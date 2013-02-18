@@ -49,21 +49,17 @@
                 </a>
 
                 <a  href="{url name=admin_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
-                <div class="nav pull-left" accesskey="m">
-                    {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
-                </div>
                 <div class="nav-collapse collapse navbar-inverse-collapse">
+                    {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
                     <ul class="nav pull-right">
                         {is_module_activated name="USERVOICE_SUPPORT"}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{t}Help{/t} <b class="caret"></b></a>
-                            <div class="dropdown-menu">
-                                <ul>
-                                    <li>
-                                        <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
+                                </li>
+                            </ul>
                         </li>
                         {/is_module_activated}
                         <li>
@@ -100,7 +96,6 @@
                             </div>
                         </li>
                     </ul>
-
                 </div>
             </div>
         </div>
@@ -132,7 +127,7 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js"}
+        {script_tag src="/onm/footer-functions.js" common=1}
         {script_tag src="/libs/tinycon.min.js"}
         <script type="text/javascript">
         Tinycon.setBubble({count_pending_comments});

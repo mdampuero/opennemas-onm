@@ -390,9 +390,57 @@ div.utilities-conf input[type="text"]{
 .utilities-conf input[type="checkbox"], .utilities-conf label { margin:0}
 
 /* -------------------------------------------------------------
-  Cleaned styles
-  From here to the end of the file all the styles were reviewed
+  NavBar for onm-core
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.navbar-inverse .dropdown a {
+    color:#ccc;
+}
+
+.navbar-inverse .divider {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0;
+  margin: 5px 0;
+}
+
+.navbar-inverse a {
+    display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none;
+}
+
+.navbar-inverse ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
+.navbar-inverse ul#menu a:hover {
+    color: White;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-inverse ul#menu ul {background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
+.navbar-inverse ul#menu a:hover, .navbar-inverse ul#menu a:focus { color: White; }
+
+.navbar-inverse ul#menu > li > a {padding: 8px 10px !important;color:#9C9C9C}
+.navbar-inverse ul#menu > li:hover > a,
+.navbar-inverse ul#menu > li:focus > a {
+    background: rgba(0,0,0,.25);
+    box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+    -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+    list-style: none;
+    text-align: center;
+}
+
+.navbar-inverse .dropdown-menu li > a:hover,
+.navbar-inverse .dropdown-menu li > a:focus,
+.navbar-inverse .dropdown-submenu:hover > a {
+    background:none;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-inverse ul#menu > li ul ul  {
+    border-radius: 0 6px 6px 0;
+    margin-left:0px;
+}
+.navbar-inverse ul#menu > li ul {
+    margin-top:0px;
+    border-top: 0 none;
+}
 
 /* -------------------------------------------------------------
   Global navigation bar
@@ -413,7 +461,8 @@ div.utilities-conf input[type="text"]{
     padding-left:10px;
     padding-right:10px;
     min-height:36px;
-    border:none !important;
+    height:36px;
+    line-height:16px;
   }
 
   .global-nav a, .global-nav{ color:#ddd; white-space:nowrap; }
@@ -456,6 +505,15 @@ div.utilities-conf input[type="text"]{
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
 }
 
+  .global-nav .dropdown-menu {
+    background: #222;
+    border-radius:0 0 3px 3px;
+    margin-top:0px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  .global-nav .dropdown-menu:after,
+  .global-nav .dropdown-menu:before { display:none !important; }
+
 /* -------------------------------------------------------------
   Global user tools inside Global nav
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -488,14 +546,6 @@ div.utilities-conf input[type="text"]{
 @media (min-width:900px) {
   .usermenu .avatar { position:absolute; top:10px; left:20px; width:50px; height:50px; }
   .usermenu li a:hover { text-decoration:underline !important; }
-  .usermenu .dropdown-menu {
-    background: #222;
-    border-radius:0 0 3px 3px;
-    margin-top:0px;
-    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-  .usermenu .dropdown-menu:after,
-  .usermenu .dropdown-menu:before { display:none; }
   .usermenu .user-info { padding-left:70px; margin:5px 10px 5px 10px; }
     .usermenu .user-info ul { width:100%; margin:0; padding:0; }
       .usermenu .user-info li { display:block !important; clear:both; width:100%; }
@@ -583,47 +633,7 @@ div.utilities-conf input[type="text"]{
   Main admin menu   //// Root = Horizontal, Secondary = Vertical
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Global menu properties*/
-ul#menu { margin: 0; padding: 0; list-style: none; display:block; height:100%; z-index:2; }
-ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
-  ul#menu li:hover > a, ul#menu a:hover,
-  ul#menu li:focus > a, ul#menu a:focus { color:White; background-color: rgba(255, 255, 255, 0.1); }
 
-ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
-  ul#menu li { display: block; position:relative; list-style: none; margin: 0; padding: 0; border: 0 none;}
-    ul#menu a:hover, ul#menu a:focus { color: White; }
-  ul#menu > li ul { border-radius: 0 0 5px 5px ; }
-
-/* Root menu */
-ul#menu > li {  display: inline-block;  position: relative; height:100%; }
-  ul#menu > li > a { margin: 0; padding: 10px 10px !important; line-height: 18px; /*border-right:1px solid #222;  border-left:1px solid #222;*/ color:#9C9C9C}
-/*  ul#menu > li:focus > a { background-color: #111; color: White; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; border-right:1px solid #2a2a2a;  border-left:1px solid #2a2a2a } */
-  ul#menu > li:hover > a,
-  ul#menu > li:focus > a {
-  background: rgba(0,0,0,.25);
-  box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-  -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-  list-style: none;
-  padding: 10px 0;
-  text-align: center;
-}
-/* 2nd Menu */
-ul#menu > li > ul { top: 99%; left: 0px; display:none; }
-
-/*From IE 7 lack of compliance*/
-ul#menu ul:after { clear: both; display: block; content: "."; height: 0; visibility: hidden; }
-
-/* 2nd-to-infinity Menu */
-ul#menu li:hover > ul,
-ul#menu li:focus > ul { display: block; }
-  ul#menu ul li a { padding: 5px 35px 5px 15px ; }
-ul#menu ul li { clear: both; display: block; float: none; }
-ul#menu ul li:last-child  a { padding-bottom:6px; }
-ul#menu ul li:first-child a { padding-top:6px; }
-    ul#menu ul ul { border-radius: 0  5px 5px 0; display: none; position: absolute; top: 0; left: 99%; }
-  ul#menu ul li.divider { padding:0; height:1px; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.1); height: 1px; margin: 5px 0; overflow: hidden; height: 1px; padding: 0; }
-
-ul#menu.manager a { color:White !important; }
 
 /* -------------------------------------------------------------
   Botonera old definitions: This should be deleted
@@ -702,7 +712,7 @@ ul#menu.manager a { color:White !important; }
             vertical-align:middle
         }
         .old-button img{
-          height:35px !important;
+            height:35px !important;
         }
         .old-button li ul {
             z-index:88;
@@ -2016,4 +2026,3 @@ select#category option {
 select#category option.unavailable {
   color:#777;
 }
- 
