@@ -682,6 +682,9 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^energia/(.*)?$ seccion/canal-energia/ [R=301,L,NC]
     RewriteRule ^rss/(.*).xml?$ /rss/listado [R=301,L,NC]
 
+    RewriteRule ^especiales/union/?$ seccion/operacion-union/ [R=301,L,NC]
+    RewriteRule ^especiales/cunion/?$ seccion/caso-union/ [R=301,L,NC]
+
     RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
     RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
     RewriteRule ^ayuntamientos/?$   http://ayuntamientos.canariasahora.es/ [R=301,L,NC]
