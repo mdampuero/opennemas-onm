@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Manager_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -20,8 +25,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the system information
  *
- * @package Backend_Controllers
- * @author
+ * @package Manager_Controllers
  **/
 class InstancesController extends Controller
 {
@@ -40,7 +44,9 @@ class InstancesController extends Controller
     /**
      * Shows a list of instances
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function listAction(Request $request)
     {
@@ -88,7 +94,9 @@ class InstancesController extends Controller
     /**
      * Returns a CSV file with all the instances information
      *
-     * @return Response the csv file of instances
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function listExportAction(Request $request)
     {

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles all the request for Welcome actions
+ *
+ * @package Manager_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,7 +22,7 @@ use Onm\Settings as s;
 /**
  * Handles all the request for Welcome actions
  *
- * @package Backend_Controllers
+ * @package Manager_Controllers
  **/
 class AuthenticationController extends Controller
 {
@@ -37,7 +42,9 @@ class AuthenticationController extends Controller
     /**
      * Shows the login form
      *
-     * @return string the response string
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function defaultAction(Request $request)
     {
@@ -61,7 +68,9 @@ class AuthenticationController extends Controller
     /**
      * Gets all the settings and displays the form
      *
-     * @return string the response
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function processformAction(Request $request)
     {
@@ -122,7 +131,9 @@ class AuthenticationController extends Controller
     /**
      * Performs the action of saving the configuration settings
      *
-     * @return string the response
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function logoutAction(Request $request)
     {
@@ -131,13 +142,13 @@ class AuthenticationController extends Controller
         // Only perform session destroy if cross-site request
         // forgery matches the session variable.
         //if ($csrf === $_SESSION['csrf']) {
-            $_SESSION = array();
-            if (isset($_COOKIE[session_name()])) {
-                setcookie(session_name(), '', time()-42000, '/');
-            }
-            session_destroy();
+        $_SESSION = array();
+        if (isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time()-42000, '/');
+        }
+        session_destroy();
 
-            return $this->redirect($this->generateUrl('manager_login_form'));
+        return $this->redirect($this->generateUrl('manager_login_form'));
 
         // } else {
         //     return new Response('Are you hijacking my session dude?!');

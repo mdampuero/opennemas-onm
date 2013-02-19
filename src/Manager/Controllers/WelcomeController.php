@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the manager welcome page
+ *
+ * @package Manager_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,7 +21,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the manager welcome page
  *
- * @package Backend_Controllers
+ * @package Manager_Controllers
  **/
 class WelcomeController extends Controller
 {
@@ -31,7 +36,9 @@ class WelcomeController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the welcome page of the manager
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
