@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for the system information
+ * Handles the actions for comments
  *
  * @package Backend_Controllers
  **/
@@ -21,7 +21,7 @@ use Onm\Settings as s;
 use Onm\Message as m;
 
 /**
- * Handles the actions for the system information
+ * Handles the actions for comments
  *
  * @package Backend_Controllers
  **/
@@ -76,7 +76,7 @@ class CommentsController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return Response the response object
      **/
     public function listAction(Request $request)
     {
@@ -189,7 +189,7 @@ class CommentsController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return Response the response object
      **/
     public function showAction(Request $request)
     {
@@ -265,7 +265,7 @@ class CommentsController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return Response the response object
      **/
     public function deleteAction(Request $request)
     {
@@ -291,7 +291,7 @@ class CommentsController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return Response the response object
      **/
     public function toggleStatusAction(Request $request)
     {
@@ -325,7 +325,7 @@ class CommentsController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return Response the response object
      **/
     public function batchStatusAction(Request $request)
     {
@@ -367,7 +367,7 @@ class CommentsController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Symfony\Component\HttpFoundation\Response the response object
+     * @return Response the response object
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -402,7 +402,7 @@ class CommentsController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return string the response string
+     * @return Response the response object
      **/
     public function configAction(Request $request)
     {

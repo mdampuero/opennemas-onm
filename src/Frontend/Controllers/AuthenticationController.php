@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the user authentication in frontend
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the user authentication in frontend
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class AuthenticationController extends Controller
 {
@@ -39,6 +44,8 @@ class AuthenticationController extends Controller
 
     /**
      * Perfoms the login action
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -130,6 +137,8 @@ class AuthenticationController extends Controller
     /**
      * Performs the log out action
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function logoutAction(Request $request)
@@ -152,6 +161,8 @@ class AuthenticationController extends Controller
     /**
      * Regenerates the password for a given user
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function regeneratePassword(Request $request)
@@ -160,6 +171,8 @@ class AuthenticationController extends Controller
 
     /**
      * Sends the user password to the his email address.
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -170,7 +183,9 @@ class AuthenticationController extends Controller
     /**
      * Shows the profile page of a user
      *
-     * @return
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function show(Request $request)
     {
@@ -178,6 +193,8 @@ class AuthenticationController extends Controller
 
     /**
      * Updates the user information given POST data
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

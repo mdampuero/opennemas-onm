@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the generic actions for contents
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -18,9 +23,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the system information
+ * Handles the generic actions for contents
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class ContentsController extends Controller
 {
@@ -36,6 +41,8 @@ class ContentsController extends Controller
 
     /**
      * Description of the action
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -68,6 +75,8 @@ class ContentsController extends Controller
 
     /**
      * Print an external article
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -114,6 +123,8 @@ class ContentsController extends Controller
 
     /**
      * Shares an content by email
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -241,6 +252,8 @@ class ContentsController extends Controller
     /**
      * Adds a vote for a content
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function rateContentAction(Request $request)
@@ -290,6 +303,8 @@ class ContentsController extends Controller
 
     /**
      * Increments the num views for a content given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

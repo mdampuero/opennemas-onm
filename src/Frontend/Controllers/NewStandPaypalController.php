@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for newstand paypal
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,9 +22,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for newstand paypal
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class NewStandPaypalController extends Controller
 {
@@ -49,6 +54,8 @@ class NewStandPaypalController extends Controller
 
     /**
      * Renders the newstand frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -182,6 +189,8 @@ class NewStandPaypalController extends Controller
      /**
      * Render a particular cover
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -249,7 +258,7 @@ class NewStandPaypalController extends Controller
     /**
      * calculates the months of the covers existing
      *
-     * @return
+     * @return void
      **/
     public function widgetNewsstandDates()
     {
@@ -263,7 +272,7 @@ class NewStandPaypalController extends Controller
     /**
      * Fetches the advertisement
      *
-     * @return
+     * @return void
      **/
     private function advertisements()
     {
@@ -291,6 +300,13 @@ class NewStandPaypalController extends Controller
         }
     }
 
+    /**
+     * undocumented function
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
     private function sessionBootstrap(Request $request)
     {
         $sessionLifeTime = (int) s::get('max_session_lifetime', 60);

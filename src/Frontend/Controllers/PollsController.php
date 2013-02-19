@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for advertisements
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -22,7 +27,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for advertisements
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class PollsController extends Controller
 {
@@ -71,7 +76,7 @@ class PollsController extends Controller
     /**
      * Renders the album frontpage
      *
-     * @param int page the page to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -142,8 +147,7 @@ class PollsController extends Controller
     /**
      * Shows a poll given its id
      *
-     * @param int id the identifier of the poll
-     * @param int page the page
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -213,7 +217,7 @@ class PollsController extends Controller
             } elseif ($voted == 1 && $valid === 0) {
                 $message = _('Please select a valid poll answer.');
             }
-        } elseif(isset($cookie)) {
+        } elseif (isset($cookie)) {
             $alreadyVoted = true;
             $message = _('You have voted this poll previously.');
         }
@@ -233,7 +237,7 @@ class PollsController extends Controller
     /**
      * Add vote & show poll result
      *
-     * @param string id the identificator of the poll
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -283,7 +287,13 @@ class PollsController extends Controller
         return $response;
     }
 
-
+    /**
+     * Fetches the ads given a context
+     *
+     * @param string $context the context to fetch ads from
+     *
+     * @return void
+     **/
     protected function getAds($context = 'frontpage')
     {
         $advertisement = \Advertisement::getInstance();
@@ -306,12 +316,13 @@ class PollsController extends Controller
         if (!empty($intersticial)) {
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
-
-        return new Response('ok');
     }
 
     /**
      * Clean the cache for a given poll
+     *
+     * @param string $categoryName the category where the clean has to be done
+     * @param int $pollId the poll id where the clean has to be done
      *
      * @return void
      **/

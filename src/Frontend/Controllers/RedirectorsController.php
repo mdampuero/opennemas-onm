@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the redirectors
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -18,7 +23,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the redirectors
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class RedirectorsController extends Controller
 {
@@ -34,7 +39,7 @@ class RedirectorsController extends Controller
     /**
      * Handles the redirections for all the contents.
      *
-     * @param int content_id the content to detect
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -57,6 +62,8 @@ class RedirectorsController extends Controller
 
     /**
      * Redirects to a category frontpage
+     *
+     * @param Request $request the request object
      *
      * @return RedirectResponse the redirection to the proper url
      **/

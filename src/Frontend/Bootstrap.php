@@ -1,5 +1,10 @@
 <?php
 /**
+ * Initializes the Backend Module
+ *
+ * @package default
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -18,10 +23,14 @@ use Onm\Settings as s;
  * Initializes the Backend Module
  *
  * @package default
- * @author
  **/
 class Bootstrap extends ModuleBootstrap
 {
+    /**
+     * Initializes the internationalization system for the frontend module
+     *
+     * @return void
+     **/
     public function initI18nSystem()
     {
         $timezone = s::get('time_zone');

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for advertisements
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for advertisements
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class StaticPagesController extends Controller
 {
@@ -36,7 +41,7 @@ class StaticPagesController extends Controller
     /**
      * Displays the static page given its id
      *
-     * @param string slug the slug that identifies the page
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

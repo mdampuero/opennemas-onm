@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for advertisements
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for advertisements
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class VideosController extends Controller
 {
@@ -67,6 +72,8 @@ class VideosController extends Controller
 
     /**
      * Renders the video frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -181,6 +188,8 @@ class VideosController extends Controller
     /**
      * Shows an inner video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -254,6 +263,8 @@ class VideosController extends Controller
     /**
      * Return via ajax more videos of a category
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function ajaxMoreAction(Request $request)
@@ -296,6 +307,8 @@ class VideosController extends Controller
 
     /**
      * Return via ajax videos of a category
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -340,7 +353,9 @@ class VideosController extends Controller
     /**
      * Returns the
      *
-     * @return Response|RedirectResponse
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function ajaxPaginatedAction(Request $request)
     {
@@ -379,11 +394,13 @@ class VideosController extends Controller
     }
 
     /**
-    * Render advertisement on videos
-    */
+     * Render advertisement on videos
+     *
+     * @param string $context the context to fetch ads from
+     */
     private function getAds($context = 'frontpage')
     {
-        if ( $context == 'inner' ) {
+        if ($context == 'inner') {
             $positions = array(901, 902, 903, 905, 909, 910);
             $intersticialId = 950;
         } else {
