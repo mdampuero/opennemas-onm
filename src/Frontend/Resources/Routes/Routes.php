@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines all the routes for frontend interface
+ *
+ * @package  Frontend
+ */
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>

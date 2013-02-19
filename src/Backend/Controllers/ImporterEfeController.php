@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the efe module
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -39,8 +44,7 @@ class ImporterEfeController extends Controller
         ini_set('set_time_limit', '0');
 
         // Check if module is configured, if not redirect to configuration form
-        if (
-            is_null(s::get('efe_server_auth'))
+        if (is_null(s::get('efe_server_auth'))
             && $action != 'config'
         ) {
             m::add(_('Please provide your EFE auth credentials to start to use your EFE Importer module'));
@@ -50,6 +54,8 @@ class ImporterEfeController extends Controller
 
     /**
      * Shows the list of downloaded newsfiles from Efe service
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -146,6 +152,8 @@ class ImporterEfeController extends Controller
     /**
      * Shows the information for a given newfile filename
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -181,6 +189,8 @@ class ImporterEfeController extends Controller
 
     /**
      * Imports the article information given a newfile filename
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -329,6 +339,8 @@ class ImporterEfeController extends Controller
     /**
      * Shows the category form to pick a category under where to import the new
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function selectCategoryWhereToImportAction(Request $request)
@@ -366,6 +378,8 @@ class ImporterEfeController extends Controller
      * Returns the image file given a newsfile id and attached image id, if
      * not found return an 404 response error.
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAttachmentAction(Request $request)
@@ -396,6 +410,8 @@ class ImporterEfeController extends Controller
 
     /**
      * Shows and handles the configuration form for Efe module
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -468,6 +484,8 @@ class ImporterEfeController extends Controller
     /**
      * Cleans the unlock file for Efe module
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function unlockAction(Request $request)
@@ -485,6 +503,8 @@ class ImporterEfeController extends Controller
 
     /**
      * Performs the files synchronization with the external server
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

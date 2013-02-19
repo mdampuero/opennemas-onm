@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -47,6 +52,8 @@ class CacheManagerController extends Controller
     }
     /**
      * Lists cache files and perform searches across them
+     *
+     * @param Request $request the request object
      *
      * @return string the string response
      **/
@@ -171,6 +178,8 @@ class CacheManagerController extends Controller
     /**
      * Recreates a template cache
      *
+     * @param Request $request the request object
+     *
      * @return string the string response
      **/
     public function deleteAction(Request $request)
@@ -203,7 +212,9 @@ class CacheManagerController extends Controller
 
     /**
      * Deletes all the frontend cache files
-     * DANGER: this action is really CPU expensive
+     * DANGER: this action has really CPU expensive
+     *
+     * @param Request $request the request object
      *
      * @return string the result string
      **/
@@ -216,6 +227,8 @@ class CacheManagerController extends Controller
 
     /**
      * Show the configuration form and stores it information
+     *
+     * @param Request $request the request object
      *
      * @return string the string response
      **/
@@ -288,6 +301,8 @@ class CacheManagerController extends Controller
     /**
      * Cleans the category frontpage given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function cleanFrontpageAction(Request $request)
@@ -330,6 +345,8 @@ class CacheManagerController extends Controller
 
     /**
      * Builds the search filter for listing the listing cache action
+     *
+     * @param Request $request the request object
      *
      * @return array
      **/

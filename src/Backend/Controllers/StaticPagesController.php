@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -294,7 +299,6 @@ class StaticPagesController extends Controller
      *
      * @return Ajax Response the response object
      **/
-
     public function buildSlugAction(Request $request)
     {
         // If the action is an Ajax request handle it, if not redirect to list

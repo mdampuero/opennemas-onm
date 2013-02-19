@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,6 @@ use Onm\Message as m;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class ImporterEuropapressController extends Controller
 {
@@ -39,6 +43,8 @@ class ImporterEuropapressController extends Controller
 
     /**
      * Shows the list of downloaded newsfiles from Europapress service
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -139,6 +145,8 @@ class ImporterEuropapressController extends Controller
     /**
      * Shows the information for a given newfile filename
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -163,6 +171,8 @@ class ImporterEuropapressController extends Controller
 
     /**
      * Imports the article information given a newfile filename
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -215,6 +225,8 @@ class ImporterEuropapressController extends Controller
 
     /**
      * Shows and handles the configuration form for Europapress module
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -287,6 +299,8 @@ class ImporterEuropapressController extends Controller
     /**
      * Cleans the unlock file for Europapress module
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function unlockAction(Request $request)
@@ -300,6 +314,8 @@ class ImporterEuropapressController extends Controller
 
     /**
      * Performs the files synchronization with the external server
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

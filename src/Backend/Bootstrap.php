@@ -1,5 +1,10 @@
 <?php
 /**
+ * Initializes the Backend module
+ *
+ * @package  Backend
+ */
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,8 +22,7 @@ use Onm\Settings as s;
 /**
  * Initializes the Backend Module
  *
- * @package default
- * @author
+ * @package Backend
  **/
 class Bootstrap extends ModuleBootstrap
 {
@@ -98,6 +102,11 @@ class Bootstrap extends ModuleBootstrap
 
     }
 
+    /**
+     * Initializes the internationalization system for the backend interface
+     *
+     * @return void
+     **/
     public function initI18nSystem()
     {
 

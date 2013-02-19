@@ -1,4 +1,9 @@
 <?php
+/**
+ * Defines the backend menu
+ *
+ * @package  Backend
+ */
 global $generator;
 $menuXml = '<?xml version="1.0"?>
 <menu>

@@ -1,9 +1,14 @@
 <?php
 /**
+ * Handles the actions for handling the pdf covers
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
-*
+ *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
@@ -62,7 +67,9 @@ class CoversController extends Controller
     /**
      * Shows the list of the
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function listAction(Request $request)
     {
@@ -127,6 +134,8 @@ class CoversController extends Controller
 
     /**
      * Show the list of the covers with favorite flag enabled
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -249,7 +258,7 @@ class CoversController extends Controller
 
             try {
                 // Create folder if it doesn't exist
-                if (!file_exists($path) ) {
+                if (!file_exists($path)) {
                     \FilesManager::createDirectory($path);
                 }
                 $uploadStatus = false;
@@ -351,6 +360,8 @@ class CoversController extends Controller
     /**
      * Deletes a video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -386,6 +397,8 @@ class CoversController extends Controller
 
     /**
      * Change availability for one cover given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -424,6 +437,8 @@ class CoversController extends Controller
     /**
      * Change suggested flag for one cover given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleFavoriteAction(Request $request)
@@ -460,6 +475,8 @@ class CoversController extends Controller
      * Change in_home flag for one cover given its id
      * Used for putting this content widgets in home
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleInHomeAction(Request $request)
@@ -493,6 +510,8 @@ class CoversController extends Controller
 
     /**
      * Deletes multiple covers at once given its ids
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -534,6 +553,8 @@ class CoversController extends Controller
     /**
      * Set the published flag for contents in batch
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchPublishAction(Request $request)
@@ -571,6 +592,8 @@ class CoversController extends Controller
 
     /**
      * Save positions for widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -610,6 +633,8 @@ class CoversController extends Controller
 
     /**
      * Handles the configuration of the covers module
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

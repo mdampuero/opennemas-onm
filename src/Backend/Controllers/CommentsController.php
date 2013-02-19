@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,9 +24,7 @@ use Onm\Message as m;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
-
 class CommentsController extends Controller
 {
     /**
@@ -69,13 +72,14 @@ class CommentsController extends Controller
     }
 
     /**
-     *  Lists comments
+     * Lists comments
+     *
+     * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
     public function listAction(Request $request)
     {
-
         $request = $this->get('request');
 
         $page          = $request->query->getDigits('page', 1);
@@ -88,8 +92,7 @@ class CommentsController extends Controller
         ) {
             $status = $requestFilter['status'];
         }
-        $filter = ' contents.in_litter != 1 AND contents.content_status = '
-                    . $status;
+        $filter = ' contents.in_litter != 1 AND contents.content_status = '. $status;
 
         $module = 0;
         if (is_array($requestFilter)
@@ -184,6 +187,8 @@ class CommentsController extends Controller
     /**
      * Shows coments in the edit form
      *
+     * @param Request $request the request object
+     *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
     public function showAction(Request $request)
@@ -215,6 +220,8 @@ class CommentsController extends Controller
 
     /**
      * Updates a comment given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -256,6 +263,8 @@ class CommentsController extends Controller
     /**
      * Deletes a comment given its id
      *
+     * @param Request $request the request object
+     *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
     public function deleteAction(Request $request)
@@ -279,6 +288,8 @@ class CommentsController extends Controller
 
     /**
      * Toggle status in comment given its id
+     *
+     * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
@@ -311,6 +322,8 @@ class CommentsController extends Controller
 
     /**
      * Change  status some comments given its ids
+     *
+     * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
@@ -350,7 +363,9 @@ class CommentsController extends Controller
     }
 
     /**
-     *  Delete multiple comments given its ids
+     * Deletes multiple comments given their ids
+     *
+     * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      **/
@@ -384,6 +399,8 @@ class CommentsController extends Controller
 
     /**
      * Shows the disqus configuration form and stores its values
+     *
+     * @param Request $request the request object
      *
      * @return string the response string
      **/

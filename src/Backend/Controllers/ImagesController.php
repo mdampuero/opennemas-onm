@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the images
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,10 +21,9 @@ use Onm\Settings as s;
 use Onm\Message as m;
 
 /**
- * Handles the actions for the system information
+ * Handles the actions for the images
  *
  * @package Backend_Controllers
- * @author
  **/
 class ImagesController extends Controller
 {
@@ -27,7 +31,6 @@ class ImagesController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -62,6 +65,8 @@ class ImagesController extends Controller
 
     /**
      * Lists images from an specific category
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -124,6 +129,8 @@ class ImagesController extends Controller
 
     /**
      * Show statitics of disk usage in images
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -291,6 +298,8 @@ class ImagesController extends Controller
     /**
      * Handles the form for configure the images module
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function configAction(Request $request)
@@ -329,6 +338,8 @@ class ImagesController extends Controller
 
     /**
      * Handles the form for searching images
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -465,6 +476,8 @@ class ImagesController extends Controller
     /**
      * Show the page for upload new images
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function newAction(Request $request)
@@ -499,6 +512,8 @@ class ImagesController extends Controller
 
     /**
      * Displays the image information given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -553,6 +568,8 @@ class ImagesController extends Controller
 
     /**
      * Updates the image information given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -610,6 +627,8 @@ class ImagesController extends Controller
     /**
      * Deletes an image given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -640,6 +659,8 @@ class ImagesController extends Controller
 
     /**
      * Uploads and creates
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -797,6 +818,8 @@ class ImagesController extends Controller
 
     /**
      * Deletes multiple images at once
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

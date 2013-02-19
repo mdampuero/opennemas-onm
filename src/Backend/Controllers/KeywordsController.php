@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the keywords
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,10 +21,9 @@ use Onm\Settings as s;
 use Onm\Message as m;
 
 /**
- * Handles the actions for the system information
+ * Handles the actions for the keywords
  *
  * @package Backend_Controllers
- * @author
  **/
 class KeywordsController extends Controller
 {
@@ -38,9 +42,11 @@ class KeywordsController extends Controller
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
     /**
-     * Description of the action
+     * Lists all the keywords
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response
      **/
     public function listAction(Request $request)
     {
@@ -82,6 +88,8 @@ class KeywordsController extends Controller
     /**
      * Shows the keyword information given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -104,6 +112,8 @@ class KeywordsController extends Controller
 
     /**
      * Shows the form for creating a new keyword and handles its form.
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -144,6 +154,8 @@ class KeywordsController extends Controller
     /**
      * Updates the Pclave information given its new data
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function updateAction(Request $request)
@@ -173,6 +185,8 @@ class KeywordsController extends Controller
     /**
      * Deletes a keyword given its id.
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -188,7 +202,10 @@ class KeywordsController extends Controller
     }
 
     /**
+     * Given a text, this action replaces all the registered keywords with the
+     * valid keyword link
      *
+     * @param Request $request the request object
      *
      * @return Reponse the response object
      **/
