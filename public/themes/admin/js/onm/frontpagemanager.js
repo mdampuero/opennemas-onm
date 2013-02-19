@@ -146,7 +146,8 @@ function initializePopovers() {
             animation: false,
             delay: 0,
             title: get_tooltip_title(element),
-            content: get_tooltip_content(element)
+            content: get_tooltip_content(element),
+            html : true
         });
     });
 }
