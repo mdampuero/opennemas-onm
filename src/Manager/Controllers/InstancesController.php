@@ -341,8 +341,6 @@ class InstancesController extends Controller
         }
 
         $errors = array();
-        // Check for reapeted internalnameshort and if so, add a number at the end
-        $data = $this->instanceManager->checkInternalShortName($data);
 
         $configurationsKeys = array(
             'site_title', 'site_description','site_keywords',
