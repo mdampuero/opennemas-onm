@@ -52,16 +52,6 @@
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     {admin_menu file='/Backend/Resources/Menu.php' base=$smarty.const.SRC_PATH}
                     <ul class="nav pull-right">
-                        {is_module_activated name="USERVOICE_SUPPORT"}
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{t}Help{/t} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
-                                </li>
-                            </ul>
-                        </li>
-                        {/is_module_activated}
                         <li>
                             <form action="{url name=admin_search}" class="navbar-search global-search nofillonhover pull-right">
                                 <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search" accesskey="s">
@@ -71,11 +61,23 @@
                         <li class="notification-messages">
                             <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
                                 href="{url name=admin_comments}">
+                                <span class="icon-envelope-alt icon-large"></span>
                                 <span class="icon">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
-
                             </a>
                         </li>
                         {/if}
+                        {is_module_activated name="USERVOICE_SUPPORT"}
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="icon-large icon-question-sign"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
+                                </li>
+                            </ul>
+                        </li>
+                        {/is_module_activated}
                         <li class="dropdown usermenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="usericon"></span> <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
                             <div class="dropdown-menu">
