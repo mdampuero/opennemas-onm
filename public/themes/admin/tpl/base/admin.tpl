@@ -8,7 +8,7 @@
 
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport"  content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     {block name="meta"}
         <title>{setting name=site_name} - {t}OpenNeMaS administration{/t}</title>
