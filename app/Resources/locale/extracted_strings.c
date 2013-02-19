@@ -1118,6 +1118,18 @@ gettext("Check if the given site url is correct.");
 gettext("ePapers");
 
 /* public/themes/admin/tpl//covers/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//covers/list.tpl */
+gettext("All categories");
+
+/* public/themes/admin/tpl//covers/list.tpl */
+gettext("Special elements");
+
+/* public/themes/admin/tpl//covers/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//covers/list.tpl */
 gettext("Delete");
 
 /* public/themes/admin/tpl//covers/list.tpl */
@@ -1161,12 +1173,6 @@ gettext("Config covers module");
 
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Settings");
-
-/* public/themes/admin/tpl//covers/list.tpl */
-gettext("WIDGET");
-
-/* public/themes/admin/tpl//covers/list.tpl */
-gettext("All");
 
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Thumbnail");
@@ -1433,6 +1439,18 @@ gettext("File");
 gettext("Albums");
 
 /* public/themes/admin/tpl//album/list.tpl */
+gettext("All categories");
+
+/* public/themes/admin/tpl//album/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//album/list.tpl */
+gettext("Other");
+
+/* public/themes/admin/tpl//album/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//album/list.tpl */
 gettext("Delete");
 
 /* public/themes/admin/tpl//album/list.tpl */
@@ -1485,12 +1503,6 @@ gettext("Config album module");
 
 /* public/themes/admin/tpl//album/list.tpl */
 gettext("Settings");
-
-/* public/themes/admin/tpl//album/list.tpl */
-gettext("WIDGET HOME");
-
-/* public/themes/admin/tpl//album/list.tpl */
-gettext("All categories");
 
 /* public/themes/admin/tpl//album/list.tpl */
 gettext("Title");
@@ -2453,6 +2465,18 @@ gettext("Unknown");
 gettext("Polls");
 
 /* public/themes/admin/tpl//polls/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//polls/list.tpl */
+gettext("All categories");
+
+/* public/themes/admin/tpl//polls/list.tpl */
+gettext("Special elements");
+
+/* public/themes/admin/tpl//polls/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//polls/list.tpl */
 gettext("Delete");
 
 /* public/themes/admin/tpl//polls/list.tpl */
@@ -2490,12 +2514,6 @@ gettext("New poll");
 
 /* public/themes/admin/tpl//polls/list.tpl */
 gettext("New poll");
-
-/* public/themes/admin/tpl//polls/list.tpl */
-gettext("Widget Home");
-
-/* public/themes/admin/tpl//polls/list.tpl */
-gettext("All categories");
 
 /* public/themes/admin/tpl//polls/list.tpl */
 gettext("Title");
@@ -2697,6 +2715,18 @@ gettext("Categories");
 
 /* public/themes/admin/tpl//common/drop_down_categories.tpl */
 gettext("All categories");
+
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("Advertisement");
+
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("(inactive)");
+
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("(inactive)");
+
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("(inactive)");
 
 /* public/themes/admin/tpl//common/content_provider/content_provider.tpl */
 gettext("Articles");
@@ -3101,6 +3131,18 @@ gettext("Add new photo");
 gettext("Opinions");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Opinion frontpage");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Listing");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Opinion frontpage");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Listing");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
 gettext("Batch actions");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
@@ -3141,12 +3183,6 @@ gettext("Settings");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
 gettext("New opinion");
-
-/* public/themes/admin/tpl//opinion/list.tpl */
-gettext("Opinion frontpage");
-
-/* public/themes/admin/tpl//opinion/list.tpl */
-gettext("Listing");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
 gettext("Opinion");
@@ -3446,6 +3482,9 @@ gettext("Comments");
 gettext("Available");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Favorite");
+
+/* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Actions");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
@@ -3453,6 +3492,9 @@ gettext("Director Articles");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Director");
+
+/* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("NoFavorite");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Edit");
@@ -3467,6 +3509,9 @@ gettext("Editorial Articles");
 gettext("Editorial");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("NoFavorite");
+
+/* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Edit");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
@@ -3477,6 +3522,12 @@ gettext("Other Articles");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Director");
+
+/* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("Favorite");
+
+/* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
+gettext("NoFavorite");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Edit");
@@ -4010,16 +4061,25 @@ gettext("Your password must contain 5 characters and dont contain the word <pass
 gettext("Please check your first password and check again.");
 
 /* public/themes/admin/tpl//base/admin.tpl */
+gettext("OpenNeMaS administration");
+
+/* public/themes/admin/tpl//base/admin.tpl */
 gettext("Go to admin main page");
 
 /* public/themes/admin/tpl//base/admin.tpl */
-gettext("Visit site");
+gettext("Help");
+
+/* public/themes/admin/tpl//base/admin.tpl */
+gettext("Contact support");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Search...");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("There are new comments to moderate");
+
+/* public/themes/admin/tpl//base/admin.tpl */
+gettext("Pending comments");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Edit my profile");
@@ -5117,6 +5177,18 @@ gettext("Value");
 gettext("Specials");
 
 /* public/themes/admin/tpl//special/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//special/list.tpl */
+gettext("All categories");
+
+/* public/themes/admin/tpl//special/list.tpl */
+gettext("Special elements");
+
+/* public/themes/admin/tpl//special/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//special/list.tpl */
 gettext("Delete");
 
 /* public/themes/admin/tpl//special/list.tpl */
@@ -5148,12 +5220,6 @@ gettext("Settings");
 
 /* public/themes/admin/tpl//special/list.tpl */
 gettext("New special");
-
-/* public/themes/admin/tpl//special/list.tpl */
-gettext("WIDGET HOME");
-
-/* public/themes/admin/tpl//special/list.tpl */
-gettext("All");
 
 /* public/themes/admin/tpl//special/list.tpl */
 gettext("Title");
@@ -5591,6 +5657,9 @@ gettext("Update");
 gettext("Articles");
 
 /* public/themes/admin/tpl//article/list.tpl */
+gettext("All categories");
+
+/* public/themes/admin/tpl//article/list.tpl */
 gettext("Delete");
 
 /* public/themes/admin/tpl//article/list.tpl */
@@ -5604,9 +5673,6 @@ gettext("Batch unpublish");
 
 /* public/themes/admin/tpl//article/list.tpl */
 gettext("New article");
-
-/* public/themes/admin/tpl//article/list.tpl */
-gettext("All categories");
 
 /* public/themes/admin/tpl//article/list.tpl */
 gettext("%1 articles");
@@ -6170,9 +6236,6 @@ gettext("Yes");
 gettext("No");
 
 /* public/themes/admin/tpl//static_pages/new.tpl */
-gettext("Description");
-
-/* public/themes/admin/tpl//static_pages/new.tpl */
 gettext("Body");
 
 /* public/themes/admin/tpl//static_pages/new.tpl */
@@ -6419,6 +6482,21 @@ gettext("HOME");
 gettext("Advertisements");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
+gettext("HOMEPAGE");
+
+/* public/themes/admin/tpl//advertisement/list.tpl */
+gettext("OPINION");
+
+/* public/themes/admin/tpl//advertisement/list.tpl */
+gettext("Special elements");
+
+/* public/themes/admin/tpl//advertisement/list.tpl */
+gettext("HOMEPAGE");
+
+/* public/themes/admin/tpl//advertisement/list.tpl */
+gettext("OPINION");
+
+/* public/themes/admin/tpl//advertisement/list.tpl */
 gettext("Delete");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
@@ -6447,12 +6525,6 @@ gettext("New");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
 gettext("New");
-
-/* public/themes/admin/tpl//advertisement/list.tpl */
-gettext("HOMEPAGE");
-
-/* public/themes/admin/tpl//advertisement/list.tpl */
-gettext("OPINION");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
 gettext("Banner type:");
@@ -6893,6 +6965,18 @@ gettext("No available videos for your search criteria");
 gettext("Videos");
 
 /* public/themes/admin/tpl//video/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//video/list.tpl */
+gettext("All categories");
+
+/* public/themes/admin/tpl//video/list.tpl */
+gettext("Special elements");
+
+/* public/themes/admin/tpl//video/list.tpl */
+gettext("WIDGET HOME");
+
+/* public/themes/admin/tpl//video/list.tpl */
 gettext("Delete");
 
 /* public/themes/admin/tpl//video/list.tpl */
@@ -6939,9 +7023,6 @@ gettext("Config video module");
 
 /* public/themes/admin/tpl//video/list.tpl */
 gettext("Settings");
-
-/* public/themes/admin/tpl//video/list.tpl */
-gettext("All categories");
 
 /* public/themes/admin/tpl//video/list.tpl */
 gettext("Title");
@@ -7374,6 +7455,9 @@ gettext("Images");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("All categories");
+
+/* public/themes/admin/tpl//image/list.tpl */
+gettext("Advertisement");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Delete");
@@ -7922,13 +8006,13 @@ gettext("Static Pages");
 gettext("Widgets");
 
 /* public/themes/manager/tpl/login/login.tpl */
-gettext("Instance manager");
+gettext("The journalism CMS");
 
 /* public/themes/manager/tpl/login/login.tpl */
-gettext("User name:");
+gettext("User name");
 
 /* public/themes/manager/tpl/login/login.tpl */
-gettext("Password:");
+gettext("Password");
 
 /* public/themes/manager/tpl/login/login.tpl */
 gettext("Enter");
@@ -7956,6 +8040,57 @@ gettext("Legal");
 
 /* public/themes/manager/tpl/system_settings/index.tpl */
 gettext("Cache manager");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
+gettext("A new instance has been created");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
+gettext("New user data are as follows");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
+gettext("User");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
+gettext("Email");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
+gettext("Newspaper URL");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
+gettext("Sincerely");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("Welcome to OpenNemas");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("Your Opennemas' Newspaper is now available");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("Your data are");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("User");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("Password");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("You can acces to newspaper with this link");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("You can also access the administrative area through this link");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("using the username and password provided in the email");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("Please change your password on your first access to the administrative area");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("In case you have any problems, please contact via e-mail");
+
+/* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
+gettext("Sincerely");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Instance Manager");
@@ -8361,6 +8496,33 @@ gettext("Cache manager");
 
 /* public/themes/manager/tpl/error/404.tpl */
 gettext("We already have being informed of this error: %1");
+
+/* public/themes/manager/tpl/framework/commands/commands.tpl */
+gettext("Application commands");
+
+/* public/themes/manager/tpl/framework/commands/commands.tpl */
+gettext("Command name");
+
+/* public/themes/manager/tpl/framework/commands/commands.tpl */
+gettext("Description");
+
+/* public/themes/manager/tpl/framework/commands/commands.tpl */
+gettext("Params");
+
+/* public/themes/manager/tpl/framework/commands/commands.tpl */
+gettext("Deploy");
+
+/* public/themes/manager/tpl/framework/commands/commands.tpl */
+gettext("Execute");
+
+/* public/themes/manager/tpl/framework/commands/execute.tpl */
+gettext("Application commands");
+
+/* public/themes/manager/tpl/framework/commands/execute.tpl */
+gettext("Cancel");
+
+/* public/themes/manager/tpl/framework/commands/execute.tpl */
+gettext("Cancel");
 
 /* public/themes/manager/tpl/framework/status.tpl */
 gettext("Framework status");
