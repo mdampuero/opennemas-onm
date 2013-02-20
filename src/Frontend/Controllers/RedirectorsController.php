@@ -46,8 +46,13 @@ class RedirectorsController extends Controller
     public function contentAction(Request $request)
     {
         $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
+        $oldVersion   = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
 
         list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+
+        if ($oldVersion == 'editmaker') {
+             $newContentID = \Content::resolveID($newContentID);
+        }
 
         if ($type == 'article') {
             $content = new \Article($newContentID);
