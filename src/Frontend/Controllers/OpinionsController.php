@@ -67,28 +67,48 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)) {
+            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)
+        ) {
 
             // Fetch last opinions from editorial
-            $editorial = $this->cm->find(
-                'Opinion',
-                'opinions.type_opinion=1 '.
-                'AND contents.available=1 '.
-                $where.
-                'AND contents.content_status=1 ',
-                $orderBy.
-                'LIMIT 2'
-            );
+            $configurations = s::get('opinion_settings');
+
+            $totalEditorial = 2;
+            $totalDirector = 1;
+            if (!empty($configurations) && array_key_exists('total_editorial', $configurations)) {
+                $totalEditorial = $configurations['total_editorial'];
+            }
+            if (!empty($configurations) && array_key_exists('total_director', $configurations)) {
+                $totalDirector = $configurations['total_director'];
+            }
+
+            $editorial = array();
+            if (!empty($totalEditorial)) {
+                $editorial = $this->cm->find(
+                    'Opinion',
+                    'opinions.type_opinion=1 '.
+                    'AND contents.available=1 '.
+                    $where.
+                    'AND contents.content_status=1 ',
+                    $orderBy.
+                    'LIMIT '.$totalEditorial
+                );
+            }
+
 
             // Fetch last opinions from director
-            $director = $this->cm->find(
-                'Opinion',
-                'opinions.type_opinion=2 '.
-                'AND contents.available=1 '.
-                $where.
-                'AND contents.content_status=1 ',
-                $orderBy.' LIMIT 2'
-            );
+            $director = array();
+            if (!empty($totalDirector)) {
+                $director = $this->cm->find(
+                    'Opinion',
+                    'opinions.type_opinion=2 '.
+                    'AND contents.available=1 '.
+                    $where.
+                    'AND contents.content_status=1 ',
+                    $orderBy.
+                    ' LIMIT '.$totalDirector
+                );
+            }
 
             if (isset($director) && !empty($director)) {
                 // Fetch the photo images of the director
@@ -98,8 +118,13 @@ class OpinionsController extends Controller
                     $dir['photo'] = $foto->path_img;
                 }
                 $dir['name'] = $aut->name;
-                $this->view->assign('dir', $dir);
-                $this->view->assign('director', $director[0]);
+                $this->view->assign(
+                    array(
+                        'dir'      => $dir,
+                        'director' => $director[0],
+                        'opinionsDirector' => $director
+                    )
+                );
             }
 
             $itemsPerPage = s::get('items_per_page');
@@ -190,7 +215,8 @@ class OpinionsController extends Controller
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)) {
+            || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)
+        ) {
 
             // Getting Synchronize setting params
             $wsUrl = '';
@@ -319,7 +345,8 @@ class OpinionsController extends Controller
         $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
-            || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)) {
+            || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
+        ) {
 
             // Get author info
             $author = new \Author($authorID);
