@@ -1,19 +1,20 @@
 <?php
 /*
+ * Defines the ContentType class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 
 /**
  * Handles common operations with content types
  *
- * @package    Onm
- * @subpackage Model
- *
- * @author Alex Rico
+ * @package    Model
  */
 class ContentType
 {
@@ -192,7 +193,7 @@ class ContentType
      * Get the content type object given the id of one content.
      *
      * @param  int $id The id of a content
-
+     *
      * @return int pk_content_type.
      */
     public static function getContentTypeByContentId($id)

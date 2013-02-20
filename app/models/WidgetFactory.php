@@ -2,8 +2,7 @@
 /**
  * Contains the WidgetFactory class definition
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 /*
  * This file is part of the onm package.
@@ -15,8 +14,7 @@
 /**
  * Initializes the common properties class for Widgets.
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class WidgetFactory
 {

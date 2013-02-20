@@ -1,4 +1,9 @@
 <?php
+/**
+ * Defintes the Video class
+ *
+ * @package    Model
+ **/
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -11,8 +16,7 @@ use Onm\Message as m;
 /**
  * Handles video CRUD actions.
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class Video extends Content
 {

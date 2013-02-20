@@ -1,10 +1,14 @@
 <?php
-/*
+/**
+ * Defines the Attachment class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 use Onm\Message as m;
 
@@ -13,8 +17,7 @@ use Onm\Message as m;
  *
  * Handles all the functionality of Attachments and asociations with contents
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  */
 class Attachment extends Content
 {
@@ -52,7 +55,7 @@ class Attachment extends Content
 
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
 
-        if ( !is_null($id) ) {
+        if (!is_null($id)) {
             $this->read($id);
         }
 
@@ -108,7 +111,7 @@ class Attachment extends Content
         }
 
         // Check if exist thumbnail for this PDF
-        if ( preg_match('/\.pdf$/', $data['path']) ) {
+        if (preg_match('/\.pdf$/', $data['path'])) {
             $dir_date = date("/Y/m/d/");
             $media_path =
                 $this->file_path.DIRECTORY_SEPARATOR.FILE_DIR.$dir_date;
@@ -288,7 +291,7 @@ class Attachment extends Content
 
         $img_name = null;
 
-        if ( preg_match('/\.pdf$/', $obj->path) ) {
+        if (preg_match('/\.pdf$/', $obj->path)) {
             $dirDateComponent = date("/Y/m/d/");
             $mediaPath        = MEDIA_IMG_PATH.'/'.$dirDateComponent;
 
@@ -297,7 +300,7 @@ class Attachment extends Content
 
             if (!file_exists($mediaPath . '/' . $img_name)) {
                 // Check if exists mediaPath
-                if ( !file_exists($mediaPath) ) {
+                if (!file_exists($mediaPath)) {
                     FilesManager::createDirectory($mediaPath);
                 }
 

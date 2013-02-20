@@ -1,4 +1,9 @@
 <?php
+/**
+ * Defines the User class
+ *
+ * @package    Model
+ **/
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -6,11 +11,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 /**
  * User
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class User
 {
@@ -51,7 +56,7 @@ class User
         }
 
         // Use MethodCacheManager
-        if ( is_null($this->cache) ) {
+        if (is_null($this->cache)) {
             $this->cache = new MethodCacheManager($this, array('ttl' => 60));
         } else {
             $this->cache->setCacheLife(60); // 60 seconds
@@ -123,7 +128,9 @@ class User
 
     public function update($data)
     {
-        if (!isset($data['id_user_group']) || empty($data['id_user_group']) ) {
+        if (!isset($data['id_user_group'])
+            || empty($data['id_user_group'])
+        ) {
             $data['id_user_group'] = $this->id_user_group;
         }
 
@@ -210,7 +217,7 @@ class User
 
     private function createAccessCategoriesDb($IdsCategory)
     {
-        if ( $this->deleteAccessCategoriesDb() ) {
+        if ($this->deleteAccessCategoriesDb()) {
             $sql = "INSERT INTO users_content_categories
                                 (`pk_fk_user`, `pk_fk_content_category`)
                     VALUES (?,?)";
@@ -352,15 +359,17 @@ class User
      * @param  string  $login
      * @param  string  $password
      * @param  loolean $managerDb
+     *
      * @return boolean Return true if login exists and password match
      */
-    public function authDatabase($login, $password, $managerDb=false)
+    public function authDatabase($login, $password, $managerDb = false)
     {
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
-        if (!$managerDb)
+        if (!$managerDb) {
             $rs = $GLOBALS['application']->conn->Execute($sql);
-        else
+        } else {
             $rs =  \Onm\Instance\InstanceManager::getInstance()->getConnection()->Execute($sql);
+        }
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -499,7 +508,7 @@ class User
 
     public function getAccessCategoryIds($id = null)
     {
-        if ( empty($this->accesscategories) ) {
+        if (empty($this->accesscategories)) {
             $this->accesscategories = $this->readAccessCategories($id);
         }
 
@@ -777,4 +786,3 @@ class User
         return $newFilter;
     }
 }
-

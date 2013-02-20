@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Defines the Widget class
+ *
+ * @package    Model
+ *
+ **/
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -10,9 +15,7 @@
 /**
  * Handles all the CRUD actions over widgets.
  *
- * @package    Onm
- * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
+ * @package    Model
  *
  **/
 class Widget extends Content
