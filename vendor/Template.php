@@ -21,6 +21,7 @@ class Template extends Smarty
     public $metatags            = array();
     public $templateBaseDir;
     public $allow_php_tag;
+    public $container           = null;
 
     public $relative_path = null;
     static public $registry = array();

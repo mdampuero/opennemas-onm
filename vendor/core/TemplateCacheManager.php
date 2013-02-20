@@ -126,8 +126,7 @@ class TemplateCacheManager
     /**
      * Decodes information of smarty cache files
      *
-     * @param mixed $properties  array containing imported
-     *                           properties from cachefile
+     * @param mixed $properties  array containing imported properties from cachefile
      *
      * @return void
      */
