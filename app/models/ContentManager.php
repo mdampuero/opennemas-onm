@@ -2071,6 +2071,9 @@ class ContentManager
         $content = new Content();
         if (is_array($contentIds) && count($contentIds) > 0) {
             foreach ($contentIds as $contentId) {
+                if ($contentId <= 0) {
+                    continue;
+                }
                 $content = $content->get($contentId);
 
                 if ($content->pk_content == $contentId) {
