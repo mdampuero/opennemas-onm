@@ -49,7 +49,8 @@ class RedirectorsController extends Controller
         $oldVersion   = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
 
         list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
-
+var_dump($oldVersion);
+die();
         if ($oldVersion == 'editmaker') {
              $newContentID = \Content::resolveID($newContentID);
         }
@@ -59,6 +60,9 @@ class RedirectorsController extends Controller
             $content->category_name = $content->catName;
         } elseif ($type == 'opinion') {
             $content = new \Opinion($newContentID);
+        }
+        if (!isset($content) || is_null($content->id)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
         $url =  SITE_URL . $content->uri;
 
