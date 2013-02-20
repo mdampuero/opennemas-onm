@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for managing ads
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -13,7 +18,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
-use \Onm\Module\ModuleManager;
+use Onm\Module\ModuleManager;
 
 /**
  * Handles the actions for managing ads
@@ -29,8 +34,6 @@ class AdsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         ModuleManager::checkActivatedOrForward('ADS_MANAGER');
 
         $this->checkAclOrForward('ADVERTISEMENT_ADMIN');
@@ -44,13 +47,12 @@ class AdsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentType);
 
-        $this->view->assign('category', $this->category);
-
         $this->view->assign(
             array(
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
                 'datos_cat'    => $this->categoryData,
+                'category'     => $this->category
             )
         );
     }
@@ -473,6 +475,8 @@ class AdsController extends Controller
     /**
      * Change available status for one ad given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -573,6 +577,7 @@ class AdsController extends Controller
      * Builds the sql
      *
      * @param Request $request the request object
+     * @param string filter the sql filter to build the final filter
      *
      * @return Response the response object
      **/
@@ -627,6 +632,8 @@ class AdsController extends Controller
 
     /**
      * Handles and shows the album configuration form
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

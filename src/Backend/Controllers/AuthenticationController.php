@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles all the request for Welcome actions
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -39,6 +44,8 @@ class AuthenticationController extends Controller
     /**
      * Shows the login form
      *
+     * @param Request $request the request object
+     *
      * @return string the response string
      **/
     public function defaultAction(Request $request)
@@ -60,6 +67,8 @@ class AuthenticationController extends Controller
     // TODO: Move session management logic to a specialized class
     /**
      * Gets all the settings and displays the form
+     *
+     * @param Request $request the request object
      *
      * @return string the response
      **/
@@ -131,6 +140,8 @@ class AuthenticationController extends Controller
 
     /**
      * Performs the action of saving the configuration settings
+     *
+     * @param Request $request the request object
      *
      * @return string the response
      **/

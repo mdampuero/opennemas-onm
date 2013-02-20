@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines all the routes for backend interface
+ *
+ * @package  Backend
+ */
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for newslibrary
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -48,9 +53,11 @@ class ArchiveController extends Controller
     /**
      * Get newslibrary from content table in database
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
-    public function archiveAction()
+    public function archiveAction(Request $request)
     {
         $this->view->setConfig('newslibrary');
         $date = "{$this->year}-{$this->month}-{$this->day}";

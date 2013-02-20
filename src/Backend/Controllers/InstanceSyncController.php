@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the instance synchronization manager
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -32,7 +37,9 @@ class InstanceSyncController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the instances synced
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the letters content
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -31,6 +36,7 @@ class LettersController extends Controller
     {
         // Check MODULE
         \Onm\Module\ModuleManager::checkActivatedOrForward('LETTER_MANAGER');
+
         // Check ACL
         $this->checkAclOrForward('LETTER_ADMIN');
 
@@ -38,7 +44,9 @@ class LettersController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the letters
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -244,6 +252,8 @@ class LettersController extends Controller
 
     /**
      * Change available status for one video given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

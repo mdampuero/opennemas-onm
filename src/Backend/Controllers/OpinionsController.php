@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for managing opinions
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -40,7 +45,9 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the opinions
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -456,6 +463,8 @@ class OpinionsController extends Controller
     /**
      * Change available status for one opinion given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -507,6 +516,8 @@ class OpinionsController extends Controller
     /**
      * Change in_home status for one opinion given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleInHomeAction(Request $request)
@@ -544,6 +555,8 @@ class OpinionsController extends Controller
 
     /**
      * Change favorite flag for one opinion given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

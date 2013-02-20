@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -62,6 +67,9 @@ class FilesController extends Controller
 
     /**
      * Lists the files for a given category
+     *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function listAction(Request $request)
@@ -139,6 +147,8 @@ class FilesController extends Controller
     /**
      * Shows the files in the widget
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function widgetAction(Request $request)
@@ -172,7 +182,9 @@ class FilesController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the file usage statistics
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -243,7 +255,7 @@ class FilesController extends Controller
                     if (!empty ($sub_files[$ind][0])) {
                         foreach ($sub_files[$ind][0] as $value) {
                             if ($v->pk_content_category == $ccm->get_id($ccm->get_father($value->catName))) {
-                                if ($ccm->get_id($ccm->get_father($value->catName)) ) {
+                                if ($ccm->get_id($ccm->get_father($value->catName))) {
                                     $sub_size[$k][$ind] += filesize(MEDIA_PATH.'/'.FILE_DIR.'/'.$value->path);
                                 }
                             }
@@ -271,7 +283,9 @@ class FilesController extends Controller
     }
 
     /**
-     * Description of this action
+     * Creates a file
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -351,6 +365,8 @@ class FilesController extends Controller
     /**
      * Shows file data given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -383,6 +399,8 @@ class FilesController extends Controller
 
     /**
      * Updates a file given the data sent by POST
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -426,6 +444,8 @@ class FilesController extends Controller
     /**
      * Deletes a file given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -462,6 +482,8 @@ class FilesController extends Controller
 
     /**
      * Toggles the content favorite state given the content id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -501,6 +523,8 @@ class FilesController extends Controller
     /**
      * Toggles the in home state given the content id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleInHomeAction(Request $request)
@@ -538,6 +562,8 @@ class FilesController extends Controller
     /**
      * Toggles the available status given the content id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -573,6 +599,8 @@ class FilesController extends Controller
 
     /**
      * Deletes multiple books at once given its ids
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -613,6 +641,8 @@ class FilesController extends Controller
     /**
      * Set the published flag for contents in batch
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchPublishAction(Request $request)
@@ -650,6 +680,8 @@ class FilesController extends Controller
 
     /**
      * Save positions for widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -693,6 +725,8 @@ class FilesController extends Controller
 
     /**
      * Return list of files for content rovider & related contents
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

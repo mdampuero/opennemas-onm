@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for newsletter subscriptions
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,9 +22,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for newsletter subscriptions
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class SubscriptionsController extends Controller
 {
@@ -44,6 +49,8 @@ class SubscriptionsController extends Controller
     /**
      * Description of the action
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -53,6 +60,8 @@ class SubscriptionsController extends Controller
 
     /**
      * Creates the new subscription given information by POST
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -109,13 +118,13 @@ class SubscriptionsController extends Controller
                         // Build mail body
                         $formulario= "Nombre y Apellidos: ". $data['name']." \r\n".
                             "Email: ".$data['email']." \r\n";
-                        if (!empty($data['subscritorEntity']) ) {
+                        if (!empty($data['subscritorEntity'])) {
                             $formulario.= "Entidad: ".$data['subscritorEntity']." \n";
                         }
-                        if (!empty($data['subscritorCountry']) ) {
+                        if (!empty($data['subscritorCountry'])) {
                             $formulario.= "País: ".$data['subscritorCountry']." \n";
                         }
-                        if (!empty($data['subscritorCommunity']) ) {
+                        if (!empty($data['subscritorCommunity'])) {
                             $formulario.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
                         }
 

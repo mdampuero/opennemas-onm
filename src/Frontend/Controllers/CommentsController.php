@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for comments
+ *
+ * @package Froentend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,9 +22,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for comments
  *
- * @package Backend_Controllers
+ * @package Froentend_Controllers
  **/
 class CommentsController extends Controller
 {
@@ -34,7 +39,9 @@ class CommentsController extends Controller
     }
 
     /**
-     * Renders
+     * Returns the list of comments for a given content id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -81,6 +88,8 @@ class CommentsController extends Controller
 
     /**
      * Shows the comments lists given a page number
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -131,6 +140,8 @@ class CommentsController extends Controller
 
     /**
      * Votes a comment given the punctuation and comment id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -184,8 +195,9 @@ class CommentsController extends Controller
     }
 
     /**
-     * TODO: not finished
      * Saves a content given its information and the content to relate to
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

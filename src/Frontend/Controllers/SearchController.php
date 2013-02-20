@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for searches
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -18,7 +23,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for searches
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class SearchController extends Controller
 {
@@ -35,6 +40,8 @@ class SearchController extends Controller
     /**
      * Displays the search results with the google algorithm
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function googleAction(Request $request)
@@ -46,6 +53,8 @@ class SearchController extends Controller
 
     /**
      * Displays the search results with the internal algorithm
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

@@ -28,7 +28,7 @@ abstract class ImporterAbstract
     public function lockSync()
     {
         try {
-            touch($this->_lockFile);
+            touch($this->lockFile);
         } catch (\Exception $e) {
 
             return;
@@ -42,8 +42,8 @@ abstract class ImporterAbstract
      */
     public function unlockSync()
     {
-        if (file_exists($this->_lockFile)) {
-            unlink($this->_lockFile);
+        if (file_exists($this->lockFile)) {
+            unlink($this->lockFile);
         }
     }
 
@@ -195,7 +195,7 @@ abstract class ImporterAbstract
             $this->setupSyncEnvironment();
         }
 
-        if (file_exists($this->_lockFile)) {
+        if (file_exists($this->lockFile)) {
             throw new LockException(
                 sprintf(_("Seems that other user is syncing the news."))
             );

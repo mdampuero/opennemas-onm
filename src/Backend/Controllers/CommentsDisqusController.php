@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the Disqus comments
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,6 @@ use Onm\Message as m;
  * Handles the actions for the Disqus comments
  *
  * @package Backend_Controllers
- * @author
  **/
 class CommentsDisqusController extends Controller
 {
@@ -40,7 +44,7 @@ class CommentsDisqusController extends Controller
 
         /**
          * Check if module is configured, if not redirect to configuration form
-        */
+         */
         if (is_null(s::get('disqus_shortname')) && $action != 'config'
         ) {
             m::add(_('Please provide your Disqus configuration to start to use your Disqus Comments module'));
@@ -52,7 +56,9 @@ class CommentsDisqusController extends Controller
     /**
      * Description of the action
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function defaultAction(Request $request)
     {
@@ -64,7 +70,9 @@ class CommentsDisqusController extends Controller
     /**
      * Shows the disqus configuration form and stores its values
      *
-     * @return string the response string
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function configAction(Request $request)
     {

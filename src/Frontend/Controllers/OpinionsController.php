@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for advertisements
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for advertisements
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class OpinionsController extends Controller
 {
@@ -43,6 +48,8 @@ class OpinionsController extends Controller
 
     /**
      * Renders the opinion frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -164,6 +171,8 @@ class OpinionsController extends Controller
 
     /**
      * Renders the opinion frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -293,6 +302,8 @@ class OpinionsController extends Controller
 
     /**
      * Renders the opinion author's frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -424,6 +435,8 @@ class OpinionsController extends Controller
 
     /**
      * Renders the external opinion author's frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -573,7 +586,7 @@ class OpinionsController extends Controller
     /**
      * Displays an opinion given its id
      *
-     * @param int opinion_id the identificator of the opinion to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -681,7 +694,7 @@ class OpinionsController extends Controller
     /**
      * Displays an external opinion given its id
      *
-     * @param int opinion_id the identificator of the opinion to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -748,7 +761,9 @@ class OpinionsController extends Controller
 
     /**
      * Fetches the advertisement
-     **/
+     *
+     * @param string $context the context to fetch ads from
+     */
     private function getAds($context = 'frontpage')
     {
         if ($context == 'inner') {

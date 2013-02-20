@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the articles
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -20,7 +25,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the articles
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class ArticlesController extends Controller
 {
@@ -41,9 +46,7 @@ class ArticlesController extends Controller
     /**
      * Displays the article given its id or slug
      *
-     * @param int article_id the identifier of the article
-     * @param string slug the slug of the article
-     * @param string category the category name
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -178,9 +181,7 @@ class ArticlesController extends Controller
     /**
      * Displays the external article given its id or slug
      *
-     * @param int article_id the identifier of the article
-     * @param string slug the slug of the article
-     * @param string category the category name
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -257,7 +258,7 @@ class ArticlesController extends Controller
     /**
      * Fetches advertisements for article inner
      *
-     * @param int category the category identifier
+     * @param string category the category identifier
      *
      * @return void
      **/

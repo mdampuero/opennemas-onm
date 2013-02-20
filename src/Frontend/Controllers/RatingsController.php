@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for ratings system
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,9 +21,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for ratings system
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class RatingsController extends Controller
 {
@@ -35,10 +40,7 @@ class RatingsController extends Controller
     /**
      * Registers a vote for a content given its id
      *
-     * @param string i the ip that sends the request
-     * @param int    v the vote value
-     * @param string i the page
-     * @param string a the content id
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

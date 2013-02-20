@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the system users
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,6 @@ use Onm\Message as m;
  * Handles the system users
  *
  * @package Backend_Controllers
- * @author OpenHost Developers <developers@openhost.es>
  **/
 class AclUserController extends Controller
 {
@@ -31,11 +35,12 @@ class AclUserController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**
      * Show a paginated list of users
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -73,6 +78,8 @@ class AclUserController extends Controller
 
     /**
      * Shows the user information given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -125,7 +132,7 @@ class AclUserController extends Controller
     /**
      * Handles the update action for a user given its id
      *
-     * After finish the task redirects the user to the proper place
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -182,7 +189,9 @@ class AclUserController extends Controller
     /**
      * Creates an user give some information
      *
-     * @return string the response string
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function createAction(Request $request)
     {
@@ -251,7 +260,9 @@ class AclUserController extends Controller
     /**
      * Deletes a user given its id
      *
-     * @return string the response string
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function deleteAction(Request $request)
     {
@@ -271,7 +282,9 @@ class AclUserController extends Controller
     /**
      * Deletes multiple users at once given their ids
      *
-     * @return string the string resposne
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function batchDeleteAction(Request $request)
     {

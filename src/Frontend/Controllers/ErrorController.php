@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handlers errors in frontend
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -15,10 +20,9 @@ use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the system information
+ * Handlers errors in frontend
  *
- * @package Backend_Controllers
- * @author
+ * @package Frontend_Controllers
  **/
 class ErrorController extends Controller
 {
@@ -26,7 +30,6 @@ class ErrorController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -34,9 +37,11 @@ class ErrorController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the error page
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function defaultAction(Request $request)
     {

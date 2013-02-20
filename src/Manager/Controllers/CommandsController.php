@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the frameworks commands
+ *
+ * @package Manager_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -20,7 +25,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the frameworks commands
  *
- * @package Backend_Controllers
+ * @package Manager_Controllers
  **/
 class CommandsController extends Controller
 {
@@ -35,7 +40,9 @@ class CommandsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the available framework commands
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -65,7 +72,9 @@ class CommandsController extends Controller
     /**
      * Executes a particular command given its name
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function executeCommandAction(Request $request)
     {

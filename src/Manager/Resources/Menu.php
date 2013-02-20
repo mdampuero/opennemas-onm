@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Defines the manager menu
+ *
+ * @package Manager
+ */
 $menuXml = '<?xml version="1.0"?>
 <menu>
     <submenu title="'.htmlspecialchars(_("Instances"), ENT_QUOTES).'" id="frontpage" link="#">
