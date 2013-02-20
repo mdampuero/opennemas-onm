@@ -11,20 +11,37 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class UserGroup
 {
+    /**
+     * The user group id
+     *
+     * @var int
+     **/
+    public $id = null;
 
-    /**Id del grupo*/
-    public $id         = null;
+    /**
+     * The user group name
+     *
+     * @var string
+     **/
+    public $name = null;
 
-    /**Nombre del grupo*/
-    public $name       = null;
-
-    /**Lista de permisos activos para este grupo de usuarios*/
+    /**
+     * List of privileges for this user group
+     *
+     * @var array
+     **/
     public $privileges = null;
 
+    /**
+     * Loads the user group information given its id
+     *
+     * @param int $id the user group id to load
+     *
+     * @return UserGroup the user group object instance
+     **/
     public function __construct($id = null)
     {
         if (!is_null($id)) {
@@ -32,9 +49,15 @@ class UserGroup
         }
     }
 
+    /**
+     * Creates a new user group given its information
+     *
+     * @param array $data the user group data
+     *
+     * @return boolean true if all went well
+     **/
     public function create($data)
     {
-        // Se inserta el grupo
         $sql = "INSERT INTO user_groups (`name`) VALUES (?)";
         $values = array($data['name']);
 
@@ -56,6 +79,13 @@ class UserGroup
         return true;
     }
 
+    /**
+     * Loads the user group information given its id
+     *
+     * @param int $id the user group id to load
+     *
+     * @return UserGroup the user group object instance
+     **/
     public function read($id)
     {
         $sql = 'SELECT * FROM user_groups WHERE pk_user_group=?';
@@ -83,8 +113,17 @@ class UserGroup
             $this->privileges[] = $rs->fields['pk_fk_privilege'];
             $rs->MoveNext();
         }
+
+        return $this;
     }
 
+    /**
+     * Updates the user group information given an array
+     *
+     * @param array $data the data to update the user group
+     *
+     * @return boolean true if the data was saved
+     **/
     public function update($data)
     {
         if (!is_null($data['id'])) {
@@ -120,6 +159,13 @@ class UserGroup
         return false;
     }
 
+    /**
+     * Deletes an user group and privilege assigned given its id
+     *
+     * @param int $id the user group id to delete
+     *
+     * @return boolean true if the user group was deleted properly
+     **/
     public function delete($id)
     {
         $sql = 'DELETE FROM user_groups WHERE pk_user_group=?';
@@ -129,37 +175,57 @@ class UserGroup
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
-        // Se eliminan las referencias de los privileges
-        $this->deletePrivileges($id);
+        return $this->deletePrivileges($id);
     }
 
-    public static function getGroupName($userGroupFK)
+    /**
+     * Returns the user group name given an user group id
+     *
+     * @param int $id the user group id
+     *
+     * @return string the name of the group
+     **/
+    public static function getGroupName($id)
     {
         $sql = 'SELECT name FROM user_groups WHERE pk_user_group=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $userGroupFK);
+        $rs = $GLOBALS['application']->conn->GetOne($sql, $id);
 
         return $rs;
     }
 
+    /**
+     * Returns all the user groups in the system, excluding the Master group
+     *
+     * @return array a list of UserGroup objects
+     **/
     public function find()
     {
-        $types = array();
-        $sql = "SELECT pk_user_group, name "
-             . "FROM user_groups WHERE name <>'Masters'";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $userGroups = array();
+
+        $rs = $GLOBALS['application']->conn->Execute(
+            "SELECT pk_user_group, name FROM user_groups WHERE name <>'Masters'"
+        );
+
         while (!$rs->EOF) {
             $userGroup = new UserGroup();
             $userGroup->load($rs->fields);
-            $types[] = $userGroup;
+            $userGroups[] = $userGroup;
             $rs->MoveNext();
         }
 
-        return ($types);
+        return $userGroups;
     }
 
+    /**
+     * Whether the group contains a privilege given the privilege id
+     *
+     * @param int $privilegeID the privilege ID to check for
+     *
+     * @return boolean true if the group has the privilege
+     **/
     public function containsPrivilege($privilegeID)
     {
         if (isset($this->privileges)) {
@@ -169,25 +235,39 @@ class UserGroup
         return false;
     }
 
-    private function insertPrivileges($data)
+    /**
+     * Assign the privileges to a group given an array of privilege ids
+     *
+     * @param array $privilegeIds a list of privileges to assign to this group
+     *
+     * @return boolean true if all went well
+     **/
+    private function insertPrivileges($privilegeIds)
     {
-        $sql =  "INSERT INTO user_groups_privileges"
-                ."            (`pk_fk_user_group`, `pk_fk_privilege`)"
-                ." VALUES (?,?)";
-        for ($i = 0; $i < count($data); $i++) {
-            $values = array($this->id, $data[$i]);
-
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        foreach ($privilegeIds as $privilegeId) {
+            $rs = $GLOBALS['application']->conn->Execute(
+                "INSERT INTO user_groups_privileges
+                (`pk_fk_user_group`, `pk_fk_privilege`)
+                VALUES (?,?)",
+                array($this->id, $privilegeId)
+            );
             if (!$rs) {
                 \Application::logDatabaseError();
 
-                return (false);
+                return false;
             }
         }
 
         return true;
     }
 
+    /**
+     * Removes the privilege assigned to the user group
+     *
+     * @param int $id the privilege id to remove
+     *
+     * @return boolean true if the privilege was removed
+     **/
     private function deletePrivileges($id)
     {
         $sql = 'DELETE FROM user_groups_privileges WHERE pk_fk_user_group=?';
@@ -196,13 +276,24 @@ class UserGroup
         if (!$rs) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Hydrates the object given an array with the new data
+     *
+     * @param array $data the data to load into the user group object
+     *
+     * @return UserGroup the user group object instance with the new information
+     **/
     private function load($data)
     {
         $this->id   = $data['pk_user_group'];
         $this->name = $data['name'];
+
+        return $this;
     }
 }

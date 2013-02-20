@@ -1,4 +1,10 @@
 <?php
+/**
+ * Contains the WidgetFactory class definition
+ *
+ * @package    Onm
+ * @subpackage Model
+ **/
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -11,10 +17,16 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class WidgetFactory
 {
+    /**
+     * Initializes the WidgetFactory object instance
+     *
+     * @param boolean $useDB whether use the database or not
+     *
+     * @return WidgetFactory the object instance
+     **/
     public function __construct($useDB = true)
     {
 
@@ -29,5 +41,7 @@ class WidgetFactory
         // Assign a random number, usefull for diferenciate instances of
         // the same widget
         $this->tpl->assign('rnd_number', rand(5, 900));
+
+        return $this;
     }
 }
