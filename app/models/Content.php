@@ -1542,7 +1542,7 @@ class Content
             return null;
         }
 
-        $type = classify($type);
+        $type = ucfirst($type);
         try {
             return new $type($contentId);
         } catch (Exception $e) {
