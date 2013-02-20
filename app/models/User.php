@@ -349,6 +349,9 @@ class User
         $result = false;
 
         $result = $this->authDatabase($login, $password);
+        if (!$result) {
+            $result = $this->authDatabase($login, $password, true);
+        }
 
         return $result;
     }
