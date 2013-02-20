@@ -232,7 +232,7 @@ class FilesManager
 
         exec($command, $output, $return_var);
 
-        if ($return_var!=0) {
+        if ($return_var != 0) {
             return false;
         }
 
@@ -248,11 +248,10 @@ class FilesManager
      */
     public static function decompressTgz($compressFile, $destination)
     {
-        $actualPath = getcwd();
         $command = "tar xpfz $compressFile -C $destination";
         exec($command, $output, $return_var);
 
-        if ($return_var!=0) {
+        if ($return_var != 0) {
             return false;
         }
 

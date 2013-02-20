@@ -51,47 +51,7 @@ class Bootstrap extends ModuleBootstrap
         }
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
-        if ($isAsset != 1) {
-            $session = $this->container->get('session');
-            $session->start();
-            $this->container->get('request')->setSession($session);
-
-            if (!isset($_SESSION['userid'])
-                && !preg_match('@^/admin/login@', $request->getPathInfo())
-            ) {
-                $url = $request->getPathInfo();
-
-                if (!empty($url)) {
-                    $redirectTo = urlencode($request->getUri());
-                }
-                $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
-
-                $response = new RedirectResponse($location, 301);
-                $response->send();
-                exit(0);
-            } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
-                $response = new RedirectResponse('/', 301);
-                $response->send();
-                exit(0);
-            } else {
-
-                if (array_key_exists('updated', $_SESSION)
-                    && (time() > ($_SESSION['updated'] + ($sessionLifeTime * 60)))
-                ) {
-                    foreach ($_COOKIE as $name => $value) {
-                        if (preg_match('@^_onm_session_.*@', $name)) {
-                            setcookie($name, '', time() - 60000);
-                        }
-                    }
-
-                    $session->invalidate();
-                    $response = new RedirectResponse(SITE_URL_ADMIN);
-                    $response->send();
-                }
-
-                $_SESSION['updated'] = time();
-            }
-        } else {
+        if ($isAsset) {
             // Log this error event to the webserver logging sysmte
             error_log("File does not exist: ".$request->getPathInfo(), 0);
 
@@ -100,6 +60,45 @@ class Bootstrap extends ModuleBootstrap
             exit();
         }
 
+        $session = $this->container->get('session');
+        $session->start();
+        $this->container->get('request')->setSession($session);
+
+        if (!isset($_SESSION['userid'])
+            && !preg_match('@^/admin/login@', $request->getPathInfo())
+        ) {
+            $url = $request->getPathInfo();
+
+            if (!empty($url)) {
+                $redirectTo = urlencode($request->getUri());
+            }
+            $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
+
+            $response = new RedirectResponse($location, 301);
+            $response->send();
+            exit(0);
+        } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
+            $response = new RedirectResponse('/', 301);
+            $response->send();
+            exit(0);
+        } else {
+
+            if (array_key_exists('updated', $_SESSION)
+                && (time() > ($_SESSION['updated'] + ($sessionLifeTime * 60)))
+            ) {
+                foreach ($_COOKIE as $name => $value) {
+                    if (preg_match('@^_onm_session_.*@', $name)) {
+                        setcookie($name, '', time() - 60000);
+                    }
+                }
+
+                $session->invalidate();
+                $response = new RedirectResponse(SITE_URL_ADMIN);
+                $response->send();
+            }
+
+            $_SESSION['updated'] = time();
+        }
     }
 
     /**
@@ -181,5 +180,19 @@ class Bootstrap extends ModuleBootstrap
         $GLOBALS['application']->register('onAfterSetInhome', 'refreshHome');
         $GLOBALS['application']->register('onAfterPosition', 'refreshFrontpage');
         $GLOBALS['application']->register('onAfterCreateAttach', 'refreshHome');
+    }
+
+    /**
+     * Initializes the templating system
+     *
+     * @return void
+     **/
+    public function initTemplateSystem()
+    {
+        $template = new \TemplateAdmin(TEMPLATE_ADMIN);
+
+        $template->container = $this->container;
+
+        $this->container->set('view', $template);
     }
 }

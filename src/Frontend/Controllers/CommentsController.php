@@ -2,7 +2,7 @@
 /**
  * Handles the actions for comments
  *
- * @package Froentend_Controllers
+ * @package Frontend_Controllers
  **/
 /**
  * This file is part of the Onm package.
@@ -24,7 +24,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for comments
  *
- * @package Froentend_Controllers
+ * @package Frontend_Controllers
  **/
 class CommentsController extends Controller
 {

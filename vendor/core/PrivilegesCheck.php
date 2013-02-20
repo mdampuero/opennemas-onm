@@ -24,8 +24,7 @@ class PrivilegesCheck
     public static function CheckAccessCategories($categoryID)
     {
         try {
-            if (
-                !isset($categoryID)
+            if (!isset($categoryID)
                 || is_null($categoryID)
             ) {
                 $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
@@ -33,21 +32,19 @@ class PrivilegesCheck
                 return true;
             }
 
-            if ( isset($_SESSION['isMaster'])
+            if (isset($_SESSION['isMaster'])
                 && $_SESSION['isMaster']
             ) {
                 return true;
             }
 
-            if (
-                isset($_SESSION['isAdmin'])
+            if (isset($_SESSION['isAdmin'])
                 && $_SESSION['isAdmin']
             ) {
                 return true;
             }
 
-            if (
-                !isset($_SESSION['accesscategories'])
+            if (!isset($_SESSION['accesscategories'])
                 || empty($_SESSION['accesscategories'])
                 || !in_array($categoryID, $_SESSION['accesscategories'])
             ) {
@@ -88,7 +85,7 @@ class PrivilegesCheck
             if (!isset($_SESSION['privileges'])
                 || empty($_SESSION['userid'])
                 || !in_array($privilege, $_SESSION['privileges'])
-                || (!is_null($categoryID) && !(self::CheckAccessCategories($category)))
+                || (!is_null($categoryID) && !(self::CheckAccessCategories($categoryID)))
             ) {
                 return false;
             }

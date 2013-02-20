@@ -1,8 +1,8 @@
 <?php
 /**
- * Initializes the Backend Module
+ * Initializes the Frontend Module
  *
- * @package default
+ * @package Frontend
  **/
 /**
  * This file is part of the Onm package.
@@ -20,9 +20,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Onm\Settings as s;
 
 /**
- * Initializes the Backend Module
+ * Initializes the Frontend Module
  *
- * @package default
+ * @package Frontend
  **/
 class Bootstrap extends ModuleBootstrap
 {
