@@ -303,6 +303,7 @@ class FrontpagesController extends Controller
                     $properties = json_decode($properties);
                     if (!empty($properties)) {
                         // #content-81115.onm-new h3.nw-title a
+                        $rules .="#content-{$item->pk_content} .title a, ";
                         $rules .="#content-{$item->pk_content} .nw-title a {\n";
                         foreach ($properties as $property => $value) {
                             if (!empty($value)) {
