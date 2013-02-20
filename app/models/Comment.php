@@ -14,19 +14,75 @@
  **/
 class Comment extends \Content
 {
+    /**
+     * The id of the comment
+     *
+     * @var int
+     **/
     public $pk_comment   = null;
+
+    /**
+     * The author id that sent this comment
+     *
+     * @var int
+     **/
     public $author       = null;
+
+    /**
+     * The city of the comment
+     *
+     * @var string
+     **/
     public $ciudad       = null;
+
+    /**
+     * The sex of the comment author
+     *
+     * @var string
+     **/
     public $sexo         = null;
+
+    /**
+     * The email of the comment author
+     *
+     * @var string
+     **/
     public $email        = null;
+
+    /**
+     * The content body
+     *
+     * @var string
+     **/
     public $body         = null;
+
+    /**
+     * The IP of the comment author
+     *
+     * @var string
+     **/
     public $ip           = null;
+
+    /**
+     * Whether this comment is published or not
+     *
+     * @var int
+     **/
     public $published    = null;
+
+    /**
+     * Content id that is referencing this comment
+     *
+     * @var int
+     **/
     public $fk_content   = null;
-    public $content_type = null;
 
     /**
      * Initializes the comment object from a given id
+     *
+     * @param int $id the comment id to load
+     *
+     * @return Comment the comment object instance
      **/
     public function __construct($id = null)
     {
@@ -37,17 +93,16 @@ class Comment extends \Content
         }
         $this->content_type = __CLASS__;
         $this->content_type_l10n_name = _('Comment');
+
+        return $this;
     }
 
     /**
-     * Creates a new comment for a given data
-     *
-     * Create a new comment for a given id from content, data regardless the
-     * comment, and the ip that issued that comment.
+     * Creates a new comment for a given id from content
      *
      * @param  array $params the params to change function behaviour
-     * @return bool  if it is true the comment was created, if it is false
-     *              something went wrong
+     *
+     * @return bool  if it is true the comment was created
      **/
     public function create($params)
     {
@@ -95,6 +150,8 @@ class Comment extends \Content
      * Gets the information from the database from one comment given its id
      *
      * @param integer $id the id of the comment
+     *
+     * @return Comment the comment object instance
      **/
     public function read($id)
     {
@@ -115,12 +172,16 @@ class Comment extends \Content
         $this->email      = $rs->fields['email'];
         $this->published  = $rs->fields['published'];
         $this->fk_content = $rs->fields['fk_content'];
+
+        return $this;
     }
 
     /**
      * Updates the information of a comment with a given $data
      *
      * @param array $data the information of the comment to update
+     *
+     * @return boolean true if the comment was updated
      **/
     public function update($data)
     {
@@ -133,14 +194,18 @@ class Comment extends \Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
      * Removes a comment from a given id
      *
      * @param integer $id the comment id
+     *
+     * @return boolean true if the comment was deleted
      */
     public function remove($id)
     {
@@ -151,18 +216,19 @@ class Comment extends \Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
-     * Delete all comments from a given content id
-     *
+     * Deletes all comments related with a given content id
      * WARNING: this is very dangerous, the action can't be undone
      *
-     * @access public
-     * @param  $contentID
-     * @return null
+     * @param  int $contentID the content id to delete comments that referent to it
+     *
+     * @return boolean true if comments were deleted
      **/
     public function deleteComments($contentID)
     {
@@ -174,17 +240,19 @@ class Comment extends \Content
             if ($rs === false) {
                 \Application::logDatabaseError();
 
-                return;
+                return false;
             }
+
+            return true;
         }
     }
 
     /**
-     * Return all the comments from a given content's id
+     * Returns all the comments from a given content's id
      *
-     * @access public
-     * @param  integer $contentID
-     * @return mixed,  array of comment's objects
+     * @param  integer $contentID the content id to fetch comments with it
+     *
+     * @return array the list of comment's objects
      **/
     public function get_comments($contentID)
     {
@@ -215,11 +283,11 @@ class Comment extends \Content
     }
 
     /**
-     * Determines if the content of a comment has bad words
+     * Checks if the content of a comment has bad words
      *
-     * @access public
-     * @param  mixed    $data, the data from the comment
-     * @return integer, higher values means more bad words
+     * @param  array $data the data of the comment
+     *
+     * @return integer higher values means more bad words
      **/
     public function hasBadWordsComment($data)
     {
@@ -233,8 +301,8 @@ class Comment extends \Content
     /**
      * Gets the public comments from a given content's id.
      *
-     * @param  integer $contentID
-     * @param int $elemsBypage the number of elements to return
+     * @param int $contentID the content id for fetching its comments
+     * @param int $elemsByPage the number of elements to return
      * @param int $page the initial offset
      *
      * @return array  array of comment's objects
@@ -275,9 +343,9 @@ class Comment extends \Content
     /**
      * Gets the number of public comments
      *
-     * @access public
-     * @param  integer  $contentID, the id of the content to get comments from
-     * @return integer, the number of public comments
+     * @param  integer  $contentID the id of the content to get comments from
+     *
+     * @return integer the number of public comments
      **/
     public function count_public_comments($contentID)
     {

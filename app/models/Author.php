@@ -1,4 +1,10 @@
 <?php
+/**
+ * Handles all CRUD actions over Authors.
+ *
+ * @package    Onm
+ * @subpackage Model
+ **/
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -11,30 +17,92 @@
  *
  * @package    Onm
  * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class Author
 {
+    /**
+     * The id of the author
+     *
+     * @var int
+     **/
     public $pk_author = null;
-    public $name      = null;
-    public $fk_user   = null;
-    public $gender    = null;
-    public $politics  = null;
-    public $condition = null;
-    public $date_nac  = null;
-    public $params    = null;
-    public $photos   = array();
 
+    /**
+     * The name of the author
+     *
+     * @var string
+     **/
+    public $name      = null;
+
+    /**
+     * Unused
+     *
+     * @var int
+     **/
+    public $fk_user   = null;
+
+    /**
+     * The gender of the author
+     *
+     * @var string
+     **/
+    public $gender    = null;
+
+    /**
+     * The political color of the author
+     *
+     * @var string
+     **/
+    public $politics  = null;
+
+    /**
+     * The condition of the author, author's work
+     *
+     * @var string
+     **/
+    public $condition = null;
+
+    /**
+     * Birth date of the author
+     *
+     * @var string
+     **/
+    public $date_nac  = null;
+
+    /**
+     * Other parameters of the author
+     *
+     * @var array
+     **/
+    public $params    = null;
+
+    /**
+     * Photos assigned to this author
+     *
+     * @var string
+     **/
+    public $photos    = array();
+
+    /**
+     * Cache proxy for the author information
+     *
+     * @var MethodCacheManager
+     **/
     public $cache     = null;
 
+    /**
+     * Default information of an author
+     *
+     * @var array
+     **/
     private $defaultValues = array(
-        'name'      =>'',
-        'gender'    =>'',
-        'blog'      =>'',
-        'politics'  =>'',
-        'condition' =>'',
-        'date_nac'  =>'',
-        'titles'    =>array(),
+        'name'      => '',
+        'gender'    => '',
+        'blog'      => '',
+        'politics'  => '',
+        'condition' => '',
+        'date_nac'  => '',
+        'titles'    => array(),
     );
 
     /**
@@ -103,25 +171,23 @@ class Author
      * Fetches one Author by its id.
      *
      * @param string $id the author id to get info from.
+     *
+     * @return Author The author object or null if the author doesn't exists
      **/
     public function read($id)
     {
-        $sql = 'SELECT `authors`.`pk_author`, `authors`.`name` ,
-                       `authors`.`blog` , `authors`.`politics` ,
-                       `authors`.`date_nac` , `authors`.`fk_user` ,
-                       `authors`.`condition` , `authors`.`params`
-                FROM authors
-                WHERE `authors`.`pk_author` = ?';
+        $sql = 'SELECT * FROM authors WHERE `authors`.`pk_author` = ?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
-        //self::$_authors
         $this->load($rs->fields);
+
+        return $this;
     }
 
     /**
@@ -210,6 +276,13 @@ class Author
         return true;
     }
 
+    /**
+     * Overload object properties from an array
+     *
+     * @param array $properties the array with properties
+     *
+     * @return Author the author with the new information
+     **/
     public function load($properties)
     {
         if (is_array($properties)) {
@@ -221,13 +294,15 @@ class Author
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
         }
         $this->params = unserialize($this->params);
         $this->id = $this->pk_author;
+
+        return $this;
     }
 
     /**
@@ -272,8 +347,6 @@ class Author
      * @param string $id the author id.
      *
      * @return stdClass the object with information about the author
-     *
-     * @throws <b>Exception</b> Explanation of exception.
      **/
     public function get_author($id)
     {
@@ -305,12 +378,15 @@ class Author
     }
 
     /**
-     * Returns a list of all authors
+     * Returns a paginated array of authors that match the given search criteria
      *
-     * @param  string $filter,   the where sql part to filter authors by
-     * @param  string $_orderBy, the ORDER BY sql part to sort authors with
+     * @param string $filter   the where sql part to filter authors by
+     * @param string $_orderBy the ORDER BY sql part to sort authors with
+     * @param int $page the offset page
+     * @param int $itemsPerPage number of authors to show per page
+     *
      * @return mixed, array of all matched authors
-     **/
+     */
     public static function list_authors(
         $filter = null,
         $_orderBy = 'ORDER BY 1',
@@ -353,22 +429,22 @@ class Author
             }
         }
 
-        return( $items );
+        return $items;
     }
 
     /**
-     * Returns all the authors that matches given WHERE and ORDER BY clauses.
+     * Returns all the authors that matches a search criteira given WHERE and ORDER BY clauses.
      *
      * @param string $filter the where criteria.
+     * @param string $orderBy the ORDER BY of the SQL sentence
      *
-     * @return array multidimensional array with information about
-     *               matching authors
-     **/
+     * @return array multidimensional array with information about matching authors
+     */
     public function all_authors($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
         $_where = '1=1';
-        if ( !is_null($filter) ) {
+        if (!is_null($filter)) {
             $_where = $filter;
         }
 
@@ -399,7 +475,7 @@ class Author
      * @param string $id the author id.
      *
      * @return array list of dummy photo objects
-     **/
+     */
     public function get_photo($id)
     {
         if (count($this->photos) <= 0) {
@@ -429,12 +505,12 @@ class Author
     }
 
     /**
-     * Returns all the photos associated to one author given its id.
+     * Returns all the photos associated to one author given the author id.
      *
      * @param string $id the author id.
      *
      * @return array list of dummy photo objects
-     **/
+     */
     public function get_author_photos($id = null)
     {
         if (is_null($id)) {
@@ -476,13 +552,11 @@ class Author
      * @param string $id the author id.
      *
      * @return int the number of photos
-     **/
+     */
     public static function count_author_photos($id = null)
     {
-        $sql = 'SELECT COUNT(*) FROM author_imgs WHERE fk_author = ?';
+        $sql = "SELECT COUNT(*) FROM author_imgs WHERE fk_author = ?";
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
-        // var_dump($rs);die();
-
 
         return $rs->fields['COUNT(*)'];
     }
