@@ -1795,7 +1795,10 @@ class ContentManager
     ) {
         // recupera el id de la categoria del array.
         $this->init($contentType);
-        $pk_fk_content_category=$this->get_id($categoryName);
+
+        $ccm = ContentCategoryManager::get_instance();
+        $pk_fk_content_category = $ccm->get_id($categoryName);
+
         $items  = array();
         $_where = 'in_litter=0';
 
