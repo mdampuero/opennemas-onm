@@ -165,6 +165,10 @@ class WidgetsController extends Controller
                 'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
             );
 
+            if ($widgetData['renderlet'] == 'intelligentwidget') {
+                $widgetData['content'] = $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING);
+            }
+
             try {
                 $widget = new \Widget();
                 $widget->create($widgetData);
@@ -222,6 +226,10 @@ class WidgetsController extends Controller
             'description' => $post->filter('description', null, FILTER_SANITIZE_STRING),
             'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
         );
+
+        if ($widgetData['renderlet'] == 'intelligentwidget') {
+            $widgetData['content'] = $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING);
+        }
 
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
