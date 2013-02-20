@@ -49,8 +49,7 @@ class RedirectorsController extends Controller
         $oldVersion   = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
 
         list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
-var_dump($oldVersion);
-die();
+
         if ($oldVersion == 'editmaker') {
              $newContentID = \Content::resolveID($newContentID);
         }
