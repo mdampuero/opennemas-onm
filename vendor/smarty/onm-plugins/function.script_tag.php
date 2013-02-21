@@ -48,7 +48,6 @@ function smarty_function_script_tag($params, &$smarty) {
         $escape = true;
     }
 
-    unset($params['external']);
     unset($params['common']);
     unset($params['src']);
     unset($params['type']);
