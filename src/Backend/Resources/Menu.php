@@ -60,7 +60,14 @@ $menuXml = '<?xml version="1.0"?>
             privilege="OPINION_ADMIN"
             title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'"
             id="opinion_manager"
-            link="'.url('admin_opinions').'">
+            link="#">
+            <node
+                module_name="OPINION_MANAGER"
+                privilege="OPINION_ADMIN"
+                title="'.htmlspecialchars(_("Article opinions"), ENT_QUOTES).'"
+                id="mailman"
+                link="'.url('admin_opinions').'"
+            />
             <node
                 module_name="OPINION_MANAGER"
                 privilege="OPINION_ADMIN"

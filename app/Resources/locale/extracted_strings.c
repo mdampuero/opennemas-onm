@@ -1574,6 +1574,12 @@ gettext("Remove element from this frontpage");
 gettext("Drop from this frontpage");
 
 /* public/themes/admin/tpl//album/content-provider/album.tpl */
+gettext("Customize in frontpage");
+
+/* public/themes/admin/tpl//album/content-provider/album.tpl */
+gettext("Customize content");
+
+/* public/themes/admin/tpl//album/content-provider/album.tpl */
 gettext("Drop from all frontpages");
 
 /* public/themes/admin/tpl//album/content-provider/album.tpl */
@@ -4067,12 +4073,6 @@ gettext("OpenNeMaS administration");
 gettext("Go to admin main page");
 
 /* public/themes/admin/tpl//base/admin.tpl */
-gettext("Help");
-
-/* public/themes/admin/tpl//base/admin.tpl */
-gettext("Contact support");
-
-/* public/themes/admin/tpl//base/admin.tpl */
 gettext("Search...");
 
 /* public/themes/admin/tpl//base/admin.tpl */
@@ -4080,6 +4080,9 @@ gettext("There are new comments to moderate");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Pending comments");
+
+/* public/themes/admin/tpl//base/admin.tpl */
+gettext("Contact support");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Edit my profile");
@@ -6473,6 +6476,9 @@ gettext("User group:");
 gettext("--Select one--");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Master");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Categories");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
@@ -7083,6 +7089,12 @@ gettext("Delete");
 
 /* public/themes/admin/tpl//video/content-provider/video.tpl */
 gettext("Drop from this frontpage");
+
+/* public/themes/admin/tpl//video/content-provider/video.tpl */
+gettext("Customize in frontpage");
+
+/* public/themes/admin/tpl//video/content-provider/video.tpl */
+gettext("Customize content");
 
 /* public/themes/admin/tpl//video/content-provider/video.tpl */
 gettext("Drop from all frontpages");
