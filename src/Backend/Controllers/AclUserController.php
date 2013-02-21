@@ -275,6 +275,8 @@ class AclUserController extends Controller
             $user->delete($userId);
             if (!$request->isXmlHttpRequest()) {
                 return $this->redirect($this->generateUrl('admin_acl_user'));
+            } else {
+                return new Response('ok');
             }
         }
     }
