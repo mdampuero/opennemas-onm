@@ -1538,7 +1538,8 @@ class Content
               . 'WHERE pk_content=? AND fk_content_type=pk_content_type';
         $type = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
 
-        if ($type === false) {
+        if (empty($type)) {
+
             return null;
         }
 
