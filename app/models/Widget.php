@@ -119,6 +119,7 @@ class Widget extends Content
 
             return null;
         }
+
         $this->load($rs->fields);
     }
 
@@ -221,21 +222,27 @@ class Widget extends Content
 
     public static function getAllInteligentWidgets()
     {
-        $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
+        $paths = array();
+        $paths[] = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
+        $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
+
         $allWidgets = array();
 
-        if (is_dir($path)) {
-            $objects = scandir($path);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (preg_match('@^widget_(.)*\.tpl$@', $object)) {
-                        $objectWords = explode('_', substr($object, 7, -10));
-                        $name = '';
-                        foreach ($objectWords as $word) {
-                            $name .= ucfirst($word);
+        foreach ($paths as $path) {
+            if (is_dir($path) && $path != '/') {
+                $objects = scandir($path);
+                foreach ($objects as $object) {
+                    if ($object != "." && $object != "..") {
+                        if (preg_match('@^widget_(.)*\.tpl$@', $object)) {
+                            $objectWords = explode('_', substr($object, 7, -10));
+                            $name = '';
+                            foreach ($objectWords as $word) {
+                                $name .= ucfirst($word);
+                            }
+                            if (!in_array($name, $allWidgets)) {
+                                $allWidgets[] .=  $name;
+                            }
                         }
-
-                        $allWidgets[] .=  $name;
                     }
                 }
             }
@@ -330,22 +337,32 @@ class Widget extends Content
 
     private function renderletIntelligentWidget($params = null)
     {
-        $path = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
-        ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
+        $paths = array();
+        $paths[] = realpath(TEMPLATE_USER_PATH . '/tpl' . '/widgets') . '/';
+        $paths[] = SITE_PATH.'themes'.DS.'base'.DS.'tpl/widgets/';
+
         $className = 'Widget' . $this->content;
         $filename = strtolower($className);
 
-        if (file_exists($path . '/' . $filename . '.class.php')) {
-            require_once $path . '/' . $filename . '.class.php';
-        } else {
-            $filename = strtolower(
-                preg_replace('/([a-z])([A-Z])/', '$1_$2', $className)
-            );
+        foreach ($paths as $path) {
+            if ($path != '/') {
+                ini_set('include_path', get_include_path() . PATH_SEPARATOR . $path);
+                if (file_exists($path . '/' . $filename . '.class.php')) {
+                    require_once $path . '/' . $filename . '.class.php';
+                    break;
+                } else {
+                    $filename = strtolower(
+                        preg_replace('/([a-z])([A-Z])/', '$1_$2', $className)
+                    );
 
-            if (file_exists($path . '/' . $filename . '.class.php')) {
-                require_once $path . '/' . $filename . '.class.php';
+                    if (file_exists($path . '/' . $filename . '.class.php')) {
+                        require_once $path . '/' . $filename . '.class.php';
+                        break;
+                    }
+                }
             }
         }
+
         try {
             if (class_exists($className)) {
                 $class = new $className;
