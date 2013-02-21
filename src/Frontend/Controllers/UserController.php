@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the user profile
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,7 +22,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the user profile
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class UserController extends Controller
 {
@@ -40,6 +45,8 @@ class UserController extends Controller
 
     /**
      * Handles the registration of a new user in frontend
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -171,6 +178,8 @@ class UserController extends Controller
      * Shows the form for recovering the pass of a user and
      * sends the mail to the user
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function recoverPassAction(Request $request)
@@ -281,7 +290,9 @@ class UserController extends Controller
     /**
      * Shows the user information
      *
-     * @return Response the response object instance
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function showAction(Request $request)
     {
@@ -310,8 +321,9 @@ class UserController extends Controller
     /**
      * Updates the user data
      *
-     * @return void
-     * @author
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function update(Request $request)
     {
@@ -355,7 +367,9 @@ class UserController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the user box
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -367,8 +381,9 @@ class UserController extends Controller
     /**
      * Activates an user account given an token
      *
-     * @return void
-     * @author
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function activateAction(Request $request)
     {
@@ -422,7 +437,9 @@ class UserController extends Controller
     /**
      * Regenerates the pass for a user
      *
-     * @return Response the response instance
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function regeneratePassAction(Request $request)
     {

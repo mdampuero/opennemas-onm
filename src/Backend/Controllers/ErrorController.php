@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -18,7 +23,6 @@ use Onm\Settings as s;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class ErrorController extends Controller
 {
@@ -26,7 +30,6 @@ class ErrorController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -34,7 +37,9 @@ class ErrorController extends Controller
     }
 
     /**
-     * Description of the action
+     * Displays an error
+     *
+     * @param Request $request the request object
      *
      * @return void
      **/
@@ -104,10 +109,9 @@ class ErrorController extends Controller
      * Returns an exceprt HTML with the content of the file highlighting
      * the line that produces the error.
      *
-     * @param string $fileName  The name of the file where is the error.
-     * @param string $fileName  The line inside the file where is the error.
-     * @param int    $showLines The number of lines to show before and after
-     *                       the error line.
+     * @param string $fileName  The name of the file where is the error
+     * @param string $lineNumber  The line inside the file where is the error
+     * @param int    $showLines The number of lines to show before and after the error line
      *
      * @return strin The HTML with the highlighted source.
      **/

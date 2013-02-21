@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles all the request for Welcome actions
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,29 +22,27 @@ use Onm\Settings as s;
  * Handles all the request for Welcome actions
  *
  * @package Backend_Controllers
- * @author
  **/
 class WelcomeController extends Controller
 {
-
     /**
-     * undocumented function
+     * Initializes the welcome controller
      *
      * @return void
-     * @author
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
+
     /**
      * Handles the default action
+     *
+     * @param Request $request the request object
      *
      * @return void
      **/
     public function defaultAction(Request $request)
     {
-
         // $this->dispatchEvent('content.update', array('content' => new \Article()));
         // $instances = $this->get('db_conn')->Execute('SELECT count(*) FROM instances');
 

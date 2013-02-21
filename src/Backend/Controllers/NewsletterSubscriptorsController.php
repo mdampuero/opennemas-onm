@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the newsletter subscriptors
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -34,7 +39,9 @@ class NewsletterSubscriptorsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the newsletter subscriptors
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -323,7 +330,9 @@ class NewsletterSubscriptorsController extends Controller
     /**
      * Builds the search filter
      *
-     * @return void
+     * @param array $filters the list of filters to take in place
+     *
+     * @return array a tuple with the where and the orderby SQL clause
      **/
     private function buildFilter($filters)
     {

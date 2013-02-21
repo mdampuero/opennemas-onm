@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for managing opinions
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -35,7 +40,9 @@ class OpinionAuthorsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the opinion authors
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -282,8 +289,10 @@ class OpinionAuthorsController extends Controller
     /**
      * Process an uploaded photo author
      *
-     * @return string the string of the local file
-     * @author
+     * @param Symfony\Component\HttpFoundation\File\UploadedFile $file the uploaded file
+     * @param string $authorName the author name
+     *
+     * @return Response the response object
      **/
     public function uploadAuthorPhoto($file, $authorName)
     {
@@ -339,6 +348,8 @@ class OpinionAuthorsController extends Controller
 
     /**
      * Set the published flag for contents in batch
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

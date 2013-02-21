@@ -1,11 +1,14 @@
 <?php
 /**
- * This file is part of the Onm package.
+ * Initializes the Frontend Module
  *
+ * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Frontend
  **/
 namespace Frontend;
 
@@ -15,13 +18,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Onm\Settings as s;
 
 /**
- * Initializes the Backend Module
+ * Initializes the Frontend Module
  *
- * @package default
- * @author
+ * @package Frontend
  **/
 class Bootstrap extends ModuleBootstrap
 {
+    /**
+     * Initializes the internationalization system for the frontend module
+     *
+     * @return void
+     **/
     public function initI18nSystem()
     {
         $timezone = s::get('time_zone');

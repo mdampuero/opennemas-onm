@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for monographs
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,9 +21,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for monographs
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class MonographsController extends Controller
 {
@@ -62,7 +67,9 @@ class MonographsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the monographs frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -79,7 +86,7 @@ class MonographsController extends Controller
            || (!$this->view->isCached('special/special_frontpage.tpl', $cacheID))
         ) {
 
-            if ( isset($this->category) && !empty($this->category) ) {
+            if (isset($this->category) && !empty($this->category)) {
                 $monographs = $this->cm->find_by_category(
                     'Special',
                     $this->category,
@@ -123,6 +130,13 @@ class MonographsController extends Controller
         break;
     }
 
+    /**
+     * Shows a monograph
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
     public function showAction(Request $request)
     {
         $dirtyID = $request->query->filter('special_id', '', FILTER_SANITIZE_STRING);

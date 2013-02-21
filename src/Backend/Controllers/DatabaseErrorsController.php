@@ -1,11 +1,8 @@
 <?php
 /**
- * This file is part of the Onm package.
+ * Handles all the request for Welcome actions
  *
- * (c)  OpenHost S.L. <developers@openhost.es>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @package Backend_Controllers
  **/
 namespace Backend\Controllers;
 
@@ -19,7 +16,6 @@ use Onm\Message as m;
  * Handles all the request for Welcome actions
  *
  * @package Backend_Controllers
- * @author
  **/
 class DatabaseErrorsController extends Controller
 {
@@ -28,7 +24,6 @@ class DatabaseErrorsController extends Controller
      * Common actions for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -38,6 +33,8 @@ class DatabaseErrorsController extends Controller
     // TODO: refactorize this method to make it simpler
     /**
      * Gets all the settings and displays the form
+     *
+     * @param Request $request the request object
      *
      * @return string the response
      **/
@@ -58,7 +55,7 @@ class DatabaseErrorsController extends Controller
 
         $sql = "SELECT count(*) FROM adodb_logsql";
         $rsTotalErrors = $GLOBALS['application']->conn->getOne($sql);
-        if (is_null($rsTotalErrors) ) {
+        if (is_null($rsTotalErrors)) {
             \Application::logDatabaseError();
         }
 
@@ -108,6 +105,8 @@ class DatabaseErrorsController extends Controller
 
     /**
      * Performs the action of saving the configuration settings
+     *
+     * @param Request $request the request object
      *
      * @return string the response
      **/

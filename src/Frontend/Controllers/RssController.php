@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the public RSS
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -18,7 +23,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the public RSS
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class RssController extends Controller
 {
@@ -34,6 +39,8 @@ class RssController extends Controller
 
     /**
      * Shows a page that shows a list of available RSS sources
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -62,9 +69,7 @@ class RssController extends Controller
     /**
      * Displays the RSS feed for a given category, opinion or topic
      *
-     * @param string category_name the category name to show
-     * @param string subcategory_name the subcategory name to show
-     * @param string author the to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

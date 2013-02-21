@@ -1,5 +1,5 @@
 /* Fonts */
-@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Light-webfont.eot'); src: url('../fonts/OpenSans-Light-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Light-webfont.woff') format("woff"), url('../fonts/OpenSans-Light-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Light-webfont.svg#OpenSansLight') format("svg"); font-weight: light; font-weight: 300; font-style: normal; }
+/*@font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Light-webfont.eot'); src: url('../fonts/OpenSans-Light-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Light-webfont.woff') format("woff"), url('../fonts/OpenSans-Light-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Light-webfont.svg#OpenSansLight') format("svg"); font-weight: light; font-weight: 300; font-style: normal; }
 @font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-LightItalic-webfont.eot'); src: url('../fonts/OpenSans-LightItalic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-LightItalic-webfont.woff') format("woff"), url('../fonts/OpenSans-LightItalic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-LightItalic-webfont.svg#OpenSansLightItalic') format("svg"); font-weight: light; font-weight: 300; font-style: italic; }
 @font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Regular-webfont.eot'); src: url('../fonts/OpenSans-Regular-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Regular-webfont.woff') format("woff"), url('../fonts/OpenSans-Regular-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Regular-webfont.svg#OpenSansRegular') format("svg"); font-weight: normal; font-weight: 500; font-style: normal; }
 @font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-Italic-webfont.eot'); src: url('../fonts/OpenSans-Italic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-Italic-webfont.woff') format("woff"), url('../fonts/OpenSans-Italic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-Italic-webfont.svg#OpenSansItalic') format("svg"); font-weight: normal; font-weight: 500; font-style: italic; }
@@ -9,7 +9,67 @@
 @font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-BoldItalic-webfont.eot'); src: url('../fonts/OpenSans-BoldItalic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-BoldItalic-webfont.woff') format("woff"), url('../fonts/OpenSans-BoldItalic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-BoldItalic-webfont.svg#OpenSansBoldItalic') format("svg"); font-weight: bold; font-weight: 700; font-style: italic; }
 @font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-ExtraBold-webfont.eot'); src: url('../fonts/OpenSans-ExtraBold-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-ExtraBold-webfont.woff') format("woff"), url('../fonts/OpenSans-ExtraBold-webfont.ttf') format("truetype"), url('../fonts/OpenSans-ExtraBold-webfont.svg#OpenSansExtrabold') format("svg"); font-weight: bold; font-weight: 900; font-style: normal; }
 @font-face { font-family: 'OpenSans'; src: url('../fonts/OpenSans-ExtraBoldItalic-webfont.eot'); src: url('../fonts/OpenSans-ExtraBoldItalic-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/OpenSans-ExtraBoldItalic-webfont.woff') format("woff"), url('../fonts/OpenSans-ExtraBoldItalic-webfont.ttf') format("truetype"), url('../fonts/OpenSans-ExtraBoldItalic-webfont.svg#OpenSansExtraboldItalic') format("svg"); font-weight: bold; font-weight: 900; font-style: italic; }
-
+*/
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/DXI1ORHCpsQm3Vp6mXoaTXhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3T8E0i7KZn-EPnyo3HZu7kw.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/MTP_ySUJH_bn48VBG8sNSnhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/k3k702ZOKiLJc3WVjuplzHhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Open Sans Extrabold'), local('OpenSans-Extrabold'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/EInbV5DfGHOiMmvb1Xr-hnhCUOGz7vYGh680lGh-uXM.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Open Sans Light Italic'), local('OpenSansLight-Italic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxh_xHqYgAV9Bl_ZQbYUxnQU.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Open Sans Italic'), local('OpenSans-Italic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/xjAJXh38I15wypJXxuGMBobN6UDyHWBl620a-IRfuBk.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 600;
+  src: local('Open Sans Semibold Italic'), local('OpenSans-SemiboldItalic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxn5HxGBcBvicCpTp6spHfNo.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Open Sans Bold Italic'), local('OpenSans-BoldItalic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxjqR_3kx9_hJXbbyU8S6IN0.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: italic;
+  font-weight: 800;
+  src: local('Open Sans Extrabold Italic'), local('OpenSans-ExtraboldItalic'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/PRmiXeptR36kaC0GEAetxkCDe67GEgBv_HnyvHTfdew.woff) format('woff');
+}
 /* =============================================================================
    Main styles
    ========================================================================== */
@@ -156,7 +216,7 @@ a.btn-danger { color:White; }
 .modal {
   border-radius:2px;
 }
-.modal-header h3 { font-family: "OpenSans"; font-weight: 600; }
+.modal-header h3 { font-family: "Open Sans"; font-weight: 600; }
 .modal .modal-footer {
   padding: 8px 15px 10px 15px;
 }
@@ -390,9 +450,61 @@ div.utilities-conf input[type="text"]{
 .utilities-conf input[type="checkbox"], .utilities-conf label { margin:0}
 
 /* -------------------------------------------------------------
-  Cleaned styles
-  From here to the end of the file all the styles were reviewed
+  NavBar for onm-core
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+.navbar-inverse .dropdown a {
+    color:#ccc;
+}
+
+.navbar-inverse .divider {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0;
+  margin: 5px 0;
+}
+
+.navbar-inverse a {
+    display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none;
+}
+
+.navbar-inverse ul#menu {
+  margin-left:10px;
+}
+
+.navbar-inverse ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
+.navbar-inverse ul#menu a:hover {
+    color: White;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-inverse ul#menu ul {background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
+.navbar-inverse ul#menu a:hover, .navbar-inverse ul#menu a:focus { color: White; }
+
+.navbar-inverse ul#menu > li > a {padding: 8px 10px !important;color:#9C9C9C}
+.navbar-inverse ul#menu > li:hover > a,
+.navbar-inverse ul#menu > li:focus > a {
+    background: rgba(0,0,0,.25);
+    box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+    -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+    list-style: none;
+    text-align: center;
+}
+
+.navbar-inverse .dropdown-menu li > a:hover,
+.navbar-inverse .dropdown-menu li > a:focus,
+.navbar-inverse .dropdown-submenu:hover > a {
+    background:none;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navbar-inverse ul#menu > li ul ul  {
+    border-radius: 0 6px 6px 0;
+    margin-left:0px;
+}
+.navbar-inverse ul#menu > li ul {
+    margin-top:0px;
+    border-top: 0 none;
+}
 
 /* -------------------------------------------------------------
   Global navigation bar
@@ -413,7 +525,8 @@ div.utilities-conf input[type="text"]{
     padding-left:10px;
     padding-right:10px;
     min-height:36px;
-    border:none !important;
+    height:36px;
+    line-height:16px;
   }
 
   .global-nav a, .global-nav{ color:#ddd; white-space:nowrap; }
@@ -456,6 +569,20 @@ div.utilities-conf input[type="text"]{
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
 }
 
+  .global-nav .dropdown-menu {
+    background: #222;
+    border-radius:0 0 3px 3px;
+    margin-top:0px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  .global-nav .dropdown-menu:after,
+  .global-nav .dropdown-menu:before { display:none !important; }
+
+@media (max-width:891px) {
+  .global-nav .navbar-inner {
+    height:auto;
+  }
+}
 /* -------------------------------------------------------------
   Global user tools inside Global nav
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -488,14 +615,6 @@ div.utilities-conf input[type="text"]{
 @media (min-width:900px) {
   .usermenu .avatar { position:absolute; top:10px; left:20px; width:50px; height:50px; }
   .usermenu li a:hover { text-decoration:underline !important; }
-  .usermenu .dropdown-menu {
-    background: #222;
-    border-radius:0 0 3px 3px;
-    margin-top:0px;
-    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
-  }
-  .usermenu .dropdown-menu:after,
-  .usermenu .dropdown-menu:before { display:none; }
   .usermenu .user-info { padding-left:70px; margin:5px 10px 5px 10px; }
     .usermenu .user-info ul { width:100%; margin:0; padding:0; }
       .usermenu .user-info li { display:block !important; clear:both; width:100%; }
@@ -526,7 +645,7 @@ div.utilities-conf input[type="text"]{
     outline:none;
     margin-top:5px;
     display:block;
-    padding:5px 8px;
+    padding:6px 8px;
     color:White
 }
 
@@ -536,8 +655,8 @@ div.utilities-conf input[type="text"]{
   background: -webkit-gradient(linear, left top, left bottom, from(#5babe4), to(#2578b4)); /* for webkit browsers */
   background: -moz-linear-gradient(top,  #5babe4,  #2578b4); /* for firefox 3.6+ */
 }
-.global-nav .notification-messages .comments-available a, .comments-available a:hover { text-decoration:none;  }
-.global-nav .notification-messages .comments-available span.icon { margin: 0; display:block; padding: 2px 0px 2px 20px; background: url(../images/messaging_system/new-message-icon.png) top left no-repeat; vertical-align:middle; }
+.global-nav .notification-messages .comments-available a, .comments-available a:hover { text-decoration:none; padding:2px;  }
+.global-nav .notification-messages .comments-available span.icon { margin: 0; display:inline-block; padding: 0px 0px 0px 2px; vertical-align:middle; }
 /*.global-nav .notification-messages .comments-available:hover span.icon { background-position:bottom left; }*/
 
 /* -------------------------------------------------------------
@@ -583,47 +702,7 @@ div.utilities-conf input[type="text"]{
   Main admin menu   //// Root = Horizontal, Secondary = Vertical
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /* Global menu properties*/
-ul#menu { margin: 0; padding: 0; list-style: none; display:block; height:100%; z-index:2; }
-ul#menu a { display: block; color: #CCCCCC; white-space:nowrap; vertical-align:middle; text-decoration: none; }
-  ul#menu li:hover > a, ul#menu a:hover,
-  ul#menu li:focus > a, ul#menu a:focus { color:White; background-color: rgba(255, 255, 255, 0.1); }
 
-ul#menu ul {margin: 0; padding: 0; position: absolute; top: 99%; left: 0px; background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
-  ul#menu li { display: block; position:relative; list-style: none; margin: 0; padding: 0; border: 0 none;}
-    ul#menu a:hover, ul#menu a:focus { color: White; }
-  ul#menu > li ul { border-radius: 0 0 5px 5px ; }
-
-/* Root menu */
-ul#menu > li {  display: inline-block;  position: relative; height:100%; }
-  ul#menu > li > a { margin: 0; padding: 10px 10px !important; line-height: 18px; /*border-right:1px solid #222;  border-left:1px solid #222;*/ color:#9C9C9C}
-/*  ul#menu > li:focus > a { background-color: #111; color: White; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.3) inset; border-right:1px solid #2a2a2a;  border-left:1px solid #2a2a2a } */
-  ul#menu > li:hover > a,
-  ul#menu > li:focus > a {
-  background: rgba(0,0,0,.25);
-  box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-  -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-  -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-  list-style: none;
-  padding: 10px 0;
-  text-align: center;
-}
-/* 2nd Menu */
-ul#menu > li > ul { top: 99%; left: 0px; display:none; }
-
-/*From IE 7 lack of compliance*/
-ul#menu ul:after { clear: both; display: block; content: "."; height: 0; visibility: hidden; }
-
-/* 2nd-to-infinity Menu */
-ul#menu li:hover > ul,
-ul#menu li:focus > ul { display: block; }
-  ul#menu ul li a { padding: 5px 35px 5px 15px ; }
-ul#menu ul li { clear: both; display: block; float: none; }
-ul#menu ul li:last-child  a { padding-bottom:6px; }
-ul#menu ul li:first-child a { padding-top:6px; }
-    ul#menu ul ul { border-radius: 0  5px 5px 0; display: none; position: absolute; top: 0; left: 99%; }
-  ul#menu ul li.divider { padding:0; height:1px; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.1); height: 1px; margin: 5px 0; overflow: hidden; height: 1px; padding: 0; }
-
-ul#menu.manager a { color:White !important; }
 
 /* -------------------------------------------------------------
   Botonera old definitions: This should be deleted
@@ -702,7 +781,7 @@ ul#menu.manager a { color:White !important; }
             vertical-align:middle
         }
         .old-button img{
-          height:35px !important;
+            height:35px !important;
         }
         .old-button li ul {
             z-index:88;
@@ -1719,12 +1798,12 @@ div.newsletter-contents .container-buttons {
     font-weight: 600;
 }
 .welcome-page .hero-unit .lean {
-    font-size:13px !important;
+    font-size:13px;
     line-height: 1.3;
     color: #6f6f6f;
     font-weight: 300;
     margin-bottom: 17px;
-    font-family: "OpenSans", Arial;
+    font-family: "Open Sans", Arial;
 }
 .welcome-page .welcome-panel-column {
     display:inline-block;
@@ -1802,7 +1881,7 @@ div.newsletter-contents .container-buttons {
 .error-trace .source .highlighted { background:#ff9; }
 .error-trace .lineno.highlighted { background:#aaa; }
 .error-trace .lineno {
-    color: #333; padding:3px 10px 3px 0px; min-width:45px; margin:0;
+    color: #333; padding:3px 10px 3px 0; min-width:45px; margin:0;
     background:#ccc; display:inline-block; text-align:right;
 }
 .error-trace .backtrace table {
@@ -1821,7 +1900,7 @@ div.newsletter-contents .container-buttons {
 .error-trace .backtrace  table td:not(:last-child) { padding-right:30px; }
 .error-trace .backtrace table th { font-weight:bold; text-align:left;}
 .error-trace .backtrace .title {
-    width:100%; background:#aaa; color:#333; font-size:12px;
+    width:100%; background:#aaa; font-size:12px;
     text-transform:uppercase; border-radius:0px; padding:0; color: White;
     font-weight:bold; word-wrap:break-word;
 }
@@ -1916,11 +1995,13 @@ progress {
   margin-bottom:4px;
 }
   .section-picker .title-picker {
-    font-family:"OpenSans";
+    font-family:"Open Sans";
     font-size:1.5em;
     padding:5px;
     background:none;
     border:1px solid rgba(0,0,0,0);
+    border-bottom: 0 none;
+    border-radius:4px 4px 0 0;
   }
   .section-picker:hover .title-picker {
     background:White;
@@ -1958,7 +2039,6 @@ progress {
     }
     .section-picker .options ul ul {
       margin-left:15px;
-      list-style-type:square !important;
     }
     .section-picker .options .component {
       margin-right:10px;
@@ -2009,11 +2089,10 @@ progress {
 }
 .support-button:hover {
   color:White;
-
+}
 select#category option {
    color:#333;
 }
 select#category option.unavailable {
   color:#777;
 }
- 

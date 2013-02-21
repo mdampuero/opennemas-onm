@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for books
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,9 +22,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for books
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class BooksController extends Controller
 {
@@ -43,7 +48,7 @@ class BooksController extends Controller
     /**
      * Renders the books frontpage
      *
-     * @param int page the page to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -97,7 +102,7 @@ class BooksController extends Controller
     /**
      * Shows a book given its id
      *
-     * @param int id the identificator of the book to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -155,8 +160,7 @@ class BooksController extends Controller
     /**
      * Shows a paginated list of books for a category
      *
-     * @param string category the category name to show
-     * @param int page the page to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

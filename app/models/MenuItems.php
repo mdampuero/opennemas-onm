@@ -14,31 +14,67 @@
  */
 class MenuItems
 {
+    /**
+     * Id of the item, autonumeric
+     *
+     * @var int
+     **/
     public $pk_item   = null;
+
+    /**
+     * Menu id this item belongs to
+     *
+     * @var int
+     **/
     public $pk_menu   = null;
+
+    /**
+     * Title of the menu item
+     *
+     * @var string
+     **/
     public $title     = null;
+
+    /**
+     * "Slug" of the link
+     *
+     * @var string
+     **/
     public $link_name = null;
-    public $type      = null; //'category','extern','static', inner'
+
+    /**
+     * Type of the item, category, extern, static, inner
+     *
+     * @var string
+     **/
+    public $type      = null;
+
+    /**
+     * Order in the menu
+     *
+     * @var int
+     **/
     public $position  = null;
+
+    /**
+     * Item id this item is subordinate
+     *
+     * @var int
+     **/
     public $pk_father = null;
 
+    /**
+     * The configuration name
+     * Maybe this is unused
+     *
+     * @var string
+     **/
     public $config    = "default_config";
 
     /**
-     * Constructor
+     * Returns the elements of a menu given its id
      *
-     * @param int $id Privilege Id
-    */
-    public function __construct($id = null)
-    {
-
-    }
-
-
-    /**
-     * Get a menu in the frontpage
-     *
-     * @param array $data image
+     * @param int $id the id of the menu
      *
      * @return array with categories order by positions
      */
@@ -69,14 +105,12 @@ class MenuItems
         }
 
         foreach ($menuItems as $id => $element) {
-            if (
-                ((int) $element->pk_father > 0)
+            if (((int) $element->pk_father > 0)
                 && isset($menuItems[$element->pk_father])
                 && isset($menuItems[$element->pk_father]->submenu)
             ) {
                 array_push($menuItems[$element->pk_father]->submenu, $element);
                 unset($menuItems[$id]);
-
             }
         }
 
@@ -84,11 +118,12 @@ class MenuItems
     }
 
     /**
-     * Update menu in the frontpage
+     * Sets the menu elements to one menu given its id and the list of items
      *
-     * @param array
+     * @param int $id the menu id to set the elements in
+     * @param array $items the list of elements to set
      *
-     * @return bool if update ok true
+     * @return bool if update went ok => true
      */
     public static function setMenuElements($id, $items = array())
     {
@@ -134,10 +169,11 @@ class MenuItems
     }
 
     /**
-     * Delete all items in a menu
+     * Deletes all items in a menu
      *
      * @param  integer $id
-     * @return null
+     *
+     * @return boolean true if all went well
      */
     public static function emptyMenu($id)
     {

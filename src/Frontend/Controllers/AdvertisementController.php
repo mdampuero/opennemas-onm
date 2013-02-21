@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for advertisements
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -18,7 +23,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for advertisements
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class AdvertisementController extends Controller
 {
@@ -35,7 +40,7 @@ class AdvertisementController extends Controller
     /**
      * Displays an advertisement given its id
      *
-     * @param integer id the id of the advertisement
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -62,7 +67,7 @@ class AdvertisementController extends Controller
     /**
      * Redirects the user to the target url defined by an advertisement
      *
-     * @param int id the id of the advertisement
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

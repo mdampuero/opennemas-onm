@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for managing articles
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -57,7 +62,9 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists articles in the system
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -306,7 +313,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Displays the article information form
+     * Displays the article information given the article id
      *
      * @param Request $request the request object
      *
@@ -630,6 +637,8 @@ class ArticlesController extends Controller
     /**
      * Change available status for one article given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -849,7 +858,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Description of this action
+     * Shows the content provider with articles suggested for frontpage
      *
      * @param Request $request the request object
      *
@@ -891,6 +900,8 @@ class ArticlesController extends Controller
     /**
      * Set the published flag for contents in batch
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchPublishAction(Request $request)
@@ -929,6 +940,8 @@ class ArticlesController extends Controller
 
     /**
      * Set the published flag for contents in batch
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

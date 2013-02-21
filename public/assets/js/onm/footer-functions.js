@@ -45,5 +45,13 @@ jQuery(document).ready(function($) {
             }
         });
     })();
+
+    jQuery('.navbar ul.nav li.dropdown').hover(function() {
+        $(this).addClass('open');
+        jQuery(this).find('.dropdown-menu:first').show();
+    }, function() {
+        $(this).removeClass('open');
+        jQuery(this).find('.dropdown-menu:first').hide();
+    });
 });
 

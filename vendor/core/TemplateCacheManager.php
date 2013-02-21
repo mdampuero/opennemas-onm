@@ -1,19 +1,21 @@
 <?php
-/*
+/**
+ * Defintes the TemplateCacheManager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Core
  */
+
 /**
  * TemplateCacheManager class manage the smarty cache.
  *
- * @package    Onm
- * @subpackage Cache
- * @author     Fran Dieguez <fran@openhost.es>
+ * @package Core
  */
-
 class TemplateCacheManager
 {
     public $cacheGroups = array();
@@ -126,8 +128,7 @@ class TemplateCacheManager
     /**
      * Decodes information of smarty cache files
      *
-     * @param mixed $properties  array containing imported
-     *                           properties from cachefile
+     * @param mixed $properties  array containing imported properties from cachefile
      *
      * @return void
      */

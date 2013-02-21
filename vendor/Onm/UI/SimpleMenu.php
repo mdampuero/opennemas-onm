@@ -16,8 +16,9 @@ namespace Onm\UI;
  */
 class SimpleMenu
 {
-    private $menu = null;
-    private $errors = null;
+    private $menu         = null;
+    private $errors       = null;
+    private $nestingLevel = 0;
 
     /**
      * Initilizes the object from an XML file
@@ -52,15 +53,22 @@ class SimpleMenu
 
     }
 
-    private function getClass($class)
+    private function getClass($class, $dropdown = false)
     {
-        if (isset($class) && !empty($class)) {
+        if (isset($class) && !empty($class) || $dropdown) {
+            if ($dropdown) {
+                if ($this->nestingLevel > 1) {
+                    $dropdownClass = ' dropdown-submenu';
+                } else {
+                    $dropdownClass = ' dropdown';
+                }
+            }
 
-            return "class=\"{$class}\"";
+            return "class=\"{$class}{$dropdownClass}\"";
         }
     }
 
-    private function getHref($title, $id, $url, $external = false)
+    private function getHref($title, $id, $url, $external = false, $toggle = false)
     {
         if (empty($title) && empty($url)) {
             return;
@@ -75,10 +83,15 @@ class SimpleMenu
             $target = "target=\"_blank\"";
         }
 
+        if ($toggle) {
+            $class = 'class="dropdown-toggle"';
+            $dataToggle = 'data-toggle="dropdown"';
+        }
+
         $attrTitle = "title=\"".sprintf(_("Go to %s"), $title)."\"";
         $attrId = "id=\"".sprintf(_("%s"), $id)."\"";
 
-        return "<a href=\"$url\" $target $attrTitle $attrId>".$title."</a>";
+        return "<a href=\"$url\" $target $attrTitle $attrId $class $dataToggle>".$title."</a>";
     }
 
     private function checkAcl($privilege)
@@ -128,24 +141,39 @@ class SimpleMenu
      **/
     private function renderSubMenu($element, $value)
     {
+        $this->nestingLevel++;
+        $hasSubmenu = false;
         foreach ($value as $element => $submenuContent) {
             $element = $this->renderElement($element, $submenuContent, false);
             if (!empty($element)) {
+                $hasSubmenu = true;
                 $output []= $element;
             }
         }
 
-        if (count($output) > 0) {
-            $class = $this->getClass($value['class']);
+        if ($hasSubmenu) {
+            $class = $this->getClass($value['class'], $hasSubmenu);
+
+            if ($this->nestingLevel > 1) {
+                $dropdownClass = ' dropdown-submenu';
+                $dropdownClassUl = ' dropdown-menu';
+            } else {
+                $dropdownClass = ' dropdown-menu';
+                $dropdownClassUl = ' dropdown-menu';
+            }
+
             $html  = "<li {$class}>"
                     .$this->getHref(
                         $value['title'],
                         'menu_'.$value['id'],
-                        $value['link']
+                        $value['link'],
+                        false,
+                        $hasSubmenu
                     )
-                    . "<ul>".implode("", $output)."</ul>"
+                    . "<ul class='".$dropdownClassUl."'>".implode("", $output)."</ul>"
                     . "</li>";
         }
+        $this->nestingLevel--;
 
         return $html;
     }
@@ -196,11 +224,11 @@ class SimpleMenu
             $output []= $this->renderElement($element, $value, false);
         }
 
-        $menu = "<ul id='menu' class='clearfix'>"
+        $menu = "<ul id='menu' class='nav'>"
               . implode("", $output)."</ul>";
-        if ($params['doctype']) {
-            $menu = "<nav>".$menu."</nav>";
-        }
+        // if ($params['doctype']) {
+        //     $menu = "<nav>".$menu."</nav>";
+        // }
 
         return $menu;
     }

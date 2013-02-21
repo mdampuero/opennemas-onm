@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the specials
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -58,6 +63,8 @@ class SpecialsController extends Controller
     /**
      * List all the specials in a category
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function listAction(Request $request)
@@ -111,8 +118,10 @@ class SpecialsController extends Controller
         );
     }
 
-        /**
-     * Description of the action
+    /**
+     * List all the specials selected for the widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -144,7 +153,7 @@ class SpecialsController extends Controller
             $special->category_title = $this->ccm->get_title($special->category_name);
         }
 
-        if (count($specials) != $numFavorites ) {
+        if (count($specials) != $numFavorites) {
             m::add(sprintf(_("You must put %d specials in the HOME widget"), $numFavorites));
         }
 
@@ -510,6 +519,8 @@ class SpecialsController extends Controller
     /**
      * Change available status for one special given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -547,6 +558,8 @@ class SpecialsController extends Controller
     /**
      * Change available status for one special given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleFavoriteAction(Request $request)
@@ -580,6 +593,8 @@ class SpecialsController extends Controller
 
     /**
      * Change available status for one special given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

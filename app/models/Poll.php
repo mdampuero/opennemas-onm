@@ -1,17 +1,20 @@
 <?php
-/*
+/**
+ * Defines the Poll class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Handles all CRUD operations over Polls.
  *
- * @package    Onm
- * @subpackage Model
- * @author     Sandra Pereira <sandra@openhost.es>
+ * @package    Model
  **/
 class Poll extends Content
 {

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the newsletter
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -81,7 +86,7 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Description of this action
+     * Shows the contents of a newsletter given its id
      *
      * @param Request $request the request object
      *
@@ -254,7 +259,7 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Sends
+     * Sends a newsletter
      *
      * @param Request $request the request object
      *
@@ -400,7 +405,7 @@ class NewsletterController extends Controller
     /**
      * Checks if the module is activated, if not redirect to the configuration form
      *
-     * @return void
+     * @return boolean
      **/
     public function checkModuleActivated()
     {

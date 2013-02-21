@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for newsstand
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,9 +22,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for newsstand
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class NewStandController extends Controller
 {
@@ -50,6 +55,8 @@ class NewStandController extends Controller
 
     /**
      * Renders the newstand frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -167,6 +174,8 @@ class NewStandController extends Controller
 
     /**
      * Renders a particular cover given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

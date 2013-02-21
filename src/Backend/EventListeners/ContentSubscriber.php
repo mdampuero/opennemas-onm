@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles all the events after content updates
+ *
+ * @package Backend_EventListeners
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -12,8 +17,18 @@ namespace Backend\EventListeners;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Handles all the events after content updates
+ *
+ * @package Backend_EventListeners
+ **/
 class ContentSubscriber implements EventSubscriberInterface
 {
+    /**
+     * Register the content event handler
+     *
+     * @return void
+     **/
     public static function getSubscribedEvents()
     {
         return array(
@@ -26,6 +41,13 @@ class ContentSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * Perform the actions after update a content
+     *
+     * @param Event $event The event to handle
+     *
+     * @return void
+     **/
     public function onContentUpdate(Event $event)
     {
         var_dump('content.update event fired and handled', $event->getArgument('content'));

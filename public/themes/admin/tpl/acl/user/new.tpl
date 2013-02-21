@@ -164,11 +164,14 @@ label {
                             <td>
                                 <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
                                     <option  value ="">{t}--Select one--{/t}</option>
+                                    {if $smarty.session.isMaster}
+                                        <option value="4" {if $user->id_user_group == 4}selected="selected"{/if}>{t}Master{/t}</option>
+                                    {/if}
                                     {section name=user_group loop=$user_groups}
                                         {if $user_groups[user_group]->id == $user->id_user_group}
-                                            <option  value = "{$user_groups[user_group]->id}" selected="selected">{$user_groups[user_group]->name}</option>
+                                            <option  value="{$user_groups[user_group]->id}" selected="selected">{$user_groups[user_group]->name}</option>
                                         {else}
-                                            <option  value = "{$user_groups[user_group]->id}">{$user_groups[user_group]->name}</option>
+                                            <option  value="{$user_groups[user_group]->id}">{$user_groups[user_group]->name}</option>
                                         {/if}
                                     {/section}
                                 </select>

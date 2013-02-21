@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,6 @@ use Onm\Module\ModuleManager as mod;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class SearchController extends Controller
 {
@@ -28,7 +32,6 @@ class SearchController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -37,6 +40,8 @@ class SearchController extends Controller
 
     /**
      * Handles the search form and shows the search contents
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -205,9 +210,11 @@ class SearchController extends Controller
     }
 
     /**
-     * Name: checkTypes
-     * Description: Parsea el $_REQUEST y obtiene un string con los tipos de contenidos enviados a la página.
-     * Output: cadena de texto con los nombre de los tipos de contenidos separados por comas.
+     * Converts and filters a list of content types into a SQL sentence
+     *
+     * @param array $selected array of content types selected
+     *
+     * @return  string string with all the content types comma separated.
      */
     private function checkTypes($selected)
     {
@@ -237,6 +244,11 @@ class SearchController extends Controller
         return implode(',', $szTypes);
     }
 
+    /**
+     * Returns the list of content types for the modules activated
+     *
+     * @return array the list of content types
+     **/
     public function getContentTypesFiltered()
     {
         $contentTypes = \Content::getContentTypes();

@@ -43,6 +43,9 @@ function smarty_function_RenderColorMenu($params, &$smarty)
             $actual = $siteColor;
         }
 
+        $output.= "\tdiv#header-menu nav.menu > ul, " .
+                  " .transparent-logo { background-color:" . $actual . " !important;}\n";
+
         $output.= "\tdiv.main-menu, div#footer-container  { background-color:" . $actual . " !important;}\n";
 
         $output.= "\th1#title a.big-text-logo  { color:" . $actual . " !important;}\n";

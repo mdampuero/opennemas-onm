@@ -1,5 +1,10 @@
 <?php
 /**
+ * Playground where to test new functions
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,9 +21,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the system information
+ * Playground where to test new functions
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class PlaygroundController extends Controller
 {
@@ -33,10 +38,11 @@ class PlaygroundController extends Controller
     }
 
     /**
-     * Some tests for Memcache
+     * Dispatches the actions through the rest of methods in this class
      *
-     * @return void
-     * @author
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function defaultAction($request)
     {
@@ -52,7 +58,9 @@ class PlaygroundController extends Controller
     }
 
     /**
-     * Tests for memcache
+     * Tests for memcache service
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -94,10 +102,11 @@ class PlaygroundController extends Controller
     }
 
     /**
-     * undocumented function
+     * Tests for logger service
      *
-     * @return void
-     * @author
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function logger(Request $request)
     {
@@ -105,14 +114,17 @@ class PlaygroundController extends Controller
         $logger = $this->get('logger');
 
         $logger->notice('texto de prueba');
+        $logger->error('error de prueba');
 
         var_dump($logger);
     }
 
     /**
-     * undocumented function
+     * tests for mailer service
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function mailer(Request $request)
     {
@@ -141,7 +153,9 @@ class PlaygroundController extends Controller
     /**
      * Tests for session in container
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function session(Request $request)
     {

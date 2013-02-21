@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,6 @@ use Onm\Message as m;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class WidgetsController extends Controller
 {
@@ -35,6 +39,8 @@ class WidgetsController extends Controller
 
     /**
      * List available widgets
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -83,6 +89,8 @@ class WidgetsController extends Controller
     /**
      * Show a selected Widget by id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -119,6 +127,8 @@ class WidgetsController extends Controller
     /**
      * Delete a selected widget
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -134,6 +144,8 @@ class WidgetsController extends Controller
 
     /**
      * Create a new widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -152,6 +164,10 @@ class WidgetsController extends Controller
                 'description' => $post->filter('description', null, FILTER_SANITIZE_STRING),
                 'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
             );
+
+            if ($widgetData['renderlet'] == 'intelligentwidget') {
+                $widgetData['content'] = $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING);
+            }
 
             try {
                 $widget = new \Widget();
@@ -182,6 +198,8 @@ class WidgetsController extends Controller
     /**
      * Update an existing widget
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function updateAction(Request $request)
@@ -209,6 +227,10 @@ class WidgetsController extends Controller
             'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
         );
 
+        if ($widgetData['renderlet'] == 'intelligentwidget') {
+            $widgetData['content'] = $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING);
+        }
+
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
             m::add(_('There was an error while updating the widget.'), m::ERROR);
@@ -227,6 +249,8 @@ class WidgetsController extends Controller
 
     /**
      * Change the availability of a Widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -252,6 +276,8 @@ class WidgetsController extends Controller
 
     /**
      * The content provider for widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

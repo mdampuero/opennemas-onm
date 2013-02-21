@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the common actions for misc purposes
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -33,7 +38,9 @@ class UtilsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Returns the cleaned and normalized tags for a given string
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

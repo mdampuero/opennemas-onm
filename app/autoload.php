@@ -42,7 +42,6 @@ require_once SITE_VENDOR_PATH.'functions.php';
 require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
 require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
 require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
-require_once SITE_VENDOR_PATH.'/Log.php';
 require_once SITE_VENDOR_PATH.'/Template.php';
 
 require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
@@ -52,8 +51,8 @@ $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 // Registering namespaces
 $loader->registerNamespaces(
     array(
-        'Onm' => __DIR__.'/../vendor',
-	'Luracast\\Restler' => __DIR__.'/../vendor/luracast/restler/vendor/',
+        'Onm'               => __DIR__.'/../vendor',
+        'Luracast\\Restler' => __DIR__.'/../vendor/luracast/restler/vendor/',
     )
 );
 
@@ -67,9 +66,7 @@ if (!interface_exists('SessionHandlerInterface')) {
 }
 
 // Ŕegistering prefixes
-$loader->registerPrefixes(array("Zend_" => __DIR__.'/../vendor/Zend/'));
-
-require (__DIR__.'/../vendor/Zend/Log.php');
+// $loader->registerPrefixes(array("Zend_" => __DIR__.'/../vendor/Zend/'));
 
 // Registering fallbacks and include path usage
 $loader->registerNamespaceFallback(SITE_MODELS_PATH);

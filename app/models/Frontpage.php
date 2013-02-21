@@ -1,16 +1,20 @@
 <?php
-/*
+/**
+ * Defintes the Frontpage class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Handles newspaper library
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class Frontpage extends Content
 {
@@ -59,7 +63,7 @@ class Frontpage extends Content
 
         parent::create($data);
 
-        if ( is_null($data['category']) ) {
+        if (is_null($data['category'])) {
             return false;
         }
         $date          = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
@@ -239,7 +243,9 @@ class Frontpage extends Content
     public function getFrontpage($date, $category = 0, $version = null)
     {
         // if category = 0 => home
-        if ( is_null($category) && is_null($date)) {
+        if (is_null($category)
+            && is_null($date)
+        ) {
               return false;
         }
 
@@ -269,7 +275,9 @@ class Frontpage extends Content
     public function getCategoriesWithFrontpage($date)
     {
         // if category = 0 => home
-        if ( is_null($category) && is_null($date)) {
+        if (is_null($category)
+            && is_null($date)
+        ) {
             return false;
         }
 

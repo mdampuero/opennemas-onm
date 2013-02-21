@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,6 @@ use Onm\Message as m;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class AlbumsController extends Controller
 {
@@ -27,7 +31,6 @@ class AlbumsController extends Controller
      * Common code for all the actions
      *
      * @return void
-     * @author
      **/
     public function init()
     {
@@ -61,6 +64,8 @@ class AlbumsController extends Controller
 
     /**
      * Lists all albums
+     *
+     * @param Request $request the request object
      *
      * @return void
      **/
@@ -129,6 +134,8 @@ class AlbumsController extends Controller
     /**
      * Lists all the albums for the widget
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function widgetAction(Request $request)
@@ -156,7 +163,7 @@ class AlbumsController extends Controller
             $itemsPerPage
         );
 
-        if (count($albums) != $numFavorites ) {
+        if (count($albums) != $numFavorites) {
             m::add(sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
         }
 
@@ -199,6 +206,8 @@ class AlbumsController extends Controller
 
     /**
      * Shows and handles the form for create a new album
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -253,6 +262,8 @@ class AlbumsController extends Controller
     /**
      * Deletes an album given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -289,6 +300,8 @@ class AlbumsController extends Controller
     /**
      * Shows the information for an album given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -321,6 +334,8 @@ class AlbumsController extends Controller
 
     /**
      * Updates the album information
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -400,6 +415,8 @@ class AlbumsController extends Controller
     /**
      * Change availability for one video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -437,6 +454,8 @@ class AlbumsController extends Controller
     /**
      * Change suggested flag for one video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleFavoriteAction(Request $request)
@@ -472,6 +491,8 @@ class AlbumsController extends Controller
     /**
      * Change in_home flag for one album given its id
      * Used for putting this content widgets in home
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -514,6 +535,8 @@ class AlbumsController extends Controller
     /**
      * Deletes multiple videos at once given its ids
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchDeleteAction(Request $request)
@@ -554,6 +577,8 @@ class AlbumsController extends Controller
     /**
      * Batch set the published flag for contents
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchPublishAction(Request $request)
@@ -591,6 +616,8 @@ class AlbumsController extends Controller
 
     /**
      * Save positions for widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -630,6 +657,8 @@ class AlbumsController extends Controller
 
     /**
      * Render the content provider for albums
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -753,6 +782,8 @@ class AlbumsController extends Controller
 
     /**
      * Handles and shows the album configuration form
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

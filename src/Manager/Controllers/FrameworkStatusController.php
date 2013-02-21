@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the framework status
+ *
+ * @package Manager_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,7 +21,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for the framework status
  *
- * @package Backend_Controllers
+ * @package Manager_Controllers
  **/
 class FrameworkStatusController extends Controller
 {
@@ -28,17 +33,17 @@ class FrameworkStatusController extends Controller
     public function init()
     {
         $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-
     }
 
     /**
-     * Description of the action
+     * Checks and shows the fullfilment framework dependencies
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
     public function checkDependenciesAction(Request $request)
     {
-        // ob_start();
         chdir(APPLICATION_PATH);
         $command = APPLICATION_PATH.'/bin/console framework:check-dependencies';
         $status = shell_exec($command);
@@ -52,7 +57,9 @@ class FrameworkStatusController extends Controller
     /**
      * Shows the APC information iframe
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function apcStatusAction(Request $request)
     {
