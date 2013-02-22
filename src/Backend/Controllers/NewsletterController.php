@@ -77,10 +77,29 @@ class NewsletterController extends Controller
     {
         $configurations = \Onm\Settings::get('newsletter_maillist');
 
+        $newsletterContent = array();
+        $menu = new \Menu();
+
+        $menu->getMenu('frontpage');
+        $i = 1;
+        foreach ($menu->items as $item) {
+            if ($item->type == 'category') {
+              $container               = new \stdClass();
+              $container->id           = $i;
+              $container->title        = $item->title;
+              $container->content_type =  'container';
+              $container->position     = $item->position;
+              $container->items        = array();
+              $newsletterContent[]     = $container;
+              $i++;
+            }
+        }
+
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
-                'name'=>$configurations['name']." [".date('d/m/Y')."]"
+                'name'              => $configurations['name']." [".date('d/m/Y')."]",
+                'newsletterContent' => $newsletterContent,
                 )
         );
     }

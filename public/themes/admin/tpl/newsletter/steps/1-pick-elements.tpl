@@ -140,7 +140,6 @@
                         {else}
                             {section name=c loop=$newsletterContent}
                                 {assign var='contents' value=$newsletterContent[c]->items}
-                                {if !empty($contents)}
                                 <div class="container-receiver {if $smarty.section.c.first} active{/if}"
                                     data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
                                     <div class="container-label"><span>{$newsletterContent[c]->title}</span>
@@ -165,7 +164,6 @@
                                         {/section}
                                     </ul>
                                 </div>
-                                {/if}
                             {/section}
                         {/if}
 
