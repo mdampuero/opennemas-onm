@@ -104,7 +104,7 @@
             <div class="control-group">
                 <label for="name" class="control-label">{t}Email subject{/t}</label>
                 <div class="controls">
-                    <input type="text" name="title" id="title" style="width:80%" value="{$newsletter->title|default:$name} [{$smarty.now|date_format:'%d/%m/%Y'}]" required class="input-xlarge"/>
+                    <input type="text" name="title" id="title" style="width:80%" value="{$newsletter->title|default:$name}" required class="input-xlarge"/>
                 </div>
             </div>
 

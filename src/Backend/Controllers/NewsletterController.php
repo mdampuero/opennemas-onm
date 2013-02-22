@@ -80,7 +80,7 @@ class NewsletterController extends Controller
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
-                'name'=>$configurations['name']
+                'name'=>$configurations['name']." [".date('d/m/Y')."]"
                 )
         );
     }
@@ -121,7 +121,7 @@ class NewsletterController extends Controller
         $contents = json_decode($contentsRAW);
         $title = $request->request->filter(
             'title',
-            s::get('site_name') + ' ['.date('%d/%m/%Y').']',
+            s::get('site_name'). ' ['.date('d/m/Y').']',
             FILTER_SANITIZE_STRING
         );
 
