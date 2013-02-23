@@ -53,7 +53,9 @@ class AuthSystem implements \Luracast\Restler\iAuthenticate
 
     private function isHttps()
     {
-        if ( !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']!="off" ) {
+        if (!empty($_SERVER['HTTPS'])
+            && $_SERVER['HTTPS']!="off"
+        ) {
             return true;
         }
         return false;

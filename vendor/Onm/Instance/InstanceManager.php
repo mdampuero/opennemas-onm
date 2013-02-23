@@ -137,8 +137,7 @@ class InstanceManager
     {
         // Database
         global $onmInstancesConnection;
-        if (
-            !is_null($connectionData)
+        if (!is_null($connectionData)
             && is_array($connectionData)
         ) {
             $onmInstancesConnection = $connectionData;
@@ -449,8 +448,7 @@ class InstanceManager
      **/
     public function createInstanceReferenceInManager($data)
     {
-        if (
-            empty($data['name'])
+        if (empty($data['name'])
             || empty($data['internal_name'])
             || empty($data['domains'])
             || !isset($data['activated'])

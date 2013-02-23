@@ -465,6 +465,11 @@ class User
         return $contentCategories;
     }
 
+    /**
+     * Removes all the category access assignments to the current user
+     *
+     * @return boolean true if the action was performed
+     **/
     private function deleteAccessCategoriesDb()
     {
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
@@ -483,6 +488,16 @@ class User
     }
 
 
+    /**
+     * Tries to login a user given a login information
+     *
+     * @param string $login the username
+     * @param string $password the password
+     * @param string $loginToken the login token provided
+     * @param string $loginCaptcha
+     *
+     * @return boolean true if the user has access
+     **/
     public function login(
         $login,
         $password,

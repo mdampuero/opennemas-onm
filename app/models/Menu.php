@@ -53,17 +53,57 @@
  */
 class Menu
 {
+    /**
+     * The menu id
+     *
+     * @var int
+     **/
     public $pk_menu   = null;
+
+    /**
+     * The name of the menu
+     *
+     * @var string
+     **/
     public $name      = null;
+
+    /**
+     * Menu type. internal, external...
+     *
+     * @var string
+     **/
     public $type      = null;
+
+    /**
+     * The site of the menu
+     *
+     * @var string
+     **/
     public $site      = null;
+
+    /**
+     * The id of the parent menu
+     *
+     * @var int
+     **/
     public $pk_father = null;
+
+    /**
+     * Misc params for this menu
+     *
+     * @var string
+     **/
     public $params    = null;
 
+    /**
+     * Unused variable
+     *
+     * @var string
+     **/
     public $config = "default_config";
 
     /**
-     * Constructor
+     * Loads a menu given its id
      *
      * @param int $id Privilege Id
      */
@@ -78,7 +118,7 @@ class Menu
     /**
      * Create a new menu
      *
-     * @param array $data .
+     * @param array $data the menu data
      *
      * @return bool If create in database
      */
@@ -115,6 +155,8 @@ class Menu
      * Gets the menu information from db to the object instance
      *
      * @param string $id The object id
+     *
+     * @return Menu the object instance
      */
     public function read($id)
     {
@@ -139,6 +181,13 @@ class Menu
         return $this;
     }
 
+    /**
+     * Updates the menu information given an array of data
+     *
+     * @param array $data the new menu data
+     *
+     * @return boolean true if the action was done
+     **/
     public function update($data)
     {
         if (!isset($data['pk_father']) && empty($data['pk_father'])) {
@@ -166,16 +215,13 @@ class Menu
         return \MenuItems::setMenuElements($this->pk_menu, $data['items']);
     }
 
-     /**
-    * Delete definetelly one content
-    *
-    * This simulates a trash system by setting their available flag to false
-    *
-    * @param integer $id
-    * @param integer $last_editor
-    *
-    * @return null
-    */
+    /**
+     * Deletes permanently one content
+     *
+     * @param integer $id the menu id to delete
+     *
+     * @return null
+     */
     public function delete($id)
     {
 
@@ -202,8 +248,6 @@ class Menu
     /**
      * Loads the menu items
      *
-     * @param array $data image
-     *
      * @return array with categories order by positions
      */
     public function loadItems()
@@ -214,9 +258,9 @@ class Menu
     }
 
     /**
-     * Get a menu in the frontpage
+     * Loads the menu data from name
      *
-     * @param array $data image
+     * @param string $name the menu name to load
      *
      * @return array with categories order by positions
      */
@@ -249,9 +293,9 @@ class Menu
     /**
      * Gets a menu instance given its position
      *
-     * @param array $data image
+     * @param string $position the position of the menu
      *
-     * @return array with categories order by positions
+     * @return Menu the object instance
      */
     public function getMenuFromPosition($position)
     {
@@ -280,9 +324,11 @@ class Menu
     }
 
     /**
-     * List menues
+     * List menues given an SQL WHERE clause
      *
-     * @param array the list of Menu objects available
+     * @param array $paramsConfig the list of Menu objects available
+     *
+     * @return array list of Menu objects
      **/
     public static function find($paramsConfig = 1)
     {
@@ -319,6 +365,8 @@ class Menu
      * Renders a menu give its name
      *
      * @param array the list of Menu objects available
+     *
+     * @return string the HTML generated for the menu
      **/
     public static function renderMenu($name)
     {
