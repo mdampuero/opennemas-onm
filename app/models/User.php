@@ -2,15 +2,14 @@
 /**
  * Defines the User class
  *
- * @package    Model
- **/
-/*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ *
+ * @package    Model
+ **/
 
 /**
  * User
@@ -19,31 +18,110 @@
  **/
 class User
 {
+    /**
+     * The user id
+     *
+     * @var int
+     **/
     public $id               = null;
+
+    /**
+     * The login name aka username
+     *
+     * @var string
+     **/
     public $login            = null;
+
+    /**
+     * Encrypted password
+     *
+     * @var string
+     **/
     public $password         = null;
+
+    /**
+     * Seconds the session will be valid
+     *
+     * @var int
+     **/
     public $sessionexpire    = null;
+
+    /**
+     * The user email
+     *
+     * @var
+     **/
     public $email            = null;
+
+    /**
+     * The user name
+     *
+     * @var string
+     **/
     public $name             = null;
+
+    /**
+     * The type of user
+     *
+     * @var string
+     **/
     public $type             = null;
+
+    /**
+     * The amount of money in the user wallet
+     *
+     * @var int
+     **/
     public $deposit          = null;
+
+    /**
+     * The login token, used for restore passwords and more
+     *
+     * @var string
+     **/
     public $token            = null;
+
+    /**
+     * Whether the user can login or not
+     *
+     * @var string
+     **/
     public $authorize        = null;
+
+    /**
+     * The user group id
+     *
+     * @var id
+     **/
     public $id_user_group    = null;
+
+    /**
+     * The list of categories this user has access
+     *
+     * @var string
+     **/
     public $accesscategories = null;
+
+    /**
+     * The user group id
+     *
+     * @var int
+     **/
     public $fk_user_group    = null;
 
     /**
+     * User login token
+     *
      * @var string
-     */
-    public $authMethod = null;
+     **/
     public $clientLoginToken = null;
 
     /**
      * Initializes the object instance
      *
-     * @see MethodCacheManager
      * @param int $id User Id
+     *
+     * @return void
      */
     public function __construct($id = null)
     {
@@ -63,6 +141,13 @@ class User
         }
     }
 
+    /**
+     * Creates a new user given an array of data
+     *
+     * @param array $data the user data
+     *
+     * @return boolean true if the user was created
+     **/
     public function create($data)
     {
         if ($this->checkIfUserExists($data)) {
@@ -101,6 +186,13 @@ class User
         return true;
     }
 
+    /**
+     * Loads the user information given its id
+     *
+     * @param int $id the user id
+     *
+     * @return User the user object instance
+     **/
     public function read($id)
     {
         $sql = 'SELECT * FROM users WHERE pk_user = '.intval($id);
@@ -124,8 +216,17 @@ class User
         $this->authorize        = $rs->fields['authorize'];
         $this->id_user_group    = $rs->fields['fk_user_group'];
         $this->accesscategories = $this->readAccessCategories();
+
+        return $this;
     }
 
+    /**
+     * Updates the user information given an array of data
+     *
+     * @param array $data the new user data
+     *
+     * @return boolean true if the user was updated
+     **/
     public function update($data)
     {
         if (!isset($data['id_user_group'])
@@ -175,7 +276,7 @@ class User
 
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $this->id = $data['id'];
@@ -185,8 +286,17 @@ class User
 
         // Finish transaction
         $GLOBALS['application']->conn->CommitTrans();
+
+        return true;
     }
 
+    /**
+     * Deletes an user given its id
+     *
+     * @param int $id the user id
+     *
+     * @return boolean true if the user was deleted
+     **/
     public function delete($id)
     {
         $sql = 'DELETE FROM users WHERE pk_user=?';
@@ -203,7 +313,9 @@ class User
     /**
      * Checks if a user exists given some information.
      *
-     * @return bool true if user exists
+     * @param array $data tuple with the login and email params
+     *
+     * @return boolean true if user exists
      **/
     public function checkIfUserExists($data)
     {
@@ -215,6 +327,13 @@ class User
         return ($rs != false);
     }
 
+    /**
+     * Stores the list of categories an user has access
+     *
+     * @param int $IdsCategory the list of category ids
+     *
+     * @return boolean
+     **/
     private function createAccessCategoriesDb($IdsCategory)
     {
         if ($this->deleteAccessCategoriesDb()) {
@@ -245,6 +364,14 @@ class User
         return false;
     }
 
+    /**
+     * Adds access to one category to a user
+     *
+     * @param int $idUser the user id
+     * @param int $idCategory the category id
+     *
+     * @return boolean true if the action was done
+     **/
     public function addCategoryToUser ($idUser, $idCategory)
     {
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
@@ -266,6 +393,14 @@ class User
         return true;
     }
 
+    /**
+     * Deletes all the category-user assignments
+     *
+     * @param int $idUser the user id
+     * @param int $idCategory the category id
+     *
+     * @return boolean
+     **/
     public function delCategoryToUser($idUser, $idCategory)
     {
         apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
@@ -284,6 +419,13 @@ class User
         return true;
     }
 
+    /**
+     * Loads and returns the categories an user has access
+     *
+     * @param int $id the user id
+     *
+     * @return array the list of category ids
+     **/
     private function readAccessCategories($id = null)
     {
         $id = (!is_null($id))? $id: $this->id;
@@ -339,6 +481,7 @@ class User
 
         return true;
     }
+
 
     public function login(
         $login,
@@ -423,6 +566,8 @@ class User
     /**
      * Check if the token for registration is same user token and get user data
      *
+     * @param string $token the token
+     *
      * @return user if exists false otherwise
      **/
     public function getUserByToken($token)
@@ -487,6 +632,13 @@ class User
         $this->accesscategories = null;
     }
 
+    /**
+     * Sets the access categories to a user
+     *
+     * @param array $categoryIds the list of category ids
+     *
+     * @return array the same list
+     **/
     public function setAccessCategories($categoryIds)
     {
         for ($iIndex=0; $iIndex < count($categoryIds); $iIndex++) {
@@ -496,6 +648,11 @@ class User
         return $contentCategories;
     }
 
+    /**
+     * Returns the list of category names the current user has
+     *
+     * @return array the list of category names
+     **/
     public function getAccessCategoriesName()
     {
         if (!empty($this->accesscategories)) {
@@ -509,6 +666,13 @@ class User
         return null;
     }
 
+    /**
+     * Returns the list of category ids a user has access given the user id
+     *
+     * @param int $id the user id
+     *
+     * @return array the list of category ids
+     **/
     public function getAccessCategoryIds($id = null)
     {
         if (empty($this->accesscategories)) {
@@ -538,6 +702,14 @@ class User
         return $ids;
     }
 
+    /**
+     * Returns a list of users that matches a search criteria
+     *
+     * @param array $filter the list of search criterias to use
+     * @param string $orderBy the ORDER BY clause to use
+     *
+     * @return array list of users
+     **/
     public function getUsers($filter = null, $orderBy = 'ORDER BY 1')
     {
         $items = array();
@@ -560,6 +732,13 @@ class User
         return $items;
     }
 
+    /**
+     * Returns the user name for a given user id
+     *
+     * @param int $id the user id
+     *
+     * @return string the user name
+     **/
     public function getUserName($id)
     {
         $sql = 'SELECT name, login FROM users WHERE pk_user=?';
@@ -569,14 +748,13 @@ class User
 
             return false;
         }
-        //Se cambia name por login.
+
         return $rs->fields['login'];
     }
 
     /**
      * Sets user configurations given a named array
      *
-     * @param int $userId   the user id to set configs to
      * @param array  $userMeta a named array with settings and its values
      *
      * @return  boolean true if all went well
@@ -642,9 +820,9 @@ class User
     /**
      * Sets an user state to disabled/not authorized
      *
-     * @param  type $id
+     * @param  int $id the use id
      *
-     * @return void
+     * @return boolean true if the action was done
      */
     public function unauthorizeUser($id)
     {
@@ -655,13 +833,16 @@ class User
 
             return false;
         }
+
+        return true;
     }
 
     /**
      * Sets an users state to enabled/authorized/activated
      *
-     * @param  type $id
-     * @return type
+     * @param  int $id the use id
+     *
+     * @return boolean true if the action was done
      */
     public function authorizeUser($id)
     {
@@ -672,6 +853,8 @@ class User
 
             return false;
         }
+
+        return true;
     }
 
     /**
@@ -719,7 +902,10 @@ class User
     /**
      * Generate new token and update user with it
      *
-     * @return true|false
+     * @param int $id the user id
+     * @param string $token the new user token
+     *
+     * @return boolen
      **/
     public function updateUserToken($id, $token)
     {
@@ -735,9 +921,12 @@ class User
     }
 
     /**
-     * Update users password
+     * Updates the users password
      *
-     * @return boolean
+     * @param int $id the user id
+     * @param string $pass the new user password
+     *
+     * @return boolean true if the pass was updated
      **/
     public function updateUserPassword($id, $pass)
     {
@@ -753,7 +942,13 @@ class User
     }
 
 
-
+    /**
+     * Returns a valid SQL WHERE clause for the given filter
+     *
+     * @param array $filter the list of filters
+     *
+     * @return string the WHERE clause
+     **/
     private function buildFilter($filter)
     {
         $newFilter = ' WHERE 1=1 ';

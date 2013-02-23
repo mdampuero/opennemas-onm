@@ -248,7 +248,7 @@ class Advertisement extends Content
         }
 
         // Store this object into the cache manager for better performance
-        if ( is_null($this->cache) ) {
+        if (is_null($this->cache)) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
             $this->cache->setCacheLife(20); // 20 seconds
@@ -269,7 +269,7 @@ class Advertisement extends Content
     public static function getInstance()
     {
         // Create a unique instance if not available
-        if ( is_null(self::$singleton) ) {
+        if (is_null(self::$singleton)) {
             self::$singleton = new Advertisement();
         }
 
@@ -562,8 +562,7 @@ class Advertisement extends Content
         $ad = new Advertisement($id);
 
         //No publicado
-        if (
-            ($ad->type_medida=='CLIC' )
+        if ($ad->type_medida == 'CLIC'
             && ($ad->num_clic <= $ad->num_clic_count)
         ) {
             $status = 0;

@@ -1,10 +1,14 @@
 <?php
-/*
+/**
+ * Defines the Onm\Log class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Log
  */
 namespace Onm;
 
@@ -12,10 +16,9 @@ use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
 /**
+ * Implements an easy initialization of Monolog service
  *
- *
- * @package    Onm
- * @subpackage Log
+ * @package    Onm_Log
  */
 class Log
 {
@@ -29,7 +32,7 @@ class Log
     /**
      * Initializes the looger instance
      *
-     * @param string $logLevel The log name
+     * @param string $loglevel The log name
      *
      * @return void
      **/
@@ -45,7 +48,7 @@ class Log
      * The proxy method to redirect all the calls to the logger instance
      *
      * @param string $funcName the function to call inside the logger
-     * @param array $arguments the list of arguments to pass to the function
+     * @param array  $arguments the list of arguments to pass to the function
      *
      * @return mixed the response of the logger method call
      **/

@@ -1,18 +1,21 @@
 <?php
-/*
+/**
+ * Defines the Subscriptor class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 /**
  * Class Privilege
  *
  * Class to manage privileges
  *
- * @package    Onm
- * @subpackage Newsletter
+ * @package    Model
  **/
 class Subscriptor
 {
@@ -55,7 +58,7 @@ class Subscriptor
 
     public function get_instance()
     {
-        if ( is_null(self::$instance) ) {
+        if (is_null(self::$instance)) {
             self::$instance = new Subscriptor();
 
             return self::$instance;
@@ -114,14 +117,14 @@ class Subscriptor
     {
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
@@ -200,7 +203,7 @@ class Subscriptor
     {
         $items = array();
         $_where = '1=1';
-        if ( !is_null($filter) ) {
+        if (!is_null($filter)) {
             $_where = $filter;
         }
 

@@ -74,7 +74,7 @@ class ArticlesController extends Controller
 
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
-            if (!\Acl::_C($this->category)) {
+            if (!\Acl::checkCategoryAccess($this->category)) {
                 m::add(_("You don't have enought privileges to see this category."));
 
                 return $this->redirect($this->generateUrl('admin_welcome'));

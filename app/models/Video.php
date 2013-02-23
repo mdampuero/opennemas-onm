@@ -98,6 +98,13 @@ class Video extends Content
         return parent::__get($name);
     }
 
+    /**
+     * Creates a new video from a given data array
+     *
+     * @param array $data the video data
+     *
+     * @return boolean true if the videos was created
+     **/
     public function create($data)
     {
         parent::create($data);
@@ -120,6 +127,13 @@ class Video extends Content
         return $this->id;
     }
 
+    /**
+     * Loads a video identified by a the given id
+     *
+     * @param int $id the video id to load
+     *
+     * @return Video the video object instance
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -139,9 +153,17 @@ class Video extends Content
         $this->information = unserialize($rs->fields['information']);
     }
 
+    /**
+     * Updates the video given an array of data
+     *
+     * @param array $data the new video data
+     *
+     * @return boolean true if the video was updated
+     **/
     public function update($data)
     {
         parent::update($data);
+
         $sql =  "UPDATE videos"
                 ." SET  `video_url`=?, `information`=?, `author_name`=?  "
                 ." WHERE pk_video=".$data['id'];
@@ -154,10 +176,19 @@ class Video extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Removes permanently a video given an id
+     *
+     * @param int $id the video id
+     *
+     * @return boolean true if the video was removed
+     **/
     public function remove($id)
     {
         parent::remove($id);
@@ -175,6 +206,8 @@ class Video extends Content
 
     /**
      * Creates a video from a local file
+     *
+     * @param array $videoFileData the new video file data
      *
      * @return true
      * @throws Exception, if something goes wrong
@@ -215,7 +248,7 @@ class Video extends Content
      * target path
      *
      * @param string $file the file path to the original FLV file
-     * @param string $baseUploadPath the path where to save the video
+     * @param string $baseUploadpath the path where to save the video
      *
      * @return string the video uri
      **/
@@ -259,6 +292,7 @@ class Video extends Content
      * Converts a video to flv given a local path
      *
      * @param array $originalVideo the video file information
+     * @param string $baseUploadpath the target directory where upload the video file
      *
      * @return string the converted file path
      **/

@@ -9,9 +9,10 @@
  **/
 require_once __DIR__.'/../app/autoload.php';
 
-$configFile = implode(DIRECTORY_SEPARATOR, array(
-    APPLICATION_PATH, 'config', 'config.inc.php'
-));
+$configFile = implode(
+    DIRECTORY_SEPARATOR,
+    array(APPLICATION_PATH, 'config', 'config.inc.php')
+);
 
 mb_internal_encoding("UTF-8");
 

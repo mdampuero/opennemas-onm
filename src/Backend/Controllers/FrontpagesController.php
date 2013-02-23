@@ -76,7 +76,7 @@ class FrontpagesController extends Controller
         // Check if the user can edit frontpages
         if (!\Acl::check('ARTICLE_FRONTPAGE')) {
             \Acl::deny();
-        } elseif (!\Acl::_C($categoryID)) {
+        } elseif (!\Acl::checkCategoryAccess($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
             $section = $ccm->get_name($categoryID);
             $_REQUEST['category'] = $categoryID;

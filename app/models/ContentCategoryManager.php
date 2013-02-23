@@ -1,34 +1,48 @@
 <?php
-/*
+/**
+ * Defines the ContentCategoryManager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Model
  */
 /**
  * Class for handling content-category relations operations
  *
- * @package Onm
- * @subpackage Model
+ * @package Model
  */
 class ContentCategoryManager
 {
     /**
-     * @var array with categories
+     * List of available categories
+     *
+     * @var array
      **/
     public $categories = null;
 
     /**
-     * @var ContentCategoryManager instance, singleton pattern
+     * The instance of this class, use for the Singleton pattern
+     * @var ContentCategoryManager
      **/
     private static $instance = null;
 
     /**
-     * @var MethodCacheManager cache, object to cache requests
+     * Cache handler
+     *
+     * @var MethodCacheManager
      **/
     public $cache = null;
 
+    /**
+     * Initializes the object class or returns the initialized instance if
+     * it was previously created
+     *
+     * @return ContentCategoryManager
+     **/
     public function __construct()
     {
         if (is_null(self::$instance)) {
@@ -46,6 +60,11 @@ class ContentCategoryManager
         }
     }
 
+    /**
+     * Returns an unique instance, Singleton pattern
+     *
+     * @return ContentCategoryManager the object instance
+     **/
     public static function get_instance()
     {
         if (is_null(self::$instance)) {
@@ -58,9 +77,9 @@ class ContentCategoryManager
     }
 
     /**
-     *  reload internal array $this->categories and
-     *  delete APC cache
-     *  call when change or create categories
+     * Reloads the internal categories array and purges the APC cache
+     *
+     * Used after creating/updating categories
      *
      * @return array Array with Content_category objects
      **/
@@ -85,10 +104,9 @@ class ContentCategoryManager
     }
 
     /**
-     * populate_categories, load internal array $this->categories for a
-     * singleton instance
+     * Fetches the available categories and stores them into a property
      *
-     * @return array Array with Content_category objects
+     * @return array List of ContentCategory objects
     */
     public function populateCategories()
     {
@@ -117,6 +135,7 @@ class ContentCategoryManager
      *
      * @param $categoryName Name of category
      * @param $subcategoryName Name of subcategory
+     *
      * @return array Return categoryName and subcategoryName fixed
     */
     public function normalize($categoryName, $subcategoryName = null)
@@ -138,9 +157,10 @@ class ContentCategoryManager
     /**
      * find objects of category and subcategory
      *
-     * @param $filter - filter of sql
-     * @param $order_by
-     * @return array Return category objects
+     * @param string $filter SQL WHERE clause
+     * @param string $orderBy ORDER BY clause
+     *
+     * @return array List of ContentCategory objects
      */
     public function find($filter = null, $orderBy = 'ORDER BY 1')
     {
@@ -168,10 +188,17 @@ class ContentCategoryManager
         return $items;
     }
 
-    //Devuelve el nombre de una categoria para los upload y posible las urls
+    /**
+     * Returns the category name given its id
+     *
+     * @param int $id the category id
+     *
+     * @return string the category name
+     * @return boolean false if the category doesn't exists
+     **/
     public function get_name($id)
     {
-        if (is_null($this->categories) ) {
+        if (is_null($this->categories)) {
             $sql = 'SELECT name FROM content_categories '
                  . 'WHERE pk_content_category = ?';
             $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
@@ -195,7 +222,8 @@ class ContentCategoryManager
      * Returns the position in menu
      *
      * @param  int $id Category ID
-     * @return int Return posmenu
+     *
+     * @return int Category position
      */
     public function get_pos($id)
     {
@@ -225,7 +253,13 @@ class ContentCategoryManager
         return $this->categories[$id]->posmenu;
     }
 
-    //Returns cetegory id
+    /**
+     * Returns the category id from its name
+     *
+     * @param string $categoryName the category name
+     *
+     * @return int the category id
+     **/
     public function get_id($categoryName)
     {
         if (is_null($this->categories)) {
@@ -291,7 +325,13 @@ class ContentCategoryManager
         }
     }
 
-    //Returns the title of category
+    /**
+     * Returns the title "Human readablle name" of a category given its name
+     *
+     * @param string $categoryName the category name
+     *
+     * @return string the category title
+     **/
     public function get_title($categoryName)
     {
         if (is_null($this->categories)) {
@@ -318,6 +358,13 @@ class ContentCategoryManager
         return '';
     }
 
+    /**
+     * Returns a category object given its name
+     *
+     * @param string $categoryName
+     *
+     * @return string the category object
+     **/
     public function getByName($categoryName)
     {
         if (is_null($this->categories)) {
@@ -344,7 +391,11 @@ class ContentCategoryManager
         return null;
     }
 
-    //Returns an all cetegories array
+    /**
+     * Returns an array with all the available category objects
+     *
+     * @return array ContentCategory object list
+     **/
     public function get_all_categories()
     {
         if (is_null($this->categories)) {
@@ -377,11 +428,17 @@ class ContentCategoryManager
         return $items;
     }
 
-    //Returns an array with subcetegories from a single category
-    //with internal_name as index
+    /**
+     * Returns an array with subcetegories from a single category
+     * with internal_name as index
+     *
+     * @param int $id the id of the parent category
+     *
+     * @return array list of ContentCategory objects
+     **/
     public function get_all_subcategories($id)
     {
-        if ( is_null($this->categories) ) {
+        if (is_null($this->categories)) {
             $sql = 'SELECT name,title,internal_category '
                  . 'FROM content_categories WHERE internal_category<>0 '
                  .' AND inmenu=1 AND fk_content_category = ? ORDER BY posmenu';
@@ -421,6 +478,13 @@ class ContentCategoryManager
         return $items;
     }
 
+    /**
+     * Sorts an array of categories by its posmenu property
+     *
+     * @param array $categories the list of categories to sort
+     *
+     * @return array the sorted list of categories
+     **/
     public function order_by_posmenu($categories)
     {
         $categories = array_values($categories);
@@ -448,6 +512,13 @@ class ContentCategoryManager
         return $categories;
     }
 
+    /**
+     * Sorts an array of categories by its internal_category property
+     *
+     * @param array $categories the list of categories to sort
+     *
+     * @return array the sorted list of categories
+     **/
     public function groupByType($categories)
     {
         $categories = array_values($categories);
@@ -480,9 +551,10 @@ class ContentCategoryManager
     /**
      * Get a tree with categories and subcategories
      *
-     * @todo To do work recursive for varios nested levels
+     * TODO: To do work recursive for varios nested levels
+     *
      * @return array Tree structure
-    */
+     **/
     public function getCategoriesTree()
     {
         $tree = array();
@@ -517,9 +589,10 @@ class ContentCategoryManager
      /**
      * Get a tree   categories and subcategories and render for select
      *
-     * @todo  To render a select form with categories
+     * TODO:  To render a select form with categories
+     *
      * @return array unidimensional structure for select form
-    */
+     **/
     public function renderCategoriesTree()
     {
         $categories = $this->getCategoriesTreeMenu();
@@ -554,9 +627,10 @@ class ContentCategoryManager
     /**
      * Get a tree with categories and subcategories for menu
      *
-     * @todo To do work recursive for varios nested levels
+     * TODO: To do work recursive for varios nested levels
+     *
      * @return array Tree structure
-    */
+     **/
     public function getCategoriesTreeMenu()
     {
         $tree = array();
@@ -590,10 +664,16 @@ class ContentCategoryManager
         return $tree;
     }
 
-    //Returns first subcategory from a father category_id
+    /**
+     * Returns first subcategory given the parente category id
+     *
+     * @param int $categoryId the category id
+     *
+     * @return string the category name
+     **/
     public function getFirstSubcategory($categoryId)
     {
-        if ( is_null($this->categories) ) {
+        if (is_null($this->categories)) {
             $sql = 'SELECT name FROM content_categories
                     WHERE inmenu=1 AND fk_content_category=?
                     AND internal_category<>0
@@ -623,6 +703,13 @@ class ContentCategoryManager
         }
     }
 
+    /**
+     * Returns the father of a category given its name
+     *
+     * @param string $category_name the category name
+     *
+     * @return string the parent category name
+     **/
     public function get_father($category_name)
     {
         if (is_null($this->categories)) {
@@ -663,7 +750,13 @@ class ContentCategoryManager
         return '';
     }
 
-    //Returns false if the category does not exist
+    /**
+     * Checks if exists one category given its name
+     *
+     * @param string $category_name the name of the category
+     *
+     * @return boolean true if the category exists
+     **/
     public function exists($category_name)
     {
         if (is_null($this->categories)) {
@@ -675,7 +768,7 @@ class ContentCategoryManager
         }
 
         // Singleton version
-        // search into categories internal array ($this->categories)
+        // searches within the interal categories array ($this->categories)
         foreach ($this->categories as $category) {
             if ($category->name == $category_name) {
                 return true;
@@ -685,10 +778,16 @@ class ContentCategoryManager
         return false;
     }
 
-    //Returns true if there is no contents in that category name
-    public function isEmpty($category)
+    /**
+     * Returns true if there is no contents in category given its name
+     *
+     * @param string $categoryName the category name
+     *
+     * @return boolean true if the category has no contents
+     **/
+    public function isEmpty($categoryName)
     {
-        $pk_category = $this->get_id($category);
+        $pk_category = $this->get_id($categoryName);
         $sql1 = 'SELECT count( * )
                  FROM `content_positions`
                  WHERE `fk_category` ='.$pk_category;
@@ -720,6 +819,8 @@ class ContentCategoryManager
     /**
      * Returns true if there is no contents in that category id
      *
+     * @param int $category the category id
+     *
      * @return boolean
      **/
     public function isEmptyByCategoryId($category)
@@ -743,6 +844,14 @@ class ContentCategoryManager
         return $number == 0;
     }
 
+    /**
+     * Counts the contents from a category
+     *
+     * @param int    $category the category id
+     * @param string $type the group type where to search from
+     *
+     * @return array the counters for a category
+     **/
     public function countContentByType($category, $type)
     {
         $sql = 'SELECT count(pk_content) AS number
@@ -761,6 +870,12 @@ class ContentCategoryManager
     }
 
     /**
+     * Counts the contents from a group type
+     *
+     * @param string $type the group type where to search from
+     * @param string $filter the WHERE SQL clause to filter contents from
+     *
+     * @return array the counters for all the group types
      *
      * @see ContentCategoryManager::countContentByType
      **/
@@ -792,6 +907,13 @@ class ContentCategoryManager
         return $groups;
     }
 
+    /**
+     * Counts the media elements from a group type
+     *
+     * @param string $filter the WHERE clause to filter the contents with
+     *
+     * @return the counters for all the group types
+     **/
     public function countMediaByTypeGroup($filter = null)
     {
         $_where = '1=1';
@@ -821,6 +943,13 @@ class ContentCategoryManager
         return $groups;
     }
 
+    /**
+     * Counts the media elements from a group type
+     *
+     * @param string $filter the WHERE clause to filter the contents with
+     *
+     * @return the counters for all the group types
+     **/
     public function dataMediaByTypeGroup($filter = null)
     {
         $_where = '1=1';
@@ -857,15 +986,13 @@ class ContentCategoryManager
      * Order array of category menu and submenues.
      * Get category info if there is one selected or get first category info
      *
-     * @param int $internal_category
+     * @param int $category the category id
+     * @param int $internalCategory 1 if only return internal categories
      *
      * @return array principal categories, childs categorys and category info
-     *
-     * @throws <b>Exception</b> Explanation of exception.
      */
     public function getArraysMenu($category = null, $internalCategory = 1)
     {
-
         //fullcat contains array with all cats order by posmenu
         //parentCategories is an array with all menu cats in frontpage
         //subcat is an array with all subcat form the parentCategories array
@@ -914,11 +1041,9 @@ class ContentCategoryManager
      *
      * Get array with subcategories info from a category id
      *
-     * @param int $category_id
+     * @param int $categoryId the category id
      *
      * @return array childs categorys
-     *
-     * @throws <b>Exception</b> Explanation of exception.
      */
     public function getSubcategories($categoryId)
     {

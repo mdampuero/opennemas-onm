@@ -1,17 +1,23 @@
 <?php
 /**
+ * Defines the Onm\Mailer class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Onm
  **/
 namespace Onm;
 
 /**
-* Mailer
-*/
+ * Initializes the SwiftMailer service for sending emails
+ *
+ * @package  Onm
+ */
 class Mailer
 {
     /**
@@ -37,6 +43,8 @@ class Mailer
 
     /**
      * Initializes the mailer service given an array with the SMTP server connection params
+     *
+     * @param array $mailerParameters the list of parameters to initialize the service
      *
      * @return Onm\Mailer the mailer instance
      **/

@@ -14,10 +14,32 @@
  **/
 class AlbumPhoto
 {
-
+    /**
+     * The album the photo belongs to
+     *
+     * @var int
+     **/
     public $pk_album = null;
+
+    /**
+     * The photo id
+     *
+     * @var int
+     **/
     public $pk_photo = null;
+
+    /**
+     * The position of the photo
+     *
+     * @var int
+     **/
     public $position = null;
+
+    /**
+     * The description of the photo in the album
+     *
+     * @var string
+     **/
     public $description = null;
 
     /**

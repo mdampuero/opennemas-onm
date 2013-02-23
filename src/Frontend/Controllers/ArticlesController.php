@@ -42,7 +42,6 @@ class ArticlesController extends Controller
         $this->ccm  = \ContentCategoryManager::get_instance();
     }
 
-
     /**
      * Displays the article given its id or slug
      *
@@ -199,8 +198,7 @@ class ArticlesController extends Controller
         // Advertisements for single article NO CACHE
         $this->getInnerAds($categoryName);
 
-        if (
-            $this->view->caching == 0
+        if ($this->view->caching == 0
             || !$this->view->isCached('article/article.tpl', $cacheID)
         ) {
 
