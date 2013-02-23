@@ -98,7 +98,7 @@ class NewNewsletter
     /**
      * Updates the newsletter properties given an array of data
      *
-     * @param array $data array with data for update
+     * @param array $newdata array with data for update
      *
      * @return NewNewsletter the object instance
      **/

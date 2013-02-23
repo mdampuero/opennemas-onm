@@ -1,11 +1,15 @@
 <?php
 /**
+ * Defines the Onm\Framework\Dispatcher\Dispatcher class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Framework_Dispatcher
  **/
 namespace Onm\Framework\Dispatcher;
 
@@ -15,15 +19,18 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Dispatches url to a matched controller
  *
- * @package Onm
- * @author
+ * @package Onm_Framework_Dispatcher
  **/
 class Dispatcher
 {
     /**
      * Initializes the dispatcher
      *
-     * @return this
+     * @param Symfony\Component\Routing\Matcher\UrlMatcher $matcher   the url matcher
+     * @param Symfony\Component\HttpFoundation             $request   the request object
+     * @param Symfony\Component\DependencyInjection        $container the container object
+     *
+     * @return void
      **/
     public function __construct($matcher, &$request, $container)
     {
@@ -98,7 +105,8 @@ class Dispatcher
      * Dispatches a controller given its filename
      *
      * @param  string $controllerFileName the controller file path
-     * @return string the response
+     *
+     * @return string the response of the controller
      **/
     public function dispatchControllerFile($controllerFileName)
     {
@@ -117,6 +125,7 @@ class Dispatcher
      * Dispatches a controller given its class name
      *
      * @param  string $className the class name to dispatch
+     *
      * @return string the response
      **/
     public function dispatchClass($className)
@@ -166,7 +175,8 @@ class Dispatcher
     /**
      * Returns the module name given a full controller class name
      *
-     * @param  string $controllerClassNAme the full controller class name
+     * @param  string $controllerClassName the full controller class name
+     *
      * @return string the module name
      * @return Dispatcher the dispatcher instance
      **/

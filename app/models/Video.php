@@ -20,14 +20,40 @@ use Onm\Message as m;
  **/
 class Video extends Content
 {
+    /**
+     * The video id
+     *
+     * @var  int
+     **/
     public $pk_video = null;
+
+    /**
+     * Serialized array with the video information
+     *
+     * @var string
+     **/
     public $information  = null;
+
+    /**
+     * The original video url, if it comes from an external source
+     *
+     * @var string
+     **/
     public $video_url  = null;
+
+    /**
+     * The video author name
+     *
+     * @var string
+     **/
     public $author_name = null;
-    public $content_type = null;
 
     /**
      * Initializes the Video object
+     *
+     * @param int $id the video id to load
+     *
+     * @return Video the video object instance
      **/
     public function __construct($id = null)
     {
@@ -39,6 +65,13 @@ class Video extends Content
         $this->content_type_l10n_name = _('Video');
     }
 
+    /**
+     * Magic function to get uninitilized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     **/
     public function __get($name)
     {
         switch ($name) {
@@ -58,6 +91,7 @@ class Video extends Content
 
                 break;
             default:
+                return parent::__get($name);
                 break;
         }
 
@@ -176,6 +210,15 @@ class Video extends Content
         return $videoId;
     }
 
+    /**
+     * Stores and generates one FLV video given the original file name and the
+     * target path
+     *
+     * @param string $file the file path to the original FLV file
+     * @param string $baseUploadPath the path where to save the video
+     *
+     * @return string the video uri
+     **/
     public function upload($file, $baseUploadpath)
     {
         $videoInformation = array();
@@ -214,6 +257,8 @@ class Video extends Content
 
     /**
      * Converts a video to flv given a local path
+     *
+     * @param array $originalVideo the video file information
      *
      * @return string the converted file path
      **/
@@ -282,12 +327,13 @@ class Video extends Content
         return $return;
     }
 
-    /*
-     * Function that creates thumbnails for one flv vídeo
+    /**
+     * Creates thumbnails from one flv vídeo
      *
-     * @param $flvPath, $sizes
+     * @param string $flvPath the path to the FLV file
+     * @param array $sizes list of thumbnail sizes to generate
      *
-     * return array the list of paths to the generated thumbnails
+     * @return array the list of paths to the generated thumbnails
      */
     public static function createThumbnailsfromFLV($flvPath, $sizes = array())
     {
@@ -352,7 +398,7 @@ class Video extends Content
     }
 
     /**
-     * Return the uri for this video
+     * Returns the uri for this video
      *
      * @return string the video uri
      **/
@@ -398,6 +444,8 @@ class Video extends Content
 
     /**
      * Renders the video object in frontpage
+     *
+     * @param array $params the parameters for changing the rendering behaviour
      *
      * @return string the final HTML for this video
      **/

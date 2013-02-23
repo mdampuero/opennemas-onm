@@ -69,8 +69,6 @@ class Widget extends Content
 
     public function create($data)
     {
-        // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes($data);
         $data['category'] = 0;
 
         // Start transaction
@@ -192,8 +190,6 @@ class Widget extends Content
      */
     public function update($data)
     {
-        // Clear  magic_quotes
-        StringUtils::disabled_magic_quotes($data);
         $data['category'] = 0;
 
         // Start transaction

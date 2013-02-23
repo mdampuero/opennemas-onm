@@ -1,11 +1,14 @@
 <?php
 /**
- * This file is part of the Onm package.
+ * Defines the Onm\File\Image\Common abstract class
  *
+ * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_File_Image
  **/
 namespace Onm\File\Image;
 
@@ -16,7 +19,6 @@ namespace Onm\File\Image;
  **/
 abstract class Common
 {
-
     /**
      * Execute a list of operations in the image object
      * @param string $operations the string of the operations and params
@@ -91,7 +93,9 @@ abstract class Common
     /**
      * Split string operations and convert it to array
      *
-     * return array the formatted operations array
+     * @param string $operations pseudo-serialized operations information
+     *
+     * @return array the formatted operations array
      **/
     private function getOperations($operations)
     {
@@ -120,7 +124,7 @@ abstract class Common
      *
      * @param int/string $position the position in the image
      * @param int        $size     the size of the image
-     * @param int        $size     the size of the canvas
+     * @param int        $canvas   the size of the canvas
      *
      * @return int the related image position
      */

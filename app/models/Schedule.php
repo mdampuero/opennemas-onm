@@ -19,7 +19,13 @@
  **/
 class Schedule extends Content
 {
-    //TODO: parent content
+    /**
+     * Loads the event instance given an event id
+     *
+     * @param int $id the id of the event to read
+     *
+     * @return Schedule the object initialized
+     **/
     public function __construct($id = null)
     {
         //  parent::__construct($id);
@@ -32,6 +38,14 @@ class Schedule extends Content
         $this->content_type = 'Schedule';
     }
 
+
+    /**
+     * Returns a list of events
+     *
+     * @param int $limit max number of elements to get
+     *
+     * @return array the list of events
+     **/
     public function getDataCalendars($limit = 8)
     {
         $sql = "SELECT * FROM phpc_AR_calendars "
@@ -49,7 +63,7 @@ class Schedule extends Content
             $item->bgcolor        = $rs->fields['bgcolor'];
             $item->ensign         = $rs->fields['ensign'];
             $item->position       = $rs->fields['position'];
-            $item->name = StringUtils::get_title($rs->fields['calendar_title']);
+            $item->name = \StringUtils::get_title($rs->fields['calendar_title']);
 
             $calendars[]=$item;
             $rs->MoveNext();
@@ -58,7 +72,13 @@ class Schedule extends Content
         return $calendars;
     }
 
-    // returns all the events for a particular where. Using in sitemap
+    /**
+     * returns all the events for a particular where. Using in sitemap
+     *
+     * @param string $where the WHERE clause to filter the events with
+     *
+     * @return array the list of events
+     **/
     public function getEventsByWhere($where)
     {
         $sql = 'SELECT * FROM phpc_AR_events '
@@ -76,10 +96,10 @@ class Schedule extends Content
             $item->startdate = $rs->fields['startdate'];
             $item->enddate   = $rs->fields['enddate'];
             $item->section   = $rs->fields['section'];
-            $item->name = StringUtils::get_slug(
+            $item->name = \StringUtils::get_slug(
                 html_entity_decode($rs->fields['subject'], ENT_QUOTES, 'UTF-8')
             );
-            $item->slug =  StringUtils::get_slug($rs->fields['subject']);
+            $item->slug =  \StringUtils::get_slug($rs->fields['subject']);
 
             $events[]=$item;
             $rs->MoveNext();
