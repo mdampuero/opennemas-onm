@@ -14,8 +14,18 @@ namespace Onm;
 */
 class Mailer
 {
+    /**
+     * List of allowed encription protocols
+     *
+     * @var array
+     **/
     private $allowedServerEncriptions = array('ssl', 'tls');
 
+    /**
+     * The default configuration for connection to the mail server
+     *
+     * @var array
+     **/
     private $defaultParams = array(
         'transport'        => 'mail',
         'username'         => '',
@@ -25,8 +35,20 @@ class Mailer
         'protocol'         => 'none',
     );
 
+    /**
+     * Initializes the mailer service given an array with the SMTP server connection params
+     *
+     * @return Onm\Mailer the mailer instance
+     **/
     public function __construct($mailerParameters)
     {
+        $mailerParameters = array_filter(
+            $mailerParameters,
+            function ($component) {
+                return ($component != null);
+            }
+        );
+
         $mailerParameters = array_merge($this->defaultParams, $mailerParameters);
 
         // Create the Transport
@@ -66,7 +88,10 @@ class Mailer
     /**
      * Redirects all the calls to the Swift_Mailer call
      *
-     * @return void
+     * @param string $method the method to call
+     * @param array $params the list of parameters to pass to the method
+     *
+     * @return mixed the result of the method call
      **/
     public function __call($method, $params)
     {
