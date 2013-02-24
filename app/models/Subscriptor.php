@@ -19,10 +19,39 @@
  **/
 class Subscriptor
 {
+    /**
+     * The subscriptor id
+     *
+     * @var int
+     **/
     public $id        = null;
+
+    /**
+     * The email of the subscriptor
+     *
+     * @var string
+     **/
     public $email     = null;
+
+    /**
+     * The name of the subscriptor
+     *
+     * @var string
+     **/
     public $name      = null;
+
+    /**
+     * The firstname of the user
+     *
+     * @var string
+     **/
     public $firstname = null;
+
+    /**
+     * The last name of the user
+     *
+     * @var string
+     **/
     public $lastname  = null;
 
     /**
@@ -38,16 +67,33 @@ class Subscriptor
      **/
     public $subscription = null;
 
+    /**
+     * The list of errors
+     *
+     * @var string
+     **/
     public $_errors = array();
 
+    /**
+     * The database table where the users are saved
+     *
+     * @var string
+     **/
     private $tableName = '`pc_users`';
 
+    /**
+     * Subscriptor instance. Singleton pattern
+     *
+     * @var Subscriptor
+     **/
     private static $instance = null;
 
     /**
      * Constructor
      *
-     * @param int $id Privilege Id
+     * @param int $id the subscriptor id
+     *
+     * @return void
      **/
     public function __construct($id = null)
     {
@@ -56,6 +102,11 @@ class Subscriptor
         }
     }
 
+    /**
+     * Singleton pattern
+     *
+     * @return Subscriptor the object instance
+     **/
     public function get_instance()
     {
         if (is_null(self::$instance)) {
@@ -68,6 +119,13 @@ class Subscriptor
         }
     }
 
+    /**
+     * Creates a new subscriptor given an array of data
+     *
+     * @param array $data the array of data
+     *
+     * @return boolean true if the subscriptor was created
+     **/
     public function create($data)
     {
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
@@ -99,6 +157,13 @@ class Subscriptor
         return true;
     }
 
+    /**
+     * Loads the subscriptor instance given the subscriptor id
+     *
+     * @param int $id the subscriptor id
+     *
+     * @return Subscriptor the object instance
+     **/
     public function read($id)
     {
         $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE pk_pc_user = ?';
@@ -111,8 +176,17 @@ class Subscriptor
         }
 
         $this->load($rs->fields);
+
+        return $this;
     }
 
+    /**
+     * Returns the Subscriptor object overloaded
+     *
+     * @param array $properties the list of properties to overload
+     *
+     * @return Subscriptor
+     **/
     public function load($properties)
     {
         if (is_array($properties)) {
@@ -139,8 +213,13 @@ class Subscriptor
     }
 
     /**
+     * Updates a subscriptor given an array of data
      *
-    */
+     * @param array   $data      the array of data
+     * @param boolean $isBackend whether this action is called from backend
+     *
+     * @return boolean true if the subscriptor was updated
+     **/
     public function update($data, $isBackend = false)
     {
         if ($isBackend) {
@@ -181,8 +260,12 @@ class Subscriptor
     }
 
     /**
-     * Recuperar un usuario por email
-    */
+     * Fetches an user given an email
+     *
+     * @param string $email the user email
+     *
+     * @return Subscriptor the object instance
+     **/
     public function getUserByEmail($email)
     {
         $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE `email`=?';
@@ -199,6 +282,15 @@ class Subscriptor
         return $this;
     }
 
+    /**
+     * Fetches all the users given an search criteria
+     *
+     * @param string $filter    the SQL WHERE clause
+     * @param int    $limit     how many users to fetch
+     * @param string $_order_by the ORDER BY clause
+     *
+     * @return boolean true if the subscriptor was created
+     **/
     public function getUsers($filter = null, $limit = null, $_order_by = 'name')
     {
         $items = array();
@@ -230,10 +322,16 @@ class Subscriptor
         return $items;
     }
 
+    /**
+     * Removes permanently a subscriptor
+     *
+     * @param int $id the subscriptor id to delete
+     *
+     * @return boolean true if the subscriptor was deleted
+     **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM ' . $this->tableName
-             . ' WHERE pk_pc_user=?';
+        $sql = 'DELETE FROM ' . $this->tableName . ' WHERE pk_pc_user=?';
         $values = array(intval($id));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -245,6 +343,14 @@ class Subscriptor
         return true;
     }
 
+    /**
+     * Sets the status to a given value
+     *
+     * @param int $id the subscriptor id
+     * @param int $status the status value
+     *
+     * @return boolean true if the subscriptor status property was changed
+     **/
     public function set_status($id, $status)
     {
         $sql = 'UPDATE ' . $this->tableName
@@ -253,10 +359,19 @@ class Subscriptor
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Checks if exists a user with an email registered
+     *
+     * @param string $email the email address
+     *
+     * @return boolean true if the subscriptor is already registered
+     **/
     public function exists_email($email)
     {
         $sql = 'SELECT count(*) AS num '
@@ -278,6 +393,8 @@ class Subscriptor
      * @param int|array $id
      * @param string    $property
      * @param mixed     $value
+     *
+     * @return boolean
     */
     public function mUpdateProperty($id, $property, $value = null)
     {
@@ -304,6 +421,13 @@ class Subscriptor
         return true;
     }
 
+    /**
+     * Returns the number of subscriptors given a search criteria
+     *
+     * @param string $where the WHERE clause
+     *
+     * @return int
+     **/
     public function countUsers($where = null)
     {
         $sql = 'SELECT count(*) FROM ' . $this->tableName;
@@ -317,29 +441,5 @@ class Subscriptor
         }
 
         return $rs;
-    }
-
-    public function getPager($itemsPage = 40, $total = null)
-    {
-        if (is_null($total)) {
-            $total = $this->countUsers();
-        }
-
-        // Pager
-        $pager_options = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPage,
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'append'      => false,
-            'path'        => '',
-            'fileName'    => 'javascript:paginate(%d);',
-            'urlVar'      => 'page',
-            'totalItems'  => $total,
-        );
-
-        $pager = Pager::factory($pager_options);
-
-        return $pager;
     }
 }

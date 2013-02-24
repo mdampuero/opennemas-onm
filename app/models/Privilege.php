@@ -132,7 +132,7 @@ class Privilege
     /**
      * Get modules name
      *
-     * @param array Array of string
+     * @return array Array of string
      **/
     public function getModuleNames()
     {

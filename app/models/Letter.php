@@ -17,12 +17,34 @@
  **/
 class Letter extends Content
 {
+    /**
+     * The letter id
+     *
+     * @var int
+     **/
     public $pk_letter         = null;
+
+    /**
+     * The author id
+     *
+     * @var int
+     **/
     public $author            = null;
+
+    /**
+     * The letter body
+     *
+     * @var string
+     **/
     public $body              = null;
 
-    private static $instance = null;
-
+    /**
+     * Initializes Letter object instance
+     *
+     * @param int $id the letter id
+     *
+     * @return void
+     **/
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -35,18 +57,13 @@ class Letter extends Content
         $this->content_type_l10n_name = _('Letter');
     }
 
-    public function getInstance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new Letter();
-
-            return self::$instance;
-
-        } else {
-            return self::$instance;
-        }
-    }
-
+    /**
+     * Magic method for generating property values
+     *
+     * @param string $name the property name
+     *
+     * @return mixed the property value
+     **/
     public function __get($name)
     {
         switch ($name) {
@@ -74,6 +91,14 @@ class Letter extends Content
         }
     }
 
+    /**
+     * Creates a new letter given an array of data
+     *
+     * @param array $data the letter information
+     *
+     * @return int the new letter id, if it was created
+     * @return boolean false if the letter was not created
+     **/
     public function create($data)
     {
         $data['content_status'] = $data['available'];
@@ -101,6 +126,13 @@ class Letter extends Content
         return $this->id;
     }
 
+    /**
+     * Loads the letter information given its id
+     *
+     * @param int $id the letter id
+     *
+     * @return Letter the letter instance
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -115,8 +147,17 @@ class Letter extends Content
         }
         $this->load($rs->fields);
         $this->ip = $this->params['ip'];
+
+        return $this;
     }
 
+    /**
+     * Updates the letter information given an array of data
+     *
+     * @param array $data the data array
+     *
+     * @return boolean true if the letter was updated
+     **/
     public function update($data)
     {
         $data['content_status'] = $data['available'];
@@ -147,7 +188,13 @@ class Letter extends Content
         return true;
     }
 
-    //Elimina definitivamente
+    /**
+     * Removes permanently the letter
+     *
+     * @param int $id the letter id to delete
+     *
+     * @return boolean true if the letter was deleted
+     **/
     public function remove($id)
     {
         parent::remove($id);
@@ -164,9 +211,8 @@ class Letter extends Content
     /**
      * Determines if the content of a comment has bad words
      *
-     * @access public
-     * @param  mixed    $data, the data from the comment
-     * @return integer, higher values means more bad words
+     * @param  array $data the data from the comment
+     * @return int higher values means more bad words
      **/
     public function hasBadWorsComment($data)
     {
@@ -181,6 +227,13 @@ class Letter extends Content
         return $weight > 100;
     }
 
+    /**
+     * Saves a letter given an array of data
+     *
+     * @param array $data the new letter information
+     *
+     * @return string
+     **/
     public function saveLetter($data)
     {
         $_SESSION['username'] = $data['author'];
