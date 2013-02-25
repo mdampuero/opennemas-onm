@@ -1,11 +1,15 @@
 <?php
 /**
+ * Defines the Onm\Import\Repository\ImporterAbstract class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Importer
  **/
 namespace Onm\Import\Repository;
 
@@ -14,13 +18,19 @@ use Onm\Import\Synchronizer\LockException;
 /**
  * Handles all the common methods in the importers
  *
- * @package Onm
- * @subpackage Importer
+ * @package Onm_Importer
  **/
 abstract class ImporterAbstract
 {
 
-    /*
+    /**
+     * The path where to save the downloaded files
+     *
+     * @var string
+     **/
+    public $syncPath = '';
+
+    /**
      * Creates a lock for avoid concurrent sync by multiple users
      *
      * @return void
@@ -35,7 +45,7 @@ abstract class ImporterAbstract
         }
     }
 
-    /*
+    /**
      * Delete the lock for avoid concurrent sync by multiple users
      *
      * @return void
@@ -64,7 +74,7 @@ abstract class ImporterAbstract
         }
     }
 
-    /*
+    /**
      * Gets the minutes from last synchronization of elements
      *
      * @param array $params misc params that alteres function behaviour
@@ -91,7 +101,7 @@ abstract class ImporterAbstract
 
         return (
             file_exists($this->_syncFilePath)
-            && is_writable($this->_syncPath)
+            && is_writable($this->syncPath)
             && is_writable($this->_syncFilePath)
         );
     }
@@ -104,8 +114,8 @@ abstract class ImporterAbstract
      */
     public function setupSyncEnvironment($params = array())
     {
-        if (!file_exists($this->_syncPath)) {
-            mkdir($this->_syncPath);
+        if (!file_exists($this->syncPath)) {
+            mkdir($this->syncPath);
         } elseif (!file_exists($this->_syncFilePath)) {
 
             return touch($this->_syncFilePath);
@@ -131,7 +141,7 @@ abstract class ImporterAbstract
         }
 
         // Clean previously imported files that are not present in local cache
-        $localElements  = $this->getLocalFileList($this->_syncPath);
+        $localElements  = $this->getLocalFileList($this->syncPath);
         $previousImportedElements      = $syncParams['imported_elements'];
         $previousImportedElementsCount = count($previousImportedElements);
         $elements = array();
@@ -203,11 +213,11 @@ abstract class ImporterAbstract
 
         $this->lockSync();
 
-        $excludedFiles = self::getLocalFileList($this->_syncPath);
+        $excludedFiles = self::getLocalFileList($this->syncPath);
 
         $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
         $ftpSync = $synchronizer->downloadFilesToCacheDir(
-            $this->_syncPath,
+            $this->syncPath,
             $excludedFiles,
             $params['max_age']
         );

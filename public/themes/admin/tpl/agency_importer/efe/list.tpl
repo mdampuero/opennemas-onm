@@ -20,7 +20,7 @@
         jQuery('.sync_with_server').on('click',function() {
            jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EFE, please wait...{/t}</div>');
         });
-        $('[rel="tooltip"]').tooltip({ placement: 'bottom' });
+        $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
     });
 </script>
 {/block}
@@ -120,11 +120,9 @@
                             <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
                     </td>
-                    <td>
-                        {$element->created_time->getTimestamp()|relative_date}
+                    <td class="nowrap">
+                        <span title="{$element->created_time->format(DateTime::RSS)}">{$element->created_time->getTimestamp()|relative_date}</span>
                     </td>
-
-
 
                     <td class="right nowrap">
                         <ul class="btn-group">

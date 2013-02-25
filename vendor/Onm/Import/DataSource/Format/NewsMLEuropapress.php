@@ -27,7 +27,6 @@ class NewsMLEuropapress extends NewsMLG1
         return parent::__get($name);
     }
 
-
     /**
      * Returns the title of the element
      *

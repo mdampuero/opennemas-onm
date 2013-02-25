@@ -31,7 +31,7 @@ class Efe extends ImporterAbstract implements ImporterInterface
 
     protected $lockFile = '';
 
-    public $_syncPath = '';
+    public $syncPath = '';
 
     /**
      * Ensures that we always get one single instance
@@ -54,16 +54,16 @@ class Efe extends ImporterAbstract implements ImporterInterface
      */
     public function __construct($config = array())
     {
-        $this->_syncPath = implode(
+        $this->syncPath = implode(
             DIRECTORY_SEPARATOR,
             array(CACHE_PATH, 'efe_import_cache')
         );
-        $this->_syncFilePath = $this->_syncPath.DIRECTORY_SEPARATOR.".sync";
+        $this->_syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
         // Merging default configurations with new ones
         $this->config   = array_merge($this->defaultConfig, $config);
 
-        $this->lockFile = $this->_syncPath.DIRECTORY_SEPARATOR.".lock";
+        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
     }
 
     /**
@@ -73,7 +73,7 @@ class Efe extends ImporterAbstract implements ImporterInterface
      */
     public function findAll($params = array())
     {
-        $filesSynced = $this->getLocalFileList($this->_syncPath);
+        $filesSynced = $this->getLocalFileList($this->syncPath);
         rsort($filesSynced, SORT_STRING);
 
         $counTotalElements = count($filesSynced);
@@ -94,11 +94,11 @@ class Efe extends ImporterAbstract implements ImporterInterface
         $elementsCount = 0;
 
         foreach ($files as $file) {
-            if (filesize($this->_syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
+            if (filesize($this->syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
                 continue;
             }
             try {
-                $element = DataSourceFactory::get($this->_syncPath.DIRECTORY_SEPARATOR.$file);
+                $element = DataSourceFactory::get($this->syncPath.DIRECTORY_SEPARATOR.$file);
             } catch (\Exception $e) {
                 continue;
             }
@@ -148,7 +148,7 @@ class Efe extends ImporterAbstract implements ImporterInterface
      */
     public function findByID($id)
     {
-        $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
+        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
         $element = new NewsMLG1($file);
 
         return  $element;
@@ -163,7 +163,7 @@ class Efe extends ImporterAbstract implements ImporterInterface
      */
     public function findByFileName($id)
     {
-        $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id;
+        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id;
         $element = DataSourceFactory::get($file);
 
         return  $element;

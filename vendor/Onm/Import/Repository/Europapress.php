@@ -1,11 +1,15 @@
 <?php
 /**
+ * Defines the Onm\Import\Repository\Europapress class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Import
  **/
 namespace Onm\Import\Repository;
 
@@ -14,8 +18,7 @@ use \Onm\Import\DataSource\Europapress as EuropapressDataSource;
 /**
  * Class to import news from EuropaPress Agency FTP
  *
- * @package    Onm
- * @subpackage Import
+ * @package    Onm_Import
  */
 class Europapress extends ImporterAbstract implements ImporterInterface
 {
@@ -31,10 +34,12 @@ class Europapress extends ImporterAbstract implements ImporterInterface
 
     protected $lockFile = '';
 
-    public $_syncPath = '';
+
 
     /**
      * Ensures that we always get one single instance
+     *
+     * @param array $config the configuration
      *
      * @return object the unique instance object
      */
@@ -50,30 +55,34 @@ class Europapress extends ImporterAbstract implements ImporterInterface
     /**
      * Initializes the object and initializes configuration
      *
+     * @param array $config the configuration
+     *
      * @return void
      */
     public function __construct($config = array())
     {
-        $this->_syncPath = implode(
+        $this->syncPath = implode(
             DIRECTORY_SEPARATOR,
             array(CACHE_PATH, 'europapress_import_cache')
         );
-        $this->_syncFilePath = $this->_syncPath.DIRECTORY_SEPARATOR.".sync";
+        $this->_syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
         // Merging default configurations with new ones
         $this->config   = array_merge($this->defaultConfig, $config);
 
-        $this->lockFile = $this->_syncPath.DIRECTORY_SEPARATOR.".lock";
+        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
     }
 
     /**
      * gets an array of news from EuropaPress
      *
+     * @param array $params the search criteria
+     *
      * @return array, the array of objects with news from EuropaPress
      */
     public function findAll($params = array())
     {
-        $filesSynced = $this->getLocalFileList($this->_syncPath);
+        $filesSynced = $this->getLocalFileList($this->syncPath);
         rsort($filesSynced, SORT_STRING);
 
         $counTotalElements = count($filesSynced);
@@ -94,11 +103,11 @@ class Europapress extends ImporterAbstract implements ImporterInterface
         $elementsCount = 0;
 
         foreach ($files as $file) {
-            if (filesize($this->_syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
+            if (filesize($this->syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
                 continue;
             }
             try {
-                $file = $this->_syncPath.DIRECTORY_SEPARATOR.$file;
+                $file = $this->syncPath.DIRECTORY_SEPARATOR.$file;
                 $element = new EuropapressDataSource($file);
             } catch (\Exception $e) {
                 continue;
@@ -139,31 +148,31 @@ class Europapress extends ImporterAbstract implements ImporterInterface
         return array($counTotalElements, $elements);
     }
 
-    /*
+    /**
      * Fetches a DataSource\Europapress object from id
      *
-     * @param $id
+     * @param int $id
      *
      * @return DataSource\Europapress the article object
      */
     public function findByID($id)
     {
-        $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
+        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
         $element = new EuropapressDataSource($file);
 
         return  $element;
     }
 
-    /*
+    /**
      * Fetches a DataSource\Europapress object from id
      *
-     * @param $fileName
+     * @param string $fileName the file path
      *
      * @return DataSource\Europapress the article object
      */
-    public function findByFileName($id)
+    public function findByFileName($fileName)
     {
-        $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id;
+        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$fileName;
         $element = new EuropapressDataSource($file);
 
         return  $element;

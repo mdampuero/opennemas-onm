@@ -68,7 +68,7 @@ class ImporterEfeController extends Controller
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $efe->minutesFromLastSync();
 
-        $categories = array(); \Onm\Import\DataSource\Format\NewsMLG1::getOriginalCategories();
+        $categories = array(); //\Onm\Import\DataSource\Format\NewsMLG1::getOriginalCategories();
 
         $queryParams = $this->request->query;
         $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
@@ -220,7 +220,7 @@ class ImporterEfeController extends Controller
 
         // Get EFE new from a filename
         try {
-            $efe = new \Onm\Import\Efe();
+            $efe = new \Onm\Import\Repository\Efe();
             $element = $efe->findByFileName($id);
         } catch (\Exception $e) {
             m::add(_('Please specify the article to import.'), m::ERROR);
@@ -233,15 +233,15 @@ class ImporterEfeController extends Controller
             $photos = $element->getPhotos();
             foreach ($photos as $photo) {
 
-                $filePath = realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
+                $filePath = realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
 
 
-                // Check if the file exists
+                // Check if the file apc_exists(keys)
                 if ($filePath) {
                     $data = array(
                         'title'         => $photo->file_path,
                         'description'   => $photo->title,
-                        'local_file'    => realpath($efe->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
+                        'local_file'    => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
                         'fk_category'   => $category,
                         'category_name' => $categoryInstance->name,
                         'category'      => $categoryInstance->name,
@@ -295,18 +295,18 @@ class ImporterEfeController extends Controller
         }
 
         $values = array(
-            'title'          => $element->texts[0]->title,
+            'title'          => $element->title,
             'category'       => $category,
             'with_comment'   => 1,
             'content_status' => 0,
             'frontpage'      => 0,
             'in_home'        => 0,
-            'title_int'      => $element->texts[0]->title,
-            'metadata'       => \StringUtils::get_tags($element->texts[0]->title),
-            'subtitle'       => $element->texts[0]->pretitle,
+            'title_int'      => $element->title,
+            'metadata'       => \StringUtils::get_tags($element->title),
+            'subtitle'       => $element->pretitle,
             'agency'         => s::get('efe_agency_string') ?: $element->agency_name,
-            'summary'        => $element->texts[0]->summary,
-            'body'           => $element->texts[0]->body,
+            'summary'        => $element->summary,
+            'body'           => $element->body,
             'posic'          => 0,
             'id'             => 0,
             'fk_publisher'   => $_SESSION['userid'],
@@ -361,7 +361,7 @@ class ImporterEfeController extends Controller
             $categories [$category->pk_content_category]= $category->title;
         }
 
-        $ep = new \Onm\Import\Efe();
+        $ep = new \Onm\Import\Repository\Efe();
         $element = $ep->findByFileName($id);
 
         return $this->render(
@@ -395,7 +395,7 @@ class ImporterEfeController extends Controller
 
             if (array_key_exists($attachmentId, $photos)) {
                 $photo = $photos[$attachmentId];
-                $content = file_get_contents(realpath($ep->_syncPath.DIRECTORY_SEPARATOR.$photo->file_path));
+                $content = file_get_contents(realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path));
                 $response = new Response($content, 200, array('content-type' => $photo->file_type));
             } else {
                 $response = new Response('Image not found', 404);
@@ -491,7 +491,7 @@ class ImporterEfeController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $e = new \Onm\Import\Efe();
+        $e = new \Onm\Import\Repository\Efe();
         $e->unlockSync();
         unset($_SESSION['error']);
 
@@ -524,7 +524,7 @@ class ImporterEfeController extends Controller
                 'max_age'                        => s::get('efe_sync_from_limit')
             );
 
-            $efeSynchronizer = \Onm\Import\Efe::getInstance();
+            $efeSynchronizer = \Onm\Import\Repository\Efe::getInstance();
             $message         = $efeSynchronizer->sync($ftpConfig);
             $efeSynchronizer->updateSyncFile();
 
