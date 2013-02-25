@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Import\DataSource;
+namespace Onm\Import\DataSource\Format;
 
 use Onm\Settings as s;
 
@@ -17,10 +17,11 @@ use Onm\Settings as s;
  * @package Onm_Import_DataSource
  **/
 class Europapress
+ // implements FormatInterface
 {
-    private $_data = null;
+    private $data = null;
 
-    private static $_priorityMap = array(
+    private static $priorityMap = array(
         '10'  => 4,
         '20' => 3,
         '25' => 2,
@@ -31,9 +32,12 @@ class Europapress
         'B' => 2,
     );
 
-    /*
-     * __construct()
-     * @param $xmlFile, the XML file that contains information about an EP new
+    /**
+     * Initializes the object instance
+     *
+     * @param string $xmlFile the XML file that contains information about an EP new
+     *
+     * @return FormatInterface
      */
     public function __construct($xmlFile)
     {
@@ -49,19 +53,19 @@ class Europapress
                 );
             }
 
-            $this->_data = simplexml_load_file(
+            $this->data = simplexml_load_file(
                 $xmlFile,
                 null,
                 LIBXML_NOERROR | LIBXML_NOWARNING
             );
 
-            if (!$this->_data) {
+            if (!$this->data) {
                 throw new \Exception(
                     sprintf(_("File '%d' can't be loaded."), $xmlFile)
                 );
             }
 
-            $this->checkFileFormat();
+            $this->checkFormat($this->data, $xmlFile);
         } else {
             throw new \Exception(
                 sprintf(_("File '%d' doesn't exists."), $xmlFile)
@@ -80,45 +84,45 @@ class Europapress
     {
         switch ($propertyName) {
             case 'id':
-                return (int) $this->_data->CODIGO;
+                return (int) $this->data->CODIGO;
 
                 break;
             case 'agencyID':
-                return (string) $this->_data->AGENCIA;
+                return (string) $this->data->AGENCIA;
 
                 break;
             case 'priority':
-                return self::matchPriority((string) $this->_data->PRIORIDAD);
+                return self::matchPriority((string) $this->data->PRIORIDAD);
 
                 break;
             case 'priorityNumber':
-                return self::$_priorityMap[(string) $this->_data->PRIORIDAD];
+                return self::$priorityMap[(string) $this->data->PRIORIDAD];
 
                 break;
             case 'service':
-                return (string) $this->_data->SERVICIO;
+                return (string) $this->data->SERVICIO;
 
                 break;
             case 'category':
-                return self::matchCategoryName((string) $this->_data->SECCION);
+                return self::matchCategoryName((string) $this->data->SECCION);
 
                 break;
             case 'originalCategory':
-                return (string) $this->_data->SECCION;
+                return (string) $this->data->SECCION;
 
                 break;
             case 'informationType':
-                return (string) $this->_data->TIPOINFO;
+                return (string) $this->data->TIPOINFO;
 
                 break;
             case 'key':
-                return (string) $this->_data->CLAVE;
+                return (string) $this->data->CLAVE;
 
                 break;
             case 'created_time':
 
                 $dateFormat = 'd/m/Y H:i:s';
-                $originalDate = $this->_data->FECHA.' '.$this->_data->HORA;
+                $originalDate = $this->data->FECHA.' '.$this->data->HORA;
                 $date = \DateTime::createFromFormat(
                     $dateFormat,
                     $originalDate,
@@ -129,59 +133,59 @@ class Europapress
 
                 break;
             case 'pretitle':
-                return (string) $this->_data->ANTETITULO;
+                return (string) $this->data->ANTETITULO;
 
                 break;
             case 'title':
-                return (string) $this->_data->TITULAR;
+                return (string) $this->data->TITULAR;
 
                 break;
             case 'body':
-                return nl2br((string) $this->_data->CONTENIDO);
+                return nl2br((string) $this->data->CONTENIDO);
 
                 break;
             case 'summary':
-                return (string) $this->_data->ENTRADILLA;
+                return (string) $this->data->ENTRADILLA;
 
                 break;
             case 'photos':
-                return (array) $this->_data->PHOTOS;
+                return (array) $this->data->PHOTOS;
 
                 break;
             case 'personajes':
-                return (array) $this->_data->PERSONAJES;
+                return (array) $this->data->PERSONAJES;
 
                 break;
             case 'photos':
-                return (array) $this->_data->PHOTOS;
+                return (array) $this->data->PHOTOS;
 
                 break;
             case 'people':
-                return (array) $this->_data->PERSONAJES;
+                return (array) $this->data->PERSONAJES;
 
                 break;
             case 'place':
-                return (array) $this->_data->LUGAR;
+                return (array) $this->data->LUGAR;
 
                 break;
             case 'associatedDocs':
-                return (array) $this->_data->DOCS;
+                return (array) $this->data->DOCS;
 
                 break;
             case 'categories':
-                return (array) $this->_data->CATEGORIES;
+                return (array) $this->data->CATEGORIES;
 
                 break;
             case 'dataCastID':
-                return (array) $this->_data->DATACASTID;
+                return (array) $this->data->DATACASTID;
 
                 break;
             case 'level':
-                return (array) $this->_data->LEVEL;
+                return (array) $this->data->LEVEL;
 
                 break;
             case 'redactor':
-                return (array) $this->_data->FIRMA;
+                return (array) $this->data->FIRMA;
 
                 break;
         }
@@ -287,7 +291,7 @@ class Europapress
      */
     public function getData()
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -317,10 +321,10 @@ class Europapress
      * @return boolean true if the format
      * @throws Exception If the format is not valid
      **/
-    public function checkFileFormat()
+    public static function checkFormat($data, $path)
     {
-        if (!(string) $this->_data->CODIGO) {
-            throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $this->xmlFile));
+        if (!(string) $data->CODIGO) {
+            throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $path));
         }
         return true;
     }

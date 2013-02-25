@@ -7,17 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Import;
+namespace Onm\Import\Repository;
 
-use \Onm\Import\DataSource\Europapress as EuropapressDataSource;
+use \Onm\Import\DataSource\DataSourceFactory;
 
 /**
- * Class to import news from EuropaPress Agency FTP
+ * Class to import news from Efe Agency FTP
  *
  * @package    Onm
  * @subpackage Import
  */
-class Europapress extends ImporterAbstract implements ImporterInterface
+class Efe extends ImporterAbstract implements ImporterInterface
 {
     // the instance object
     private static $instance = null;
@@ -56,7 +56,7 @@ class Europapress extends ImporterAbstract implements ImporterInterface
     {
         $this->_syncPath = implode(
             DIRECTORY_SEPARATOR,
-            array(CACHE_PATH, 'europapress_import_cache')
+            array(CACHE_PATH, 'efe_import_cache')
         );
         $this->_syncFilePath = $this->_syncPath.DIRECTORY_SEPARATOR.".sync";
 
@@ -67,9 +67,9 @@ class Europapress extends ImporterAbstract implements ImporterInterface
     }
 
     /**
-     * gets an array of news from EuropaPress
+     * gets an array of news from Efe
      *
-     * @return array, the array of objects with news from EuropaPress
+     * @return array, the array of objects with news from Efe
      */
     public function findAll($params = array())
     {
@@ -98,13 +98,13 @@ class Europapress extends ImporterAbstract implements ImporterInterface
                 continue;
             }
             try {
-                $file = $this->_syncPath.DIRECTORY_SEPARATOR.$file;
-                $element = new EuropapressDataSource($file);
+                $element = DataSourceFactory::get($this->_syncPath.DIRECTORY_SEPARATOR.$file);
             } catch (\Exception $e) {
                 continue;
             }
 
-            if (($params['title'] != '*')
+
+            if ($params['title'] != '*'
                 && !($element->hasContent($params['title']))
             ) {
                 continue;
@@ -140,31 +140,31 @@ class Europapress extends ImporterAbstract implements ImporterInterface
     }
 
     /*
-     * Fetches a DataSource\Europapress object from id
+     * Fetches a DataSource\NewsMLG1 object from id
      *
      * @param $id
      *
-     * @return DataSource\Europapress the article object
+     * @return DataSource\Efe the article object
      */
     public function findByID($id)
     {
         $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
-        $element = new EuropapressDataSource($file);
+        $element = new NewsMLG1($file);
 
         return  $element;
     }
 
     /*
-     * Fetches a DataSource\Europapress object from id
+     * Fetches a DataSource\NewsMLG1 object from id
      *
      * @param $fileName
      *
-     * @return DataSource\Europapress the article object
+     * @return DataSource\NewsMLG1 the article object
      */
     public function findByFileName($id)
     {
         $file    = $this->_syncPath.DIRECTORY_SEPARATOR.$id;
-        $element = new EuropapressDataSource($file);
+        $element = DataSourceFactory::get($file);
 
         return  $element;
     }

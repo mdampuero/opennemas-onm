@@ -7,24 +7,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Import\DataSource;
+namespace Onm\Import\DataSource\Format;
 
 use Onm\Settings as s;
-use \Onm\Import\DataSource\NewsMLG1Component\Video;
-use \Onm\Import\DataSource\NewsMLG1Component\Photo;
+use Onm\Import\DataSource\FormatInterface;
+use Onm\Import\DataSource\Format\NewsMLG1Component\Video;
+use Onm\Import\DataSource\Format\NewsMLG1Component\Photo;
 
-class NewsMLG1
+class NewsMLG1 implements FormatInterface
 {
+    private $data = null;
 
-    private $_data = null;
-
-    /*
-     * __construct()
-     * @param $xmlFile, the XML file that contains information about an EP new
+    /**
+     * Initializes the class given an xmlFile path
+     *
+     * @param string $xmlFile the XML file path
+     *
+     * @return NewsMLG1
      */
     public function __construct($xmlFile)
     {
-
         $this->xmlFile = basename($xmlFile);
 
         $baseAgency = s::get('site_agency');
@@ -37,18 +39,18 @@ class NewsMLG1
                 );
             }
 
-            $this->_data = simplexml_load_file(
+            $this->data = simplexml_load_file(
                 $xmlFile,
                 null,
                 LIBXML_NOERROR | LIBXML_NOWARNING
             );
-            if (!$this->_data) {
+            if (!$this->data) {
                 throw new \Exception(
                     sprintf(_("File '%d' can't be loaded."), $xmlFile)
                 );
             }
 
-            $this->checkFileFormat();
+            $this->checkFormat($this->data, $xmlFile);
         } else {
             throw new \Exception(
                 sprintf(_("File '%d' doesn't exists."), $xmlFile)
@@ -56,10 +58,9 @@ class NewsMLG1
         }
 
         return $this;
-
     }
 
-    /*
+    /**
      * Magic method for translate properties into XML elements
      *
      * @param string $propertyName the name of the property to get
@@ -68,72 +69,35 @@ class NewsMLG1
     {
         switch ($propertyName) {
             case 'id':
-                return (string) $this->getData()->NewsItem->Identification
-                                    ->NewsIdentifier->NewsItemId;
+                return $this->getId();
 
                 break;
             case 'urn':
-                return (string) $this->getData()->NewsItem->Identification
-                                    ->NewsIdentifier->PublicIdentifier;
+                return $this->getUrn();
 
                 break;
             case 'title':
-                return (string) $this->getData()->NewsItem->NewsComponent
-                                    ->NewsLines->HeadLine;
+                return $this->getTitle();
 
                 break;
             case 'priority':
-                $rawUrgency =  $this->getData()
-                                ->xpath("//NewsItem/NewsManagement/Urgency");
-
-                return (int) $rawUrgency[0]->attributes()->FormalName;
+                return $this->getPriority();
 
                 break;
             case 'tags':
-                $rawCategory = $this->getData()->NewsItem->NewsComponent
-                                ->DescriptiveMetadata
-                                ->xpath("//Property[@FormalName=\"Tesauro\"]");
-                $rawTags = (string) $rawCategory[0]->attributes()->Value;
-                $tagGroups = explode(";", $rawTags);
-
-                $tags = array();
-                foreach ($tagGroups as $group) {
-                    preg_match('@(.*):(.*)@', $group, $matches);
-                    $tags [$matches[1]]= $matches[2];
-                }
-
-                return $tags;
+                return $this->getTags();
 
                 break;
             case 'created_time':
-                $originalDate = (string) $this->getData()
-                                            ->NewsItem->NewsManagement
-                                            ->ThisRevisionCreated;
-
-                // ISO 8601 doesn't match this date 20111211T103900+0000
-                $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
-
-                return \DateTime::createFromFormat(
-                    'Ymd\THis',
-                    $originalDate
-                );
+                return $this->getCreatedTime();
 
                 break;
             case 'body':
-                if (count($this->texts) > 0) {
-                    return $this->texts[0]->body;
-                }
-
-                return;
+                return $this->getBody();
 
                 break;
             case 'agency_name':
-                $rawAgencyName =
-                    $this->getData()
-                         ->NewsEnvelope->SentFrom->Party
-                         ->xpath("//Property[@FormalName=\"Organization\"]");
-
-                return (string) $rawAgencyName[0]->attributes()->Value;
+                $this->getServiceName();
 
                 break;
             case 'texts':
@@ -147,6 +111,165 @@ class NewsMLG1
                 break;
 
         }
+    }
+
+    /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServiceName()
+    {
+        $rawAgencyName = $this->getData()
+            ->NewsEnvelope->SentFrom->Party
+            ->xpath("//Property[@FormalName=\"Organization\"]");
+
+        return (string) $rawAgencyName[0]->attributes()->Value;
+    }
+
+    /**
+     * Returns the id of the element
+     *
+     * @return string the title
+     **/
+    public function getId()
+    {
+        return (string) $this->getData()->NewsItem->Identification->NewsIdentifier->NewsItemId;
+    }
+
+
+    /**
+     * Returns the title of the element
+     *
+     * @return string the title
+     **/
+    public function getTitle()
+    {
+        return (string) $this->getData()->NewsItem->NewsComponent->NewsLines->HeadLine;
+    }
+
+    /**
+     * Returns the pretitle of the element
+     *
+     * @return string the pretitle
+     **/
+    public function getPretitle()
+    {
+        return '';
+    }
+
+    /**
+     * Returns the summary of the element
+     *
+     * @return string the summary
+     **/
+    public function getSummary()
+    {
+        return '';
+    }
+
+    /**
+     * Returns the body of the element
+     *
+     * @return string the body
+     **/
+    public function getBody()
+    {
+        if (count($this->texts) > 0) {
+            return $this->texts[0]->body;
+        }
+    }
+
+    /**
+     * Returns the unique urn of the element
+     *
+     * @return string the urn
+     **/
+    public function getUrn()
+    {
+        return (string) $this->getData()->NewsItem->Identification
+                                    ->NewsIdentifier->PublicIdentifier;
+    }
+
+    /**
+     * Returns an integer between 1 and 5 that represents the priority level
+     *
+     * @return int the priority level
+     **/
+    public function getPriority()
+    {
+        $rawUrgency =  $this->getData()->xpath("//NewsItem/NewsManagement/Urgency");
+
+        return (int) $rawUrgency[0]->attributes()->FormalName;
+    }
+
+    /**
+     * Returns the list of tags of this element
+     *
+     * @return int the priority level
+     **/
+    public function getTags()
+    {
+        $rawCategory =
+            $this->getData()->NewsItem->NewsComponent->DescriptiveMetadata
+            ->xpath("//Property[@FormalName=\"Tesauro\"]");
+        $rawTags = (string) $rawCategory[0]->attributes()->Value;
+        $tagGroups = explode(";", $rawTags);
+
+        $tags = array();
+        foreach ($tagGroups as $group) {
+            preg_match('@(.*):(.*)@', $group, $matches);
+            $tags [$matches[1]]= $matches[2];
+        }
+
+        return $tags;
+    }
+
+    /**
+     * Returns the category of the element
+     *
+     * @return int the priority level
+     **/
+    public function getCategory()
+    {
+        return '';
+    }
+
+    /**
+     * Returns the creation datetime of this element
+     *
+     * @return DateTime the datetime of the element
+     **/
+    public function getCreatedTime()
+    {
+        $originalDate = (string) $this->getData()
+                                    ->NewsItem->NewsManagement
+                                    ->ThisRevisionCreated;
+
+        // ISO 8601 doesn't match this date 20111211T103900+0000
+        $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
+
+        return \DateTime::createFromFormat(
+            'Ymd\THis',
+            $originalDate
+        );
+    }
+
+    /**
+     * Checks if the data provided could be handled by the class
+     *
+     * @return string
+     **/
+    public static function checkFormat($data = null, $xmlFile = null)
+    {
+        $title = (string) $data->NewsItem->NewsComponent->NewsLines->HeadLine;
+
+        if (!(string) $data->NewsEnvelope
+            || empty($title)
+        ) {
+            throw new \Exception(sprintf(_('File %s is not a valid NewsMLG1 file'), $xmlFile));
+        }
+        return true;
     }
 
     /**
@@ -164,7 +287,7 @@ class NewsMLG1
         $texts = null;
         if (isset($contents[0]) && $contents[0]->NewsComponent) {
             foreach ($contents[0]->NewsComponent as $component) {
-                $nitf = new \Onm\Import\DataSource\NITF($component);
+                $nitf = new \Onm\Import\DataSource\Format\NITF($component);
                 $texts []= $nitf;
             }
         }
@@ -310,7 +433,7 @@ class NewsMLG1
      */
     public function getData()
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
@@ -332,19 +455,5 @@ class NewsMLG1
         }
 
         return false;
-    }
-
-    /**
-     * Checks if the file loaded is an article with NewsMLG1 format
-     *
-     * @return boolean true if the format
-     * @throws Exception If the format is not valid
-     **/
-    public function checkFileFormat()
-    {
-        if (!(string) $this->_data->NewsEnvelope) {
-            throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $this->xmlFile));
-        }
-        return true;
     }
 }

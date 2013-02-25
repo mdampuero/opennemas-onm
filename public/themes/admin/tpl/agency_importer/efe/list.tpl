@@ -2,34 +2,6 @@
 
 {block name="header-css" append}
     <style type="text/css">
-    .tags-hidden {
-        position:absolute;
-        width:30px;
-        height: 15px;
-        margin:0;
-        padding:0;
-        margin-top:-10px;
-        overflow:hidden;
-    }
-    .tags-hidden:hover {
-        margin-top:-15px;
-        margin-left:-5px;
-        width:auto;
-        height:auto;
-        overflow:show;
-        background:White;
-        z-index:999;
-        padding:5px;
-        box-shadow:0 0 3px rgba(0,0,0,0.2)
-    }
-    .tags-hidden ul { margin:0; padding:0; display:none; }
-    .tags-hidden:hover ul { display:block; }
-    .tags-hidden ul li { list-style:none }
-
-    .tags-hidden:hover .list-tags {
-        display:none;
-    }
-
     .already-imported,
     .already-imported:hover{
         background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
@@ -111,7 +83,6 @@
                     <th>{t}Title{/t}</th>
                     <th>{t}Attachments{/t}</th>
                     <th>{t}Date{/t}</th>
-                    <th style="width:40px;">{t}Tags{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
                 {/if}
@@ -128,6 +99,9 @@
                         <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
                             {$element->title}
                         </a>
+                        <div class="tags">
+                            {$element->tags|implode:", "}
+                        </div>
                     </td>
 
                     <td>
@@ -150,22 +124,7 @@
                         {$element->created_time->getTimestamp()|relative_date}
                     </td>
 
-                    <td>
-                        <div style="position:relative">
-                            <div class="tags-hidden" >
-                                <span class="list-tags">
-                                {foreach from=$element->tags  key=key item=value name=loop1}
-                                    {$key}
-                                {/foreach}
-                                </span>
-                                <ul>
-                                {foreach from=$element->tags item=tag name=loop1}
-                                    <li>{$tag}</li>
-                                {/foreach}
-                                </ul><!-- / -->
-                            </div><!-- / -->
-                        </div><!-- / -->
-                    </td>
+
 
                     <td class="right nowrap">
                         <ul class="btn-group">

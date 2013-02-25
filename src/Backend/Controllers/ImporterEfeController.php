@@ -63,12 +63,12 @@ class ImporterEfeController extends Controller
     {
         $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        $efe = \Onm\Import\Efe::getInstance();
+        $efe = \Onm\Import\Repository\Efe::getInstance();
 
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $efe->minutesFromLastSync();
 
-        $categories = \Onm\Import\DataSource\NewsMLG1::getOriginalCategories();
+        $categories = array(); \Onm\Import\DataSource\Format\NewsMLG1::getOriginalCategories();
 
         $queryParams = $this->request->query;
         $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
@@ -161,7 +161,7 @@ class ImporterEfeController extends Controller
         $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         try {
-            $ep = new \Onm\Import\Efe();
+            $ep = new \Onm\Import\Repository\Efe();
             $element = $ep->findByFileName($id);
 
             $alreadyImported = \Content::findByUrn($element->urn);
@@ -433,6 +433,7 @@ class ImporterEfeController extends Controller
                     'agency_string' => s::get('efe_agency_string'),
                     'sync_from'     => array(
                         'no_limits'     => _('No limit'),
+                        '10800'         => sprintf(_('%d hours'), '3'),
                         '21600'         => sprintf(_('%d hours'), '6'),
                         '43200'         => sprintf(_('%d hours'), '12'),
                         '86400'         => _('1 day'),

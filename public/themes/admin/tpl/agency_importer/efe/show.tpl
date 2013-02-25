@@ -62,10 +62,10 @@
         <div id="basic">
             <fieldset>
                     <legend>{t}Basic information{/t}</legend>
-                    {if $element->texts[0]->pretitle}
+                    {if $element->pretitle}
                     <p>
                         <label>{t}Pretitle:{/t}</label>
-                        {$element->texts[0]->pretitle}
+                        {$element->pretitle}
                     </p>
                     {/if}
                     <p>
@@ -83,13 +83,13 @@
                     </p>
                     {if $element->texts[0]->summary}
                         <strong>{t}Summary:{/t}</strong> <br/>
-                        {$element->texts[0]->summary}
+                        {$element->summary}
                     {/if}
                 </fieldset>
 
                 <fieldset>
                     <legend>{t}Main information{/t}</legend>
-                    {$element->texts[0]->body}
+                    {$element->body}
                 </fieldset>
         </div>
         {if count($element->photos) > 0}

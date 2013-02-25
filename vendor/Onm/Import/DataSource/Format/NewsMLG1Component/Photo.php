@@ -7,14 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\NewsMLG1Component;
+namespace Onm\Import\DataSource\Format\NewsMLG1Component;
 
 /**
- * Wrapper for Video component inside NewsMLG1
+ * Wrapper for Photo component inside NewsMLG1
  *
- * @package Onm
- * @subpackage Import_DataSource_NewsMLG1Component
+ * @package Onm_Import_DataSource_Format_NewsMLG1Component
  **/
-class Video extends ResourceAbstract
+class Photo extends ResourceAbstract
 {
 }

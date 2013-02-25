@@ -7,13 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Import\DataSource\NewsMLG1Component;
+namespace Onm\Import\DataSource\Format\NewsMLG1Component;
 
 /**
  * Handles all the common methods for Resources in NewsMLG1Components
  *
- * @package Onm
- * @subpackage Import_DataSource_NewsMLG1Component
+ * @package Onm_Import_DataSource_Format_NewsMLG1Component
  **/
 abstract class ResourceAbstract
 {

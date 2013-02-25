@@ -248,6 +248,7 @@ class ImporterEuropapressController extends Controller
                     'agency_string' => s::get('europapress_agency_string'),
                     'sync_from'     => array(
                         'no_limits' => _('No limit'),
+                        '10800'     => sprintf(_('%d hours'), '3'),
                         '21600'     => sprintf(_('%d hours'), '6'),
                         '43200'     => sprintf(_('%d hours'), '12'),
                         '86400'     => _('1 day'),
