@@ -149,7 +149,7 @@ class Efe extends ImporterAbstract implements ImporterInterface
     public function findByID($id)
     {
         $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
-        $element = new NewsMLG1($file);
+        $element = DataSourceFactory::get($file);
 
         return  $element;
     }
