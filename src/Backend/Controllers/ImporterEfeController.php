@@ -541,8 +541,8 @@ class ImporterEfeController extends Controller
         } catch (\Onm\Import\Synchronizer\LockException $e) {
             $errorMessage = $e->getMessage()
                 .sprintf(
-                    _('If you are sure <a href="%s?action=unlock">try to unlock it</a>'),
-                    $_SERVER['PHP_SELF']
+                    _('If you are sure <a href="%s">try to unlock it</a>'),
+                    $this->generateUrl('admin_importer_efe_unlock')
                 );
             m::add($errorMessage, m::ERROR);
         } catch (\Exception $e) {
