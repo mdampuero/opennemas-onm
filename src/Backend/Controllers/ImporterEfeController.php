@@ -387,7 +387,7 @@ class ImporterEfeController extends Controller
         $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
-        $ep = new \Onm\Import\Efe();
+        $ep = new \Onm\Import\Repository\Efe();
         $element = $ep->findById($id);
 
         if ($element->hasPhotos()) {
