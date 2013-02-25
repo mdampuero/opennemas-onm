@@ -67,7 +67,7 @@
                                     <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
                                     <div class="login-name">{$smarty.session.username}</div>
                                     <ul class="links">
-                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=admin_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
+                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
                                         <li><a href="javascript:salir('{t}Do you really want to exit from manager?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from manager{/t}">{t}Log out{/t}</a></li>
                                     </ul><!-- /.links -->
                                 </div><!-- /.user-info -->
@@ -83,6 +83,8 @@
     <div id="content" role="main">
     {block name="content"}{/block}
     </div>
+
+    {include file="acl/user/modal/_modalDelete.tpl"}
 
     {block name="copyright"}
     <footer class="wrapper-content">
@@ -106,7 +108,7 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js"}
+        {script_tag src="/onm/footer-functions.js" common=1}
 
         {if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">

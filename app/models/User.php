@@ -639,6 +639,28 @@ class User
 
         return $returnValues;
     }
+
+     /**
+     * Remove user meta given a named array
+     *
+     * @param int $userId   the user id to set configs to
+     * @param array  $userMeta a named array with settings and its values
+     *
+     * @return  boolean true if all went well
+     */
+    public function deleteMeta($userId)
+    {
+        $sql = 'DELETE FROM usermeta WHERE `user_id`=?';
+
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId)))===false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Sets an user state to disabled/not authorized
      *
