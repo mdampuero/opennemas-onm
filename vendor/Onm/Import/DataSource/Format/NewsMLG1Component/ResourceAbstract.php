@@ -1,11 +1,15 @@
 <?php
 /**
+ * Defines the Onm\Import\DataSource\Format\NewsMLG1Component\ResourceAbstract
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Import_DataSource_Format_NewsMLG1Component
  **/
 namespace Onm\Import\DataSource\Format\NewsMLG1Component;
 
@@ -20,6 +24,8 @@ abstract class ResourceAbstract
     /**
      * Instantiates the Photo DOM data from an SimpleXML object
      *
+     * @param SimpleXmlElement $data the XML data fromt the file
+     *
      * @return void
      **/
     public function __construct($data)
@@ -28,7 +34,7 @@ abstract class ResourceAbstract
 
     }
 
-    /*
+    /**
      * Magic method for translate properties into XML elements
      *
      * @param string $propertyName the name of the property to get
@@ -83,7 +89,7 @@ abstract class ResourceAbstract
         }
     }
 
-    /*
+    /**
      * Returns the internal data, use with caution
      */
     public function getData()

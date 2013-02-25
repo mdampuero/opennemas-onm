@@ -258,6 +258,9 @@ class NewsMLG1 implements FormatInterface
     /**
      * Checks if the data provided could be handled by the class
      *
+     * @param SimpleXmlElement $file the XML file to parse
+     * @param string           $xmlFile the path to the xml file
+     *
      * @return string
      **/
     public static function checkFormat($data = null, $xmlFile = null)

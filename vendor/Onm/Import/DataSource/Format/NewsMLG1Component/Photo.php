@@ -1,12 +1,16 @@
 <?php
-/*
+/**
+ * Defines the Onm\Import\DataSource\Format\NewsMLG1Component\Photo class
+ *
  * This file is part of the Onm package.
  *
- * (c)  Fran Dieguez <fran@openhost.es>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ *
+ * @package Onm_Import_DataSource_Format_NewsMLG1Component
+ **/
 namespace Onm\Import\DataSource\Format\NewsMLG1Component;
 
 /**

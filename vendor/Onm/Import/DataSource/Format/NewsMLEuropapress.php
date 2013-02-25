@@ -7,6 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm\Import\DataSource\Format
  **/
 namespace Onm\Import\DataSource\Format;
 
@@ -20,7 +22,9 @@ class NewsMLEuropapress extends NewsMLG1
     /**
      * Magic method for translate properties into XML elements
      *
-     * @param string $propertyName the name of the property to get
+     * @param string $name the name of the property to get
+     *
+     * @return mixed the property value
      */
     public function __get($name)
     {
@@ -86,7 +90,8 @@ class NewsMLEuropapress extends NewsMLG1
      **/
     public function getBody()
     {
-        $rawContent = (string) $this->getData()->NewsItem->NewsComponent->NewsComponent->ContentItem->DataContent;
+        $rawContent = (string) $this->getData()->NewsItem->NewsComponent
+            ->NewsComponent->ContentItem->DataContent;
 
         preg_match('@<body[^>]*>(.*?)<\/body>@is', $rawContent, $matches);
 
@@ -96,13 +101,13 @@ class NewsMLEuropapress extends NewsMLG1
         }
 
         return $body;
-
     }
 
     /**
      * Checks if a XML file could be handled by this class
      *
-     * @param SimpleXmlElement $file the XML file to parse
+     * @param SimpleXmlElement $data the XML file to parse
+     * @param string $xmlFile the path to the xml file
      *
      * @return boolean true if the file could be handle by this class
      **/
