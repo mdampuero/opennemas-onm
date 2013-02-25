@@ -155,7 +155,7 @@ gettext("Next step");
 gettext("Back to list");
 
 /* public/themes/admin/tpl//newsletter/steps/1-pick-elements.tpl */
-gettext("Go back");
+gettext("Back to list");
 
 /* public/themes/admin/tpl//newsletter/steps/1-pick-elements.tpl */
 gettext("Email subject");
@@ -558,6 +558,15 @@ gettext("Overwrite actual HTML");
 
 /* public/themes/admin/tpl//newsletter/modals/_back_contents_accept.tpl */
 gettext("Cancel");
+
+/* public/themes/admin/tpl//newsletter/modals/_save_changes_alert.tpl */
+gettext("Save changes");
+
+/* public/themes/admin/tpl//newsletter/modals/_save_changes_alert.tpl */
+gettext("You must save a changes or back to list");
+
+/* public/themes/admin/tpl//newsletter/modals/_save_changes_alert.tpl */
+gettext("Acept");
 
 /* public/themes/admin/tpl//newsletter/modals/_add_container_label.tpl */
 gettext("Add Container label");
@@ -1310,12 +1319,6 @@ gettext("Title");
 gettext("Category");
 
 /* public/themes/admin/tpl//covers/new.tpl */
-gettext("%1");
-
-/* public/themes/admin/tpl//covers/new.tpl */
-gettext("%1");
-
-/* public/themes/admin/tpl//covers/new.tpl */
 gettext("Available");
 
 /* public/themes/admin/tpl//covers/new.tpl */
@@ -1749,12 +1752,6 @@ gettext("Available");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Category");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("%1");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("%1");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Agency");
@@ -2467,12 +2464,6 @@ gettext("Path");
 /* public/themes/admin/tpl//files/new.tpl */
 gettext("Category");
 
-/* public/themes/admin/tpl//files/new.tpl */
-gettext("Unknown");
-
-/* public/themes/admin/tpl//files/new.tpl */
-gettext("Unknown");
-
 /* public/themes/admin/tpl//polls/list.tpl */
 gettext("Polls");
 
@@ -2778,6 +2769,12 @@ gettext("-- All categories --");
 
 /* public/themes/admin/tpl//common/content_provider/_container-content-list.tpl */
 gettext("No available contents");
+
+/* public/themes/admin/tpl//common/selector_categories.tpl */
+gettext("Unknown");
+
+/* public/themes/admin/tpl//common/selector_categories.tpl */
+gettext("Unknown");
 
 /* public/themes/admin/tpl//comment/list.tpl */
 gettext("Comments");
@@ -5385,12 +5382,6 @@ gettext("List of words separated by words.");
 
 /* public/themes/admin/tpl//special/new.tpl */
 gettext("Category");
-
-/* public/themes/admin/tpl//special/new.tpl */
-gettext("%1");
-
-/* public/themes/admin/tpl//special/new.tpl */
-gettext("%1");
 
 /* public/themes/admin/tpl//special/new.tpl */
 gettext("Available");
