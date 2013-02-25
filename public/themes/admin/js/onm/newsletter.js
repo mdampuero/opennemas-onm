@@ -31,6 +31,13 @@ $('#modal-newsletter-accept a.btn.no').on('click', function(e) {
     $('#modal-newsletter-accept').modal('hide');
 });
 
+$("#modal-newsletter-accept").on('click', '.accept', function(e, ui) {
+    $("#modal-newsletter-accept").modal('hide');
+    log('yes clicked');
+
+    $('#newsletter-pick-elements-form').submit();
+});
+
 saveContents = function() {
     var els = [];
 
@@ -263,6 +270,7 @@ $('#newsletter-preview-form').on('click', '#next-button, #prev-button', function
     var saved = $(document).data('saved');
     if (!saved) {
         log('not saved');
+        $("#modal-save-changes").modal('show');
         return false;
     }
 });

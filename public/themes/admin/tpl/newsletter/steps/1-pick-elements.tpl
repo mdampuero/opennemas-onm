@@ -1,4 +1,4 @@
-23{extends file="base/admin.tpl"}
+{extends file="base/admin.tpl"}
 
 {block name="header-css" append}
 <style type="text/css">
@@ -88,7 +88,7 @@
                 <li>
                     <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
-                        {t}Go back{/t}
+                        {t}Back to list{/t}
                     </a>
                 </li>
             </ul>
