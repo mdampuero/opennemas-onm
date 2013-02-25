@@ -272,9 +272,12 @@ class Content
                 return $this->getUri();
 
                 break;
-            case 'slug2':
-                return StringUtils::get_title($this->title);
-
+            case 'slug':
+                if (!empty($this->slug)) {
+                    return $this->slug;
+                } else {
+                    return StringUtils::get_title($this->title);
+                }
                 break;
             case 'content_type_name':
                 return $this->getContentTypeName();
@@ -329,10 +332,12 @@ class Content
     {
         $exists = false;
 
-        $rs = $GLOBALS['application']->conn->Execute(
-            'SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1',
-            array($id)
-        );
+ 
+        $sql = 'SELECT pk_content FROM `contents` '
+             . 'WHERE pk_content = ? LIMIT 1';
+        $values = array($id);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+ 
 
         $exists = ($rs != false);
 
@@ -356,7 +361,7 @@ class Content
                 'id'       => sprintf('%06d', $this->id),
                 'date'     => date('YmdHis', strtotime($this->created)),
                 'category' => $this->category_name,
-                'slug'     => $this->slug2,
+                'slug'     => $this->slug,
             )
         );
 
@@ -432,7 +437,7 @@ class Content
             (!isset($data['params'])
             || empty($data['params'])) ? null: serialize($data['params']);
 
-        if (empty($data['slug'] ) || !isset($data['slug'])) {
+        if (!isset($data['slug']) || empty($data['slug'])) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
         }
 
@@ -447,7 +452,7 @@ class Content
             $data['metadata']='';
         }
 
-        $data['fk_user']             =
+        $data['fk_user'] =
             (empty($data['fk_user']) && !isset ($data['fk_user']))
             ? $_SESSION['userid'] :$data['fk_user'] ;
         $data['fk_user_last_editor'] = $data['fk_user'];
@@ -501,7 +506,7 @@ class Content
     /**
      * Loads the data for an content given its id
      *
-     * @param array $id the content id to load
+     * @param integer $id content identifier
      *
      * @return Content the content object with all the information
      **/
@@ -555,6 +560,7 @@ class Content
         $this->read($data['id']);
 
         if ($data['available'] == 1
+            && $this->available == 0
             && array_key_exists('starttime', $data)
             && ($data['starttime'] =='0000-00-00 00:00:00')
         ) {
@@ -564,7 +570,7 @@ class Content
         $values = array(
             'changed'        => date("Y-m-d H:i:s"),
             'starttime'      =>
-                (empty($data['starttime'])) ? $this->starttime: $data['starttime'],
+                (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
             'endtime'        =>
                 (empty($data['endtime'])) ? '0000-00-00 00:00:00': $data['endtime'],
             'content_status' =>
@@ -589,11 +595,16 @@ class Content
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])
-            && !isset ($data['fk_user_last_editor'])) {
+            && !isset ($data['fk_user_last_editor'])
+        ) {
             $data['fk_user_last_editor'] = $_SESSION['userid'];
         }
-        if (empty($data['slug'] ) || !isset($data['slug'])) {
-            $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+        if (!isset($data['slug']) || empty($data['slug'])) {
+            if (!empty($this->slug)) {
+                $data['slug'] = $this->slug;
+            } else {
+                $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+            }
         }
         if (empty($data['description'] ) && !isset ($data['description'])) {
             $data['description']='';

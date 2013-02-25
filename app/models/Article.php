@@ -179,16 +179,19 @@ class Article extends Content
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug'     => $this->slug2,
+                        'slug'     => $this->slug,
                     )
                 );
 
                 return $uri;
 
                 break;
-            case 'slug2':
-                return StringUtils::get_title($this->title);
-
+            case 'slug':
+                if (!empty($this->slug)) {
+                    return $this->slug;
+                } else {
+                    return StringUtils::get_title($this->title);
+                }
                 break;
             case 'content_type_name':
                 return 'Article';
@@ -213,24 +216,23 @@ class Article extends Content
     public function create($data)
     {
         if (!isset($data['description'])) {
-            $data['description'] =
-                StringUtils::get_num_words($data['body'], 50);
+            $data['description'] = StringUtils::get_num_words($data['body'], 50);
         }
 
         $data['subtitle']= $data['subtitle'];
         $data['columns'] = 1;
         $data['home_columns'] = 1;
         $data['available'] = $data['content_status'];
-        $data['img1_footer'] =
-            (!isset($data['img1_footer']) || empty($data['img1_footer']))
+        $data['img1_footer']
+            = (!isset($data['img1_footer']) || empty($data['img1_footer']))
                 ? ''
                 : $data['img1_footer'];
-        $data['img2_footer'] =
-                (!isset($data['img2_footer']) || empty($data['img2_footer']))
-                    ? ''
-                    : $data['img2_footer'];
-        $data['with_comment'] =
-            (!isset($data['with_comment']) || empty($data['with_comment']))
+        $data['img2_footer']
+            = (!isset($data['img2_footer']) || empty($data['img2_footer']))
+                ? ''
+                : $data['img2_footer'];
+        $data['with_comment']
+            = (!isset($data['with_comment']) || empty($data['with_comment']))
                 ? ''
                 : intval($data['with_comment']);
 
