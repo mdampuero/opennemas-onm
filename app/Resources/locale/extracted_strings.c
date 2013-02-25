@@ -1958,6 +1958,12 @@ gettext("You can get your Google Analytics Site ID from <a href=\"https://www.go
 gettext("Publication name in Google News");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("YouTube Page Url");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("If you have a <b>Youtube page</b>, please complete the form with your youtube page url.");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Facebook");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
@@ -4191,9 +4197,6 @@ gettext("Attachments");
 
 /* public/themes/admin/tpl//agency_importer/efe/list.tpl */
 gettext("Date");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Tags");
 
 /* public/themes/admin/tpl//agency_importer/efe/list.tpl */
 gettext("Actions");
