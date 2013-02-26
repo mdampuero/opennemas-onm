@@ -683,6 +683,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteRule ^especiales/union/?$ seccion/operacion-union/ [R=301,L,NC]
     RewriteRule ^especiales/cunion/?$ seccion/caso-union/ [R=301,L,NC]
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
     RewriteRule ^especiales/(.*)?$ album/  [R=301,L,NC]
 
     RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
