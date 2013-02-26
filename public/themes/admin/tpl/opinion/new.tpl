@@ -11,11 +11,14 @@
         OpenNeMas.tinyMceConfig.advanced.elements = "body";
         tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 
+        OpenNeMas.tinyMceConfig.simple.elements = "summary";
+        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
+
         $('.tabs').tabs();
 
         jQuery(document).ready(function ($){
             $('#opinion-form').tabs();
-            $('#title').inputLengthControl();
+            $('#title, #subtitle').inputLengthControl();
             $('#title input').on('change', function(e, ui) {
                 fill_tags($('#title input').val(), '#metadata', '{url name=admin_utils_calculate_tags}');
             });
@@ -105,6 +108,16 @@
             </div>
 
             <div class="control-group">
+                <label for="subtitle" class="control-label">{t}Pretitle{/t}</label>
+                <div class="controls">
+                    <div class="input-append" id="subtitle">
+                        <input  type="text" name="subtitle" value="{$opinion->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
+                        <span class="add-on"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
                 <label for="metadata" class="control-label">{t}Keywords{/t}</label>
                 <div class="controls">
                     <input type="text" id="metadata" name="metadata" title="{t}Metadata{/t}" value="{$opinion->metadata|clearslash}" class="input-xxlarge" required="required" />
@@ -136,10 +149,30 @@
                 </div>
             </div>
 
+
+            <div class="control-group">
+                <label for="summary" class="control-label">
+                    {t}Summary{/t}
+                    <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
+                        <img src="{$params.IMAGE_DIR}/users_edit.png" />
+                    </a>
+                </label>
+                <div class="controls">
+                    <textarea name="summary" id="summary" style="width:100%">{$opinion->summary|clearslash|escape:"html"}</textarea>
+                </div>
+            </div>
+
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
                     <textarea name="body" id="body" style="width:100%; min-height:600px;">{$opinion->body|clearslash}</textarea>
+                </div>
+            </div>
+
+             <div class="control-group">
+                <label for="body" class="control-label">{t}Image{/t}</label>
+                <div class="controls">
+                    {include file="common/images_provider.tpl" image=$image category=4}
                 </div>
             </div>
 
