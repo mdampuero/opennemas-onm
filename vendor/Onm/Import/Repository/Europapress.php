@@ -13,7 +13,7 @@
  **/
 namespace Onm\Import\Repository;
 
-use \Onm\Import\DataSource\Europapress as EuropapressDataSource;
+use \Onm\Import\DataSource\Format\Europapress as EuropapressDataSource;
 
 /**
  * Class to import news from EuropaPress Agency FTP

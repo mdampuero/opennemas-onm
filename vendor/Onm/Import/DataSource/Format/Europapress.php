@@ -9,6 +9,7 @@
  **/
 namespace Onm\Import\DataSource\Format;
 
+use Onm\Import\DataSource\FormatInterface;
 use Onm\Settings as s;
 
 /**
@@ -16,22 +17,9 @@ use Onm\Settings as s;
  *
  * @package Onm_Import_DataSource
  **/
-class Europapress
- // implements FormatInterface
+class Europapress implements FormatInterface
 {
     private $data = null;
-
-    private static $priorityMap = array(
-        '10'  => 4,
-        '20' => 3,
-        '25' => 2,
-        '30' => 1,
-        // From Pandora
-        'U' => 4,
-        'R' => 3,
-        'B' => 2,
-    );
-
     /**
      * Initializes the object instance
      *
@@ -84,110 +72,51 @@ class Europapress
     {
         switch ($propertyName) {
             case 'id':
-                return (int) $this->data->CODIGO;
+                return $this->getId();
 
                 break;
-            case 'agencyID':
-                return (string) $this->data->AGENCIA;
-
-                break;
-            case 'priority':
-                return self::matchPriority((string) $this->data->PRIORIDAD);
-
-                break;
-            case 'priorityNumber':
-                return self::$priorityMap[(string) $this->data->PRIORIDAD];
-
-                break;
-            case 'service':
-                return (string) $this->data->SERVICIO;
-
-                break;
-            case 'category':
-                return self::matchCategoryName((string) $this->data->SECCION);
-
-                break;
-            case 'originalCategory':
-                return (string) $this->data->SECCION;
-
-                break;
-            case 'informationType':
-                return (string) $this->data->TIPOINFO;
-
-                break;
-            case 'key':
-                return (string) $this->data->CLAVE;
-
-                break;
-            case 'created_time':
-
-                $dateFormat = 'd/m/Y H:i:s';
-                $originalDate = $this->data->FECHA.' '.$this->data->HORA;
-                $date = \DateTime::createFromFormat(
-                    $dateFormat,
-                    $originalDate,
-                    new \DateTimeZone('Europe/Madrid')
-                );
-
-                return $date;
+            case 'urn':
+                return $this->getUrn();
 
                 break;
             case 'pretitle':
-                return (string) $this->data->ANTETITULO;
+                return $this->getPretitle();
 
                 break;
             case 'title':
-                return (string) $this->data->TITULAR;
+                return $this->getTitle();
+
+                break;
+            case 'priority':
+                return $this->getPriority();
+
+                break;
+            case 'tags':
+                return $this->getTags();
+
+                break;
+            case 'created_time':
+                return $this->getCreatedTime();
 
                 break;
             case 'body':
-                return nl2br((string) $this->data->CONTENIDO);
+                return $this->getBody();
 
                 break;
-            case 'summary':
-                return (string) $this->data->ENTRADILLA;
+            case 'agency_name':
+                return $this->getServiceName();
 
                 break;
+            case 'texts':
             case 'photos':
-                return (array) $this->data->PHOTOS;
+            case 'videos':
+            case 'audios':
+            case 'moddocs':
+            case 'files':
+                return $this->{'get'.ucfirst($propertyName)}();
 
                 break;
-            case 'personajes':
-                return (array) $this->data->PERSONAJES;
 
-                break;
-            case 'photos':
-                return (array) $this->data->PHOTOS;
-
-                break;
-            case 'people':
-                return (array) $this->data->PERSONAJES;
-
-                break;
-            case 'place':
-                return (array) $this->data->LUGAR;
-
-                break;
-            case 'associatedDocs':
-                return (array) $this->data->DOCS;
-
-                break;
-            case 'categories':
-                return (array) $this->data->CATEGORIES;
-
-                break;
-            case 'dataCastID':
-                return (array) $this->data->DATACASTID;
-
-                break;
-            case 'level':
-                return (array) $this->data->LEVEL;
-
-                break;
-            case 'redactor':
-                return (array) $this->data->FIRMA;
-
-                break;
         }
     }
 
@@ -255,14 +184,14 @@ class Europapress
     public static function getOriginalPriorities()
     {
         return array(
-            '10' => _('Flash'),
-            '20' => _('Urgent'),
-            '25' => _('General'),
-            '30' => _('Normal'),
+            '10' => 4,
+            '20' => 3,
+            '25' => 2,
+            '30' => 1,
             // From Pandora
-            'U'  => _('Urgent'),
-            'R'  => _('Normal'),
-            'B'  => _('General'),
+            'U'  => 4,
+            'R'  => 3,
+            'B'  => 2,
         );
     }
 
@@ -316,16 +245,219 @@ class Europapress
     }
 
     /**
-     * Checks if the file loaded is an article with Europapress format
+     * Returns the name of the service that authored this element
      *
-     * @return boolean true if the format
-     * @throws Exception If the format is not valid
+     * @return string the service name
      **/
-    public static function checkFormat($data, $path)
+    public function getServiceName()
+    {
+        return 'Europa Press';
+    }
+
+    /**
+     * Returns the id of the element
+     *
+     * @return string the title
+     **/
+    public function getId()
+    {
+        return (int) $this->data->CODIGO;
+    }
+
+    /**
+     * Returns the title of the element
+     *
+     * @return string the title
+     **/
+    public function getTitle()
+    {
+        return (string) $this->data->TITULAR;
+    }
+
+    /**
+     * Returns the pretitle of the element
+     *
+     * @return string the pretitle
+     **/
+    public function getPretitle()
+    {
+        return (string) $this->data->ANTETITULO;
+    }
+
+    /**
+     * Returns the summary of the element
+     *
+     * @return string the summary
+     **/
+    public function getSummary()
+    {
+        return (string) $this->data->ENTRADILLA;
+    }
+
+    /**
+     * Returns the body of the element
+     *
+     * @return string the body
+     **/
+    public function getBody()
+    {
+        return nl2br((string) $this->data->CONTENIDO);
+    }
+
+    /**
+     * Returns the unique urn of the element
+     *
+     * @return string the urn
+     **/
+    public function getUrn()
+    {
+        $createdTime = $this->getCreatedTime();
+
+        return 'urn:newsml:europapress.es:'
+            . $createdTime->format('Ymd\THisP00').':'
+            .$this->getId().':2';
+    }
+
+    /**
+     * Returns an integer between 1 and 5 that represents the priority level
+     *
+     * @return int the priority level
+     **/
+    public function getPriority()
+    {
+        return self::matchPriority((string) $this->data->PRIORIDAD);
+    }
+
+    /**
+     * Returns the list of tags of this element
+     *
+     * @return int the priority level
+     **/
+    public function getTags()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the category of the element
+     *
+     * @return int the priority level
+     **/
+    public function getCategory()
+    {
+        return self::matchCategoryName((string) $this->data->SECCION);
+    }
+
+    /**
+     * Returns the creation datetime of this element
+     *
+     * @return DateTime the datetime of the element
+     **/
+    public function getCreatedTime()
+    {
+        $dateFormat = 'd/m/Y H:i:s';
+        $originalDate = $this->data->FECHA.' '.$this->data->HORA;
+        $date = \DateTime::createFromFormat(
+            $dateFormat,
+            $originalDate,
+            new \DateTimeZone('Europe/Madrid')
+        );
+
+        return $date;
+    }
+
+    /**
+     * Checks if the data provided could be handled by the class
+     *
+     * @param SimpleXMLElement $data the XML data
+     * @param string $xmlFile the file path
+     *
+     * @return string
+     **/
+    public static function checkFormat($data, $xmlFile)
     {
         if (!(string) $data->CODIGO) {
-            throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $path));
+            throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $xmlFile));
         }
+
         return true;
+    }
+
+    /**
+     * Returns the available photos in this multimedia package
+     *
+     * @return void
+     **/
+    public function getPhotos()
+    {
+        if (!isset($this->photos)) {
+            $this->photos = array();
+        }
+
+        return $this->photos;
+    }
+
+    /**
+     * Checks if this news component has photos
+     *
+     * @return boolean
+     **/
+    public function hasPhotos()
+    {
+        return count($this->getPhotos()) > 0;
+    }
+
+    /**
+     * Returns the available images in this multimedia package
+     *
+     * @return void
+     **/
+    public function getVideos()
+    {
+        if (!isset($this->videos)) {
+            $this->videos = array();
+        }
+
+        return $this->videos;
+    }
+
+    /**
+     * Checks if this news component has photos
+     *
+     * @return boolean
+     **/
+    public function hasVideos()
+    {
+        return count($this->getVideos()) > 0;
+    }
+
+    /**
+     * Returns the available audios in this multimedia package
+     *
+     * @return void
+     **/
+    public function getAudios()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the available Documentary modules in this multimedia package
+     *
+     * @return void
+     **/
+    public function getModdocs()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the available files in this multimedia package
+     *
+     * @return void
+     **/
+    public function getFiles()
+    {
+        return array();
     }
 }

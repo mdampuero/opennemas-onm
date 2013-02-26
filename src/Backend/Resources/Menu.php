@@ -220,9 +220,9 @@ $menuXml = '<?xml version="1.0"?>
         <node
             module_name="EFE_IMPORTER"
             privilege="IMPORT_EFE"
-            title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("News Agency"), ENT_QUOTES).'"
             id="efe_importer"
-            link="'.url('admin_importer_efe').'"
+            link="'.url('admin_news_agency').'"
         />
         <node
             module_name="PAPER_IMPORT"

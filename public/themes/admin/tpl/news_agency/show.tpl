@@ -26,15 +26,15 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}EFE articles{/t}</h2></div>
+        <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{url name=admin_importer_efe_pickcategory id=$element->xmlFile}" title="{t}Import{/t}">
+                <a href="{url name=admin_news_agency_pickcategory id=$element->xmlFile}" title="{t}Import{/t}">
                 <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Import{/t}" ><br />{t}Import{/t}
                 </a>
             </li>
             <li>
-                <a href="{url name=admin_importer_efe}" class="admin_add" title="{t}Go back to list{/t}">
+                <a href="{url name=admin_news_agency}" class="admin_add" title="{t}Go back to list{/t}">
                 <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                 </a>
             </li>
@@ -81,7 +81,7 @@
                     <p>
                         <strong>{t}Date:{/t}</strong> {$element->created_time->format("H:i:s d-m-Y")}
                     </p>
-                    {if $element->texts[0]->summary}
+                    {if $element->summary}
                         <strong>{t}Summary:{/t}</strong> <br/>
                         {$element->summary}
                     {/if}
@@ -96,7 +96,7 @@
         <div id="photos" class="clearfix">
             {foreach from=$element->photos item=photo}
             <div class="photo">
-                <img style="width:220px" src="{url name=admin_importer_efe_showattachment id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
+                <img style="width:220px" src="{url name=admin_news_agency_showattachment id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
                 <div>
                     <p>{$photo->title}</p>
                 </div>

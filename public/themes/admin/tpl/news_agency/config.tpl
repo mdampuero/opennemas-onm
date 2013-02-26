@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_importer_efe_config}" method="POST" id="formulario">
+<form action="{url name=admin_news_agency_config}" method="POST" id="formulario">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}EFE articles{/t} :: {t}Configuration{/t}</h2></div>
@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
             </li>
             <li class="separator"></li>
             <li>
-                <a href="{url name=admin_importer_efe}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
+                <a href="{url name=admin_news_agency}" class="admin_add" value="{t}Go back to list{/t}" title="{t}Go back to list{/t}">
                 <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Sync list  with server{/t}" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                 </a>
             </li>

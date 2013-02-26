@@ -2296,66 +2296,66 @@ $adminRoutes->add(
 
 // Importer Efe controller routes
 $adminRoutes->add(
-    'admin_importer_efe',
+    'admin_news_agency',
     new Route(
-        '/importer/efe',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:list')
+        '/news-agency',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:list')
     )
 );
 
 $adminRoutes->add(
-    'admin_importer_efe_config',
+    'admin_news_agency_config',
     new Route(
-        '/importer/efe/config',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:config')
+        '/news-agency/config',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:config')
     )
 );
 
 $adminRoutes->add(
-    'admin_importer_efe_unlock',
+    'admin_news_agency_unlock',
     new Route(
-        '/importer/efe/unlock',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:unlock')
+        '/news-agency/unlock',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:unlock')
     )
 );
 
 $adminRoutes->add(
-    'admin_importer_efe_sync',
+    'admin_news_agency_sync',
     new Route(
-        '/importer/efe/sync',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:sync')
+        '/news-agency/sync',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:sync')
     )
 );
 
 $adminRoutes->add(
-    'admin_importer_efe_import',
+    'admin_news_agency_import',
     new Route(
-        '/importer/efe/{id}/import',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:import')
+        '/news-agency/{id}/import',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:import')
     )
 );
 
 $adminRoutes->add(
-    'admin_importer_efe_show',
+    'admin_news_agency_show',
     new Route(
-        '/importer/efe/{id}/show',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:show')
+        '/news-agency/{id}/show',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:show')
     )
 );
 
 $adminRoutes->add(
-    'admin_importer_efe_showattachment',
+    'admin_news_agency_showattachment',
     new Route(
-        '/importer/europapress/{id}/attachment/{attachment_id}',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:showAttachment')
+        '/news-agency/{id}/attachment/{attachment_id}',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:showAttachment')
     )
 );
 
 $adminRoutes->add(
-    'admin_importer_efe_pickcategory',
+    'admin_news_agency_pickcategory',
     new Route(
-        '/importer/europapress/{id}/pickcategory',
-        array('_controller' => 'Backend:Controllers:ImporterEfeController:selectCategoryWhereToImport')
+        '/news-agency/{id}/pickcategory',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:selectCategoryWhereToImport')
     )
 );
 

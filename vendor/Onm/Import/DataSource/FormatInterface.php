@@ -7,13 +7,15 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Import_DataSource
  **/
 namespace Onm\Import\DataSource;
 
 /**
  * Defines the list of methods that a datasource format should implemente
  *
- * @package Onm_Import
+ * @package Onm_Import_DataSource
  **/
 interface FormatInterface
 {
@@ -96,6 +98,9 @@ interface FormatInterface
 
     /**
      * Checks if the data provided could be handled by the class
+     *
+     * @param SimpleXMLElement $data the XML data
+     * @param string $xmlFile the file path
      *
      * @return string
      **/

@@ -7,6 +7,8 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm\Import\DataSouce
  **/
 namespace Onm\Import\DataSource;
 
@@ -35,7 +37,7 @@ class DataSourceFactory
             $formatClass = __NAMESPACE__."\Format\\".$formatName;
             try {
                 $dataSource = new $formatClass($filePath);
-
+                break;
             } catch (\Exception $e) {
                 continue;
             }

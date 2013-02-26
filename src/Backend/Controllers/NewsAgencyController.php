@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the actions for the efe module
+ * Handles the actions for the news agency module
  *
  * @package Backend_Controllers
  **/
@@ -21,11 +21,11 @@ use Onm\Settings as s;
 use Onm\Message as m;
 
 /**
- * Handles the actions for the efe module
+ * Handles the actions for the news agency module
  *
  * @package Backend_Controllers
  **/
-class ImporterEfeController extends Controller
+class NewsAgencyController extends Controller
 {
 
     /**
@@ -96,7 +96,7 @@ class ImporterEfeController extends Controller
                 'path'        => '',
                 'totalItems'  => $countTotalElements,
                 'fileName'        => $this->generateUrl(
-                    'admin_importer_efe',
+                    'admin_news_agency',
                     array(
                         'filter_category' => $filterCategory,
                         'filter_title'    => $filterTitle,
@@ -129,7 +129,7 @@ class ImporterEfeController extends Controller
         }
 
         $_SESSION['_from'] = $this->generateUrl(
-            'admin_importer_efe',
+            'admin_news_agency',
             array(
                 'filter_category' => $filterCategory,
                 'filter_title'    => $filterTitle,
@@ -173,7 +173,7 @@ class ImporterEfeController extends Controller
             $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
             return $this->redirect(
-                $this->generateUrl('admin_importer_efe', array('page' => $page))
+                $this->generateUrl('admin_news_agency', array('page' => $page))
             );
         }
 
@@ -202,20 +202,20 @@ class ImporterEfeController extends Controller
         if (empty($id)) {
             m::add(_('Please specify the article to import.'), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_importer_efe'));
+            return $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
         if (empty($category)) {
             m::add(_('Please assign the category where import this article'), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_importer_efe_pickcategory', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array('id' => $id)));
         }
 
         $categoryInstance = new \ContentCategory($category);
         if (!is_object($categoryInstance)) {
             m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_importer_efe_pickcategory', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array('id' => $id)));
         }
 
         // Get EFE new from a filename
@@ -225,7 +225,7 @@ class ImporterEfeController extends Controller
         } catch (\Exception $e) {
             m::add(_('Please specify the article to import.'), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_importer_efe'));
+            return $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
         // If the new has photos import them
@@ -332,7 +332,7 @@ class ImporterEfeController extends Controller
         } else {
             m::add(sprintf('Unable to import the file "%s"', $id));
 
-            return $this->redirect($this->generateUrl('admin_importer_efe'));
+            return $this->redirect($this->generateUrl('admin_news_agency'));
         }
     }
 
@@ -350,7 +350,7 @@ class ImporterEfeController extends Controller
 
         if (empty($id)) {
             m::add(_('The article you want to import doesn\'t exists.'), m::ERROR);
-            $this->redirect($this->generateUrl('admin_importer_efe'));
+            $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
         $ccm = \ContentCategoryManager::get_instance();
@@ -460,7 +460,7 @@ class ImporterEfeController extends Controller
             $agencyString = $requestParams->filter('agency_string', null, FILTER_SANITIZE_STRING);
 
             if (!isset($server) || !isset($username) || !isset($password)) {
-                return $this->redirect($this->generateUrl('admin_importer_efe_config'));
+                return $this->redirect($this->generateUrl('admin_news_agency_config'));
             }
 
             $serverAuth =  array(
@@ -473,9 +473,9 @@ class ImporterEfeController extends Controller
                 && s::set('efe_sync_from_limit', $syncFrom)
                 && s::set('efe_agency_string', $agencyString)
             ) {
-                m::add(_('EFE module configuration saved successfully'), m::SUCCESS);
+                m::add(_('News agency module configuration saved successfully'), m::SUCCESS);
             } else {
-                m::add(_('There was an error while saving the EFE module configuration'), m::ERROR);
+                m::add(_('There was an error while saving the News Agency module configuration'), m::ERROR);
             }
 
             return $this->redirect($this->generateUrl('admin_importer_efe_config'));
@@ -498,7 +498,7 @@ class ImporterEfeController extends Controller
         $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
 
         return $this->redirect(
-            $this->generateUrl('admin_importer_efe', array('page' => $page))
+            $this->generateUrl('admin_news_agency', array('page' => $page))
         );
     }
 
@@ -542,7 +542,7 @@ class ImporterEfeController extends Controller
             $errorMessage = $e->getMessage()
                 .sprintf(
                     _('If you are sure <a href="%s">try to unlock it</a>'),
-                    $this->generateUrl('admin_importer_efe_unlock')
+                    $this->generateUrl('admin_news_agency_unlock')
                 );
             m::add($errorMessage, m::ERROR);
         } catch (\Exception $e) {
@@ -552,7 +552,7 @@ class ImporterEfeController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_importer_efe', array('page' => $page))
+            $this->generateUrl('admin_news_agency', array('page' => $page))
         );
     }
 }

@@ -62,12 +62,12 @@ class ImporterEuropapressController extends Controller
             return $this->redirect($this->generateUrl('admin_import_europapress'));
         }
 
-        $europapress = \Onm\Import\Europapress::getInstance();
+        $europapress = \Onm\Import\Repository\Europapress::getInstance();
 
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $europapress->minutesFromLastSync();
 
-        $categories = \Onm\Import\DataSource\Europapress::getOriginalCategories();
+        $categories = array(); // \Onm\Import\Repository\Europapress::getOriginalCategories();
 
         $queryParams = $this->request->query;
         $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);

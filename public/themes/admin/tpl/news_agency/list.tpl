@@ -18,7 +18,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function ($){
         jQuery('.sync_with_server').on('click',function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from EFE, please wait...{/t}</div>');
+           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from news agencies, please wait...{/t}</div>');
         });
         $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
     });
@@ -27,21 +27,21 @@
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}EFE articles{/t}</h2></div>
+        <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
 			<li>
-				<a href="{url name=admin_importer_efe_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
+				<a href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
 				    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
 				</a>
 			</li>
 			<li>
-				<a href="{url name=admin_importer_efe}" class="admin_add" title="{t}Reload list{/t}">
+				<a href="{url name=admin_news_agency}" class="admin_add" title="{t}Reload list{/t}">
 				    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
 				</a>
 			</li>
             {acl isAllowed="IMPORT_EFE_CONFIG"}
 			<li>
-				<a href="{url name=admin_importer_efe_config}" class="admin_add" title="{t}Reload list{/t}">
+				<a href="{url name=admin_news_agency_config}" class="admin_add" title="{t}Reload list{/t}">
 				    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
 				</a>
 			</li>
@@ -52,21 +52,21 @@
 <div class="wrapper-content">
     <div class="warnings-validation"></div><!-- / -->
 
-    <form action="{url name=admin_importer_efe}" method="GET">
+    <form action="{url name=admin_news_agency}" method="GET">
 
     	{render_messages}
 
         <div class="table-info clearfix">
             <div class="left"><strong>{t 1=$pagination->_totalItems}%1 articles{/t}</strong></div>
             <div class="right form-inline">
-                <input type="search" id="username" name="filter_title" onchange="this.form.submit();" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
+                <input type="search" id="username" name="filter_title"value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
 
                 <div class="input-append">
                     <label for="usergroup">
                         {t}and in{/t}
-                        <select id="usergroup" name="filter_category" onchange="this.form.submit();">
-                            <option value="*">{t}All categories{/t}</option>
-                            {html_options options=$categories selected=$smarty.request.filter_group|default:""}
+                        <select id="usergroup" name="filter_category">
+                            <option value="*">{t}All sources{/t}</option>
+                            {html_options options=$sources selected=$selectedSource|default:""}
                         </select>
                     </label>
 
@@ -96,7 +96,7 @@
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $element->priority > 4}4{else}{$element->priority}{/if}.png" alt="{t 1=$element->priority}Priority %1{/t}" title="{t 1=$element->priority}Priority %1{/t}">
                     </td>
                     <td >
-                        <a href="{url name=admin_importer_efe_show id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                        <a href="{url name=admin_news_agency_show id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
                             {$element->title}
                         </a>
                         <div class="tags">
@@ -127,7 +127,7 @@
                     <td class="right nowrap">
                         <ul class="btn-group">
                             <li>
-                                <a class="btn btn-mini" href="{url name=admin_importer_efe_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
+                                <a class="btn btn-mini" href="{url name=admin_news_agency_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>

@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="{url name=admin_importer_efe_import id=$id}" method="POST">
+    <form action="{url name=admin_news_agency_import id=$id}" method="POST">
 
     {render_messages}
     <div class="panel">
@@ -16,8 +16,10 @@
         <dl>
             <dt>{t}Title{/t}</dt>
             <dd>{$article->title}</dd>
-            <dt>{t}Summary{/t}</dt>
-            <dd>{$article->texts[0]->summary}</dd>
+            {if $article->summary}
+                <dt>{t}Summary{/t}</dt>
+                <dd>{$article->summary}</dd>
+            {/if}
             <dt>{t}In which category you want to import this element?{/t}</dt>
             <dd>
                 <select name="category">
@@ -25,7 +27,6 @@
                 </select>
             </dd>
         </dl>
-
 
     </div><!-- / -->
     <div class="form-actions">
