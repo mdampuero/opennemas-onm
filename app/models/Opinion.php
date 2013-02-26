@@ -214,6 +214,18 @@ class Opinion extends Content
             return false;
         }
 
+        if (array_key_exists('summary', $data) && !empty($data['summary'])) {
+            parent::setProperty('summary', $data['summary']);
+        }
+
+        if (array_key_exists('subtitle', $data) && !empty($data['subtitle'])) {
+            parent::setProperty('subtitle', $data['subtitle']);
+        }
+
+        if (array_key_exists('image', $data) && !empty($data['image'])) {
+            parent::setProperty('image', $data['image']);
+        }
+
         return $this->id;
     }
 
@@ -254,6 +266,8 @@ class Opinion extends Content
 
         $this->load($rs->fields);
 
+        $this->loadAllContentProperties();
+
         return $this;
     }
 
@@ -271,8 +285,8 @@ class Opinion extends Content
             $rs = $GLOBALS['application']->conn->Execute($sql);
 
             while (!$rs->EOF) {
-                $this->authorNames[ $rs->fields['pk_author'] ] =
-                    $rs->fields['name'];
+                $this->authorNames[ $rs->fields['pk_author'] ]
+                    = $rs->fields['name'];
 
                 $rs->MoveNext();
             }
@@ -325,6 +339,25 @@ class Opinion extends Content
 
             return false;
         }
+
+        if (array_key_exists('summary', $data) && !empty($data['summary'])) {
+            parent::setProperty('summary', $data['summary']);
+        } else {
+            parent::clearProperty('summary');
+        }
+
+        if (array_key_exists('subtitle', $data) && !empty($data['subtitle'])) {
+            parent::setProperty('subtitle', $data['subtitle']);
+        } else {
+            parent::clearProperty('subtitle');
+        }
+
+        if (array_key_exists('image', $data) && !empty($data['image'])) {
+            parent::setProperty('image', $data['image']);
+        } else {
+            parent::clearProperty('image');
+        }
+
 
         $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
 
