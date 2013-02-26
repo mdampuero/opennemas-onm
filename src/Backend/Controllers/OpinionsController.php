@@ -42,6 +42,17 @@ class OpinionsController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
+        $this->ccm  = \ContentCategoryManager::get_instance();
+
+        list($this->parentCategories, $this->subcat, $this->categoryData)
+            = $this->ccm->getArraysMenu();
+
+        $this->view->assign(
+            array(
+                'allcategorys' => $this->parentCategories,
+            )
+        );
+
     }
 
     /**
@@ -255,6 +266,11 @@ class OpinionsController extends Controller
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
 
+        if (!empty($opinion->image)) {
+            $image = new \Photo($opinion->image);
+            $this->view->assign('image', $image);
+        }
+
         $author      = new \Author();
         $allAuthors  = $author->all_authors(null, 'ORDER BY name');
         $author      = new \Author($opinion->fk_author);
@@ -300,6 +316,9 @@ class OpinionsController extends Controller
                 'available'            => (empty($available)) ? 0 : 1,
                 'in_home'              => (empty($inhome)) ? 0 : 1,
                 'with_comment'         => (empty($withComment)) ? 0 : 1,
+                'subtitle'             => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+                'summary'              => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
+                'image'                => $request->request->filter('image', '', FILTER_SANITIZE_STRING),
                 'type_opinion'         => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
                 'fk_author'            => $request->request->getDigits('fk_author'),
                 'fk_user_last_editor'  => $request->request->getDigits('fk_user_last_editor'),
@@ -382,6 +401,9 @@ class OpinionsController extends Controller
                 'available'            => (empty($available)) ? 0 : 1,
                 'in_home'              => (empty($inhome)) ? 0 : 1,
                 'with_comment'         => (empty($withComment)) ? 0 : 1,
+                'subtitle'             => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+                'summary'              => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
+                'image'                => $request->request->filter('image', '', FILTER_SANITIZE_STRING),
                 'type_opinion'         => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
                 'fk_author'            => $request->request->getDigits('fk_author'),
                 'fk_user_last_editor'  => $request->request->getDigits('fk_user_last_editor'),
