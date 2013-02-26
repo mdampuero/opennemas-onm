@@ -2245,55 +2245,6 @@ $adminRoutes->add(
     )
 );
 
-// Importer Europapress controller routes
-$adminRoutes->add(
-    'admin_importer_europapress',
-    new Route(
-        '/importer/europapress',
-        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:list')
-    )
-);
-
-$adminRoutes->add(
-    'admin_importer_europapress_config',
-    new Route(
-        '/importer/europapress/config',
-        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:config')
-    )
-);
-
-$adminRoutes->add(
-    'admin_importer_europapress_unlock',
-    new Route(
-        '/importer/europapress/unlock',
-        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:unlock')
-    )
-);
-
-$adminRoutes->add(
-    'admin_importer_europapress_sync',
-    new Route(
-        '/importer/europapress/sync',
-        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:sync')
-    )
-);
-
-$adminRoutes->add(
-    'admin_importer_europapress_import',
-    new Route(
-        '/importer/europapress/{id}/import',
-        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:import')
-    )
-);
-
-$adminRoutes->add(
-    'admin_importer_europapress_show',
-    new Route(
-        '/importer/europapress/{id}/show',
-        array('_controller' => 'Backend:Controllers:ImporterEuropapressController:show')
-    )
-);
-
 // Importer Efe controller routes
 $adminRoutes->add(
     'admin_news_agency',

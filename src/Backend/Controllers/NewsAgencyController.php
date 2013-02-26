@@ -138,7 +138,7 @@ class NewsAgencyController extends Controller
         );
 
         return $this->render(
-            'agency_importer/efe/list.tpl',
+            'news_agency/list.tpl',
             array(
                 'elements'         =>  $elements,
                 'already_imported' =>  $alreadyImported,
@@ -178,7 +178,7 @@ class NewsAgencyController extends Controller
         }
 
         return $this->render(
-            'agency_importer/efe/show.tpl',
+            'news_agency/show.tpl',
             array(
                 'element'  => $element,
                 'imported' => count($alreadyImported) > 0,
@@ -365,7 +365,7 @@ class NewsAgencyController extends Controller
         $element = $ep->findByFileName($id);
 
         return $this->render(
-            'agency_importer/efe/import_select_category.tpl',
+            'news_agency/import_select_category.tpl',
             array(
                 'id' => $id,
                 'article' => $element,
@@ -449,7 +449,7 @@ class NewsAgencyController extends Controller
                 )
             );
 
-            return $this->render('agency_importer/efe/config.tpl');
+            return $this->render('news_agency/config.tpl');
         } else {
 
             $requestParams = $this->request->request;

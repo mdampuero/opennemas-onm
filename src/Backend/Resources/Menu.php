@@ -212,12 +212,6 @@ $menuXml = '<?xml version="1.0"?>
             link="http://www.cronicasdelaemigracion.com//agenda/"
             privilege="SCHEDULE_ADMIN" />
         <node
-            module_name="EUROPAPRESS_IMPORTER"
-            title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"
-            id="europaPress_importer"
-            link="'.url('admin_importer_europapress').'"
-            privilege="IMPORT_EPRESS" />
-        <node
             module_name="EFE_IMPORTER"
             privilege="IMPORT_EFE"
             title="'.htmlspecialchars(_("News Agency"), ENT_QUOTES).'"
