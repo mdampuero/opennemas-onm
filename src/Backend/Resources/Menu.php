@@ -215,7 +215,7 @@ $menuXml = '<?xml version="1.0"?>
             module_name="EFE_IMPORTER"
             privilege="IMPORT_EFE"
             title="'.htmlspecialchars(_("News Agency"), ENT_QUOTES).'"
-            id="efe_importer"
+            id="news_agency"
             link="'.url('admin_news_agency').'"
         />
         <node
@@ -225,7 +225,6 @@ $menuXml = '<?xml version="1.0"?>
             id="xml_importer"
             link="'.url('admin_importer_xmlfile').'"
         />
-
         <node class="divider" />
         <node
             module_name="CRONICAS_MODULES"

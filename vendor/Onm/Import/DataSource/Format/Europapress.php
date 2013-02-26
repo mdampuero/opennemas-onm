@@ -301,7 +301,8 @@ class Europapress implements FormatInterface
      **/
     public function getBody()
     {
-        return nl2br((string) $this->data->CONTENIDO);
+        $title = (string) $this->data->CONTENIDO;
+        return nl2br($title);
     }
 
     /**

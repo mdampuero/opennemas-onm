@@ -478,7 +478,7 @@ class NewsAgencyController extends Controller
                 m::add(_('There was an error while saving the News Agency module configuration'), m::ERROR);
             }
 
-            return $this->redirect($this->generateUrl('admin_importer_efe_config'));
+            return $this->redirect($this->generateUrl('admin_news_agency_config'));
         }
     }
 
@@ -547,7 +547,7 @@ class NewsAgencyController extends Controller
             m::add($errorMessage, m::ERROR);
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
-            $e = new \Onm\Import\Efe();
+            $e = new \Onm\Import\Repository\Efe();
             $e->unlockSync();
         }
 

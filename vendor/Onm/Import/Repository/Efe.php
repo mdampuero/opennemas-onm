@@ -139,7 +139,7 @@ class Efe extends ImporterAbstract implements ImporterInterface
         return array($counTotalElements, $elements);
     }
 
-    /*
+    /**
      * Fetches a DataSource\NewsMLG1 object from id
      *
      * @param $id
@@ -154,7 +154,7 @@ class Efe extends ImporterAbstract implements ImporterInterface
         return  $element;
     }
 
-    /*
+    /**
      * Fetches a DataSource\NewsMLG1 object from id
      *
      * @param $fileName
