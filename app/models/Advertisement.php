@@ -725,9 +725,9 @@ class Advertisement extends Content
             } else {
                 $generics = ' OR fk_content_categories=0';
             }
-            // Generate sql with or without category
 
-             $cm = new \ContentManager();
+            // Generate sql with or without category
+            $cm = new \ContentManager();
             if ($category !== 0) {
                 $rsBanner = $cm->find(
                     'Advertisement',
@@ -789,10 +789,13 @@ class Advertisement extends Content
                 $homeBanners[$adType] = array();
                 if (count($advs) > 1) {
                     foreach ($advs as $ad) {
-                        if ($ad->fk_content_categories != array(0)) {
-                            array_push($banners[$adType], $ad); // Category banners
-                        } else {
+                        if (in_array(0, $ad->fk_content_categories)) {
                             array_push($homeBanners[$adType], $ad); // Home banners
+                            if (in_array($category, $ad->fk_content_categories)) {
+                                array_push($banners[$adType], $ad); // Category+Home banners
+                            }
+                        } else {
+                            array_push($banners[$adType], $ad); // Category banners
                         }
                     }
                     // If this ad-type don't has any banner, get all from home
