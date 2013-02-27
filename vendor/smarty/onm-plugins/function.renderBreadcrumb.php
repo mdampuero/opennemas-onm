@@ -13,6 +13,11 @@ function smarty_function_renderBreadcrumb($params,&$smarty)
         return $output;
     }
 
+    if (!array_key_exists('separator', $params)) {
+        $separator = '/';
+    } else {
+        $separator = $params['separator'];
+    }
 
     $actualCategory = $params['item']->category;
 
@@ -25,8 +30,9 @@ function smarty_function_renderBreadcrumb($params,&$smarty)
 
     if (!empty($first->fk_content_category)) {
         $second = $ccm->categories[$first->fk_content_category];
-        $output .= ' | <a href="/section/' . $second->name
-            .'" title="'. $second->title . '">' . $second->title . '</a>';
+        $output = ' <a href="/section/' . $second->name
+            .'" title="'. $second->title . '">' . $second->title . '</a>'
+            . $separator. $output;
     }
 
     return $output;
