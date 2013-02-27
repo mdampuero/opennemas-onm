@@ -59,7 +59,7 @@ class NewsAgencyController extends Controller
         ini_set('set_time_limit', '0');
 
         // Check if module is configured, if not redirect to configuration form
-        if (is_null(s::get('efe_server_auth'))
+        if (is_null(s::get('news_agency_config'))
             && $action != 'config'
         ) {
             m::add(_('Please provide your EFE auth credentials to start to use your EFE Importer module'));
@@ -455,7 +455,7 @@ class NewsAgencyController extends Controller
         $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
         try {
 
-            $serverAuth = s::get('efe_server_auth');
+            $serverAuth = s::get('news_agency_config');
 
             $ftpConfig = array(
                 'servers'                         => $serverAuth['server'],
