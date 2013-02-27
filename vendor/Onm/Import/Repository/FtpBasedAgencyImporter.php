@@ -1,7 +1,5 @@
 <?php
 /**
- * Defines the Onm\Import\Repository\Europapress class
- *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -13,14 +11,14 @@
  **/
 namespace Onm\Import\Repository;
 
-use \Onm\Import\DataSource\Format\Europapress as EuropapressDataSource;
+use \Onm\Import\DataSource\DataSourceFactory;
 
 /**
- * Class to import news from EuropaPress Agency FTP
+ * Class to import news from Efe Agency FTP
  *
  * @package    Onm_Import
  */
-class Europapress extends ImporterAbstract implements ImporterInterface
+class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterface
 {
     // the instance object
     private static $instance = null;
@@ -34,12 +32,10 @@ class Europapress extends ImporterAbstract implements ImporterInterface
 
     protected $lockFile = '';
 
-
+    public $syncPath = '';
 
     /**
      * Ensures that we always get one single instance
-     *
-     * @param array $config the configuration
      *
      * @return object the unique instance object
      */
@@ -55,15 +51,13 @@ class Europapress extends ImporterAbstract implements ImporterInterface
     /**
      * Initializes the object and initializes configuration
      *
-     * @param array $config the configuration
-     *
      * @return void
      */
     public function __construct($config = array())
     {
         $this->syncPath = implode(
             DIRECTORY_SEPARATOR,
-            array(CACHE_PATH, 'europapress_import_cache')
+            array(CACHE_PATH, 'efe_import_cache')
         );
         $this->_syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
@@ -74,11 +68,9 @@ class Europapress extends ImporterAbstract implements ImporterInterface
     }
 
     /**
-     * gets an array of news from EuropaPress
+     * gets an array of news from Efe
      *
-     * @param array $params the search criteria
-     *
-     * @return array, the array of objects with news from EuropaPress
+     * @return array, the array of objects with news from Efe
      */
     public function findAll($params = array())
     {
@@ -86,7 +78,8 @@ class Europapress extends ImporterAbstract implements ImporterInterface
         rsort($filesSynced, SORT_STRING);
 
         $counTotalElements = count($filesSynced);
-        if (array_key_exists('items_page', $params)
+        if ($params['title'] == '*'
+            && array_key_exists('items_page', $params)
             && array_key_exists('page', $params)
         ) {
             $files = array_slice(
@@ -107,13 +100,13 @@ class Europapress extends ImporterAbstract implements ImporterInterface
                 continue;
             }
             try {
-                $file = $this->syncPath.DIRECTORY_SEPARATOR.$file;
-                $element = new EuropapressDataSource($file);
+                $element = DataSourceFactory::get($this->syncPath.DIRECTORY_SEPARATOR.$file);
             } catch (\Exception $e) {
                 continue;
             }
 
-            if (($params['title'] != '*')
+
+            if ($params['title'] != '*'
                 && !($element->hasContent($params['title']))
             ) {
                 continue;
@@ -126,14 +119,19 @@ class Europapress extends ImporterAbstract implements ImporterInterface
                 continue;
             }
 
-            if (array_key_exists('limit', $params)
-               && ($elementsCount <= $params['limit'])
+            if ($params['title'] == '*'
+                && array_key_exists('limit', $params)
+                && ($elementsCount <= $params['limit'])
             ) {
                 break;
             }
 
             $elements []= $element;
             $elementsCount++;
+        }
+
+        if ($params['title'] != '*') {
+            $counTotalElements = $elementsCount;
         }
 
         usort(
@@ -149,31 +147,31 @@ class Europapress extends ImporterAbstract implements ImporterInterface
     }
 
     /**
-     * Fetches a DataSource\Europapress object from id
+     * Fetches a DataSource\NewsMLG1 object from id
      *
-     * @param int $id
+     * @param $id
      *
-     * @return DataSource\Europapress the article object
+     * @return DataSource\Efe the article object
      */
     public function findByID($id)
     {
         $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
-        $element = new EuropapressDataSource($file);
+        $element = DataSourceFactory::get($file);
 
         return  $element;
     }
 
     /**
-     * Fetches a DataSource\Europapress object from id
+     * Fetches a DataSource\NewsMLG1 object from id
      *
-     * @param string $fileName the file path
+     * @param $fileName
      *
-     * @return DataSource\Europapress the article object
+     * @return DataSource\NewsMLG1 the article object
      */
-    public function findByFileName($fileName)
+    public function findByFileName($id)
     {
-        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$fileName;
-        $element = new EuropapressDataSource($file);
+        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id;
+        $element = DataSourceFactory::get($file);
 
         return  $element;
     }

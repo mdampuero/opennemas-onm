@@ -96,7 +96,7 @@ abstract class ImporterAbstract
      *
      * @return boolean true if syncPath is present and writtable
      */
-    public function isSyncEnrironmetReady()
+    public function isSyncEnvironmetReady()
     {
 
         return (
@@ -201,7 +201,7 @@ abstract class ImporterAbstract
     public function sync($params = array())
     {
         // Check if the folder where store elements is ready and writtable
-        if (!$this->isSyncEnrironmetReady()) {
+        if (!$this->isSyncEnvironmetReady()) {
             $this->setupSyncEnvironment();
         }
 

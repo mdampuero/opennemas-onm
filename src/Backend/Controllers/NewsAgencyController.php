@@ -27,7 +27,6 @@ use Onm\Message as m;
  **/
 class NewsAgencyController extends Controller
 {
-
     /**
      * Common code for all the actions
      *
@@ -39,6 +38,22 @@ class NewsAgencyController extends Controller
         $this->checkAclOrForward('IMPORT_EFE');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+
+        $this->syncFrom = array(
+            '3600'         => sprintf(_('%d hour'), '1'),
+            '10800'         => sprintf(_('%d hours'), '3'),
+            '21600'         => sprintf(_('%d hours'), '6'),
+            '43200'         => sprintf(_('%d hours'), '12'),
+            '86400'         => _('1 day'),
+            '172800'        => sprintf(_('%d days'), '2'),
+            '259200'        => sprintf(_('%d days'), '3'),
+            '345600'        => sprintf(_('%d days'), '4'),
+            '432000'        => sprintf(_('%d days'), '5'),
+            '518400'        => sprintf(_('%d days'), '6'),
+            '604800'        => sprintf(_('%d week'), '1'),
+            '1209600'       => sprintf(_('%d weeks'), '2'),
+            'no_limits'     => _('No limit'),
+        );
 
         ini_set('memory_limit', '128M');
         ini_set('set_time_limit', '0');
@@ -63,7 +78,7 @@ class NewsAgencyController extends Controller
     {
         $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        $efe = \Onm\Import\Repository\Efe::getInstance();
+        $efe = \Onm\Import\Repository\FtpBasedAgencyImporter::getInstance();
 
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $efe->minutesFromLastSync();
@@ -161,7 +176,7 @@ class NewsAgencyController extends Controller
         $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         try {
-            $ep = new \Onm\Import\Repository\Efe();
+            $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
             $element = $ep->findByFileName($id);
 
             $alreadyImported = \Content::findByUrn($element->urn);
@@ -220,7 +235,7 @@ class NewsAgencyController extends Controller
 
         // Get EFE new from a filename
         try {
-            $efe = new \Onm\Import\Repository\Efe();
+            $efe = new \Onm\Import\Repository\FtpBasedAgencyImporter();
             $element = $efe->findByFileName($id);
         } catch (\Exception $e) {
             m::add(_('Please specify the article to import.'), m::ERROR);
@@ -361,7 +376,7 @@ class NewsAgencyController extends Controller
             $categories [$category->pk_content_category]= $category->title;
         }
 
-        $ep = new \Onm\Import\Repository\Efe();
+        $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
         $element = $ep->findByFileName($id);
 
         return $this->render(
@@ -387,7 +402,7 @@ class NewsAgencyController extends Controller
         $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
-        $ep = new \Onm\Import\Repository\Efe();
+        $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
         $element = $ep->findById($id);
 
         if ($element->hasPhotos()) {
@@ -409,80 +424,6 @@ class NewsAgencyController extends Controller
     }
 
     /**
-     * Shows and handles the configuration form for Efe module
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function configAction(Request $request)
-    {
-        $this->checkAclOrForward('IMPORT_EFE_CONFIG');
-
-        if (count($_POST) <= 0) {
-            $serverAuth = s::get('efe_server_auth');
-
-            $message = $this->request->query->filter('message', null, FILTER_SANITIZE_STRING);
-
-            $this->view->assign(
-                array(
-                    'server'        => $serverAuth['server'],
-                    'username'      => $serverAuth['username'],
-                    'password'      => $serverAuth['password'],
-                    'message'       => $message,
-                    'agency_string' => s::get('efe_agency_string'),
-                    'sync_from'     => array(
-                        'no_limits'     => _('No limit'),
-                        '10800'         => sprintf(_('%d hours'), '3'),
-                        '21600'         => sprintf(_('%d hours'), '6'),
-                        '43200'         => sprintf(_('%d hours'), '12'),
-                        '86400'         => _('1 day'),
-                        '172800'        => sprintf(_('%d days'), '2'),
-                        '259200'        => sprintf(_('%d days'), '3'),
-                        '345600'        => sprintf(_('%d days'), '4'),
-                        '432000'        => sprintf(_('%d days'), '5'),
-                        '518400'        => sprintf(_('%d days'), '6'),
-                        '604800'        => sprintf(_('%d week'), '1'),
-                        '1209600'       => sprintf(_('%d weeks'), '2'),
-                    ),
-                    'sync_from_setting'=> s::get('efe_sync_from_limit'),
-                )
-            );
-
-            return $this->render('news_agency/config.tpl');
-        } else {
-
-            $requestParams = $this->request->request;
-            $server       = $requestParams->filter('server', null, FILTER_SANITIZE_STRING);
-            $username     = $requestParams->filter('username', null, FILTER_SANITIZE_STRING);
-            $password     = $requestParams->filter('password', null, FILTER_SANITIZE_STRING);
-            $syncFrom     = $requestParams->filter('sync_from', null, FILTER_SANITIZE_STRING);
-            $agencyString = $requestParams->filter('agency_string', null, FILTER_SANITIZE_STRING);
-
-            if (!isset($server) || !isset($username) || !isset($password)) {
-                return $this->redirect($this->generateUrl('admin_news_agency_config'));
-            }
-
-            $serverAuth =  array(
-                'server'   => $server,
-                'username' => $username,
-                'password' => $password,
-            );
-
-            if (s::set('efe_server_auth', $serverAuth)
-                && s::set('efe_sync_from_limit', $syncFrom)
-                && s::set('efe_agency_string', $agencyString)
-            ) {
-                m::add(_('News agency module configuration saved successfully'), m::SUCCESS);
-            } else {
-                m::add(_('There was an error while saving the News Agency module configuration'), m::ERROR);
-            }
-
-            return $this->redirect($this->generateUrl('admin_news_agency_config'));
-        }
-    }
-
-    /**
      * Cleans the unlock file for Efe module
      *
      * @param Request $request the request object
@@ -491,7 +432,7 @@ class NewsAgencyController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $e = new \Onm\Import\Repository\Efe();
+        $e = new \Onm\Import\Repository\FtpBasedAgencyImporter();
         $e->unlockSync();
         unset($_SESSION['error']);
 
@@ -517,14 +458,14 @@ class NewsAgencyController extends Controller
             $serverAuth = s::get('efe_server_auth');
 
             $ftpConfig = array(
-                'server'                         => $serverAuth['server'],
+                'servers'                         => $serverAuth['server'],
                 'user'                           => $serverAuth['username'],
                 'password'                       => $serverAuth['password'],
                 'allowed_file_extesions_pattern' => '.*',
                 'max_age'                        => s::get('efe_sync_from_limit')
             );
 
-            $efeSynchronizer = \Onm\Import\Repository\Efe::getInstance();
+            $efeSynchronizer = \Onm\Import\Repository\FtpBasedAgencyImporter::getInstance();
             $message         = $efeSynchronizer->sync($ftpConfig);
             $efeSynchronizer->updateSyncFile();
 
@@ -547,12 +488,162 @@ class NewsAgencyController extends Controller
             m::add($errorMessage, m::ERROR);
         } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
-            $e = new \Onm\Import\Repository\Efe();
+            $e = new \Onm\Import\Repository\FtpBasedAgencyImporter();
             $e->unlockSync();
         }
 
         return $this->redirect(
             $this->generateUrl('admin_news_agency', array('page' => $page))
         );
+    }
+
+    /**
+     * Lists all the servers for the news agency
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function configListServersAction(Request $request)
+    {
+        $servers = s::get('news_agency_config');
+
+        return $this->render(
+            'news_agency/config/list.tpl',
+            array(
+                'servers'   => $servers,
+                'sync_from' => $this->syncFrom
+            )
+        );
+    }
+
+    /**
+     * Shows and handles the configuration form for Efe module
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function configUpdateServerAction(Request $request)
+    {
+        $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+
+        $id = $request->query->getDigits('id');
+
+        $servers = s::get('news_agency_config');
+
+        $server = array(
+            'id'            => $id,
+            'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+            'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+            'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+            'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+            'activated'     => $request->request->getDigits('activated', 0),
+        );
+
+        $servers[$id] = $server;
+
+        s::set('news_agency_config', $servers);
+
+        m::add(_('News agency server updated.'), m::SUCCESS);
+
+        return $this->redirect($this->generateUrl('admin_news_agency_server_show', array('id' => $id)));
+    }
+
+    /**
+     * Shows the news agency information
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function configShowServerAction(Request $request)
+    {
+        $servers = s::get('news_agency_config');
+
+        $id = $request->query->getDigits('id');
+
+        $server = $servers[$id];
+
+        $this->view->assign(
+            array(
+                'server'        => $server,
+                'sync_from'     => $this->syncFrom,
+            )
+        );
+
+        return $this->render('news_agency/config/new.tpl');
+    }
+
+    /**
+     * Shows and handles the configuration form for Efe module
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function configCreateServerAction(Request $request)
+    {
+        if ('POST' != $request->getMethod()) {
+            $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+
+            $this->view->assign(
+                array(
+                    'server'        => array(),
+                    'sync_from'     => $this->syncFrom,
+                )
+            );
+
+            return $this->render('news_agency/config/new.tpl');
+        } else {
+            $servers = s::get('news_agency_config');
+
+            if (!is_array($servers)) {
+                $servers = array();
+            }
+
+            $server = array(
+                'id'            => count($servers) + 1,
+                'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
+                'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+                'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
+                'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
+                'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+                'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
+                'activated'     => $request->request->getDigits('activated', 0),
+            );
+
+            $servers[$server['id']] = $server;
+
+            s::set('news_agency_config', $servers);
+
+            m::add(_('News agency server added.'), m::SUCCESS);
+
+            return $this->redirect($this->generateUrl('admin_news_agency_server_show', array('id' => $server['id'])));
+        }
+    }
+
+    /**
+     * Shows and handles the configuration form for Efe module
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function configDeleteServerAction(Request $request)
+    {
+        $servers = s::get('news_agency_config');
+
+        $id = $request->query->getDigits('id');
+
+        unset($servers[$id]);
+
+        s::set('news_agency_config', $servers);
+
+        m::add(_('News agency server deleted.'), m::SUCCESS);
+
+        return $this->redirect($this->generateUrl('admin_news_agency_servers'));
     }
 }

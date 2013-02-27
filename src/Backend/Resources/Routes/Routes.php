@@ -2255,10 +2255,43 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_news_agency_config',
+    'admin_news_agency_servers',
     new Route(
-        '/news-agency/config',
-        array('_controller' => 'Backend:Controllers:NewsAgencyController:config')
+        '/news-agency/servers',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:configListServers')
+    )
+);
+
+$adminRoutes->add(
+    'admin_news_agency_server_create',
+    new Route(
+        '/news-agency/servers/create',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:configCreateServer')
+    )
+);
+
+$adminRoutes->add(
+    'admin_news_agency_server_show',
+    new Route(
+        '/news-agency/servers/{id}/show',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:configShowServer')
+    )
+);
+
+
+$adminRoutes->add(
+    'admin_news_agency_server_update',
+    new Route(
+        '/news-agency/servers/{id}/update',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:configUpdateServer')
+    )
+);
+
+$adminRoutes->add(
+    'admin_news_agency_server_delete',
+    new Route(
+        '/news-agency/servers/{id}/delete',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:configDeleteServer')
     )
 );
 
