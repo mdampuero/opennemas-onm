@@ -92,6 +92,7 @@ class SubscriptionsController extends Controller
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
             $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
+            $class = 'error';
         } else {
             // Correct CAPTCHA, bad mail and name empty
             $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
@@ -100,6 +101,7 @@ class SubscriptionsController extends Controller
             if (empty($email) || empty($name)) {
                 $message = "Lo sentimos, no se ha podido completar su solicitud.\n"
                         ."Verifique el formulario y vuelva intentarlo.";
+                $class = 'error';
             } else {
                 // Correct CAPTCHA, correct mail and name not empty
 
@@ -134,11 +136,13 @@ class SubscriptionsController extends Controller
                             $body    =  "Solicitud de Alta en el boletín de: \r\n". $formulario;
 
                             $message = _("You have been subscribed to the newsletter.");
+                            $class = 'success';
                         } else {
                             $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
                             $body    =  "Solicitud de Baja en el boletín de: \r\n". $formulario;
 
                             $message = _("You have been unsusbscribed from the newsletter.");
+                            $class = 'success';
                         }
 
                         //Send mail
@@ -168,6 +172,7 @@ class SubscriptionsController extends Controller
                             $message = "Lo sentimos, no se ha podido '
                                 .'completar su solicitud.\nVerifique el formulario '
                                 .'y vuelva intentarlo.";
+                            $class = 'error';
                         }
                         break;
                     case 'create_subscriptor':
@@ -180,11 +185,13 @@ class SubscriptionsController extends Controller
 
                             if ($user->create($data)) {
                                 $message = _("You have been subscribed to our newsletter.");
+                                $class = 'success';
                             } else {
                                 $message = _(
                                     "Sorry, we were unable to complete your request.\n"
                                     ."Check the form and try again"
                                 );
+                                $class = 'error';
                             }
                         } else {
                             $data['subscription'] = 0;
@@ -196,17 +203,25 @@ class SubscriptionsController extends Controller
 
                             if ($user->update($data)) {
                                 $message = _("You have been unsubscribed from our newsletter");
+                                $class = 'success';
                             } else {
                                 $message = _(
                                     "Sorry, we were unable to complete your request.\n"
                                     ."Check the form and try again"
                                 );
+                                $class = 'error';
                             }
                         }
                         break;
                 }
             }
         }
-        return $this->render('static_pages/subscription.tpl', array('message' => $message));
+        return $this->render(
+            'static_pages/subscription.tpl',
+            array(
+                'message' => $message,
+                'class'   => $class,
+            )
+        );
     }
 }
