@@ -1,26 +1,36 @@
 <?php
-
 /**
+ * Defines the Onm\Rest\Manager\AuthSystem class
+ *
  * This file is part of the onm package.
  * (c) 2009-2013 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
-/**
  *
- *
- * @package    Onm
- * @subpackage Rest
- * @author     me
+ * @package    Onm_Rest
  **/
 namespace Onm\Rest\Manager;
 
+/**
+ * Handles the authentication protocol for the Lucarast\Restler into Onm
+ *
+ * @package    Onm_Rest
+ **/
 class AuthSystem implements \Luracast\Restler\iAuthenticate
 {
-
+    /**
+     * Key used for authenticate users
+     *
+     * @var
+     **/
     private $key;
 
+    /**
+     * Sets the key for the auth layer
+     *
+     * @return void
+     **/
     private function setKey()
     {
         //Get key from congig
@@ -29,6 +39,11 @@ class AuthSystem implements \Luracast\Restler\iAuthenticate
         }
     }
 
+    /**
+     * Magick method for checking if the user has access to the ws
+     *
+     * @return boolean true if the user has no access
+     **/
     public function __isAllowed()
     {
         if (!$this->isHttps()) {
@@ -51,9 +66,16 @@ class AuthSystem implements \Luracast\Restler\iAuthenticate
         return false;
     }
 
+    /**
+     * Checks if the request was done through encrypted HTTP
+     *
+     * @return boolean true if the request was done with HTTPS
+     **/
     private function isHttps()
     {
-        if ( !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']!="off" ) {
+        if (!empty($_SERVER['HTTPS'])
+            && $_SERVER['HTTPS']!="off"
+        ) {
             return true;
         }
         return false;

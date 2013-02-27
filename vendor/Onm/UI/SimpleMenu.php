@@ -1,35 +1,55 @@
 <?php
-/*
+/**
+ * Defines the Onm\Ui\SimpleMenu class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_UI
  */
 namespace Onm\UI;
 
 /**
  * Class for generate a menu from XML file, with support for ACLs system.
  *
- * @package    Onm
- * @subpackage UI
+ * @package    Onm_UI
  */
 class SimpleMenu
 {
+    /**
+     * The menu to render
+     *
+     * @var array
+     **/
     private $menu         = null;
+
+    /**
+     * Errors while parsing the menu
+     *
+     * @var array
+     **/
     private $errors       = null;
+
+    /**
+     * The nesting level when traversing the menu
+     *
+     * @var int
+     **/
     private $nestingLevel = 0;
 
     /**
      * Initilizes the object from an XML file
      *
      * @param string $menuXMLFile the path to the XML menu file
+     * @param string $baseUrl the base url for the links
      *
      * @return void
      */
     public function __construct($menuXMLFile, $baseUrl = null)
     {
-
         $menu = simplexml_load_string($menuXMLFile);
 
         if (!isset($baseUrl)) {
@@ -53,6 +73,14 @@ class SimpleMenu
 
     }
 
+    /**
+     * Returns the class HTML property given a set of properties
+     *
+     * @param string $class the element class
+     * @param boolean $dropdown whether if the element is a dropdown element
+     *
+     * @return string the HTML generated
+     **/
     private function getClass($class, $dropdown = false)
     {
         if (isset($class) && !empty($class) || $dropdown) {
@@ -68,6 +96,17 @@ class SimpleMenu
         }
     }
 
+    /**
+     * Returns the <a> tag for an element given a set of properties
+     *
+     * @param string $title the title property
+     * @param string $id    the id property
+     * @param string $url   the link url
+     * @param boolean $external whether this link is external
+     * @param boolean $toggle whether if it is a toggle element
+     *
+     * @return string the HTML generated
+     **/
     private function getHref($title, $id, $url, $external = false, $toggle = false)
     {
         if (empty($title) && empty($url)) {
@@ -94,6 +133,13 @@ class SimpleMenu
         return "<a href=\"$url\" $target $attrTitle $attrId $class $dataToggle>".$title."</a>";
     }
 
+    /**
+     * Checks if the user has access to this element
+     *
+     * @param string $privilege the menu element privilege
+     *
+     * @return boolean true if the user has access
+     **/
     private function checkAcl($privilege)
     {
         if (isset($privilege) && !is_null($privilege)) {
@@ -109,10 +155,14 @@ class SimpleMenu
         return true;
     }
 
-    /*
-     * Renders wrapper
+    /**
+     * Renders an element
      *
-     * @param $element
+     * @param string $element the element name
+     * @param SimpleXMLElement $value the element to render
+     * @param boolean $last whether this element is the last in the list
+     *
+     * @return string the generated HTML
      */
     private function renderElement($element, $value, $last)
     {
@@ -137,7 +187,10 @@ class SimpleMenu
     /**
      * Recursive function to render a SubMenu and its contents
      *
-     * @return void
+     * @param string $element the element name
+     * @param SimpleXMLElement $value the element to render
+     *
+     * @return string the generated HTML
      **/
     private function renderSubMenu($element, $value)
     {
@@ -181,6 +234,8 @@ class SimpleMenu
     /**
      * Function for rendering one menu node
      *
+     * @param SimpleXMLElement $value the node to render
+     *
      * @return string the html content for a node
      **/
     private function renderNode($value)
@@ -209,7 +264,9 @@ class SimpleMenu
     }
 
     /**
-     * Renders the menu
+     * Renders the menu given a set of params
+     *
+     * @param array $params the list of params used to render the menu
      *
      * @return string the final html content for the menu
      **/

@@ -22,11 +22,22 @@ class cSearch
 
     const ITEMS_PAGE        = 10;
 
+    /**
+     * Undocumented. Maybe unused variable
+     *
+     * @var int
+     **/
     public static $int      = 0;
+
+    /**
+     * The singleton instance of the cSearch object
+     *
+     * @var cSearch
+     **/
     private static $instance;
 
-    /*
-     * Devuelve una instancia al propio Objeto. Patron singleton.
+    /**
+     * Returns an instance of the object. Singleton pattern
      *
      * @return cSearch the singleton object instance
      *
@@ -40,17 +51,19 @@ class cSearch
         return self::$instance;
     }
 
-    /*
+    /**
      * Busca en la base de datos todos los contenidos que sean del
      * tipo indicado en szContentsType y los tag tenga alguna coincidencia
      * con los proporcionados en szSource.
      *
-     * @param string $szSource       Cadena fuente a buscar.
-     * @param string $szContentsType Tipos de contenidos en donde buscar.
+     * @param string $szSourceTags         Cadena fuente a buscar.
+     * @param string $szContentsTypeTitle  Tipos de contenidos en donde buscar.
+     * @param int    $iLimit               Max number of elements to return
+     * @param string $_where               WHERE clause to filter contents with
      *
      * @return array array de los pk_content de todos los contendios
      *               ordenado por el numero de coincidencias.
-    */
+     */
     public function searchRelatedContents(
         $szSourceTags,
         $szContentsTypeTitle,
@@ -114,20 +127,19 @@ class cSearch
         return $result;
     }
 
-    /*
+    /**
      * Busca en la base de datos todos los contenidos que sean del tipo
      * indicado en szContentsType y los tag tenga alguna coincidencia con
      * los proporcionados en szSource.
      *
-     * @param string $szReturnValues Cadena con las columnas a devolver.
-     * @param string $szContentsTags Cadena con los tags a buscar
-     *                               en los fulltext.
-     * @param string $szContentsTypeTitle Titulos de los tipos de contenidos
-     *                                    en donde buscar.
+     * @param string $szReturnValues      Cadena con las columnas a devolver.
+     * @param string $szSourceTags        Cadena con los tags a buscar en los fulltext.
+     * @param string $szContentsTypeTitle Titulos de los tipos de contenidos en donde buscar.
+     * @param int    $iLimit              Max number of elements to return
      *
      * @return array array de los pk_content de todos los contendios ordenado
-     *               por el n�mero de coincidencias.
-    */
+     *               por el numero de coincidencias.
+     */
     public function searchContentsSelect(
         $szReturnValues,
         $szSourceTags,
@@ -150,22 +162,22 @@ class cSearch
         return null;
     }
 
-    /*
+    /**
      * Busca en la base de datos todos los contenidos que sean del tipo
      * indicado en szContentsType y los tag tenga alguna coincidencia con los
      * proporcionados en szSource. Permiete relacionar la tabla contents con
      * otra tabla.
      *
      * @param string $szReturnValues      Cadena con las columnas a devolver.
-     * @param string $szContentsTags      Cadena con los tags a buscar en los fulltext.
-     * @param string $szContentsTypeTitle Titulos de los tipos de contenidos
-     *                                    en donde buscar.
-     * @param string $szWhere operaciones logicas a añadir a la parte
-     *                        where de la sentencia.
-     * @param string $szNewTAble tabla a añadir a la sentencia.
+     * @param string $szSourceTags        Cadena con los tags a buscar en los fulltext.
+     * @param string $szContentsTypeTitle Titulos de los tipos de contenidos en donde buscar.
+     * @param string $szWhere             operaciones logicas a añadir a la parte
+     *                                    where de la sentencia.
+     * @param string $szNewTable          tabla a añadir a la sentencia.
+     * @param int    $iLimit              Max number of elements to return
      *
-     * Output: pk_content de todos los contendios ordenado por el n�mero de coincidencias.
-    */
+     * @return array pk_content de todos los contendios ordenado por el n�mero de coincidencias.
+     */
     public function searchContentsSelectMerge(
         $szReturnValues,
         $szSourceTags,
@@ -209,19 +221,19 @@ class cSearch
         return null;
     }
 
-    /*
+    /**
      * Busca en la base de datos todos los contenidos con Available a 1
      * (Publicados) que sean del tipo indicado en szContentsType y los tag
      * tengan alguna coincidencia con los proporcionados en szSource.
      *
-     * @param string $szReturnValues      Cadena con las columnas a devolver.
-     * @param string $szContentsTags      Cadena con los tags a buscar en los fulltext.
-     * @param string $szContentsTypeTitle Titulos de los tipos de contenidos
-     *                                    en donde buscar.
+     * @param string $szReturnValues      Cadena con las columnas a devolver
+     * @param string $szSourceTags        Cadena con los tags a buscar en los fulltext
+     * @param string $szContentsTypeTitle Titulos de los tipos de contenidos en donde buscar
+     * @param int    $iLimit              Max number of elements to return
      *
      * @return array pk_content de todos los contendios ordenado por el
      *               número de coincidencias.
-    */
+     */
     public function searchPublishContentsSelect($szReturnValues, $szSourceTags, $szContentsTypeTitle, $iLimit)
     {
         $szMatch = $this->defineMatchOfSentence($szSourceTags);
@@ -249,11 +261,11 @@ class cSearch
      * szContentsType y los tag tengan alguna coincidencia con los
      * proporcionados en szSource.
      *
-     * @param string $szReturnValues      Cadena con las columnas a devolver.
-     * @param string $szContentsTags      Cadena con los tags a buscar en los fulltext.
+     * @param string $szSourceTags        Cadena con las tags a parsear
      * @param string $szContentsTypeTitle Titulos de los tipos de
      *                                    contenidos en donde buscar.
      * @param string $filter condicion que han de cumplir
+     * @param int    $iLimit max number of elements to return
      *
      * Example
      * SELECT pk_content, title, metadata, created, permalink, MATCH ( metadata)
@@ -266,11 +278,10 @@ class cSearch
      *  ORDER BY rel DESC, created DESC LIMIT 0, 6
      *
      * @return pk_content de todos los contendios ordenado por el número de coincidencias.
-    */
+     */
     public function searchSuggestedContents($szSourceTags, $szContentsTypeTitle, $filter, $iLimit)
     {
-
-        if ( is_null($filter) ) {
+        if (is_null($filter)) {
             $filter = "1=1";
         }
 
@@ -323,20 +334,17 @@ class cSearch
         return $result;
     }
 
-    /*
-     * Name: 	Paginate
+    /**
+     * pagina los resultado proporcionados por $cItems.
      *
-     * Description: pagina los resultado proporcionados por $cItems.
+     * @param Pager  $PageReturn the pager instance
+     * @param array  $cItems contenidos a paginar.
+     * @param array  $szId Elemento del objeto que tomamos como id. Valor único en el array.
+     * @param string $iPaging Número de contenidos por página.
      *
-     * Input:
-     * 		$cItems: (array) contenidos a paginar.
-     *		$szId: (array) Elemento del objeto que tomamos como id. Valor único en el array.
-     *		$iPaging: (string) Número de contenidos por página.
+     * @return  array contendios para mostrar en la pagina actual.
      *
-     * Output: (array) contendios para mostrar en la pagina actual.
-     *
-    */
-
+     */
     public static function Paginate(&$PageReturn, $cItems, $szId, $iPaging)
     {
         $items = array();
@@ -379,19 +387,13 @@ class cSearch
         return $aResult;
     }
 
-    /*
-     * Name: 	defineMatchOfSentence
+    /**
+     * Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
      *
-     * Description: Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
+     * @param string $szSourceTags Cadena a parsear con los Tags.
      *
-     * Input:
-     * 		szSource: (string) Cadena a parsear con los Tags.
-     *		szContentsTypeTitle: (string) titulos de los tipos de contenidos a buscar.
-     *		szColumn: (string) campo de la tabla en la que buscar los tags de szSource.
-     *
-     * Output: (String) Parte "WHERE" de la sentencia SQL.
-     *
-    */
+     * @return string Parte "WHERE" de la sentencia SQL.
+     */
     public function defineMatchOfSentence0($szSourceTags)
     {
         $szSourceTags = trim($szSourceTags);
@@ -401,19 +403,13 @@ class cSearch
         return $szSqlMatch;
     }
 
-    /*
-     * Name:    defineMatchOfSentence
+    /**
+     * Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
      *
-     * Description: Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
+     * @param string $szSourceTags Cadena a parsear con los Tags.
      *
-     * Input:
-     *      szSource: (string) Cadena a parsear con los Tags.
-     *      szContentsTypeTitle: (string) titulos de los tipos de contenidos a buscar.
-     *      szColumn: (string) campo de la tabla en la que buscar los tags de szSource.
-     *
-     * Output: (String) Parte "WHERE" de la sentencia SQL.
-     *
-    */
+     * @return string Parte "WHERE" de la sentencia SQL.
+     */
     public function defineMatchOfSentence($szSourceTags)
     {
         $szSourceTags = trim($szSourceTags);
@@ -422,19 +418,14 @@ class cSearch
 
         return $szSqlMatch;
     }
-    /*
-     * Name: 	defineMatchOfSentence2
+    /**
+     * Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
      *
-     * Description: Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
+     * @param string $szSourceTags Cadena a parsear con los Tags.
      *
-     * Input:
-     * 		szSource: (string) Cadena a parsear con los Tags.
-     *		szContentsTypeTitle: (string) titulos de los tipos de contenidos a buscar.
-     *		szColumn: (string) campo de la tabla en la que buscar los tags de szSource.
+     * @return string Parte "WHERE" de la sentencia SQL.
      *
-     * Output: (String) Parte "WHERE" de la sentencia SQL.
-     *
-    */
+     */
     private function defineMatchOfSentence2($szSourceTags)
     {
         $szSourceTags = trim($szSourceTags);
@@ -443,17 +434,14 @@ class cSearch
 
         return $szSqlMatch;
     }
-    /*
-     * Name: 	parseTypes
+    /**
+     * Parsea la cadena fuente comprobando posibles operaciones lógicas.
      *
-     * Description: Parsea la cadena fuente comprobando posibles operaciones lógicas.
+     * @param string $szSource Cadena a parsear.
      *
-     * Input:
-     * 		szSource: (string) Cadena a parsear.
+     * @return array list of types to search
      *
-     * Output: (Array de String)
-     *
-    */
+     */
     private function parseTypes($szSource)
     {
         $szSource = trim($szSource);
@@ -476,16 +464,14 @@ class cSearch
         return $szIdTypes;
     }
 
-    /*
-     * Name: getPkContentsType
+    /**
+     * Busca en la base de datos todos los pk de la tabla Contents_type cuyo titulo
+     * coincida con los proporcionados en el parametro de entrada.
      *
-     * Description: Busca en la base de datos todos los pk de la tabla Contents_type cuyo titulo
-     *	coincida con los proporcionados en el parametro de entrada.
+     * @param  string $szContentsType Cadena fuente con los titulos de los tipos de contenido.
      *
-     * Input: szContentsType.: (string) Cadena fuente con los titulos de los tipos de contenido.
-     *
-     * Output: pk_contentType de todas las coincidencias con los titulos.
-    */
+     * @return array  lista de todas las coincidencias con los titulos.
+     */
     public function getPkContentsType($szContentsType)
     {
         $szContentsType    = trim($szContentsType);

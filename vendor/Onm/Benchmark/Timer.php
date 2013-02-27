@@ -1,10 +1,14 @@
 <?php
-/*
+/**
+ * Defines the Onm\Benchmark\Timer class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Benchmark
  */
 namespace Onm\Benchmark;
 
@@ -23,18 +27,19 @@ namespace Onm\Benchmark;
  * </code>
  *
  *
- * @package    Onm
- * @subpackage Benchmakr
- * @author     Fran Dieguez <fran@openhost.es>
- * @version    SVN: $Id: Benchmark.php 28842 Lun Xuñ 27 11:50:52 2011 frandieguez $
+ * @package    Onm_Benchmark
  */
 class Timer
 {
+    /**
+     * List of markers
+     *
+     * @var array
+     **/
     public $markers = null;
 
-    /*
+    /**
      * Initilizes the object
-     *
      */
     public function __construct()
     {
@@ -45,6 +50,8 @@ class Timer
      * Explanation for this function.
      *
      * @param string $marker The marker where we want to start the count.
+     *
+     * @return void
      */
     public function start($marker = "default")
     {
@@ -76,23 +83,19 @@ class Timer
      */
     public function display($marker = "default")
     {
+        $starttime = $this->markers[$marker]['endtime'];
+        $endtime   = $this->markers[$marker]['starttime'];
+
         if (extension_loaded('bcmath')) {
-            return bcsub(
-                $this->markers[$marker]['endtime'],
-                $this->markers[$marker]['starttime'],
-                6
-            );
+            return bcsub($starttime, $endtime, 6);
         } else {
-            return $this->markers[$marker]['endtime']
-                    - $this->markers[$marker]['starttime'];
+            return $starttime - $endtime;
         }
     }
     /**
      * Wrapper for microtime().
      *
      * @return float
-     * @access private
-     * @since  1.3.0
      */
     private function getMicrotime()
     {

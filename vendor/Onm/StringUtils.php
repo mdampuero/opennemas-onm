@@ -1,10 +1,13 @@
 <?php
-/*
+/**
+ * Defines the Onm\StringUtils class
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Utils
  */
 namespace Onm;
 
@@ -12,16 +15,15 @@ namespace Onm;
  * Library for handling unusual string operations.
  *
  * @package    Onm
- * @subpackage Utils
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class StringUtils
 {
     /**
      * Delete disallowed chars from a sentence and transform it to a url friendly name
      *
-     * @param  string  $name, the string to clen
-     * @return string, the string cleaned
+     * @param  string  $name the string to clean
+     *
+     * @return string the string cleaned
      **/
     public static function normalize_name($name)
     {
@@ -34,8 +36,9 @@ class StringUtils
     /**
      * Delete disallowed chars from a sentence and transform it to a url friendly name
      *
-     * @param  string  $name, the string to clen
-     * @return string, the string cleaned
+     * @param  string  $name the string to clean
+     *
+     * @return string the string cleaned
      **/
     public static function normalize($name)
     {
@@ -67,9 +70,9 @@ class StringUtils
      * Performs a html_entity_encode, mb_strtolower and mb_ereg_replace
      * disallowed chars
      *
-     * @access static
-     * @param  string  $str, the string to clen
-     * @return string, the string cleaned
+     * @param  string  $str the string to clen
+     *
+     * @return string the string cleaned
      **/
     public static function clearSpecialChars($str)
     {
@@ -83,9 +86,10 @@ class StringUtils
     /**
      * Deletes disallowed chars from a sentence and transform it to a url friendly name
      *
-     * @access static
-     * @param  string  $name, the string to clen
-     * @return string, the string cleaned
+     * @param string $str       the string to clean
+     * @param string $separator the separator chapter to use
+     *
+     * @return string the string cleaned
      **/
     public static function setSeparator($str, $separator = '-')
     {
@@ -99,7 +103,8 @@ class StringUtils
      * Generates a valid permalink
      *
      * @param  string  $title
-     * @param  boolean $useStopList
+     * @param  boolean $useStopList whether use the stopList array
+     *
      * @return string
      **/
     public static function get_title($title, $useStopList = true)
@@ -115,7 +120,7 @@ class StringUtils
         }
 
         if (empty($titule) || $titule == " ") {
-            $titule=$title;
+            $titule = $title;
         }
 
         $titule = self::setSeparator($titule, '-');
@@ -127,10 +132,11 @@ class StringUtils
     /**
      * Prevent duplicate metadata
      *
-     * @param string $metadata
-     * @param string $separator By default ','
+     * @param string $metadata  the metadata to clean
+     * @param string $separator Separator character to use for splitting the words.
+     *                          By default ','
      *
-     * @return string
+     * @return string the cleaned metadata string
      **/
     public static function normalize_metadata($metadata, $separator = ',')
     {
@@ -149,15 +155,15 @@ class StringUtils
     }
 
     /**
-     * Generate a string of key words separated by semicolon
+     * Returns a string with keywords from a given text
      *
-     * @access static
-     * @param  string $title
-     * @return string
+     * @param  string $text the text where extract keywords from
+     *
+     * @return string the string of keywords separated by commas
      **/
-    public static function get_tags($title)
+    public static function get_tags($text)
     {
-        $tags = self::clearSpecialChars($title);
+        $tags = self::clearSpecialChars($text);
 
         // Remove stop list
         $tags = self::remove_shorts($tags);
@@ -173,8 +179,14 @@ class StringUtils
     }
 
     /**
+     * Removes some short spanish words, preps, conjunctions...
+     *
      * Modified from Meneame:
      * @link http://svn.meneame.net/index.cgi/branches/version3/www/libs/uri.php
+     *
+     * @param string $string the string to clean
+     *
+     * @return string the cleaned string
      **/
     public static function remove_shorts($string)
     {
@@ -296,6 +308,16 @@ EOF;
         return $string;
     }
 
+    /**
+     * Returns a trimmed string with a max number of elements and appends an elipsis
+     * at the end
+     *
+     * @param string $string the string to trim
+     * @param int $maxLength the max length of the final string
+     * @param string $suffix the text to append at the end of the trimmed string
+     *
+     * @return string the trimmed string
+     **/
     public static function str_stop($string, $maxLength = 30, $suffix = '...')
     {
         if (strlen($string) > $maxLength) {
@@ -311,6 +333,13 @@ EOF;
         }
     }
 
+    /**
+     * Reverse operation for htmlentities
+     *
+     * @param string $string the string to operate with
+     *
+     * @return string the string without HTML entities
+     **/
     public static function unhtmlentities($string)
     {
         // replace numeric entities
@@ -328,6 +357,8 @@ EOF;
      * Disable magic quotes if it is enabled
      *
      * @param array $data
+     *
+     * @return void
      **/
     public static function disabled_magic_quotes(&$data = null)
     {
@@ -342,9 +373,15 @@ EOF;
                 $_REQUEST = array_map('stripslashes_deep', $_REQUEST);
             }
         }
-        // @codeCoverageIgnoreEnd
     }
 
+    /**
+     * Removes some spanish bad words and swears from the given string
+     *
+     * @param string $string the string to clean
+     *
+     * @return string the cleaned string
+     **/
     public static function clearBadChars($string)
     {
         $string = preg_replace('/'.chr(226).chr(128).chr(169).'/', '', $string);
@@ -355,10 +392,12 @@ EOF;
     /**
      * Gets "n" first words from a given text
      *
-     * @param  string  $text
-     * @param  integer $numWords
-     * @return string
      * @example self::get_numWords('hello world', 1)
+     *
+     * @param  string  $text the text to operate with
+     * @param  integer $numWords
+     *
+     * @return string
      **/
     public static function get_num_words($text, $numWords)
     {
@@ -370,37 +409,59 @@ EOF;
         return $words;
     }
 
+    /**
+     * Retuns a list of bad words with their weigth
+     *
+     * @return array the list of words
+     **/
     public static function loadBadWords()
     {
-        // $entries = file(dirname(__FILE__).'/self_badwords.txt');
-        $entries = <<<EOF
-5, m[i]?erda
-5, marica
-5, carallo
-10, [h]?ostia
-20, puta[s]?
-30, cabr[oó]n[a]?
-50, fill[ao] d[ae] puta
-50, hij[ao] de puta
-EOF;
+        $badWords = array(
+            array(
+                'weight' => 5,
+                'text'   => 'm[i]?erda',
+            ),
+            array(
+                'weight' => 5,
+                'text'   => 'marica',
+            ),
+            array(
+                'weight' => 5,
+                'text'   => 'carallo',
+            ),
+            array(
+                'weight' => 10,
+                'text'   => '[h]?ostia',
+            ),
+            array(
+                'weight' => 20,
+                'text'   => 'puta[s]?',
+            ),
+            array(
+                'weight' => 30,
+                'text'   => 'cabr[oó]n[a]?',
+            ),
+            array(
+                'weight' => 50,
+                'text'   => 'fill[ao] d[ae] puta',
+            ),
+            array(
+                'weight' => 50,
+                'text'   => 'hij[ao] de puta',
+            ),
+        );
 
-        $entries = preg_split('@\n@', $entries);
-
-        $words = array();
-        foreach ($entries as $entry) {
-            if (preg_match('/^(\d+)\,(.*?)$/', $entry, $matches)) {
-                $words[] = array(
-                    'weight' => $matches[1],
-                    'text'   => trim($matches[2])
-                );
-            }
-        }
-
-        return $words;
+        return $badWords;
     }
 
     /**
-     * filterBadWords
+     * Removes bad words from a text
+     *
+     * @param string $text       the text to clean
+     * @param int    $weight     the minimum bad word weight to clean
+     * @param string $replaceStr the replacement string for the bad words
+     *
+     * @return string the cleaned string
      **/
     public static function filterBadWords($text, $weight = 0, $replaceStr = ' ')
     {
@@ -426,7 +487,11 @@ EOF;
     }
 
     /**
-     * getWeightBadWords
+     * Returns the weight of a text from its bad words
+     *
+     * @param string $text the text to work with
+     *
+     * @return int the weight of the text
      **/
     public static function getWeightBadWords($text)
     {
@@ -444,38 +509,43 @@ EOF;
         return $weight;
     }
 
-    /*
-     * implodes a two dimension array to a http params string
-     * @param $array
+    /**
+     * Implodes a two dimension array to a http params strins
+     *
+     * @param Array $httpParams an array of http parameters
+     *
+     * @return string the url compatible list of params
      **/
     public static function toHttpParams(Array $httpParams)
     {
-        // The final result
         $result = array();
 
-        // Iterate over each key-value parameter
+        // Implode each key => value parameter into key-value
         foreach ($httpParams as $param) {
-
-            // Implode each key => value parameter into key-value
             foreach ($param as $key => $value) {
                 $result []= $key.'='.$value;
             }
-
         }
 
         // And implode all key=value parameters with &
         $result = implode('&', $result);
 
         return $result;
-
     }
 
+    /**
+     * Replaces matches of a text with another text
+     *
+     * Ignores the case and do keep the original capitalization by using $1 in $replacewith
+     *
+     * @param string $findme      the text to replace
+     * @param string $replacewith the replacement text
+     * @param string $subject     the text to change
+     *
+     * @return string the new string
+     **/
     public static function extStrIreplace($findme, $replacewith, $subject)
     {
-        // Replaces $findme in $subject with $replacewith
-        // Ignores the case and do keep the original capitalization by using $1 in $replacewith
-        // Required: PHP 5
-
         $rest = $subject;
         $result = '';
 
@@ -497,6 +567,13 @@ EOF;
         return $result;
     }
 
+    /**
+     * Returns a random password with an specific length
+     *
+     * @param int $length the length of the password
+     *
+     * @return string the password string
+     **/
     public static function generatePassword($length = 8)
     {
         $chars = "234567890abcdefghijkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -515,9 +592,9 @@ EOF;
      /**
      * Clean the special chars into a file name
      *
-     * @access static
-     * @param  string  $name, the string to clean
-     * @return string, the string cleaned
+     * @param  string  $name the string to clean
+     *
+     * @return string the string cleaned
      **/
     public static function cleanFileName($name)
     {
@@ -533,9 +610,9 @@ EOF;
      /**
      * Clean the special chars and add - for separate words
      *
-     * @access static
-     * @param  string  $text, the string to transform
-     * @return string, the string cleaned
+     * @param  string  $text the string to transform
+     *
+     * @return string the string cleaned
      **/
     public static function generateSlug($text)
     {

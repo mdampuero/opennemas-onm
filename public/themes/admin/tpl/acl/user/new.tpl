@@ -96,7 +96,7 @@ label {
                         <div class="control-group">
                             <label for="login" class="control-label">{t}User name{/t}</label>
                             <div class="controls">
-                                <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge" required=required maxlength="20"/>
+                                <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge" required="required" maxlength="20"/>
                             </div>
                         </div>
 
@@ -162,7 +162,7 @@ label {
                                 <label for="id_user_group">{t}User group:{/t}</label>
                             </th>
                             <td>
-                                <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
+                                <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}"  required="required" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
                                     <option  value ="">{t}--Select one--{/t}</option>
                                     {if $smarty.session.isMaster}
                                         <option value="4" {if $user->id_user_group == 4}selected="selected"{/if}>{t}Master{/t}</option>

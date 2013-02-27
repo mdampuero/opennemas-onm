@@ -1,10 +1,15 @@
 <?php
-/*
+/**
+ * Defines the Onm\Instance\NotActivatedException
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm
+ * @subpackage Instance
  */
 namespace Onm\Instance;
 
@@ -13,10 +18,15 @@ namespace Onm\Instance;
  *
  * @package    Onm
  * @subpackage Instance
- * @author     me
  **/
 class NotActivatedException extends \Exception
 {
+    /**
+     * Initializes the exception
+     *
+     * @param string $message the message that raises the exception
+     * @param int    $code    the code that identifies this exception
+     **/
     public function __construct($message = null, $code = 0)
     {
         parent::__construct($message, $code);

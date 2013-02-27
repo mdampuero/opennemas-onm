@@ -20,18 +20,29 @@ class Special extends Content
 {
     /**
      * The special id
+     *
+     * @var int
      */
     public $pk_special = null;
-     /**
+
+    /**
      * The subtitle for this album
+     *
+     * @var string
      */
     public $subtitle = null;
-     /**
+
+    /**
      * Path for get a pdf file
+     *
+     * @var string
      */
     public $pdf_path = null;
-     /**
+
+    /**
      * The id of the image that is the cover for this album
+     *
+     * @var int
      */
     public $img1 = null;
 
@@ -40,6 +51,7 @@ class Special extends Content
      *
      * @param string $id the id of the album.
      *
+     * @return void
      **/
     public function __construct($id = null)
     {
@@ -149,6 +161,13 @@ class Special extends Content
         return $this;
     }
 
+    /**
+     * Loads a special information given its special id
+     *
+     * @param int $id the special id
+     *
+     * @return Special the special object
+     */
     public function read($id)
     {
         parent::read($id);
@@ -159,7 +178,7 @@ class Special extends Content
         if (!$rs) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $this->id         = $rs->fields['pk_special'];
@@ -168,8 +187,16 @@ class Special extends Content
         $this->img1       = $rs->fields['img1'];
         $this->pdf_path   = $rs->fields['pdf_path'];
 
+        return $this;
     }
 
+    /**
+     * Updates an special from a data array
+     *
+     * @param array $data the data of the special
+     *
+     * @return bool true if the object was stored
+     */
     public function update($data)
     {
         parent::update($data);
@@ -191,7 +218,7 @@ class Special extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $this->saveItems($data);
@@ -199,6 +226,13 @@ class Special extends Content
         return true;
     }
 
+    /**
+     * Removes permanently a special given its id
+     *
+     * @param int $id the special id
+     *
+     * @return bool true if the object was removed
+     */
     public function remove($id)
     {
         parent::remove($id);
@@ -218,10 +252,19 @@ class Special extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Saves the items for the current special
+     *
+     * @param array $data the data of the special
+     *
+     * @return void
+     */
     public function saveItems($data)
     {
         $this->deleteAllContents($data['id']);
@@ -258,6 +301,13 @@ class Special extends Content
 
     }
 
+    /**
+     * Returns the list of contents for a special given its id
+     *
+     * @param int $id the special id
+     *
+     * @return array the list of contents
+     */
     public function getContents($id)
     {
         if ($id == null) {

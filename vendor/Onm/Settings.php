@@ -1,10 +1,14 @@
 <?php
-/*
+/**
+ * Defines the Onm\Settings class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Settings
  */
 namespace Onm;
 
@@ -21,13 +25,10 @@ namespace Onm;
  *          europapress is the name of the module
  *          server is the name of the setting
  *
- * @package    Onm
- * @subpackage Settings
- * @author     Fran Dieguez <fran@openhost.es>
+ * @package    Onm_Settings
  */
 class Settings
 {
-
     /**
      * Fetches a setting from its name.
      *
@@ -36,7 +37,7 @@ class Settings
      *  s::get('opinion');
      *
      * @param string $settingName the name of the setting.
-     * @param array  $settingName array of settings name
+     * @param array  $default     the default value to return if not available
      *
      * @return string the value of the setting
      * @return array  if was provided an array of names this function returns an array of name/values
@@ -50,7 +51,6 @@ class Settings
         };
 
         if (!is_array($settingName)) {
-
             // Try to fetch the setting from APC first
             $fetchedFromAPC = false;
             if (extension_loaded('apc')) {
@@ -80,9 +80,7 @@ class Settings
                 }
 
             }
-
         } else {
-
             // Try to fetch each setting from APC first
             $fetchedFromAPC = false;
             if (extension_loaded('apc')) {
@@ -104,11 +102,9 @@ class Settings
             }
 
             // If all the keys were not fetched from APC now is turn of DB
-            if (
-                !is_null($settingValue)
+            if (!is_null($settingValue)
                 && (count($settingValue) != count($settingName))
             ) {
-
                 $settingName = implode("', '", $settingName);
                 $sql         = "SELECT name, value FROM `settings` "
                                ."WHERE name IN ('{$settingName}') ";
