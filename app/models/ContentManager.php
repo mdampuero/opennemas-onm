@@ -1302,7 +1302,7 @@ class ContentManager
 
         $items = $this->loadObject($rs, 'content');
 
-        return $items;
+        return $this->getInTime($items);
     }
 
     /**

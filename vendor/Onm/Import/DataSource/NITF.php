@@ -28,7 +28,7 @@ class NITF
         $this->data = $data;
     }
 
-    /*
+    /**
      * Magic method for translate properties into XML elements
      *
      * @param string $propertyName the name of the property to get
@@ -70,7 +70,7 @@ class NITF
         }
     }
 
-    /*
+    /**
      * Returns the internal data, use with caution
      */
     public function getData()

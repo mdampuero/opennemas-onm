@@ -1,11 +1,14 @@
 <?php
-
-/*
+/**
+ * Defines the Onm\Import\ImporterXml class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Import
  */
 use Onm\Settings as s;
 use Onm\Message  as m;
@@ -14,12 +17,8 @@ use Onm\StringUtils;
 /**
  * Class to import news from XML files
  *
- * @package    Onm
- * @subpackage Import
- * @author     Sandra Pereira <sandra@openhost.es>, 2011
- * @version
+ * @package    Onm_Import
  */
-
 class ImporterXml
 {
     // the instance object
@@ -147,13 +146,13 @@ class ImporterXml
                 if (!empty($label)) {
                     $point = next($array);
 
-                    if (is_object($point) || is_array($point) ) {
+                    if (is_object($point) || is_array($point)) {
                         $this->data[$label] .= $tag.$this->parseNodes($point).$end;
                     } else {
                         $this->data[$label] .= $tag. $this->checkBeIgnored($point).$end;
                     }
                 }
-            } elseif (!in_array($key, $this->ignoreds) ) {
+            } elseif (!in_array($key, $this->ignoreds)) {
                 $label = $this->checkLabels($key);
             } else {
 
@@ -192,7 +191,7 @@ class ImporterXml
     {
         $label='';
 
-        if ((is_object($value) || is_array($value)) ) {
+        if ((is_object($value) || is_array($value))) {
 
             foreach ($value as $n => $val) {
 
@@ -212,7 +211,7 @@ class ImporterXml
 
     public function checkBeImportant($value)
     {
-        if ((!is_object($value) && !is_array($value)) ) {
+        if ((!is_object($value) && !is_array($value))) {
 
             if (in_array($value, $this->alloweds)) {
 

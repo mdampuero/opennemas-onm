@@ -2,14 +2,13 @@
 /**
  * Defines the Vote class
  *
- * @package    Model
- **/
-/*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  **/
 /**
  * Handles all the vote system.
@@ -18,19 +17,54 @@
  **/
 class Vote
 {
+    /**
+     * The content id that this vote references
+     *
+     * @var int
+     **/
     public $pk_vote        = null;
+
+    /**
+     * Summary of positive votes
+     *
+     * @var int
+     **/
     public $value_pos      = null;
+
+    /**
+     * Summary of negative votes
+     *
+     * @var int
+     **/
     public $value_neg      = null;
+
+    /**
+     * Final karma for the content
+     *
+     * @var
+     **/
     public $karma          = null;
+
+    /**
+     * Serialized array of ips that voted
+     *
+     * @var
+     **/
     public $ips_count_vote = null;
 
     /**
      * messages to use in links and image
+     *
+     * @var  array
      */
     private $messages = array('', 'A Favor', 'En Contra');
 
     /**
-     * Constructor PHP5
+     * Initializes the vote given an content id
+     *
+     * @param int $id the content id to fetch the votes
+     *
+     * @return void
      */
     public function __construct($id = null)
     {
@@ -42,13 +76,14 @@ class Vote
     /**
      * Creates an vote to a element given the element if.
      *
-     * @param string $votePK the pk of the vote.
+     * @param string $votePK the pk of the vote
+     * @param int    $vote   the vote value
+     * @param string $ip     the IP that performs the vote
      *
      * @return boolean true if all went well
      **/
     public function create($votePK, $vote, $ip)
     {
-
         $sql = "INSERT INTO votes
                     (`pk_vote`,`value_pos`, `value_neg`, `karma`, `ips_count_vote`)
                 VALUES (?,?,?,?,?)";
@@ -78,6 +113,13 @@ class Vote
         return true;
     }
 
+    /**
+     * Loads all the votes for a given content id
+     *
+     * @param int $votePK the content id
+     *
+     * @return Vote the object instance
+     **/
     public function read($votePK)
     {
         $sql = 'SELECT value_pos, value_neg, ips_count_vote
@@ -118,8 +160,8 @@ class Vote
     /**
      * Updates the vote information.
      *
-     * @param string $vote
-     * @param string $ip
+     * @param string $vote the vote value
+     * @param string $ip   the ip that performs the vote
      *
      * @return boolean true if all went well
      **/
@@ -152,7 +194,13 @@ class Vote
     }
 
     /**
-     * Renders the html for the voting result.
+     * Renders the html for the voting result
+     *
+     * @param string $page the page where the vote takes place
+     * @param string $type the type of the vote
+     * @param string $ajax whether the votes is from an ajax request
+     *
+     * @return string the HTML generated
      **/
     public function render($page, $type, $ajax = 0)
     {
@@ -193,7 +241,14 @@ class Vote
         return $outputHTML;
     }
 
-    // Add adressIP to votes array. Only permit 50 from  IP.
+    /**
+     * Adds a new vote for an IP. Only 50 votes/IP allowed
+     *
+     * @param array  $countIPs list of ips that voted
+     * @param string $ip       the ip that performs the vote
+     *
+     * @return array the new list of ips and vote counts
+     **/
     public function add_count($countIPs, $ip)
     {
 
@@ -242,6 +297,8 @@ class Vote
     /**
      * Returns the HTML for a vote image
      *
+     * @param int $i the voting position
+     *
      * @return string the HTML for the vote image
      *
      **/
@@ -262,6 +319,10 @@ class Vote
 
     /**
      * Returns the HTML for a vote link
+     *
+     * @param int $i the voting position
+     * @param int $votePK the content id to vote
+     * @param int $value the voting value
      *
      * @example
      *  <a href="javascript:vote_comment(IP,1,PK_VOTE)" title="A favor">

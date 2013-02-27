@@ -286,15 +286,19 @@ class AlbumsController extends Controller
 
         m::add(_('Album delete successfully.'), m::SUCCESS);
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_albums',
-                array(
-                    'category' => $album->category,
-                    'page'     => $page,
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_albums',
+                    array(
+                        'category' => $album->category,
+                        'page'     => $page,
+                    )
                 )
-            )
-        );
+            );
+        } else {
+            return new Response('ok');
+        }
     }
 
     /**

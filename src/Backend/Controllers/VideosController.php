@@ -341,8 +341,8 @@ class VideosController extends Controller
     {
         $this->checkAclOrForward('VIDEO_DELETE');
 
-        $id = $request->getDigits('id');
-        $page = $request->getDigits('page', 1);
+        $id =  $request->query->getDigits('id');
+        $page = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
             $video = new \Video($id);
@@ -351,20 +351,25 @@ class VideosController extends Controller
             $rel->deleteAll($id);
 
             $video->delete($id, $_SESSION['userid']);
+
             m::add(_("Video '{$video->title}' deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete the video.'), m::ERROR);
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_videos',
-                array(
-                    'category' => $video->category,
-                    'page' => $page
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_videos',
+                    array(
+                        'category' => $video->category,
+                        'page' => $page
+                    )
                 )
-            )
-        );
+            );
+        } else {
+            return new Response('ok');
+        }
     }
 
     /**

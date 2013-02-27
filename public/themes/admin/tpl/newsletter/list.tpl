@@ -66,7 +66,7 @@
                         {if !empty($newsletter->title)}
                             {$newsletter->title}
                         {else}
-                            {t}Newsletter{/t}  - {date("d-m-Y")}
+                            {t}Newsletter{/t}  -  {$newsletter->created}
                         {/if}
                     </td>
                     <td class="left">
