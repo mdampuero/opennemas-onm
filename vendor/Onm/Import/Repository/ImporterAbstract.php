@@ -177,7 +177,9 @@ abstract class ImporterAbstract
 
         usort(
             $fileListing,
-            create_function('$a,$b', 'return filemtime($b) - filemtime($a);')
+            function ($a, $b) {
+                return filemtime($a) < filemtime($b);
+            }
         );
 
         $fileListingCleaned = array();

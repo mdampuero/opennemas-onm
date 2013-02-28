@@ -94,11 +94,11 @@ class NewsAgencyController extends Controller
 
         $categories = array(); //\Onm\Import\DataSource\Format\NewsMLG1::getOriginalCategories();
 
-        $queryParams = $this->request->query;
+        $queryParams    = $this->request->query;
         $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
-        $filterTitle = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
-        $page = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
-        $itemsPage =  s::get('items_per_page') ?: 20;
+        $filterTitle    = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
+        $page           = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
+        $itemsPage      =  s::get('items_per_page') ?: 20;
 
         $findParams = array(
             'category'   => $filterCategory,
@@ -164,12 +164,13 @@ class NewsAgencyController extends Controller
         return $this->render(
             'news_agency/list.tpl',
             array(
-                'sources'   => $sources,
-                'elements'         =>  $elements,
-                'already_imported' =>  $alreadyImported,
-                'categories'       =>  $categories,
-                'minutes'          =>  $minutesFromLastSync,
-                'pagination'       =>  $pagination,
+                'source_names'     => $sources,
+                'servers'          => $servers,
+                'elements'         => $elements,
+                'already_imported' => $alreadyImported,
+                'categories'       => $categories,
+                'minutes'          => $minutesFromLastSync,
+                'pagination'       => $pagination,
             )
         );
     }
@@ -184,10 +185,12 @@ class NewsAgencyController extends Controller
     public function showAction(Request $request)
     {
         $id = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId = $this->request->query->getDigits('source_id');
 
         try {
             $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $element = $ep->findByFileName($id);
+            $element = $ep->findByFileName($sourceId, $id);
+            $element->source_id = $sourceId;
 
             $alreadyImported = false;
             if (!is_null($element)) {
@@ -224,9 +227,10 @@ class NewsAgencyController extends Controller
     public function importAction(Request $request)
     {
         $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId = $this->request->query->getDigits('source_id');
         $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
 
-        if (empty($id)) {
+        if (empty($id) || empty($sourceId)) {
             m::add(_('Please specify the article to import.'), m::ERROR);
 
             return $this->redirect($this->generateUrl('admin_news_agency'));
@@ -235,20 +239,36 @@ class NewsAgencyController extends Controller
         if (empty($category)) {
             m::add(_('Please assign the category where import this article'), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array('id' => $id)));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_news_agency_pickcategory',
+                    array(
+                        'id'        => $id,
+                        'source_id' => $sourceId
+                    )
+                )
+            );
         }
 
         $categoryInstance = new \ContentCategory($category);
         if (!is_object($categoryInstance)) {
             m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array('id' => $id)));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_news_agency_pickcategory',
+                    array(
+                        'id' => $id,
+                        'source_id' => $sourceId
+                    )
+                )
+            );
         }
 
         // Get EFE new from a filename
         try {
             $efe = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $element = $efe->findByFileName($id);
+            $element = $efe->findByFileName($sourceId, $id);
         } catch (\Exception $e) {
             m::add(_('Please specify the article to import.'), m::ERROR);
 
@@ -373,6 +393,7 @@ class NewsAgencyController extends Controller
     public function selectCategoryWhereToImportAction(Request $request)
     {
         $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId = $this->request->query->getDigits('source_id');
         $category = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
         if (empty($id)) {
@@ -389,13 +410,14 @@ class NewsAgencyController extends Controller
         }
 
         $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $element = $ep->findByFileName($id);
+        $element = $ep->findByFileName($sourceId, $id);
 
         return $this->render(
             'news_agency/import_select_category.tpl',
             array(
-                'id' => $id,
-                'article' => $element,
+                'id'         => $id,
+                'source_id'  => $sourceId,
+                'article'    => $element,
                 'categories' => $categories,
             )
         );
@@ -412,17 +434,19 @@ class NewsAgencyController extends Controller
     public function showAttachmentAction(Request $request)
     {
         $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId = $this->request->query->getDigits('source_id');
         $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
         $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $element = $ep->findById($id);
+        $element = $ep->findById($sourceId, $id);
 
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
 
             if (array_key_exists($attachmentId, $photos)) {
                 $photo = $photos[$attachmentId];
-                $content = file_get_contents(realpath($ep->syncPath.DIRECTORY_SEPARATOR.$photo->file_path));
+                $filePath = realpath($ep->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$photo->file_path);
+                $content = file_get_contents($filePath);
                 $response = new Response($content, 200, array('content-type' => $photo->file_type));
             } else {
                 $response = new Response('Image not found', 404);
@@ -656,6 +680,9 @@ class NewsAgencyController extends Controller
         $servers = s::get('news_agency_config');
 
         $id = $request->query->getDigits('id');
+
+        var_dump(realpath($this->syncPath));die();
+
 
         unset($servers[$id]);
 

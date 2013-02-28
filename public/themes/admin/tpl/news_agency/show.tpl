@@ -29,7 +29,7 @@
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
             <li>
-                <a href="{url name=admin_news_agency_pickcategory id=$element->xmlFile}" title="{t}Import{/t}">
+                <a href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile}" title="{t}Import{/t}">
                 <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Import{/t}" ><br />{t}Import{/t}
                 </a>
             </li>
@@ -64,17 +64,17 @@
                     <legend>{t}Basic information{/t}</legend>
                     {if $element->pretitle}
                     <p>
-                        <label>{t}Pretitle:{/t}</label>
+                        <strong>{t}Pretitle:{/t}</strong>
                         {$element->pretitle}
                     </p>
                     {/if}
                     <p>
-                        <label>{t}Title:{/t}</label>
+                        <strong>{t}Title:{/t}</strong>
                         {$element->title}
                     </p>
 
                     <p>
-                        <label>{t}Priority:{/t}</label>
+                        <strong>{t}Priority:{/t}</strong>
                         {$element->priority}
                     </p>
 
@@ -96,7 +96,7 @@
         <div id="photos" class="clearfix">
             {foreach from=$element->photos item=photo}
             <div class="photo">
-                <img style="width:220px" src="{url name=admin_news_agency_showattachment id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
+                <img style="width:220px" src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
                 <div>
                     <p>{$photo->title}</p>
                 </div>

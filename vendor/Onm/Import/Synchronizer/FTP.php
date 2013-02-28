@@ -133,6 +133,10 @@ class FTP
                                 FTP_BINARY
                             );
 
+                            $date = $file['date'];
+
+                            touch($localFilePath, $date->getTimestamp());
+
                             $downloadedFiles++;
                         }
                     }
@@ -201,8 +205,6 @@ class FTP
                 if (!in_array($file, $serverFileList)) {
                     $file = basename($file);
                     $filePath = $cacheDir.'/'.$file;
-
-                    var_dump($filePath);die();
 
                     if (file_exists($filePath)) {
                         unlink($cacheDir.'/'.$file);

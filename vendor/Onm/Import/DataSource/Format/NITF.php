@@ -224,7 +224,7 @@ class NITF implements FormatInterface
 
         $node = $data->xpath("//nitf");
 
-        if (!(string) $node) {
+        if (!is_array($node)) {
             throw new \Exception(sprintf(_('Not a valid NITF file')));
         }
         return true;

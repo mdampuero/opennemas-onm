@@ -17,8 +17,8 @@
 {block name="header-js" prepend}
 <script type="text/javascript">
     jQuery(document).ready(function ($){
-        jQuery('.sync_with_server').on('click',function() {
-           jQuery('.warnings-validation').html('<div class="ui-blocker"></div><div class="ui-blocker-message"><progress style="width:100%"></progress><br /><br />{t}Downloading articles from news agencies, please wait...{/t}</div>');
+        jQuery('.sync_with_server').on('click',function(e, ui) {
+            $('#modal-sync').modal('show');
         });
         $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
     });
@@ -66,7 +66,7 @@
                         {t}and in{/t}
                         <select id="usergroup" name="filter_category">
                             <option value="*">{t}All sources{/t}</option>
-                            {html_options options=$sources selected=$selectedSource|default:""}
+                            {html_options options=$source_names selected=$selectedSource|default:""}
                         </select>
                     </label>
 
@@ -82,6 +82,7 @@
                     <th style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th>{t}Attachments{/t}</th>
+                    <th>{t}Origin{/t}</th>
                     <th>{t}Date{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
@@ -96,7 +97,7 @@
                        <img src="{$params.IMAGE_DIR}notifications/level-{if $element->priority > 4}4{else}{$element->priority}{/if}.png" alt="{t 1=$element->priority}Priority %1{/t}" title="{t 1=$element->priority}Priority %1{/t}">
                     </td>
                     <td >
-                        <a href="{url name=admin_news_agency_show id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                        <a href="{url name=admin_news_agency_show source_id=$element->source_id id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
                             {$element->title}
                         </a>
                         <div class="tags">
@@ -120,6 +121,7 @@
                             <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
                     </td>
+                    <td class="nowrap">{$servers[$element->source_id]['name']}</td>
                     <td class="nowrap">
                         <span title="{$element->created_time->format(DateTime::RSS)}">{$element->created_time->getTimestamp()|relative_date}</span>
                     </td>
@@ -127,7 +129,7 @@
                     <td class="right nowrap">
                         <ul class="btn-group">
                             <li>
-                                <a class="btn btn-mini" href="{url name=admin_news_agency_import id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
+                                <a class="btn btn-mini" href="{url name=admin_news_agency_import source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>
@@ -159,4 +161,5 @@
         </table>
 	</form>
 </div>
+{include file="news_agency/modals/_modal_sync_dialog.tpl"}
 {/block}

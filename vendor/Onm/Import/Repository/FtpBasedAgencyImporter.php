@@ -74,6 +74,9 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
         $elementsCount = 0;
 
         foreach ($files as $file) {
+
+            $fileParts = explode('/', $file);
+            $sourceId = (int) $fileParts[0];
             if (filesize($this->syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
                 continue;
             }
@@ -104,6 +107,8 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
                 break;
             }
 
+            $element->source_id = $sourceId;
+
             $elements []= $element;
             $elementsCount++;
         }
@@ -112,14 +117,14 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
             $counTotalElements = $elementsCount;
         }
 
-        usort(
-            $elements,
-            create_function(
-                '$a,$b',
-                'return  $b->created_time->getTimestamp() '
-                .'- $a->created_time->getTimestamp();'
-            )
-        );
+        // usort(
+        //     $elements,
+        //     create_function(
+        //         '$a,$b',
+        //         'return  $b->created_time->getTimestamp() '
+        //         .'- $a->created_time->getTimestamp();'
+        //     )
+        // );
 
         return array($counTotalElements, $elements);
     }
@@ -131,9 +136,13 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
      *
      * @return DataSource\Efe the article object
      */
-    public function findByID($id)
+    public function findByID($sourceId, $id)
     {
-        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id.'.xml';
+        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$id.'.xml';
+
+        if (!realpath($file)) {
+            throw new \Exception();
+        }
         $element = DataSourceFactory::get($file);
 
         return  $element;
@@ -146,14 +155,15 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
      *
      * @return DataSource\NewsMLG1 the article object
      */
-    public function findByFileName($id)
+    public function findByFileName($sourceId, $id)
     {
-        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id;
-        $element = DataSourceFactory::get($file);
+        $file    = $this->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$id;
 
-        if (is_null($element)) {
+        if (!realpath($file)) {
             throw new \Exception();
         }
+
+        $element = DataSourceFactory::get($file);
 
         return  $element;
     }

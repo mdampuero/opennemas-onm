@@ -2314,7 +2314,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_news_agency_import',
     new Route(
-        '/news-agency/{id}/import',
+        '/news-agency/{source_id}/{id}/import',
         array('_controller' => 'Backend:Controllers:NewsAgencyController:import')
     )
 );
@@ -2322,7 +2322,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_news_agency_show',
     new Route(
-        '/news-agency/{id}/show',
+        '/news-agency/{source_id}/{id}/show',
         array('_controller' => 'Backend:Controllers:NewsAgencyController:show')
     )
 );
@@ -2330,7 +2330,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_news_agency_showattachment',
     new Route(
-        '/news-agency/{id}/attachment/{attachment_id}',
+        '/news-agency/{source_id}/{id}/attachment/{attachment_id}',
         array('_controller' => 'Backend:Controllers:NewsAgencyController:showAttachment')
     )
 );
@@ -2338,7 +2338,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_news_agency_pickcategory',
     new Route(
-        '/news-agency/{id}/pickcategory',
+        '/news-agency/{source_id}/{id}/pickcategory',
         array('_controller' => 'Backend:Controllers:NewsAgencyController:selectCategoryWhereToImport')
     )
 );

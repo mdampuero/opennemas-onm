@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="{url name=admin_news_agency_import id=$id}" method="POST">
+    <form action="{url name=admin_news_agency_import source_id=$source_id id=$id}" method="POST">
 
     {render_messages}
     <div class="panel">
