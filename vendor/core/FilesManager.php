@@ -76,14 +76,15 @@ class FilesManager
     {
         // Delete destination if exists
         if (file_exists($destination)) {
-            this::deleteDirectoryRecursively($destination);
+            self::deleteDirectoryRecursively($destination);
         }
 
         // if is dir try to recursive copy it, if is a file copy it directly
         if (is_dir($source)) {
             if (!file_exists($destination)) {
                 if (!is_writable(dirname($destination))
-                    || !mkdir($destination, 0775, true)) {
+                    || !mkdir($destination, 0775, true)
+                ) {
                     return false;
                 }
             }
