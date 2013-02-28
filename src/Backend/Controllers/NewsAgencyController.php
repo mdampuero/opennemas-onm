@@ -78,7 +78,7 @@ class NewsAgencyController extends Controller
     {
         $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        $efe = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+        $repository = new \Onm\Import\Repository\FtpBasedAgencyImporter();
 
         $servers = s::get('news_agency_config');
 
@@ -90,9 +90,7 @@ class NewsAgencyController extends Controller
         );
 
         // Get the amount of minutes from last sync
-        $minutesFromLastSync = $efe->minutesFromLastSync();
-
-        $categories = array(); //\Onm\Import\DataSource\Format\NewsMLG1::getOriginalCategories();
+        $minutesFromLastSync = $repository->minutesFromLastSync();
 
         $queryParams  = $this->request->query;
         $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
@@ -107,7 +105,7 @@ class NewsAgencyController extends Controller
             'items_page' => $itemsPage,
         );
 
-        list($countTotalElements, $elements) = $efe->findAll($findParams);
+        list($countTotalElements, $elements) = $repository->findAll($findParams);
 
         $pagination = \Pager::factory(
             array(
@@ -169,7 +167,6 @@ class NewsAgencyController extends Controller
                 'servers'          => $servers,
                 'elements'         => $elements,
                 'already_imported' => $alreadyImported,
-                'categories'       => $categories,
                 'minutes'          => $minutesFromLastSync,
                 'pagination'       => $pagination,
             )
@@ -280,16 +277,16 @@ class NewsAgencyController extends Controller
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
             foreach ($photos as $photo) {
-
-                $filePath = realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path);
-
+                $filePath = realpath(
+                    $efe->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$photo->file_path
+                );
 
                 // Check if the file apc_exists(keys)
                 if ($filePath) {
                     $data = array(
                         'title'         => $photo->file_path,
                         'description'   => $photo->title,
-                        'local_file'    => realpath($efe->syncPath.DIRECTORY_SEPARATOR.$photo->file_path),
+                        'local_file'    => $filePath,
                         'fk_category'   => $category,
                         'category_name' => $categoryInstance->name,
                         'category'      => $categoryInstance->name,
@@ -314,8 +311,9 @@ class NewsAgencyController extends Controller
         if ($element->hasVideos()) {
             $videos = $element->getVideos();
             foreach ($videos as $video) {
-
-                $filepath = realpath($efe->syncPath.DIRECTORY_SEPARATOR.$video->file_path);
+                $filepath = realpath(
+                    $efe->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$video->file_path
+                );
 
                 // Check if the file exists
                 if ($filePath) {

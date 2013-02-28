@@ -53,11 +53,9 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
     public function findAll($params = array())
     {
         $filesSynced = $this->getLocalFileList($this->syncPath);
-        rsort($filesSynced, SORT_STRING);
 
         $counTotalElements = count($filesSynced);
         if ($params['title'] == '*'
-            && $params['source'] == '*'
             && array_key_exists('items_page', $params)
             && array_key_exists('page', $params)
         ) {
@@ -114,18 +112,10 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
             $elementsCount++;
         }
 
-        if ($params['title'] != '*') {
+        if ($params['title'] != '*' || $params['source'] != '*') {
             $counTotalElements = $elementsCount;
         }
 
-        // usort(
-        //     $elements,
-        //     create_function(
-        //         '$a,$b',
-        //         'return  $b->created_time->getTimestamp() '
-        //         .'- $a->created_time->getTimestamp();'
-        //     )
-        // );
 
         return array($counTotalElements, $elements);
     }

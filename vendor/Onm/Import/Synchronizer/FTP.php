@@ -133,7 +133,13 @@ class FTP
                                 FTP_BINARY
                             );
 
-                            $date = $file['date'];
+
+                            $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
+                            if (is_object($element)) {
+                                $date = $element->getCreatedTime();
+                            } else {
+                                $date = $file['date'];
+                            }
 
                             touch($localFilePath, $date->getTimestamp());
 
