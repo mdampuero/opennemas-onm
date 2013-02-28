@@ -566,7 +566,7 @@ gettext("Save changes");
 gettext("You must save a changes or back to list");
 
 /* public/themes/admin/tpl//newsletter/modals/_save_changes_alert.tpl */
-gettext("Acept");
+gettext("Accept");
 
 /* public/themes/admin/tpl//newsletter/modals/_add_container_label.tpl */
 gettext("Add Container label");
@@ -2464,6 +2464,321 @@ gettext("Path");
 /* public/themes/admin/tpl//files/new.tpl */
 gettext("Category");
 
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("News agency");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Configuration");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Save and exit");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Add server");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Sync list  with server");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Source name");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Sync from");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Activated");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Actions");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Enabled");
+
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Disabled");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("News agency");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Update source");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Add source");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Save and exit");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Sync list  with server");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Source name");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Activated");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Url");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("The server url for this source. Example: ftp://server.com/path");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Username");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Password");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Agency");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("When importing elements this will be the signature");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Sync elements newer than");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("News Agency");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Sync with server");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Sync list  with server");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Sync with server");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Sync with server");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Reload list");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Sync list  with server");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Reload list");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Reload list");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Reload list");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Config Europapress module");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Config Europapress module");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Config");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("%1 articles");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Filter by title or content");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("and in");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("All sources");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Priority");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Title");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Attachments");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Origin");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Date");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Actions");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("With image");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("This new has attached images");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("With video");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("This new has attached videos");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("With files");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("This new has attached videos");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("With documentary modules");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("This new has attached videos");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Import");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Import");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("There is no elements to import");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Try syncing from server by click over the \"Sync with server\" button above.");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("News Agency");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Importing article");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Import");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Import");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("You are about to import one article with the next data");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Title");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Content");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("Category");
+
+/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
+gettext("In which category you want to import this element?");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
+gettext("Syncing from sources");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
+gettext("Downloading articles from news agencies, please wait...");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
+gettext("Stop sync");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("News Agency");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Import");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Import");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Import");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("This article was imported before. Take care of it.");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Basic information");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Photos");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Videos");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Other attachments");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Pretitle:");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Title:");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Priority:");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Date:");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Summary:");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Body");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Files:");
+
+/* public/themes/admin/tpl//news_agency/show.tpl */
+gettext("Documentary modules:");
+
 /* public/themes/admin/tpl//polls/list.tpl */
 gettext("Polls");
 
@@ -4129,246 +4444,6 @@ gettext("Legal");
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Legal");
 
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Downloading articles from EFE, please wait...");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("EFE articles");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Sync with server");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Sync list  with server");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Sync with server");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Sync with server");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Sync list  with server");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Config Europapress module");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Config Europapress module");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Config");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("%1 articles");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Filter by title or content");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("and in");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("All categories");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Priority");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Attachments");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Date");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Actions");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Priority %1");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Priority %1");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("With image");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("This new has attached images");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("With video");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("This new has attached videos");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("With files");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("This new has attached videos");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("With documentary modules");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("This new has attached videos");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("There is no elements to import");
-
-/* public/themes/admin/tpl//agency_importer/efe/list.tpl */
-gettext("Try syncing from server by click over the \"Sync with server\" button above.");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("EFE importer");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("Importing article \"%1\"");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("You are about to import one article with the next data:");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("Summary");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("In which category you want to import this element?");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/efe/import_select_category.tpl */
-gettext("Go back");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("EFE articles");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Configuration");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Save and exit");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Save");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Sync list  with server");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Server");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Username");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Password");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Agency");
-
-/* public/themes/admin/tpl//agency_importer/efe/config.tpl */
-gettext("Sync elements newer than");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("EFE articles");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("This article was imported before. Take care of it.");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Basic information");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Photos");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Videos");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Other attachments");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Basic information");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Pretitle:");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Title:");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Priority:");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Date:");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Summary:");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Main information");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Files:");
-
-/* public/themes/admin/tpl//agency_importer/efe/show.tpl */
-gettext("Documentary modules:");
-
 /* public/themes/admin/tpl//agency_importer/xml-file/list.tpl */
 gettext("XML importer");
 
@@ -4553,201 +4628,6 @@ gettext("Level:");
 gettext("Level:");
 
 /* public/themes/admin/tpl//agency_importer/xml-file/show.tpl */
-gettext("Redactors:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Downloading articles from EuropaPress, please wait...");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("EuropaPress articles");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Sync with server");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Sync list  with server");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Sync with server");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Sync with server");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Sync list  with server");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Reload list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Config Europapress module");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Config Europapress module");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Config");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("%1 articles");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Filter by title or content");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("and in");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("All categories");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Priority");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Date");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Section");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Actions");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Priority %1");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Priority %1");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("There is no elements to import");
-
-/* public/themes/admin/tpl//agency_importer/europapress/list.tpl */
-gettext("Try syncing from server by click over the \"Sync with server\" button above.");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("EuropaPress articles");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Configuration");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Save and exit");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Save");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Server");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Username");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Password");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Agency");
-
-/* public/themes/admin/tpl//agency_importer/europapress/config.tpl */
-gettext("Sync elements newer than");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("EuropaPress articles");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Import");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Go back to list");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Basic information");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Basic information");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("More information");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("More information");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Priority:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Date:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Pretitle:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Summary:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Body:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Photos:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("People:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Place:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Associated Docs:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Categories:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Level:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
-gettext("Level:");
-
-/* public/themes/admin/tpl//agency_importer/europapress/show.tpl */
 gettext("Redactors:");
 
 /* public/themes/admin/tpl//book/list.tpl */

@@ -62,8 +62,8 @@ class FTP
                     throw new \Exception(
                         sprintf(
                             _(
-                                "Directory '%s' in the server '%s' doesn't exists or '
-                                .'you don't have enought permissions to acces it"
+                                "Directory '%s' in the server '%s' doesn't exists or "
+                                ."you don't have enought permissions to access it"
                             ),
                             $this->serverUrl['path'],
                             $this->serverUrl['host']

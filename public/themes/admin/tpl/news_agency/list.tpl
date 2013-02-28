@@ -92,9 +92,8 @@
 
             <tbody>
                 {foreach name=c from=$elements item=element}
-                <tr class="{if is_array($already_imported) &&  in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
-
-                    <td  class="center">
+                <tr class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
+                    <td  class="right">
                         {if $element->priority <= 1}
                         <span class="badge">Basic</span>
                         {elseif $element->priority == 2}
