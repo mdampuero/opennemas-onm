@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 19:43+0100\n"
+"POT-Creation-Date: 2013-02-28 20:13+0100\n"
 "PO-Revision-Date: 2012-03-09 11:34+0100\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
@@ -1123,25 +1123,25 @@ msgstr ""
 msgid "News agency server deleted."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:363
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:364
 msgid "Newsletter deleted successfully."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:365
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:366
 msgid "You must give an id for delete a newsletter."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:393
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:394
 msgid "Newsletter module settings saved successfully."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:436
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:437
 msgid ""
 "Please provide your Newsletter configuration to start to use your Newsletter "
 "module"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:446
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:447
 msgid ""
 "Your newsletter configuration is not complete. Please go to settings and "
 "complete the form."
@@ -1757,26 +1757,26 @@ msgstr ""
 msgid "The reCAPTCHA wasn't entered correctly. Go back and try it again."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:136
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:138
 msgid "You have been subscribed to the newsletter."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:141
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:144
 msgid "You have been unsusbscribed from the newsletter."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:182
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:187
 msgid "You have been subscribed to our newsletter."
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:185
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:201
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:191
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:209
 msgid ""
 "Sorry, we were unable to complete your request.\n"
 "Check the form and try again"
 msgstr ""
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:198
+#: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/SubscriptionsController.php:205
 msgid "You have been unsubscribed from our newsletter"
 msgstr ""
 
