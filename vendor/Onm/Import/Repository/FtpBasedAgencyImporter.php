@@ -57,6 +57,7 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
 
         $counTotalElements = count($filesSynced);
         if ($params['title'] == '*'
+            && $params['source'] == '*'
             && array_key_exists('items_page', $params)
             && array_key_exists('page', $params)
         ) {
@@ -74,14 +75,21 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
         $elementsCount = 0;
 
         foreach ($files as $file) {
-
             $fileParts = explode('/', $file);
             $sourceId = (int) $fileParts[0];
-            if (filesize($this->syncPath.DIRECTORY_SEPARATOR.$file) <= 0) {
+
+            if ($params['source'] != '*'
+                && $sourceId != $params['source']
+            ) {
+                continue;
+            }
+
+            $filePath = $this->syncPath.DIRECTORY_SEPARATOR.$file;
+            if (filesize($filePath) <= 0) {
                 continue;
             }
             try {
-                $element = DataSourceFactory::get($this->syncPath.DIRECTORY_SEPARATOR.$file);
+                $element = DataSourceFactory::get($filePath);
             } catch (\Exception $e) {
                 continue;
             }
@@ -89,13 +97,6 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
 
             if ($params['title'] != '*'
                 && !($element->hasContent($params['title']))
-            ) {
-                continue;
-            }
-
-            $category = $element->originalCategory;
-            if ((($params['category'] != '*'))
-                && !(preg_match('@'.$params['category'].'@', $category) > 0)
             ) {
                 continue;
             }

@@ -64,7 +64,7 @@
                 <div class="input-append">
                     <label for="usergroup">
                         {t}and in{/t}
-                        <select id="usergroup" name="filter_category">
+                        <select id="source" name="filter_source">
                             <option value="*">{t}All sources{/t}</option>
                             {html_options options=$source_names selected=$selectedSource|default:""}
                         </select>

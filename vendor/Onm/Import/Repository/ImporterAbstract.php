@@ -186,7 +186,7 @@ abstract class ImporterAbstract
 
 
         foreach ($fileListing as &$file) {
-            $file = trim($file, $cacheDir);
+            $file = str_replace($cacheDir.DIRECTORY_SEPARATOR, '', $file);
 
             // $fileListingCleaned []= basename($file);
         }

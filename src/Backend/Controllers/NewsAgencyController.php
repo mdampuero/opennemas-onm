@@ -94,14 +94,14 @@ class NewsAgencyController extends Controller
 
         $categories = array(); //\Onm\Import\DataSource\Format\NewsMLG1::getOriginalCategories();
 
-        $queryParams    = $this->request->query;
-        $filterCategory = $queryParams->filter('filter_category', '*', FILTER_SANITIZE_STRING);
-        $filterTitle    = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
-        $page           = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
-        $itemsPage      =  s::get('items_per_page') ?: 20;
+        $queryParams  = $this->request->query;
+        $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
+        $filterTitle  = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
+        $page         = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
+        $itemsPage    = s::get('items_per_page') ?: 20;
 
         $findParams = array(
-            'category'   => $filterCategory,
+            'source'     => $filterSource,
             'title'      => $filterTitle,
             'page'       => $page,
             'items_page' => $itemsPage,
@@ -122,8 +122,8 @@ class NewsAgencyController extends Controller
                 'fileName'        => $this->generateUrl(
                     'admin_news_agency',
                     array(
-                        'filter_category' => $filterCategory,
-                        'filter_title'    => $filterTitle,
+                        'filter_source' => $filterSource,
+                        'filter_title'  => $filterTitle,
                     )
                 ).'&page=%d',
             )
@@ -155,9 +155,9 @@ class NewsAgencyController extends Controller
         $_SESSION['_from'] = $this->generateUrl(
             'admin_news_agency',
             array(
-                'filter_category' => $filterCategory,
-                'filter_title'    => $filterTitle,
-                'page'            => $page
+                'filter_source' => $filterSource,
+                'filter_title'  => $filterTitle,
+                'page'          => $page
             )
         );
 
@@ -165,6 +165,7 @@ class NewsAgencyController extends Controller
             'news_agency/list.tpl',
             array(
                 'source_names'     => $sources,
+                'selectedSource'   => $filterSource,
                 'servers'          => $servers,
                 'elements'         => $elements,
                 'already_imported' => $alreadyImported,
