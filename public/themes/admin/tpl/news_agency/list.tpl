@@ -80,11 +80,11 @@
             <thead>
                 <tr>
                 {if count($elements) >0}
-                    <th style='width:10px !important;'>{t}Priority{/t}</th>
+                    <th class="right" style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th>{t}Attachments{/t}</th>
                     <th>{t}Origin{/t}</th>
-                    <th>{t}Date{/t}</th>
+                    <th style='width:10px !important;'>{t}Date{/t}</th>
                     <th style="width:20px;">{t}Actions{/t}</th>
                 </tr>
                 {/if}
@@ -95,13 +95,13 @@
                 <tr class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
                     <td  class="right">
                         {if $element->priority <= 1}
-                        <span class="badge">Basic</span>
+                        <span class="badge">{t}Basic{/t}</span>
                         {elseif $element->priority == 2}
-                        <span class="badge badge-info">Normal</span>
+                        <span class="badge badge-info">{t}Normal{/t}</span>
                         {elseif $element->priority == 3}
-                        <span class="badge badge-warning">Important</span>
+                        <span class="badge badge-warning">{t}Important{/t}</span>
                         {else}
-                        <span class="badge badge-important">Urgent</span>
+                        <span class="badge badge-important">{t}Urgent{/t}</span>
                         {/if}
                     </td>
                     <td >
@@ -137,7 +137,7 @@
                     <td class="right nowrap">
                         <ul class="btn-group">
                             <li>
-                                <a class="btn btn-mini" href="{url name=admin_news_agency_import source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
+                                <a class="btn" href="{url name=admin_news_agency_import source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>

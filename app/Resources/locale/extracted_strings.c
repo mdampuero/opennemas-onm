@@ -2639,6 +2639,18 @@ gettext("Date");
 gettext("Actions");
 
 /* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Basic");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Normal");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Important");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Urgent");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
 gettext("With image");
 
 /* public/themes/admin/tpl//news_agency/list.tpl */
