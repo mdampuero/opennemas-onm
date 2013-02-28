@@ -60,8 +60,17 @@
             {/if}
         </ul><!-- / -->
         <div id="basic">
+            {if count($element->photos) > 0}
+                {foreach from=$element->photos item=photo}
+                <div class="photo" style="width:220px; float:left; margin-right:20px;">
+                    <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
+                    <div>
+                        <p>{$photo->title}</p>
+                    </div>
+                </div>
+                {/foreach}
+            {/if}
             <fieldset>
-                    <legend>{t}Basic information{/t}</legend>
                     {if $element->pretitle}
                     <p>
                         <strong>{t}Pretitle:{/t}</strong>
@@ -70,7 +79,7 @@
                     {/if}
                     <p>
                         <strong>{t}Title:{/t}</strong>
-                        {$element->title}
+                        <h4>{$element->title}</h4>
                     </p>
 
                     <p>
@@ -85,11 +94,9 @@
                         <strong>{t}Summary:{/t}</strong> <br/>
                         {$element->summary}
                     {/if}
-                </fieldset>
 
-                <fieldset>
-                    <legend>{t}Main information{/t}</legend>
-                    {$element->body}
+                    <strong>{t}Body{/t}</strong>
+                    <p>{$element->body}</p>
                 </fieldset>
         </div>
         {if count($element->photos) > 0}

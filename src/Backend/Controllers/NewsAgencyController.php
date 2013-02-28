@@ -212,7 +212,6 @@ class NewsAgencyController extends Controller
                 'imported' => $alreadyImported,
             )
         );
-
     }
 
     /**

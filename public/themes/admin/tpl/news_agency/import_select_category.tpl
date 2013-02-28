@@ -1,38 +1,61 @@
 {extends file="base/admin.tpl"}
 
 {block name="content"}
+<form action="{url name=admin_news_agency_import source_id=$source_id id=$id}" method="POST">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}EFE importer{/t} :: {t 1=$article->title|truncate:40:"..."}Importing article "%1"{/t}</h2></div>
+        <div class="title"><h2>{t}News Agency{/t} :: {t}Importing article{/t}</h2></div>
+
+        <ul class="old-button">
+            <li>
+                <button type="submit">
+                    <img src="{$params.IMAGE_DIR}archive_no.png" alt="{t}Import{/t}" ><br />{t}Import{/t}
+                </button>
+            </li>
+            <li>
+                <a href="{url name=admin_news_agency}" class="admin_add" title="{t}Go back to list{/t}">
+                <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="{url name=admin_news_agency_import source_id=$source_id id=$id}" method="POST">
 
     {render_messages}
-    <div class="panel">
-        <h2>{t}You are about to import one article with the next data:{/t}</h2>
 
-        <dl>
-            <dt>{t}Title{/t}</dt>
-            <dd>{$article->title}</dd>
-            {if $article->summary}
-                <dt>{t}Summary{/t}</dt>
-                <dd>{$article->summary}</dd>
-            {/if}
-            <dt>{t}In which category you want to import this element?{/t}</dt>
-            <dd>
+    <div class="alert alert-info">{t}You are about to import one article with the next data{/t}</div>
+    <div class="form-horizontal panel">
+
+
+        <div class="control-group">
+            <label for="title" class="control-label">{t}Title{/t}</label>
+            <div class="controls">
+                <h4>{$article->title}</h4>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="summary" class="control-label">{t}Content{/t}</label>
+            <div class="controls">
+                {if $article->summary}
+                    {$article->summary}
+                {else}
+                    {$article->body|clearslash|truncate:600:"..."}
+                {/if}
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="category" class="control-label">{t}Category{/t}</label>
+            <div class="controls">
                 <select name="category">
                     {html_options options=$categories}
                 </select>
-            </dd>
-        </dl>
-
+                <div class="help-block">
+                    {t}In which category you want to import this element?{/t}
+                </div>
+            </div>
+        </div>
     </div><!-- / -->
-    <div class="form-actions">
-        <button type="submit" class="btn btn-primary">{t}Import{/t}</button>
-        <a class="btn" onclick="history.go(-1)">{t}Go back{/t}</a>
-    </div>
     </form>
 </div>
 {/block}

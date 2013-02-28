@@ -4,7 +4,9 @@
       <h3>{t}Syncing from sources{/t}</h3>
     </div>
     <div class="modal-body">
-        <progress style="width:100%"></progress>
+        <div class="progress progress-striped active">
+          <div class="bar" style="width: 100%;"></div>
+        </div>
         <p>{t}Downloading articles from news agencies, please wait...{/t}</p>
     </div>
     <div class="modal-footer">

@@ -39,6 +39,7 @@
 				    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
 				</a>
 			</li>
+            <li class="separator"></li>
             {acl isAllowed="IMPORT_EFE_CONFIG"}
 			<li>
 				<a href="{url name=admin_news_agency_servers}" class="admin_add" title="{t}Reload list{/t}">
@@ -93,11 +94,19 @@
                 {foreach name=c from=$elements item=element}
                 <tr class="{if is_array($already_imported) &&  in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
 
-                    <td style="text-align:center;">
-                       <img src="{$params.IMAGE_DIR}notifications/level-{if $element->priority > 4}4{else}{$element->priority}{/if}.png" alt="{t 1=$element->priority}Priority %1{/t}" title="{t 1=$element->priority}Priority %1{/t}">
+                    <td  class="center">
+                        {if $element->priority <= 1}
+                        <span class="badge">Basic</span>
+                        {elseif $element->priority == 2}
+                        <span class="badge badge-info">Normal</span>
+                        {elseif $element->priority == 3}
+                        <span class="badge badge-warning">Important</span>
+                        {else}
+                        <span class="badge badge-important">Urgent</span>
+                        {/if}
                     </td>
                     <td >
-                        <a href="{url name=admin_news_agency_show source_id=$element->source_id id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'}">
+                        <a href="{url name=admin_news_agency_show source_id=$element->source_id id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'|truncate:600:"..."}">
                             {$element->title}
                         </a>
                         <div class="tags">
