@@ -190,6 +190,7 @@ a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.acti
     opacity: 1;
     filter:alpha(opacity=100)
 }
+.alert a { color:White; text-decoration:underline; }
 
 .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover { font-size: 12px; }
 

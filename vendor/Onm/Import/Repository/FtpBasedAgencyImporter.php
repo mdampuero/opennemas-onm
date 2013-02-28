@@ -23,30 +23,11 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
     // the instance object
     private static $instance = null;
 
-    // the configuration to access to the server
-    private $defaultConfig = array(
-        'port' => 21,
-    );
-
     private $config = array();
 
     protected $lockFile = '';
 
     public $syncPath = '';
-
-    /**
-     * Ensures that we always get one single instance
-     *
-     * @return object the unique instance object
-     */
-    public static function getInstance($config = array())
-    {
-        if (!self::$instance instanceof self) {
-            self::$instance = new self($config);
-        }
-
-        return self::$instance;
-    }
 
     /**
      * Initializes the object and initializes configuration
@@ -57,12 +38,9 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
     {
         $this->syncPath = implode(
             DIRECTORY_SEPARATOR,
-            array(CACHE_PATH, 'efe_import_cache')
+            array(CACHE_PATH, 'importers')
         );
-        $this->_syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
-
-        // Merging default configurations with new ones
-        $this->config   = array_merge($this->defaultConfig, $config);
+        $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
         $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
     }
@@ -172,6 +150,10 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
     {
         $file    = $this->syncPath.DIRECTORY_SEPARATOR.$id;
         $element = DataSourceFactory::get($file);
+
+        if (is_null($element)) {
+            throw new \Exception();
+        }
 
         return  $element;
     }

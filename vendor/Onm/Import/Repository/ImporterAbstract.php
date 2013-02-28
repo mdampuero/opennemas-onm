@@ -64,8 +64,8 @@ abstract class ImporterAbstract
      */
     public function getSyncParams()
     {
-        if (file_exists($this->_syncFilePath)) {
-            return unserialize(file_get_contents($this->_syncFilePath));
+        if (file_exists($this->syncFilePath)) {
+            return unserialize(file_get_contents($this->syncFilePath));
         } else {
             return array(
                 'lastimport'        => '',
@@ -98,11 +98,10 @@ abstract class ImporterAbstract
      */
     public function isSyncEnvironmetReady()
     {
-
         return (
-            file_exists($this->_syncFilePath)
+            file_exists($this->syncFilePath)
             && is_writable($this->syncPath)
-            && is_writable($this->_syncFilePath)
+            && is_writable($this->syncFilePath)
         );
     }
 
@@ -116,9 +115,10 @@ abstract class ImporterAbstract
     {
         if (!file_exists($this->syncPath)) {
             mkdir($this->syncPath);
-        } elseif (!file_exists($this->_syncFilePath)) {
+        }
 
-            return touch($this->_syncFilePath);
+        if (!file_exists($this->syncFilePath)) {
+            return touch($this->syncFilePath);
         }
 
         return false;
@@ -159,7 +159,7 @@ abstract class ImporterAbstract
             'imported_elements' => $newImportedelements,
         );
 
-        file_put_contents($this->_syncFilePath, serialize($newSyncParams));
+        file_put_contents($this->syncFilePath, serialize($newSyncParams));
 
         return $newSyncParams;
     }
@@ -173,7 +173,7 @@ abstract class ImporterAbstract
      */
     public static function getLocalFileList($cacheDir)
     {
-        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
+        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*/*.xml');
 
         usort(
             $fileListing,
@@ -182,11 +182,14 @@ abstract class ImporterAbstract
 
         $fileListingCleaned = array();
 
-        foreach ($fileListing as $file) {
-            $fileListingCleaned []= basename($file);
+
+        foreach ($fileListing as &$file) {
+            $file = trim($file, $cacheDir);
+
+            // $fileListingCleaned []= basename($file);
         }
 
-        return $fileListingCleaned;
+        return $fileListing;
     }
 
     /**
@@ -211,15 +214,21 @@ abstract class ImporterAbstract
             );
         }
 
+        $serverSyncPath = $this->syncPath.DIRECTORY_SEPARATOR.$params['id'];
+
+        if (!is_dir($serverSyncPath)) {
+            mkdir($serverSyncPath);
+        }
+
         $this->lockSync();
 
-        $excludedFiles = self::getLocalFileList($this->syncPath);
+        $excludedFiles = self::getLocalFileList($serverSyncPath);
 
         $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
         $ftpSync = $synchronizer->downloadFilesToCacheDir(
-            $this->syncPath,
+            $serverSyncPath,
             $excludedFiles,
-            $params['max_age']
+            $params['sync_from']
         );
 
         $this->unlockSync();

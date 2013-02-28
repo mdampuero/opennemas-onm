@@ -78,7 +78,16 @@ class NewsAgencyController extends Controller
     {
         $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        $efe = \Onm\Import\Repository\FtpBasedAgencyImporter::getInstance();
+        $efe = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+
+        $servers = s::get('news_agency_config');
+
+        $sources = array_map(
+            function ($server) {
+                return $server['name'];
+            },
+            $servers
+        );
 
         // Get the amount of minutes from last sync
         $minutesFromLastSync = $efe->minutesFromLastSync();
@@ -155,6 +164,7 @@ class NewsAgencyController extends Controller
         return $this->render(
             'news_agency/list.tpl',
             array(
+                'sources'   => $sources,
                 'elements'         =>  $elements,
                 'already_imported' =>  $alreadyImported,
                 'categories'       =>  $categories,
@@ -179,10 +189,12 @@ class NewsAgencyController extends Controller
             $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
             $element = $ep->findByFileName($id);
 
-            $alreadyImported = \Content::findByUrn($element->urn);
+            $alreadyImported = false;
+            if (!is_null($element)) {
+                $alreadyImported = (count(\Content::findByUrn($element->urn)) > 0);
+            }
         } catch (\Exception $e) {
-            // Redirect the user to the list of articles and
-            // show him/her an error message
+            // Redirect the user to the list of articles and show  an error message
             m::add(sprintf(_('Unable to find an element with the id "%d"'), $id), m::ERROR);
 
             $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
@@ -196,7 +208,7 @@ class NewsAgencyController extends Controller
             'news_agency/show.tpl',
             array(
                 'element'  => $element,
-                'imported' => count($alreadyImported) > 0,
+                'imported' => $alreadyImported,
             )
         );
 
@@ -453,44 +465,51 @@ class NewsAgencyController extends Controller
     public function syncAction(Request $request)
     {
         $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
-        try {
 
-            $serverAuth = s::get('news_agency_config');
+        $servers = s::get('news_agency_config');
 
-            $ftpConfig = array(
-                'servers'                         => $serverAuth['server'],
-                'user'                           => $serverAuth['username'],
-                'password'                       => $serverAuth['password'],
-                'allowed_file_extesions_pattern' => '.*',
-                'max_age'                        => s::get('efe_sync_from_limit')
-            );
+        $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
 
-            $efeSynchronizer = \Onm\Import\Repository\FtpBasedAgencyImporter::getInstance();
-            $message         = $efeSynchronizer->sync($ftpConfig);
-            $efeSynchronizer->updateSyncFile();
+        foreach ($servers as $server) {
+            try {
+                if ($server['activated'] != '1') {
+                    continue;
+                }
 
-            m::add(
-                sprintf(
-                    _('Downloaded %d new articles and deleted %d old ones.'),
-                    $message['downloaded'],
-                    $message['deleted']
-                )
-            );
+                $server['allowed_file_extesions_pattern'] = '.*';
 
-        } catch (\Onm\Import\SynchronizationException $e) {
-            m::add($e->getMessage(), m::ERROR);
-        } catch (\Onm\Import\Synchronizer\LockException $e) {
-            $errorMessage = $e->getMessage()
-                .sprintf(
-                    _('If you are sure <a href="%s">try to unlock it</a>'),
-                    $this->generateUrl('admin_news_agency_unlock')
+                $message      = $synchronizer->sync($server);
+
+                m::add(
+                    sprintf(
+                        _('Downloaded %d new articles and deleted %d old ones from "%s".'),
+                        $message['downloaded'],
+                        $message['deleted'],
+                        $server['name']
+                    )
                 );
-            m::add($errorMessage, m::ERROR);
-        } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
-            $e = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $e->unlockSync();
+
+            } catch (\Onm\Import\SynchronizationException $e) {
+                m::add($e->getMessage(), m::ERROR);
+            } catch (\Onm\Import\Synchronizer\LockException $e) {
+                if (!isset($lockErrors)) {
+                    $errorMessage = $e->getMessage()
+                    .sprintf(
+                        _('If you are sure <a href="%s">try to unlock it</a>'),
+                        $this->generateUrl('admin_news_agency_unlock')
+                    );
+                    m::add($errorMessage, m::ERROR);
+
+                    $lockErrors = true;
+                }
+            } catch (\Exception $e) {
+                m::add($e->getMessage(), m::ERROR);
+
+                $synchronizer->unlockSync();
+            }
         }
+        $synchronizer->updateSyncFile();
+
 
         return $this->redirect(
             $this->generateUrl('admin_news_agency', array('page' => $page))

@@ -54,6 +54,7 @@ jQuery(document).ready(function($) {
             <label for="url" class="control-label">{t}Url{/t}</label>
             <div class="controls">
                 <input type="text" id="server" name="url" value="{$server['url']}" class="input-xxlarge" required="required"/>
+                <div class="help-block">{t}The server url for this source. Example: ftp://server.com/path{/t}</div>
             </div>
         </div>
 
@@ -75,6 +76,7 @@ jQuery(document).ready(function($) {
             <label for="agency_string" class="control-label">{t}Agency{/t}</label>
             <div class="controls">
                 <input type="text" id="agency_string" name="agency_string" value="{$server['agency_string']}" class="input-xlarge" required="required"/>
+                <div class="help-block">{t}When importing elements this will be the signature{/t}</div>
             </div>
         </div>
 
@@ -84,6 +86,7 @@ jQuery(document).ready(function($) {
                 <select name="sync_from" required="required">
                     {html_options options=$sync_from selected={$server['sync_from']}}
                 </select>
+                <div class="help-block">{t escape=off}Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.{/t}</div>
             </div>
         </div>
     </div>
