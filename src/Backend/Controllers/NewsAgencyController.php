@@ -339,6 +339,9 @@ class NewsAgencyController extends Controller
             }
         }
 
+        $servers = s::get('news_agency_config');
+        $server = $servers[$sourceId];
+
         $values = array(
             'title'          => $element->title,
             'category'       => $category,
@@ -349,7 +352,7 @@ class NewsAgencyController extends Controller
             'title_int'      => $element->title,
             'metadata'       => \StringUtils::get_tags($element->title),
             'subtitle'       => $element->pretitle,
-            'agency'         => s::get('efe_agency_string') ?: $element->agency_name,
+            'agency'         => $server['agency_string'],
             'summary'        => $element->summary,
             'body'           => $element->body,
             'posic'          => 0,
