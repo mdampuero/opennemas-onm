@@ -137,7 +137,7 @@
                     <td class="right nowrap">
                         <ul class="btn-group">
                             <li>
-                                <a class="btn" href="{url name=admin_news_agency_import source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
+                                <a class="btn" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>

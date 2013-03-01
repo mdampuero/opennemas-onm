@@ -4,7 +4,7 @@
 <form action="{url name=admin_news_agency_import source_id=$source_id id=$id}" method="POST">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}News Agency{/t} :: {t}Importing article{/t}</h2></div>
+        <div class="title"><h2>{t}News Agency{/t}</h2></div>
 
         <ul class="old-button">
             <li>
@@ -24,7 +24,7 @@
 
     {render_messages}
 
-    <div class="alert alert-info">{t}You are about to import one article with the next data{/t}</div>
+    <div class="alert alert-info">{t}You are about to import one article, please select a category where to import the article{/t}</div>
     <div class="form-horizontal panel">
 
 
