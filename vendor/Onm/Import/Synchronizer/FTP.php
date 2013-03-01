@@ -11,15 +11,14 @@ namespace Onm\Import\Synchronizer;
 /**
  * Class to synchronize local folders with an external FTP folder.
  *
- * @package    Onm
- * @subpackage Import
- * @author     Fran Dieguez <fran@openhost.es>
- * @version    SVN: $Id: FTP.php 28842 Mér Xuñ 22 16:24:40 2011 frandieguez $
+ * @package    Onm_Import
  */
 class FTP
 {
-    /*
+    /**
      * Opens an FTP connection with the parameters of the object
+     *
+     * @param array $params the list of params to the ftp connection
      *
      * @throws Exception, if something went wrong while connecting to FTP server
      */
@@ -27,7 +26,7 @@ class FTP
     {
         $this->params = $params;
 
-        $this->serverUrl = parse_url($params['server']);
+        $this->serverUrl = parse_url($params['url']);
 
         $this->ftpConnection = @ftp_connect($this->serverUrl['host']);
         // test if the connection was successful
@@ -35,26 +34,26 @@ class FTP
             throw new \Exception(
                 sprintf(
                     _(
-                        'Can\'t connect to server %s. Contact with your "
-                        ."administrator for support.'
+                        'Can\'t connect to server %s. Please check your'
+                        .' connection details.'
                     ),
-                    $params['server']
+                    $params['name']
                 )
             );
         }
 
         // if there is a ftp login configuration use it
-        if (isset($params['user'])) {
+        if (isset($params['username'])) {
 
             $loginResult = ftp_login(
                 $this->ftpConnection,
-                $params['user'],
+                $params['username'],
                 $params['password']
             );
 
             if (!$loginResult) {
                 throw new \Exception(
-                    sprintf(_('Can\'t login into server '), $params['server'])
+                    sprintf(_('Can\'t login into server %s'), $params['server'])
                 );
             }
 
@@ -62,8 +61,12 @@ class FTP
                 if (!@ftp_chdir($this->ftpConnection, $this->serverUrl['path'])) {
                     throw new \Exception(
                         sprintf(
-                            _("Directory '%s' doesn't exists or you don't have enought permissions to acces it"),
-                            $this->serverUrl['path']
+                            _(
+                                "Directory '%s' in the server '%s' doesn't exists or "
+                                ."you don't have enought permissions to access it"
+                            ),
+                            $this->serverUrl['path'],
+                            $this->serverUrl['host']
                         )
                     );
                 }
@@ -93,7 +96,7 @@ class FTP
             true
         );
         $files = $this->_filterOldFiles(
-            $this->_formatRawFtpFileList($files),
+            $this->formatRawFtpFileList($files),
             $maxAge
         );
 
@@ -129,6 +132,16 @@ class FTP
                                 $file['filename'],
                                 FTP_BINARY
                             );
+
+
+                            $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
+                            if (is_object($element)) {
+                                $date = $element->getCreatedTime();
+                            } else {
+                                $date = $file['date'];
+                            }
+
+                            touch($localFilePath, $date->getTimestamp());
 
                             $downloadedFiles++;
                         }
@@ -196,8 +209,14 @@ class FTP
 
             foreach ($localFileList as $file) {
                 if (!in_array($file, $serverFileList)) {
-                    unlink($cacheDir.'/'.$file);
-                    $deletedFiles++;
+                    $file = basename($file);
+                    $filePath = $cacheDir.'/'.$file;
+
+                    if (file_exists($filePath)) {
+                        unlink($cacheDir.'/'.$file);
+
+                        $deletedFiles++;
+                    }
                 }
             }
         }
@@ -210,7 +229,7 @@ class FTP
      *
      * @return array list of files with its properties
      **/
-    protected function _formatRawFtpFileList($rawFiles = '')
+    protected function formatRawFtpFileList($rawFiles = '')
     {
         // here the magic begins!
         $structure = array();

@@ -7,25 +7,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource;
+namespace Onm\Import\DataSource\Format;
+
+use Onm\Import\DataSource\FormatInterface;
 
 /**
  * Handles all the operations for NITF data
  *
- * @package Onm
- * @author
+ * @package Onm_Import
  **/
-class NITF
+class NITF implements FormatInterface
 {
     /**
      * Instantiates the NITF DOM data from an SimpleXML object
      *
      * @return void
-     * @author
      **/
     public function __construct($data)
     {
         $this->data = $data;
+
+        self::checkFormat($data, null);
     }
 
     /**
@@ -60,13 +62,6 @@ class NITF
                 return $this->getCreatedTime();
 
                 break;
-            case 'body':
-                if (count($this->texts) > 0) {
-                    return $this->texts[0];
-                }
-
-                return;
-                break;
         }
     }
 
@@ -76,6 +71,16 @@ class NITF
     public function getData()
     {
         return $this->data;
+    }
+
+    /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServiceName()
+    {
+        return '';
     }
 
     /**
@@ -151,6 +156,46 @@ class NITF
     }
 
     /**
+     * Returns the unique urn of the element
+     *
+     * @return string the urn
+     **/
+    public function getUrn()
+    {
+        return '';
+    }
+
+    /**
+     * Returns an integer between 1 and 5 that represents the priority level
+     *
+     * @return int the priority level
+     **/
+    public function getPriority()
+    {
+        return 1;
+    }
+
+    /**
+     * Returns the list of tags of this element
+     *
+     * @return int the priority level
+     **/
+    public function getTags()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the category of the element
+     *
+     * @return int the priority level
+     **/
+    public function getCategory()
+    {
+        return '';
+    }
+
+    /**
      * Returns the created time for this NITF resource
      *
      * @return \DateTime the created time
@@ -164,5 +209,24 @@ class NITF
             \DateTime::ISO8601,
             $originalDate
         );
+    }
+
+    /**
+     * Checks if the data provided could be handled by the class
+     *
+     * @return string
+     **/
+    public static function checkFormat($data, $xmlFile)
+    {
+        if (is_string($data)) {
+            throw new \Exception(sprintf(_('Not a valid NITF file')));
+        }
+
+        $node = $data->xpath("//nitf");
+
+        if (!is_array($node)) {
+            throw new \Exception(sprintf(_('Not a valid NITF file')));
+        }
+        return true;
     }
 }

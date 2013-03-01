@@ -7,7 +7,7 @@
         <p>{t}You must save a changes or back to list{/t}</p>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-primary yes accept" href="#">{t}Acept{/t}</a>
+        <a class="btn btn-primary yes accept" href="#">{t}Accept{/t}</a>
 
     </div>
 
