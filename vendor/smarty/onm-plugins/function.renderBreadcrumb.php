@@ -25,12 +25,12 @@ function smarty_function_renderBreadcrumb($params,&$smarty)
 
     $first = $ccm->categories[$actualCategory];
 
-    $output .= '<a href="/section/' . $first->name . '" title="'
+    $output .= '<a href="/seccion/' . $first->name . '" title="'
         . $first->title . '">' . $first->title . '</a>';
 
     if (!empty($first->fk_content_category)) {
         $second = $ccm->categories[$first->fk_content_category];
-        $output = ' <a href="/section/' . $second->name
+        $output = ' <a href="/seccion/' . $second->name
             .'" title="'. $second->title . '">' . $second->title . '</a>'
             . $separator. $output;
     }
