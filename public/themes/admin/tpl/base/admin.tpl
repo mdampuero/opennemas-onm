@@ -59,7 +59,7 @@
                         </li>
                         {if {count_pending_comments} gt 0}
                         <li class="notification-messages">
-                            <a class="" title="{t}There are new comments to moderate{/t}"
+                            <a class="" title="{count_pending_comments} {t}Pending comments{/t}"
                                 href="{url name=admin_comments}">
                                 <span class="icon icon-inbox icon-large"></span>
                                 <span class="icon count">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
