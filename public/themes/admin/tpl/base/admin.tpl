@@ -59,15 +59,15 @@
                         </li>
                         {if {count_pending_comments} gt 0}
                         <li class="notification-messages">
-                            <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
+                            <a class="" title="{t}There are new comments to moderate{/t}"
                                 href="{url name=admin_comments}">
-                                <span class="icon-envelope-alt icon-large"></span>
-                                <span class="icon">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
+                                <span class="icon icon-inbox icon-large"></span>
+                                <span class="icon count">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
                             </a>
                         </li>
                         {/if}
                         {is_module_activated name="USERVOICE_SUPPORT"}
-                        <li class="dropdown">
+                        <li class="help dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="icon-large icon-question-sign"></span>
                             </a>
