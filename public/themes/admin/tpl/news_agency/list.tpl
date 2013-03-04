@@ -94,14 +94,15 @@
                 {foreach name=c from=$elements item=element}
                 <tr class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
                     <td  class="right">
+                        {$element->priority}
                         {if $element->priority <= 1}
-                        <span class="badge">{t}Basic{/t}</span>
-                        {elseif $element->priority == 2}
-                        <span class="badge badge-info">{t}Normal{/t}</span>
-                        {elseif $element->priority == 3}
-                        <span class="badge badge-warning">{t}Important{/t}</span>
-                        {else}
                         <span class="badge badge-important">{t}Urgent{/t}</span>
+                        {elseif $element->priority == 2}
+                        <span class="badge badge-warning">{t}Important{/t}</span>
+                        {elseif $element->priority == 3}
+                        <span class="badge badge-info">{t}Normal{/t}</span>
+                        {else}
+                        <span class="badge">{t}Basic{/t}</span>
                         {/if}
                     </td>
                     <td >
@@ -137,7 +138,7 @@
                     <td class="right nowrap">
                         <ul class="btn-group">
                             <li>
-                                <a class="btn" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
+                                <a class="btn btn-small" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>
