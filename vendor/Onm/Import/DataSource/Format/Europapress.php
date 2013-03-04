@@ -184,10 +184,10 @@ class Europapress implements FormatInterface
     public static function getOriginalPriorities()
     {
         return array(
-            '10' => 4,
-            '20' => 3,
-            '25' => 2,
-            '30' => 1,
+            '10' => 1,
+            '20' => 2,
+            '25' => 3,
+            '30' => 4,
             // From Pandora
             'U'  => 4,
             'R'  => 3,
