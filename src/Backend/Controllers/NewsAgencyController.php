@@ -682,14 +682,71 @@ class NewsAgencyController extends Controller
 
         $id = $request->query->getDigits('id');
 
-        var_dump(realpath($this->syncPath));die();
+        if (!array_key_exists($id, $servers)) {
+            m::add(
+                sprintf(
+                    _('Source identifier "%d" not valid'),
+                    $id
+                ),
+                m::ERROR
+            );
 
+            return $this->redirect(
+                $this->generateUrl('admin_news_agency_config', array('page' => $page))
+            );
+        }
 
-        unset($servers[$id]);
+        try {
+            $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+            $synchronizer->deleteFilesForSource($id);
 
-        s::set('news_agency_config', $servers);
+            unset($servers[$id]);
 
-        m::add(_('News agency server deleted.'), m::SUCCESS);
+            s::set('news_agency_config', $servers);
+
+            m::add(_('News agency server deleted.'), m::SUCCESS);
+        } catch (\Exception $e) {
+            m::add($e->getMessage(), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl('admin_news_agency_servers'));
+    }
+
+    /**
+     * Removes the synchronized files for a given source
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function removeServerFilesAction(Request $request)
+    {
+        $servers = s::get('news_agency_config');
+
+        $id = $request->query->getDigits('id');
+
+        if (!array_key_exists($id, $servers)) {
+            m::add(
+                sprintf(
+                    _('Source identifier "%d" not valid'),
+                    $id
+                ),
+                m::ERROR
+            );
+
+            return $this->redirect(
+                $this->generateUrl('admin_news_agency_config', array('page' => $page))
+            );
+        }
+
+        try {
+            $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+            $synchronizer->deleteFilesForSource($id);
+
+            m::add(sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name']), m::SUCCESS);
+        } catch (\Exception $e) {
+            m::add($e->getMessage(), m::ERROR);
+        }
 
         return $this->redirect($this->generateUrl('admin_news_agency_servers'));
     }

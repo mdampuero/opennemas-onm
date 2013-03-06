@@ -2296,6 +2296,14 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_news_agency_server_clean_files',
+    new Route(
+        '/news-agency/servers/{id}/clean',
+        array('_controller' => 'Backend:Controllers:NewsAgencyController:removeServerFiles')
+    )
+);
+
+$adminRoutes->add(
     'admin_news_agency_unlock',
     new Route(
         '/news-agency/unlock',

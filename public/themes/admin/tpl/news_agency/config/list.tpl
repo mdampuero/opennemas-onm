@@ -50,6 +50,7 @@ jQuery(document).ready(function($) {
             <td class="right">
                 <div class="btn-group">
                     <a href="{url name=admin_news_agency_server_show id=$server['id']}" class="btn edit"><i class="pencil"></i> Editar</a>
+                    <a href="{url name=admin_news_agency_server_clean_files id=$server['id']}" class="btn" title="{t}Removes the synchronized files for this source{/t}"><i class="icon-circle-blank"></i></a>
                     <a href="{url name=admin_news_agency_server_delete id=$server['id']}" class="btn btn-danger"><i class="icon-trash icon-white"></i></a>
                 </div>
             </td>
