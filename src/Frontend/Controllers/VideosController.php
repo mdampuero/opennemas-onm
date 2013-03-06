@@ -48,7 +48,9 @@ class VideosController extends Controller
         $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $this->page = $this->request->query->getDigits('page', 1);
 
-        if (!empty($this->category_name) && $this->category_name != 'home' ) {
+        if (!empty($this->category_name)
+            && $this->category_name != 'home'
+        ) {
             $ccm = \ContentCategoryManager::get_instance();
             $this->category = $ccm->get_id($this->category_name);
             $category_real_name = $ccm->get_title($this->category_name);

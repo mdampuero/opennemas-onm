@@ -18,27 +18,81 @@
  **/
 class ContentCategory
 {
+    /**
+     * Category id
+     *
+     * @var int
+     **/
     public $pk_content_category = null;
-    public $fk_content_category = null;
-    public $img_path            = null;
-    public $color               = null;
-    public $name                = null; //nombre carpeta
-
-    public $title               = null; //titulo seccion
-
-    public $inmenu              = null; // Flag Ver en el menu.
-
-    public $posmenu             = null;
-    public $internal_category   = null; // flag asignar a un tipo de contenido.
-    public $params              = null;
 
     /**
+     * The parent category id
+     *
+     * @var int
+     **/
+    public $fk_content_category = null;
+
+    /**
+     * The path to the category logo/image
+     *
+     * @var string
+     **/
+    public $img_path            = null;
+
+    /**
+     * The color of the category
+     *
+     * @var string
+     **/
+    public $color               = null;
+
+    /**
+     * The name of the category
+     *
+     * @var string
+     **/
+    public $name                = null;
+
+    /**
+     * The human readable category name
+     *
+     * @var string
+     **/
+    public $title               = null;
+
+    /**
+     * Whether if this category is in menu
+     *
+     * @var boolean
+     **/
+    public $inmenu              = null;
+
+    /**
+     * Position in menu
+     *
+     * @var int
+     **/
+    public $posmenu             = null;
+
+    /**
+     * Special category for identify types of content
+     *
      * $internal_category = 0 categoria es interna (para usar ventajas
      * funciones class ContentCategory) no se muestra en el menu.
      * $internal_category = 1 categoria generica para todos los
      * tipos de contenidos.
      * $internal_category = n corresponde con el content_type
+     *
+     * @var int
      **/
+    public $internal_category   = null;
+
+    /**
+     * Misc params for this category
+     *
+     * @var array
+     **/
+    public $params              = null;
 
     /**
      * Initializes the Category class.
@@ -126,7 +180,6 @@ class ContentCategory
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
-
     }
 
     /**
@@ -235,8 +288,6 @@ class ContentCategory
 
     /**
      * Deletes all the contents for one category given the category id.
-     *
-     * @param string $id the category id.
      *
      * @return boolean true if all the contents was deleted sucessfully
      **/

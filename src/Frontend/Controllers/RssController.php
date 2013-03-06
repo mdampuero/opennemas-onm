@@ -194,7 +194,7 @@ class RssController extends Controller
                     $photos[$article->id] = new \Photo($article->img1);
                 }
 
-                $article->category_name = $article->loadCategoryName($article->id);
+                // $article->category_name = $article->loadCategoryName($article->id);
             }
 
             $this->view->assign(

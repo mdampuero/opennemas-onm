@@ -94,5 +94,5 @@ var  newsletter_urls = {
         </div>
     </div>
 </form>
-
+{include file="newsletter/modals/_save_changes_alert.tpl"}
 {/block}

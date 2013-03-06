@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\Import;
+namespace Onm\Import\Repository;
 
 /**
  * Base interface for create resource importers.
@@ -15,7 +15,7 @@ namespace Onm\Import;
  * @package    Onm
  * @subpackage Import
  */
-interface Importer
+interface ImporterInterface
 {
     public function findAll();
     public function findAllBy($params);

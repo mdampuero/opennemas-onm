@@ -19,18 +19,43 @@ use \Onm\Settings as s;
  **/
 class PClave
 {
+    /**
+     * The keyword id
+     *
+     * @var int
+     **/
     public $id = null;
+
+    /**
+     * The keyword name
+     *
+     * @var string
+     **/
     public $pclave = null;
+
+    /**
+     * The keyword value
+     *
+     * @var string
+     **/
     public $value  = null;
+
+    /**
+     * The type of the keyword (url, internal search, ...)
+     *
+     * @var
+     **/
     public $tipo   = null;
 
     /**
-     * @var MethodCacheManager Handler to call method cached
+     * Handler to call the method cacher
+     *
+     * @var MethodCacheManager
      */
     public $cache = null;
 
     /**
-     * constructor
+     * Initializes the keyword object instance
      *
      * @param int $id
      */
@@ -47,6 +72,7 @@ class PClave
      * Read, get a specific object
      *
      * @param  int    $id Object ID
+     *
      * @return PClave Return instance to chaining method
      */
     public function read($id)
@@ -168,9 +194,11 @@ class PClave
     }
 
     /**
-     * Get list of terms to substitute
+     * Get list of terms given a filter
      *
-     * @return array Terms
+     * @param string $filter the SQL WHERE clause
+     *
+     * @return array list of terms
      */
     public function find($filter = null)
     {
@@ -197,7 +225,12 @@ class PClave
     }
 
     /**
+     * Replaces the appearances of all the keywords by their replacements
      *
+     * @param string $text the text to change
+     * @param array $terms the list of terms to replace
+     *
+     * @return string the changed text
      */
     public function replaceTerms($text, $terms)
     {

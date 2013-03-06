@@ -62,9 +62,25 @@ function smarty_function_get_social_link($params, &$smarty)
             $googlePage = s::get('google_page');
 
             if (!empty($googlePage)) {
-                $output = 
+                $output =
                     '<li '.$style.'>
                         <a href="'.$googlePage.'" target="_blank" title="Visita nuestro perfíl en Google Plus">
+                           <img src="'.$params['img'].'" alt="" />
+                        </a>
+                    </li>';
+            }
+            break;
+        case 'youtube':
+            if (!isset($params['img'])) {
+                $params['img'] = $smarty->parent->image_dir.'bullets/youtube-24.png';
+            }
+
+            $youtubePage = s::get('youtube_page');
+
+            if (!empty($googlePage)) {
+                $output =
+                    '<li '.$style.'>
+                        <a href="'.$youtubePage.'" target="_blank" title="Visita nuestra página en Youtube">
                            <img src="'.$params['img'].'" alt="" />
                         </a>
                     </li>';
@@ -81,7 +97,7 @@ function smarty_function_get_social_link($params, &$smarty)
                        <img src="'.$params['img'].'" alt="" />
                     </a>
                 </li>';
- 
+
             }
             break;
     }

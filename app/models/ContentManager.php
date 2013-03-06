@@ -1302,7 +1302,7 @@ class ContentManager
 
         $items = $this->loadObject($rs, 'content');
 
-        return $items;
+        return $this->getInTime($items);
     }
 
     /**
@@ -2077,9 +2077,9 @@ class ContentManager
                 if ($contentId <= 0) {
                     continue;
                 }
-                $content = $content->get($contentId);
 
-                if ($content->pk_content == $contentId) {
+                $content = \Content::get($contentId);
+                if (isset($content->pk_content) && $content->pk_content == $contentId) {
                     $contents []= $content;
                 }
             }

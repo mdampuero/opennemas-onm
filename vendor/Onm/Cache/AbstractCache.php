@@ -1,10 +1,14 @@
 <?php
-/*
+/**
+ * Defines the Onm\Cache\AbstractCache abstract class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Cache
  */
 
 namespace Onm\Cache;
@@ -12,27 +16,33 @@ namespace Onm\Cache;
 /**
  * Base class for cache driver implementations.
  *
- * @since 0.8
- * @author  Fran Dieguez <fran@openhost.es>
+ * @package Onm_Cache
  */
 abstract class AbstractCache implements CacheInterface
 {
-    /** @var string The namespace to prefix all cache ids with */
-    private $_namespace = '';
+    /**
+     * The namespace to prefix all cache ids with
+     * @var string
+     **/
+    private $namespace = '';
 
     /**
-     * Set the namespace to prefix all cache ids with.
+     * Set the namespace to prefix all cache ids with
      *
      * @param  string $namespace
      * @return void
      */
     public function setNamespace($namespace)
     {
-        $this->_namespace = (string) $namespace;
+        $this->namespace = (string) $namespace;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param  string $id cache id The id of the cache entry to fetch.
+     * @return string The cached data or FALSE, if no cache entry
+     *                exists for the given id.
      */
     public function fetch($id)
     {
@@ -41,6 +51,10 @@ abstract class AbstractCache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param  string  $id cache id The cache id of the entry to check for.
+     * @return boolean TRUE if a cache entry exists for
+     *                 the given cache id, FALSE otherwise.
      */
     public function contains($id)
     {
@@ -49,6 +63,14 @@ abstract class AbstractCache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $id       The cache id.
+     * @param string $data     The cache entry/data.
+     * @param int    $lifeTime The lifetime. If != false, sets a specific
+     *                         lifetime for this cache entry (null => infinite
+     *                         lifeTime).
+     * @return boolean TRUE if the entry was successfully stored in the
+     *                         cache, FALSE otherwise.
      */
     public function save($id, $data, $lifeTime = 0)
     {
@@ -57,6 +79,10 @@ abstract class AbstractCache implements CacheInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param  string  $id cache id
+     * @return boolean TRUE if the cache entry was successfully deleted,
+     *                 FALSE otherwise.
      */
     public function delete($id)
     {
@@ -70,7 +96,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Delete all cache entries.
+     * Deletes all cache entries.
      *
      * @return array $deleted  Array of the deleted cache ids
      */
@@ -86,7 +112,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Delete cache entries where the id matches a PHP regular expressions
+     * Deletes cache entries where the id matches a PHP regular expressions
      *
      * @param  string $regex
      * @return array  $deleted  Array of the deleted cache ids
@@ -108,7 +134,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Delete cache entries where the id has the passed prefix
+     * Deletes cache entries where the id has the passed prefix
      *
      * @param  string $prefix
      * @return array  $deleted  Array of the deleted cache ids
@@ -131,7 +157,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Delete cache entries where the id has the passed suffix
+     * Deletes cache entries where the id has the passed suffix
      *
      * @param  string $suffix
      * @return array  $deleted  Array of the deleted cache ids
@@ -160,7 +186,7 @@ abstract class AbstractCache implements CacheInterface
      */
     private function getNamespacedId($id)
     {
-        return $this->_namespace . $id;
+        return $this->namespace . $id;
     }
 
     /**

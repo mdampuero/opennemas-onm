@@ -42,7 +42,6 @@ class ArticlesController extends Controller
         $this->ccm  = \ContentCategoryManager::get_instance();
     }
 
-
     /**
      * Displays the article given its id or slug
      *
@@ -73,15 +72,19 @@ class ArticlesController extends Controller
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
+        $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+        $layoutFile = 'layouts/'.$layout.'.tpl';
+
+        $this->view->assign('layoutFile', $layoutFile);
+
         if (($this->view->caching == 0)
-            || !$this->view->isCached('article/article.tpl', $cacheID)
+            || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
             $article = new \Article($articleID);
 
             if (($article->available == 1) && ($article->in_litter == 0)
                 && ($article->isStarted())
             ) {
-
                 // Categories code -------------------------------------------
                 // TODO: Seems that this is rubbish, evaluate its removal
                 $actualCategory      = $categoryName;
@@ -143,6 +146,7 @@ class ArticlesController extends Controller
                 // Machine suggested contents code -----------------------------
                 $machineSuggestedContents = array();
                 if (!empty($article->metadata)) {
+
                     $objSearch    = \cSearch::getInstance();
                     $machineSuggestedContents =
                         $objSearch->searchSuggestedContents(
@@ -156,12 +160,6 @@ class ArticlesController extends Controller
                         $cm->getInTime($machineSuggestedContents);
                 }
                 $this->view->assign('suggested', $machineSuggestedContents);
-
-                $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
-                $layoutFile = 'layouts/'.$layout.'.tpl';
-
-                $this->view->assign('layoutFile', $layoutFile);
-
             } else {
                 throw new ResourceNotFoundException();
             }
@@ -199,8 +197,7 @@ class ArticlesController extends Controller
         // Advertisements for single article NO CACHE
         $this->getInnerAds($categoryName);
 
-        if (
-            $this->view->caching == 0
+        if ($this->view->caching == 0
             || !$this->view->isCached('article/article.tpl', $cacheID)
         ) {
 

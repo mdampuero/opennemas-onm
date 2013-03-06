@@ -1,43 +1,50 @@
 <?php
-/*
+/**
+ * Defines the FilesManager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Utils
  */
 /**
  * Files Manager
  *
- * @package    Onm
- * @subpackage Utils
+ * @package    Onm_Utils
  **/
 class FilesManager
 {
     /**
-     * Create directories each content, if it don't exists
-     * /images/ /files/, /advertisements/, /opinion/
+     * Create the directories for each content, if they don't exists
+     *
+     * @return void
      */
     public function createAllDirectories()
     {
-        $dir_date = date("Y/m/d/");
+        $directoryDate = date("Y/m/d/");
+
         // /images/, /files/, /ads/, /opinion/
         // /media/images/año/mes/dia/
-        //
-        $dirs = array(
+        $mediaDirectories = array(
             MEDIA_IMG_DIR, MEDIA_FILE_DIR, MEDIA_ADS_DIR, MEDIA_OPINION_DIR
         );
 
-        foreach ($dirs as $dir) {
-            $path = MEDIA_PATH.$dir.'/'.$dir_date ;
-            FilesManager::createDirectory($path);
+        foreach ($mediaDirectories as $directory) {
+            $path = MEDIA_PATH.$directory.'/'.$directoryDate ;
+
+            self::createDirectory($path);
         }
     }
 
     /**
-     * Create a new directory, if it don't exists
+     * Creates a new directory, if it don't exists
      *
      * @param string $path Directory to create
+     *
+     * @return boolean true if the directory was created
      */
     public static function createDirectory($path)
     {
@@ -58,23 +65,26 @@ class FilesManager
     }
 
     /**
-     * Copy source path into destination path, and creates it if not exists.
+     * Copies a folder and all its contents into a destination
      *
      * @param string $source      fullpath for the copy
      * @param string $destination path to the new destination
+     *
+     * @return boolean true if the copy was done
      */
     public static function recursiveCopy($source, $destination)
     {
         // Delete destination if exists
         if (file_exists($destination)) {
-            this::deleteDirectoryRecursively($destination);
+            self::deleteDirectoryRecursively($destination);
         }
 
         // if is dir try to recursive copy it, if is a file copy it directly
         if (is_dir($source)) {
             if (!file_exists($destination)) {
                 if (!is_writable(dirname($destination))
-                    || !mkdir($destination, 0775, true)) {
+                    || !mkdir($destination, 0775, true)
+                ) {
                     return false;
                 }
             }
@@ -95,7 +105,11 @@ class FilesManager
     }
 
     /**
-     * Delete a directory is it exists
+     * Deletes a directory is it exists
+     *
+     * @param string $path the path to remove
+     *
+     * @return void
      */
     public function deleteDirectory($path)
     {
@@ -109,11 +123,11 @@ class FilesManager
     }
 
     /**
-     * Delete a directory recursively. Delete
-     * a directiry with content.
+     * Deletes a directory and all its contents.
      *
      * @param string $path Directory to delete
-     * @return  Returns TRUE on success or FALSE on failure.
+     *
+     * @return boolean Returns TRUE on success or FALSE on failure.
      */
     public static function deleteDirectoryRecursively($path)
     {
@@ -138,70 +152,56 @@ class FilesManager
     }
 
     /**
-     * Create a file in some path
+     * Creates an empty file in th given path
      *
-     * @param string $path Directory concat with filename
+     * @param string $filename Directory concat with filename
+     *
+     * @return boolean true if the file was created or already exists.
      */
     public static function mkFile($filename)
     {
         if (!is_file($filename)) {
-            $handle = fopen($filename, "x");
-            if ($handle) {
-                fclose($handle);
-
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return true; //file already exists
+            return self::writeInFile($filename, '');
         }
+
+        return true;
     }
 
     /**
      * Write some content in a file
      *
-     * @param string $file  name
-     * @param string $input content to save in a file
+     * @param string $file  the name of the file
+     * @param string $content content to save in a file
+     *
+     * @return boolean true if the file was saved
      */
-    public static function writeInFile($file, $input)
+    public static function writeInFile($file, $content)
     {
-        chmod($file, 0755);
-        $handle = fopen($file, "w");
-        if (!fwrite($handle, $input)) {
-            return false; // failed.
-        } else {
-            fclose($handle);
-            return true; //success.
-        }
+        $bytesSaved = file_put_contents($file, $content);
 
+        return ($bytesSaved !== false);
     }
 
     /**
-     * Uncompress Zip archives
+     * Uncompress Zip archives and returns the list of files inside the archive
      *
-     * @param string $file name
+     * @param string $filePath the
      *
+     * @return string the list of files extracted
      */
-    public static function decompressZIP($file)
+    public static function decompressZIP($filePath)
     {
         $zip = new ZipArchive;
 
         // open archive
-        if ($zip->open($file) !== true) {
+        if ($zip->open($filePath) !== true) {
             die ("Could not open archive");
         }
 
         $dataZIP = array();
 
-        // get number of files in archive
         $numFiles = $zip->numFiles;
-
-        // iterate over file list
-        // print details of each file
-        // DEL REVËS   for ($x=$numFiles; $x>0; $x--) {
         for ($x=0; $x<$numFiles; $x++) {
-
             $file = $zip->statIndex($x);
             $dataZIP[$x] = $file['name'];
         }
@@ -222,17 +222,18 @@ class FilesManager
     /**
      * Compress archives in a Tgz
      *
-     * @param string $file name
-     * @param string $compressFile name
+     * @param string $file the file compress
+     * @param string $destination the target destionation
      *
+     * @return boolean true if the file was compresed
      */
-    public static function compressTgz($file, $compressFile)
+    public static function compressTgz($file, $destination)
     {
-        $command = "tar cpfz $compressFile $file";
+        $command = "tar cpfz $compressFile $destination";
 
-        exec($command, $output, $return_var);
+        exec($command, $output, $outputCode);
 
-        if ($return_var != 0) {
+        if ($outputCode != 0) {
             return false;
         }
 
@@ -240,11 +241,12 @@ class FilesManager
     }
 
     /**
-     * Decompress archives Tgz
+     * Decompress a tgz file into a destionation
      *
-     * @param string $file name
-     * @param string $compressFile name
+     * @param string $compressFile the original file to extract
+     * @param string $destination the folder where extract files
      *
+     * @return boolean true if the file was decompressed
      */
     public static function decompressTgz($compressFile, $destination)
     {
@@ -259,11 +261,11 @@ class FilesManager
     }
 
      /**
-     * Clean the special chars into a file name
+     * Cleans special chars from a file name
      *
-     * @access static
-     * @param  string  $name, the string to clean
-     * @return string, the string cleaned
+     * @param  string  $name the string to clean
+     *
+     * @return string the string cleaned
      **/
     public static function cleanFileName($name)
     {

@@ -1,26 +1,36 @@
 <?php
 /**
+ * Defines the Onm\Import\Repository\ImporterAbstract class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Importer
  **/
-namespace Onm\Import;
+namespace Onm\Import\Repository;
 
 use Onm\Import\Synchronizer\LockException;
 
 /**
  * Handles all the common methods in the importers
  *
- * @package Onm
- * @subpackage Importer
+ * @package Onm_Importer
  **/
 abstract class ImporterAbstract
 {
 
-    /*
+    /**
+     * The path where to save the downloaded files
+     *
+     * @var string
+     **/
+    public $syncPath = '';
+
+    /**
      * Creates a lock for avoid concurrent sync by multiple users
      *
      * @return void
@@ -35,7 +45,7 @@ abstract class ImporterAbstract
         }
     }
 
-    /*
+    /**
      * Delete the lock for avoid concurrent sync by multiple users
      *
      * @return void
@@ -54,8 +64,8 @@ abstract class ImporterAbstract
      */
     public function getSyncParams()
     {
-        if (file_exists($this->_syncFilePath)) {
-            return unserialize(file_get_contents($this->_syncFilePath));
+        if (file_exists($this->syncFilePath)) {
+            return unserialize(file_get_contents($this->syncFilePath));
         } else {
             return array(
                 'lastimport'        => '',
@@ -64,7 +74,7 @@ abstract class ImporterAbstract
         }
     }
 
-    /*
+    /**
      * Gets the minutes from last synchronization of elements
      *
      * @param array $params misc params that alteres function behaviour
@@ -86,13 +96,12 @@ abstract class ImporterAbstract
      *
      * @return boolean true if syncPath is present and writtable
      */
-    public function isSyncEnrironmetReady()
+    public function isSyncEnvironmetReady()
     {
-
         return (
-            file_exists($this->_syncFilePath)
-            && is_writable($this->_syncPath)
-            && is_writable($this->_syncFilePath)
+            file_exists($this->syncFilePath)
+            && is_writable($this->syncPath)
+            && is_writable($this->syncFilePath)
         );
     }
 
@@ -104,11 +113,12 @@ abstract class ImporterAbstract
      */
     public function setupSyncEnvironment($params = array())
     {
-        if (!file_exists($this->_syncPath)) {
-            mkdir($this->_syncPath);
-        } elseif (!file_exists($this->_syncFilePath)) {
+        if (!file_exists($this->syncPath)) {
+            mkdir($this->syncPath);
+        }
 
-            return touch($this->_syncFilePath);
+        if (!file_exists($this->syncFilePath)) {
+            return touch($this->syncFilePath);
         }
 
         return false;
@@ -131,7 +141,7 @@ abstract class ImporterAbstract
         }
 
         // Clean previously imported files that are not present in local cache
-        $localElements  = $this->getLocalFileList($this->_syncPath);
+        $localElements  = $this->getLocalFileList($this->syncPath);
         $previousImportedElements      = $syncParams['imported_elements'];
         $previousImportedElementsCount = count($previousImportedElements);
         $elements = array();
@@ -149,7 +159,7 @@ abstract class ImporterAbstract
             'imported_elements' => $newImportedelements,
         );
 
-        file_put_contents($this->_syncFilePath, serialize($newSyncParams));
+        file_put_contents($this->syncFilePath, serialize($newSyncParams));
 
         return $newSyncParams;
     }
@@ -163,20 +173,25 @@ abstract class ImporterAbstract
      */
     public static function getLocalFileList($cacheDir)
     {
-        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
+        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*/*.xml');
 
         usort(
             $fileListing,
-            create_function('$a,$b', 'return filemtime($b) - filemtime($a);')
+            function ($a, $b) {
+                return filemtime($a) < filemtime($b);
+            }
         );
 
         $fileListingCleaned = array();
 
-        foreach ($fileListing as $file) {
-            $fileListingCleaned []= basename($file);
+
+        foreach ($fileListing as &$file) {
+            $file = str_replace($cacheDir.DIRECTORY_SEPARATOR, '', $file);
+
+            // $fileListingCleaned []= basename($file);
         }
 
-        return $fileListingCleaned;
+        return $fileListing;
     }
 
     /**
@@ -191,7 +206,7 @@ abstract class ImporterAbstract
     public function sync($params = array())
     {
         // Check if the folder where store elements is ready and writtable
-        if (!$this->isSyncEnrironmetReady()) {
+        if (!$this->isSyncEnvironmetReady()) {
             $this->setupSyncEnvironment();
         }
 
@@ -201,15 +216,21 @@ abstract class ImporterAbstract
             );
         }
 
+        $serverSyncPath = $this->syncPath.DIRECTORY_SEPARATOR.$params['id'];
+
+        if (!is_dir($serverSyncPath)) {
+            mkdir($serverSyncPath);
+        }
+
         $this->lockSync();
 
-        $excludedFiles = self::getLocalFileList($this->_syncPath);
+        $excludedFiles = self::getLocalFileList($serverSyncPath);
 
         $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
         $ftpSync = $synchronizer->downloadFilesToCacheDir(
-            $this->_syncPath,
+            $serverSyncPath,
             $excludedFiles,
-            $params['max_age']
+            $params['sync_from']
         );
 
         $this->unlockSync();

@@ -1,4 +1,4 @@
-23{extends file="base/admin.tpl"}
+{extends file="base/admin.tpl"}
 
 {block name="header-css" append}
 <style type="text/css">
@@ -88,7 +88,7 @@
                 <li>
                     <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
-                        {t}Go back{/t}
+                        {t}Back to list{/t}
                     </a>
                 </li>
             </ul>
@@ -104,7 +104,7 @@
             <div class="control-group">
                 <label for="name" class="control-label">{t}Email subject{/t}</label>
                 <div class="controls">
-                    <input type="text" name="title" id="title" style="width:80%" value="{$newsletter->title|default:$name} [{$smarty.now|date_format:'%d/%m/%Y'}]" required class="input-xlarge"/>
+                    <input type="text" name="title" id="title" style="width:80%" value="{$newsletter->title|default:$name}" required class="input-xlarge"/>
                 </div>
             </div>
 
@@ -140,7 +140,6 @@
                         {else}
                             {section name=c loop=$newsletterContent}
                                 {assign var='contents' value=$newsletterContent[c]->items}
-                                {if !empty($contents)}
                                 <div class="container-receiver {if $smarty.section.c.first} active{/if}"
                                     data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
                                     <div class="container-label"><span>{$newsletterContent[c]->title}</span>
@@ -165,7 +164,6 @@
                                         {/section}
                                     </ul>
                                 </div>
-                                {/if}
                             {/section}
                         {/if}
 

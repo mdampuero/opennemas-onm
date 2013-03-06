@@ -81,22 +81,7 @@
             <div class="control-group">
                 <label for="category" class="control-label">{t}Category{/t}</label>
                 <div class="controls">
-                    <select name="category" id="category" required="required">
-                        {section name=as loop=$allcategorys}
-                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                            <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                            {if (($category == $allcategorys[as]->pk_content_category))
-                            || $attaches->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                            {section name=su loop=$subcat[as]}
-                                {if $subcat[as][su]->internal_category eq 1}
-                                    <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                                    {if $category eq $subcat[as][su]->pk_content_category || $attaches->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                {/if}
-                            {/section}
-                            {/acl}
-                        {/section}
-                        <option value="20" data-name="{t}Unknown{/t}">{t}Unknown{/t}</option>
-                    </select>
+                    {include file="common/selector_categories.tpl" name="category" item=$attaches}
                 </div>
             </div>
         </div>

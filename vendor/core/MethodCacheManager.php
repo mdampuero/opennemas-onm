@@ -15,11 +15,43 @@
  **/
 class MethodCacheManager
 {
+    /**
+     * How much time the cache will be valid
+     *
+     * @var int
+     **/
     private $ttl       = 300;
+
+    /**
+     * The object to interact with
+     *
+     * @var mixed
+     **/
     private $object    = null;
+
+    /**
+     * A list of methods that the object has
+     *
+     * @var array
+     **/
     private $methods   = null;
+
+    /**
+     * The class name of the referenced object
+     *
+     * @var string
+     **/
     private $classname = null;
 
+    /**
+     * Initializes the instance
+     *
+     * @param mixed $object the object to interact with
+     * @param array $options some options to change the behaviour of this class
+     *                       like ttl, ...
+     *
+     * @return MethodCacheManager
+     **/
     public function __construct($object, $options = array())
     {
         $this->object = $object;
@@ -29,6 +61,15 @@ class MethodCacheManager
         }
     }
 
+    /**
+     * Proxy method that performs all the calls to the object and caches its results
+     * if the result was previously cached returns the result directly from the cache
+     *
+     * @param string $method the method to call
+     * @param array $args the arguments to pass to the method
+     *
+     * @return mixed the result of the called
+     **/
     public function __call($method, $args)
     {
         $class_methods = $this->getInternalObjectMethods();
@@ -54,6 +95,13 @@ class MethodCacheManager
         }
     }
 
+    /**
+     * Sets the time to life of caches for this instance
+     *
+     * @param int $ttl the amount of seconds the cache will be valid
+     *
+     * @return MethodCacheManager
+     **/
     public function setCacheLife($ttl)
     {
         $this->ttl = $ttl;
@@ -61,6 +109,13 @@ class MethodCacheManager
         return $this;
     }
 
+    /**
+     * Deletes an APC cache given its key
+     *
+     * @param string $key the name of the cache to delete
+     *
+     * @return MethodCacheManager
+     **/
     public function clearCache($key)
     {
         apc_delete($key);
@@ -68,6 +123,11 @@ class MethodCacheManager
         return $this;
     }
 
+    /**
+     * Deletes all the APC caches.
+     *
+     * @return MethodCacheManager
+     **/
     public function clearAllCaches()
     {
         apc_clear_cache('user');
@@ -75,6 +135,12 @@ class MethodCacheManager
         return $this;
     }
 
+    /**
+     * Return the list of class methods for the object that this instance is
+     * interacting with
+     *
+     * @return array
+     **/
     protected function getInternalObjectMethods()
     {
         if ($this->methods === null && $this->object !== null) {

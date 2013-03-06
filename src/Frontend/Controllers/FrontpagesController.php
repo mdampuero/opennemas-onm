@@ -165,8 +165,7 @@ class FrontpagesController extends Controller
         $this->getAds($categoryName);
 
         // Avoid to run the entire app logic if is available a cache for this page
-        if (
-            $this->view->caching == 0
+        if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
 
