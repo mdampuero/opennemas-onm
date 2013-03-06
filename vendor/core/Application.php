@@ -119,7 +119,7 @@ class Application
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
 
         $GLOBALS['application']->conn->bulkBind = true;
-        $GLOBALS['application']->conn->LogSQL();
+        // $GLOBALS['application']->conn->LogSQL();
     }
 
     /**
