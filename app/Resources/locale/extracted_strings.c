@@ -2509,6 +2509,9 @@ gettext("Enabled");
 /* public/themes/admin/tpl//news_agency/config/list.tpl */
 gettext("Disabled");
 
+/* public/themes/admin/tpl//news_agency/config/list.tpl */
+gettext("Removes the synchronized files for this source");
+
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("News agency");
 
@@ -2639,16 +2642,16 @@ gettext("Date");
 gettext("Actions");
 
 /* public/themes/admin/tpl//news_agency/list.tpl */
-gettext("Basic");
-
-/* public/themes/admin/tpl//news_agency/list.tpl */
-gettext("Normal");
+gettext("Urgent");
 
 /* public/themes/admin/tpl//news_agency/list.tpl */
 gettext("Important");
 
 /* public/themes/admin/tpl//news_agency/list.tpl */
-gettext("Urgent");
+gettext("Normal");
+
+/* public/themes/admin/tpl//news_agency/list.tpl */
+gettext("Basic");
 
 /* public/themes/admin/tpl//news_agency/list.tpl */
 gettext("With image");
@@ -2690,9 +2693,6 @@ gettext("Try syncing from server by click over the \"Sync with server\" button a
 gettext("News Agency");
 
 /* public/themes/admin/tpl//news_agency/import_select_category.tpl */
-gettext("Importing article");
-
-/* public/themes/admin/tpl//news_agency/import_select_category.tpl */
 gettext("Import");
 
 /* public/themes/admin/tpl//news_agency/import_select_category.tpl */
@@ -2708,7 +2708,7 @@ gettext("Go back to list");
 gettext("Go back to list");
 
 /* public/themes/admin/tpl//news_agency/import_select_category.tpl */
-gettext("You are about to import one article with the next data");
+gettext("You are about to import one article, please select a category where to import the article");
 
 /* public/themes/admin/tpl//news_agency/import_select_category.tpl */
 gettext("Title");
@@ -4406,7 +4406,7 @@ gettext("Go to admin main page");
 gettext("Search...");
 
 /* public/themes/admin/tpl//base/admin.tpl */
-gettext("There are new comments to moderate");
+gettext("Pending comments");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Pending comments");
@@ -8350,17 +8350,26 @@ gettext("Private key:");
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Activated modules");
 
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("Dragons Ahead!");
-
-/* public/themes/manager/tpl/instances/edit.tpl */
-gettext("This section is experimental and could not work as espected");
-
 /* public/themes/manager/tpl/index/index.tpl */
 gettext("Welcome to OpenNeMas instance manager");
 
 /* public/themes/manager/tpl/base/base.tpl */
 gettext("Go to admin main page");
+
+/* public/themes/manager/tpl/base/base.tpl */
+gettext("Edit my profile");
+
+/* public/themes/manager/tpl/base/base.tpl */
+gettext("Edit my profile");
+
+/* public/themes/manager/tpl/base/base.tpl */
+gettext("Do you really want to exit from manager?");
+
+/* public/themes/manager/tpl/base/base.tpl */
+gettext("Logout from manager");
+
+/* public/themes/manager/tpl/base/base.tpl */
+gettext("Log out");
 
 /* public/themes/manager/tpl/base/base.tpl */
 gettext("About");
@@ -8394,6 +8403,240 @@ gettext("Cache manager");
 
 /* public/themes/manager/tpl/error/404.tpl */
 gettext("We already have being informed of this error: %1");
+
+/* public/themes/manager/tpl/acl/user_group/modal/_modalDelete.tpl */
+gettext("Delete user");
+
+/* public/themes/manager/tpl/acl/user_group/modal/_modalDelete.tpl */
+gettext("Are you sure that do you want to delete \"<span>%title%</span>\"?");
+
+/* public/themes/manager/tpl/acl/user_group/modal/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/themes/manager/tpl/acl/user_group/modal/_modalDelete.tpl */
+gettext("No");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("User groups");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("New Privilege");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("New User Group");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("New User group");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("Group name");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("Actions");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("Edit group");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("Edit group");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("Edit");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("Delete group");
+
+/* public/themes/manager/tpl/acl/user_group/list.tpl */
+gettext("There is no groups created yet.");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Editing group");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Creating user group");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Save");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Save");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Go back");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Go back");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Go back");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Group name");
+
+/* public/themes/manager/tpl/acl/user_group/new.tpl */
+gettext("Privileges");
+
+/* public/themes/manager/tpl/acl/user/modal/_modalDelete.tpl */
+gettext("Delete user");
+
+/* public/themes/manager/tpl/acl/user/modal/_modalDelete.tpl */
+gettext("Are you sure that do you want to delete \"<span>%title%</span>\"?");
+
+/* public/themes/manager/tpl/acl/user/modal/_modalDelete.tpl */
+gettext("Yes, delete");
+
+/* public/themes/manager/tpl/acl/user/modal/_modalDelete.tpl */
+gettext("No");
+
+/* public/themes/manager/tpl/acl/user/modal/_modal_edit_user_group.tpl */
+gettext("Editing user group");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Users");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Delete selected users");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Delete");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Delete");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Create new user");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("New user");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Filter by name");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("or");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("username");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("and group:");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Full name");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Username");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Group");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Activated");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Actions");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Edit user");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Activate user");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Edit user");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Edit");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("Delete this user");
+
+/* public/themes/manager/tpl/acl/user/list.tpl */
+gettext("There is no users created yet or <br/>your search don't match your criteria");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Editing user");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Creating user");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Save and exit");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Save and exit");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Save");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Go back");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Go back");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Go back");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Basic information");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("User info");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Settings");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Settings");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Privileges");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Privileges");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Display name");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("User name");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Email");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Password");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Confirm password");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Session expire time:");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("minutes");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("User language");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Used for displayed messages, interface and measures in your page.");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("User group:");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("User group:");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("--Select one--");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Master");
 
 /* public/themes/manager/tpl/framework/commands/commands.tpl */
 gettext("Application commands");
