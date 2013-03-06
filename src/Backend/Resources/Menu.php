@@ -176,7 +176,7 @@ $menuXml = '<?xml version="1.0"?>
 
     <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#"
         privilege="SEARCH_ADMIN,TRASH_ADMIN,NEWSLETTER_ADMIN,PCLAVE_ADMIN,SCHEDULE_ADMIN,'
-                  .'IMPORT_EPRESS,IMPORT_EFE,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
+                  .'IMPORTER_ADMIN,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
@@ -212,8 +212,8 @@ $menuXml = '<?xml version="1.0"?>
             link="http://www.cronicasdelaemigracion.com//agenda/"
             privilege="SCHEDULE_ADMIN" />
         <node
-            module_name="EFE_IMPORTER"
-            privilege="IMPORT_EFE"
+            module_name="NEWS_AGENCY_IMPORTER"
+            privilege="IMPORT_ADMIN"
             title="'.htmlspecialchars(_("News Agency"), ENT_QUOTES).'"
             id="news_agency"
             link="'.url('admin_news_agency').'"

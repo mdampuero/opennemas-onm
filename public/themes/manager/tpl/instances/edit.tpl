@@ -668,13 +668,7 @@ jQuery(document).ready(function($) {
                                 <label for="mail_server">{t}Activated modules{/t}</label>
                             </th>
                             <td class="form-inline">
-                                {html_checkboxes name='activated_modules' values=$available_modules output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
-                            </td>
-                            <td>
-                                <div class="onm-help-block warning margin-left-1">
-                                    <div class="title"><h4>{t}Dragons Ahead!{/t}</h4></div>
-                                    <div class="content">{t escape=off}This section is experimental and could not work as espected{/t}</div>
-                                </div>
+                                {html_checkboxes name='activated_modules' values=array_keys($available_modules) output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
                             </td>
                         </tr>
                     </tbody>
