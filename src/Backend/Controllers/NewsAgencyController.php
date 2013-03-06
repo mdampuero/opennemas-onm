@@ -648,8 +648,10 @@ class NewsAgencyController extends Controller
                 $servers = array();
             }
 
+            $latestServerId = max(array_keys($servers));
+
             $server = array(
-                'id'            => count($servers) + 1,
+                'id'            => $latestServerId + 1,
                 'name'          => $request->request->filter('name', '', FILTER_SANITIZE_STRING),
                 'url'           => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
