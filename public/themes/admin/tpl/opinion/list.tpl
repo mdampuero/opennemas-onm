@@ -16,7 +16,7 @@
         </div>
         <ul class="old-button">
             {acl isAllowed="OPINION_AVAILABLE"}
-        {*    <li class="batch-actions">
+            <li class="batch-actions">
 
                 <a href="#">
                     <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
@@ -54,7 +54,6 @@
                 </ul>
 
             </li>
-            *}
             {/acl}
 
             {acl isAllowed="OPINION_FRONTPAGE"}

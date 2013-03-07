@@ -714,15 +714,15 @@ class OpinionsController extends Controller
     {
         $this->checkAclOrForward('OPINIONS_AVAILABLE');
 
-        $selected = $request->request->get('selected_fld', null);
-        $status = $request->request->getDigits('status', 0);
-        $author = $request->request->getDigits('author');
-        $page     = $request->request->getDigits('page', 1);
+        $selected = $request->query->get('selected_fld', null);
+        $status   = $request->query->getDigits('status', 0);
+        $author   = $request->query->getDigits('author');
+        $page     = $request->query->getDigits('page', 1);
 
+        $changes = 0;
         if (is_array($selected)
             && count($selected) > 0
         ) {
-            $changes = 0;
             foreach ($selected as $id) {
                 $opinion = new \Opinion((int) $id);
                 if (!is_null($opinion->id)) {
@@ -752,6 +752,53 @@ class OpinionsController extends Controller
         );
     }
 
+      /**
+     * Changes home status for opinions given their ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchInHomeAction(Request $request)
+    {
+        $this->checkAclOrForward('OPINIONS_AVAILABLE');
+
+        $selected = $request->query->get('selected_fld', null);
+        $status   = $request->query->getDigits('status', 0);
+        $author   = $request->query->getDigits('author');
+        $page     = $request->query->getDigits('page', 1);
+
+        $changes = 0;
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            foreach ($selected as $id) {
+                $opinion = new \Opinion((int) $id);
+                if (!is_null($opinion->id)) {
+                    if ($status == 0) {
+                        $opinion->set_inhome($status);
+                    } else {
+                        $opinion->set_inhome($status);
+                    }
+                    $changes++;
+                } else {
+                    m::add(sprintf(_('Unable to find a opinion with the id "%d"'), $id), m::ERROR);
+                }
+            }
+        }
+        if ($changes > 0) {
+            m::add(sprintf(_('Successfully changed the home status of %d opinions'), $changes), m::SUCCESS);
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_opinions',
+                array(
+                    'author' => $author,
+                )
+            )
+        );
+    }
     /**
      * Lists the available opinions for the frontpage manager
      *
