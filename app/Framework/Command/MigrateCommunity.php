@@ -418,7 +418,6 @@ EOF
                     return false;
                 }
 
-                /*
                 // Revoke all privileges on old database
                 $sql = "REVOKE ALL PRIVILEGES ON `".$dataBaseName."` . * FROM '".$value['id']."'@'".$dataBaseHost."'";
                 $rs = $GLOBALS['application']->conn->Execute($sql);
@@ -434,7 +433,6 @@ EOF
                     $output->writeln("\t<error>Cannot revoke grant option on ".$dataBaseName." : ".$sql."</error>");
                     return false;
                 }
-                */
 
                 // Drop old database
                 $sql = "DROP database `".$dataBaseName."`";
