@@ -666,15 +666,15 @@ class OpinionsController extends Controller
     {
         $this->checkAclOrForward('OPINION_DELETE');
 
-        $selected = $request->request->get('selected_fld', null);
-        $status = $request->request->getDigits('status');
-        $author = $request->request->getDigits('author');
-        $page     = $request->request->getDigits('page', 1);
+        $selected       = $request->query->get('selected_fld', null);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $author         = $request->query->getDigits('author');
+        $page           = $request->query->getDigits('page', 1);
 
+        $changes = 0;
         if (is_array($selected)
             && count($selected) > 0
         ) {
-            $changes = 0;
             foreach ($selected as $id) {
                 $opinion = new \Opinion((int) $id);
                 if (!is_null($opinion->id)) {
@@ -694,8 +694,9 @@ class OpinionsController extends Controller
                 $this->generateUrl(
                     'admin_opinions',
                     array(
-                        'status' => $status,
                         'author' => $author,
+                        'status' => $redirectStatus,
+                        'page' => $page,
                     )
                 )
             );
@@ -714,10 +715,11 @@ class OpinionsController extends Controller
     {
         $this->checkAclOrForward('OPINIONS_AVAILABLE');
 
-        $selected = $request->query->get('selected_fld', null);
-        $status   = $request->query->getDigits('status', 0);
-        $author   = $request->query->getDigits('author');
-        $page     = $request->query->getDigits('page', 1);
+        $selected       = $request->query->get('selected_fld', null);
+        $status         = $request->query->getDigits('new_status', 0);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $author         = $request->query->getDigits('author');
+        $page           = $request->query->getDigits('page', 1);
 
         $changes = 0;
         if (is_array($selected)
@@ -729,6 +731,7 @@ class OpinionsController extends Controller
                     if ($status == 0) {
                         $opinion->setDraft();
                         $opinion->set_favorite($status);
+                        $opinion->set_inhome($status);
                     } else {
                         $opinion->setAvailable();
                     }
@@ -747,6 +750,8 @@ class OpinionsController extends Controller
                 'admin_opinions',
                 array(
                     'author' => $author,
+                    'status' => $redirectStatus,
+                    'page' => $page,
                 )
             )
         );
@@ -763,10 +768,11 @@ class OpinionsController extends Controller
     {
         $this->checkAclOrForward('OPINIONS_AVAILABLE');
 
-        $selected = $request->query->get('selected_fld', null);
-        $status   = $request->query->getDigits('status', 0);
-        $author   = $request->query->getDigits('author');
-        $page     = $request->query->getDigits('page', 1);
+        $selected       = $request->query->get('selected_fld', null);
+        $status         = $request->query->getDigits('new_status', 0);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $author         = $request->query->getDigits('author');
+        $page           = $request->query->getDigits('page', 1);
 
         $changes = 0;
         if (is_array($selected)
@@ -795,6 +801,8 @@ class OpinionsController extends Controller
                 'admin_opinions',
                 array(
                     'author' => $author,
+                    'status' => $redirectStatus,
+                    'page' => $page,
                 )
             )
         );

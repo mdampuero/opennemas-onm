@@ -35,22 +35,22 @@
 
                 <ul class="dropdown-menu">
                     <li>
-                        <button type="submit" name="new_status" value="0" href="#" id="batch-publish">
+                        <button type="submit" name="new_status" value="1" href="#" id="batch-publish">
                             {t}Batch publish{/t}
                         </button>
                     </li>
                     <li>
-                        <button type="submit" name="new_status" value="1" href="#" id="batch-unpublish">
+                        <button type="submit" name="new_status" value="0" href="#" id="batch-unpublish">
                             {t}Batch unpublish{/t}
                         </button>
                     </li>
                     <li>
-                        <button type="submit" name="new_status" value="0" id="batch-inhome">
+                        <button type="submit" name="new_status" value="1" id="batch-inhome">
                             {t escape="off"}Batch in home{/t}
                         </button>
                     </li>
                     <li>
-                        <button type="submit" name="new_status" value="1" id="batch-noinhome">
+                        <button type="submit" name="new_status" value="0" id="batch-noinhome">
                             {t escape="off"}Batch drop from home{/t}
                         </button>
                     </li>
@@ -137,20 +137,18 @@
                 $('.old-button .batch-actions').fadeOut('fast');
             }
         });
-        $('#batch-inhome, #batch-noinhome').on('click', function(e, ui){
-            e.preventDefault();
+        $('#batch-inhome, #batch-noinhome').on('click', function(e, ui) {
             $('#formulario').attr('action', "{url name=admin_opinions_batch_inhome}");
-            $('#formulario').submit();
         });
-        $('#batch-publish, #batch-unpublish').on('click', function(e, ui){
-            e.preventDefault();
+
+        $('#batch-publish, #batch-unpublish').on('click', function(e, ui) {
             $('#formulario').attr('action', "{url name=admin_opinions_batch_publish}");
-            $('#formulario').submit();
         });
+
+
         $('#batch-delete').on('click', function(e, ui){
             e.preventDefault();
             $('#formulario').attr('action', "{url name=admin_opinions_batch_delete}");
-            $('#formulario').attr('method', "POST");
             $('#formulario').submit();
         });
 
