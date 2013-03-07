@@ -1,5 +1,15 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    <script>
+        var opinion_manager_urls = {
+            batch_delete: '{url name=admin_opinions_batch_delete category=$category page=$page}'
+        }
+    </script>
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
+
+{/block}
+
 {block name="content"}
 <form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
 <div class="top-action-bar clearfix">
@@ -25,33 +35,33 @@
 
                 <ul class="dropdown-menu">
                     <li>
-                        <button type="submit" name="status" value="0" href="#" id="batch-publish">
+                        <button type="submit" name="new_status" value="0" href="#" id="batch-publish">
                             {t}Batch publish{/t}
                         </button>
                     </li>
                     <li>
-                        <button type="submit" name="status" value="1" id="batch-unpublish">
+                        <button type="submit" name="new_status" value="1" href="#" id="batch-unpublish">
                             {t}Batch unpublish{/t}
-                        </a>
-                    </li>
-                    <li>
-                        <button type="submit" name="status" value="0" id="batch-inhome">
-                            {t escape="off"}Batch in home{/t}
-                        </a>
-                    </li>
-                    <li>
-                        <button type="submit" name="status" value="1" id="batch-noinhome">
-                            {t escape="off"}Batch drop from home{/t}
-                        </a>
-                    </li>
-                    {acl isAllowed="OPINION_DELETE"}
-                    <li>
-                        <button type="submit" id="batch-delete" title="{t}Delete{/t}">
-                            {t}Delete{/t}
                         </button>
                     </li>
-                    {/acl}
+                    <li>
+                        <button type="submit" name="new_status" value="0" id="batch-inhome">
+                            {t escape="off"}Batch in home{/t}
+                        </button>
+                    </li>
+                    <li>
+                        <button type="submit" name="new_status" value="1" id="batch-noinhome">
+                            {t escape="off"}Batch drop from home{/t}
+                        </button>
+                    </li>
                 </ul>
+                {acl isAllowed="OPINION_DELETE"}
+                <li>
+                    <a class="delChecked" data-controls-modal="modal-opinion-batchDelete" href="#" title="{t}Delete{/t}">
+                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                </a>
+                </li>
+                {/acl}
 
             </li>
             {/acl}
@@ -132,7 +142,7 @@
             $('#formulario').attr('action', "{url name=admin_opinions_batch_inhome}");
             $('#formulario').submit();
         });
-        $('#batch-publish, batch-unpublish').on('click', function(e, ui){
+        $('#batch-publish, #batch-unpublish').on('click', function(e, ui){
             e.preventDefault();
             $('#formulario').attr('action', "{url name=admin_opinions_batch_publish}");
             $('#formulario').submit();
