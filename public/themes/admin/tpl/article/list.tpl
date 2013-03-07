@@ -16,9 +16,9 @@
             <ul class="old-button">
                 {acl isAllowed="ARTICLE_DELETE"}
                 <li>
-                    <button type="submit" id="batch-delete">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
-                    </button>
+                    <a class="delChecked" data-controls-modal="modal-opinion-batchDelete" href="#" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                    </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ARTICLE_AVAILABLE"}
