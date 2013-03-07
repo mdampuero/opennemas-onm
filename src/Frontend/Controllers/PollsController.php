@@ -220,6 +220,9 @@ class PollsController extends Controller
         } elseif (isset($cookie)) {
             $alreadyVoted = true;
             $message = _('You have voted this poll previously.');
+        } elseif (($valid == 0) && ($voted == 0)) {
+            $alreadyVoted = true;
+            $message = _('You have voted this poll previously.');
         }
 
         $this->getAds('inner');
