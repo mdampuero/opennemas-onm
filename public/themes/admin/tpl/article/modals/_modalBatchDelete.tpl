@@ -33,8 +33,8 @@ jQuery('.delChecked').click(function(e, ui) {
     }
 });
 
-jQuery('#modal-article-batchDelete a.btn.yes').on('click', function(){
-    jQuery('#formulario').attr('action', {url name=admin_article_batchdelete category=$category page=$page});
+jQuery('#modal-article-batchDelete a.btn.yes').on('click', function(e){
+    jQuery('#formulario').attr('action', article_manager_urls.batch_delete);
     jQuery('#formulario').submit();
     e.preventDefault();
 });

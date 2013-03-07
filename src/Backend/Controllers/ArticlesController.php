@@ -958,8 +958,6 @@ class ArticlesController extends Controller
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
         $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page           = $request->query->getDigits('page', 1);
-var_dump($request->query);
-die();
         if (is_array($selected)
             && count($selected) > 0
         ) {
