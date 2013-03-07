@@ -212,7 +212,6 @@ class PollsController extends Controller
         $alreadyVoted = false;
         $voted = (int) $request->query->getDigits('voted', 0);
         $valid = (int) $request->query->getDigits('valid', 3);
-        var_dump($valid, $voted);
         if ($voted == 1) {
             if ($voted == 1 && $valid === 1) {
                 $message = _('Thanks for participating.');
