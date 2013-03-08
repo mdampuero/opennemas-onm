@@ -367,6 +367,15 @@ EOF
                 // Rename user name on instance settings
                 $settings['BD_USER'] = $value['id'];
 
+                // Set the password for this user
+                $sql = "SET PASSWORD FOR`".$settings['BD_USER']."`@".$dataBaseHost.
+                        "= PASSWORD('".$settings['BD_PASS']."')";
+                $rs = $GLOBALS['application']->conn->Execute($sql);
+                if (!$rs) {
+                    $output->writeln("\t<error>[Database Error] Couldn't set user password: ".$sql."</error>");
+                    return false;
+                }
+
                 // Update instace database settings
                 $sql = "UPDATE instances SET settings='".serialize($settings)."' WHERE id=".$value['id'];
                 $rs = $GLOBALS['application']->connInstaces->Execute($sql);
