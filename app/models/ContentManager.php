@@ -1921,6 +1921,54 @@ class ContentManager
     }
 
     /**
+     * Returns title, catName, slugs, dates and images of last headlines
+     *
+     * @return array a list of content information (not the object itself)
+     **/
+    public function findHeadlinesWithImage()
+    {
+        $sql =
+        'SELECT `contents`.`title`, `contents`.`pk_content` ,
+               `contents`.`created` ,  `contents`.`slug` ,
+               `contents`.`starttime` , `contents`.`endtime` ,
+               `articles`.`img1` , `articles`.`img2` ,
+               `contents_categories`.`pk_fk_content_category` AS `category_id`
+        FROM `contents`, contents_categories, articles
+        WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
+            AND `contents`.`pk_content`=`articles`.`pk_article`
+            AND `contents`.`content_status` =1
+            AND `contents`.`frontpage` =1
+            AND `contents`.`available` =1
+            AND `contents`.`fk_content_type` =1
+            AND `contents`.`in_litter` =0
+        ORDER BY `contents`.`placeholder` ASC, `created` DESC ';
+
+        $rs    = $GLOBALS['application']->conn->Execute($sql);
+        $ccm   = ContentCategoryManager::get_instance();
+        $items = array();
+        while (!$rs->EOF) {
+            $items[] = array(
+                'title'          => $rs->fields['title'],
+                'catName'        => $ccm->get_name($rs->fields['category_id']),
+                'slug'           => $rs->fields['slug'],
+                'created'        => $rs->fields['created'],
+                'category_title' => $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                'id'             => $rs->fields['pk_content'],
+                'starttime'      => $rs->fields['starttime'],
+                'endtime'        => $rs->fields['endtime'],
+                'img1'           => $rs->fields['img1'],
+                'img2'           => $rs->fields['img2'],
+            );
+
+            $rs->MoveNext();
+        }
+
+        $items = $this->getInTime($items);
+
+        return $items;
+    }
+
+    /**
      * Returns the title, catName and slugs of last headlines from a given category
      *
      * @param string $filter the SQL WHERE sentence to filter the contents
