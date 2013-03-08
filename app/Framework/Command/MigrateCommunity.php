@@ -368,12 +368,17 @@ EOF
                 $settings['BD_USER'] = $value['id'];
 
                 // Set the password for this user
-                $sql = "SET PASSWORD FOR`".$settings['BD_USER']."`@".$dataBaseHost.
-                        "= PASSWORD('".$settings['BD_PASS']."')";
+                $sql = "SET PASSWORD FOR `".$settings['BD_USER']."`@`".$dataBaseHost.
+                        "` = PASSWORD('".$settings['BD_PASS']."')";
                 $rs = $GLOBALS['application']->conn->Execute($sql);
                 if (!$rs) {
-                    $output->writeln("\t<error>[Database Error] Couldn't set user password: ".$sql."</error>");
-                    return false;
+                    $sql = "GRANT USAGE ON *.* TO '".$settings['BD_USER']."'@'".$dataBaseHost.
+                            "' IDENTIFIED BY '".$settings['BD_PASS']."'";
+                    $rs = $GLOBALS['application']->conn->Execute($sql);
+                    if (!$rs) {
+                        $output->writeln("\t<error>[Database Error] Couldn't set user password: ".$sql."</error>");
+                        return false;
+                    }
                 }
 
                 // Update instace database settings
