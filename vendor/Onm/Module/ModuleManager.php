@@ -1,24 +1,24 @@
 <?php
-/*
+/**
+ * Defines the Onm\Module\ModuleManager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Module
  */
 namespace Onm\Module;
 
 /**
  * Class for handling activated and available modules.
  *
- * @package    Onm
- * @subpackage Module
- * @author     Fran Dieguez <fran@openhost.es>
- * @version    SVN: $Id: Module.php 28842 Xov Xuñ 23 12:24:17 2011 frandieguez $
+ * @package    Onm_Module
  */
 class ModuleManager
 {
-
     /**
      * Stores the activatedModules over all instances of ModuleManager
      *
@@ -46,10 +46,7 @@ class ModuleManager
     /**
      * Returns the activated modules.
      *
-     *
      * @return array array of activated modules
-     *
-     * @throws <b>Exception</b> if something went wrong
      */
     public static function getActivatedModules()
     {
@@ -83,58 +80,67 @@ class ModuleManager
      */
     public static function getAvailableModules()
     {
-        if ( !isset(self::$availableModules) ) {
+        if (!isset(self::$availableModules)) {
             self::$availableModules = array(
-                'ADS_MANAGER',
-                'ADVANCED_SEARCH',
-                'ALBUM_MANAGER',
-                'ARTICLE_MANAGER',
-                'CACHE_MANAGER',
-                'CATEGORY_MANAGER',
-                'COMMENT_MANAGER',
-                'COMMENT_DISQUS_MANAGER',
-                'EFE_FILE_IMPORTER',
-                'EFE_IMPORTER',
-                'EUROPAPRESS_IMPORTER',
-                'FILE_MANAGER',
-                'FRONTPAGE_MANAGER',
-                'IMAGE_MANAGER',
-                'KEYWORD_MANAGER',
-                'KIOSKO_MANAGER',
-                'LINK_CONTROL_MANAGER',
-                'MENU_MANAGER',
-                'MYSQL_MANAGER',
-                'NEWSLETTER_MANAGER',
-                'ONM_STATISTICS',
-                'OPINION_MANAGER',
-                'PAPER_IMPORT',
-                'PHP_CACHE_MANAGER',
-                'POLL_MANAGER',
-                'PRIVILEGE_MANAGER',
-                'SETTINGS_MANAGER',
-                'STATIC_PAGES_MANAGER',
-                'SYSTEM_UPDATE_MANAGER',
-                'TRASH_MANAGER',
-                'USER_GROUP_MANAGER',
-                'USER_MANAGER',
-                'VIDEO_MANAGER',
-                'WIDGET_MANAGER',
-                'LOG_SQL',
-                'BOOK_MANAGER',
-                'SPECIAL_MANAGER',
-                'SCHEDULE_MANAGER',
-                'AVANCED_ARTICLE_MANAGER',
-                'LIBRARY_MANAGER',
-                'LETTER_MANAGER',
-                'SYNC_MANAGER',
-                'FRONTPAGES_LIBRARY',
-                'STATIC_LIBRARY',
-                'CRONICAS_MODULES',
-                'AVANCED_FRONTPAGE_MANAGER',
+                'ADS_MANAGER'               => _('Advertisement'),
+                'ADVANCED_SEARCH'           => _('Advanced search'),
+                'ALBUM_MANAGER'             => _('Albums'),
+                'ARTICLE_MANAGER'           => _('Articles'),
+                'AVANCED_ARTICLE_MANAGER'   => _('Advanced article options'),
+                'AVANCED_FRONTPAGE_MANAGER' => _('Advanced frontpage managers'),
+                'BOOK_MANAGER'              => _('Books'),
+                'CACHE_MANAGER'             => _('Cache manager'),
+                'CATEGORY_MANAGER'          => _('Category'),
+                'COMMENT_DISQUS_MANAGER'    => _('Disqus comment integration'),
+                'COMMENT_MANAGER'           => _('Comments'),
+                'CRONICAS_MODULES'          => _('Cronicas customizations'),
+                'EFE_FILE_IMPORTER'         => _('EFE agency files importer'),
+                'FILE_MANAGER'              => _('Files'),
+                'FRONTPAGE_MANAGER'         => _('Frontpages'),
+                'FRONTPAGES_LIBRARY'        => _('Frontpages library'),
+                'IMAGE_MANAGER'             => _('Images'),
+                'KEYWORD_MANAGER'           => _('Keywords'),
+                'KIOSKO_MANAGER'            => _('Kiosko'),
+                'LETTER_MANAGER'            => _('Letters'),
+                'LIBRARY_MANAGER'           => _('Library'),
+                'LINK_CONTROL_MANAGER'      => _('Link control'),
+                'LOG_SQL'                   => _('SQL Log'),
+                'MENU_MANAGER'              => _('Menus'),
+                'MYSQL_MANAGER'             => _('MySQL errors'),
+                'NEWS_AGENCY_IMPORTER'      => _('News Agency importer'),
+                'NEWSLETTER_MANAGER'        => _('Newsletter'),
+                'ONM_STATISTICS'            => _('ONM Statistics'),
+                'OPINION_MANAGER'           => _('Opinion'),
+                'PAPER_IMPORT'              => _('Paper import'),
+                'POLL_MANAGER'              => _('Polls'),
+                'SCHEDULE_MANAGER'          => _('Schedules'),
+                'SETTINGS_MANAGER'          => _('System wide settings'),
+                'SPECIAL_MANAGER'           => _('Specials'),
+                'STATIC_LIBRARY'            => _('Static library'),
+                'STATIC_PAGES_MANAGER'      => _('Static pages'),
+                'SYNC_MANAGER'              => _('Instace synchronization'),
+                'TRASH_MANAGER'             => _('Trash'),
+                'USER_GROUP_MANAGER'        => _('User groups'),
+                'USER_MANAGER'              => _('Users'),
+                'USERVOICE_SUPPORT'         => _('UserVoice integration'),
+                'VIDEO_MANAGER'             => _('Videos'),
+                'WIDGET_MANAGER'            => _('Widgets'),
             );
         }
 
         return self::$availableModules;
+    }
+
+    /**
+     * Returns the list of internal modules names
+     *
+     * @return array the list of internal names
+     **/
+    public static function getAvailableModuleNames()
+    {
+        $modules = self::getAvailableModules();
+
+        return array_keys($modules);
     }
 
     /**
@@ -174,7 +180,7 @@ class ModuleManager
         } elseif (!self::moduleExists($module)) {
             // Check if module exists
 
-            throw new ModuleException("Module '{$module}'not available");
+            throw new ModuleException("Module '{$module} is not available");
         } else {
             // Finally return if that module is activated
 
@@ -216,7 +222,8 @@ class ModuleManager
      */
     public static function moduleExists($moduleName)
     {
-        return in_array($moduleName, self::getAvailableModules());
+        $moduleNames = self::getAvailableModuleNames();
+
+        return in_array($moduleName, $moduleNames);
     }
 }
-

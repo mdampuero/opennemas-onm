@@ -1,56 +1,85 @@
 <?php
-/*
+/**
+ * Defintes the Frontpage class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Handles newspaper library
  *
- * @package    Onm
- * @subpackage Model
- * @author     Sandra Pereira <sandra@openhost.es>
+ * @package    Model
  **/
-
-/*
- *
- *
- CREATE TABLE IF NOT EXISTS `frontpages` (
-   `pk_frontpage` bigint(20) NOT NULL COMMENT '',
-   `date` int(11) NOT NULL COMMENT 'date as 20110720',
-   `category` int(11) NOT NULL COMMENT 'category',
-   `version` bigint(20) DEFAULT NULL,
-   `content_positions` longtext NOT NULL COMMENT 'serialized id of contents',
-   `promoted` tinyint(1) DEFAULT NULL,
-   `day_frontpage` tinyint(1) DEFAULT NULL,
-   `params` longtext NOT NULL COMMENT 'serialized params',
-   PRIMARY KEY (`date`,`category`)
-
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
- *
- */
 class Frontpage extends Content
 {
+    /**
+     * The frontpage id
+     *
+     * @var int
+     **/
     public $pk_frontpage = null;
+
+    /**
+     * The frontpage date
+     *
+     * @var string
+     **/
     public $date = null;
+
+    /**
+     * The frontpage version
+     *
+     * @var int
+     **/
     public $version = null;
+
+    /**
+     * The list of the frontpage contents
+     *
+     * @var array
+     **/
     public $contents = null;
+
+    /**
+     * Whether this frontpage is promoted
+     *
+     * @var boolean
+     **/
     public $promoted = null;
+
+    /**
+     * Whether the frontpage is a frontpage day
+     *
+     * @var boolean
+     **/
     public $day_frontpage = null;
+
+    /**
+     * Miscelanous params of this frontpage
+     *
+     * @var array
+     **/
     public $params = null;
 
     /**
+     * Proxy property to the cache handler
+     *
      * @var MethodCacheManager Handler to call method cached
      */
     public $cache = null;
 
     /**
-     * constructor
+     * Initializes the Frontpage instance
      *
      * @param int $id
+     *
+     * @return void
      */
     public function __construct($id = null)
     {
@@ -65,30 +94,29 @@ class Frontpage extends Content
     }
 
     /**
-     * Save frontpage
+     * Creates a frontpage given an array of data
      *
-     * @param int $id
+     * @param array $data the frontpge data
      *
      * @return bool If create in database
      */
     public function create($data)
     {
-
         $data['content_status'] = 1;
-        $data['available'] =1;
-        $data['position']   =  1;
+        $data['available']      = 1;
+        $data['position']       = 1;
 
         parent::create($data);
 
-        if ( is_null($data['category']) ) {
+        if (is_null($data['category'])) {
             return false;
         }
-        $date = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
-        $category = $data['category'];
-        $contents = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
-        $params = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
-        $version = (empty($data['version']))? 0: $data['version'];
-        $promoted = (empty($data['promoted'])) ? null : intval($data['promoted']);
+        $date          = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
+        $category      = $data['category'];
+        $contents      = (!isset($data['contents']) || empty($data['contents']))? null: serialize($data['contents']);
+        $params        = (!isset($data['params']) || empty($data['params']))? null: serialize($data['params']);
+        $version       = (empty($data['version']))? 0: $data['version'];
+        $promoted      = (empty($data['promoted'])) ? null : intval($data['promoted']);
         $day_frontpage = (empty($data['day_frontpage'])) ? null: intval($data['day_frontpage']);
 
         $resp = $GLOBALS['application']->conn->GetOne(
@@ -97,7 +125,7 @@ class Frontpage extends Content
         );
 
         if ($resp) {
-            $promoted ="1";
+            $promoted = "1";
             $sql = "UPDATE frontpages SET  `content_positions`=?,,
                                            `version` =?,
                                            `promoted` =?,
@@ -107,7 +135,7 @@ class Frontpage extends Content
 
             $values = array($contents, $version, $promoted, $day_frontpage, $params);
         } else {
-            $promoted ="2";
+            $promoted = "2";
             $sql = "INSERT INTO frontpages (`date`,`category`,`content_positions`,
                                             `version`, `promoted`, `day_frontpage`,
                                             `params`)
@@ -120,18 +148,18 @@ class Frontpage extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return(false);
+            return false;
         }
 
         return true;
-
     }
 
     /**
-     * Read, get a specific object
+     * Reads an specific frontpage given its id
      *
      * @param  int       $id Object ID
-     * @return Frontpage Return
+     *
+     * @return Frontpage the frontpage object instance
      */
     public function read($id)
     {
@@ -148,6 +176,8 @@ class Frontpage extends Content
         }
 
         $this->load($rs->fields);
+
+        return $this;
     }
 
     /**
@@ -176,6 +206,8 @@ class Frontpage extends Content
 
         $this->id = $this->pk_frontpage;
         $this->contents= unserialize($this->content_positions);
+
+        return $this;
     }
 
     /**
@@ -184,12 +216,12 @@ class Frontpage extends Content
     *
     * This is used for newspaper library
     *
-    * @param type $category_id, the id of the category we want to get contents from
-    * @return mixed, array of contents
+    * @param int $category the id of the category we want to get contents from
+    *
+    * @return mixed array of contents
     */
     public function getContentsPositionsInCategory($category)
     {
-
         // Initialization of variables
         $contents = array();
 
@@ -251,15 +283,19 @@ class Frontpage extends Content
     /**
      * Read, get a specific frontpage
      *
-     * @param  int    $category category in menu element
      * @param  int    $date     date of calendar
-     * @return Widget Return instance to chaining method
+     * @param  int    $category category in menu element
+     * @param  int    $version  version of the frontpage
+     *
+     * @return boolean
      */
 
     public function getFrontpage($date, $category = 0, $version = null)
     {
         // if category = 0 => home
-        if ( is_null($category) && is_null($date)) {
+        if (is_null($category)
+            && is_null($date)
+        ) {
               return false;
         }
 
@@ -275,25 +311,27 @@ class Frontpage extends Content
 
         $this->load($rs->fields);
 
-        return true;
+        return $this;
     }
 
      /**
      * Read, get a specific frontpage
      *
-     * @param  int    $category category in menu element
      * @param  int    $date     date of calendar
+     *
      * @return Widget Return instance to chaining method
      */
 
     public function getCategoriesWithFrontpage($date)
     {
         // if category = 0 => home
-        if ( is_null($category) && is_null($date)) {
-              return false;
+        if (is_null($category)
+            && is_null($date)
+        ) {
+            return false;
         }
 
-        $sql = "SELECT category FROM `frontpages` WHERE `date`=? ";
+        $sql = "SELECT category FROM `frontpages` WHERE `date`=?";
         $values = array($date);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -311,4 +349,3 @@ class Frontpage extends Content
         return $items;
     }
 }
-

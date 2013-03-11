@@ -1,7 +1,0 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-
-    RewriteCond $1 !\.(php)$ [NC]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^(.*)$ ws.php [QSA,L]
-</IfModule>

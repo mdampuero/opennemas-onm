@@ -1,4 +1,5 @@
 <div class="table-info clearfix">
+    <div class="pull-left"><strong>{t 1=$total}%1 opinions{/t}</strong></div>
     <div class="pull-right form-inline">
         {t}Status:{/t}
         <select name="status">

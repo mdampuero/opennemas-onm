@@ -26,8 +26,8 @@ services:
         arguments: [ @session_storage ]
 
     logger:
-        class: Monolog\Logger
-        arguments: [ 'application_log' ]
+        class: Onm\Log
+        arguments: [ 'normal' ]
 
     mailer:
         class: Onm\Mailer

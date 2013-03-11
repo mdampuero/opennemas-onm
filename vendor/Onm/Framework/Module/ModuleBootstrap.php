@@ -1,11 +1,15 @@
 <?php
 /**
+ * Defines the Onm\Framework\Module\ModuleBootstrap class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Framework_Module_ModuleBootstrap
  **/
 namespace Onm\Framework\Module;
 
@@ -18,6 +22,8 @@ class ModuleBootstrap
 {
     /**
      * Initialies the module given the general container
+     *
+     * @param Container $container the container instance to pass to the module
      *
      * @return void
      **/
@@ -58,10 +64,9 @@ class ModuleBootstrap
     }
 
     /**
-     * undocumented function
+     * Calls all the init* methods in this class
      *
-     * @return void
-     * @author
+     * @return ModuleBoostrap the initialized module
      **/
     public function init()
     {
@@ -76,4 +81,3 @@ class ModuleBootstrap
         return $this;
     }
 }
-

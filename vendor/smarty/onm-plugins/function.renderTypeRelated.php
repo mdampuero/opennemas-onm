@@ -68,9 +68,9 @@ function smarty_function_renderTypeRelated($params, &$smarty)
     $replace = array('', '','');
 
     $title_cleaned = preg_replace($patterns, $replace, $content->title);
-    $pathFile = ContentManager::getFilePathFromId($content->id);
 
     if ($content->content_type == 3 || $content->fk_content_type == 3) {
+        $pathFile = ContentManager::getFilePathFromId($content->id);
         // Check if is attachment from synchronize
         if ($pathFile) {
             $content->uri = INSTANCE_MEDIA.FILE_DIR . $pathFile;

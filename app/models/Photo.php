@@ -1,36 +1,111 @@
 <?php
-/*
+/**
+ * Contains the Photo class definition
+ *
  * This file is part of the Onm package.
  *
  * (c)  Fran Dieguez <fran@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Model
  */
 use Onm\Message as m;
 use Onm\Settings as s;
 use Onm\StringUtils;
 
 /**
- * Photo
+ * Photo class
  *
- * @package    Onm
- * @subpackage Model
- **/
+ * @package Model
+ */
 class Photo extends Content
 {
+    /**
+     * Photo id
+     *
+     * @var int
+     **/
     public $pk_photo    = null;
-    public $name        = null; //id del articulo
+
+    /**
+     * File name of the photo
+     *
+     * @var string
+     **/
+    public $name        = null;
+
+    /**
+     * Full path to the photo file
+     *
+     * @var string
+     **/
     public $path_file   = null;
+
+    /**
+     * Date when the photo was taken
+     *
+     * @var string
+     **/
     public $date        = null;
+
+    /**
+     * The size of the image
+     *
+     * @var int
+     **/
     public $size        = null;
+
+    /**
+     * The width of the image
+     *
+     * @var int
+     **/
     public $width       = null;
+
+    /**
+     * The height of the image
+     *
+     * @var int
+     **/
     public $height      = null;
+
+    /**
+     * the resolution of the image
+     *
+     * @var string
+     **/
     public $resolution  = null;
+
+    /**
+     * The kind of image (jpg, gif, ...)
+     *
+     * @var string
+     **/
     public $type_img    = null;
+
+    /**
+     * The kind of resource (image or grafico)
+     *
+     * @var
+     **/
     public $media_type  = null;
+
+    /**
+     * The copyright of the image
+     *
+     * @var string
+     **/
     public $author_name = null;
 
+    /**
+     * Initializes the Photo object instance given an id
+     *
+     * @param int $id the photo id to load
+     *
+     * @return Photo the photo object instance
+     **/
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -40,8 +115,18 @@ class Photo extends Content
 
         $this->content_type = 'Photo';
         $this->content_type_l10n_name = _('Image');
+
+        return $this;
     }
 
+    /**
+     * Creates a new photo given an array of information
+     *
+     * @param array $data the photo information
+     *
+     * @return int the photo id
+     * @return boolean false if the photo was not created
+     **/
     public function create($data)
     {
         $data['content_status'] = 1;
@@ -77,12 +162,14 @@ class Photo extends Content
      * Creates one photo register in the database from data and local file
      * TODO: this function must content the photo local_file
      *
-     * @params array $data the data for the photo, must content the
-     *                     photo local_file
+     * @param array $dataSource the data for the photo, must content the photo local_file
+     * @param string $dateForDirectory the date for the directory
+     *
+     * @return int the id of the photo created
+     * @return boolean false if the photo was not created
      **/
     public function createFromLocalFile($dataSource, $dateForDirectory = null)
     {
-
         $filePath = $dataSource["local_file"];
 
         if (empty($filePath)) {
@@ -178,30 +265,6 @@ class Photo extends Content
                         realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
                     );
 
-                    // Article inner thumbnail
-                    $thumb->thumbnailImage(
-                        $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
-                        $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
-                        true
-                    );
-                    $thumb->writeImage(
-                        $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                        . '-' . $imageThumbSize['image_thumb_size']['height']
-                        . '-' . $finalPhotoFileName
-                    );
-
-                    // Generate frontpage thumbnails
-                    $thumb->thumbnailImage(
-                        $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
-                        $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
-                        true
-                    );
-                    $thumb->writeImage(
-                        $uploadDir.$imageThumbSize['image_front_thumb_size']['width']
-                        . '-' . $imageThumbSize['image_front_thumb_size']['height']
-                        . '-' . $finalPhotoFileName
-                    );
-
                     // Main thumbnail
                     $thumb->thumbnailImage(
                         $imageThumbSize['image_thumb_size']['width'] ?: 140,
@@ -266,8 +329,9 @@ class Photo extends Content
      * Creates one photo register in the database from data and local file
      * TODO: this function must content the photo local_file
      *
-     * @params array $data the data for the photo,
-     *                     must content the photo local_file
+     * @param array $dataSource the data for the photo, must content the photo local_file
+     *
+     * @return Photo the photo object
      **/
     public function createFromLocalFileAjax($dataSource)
     {
@@ -364,30 +428,6 @@ class Photo extends Content
                         // Thumbnail handler
                         $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
 
-                        // Article inner thumbnail
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
-                            $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
-                            true
-                        );
-                        $thumb->writeImage(
-                            $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                            .'-'.$imageThumbSize['image_thumb_size']['height']
-                            .'-'.$finalPhotoFileName
-                        );
-
-                        // Generate frontpage thumbnails
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
-                            $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
-                            true
-                        );
-                        $thumb->writeImage(
-                            $uploadDir.$imageThumbSize['image_front_thumb_size']['width']
-                            .'-'.$imageThumbSize['image_front_thumb_size']['height']
-                            .'-'.$finalPhotoFileName
-                        );
-
                         // Main thumbnail
                         $thumb->thumbnailImage(
                             $imageThumbSize['image_thumb_size']['width'] ?: 140,
@@ -446,6 +486,13 @@ class Photo extends Content
         return $photo;
     }
 
+    /**
+     * Returns an instance of the Photo object given a photo id
+     *
+     * @param int $id the photo id to load
+     *
+     * @return Photo the photo object
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -460,7 +507,6 @@ class Photo extends Content
             return;
         }
 
-        //$this->load( $rs->fields );
         $this->pk_photo    = $rs->fields['pk_photo'];
         $this->name        = $rs->fields['name'];
         $this->path_file   = $rs->fields['path_file'];
@@ -477,8 +523,17 @@ class Photo extends Content
         $this->date        = $rs->fields['date'];
         $this->color       = $rs->fields['color'];
         $this->address     = $rs->fields['address'];
+
+        return $this;
     }
 
+    /**
+     * Returns an object with all information of a photo given a photo id
+     *
+     * @param int $id the photo id to load
+     *
+     * @return stdClass a dummy object with the photo information
+     **/
     public function readAllData($id)
     {
         $photo = new stdClass();
@@ -656,7 +711,15 @@ class Photo extends Content
         return $photo;
     }
 
-    //FIXME: No se usa
+    /**
+     * Updates the photo object given an array with information
+     *
+     * @see  Photo::setData()
+     *
+     * @param array $data the new photo inforamtion
+     *
+     * @return boolean true if the photo was updated properly
+     **/
     public function update($data)
     {
         parent::update($data);
@@ -666,20 +729,35 @@ class Photo extends Content
              . "WHERE pk_photo=?";
 
         $values = array(
-            $data['pk_photo'], $data['name'], $data['path_file'],
-            $data['size'], $data['width'], $data['height'],
-            $data['type_img'], $data['author_name'],
-            $data['date'], $data['color'], $data['id']
+            $data['pk_photo'],
+            $data['name'],
+            $data['path_file'],
+            $data['size'],
+            $data['width'],
+            $data['height'],
+            $data['type_img'],
+            $data['author_name'],
+            $data['date'],
+            $data['color'],
+            $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
-    //FIXME: Actualiza metadata description y author de una photo
+    /**
+     * Updates photo information
+     *
+     * @param array $data the new photo data to set
+     *
+     * @return boolean if the photo was updated
+     **/
     public function setData($data)
     {
         $data['pk_author'] = $_SESSION['userid'];
@@ -689,8 +767,9 @@ class Photo extends Content
         }
         parent::update($data);
 
-        $sql = "UPDATE `photos` SET `author_name`=?, `address`=?, `color`=?, "
-             . "`date`=?, `resolution`=? WHERE `pk_photo`=?";
+        $sql = "UPDATE `photos`
+                SET `author_name`=?, `address`=?, `color`=?, `date`=?, `resolution`=?
+                WHERE `pk_photo`=?";
 
         $values = array(
             $data['author_name'],
@@ -704,12 +783,19 @@ class Photo extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         return true;
     }
 
+    /**
+     * Removes a photo given its id
+     *
+     * @param int $id the photo id to delete
+     *
+     * @return boolean true if the photo was deleted
+     **/
     public function remove($id)
     {
         parent::remove($id);
@@ -720,7 +806,7 @@ class Photo extends Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
@@ -733,8 +819,18 @@ class Photo extends Content
             @unlink($thumbimage);
         }
 
+        return true;
+
     }
 
+    /**
+     * Updates the file path of a photo
+     *
+     * @param string $path the new file path
+     * @param int $id the photo id
+     *
+     * @return boolean true if the file path was changed
+     **/
     public function updatePath($path, $id)
     {
         $sql = "UPDATE `photos` SET `path_file`=? WHERE `pk_photo`=?";
@@ -744,19 +840,24 @@ class Photo extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
-    //function check image is used by article, album, advertisement
-    // return array id contents use this image.
-
+    /**
+     * Checks if a image is being used by another content
+     *
+     * @param int $id the photo id
+     *
+     * @return array the list of content ids that are using this photo
+     **/
     public function isUsed($id)
     {
-        $sqlAlbums = 'SELECT pk_album FROM albums_photos WHERE pk_photo=?';
-        $sqlAds = 'SELECT pk_advertisement FROM advertisements WHERE path=?';
+        $sqlAlbums   = 'SELECT pk_album FROM albums_photos WHERE pk_photo=?';
+        $sqlAds      = 'SELECT pk_advertisement FROM advertisements WHERE path=?';
         $sqlarticles = 'SELECT pk_article FROM articles WHERE img1=? OR img2=?';
-        // $sql= "$sql3 UNION $sql1 UNION $sql2";
 
         $result = array();
         $values = array($id);
@@ -789,4 +890,3 @@ class Photo extends Content
         return $result;
     }
 }
-

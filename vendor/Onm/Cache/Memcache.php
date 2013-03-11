@@ -1,10 +1,14 @@
 <?php
-/*
+/**
+ * Defines the Onm\Cache\Memcache class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Cache
  */
 namespace Onm\Cache;
 
@@ -13,25 +17,27 @@ use \Memcache as BaseMemcache;
 /**
  * Memcache cache driver.
  *
- * @since 0.8
- * @author  Fran Dieguez <fran@openhost.es>
+ * @package Onm_Cache
  */
 class Memcache extends AbstractCache
 {
     /**
+     * The memcache server connection
+     *
      * @var Memcache
      */
-    private $_memcache;
+    private $memcache;
 
     /**
      * Initializes the database layer
+     *
+     * @param array $options options to change initialization of the cache layer
      *
      * @return void
      **/
     public function __construct($options)
     {
-        if (
-            array_key_exists('server', $options)
+        if (array_key_exists('server', $options)
             && array_key_exists('port', $options)
         ) {
             $memcache = new \Memcache();
@@ -45,11 +51,11 @@ class Memcache extends AbstractCache
     /**
      * Sets the memcache instance to use.
      *
-     * @param Memcache $memcache
+     * @param BaseMemcache $memcache
      */
     public function setMemcache(BaseMemcache $memcache)
     {
-        $this->_memcache = $memcache;
+        $this->memcache = $memcache;
     }
 
     /**
@@ -59,7 +65,7 @@ class Memcache extends AbstractCache
      */
     public function getMemcache()
     {
-        return $this->_memcache;
+        return $this->memcache;
     }
 
     /**
@@ -68,12 +74,12 @@ class Memcache extends AbstractCache
     public function getIds()
     {
         $keys = array();
-        $allSlabs = $this->_memcache->getExtendedStats('slabs');
+        $allSlabs = $this->memcache->getExtendedStats('slabs');
 
         foreach ($allSlabs as $server => $slabs) {
             if (is_array($slabs)) {
                 foreach (array_keys($slabs) as $slabId) {
-                    $dump = @$this->_memcache->getExtendedStats(
+                    $dump = @$this->memcache->getExtendedStats(
                         'cachedump',
                         (int) $slabId
                     );
@@ -97,34 +103,53 @@ class Memcache extends AbstractCache
 
     /**
      * {@inheritdoc}
+     *
+     * @param  string $id cache id The id of the cache entry to fetch.
+     * @return string The cached data or FALSE, if no cache entry
+     *                exists for the given id.
      */
     protected function doFetch($id)
     {
-        return $this->_memcache->get($id);
+        return $this->memcache->get($id);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param  string  $id cache id The cache id of the entry to check for.
+     * @return boolean TRUE if a cache entry exists for
+     *                 the given cache id, FALSE otherwise.
      */
     protected function doContains($id)
     {
-        return (bool) $this->_memcache->get($id);
+        return (bool) $this->memcache->get($id);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param string $id       The cache id.
+     * @param string $data     The cache entry/data.
+     * @param int    $lifeTime The lifetime. If != false, sets a specific
+     *                         lifetime for this cache entry (null => infinite
+     *                         lifeTime).
+     * @return boolean TRUE if the entry was successfully stored in the
+     *                         cache, FALSE otherwise.
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-        return $this->_memcache->set($id, $data, 0, (int) $lifeTime);
+        return $this->memcache->set($id, $data, 0, (int) $lifeTime);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @param  string  $id cache id
+     * @return boolean TRUE if the cache entry was successfully deleted,
+     *                 FALSE otherwise.
      */
     protected function doDelete($id)
     {
-        return $this->_memcache->delete($id);
+        return $this->memcache->delete($id);
     }
 }
-

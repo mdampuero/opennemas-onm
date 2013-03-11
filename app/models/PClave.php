@@ -1,33 +1,61 @@
 <?php
-/*
+/**
+ * Handles all the CRUD operations over Keywords
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 use \Onm\Settings as s;
 
 /**
  * Handles all the CRUD operations over Keywords
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class PClave
 {
+    /**
+     * The keyword id
+     *
+     * @var int
+     **/
     public $id = null;
+
+    /**
+     * The keyword name
+     *
+     * @var string
+     **/
     public $pclave = null;
+
+    /**
+     * The keyword value
+     *
+     * @var string
+     **/
     public $value  = null;
+
+    /**
+     * The type of the keyword (url, internal search, ...)
+     *
+     * @var
+     **/
     public $tipo   = null;
 
     /**
-     * @var MethodCacheManager Handler to call method cached
+     * Handler to call the method cacher
+     *
+     * @var MethodCacheManager
      */
     public $cache = null;
 
     /**
-     * constructor
+     * Initializes the keyword object instance
      *
      * @param int $id
      */
@@ -44,6 +72,7 @@ class PClave
      * Read, get a specific object
      *
      * @param  int    $id Object ID
+     *
      * @return PClave Return instance to chaining method
      */
     public function read($id)
@@ -165,16 +194,19 @@ class PClave
     }
 
     /**
-     * Get list of terms to substitute
+     * Get list of terms given a filter
      *
-     * @return array Terms
+     * @param string $filter the SQL WHERE clause
+     *
+     * @return array list of terms
      */
     public function find($filter = null)
     {
         $sql = 'SELECT * FROM `pclave`';
-        if (!is_null($filter)) {
+        if (!empty($filter)) {
             $sql = 'SELECT * FROM `pclave` WHERE ' . $filter;
         }
+
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $terms = array();
@@ -193,7 +225,12 @@ class PClave
     }
 
     /**
+     * Replaces the appearances of all the keywords by their replacements
      *
+     * @param string $text the text to change
+     * @param array $terms the list of terms to replace
+     *
+     * @return string the changed text
      */
     public function replaceTerms($text, $terms)
     {
@@ -236,5 +273,20 @@ class PClave
 
         return trim($text);
     }
-}
 
+    /**
+     * Returns the available keyword types
+     *
+     * @return array the list of types
+     **/
+    public static function getTypes()
+    {
+        $types = array(
+            'url'       => _('URL'),
+            'intsearch' => _('Internal search'),
+            'email'     => _('Email')
+        );
+
+        return $types;
+    }
+}

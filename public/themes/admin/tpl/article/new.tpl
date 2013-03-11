@@ -68,19 +68,14 @@
 
 {block name="content"}
 <form action="{if isset($article->id)}{url name=admin_article_update id=$article->id}{else}{url name=admin_article_create}{/if}" method="POST" name="formulario" id="formulario">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Article manager{/t} :: {if isset($article->id)}{t}Creating new article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
+            <div class="title"><h2>{if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
             <ul class="old-button">
                 {acl isAllowed="ARTICLE_UPDATE"}
                 <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                </li>
-                <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}" ><br />{t}Save and exit{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{if isset($article->id)}{t}Update{/t}{else}{t}Save{/t}{/if}
                     </button>
                 </li>
                 {/acl}
@@ -179,19 +174,25 @@
                         <label for="category" class="control-label">{t}Section:{/t}</label>
                         <div class="controls">
                             <select name="category" id="category">
-                                <option value="20" data-name="{t}Unknown{/t}" {if !isset($category)}selected{/if}>{t}Unknown{/t}</option>
                                 {section name=as loop=$allcategorys}
-                                {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                {section name=su loop=$subcat[as]}
-                                    {if $subcat[as][su]->internal_category eq 1}
-                                        <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                                        {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                    {/if}
+                                    {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                    <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
+                                        {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                        {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
+                                            {$allcategorys[as]->title}</option>
+                                    {/acl}
+                                    {section name=su loop=$subcat[as]}
+                                        {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                        {if $subcat[as][su]->internal_category eq 1}
+                                            <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
+                                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                            {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
+                                            &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                        {/if}
+                                        {/acl}
+                                    {/section}
                                 {/section}
-                                {/acl}
-                                {/section}
+                                <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
                             </select>
                         </div>
                     </div>
@@ -208,7 +209,7 @@
                         </div>
                     </div>
 
-                    {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                    {is_module_activated name="CRONICAS_MODULES"}
                     <div class="control-group">
                         <label for="agency_bulletin" class="control-label">{t}Newsletter signature{/t}</label>
                         <div class="">

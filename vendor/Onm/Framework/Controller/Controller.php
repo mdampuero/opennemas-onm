@@ -1,11 +1,14 @@
 <?php
 /**
- * This file is part of the Onm package.
+ * Defines the Onm\Framework\Controller\Controller class
  *
+ * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Onm_Framework_Controller_Controller
  **/
 namespace Onm\Framework\Controller;
 
@@ -19,15 +22,16 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * It provides methods to common features needed in controllers.
  *
- * @author Fran Diéguez <fran@openhost.es>
+ * @package  Onm_Framework_Controller_Controller
  */
 class Controller extends ContainerAware
 {
     /**
-     * Retrieve unsetted variables from the container
+     * Fetches unsetted variables from the container
      *
-     * @return void
-     * @author
+     * @param string $name the property name
+     *
+     * @return mixed the property value
      **/
     public function __get($name)
     {
@@ -80,7 +84,41 @@ class Controller extends ContainerAware
 
         $this->view->assign($parameters);
 
+        $this->template = $this->view->createTemplate($view, $cacheID);
+
         return $this->view->fetch($view, $cacheID);
+    }
+
+    /**
+     * Returns information about a template
+     *
+     * @return array
+     **/
+    public function getExpireDate()
+    {
+        $data = null;
+
+        // If the template is cached, fetch the dates from it
+        if ($this->view->caching && $this->template->cached->timestamp) {
+            $expires = $this->template->cached->timestamp + $this->template->cache_lifetime;
+
+            $creationDate = new \DateTime();
+            $creationDate->setTimeStamp($this->template->cached->timestamp);
+            $creationDate->setTimeZone(new \DateTimeZone('Europe/Madrid'));
+
+            $expireDate = new \DateTime();
+            $expireDate->setTimeStamp($expires);
+            $expireDate->setTimeZone(new \DateTimeZone('Europe/Madrid'));
+
+            $data = array(
+                'creation_date' => $creationDate,
+                'expire_date' => $expireDate,
+                'max_age'     => $expires - time(),
+            );
+        }
+
+        return $data;
+
     }
 
     /**
@@ -97,11 +135,21 @@ class Controller extends ContainerAware
         $contents = $this->renderView($view, $parameters);
 
         if (is_null($response)) {
-            return new Response($contents);
+            $response = new Response($contents);
         } else {
-            return $response->setContent($contents);
+            $response->setContent($contents);
         }
-        // return $this->container->get('templating')->renderResponse($view, $parameters, $response);
+
+        // if (array_key_exists('cache_id', $parameters)) {
+        //     $expires = $this->getExpireDate();
+        //     if (!is_null($expires)) {
+        //         $response->setDate($expires['creation_date']);
+        //         $response->setExpires($expires['expire_date']);
+        //         $response->setSharedMaxAge($expires['max_age']);
+        //     }
+        // }
+
+        return $response;
     }
 
     /**
@@ -179,11 +227,12 @@ class Controller extends ContainerAware
     /**
      * Checks if the user can access an specific aclname or redirects him to wellcome page
      *
-     * @return void
+     * @param string $aclName the name of the acl
+     *
+     * @return boolean true if the user has rights for the given ACL
      **/
     public function checkAclOrForward($aclName)
     {
         return \Acl::checkOrForward($aclName);
     }
 }
-

@@ -15,6 +15,11 @@ function smarty_function_get_social_link($params, &$smarty)
         return;
     }
 
+    $style ='';
+    if (!isset($params['style'])) {
+        $style .= ' style = "'. $params['style'].'"';
+    }
+
     $output = '';
     switch ($params['page']) {
         case 'twitter':
@@ -26,9 +31,8 @@ function smarty_function_get_social_link($params, &$smarty)
 
             if (!empty($twitterPage)) {
                 $output =
-                '<li>
-                    <a href="http://twitter.com/'.s::get('twitter_page').
-                    '" target="_blank" title="Visita nuestro perfíl en Twitter">
+                '<li '.$style.'>
+                    <a href="'.$twitterPage.'" target="_blank" title="Visita nuestro perfíl en Twitter">
                        <img src="'.$params['img'].'" alt="" />
                     </a>
                 </li>';
@@ -43,7 +47,7 @@ function smarty_function_get_social_link($params, &$smarty)
 
             if (!empty($facebookPage)) {
                 $output =
-                '<li>
+                '<li '.$style.'>
                     <a href="'.$facebookPage.'" target="_blank" title="Visita nuestro perfíl en Facebook">
                        <img src="'.$params['img'].'" alt="" />
                     </a>
@@ -58,15 +62,43 @@ function smarty_function_get_social_link($params, &$smarty)
             $googlePage = s::get('google_page');
 
             if (!empty($googlePage)) {
-            $output =
-                '<li>
-                    <a href="'.$googlePage.'" target="_blank" title="Visita nuestro perfíl en Google Plus">
-                       <img src="'.$params['img'].'" alt="" />
-                    </a>
-                </li>';
+                $output =
+                    '<li '.$style.'>
+                        <a href="'.$googlePage.'" target="_blank" title="Visita nuestro perfíl en Google Plus">
+                           <img src="'.$params['img'].'" alt="" />
+                        </a>
+                    </li>';
+            }
+            break;
+        case 'youtube':
+            if (!isset($params['img'])) {
+                $params['img'] = $smarty->parent->image_dir.'bullets/youtube-24.png';
+            }
+
+            $youtubePage = s::get('youtube_page');
+
+            if (!empty($googlePage)) {
+                $output =
+                    '<li '.$style.'>
+                        <a href="'.$youtubePage.'" target="_blank" title="Visita nuestra página en Youtube">
+                           <img src="'.$params['img'].'" alt="" />
+                        </a>
+                    </li>';
             }
             break;
         default:
+            if (!isset($params['img'])) {
+                $output = '';
+            }
+            if (!empty($params['page']) && !empty($params['img'])) {
+                $output =
+                '<li '.$style.'>
+                    <a href="'.$params['page'].'" target="_blank" title="Visitanos">
+                       <img src="'.$params['img'].'" alt="" />
+                    </a>
+                </li>';
+
+            }
             break;
     }
 

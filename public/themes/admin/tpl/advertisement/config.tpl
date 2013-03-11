@@ -23,7 +23,7 @@
 
 {block name="content"}
 <form action="{url name=admin_ads_config}" method="POST">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Ads :: Configuration{/t}</h2></div>
             <ul class="old-button">
@@ -55,8 +55,17 @@
                     <div class="help-block">{t}This setting indicates how long will take to re-display the interstitial in frontpage.{/t}</div>
                 </div>
             </div>
+            <div class="control-group">
+                <label for="ads_settings_no_generics" class="control-label">{t}Allow generic advertisement{/t}</label>
+                <div class="controls">
+                    <select name="ads_settings_no_generics" id="ads_settings_no_generics">
+                        <option value="0">{t}Yes{/t}</option>
+                        <option value="1" {if $configs['ads_settings']['no_generics'] eq "1"} selected {/if}>{t}No{/t}</option>
+                    </select>
+                    <div class="help-block">{t}This settings allow printing home ads when ads in category are empty.{/t}</div>
+                </div>
+            </div>
         </div>
-
         <input type="hidden" id="action" name="action" value="config" />
     </div>
 </form>

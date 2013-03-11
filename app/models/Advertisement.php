@@ -6,6 +6,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Onm\Settings as s;
+
 /**
  * Advertisement class
  *
@@ -17,10 +19,19 @@
  **/
 class Advertisement extends Content
 {
-
+    /**
+     * The category that all the advertisements belongs to
+     *
+     * @var int
+     **/
     const ADVERTISEMENT_CATEGORY = 2;
 
     // FIXME: modificado para versión demo
+    /**
+     * List of available ads positions
+     *
+     * @var array
+     **/
     public static $map = array(
         /* Intersticial banners frontpages */
         50 => "Banner Interticial en portada",
@@ -183,58 +194,131 @@ class Advertisement extends Content
     );
 
     /**
-     * @access public
-     * @var long
+     * the advertisement id
+     *
+     * @var int
      **/
     public $pk_advertisement = null;
 
     /**
-     * @access public
+     * The type of advertisement
+     *
      * @var int
      **/
     public $type_advertisement = null;
 
     /**
-     * @access public
-     * @var int
+     * List of categories that this advertisement will be available
+     *
+     * @var string
      **/
     public $fk_content_categories = null;
 
+    /**
+     * The related image id to this ad
+     *
+     * @var int
+     **/
     public $img  = null;
+
+    /**
+     * The position of the advertisement
+     *
+     * @var int
+     **/
     public $path = null;
 
+    /**
+     * The url that this advertisment links to
+     *
+     * @var string
+     **/
     public $url            = null;
+
+    /**
+     * The type of measure for this ad (views, clicks, data range)
+     *
+     * @var string
+     **/
     public $type_medida    = null;
+
+    /**
+     * TODO: maybe this is replicated with num_clic_count
+     * Number of user clicks in this advertismenet
+     *
+     * @var int
+     **/
     public $num_clic       = null;
+
+    /**
+     * Number of user clicks in this advertisement
+     *
+     * @var int
+     **/
     public $num_clic_count = null;
+
+    /**
+     * Number of views for this advertisement
+     *
+     * @var int
+     **/
     public $num_view       = null;
+
+    /**
+     * Whether overlap flash events when rendering this advertisement
+     *
+     * @var boolean
+     **/
     public $overlap        = null;
 
+    /**
+     * The <script> content of this advertisement
+     *
+     * @varstring
+     **/
     public $script      = null;
+
+    /**
+     * Whether this advertisement has a <script> content
+     *
+     * @var boolean
+     **/
     public $with_script = null;
+
+    /**
+     * In interstitial advertisements this is the amount of time that it will
+     * be shown to the user
+     *
+     * @var int
+     **/
     public $timeout     = null;
 
     /**
-     * @var MethodCacheManager Instance of MethodCacheManager
+     * Instance of MethodCacheManager
+     *
+     * @var MethodCacheManager
      **/
     public $cache = null;
 
     /**
-     * @var Advertisement instance, singleton pattern
+     * Advertisement instance, singleton pattern
+     *
+     * @var Advertisement
      **/
     private static $singleton = null;
 
     /**
-     * @var registry of banners
+     * The registry for banners
+     * @var array
      **/
     protected $_registry = array();
 
     /**
      * Initializes the Advertisement class
      *
-     * @param int $id, ID of the Advertisement
+     * @param int $id ID of the Advertisement
      *
-     * return Advertisement the instance of the advertisement class
+     * @return Advertisement the instance of the advertisement class
      **/
     public function __construct($id = null)
     {
@@ -246,7 +330,7 @@ class Advertisement extends Content
         }
 
         // Store this object into the cache manager for better performance
-        if ( is_null($this->cache) ) {
+        if (is_null($this->cache)) {
             $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
         } else {
             $this->cache->setCacheLife(20); // 20 seconds
@@ -267,7 +351,7 @@ class Advertisement extends Content
     public static function getInstance()
     {
         // Create a unique instance if not available
-        if ( is_null(self::$singleton) ) {
+        if (is_null(self::$singleton)) {
             self::$singleton = new Advertisement();
         }
 
@@ -344,7 +428,7 @@ class Advertisement extends Content
     /**
      * Get an instance of a particular ad from its ID
      *
-     * @param int $id, the ID of the Advertisement
+     * @param int $id the ID of the Advertisement
      *
      * @return Advertisement the instance for the Ad
      **/
@@ -385,9 +469,7 @@ class Advertisement extends Content
     }
 
     /**
-     * Update advertisement
-     *
-     * Update the data of the ad from one array.
+     * Updates the data of the ad from one array.
      *
      * @param array $data
      *
@@ -560,8 +642,7 @@ class Advertisement extends Content
         $ad = new Advertisement($id);
 
         //No publicado
-        if (
-            ($ad->type_medida=='CLIC' )
+        if ($ad->type_medida == 'CLIC'
             && ($ad->num_clic <= $ad->num_clic_count)
         ) {
             $status = 0;
@@ -637,23 +718,29 @@ class Advertisement extends Content
 
             // Get string of types separeted by coma
             $types = implode(',', $types);
+            $config = s::get(array('ads_settings'));
+            if (isset($config['ads_settings']['no_generics'])
+                && ($config['ads_settings']['no_generics'] == '1')) {
+                $generics = '';
+            } else {
+                $generics = ' OR fk_content_categories=0';
+            }
 
             // Generate sql with or without category
-            $cm = new ContentManager();
-            if ($category!=0) {
+            $cm = new \ContentManager();
+            if ($category !== 0) {
                 $rsBanner = $cm->find(
                     'Advertisement',
-                    ' type_advertisement IN ('.$types.') AND available=1 AND
-                    (fk_content_categories LIKE \'%'.$category.'%\'
-                    OR fk_content_categories=0)',
-                    'ORDER BY type_advertisement, created'
+                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
+                    (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')',
+                    'ORDER BY contents.created'
                 );
             } else {
                 $rsBanner = $cm->find(
                     'Advertisement',
-                    ' type_advertisement IN ('.$types.') AND available=1 AND
-                    fk_content_categories=0',
-                    'ORDER BY type_advertisement, created'
+                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
+                    advertisements.fk_content_categories=0',
+                    'ORDER BY contents.created'
                 );
             }
 
@@ -702,10 +789,13 @@ class Advertisement extends Content
                 $homeBanners[$adType] = array();
                 if (count($advs) > 1) {
                     foreach ($advs as $ad) {
-                        if ($ad->fk_content_categories != array(0)) {
-                            array_push($banners[$adType], $ad); // Category banners
-                        } else {
+                        if (in_array(0, $ad->fk_content_categories)) {
                             array_push($homeBanners[$adType], $ad); // Home banners
+                            if (in_array($category, $ad->fk_content_categories)) {
+                                array_push($banners[$adType], $ad); // Category+Home banners
+                            }
+                        } else {
+                            array_push($banners[$adType], $ad); // Category banners
                         }
                     }
                     // If this ad-type don't has any banner, get all from home
@@ -747,10 +837,10 @@ class Advertisement extends Content
             $cm = new ContentManager();
             $rsBanner = $cm->find(
                 'Advertisement',
-                ' `type_advertisement`=' . $type
-                .' AND `available`=1'
-                .' AND `fk_content_categories` LIKE "%'.$category.'%"',
-                ' ORDER BY type_advertisement, created'
+                ' `contents`.`available`=1'
+                .' AND `advertisements`.`type_advertisement`=' . $type
+                .' AND `advertisements`.`fk_content_categories` LIKE "%'.$category.'%"',
+                ' ORDER BY `contents`.created'
             );
 
             $numBanner = array_rand($rsBanner);
@@ -767,6 +857,9 @@ class Advertisement extends Content
 
     /**
      * Renders the advertisment given a set of parameters
+     *
+     * @param array $params list of parameters for rendering the advertisement
+     * @param Template $tpl the Template class instance
      *
      * @return string the final html for the ad
      **/
@@ -818,7 +911,7 @@ class Advertisement extends Content
                    'marginwidth="0" marginheight="0" rel="nofollow"></iframe>';
             }
 
-        } elseif( !empty($banner->pk_advertisement) ) {
+        } elseif (!empty($banner->pk_advertisement)) {
 
             // TODO: controlar los banners swf especiales con div por encima
             if (strtolower($photo->type_img)=='swf') {
@@ -853,7 +946,7 @@ class Advertisement extends Content
                     } else {
                         $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                             <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
-                                .'filter:alpha(opacity=0);position:absolute;z-index:100;width:'.
+                                .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
                                 $width.'px;height:'.$height.'px;"
                                 onclick="javascript:window.open(\''.SITE_URL.'ads/'
                                 .date('YmdHis', strtotime($banner->created))
@@ -913,6 +1006,7 @@ class Advertisement extends Content
      *
      * @param array  $banners Array of Advertisement objects
      * @param Smarty $tpl     Template
+     * @param string $wsUrl   The external web service url
      **/
     public function renderMultiple($banners, $tpl, $wsUrl = false)
     {
@@ -1064,4 +1158,3 @@ class Advertisement extends Content
         }
     }
 }
-

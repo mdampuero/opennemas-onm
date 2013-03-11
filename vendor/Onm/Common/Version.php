@@ -1,27 +1,28 @@
 <?php
-/*
+/**
+ * Defines the Onm\Common\Version
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_Common
  */
 namespace Onm\Common;
 
 /**
  * Class to store and retrieve the version of Onm
  *
- * @link    www.opennemas.org
- * @since   0.8
- * @version $Revision$
- * @author  Fran Dieguez <fran@openhost.es>
+ * @package Onm_Common
  */
 class Version
 {
     /**
-     * Current Doctrine Version
+     * Current Onm framework Version
      */
-    const VERSION = '0.9.2.3';
+    const VERSION = '1.0';
 
     /**
      * Compares a Onm version with the current one.
@@ -39,4 +40,3 @@ class Version
         return version_compare($version, $currentVersion);
     }
 }
-

@@ -15,7 +15,15 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Album manager{/t} :: {if $category eq 'widget'}Widget Home{elseif $category eq 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</h2>
+                <h2>{t}Albums{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category== 'all'}{t}All categories{/t}{elseif $category == 'widget'}{t}WIDGET HOME{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <h4>{t}Other{/t}</h4>
+                        <a href="{url name=admin_albums_widget}" {if $category == 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                        {include file="common/drop_down_categories.tpl" home="{url name=admin_albums l=1 status=$status}"}
+                    </div>
+                </div>
             </div>
             <ul class="old-button">
                 {acl isAllowed="ALBUM_DELETE"}
@@ -23,9 +31,9 @@
                     <a class="delChecked" data-controls-modal="modal-album-batchDelete" href="#" title="{t}Delete{/t}">
                         <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
-				</li>
-				{/acl}
-				{acl isAllowed="ALBUM_AVAILABLE"}
+                </li>
+                {/acl}
+                {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
                     <button id="batch-publish" type="submit" name="status" value="0">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
@@ -70,16 +78,6 @@
     <div class="wrapper-content">
 
         {render_messages}
-
-        <ul class="pills clearfix">
-            <li>
-                <a href="{url name=admin_albums_widget}" {if $category == 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
-            </li>
-            <li>
-                <a href="{url name=admin_albums category=all}" {if $category==='all'}class="active"{/if} >{t}All categories{/t}</a>
-            </li>
-           {include file="menu_categories.tpl" home={url name=admin_albums l=1}}
-        </ul>
 
         {* MENSAJES DE AVISO GUARDAR POS******* *}
         <div id="warnings-validation"></div>

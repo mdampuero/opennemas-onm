@@ -1,19 +1,21 @@
 <?php
 /**
- * This file is part of the Onm package.
+ * Defines the Onm\Cron class
  *
+ * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm
  **/
 namespace Onm\Component\Cron;
 
 /**
  * Handles all the cron actions, stores its parameters and provides statefull executions
  *
- * @package default
- * @author
+ * @package Onm
  **/
 class Cron
 {
@@ -22,11 +24,12 @@ class Cron
      *
      * @var array
      **/
-    private $_registeredPlugins;
+    private $registeredPlugins;
+
     /**
      * Initializes the cron handler
      *
-     * @author
+     * @return  Cron the object instance
      **/
     public function __construct()
     {
@@ -40,6 +43,9 @@ class Cron
      * register the class. If the $plugin parameter is a plugin object adds it
      * to the registered plugins.
      *
+     * @param string $plugin the plugin name
+     * @param string $plugin a plugin object instance
+     *
      * @return boolean true if the plugin was registered properly
      **/
     public function registerPlugin($plugin)
@@ -52,7 +58,7 @@ class Cron
                 class_implements($plugin)
             )
         ) {
-            $this->_registeredPlugins []= $plugin;
+            $this->registeredPlugins []= $plugin;
 
             return true;
         } elseif (is_string($plugin)) {
@@ -66,6 +72,8 @@ class Cron
 
     /**
      * Register an array of plugins
+     *
+     * @param string $plugins the list of plugins to register
      *
      * @return boolean true if all went well
      **/
@@ -81,4 +89,3 @@ class Cron
         return $loaded;
     }
 }
-

@@ -1,19 +1,22 @@
 <?php
 /**
+ * Defines the Instance class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Onm
  **/
 namespace Onm\Instance;
 
 /**
  * Handles the instance operations
  *
- * @package default
- * @author
+ * @package Onm
  **/
 class Instance
 {
@@ -21,7 +24,6 @@ class Instance
      * Initializes the instance object
      *
      * @return void
-     * @author
      **/
     public function __construct()
     {
@@ -62,7 +64,6 @@ class Instance
      * Loads the theme configuration
      *
      * @return void
-     * @author
      **/
     public function initTheme()
     {
@@ -71,9 +72,10 @@ class Instance
         $this->theme = $theme;
     }
 
-    /*
+    /**
      * Initializes all the internal application constants
      *
+     * @return void
      */
     public function initInternalConstants()
     {
@@ -114,11 +116,14 @@ class Instance
         }
         define('COMMON_CACHE_PATH', realpath($commonCachepath));
 
+        // Backup paths
+        define('BACKUP_PATH', realpath(SITE_PATH.DS.'..'.DS."backups"));
+
         /**
          * Logging settings
          **/
         define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
-        define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'application.log');
+        define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.INSTANCE_UNIQUE_NAME.'-application.log');
 
         // TODO: delete from application
         define('SYS_NAME_GROUP_ADMIN', 'Administrador');
@@ -163,6 +168,7 @@ class Instance
         define('TEMPLATE_ADMIN_URL', SS."themes".SS.TEMPLATE_ADMIN.SS);
         define('ADVERTISEMENT_ENABLE', true);
 
+        define('TEMPLATE_MANAGER', "manager");
 
         /**
          * Mail settings
@@ -182,4 +188,3 @@ class Instance
         define('ITEMS_PAGE', "20"); // TODO: delete from application
     }
 }
-

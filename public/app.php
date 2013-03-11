@@ -8,16 +8,28 @@
  * file that was distributed with this source code.
  **/
 
-require '../app/autoload.php';
+require __DIR__.'/../app/autoload.php';
 
-require __DIR__.'/../app/Frontend/Resources/Routes/Routes.php';
+// Load the available route collection
+$routes = new \Symfony\Component\Routing\RouteCollection();
+
+$routeFiles = glob(SRC_PATH.'/*/Resources/Routes/Routes.php');
+foreach ($routeFiles as $routeFile) {
+    require $routeFile;
+}
 
 require 'bootstrap.php';
 
-$sc = include '../app/container.php';
+$sc = include __DIR__.'/../app/container.php';
 
-$sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
+if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
+    $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
+} elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
+    $sc->setParameter('dispatcher.exceptionhandler', 'Manager:Controllers:ErrorController:default');
+} else {
+    $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
+}
+
 // Dispatch the response
 $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
 $dispatcher->dispatch();
-

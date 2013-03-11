@@ -16,7 +16,7 @@ jQuery(function($){
 <form action="{url name=admin_user_list}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}User manager{/t}</h2></div>
+			<div class="title"><h2>{t}Users{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
@@ -79,7 +79,8 @@ jQuery(function($){
 					</td>
 					<td class="left">
 						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
-							{$user->name}&nbsp;{$user->firstname}&nbsp;{$user->lastname}</a>
+							{$user->name}
+						</a>
 					</td>
 					<td class="left">
 						{$user->login}

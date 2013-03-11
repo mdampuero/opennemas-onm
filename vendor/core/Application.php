@@ -13,32 +13,79 @@ use Onm\Settings as s;
  *
  * @package    Onm
  * @subpackage Core
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class Application
 {
-    public $conn           = null;
-    public $logger         = null;
-    public $errors         = array();
-    public $adodb          = null;
-    public $smarty         = null;
-    public $log            = null;
-    public $template       = null;
-    public $sesion         = null;
-    public $cache          = null;
-    public $events         = array();
-    public static $language    = '';
-    public static $request        = null;
+    /**
+     * Database connection object
+     *
+     * @var AdodbConnection
+     **/
+    public $conn                = null;
 
     /**
-    * Setup the Application instance and assigns it to a global variable
-    *
-    * If global variable application doesn't exists create an instance of it,
-    * and setup up DB conection, Adodb logger instance, Workflow
-    * logger instance,
-    *
-    * @return object $GLOBALS['application']
-    */
+     * Logger instance
+     *
+     * @var Monolog
+     **/
+    public $logger              = null;
+
+    /**
+     * Static access to the logger instance
+     *
+     * @var Monolog
+     **/
+    public static $loggerStatic = null;
+
+    /**
+     * Saves the latest error of the application
+     *
+     * @var string
+     **/
+    public $errors              = array();
+
+    /**
+     * Adodb connection
+     *
+     * @deprecated deprecated from version 0.6
+     *
+     * @var AdoDbConnection
+     **/
+    public $adodb               = null;
+
+    /**
+     * Smarty object instance
+     *
+     * @var Template
+     **/
+    public $smarty              = null;
+
+    /**
+     * The method cache handler object instance
+     *
+     * @var MethodCacheManager
+     **/
+    public $cache               = null;
+
+    /**
+     * Registered events
+     *
+     * @var array
+     **/
+    public $events              = array();
+
+    /**
+     * Current application language
+     *
+     * @var string
+     **/
+    public static $language     = null;
+
+    /**
+     * Setup the Application instance and assigns it to a global variable
+     *
+     * @return object $GLOBALS['application']
+     */
     public static function load()
     {
         self::initEnvironment(ENVIRONMENT);
@@ -48,23 +95,23 @@ class Application
 
             $GLOBALS['application'] = new Application();
 
-            if (INSTANCE_UNIQUE_NAME != 'onm_manager') {
-                // Setting up DataBase connection
-                self::initDatabase();
+            // Setting up DataBase connection
+            self::initDatabase();
 
-                // Setting up Logger
-                self::initLogger();
+            // Setting up Logger
+            self::initLogger();
 
-                // Setting up Gettext
-                self::initL10nSystem();
-
-                self::initTimeZone();
-            }
+            self::initTimeZone();
         }
 
         return $GLOBALS['application'];
     }
 
+    /**
+     * Initializes the database connection
+     *
+     * @return void
+     **/
     public static function initDatabase()
     {
         // Database
@@ -72,80 +119,18 @@ class Application
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
 
         $GLOBALS['application']->conn->bulkBind = true;
-
-        // Check if adodb is log enabled
-        if (s::get('log_db_enabled') == 1) {
-            $GLOBALS['application']->conn->LogSQL();
-        }
-    }
-
-    public static function initLogger()
-    {
-        // init Logger
-        $logLevel = (s::get('log_level'))?: 'normal';
-        $logger = new \Onm\Log($logLevel);
-        Zend_Registry::set('logger', $logger);
-
-        // Composite Logger (file + mail)
-        // http://www.indelible.org/php/Log/guide.html#composite-handlers
-        if ( s::get('log_enabled') == 1) {
-            $GLOBALS['application']->logger = \Log::singleton('composite');
-
-            $conf = array('mode' => 0600,
-                          'timeFormat' => '[%Y-%m-%d %H:%M:%S]',
-                          'lineFormat' => '%1$s %2$s [%3$s] %4$s %5$s %6$s');
-            $fileLogger = &Log::singleton(
-                'file',
-                SYS_LOG_FILENAME,
-                'application',
-                $conf
-            );
-            $GLOBALS['application']->logger->addChild($fileLogger);
-        } else {
-            $GLOBALS['application']->logger = \Log::singleton('null');
-        }
+        // $GLOBALS['application']->conn->LogSQL();
     }
 
     /**
-     * Set up gettext translations.
-     */
-    public static function initL10nSystem()
+     * Initializes the logger instance
+     *
+     * @return
+     **/
+    public static function initLogger()
     {
-        $timezone = s::get('time_zone');
-        if (isset($timezone)) {
-            $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[$timezone]);
-        }
-
-        /* Set internal character encoding to UTF-8 */
-        mb_internal_encoding("UTF-8");
-
-        if (!self::isBackend()) {
-            $availableLanguages = self::getAvailableLanguages();
-            $forceLanguage = filter_input(INPUT_GET, 'language', FILTER_SANITIZE_STRING);
-
-            if ($forceLanguage !== null
-                && in_array($forceLanguage, array_keys($availableLanguages))
-            ) {
-                self::$language = $forceLanguage;
-            } else {
-                self::$language = s::get('site_language');
-            }
-
-            $locale = self::$language.".UTF-8";
-            $domain = 'messages';
-
-            $localeDir = realpath(APP_PATH.'/Frontend/Resources/locale/');
-
-            if (isset($_GET["locale"])) {
-                $locale = $_GET["locale"].'.UTF-8';
-            }
-
-            putenv("LC_MESSAGES=$locale");
-            setlocale(LC_ALL, $locale);
-            bindtextdomain($domain, $localeDir);
-            textdomain($domain);
-        }
+        self::$loggerStatic = new \Onm\Log('normal');
+        $GLOBALS['application']->logger = self::$loggerStatic;
     }
 
     /**
@@ -155,15 +140,18 @@ class Application
      **/
     public static function initTimeZone()
     {
-        if ($timezone = s::get('time_zone')) {
-            $availableTimeZones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimeZones[(int) $timezone]);
+        $timezone = s::get('time_zone');
+        if (isset($timezone)) {
+            $availableTimezones = \DateTimeZone::listIdentifiers();
+            date_default_timezone_set($availableTimezones[$timezone]);
         }
     }
 
     /**
      * Sets the PHP environment given an environmen
      * name 'production', 'development'
+     *
+     * @param string $environment The current environment
      *
      * @return void
      **/
@@ -181,21 +169,6 @@ class Application
         ini_set('apc.slam_defense', '0');
     }
 
-    // TODO: move to a separated file called functions.php
-    /**
-     * Returns the available languages
-     *
-     * @return array the list of languages
-     **/
-    public static function getAvailableLanguages()
-    {
-        return array(
-            'en_US' => "English",
-            'es_ES' => "Español",
-            'gl_ES' => "Galego"
-        );
-    }
-
     /**
     * This function retrieves the logger instance that is in the Zend registry
     *
@@ -203,16 +176,33 @@ class Application
     */
     public static function getLogger()
     {
-        return \Zend_Registry::get('logger');
+        return self::$loggerStatic;
     }
 
 
-    /* Events system */
+    /**
+     * Registers a new event handler for a given event name
+     *
+     * @param string $event the event name
+     * @param string $callback the function to call when firing this event
+     * @param string $args the params to pass to the function
+     *
+     * @return void
+     **/
     public function register($event, $callback, $args = array())
     {
         $this->events[$event][] = array($callback, $args);
     }
 
+    /**
+     * Fires an event given the event name
+     *
+     * @param string $eventName the event to fire
+     * @param object|string $instance the class to call
+     * @param array $args the list of arguments to pass to the callback
+     *
+     * @return
+     **/
     public function dispatch($eventName, $instance, $args = array())
     {
         if (isset($this->events[$eventName])) {
@@ -238,25 +228,12 @@ class Application
     }
 
     // TODO: move to a separated file called functions.php
-    /**
-    * Raise an HTTP redirection to given url
-    *
-    * Use the header PHP function to redirect browser to another page
-    *
-    * @param string $url the url to redirect to
-    */
-    public static function forward($url)
-    {
-        header("Location: ".$url);
-        exit(0);
-    }
-
-    // TODO: move to a separated file called functions.php
     // TODO: rename the function to isMobile()
     /**
      * Detect a mobile device and redirect to mobile version
      *
      * @param  boolean $autoRedirect
+     *
      * @return boolean True if it's a mobile device and $autoRedirect is false
      */
     public function mobileRouter($autoRedirect = true)
@@ -275,13 +252,13 @@ class Application
         $bc = new \Browscap(APPLICATION_PATH .DS.'tmp'.DS.'cache');
         $browser = $bc->getBrowser(); //isBanned
 
-        if (
-            !empty($browser->isMobileDevice)
+        if (!empty($browser->isMobileDevice)
             && ($browser->isMobileDevice == true)
             && !(isset($_COOKIE['confirm_mobile']))
         ) {
             if ($autoRedirect) {
-                Application::forward('/mobile' . $_SERVER['REQUEST_URI']);
+                header("Location: ".'/mobile' . $_SERVER['REQUEST_URI']);
+                exit(0);
             } else {
                 $isMobileDevice = true;
             }
@@ -290,18 +267,6 @@ class Application
         return $isMobileDevice;
     }
 
-    // TODO: move to a separated file called functions.php
-    /**
-     * Check if current request is from backend
-     *
-     * Checks if the current URI requrested belongs to admin panel
-     *
-     * @return boolean true if request is from backend
-    */
-    public static function isBackend()
-    {
-        return strncasecmp($_SERVER['REQUEST_URI'], '/admin/', 7) === 0;
-    }
 
     /**
     * Perform a permanently redirection (301)
@@ -317,25 +282,16 @@ class Application
         exit(0);
     }
 
-    // TODO: move to a separated file called functions.php
     /**
-    * Wrapper to output content to AJAX requests
-    *
-    * @param string $htmlout, the content to output
-    * @return null
-    */
-    public static function ajaxOut($htmlout)
-    {
-        header("Cache-Control: no-cache");
-        header("Pragma: nocache");
-        echo $htmlout;
-        exit(0);
-    }
-
-    // TODO: move to a separated file called functions.php
-    /**
-    * Stablishes a cookie value in a secure way
-    */
+     * Stablishes a cookie value in a secure way
+     *
+     * @param string $name the name of the cookie
+     * @param mixed $value the value to set into the cookie
+     * @param int $expires the seconds during the cookie will be valid
+     * @param int $domain the path for which the cookie will be valid
+     *
+     * @return void
+     */
     public static function setCookieSecure($name, $value, $expires = 0, $domain = '/')
     {
         setcookie($name, $value, $expires, $domain, $_SERVER['SERVER_NAME'], isset($_SERVER['HTTPS']), true);
@@ -359,8 +315,7 @@ class Application
         // IP que partiendo del REMOTE_ADDR original irá indicando los proxys
         // por los que ha pasado.
 
-        if (
-            isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
             && $_SERVER['HTTP_X_FORWARDED_FOR'] != ''
         ) {
             $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
@@ -415,10 +370,12 @@ class Application
 
     // TODO: move to a separated file called functions.php
     /**
-     * Register in the log one event in the content
+     * Registers in the log one event in the content
+     *
+     * @param string $action the action to log
+     * @param string $content the content of the action to log
      *
      * @return void
-     * @author
      **/
     public static function logContentEvent($action = null, $content = null)
     {
@@ -435,22 +392,17 @@ class Application
 
     // TODO: move to a separated file called functions.php
     /**
-     * Register in the Database error handler one error message
+     * Registers in the Database error handler one error message
      *
      * @return boolean true if all was sucessfully performed
-     * @author
      **/
     public static function logDatabaseError()
     {
         $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
 
         $logger = Application::getLogger();
-        $logger->notice('[Database Error] '.$errorMsg, 'normal');
-
-        $GLOBALS['application']->logger->debug('Error: '.$errorMsg);
-        $GLOBALS['application']->errors[] = 'Error: '.$errorMsg;
+        $logger->notice('[Database Error] '.$errorMsg);
 
         return $errorMsg;
     }
 }
-

@@ -51,18 +51,13 @@
 
 {block name="content"}
 <form action="{if $poll->id}{url name=admin_poll_update id=$poll->id}{else}{url name=admin_poll_create}{/if}" method="post" id="formulario">
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Poll manager{/t} :: {if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h2></div>
+            <div class="title"><h2>{if $poll->id}{t}Editing poll{/t}{else}{t}Creating a poll{/t}{/if}</h2></div>
             <ul class="old-button">
                 <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
@@ -108,9 +103,13 @@
                 <div class="controls">
                     <select name="category" id="category"  >
                         {section name=as loop=$allcategorys}
-                            <option value="{$allcategorys[as]->pk_content_category}" {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
+                            <option value="{$allcategorys[as]->pk_content_category}"
+                                {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                {if $poll->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}
-                                <option value="{$subcat[as][su]->pk_content_category}" {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                <option value="{$subcat[as][su]->pk_content_category}"
+                                {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                    {if $poll->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                             {/section}
                         {/section}
                     </select>
@@ -151,8 +150,8 @@
                             {foreach name=i from=$items item=answer}
                                 <div class="poll_answer">
                                     <div class="input-append">
-                                        <input type="text" name="item[]" value="{$answer.item}"/>
-                                        <input type="hidden" name="votes[]" value="{$answer.votes}">
+                                        <input type="text" name="item[{$answer.pk_item}]" value="{$answer.item}"/>
+                                        <input type="hidden" name="votes[{$answer.pk_item}]" value="{$answer.votes}">
                                         <div class="btn addon del">
                                             <i class="icon-trash"></i>
                                         </div>

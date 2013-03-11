@@ -9,18 +9,34 @@ function smarty_function_getProperty($params, &$smarty)
     }
 
     $item = $params['item'];
-    $category = $params['category'];
-    $property = $params['property']."_".$category;
-
-    $value = $item->getProperty($property);
-    if (empty($value)) {
-        return '';
+    if ($params['category'] == 'home') {
+        $category = 0;
+    } else {
+        $category = $params['category'];
     }
 
-    if ($params['property'] == 'bgcolor') {
-        return " style = \"background-color:{$value}\"";
+    $properties = explode(', ', $params['property']);
+    $output = '';
+    $end='';
+
+    if (is_array($properties)) {
+        if (!empty($params['style'])) {
+            $output = " style =\"";
+            $end = "\"";
+        }
+        foreach ($properties as $key => $property) {
+            $prop = $property."_".$category;
+            $value = $item->getProperty($prop);
+            if (!empty($value)) {
+                if ($property == 'bgcolor') {
+                    $output .= "background-color:{$value};";
+                } else {
+                    $output .= "{$value};";
+                }
+            }
+        }
     }
 
-    return $value;
+    return $output.$end;
 }
 

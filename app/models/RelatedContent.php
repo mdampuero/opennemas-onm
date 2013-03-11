@@ -1,28 +1,83 @@
 <?php
-/*
+/**
+ * Handles all the CRUD actions over Related contents.
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 /**
  * Handles all the CRUD actions over Related contents.
  *
- * @package    Onm
- * @subpackage Model
- * @author     me
+ * @package    Model
  **/
 class RelatedContent
 {
+    /**
+     * Content id of the first content
+     *
+     * @var int
+     **/
     public $pk_content1  = null;
+
+    /**
+     * Content id of the second content
+     *
+     * @var int
+     **/
     public $pk_content2  = null;
+
+    /**
+     * Relation type (inner, home, ...)
+     *
+     * @var string
+     **/
     public $relationship = null;
+
+    /**
+     * Information about the relation
+     *
+     * @var string
+     **/
     public $text         = null;
+
+    /**
+     * Proxy property for cache purpouses
+     *
+     * @var MethodCacheManager
+     **/
     public $cache        = null;
+
+    /**
+     * Position in the list when multiple relations of the same type
+     *
+     * @var int
+     **/
     public $position     = null;
+
+    /**
+     * Position in the list of inner
+     *
+     * @var int
+     **/
     public $posinterior  = null;
+
+    /**
+     * Whether showing this relation in frontpage
+     *
+     * @var boolean
+     **/
     public $verportada   = null;
+
+    /**
+     * Whether showing this relation in inner
+     *
+     * @var boolean
+     **/
     public $verinterior  = null;
 
     /**
@@ -43,13 +98,13 @@ class RelatedContent
     /**
      * Creates a relation between two contents given its ids.
      *
-     * @param string $contentID  the content id.
-     * @param string $contentID2 the content id.
+     * @param string $contentID  the content id of the first content
+     * @param string $contentID2 the content id of the second content
      * @param int    $position   the weight of the relation, for sorting
      * @param int    $posint     the weight of the relation in inner
-     * @param string $verport
-     * @param string $verint
-     * @param string $relation
+     * @param string $verport    true if the relation must be shown in frontpage
+     * @param string $verint     true if the relation must be shown in inner
+     * @param string $relation   kind of relation to assign
      *
      * @return boolean true if relation was created sucessfully.
      **/
@@ -64,33 +119,32 @@ class RelatedContent
     ) {
 
         $sql = "INSERT INTO related_contents
-                (`pk_content1`, `pk_content2`,
-                `position`,  `posinterior`,
-                `verportada`, `verinterior`,
-                `relationship`) " . "
+                (`pk_content1`, `pk_content2`, `position`,  `posinterior`,
+                `verportada`, `verinterior`, `relationship`) " . "
                 VALUES (?,?,?,?,?,?,?)";
         $values = array(
             $contentID, $contentID2, $position,
             $posint, $verport, $verint, $relation
-        ); //positions=1
+        );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return (false);
+            return false;
         }
 
-        return (true);
+        return true;
     }
 
     /**
      * Magic method for loading data from array and inject it in the object.
      *
      * @param array $properties the properties to inject inside the object.
+     *
+     * @return RelationContent the overloaded related content object instance
      **/
     public function load($properties)
     {
-
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
 
@@ -107,30 +161,36 @@ class RelatedContent
                 }
             }
         }
+
+        return $this;
     }
 
     /**
-     * Getches all the relations for a given element.
+     * Get all the relations for a given element.
      *
      * @param string $contentID the id of the element.
+     *
+     * @return RelatedContent the related content object instance
      **/
     public function read($contentID)
     {
-
         $sql = 'SELECT * FROM related_contents WHERE pk_content1=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($contentID));
 
         if (!$rs) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
         $this->pk_content1 = $rs->fields['pk_content1'];
         $this->pk_content2 = $rs->fields['pk_content2'];
         $this->position    = $rs->fields['position'];
         $this->posinterior = $rs->fields['posinterior'];
         $this->verportada  = $rs->fields['verportada'];
         $this->verinterior = $rs->fields['verinterior'];
+
+        return $this;
     }
 
     /**
@@ -140,37 +200,45 @@ class RelatedContent
      **/
     public function update($data)
     {
-
         $sql = "UPDATE related_contents"
                 ."   SET `pk_content2`=?, `relationship`=?,"
                 ."       `text`=?, `position`=?"
-                . "WHERE pk_content1=" . ($data['id']);
+                . "WHERE pk_content1=?";
         $values = array(
-            $data['pk_content2'], $data['relationship'],
-            $data['text'], $data['position']
+            $data['pk_content2'],
+            $data['relationship'],
+            $data['text'],
+            $data['position'],
+            $data['id'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
-     * Delete all the relations for a given element.
+     * Delete all the relations for an element given its id.
      *
      * @param string $contentID the element id.
+     *
+     * @return boolean true if the relations were removed
      **/
     public function delete($contentID)
     {
-        $sql = 'DELETE FROM related_contents WHERE pk_content1=' . ($contentID);
+        $sql = 'DELETE FROM related_contents WHERE pk_content1=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($contentID)) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -178,6 +246,8 @@ class RelatedContent
      * relations with other objects id->XXX and other objects with id XXX->id.
      *
      * @param string $contentID the element id.
+     *
+     * @return boolean true if all went well
      **/
     public function deleteAll($contentID)
     {
@@ -189,8 +259,10 @@ class RelatedContent
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -257,29 +329,13 @@ class RelatedContent
         return $related;
     }
 
-    // Didn't find a real usage in the entire ONM application for this function.
-    // public function get_relations_vic($contentID)
-    // {
-    //     $related = array();
-
-    //     if ($contentID) {
-    //         $sql = "SELECT pk_content1 FROM related_contents"
-    //                ." WHERE pk_content2=? ORDER BY position ASC";
-    //         $values = array($contentID);
-    //         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-    //         if ($rs !== false) {
-    //             while (!$rs->EOF) {
-    //                 $related[] = $rs->fields['pk_content1'];
-    //                 $rs->MoveNext();
-    //             }
-    //         }
-    //     }
-    //     $related = array_unique($related);
-
-    //     return $related;
-    // }
-
+    /**
+     * Returns all the relations for a given content
+     *
+     * @param int $contentID the content where search related contents from
+     *
+     * @return array Array of content ids
+     **/
     public static function getContentRelations($contentID)
     {
         $related = array();
@@ -302,7 +358,14 @@ class RelatedContent
         return $related;
     }
 
-    //Define relacion entre noticias y entre publi y noticias
+    /**
+     * Creates relations between one content and a list of content id
+     *
+     * @param int $contentID the content ID to relate with others
+     * @param array $relations the list of contents to relate with
+     *
+     * @return boolean true if all went well
+     **/
     public function setRelations($contentID, $relations)
     {
         $relations->delete($contentID);
@@ -313,11 +376,22 @@ class RelatedContent
                 $relations->create($contentID, $related);
             }
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
-    //Cambia la posicion en portada
+    /**
+     * Creates a fronpage relation between one content and a list of content id or a given
+     * position
+     *
+     * @param int $contentID the content ID to relate with others
+     * @param string $position the position name where relations will be stored
+     * @param array $relationID the content ID of the other content to relate with
+     *
+     * @return boolean true if all went well
+     **/
     public function setRelationPosition($contentID, $position, $relationID)
     {
         $sql =  "SELECT position FROM related_contents"
@@ -341,28 +415,37 @@ class RelatedContent
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
-    //Cambia la posicion en el interior
+    /**
+     * Creates a inner relation between one content and a list of content id or a given
+     * position
+     *
+     * @param int $contentID the content ID to relate with others
+     * @param string $position the position name where relations will be stored
+     * @param array $relationID the content ID of the other content to relate with
+     *
+     * @return boolean true if all went well
+     **/
     public function setRelationPositionForInner($contentID, $position, $relationID)
     {
-
-        $sql =  "SELECT position FROM related_contents"
-                ." WHERE pk_content1=? AND pk_content2 =?" ;
-        $values = array($contentID, intval($relationID));
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute(
+            "SELECT position FROM related_contents WHERE pk_content1=? AND pk_content2 =?",
+            array($contentID, intval($relationID))
+        );
 
         if (isset($rs->fields['position'])) {
-            $sql =  "UPDATE related_contents"
-                    ." SET  `verinterior`=?, `posinterior`=?"
-                    ." WHERE pk_content1=? AND pk_content2=?";
+            $sql =  "UPDATE related_contents "
+                    ."SET  `verinterior`=?, `posinterior`=? "
+                    ."WHERE pk_content1=? AND pk_content2=?";
             $values = array(1, $position, $contentID, $relationID);
         } else {
             $sql = "INSERT INTO related_contents
-                    (`pk_content1`, `pk_content2`,
-                    `posinterior`,`verinterior`) "
+                    (`pk_content1`, `pk_content2`, `posinterior`,`verinterior`) "
                     ." VALUES (?,?,?,?)";
             $values = array($contentID, $relationID, $position, 1);
         }
@@ -370,16 +453,29 @@ class RelatedContent
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Sets the relation between two contents for frontpage
+     *
+     * @param int $contentID the content ID to relate with
+     * @param string $position the position name where relations will be stored
+     * @param int $relationID the content ID to relate with the first one
+     *
+     *
+     * @return boolean true if the relations were saved
+     **/
     public function setHomeRelations($contentID, $position, $relationID)
     {
-        $sql =  "SELECT position FROM related_contents"
-                ." WHERE pk_content1=? AND pk_content2 =? AND verportada=2";
-        $values = array($contentID, intval($relationID));
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute(
+            "SELECT position FROM related_contents"
+            ." WHERE pk_content1=? AND pk_content2 =? AND verportada=2",
+            array($contentID, intval($relationID))
+        );
 
         if (isset($rs->fields['position'])) {
             $sql = "UPDATE related_contents "
@@ -396,22 +492,31 @@ class RelatedContent
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Returns the frontpage relations for a content given its id
+     *
+     * @param int $contentID the content ID to fetch relations from
+     *
+     * @return boolean true if the relations were saved
+     **/
     public function getHomeRelations($contentID)
     {
-        $sql = "SELECT DISTINCT pk_content2 FROM related_contents "
-             . "WHERE pk_content1=? AND verportada=2 ORDER BY position ASC";
-        $values = array($contentID);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute(
+            "SELECT DISTINCT pk_content2 FROM related_contents "
+            ."WHERE pk_content1=? AND verportada=2 ORDER BY position ASC",
+            array($contentID)
+        );
 
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $related = array();
@@ -424,38 +529,4 @@ class RelatedContent
 
         return $related;
     }
-
-    //TODO: Delete
-    public function sortArticles($articles)
-    {
-        //Hay que coger las cats para que sean indices de los arrays
-        $cc = new ContentCategoryManager();
-
-        $allcategorys = $cc->find(
-            'inmenu=1 AND internal_category=1 AND fk_content_category=0',
-            'ORDER BY posmenu'
-        );
-        $i = 0;
-        foreach ($allcategorys as $prima) {
-            $sql =  ' inmenu=1  AND internal_category=1 '
-                    .'AND fk_content_category =' . $prima->pk_content_category;
-            $subcat[$i] = $cc->find($sql, 'ORDER BY posmenu');
-            foreach ($articles as $article) {
-                if (($article->category == $prima->pk_content_category)) {
-                    $output[$prima->title][] = $article;
-                }
-            }
-            foreach ($subcat[$i] as $prima) {
-                foreach ($articles as $article) {
-                    if (($article->category == $prima->pk_content_category)) {
-                        $output[$prima->title][] = $article;
-                    }
-                }
-            }
-            $i++;
-        }
-
-        return $output;
-    }
 }
-

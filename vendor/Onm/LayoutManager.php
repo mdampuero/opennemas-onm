@@ -1,11 +1,16 @@
 <?php
-/*
+/**
+ * Defines the LayoutManager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Onm
+ * @subpackage LayoutManager
  */
 namespace Onm;
 
@@ -17,20 +22,24 @@ namespace Onm;
  **/
 class LayoutManager
 {
-    /*
+    /**
      * Initializes the LayoutManager from a xml file
      *
-     * @param $xmlFile
+     * @param stringn $xmlFile the layout definition file
      */
     public function __construct($xmlFile)
     {
         $this->layoutDoc = simplexml_load_file($xmlFile);
     }
 
-    /*
-     * Renders wrapper
+    /**
+     * Renders a layout element
      *
-     * @param $element
+     * @param string  $element the kind of element
+     * @param array   $value the properties for this placeholder
+     * @param boolean $last      true if this element will be last in a column
+     *
+     * @return string the HTML generated for a static placeholder
      */
     public function renderElement($element, $value, $last)
     {
@@ -53,11 +62,14 @@ class LayoutManager
         return implode("\n", $output);
     }
 
-    /*
-     * Renders wrapper
+    /**
+     * Renders a placeholder wrapper
      *
-     * @param $elementType
-     * @param $innerValues
+     * @param string  $elementType the kind of element
+     * @param array   $innerValues the properties for this wrapper
+     * @param boolean $isLast      true if this element will be last in a column
+     *
+     * @return string the HTML generated for a static placeholder
      */
     public function renderWrapper($elementType, $innerValues, $isLast)
     {
@@ -79,11 +91,14 @@ class LayoutManager
         return implode("\n", $output);
     }
 
-    /*
-     * Renders wrapper
+    /**
+     * Renders a placeholder
      *
-     * @param $elementType
-     * @param $innerValues
+     * @param string  $elementType the kind of element
+     * @param array   $innerValues the properties for this placeholder
+     * @param boolean $isLast      true if this element will be last in a column
+     *
+     * @return string the HTML generated for a static placeholder
      */
     public function renderPlaceholder($elementType, $innerValues, $isLast)
     {
@@ -113,11 +128,14 @@ class LayoutManager
         return $output;
     }
 
-    /*
-     * Renders wrapper
+    /**
+     * Renders a static placeholder
      *
-     * @param $elementType
-     * @param $innerValues
+     * @param string  $elementType the kind of element
+     * @param array   $innerValues the properties for this placeholder
+     * @param boolean $isLast      true if this element will be last in a column
+     *
+     * @return string the HTML generated for a static placeholder
      */
     public function renderStatic($elementType, $innerValues, $isLast)
     {
@@ -141,7 +159,10 @@ class LayoutManager
     /**
      * Returns the html for a given placeholder
      *
-     * @return string
+     * @param string $placeholderName the name of the placeholder
+     * @param string $order           the order to sort the rendered contents
+     *
+     * @return string the final HTML for the rendered contents
      **/
     public function renderContentsForPlaceholder($placeholderName, $order)
     {
@@ -171,7 +192,8 @@ class LayoutManager
 
     /**
      * Sorts contents by one of its properties
-     * @param array $contents the array of objects to sort
+     *
+     * @param array  $contents the array of objects to sort
      * @param string $order the sort method
      *
      * @return array the sorted array of contents
@@ -191,6 +213,8 @@ class LayoutManager
     /**
      * Returns the html for a given content
      *
+     * @param Content $content the content instance to render
+     *
      * @return string the html for the content
      **/
     private function renderContent($content)
@@ -208,6 +232,8 @@ class LayoutManager
 
     /**
      * Renders the frontpage layout.
+     *
+     * @param array $params the list of params to pass to the template
      *
      * @param array $params the params for rendering the layout
      **/
@@ -236,4 +262,3 @@ class LayoutManager
         return implode("\n", $output);
     }
 }
-

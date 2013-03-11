@@ -1,32 +1,92 @@
 <?php
-/*
+/**
+ * Handles all the CRUD actions of Comments
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  **/
+
 /**
  * Handles all the CRUD actions of Comments
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class Comment extends \Content
 {
+    /**
+     * The id of the comment
+     *
+     * @var int
+     **/
     public $pk_comment   = null;
+
+    /**
+     * The author id that sent this comment
+     *
+     * @var int
+     **/
     public $author       = null;
+
+    /**
+     * The city of the comment
+     *
+     * @var string
+     **/
     public $ciudad       = null;
+
+    /**
+     * The sex of the comment author
+     *
+     * @var string
+     **/
     public $sexo         = null;
+
+    /**
+     * The email of the comment author
+     *
+     * @var string
+     **/
     public $email        = null;
+
+    /**
+     * The content body
+     *
+     * @var string
+     **/
     public $body         = null;
+
+    /**
+     * The IP of the comment author
+     *
+     * @var string
+     **/
     public $ip           = null;
+
+    /**
+     * Whether this comment is published or not
+     *
+     * @var int
+     **/
     public $published    = null;
+
+    /**
+     * Content id that is referencing this comment
+     *
+     * @var int
+     **/
     public $fk_content   = null;
-    public $content_type = null;
 
     /**
      * Initializes the comment object from a given id
+     *
+     * @param int $id the comment id to load
+     *
+     * @return Comment the comment object instance
      **/
     public function __construct($id = null)
     {
@@ -37,23 +97,22 @@ class Comment extends \Content
         }
         $this->content_type = __CLASS__;
         $this->content_type_l10n_name = _('Comment');
+
+        return $this;
     }
 
     /**
-     * Creates a new comment for a given data
-     *
-     * Create a new comment for a given id from content, data regardless the
-     * comment, and the ip that issued that comment.
+     * Creates a new comment for a given id from content
      *
      * @param  array $params the params to change function behaviour
-     * @return bool  if it is true the comment was created, if it is false
-     *              something went wrong
+     *
+     * @return bool  if it is true the comment was created
      **/
     public function create($params)
     {
         $fkContent = $params['id'];
-        $data = $params['data'];
-        $ip = $params['ip'];
+        $data      = $params['data'];
+        $ip        = $params['ip'];
 
         if (!isset($data['content_status'])) {
             $data['content_status'] = 0;
@@ -62,6 +121,8 @@ class Comment extends \Content
         if (!isset($data['available'])) {
             $data['available'] = 0;
         }
+        $data['title'] = '';
+        $data['category'] = '';
         parent::create($data);
 
         if (empty($data['ciudad']) && !isset($data['ciudad'])) {
@@ -93,6 +154,8 @@ class Comment extends \Content
      * Gets the information from the database from one comment given its id
      *
      * @param integer $id the id of the comment
+     *
+     * @return Comment the comment object instance
      **/
     public function read($id)
     {
@@ -113,12 +176,16 @@ class Comment extends \Content
         $this->email      = $rs->fields['email'];
         $this->published  = $rs->fields['published'];
         $this->fk_content = $rs->fields['fk_content'];
+
+        return $this;
     }
 
     /**
      * Updates the information of a comment with a given $data
      *
      * @param array $data the information of the comment to update
+     *
+     * @return boolean true if the comment was updated
      **/
     public function update($data)
     {
@@ -131,14 +198,18 @@ class Comment extends \Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
      * Removes a comment from a given id
      *
      * @param integer $id the comment id
+     *
+     * @return boolean true if the comment was deleted
      */
     public function remove($id)
     {
@@ -149,20 +220,21 @@ class Comment extends \Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
-     * Delete all comments from a given content id
-     *
+     * Deletes all comments related with a given content id
      * WARNING: this is very dangerous, the action can't be undone
      *
-     * @access public
-     * @param  $contentID
-     * @return null
+     * @param  int $contentID the content id to delete comments that referent to it
+     *
+     * @return boolean true if comments were deleted
      **/
-    public function delete_comments($contentID)
+    public function deleteComments($contentID)
     {
         if ($contentID) {
             $sql = 'DELETE FROM `comments`, `contents`
@@ -172,17 +244,19 @@ class Comment extends \Content
             if ($rs === false) {
                 \Application::logDatabaseError();
 
-                return;
+                return false;
             }
+
+            return true;
         }
     }
 
     /**
-     * Return all the comments from a given content's id
+     * Returns all the comments from a given content's id
      *
-     * @access public
-     * @param  integer $contentID
-     * @return mixed,  array of comment's objects
+     * @param  integer $contentID the content id to fetch comments with it
+     *
+     * @return array the list of comment's objects
      **/
     public function get_comments($contentID)
     {
@@ -213,19 +287,16 @@ class Comment extends \Content
     }
 
     /**
-     * Determines if the content of a comment has bad words
+     * Checks if the content of a comment has bad words
      *
-     * @access public
-     * @param  mixed    $data, the data from the comment
-     * @return integer, higher values means more bad words
+     * @param  array $data the data of the comment
+     *
+     * @return integer higher values means more bad words
      **/
-    public function hasBadWorsComment($data)
+    public function hasBadWordsComment($data)
     {
-        $text = $data['title'].' '.$data['body'];
+        $text = $data['author'].' '.$data['body'];
 
-        if (isset($data['author'])) {
-            $text .= ' ' . $data['author'];
-        }
         $weight = StringUtils::getWeightBadWords($text);
 
         return $weight > 100;
@@ -234,13 +305,24 @@ class Comment extends \Content
     /**
      * Gets the public comments from a given content's id.
      *
-     * @access public
-     * @param  integer $contentID
-     * @return mixed,  array of comment's objects
+     * @param int $contentID the content id for fetching its comments
+     * @param int $elemsByPage the number of elements to return
+     * @param int $page the initial offset
+     *
+     * @return array  array of comment's objects
      **/
-    public function get_public_comments($contentID)
+    public static function get_public_comments($contentID, $elemsByPage = null, $page = null)
     {
         $related = array();
+
+        $limitSQL = '';
+        if (!empty($elemsByPage) && !empty($page)) {
+            if ($page == 1) {
+                $limitSQL = ' LIMIT '. $elemsByPage;
+            } else {
+                $limitSQL = ' LIMIT '.($page-1)*$elemsByPage.', '.$elemsByPage;
+            }
+        }
 
         if ($contentID) {
             $sql = 'SELECT * FROM comments, contents
@@ -248,7 +330,7 @@ class Comment extends \Content
                       AND content_status=1
                       AND in_litter=0
                       AND pk_content=pk_comment
-                    ORDER BY pk_comment DESC';
+                    ORDER BY pk_comment DESC '.$limitSQL;
             $values = array($contentID);
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             while (!$rs->EOF) {
@@ -265,9 +347,9 @@ class Comment extends \Content
     /**
      * Gets the number of public comments
      *
-     * @access public
-     * @param  integer  $contentID, the id of the content to get comments from
-     * @return integer, the number of public comments
+     * @param  integer  $contentID the id of the content to get comments from
+     *
+     * @return integer the number of public comments
      **/
     public function count_public_comments($contentID)
     {
@@ -285,41 +367,43 @@ class Comment extends \Content
         return intval($rs);
     }
 
-    // TODO: not used, should be dropped
-    public function getHomeComments($filter = null)
+    /**
+     * Returns the total amount of comments for a contentId and a slice from the list
+     * of all those comments, starting from the offset and displaying only some elements
+     * for this slice
+     *
+     * @param int $contentId the content id where fetch comments from
+     * @param int $elemsByPage the amount of comments to get
+     * @param int $offset the starting page to start to display elements
+     *
+     * @return array the total amount of comments, and a list of comments
+     **/
+    public static function getPublicCommentsAndTotalCount($contentId, $elemsByPage, $offset)
     {
-        if (is_null($filter)) {
-            $filter = "1=1";
-        }
-        $items = array();
-        $sql = "SELECT fk_content, pk_comment
+        // Get the total number of comments
+        $sql = 'SELECT count(pk_comment)
                 FROM comments, contents
-                WHERE ?
-                  AND in_litter=0 AND pk_content=pk_comment
-                ORDER BY created DESC";
-        $values = array($filter);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        while (!$rs->EOF) {
-            $sql2 = 'SELECT pk_content
-                     FROM  contents, articles
-                     WHERE in_home=1
-                       AND content_status=1
-                       AND available=1
-                       AND in_litter=0
-                       AND pk_content=?
-                       AND pk_content=pk_article
-                     ORDER BY created DESC';
-            $values = array($rs->fields['fk_content']);
-            $rs2 = $GLOBALS['application']->conn->Execute($sql2, $values);
+                WHERE comments.fk_content = ?
+                  AND content_status=1
+                  AND in_litter=0
+                  AND pk_content=pk_comment';
+        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
 
-            // If is home article gets the comment
-            if ($rs2->fields['pk_content']) {
-                $items[] = new Comment($rs->fields['pk_comment']);
-            }
-            $rs->MoveNext();
+        // If there is no comments do a early return
+        if ($rs === false) {
+            return array(0, array());
+        }
+        $countComments = intval($rs);
+
+        // Retrieve the comments and their votes
+        $comments = self::get_public_comments($contentId, $elemsByPage, $offset);
+
+        foreach ($comments as &$comment) {
+            $vote = new \Vote($comment->id);
+            $comment->votes = $vote;
         }
 
-        return $items;
+        return array($countComments, $comments);
     }
 
     /**
@@ -339,4 +423,3 @@ class Comment extends \Content
         return intval($rs->fields['count(pk_content)']);
     }
 }
-

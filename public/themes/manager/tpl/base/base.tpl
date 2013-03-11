@@ -8,46 +8,75 @@
 
     <meta name="author"    content="OpenHost,SL">
     <meta name="generator" content="OpenNemas - News Management System">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     {block name="meta"}
-    <title>OpenNeMaS - Administration section</title>
+    <title>OpenNeMaS - Manager</title>
     {/block}
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
     {block name="header-css"}
-        {css_tag href="/bootstrap/bootstrap.css"}
-        {css_tag href="/style.css"}
+        {css_tag href="/bootstrap/bootstrap.css" common=1}
+        {css_tag href="/fontawesome/font-awesome.min.css" common=1}
+        {css_tag href="/style.css" common=1}
+        {css_tag href="/style-navbar.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
-        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
+        {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
     {/block}
 
     {block name="js-library"}
-        {script_tag src="/jquery/jquery.min.js"}
-        {script_tag src="/libs/bootstrap.js"}
-        {script_tag src="/libs/jquery.tools.min.js"}
-        {script_tag src="/jquery-onm/jquery.onmvalidate.js"}
+        {script_tag src="/jquery/jquery.min.js" common=1}
+        {script_tag src="/libs/bootstrap.js" common=1}
+        {script_tag src="/libs/jquery.tools.min.js" common=1}
+        {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
         {block name="prototype"}{/block}
     {/block}
 
     {block name="header-js"}
-        {script_tag src="/libs/modernizr.min.js"}
+        {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js"}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
+        {script_tag src="/onm/scripts.js" common=1}
+        {script_tag src="/tiny_mce/tiny_mce_gzip.js" common=1}
      {/block}
 
 </head>
 <body class="manager">
 
-    <header class="global-nav manager clearfix">
-        <div class="logoonm pull-right">
-            <a  href="{url name=manager_welcome}" id="logo-onm" class="clearfix" title="{t}Go to admin main page{/t}">
-               <img src="{$smarty.const.TEMPLATE_ADMIN_PATH_WEB}images/logo-opennemas-small.png" alt="opennemas" width="132" height="27"/>
-            </a>
-        </div>
-        <div class="global-menu pull-left">
-            {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.APP_PATH}
+    <header class="clearfix">
+        <div class="navbar navbar-inverse global-nav manager" style="position:fixed">
+            <div class="navbar-inner">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a  href="{url name=manager_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
+                <div class="nav pull-left" accesskey="m">
+                    {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.SRC_PATH}
+                </div>
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav pull-right">
+                        <li class="dropdown usermenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="usericon"></span> <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
+                            <div class="dropdown-menu">
+                                <div class="avatar">
+                                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                </div><!-- /.avatar -->
+                                <div class="user-info">
+                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
+                                    <div class="login-name">{$smarty.session.username}</div>
+                                    <ul class="links">
+                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
+                                        <li><a href="javascript:salir('{t}Do you really want to exit from manager?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from manager{/t}">{t}Log out{/t}</a></li>
+                                    </ul><!-- /.links -->
+                                </div><!-- /.user-info -->
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
         </div>
     </header>
 
@@ -77,7 +106,7 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js"}
+        {script_tag src="/onm/footer-functions.js" common=1}
 
         {if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">

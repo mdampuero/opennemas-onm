@@ -1,11 +1,13 @@
 <?php
 /**
+ * Defines the Onm\Message class
  * This file is part of the Onm package.
- *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm
  **/
 namespace Onm;
 
@@ -16,7 +18,6 @@ namespace Onm;
  */
 class Message
 {
-
     /**
      * Priority level for errors
      */
@@ -27,12 +28,11 @@ class Message
     const NOTICE  = 'notice';
     /**
      * Priority level for success
-    */
+     */
     const SUCCESS = 'success';
 
-    /*
+    /**
      * Initializes the message save handler
-     *
      */
     public static function initMessageHandler()
     {
@@ -50,6 +50,11 @@ class Message
 
     /**
      * Adds a message to the message handler
+     *
+     * @param string $message the message to register
+     * @param string $priority priority where register the message
+     *
+     * @return void
      *
      * Example:
      *   m::add(array('one error','another error'), m::ERROR);
@@ -77,14 +82,15 @@ class Message
 
     }
 
-    /*
+    /**
      * Gets all the messages form the message handler
      *
      * @param $priority the priority for gettings the settings
+     *
+     * @return array the list of messages
      */
     public static function getAll($priority = null)
     {
-
         self::initMessageHandler();
 
         if (!isset($_SESSION)
@@ -102,10 +108,12 @@ class Message
         return $output;
     }
 
-    /*
+    /**
      * Returns html for all the messages from the message handler
      *
-     * @param $priority
+     * @param string $priority the priority of the messages to fetch
+     *
+     * @return string the HTMLgenerated for all the messages registered
      */
     public static function getHTMLforAll($priority = null)
     {
@@ -172,4 +180,3 @@ class Message
         }
     }
 }
-

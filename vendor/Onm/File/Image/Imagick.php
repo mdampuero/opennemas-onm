@@ -1,11 +1,15 @@
 <?php
 /**
+ * Defines the Onm\File\Image\Imagick class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package Onm_File_Image
  **/
 namespace Onm\File\Image;
 
@@ -16,7 +20,11 @@ namespace Onm\File\Image;
  **/
 class Imagick extends Common implements ImageInterface
 {
-    // The image object to operate into
+    /**
+     * The image object to operate into
+     *
+     * @var mixed
+     **/
     protected $_image;
 
     /**
@@ -210,11 +218,11 @@ class Imagick extends Common implements ImageInterface
     }
 
     /**
-     * Merge two images in one
+     * Merge two images into one
      *
      * @param string     $imagePath the image path to merge into the actual
-     * @param int/string $x         the horizontal position where merge the image
-     * @param int/string $y         the vertical position where merge the image
+     * @param int        $x         the horizontal position where merge the image
+     * @param int        $y         the vertical position where merge the image
      *
      * @return Onm\File\Imagick object
      */
@@ -251,10 +259,11 @@ class Imagick extends Common implements ImageInterface
     }
 
     /**
-     * undocumented function
+     * Echoes the image information and the proper HTTP content-type header
+     *
+     * @param string $header the HTTP content-type header
      *
      * @return void
-     * @author
      **/
     public function output($header = true)
     {
@@ -282,4 +291,3 @@ class Imagick extends Common implements ImageInterface
         die();
     }
 }
-

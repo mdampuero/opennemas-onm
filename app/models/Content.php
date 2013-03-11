@@ -1,54 +1,238 @@
 <?php
-/*
- * This file is part of the Onm package.
+/**
+ * Defines the Content class
  *
- * (c)
+ * This file is part of the onm package.
+ * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ *
+ * @package    Model
+ **/
+
 /**
  * Handles all the common actions in all the contents
  *
- * @package    Onm
- * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
+ * @package    Model
  **/
 class Content
 {
+    /**
+     * The content id
+     *
+     * @var ont
+     **/
+    public $id = null;
 
-    public $id                  = null;
-    public $content_type        = null;
-    public $title               = null;
+    /**
+     * The content type of the content
+     *
+     * @var string
+     **/
+    public $content_type = null;
+
+    /**
+     * The title of the content
+     *
+     * @var string
+     **/
+    public $title = null;
+
+    /**
+     * The description of the content
+     *
+     * @var string
+     **/
     public $description         = null;
+
+    /**
+     * The list of tags of this content separated by commas
+     *
+     * @var string
+     **/
     public $metadata            = null;
+
+    /**
+     * The date from when this will be available to publish
+     *
+     * @var string
+     **/
     public $starttime           = null;
+
+    /**
+     * The end until when this content will be available to publish
+     *
+     * @var string
+     **/
     public $endtime             = null;
+
+    /**
+     * The date when this content was created
+     *
+     * @var string
+     **/
     public $created             = null;
+
+    /**
+     * The date when this content was updated the last time
+     *
+     * @var string
+     **/
     public $changed             = null;
+
+    /**
+     * The user id of the last user that have changed this content
+     *
+     * @var int
+     **/
     public $fk_user             = null;
+
+    /**
+     * The user id that have published this content
+     *
+     * @var int
+     **/
     public $fk_publisher        = null;
+
+    /**
+     * The user id of the last user that have changed this content
+     *
+     * @var int
+     **/
     public $fk_user_last_editor = null;
+
+    /**
+     * The category id this content belongs to
+     *
+     * @var int
+     **/
     public $category            = null;
+
+    /**
+     * The category name this content belongs to
+     *
+     * @var string
+     **/
     public $category_name       = null;
+
+    /**
+     * View counter for this content
+     *
+     * @var int
+     **/
     public $views               = null;
+
+    /**
+     * Not documented
+     *
+     * @var
+     **/
     public $archive             = null;
+
+    /**
+     * The permalink/slug of this content
+     *
+     * @var string
+     **/
     public $permalink           = null;
+
+    /**
+     * The order of this content
+     *
+     * @var int
+     **/
     public $position            = null;
+
+    /**
+     * Whether this content is in home
+     *
+     * @var int 0|1
+     **/
     public $in_home             = null;
+
+    /**
+     * Ther order of this content for homepages
+     *
+     * @var int
+     **/
     public $home_pos            = null;
+
+    /**
+     * Whether if this content is available
+     *
+     * @var int 0|1
+     **/
     public $available           = null;
+
+    /**
+     * Whether if this content is suggested to homepage
+     *
+     * @var int 0|1
+     **/
     public $frontpage           = null;
+
+    /**
+     * Whether if this content is trashed
+     *
+     * @var int 0|1
+     **/
     public $in_litter           = null;
+
+    /**
+     * Status of this content
+     *
+     * @var int 0|1|2
+     **/
     public $content_status      = null;
+
+    /**
+     * Not used
+     *
+     * @deprecated  deprecated from 0.8
+     *
+     * @var string
+     **/
     public $placeholder         = null;
+
+    /**
+     * Not used
+     *
+     * @deprecated  deprecated from 0.8
+     *
+     * @var string
+     **/
     public $home_placeholder    = null;
+
+    /**
+     * An array for misc information of this content
+     * Must be serialized when saved to database
+     *
+     * @var array
+     **/
     public $params              = null;
+
+    /**
+     * The slug of the content
+     *
+     * @var string
+     **/
     public $slug                = null;
+
+    /**
+     * Whether if this content is marked as favorite
+     *
+     * @var int 0|1
+     **/
     public $favorite            = null;
+
+    /**
+     * Proxy cache handler
+     *
+     * @var MethodCacheManager
+     **/
     public $cache               = null;
 
-    // Content status
     const AVAILABLE             = 'available';
     const TRASHED               = 'trashed';
     const PENDING               = 'pending';
@@ -88,9 +272,12 @@ class Content
                 return $this->getUri();
 
                 break;
-            case 'slug2':
-                return StringUtils::get_title($this->title);
-
+            case 'slug':
+                if (!empty($this->slug)) {
+                    return $this->slug;
+                } else {
+                    return StringUtils::get_title($this->title);
+                }
                 break;
             case 'content_type_name':
                 return $this->getContentTypeName();
@@ -135,7 +322,9 @@ class Content
     }
 
     /**
-     * Checks if a content exists given its id
+     * Checks if a content exists given the content id
+     *
+     * @param int $id the content id
      *
      * @return boolean true if the content exists
      **/
@@ -143,11 +332,12 @@ class Content
     {
         $exists = false;
 
+ 
         $sql = 'SELECT pk_content FROM `contents` '
              . 'WHERE pk_content = ? LIMIT 1';
         $values = array($id);
-        $rs =
-            $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+ 
 
         $exists = ($rs != false);
 
@@ -171,7 +361,7 @@ class Content
                 'id'       => sprintf('%06d', $this->id),
                 'date'     => date('YmdHis', strtotime($this->created)),
                 'category' => $this->category_name,
-                'slug'     => $this->slug2,
+                'slug'     => $this->slug,
             )
         );
 
@@ -179,18 +369,15 @@ class Content
     }
 
     /**
-     * undocumented function
+     * Return the content type name for this content
      *
      * @return void
-     * @author
      **/
     public function getContentTypeName()
     {
-        $sql = 'SELECT * FROM `content_types` '
-             . 'WHERE pk_content_type = ? LIMIT 1';
+        $sql = 'SELECT * FROM `content_types` WHERE pk_content_type = ? LIMIT 1';
         $values = array($this->content_type);
-        $contentTypeName =
-            $GLOBALS['application']->conn->Execute($sql, $values);
+        $contentTypeName = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if (isset($contentTypeName->fields['name'])) {
             $returnValue =
@@ -207,7 +394,7 @@ class Content
      *
      * @param array $data array with data for create the article
      *
-     * @return void
+     * @return boolean true if the content was created
      **/
     public function create($data)
     {
@@ -250,7 +437,7 @@ class Content
             (!isset($data['params'])
             || empty($data['params'])) ? null: serialize($data['params']);
 
-        if (empty($data['slug'] ) || !isset($data['slug']) ) {
+        if (!isset($data['slug']) || empty($data['slug'])) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
         }
 
@@ -265,7 +452,7 @@ class Content
             $data['metadata']='';
         }
 
-        $data['fk_user']             =
+        $data['fk_user'] =
             (empty($data['fk_user']) && !isset ($data['fk_user']))
             ? $_SESSION['userid'] :$data['fk_user'] ;
         $data['fk_user_last_editor'] = $data['fk_user'];
@@ -319,9 +506,9 @@ class Content
     /**
      * Loads the data for an content given its id
      *
-     * @param array $data array with data for create the article
+     * @param integer $id content identifier
      *
-     * @return void
+     * @return Content the content object with all the information
      **/
     public function read($id)
     {
@@ -350,6 +537,13 @@ class Content
         return $this;
     }
 
+    /**
+     * Updates one content given an array of data
+     *
+     * @param array $data array with content data
+     *
+     * @return boolean true if the content was updated
+     **/
     public function update($data)
     {
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
@@ -365,14 +559,18 @@ class Content
 
         $this->read($data['id']);
 
-        if (($data['available'] == 1) && ($data['starttime'] =='0000-00-00 00:00:00')) {
+        if ($data['available'] == 1
+            && $this->available == 0
+            && array_key_exists('starttime', $data)
+            && ($data['starttime'] =='0000-00-00 00:00:00')
+        ) {
             $data['starttime'] = date("Y-m-d H:i:s");
         }
 
         $values = array(
             'changed'        => date("Y-m-d H:i:s"),
             'starttime'      =>
-                (empty($data['starttime'])) ? $this->starttime: $data['starttime'],
+                (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
             'endtime'        =>
                 (empty($data['endtime'])) ? '0000-00-00 00:00:00': $data['endtime'],
             'content_status' =>
@@ -397,11 +595,16 @@ class Content
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])
-            && !isset ($data['fk_user_last_editor'])) {
+            && !isset ($data['fk_user_last_editor'])
+        ) {
             $data['fk_user_last_editor'] = $_SESSION['userid'];
         }
-        if (empty($data['slug'] ) || !isset($data['slug']) ) {
-            $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+        if (!isset($data['slug']) || empty($data['slug'])) {
+            if (!empty($this->slug)) {
+                $data['slug'] = $this->slug;
+            } else {
+                $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+            }
         }
         if (empty($data['description'] ) && !isset ($data['description'])) {
             $data['description']='';
@@ -455,36 +658,33 @@ class Content
     }
 
     /**
-    * Delete definetelly one content
-    *
-    * This simulates a trash system by setting their available flag to false
+    * Permanently removes one content given its id
     *
     * @param integer $id
-    * @param integer $last_editor
     *
-    * @return null
+    * @return boolean
     */
     public function remove($id)
     {
-        $sql = 'DELETE FROM contents WHERE pk_content='.($id);
+        $sql = 'DELETE FROM contents WHERE pk_content=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             Application::logDatabaseError();
 
             return;
         }
 
-        $sql = 'DELETE FROM contents_categories WHERE pk_fk_content='.($id);
+        $sql = 'DELETE FROM contents_categories WHERE pk_fk_content=?';
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
             Application::logDatabaseError();
 
             return false;
         }
 
-        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = '.($id);
+        $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             Application::logDatabaseError();
         }
         /* Notice log of this action */
@@ -526,13 +726,10 @@ class Content
     /**
     * Make available one content, restoring it from trash
     *
-    * This "restores" the content from the trash system by setting their
+    * This "restores" the content from the trash system by setting its
     * available flag to true
     *
-    * @param integer $id
-    * @param integer $last_editor
-    *
-    * @return null
+    * @return Content the content instance
     **/
     public function restoreFromTrash()
     {
@@ -598,8 +795,6 @@ class Content
     /**
      * Change current value of frontpage property
      *
-     * @param string $id the id of the element
-     *
      * @return boolean true if it was changed successfully
      **/
     public function toggleSuggested()
@@ -621,7 +816,14 @@ class Content
         return true;
     }
 
-    //Cambia available y estatus, paso de pendientes a disponibles y viceversa.
+    /**
+     * Change the current value of available content_status property
+     *
+     * @param int $status the available value
+     * @param int $lastEditor the author id that performs the action
+     *
+     * @return boolean true if it was changed successfully
+     **/
     public function set_available($status, $lastEditor)
     {
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
@@ -968,7 +1170,14 @@ class Content
         return true;
     }
 
-    // FIXME:  move to ContentCategory class
+    /**
+     * TODO:  move to ContentCategory class
+     * Loads the category name for a given content id
+     *
+     * @param int $pk_content the content id
+     *
+     * @return string the category name
+     **/
     public function loadCategoryName($pk_content)
     {
         if (!empty($this->category_name)) {
@@ -985,10 +1194,16 @@ class Content
         }
 
         return $ccm->get_name($this->category);
-
     }
 
-    // FIXME:  move to ContentCategory class
+    /**
+     * TODO:  move to ContentCategory class
+     * Loads the category title for a given content id
+     *
+     * @param int $pk_content the content id
+     *
+     * @return string the category title
+     **/
     public function loadCategoryTitle($pk_content)
     {
         $ccm = ContentCategoryManager::get_instance();
@@ -1004,19 +1219,26 @@ class Content
         return $ccm->get_title($this->category_name);
     }
 
-    // FIXME: check funcionality
+    /**
+     * TODO: check funcionality
+     * Overloads the object properties with an array of the new ones
+     *
+     * @param array $properties the list of properties to load
+     *
+     * @return void
+     **/
     public function load($properties)
     {
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
@@ -1052,6 +1274,9 @@ class Content
 
     /**
      * Returns the scheduling state
+     *
+     * @param string $now string that represents the actual
+     *                    time, useful for testing purposes
      *
      * @return string the scheduling state
      **/
@@ -1109,9 +1334,7 @@ class Content
     /**
      * Check if a content is in time for publishing
      *
-     * @param string $starttime the initial time from it will be available
-     * @param string $endtime   the initial time until it will be available
-     * @param string $time      time to compare with the previous parameters
+     * @param string $now the current time
      *
      * @return boolean
      **/
@@ -1176,7 +1399,8 @@ class Content
      * Check if a content start time for publishing
      * don't check Content::endtime
      *
-     * @link https://redmine.openhost.es/issues/show/1058#note-8
+     * @param string $now the current date
+     *
      * @return boolean
     */
     public function isStarted($now = null)
@@ -1198,6 +1422,8 @@ class Content
      *       Now     Start
      * -------|--------[-----------
      *
+     * @param string $now the current date
+     *
      * @return boolean
      */
     public function isPostponed($now = null)
@@ -1217,6 +1443,9 @@ class Content
      * Check if this content is dued
      *       End      Now
      * -------]--------|-----------
+     *
+     * @param string $now the current date
+     *
      * @return boolean
      */
     public function isDued($now = null)
@@ -1232,6 +1461,15 @@ class Content
         return false;
     }
 
+    /**
+     * Sets the content_status flag for the actual content, given the status value
+     * @deprecated not valid anymore
+     *
+     * @param int $status the content_status value
+     * @param int $last_editor the author id that performs the action
+     *
+     * @return void
+     **/
     public function set_status($status, $last_editor)
     {
         if (($this->id == null) && !is_array($status)) {
@@ -1273,6 +1511,14 @@ class Content
         return ($this->frontpage == 1);
     }
 
+    /**
+     * Sets the frontpage flag
+     *
+     * @param int $status the status of the flag
+     * @param int $lastEditor the id of the user that is changing the content
+     *
+     * @return boolean if the change was done
+     **/
     public function set_frontpage($status, $lastEditor)
     {
         if (($this->id == null) && !is_array($status)) {
@@ -1301,7 +1547,15 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    public function set_inhome($status, $lastEditor)
+    /**
+     * Sets the in_home flag
+     *
+     * @param int $status the status of the flag
+     * @param int $lastEditor the id of the user that is changing the content
+     *
+     * @return boolean if the change was done
+     **/
+    public function set_inhome($status, $lastEditor = null)
     {
         $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
 
@@ -1333,13 +1587,10 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    /*
+    /**
      * Fetches available content types.
      *
      * @return array an array with each content type with id, name and title.
-     *
-     * @throw Exception if there was an error while
-     *        fetching all the content types
      */
     public static function getContentTypes()
     {
@@ -1384,13 +1635,12 @@ class Content
         return $resultArray;
     }
 
-    /*
-     * find  content type id by name.
+    /**
+     * Returns the id of a content type given its name.
      *
-     * @return int pk_content_type.
+     * @param string $name the name of the content type
      *
-     * @throw Exception if there was an error while
-     *        fetching all the content types
+     * @return int the content type id
      */
     public static function getIdContentType($name)
     {
@@ -1405,9 +1655,15 @@ class Content
         return false;
     }
 
+    /**
+     * Increments the num views for a content given its id
+     *
+     * @param int $id the content id
+     *
+     * @return boolean true if the update was done
+     **/
     public static function setNumViews($id = null)
     {
-
         if (!array_key_exists('HTTP_USER_AGENT', $_SERVER)
             && empty($_SERVER['HTTP_USER_AGENT'])
         ) {
@@ -1445,9 +1701,6 @@ class Content
             if (stristr($httpUserAgent, $bot) != false) {
                 return false;
             }
-            // if (preg_match("@".strtolower($httpUserAgent)."@", $bot) > 0) {
-            //     return false;
-            // }
         }
 
         if (is_null($id) || empty($id)) {
@@ -1455,7 +1708,8 @@ class Content
         }
 
         // Multiple exec SQL
-        if (is_array($id) ) {
+        $sqlValues = array();
+        if (is_array($id)) {
             $ads = array();
 
             if (count($id)>0) {
@@ -1477,10 +1731,12 @@ class Content
 
         } else {
             $sql =  'UPDATE `contents` SET `views`=`views`+1 '
-                    .'WHERE `available`=1 AND `pk_content`='.$id;
+                    .'WHERE `pk_content`=?';
+            $sqlValues = array($id);
         }
+        $rs = $GLOBALS['application']->conn->Execute($sql, $sqlValues);
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return false;
@@ -1489,54 +1745,36 @@ class Content
         return true;
     }
 
-    //TODO Check (xornal function)
-    /**
-     * Check if $pk_content exists in database
-     *
-     * @param string $pk_content
-     *
-     * @return array Array with code status
-     *               (array[0] == 200|404), and permalink or null (array[1])
-     */
-    public static function pkExists($pkContent)
-    {
-        $content = new Content($pkContent);
-        if (empty($content)) {
-            $code = 404;
-            $url  = null;
-        } else {
-            $code = 200;
-            $url  = $content->uri;
-        }
-
-        return array($code, $url);
-    }
-
     /**
      * Abstract factory method getter
      *
-     * @param  string $pk_content Content identifier
-     * @return object Instance of an specific object in function of content type
+     * @param  string $contentId Content identifier
+     *
+     * @return Content Instance of an specific object in function of content type
     */
-    public static function get($pk_content)
+    public static function get($contentId)
     {
         $sql  = 'SELECT `content_types`.name '
               . 'FROM `contents`, `content_types` '
               . 'WHERE pk_content=? AND fk_content_type=pk_content_type';
-        $type = $GLOBALS['application']->conn->GetOne($sql, array($pk_content));
+        $type = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
 
-        if ($type === false) {
+        if (empty($type)) {
+
             return null;
         }
 
         $type = ucfirst($type);
         try {
-            return new $type($pk_content);
+            return new $type($contentId);
         } catch (Exception $e) {
             return null;
         }
     }
 
+    /**
+     * Event handler on update a content
+     **/
     public function onUpdateClearCacheContent()
     {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -1547,11 +1785,11 @@ class Content
             );
 
             // Deleting home cache files
-            if (isset($this->in_home) && $this->in_home) {
+            // if (isset($this->in_home) && $this->in_home) {
                 $tplManager->delete('home|0');
-                $tplManager->fetch(SITE_URL);
-                $tplManager->delete('home|RSS');
-            }
+            // }
+            $tplManager->delete('home|RSS');
+            $tplManager->delete('last|RSS');
 
             if (isset($this->frontpage)
                 && $this->frontpage
@@ -1613,6 +1851,8 @@ class Content
     /**
      * Deletes the homepage cache.
      *
+     * @param array $params list of parameters
+     *
      * @param array $params parameters for changing the behaviour of the func.
      **/
     public function refreshHome($params = '')
@@ -1621,6 +1861,7 @@ class Content
 
         // Delete all the available Homepage cache files
         $tplManager->delete('home|RSS');
+        $tplManager->delete('last|RSS');
         $tplManager->delete('home|0');
 
         // Generate the cache file again
@@ -1631,7 +1872,7 @@ class Content
      * Removes element with $contentPK from homepage of category.
      *
      * @param string $category  the id of the category where remove the element.
-     * @param string $contentPK the pk of the content.
+     * @param string $pkContent the pk of the content.
      *
      * @return boolean true if was removed successfully
      **/
@@ -1671,8 +1912,6 @@ class Content
     /**
      * Removes element with $contentPK from Homepage.
      *
-     * @param string $contentPK the pk of the content.
-     *
      * @return boolean true if was removed successfully
      **/
     public function dropFromAllHomePages()
@@ -1703,11 +1942,11 @@ class Content
     /**
      * Define content position in a widget
      *
-     * @param array $status - array of contents id's
+     * @param int $position the position of the content
+     * @param int $lastEditor the id of the user that is changing this content
      *
      * @return pk_content or false
-    */
-
+     */
     public function set_position($position, $lastEditor)
     {
         $GLOBALS['application']->dispatch('onBeforePosition', $this);
@@ -1746,7 +1985,7 @@ class Content
     /**
      * Define contents as un/favorite for include them in a widget
      *
-     * @param array $status - array of contents id's
+     * @param array $status array of contents id's
      *
      * @return true or false
     */
@@ -1780,9 +2019,9 @@ class Content
     }
 
     /**
-     * Check if $pk_content exists in database
+     * Check if content id exists
      *
-     * @param string $pk_content
+     * @param string $oldID the content id to check
      *
      * @return pk_content or false
     */
@@ -1799,7 +2038,7 @@ class Content
      /**
      *  Search id in refactor_id table. (used for translate old format ids)
      *
-     * @param string $oldID. Old id created with mktime
+     * @param string $oldID Old id created with mktime
      *
      * @return int id in table refactor_id or false
      *
@@ -1824,10 +2063,9 @@ class Content
 
     /**
      * Clean id and search if exist in content table.
-     * If not found search in refactor_id table.
-     * (used for translate old format ids
+     * If not found search in refactor_id table. (used for translate old format ids)
      *
-     * @param string $dirtyID. Vble with date in first 14 digits
+     * @param string $dirtyID Vble with date in first 14 digits
      *
      * @return int id in table content or forward to 404
      *
@@ -1851,11 +2089,11 @@ class Content
 
             return $contentID;
         } else {
+            return 0;
             // header("HTTP/1.0 404 Not Found");
             // Can't do because sometimes id is empty,
             // example rss in article.php
         }
-
     }
 
 
@@ -1863,6 +2101,7 @@ class Content
      * Search contents by its urn
      *
      * @param  array/string $urns one urn string or one array of urn strings
+     *
      * @return array        the array of contents
      **/
     public static function findByUrn($urns)
@@ -1903,7 +2142,8 @@ class Content
     /**
      * Search contents by its urn
      *
-     * @param  array/string $urns one urn string or one array of urn strings
+     * @param  string $originalName one urn string or one array of urn strings
+     *
      * @return array        the array of contents
      **/
     public static function findByOriginaNameInUrn($originalName)
@@ -1911,8 +2151,7 @@ class Content
         $content = null;
         if (is_string($originalName)) {
             $name = $GLOBALS['application']->conn->quote('%'.$originalName.'%');
-            $sql  = "SELECT pk_content FROM `contents` "
-                . "WHERE urn_source LIKE {$name}";
+            $sql  = "SELECT pk_content FROM `contents` WHERE urn_source LIKE {$name}";
 
             $content = $GLOBALS['application']->conn->GetOne($sql);
 
@@ -1940,6 +2179,9 @@ class Content
     /**
      * Loads all the related contents for this content
      *
+     * @param string $categoryName the category where fetching related contents from
+     *
+     * @return Content the content object
      **/
     public function loadRelatedContents($categoryName = '')
     {
@@ -1959,6 +2201,9 @@ class Content
 
                 // Only include content is is in time and available.
                 if ($content->isReadyForPublish()) {
+                    if ($content->fk_content_type == 4) {
+                         $content = $content->get($relatedContentId);
+                    }
                     $content->categoryName = $ccm->get_name($content->category);
                     $this->related_contents []= $content;
                 }
@@ -1971,6 +2216,8 @@ class Content
 
     /**
      * Loads all the attached images for this content given an array of images
+     *
+     * @param array $images list of Image object to hydrate the current content
      *
      * @return Content the object with the images loaded
      **/
@@ -1996,14 +2243,13 @@ class Content
      * Loads the attached video's information for the content.
      * If force param is true don't take care of attached images.
      *
+     * @param boolean $force whether if force the property fetch
+     *
      * @return Content the object with the video information loaded
-     * @author
      **/
     public function loadAttachedVideo($force = false)
     {
-
-        if (
-            ($force || empty($this->img1))
+        if (($force || empty($this->img1))
             && !empty($this->fk_video)
         ) {
             $this->obj_video = new Video($this->fk_video);
@@ -2014,6 +2260,8 @@ class Content
 
     /**
      * Checks if this content is in one category frontpage given the category id
+     *
+     * @param int $categoryID the category id
      *
      * @return boolean true if it is in the category
      **/
@@ -2030,10 +2278,11 @@ class Content
     }
 
     /**
-     * undocumented function
+     * Promotes the current content to a category frontapge given the category id
      *
-     * @return void
-     * @author
+     * @param int $categoryID the category id
+     *
+     * @return boolean  true if the content was promoted
      **/
     public function promoteToCategoryFrontpage($categoryID)
     {
@@ -2049,11 +2298,12 @@ class Content
     }
 
     /**
-     * Load content specific property given the category id
+     * Returns a metaproperty value from the current content
+     *
+     * @param string $property the property name to fetch
      *
      * @return boolean true if it is in the category
      **/
-
     public function getProperty($property)
     {
         if ($this->id == null) {
@@ -2069,6 +2319,14 @@ class Content
     }
 
 
+    /**
+     * Sets a metaproperty for the actual content
+     *
+     * @param string $property the name of the property
+     * @param mixed $value     the value of the property
+     *
+     * @return boolean true if the property was setted
+     **/
     public function setProperty($property, $value)
     {
         if ($this->id == null) {
@@ -2088,6 +2346,33 @@ class Content
                 return false;
             }
         }
+
+        return true;
+    }
+
+    /**
+     * Removes the metavalue for a content given its name
+     *
+     * @param string $property the name of the property to remove
+     *
+     * @return boolean true if the meta value was cleaned
+     **/
+    public function clearProperty($property)
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        $sql = "DELETE FROM contentmeta WHERE `fk_content` = '{$this->id}' "
+            ."AND `meta_name` = '{$property}'";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
 
         return true;
     }
@@ -2125,6 +2410,8 @@ class Content
     /**
      * Update content property given the content id, property & value
      *
+     * @param array $values the list of meta values to store
+     *
      * @return boolean true if it is in the category
      **/
 
@@ -2147,7 +2434,4 @@ class Content
 
         return true;
     }
-
-
 }
-

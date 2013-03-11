@@ -22,7 +22,8 @@
             quick_info: '{url name=admin_content_quick_info}',
             set_arquived: '{url name=admin_content_set_archived}',
             send_to_trash: '{url name=admin_content_send_to_trash}',
-            change_color: '{url name=admin_content_update_property}'
+            customize_content: '{url name=admin_content_update_property}',
+            check_version: '{url name=admin_frontpage_last_version category=$category}'
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
@@ -31,15 +32,19 @@
             {/if}
             {/foreach}
         }
+        var frontpage_info = {
+            last_saved : '{$frontpage_last_saved}',
+            changed: false
+        }
     </script>
     {script_tag src="/onm/frontpagemanager.js"}
 {/block}
 
 {block name="content"}
 <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Frontpage Manager{/t} :: {if $category eq 0}{t}HOME{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}</h2></div>
+            <div class="title"><h2>{t}Frontpages{/t} :: {if $category eq 0}{t}Home{/t}{else}{$datos_cat[0]->title}{/if} {if $available_layouts > 1} <small>({$layout_theme['name']})</small> {/if}</h2></div>
             <ul class="old-button">
                 <li class="batch-actions">
                     <a href="#">
@@ -119,6 +124,7 @@
         {include file="frontpagemanager/_render_menu_categories.tpl"}
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
+        {render_messages}
 
         <div id="frontpagemanager" data-category="{$category_id}" class="{$category} clearfix">
             {$layout}
@@ -189,8 +195,9 @@
 {include file="frontpagemanager/modals/_modal_suggest_to_frontpage.tpl"}
 {include file="frontpagemanager/modals/_modal_drop_selected.tpl"}
 {include file="frontpagemanager/modals/_modal_arquive_selected.tpl"}
+{include file="frontpagemanager/modals/_modal_new_version.tpl"}
 {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
-{include file="frontpagemanager/modals/_modal_change_bgcolor.tpl"}
+{include file="frontpagemanager/modals/_modal_customize_content.tpl"}
 {/is_module_activated}
 
 {/block}

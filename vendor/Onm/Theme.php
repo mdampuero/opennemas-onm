@@ -1,20 +1,25 @@
 <?php
 /**
+ * Defines the Onm\Theme class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Onm
  **/
 namespace Onm;
 
 /**
-* Handles the theme information
-*/
+ * Handles the theme information
+ *
+ * @package  Onm
+ **/
 class Theme
 {
-
     /**
      * The name of the theme
      *
@@ -53,32 +58,51 @@ class Theme
     /**
      * The layouts available for this theme
      *
-     * @var string
+     * @var array
      **/
     public $layouts = array();
 
     /**
      * Registered menus in the theme
      *
-     * @var string
+     * @var array
      **/
     public $menus = array();
 
     /**
-     * Default property definitions for a menu
+     * The l10n domain
      *
      * @var string
      **/
+    public $l10ndomain = null;
+
+    /**
+     * Default property definitions for a menu
+     *
+     * @var array
+     **/
     private $defaultMenu = array(
-        'description' => 'A simple menu',
-        'default_menu'        => 'frontpage',
-        'class'       => 'menu',
-        'before_menu' => '<div id="%1$s" class="menu %2$s">',
-        'after_menu'  => '</div>',
+        'description'  => 'A simple menu',
+        'default_menu' => 'frontpage',
+        'class'        => 'menu',
+        'before_menu'  => '<div id="%1$s" class="menu %2$s">',
+        'after_menu'   => '</div>',
+    );
+
+    /**
+     * Default property definitions for a layout
+     *
+     * @var array
+     **/
+    private $defaultLayout = array(
+        'name'        => 'Layout name',
+        'menu'        => 'frontpage',
     );
 
     /**
      * Initializes the Theme instance
+     *
+     * @param array $settings the settings for the theme
      *
      * @return Theme the object initialized
      **/
@@ -102,10 +126,14 @@ class Theme
     /**
      * Adds a layout to the available layouts
      *
+     * @param string $name the layout name
+     * @param string $file the layout file path
+     *
      * @return boolean true if all went well
      **/
     public function registerLayout($name, $file)
     {
+        $file = array_merge($this->defaultLayout, $file);
         $this->layouts[$name] = $file;
 
         return $this;
@@ -124,6 +152,8 @@ class Theme
     /**
      * Returns the configuration array for a layout
      *
+     * @param string $name the layout name
+     *
      * @return array
      **/
     public function getLayout($name)
@@ -136,6 +166,8 @@ class Theme
 
     /**
      * Registers a new menu in the theme
+     *
+     * @param array $menuDefinition the menu definition
      *
      * @return Theme the object
      **/
@@ -165,6 +197,8 @@ class Theme
 
     /**
      * Returns the menu placeholder definition
+     *
+     * @param string $name the menu name
      *
      * @return array the menu definitions
      **/
@@ -199,5 +233,58 @@ class Theme
         }
         return $definitions;
     }
-}
 
+    /**
+     * Registers theme translations for allowing to translate templates
+     *
+     * @param string $domain the domain to register
+     * @param string $translationsDir the directory where translations are stored
+     *
+     * @return void
+     **/
+    public function registerTranslationsDomain($domain, $translationsDir)
+    {
+        $this->l10ndomain = $domain;
+        $this->translationsDir = $translationsDir;
+
+        bindtextdomain($domain, $translationsDir);
+    }
+
+    /**
+     * Returns the translation domain for this theme or false if it doesn't have
+     * support for translations
+     *
+     * @return string|false the translation domain
+     **/
+    public function getTranslationDomain()
+    {
+        if ($this->hasL10nSupport()) {
+            return $this->l10ndomain;
+        }
+        return false;
+    }
+
+    /**
+     * Returns the translations folder for this theme or false if it doesn't have
+     * support for translations
+     *
+     * @return string|false the folder where the translations are
+     **/
+    public function getTranslationsDir()
+    {
+        if ($this->hasL10nSupport()) {
+            return $this->translationsDir;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if the theme has l10n support registered
+     *
+     * @return boolean true if this theme has support for translations
+     **/
+    public function hasL10nSupport()
+    {
+        return ($this->l10ndomain !== null);
+    }
+}

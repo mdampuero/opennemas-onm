@@ -1,28 +1,65 @@
 <?php
 /**
- * This file is part of the Onm package.
+ * Contains the Book class definition
  *
+ * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
-/**
- * Book
  *
+ * @package    Model
+ */
+
+/**
  * Handles all the functionality of Book
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  */
 class Book extends Content
 {
+    /**
+     * The id of the group
+     *
+     * @var int
+     **/
     public $pk_book  = null;
+
+    /**
+     * The author id that created this book
+     *
+     * @var int
+     **/
     public $author  = null;
+
+    /**
+     * The file name of the book
+     *
+     * @var string
+     **/
     public $file_name  = null;
+
+    /**
+     * The editorial of the book
+     *
+     * @var string
+     **/
     public $editorial  = null;
+
+    /**
+     * The path of the book file
+     *
+     * @var string
+     **/
     public $books_path = null;
 
+    /**
+     * Initializes the book instance given an id
+     *
+     * @param int $id the book id to load
+     *
+     * @return Book The book object instance
+     **/
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -35,8 +72,17 @@ class Book extends Content
         $this->content_type = 'Book';
         $this->content_type_l10n_name = _('Book');
         $this->books_path = INSTANCE_MEDIA_PATH.'/books/';
+
+        return $this;
     }
 
+    /**
+     * Magic method to load a virtual property
+     *
+     * @param string $name the property name to fetch
+     *
+     * @return mixed the property value
+     **/
     public function __get($name)
     {
 
@@ -67,6 +113,14 @@ class Book extends Content
         return parent::__get($name);
     }
 
+    /**
+     * Creates a new book given an array of information
+     *
+     * @param array $data an array that contains the book information
+     *
+     * @return int the book id
+     * @return boolean false if the book was not created
+     **/
     public function create($data)
     {
         parent::create($data);
@@ -92,6 +146,13 @@ class Book extends Content
         return $this->id;
     }
 
+    /**
+     * Loads the book information given a book id
+     *
+     * @param int $id the book id to load
+     *
+     * @return Book the Book object instance
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -114,9 +175,15 @@ class Book extends Content
         return $this;
     }
 
+    /**
+     * Updates the book information given an array with the new information
+     *
+     * @param array $data the new book data
+     *
+     * @return int the book id
+     **/
     public function update($data)
     {
-
         parent::update($data);
 
         $sql = "UPDATE books "
@@ -142,6 +209,13 @@ class Book extends Content
         return $this->id;
     }
 
+    /**
+     * Removes a book given its id
+     *
+     * @param int $id the book id to remove
+     *
+     * @return boolean  true if the book was removed
+     **/
     public function remove($id)
     {
         parent::remove($this->id);
@@ -157,8 +231,9 @@ class Book extends Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 }
-

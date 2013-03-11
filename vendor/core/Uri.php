@@ -17,20 +17,10 @@ class Uri
 {
 
     /**
-     * Uri settings
+     * List of all default uri settings
+     *
+     * @var array
      **/
-    // private static $urlConfigurations = array(
-    //    'article'   =>  array( 'articulo/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-    //    'opinion'   =>  array( 'opinion/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-    //    'opinion_author_frontpage'   =>  array( 'opinion/autor/_ID_/_SLUG_'),
-    //    'section'   =>  array( 'seccion/_ID_'),
-    //    'video'     =>  array( 'video/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-    //    'album'     =>  array( 'album/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-    //    'poll'      =>  array( 'encuesta/_CATEGORY_/_DATE_/_SLUG_/_ID_.html'),
-    //    'static_page'=> array( 'estaticas/_SLUG_.html'),
-    //    'ad'        =>  array( 'publicidad/_ID_.html'),
-    //    'articleNewsletter' => array( 'seccion/_CATEGORY_/#_ID_'),
-    // );
     private static $urlConfigurations = array(
        'article'   =>  array( 'articulo/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'opinion'    =>  array( 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
@@ -51,13 +41,19 @@ class Uri
     /**
      * Initializes the Uri object.
      *
-     * @param array $params parameters for modify function behaviour.
      **/
     public function __construct()
     {
         Uri::getConfig();
     }
 
+    /**
+     * Returns the list of configurations for uri generation
+     *
+     * @param array $params parameters for modify function behaviour.
+     *
+     * @return array the array of configurations
+     **/
     public static function getConfig($params = array())
     {
         if (isset($GLOBALS['url_configurations'])) {
@@ -73,6 +69,14 @@ class Uri
         return $config;
     }
 
+    /**
+     * Returns a generated uri for a content type given some params
+     *
+     * @param string $contentType the content type to generate the url
+     * @param array  $params the list of params required to generate the url
+     *
+     * @return string the uri generated
+     **/
     public static function generate($contentType, $params = array())
     {
 
@@ -110,4 +114,3 @@ class Uri
         return trim($finaluri[0]);
     }
 }
-

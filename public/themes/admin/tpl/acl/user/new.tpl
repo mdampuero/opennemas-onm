@@ -5,7 +5,7 @@
 {block name="footer-js" append}
 <script>
     jQuery(document).ready(function($){
-        $('[rel=tooltip]').tooltip({ placement: 'bottom' });
+        $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
         $("#user-editing-form").tabs();
 
         $('#formulario').onmValidate({
@@ -45,16 +45,11 @@ label {
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}User manager{/t} :: {t}Editing user information{/t}</h2></div>
+			<div class="title"><h2>{if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}</h2></div>
 			<ul class="old-button">
                 <li>
-                    <button action="submit">
+                    <button action="submit"  name="action" value="validate">
                         <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li>
-                    <button action="submit" name="action" value="validate">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
@@ -79,18 +74,29 @@ label {
                 <div class="avatar">
                     <div class="avatar-image thumbnail"  rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
                         {if $user}
-                            <img src="{$params.IMAGE_DIR}default_avatar.png" alt="Default avatar" width=150>
+                            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
                         {else}
+                            <img src="{$params.IMAGE_DIR}default_avatar.png" alt="Default avatar" width=150>
                             {gravatar email="fake@mail.com" image_dir=$params.IMAGE_DIR image=true size=150}
                         {/if}
                     </div>
                 </div>
                 <div class="user-info form-vertical">
+
+                    <fieldset>
+                        <div class="control-group">
+                            <label for="name" class="control-label">{t}Display name{/t}</label>
+                            <div class="controls">
+                                <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
+                            </div>
+                        </div>
+                    </fieldset>
+
                     <fieldset>
                         <div class="control-group">
                             <label for="login" class="control-label">{t}User name{/t}</label>
                             <div class="controls">
-                                <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge" required=required maxlength="20"/>
+                                <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge" required="required" maxlength="20"/>
                             </div>
                         </div>
 
@@ -98,7 +104,7 @@ label {
                             <label for="login" class="control-label">{t}Email{/t}</label>
                             <div class="controls">
                                 <div class="input-prepend">
-                                    <span class="add-on">@</span><input class="span2" id="email" type="email" name="email" value="{$user->email}" required="required"  size="50">
+                                    <span class="add-on">@</span><input class=" input-large" id="email" type="email" name="email" value="{$user->email}" required="required">
                                 </div>
                             </div>
                         </div>
@@ -108,40 +114,23 @@ label {
                         <div class="control-group">
                             <label for="password" class="control-label">{t}Password{/t}</label>
                             <div class="controls">
-                                <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-key"></i></span>
+                                    <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
+                                </div>
                             </div>
                         </div>
 
                         <div class="control-group">
                             <label for="passwordconfirm" class="control-label">{t}Confirm password{/t}</label>
                             <div class="controls">
-                                <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
+                                <div class="input-prepend">
+                                    <span class="add-on"><i class="icon-key"></i></span>
+                                    <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
+                                </div>
                             </div>
                         </div>
                     <fieldset>
-
-                    <fieldset>
-                        <div class="control-group">
-                            <label for="name" class="control-label">{t}Display name{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="firstname" class="control-label">{t}Surname{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="firstname" name="firstname" value="{$user->firstname|default:""}" class="input-xlarge required" maxlength="50"/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="lastname" class="control-label">{t}Maiden surname{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="lastname" name="lastname" value="{$user->lastname|default:""}" class="input-xlarge required" maxlength="50"/>
-                            </div>
-                        </div>
-                    </fieldset>
                 </div>
 
             </div><!-- /personal -->
@@ -173,13 +162,16 @@ label {
                                 <label for="id_user_group">{t}User group:{/t}</label>
                             </th>
                             <td>
-                                <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
+                                <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}"  required="required" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
                                     <option  value ="">{t}--Select one--{/t}</option>
+                                    {if $smarty.session.isMaster}
+                                        <option value="4" {if $user->id_user_group == 4}selected="selected"{/if}>{t}Master{/t}</option>
+                                    {/if}
                                     {section name=user_group loop=$user_groups}
                                         {if $user_groups[user_group]->id == $user->id_user_group}
-                                            <option  value = "{$user_groups[user_group]->id}" selected="selected">{$user_groups[user_group]->name}</option>
+                                            <option  value="{$user_groups[user_group]->id}" selected="selected">{$user_groups[user_group]->name}</option>
                                         {else}
-                                            <option  value = "{$user_groups[user_group]->id}">{$user_groups[user_group]->name}</option>
+                                            <option  value="{$user_groups[user_group]->id}">{$user_groups[user_group]->name}</option>
                                         {/if}
                                     {/section}
                                 </select>

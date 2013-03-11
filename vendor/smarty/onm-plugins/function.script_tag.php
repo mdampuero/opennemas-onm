@@ -35,6 +35,7 @@ function smarty_function_script_tag($params, &$smarty) {
         }
     }
 
+
     //Comprobar si tiene type definido
     if (isset($params['type'])) {
         $type = "type=\"{$params['type']}\"";
@@ -47,14 +48,13 @@ function smarty_function_script_tag($params, &$smarty) {
         $escape = true;
     }
 
-    unset($params['external']);
     unset($params['common']);
     unset($params['src']);
     unset($params['type']);
     unset($params['escape']);
     unset($params['basepath']);
     $properties = '';
-    foreach($params as $key => $value) {
+    foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
     //Comprobar si es external
@@ -62,6 +62,10 @@ function smarty_function_script_tag($params, &$smarty) {
         $resource = $src;
     } else {
         $resource = $server.SS.$src;
+    }
+
+    if ($params['external'] != 1) {
+        $resource = str_replace(SS.SS, SS, $resource);
     }
 
     // $resource = preg_replace('/(\/+)/','/',$resource);

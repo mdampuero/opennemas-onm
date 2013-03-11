@@ -1,23 +1,26 @@
 <?php
-/*
+/**
+ * Defines the Album class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Handles all the CRUD actions over albums.
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class Album extends Content
 {
-
     /**
      * the album id
-     */
+     **/
     public $pk_album = null;
 
     /**
@@ -27,9 +30,14 @@ class Album extends Content
 
     /**
      * the agency which created this album originaly
-     */
+     **/
     public $agency = null;
 
+    /**
+     * Unused variable
+     *
+     * @var string
+     **/
     public $fuente = null;
 
     /**
@@ -40,7 +48,9 @@ class Album extends Content
     /**
      * Initializes the Album class.
      *
-     * @param strin $id the id of the album.
+     * @param string $id the id of the album
+     *
+     * @return void
      **/
     public function __construct($id = null)
     {
@@ -64,9 +74,7 @@ class Album extends Content
      **/
     public function __get($name)
     {
-
-        switch ($name)
-        {
+        switch ($name) {
             case 'uri':
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
@@ -122,7 +130,6 @@ class Album extends Content
      */
     public function create($data)
     {
-
         parent::create($data);
 
         $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
@@ -155,6 +162,8 @@ class Album extends Content
      * Fetches one Album by its id.
      *
      * @param string $id the album id to get info from.
+     *
+     * @return Album the object instance
      **/
     public function read($id)
     {
@@ -174,7 +183,6 @@ class Album extends Content
         $this->cover_image = new Photo($rs->fields['cover_id']);
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
 
-        // var_dump($rs->fields['cover_id'], $this->cover_image, $this);die();
         return $this;
     }
 
@@ -182,10 +190,11 @@ class Album extends Content
      * Updates the information of the album given an array of key-values
      *
      * @param array $data the new data to update the album
+     *
+     * @return Album the object instance
      **/
     public function update($data)
     {
-
         parent::update($data);
 
         $data['subtitle'] = (empty($data['subtitle']))? 0: $data['subtitle'];
@@ -193,13 +202,14 @@ class Album extends Content
 
         $sql = "UPDATE albums "
              . "SET  `subtitle`=?, `agency`=?, `fuente`=?, `cover_id`=? "
-             ." WHERE pk_album=".($data['id']);
+             ." WHERE pk_album=?";
 
         $values = array(
             $data['subtitle'],
             $data['agency'],
             $data['fuente'],
             $data['album_frontpage_image'],
+            $data['id']
         );
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
@@ -217,15 +227,14 @@ class Album extends Content
      *
      * @param string $id the album id
      *
-     * @return
+     * @return boolean
      **/
     public function remove($id)
     {
-
         parent::remove($id);
 
-        $sql = 'DELETE FROM albums WHERE pk_album='.$id;
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
+        $sql = 'DELETE FROM albums WHERE pk_album=?';
+        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
             return Application::logDatabaseError();
         }
 
@@ -235,13 +244,12 @@ class Album extends Content
     /**
      * Returns a multidimensional array with the images related to this album
      *
-     * @param int $albumId the album id
+     * @param int $albumID the album id
      *
      * @return mixed array of array(pk_photo, position, description)
      */
     public function _getAttachedPhotos($albumID)
     {
-
         if ($albumID == null) {
             return false ;
         }
@@ -278,7 +286,6 @@ class Album extends Content
      */
     public function getAttachedPhotosPaged($albumID, $items_page, $page = 1)
     {
-
         if ($albumID == null) {
             return false ;
         }
@@ -297,10 +304,10 @@ class Album extends Content
         $photosAlbum = array();
         while (!$rs->EOF) {
             $photosAlbum []= array(
-                'id'       => $rs->fields['pk_photo'],
-                'position' => $rs->fields['position'],
+                'id'          => $rs->fields['pk_photo'],
+                'position'    => $rs->fields['position'],
                 'description' => $rs->fields['description'],
-                'photo'    => new Photo($rs->fields['pk_photo']),
+                'photo'       => new Photo($rs->fields['pk_photo']),
             );
 
             $rs->MoveNext();
@@ -312,7 +319,9 @@ class Album extends Content
     /**
      * Saves the photos attached to one album
      *
-     * @return void
+     * @param arrray $data the new photos data
+     *
+     * @return Album the object instance
      **/
     public function saveAttachedPhotos($data)
     {
@@ -342,8 +351,8 @@ class Album extends Content
     /**
      * Delete one album by a given id
      *
-     * @param  int      $albumID, the foreighn key for the album
-     * @return boolean, true if the album was deleted, false if it wasn't
+     * @param  int      $albumID the foreighn key for the album
+     * @return boolean true if the album was deleted, false if it wasn't
      **/
     public function removeAttachedImages($albumID)
     {
@@ -351,20 +360,24 @@ class Album extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
         if (!$rs) {
-            return Application::logDatabaseError();
+            Application::logDatabaseError();
+
+            return false;
         }
 
-        return $this;
+        return true;
     }
 
     /**
      * Renders the album
      *
-     * @return void
+     * @param arrray $params parameters for rendering the content
+     * @param Template $smarty the Template object instance
+     *
+     * @return string the generated HTML
      **/
     public function render($params, $smarty)
     {
-
         //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
         //}
@@ -381,4 +394,3 @@ class Album extends Content
         return $html;
     }
 }
-

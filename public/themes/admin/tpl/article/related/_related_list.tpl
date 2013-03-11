@@ -48,11 +48,13 @@
                         {/foreach}
                         </ul>
                     </div>
+                {/is_module_activated}
+                {is_module_activated name="CRONICAS_MODULES"}
                     <div id="gallery-Frontpage" class="column-receiver gallery">
                         <h5>{t}Gallery for frontpage{/t}(*{t}Only one album{/t})</h5>
                         <ul class="content-receiver" >
                             {if !empty($article->params['withGallery']) && !empty($galleries['front']->pk_album)}
-                                <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
+                                <li class="" data-type="Album" data-id="{$galleries['front']->pk_album}">
                                     {$galleries['front']->created|date_format:"%d-%m-%Y"} : {$galleries['front']->title|clearslash}
                                     <span class="icon"><i class="icon-trash"></i></span>
                                 </li>
@@ -63,7 +65,7 @@
                         <h5>{t}Gallery for inner{/t}(*{t}Only one album{/t})</h5>
                         <ul class="content-receiver" >
                             {if !empty($article->params['withGallery']) && !empty($galleries['inner']->pk_album)}
-                                <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
+                                <li class="" data-type="Album" data-id="{$galleries['inner']->pk_album}">
                                     {$galleries['inner']->created|date_format:"%d-%m-%Y"} : {$galleries['inner']->title|clearslash}
                                     <span class="icon"><i class="icon-trash"></i></span>
                                 </li>
@@ -74,7 +76,7 @@
                         <h5>{t}Gallery for Home{/t} (*{t}Only one album{/t})</h5>
                         <ul class="content-receiver" >
                             {if !empty($article->params['withGallery']) && !empty($galleries['home']->pk_album)}
-                                <li class="" data-type="Album" data-id="{$article->params['withGallery']}">
+                                <li class="" data-type="Album" data-id="{$galleries['home']->pk_album}">
                                     {$galleries['home']->created|date_format:"%d-%m-%Y"} : {$galleries['home']->title|clearslash}
                                     <span class="icon"><i class="icon-trash"></i></span>
                                 </li>

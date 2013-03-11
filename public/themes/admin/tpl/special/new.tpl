@@ -72,20 +72,12 @@
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Special manager{/t} :: {if $smarty.request.action eq "new"}{t}Creating Special{/t}{else}{t}Editing Special{/t}{/if}</h2></div>
+            <div class="title"><h2>{if !isset($special->id)}{t}Creating special{/t}{else}{t}Editing special{/t}{/if}</h2></div>
             <ul class="old-button">
-
-                 <li>
-                    {acl isAllowed="SPECIAL_CREATE"}
-                    <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                    </button>
-                    {/acl}
-                </li>
                 <li>
                 {if isset($special->id)}
                     {acl isAllowed="SPECIAL_UPDATE"}
-                    <button type="submit">
+                    <button type="submit" name="continue" value=1>
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                     </button>
                     {/acl}
@@ -107,6 +99,7 @@
         </div>
     </div>
     <div class="wrapper-content">
+        {render_messages}
         <div class="form-horizontal panel">
             <div class="control-group">
                 <label for="title" class="control-label">{t}Title{/t}</label>
@@ -127,18 +120,7 @@
             <div class="control-group">
                 <label for="category" class="control-label">{t}Category{/t}</label>
                 <div class="controls">
-                    <select name="category" id="category">
-                    {section name=as loop=$allcategorys}
-                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if} name="{$allcategorys[as]->title}" >{t 1=$allcategorys[as]->title}%1{/t}</option>
-                        {/acl}
-                        {section name=su loop=$subcat[as]}
-                            {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                            <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}</option>
-                            {/acl}
-                        {/section}
-                    {/section}
-                    </select>
+                    {include file="common/selector_categories.tpl" name="category" item=$special}
                 </div>
             </div>
             <div class="control-group">
@@ -156,7 +138,7 @@
             <div class="control-group">
                 <label for="slug" class="control-label">{t}Slug{/t}</label>
                 <div class="controls">
-                    <input  type="text" id="slug" name="slug" class="input-xlarge" required="required"
+                    <input  type="text" id="slug" name="slug" class="input-xlarge"
                             value="{$special->slug|clearslash|escape:"html"}" />
                 </div>
             </div>

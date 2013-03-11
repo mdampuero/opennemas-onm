@@ -1,43 +1,141 @@
 <?php
-/*
+/**
+ * Defines the Article class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Class for handling articles.
  *
- * @package    Onm
- * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>, Xov Ago 25 13:57:22 2011
+ * @package    Model
  **/
 class Article extends Content
 {
-    /**#@+
-     * Article properties
+    /**
+     * The id of the article
      *
-     * @access public
-     */
+     * @var int
+     **/
     public $pk_article    = null;
-    public $subtitle      = null;
-    public $agency        = null;
-    public $summary       = null;
-    public $body          = null;
-    public $img1          = null;
-    public $img1_footer   = null;
-    public $img2          = null;
-    public $img2_footer   = null;
-    public $fk_video      = null;
-    public $fk_video2     = null;
-    public $footer_video2 = null;
-    public $with_comment  = null;
-    public $columns       = null;
-    public $home_columns  = null;
-    public $title_int     = null;
-    /**#@-*/
 
+    /**
+     * The subtitle of the article
+     *
+     * @var string
+     **/
+    public $subtitle      = null;
+
+    /**
+     * The agency that authored the article
+     *
+     * @var string
+     **/
+    public $agency        = null;
+
+    /**
+     * The summary of the article
+     *
+     * @var string
+     **/
+    public $summary       = null;
+
+    /**
+     * The body of the article
+     *
+     * @var string
+     **/
+    public $body          = null;
+
+    /**
+     * The id of the image assigned for frontpage
+     *
+     * @var int
+     **/
+    public $img1          = null;
+
+    /**
+     * The footer of the image assigned for frontpage
+     *
+     * @var string
+     **/
+    public $img1_footer   = null;
+
+    /**
+     * The id of the image assigned for inner
+     *
+     * @var int
+     **/
+    public $img2          = null;
+
+    /**
+     * The footer of the image assigned for inner
+     *
+     * @var string
+     **/
+    public $img2_footer   = null;
+
+    /**
+     * The id of the video assigned for frontpage
+     *
+     * @var int
+     **/
+    public $fk_video      = null;
+
+    /**
+     * The id of the video assigned for inner
+     *
+     * @var int
+     **/
+    public $fk_video2     = null;
+
+    /**
+     * The footer of the video assigned for inner
+     *
+     * @var string
+     **/
+    public $footer_video2 = null;
+
+    /**
+     * Wheter allowing comments in this article
+     *
+     * @var boolean
+     **/
+    public $with_comment  = null;
+
+    /**
+     * The column where is placed this article
+     *
+     * @deprecated  deprecated from version 0.8
+     * @var string
+     **/
+    public $columns       = null;
+
+    /**
+     * The column where is placed this article in home
+     *
+     * @var string
+     **/
+    public $home_columns  = null;
+
+    /**
+     * The inner title of this article
+     *
+     * @var string
+     **/
+    public $title_int     = null;
+
+    /**
+     * The list of clones that this article has
+     *
+     * @var array
+     **/
     public static $clonesHash = null;
 
     /**
@@ -63,8 +161,9 @@ class Article extends Content
     /**
      * Magic method for populate properties on the fly
      *
-     * @return mixed
-     * @author
+     * @param string $name the name of the property to fetch
+     *
+     * @return mixed the value of the property requested
      **/
     public function __get($name)
     {
@@ -80,16 +179,19 @@ class Article extends Content
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
                         'category' => $this->category_name,
-                        'slug'     => $this->slug2,
+                        'slug'     => $this->slug,
                     )
                 );
 
                 return $uri;
 
                 break;
-            case 'slug2':
-                return StringUtils::get_title($this->title);
-
+            case 'slug':
+                if (!empty($this->slug)) {
+                    return $this->slug;
+                } else {
+                    return StringUtils::get_title($this->title);
+                }
                 break;
             case 'content_type_name':
                 return 'Article';
@@ -114,24 +216,23 @@ class Article extends Content
     public function create($data)
     {
         if (!isset($data['description'])) {
-            $data['description'] =
-                StringUtils::get_num_words($data['body'], 50);
+            $data['description'] = StringUtils::get_num_words($data['body'], 50);
         }
 
         $data['subtitle']= $data['subtitle'];
         $data['columns'] = 1;
         $data['home_columns'] = 1;
         $data['available'] = $data['content_status'];
-        $data['img1_footer'] =
-            (!isset($data['img1_footer']) || empty($data['img1_footer']))
+        $data['img1_footer']
+            = (!isset($data['img1_footer']) || empty($data['img1_footer']))
                 ? ''
                 : $data['img1_footer'];
-        $data['img2_footer'] =
-                (!isset($data['img2_footer']) || empty($data['img2_footer']))
-                    ? ''
-                    : $data['img2_footer'];
-        $data['with_comment'] =
-            (!isset($data['with_comment']) || empty($data['with_comment']))
+        $data['img2_footer']
+            = (!isset($data['img2_footer']) || empty($data['img2_footer']))
+                ? ''
+                : $data['img2_footer'];
+        $data['with_comment']
+            = (!isset($data['with_comment']) || empty($data['with_comment']))
                 ? ''
                 : intval($data['with_comment']);
 
@@ -217,10 +318,11 @@ class Article extends Content
     }
 
     /**
-     * Updates the information for one article given an array for the new data
+     * Updates the information for one article given an array with the new data
      *
-     * @return void
-     * @author
+     * @param mixed $data array of properties for the article
+     *
+     * @return boolean true if the article was properly updated
      **/
     public function update($data)
     {
@@ -321,15 +423,15 @@ class Article extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM articles WHERE pk_article='.($id);
+        $sql = 'DELETE FROM articles WHERE pk_article=?';
 
         $rel = new RelatedContent();
         $rel->delete($id); //Eliminamos con los que esta relacionados.
 
         $rel = new Comment();
-        $rel->delete_comments($id); //Eliminamos  los comentarios.
+        $rel->deleteComments($id); //Eliminamos  los comentarios.
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             \Application::logDatabaseError();
 
             return;
@@ -363,6 +465,13 @@ class Article extends Content
         return $permalink;
     }
 
+    /**
+     * Returns the original id of this article (only if it is a clone)
+     *
+     * @param int $clonePK the content id to get its parent
+     *
+     * @return int the id of the original content
+     **/
     public function getOriginalPk($clonePK = null)
     {
         if (is_null($clonePK)) {
@@ -380,7 +489,11 @@ class Article extends Content
     }
 
     /**
+     * Checks if a content is a clone given its id
      *
+     * @param int $contentPK the content id
+     *
+     * @return boolean true if is a clone
      */
     public function isClone($contentPK = null)
     {
@@ -412,6 +525,9 @@ class Article extends Content
     /**
      * Renders the article given a set of parameters
      *
+     * @param array $params a list of parameters to pass to the template object
+     * @param Template $tpl the smarty instance
+     *
      * @return string the final html for the article
      **/
     public function render($params, $tpl = null)
@@ -420,11 +536,12 @@ class Article extends Content
             $tpl = new Template(TEMPLATE_USER);
         //}
 
-        $tpl->assign('item', $this);
-        $tpl->assign('cssclass', $params['cssclass']);
+        $params['item'] = $this;
+        // $params'cssclass', $params['cssclass']);
+        // $tpl->assign('categoryId', $params['categoryId']);
 
         try {
-            $html = $tpl->fetch($params['tpl']);
+            $html = $tpl->fetch($params['tpl'], $params);
         } catch (\Exception $e) {
             $html = 'Article not available';
         }
@@ -453,4 +570,3 @@ class Article extends Content
         }
     }
 }
-

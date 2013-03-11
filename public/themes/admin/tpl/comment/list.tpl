@@ -18,13 +18,11 @@
 
 {block name="content"}
 <form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
-    <div class="top-action-bar" class="clearfix">
+    <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2>
-                    Comment Manager ::
-                    {if $category eq 'home' ||  $category eq 'todos'} {$category|upper}
-                    {else} {$datos_cat[0]->title} {/if}
+                    {t}Comments{/t}
                 </h2>
             </div>
             <ul class="old-button">
@@ -50,7 +48,14 @@
                    </button>
                 </li>
                 {/if}
-               {/acl}
+                {/acl}
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
+                        <img border="0" src="/themes/admin/images/template_manager/configure48x48.png" alt=""><br>
+                        {t}Settings{/t}
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -63,22 +68,27 @@
             <div class="pull-right form-inline">
                 <label>{t}Status:{/t}
                 <select name="filter[status]" class="form-filters">
-                    <option value="0" {if $status eq '0'}selected{/if}> {t}Pending{/t} </option>
-                    <option value="1" {if $status eq '1'}selected{/if}> {t}Published{/t} </option>
-                    <option value="2" {if $status eq '2'}selected{/if}> {t}Rejected{/t} </option>
+                    <option value="0" {if $status eq '0'}selected{/if}>{t}Pending{/t}</option>
+                    <option value="1" {if $status eq '1'}selected{/if}>{t}Published{/t}</option>
+                    <option value="2" {if $status eq '2'}selected{/if}>{t}Rejected{/t}</option>
                 </select>
                 </label>
 
                 <label for="category">
                     {t}Category:{/t}
                     <select name="category" class="form-filters">
-                        <option value="all" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
+                        <option value="all" {if $category eq '0'}selected{/if}>{t}-- All --{/t} </option>
                         {section name=as loop=$allcategorys}
-                             <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
-                             {section name=su loop=$subcat[as]}
+                             <option value="{$allcategorys[as]->pk_content_category}"
+                                {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>
+                                {$allcategorys[as]->title}</option>
+                                {section name=su loop=$subcat[as]}
                                     {if $subcat[as][su]->internal_category eq 1}
-                                        <option value="{$subcat[as][su]->pk_content_category}"
-                                        {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                    <option value="{$subcat[as][su]->pk_content_category}"
+                                        {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                        {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">
+                                        &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
                                     {/if}
                                 {/section}
                         {/section}
@@ -87,7 +97,7 @@
                 <div class="input-append">
                     <label>{t}Module:{/t}
                     <select name="filter[module]" class="form-filters">
-                        <option value="0" {if $module eq '0'}selected{/if}> {t}All{/t} </option>
+                        <option value="0" {if $module eq '0'}selected{/if}>{t}-- All --{/t}</option>
                         {foreach from=$content_types key=i item=type}
                         <option value="{$i}" {if $module eq $i}selected{/if}>{$type}</option>
                         {/foreach}
@@ -131,10 +141,10 @@
 						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}"
                             name="selected_fld[]" value="{$comments[c]->id}">
 					</td>
-					<td rel="tooltip" data-original-title="{$comments[c]->body|strip_tags|clearslash}">
-						<a href="{url name=admin_comments_show id=$comments[c]->id}"title="{t 1=$articles[c]->title}Edit comment %1{/t}">
+					<td>
+						<a href="{url name=admin_comments_show id=$comments[c]->id}" title="{t 1=$articles[c]->title}Edit comment %1{/t}">
                             <strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
-                            {$comments[c]->body|strip_tags|clearslash|truncate:50}
+                            <span rel="tooltip" data-original-title="{$comments[c]->body|strip_tags|clearslash}">{$comments[c]->body|strip_tags|clearslash|truncate:50}</span>
                         </a>
                         <br>
                         <strong>{t}Author{/t}</strong>

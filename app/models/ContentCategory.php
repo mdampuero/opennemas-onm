@@ -1,40 +1,98 @@
 <?php
-/*
+/**
+ * Defines the ContentCategory class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Handles all the categories CRUD actions.
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class ContentCategory
 {
+    /**
+     * Category id
+     *
+     * @var int
+     **/
     public $pk_content_category = null;
-    public $fk_content_category = null;
-    public $img_path            = null;
-    public $color               = null;
-    public $name                = null; //nombre carpeta
-
-    public $title               = null; //titulo seccion
-
-    public $inmenu              = null; // Flag Ver en el menu.
-
-    public $posmenu             = null;
-    public $internal_category   = null; // flag asignar a un tipo de contenido.
-    public $params              = null;
 
     /**
+     * The parent category id
+     *
+     * @var int
+     **/
+    public $fk_content_category = null;
+
+    /**
+     * The path to the category logo/image
+     *
+     * @var string
+     **/
+    public $img_path            = null;
+
+    /**
+     * The color of the category
+     *
+     * @var string
+     **/
+    public $color               = null;
+
+    /**
+     * The name of the category
+     *
+     * @var string
+     **/
+    public $name                = null;
+
+    /**
+     * The human readable category name
+     *
+     * @var string
+     **/
+    public $title               = null;
+
+    /**
+     * Whether if this category is in menu
+     *
+     * @var boolean
+     **/
+    public $inmenu              = null;
+
+    /**
+     * Position in menu
+     *
+     * @var int
+     **/
+    public $posmenu             = null;
+
+    /**
+     * Special category for identify types of content
+     *
      * $internal_category = 0 categoria es interna (para usar ventajas
      * funciones class ContentCategory) no se muestra en el menu.
      * $internal_category = 1 categoria generica para todos los
      * tipos de contenidos.
      * $internal_category = n corresponde con el content_type
+     *
+     * @var int
      **/
+    public $internal_category   = null;
+
+    /**
+     * Misc params for this category
+     *
+     * @var array
+     **/
+    public $params              = null;
 
     /**
      * Initializes the Category class.
@@ -122,7 +180,6 @@ class ContentCategory
         if (!empty($this->params) && is_string($this->params)) {
             $this->params = unserialize($this->params);
         }
-
     }
 
     /**
@@ -232,8 +289,6 @@ class ContentCategory
     /**
      * Deletes all the contents for one category given the category id.
      *
-     * @param string $id the category id.
-     *
      * @return boolean true if all the contents was deleted sucessfully
      **/
     public function deleteContents()
@@ -259,9 +314,6 @@ class ContentCategory
                 .'WHERE `pk_content` IN ('.$contents.')';
             $sqls []= 'DELETE FROM articles '
                 .' WHERE `pk_article` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM articles_clone  '
-                .'WHERE `pk_original` IN (' . $contents . ')  '
-                .'OR `pk_clone` IN ('.$contents.')';
             $sqls []= 'DELETE FROM advertisements  '
                 .'WHERE `pk_advertisement` IN ('.$contents.')';
             $sqls []= 'DELETE FROM albums  '
@@ -310,7 +362,7 @@ class ContentCategory
      *
      * @param string $status the status to set to the category.
      **/
-    public function set_inmenu($status)
+    public function setInMenu($status)
     {
         if ($this->pk_content_category == null) {
             return false;
@@ -359,4 +411,3 @@ class ContentCategory
         return $this;
     }
 }
-

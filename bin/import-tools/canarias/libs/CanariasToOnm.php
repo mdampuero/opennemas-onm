@@ -119,7 +119,7 @@ class CanariasToOnm
             'fotos-de-hoy' => 31,
             'portadas' => 32,
             'top-secret' => 33,
-            'canarias' => 34,
+            'canarias' => 36,
             'nacional' => 37,
             'internacional'  => 38,
             'tecnología' => 39,
@@ -260,10 +260,7 @@ class CanariasToOnm
     public function importImagesArticles()
     {
 
-        $sql = 'SELECT `id`, `fecha`, `hora`, `seccion`, `subseccion`,
-            `islas`, `titulo`, `antetitulo`, `titulo_home`,
-            `piedefoto`, `foto_noti_ampliada`, `foto_portada`, `foto_seccion`,
-            `foto_panoramica`  FROM `noticias` ';
+        $sql = 'SELECT *  FROM `noticias` ';
 
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
@@ -312,7 +309,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => \StringUtils::get_tags($slug.', '.$category_name),
+                            'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -320,23 +317,35 @@ class CanariasToOnm
                             'local_file' =>OLD_MEDIA,
                         );
 
-                       /* preg_match_all("/(http:\/\/www.youtube.com\/v.*&amp;(.*)/i", $photoName, $matches, PREG_SET_ORDER);
-                        var_dump($matches);
-                        preg_match_all("/(http:\/\/www.youtube.com\/v.*&amp;(.*)/i", $photoName2, $matches2, PREG_SET_ORDER);
-                        var_dump($matches2); */
-                        die();
                         if (!empty($photoName)) {
-                            $resp = $this->createImage($imageData);
-                            if ($resp =='other') {
+                            preg_match(
+                                '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+                                $photoName,
+                                $match
+                            );
+
+                            if (!empty($match[1])) {
+
+                                $imageData['oldName'] = "http://www.youtube.com/watch?v=".$match[1] ;
                                 $resp = $this->createVideo($imageData);
+                            } else {
+                                $resp = $this->createImage($imageData);
                             }
                         }
                         if (!empty($photoName2) && ($photoName != $photoName2)) {
                             $imageData['name'] = $photoName2;
-                            $imageData['oldName'] = $photoName2;
-                            $this->createImage($imageData);
-                            if ($resp =='other') {
+                            preg_match(
+                                '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+                                $photoName2,
+                                $match
+                            );
+                            if (!empty($match[1])) {
+                                $imageData['oldName'] = "http://www.youtube.com/watch?v=".$match[1];
                                 $resp = $this->createVideo($imageData);
+
+                            } else {
+                                $imageData['oldName'] = $photoName2;
+                                $this->createImage($imageData);
                             }
                         }
 
@@ -402,7 +411,7 @@ class CanariasToOnm
                             'available' =>1,
                             'category'=> $category,
                             'category_name'=>  $category_name,
-                            'metadata' => StringUtils::get_tags($slug.', '.$category_name),
+                            'metadata' => StringUtils::get_tags($title.', '.$category_name),
                             'description' => $title.' '.$category_name,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -642,6 +651,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'img1' =>$this->helper->imageIsImported(
@@ -784,7 +794,7 @@ class CanariasToOnm
      */
     public function importAyuntamientos()
     {
-        $this->importMunicipios();
+      //  $this->importMunicipios();
 
         $sql = 'SELECT `noticia`, `fecha`, `hora`, `antetitulo`, `titulo`, '.
          ' `texto`, `isla`, `municipio`, `activar` FROM `ayuntamientos_noticias` ';
@@ -820,6 +830,7 @@ class CanariasToOnm
                         'category' => $category,
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => '',
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' =>$this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
@@ -835,7 +846,8 @@ class CanariasToOnm
                         );
 
                     $articleID = $article->create($data);
-                    echo "\n [{$current}/{$totalRows}] Importing article Ayuntamientos with id {$originalArticleID} - in {$seccion}  ";
+                    echo "\n [{$current}/{$totalRows}] Importing article "
+                        ."Ayuntamientos with id {$originalArticleID} - in {$seccion} ";
                     if (!empty($articleID) ) {
                         $this->helper->insertRefactorID($originalArticleID, $articleID, 'Ayuntamientos');
 
@@ -907,6 +919,7 @@ class CanariasToOnm
                         'summary' => substr($this->helper->convertToUtf8($rs->fields['texto']), 0, 250 . '...'),
                         'body' => $this->helper->convertToUtf8($rs->fields['texto']),
                         'category_name'=>  $category_name,
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'description' => substr($rs->fields['texto'], 0, 120 . '...'),
                         'content_status' =>1,
                         'available' => 1,
@@ -1004,6 +1017,7 @@ class CanariasToOnm
                         'description' => $this->helper->convertToUtf8($rs->fields['entradilla']),
                         'content_status' => 1,
                         'available' => 1,
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                         'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1048,19 +1062,7 @@ class CanariasToOnm
     public function importArticles()
     {
 
-         $sql = 'SELECT `id`, `fecha`, `fecha_activar`, `hora`, `hora_activar`,
-            `especiales`, `tipo`, `EFE_motor`, `efe_id`, `version`, `texto_id`,
-            `EFE_seccion`, `canal`, `seccion`, `seccion_activar`, `subseccion`,
-            `islas`, `titulo`, `antetitulo`, `titulo_home`, `titulo_premium`,
-            `antetitulo_premium`, `entradilla_premium`, `antetitulo_home`,
-            `entradilla`, `data`, `firma`, `firma_activar`, `piedefoto`,
-            `foto_noti_ampliada`, `foto_portada`, `foto_seccion`,
-            `foto_panoramica`, `noti_relacion`, `opinion_relacion`,
-            `documentos_relacion`, `audio_relacion`, `video_relacion`,
-            `galeria_relacion`, `susfotos_relacion`, `encuesta_relacion`,
-            `fuerteventuraahora_relacion`, `diversia_relacion`, `activar_diversia`,
-            `deportes_portada`, `empresarios_url`, `radio`, `activar`, `texto`
-            FROM `noticias` ';
+         $sql = 'SELECT * FROM `noticias` ';
 
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
@@ -1090,6 +1092,7 @@ class CanariasToOnm
                     $data = array(
                         'title' => $title,
                         'category' => $category,
+                        'metadata' => \StringUtils::get_tags($title.', '.$category_name),
                         'subtitle' => $this->helper->convertToUtf8($rs->fields['antetitulo']),
                         'agency' => $this->helper->convertToUtf8($rs->fields['firma']),
                         'summary' => $this->helper->convertToUtf8($rs->fields['entradilla']),
@@ -1133,9 +1136,9 @@ class CanariasToOnm
                 $current++;
                 $rs->MoveNext();
             }
-
+            $rs->Close(); # optional
         }
-        $rs->Close(); # optional
+
         return true;
 
     }
@@ -1148,7 +1151,6 @@ class CanariasToOnm
      * @return bool
      *
      */
-
 
     public function createDefaultAuthors()
     {
@@ -1173,9 +1175,11 @@ class CanariasToOnm
         /*
         Belén Molina, Thalía Rodríguez, Alexis González
          Noé Ramón  Jaime Puig, Martín Macho,
+
         */
 
-        $editorial = array('beln-molina', 'thala-rodrguez', 'alexis-gonzlez', 'editorial');
+        $editorial = array('belen-molina', 'thalia-rodriguez', 'alexis-gonzalez', 'editorial',
+         'noe-ramon', 'jaime-puig', 'martin-macho');
         if (in_array($name, $editorial)) {
             return 1;
         }
@@ -1186,15 +1190,18 @@ class CanariasToOnm
         */
 
         $authors = array(
-            '-cristbal-d-peate', '-joaquin-sagaseta-de-ilurdoz-paradas', '-jos-a-alemn',
-            '-salvador-garca-llanos', 'antonio-gonzlez-vieitez', 'cristbal-d-peate',
-            'cristbal-d-penate', 'cristbal-peate', 'cristobal-d-peate', 'eduardo-serradilla-sanchs',
-            'faustino-garca-mrquez', 'joaquin-sagaseta-de-ilurdoz-paradas',
-            'joaqun-sagaseta-de-ilurdoz-paradas',
-            'joaqun-sagaseta-paradas', 'jos-a-aleman', 'jos-a-alemn',
-            'octavio-hernndez', 'rafael-gonzlez-morera', 'salvador-garca-llanos',
-            'salvador-graca-llanos', 'salvador-martnez-gonzlez'
+            'jose-aleman', 'jose-a-aleman',
+            'antonio-gonzalez-vieitez',
+            'francisco-morote',
+            'cristobal-penate', 'cristobal-peate', 'cristobal-d-penate',
+            'eduardo-serradilla',
+            'faustino-garcia-marquez',
+            'joaquin-sagaseta-de-ilurdoz-paradas', 'joaquin-sagaseta',
+            'octavio-hernandez',
+            'rafael-gonzalez-morera',
+            'salvador-garcia-llanos',
         );
+
         if (in_array($name, $authors)) {
             return 0;
         }
@@ -1229,7 +1236,8 @@ class CanariasToOnm
         while (!$rs->EOF) {
 
             $name =  $this->helper->getSlug($rs->fields['autor']);
-            if (!empty($name) &&$this->isOpinionAuthors($name) == 0) {
+
+            if (!empty($name)) {  //&& $this->isOpinionAuthors($name) == 0) {
                 $authorID = $this->helper->authorIsImported($name);
 
                 if (!$authorID) {
@@ -1242,23 +1250,20 @@ class CanariasToOnm
                             'date_nac`' =>''
                         );
 
-
                         $authorID = $author->create($values);
 
                         echo "\n new id {$authorID} [DONE]\n";
                         $this->helper->insertAuthorTranslated($authorID, $name);
 
-                } else {
-                    echo "\n name -".$name.$authorID;
-                    $cont++;
                 }
+                $cont++;
+
             }
             echo '.';
             $rs->MoveNext();
         }
         $rs->Close(); # optional
-        echo "\n Please Check duplicate entries or similar texts in author names. ("
-            .$cont." duplicated)\n";
+
         return true;
     }
 
@@ -1338,8 +1343,6 @@ class CanariasToOnm
 
     public function importOpinions()
     {
-        //$this->importAuthorsOpinion();
-        //$this->importPhotoAuthorsOpinion();
 
         echo "IMPORTING OPINIONS\n";
         $sql = "SELECT  `id`, `fecha`, `hora`, `titulo`, `antetitulo`, "
@@ -1368,14 +1371,16 @@ class CanariasToOnm
                     echo "[{$current}/{$totalRows}] Opinion with id {$originalOpinionID} already imported\n";
                 } elseif(!empty($rs->fields['titulo'])) {
                     $name = $this->helper->getSlug($rs->fields['autor']);
-                    //   $authorID = $this->helper->authorIsImported($name);
+
                     $fkAuthor = 0;
-                    $typeOpinion =$this->isOpinionAuthors($name);
+                    $typeOpinion = 0;//$this->isOpinionAuthors($name);
+                    $colab ='';
                     if ($typeOpinion == 3) {
                         //Colaboradores
                         $typeOpinion = 0;
                         $fkAuthor = 3;
-                    } elseif($typeOpinion == 3) {
+                        $colab =  $this->helper->convertToUtf8($rs->fields['autor']);
+                    } elseif($typeOpinion == 0) {
                         $fkAuthor = $this->helper->authorIsImported($name);
                     }
 
@@ -1384,18 +1389,17 @@ class CanariasToOnm
                     echo "[{$current}/{$totalRows}] Importing opinion with id {$originalOpinionID} ";
                     $values =
                         array(
-                            'title' => $title,
+                            'title' => $title .$colab,
                             'category' => '4',
                             'category_name' => 'opinion',
                             'type_opinion' => $typeOpinion,
-                            'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                            'metadata' => \StringUtils::get_tags($title.',  opinion'),
-                            'description' => 'opinion colaborador'.$rs->fields['autor']
-                                .' '.strip_tags(substr($rs->fields['texto'], 0, 100)),
+                            'body' => $this->helper->convertToUtf8($rs->fields['texto'])." <br> ".$colab,
+                            'metadata' => \StringUtils::get_tags($title.',  opinion', $colab),
+                            'description' => $this->helper->convertToUtf8('opinion '.strip_tags(substr($rs->fields['texto'], 0, 100))),
                             'fk_author' => $fkAuthor,
-                            'available' => ($rs->fields['activar'] == 0)? 0:1,
+                            'available' => 1,
                             'with_comment' => 0,
-                            'content_status' => ($rs->fields['activar'] == 0)? 0:1,
+                            'content_status' => 1,
                             'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'starttime' => $rs->fields['fecha'].' '.$rs->fields['hora'],
                             'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
@@ -1785,92 +1789,6 @@ class CanariasToOnm
 
 
     /**
-     * create comments
-     *
-     * @param string $topic string for search articles in old database.
-     *
-     * @return datatype Explanation of returned data
-     *
-     * @throws <b>Exception</b> Explanation of exception.
-     */
-    public function importComments()
-    {
-        $sql = 'SELECT `id`, `fecha`, `hora`, `nombre`, `email`, `asunto`, '.
-            ' `texto`, `seccion`, `idnoticia`, `ip_real`, `revisado`, `activar`'.
-            ' FROM opinion_lectores'
-                .$limit;
-
-        $request = self::$originConn->Prepare($sql);
-        $rs = self::$originConn->Execute($request);
-
-        if (!$rs) {
-            echo self::$originConn->ErrorMsg();
-            $this->helper->log(self::$originConn->ErrorMsg());
-        } else {
-            $totalRows = $rs->_numOfRows;
-
-            $current = 1;
-
-            $comment = new Comment();
-            while (!$rs->EOF) {
-
-                $originalCommentID = $rs->fields['id'];
-                if ($this->helper->elementIsImported($originalCommentID, 'comment') ) {
-                    echo "[{$current}/{$totalRows}] comment with id {$originalCommentID} already imported\n";
-                } else {
-                    $contentId = $this->helper->elementIsImported($$rs->fields['idnoticia'], 'article');
-                    $content = new Article($contentId);
-                    if (!empty($content->pk_content)) {
-                        echo "[{$current}/{$totalRows}] Importing comment with id {$originalCommentID} - ";
-                        $title = $this->helper->convertToUtf8($rs->fields['asunto']);
-                        $category = $content->category;
-                        $category_name = $content->category_name;
-
-                        $data = array(
-                            'title' => $title,
-                            'category' => $category,
-                            'summary' => $title,
-                            'body' => $this->helper->convertToUtf8($rs->fields['texto']),
-                            'category_name'=>  $category_name,
-                            'description' => $title,
-                            'created' => $rs->fields['fecha']." ".$rs->fields['hora'],
-                            'changed' => $rs->fields['fecha']." ". $rs->fields['hora'],
-                            'starttime' => $rs->fields['fecha']." ".$rs->fields['hora'],
-                            'fk_user' => USER_ID,
-                            'fk_author' => USER_ID,
-                            'slug' => '',
-                            'fk_content' => $content->pk_content,
-                            'available' => ($rs->fields['activar'] == 0)? 0:1,
-                            );
-
-                        $commentID = $comment->create($data)->id;
-
-                        if (!empty($commentID) ) {
-                            $this->helper->insertRefactorID($originalCommentID, $commentID, 'comment');
-
-
-                        } else {
-                            $errorMsg = 'Problem '.$originalCommentID.' - '.$title;
-                            $this->helper->log('insert comment : '.$originalCommentID. $errorMsg);
-                            $this->helper->log("\n Problem inserting ads {$rs->fields['id']}\n ");
-                        }
-                    } else {
-                        $this->helper->log('insert comment no content: '.$originalCommentID. $contentId);
-                    }
-                }
-
-                $current++;
-                $rs->MoveNext();
-            }
-            $rs->Close(); # optional
-        }
-
-        return true;
-
-    }
-
-
-    /**
      * create Attachments & import image ads in new DB.
      *
      * @param string $topic string for search articles in old database.
@@ -1913,7 +1831,7 @@ class CanariasToOnm
                     echo "[{$current}/{$totalRows}] attachment with id {$originalAdID} already imported\n";
                 } else {
                     echo "[{$current}/{$totalRows}] Importing attachment with id {$originalAdID} - ";
-                    $title= $this->helper->convertToUtf8($rs->fields['asunto']);
+                    $title= $this->helper->convertToUtf8($rs->fields['titulo']);
                     $name = $rs->fields['url'];
                     $category = 9;
                     $category_name = 'files';
@@ -1923,7 +1841,7 @@ class CanariasToOnm
                     $data['title'] = $title;
                     $data['category'] = $category;
                     $data['category_name'] = $category_name;
-                    $data['available'] = ($rs->fields['activar'] == 0)? 0:1;
+                    $data['available'] = 1;
 
                     $data['description'] = $title;
                     $data['metadata'] = StringUtils::get_tags($title.', '.$category_name);
@@ -1963,54 +1881,113 @@ class CanariasToOnm
     }
 
 
-     /* create new image */
+     /**
+     * create Videos & import image ads in new DB.
+     *
+     * @param string $topic string for search articles in old database.
+     *
+     * @return datatype Explanation of returned data
+     *
+     * @throws <b>Exception</b> Explanation of exception.
+     */
+    public function importVideos()
+    {
+        $sql = 'SELECT `id`, `fecha`, `hora`, `titulo`, `texto`, `imagen`, `video`, `activar` FROM `videos`';
+
+        //$sql = 'SELECT * FROM rel_radio';
+
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+
+            while (!$rs->EOF) {
+                if (!empty($rs->fields['video'])) {
+                    $originalAdID = $rs->fields['id'];
+                    if ($this->helper->elementIsImported($originalAdID, 'video') ) {
+                        echo "[{$current}/{$totalRows}] video with id {$originalAdID} already imported\n";
+                    } else {
+                        echo "[{$current}/{$totalRows}] Importing video with id {$originalAdID} - ";
+                        $title = $this->helper->convertToUtf8($rs->fields['titulo']);
+                        $seccion = 'otros';
+                        $category = $this->matchInternalCategory($seccion);
+                        $category_name = $this->categoriesData[$category]->name;
+                        $videoData = array(
+                                'title' => $title,
+                                'name' => $rs->fields['video'],
+                                'available' =>1,
+                                'category'=> $category,
+                                'metadata' => StringUtils::get_tags($photoName),
+                                'description' => $rs->fields['texto'],
+                                'created' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                                'changed' => $rs->fields['fecha'].' '.$rs->fields['hora'],
+                                'oldName' => $rs->fields['video'],
+                                'author_name' => 'internal',
+                            );
+                            $this->createVideo($videoData, 'file');
+                    }
+                }
+                $current++;
+                $rs->MoveNext();
+            }
+
+            echo "\n fail $originalAdID video \n";
+            $rs->Close(); # optional
+        }
+
+        return true;
+
+    }
+
+
+     /* create new video */
 
     public function createVideo($data, $type = 'web-source', $dateForDirectory = null)
     {
         $newVideoID = null;
         if ($type === 'file') {
-            $oldPath = OLD_MEDIA.$data['oldName'];
+            $oldFile = OLD_MEDIA.'/videos/'.$data['oldName'];
             // Check if the video file entry was completed
-            if (!(file_exists($data['oldName']))
+            if (!(file_exists($oldFile))
             ) {
-                $this->helper->log(" Problem no exists video file: {$e->getMessage()} {$oldPath} \n ");
+                $this->helper->log(" Problem no exists video file:   {$oldFile} \n ");
             } else {
-
                 $videoFileData = array(
-                    'file_type'      => 'flv', //$data['type']
-                    'file_path'      => $oldPath,
+                    'file_type'      => 'video/x-flv', //$data['type']
+                    'file_path'      => $oldFile,
                     'category'       => $data['category'],
                     'available'      => 1,
                     'content_status' => 1,
-                    'title'          => $this->helper->convertToUtf8($data['title']),
+                    'title'          => $data['title'],
                     'metadata'       => $data['metadata'],
-                    'description'    => $data['name'].' video '.$data['texto'],
-                    'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
+                    'description'    => $data['description'],
+                    'author_name'    => $data['author_name'],
                 );
 
                 try {
                     $video = new \Video();
                     $newVideoID = $video->createFromLocalFile($videoFileData);
+                    $this->helper->insertImageTranslated($newVideoID, $oldFile, 'video');
                 } catch (\Exception $e) {
-                    m::add($e->getMessage(), m::ERROR);
-                    $this->helper->log(" Problem with video file: {$e->getMessage()} {$oldPath} \n ");
+                    $this->helper->log(" Problem with video file: {$e->getMessage()} {$oldFile} \n ");
                 }
             }
 
         } elseif ($type == 'web-source') {
+            var_dump($data['oldName']);
 
             $url = rawurldecode($data['oldName']);
 
             if ($url) {
-
                 try {
                     $videoP = new \Panorama\Video($url);
-                    var_dump($videoP);
-
                     $information = $videoP->getVideoDetails();
-                    var_dump($url);
-                    var_dump($information);
-
                     $values = array(
                         'file_path'      => $url,
                         'video_url'      => $url,
@@ -2025,10 +2002,12 @@ class CanariasToOnm
 
                 } catch (\Exception $e) {
                     $this->helper->log("\n 1 Can't get video information. Check the $url");
+                    return;
                 }
 
                 $video = new \Video();
-                $values['information'] = json_decode($information, true);
+                $values['information'] = $information;
+
                 try {
                     $newVideoID = $video->create($values);
                 } catch (\Exception $e) {
@@ -2069,7 +2048,7 @@ class CanariasToOnm
     public function importRelatedContents()
     {
         $sql = 'SELECT id, opinion_relacion, video_relacion, radio_relacion,
-        documentos_relacion, galeria_relacion, encuesta_relacion, noti_relacion FROM noticias ';
+        documentos_relacion, galeria_relacion,  noti_relacion FROM noticias ';
         $request = self::$originConn->Prepare($sql);
         $rs = self::$originConn->Execute($request);
         $related = new RelatedContent();
@@ -2098,6 +2077,279 @@ class CanariasToOnm
 
         $rs->Close(); # optional
         */
+    }
+
+
+    public function importPolls()
+    {
+
+
+        $sql= 'SELECT `id`, `fecha`, `seccion`, `pregunta`, `foto`, '
+            .'`respuesta1`, `respuesta2`, `respuesta3`, `respuesta4`, '
+            .'`voto1`, `voto2`, `voto3`, `voto4`, `cerrar`, `activar` FROM `encuestas` ';
+
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+
+            $poll = new Poll();
+            while (!$rs->EOF) {
+
+                $originalPollID = $rs->fields['id'];
+                if ($this->helper->elementIsImported($originalPollID, 'poll')) {
+                    echo "[{$current}/{$totalRows}] Polls with id {$originalPollID} already imported\n";
+                } elseif (!empty($rs->fields['pregunta']) && !empty($rs->fields['respuesta1'])) {
+                    echo "[{$current}/{$totalRows}] Importing poll with id {$originalPollID}  \n";
+                    $title= $this->helper->convertToUtf8($rs->fields['pregunta']);
+
+                    $seccion = 'encuesta-del-dia';
+                    $category = '80';
+                    $category_name = 'Encuesta del día';
+
+
+                    $data = array(
+                        'title' => $title,
+                        'category' => $category,
+                        'with_comment' => 0,
+                        'content_status' => ($rs->fields['activar'] === 0)? 0:1,
+                        'available' => ($rs->fields['activar'] === 0)? 0:1,
+                        'metadata' => \StringUtils::get_tags($title),
+                        'subtitle' => '',
+                        'agency' => '',
+                        'summary' => '',
+                        'fuente' => '',
+                        'category_name'=>  $category_name,
+                        'description' => $title,
+                        'created' => $rs->fields['fecha'].' 00:00:00',
+                        'changed' => $rs->fields['fecha'].' 00:00:00',
+                        'starttime' => $rs->fields['fecha'].' 00:00:00',
+                        'fk_user' => USER_ID,
+                        'fk_author' => USER_ID,
+                        'slug' => \Onm\StringUtils::get_title($title),
+                        'visualization' => 1,
+                        );
+
+                    $data['item'] = array();
+                    $total_votes = 0;
+
+                    if (!empty($rs->fields['respuesta1'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta1']);
+                        $total_votes  += (int)$rs->fields['voto1'];
+                    }
+                    if (!empty($rs->fields['respuesta2'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta2']);
+                        $total_votes += (int)$rs->fields['voto2'];
+                    }
+                    if (!empty($rs->fields['respuesta3'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta3']);
+                        $total_votes += (int)$rs->fields['voto3'];
+                    }
+                    if (!empty($rs->fields['respuesta4'])) {
+                        $data['item'][] = $this->helper->convertToUtf8($rs->fields['respuesta4']);
+                        $total_votes  += (int)$rs->fields['voto4'];
+                    }
+
+                    $poll->create($data);
+
+                    $votes = array();
+                    $i=0;
+                    if (!empty($rs->fields['respuesta1'])) {
+                        $votes[$i] = array($rs->fields['voto1'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta1']));
+
+                        $i++;
+                    }
+                    if (!empty($rs->fields['respuesta2'])) {
+                        $votes[$i] = array($rs->fields['voto2'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta2']));
+                        $i++;
+                    }
+                    if (!empty($rs->fields['respuesta3'])) {
+                        $votes[$i] = array($rs->fields['voto3'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta3']));
+                        $i++;
+                    }
+                    if (!empty($rs->fields['respuesta4'])) {
+                        $votes[$i] = array($rs->fields['voto4'], $poll->id, $this->helper->convertToUtf8($rs->fields['respuesta4']));
+                        $i++;
+                    }
+
+
+                    if (!empty($poll->id) ) {
+                        $this->helper->insertRefactorID($originalPollID, $poll->id, 'poll');
+                        $this->helper->updatePolls($total_votes, $poll->id);
+                        $this->helper->updatePollVotes($votes);
+                    } else {
+                        $errorMsg = 'Problem '.$originalPollID.' - '.$title;
+                        $this->helper->log('insert poll : '.$errorMsg);
+                        $this->helper->log("\n Problem inserting poll {$rs->fields['id']} \n ");
+                    }
+                }
+
+                $current++;
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+
+         return true;
+
+    }
+
+
+
+    public function getFilesData()
+    {
+
+        $sql = "SELECT * FROM `rela_documentos` ";
+        $rs  = self::$originConn->Execute($sql);
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log(self::$originConn->ErrorMsg());
+        } else {
+
+            $totalRows = $rs->_numOfRows;
+            $current = 1;
+
+            $handle = fopen(__DIR__."/../log/updateFiles.txt", "w");
+            while (!$rs->EOF) {
+                $id = $this->helper->elementIsImported($rs->fields['id'], 'attachment');
+                if (!empty($id)) {
+                    $sql = '';
+                    $sqlContents = "UPDATE `contents` SET "
+                        ."`title`='".addslashes($rs->fields['titulo'])."', "
+                        ."`metadata`='".StringUtils::get_tags($rs->fields['titulo'])."' "
+                        ." WHERE pk_content=".$id.";  \n";
+
+                    $sqlAttach = "UPDATE `attachments` SET "
+                        ."`title`='".addslashes($rs->fields['titulo'])."' "
+                        ." WHERE pk_attachment=".$id."; \n ";
+
+                    $datawritten = fwrite($handle, $sqlContents);
+                    $datawritten = fwrite($handle, $sqlAttach);
+                }
+                $rs->MoveNext();
+            }
+
+            fclose($handle);
+            $rs->Close();
+
+        }
+
+    }
+
+    public function updateContents()
+    {
+
+        $sql = "SELECT title, pk_content FROM `contents` WHERE metadata=''";
+        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        if (!$rs) {
+            echo  $GLOBALS['application']->conn->ErrorMsg();
+            $this->helper->log($GLOBALS['application']->conn->ErrorMsg());
+        } else {
+
+            $totalRows = $rs->_numOfRows;
+            $current = 1;
+            $values = array();
+            while (!$rs->EOF) {
+                if (!empty($rs->fields['title'])) {
+                    $metadata = $this->helper->getSlug($rs->fields['title']);
+                    echo "- $metadata, ".$rs->fields['pk_content']." \n";
+                    $values[] = array($metadata, $rs->fields['pk_content']);
+                }
+                $rs->MoveNext();
+            }
+            $rs->Close();
+            //update
+            if (!empty($values)) {
+
+                $sql = 'UPDATE `contents` SET `metadata`=?  WHERE pk_content=?';
+
+                $request = $GLOBALS['application']->conn->Prepare($sql);
+                $rss     = $GLOBALS['application']->conn->Execute($request, $values);
+                if (!$rss) {
+                    echo $GLOBALS['application']->conn->ErrorMsg();
+                }
+            }
+            $rss->Close(); # optional
+        }
+
+    }
+
+    //New functions for satelite instaces
+
+
+    public function createCategories()
+    {
+
+        $this->categoriesMatches = array();
+
+        $sql = "SELECT nombre FROM `secciones`";
+        $request = self::$originConn->Prepare($sql);
+        $rs = self::$originConn->Execute($request);
+
+        if (!$rs) {
+            echo self::$originConn->ErrorMsg();
+            $this->helper->log('problem import categories = seccion'.self::$originConn->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+
+            $current = 1;
+            $category = new \ContentCategory();
+
+            while (!$rs->EOF) {
+                $title = $this->helper->convertToUtf8(strtolower($rs->fields['nombre']));
+                $data = array();
+                $data['name'] = \StringUtils::normalize_name($title);
+                $data['title'] = $title;
+                $data['inmenu']=1;
+                $data['subcategory'] =0;
+                $data['internal_category'] =1;
+                $data['logo_path'] ='';
+                $data['color']  ='';
+                $data['params']  ='';
+
+                if ($category->create($data)) {
+                    $this->helper->log("added seccion {$title} \n");
+                    $title = \Onm\StringUtils::setSeparator(strtolower($title), '-');
+                    $this->categoriesMatches[$title] = $category->pk_content_category;
+                } else {
+                    $this->helper->log("problem creating {$title} \n");
+                }
+
+                $rs->MoveNext();
+            }
+
+            $others = array('Galerias', 'Otros');
+            foreach ($others as $nombre) {
+                $title = $this->helper->convertToUtf8(strtolower($nombre));
+                $data = array();
+                $data['name'] = \StringUtils::normalize_name($title);
+                $data['title'] = ucfirst($title);
+                $data['inmenu']=1;
+                $data['subcategory'] =0;
+                $data['internal_category'] =1;
+                $data['logo_path'] ='';
+                $data['color']  ='';
+                $data['params']  ='';
+
+                if ($category->create($data)) {
+                    $this->helper->log("added seccion {$title} \n");
+                    $title = \Onm\StringUtils::setSeparator(strtolower($title), '-');
+                    $this->categoriesMatches[$title] = $category->pk_content_category;
+                } else {
+                    $this->helper->log("problem creating {$title} \n");
+                }
+
+            }
+
+        }
+
     }
 }
 

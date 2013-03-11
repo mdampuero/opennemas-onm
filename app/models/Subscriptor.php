@@ -1,26 +1,57 @@
 <?php
-/*
+/**
+ * Defines the Subscriptor class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 /**
  * Class Privilege
  *
  * Class to manage privileges
  *
- * @package    Onm
- * @subpackage Newsletter
- * @author     Sandra Pereira <sandra@openhost.es>
+ * @package    Model
  **/
 class Subscriptor
 {
+    /**
+     * The subscriptor id
+     *
+     * @var int
+     **/
     public $id        = null;
+
+    /**
+     * The email of the subscriptor
+     *
+     * @var string
+     **/
     public $email     = null;
+
+    /**
+     * The name of the subscriptor
+     *
+     * @var string
+     **/
     public $name      = null;
+
+    /**
+     * The firstname of the user
+     *
+     * @var string
+     **/
     public $firstname = null;
+
+    /**
+     * The last name of the user
+     *
+     * @var string
+     **/
     public $lastname  = null;
 
     /**
@@ -36,17 +67,33 @@ class Subscriptor
      **/
     public $subscription = null;
 
+    /**
+     * The list of errors
+     *
+     * @var string
+     **/
     public $_errors = array();
 
-    private $_tableName = '`pc_users`';
+    /**
+     * The database table where the users are saved
+     *
+     * @var string
+     **/
+    private $tableName = '`pc_users`';
 
-    private static $_instance = null;
+    /**
+     * Subscriptor instance. Singleton pattern
+     *
+     * @var Subscriptor
+     **/
+    private static $instance = null;
 
     /**
      * Constructor
      *
-     * @see Privilege::Privilege
-     * @param int $id Privilege Id
+     * @param int $id the subscriptor id
+     *
+     * @return void
      **/
     public function __construct($id = null)
     {
@@ -55,18 +102,30 @@ class Subscriptor
         }
     }
 
+    /**
+     * Singleton pattern
+     *
+     * @return Subscriptor the object instance
+     **/
     public function get_instance()
     {
-        if ( is_null(self::$_instance) ) {
-            self::$_instance = new Subscriptor();
+        if (is_null(self::$instance)) {
+            self::$instance = new Subscriptor();
 
-            return self::$_instance;
+            return self::$instance;
 
         } else {
-            return self::$_instance;
+            return self::$instance;
         }
     }
 
+    /**
+     * Creates a new subscriptor given an array of data
+     *
+     * @param array $data the array of data
+     *
+     * @return boolean true if the subscriptor was created
+     **/
     public function create($data)
     {
         $data['status'] = (!isset($data['status']))? 0: $data['status'];
@@ -79,7 +138,7 @@ class Subscriptor
         $data['firstname'] = (isset($data['firstname']))? $data['firstname']: "";
         $data['lastname'] = (isset($data['lastname']))? $data['lastname']: "";
 
-        $sql = 'INSERT INTO ' . $this->_tableName . ' (
+        $sql = 'INSERT INTO ' . $this->tableName . ' (
                   `email`, `name`, `firstname`, `lastname`,
                  `status`, `subscription`) VALUES
                 ( ?,?,?,?, ?,?)';
@@ -98,9 +157,16 @@ class Subscriptor
         return true;
     }
 
+    /**
+     * Loads the subscriptor instance given the subscriptor id
+     *
+     * @param int $id the subscriptor id
+     *
+     * @return Subscriptor the object instance
+     **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE pk_pc_user = ?';
+        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE pk_pc_user = ?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
@@ -110,20 +176,29 @@ class Subscriptor
         }
 
         $this->load($rs->fields);
+
+        return $this;
     }
 
+    /**
+     * Returns the Subscriptor object overloaded
+     *
+     * @param array $properties the list of properties to overload
+     *
+     * @return Subscriptor
+     **/
     public function load($properties)
     {
         if (is_array($properties)) {
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
             foreach ($properties as $k => $v) {
-                if ( !is_numeric($k) ) {
+                if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
             }
@@ -138,16 +213,21 @@ class Subscriptor
     }
 
     /**
+     * Updates a subscriptor given an array of data
      *
-    */
+     * @param array   $data      the array of data
+     * @param boolean $isBackend whether this action is called from backend
+     *
+     * @return boolean true if the subscriptor was updated
+     **/
     public function update($data, $isBackend = false)
     {
         if ($isBackend) {
-            $sql = 'UPDATE ' . $this->_tableName
+            $sql = 'UPDATE ' . $this->tableName
                  . ' SET `subscription`=?, `status`=?,'
                  . ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
         } else {
-            $sql = 'UPDATE ' . $this->_tableName
+            $sql = 'UPDATE ' . $this->tableName
                  . ' SET `subscription`= ?, `status`=?';
         }
 
@@ -180,11 +260,15 @@ class Subscriptor
     }
 
     /**
-     * Recuperar un usuario por email
-    */
+     * Fetches an user given an email
+     *
+     * @param string $email the user email
+     *
+     * @return Subscriptor the object instance
+     **/
     public function getUserByEmail($email)
     {
-        $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE `email`=?';
+        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE `email`=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
         if ($rs===false) {
@@ -198,15 +282,24 @@ class Subscriptor
         return $this;
     }
 
+    /**
+     * Fetches all the users given an search criteria
+     *
+     * @param string $filter    the SQL WHERE clause
+     * @param int    $limit     how many users to fetch
+     * @param string $_order_by the ORDER BY clause
+     *
+     * @return boolean true if the subscriptor was created
+     **/
     public function getUsers($filter = null, $limit = null, $_order_by = 'name')
     {
         $items = array();
         $_where = '1=1';
-        if ( !is_null($filter) ) {
+        if (!is_null($filter)) {
             $_where = $filter;
         }
 
-        $sql = 'SELECT * FROM ' . $this->_tableName . ' WHERE ' . $_where;
+        $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE ' . $_where;
         $sql .= ' ORDER BY ' . $_order_by;
 
         if (!is_null($limit)) {
@@ -229,10 +322,16 @@ class Subscriptor
         return $items;
     }
 
+    /**
+     * Removes permanently a subscriptor
+     *
+     * @param int $id the subscriptor id to delete
+     *
+     * @return boolean true if the subscriptor was deleted
+     **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM ' . $this->_tableName
-             . ' WHERE pk_pc_user=?';
+        $sql = 'DELETE FROM ' . $this->tableName . ' WHERE pk_pc_user=?';
         $values = array(intval($id));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -244,18 +343,35 @@ class Subscriptor
         return true;
     }
 
+    /**
+     * Sets the status to a given value
+     *
+     * @param int $id the subscriptor id
+     * @param int $status the status value
+     *
+     * @return boolean true if the subscriptor status property was changed
+     **/
     public function set_status($id, $status)
     {
-        $sql = 'UPDATE ' . $this->_tableName
+        $sql = 'UPDATE ' . $this->tableName
              . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Checks if exists a user with an email registered
+     *
+     * @param string $email the email address
+     *
+     * @return boolean true if the subscriptor is already registered
+     **/
     public function exists_email($email)
     {
         $sql = 'SELECT count(*) AS num '
@@ -277,10 +393,12 @@ class Subscriptor
      * @param int|array $id
      * @param string    $property
      * @param mixed     $value
+     *
+     * @return boolean
     */
     public function mUpdateProperty($id, $property, $value = null)
     {
-        $sql = 'UPDATE ' . $this->_tableName
+        $sql = 'UPDATE ' . $this->tableName
              . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
         if (!is_array($id)) {
             $values = array($value, $id);
@@ -303,9 +421,16 @@ class Subscriptor
         return true;
     }
 
+    /**
+     * Returns the number of subscriptors given a search criteria
+     *
+     * @param string $where the WHERE clause
+     *
+     * @return int
+     **/
     public function countUsers($where = null)
     {
-        $sql = 'SELECT count(*) FROM ' . $this->_tableName;
+        $sql = 'SELECT count(*) FROM ' . $this->tableName;
         if (!is_null($where)) {
             $sql .= ' WHERE ' . $where;
         }
@@ -317,29 +442,4 @@ class Subscriptor
 
         return $rs;
     }
-
-    public function getPager($itemsPage = 40, $total = null)
-    {
-        if (is_null($total)) {
-            $total = $this->countUsers();
-        }
-
-        // Pager
-        $pager_options = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPage,
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'append'      => false,
-            'path'        => '',
-            'fileName'    => 'javascript:paginate(%d);',
-            'urlVar'      => 'page',
-            'totalItems'  => $total,
-        );
-
-        $pager = Pager::factory($pager_options);
-
-        return $pager;
-    }
 }
-

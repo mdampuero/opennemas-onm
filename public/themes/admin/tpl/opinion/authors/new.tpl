@@ -21,24 +21,19 @@
 
 {block name="content"}
 <form action="{if $author->id}{url name=admin_opinion_author_update id=$author->id}{else}{url name=admin_opinion_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" >
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{if !isset($author)}{t}Opinion Manager :: New author{/t}{else}{t}Opinion Manager :: Edit author{/t}{/if}</div>
+            <div class="title"><h2>{if !isset($author)}{t}Creating opinion author{/t}{else}{t}Editing opinion author{/t}{/if}</div>
             <ul class="old-button">
                 <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="Guardar y salir"><br />{t}Save{/t}
-                    </button>
-                </li>
-                <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="Guardar y continuar" ><br />{t}Save and continue{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_opinion_authors page=$page}" title="Cancelar">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="Cancelar" ><br />{t}Go back{/t}
+                    <a href="{url name=admin_opinion_authors page=$page}" title="{t}Go back{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
 
@@ -79,6 +74,13 @@
                 <label for="blog" class="control-label">{t}Blog url{/t}</label>
                 <div class="controls">
                     <input type="text" id="blog" name="blog" value="{$author->blog|default:""}" class="input-xlarge"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="params[twitter]" class="control-label">{t}Twitter user{/t}</label>
+                <div class="controls">
+                    <input type="text" id="params[twitter]" name="params[twitter]" value="{$author->params['twitter']|default:""}" class="input-xlarge"/>
                 </div>
             </div>
 

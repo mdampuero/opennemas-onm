@@ -1,30 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    label {
-        width:200px;
-        padding-left:10px;
-        display:inline-block;
-    }
-    input[type="text"],
-    input[type="password"] {
-        width:400px;
-    }
-    th {
-        vertical-align: top;
-        text-align: left;
-        padding: 10px;
-        width: 200px;
-        font-size: 13px;
-    }
-    .form-wrapper {
-        margin:10px auto;
-        width:70%;
-    }
-    </style>
-{/block}
-
 {block name="footer-js" append}
 <script type="text/javascript">
 jQuery(document).ready(function($){
@@ -70,9 +45,9 @@ jQuery(document).ready(function($){
 
 {block name="content"}
 <form action="{url name=admin_newsletter_config}" method="POST" name="formulario" id="formulario" {$formAttrs}>
-    <div class="top-action-bar">
+    <div class="top-action-bar clearfix">
         <div class="wrapper-content">
-            <div class="title"><h2>{t}Newsletter :: Configuration{/t}</h2></div>
+            <div class="title"><h2>{t}Newsletters{/t} :: {t}Configuration{/t}</h2></div>
             <ul class="old-button">
                 <li>
                     <button type="submit">
@@ -124,9 +99,9 @@ jQuery(document).ready(function($){
             </div>
 
             <div class="control-group">
-                <label for="newsletter_maillist_subs_type" class="control-label">{t}Newsletter subscription type{/t}</label>
+                <label for="newsletter_subscriptionType" class="control-label">{t}Newsletter subscription type{/t}</label>
                 <div class="controls">
-                    <select name="newsletter_subscriptionType" id="newsletter_maillist_subs_type">
+                    <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
                         <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}Manage newsletter by e-mail{/t}</option>
                         <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Manage newsletter by subscriptors table{/t}</option>
                     </select>
@@ -141,7 +116,6 @@ jQuery(document).ready(function($){
                 <label for="subscription" class="control-label">{t}Mail address to receive new subscriptions{/t}</label>
                 <div class="controls">
                     <input type="text" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
-
                 </div>
             </div>
 
@@ -149,6 +123,7 @@ jQuery(document).ready(function($){
                 <label for="sender" class="control-label">{t}Mail sender{/t}</label>
                 <div class="controls">
                     <input type="text" id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge"/>
+                <div class="help-block">{t escape=off}Verify that the domain has enabled <a href="http://en.wikipedia.org/wiki/Sender_Policy_Framework" target="_blank">SPF</a> settings for sending{/t}</div>
                 </div>
             </div>
 

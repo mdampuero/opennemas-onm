@@ -11,11 +11,9 @@
  *
  * @package    Onm
  * @subpackage Acl
- * @author     Fran Dieguez <fran@openhost.es>
  **/
 class PrivilegesCheck
 {
-
     /**
      * Checks if the current user has access to category given its id.
      *
@@ -26,8 +24,7 @@ class PrivilegesCheck
     public static function CheckAccessCategories($categoryID)
     {
         try {
-            if (
-                !isset($categoryID)
+            if (!isset($categoryID)
                 || is_null($categoryID)
             ) {
                 $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
@@ -35,21 +32,19 @@ class PrivilegesCheck
                 return true;
             }
 
-            if ( isset($_SESSION['isMaster'])
+            if (isset($_SESSION['isMaster'])
                 && $_SESSION['isMaster']
             ) {
                 return true;
             }
 
-            if (
-                isset($_SESSION['isAdmin'])
+            if (isset($_SESSION['isAdmin'])
                 && $_SESSION['isAdmin']
             ) {
                 return true;
             }
 
-            if (
-                !isset($_SESSION['accesscategories'])
+            if (!isset($_SESSION['accesscategories'])
                 || empty($_SESSION['accesscategories'])
                 || !in_array($categoryID, $_SESSION['accesscategories'])
             ) {
@@ -59,8 +54,6 @@ class PrivilegesCheck
         } catch (Exception $e) {
             return false;
         }
-
-        $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
 
         return true;
     }
@@ -76,12 +69,6 @@ class PrivilegesCheck
     public static function CheckPrivileges($privilege, $categoryID = null)
     {
         try {
-            if (!isset($_SESSION['userid'])
-                || self::checkSessionExpireTime()
-            ) {
-                self::sessionExpireTimeAction();
-            }
-
             if (isset($_SESSION['isMaster'])
             && $_SESSION['isMaster']
             ) {
@@ -98,9 +85,7 @@ class PrivilegesCheck
             if (!isset($_SESSION['privileges'])
                 || empty($_SESSION['userid'])
                 || !in_array($privilege, $_SESSION['privileges'])
-                || (!is_null($categoryID)
-                    && !(self::CheckAccessCategories($category))
-                    )
+                || (!is_null($categoryID) && !(self::CheckAccessCategories($categoryID)))
             ) {
                 return false;
             }
@@ -109,53 +94,6 @@ class PrivilegesCheck
             return false;
         }
 
-        $_SESSION['lasturl'] = $_SERVER['REQUEST_URI'];
-
         return true;
     }
-
-    /**
-     * Redirects the user to the login page.
-     *
-     **/
-    private static function sessionExpireTimeAction()
-    {
-        Application::forward("/admin/login/");
-    }
-
-    public static function loadSessionExpireTime()
-    {
-        if (isset($_SESSION)
-            && isset($_SESSION['default_expire'])
-        ) {
-            $_SESSION['expire'] = time()+($_SESSION['default_expire']*60);
-        }
-    }
-
-    public static function checkSessionExpireTime()
-    {
-
-        if (isset($_SESSION)
-            && array_key_exists('expire', $_SESSION)
-            && (time() > $_SESSION['expire'])
-        ) {
-            foreach ($_COOKIE as $name => $value) {
-                if (preg_match('@^_onm_session_.*@', $name)) {
-                    setcookie($name, '', time() - 60000);
-                }
-            }
-
-            session_destroy();
-            unset($_SESSION);
-
-            return true;
-        } else {
-
-        }
-        // Actualiza la sesion
-        self::loadSessionExpireTime();
-
-        return false;
-    }
 }
-

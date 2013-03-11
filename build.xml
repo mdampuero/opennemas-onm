@@ -6,10 +6,10 @@
             depends="prepare,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpunit-ci,docblox" />
 
     <path id="project.paths.php">
-        <pathelement path="${basedir}/app/Backend" />
-        <pathelement path="${basedir}/app/Manager" />
+        <pathelement path="${basedir}/src/Backend" />
+        <pathelement path="${basedir}/src/Frontend" />
+        <pathelement path="${basedir}/src/Manager" />
         <pathelement path="${basedir}/app/models" />
-        <pathelement path="${basedir}/public/controllers" />
         <pathelement path="${basedir}/vendor/Onm" />
         <pathelement path="${basedir}/vendor/core" />
         <!-- Take a look at lint target should be updated -->
@@ -62,10 +62,12 @@
         <apply executable="php" failonerror="true">
             <arg value="-l" />
             <fileset dir=".">
+                <include name="src/Backend/" />
+                <include name="src/Frontend/" />
+                <include name="src/Manager/" />
                 <include name="app/models/" />
-                <include name="public/core/" />
-                <include name="public/controllers/" />
                 <include name="vendor/Onm/" />
+                <include name="vendor/core/" />
             </fileset>
         </apply>
     </target>

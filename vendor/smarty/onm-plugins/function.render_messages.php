@@ -8,5 +8,5 @@
 */
 function smarty_function_render_messages($params, &$smarty)
 {
-    return  \Onm\Message::getHTMLforAll();
+    return  "<div class='messages'>".\Onm\Message::getHTMLforAll()."</div>";
 }

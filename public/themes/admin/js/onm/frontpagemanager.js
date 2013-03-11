@@ -6,7 +6,8 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
+            frontpage_info.changed=true;
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
@@ -19,12 +20,30 @@ function makeContentProviderAndPlaceholdersSortable() {
         handle: '.description',
         update: function(event,ui) {
             initializePopovers();
-            jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
+            show_save_frontpage_dialog();
+            frontpage_info.changed=true;
         },
         tolerance: 'pointer'
         //containment: '#content-with-ticker'
     }).disableSelection();
 }
+
+function check_available_new_version() {
+    var $version = frontpage_info.last_saved;
+    var category = $('#frontpagemanager').data('category');
+    var exists_version = true;
+    $.ajax({
+        url: frontpage_urls.check_version + '?date=' + encodeURIComponent($version) + '&category=' + category,
+        method: 'get',
+        async: false,
+        type: 'json'
+    }).done(function(data) {
+        exists_version = (data == 'true');
+    });
+    return exists_version;
+}
+
+
 
 function get_tooltip_content(elem) {
     var parent_content_div = elem.closest('div.content-provider-element');
@@ -69,7 +88,7 @@ function get_tooltip_title(elem) {
         jQuery.ajax({
             url: $url,
             async: false
-        }).success(function(data) {
+        }).done(function(data) {
             content_states[id] = data;
             if (content_states.hasOwnProperty('id') && content_states[id].hasOwnProperty('title')) {
                 return content_states[id].title;
@@ -113,7 +132,7 @@ function get_contents_in_frontpage() {
 }
 
 function show_save_frontpage_dialog() {
-    jQuery('#warnings-validation').html('<div class="notice">' + frontpage_messages.remember_save_positions + '</div>');
+    jQuery('#warnings-validation').html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>' + frontpage_messages.remember_save_positions + '</div>');
 }
 
 
@@ -127,17 +146,32 @@ function initializePopovers() {
             animation: false,
             delay: 0,
             title: get_tooltip_title(element),
-            content: get_tooltip_content(element)
+            content: get_tooltip_content(element),
+            html : true
         });
     });
 }
 jQuery(function($) {
 
+    window.setInterval(function(){
+        // Frontpage has changed and needs to be reloaded
+        if (check_available_new_version()) {
+            $('#modal-new-version').modal('show');
+        }
+    }, 10000);
     /***************************************************************************
     * Sortable handlers
     ***************************************************************************/
     makeContentProviderAndPlaceholdersSortable();
 
+    /***************************************************************************
+    * Frontpage version control
+    ***************************************************************************/
+    $('#modal-new-version').modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-new-version').on('click', 'a.btn.no', function(e,ui) {
+        e.preventDefault();
+        $('#modal-new-version').modal('hide');
+    });
     /***************************************************************************
     * Batch Actions
     ***************************************************************************/
@@ -313,43 +347,122 @@ jQuery(function($) {
 
 
     // Change-background-color
-    $('#modal-element-change-bgcolor').modal({ backdrop: 'static', keyboard: true, show: false });
+    $('#modal-element-customize-content').modal({ backdrop: 'static', keyboard: true, show: false });
     $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.change-color', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
-        var modal = $('#modal-element-change-bgcolor');
-        modal.data('element-for-change-bgcolor', element);
 
-        modal.data('selected-for-change-bgcolor', elementID);
+        var modal = $('#modal-element-customize-content');
+        modal.data('element-for-customize-content', element);
 
-        modal.find('.modal-body span.color').html('<strong>' + element.find('.color').html() + '</strong>');
+        modal.data('selected-for-customize-content', elementID);
+
+
+        var title = element.data('title')
+
+        if (title['font-size'] !== undefined) {
+            console.log(title['font-size']);
+            var size = title['font-size'].substring(0,2);
+            modal.find('.modal-body #font-size option[value='+size+']').attr('selected', 'selected');
+        }
+        if (title['font-family'] !== undefined) {
+           modal.find('.modal-body #font-family').val(title['font-family']);
+        }
+        if (title['font-style'] !== undefined) {
+            modal.find('.modal-body #font-style').val(title['font-style']);
+        }
+        if (title['font-weight'] !== undefined) {
+            modal.find('.modal-body #font-weight').val(title['font-weight']);
+        }
+        if (title['color'] !== undefined) {
+            modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', title['color']);
+            modal.find('.modal-body input#font-color').val(title['color']);
+        }
+
+        if (element.data('bg').length>0) {
+            var bgcolor = element.data('bg').substring(17,24);
+            modal.find('.modal-body .background span.simplecolorpicker').css('background-color', bgcolor);
+            modal.find('.modal-body input#bg-color').val(bgcolor);
+        }
         modal.modal('show');
         e.preventDefault();
     });
 
-    $('#modal-element-change-bgcolor').on('click', 'a.btn.yes', function(e, ui) {
-        var elementID = $('#modal-element-change-bgcolor').data('selected-for-change-bgcolor');
-        var url =  frontpage_urls.change_color;
-        var colorValue = "#"+$('#color').val();
-        var property = 'bgcolor_' + $('#frontpagemanager').data('category');
+    $('#modal-element-customize-content').on('click', 'a.btn.yes', function(e, ui) {
+
+        var elementID = $('#modal-element-customize-content').data('selected-for-customize-content');
+        var element = $('[data-content-id='+elementID+']');
+        var url = frontpage_urls.customize_content;
+
+        var titleValues = new Object();
+
+        var keys = new Array();
+        var fontFamilyValue = $('#font-family').val();
+        var fontSizeValue   = $('#font-size').val();
+        var fontStyleValue  = $('#font-style').val();
+        var fontWeightValue  = $('#font-weight').val();
+        var fontColorValue  = $('#font-color').val();
+        if(fontFamilyValue.length>0 && fontFamilyValue!='Auto') {
+            titleValues["font-family"] = fontFamilyValue;
+            keys[0] = "font-family";
+        }
+        if(fontSizeValue.length>0 && fontSizeValue!='Auto') {
+            titleValues["font-size"] = fontSizeValue+'px';
+            keys[1] = "font-size";
+        }
+        if(fontStyleValue.length>0 && fontStyleValue!='Auto') {
+            titleValues["font-style"] = fontStyleValue;
+            keys[2] = "font-style";
+        }
+        if(fontColorValue.length>0 && fontColorValue!='Auto' && fontColorValue!='#000000') {
+            titleValues["color"] = fontColorValue;
+            keys[3] = "color";
+        }
+        if(fontWeightValue.length>0 && fontStyleValue!='Auto') {
+            titleValues["font-weight"] = fontWeightValue;
+            keys[4] = "font-weight";
+        }
+
+        var jsonTitle = JSON.stringify(titleValues, keys);
+        var properties = new Object();
+
+                    var name = 'title_' + $('#frontpagemanager').data('category');
+        if(!$.isEmptyObject(titleValues)) {
+            properties[name] = jsonTitle;
+        } else {
+            properties[name] = '';
+        }
+        var bgcolor =$('#bg-color').val();
+        var name2='bgcolor_' + $('#frontpagemanager').data('category');
+        if(bgcolor.length>0 && bgcolor !='#ffffff') {
+            properties[name2] = bgcolor;
+        } else {
+            properties[name2] = '';
+        }
 
         if (elementID) {
-            $.get(
-                url,
-                { 'id': elementID, meta: property, value: colorValue }
-            ).success(function(data) {
-                 $('#modal-element-change-bgcolor').data('element-for-change-bgcolor').animate({ 'backgroundColor': colorValue },300);
+            $.ajax({
+                url:url,
+                type:'POST',
+                dataType: 'json',
+                data: { 'id': elementID, 'properties' : properties}
+            }).done(function(data) {
+                 $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
+                  element.data('bg', 'background-color:'+bgcolor);
+                  element.data('title', jsonTitle);
+
             }).error(function(data) {
+                //data.message
             });
         }
-        $('#modal-element-change-bgcolor').modal('hide');
+        $('#modal-element-customize-content').modal('hide');
 
         e.preventDefault();
 
     });
 
-    $('#modal-element-change-bgcolor').on('click', 'a.btn.no', function(e) {
-        $('#modal-element-change-bgcolor').modal('hide');
+    $('#modal-element-customize-content').on('click', 'a.btn.no', function(e) {
+        $('#modal-element-customize-content').modal('hide');
         e.preventDefault();
     });
 
@@ -385,17 +498,14 @@ jQuery(function($) {
         var parent = $(this).closest('.ui-tabs-panel');
         $.ajax({
             url: $(this).attr('href'),
-            success: function(data) {
-                parent.html(data);
-                makeContentProviderAndPlaceholdersSortable();
-            },
-            complete: function() {
-                $('#content-provider .spinner').hide();
-            },
             beforeSend: function() {
                 $('#content-provider .spinner').show();
-
-           }
+            }
+        }).done(function(data) {
+            parent.html(data);
+            makeContentProviderAndPlaceholdersSortable();
+        }).always(function() {
+            $('#content-provider .spinner').hide();
         });
     });
 
@@ -413,23 +523,42 @@ jQuery(function($) {
         e.preventDefault();
         var els = get_contents_in_frontpage();
         var category = $('#frontpagemanager').data('category');
+        var new_version_available = check_available_new_version(false);
 
-        $.post(frontpage_urls.save_positions + '?category=' + category,
-                { 'contents_positions': els }
-        ).success(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-success'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data +
-                '</div>');
-        }).error(function(data) {
-            $('#warnings-validation').html(
-                "<div class='alert alert-error'>" +
-                    "<button class='close' data-dismiss='alert'>×</button>" +
-                    data.responseText +
-                '</div>'
-            );
-        });
+        // If there is a new version available for this frontpage avoid to save
+        if (new_version_available) {
+            $('#modal-new-version').modal('show');
+        } else {
+            $.ajax({
+                url: frontpage_urls.save_positions + '?category=' + category,
+                async: false,
+                type: 'POST',
+                dataType: 'json',
+                data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved },
+                beforeSend: function(xhr) {
+                    $('#warnings-validation').html(
+                    "<div class='alert alert-notice'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>"+
+                        "Saving"+
+                    '</div>');
+                }
+            }).done(function(data) {
+                $('#warnings-validation').html(
+                    "<div class='alert alert-success'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        data.message +
+                    '</div>');
+                frontpage_info.last_saved = data.date;
+            }).fail(function(data, ajaxOptions, thrownError) {
+                var response = $.parseJSON(data.responseText);
+                $('#warnings-validation').html(
+                    "<div class='alert alert-error'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        response.message +
+                    '</div>'
+                );
+            });
+        }
     });
 
     $('#button_clearcache').on('click', function(e, ui) {
@@ -440,10 +569,9 @@ jQuery(function($) {
             url: frontpage_urls.clean_frontpage,
             data: {
                 'category' : category
-            },
-            success: function(data) {
-                $('#warnings-validation').html(data);
             }
+        }).done(function(data) {
+            $('#warnings-validation').html(data);
         });
     });
 
@@ -460,11 +588,19 @@ jQuery(function($) {
                 'contents': encodedContents,
                 'category_name': category
             },
-            success: function(data) {
-                previewWindow = window.open('', '_blank', '');
-                previewWindow.document.write(data);
-                previewWindow.focus();
+            beforeSend: function(xhr) {
+                $('#warnings-validation').html(
+                    "<div class='alert alert-notice'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        "Generating frontpage. Please wait..." +
+                    '</div>'
+                );
             }
+        }).done(function(data) {
+            previewWindow = window.open('', '_blank', '');
+            previewWindow.document.write(data);
+            previewWindow.focus();
+            $('#warnings-validation').html('');
         });
     });
 
@@ -497,13 +633,13 @@ jQuery(function($) {
             $.get(
                 frontpage_urls.toggle_suggested,
                 { 'ids': contentIds }
-            ).success(function(data) {
-            }).error(function(data) {
+            ).done(function(data) {
+            }).fail(function(data) {
             });
         }
     });
 
-    $('#pick-layout').click('click', function(e, ui) {
+    $('#pick-layout, .settings-panel .close').click('click', function(e, ui) {
         $('.settings-panel').slideToggle();
     });
 

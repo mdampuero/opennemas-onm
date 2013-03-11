@@ -1,38 +1,48 @@
 <?php
 /*
+ * Defines the ContentType class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 
 /**
  * Handles common operations with content types
  *
- * @package    Onm
- * @subpackage Model
- *
- * @author Alex Rico
+ * @package    Model
  */
 class ContentType
 {
     /**
-     * @var int(10) with id for a content type
+     * The content type id
+     *
+     * @var int
      */
     public $pk_content_type = null;
 
     /**
-     * @var string with internal name for content type
+     * Internal name of the content type
+     *
+     * @var string
      */
     public $name = null;
 
     /**
-     * @var string with readable name for content type
+     * Readablel name of the content type
+     *
+     * @var string
      */
     public $title = null;
 
     /**
+     * The default template to use
+     * Maybe unused
+     *
      * @var int(10)
      */
     public $fk_template_default = null;
@@ -41,7 +51,7 @@ class ContentType
      * Initializes the content type for a given id.
      *
      * @param string $id the content type id to initilize.
-     **/
+     */
     public function __construct($id = null)
     {
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
@@ -51,6 +61,13 @@ class ContentType
         }
     }
 
+    /**
+     * Returns a ContentType object given its id
+     *
+     * @param int $id the content type id to load
+     *
+     * @return ContentType the content type object instance
+     **/
     public function read($id)
     {
         // Fire event onBeforeXxx
@@ -69,15 +86,15 @@ class ContentType
 
         $this->load($rs->fields);
 
-        // Fire event onAfterXxx
-        $GLOBALS['application']->dispatch('onAfterRead', $this);
-
+        return $this;
     }
 
     /**
      * Load properties into this instance
      *
      * @param array $properties Array properties
+     *
+     * @return ContentType the content type object instance
      */
     public function load($properties)
     {
@@ -98,15 +115,16 @@ class ContentType
                 }
             }
         }
+
+        return $this;
     }
 
-    /*
+    /**
      * Fetches available content types.
      *
      * @return array an array with each content type with id, name and title.
      *
-     * @throw Exception if there was an error while fetching all the
-     *                  content types
+     * @throw Exception if there was an error while fetching all the content types
      */
     public static function getAllContentTypes()
     {
@@ -150,13 +168,13 @@ class ContentType
         return $resultArray;
     }
 
-    /*
+    /**
      * Find a content type id given the name of one content type.
      *
      * @param  string $name The name of a content type
      * @return int    pk_content_type.
-     * @throw  Exception  if there was an error while fetching
-     *                    all the content types
+     *
+     * @throw  Exception  if there was an error while fetching all the content types
      */
     public static function getIdContentType($name)
     {
@@ -171,12 +189,12 @@ class ContentType
         return false;
     }
 
-    /*
+    /**
      * Get the content type object given the id of one content.
      *
-     * @return int pk_content_type.
      * @param  int $id The id of a content
      *
+     * @return int pk_content_type.
      */
     public static function getContentTypeByContentId($id)
     {
@@ -192,4 +210,3 @@ class ContentType
         return $rs;
     }
 }
-

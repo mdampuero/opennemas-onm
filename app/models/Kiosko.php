@@ -1,32 +1,86 @@
 <?php
-/*
+/**
+ * Handles all the CRUD actions over kioko.
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 
 /**
  * Handles all the CRUD actions over kioko.
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class Kiosko extends Content
 {
+    /**
+     * The kiosko id
+     *
+     * @var int
+     **/
     public $pk_kiosko   = null;
+
+    /**
+     * The name of the kiosko
+     *
+     * @var string
+     **/
     public $name        = null;
+
+    /**
+     * The path to the kiosko file
+     *
+     * @var string
+     **/
     public $path        = null;
+
+    /**
+     * The publishing date of the kiosko
+     *
+     * @var string
+     **/
     public $date        = null;
+
+    /**
+     * Whether if this kiosko is marked as favorite or not
+     *
+     * @var boolean
+     **/
     public $favorite    = 0;
+
+    /**
+     * The price of this kiosko
+     *
+     * @var int
+     **/
     public $price       = 0;
+
+    /**
+     * The type of kiosko
+     *
+     * @var string
+     **/
     public $type        = 0;
+
+    /**
+     * The path to the kiosko
+     *
+     * @var string
+     **/
     public $kiosko_path = null;
 
     /**
-      * Constructor PHP5
-    */
+      * Initializes the kiosko object
+      *
+      * @param int $id the kiosko id to read
+      *
+      * @return Kiosko the object instance
+      */
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -39,26 +93,43 @@ class Kiosko extends Content
         $this->kiosko_path = INSTANCE_MEDIA_PATH.'kiosko'.DS;
         $this->content_type = 'Kiosko';
         $this->content_type_l10n_name = _('Cover');
+
+        return $this;
     }
 
+    /**
+     * Loads the kiosko data from an array into the object properties
+     *
+     * @param array $data the kiosko data
+     *
+     * @return Kiosko the kiosko object
+     **/
     public function initialize($data)
     {
-        $this->title=$data['name'];
-        $this->name=$data['name'];
-        $this->path=$data['path'];
-        $this->date=$data['date'];
-        $this->date=$data['price'];
-        $this->date=$data['type'];
+        $this->title     = $data['name'];
+        $this->name      = $data['name'];
+        $this->path      = $data['path'];
+        $this->date      = $data['date'];
+        $this->price     = $data['price'];
+        $this->type      = $data['type'];
+        $this->category  = $data['category'];
+        $this->available = $data['available'];
+        $this->metadata  = $data['metadata'];
 
-        $this->category=$data['category'];
-        $this->available=$data['available'];
-        $this->metadata=$data['metadata'];
+        return $this;
     }
 
+    /**
+     * Creates a new kiosko from a data array
+     *
+     * @param array $data the kiosko data
+     *
+     * @return int the kiosko id
+     **/
     public function create($data)
     {
         if ($this->exists($data['path'], $data['category'])) {
-            throw new \Exception(_("There's other paper in this date & this category."));
+            //  throw new \Exception(_("There's other paper in this date & this category."));
         }
 
         // Check price
@@ -87,9 +158,16 @@ class Kiosko extends Content
             Application::logDatabaseError();
         }
 
-        return true;
+        return $this->id;
     }
 
+    /**
+     * Loads the kiosko data given an id
+     *
+     * @param int $id the kiosko id
+     *
+     * @return Kiosko the object instance
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -104,11 +182,19 @@ class Kiosko extends Content
         }
 
         $this->load($rs->fields);
+
+        return $this;
     }
 
+    /**
+     * Updates the kiosko information given an array of data
+     *
+     * @param array $data the new data for the kiosko
+     *
+     * @return boolean true if the kiosko was updated
+     **/
     public function update($data)
     {
-
         if (isset($data['available']) and !isset($data['content_status'])) {
             $data['content_status'] = $data['available'];
         }
@@ -134,6 +220,13 @@ class Kiosko extends Content
         return true;
     }
 
+    /**
+     * Removes permanently the kiosko and its files
+     *
+     * @param int $id the kiosko id to remove
+     *
+     * @return boolean true if the kiosko was removed
+     **/
     public function remove($id)
     {
         parent::remove($this->id);
@@ -151,15 +244,18 @@ class Kiosko extends Content
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
     /**
-     * Check if a front exists yet
+     * Check if already exists a kiosko
      *
-     * @param  string  $name_pdf
-     * @param  string  $category
+     * @param  string  $path_pdf the path to the kiosko file
+     * @param  string  $category the category where is saved
+     *
      * @return boolean
     */
     public function exists($path_pdf, $category)
@@ -174,6 +270,13 @@ class Kiosko extends Content
         return intval($rs) > 0;
     }
 
+    /**
+     * Sets the favorite flag
+     *
+     * @param int $status the final status of the favorite flag
+     *
+     * @return boolean true if the flag changed its status
+     **/
     public function set_favorite($status)
     {
         if ($this->id == null) {
@@ -188,12 +291,20 @@ class Kiosko extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         return true;
     }
 
+    /**
+     * Creates the PDF thumbnail for the kiosko
+     *
+     * @param string $file_pdf the filename to the pdf file
+     * @param string $path     the path to the pdf file
+     *
+     * @return void
+     **/
     public function createThumb($file_pdf, $path)
     {
         $img_name = basename($file_pdf, ".pdf") . '.jpg';
@@ -203,13 +314,13 @@ class Kiosko extends Content
         if (file_exists($this->kiosko_path.$path. $file_pdf)) {
             try {
 
-                $imagick = new Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
+                $imagick = new \Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
                 $imagick->thumbnailImage(650, 0);
                 // First, save to PNG (*.pdf => /tmp/xxx.png)
                 $imagick->writeImage($tmp_name);
                 // finally, save to jpg (/tmp/xxx.png => *.jpg)
                 // to avoid problems with the image
-                $imagick = new Imagick($tmp_name);
+                $imagick = new \Imagick($tmp_name);
 
                 $imagick->writeImage($this->kiosko_path.$path.'650-'.$img_name);
 
@@ -222,17 +333,21 @@ class Kiosko extends Content
             } catch (Exception $e) {
                 // Nothing
             }
-
         }
-
     }
 
+    /**
+     * Returns the list of kioskos by months
+     *
+     * @return array
+     **/
     public function get_months_by_years()
     {
         $sql = "SELECT DISTINCT MONTH(date) as month, "
                ."YEAR(date) as year FROM `kioskos` ORDER BY year, month DESC";
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
+        $items = null;
         while (!$rs->EOF) {
             $items[$rs->fields['year']][] = $rs->fields['month'];
             $rs->MoveNext();
@@ -244,7 +359,7 @@ class Kiosko extends Content
     /**
      * Get all subscription elements/items
      *
-    */
+     */
     public static function getSubscriptionItems()
     {
         $sql = 'SELECT `kioskos`.`pk_kiosko`, `kioskos`.`price` , `contents`.`title`
@@ -262,4 +377,3 @@ class Kiosko extends Content
         return $rs;
     }
 }
-

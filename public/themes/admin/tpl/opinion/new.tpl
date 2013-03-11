@@ -40,18 +40,13 @@
 
 {block name="content"}
 <form action="{iF $opinion->id}{url name=admin_opinion_update id=$opinion->id}{else}{url name=admin_opinion_create}{/if}" method="POST" id="formulario">
-<div class="top-action-bar">
+<div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t}Opinion Manager{/t} :: {if $opinion->id}{t 1=$opinion->title}Editing opinion "%1"{/t}{else}{t}Creating new opinion{/t}{/if}</h2></div>
+        <div class="title"><h2>{if $opinion->id}{t}Editing opinion{/t}{else}{t}Creating opinion{/t}{/if}</h2></div>
         <ul class="old-button">
             <li>
                 <button type="submit" name="continue" value="1">
-                    <img src="{$params.IMAGE_DIR}save_and_continue.png" title="{t}Save and continue{/t}" alt="{t}Save and continue{/t}" ><br />{t}Save and continue{/t}
-                </a>
-            </li>
-            <li>
-                <button type="submit">
-                    <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
+                    <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
                 </button>
             </li>
             <li class="separator"></li>
