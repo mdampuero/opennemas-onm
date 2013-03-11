@@ -4,7 +4,8 @@
  * Start up and setup the app
 */
 
-//TODO: use includepath as import-tools.
+require __DIR__.'/../app/autoload.php';
+
 
 $_SERVER['SERVER_NAME']   = 'www.cronicasdelaemigracion.com';
 //$_SERVER['SERVER_NAME'] = 'onm-cronicas.local';
@@ -19,11 +20,9 @@ require __DIR__.'/../app/bootstrap.php';
  * Setup view
 */
 $tpl = new Template(TEMPLATE_USER);
-//$tpl->setConfig('newslibrary');
 
 $urlBase = SITE_URL."seccion/";
-//TODO: work with db
-//$menuItems     = Menu::renderMenu('frontpage');
+
 $date          =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
 $basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
@@ -36,12 +35,11 @@ if ( !file_exists($basePath) ) {
 // multi handle
 $mh = curl_multi_init();
 
-$items = array('home', 'cronicas', 'galicia', 'castillaleon', 'asturias',
-    'madrid', 'canarias', 'andalucia', 'cantabria', 'baleares', 'paisvasco');
+$menu = new Menu();
+$menu->getMenu('frontpage');
+foreach ($menu->items as $item) {
 
-//foreach ($menuItems->items as $id => $item) {
-foreach ($items as $category_name) {
-    // $category_name = $item->link;
+     $category_name = $item->link;
 
     if ( !empty($category_name) ) {
 
