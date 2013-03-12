@@ -36,7 +36,12 @@ if ( !file_exists($basePath) ) {
 $mh = curl_multi_init();
 
 $menu = new \Menu();
-$menu->getMenu('frontpage');
+$menu->getMenu('archive');
+
+if (count(($menu->items)) <= 0) {
+    echo "There are no frontpages. You must define archive menu. \n";
+    die();
+}
 
 foreach ($menu->items as $item) {
 
