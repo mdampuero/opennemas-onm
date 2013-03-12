@@ -35,11 +35,12 @@ if ( !file_exists($basePath) ) {
 // multi handle
 $mh = curl_multi_init();
 
-$menu = new Menu();
+$menu = new \Menu();
 $menu->getMenu('frontpage');
+
 foreach ($menu->items as $item) {
 
-     $category_name = $item->link;
+    $category_name = $item->link;
 
     if ( !empty($category_name) ) {
 
@@ -67,14 +68,16 @@ do {
 $pattern     = array();
 $replacement = array();
 
-foreach ($menu->items as $category) {
+foreach ($menu->items as $item) {
+    $category = $item->link;
     $pattern[] = "@href=\"/seccion/{$category}\"@";
     //archive/digital/2013/02/02/home.html
     $replacement[] = "href=\"/archive/digital{$directoryDate}{$category}.html\"";
 }
-    array_push($pattern, "@href=\"/\"@");
-    //archive/digital/2013/02/02/home.html
-    array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
+
+array_push($pattern, "@href=\"/\"@");
+//archive/digital/2013/02/02/home.html
+array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
 
   // get content and remove handles
 foreach ($curly as $category_name => $c) {
