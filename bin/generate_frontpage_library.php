@@ -67,7 +67,7 @@ do {
 $pattern     = array();
 $replacement = array();
 
-foreach ($items as $category) {
+foreach ($menu->items as $category) {
     $pattern[] = "@href=\"/seccion/{$category}\"@";
     //archive/digital/2013/02/02/home.html
     $replacement[] = "href=\"/archive/digital{$directoryDate}{$category}.html\"";
