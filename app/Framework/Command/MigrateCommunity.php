@@ -23,10 +23,7 @@ class MigrateCommunity extends Command
         $this
             ->setDefinition(
                 array(
-                    new InputArgument('host', InputArgument::REQUIRED, 'host'),
                     new InputArgument('user', InputArgument::REQUIRED, 'user'),
-                    new InputArgument('pass', InputArgument::REQUIRED, 'pass'),
-                    new InputArgument('type', InputArgument::REQUIRED, 'type'),
                     new InputArgument('database', InputArgument::REQUIRED, 'database'),
                 )
             )
@@ -49,11 +46,24 @@ EOF
 
         chdir($basePath);
 
-        $dataBaseName = $input->getArgument('database');
-        $dataBaseHost = $input->getArgument('host');
+        $dataBaseHost = 'localhost';
+        $dataBaseType = 'mysqli';
         $dataBaseUser = $input->getArgument('user');
-        $dataBasePass = $input->getArgument('pass');
-        $dataBaseType = $input->getArgument('type');
+        $dataBaseName = $input->getArgument('database');
+
+        $dialog = $this->getHelperSet()->get('dialog');
+
+        $validator = function ($value) {
+            if (trim($value) == '') {
+                throw new \Exception('The password can not be empty');
+            }
+        };
+
+        $dataBasePass = $password = $dialog->askHiddenResponse(
+            $output,
+            'What is the database user password?',
+            false
+        );
 
         define('BD_HOST', $dataBaseHost);
         define('BD_USER', $dataBaseUser);
@@ -73,7 +83,6 @@ EOF
         $GLOBALS['application'] = new \Application();
         \Application::initDatabase();
         \Application::initLogger();
-
 
         // Execute functions
         $output->writeln("\t<fg=blue;bg=white>Migrating: ".$dataBaseName."</fg=blue;bg=white>");
@@ -367,6 +376,9 @@ EOF
                 // Rename user name on instance settings
                 $settings['BD_USER'] = $value['id'];
 
+                // Set external media to empty
+                $settings['MEDIA_URL'] = '';
+
                 // Set the password for this user
                 $sql = "SET PASSWORD FOR `".$settings['BD_USER']."`@`".$dataBaseHost.
                         "` = PASSWORD('".$settings['BD_PASS']."')";
@@ -441,12 +453,12 @@ EOF
                 }
 
                 // Revoke grant option on old database
-                $sql = "REVOKE GRANT OPTION ON `".$dataBaseName."` . * FROM '".$value['id']."'@'".$dataBaseHost."'";
-                $rs = $GLOBALS['application']->conn->Execute($sql);
-                if (!$rs) {
-                    $output->writeln("\t<error>Cannot revoke grant option on ".$dataBaseName." : ".$sql."</error>");
-                    return false;
-                }
+                // $sql = "REVOKE GRANT OPTION ON `".$dataBaseName."` . * FROM '".$value['id']."'@'".$dataBaseHost."'";
+                // $rs = $GLOBALS['application']->conn->Execute($sql);
+                // if (!$rs) {
+                //     $output->writeln("\t<error>Cannot revoke grant option on ".$dataBaseName." : ".$sql."</error>");
+                //     return false;
+                // }
 
                 // Drop old database
                 $sql = "DROP database `".$dataBaseName."`";

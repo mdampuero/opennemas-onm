@@ -852,25 +852,13 @@ class Privilege
             125 => array(
                 'pk_privilege' => '125',
                 'name'         => 'IMPORT_ADMIN',
-                'description'  => _('Import agency'),
-                'module'       => 'IMPORT',
-            ),
-            126 => array(
-                'pk_privilege' => '126',
-                'name'         => 'IMPORT_EPRESS',
-                'description'  => _('Import EuropaPress articles'),
+                'description'  => _('Import news from agency'),
                 'module'       => 'IMPORT',
             ),
             127 => array(
                 'pk_privilege' => '127',
                 'name'         => 'IMPORT_XML',
                 'description'  => _('Import XML files'),
-                'module'       => 'IMPORT',
-            ),
-            128 => array(
-                'pk_privilege' => '128',
-                'name'         => 'IMPORT_EFE',
-                'description'  => _('Import EFE articles'),
                 'module'       => 'IMPORT',
             ),
             130 => array(
@@ -1143,17 +1131,10 @@ class Privilege
                 'description'  => _('Manage frontpage'),
                 'module'       => 'POLL',
             ),
-
-            176 => array(
-                'pk_privilege' => '176',
-                'name'         => 'IMPORT_EPRESS_CONFIG',
-                'description'  => _('Config Import EuropaPress'),
-                'module'       => 'IMPORT',
-            ),
             177 => array(
                 'pk_privilege' => '177',
-                'name'         => 'IMPORT_EFE_CONFIG',
-                'description'  => _('Config Import EFE'),
+                'name'         => 'IMPORT_NEWS_AGENCY_CONFIG',
+                'description'  => _('Config News Agency importer'),
                 'module'       => 'IMPORT',
             ),
         );

@@ -131,7 +131,8 @@ class SpecialsController extends Controller
 
         $page = $request->query->getDigits('page', 1);
         if (isset($configurations['total_widget'])
-            && !empty($configurations['total_widget'])) {
+            && !empty($configurations['total_widget'])
+        ) {
             $numFavorites = $configurations['total_widget'];
         } else {
             $numFavorites = 1;

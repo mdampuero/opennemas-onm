@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     {block name="meta"}
-    <title>OpenNeMaS - Administration section</title>
+    <title>OpenNeMaS - Manager</title>
     {/block}
 
     <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
@@ -35,7 +35,7 @@
     {block name="header-js"}
         {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js"}
+        {script_tag src="/onm/scripts.js" common=1}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js" common=1}
      {/block}
 
@@ -54,6 +54,27 @@
                 <a  href="{url name=manager_welcome}" class="brand ir logoonm" title="{t}Go to admin main page{/t}">OpenNemas</a>
                 <div class="nav pull-left" accesskey="m">
                     {admin_menu file='/Manager/Resources/Menu.php' base=$smarty.const.SRC_PATH}
+                </div>
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav pull-right">
+                        <li class="dropdown usermenu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="usericon"></span> <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
+                            <div class="dropdown-menu">
+                                <div class="avatar">
+                                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                </div><!-- /.avatar -->
+                                <div class="user-info">
+                                    <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
+                                    <div class="login-name">{$smarty.session.username}</div>
+                                    <ul class="links">
+                                        <li><a id="settings" title="{t}Edit my profile{/t}" href="{url name=manager_acl_user_show id=me}">{t}Edit my profile{/t}</a></li>
+                                        <li><a href="javascript:salir('{t}Do you really want to exit from manager?{/t}','{url name="manager_logout"  csrf=$smarty.session.csrf}');" id="logout" class="logout" title="{t}Logout from manager{/t}">{t}Log out{/t}</a></li>
+                                    </ul><!-- /.links -->
+                                </div><!-- /.user-info -->
+                            </div>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </div>
@@ -85,7 +106,7 @@
 
     {block name="footer-js"}
         {browser_update}
-        {script_tag src="/onm/footer-functions.js"}
+        {script_tag src="/onm/footer-functions.js" common=1}
 
         {if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
         <script type="text/javascript">

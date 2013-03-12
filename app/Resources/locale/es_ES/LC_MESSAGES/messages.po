@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-28 20:15+0100\n"
-"PO-Revision-Date: 2013-02-28 20:15+0200\n"
+"POT-Creation-Date: 2013-03-06 16:06+0100\n"
+"PO-Revision-Date: 2013-03-06 17:35+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -21,59 +21,73 @@ msgstr ""
 "X-Generator: Virtaal 0.7.1\n"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:64
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:60
 msgid "--All--"
 msgstr "--Todos--"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:106
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:99
 #, php-format
 msgid "Unable to find the user with the id '%d'"
 msgstr "No se pudo encontrar el usuario con el identificador «%d»"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:117
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:246
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:109
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:229
 msgid "Default system language"
 msgstr "Idioma predeterminado del sistema"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:171
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:160
 msgid "User data updated successfully."
 msgstr "Datos del usuario actualizados correctamente."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:225
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:213
 msgid "User created successfully."
 msgstr "Usuario creado correctamente."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:234
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:219
 msgid "Unable to create the user with that information"
 msgstr "No se pudo crear el usuario con la información proporcionada"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:302
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:284
 #, php-format
 msgid "You have deleted %d users."
 msgstr "Se han eliminado %d usuarios."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:304
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:286
 msgid "You haven't selected any user to delete."
 msgstr "No ha seleccionado ningún usuario para eliminar."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserGroupsController.php:74
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserGroupsController.php:68
 #, php-format
 msgid "Unable to find user group with id '%d'"
 msgstr "No se pudo encontrar el grupo de usuarios con el identificador «%d»"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserGroupsController.php:152
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserGroupsController.php:146
 msgid "User group updated successfully."
 msgstr "Grupo de usuario actualizado correctamente."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserGroupsController.php:155
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserGroupsController.php:149
 #, php-format
 msgid "Unable to update the user group with id \"%d\""
 msgstr "No se pudo actualizar el grupo de usuario con el identificador «%d»"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserGroupsController.php:181
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserGroupsController.php:177
 msgid "User group deleted successfully."
 msgstr "Grupo de usuario eliminado correctamente."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserGroupsController.php:185
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserGroupsController.php:181
 #, php-format
 msgid "Unable to delete the user group with id \"%d\""
 msgstr "No se pudo eliminar el grupo de usuario con el identificador «%d»"
@@ -368,7 +382,7 @@ msgstr "Este usuario se ha desactivado. Consulte a su administrador."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AuthenticationController.php:131
 #: /home/fran/Projects/OpenHost/opennemas/src/Frontend/Controllers/AuthenticationController.php:120
-#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AuthenticationController.php:121
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AuthenticationController.php:126
 msgid "Username or password incorrect."
 msgstr "Nombre de usuario o contraseña incorrecta."
 
@@ -1148,33 +1162,44 @@ msgstr "Asigne la categoría donde quiere importar este artículo"
 msgid "The category you have chosen doesn't exists."
 msgstr "La categoría que seleccionó no existe."
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:398
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:401
 msgid "The article you want to import doesn't exists."
 msgstr "El artículo que quiere importar no existe."
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:507
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:510
 #, php-format
 msgid "Downloaded %d new articles and deleted %d old ones from \"%s\"."
 msgstr ""
 "Se han descargado %d nuevos artículos y se han eliminado %d obsoletos desde "
 "\"%s\"."
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:520
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:523
 #, php-format
 msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
 msgstr "Si está seguro <a href=\"%s\">intente desbloquearlo</a>"
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:591
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:594
 msgid "News agency server updated."
 msgstr "Servidor de agencia de noticias actualizado."
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:663
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:668
 msgid "News agency server added."
 msgstr "Servidor de agencia de noticias añadido."
 
-#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:689
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:690
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:733
+#, php-format
+msgid "Source identifier \"%d\" not valid"
+msgstr "Identificador de origen «%s» no válido"
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:709
 msgid "News agency server deleted."
 msgstr "Servidor de agencia de noticias eliminado."
+
+#: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsAgencyController.php:748
+#, php-format
+msgid "Files for \"%s\" cleaned."
+msgstr "Archivos de «%s» limpiados."
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/NewsletterController.php:364
 msgid "Newsletter deleted successfully."
@@ -1865,6 +1890,10 @@ msgstr "Se ha desubscrito del boletín de noticias"
 msgid "Verification image not valid. Try to fill it again."
 msgstr "Imagen de verificación no válida. Intente completarla de nuevo."
 
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:257
+msgid "You have deleted selected user."
+msgstr "Has eliminado el usuario seleccionado."
+
 #: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/InstancesController.php:158
 #, php-format
 msgid "Unable to find an instance with the id \"%d\""
@@ -1872,7 +1901,7 @@ msgstr "No es posible encontrar la instancia con el identificador «%d»"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/InstancesController.php:178
 #: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/InstancesController.php:277
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2645
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2651
 msgid "Normal"
 msgstr "Normal"
 
@@ -2134,8 +2163,8 @@ msgid "Agenda"
 msgstr "Agenda"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:217
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2573
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2690
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2576
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2693
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2735
 msgid "News Agency"
 msgstr "Agencias de noticias"
@@ -2201,6 +2230,7 @@ msgid "Mailman Andalucía"
 msgstr "Mailman de Andalucía"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:339
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:28
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:224
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:617
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:815
@@ -2223,6 +2253,8 @@ msgstr "Mailman de Andalucía"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6917
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7007
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7382
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8588
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8591
 msgid "Settings"
 msgstr "Opciones"
 
@@ -2233,21 +2265,25 @@ msgid "General"
 msgstr "General"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:348
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:29
 msgid "Users & Groups"
 msgstr "Usuarios y grupos"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:353
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:31
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6221
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8495
 msgid "Users"
 msgstr "Usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:360
+#: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:36
 msgid "User Groups"
 msgstr "Grupos de usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:368
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7940
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8393
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8402
 msgid "Cache manager"
 msgstr "Gestor de caché"
 
@@ -2404,6 +2440,7 @@ msgstr "Búsqueda interna"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4997
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6335
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7952
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8609
 msgid "Email"
 msgstr "Email"
 
@@ -2455,9 +2492,9 @@ msgstr "Fichero de imagen inválido"
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:747
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:807
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:837
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:915
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:963
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1131
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:903
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:951
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1119
 msgid "List"
 msgstr "Listado"
 
@@ -2483,9 +2520,9 @@ msgstr "Activar/desactivar"
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:759
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:819
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:849
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:945
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:993
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1101
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:933
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:981
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1089
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:110
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:113
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:116
@@ -2525,6 +2562,8 @@ msgstr "Activar/desactivar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7634
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8042
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8057
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8444
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8549
 msgid "Edit"
 msgstr "Editar"
 
@@ -2549,9 +2588,9 @@ msgstr "Eliminar"
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:741
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:771
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:831
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:921
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:969
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1125
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:909
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:957
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1113
 msgid "Create"
 msgstr "Crear"
 
@@ -2574,9 +2613,9 @@ msgstr "Listado de artículos pendientes"
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:621
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:813
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:843
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:933
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:981
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1113
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:921
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:969
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1101
 msgid "Publish/unpublish"
 msgstr "Publicar/despublicar"
 
@@ -2596,10 +2635,10 @@ msgstr "Publicar/despublicar"
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:729
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:765
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:825
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:951
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:999
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1077
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1095
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:939
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:987
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1065
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1083
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:359
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:362
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1079
@@ -2668,6 +2707,8 @@ msgstr "Publicar/despublicar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7637
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7808
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8060
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8501
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8504
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -2686,9 +2727,9 @@ msgstr "Gestionar portada principal"
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:471
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:507
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:543
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:957
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1005
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1089
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:945
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:993
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1077
 msgid "Send to trash and restore"
 msgstr "Enviar y restaurar de la papelera"
 
@@ -2702,9 +2743,9 @@ msgstr "Administrar publicidades en portadas"
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:357
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:609
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1011
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1023
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1035
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1143
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1131
 msgid "Manage frontpage"
 msgstr "Gestionar portada"
 
@@ -2749,93 +2790,81 @@ msgid "List trashed elementes"
 msgstr "Listar elementos en papelera"
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:855
-msgid "Import agency"
-msgstr "Importador de agencia"
+msgid "Import news from agency"
+msgstr "Importar noticias de agencias"
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:861
-msgid "Import EuropaPress articles"
-msgstr "Importador de artículos de EuropaPress"
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:867
 msgid "Import XML files"
 msgstr "Importación de archivos XML"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:873
-msgid "Import EFE articles"
-msgstr "Importación de artículos de EFE"
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:879
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:867
 msgid "Manage global settings"
 msgstr "Gestionar preferencias globales"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:885
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:873
 msgid "Access instance manager"
 msgstr "Acceder al gestor de instancias"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:891
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:879
 msgid "Modify other users's content"
 msgstr "Modificar contenido de otros usuarios"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:897
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:885
 msgid "Delete other users's content"
 msgstr "Eliminar contenido de otros usuarios"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:903
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:891
 msgid "Configure system-wide settings"
 msgstr "Configurar las preferencias globales"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:909
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:897
 msgid "Change the user group from one user"
 msgstr "Cambiar el grupo de usuario de un usuario"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:927
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:975
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1119
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:915
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:963
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1107
 msgid "Manage widget"
 msgstr "Gestionar widget"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:939
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:927
 msgid "Administrate settings"
 msgstr "Administrar configuraciones"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:987
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1011
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1065
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1071
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1107
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:975
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:999
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1053
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1059
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1095
 msgid "Manage module settings"
 msgstr "Gestionar preferencias del módulo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1017
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1005
 msgid "Manage agenda"
 msgstr "Gestionar agenda"
 
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1017
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1029
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1041
 msgid "Manage favorite flag"
 msgstr "Gestionar estado de favorito"
 
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1035
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1041
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1047
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1053
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1059
 msgid "Manage module setting"
 msgstr "Gestionar preferencias del módulo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1083
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1071
 msgid "Import EFE articles file"
 msgstr "Importación de artículos de EFE"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1137
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1125
 msgid "Manage favourite flag"
 msgstr "Gestionar estado de favorito"
 
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1150
-msgid "Config Import EuropaPress"
-msgstr "Configurar el importador de EuropaPress"
-
-#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1156
-msgid "Config Import EFE"
-msgstr "Configurar el importador de EFE"
+#: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:1137
+msgid "Config News Agency importer"
+msgstr "Configurar el importador de agencias"
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Special.php:64
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:914
@@ -2943,15 +2972,17 @@ msgstr "El CMS para periodismo"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6332
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7910
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8606
 msgid "User name"
 msgstr "Nombre de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2558
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2561
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6338
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7913
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7973
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8249
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8612
 msgid "Password"
 msgstr "Contraseña"
 
@@ -2963,7 +2994,7 @@ msgstr "Entrar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:14
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4439
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7919
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8366
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8375
 msgid "About"
 msgstr "Sobre"
 
@@ -2973,8 +3004,8 @@ msgstr "Sobre"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4445
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7922
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7925
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8369
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8372
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8378
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8381
 msgid "Help"
 msgstr "Ayuda"
 
@@ -2984,8 +3015,8 @@ msgstr "Ayuda"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4451
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7928
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7931
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8375
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8378
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8384
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8387
 msgid "Privacy Policy"
 msgstr "Política de privacidad"
 
@@ -2995,8 +3026,8 @@ msgstr "Política de privacidad"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4457
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7934
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7937
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8381
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8384
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8390
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8393
 msgid "Legal"
 msgstr "Legal"
 
@@ -3215,7 +3246,7 @@ msgstr "Subscriptores"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2276
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2363
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2453
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2627
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2630
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2714
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2849
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3002
@@ -3275,7 +3306,7 @@ msgstr "Enviado"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2132
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2378
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2504
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2639
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2642
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2876
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3185
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3371
@@ -3296,6 +3327,8 @@ msgstr "Enviado"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7757
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7832
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8039
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8435
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8537
 msgid "Actions"
 msgstr "Acciones"
 
@@ -3376,6 +3409,8 @@ msgstr "Sí"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7865
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8075
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8138
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8417
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8489
 msgid "No"
 msgstr "No"
 
@@ -3413,7 +3448,7 @@ msgstr "Configuración"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2222
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2444
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2447
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2525
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2528
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2900
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2903
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2990
@@ -3459,6 +3494,9 @@ msgstr "Configuración"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7493
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7496
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8084
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8459
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8462
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8570
 msgid "Save"
 msgstr "Guardar"
 
@@ -3479,10 +3517,10 @@ msgstr "Guardar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2483
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2489
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2492
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2528
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2531
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2537
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2534
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2540
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2543
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2702
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2705
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2708
@@ -3533,9 +3571,9 @@ msgstr "Volver a la lista"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:824
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1619
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2486
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2534
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2579
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2591
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2537
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2582
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2594
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3575
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4505
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4598
@@ -3714,6 +3752,12 @@ msgstr "Subscribir"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7505
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7517
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8099
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8465
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8468
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8471
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8573
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8576
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8579
 msgid "Go back"
 msgstr "Atrás"
 
@@ -3760,10 +3804,11 @@ msgstr "Nombre"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:404
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:530
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2501
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2546
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2549
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6260
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8036
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8132
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8534
 msgid "Activated"
 msgstr "Activado"
 
@@ -3786,12 +3831,16 @@ msgstr "Desactivado por el administrador"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:425
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6266
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6272
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8540
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8546
 msgid "Edit user"
 msgstr "Editar usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:428
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6134
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6206
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8408
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8480
 msgid "Delete user"
 msgstr "Eliminar usuario"
 
@@ -3835,6 +3884,8 @@ msgstr ""
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7442
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7850
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8072
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8414
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8486
 msgid "Yes, delete"
 msgstr "Si, eliminar"
 
@@ -3955,11 +4006,13 @@ msgstr "Guardar y continuar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:500
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1307
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2474
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2522
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2525
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3275
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6290
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6293
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6617
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8564
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8567
 msgid "Save and exit"
 msgstr "Guardar y salir"
 
@@ -4026,8 +4079,8 @@ msgstr "Sobreescribir HTML actual"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8090
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8093
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8096
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8420
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8423
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8663
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8666
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -4618,7 +4671,7 @@ msgstr "Sección"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1196
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1349
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1436
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2636
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2639
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2864
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3176
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4835
@@ -5089,7 +5142,7 @@ msgstr "Tamaño de archivo"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7124
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7169
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7664
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8405
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8648
 msgid "Description"
 msgstr "Descripción"
 
@@ -5108,7 +5161,7 @@ msgid "Creating Album"
 msgstr "Creando álbum"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1757
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2561
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2564
 msgid "Agency"
 msgstr "Agencia"
 
@@ -5269,6 +5322,7 @@ msgstr "Idioma por omisión"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1898
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6353
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8627
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para los mensajes, interfaz y medidas en su página web."
 
@@ -5862,7 +5916,7 @@ msgid "Metadata"
 msgstr "Metadatos"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2468
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2513
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2516
 msgid "News agency"
 msgstr "Agencias de noticias"
 
@@ -5871,7 +5925,7 @@ msgid "Add server"
 msgstr "Añadir servidor"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2495
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2543
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2546
 msgid "Source name"
 msgstr "Nome del origen"
 
@@ -5879,39 +5933,44 @@ msgstr "Nome del origen"
 msgid "Sync from"
 msgstr "Sincronizar desde"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2516
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2513
+msgid "Removes the synchronized files for this source"
+msgstr "Elimina los archivos sincronizados para este origen"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2519
 msgid "Update source"
 msgstr "Actualzar origen"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2519
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2522
 msgid "Add source"
 msgstr "Añadir origen"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2549
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2552
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6647
 msgid "Url"
 msgstr "Url"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2552
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2555
 msgid "The server url for this source. Example: ftp://server.com/path"
 msgstr ""
 "La url del servidor para esta origen. Por ejemplo. ftp://server.com/path"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2555
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2558
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6254
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8246
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8528
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2564
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2567
 msgid "When importing elements this will be the signature"
 msgstr "Al importar elementos esta será la firma"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2567
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2570
 msgid "Sync elements newer than"
 msgstr "Sincronizar elementos más actuales que"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2570
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2573
 msgid ""
 "Set this to you preferences to fetch elements since a fixed date.<br>Less "
 "time means faster synchronizations."
@@ -5919,100 +5978,100 @@ msgstr ""
 "Establezca esta preferenca para obtener los elementos desde una fecha fija."
 "<br>Menos tiempo implica sincronizaciones más rápidas."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2576
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2582
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2579
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2585
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2588
 msgid "Sync with server"
 msgstr "Sincronizar con servidor"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2588
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2594
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2591
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2597
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2600
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2603
 msgid "Reload list"
 msgstr "Recargar listado"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2603
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2606
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2609
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6827
 msgid "Config Europapress module"
 msgstr "Configurar módulo Europapress"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2609
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2612
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4484
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6830
 msgid "Config"
 msgstr "Configuración"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2612
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2615
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5567
 msgid "%1 articles"
 msgstr "%1 artículos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2615
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2618
 msgid "Filter by title or content"
 msgstr "Filtrar por título o contenido"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2618
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2621
 msgid "and in"
 msgstr "y en"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2621
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2624
 msgid "All sources"
 msgstr "Todos los orígenes"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2624
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2627
 msgid "Priority"
 msgstr "Prioridad"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2630
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2633
 msgid "Attachments"
 msgstr "Adjuntos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2633
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2636
 msgid "Origin"
 msgstr "Origen"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2642
-msgid "Basic"
-msgstr "Básica"
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2645
+msgid "Urgent"
+msgstr "Urgente"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2648
 msgid "Important"
 msgstr "Importante"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2651
-msgid "Urgent"
-msgstr "Urgente"
-
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2654
+msgid "Basic"
+msgstr "Básica"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2657
 msgid "With image"
 msgstr "Con imagen"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2657
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2660
 msgid "This new has attached images"
 msgstr "Esta noticia tiene imagenes asociadas"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2660
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2663
 msgid "With video"
 msgstr "Con vídeo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2663
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2669
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2675
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2666
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2672
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2678
 msgid "This new has attached videos"
 msgstr "Esta noticia tiene vídeos asociados"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2666
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2669
 msgid "With files"
 msgstr "Con archivos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2672
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2675
 msgid "With documentary modules"
 msgstr "Con modulos documentales"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2678
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2681
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2684
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2696
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2699
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2738
@@ -6027,24 +6086,24 @@ msgstr "Con modulos documentales"
 msgid "Import"
 msgstr "Importar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2684
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2687
 msgid "There is no elements to import"
 msgstr "No hay ningún elemento para poder importarlo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2687
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2690
 msgid ""
 "Try syncing from server by click over the \"Sync with server\" button above."
 msgstr ""
 "Intente actualizar esta lista desde el servidor pulsando el botón "
 "«Sincronizar con servidor» desde la barra de herramientas superior."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2693
-msgid "Importing article"
-msgstr "Importando artículo"
-
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2711
-msgid "You are about to import one article with the next data"
-msgstr "Está a punto de importar un artículo con los siguientes datos"
+msgid ""
+"You are about to import one article, please select a category where to "
+"import the article"
+msgstr ""
+"Está a punto de importar un artículo, seleccione la categoría en donde "
+"importarlo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2717
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3659
@@ -6078,6 +6137,7 @@ msgstr "Este artículo fue importado con anterioridad."
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2759
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6308
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7643
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8582
 msgid "Basic information"
 msgstr "Información básica"
 
@@ -6400,6 +6460,7 @@ msgstr "Nuevo autor"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3359
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6239
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8003
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8513
 msgid "Filter by name"
 msgstr "Filtrar por nombre"
 
@@ -7003,7 +7064,7 @@ msgid "Support & Help"
 msgstr "Soporte y ayuda"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4394
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8387
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8396
 msgid ""
 "Your password must contain 5 characters and dont contain the word <password> "
 "or your user name."
@@ -7012,7 +7073,7 @@ msgstr ""
 "palabra <password> o su nombre de usuario."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4397
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8390
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8399
 msgid "Please check your first password and check again."
 msgstr "Por favor, compruebe su contraseña y pruebe de nuevo"
 
@@ -7021,7 +7082,7 @@ msgid "OpenNeMaS administration"
 msgstr "Administración de OpenNemas"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4403
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8363
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8357
 msgid "Go to admin main page"
 msgstr "Ir a la página de administración"
 
@@ -7030,9 +7091,6 @@ msgid "Search..."
 msgstr "Buscar..."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4409
-msgid "There are new comments to moderate"
-msgstr "Non hay comentarios para moderar"
-
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4412
 msgid "Pending comments"
 msgstr "Comentarios pendientes"
@@ -7043,6 +7101,8 @@ msgstr "Contactar con soporte"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4418
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4421
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8360
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8363
 msgid "Edit my profile"
 msgstr "Editar mi perfíl"
 
@@ -7063,6 +7123,7 @@ msgid "Logout from control panel"
 msgstr "Salir del panel de administración"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4436
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8372
 msgid "Log out"
 msgstr "Salir"
 
@@ -7806,7 +7867,7 @@ msgid "There is no SQL errors registered in database."
 msgstr "No hay ningún error SQL registrado en la base de datos."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6017
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8396
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8405
 msgid "We already have being informed of this error: %1"
 msgstr "Ya hemos sido informados de este error: %1"
 
@@ -7860,102 +7921,131 @@ msgstr "El componente slug de la url"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6137
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6209
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8411
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8483
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "¿Está seguro de que quiere eliminar \"<span>%title%</span>\"?"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6146
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8420
 msgid "User groups"
 msgstr "Grupos de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6149
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8423
 msgid "New Privilege"
 msgstr "Nuevo privilegio"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6152
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8426
 msgid "New User Group"
 msgstr "Nuevo grupo de usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6155
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8429
 msgid "New User group"
 msgstr "Nuevo grupo de usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6158
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6200
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8432
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8474
 msgid "Group name"
 msgstr "Nombre del grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6164
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6167
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8438
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8441
 msgid "Edit group"
 msgstr "Editar grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6173
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8447
 msgid "Delete group"
 msgstr "Eliminar grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6176
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8450
 msgid "There is no groups created yet."
 msgstr "No hay ningún grupo creado todavía."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6179
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8453
 msgid "Editing group"
 msgstr "Editando grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6182
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8456
 msgid "Creating user group"
 msgstr "Creando grupo de usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6203
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6320
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6323
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8477
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8594
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8597
 msgid "Privileges"
 msgstr "Privilegios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6218
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8492
 msgid "Editing user group"
 msgstr "Editando grupo de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6224
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8498
 msgid "Delete selected users"
 msgstr "Eliminar usuarios seleccionados"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6233
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8507
 msgid "Create new user"
 msgstr "Crear nuevo usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6236
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8510
 msgid "New user"
 msgstr "Nuevo usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6242
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8516
 msgid "or"
 msgstr "o"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6245
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8519
 msgid "username"
 msgstr "nombre de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6248
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8522
 msgid "and group:"
 msgstr "y grupo:"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6251
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8525
 msgid "Full name"
 msgstr "Nombre comopleto"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6257
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8531
 msgid "Group"
 msgstr "Grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6269
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8543
 msgid "Activate user"
 msgstr "Usuario activado"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6278
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8552
 msgid "Delete this user"
 msgstr "Eliminar este usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6281
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8555
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
@@ -7963,18 +8053,22 @@ msgstr ""
 "con ningún usuario."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6284
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8558
 msgid "Editing user"
 msgstr "Editando usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6287
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8561
 msgid "Creating user"
 msgstr "Creando usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6311
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8585
 msgid "User info"
 msgstr "Información de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6326
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8600
 msgid ""
 "If you want a custom avatar sign up in <a href='http://www.gravatar."
 "com'>gravatar.com</a> with the same email address as you have here in "
@@ -7985,35 +8079,44 @@ msgstr ""
 "electrónico que tienes aquí en OpenNemas"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6329
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8603
 msgid "Display name"
 msgstr "Nombre en pantalla"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6341
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8615
 msgid "Confirm password"
 msgstr "Confirmar contraseña"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6344
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8618
 msgid "Session expire time:"
 msgstr "Tiempo de expiración de sesión:"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6347
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8621
 msgid "minutes"
 msgstr "minutos"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6350
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8624
 msgid "User language"
 msgstr "Idioma del usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6356
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6359
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8630
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8633
 msgid "User group:"
 msgstr "Grupos de usuario:"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6362
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8636
 msgid "--Select one--"
 msgstr "--Seleccione uno--"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6365
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8639
 msgid "Master"
 msgstr "Maestro"
 
@@ -9307,41 +9410,66 @@ msgid "Activated modules"
 msgstr "Módulos activados"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8354
-msgid "Dragons Ahead!"
-msgstr "Manazas fuera!"
-
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8357
-msgid "This section is experimental and could not work as espected"
-msgstr "Esta sección es experimental y puede que no funcione como se espera."
-
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8360
 msgid "Welcome to OpenNeMas instance manager"
 msgstr "Bienvenido al Gestor de instancias de OpenNeMas"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8399
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8417
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8366
+msgid "Do you really want to exit from manager?"
+msgstr "¿Está seguro de que quiere salir del gestor?"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8369
+msgid "Logout from manager"
+msgstr "Salir del gestor"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8642
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8660
 msgid "Application commands"
 msgstr "Ordenes de la aplicación"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8402
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8645
 msgid "Command name"
 msgstr "Nombre de la orden"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8408
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8651
 msgid "Params"
 msgstr "Parámetros"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8411
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8654
 msgid "Deploy"
 msgstr "Desplegar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8414
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8657
 msgid "Execute"
 msgstr "Ejecutar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8426
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8669
 msgid "Framework status"
 msgstr "Estado del framework"
+
+#~ msgid "Import EuropaPress articles"
+#~ msgstr "Importador de artículos de EuropaPress"
+
+#~ msgid "Import EFE articles"
+#~ msgstr "Importación de artículos de EFE"
+
+#~ msgid "Config Import EuropaPress"
+#~ msgstr "Configurar el importador de EuropaPress"
+
+#~ msgid "Config Import EFE"
+#~ msgstr "Configurar el importador de EFE"
+
+#~ msgid "Importing article"
+#~ msgstr "Importando artículo"
+
+#~ msgid "There are new comments to moderate"
+#~ msgstr "Non hay comentarios para moderar"
+
+#~ msgid "Dragons Ahead!"
+#~ msgstr "Manazas fuera!"
+
+#~ msgid "This section is experimental and could not work as espected"
+#~ msgstr ""
+#~ "Esta sección es experimental y puede que no funcione como se espera."
 
 #, fuzzy
 #~ msgid "Acept"
