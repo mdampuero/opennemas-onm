@@ -31,9 +31,9 @@
                     <a class="delChecked" data-controls-modal="modal-album-batchDelete" href="#" title="{t}Delete{/t}">
                         <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </a>
-				</li>
-				{/acl}
-				{acl isAllowed="ALBUM_AVAILABLE"}
+                </li>
+                {/acl}
+                {acl isAllowed="ALBUM_AVAILABLE"}
                 <li>
                     <button id="batch-publish" type="submit" name="status" value="0">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}

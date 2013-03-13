@@ -354,8 +354,8 @@ class ArticlesController extends Controller
         }
 
         if (is_array($article->params) &&
-            (array_key_exists('imageHome', $article->params)) &&
-            !empty($article->params['imageHome'])
+           (array_key_exists('imageHome', $article->params)) &&
+           !empty($article->params['imageHome'])
         ) {
             $photoHome = new \Photo($article->params['imageHome']);
             $this->view->assign('photo3', $photoHome);
@@ -906,6 +906,7 @@ class ArticlesController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
+
         $this->checkAclOrForward('ARTICLE_AVAILABLE');
 
         $status         = $request->query->getDigits('new_status', 0);
@@ -919,9 +920,13 @@ class ArticlesController extends Controller
         ) {
             foreach ($selected as $id) {
                 $article = new \Article($id);
-                $article->set_available($status, $_SESSION['userid']);
-                if ($status == 0) {
-                    $article->set_favorite($status, $_SESSION['userid']);
+                if ($article->category != 20) {
+                    $article->set_available($status, $_SESSION['userid']);
+                    if ($status == 0) {
+                        $article->set_favorite($status, $_SESSION['userid']);
+                    }
+                } else {
+                    m::add(sprintf(_('You must assign a section for "%s"'), $article->title), m::ERROR);
                 }
             }
         }
@@ -953,7 +958,6 @@ class ArticlesController extends Controller
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
         $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page           = $request->query->getDigits('page', 1);
-
         if (is_array($selected)
             && count($selected) > 0
         ) {

@@ -954,7 +954,7 @@ $frontendRoutes->add(
         '/portadas-papel/{year}/{month}/{day}',
         array(
            '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
-           'month'       => date('n'),
+           'month'       => 0,
            'day'         => 1,
         ),
         array(

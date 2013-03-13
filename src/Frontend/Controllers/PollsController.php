@@ -91,7 +91,8 @@ class PollsController extends Controller
         // Don't execute action logic if was cached before
         $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('poll/poll-frontpage.tpl', $cacheID))) {
+            || (!$this->view->isCached('poll/poll-frontpage.tpl', $cacheID))
+        ) {
 
             if (isset($this->category) && !empty($this->category)) {
                 $polls = $this->cm->find_by_category(
@@ -210,7 +211,7 @@ class PollsController extends Controller
         $message = null;
         $alreadyVoted = false;
         $voted = (int) $request->query->getDigits('voted', 0);
-        $valid = (int) $request->query->getDigits('valid', null);
+        $valid = (int) $request->query->getDigits('valid', 3);
         if ($voted == 1) {
             if ($voted == 1 && $valid === 1) {
                 $message = _('Thanks for participating.');
@@ -218,6 +219,9 @@ class PollsController extends Controller
                 $message = _('Please select a valid poll answer.');
             }
         } elseif (isset($cookie)) {
+            $alreadyVoted = true;
+            $message = _('You have voted this poll previously.');
+        } elseif (($valid === 0) && ($voted == 0)) {
             $alreadyVoted = true;
             $message = _('You have voted this poll previously.');
         }

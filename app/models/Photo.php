@@ -265,30 +265,6 @@ class Photo extends Content
                         realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
                     );
 
-                    // Article inner thumbnail
-                    $thumb->thumbnailImage(
-                        $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
-                        $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
-                        true
-                    );
-                    $thumb->writeImage(
-                        $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                        . '-' . $imageThumbSize['image_thumb_size']['height']
-                        . '-' . $finalPhotoFileName
-                    );
-
-                    // Generate frontpage thumbnails
-                    $thumb->thumbnailImage(
-                        $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
-                        $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
-                        true
-                    );
-                    $thumb->writeImage(
-                        $uploadDir.$imageThumbSize['image_front_thumb_size']['width']
-                        . '-' . $imageThumbSize['image_front_thumb_size']['height']
-                        . '-' . $finalPhotoFileName
-                    );
-
                     // Main thumbnail
                     $thumb->thumbnailImage(
                         $imageThumbSize['image_thumb_size']['width'] ?: 140,
@@ -451,30 +427,6 @@ class Photo extends Content
 
                         // Thumbnail handler
                         $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
-
-                        // Article inner thumbnail
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 480,
-                            $imageThumbSize['image_front_thumb_size']['height'] ?: 250,
-                            true
-                        );
-                        $thumb->writeImage(
-                            $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                            .'-'.$imageThumbSize['image_thumb_size']['height']
-                            .'-'.$finalPhotoFileName
-                        );
-
-                        // Generate frontpage thumbnails
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_front_thumb_size']['width'] ?: 350,
-                            $imageThumbSize['image_front_thumb_size']['height'] ?: 200,
-                            true
-                        );
-                        $thumb->writeImage(
-                            $uploadDir.$imageThumbSize['image_front_thumb_size']['width']
-                            .'-'.$imageThumbSize['image_front_thumb_size']['height']
-                            .'-'.$finalPhotoFileName
-                        );
 
                         // Main thumbnail
                         $thumb->thumbnailImage(

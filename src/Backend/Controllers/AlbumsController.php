@@ -49,8 +49,8 @@ class AlbumsController extends Controller
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($category, $contentType);
+        list($this->parentCategories, $this->subcat, $this->categoryData)
+            = $this->ccm->getArraysMenu($category, $contentType);
 
         $this->view->assign(
             array(

@@ -4,7 +4,8 @@
  * Start up and setup the app
 */
 
-//TODO: use includepath as import-tools.
+require __DIR__.'/../app/autoload.php';
+
 
 $_SERVER['SERVER_NAME']   = 'www.cronicasdelaemigracion.com';
 //$_SERVER['SERVER_NAME'] = 'onm-cronicas.local';
@@ -19,11 +20,9 @@ require __DIR__.'/../app/bootstrap.php';
  * Setup view
 */
 $tpl = new Template(TEMPLATE_USER);
-//$tpl->setConfig('newslibrary');
 
 $urlBase = SITE_URL."seccion/";
-//TODO: work with db
-//$menuItems     = Menu::renderMenu('frontpage');
+
 $date          =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
 $basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
@@ -36,12 +35,17 @@ if ( !file_exists($basePath) ) {
 // multi handle
 $mh = curl_multi_init();
 
-$items = array('home', 'cronicas', 'galicia', 'castillaleon', 'asturias',
-    'madrid', 'canarias', 'andalucia', 'cantabria', 'baleares', 'paisvasco');
+$menu = new \Menu();
+$menu->getMenu('archive');
 
-//foreach ($menuItems->items as $id => $item) {
-foreach ($items as $category_name) {
-    // $category_name = $item->link;
+if (count(($menu->items)) <= 0) {
+    echo "There are no frontpages. You must define archive menu. \n";
+    die();
+}
+
+foreach ($menu->items as $item) {
+
+    $category_name = $item->link;
 
     if ( !empty($category_name) ) {
 
@@ -69,14 +73,16 @@ do {
 $pattern     = array();
 $replacement = array();
 
-foreach ($items as $category) {
+foreach ($menu->items as $item) {
+    $category = $item->link;
     $pattern[] = "@href=\"/seccion/{$category}\"@";
     //archive/digital/2013/02/02/home.html
     $replacement[] = "href=\"/archive/digital{$directoryDate}{$category}.html\"";
 }
-    array_push($pattern, "@href=\"/\"@");
-    //archive/digital/2013/02/02/home.html
-    array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
+
+array_push($pattern, "@href=\"/\"@");
+//archive/digital/2013/02/02/home.html
+array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
 
   // get content and remove handles
 foreach ($curly as $category_name => $c) {
