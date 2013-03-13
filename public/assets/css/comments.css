@@ -2379,8 +2379,10 @@ pre .tex .formula{
 }
 
 .post-content .post-message {
-
     font-size: 0.9em;
     line-height: 1.3em;
+}
 
+div#comments_thread {
+    margin: 15px 10px 10px 0px;
 }
