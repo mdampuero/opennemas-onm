@@ -22,7 +22,7 @@ $.fn.stickyfloat = function(options, lockBottom) {
 
     $obj.css({ position: 'absolute' });
 
-    $(window).scroll(function () { 
+    $(window).scroll(function () {
         if ( opts.lockBottom ) {
             var bottomPos = $obj.parent().height() - $obj.height() + parentPaddingTop; //get the maximum scrollTop value
             if( bottomPos < 0 )
@@ -33,7 +33,7 @@ $.fn.stickyfloat = function(options, lockBottom) {
 
         var pastStartOffset         = $(document).scrollTop() > opts.startOffset;   // check if the window was scrolled down more than the start offset declared.
         var objFartherThanTopPos    = $obj.offset().top > startOffset;  // check if the object is at it's top position (starting point)
-        var objBiggerThanWindow     = $obj.outerHeight() < $(window).height();  // if the window size is smaller than the Obj size, then do not animate.
+        var objBiggerThanWindow     = $obj.outerHeight(false) < $(window).height();  // if the window size is smaller than the Obj size, then do not animate.
 
         // if window scrolled down more than startOffset OR obj position is greater than
         // the top position possible (+ offsetY) AND window size must be bigger than Obj size
