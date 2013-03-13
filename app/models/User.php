@@ -195,8 +195,8 @@ class User
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM users WHERE pk_user = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM users WHERE pk_user = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -564,7 +564,7 @@ class User
      * @param  string     $email
      * @return array|null
      */
-    public function getUserDataByEmail($email)
+    public function findByEmail($email)
     {
         $sql = 'SELECT * FROM users WHERE email=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
@@ -575,7 +575,20 @@ class User
             return null;
         }
 
-        return $rs->fields;
+        $this->id               = $rs->fields['pk_user'];
+        $this->login            = $rs->fields['login'];
+        $this->password         = $rs->fields['password'];
+        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->email            = $rs->fields['email'];
+        $this->name             = $rs->fields['name'];
+        $this->deposit          = $rs->fields['deposit'];
+        $this->type             = $rs->fields['type'];
+        $this->token            = $rs->fields['token'];
+        $this->authorize        = $rs->fields['authorize'];
+        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->accesscategories = $this->readAccessCategories();
+
+        return $this;
     }
 
     /**
@@ -585,21 +598,29 @@ class User
      *
      * @return user if exists false otherwise
      **/
-    public function getUserByToken($token)
+    public function findByToken($token)
     {
-        $sql   = 'SELECT count(*) FROM users WHERE token=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $token);
+        $sql   = 'SELECT * FROM users WHERE token=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, $token);
 
-        if ($rs === false) {
-            return 0;
-        } elseif ($rs != 1) {
-            return 0;
+        if ($rs == false) {
+            return null;
         }
 
-        $sql2   = 'SELECT * FROM users WHERE token=?';
-        $rs2 = $GLOBALS['application']->conn->Execute($sql2, $token);
+        $this->id               = $rs->fields['pk_user'];
+        $this->login            = $rs->fields['login'];
+        $this->password         = $rs->fields['password'];
+        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->email            = $rs->fields['email'];
+        $this->name             = $rs->fields['name'];
+        $this->deposit          = $rs->fields['deposit'];
+        $this->type             = $rs->fields['type'];
+        $this->token            = $rs->fields['token'];
+        $this->authorize        = $rs->fields['authorize'];
+        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->accesscategories = $this->readAccessCategories();
 
-        return $rs2->fields;
+        return $this;
     }
 
     /**

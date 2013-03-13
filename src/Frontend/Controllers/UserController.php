@@ -44,6 +44,29 @@ class UserController extends Controller
     }
 
     /**
+     * Shows the user information
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function showAction(Request $request)
+    {
+        if (array_key_exists('userid', $_SESSION) && !empty($_SESSION['userid'])) {
+            $user = new \User($_SESSION['userid']);
+
+            return $this->render(
+                'user/show.tpl',
+                array(
+                    'user'  => $user
+                )
+            );
+        }
+
+        return $this->redirect($this->generateUrl('frontend_auth_login'));
+    }
+
+    /**
      * Handles the registration of a new user in frontend
      *
      * @param Request $request the request object
@@ -175,195 +198,41 @@ class UserController extends Controller
     }
 
     /**
-     * Shows the form for recovering the pass of a user and
-     * sends the mail to the user
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function recoverPassAction(Request $request)
-    {
-        if ('POST' != $request->getMethod()) {
-            return $this->render('login/recover_pass.tpl');
-        } else {
-            //Get config vars
-            $configRecaptcha = s::get('recaptcha');
-            $configSiteName = s::get('site_name');
-
-            $recaptcha_challenge_field = $request->request->filter(
-                'recaptcha_challenge_field',
-                null,
-                FILTER_SANITIZE_STRING
-            );
-            $recaptcha_response_field = $request->request->filter(
-                'recaptcha_response_field',
-                null,
-                FILTER_SANITIZE_STRING
-            );
-
-            // Get reCaptcha validate response
-            $resp = recaptcha_check_answer(
-                $configRecaptcha['private_key'],
-                $_SERVER["REMOTE_ADDR"],
-                $recaptcha_challenge_field,
-                $recaptcha_response_field
-            );
-
-            // What happens when the CAPTCHA was entered incorrectly
-            // if (!$resp->is_valid) {
-            //     echo('The reCAPTCHA wasn\'t entered correctly. Please try it again.');
-            // } else {
-
-            // Correct CAPTCHA - Filter $_POST vars from FORM
-            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-
-            // Get user by email
-            $user = new User();
-            $userData = $user->getUserDataByEmail($email);
-
-
-            // If e-mail exists in DB
-            if (!empty($userData) && $userData['type'] == 1) {
-
-                // Generate and update user with new token
-                $token = md5(uniqid(mt_rand(), true));
-                $user->updateUserToken($userData['pk_user'], $token);
-
-                //Build mail body
-                $mailSubject  = utf8_decode("Recordatorio de contrasinal - ".$configSiteName);
-                $mailBody = "Estimad@ ".$userData['login'].", \r\n";
-                $mailBody.= "Para  reestablecer su contraseña, por favor acceda a este enlace:\r\n";
-                $mailBody.= SITE_URL."regenerate/pass/check/".$token."/\r\n\n";
-                $mailBody.= "Podrás modificar tus datos siempre que desee, ";
-                $mailBody.= "incluido la contraseña, en las opciones de usuario\r\n\n";
-                $mailBody.= "Gracias por formar parte de la comunidad de ".$configSiteName.".\r\n\n";
-                $mailBody.= "Un saludo,\r\n\n";
-                $mailBody.= "El equipo de ".$configSiteName;
-
-                $to = $email;
-
-                $mail = new PHPMailer();
-                $mail->SetLanguage('es');
-                $mail->IsSMTP();
-                $mail->Host = MAIL_HOST;
-                $mail->Username = MAIL_USER;
-                $mail->Password = MAIL_PASS;
-
-                if (!empty($mail->Username) && !empty($mail->Password)) {
-                    $mail->SMTPAuth = true;
-                } else {
-                    $mail->SMTPAuth = false;
-                }
-
-                $mail->Subject = $mailSubject;
-                $mail->From = "mailer@opennemas.com";
-                $mail->FromName = $configSiteName;
-                $mail->Body = utf8_decode($mailBody);
-
-                $mail->AddAddress($to, $to);
-
-                if ($mail->Send()) {
-                    $success = 'Comprobe a bandexa de entrada do seu correo electrónico'
-                            .' para cambiar a contrasinal.</br>'
-                            . 'Esta páxina será redireccionada en 8 segundos.';
-                    $this->view->assign('success', $success);
-                } else {
-                    $error = 'A ocurrido un erro. Por favor, ténteo de novo.';
-                    $this->view->assign('error', $error);
-                }
-
-                // Display form and assign flag to template
-                $this->view->assign('mail_ok', true);
-
-            } else {
-                // If e-mail doesn't exists
-                $error = 'O enderezo electrónico non se atopa nos nosos rexistros.';
-                $this->view->assign('error', $error);
-            }
-
-            // Display form
-            return $this->render('login/recover_pass.tpl');
-        }
-    }
-
-    /**
-     * Shows the user information
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function showAction(Request $request)
-    {
-        // Get user id from GET
-        $userId = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-
-        if (array_key_exists('userid', $_SESSION) && !empty($_SESSION['userid'])) {
-            $user = new \User($_SESSION['userid']);
-
-            // Generate token for security
-            $token = md5(uniqid(mt_rand(), true));
-
-            return $this->render(
-                'login/register.tpl',
-                array(
-                    'user'  => $user,
-                    'token' => $token
-                )
-            );
-        } else {
-            // If actual session user is not the requested user
-            return $this->redirect($this->generateUrl('frontend_frontpage'));
-        }
-    }
-
-    /**
      * Updates the user data
      *
      * @param Request $request the request object
      *
      * @return Response the response object
      **/
-    public function update(Request $request)
+    public function updateAction(Request $request)
     {
-        // Get variables from GET
-        $userId = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $token  = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
-
-        // Get variables from the user FORM
-        $data['login']    = $request->request->filter('user_name', null, FILTER_SANITIZE_STRING);
-        $data['name']     = $request->request->filter('full_name', null, FILTER_SANITIZE_STRING);
-        $data['password'] = $request->request->filter('pwd', '', FILTER_SANITIZE_STRING);
-        $data['cpwd']     = $request->request->filter('cpwd', '', FILTER_SANITIZE_STRING);
-        $data['email']    = $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL);
-
-        // Flag to check if response is ok and redirect user from template
-        $resp = false;
-        if ($userId == $_SESSION['userid']) {
-            // Get user data, check token and confirm pass
-            $user = new \User($userId);
-            if ($user->getUserByToken($token) != 0
-                && $data['password'] == $data['cpwd']) {
-
-                if ($user->update($data)) {
-                    $resp = true;
-                    $this->view->assign('success', 'Os datos do usuario foron modificados correctamente');
-                } else {
-                    $error = 'A ocurrido un erro ao gardar os datos. Por favor, ténteo de novo.';
-                    $this->view->assign('error', $error);
-                }
-            } else {
-                $error = 'A ocurrido un erro de seguridade. Por favor, ténteo de novo.';
-                $this->view->assign('error', $error);
-            }
-        } else {
-            $error = 'A ocurrido un erro co usuario. Por favor, ténteo de novo.';
-            $this->view->assign('error', $error);
+        if (!isset($_SESSION['userid'])) {
+            return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        $this->view->assign('resp_ok', $resp);
-        $this->view->display('login/register.tpl');
+        // Get variables from the user FORM
+        $data['login']    = $request->request->filter('username', null, FILTER_SANITIZE_STRING);
+        $data['name']     = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
+        $data['email']    = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        $data['password'] = $request->request->filter('pwd', '', FILTER_SANITIZE_STRING);
+        $data['password-verify']     = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
+
+        if ($data['password'] != $data['cpwd']) {
+            return $this->redirect($this->generateUrl('frontend_auth_login'));
+        }
+        // Get user data, check token and confirm pass
+        $user = new \User($userId);
+        if ($user->id <= 0) {
+            if ($user->update($data)) {
+                m::add('Data updated successfully', m::SUCCESS);
+            } else {
+                m::add('There was an error while updating the user data.', m::ERROR);
+            }
+        } else {
+            m::add('The user does not exists.', m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl('frontend_user_show'));
     }
 
     /**
@@ -435,14 +304,123 @@ class UserController extends Controller
     }
 
     /**
+     * Shows the form for recovering the pass of a user and
+     * sends the mail to the user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function recoverPasswordAction(Request $request)
+    {
+        if ('POST' != $request->getMethod()) {
+            return $this->render('user/recover_pass.tpl');
+        } else {
+            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+
+            // Get user by email
+            $user = new \User();
+            $user->findByEmail($email);
+
+            // If e-mail exists in DB
+            if (($user !== false)) {
+                // Generate and update user with new token
+                $token = md5(uniqid(mt_rand(), true));
+                $user->updateUserToken($user->id, $token);
+
+                $url = $this->generateUrl('frontend_user_resetpass', array('token' => $token), true);
+
+                $tplMail = new \Template(TEMPLATE_USER);
+                $tplMail->caching = 0;
+
+                $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
+                $mailBody = $tplMail->fetch(
+                    'user/emails/recoverpassword.tpl',
+                    array(
+                        'user' => $user,
+                        'url'  => $url,
+                    )
+                );
+
+                //  Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/html')
+                    ->setTo($user->email)
+                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $this->view->assign('mailSent', true);
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('logger')->notice(
+                        "Unable to send the recover password email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                }
+
+            } else {
+                m::add(_('Unable to find an user with that email.'), m::ERROR);
+            }
+
+            // Display form
+            return $this->render('user/recover_pass.tpl');
+        }
+    }
+
+    /**
      * Regenerates the pass for a user
      *
      * @param Request $request the request object
      *
      * @return Response the response object
      **/
-    public function regeneratePassAction(Request $request)
+    public function regeneratePasswordAction(Request $request)
     {
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+
+        $user = new \User();
+        $user = $user->findByToken($token);
+
+        if ('POST' !== $request->getMethod()) {
+            if (empty($user->id)) {
+                m::add(
+                    _(
+                        'Unable to find the password reset request. '
+                        .'Please check the url we sent you in the email.'
+                    ),
+                    m::ERROR
+                );
+                $this->view->assign('userNotValid', true);
+            } else {
+                $this->view->assign(
+                    array(
+                        'user' => $user
+                    )
+                );
+            }
+        } else {
+            $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
+            $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
+
+            if ($password == $passwordVerify && !empty($password)) {
+                $user->updateUserPassword($user->id, $password);
+                $user->updateUserToken($user->id, null);
+
+                $this->view->assign('updated', true);
+            } else {
+                m::add(_('Unable to find the password reset request. Please check the url we sent you in the email.'));
+            }
+
+        }
+
+        return $this->render('user/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
 
     }
 }

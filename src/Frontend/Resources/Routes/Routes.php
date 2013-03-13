@@ -102,15 +102,15 @@ $frontendRoutes->add(
     new Route(
         '/user/recover-pass',
         array(
-            '_controller' => 'Frontend:Controllers:UserController:recoverPass',
+            '_controller' => 'Frontend:Controllers:UserController:recoverPassword',
         )
     )
 );
 
 $frontendRoutes->add(
-    'frontend_user_regeneratepass',
+    'frontend_user_resetpass',
     new Route(
-        '/user/regenerate-pass',
+        '/user/reset-pass/{token}',
         array(
             '_controller' => 'Frontend:Controllers:UserController:regeneratePassword',
         )
