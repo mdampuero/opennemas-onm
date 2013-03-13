@@ -346,7 +346,7 @@ class UserController extends Controller
                 $message = \Swift_Message::newInstance();
                 $message
                     ->setSubject($mailSubject)
-                    ->setBody($mailBody, 'text/html')
+                    ->setBody($mailBody, 'text/plain')
                     ->setTo($user->email)
                     ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
 
