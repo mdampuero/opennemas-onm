@@ -374,7 +374,7 @@ h6{
     font-weight:600;font-size:11px;color:#8e949c;text-transform:uppercase;margin:0 0 10px;line-height:1
 }
 #global-nav{
-    margin:0 0 18px;*zoom:1
+    margin:10px 0 18px;*zoom:1
 }
 #global-nav:before,#global-nav:after{
     display:table;content:"";line-height:0
@@ -503,7 +503,7 @@ h6{
     border-color:#ff2e46
 }
 .postbox{
-    position:relative;margin:0 0 18px
+    position:relative;margin:0 10px 18px 0px
 }
 .postbox .avatar{
     top:0
@@ -2381,8 +2381,4 @@ pre .tex .formula{
 .post-content .post-message {
     font-size: 0.9em;
     line-height: 1.3em;
-}
-
-div#comments_thread {
-    margin: 15px 10px 10px 0px;
 }
