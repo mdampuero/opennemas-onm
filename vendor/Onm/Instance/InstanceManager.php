@@ -425,11 +425,6 @@ class InstanceManager
             $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
         } catch (ApacheConfigurationNotCreatedException $e) {
             $errors []= $e->getMessage();
-            $assetFolder = SITE_PATH.DS.'media'.DS.$data['internal_name'];
-            $this->deleteDefaultAssetsForInstance($assetFolder);
-            $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
-            $this->deleteInstanceReferenceInManager($data['id']);
-            $this->deleteApacheConfAndReloadConfiguration($data['internal_name']);
         }
 
         if (count($errors) > 0) {
