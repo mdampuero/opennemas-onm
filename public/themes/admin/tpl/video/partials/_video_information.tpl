@@ -8,7 +8,7 @@
             {else}
                 value="{$information['title']}"
             {/if}
-            class="required" />
+             required="required" class="input-xlarge"/>
     </div>
 </div>
 
