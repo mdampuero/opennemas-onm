@@ -185,7 +185,7 @@ jQuery(document).ready(function($) {
                                 <label for="contact" class="control-label">{t}User password:{/t}</label>
                             </th>
                             <td class="controls">
-                                <input type="password" id="password" class="{if $smarty.request.action eq "new"}required validate-password{/if}" name="password" value="" {if isset($instance)}readonly="readonly"{/if}  required="required" >
+                                <input type="password" id="password" class="{if !isset($instance)}required validate-password required="required"{/if}" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
                             </td>
                             <td>
                                 <span class="default-value">{t}(The password must have between 8 and 16 characters){/t}</span>
@@ -197,7 +197,7 @@ jQuery(document).ready(function($) {
                                 <label for="contact" class="control-label">{t}User contact mail:{/t}</label>
                             </th>
                             <td class="controls">
-                                <input type="text" id="contact_mail" name="contact_mail" value="{$configs['contact_mail']|default:""}" data-password-equals="password">
+                                <input type="email" id="contact_mail" name="contact_mail" value="{$configs['contact_mail']|default:""}" required="required">
                             </td>
                             <td>
 
