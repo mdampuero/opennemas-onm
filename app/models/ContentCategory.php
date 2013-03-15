@@ -323,16 +323,12 @@ class ContentCategory
                 .'OR `pk_photo` IN ('.$contents.')';
             $sqls []= 'DELETE FROM videos '
                 .'WHERE `pk_video` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM photos '
-                .'WHERE `pk_photo` IN ('.$contents.')';
             $sqls []= 'DELETE FROM comments '
                 .'WHERE `pk_comment` IN ('.$contents.')';
             $sqls []= 'DELETE FROM votes '
                 .'WHERE `pk_vote` IN ('.$contents.')';
             $sqls []= 'DELETE FROM ratings '
                 .'WHERE `pk_rating` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM attachments '
-                .'WHERE `pk_attachment` IN ('.$contents.')';
             $sqls []= 'DELETE FROM polls '
                 .'WHERE `pk_poll` IN ('.$contents.')';
             $sqls []= 'DELETE FROM poll_items '
