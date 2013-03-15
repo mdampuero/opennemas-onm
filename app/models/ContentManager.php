@@ -1889,7 +1889,6 @@ class ContentManager
         WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
             AND `contents`.`pk_content`=`articles`.`pk_article`
             AND `contents`.`content_status` =1
-            AND `contents`.`frontpage` =1
             AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0

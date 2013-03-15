@@ -35,7 +35,7 @@ class NewsAgencyController extends Controller
     public function init()
     {
         // Check ACL
-        $this->checkAclOrForward('IMPORT_EFE');
+        $this->checkAclOrForward('IMPORT_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 

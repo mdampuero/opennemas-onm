@@ -107,28 +107,6 @@
     {block name="footer-js"}
         {browser_update}
         {script_tag src="/onm/footer-functions.js" common=1}
-
-        {if isset($smarty.request.action) && ($smarty.request.action == 'new' || $smarty.request.action == 'read')}
-        <script type="text/javascript">
-        try {
-            // Activar la validación
-            new Validation('formulario', { immediate : true });
-            Validation.addAllThese([
-                ['validate-password',
-                    '{t}Your password must contain 5 characters and dont contain the word <password> or your user name.{/t}', {
-                    minLength : 6,
-                    notOneOf : ['password','PASSWORD','Password'],
-                    notEqualToField : 'login'
-                }],
-                ['validate-password-confirm',
-                    '{t}Please check your first password and check again.{/t}', {
-                    equalToField : 'password'
-                }]
-            ]);
-        } catch(e) {
-        }
-        </script>
-        {/if}
     {/block}
 
 
