@@ -344,6 +344,10 @@ class ContentCategory
                 .'WHERE `pk_kiosko` IN ('.$contents.')';
             $sqls []= 'DELETE FROM static_pages '
                 .'WHERE `pk_static_page` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM content_positions '
+                .'WHERE `pk_fk_content` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM contentmeta '
+                .'WHERE `fk_content` IN ('.$contents.')';
 
             foreach ($sqls as $sql) {
                 if ($GLOBALS['application']->conn->Execute($sql) === false) {
