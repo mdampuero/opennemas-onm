@@ -897,7 +897,7 @@ class Photo extends Content
      *
      * @return boolean true if the photo was deleted
      **/
-    public function batchDelete($arrayIds)
+    public static function batchDelete($arrayIds)
     {
 
         $contents = implode(', ', $arrayIds);
