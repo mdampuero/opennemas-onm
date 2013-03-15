@@ -139,7 +139,8 @@ class NITF extends NewsMLG1
      **/
     public function getId()
     {
-        $docId = $this->getData()->head->docdata->xpath('//doc-id')[0];
+        $docId = $this->getData()->head->docdata->xpath('//doc-id');
+        $docId = $docId[0];
         $attributtes = $docId->attributes();
 
         return (string) $attributtes->{'id-string'};
