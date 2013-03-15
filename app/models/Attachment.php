@@ -298,7 +298,7 @@ class Attachment extends Content
      *
      * @return boolean true if the photo was deleted
      **/
-    public function batchDelete($arrayIds)
+    public static function batchDelete($arrayIds)
     {
 
         $contents = implode(', ', $arrayIds);
@@ -313,17 +313,17 @@ class Attachment extends Content
         }
 
         while (!$rs->EOF) {
-            $image      = MEDIA_IMG_PATH . $rs->fields['path_file'].$rs->fields['name'];
-
-            if (file_exists($image)) {
-                @unlink($image);
+            $file = MEDIA_PATH.DS.FILE_DIR.DS.$rs->fields['path'];
+            if (file_exists($file)) {
+                var_dump($file);
+                @unlink($file);
             }
 
             $rs->MoveNext();
         }
 
         $sql = 'DELETE FROM attachments '
-                .'WHERE `attachment` IN ('.$contents.')';
+                .'WHERE `pk_attachment` IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {

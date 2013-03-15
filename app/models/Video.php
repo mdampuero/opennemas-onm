@@ -204,6 +204,66 @@ class Video extends Content
         return true;
     }
 
+
+    /**
+     * Removes videos given its id
+     *
+     * @param array $arrayId the video ids to delete
+     *
+     * @return boolean true if the videos was deleted
+     **/
+    public static function batchDelete($arrayIds)
+    {
+
+        $contents = implode(', ', $arrayIds);
+
+        $sql = "SELECT  video_url, information  FROM videos WHERE author_name='internal' "
+            ." AND pk_video IN (".$contents.")";
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        while (!$rs->EOF) {
+            $image       = MEDIA_PATH.DS . $rs->fields['video_url'];
+            $thumbs      = unserialize($rs->fields['information']);
+            $thumbSmall  = MEDIA_PATH.DS .$thumbs['thumbnails']['small'];
+            $thumbNormal = MEDIA_PATH.DS .$thumbs['thumbnails']['normal'];
+            $thumbBig    = MEDIA_PATH.DS .$thumbs['thumbnails']['big'];
+
+            if (file_exists($image)) {
+                @unlink($image);
+            }
+            if (file_exists($thumbSmall)) {
+                @unlink($thumbSmall);
+            }
+            if (file_exists($thumbNormal)) {
+                @unlink($thumbNormal);
+            }
+            if (file_exists($thumbBig)) {
+                @unlink($thumbBig);
+            }
+
+            $rs->MoveNext();
+        }
+
+        $sql = 'DELETE FROM videos '
+                .'WHERE `pk_video` IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+
+    }
+
     /**
      * Creates a video from a local file
      *

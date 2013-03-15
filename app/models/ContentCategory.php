@@ -321,8 +321,6 @@ class ContentCategory
             $sqls []= 'DELETE FROM albums_photos '
                 .'WHERE `pk_album` IN (' . $contents . ')  '
                 .'OR `pk_photo` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM videos '
-                .'WHERE `pk_video` IN ('.$contents.')';
             $sqls []= 'DELETE FROM comments '
                 .'WHERE `pk_comment` IN ('.$contents.')';
             $sqls []= 'DELETE FROM votes '
@@ -352,6 +350,11 @@ class ContentCategory
                     return false;
                 }
             }
+
+
+            \Photo::batchDelete($contentsArray);
+            \Video::batchDelete($contentsArray);
+            \Attachment::batchDelete($contentsArray);
         }
 
         return true;
