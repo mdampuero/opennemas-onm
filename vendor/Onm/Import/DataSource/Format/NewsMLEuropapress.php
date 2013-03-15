@@ -113,6 +113,9 @@ class NewsMLEuropapress extends NewsMLG1
      **/
     public static function checkFormat($data, $xmlFile)
     {
+        if ($data->NewsItem->count() <= 0) {
+            throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
+        }
         $provider = (string) $data->NewsItem->Identification->NewsIdentifier->ProviderId;
 
         if ($provider != 'Europa Press') {

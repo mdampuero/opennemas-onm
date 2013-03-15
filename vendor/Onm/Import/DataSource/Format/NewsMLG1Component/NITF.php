@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Onm\Import\DataSource\Format;
+namespace Onm\Import\DataSource\Format\NewsMLG1Component;
 
 use Onm\Import\DataSource\FormatInterface;
 
@@ -16,44 +16,50 @@ use Onm\Import\DataSource\FormatInterface;
  *
  * @package Onm_Import
  **/
-class NITF extends NewsMLG1
+class NITF implements FormatInterface
 {
     /**
      * Instantiates the NITF DOM data from an SimpleXML object
      *
      * @return void
      **/
-    public function __construct($xmlFile)
+    public function __construct($data)
     {
-        $this->xmlFile = basename($xmlFile);
+        if (is_object($data)) {
+            $this->data = $data;
+        } elseif (is_string($data)) {
+            $this->xmlFile = $data;
 
-        if (file_exists($xmlFile)) {
-            if (filesize($xmlFile) < 2) {
+            if (file_exists($this->xmlFile)) {
+                if (filesize($this->xmlFile) < 2) {
+                    throw new \Exception(
+                        sprintf(_("File '%d' can't be loaded."), $this->xmlFile)
+                    );
+                }
+
+                $this->data = simplexml_load_file(
+                    $this->xmlFile,
+                    null,
+                    LIBXML_NOERROR | LIBXML_NOWARNING
+                );
+
+                if (!$this->data) {
+                    throw new \Exception(
+                        sprintf(_("File '%d' can't be loaded."), $this->xmlFile)
+                    );
+                }
+
+                $this->checkFormat($this->data, $this->xmlFile);
+            } else {
                 throw new \Exception(
-                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
+                    sprintf(_("File '%d' doesn't exists."), $this->xmlFile)
                 );
             }
-
-            $this->data = simplexml_load_file(
-                $xmlFile,
-                null,
-                LIBXML_NOERROR | LIBXML_NOWARNING
-            );
-
-            if (!$this->data) {
-                throw new \Exception(
-                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
-                );
-            }
-
-            $this->checkFormat($this->data, $xmlFile);
-        } else {
-            throw new \Exception(
-                sprintf(_("File '%d' doesn't exists."), $xmlFile)
-            );
         }
 
-        return $this;
+        $this->agencyName = 'Europapress';
+
+        self::checkFormat($this->data, null);
     }
 
     /**
@@ -68,45 +74,24 @@ class NITF extends NewsMLG1
                 return $this->getId();
 
                 break;
-            case 'urn':
-                return $this->getUrn();
-
-                break;
-            case 'pretitle':
-                return $this->getPretitle();
-
-                break;
             case 'title':
                 return $this->getTitle();
 
                 break;
-            case 'priority':
-                return $this->getPriority();
+            case 'pretitle':
+                return $this->getPreTitle();
 
                 break;
-            case 'tags':
-                return $this->getTags();
-
-                break;
-            case 'created_time':
-                return $this->getCreatedTime();
+            case 'summary':
+                return $this->getSummary();
 
                 break;
             case 'body':
                 return $this->getBody();
 
                 break;
-            case 'agency_name':
-                return $this->getServiceName();
-
-                break;
-            case 'texts':
-            case 'photos':
-            case 'videos':
-            case 'audios':
-            case 'moddocs':
-            case 'files':
-                return array();
+            case 'created_time':
+                return $this->getCreatedTime();
 
                 break;
         }
@@ -127,9 +112,7 @@ class NITF extends NewsMLG1
      **/
     public function getServiceName()
     {
-        $docId = $this->getData()->body->{'body.head'}->rights->{'rights.owner'};
-
-        return (string) $docId;
+        return '';
     }
 
     /**
@@ -139,10 +122,10 @@ class NITF extends NewsMLG1
      **/
     public function getId()
     {
-        $docId = $this->getData()->head->docdata->xpath('//doc-id')[0];
-        $attributtes = $docId->attributes();
+        $attributes = $this->getData()->attributes();
+var_dump($attributes);die();
 
-        return (string) $attributtes->{'id-string'};
+        return (string) $attributes->Euid;
     }
 
     /**
@@ -152,7 +135,9 @@ class NITF extends NewsMLG1
      **/
     public function getTitle()
     {
-        return (string) $this->getData()->head->title;
+        $titles = $this->getData()->xpath("//NewsLines/HeadLine");
+
+        return (string) $titles[0];
     }
 
     /**
@@ -162,7 +147,9 @@ class NITF extends NewsMLG1
      **/
     public function getPreTitle()
     {
-        return '';
+        $pretitles = $this->getData()->xpath("//NewsLines/SubHeadLine");
+
+        return (string) $pretitles[0];
     }
 
     /**
@@ -172,7 +159,15 @@ class NITF extends NewsMLG1
      **/
     public function getSummary()
     {
-        return '';
+        $summaries = $this->getData()->xpath(
+            "//nitf/body/body.head/abstract"
+        );
+        $summary   = "";
+        foreach ($summaries[0]->children() as $child) {
+            $summary .= "<p>".sprintf("%s", $child)."</p>";
+        }
+
+        return $summary;
     }
 
     /**
@@ -200,9 +195,7 @@ class NITF extends NewsMLG1
      **/
     public function getUrn()
     {
-        $date = (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
-        $id = $this->getId();
-        return 'urn:newsml:multimedia.efeservicios.com:'.$date.':'.$id.':2';
+        return '';
     }
 
     /**
@@ -212,26 +205,7 @@ class NITF extends NewsMLG1
      **/
     public function getPriority()
     {
-        $priority = $this->getData()->xpath('//head/meta[@name="prioridad"]');
-        $priority = $priority[0]->attributes();
-        $priority = (string) $priority->content;
-
-        $priorities = array(
-            '10' => 1,
-            '20' => 2,
-            '25' => 3,
-            '30' => 4,
-            // From Pandora
-            'U'  => 4,
-            'R'  => 3,
-            'B'  => 2,
-        );
-
-        if (array_key_exists($priority, $priorities)) {
-            return $priorities[$priority];
-        } else {
-            return 1;
-        }
+        return 1;
     }
 
     /**
@@ -261,15 +235,12 @@ class NITF extends NewsMLG1
      **/
     public function getCreatedTime()
     {
-        $attributes =
-            (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
+        $originalDate =
+            (string) $this->getData()->DescriptiveMetadata->DateLineDate;
 
-        $attributes = explode('+', $attributes);
-
-        // '20130315T150100+0000'
         return \DateTime::createFromFormat(
-            'Ymd\THis',
-            $attributes[0]
+            \DateTime::ISO8601,
+            $originalDate
         );
     }
 
@@ -280,6 +251,10 @@ class NITF extends NewsMLG1
      **/
     public static function checkFormat($data, $xmlFile)
     {
+        if (is_string($data)) {
+            throw new \Exception(sprintf(_('Not a valid NITF file')));
+        }
+
         $node = $data->xpath("//nitf");
 
         if (!is_array($node)) {
