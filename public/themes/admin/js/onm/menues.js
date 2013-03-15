@@ -62,6 +62,12 @@ jQuery(document).ready(function($) {
             var url = link.val();
             menuItem.data('link', url);
         }
+
+        jQuery('#warnings-validation').html(
+            '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'
+                + menu_messages.remember_save +
+            '</div>'
+        );
     });
 
 
