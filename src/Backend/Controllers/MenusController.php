@@ -161,7 +161,7 @@ class MenusController extends Controller
         $this->checkAclOrForward('MENU_CREATE');
 
         if ('POST' == $request->getMethod()) {
-            $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             $data = array(
                 'name'      => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'params'    => serialize(
@@ -171,7 +171,7 @@ class MenusController extends Controller
                 ),
                 'site'      => SITE,
                 'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
-                'items'     => json_decode(json_decode($request->request->get('items'))),
+                'items'     => json_decode($request->request->get('items')),
                 'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
             );
 
