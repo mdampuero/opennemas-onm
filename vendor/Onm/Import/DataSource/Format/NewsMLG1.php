@@ -265,6 +265,10 @@ class NewsMLG1 implements FormatInterface
      **/
     public static function checkFormat($data = null, $xmlFile = null)
     {
+
+        if ($data->NewsItem->count() <= 0) {
+            throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
+        }
         $title = (string) $data->NewsItem->NewsComponent->NewsLines->HeadLine;
 
         if (!(string) $data->NewsEnvelope
@@ -290,7 +294,7 @@ class NewsMLG1 implements FormatInterface
         $texts = null;
         if (isset($contents[0]) && $contents[0]->NewsComponent) {
             foreach ($contents[0]->NewsComponent as $component) {
-                $nitf = new \Onm\Import\DataSource\Format\NITF($component);
+                $nitf = new \Onm\Import\DataSource\Format\NewsMLG1Component\NITF($component);
                 $texts []= $nitf;
             }
         }

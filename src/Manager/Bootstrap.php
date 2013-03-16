@@ -67,7 +67,7 @@ class Bootstrap extends ModuleBootstrap
                 $url = $request->getPathInfo();
 
                 if (!empty($url)) {
-                    $redirectTo = urlencode($request->getUri());
+                    $redirectTo = urlencode($request->getRequestUri());
                 }
                 $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
 

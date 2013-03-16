@@ -79,7 +79,7 @@ class Dispatcher
      **/
     public function handleException($exception)
     {
-        $this->request->request->set('error', serialize($exception));
+        $this->request->request->set('error', $exception);
         $this->container->set('request', $this->request);
         return $this->dispatchClass($this->container->getParameter('dispatcher.exceptionhandler'));
     }

@@ -59,5 +59,18 @@ jQuery(document).ready(function($) {
             $(this).remove();
         });
     }, 5000);
+
+    jQuery(window).scroll(function() {
+        var $this = $(this);
+        var html_tag = $('html');
+        var top_offset = $this.scrollTop();
+
+        if ((top_offset >= 20)) {
+            html_tag.addClass('scrolled');
+        } else {
+            html_tag.removeClass('scrolled');
+        }
+    });
+
 });
 

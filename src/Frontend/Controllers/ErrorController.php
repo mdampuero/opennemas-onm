@@ -49,7 +49,7 @@ class ErrorController extends Controller
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-        $error = unserialize($request->get('error'));
+        $error = $request->get('error');
 
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
@@ -112,7 +112,7 @@ class ErrorController extends Controller
                         'error'         => $error,
                         'error_id'      => $errorID,
                         'environment'   => $environment,
-                        'backtrace'     => array_reverse($error->getTrace()),
+                        'backtrace'     => $error->getTrace(),
                     )
                 );
 
