@@ -1,36 +1,85 @@
 <?php
-/*
+/**
+ * Defintes the Frontpage class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Handles newspaper library
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class Frontpage extends Content
 {
+    /**
+     * The frontpage id
+     *
+     * @var int
+     **/
     public $pk_frontpage = null;
+
+    /**
+     * The frontpage date
+     *
+     * @var string
+     **/
     public $date = null;
+
+    /**
+     * The frontpage version
+     *
+     * @var int
+     **/
     public $version = null;
+
+    /**
+     * The list of the frontpage contents
+     *
+     * @var array
+     **/
     public $contents = null;
+
+    /**
+     * Whether this frontpage is promoted
+     *
+     * @var boolean
+     **/
     public $promoted = null;
+
+    /**
+     * Whether the frontpage is a frontpage day
+     *
+     * @var boolean
+     **/
     public $day_frontpage = null;
+
+    /**
+     * Miscelanous params of this frontpage
+     *
+     * @var array
+     **/
     public $params = null;
 
     /**
+     * Proxy property to the cache handler
+     *
      * @var MethodCacheManager Handler to call method cached
      */
     public $cache = null;
 
     /**
-     * constructor
+     * Initializes the Frontpage instance
      *
      * @param int $id
+     *
+     * @return void
      */
     public function __construct($id = null)
     {
@@ -45,9 +94,9 @@ class Frontpage extends Content
     }
 
     /**
-     * Save frontpage
+     * Creates a frontpage given an array of data
      *
-     * @param int $id
+     * @param array $data the frontpge data
      *
      * @return bool If create in database
      */
@@ -59,7 +108,7 @@ class Frontpage extends Content
 
         parent::create($data);
 
-        if ( is_null($data['category']) ) {
+        if (is_null($data['category'])) {
             return false;
         }
         $date          = (!isset($data['date']) || empty($data['date']))? date("Ymd") : $data['date'];
@@ -106,7 +155,7 @@ class Frontpage extends Content
     }
 
     /**
-     * Read, get a specific object
+     * Reads an specific frontpage given its id
      *
      * @param  int       $id Object ID
      *
@@ -157,6 +206,8 @@ class Frontpage extends Content
 
         $this->id = $this->pk_frontpage;
         $this->contents= unserialize($this->content_positions);
+
+        return $this;
     }
 
     /**
@@ -165,8 +216,9 @@ class Frontpage extends Content
     *
     * This is used for newspaper library
     *
-    * @param type $category_id, the id of the category we want to get contents from
-    * @return mixed, array of contents
+    * @param int $category the id of the category we want to get contents from
+    *
+    * @return mixed array of contents
     */
     public function getContentsPositionsInCategory($category)
     {
@@ -231,15 +283,19 @@ class Frontpage extends Content
     /**
      * Read, get a specific frontpage
      *
-     * @param  int    $category category in menu element
      * @param  int    $date     date of calendar
-     * @return Widget Return instance to chaining method
+     * @param  int    $category category in menu element
+     * @param  int    $version  version of the frontpage
+     *
+     * @return boolean
      */
 
     public function getFrontpage($date, $category = 0, $version = null)
     {
         // if category = 0 => home
-        if ( is_null($category) && is_null($date)) {
+        if (is_null($category)
+            && is_null($date)
+        ) {
               return false;
         }
 
@@ -255,21 +311,23 @@ class Frontpage extends Content
 
         $this->load($rs->fields);
 
-        return true;
+        return $this;
     }
 
      /**
      * Read, get a specific frontpage
      *
-     * @param  int    $category category in menu element
      * @param  int    $date     date of calendar
+     *
      * @return Widget Return instance to chaining method
      */
 
     public function getCategoriesWithFrontpage($date)
     {
         // if category = 0 => home
-        if ( is_null($category) && is_null($date)) {
+        if (is_null($category)
+            && is_null($date)
+        ) {
             return false;
         }
 

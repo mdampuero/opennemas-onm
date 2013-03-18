@@ -1,26 +1,65 @@
 <?php
-/*
+/**
+ * Defines the Poll class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
+
 /**
  * Handles all CRUD operations over Polls.
  *
- * @package    Onm
- * @subpackage Model
- * @author     Sandra Pereira <sandra@openhost.es>
+ * @package    Model
  **/
 class Poll extends Content
 {
+    /**
+     * The poll id
+     *
+     * @var int
+     **/
     public $pk_poll       = null;
+
+    /**
+     * The poll subtitle
+     *
+     * @var string
+     **/
     public $subtitle      = null;
+
+    /**
+     * The total amount of votes for this poll
+     *
+     * @var int
+     **/
     public $total_votes   = null;
+
+    /**
+     * Ips that have voted this poll
+     *
+     * @var array
+     **/
     public $used_ips      = null;
+
+    /**
+     * Type of visualization (bars, pie, ...)
+     *
+     * @var string
+     **/
     public $visualization = null;
 
+    /**
+     * Initializes the poll instance
+     *
+     * @param int $id the poll id
+     *
+     * @return Poll the object instance
+     **/
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -33,6 +72,13 @@ class Poll extends Content
         $this->content_type_l10n_name = _('Poll');
     }
 
+    /**
+     * Magic method for calculating undefined object properties
+     *
+     * @param string $name the property name
+     *
+     * @return mixed the property value
+     **/
     public function __get($name)
     {
 
@@ -61,6 +107,13 @@ class Poll extends Content
         return parent::__get($name);
     }
 
+    /**
+     * Loads a poll given its id
+     *
+     * @param int $id the poll id
+     *
+     * @return Poll the poll instance
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -84,6 +137,13 @@ class Poll extends Content
         return $this;
     }
 
+    /**
+     * Creates a new poll given an array of data
+     *
+     * @param array $data the data for the new poll
+     *
+     * @return boolean true if the poll was created
+     **/
     public function create($data)
     {
         parent::create($data);
@@ -118,6 +178,13 @@ class Poll extends Content
         return true;
     }
 
+    /**
+     * Updates a poll from an array of data
+     *
+     * @param array $data the array of data
+     *
+     * @return Poll the object instance
+     **/
     public function update($data)
     {
         parent::update($data);
@@ -163,6 +230,13 @@ class Poll extends Content
         return $this;
     }
 
+    /**
+     * Removes permanently the poll
+     *
+     * @param int $id the poll id
+     *
+     * @return boolean true if the poll was removed
+     **/
     public function remove($id)
     {
         parent::remove($id);
@@ -184,6 +258,13 @@ class Poll extends Content
         return true;
     }
 
+    /**
+     * Returns the list of poll answers given the poll id
+     *
+     * @param int $pkPoll the poll id
+     *
+     * @return array the list of poll answers
+     **/
     public function get_items($pkPoll)
     {
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, '
@@ -221,12 +302,18 @@ class Poll extends Content
         return $items;
     }
 
+    /**
+     * Registers a poll answer vote given the answer id
+     *
+     * @param int    $pkItem the poll answer
+     * @param string $ip     the ip that votes
+     *
+     * @return boolean true if the vote was registered
+     **/
     public function vote($pkItem, $ip)
     {
         $this->used_ips = $this->add_count($this->used_ips, $ip);
         if (!$this->used_ips) {
-            // Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
-            setcookie("polls".$this->id, 'true', time()+3600);
             return false;
         }
 
@@ -256,14 +343,17 @@ class Poll extends Content
 
             return false;
         }
-
-        //creamos la cookie
-        //Application::setCookieSecure("polls".$this->id, 'true', time()+60*60*24*30);
-        setcookie("polls".$this->id, 'true', time()+3600);
-
         return true;
     }
 
+    /**
+     * Adds a new ip to the arrays vote list
+     *
+     * @param array $ips_count
+     * @param string $ip
+     *
+     * @return array
+     **/
     public function add_count($ips_count, $ip)
     {
         $ips = array();

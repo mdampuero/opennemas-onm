@@ -38,7 +38,6 @@
         if (url) {
             jQuery.ajax({
                 url:  url,
-                type: "POST",
                 success: function(){
                     location.reload();
                 }

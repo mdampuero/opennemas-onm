@@ -16,21 +16,76 @@ use Onm\Settings as s;
  **/
 class Application
 {
+    /**
+     * Database connection object
+     *
+     * @var AdodbConnection
+     **/
     public $conn                = null;
+
+    /**
+     * Logger instance
+     *
+     * @var Monolog
+     **/
     public $logger              = null;
+
+    /**
+     * Static access to the logger instance
+     *
+     * @var Monolog
+     **/
     public static $loggerStatic = null;
+
+    /**
+     * Saves the latest error of the application
+     *
+     * @var string
+     **/
     public $errors              = array();
+
+    /**
+     * Adodb connection
+     *
+     * @deprecated deprecated from version 0.6
+     *
+     * @var AdoDbConnection
+     **/
     public $adodb               = null;
+
+    /**
+     * Smarty object instance
+     *
+     * @var Template
+     **/
     public $smarty              = null;
+
+    /**
+     * The method cache handler object instance
+     *
+     * @var MethodCacheManager
+     **/
     public $cache               = null;
+
+    /**
+     * Registered events
+     *
+     * @var array
+     **/
     public $events              = array();
+
+    /**
+     * Current application language
+     *
+     * @var string
+     **/
     public static $language     = null;
 
     /**
-    * Setup the Application instance and assigns it to a global variable
-    *
-    * @return object $GLOBALS['application']
-    */
+     * Setup the Application instance and assigns it to a global variable
+     *
+     * @return object $GLOBALS['application']
+     */
     public static function load()
     {
         self::initEnvironment(ENVIRONMENT);
@@ -52,6 +107,11 @@ class Application
         return $GLOBALS['application'];
     }
 
+    /**
+     * Initializes the database connection
+     *
+     * @return void
+     **/
     public static function initDatabase()
     {
         // Database
@@ -59,9 +119,14 @@ class Application
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
 
         $GLOBALS['application']->conn->bulkBind = true;
-        $GLOBALS['application']->conn->LogSQL();
+        // $GLOBALS['application']->conn->LogSQL();
     }
 
+    /**
+     * Initializes the logger instance
+     *
+     * @return
+     **/
     public static function initLogger()
     {
         self::$loggerStatic = new \Onm\Log('normal');
@@ -85,6 +150,8 @@ class Application
     /**
      * Sets the PHP environment given an environmen
      * name 'production', 'development'
+     *
+     * @param string $environment The current environment
      *
      * @return void
      **/
@@ -113,12 +180,29 @@ class Application
     }
 
 
-    /* Events system */
+    /**
+     * Registers a new event handler for a given event name
+     *
+     * @param string $event the event name
+     * @param string $callback the function to call when firing this event
+     * @param string $args the params to pass to the function
+     *
+     * @return void
+     **/
     public function register($event, $callback, $args = array())
     {
         $this->events[$event][] = array($callback, $args);
     }
 
+    /**
+     * Fires an event given the event name
+     *
+     * @param string $eventName the event to fire
+     * @param object|string $instance the class to call
+     * @param array $args the list of arguments to pass to the callback
+     *
+     * @return
+     **/
     public function dispatch($eventName, $instance, $args = array())
     {
         if (isset($this->events[$eventName])) {
@@ -149,6 +233,7 @@ class Application
      * Detect a mobile device and redirect to mobile version
      *
      * @param  boolean $autoRedirect
+     *
      * @return boolean True if it's a mobile device and $autoRedirect is false
      */
     public function mobileRouter($autoRedirect = true)
@@ -199,6 +284,13 @@ class Application
 
     /**
      * Stablishes a cookie value in a secure way
+     *
+     * @param string $name the name of the cookie
+     * @param mixed $value the value to set into the cookie
+     * @param int $expires the seconds during the cookie will be valid
+     * @param int $domain the path for which the cookie will be valid
+     *
+     * @return void
      */
     public static function setCookieSecure($name, $value, $expires = 0, $domain = '/')
     {
@@ -278,7 +370,10 @@ class Application
 
     // TODO: move to a separated file called functions.php
     /**
-     * Register in the log one event in the content
+     * Registers in the log one event in the content
+     *
+     * @param string $action the action to log
+     * @param string $content the content of the action to log
      *
      * @return void
      **/
@@ -297,7 +392,7 @@ class Application
 
     // TODO: move to a separated file called functions.php
     /**
-     * Register in the Database error handler one error message
+     * Registers in the Database error handler one error message
      *
      * @return boolean true if all was sucessfully performed
      **/

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -19,7 +24,6 @@ use Onm\StringUtils;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class BooksController extends Controller
 {
@@ -58,7 +62,7 @@ class BooksController extends Controller
         );
         // ---------------------------------------------------------------------
 
-        // Optimize  this crap from this ---------------------------------------
+        // Optimize  this crap  ---------------------------------------
         $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
 
         // Create folder if it doesn't exist
@@ -71,7 +75,9 @@ class BooksController extends Controller
     /**
      * Lists all the
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function listAction(Request $request)
     {
@@ -123,7 +129,7 @@ class BooksController extends Controller
                 $book->category_title = $this->ccm->get_title($book->category_name);
             }
         }
-        if (count($books) != $numFavorites ) {
+        if (count($books) != $numFavorites) {
             m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
         }
 
@@ -159,7 +165,9 @@ class BooksController extends Controller
     /**
      * List books favorites for widget
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function widgetAction(Request $request)
     {
@@ -180,7 +188,7 @@ class BooksController extends Controller
             }
         }
 
-        if (count($books) != $numFavorites ) {
+        if (count($books) != $numFavorites) {
             m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
         }
 
@@ -196,7 +204,9 @@ class BooksController extends Controller
     /**
      * Shows and handles the form for create new books
      *
-     * @return Response the response objcet
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function createAction(Request $request)
     {
@@ -235,7 +245,7 @@ class BooksController extends Controller
             $id   =$book->create($data);
 
             $sizeFile = ini_get('upload_max_filesize');
-            if ( ($uploadStatusPdf !== false) && !empty($id)) {
+            if (($uploadStatusPdf !== false) && !empty($id)) {
                 $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
                 if ($continue) {
                     $book = $book->read($id);
@@ -267,6 +277,8 @@ class BooksController extends Controller
     /**
      * Shows the book information given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -294,6 +306,8 @@ class BooksController extends Controller
 
     /**
      * Handles the form for update a book given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -381,6 +395,8 @@ class BooksController extends Controller
     /**
      * Deletes a book given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -411,6 +427,8 @@ class BooksController extends Controller
 
     /**
      * Deletes multiple books at once given its ids
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -450,6 +468,8 @@ class BooksController extends Controller
     /**
      * Change availability for one book given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -487,6 +507,8 @@ class BooksController extends Controller
      * Change in_home flag for one book given its id
      * Used for putting this content widgets in home
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleInHomeAction(Request $request)
@@ -518,6 +540,8 @@ class BooksController extends Controller
 
     /**
      * Save positions for widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -558,6 +582,8 @@ class BooksController extends Controller
 
     /**
      * Set the published flag for contents in batch
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

@@ -683,6 +683,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteRule ^especiales/union/?$ seccion/operacion-union/ [R=301,L,NC]
     RewriteRule ^especiales/cunion/?$ seccion/caso-union/ [R=301,L,NC]
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
     RewriteRule ^especiales/(.*)?$ album/  [R=301,L,NC]
 
     RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
@@ -693,32 +695,32 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteCond %{SERVER_NAME} ^canariasahora.es$ [OR]
     RewriteCond %{SERVER_NAME} ^www.canariasahora.es$
-    RewriteRule ^(top-secret|canarias|nacional|internacional|economia|deportes|sociedad|cultura|tecnologia)/?$ seccion/$1 [R=301,L,NC]
+    RewriteRule ^(top-secret|canal-energia|topsecret|canarias|nacional|internacional|economia|deportes|sociedad|cultura|tecnologia)/?$ seccion/$1 [R=301,L,NC]
 
 
     #--------------------------------------------------------
     #Redirection from old nuevatribuna.es
 
     #Inner Article
-    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /redirect/content?content_type=article&content_id=$1 [R=301,L,NC]
+    RewriteRule ^noticia/([0-9]+)($|/$|.+/$|.+html$) /redirect/content?content_type=article&version=editmaker&content_id=$1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
-    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [R=301,L,NC]
+    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&version=editmaker&content_id=%1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)&?pos=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?ref=([^&]+)
-    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&content_id=%1 [R=301,L,NC]
+    RewriteRule ^noticia\.asp$ /redirect/content?content_type=article&version=editmaker&content_id=%1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?id=([^&]+)&?pg=([^&]+) [OR]
     RewriteCond %{QUERY_STRING} &?id=([^&]+)
-    RewriteRule ^foros/mostrar_foro\.asp$ /redirect/content?content_type=article&content_id=%1 [R=301,L,NC]
+    RewriteRule ^foros/mostrar_foro\.asp$ /redirect/content?content_type=article&version=editmaker&content_id=%1 [R=301,L,NC]
 
     RewriteCond %{QUERY_STRING} &?pg=([^&]+)&?[(pf=)|(s=)]([^&]+)
     RewriteRule ^pda/noticia\.asp$ /mobile/? [R=301,L,NC]
 
     #Inner Opinion
-    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /redirect/content?content_type=article&content_id=$1 [R=301,L,NC]
+    RewriteRule ^noticia/([0-9]+)/OPINI.+/($|.+html$) /redirect/content?content_type=article&version=editmaker&content_id=$1 [R=301,L,NC]
 
     #Section
     RewriteCond %{QUERY_STRING} ref=58

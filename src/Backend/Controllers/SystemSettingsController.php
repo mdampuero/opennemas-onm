@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles all the request for Welcome actions
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -39,13 +44,15 @@ class SystemSettingsController extends Controller
     /**
      * Gets all the settings and displays the form
      *
-     * @return string the response
+     * @param Request $request the resquest object
+     *
+     * @return Response the response object
      **/
     public function defaultAction(Request $request)
     {
         $configurationsKeys = array(
             'site_title', 'site_logo', 'site_description','site_keywords','site_agency',
-            'site_footer', 'mobile_logo', 'favico',
+            'site_footer', 'mobile_logo', 'favico', 'youtube_page',
             'site_color', 'site_name', 'time_zone','site_language','site_footer',
             'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
             'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
@@ -71,7 +78,9 @@ class SystemSettingsController extends Controller
     /**
      * Performs the action of saving the configuration settings
      *
-     * @return string the response
+     * @param Request $request the resquest object
+     *
+     * @return Response the response object
      **/
     public function saveAction(Request $request)
     {

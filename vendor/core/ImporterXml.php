@@ -1,11 +1,14 @@
 <?php
-
-/*
+/**
+ * Defines the Onm\Import\ImporterXml class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_Import
  */
 use Onm\Settings as s;
 use Onm\Message  as m;
@@ -14,12 +17,8 @@ use Onm\StringUtils;
 /**
  * Class to import news from XML files
  *
- * @package    Onm
- * @subpackage Import
- * @author     Sandra Pereira <sandra@openhost.es>, 2011
- * @version
+ * @package    Onm_Import
  */
-
 class ImporterXml
 {
     // the instance object
@@ -101,12 +100,10 @@ class ImporterXml
     {
         if (!empty($text)
             && (in_array($text, $this->ignoreds)
-                || in_array($text, $this->labels))
+            || in_array($text, $this->labels))
         ) {
-
             return '';
         } else {
-
             return $text. ' ';
         }
     }
@@ -147,13 +144,13 @@ class ImporterXml
                 if (!empty($label)) {
                     $point = next($array);
 
-                    if (is_object($point) || is_array($point) ) {
-                        $this->data[$label] .= $tag.$this->parseNodes($point).$end;
-                    } else {
-                        $this->data[$label] .= $tag. $this->checkBeIgnored($point).$end;
+                    if (is_object($point) || is_array($point)) {
+                        $this->data[$label] = $tag.$this->parseNodes($point).$end;
+                    } elseif (empty($this->data[$label])) {
+                        $this->data[$label] = $tag. $this->checkBeIgnored($point).$end;
                     }
                 }
-            } elseif (!in_array($key, $this->ignoreds) ) {
+            } elseif (!in_array($key, $this->ignoreds)) {
                 $label = $this->checkLabels($key);
             } else {
 
@@ -192,7 +189,7 @@ class ImporterXml
     {
         $label='';
 
-        if ((is_object($value) || is_array($value)) ) {
+        if ((is_object($value) || is_array($value))) {
 
             foreach ($value as $n => $val) {
 
@@ -212,7 +209,7 @@ class ImporterXml
 
     public function checkBeImportant($value)
     {
-        if ((!is_object($value) && !is_array($value)) ) {
+        if ((!is_object($value) && !is_array($value))) {
 
             if (in_array($value, $this->alloweds)) {
 
@@ -258,7 +255,6 @@ class ImporterXml
         $this->data['img1_footer'] = $this->data['img_footer'];
         $this->data['img2']        = $imgImported;
         $this->data['img2_footer'] = $this->data['img_footer'];
-
         if (empty($this->data['title_int'])) {
             $this->data['title_int'] = $this->data['title'];
         }

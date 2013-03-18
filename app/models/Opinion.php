@@ -1,36 +1,92 @@
 <?php
-/*
+/**
+ * Defines the Opinion class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 /**
  * Handles all the CRUD operations over opinions.
  *
- * @package    Onm
- * @subpackage Model
- * @author     Fran Dieguez <fran@openhost.es>
+ * @package    Model
  **/
 class Opinion extends Content
 {
+    /**
+     * The opinion id
+     *
+     * @var int
+     **/
     public $pk_opinion            = null;
-    public $fk_content_categories = null;
-    public $fk_author             = null;
-    public $body                  = null;
-    public $author                = null;
-    public $fk_author_img         = null;
-    public $with_comment          = null;
-    public $fk_author_img_widget  = null;
-
-    private static $instance     = null;
 
     /**
-    * Array of authors
-    */
+     * The categories this opinion belongs to
+     *
+     * @var string
+     **/
+    public $fk_content_categories = null;
+
+    /**
+     * The author of this opinion
+     *
+     * @var int
+     **/
+    public $fk_author             = null;
+
+    /**
+     * The contents of this opinion
+     *
+     * @var string
+     **/
+    public $body                  = null;
+
+    /**
+     * The opinion author id
+     *
+     * @var int
+     **/
+    public $author                = null;
+
+    /**
+     * The author img id
+     *
+     * @var int
+     **/
+    public $fk_author_img         = null;
+
+    /**
+     * Whether allowing comments on this opinion
+     *
+     * @var boolean
+     **/
+    public $with_comment          = null;
+
+    /**
+     * The image id for the opinion widget
+     *
+     * @var int
+     **/
+    public $fk_author_img_widget  = null;
+
+    /**
+     * Array of authors names
+     *
+     * @var array
+     */
     private $authorNames         = null;
 
+    /**
+     * Initializes the opinion object given an id
+     *
+     * @param int $id the opinion id to load
+     *
+     * @return Opinion the opinion object
+     **/
     public function __construct($id = null)
     {
         parent::__construct($id);
@@ -43,17 +99,13 @@ class Opinion extends Content
         $this->content_type_l10n_name = _('Opinion');
     }
 
-    public function getInstance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new Opinion();
-
-            return self::$instance;
-        } else {
-            return self::$instance;
-        }
-    }
-
+    /**
+     * Magic method for getting not assigned variables
+     *
+     * @param string $name the property name
+     *
+     * @return mixed the value of the property
+     **/
     public function __get($name)
     {
         switch ($name) {
@@ -119,6 +171,14 @@ class Opinion extends Content
         }
     }
 
+    /**
+     * Creates a new opinion article given an array of data
+     *
+     * @param array $data the
+     *
+     * @return int the id of the opinion article created
+     * @return boolean false if the
+     **/
     public function create($data)
     {
         $data['content_status'] = $data['available'];
@@ -157,6 +217,13 @@ class Opinion extends Content
         return $this->id;
     }
 
+    /**
+     * Loads the opinion article information for the given id
+     *
+     * @param int $id the opinion id
+     *
+     * @return Opinion the opinion object
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -186,14 +253,16 @@ class Opinion extends Content
         }
 
         $this->load($rs->fields);
+
+        return $this;
     }
 
     /**
-     * Returns the author name
+     * Returns the author name for a given author id
      *
-     * @param int $fkAuthor
+     * @param int $fkAuthor the author id
      *
-     * @return String Return name of author
+     * @return string the author name
      */
     public function get_author_name($fkAuthor)
     {
@@ -216,6 +285,13 @@ class Opinion extends Content
         return $this->authorNames[$fkAuthor];
     }
 
+    /**
+     * Updates the opinion information given a data array
+     *
+     * @param array $data the new opinion data
+     *
+     * @return boolean true if the opinion was updated
+     **/
     public function update($data)
     {
         $data['content_status']= $data['available'];
@@ -255,6 +331,13 @@ class Opinion extends Content
         return true;
     }
 
+    /**
+     * Removes permanently an opinion
+     *
+     * @param int $id the opinion article id
+     *
+     * @return boolean true if the action was performed
+     **/
     public function remove($id)
     {
         parent::remove($id);
@@ -264,88 +347,17 @@ class Opinion extends Content
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             \Application::logDatabaseError();
 
-            return;
-        }
-    }
-
-    public function find_by_gender($gender)
-    {
-        $sql = 'SELECT contents.title, opinions.pk_opinion, opinions.fk_author,'
-             . '       opinions.fk_author_img, opinions.fk_author_img_widget, '
-             . '       contents.pk_content, contents.permalink, authors.name '
-             . 'FROM opinions, contents, authors WHERE in_litter=0 '
-             . 'AND content_status=1 and type_opinion=0 '
-             . 'AND authors.pk_author= opinions.fk_author '
-             . 'AND  pk_opinion = pk_content '
-             . 'AND  gender=? ORDER BY created DESC';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($gender));
-        $i = 0;
-
-        while (!$rs->EOF) {
-            $items[$i]->pk_opinion           = $rs->fields['pk_opinion'];
-            $items[$i]->permalink            = $rs->fields['permalink'];
-            $items[$i]->title                = $rs->fields['title'];
-            $items[$i]->name                 = $rs->fields['name'];
-            $items[$i]->fk_author            = $rs->fields['fk_author'];
-            $items[$i]->fk_author_img        = $rs->fields['fk_author_img'];
-            $items[$i]->fk_author_img_widget = $rs->fields['fk_author_img_widget'];
-
-            $i++;
-            $rs->MoveNext();
-        }
-
-        return $items ;
-    }
-
-    //Poner en una clase aparte
-    public function get_opinion_algoritm()
-    {
-        $sql = 'SELECT `value` FROM settings `name`=`opinion_algoritm`';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
-        return $rs->fields['opinion_algoritm'];
+        return true;
     }
 
-    public function set_opinion_algoritm($value)
-    {
-        $sql = "UPDATE settings SET `value`='".$value
-             . "' WHERE `name`=`opinion_algoritm`";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-        if ($rs === false) {
-            \Application::logDatabaseError();
-
-            return;
-        }
-    }
-
-    public function count_inhome_type($opinionType = null)
-    {
-        if ($opinionType == null && $this->type_opinion) {
-            $opinionType = $this->type_opinion;
-        }
-
-        $sql = "SELECT count(pk_content) FROM contents, opinions "
-             . "WHERE `contents`.`in_litter`=0 AND "
-             . "`contents`.`in_home`=1 AND `opinions`.`type_opinion`=?"
-             ." AND `contents`.`pk_content`= `opinions`.pk_opinion";
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($opinionType));
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return $rs->fields['count(pk_content)'];
-    }
-
+    /**
+     * Removes the cache for an inner opinion and for the opinion frontpage
+     *
+     * @return void
+     **/
     public function onUpdateClearCacheOpinion()
     {
         $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -359,6 +371,11 @@ class Opinion extends Content
         }
     }
 
+    /**
+     * Renders the opinion article
+     *
+     * @return string the generated HTML for the opinion
+     **/
     public function render()
     {
         $tpl = new Template(TEMPLATE_USER);
@@ -494,8 +511,8 @@ class Opinion extends Content
     /**
     * Get all latest Opinions from an author given his id
     *
-    * @param int $authorId the identificator of the author
-    * @param array params list of parameters
+    * @param int $authorID the identificator of the author
+    * @param array $params list of parameters
     *
     * @return mixed, all latest opinions sorted by creation time
     */

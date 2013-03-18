@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for managing articles
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -57,7 +62,9 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists articles in the system
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -67,7 +74,7 @@ class ArticlesController extends Controller
 
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
-            if (!\Acl::_C($this->category)) {
+            if (!\Acl::checkCategoryAccess($this->category)) {
                 m::add(_("You don't have enought privileges to see this category."));
 
                 return $this->redirect($this->generateUrl('admin_welcome'));
@@ -306,7 +313,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Displays the article information form
+     * Displays the article information given the article id
      *
      * @param Request $request the request object
      *
@@ -347,8 +354,8 @@ class ArticlesController extends Controller
         }
 
         if (is_array($article->params) &&
-            (array_key_exists('imageHome', $article->params)) &&
-            !empty($article->params['imageHome'])
+           (array_key_exists('imageHome', $article->params)) &&
+           !empty($article->params['imageHome'])
         ) {
             $photoHome = new \Photo($article->params['imageHome']);
             $this->view->assign('photo3', $photoHome);
@@ -630,6 +637,8 @@ class ArticlesController extends Controller
     /**
      * Change available status for one article given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -811,7 +820,7 @@ class ArticlesController extends Controller
         list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             $categoryFilter,
-            'contents.content_status=1',
+            '',
             ' ORDER BY created DESC ',
             $page,
             $itemsPerPage
@@ -849,7 +858,7 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Description of this action
+     * Shows the content provider with articles suggested for frontpage
      *
      * @param Request $request the request object
      *
@@ -891,10 +900,13 @@ class ArticlesController extends Controller
     /**
      * Set the published flag for contents in batch
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchPublishAction(Request $request)
     {
+
         $this->checkAclOrForward('ARTICLE_AVAILABLE');
 
         $status         = $request->query->getDigits('new_status', 0);
@@ -908,9 +920,13 @@ class ArticlesController extends Controller
         ) {
             foreach ($selected as $id) {
                 $article = new \Article($id);
-                $article->set_available($status, $_SESSION['userid']);
-                if ($status == 0) {
-                    $article->set_favorite($status, $_SESSION['userid']);
+                if ($article->category != 20) {
+                    $article->set_available($status, $_SESSION['userid']);
+                    if ($status == 0) {
+                        $article->set_favorite($status, $_SESSION['userid']);
+                    }
+                } else {
+                    m::add(sprintf(_('You must assign a section for "%s"'), $article->title), m::ERROR);
                 }
             }
         }
@@ -930,6 +946,8 @@ class ArticlesController extends Controller
     /**
      * Set the published flag for contents in batch
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchDeleteAction(Request $request)
@@ -940,7 +958,6 @@ class ArticlesController extends Controller
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
         $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page           = $request->query->getDigits('page', 1);
-
         if (is_array($selected)
             && count($selected) > 0
         ) {

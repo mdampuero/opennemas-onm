@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for frontpages
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,9 +21,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for frontpages
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class FrontpagesController extends Controller
 {
@@ -36,7 +41,9 @@ class FrontpagesController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the frontpage given a category name
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -141,7 +148,9 @@ class FrontpagesController extends Controller
     /**
      * Displays an external frontpage by sync
      *
-     * @return Response the response instance
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function extShowAction(Request $request)
     {
@@ -156,8 +165,7 @@ class FrontpagesController extends Controller
         $this->getAds($categoryName);
 
         // Avoid to run the entire app logic if is available a cache for this page
-        if (
-            $this->view->caching == 0
+        if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
 
@@ -227,6 +235,8 @@ class FrontpagesController extends Controller
     /**
      * Retrieves the advertisement for the frontpage
      *
+     * @param string $categoryName the category name where fetch ads from
+     *
      * @return void
      **/
     public static function getAds($categoryName = 'home')
@@ -259,7 +269,9 @@ class FrontpagesController extends Controller
      /**
      * Retrieves the styleSheet rules for the frontpage
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function cssAction(Request $request)
     {
@@ -290,6 +302,7 @@ class FrontpagesController extends Controller
                     $properties = json_decode($properties);
                     if (!empty($properties)) {
                         // #content-81115.onm-new h3.nw-title a
+                        $rules .="#content-{$item->pk_content} .title a, ";
                         $rules .="#content-{$item->pk_content} .nw-title a {\n";
                         foreach ($properties as $property => $value) {
                             if (!empty($value)) {

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Generates the robots.txt file
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -16,9 +21,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for the system information
+ * Generates the robots.txt file
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class RobotsController extends Controller
 {
@@ -34,6 +39,8 @@ class RobotsController extends Controller
 
     /**
      * Displays a prebuild robots.txt file
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

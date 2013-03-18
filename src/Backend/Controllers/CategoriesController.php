@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for categories
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -34,6 +39,8 @@ class CategoriesController extends Controller
 
     /**
      * Lists all the available categories
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -351,6 +358,8 @@ class CategoriesController extends Controller
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_categories'));
+        } else {
+            return new Response('ok');
         }
     }
 
@@ -388,6 +397,8 @@ class CategoriesController extends Controller
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_categories'));
+        } else {
+            return new Response('ok');
         }
     }
 

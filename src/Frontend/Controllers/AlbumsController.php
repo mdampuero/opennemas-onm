@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for frontend albums
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -21,7 +26,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for frontend albums
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class AlbumsController extends Controller
 {
@@ -70,7 +75,7 @@ class AlbumsController extends Controller
     /**
      * Renders the album frontpage
      *
-     * @param int page the pagination of this frontpage
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -139,10 +144,9 @@ class AlbumsController extends Controller
     /**
      * Shows an inner album
      *
-     * @param int album_id the id of the album to show
-     * @param int page the number of the page to show
+     * @param Request $request the request object
      *
-     * @return Response the response instance
+     * @return Response the response object
      **/
     public function showAction(Request $request)
     {
@@ -226,7 +230,9 @@ class AlbumsController extends Controller
     /**
      * Returns the
      *
-     * @return Response|RedirectResponse
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function ajaxPaginatedAction(Request $request)
     {

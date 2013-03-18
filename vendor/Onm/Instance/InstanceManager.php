@@ -137,8 +137,7 @@ class InstanceManager
     {
         // Database
         global $onmInstancesConnection;
-        if (
-            !is_null($connectionData)
+        if (!is_null($connectionData)
             && is_array($connectionData)
         ) {
             $onmInstancesConnection = $connectionData;
@@ -426,11 +425,6 @@ class InstanceManager
             $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
         } catch (ApacheConfigurationNotCreatedException $e) {
             $errors []= $e->getMessage();
-            $assetFolder = SITE_PATH.DS.'media'.DS.$data['internal_name'];
-            $this->deleteDefaultAssetsForInstance($assetFolder);
-            $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
-            $this->deleteInstanceReferenceInManager($data['id']);
-            $this->deleteApacheConfAndReloadConfiguration($data['internal_name']);
         }
 
         if (count($errors) > 0) {
@@ -449,8 +443,7 @@ class InstanceManager
      **/
     public function createInstanceReferenceInManager($data)
     {
-        if (
-            empty($data['name'])
+        if (empty($data['name'])
             || empty($data['internal_name'])
             || empty($data['domains'])
             || !isset($data['activated'])

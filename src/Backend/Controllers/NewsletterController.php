@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the newsletter
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -72,16 +77,35 @@ class NewsletterController extends Controller
     {
         $configurations = \Onm\Settings::get('newsletter_maillist');
 
+        $newsletterContent = array();
+        $menu = new \Menu();
+
+        $menu->getMenu('frontpage');
+        $i = 1;
+        foreach ($menu->items as $item) {
+            if ($item->type == 'category' || $item->type == 'internal') {
+                $container               = new \stdClass();
+                $container->id           = $i;
+                $container->title        = $item->title;
+                $container->content_type =  'container';
+                $container->position     = $item->position;
+                $container->items        = array();
+                $newsletterContent[]     = $container;
+                $i++;
+            }
+        }
+
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
-                'name'=>$configurations['name']
+                'name'              => $configurations['name']." [".date('d/m/Y')."]",
+                'newsletterContent' => $newsletterContent,
                 )
         );
     }
 
     /**
-     * Description of this action
+     * Shows the contents of a newsletter given its id
      *
      * @param Request $request the request object
      *
@@ -116,7 +140,7 @@ class NewsletterController extends Controller
         $contents = json_decode($contentsRAW);
         $title = $request->request->filter(
             'title',
-            s::get('site_name') + ' ['.date('%d/%m/%Y').']',
+            s::get('site_name'). ' ['.date('d/m/Y').']',
             FILTER_SANITIZE_STRING
         );
 
@@ -254,7 +278,7 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Sends
+     * Sends a newsletter
      *
      * @param Request $request the request object
      *
@@ -279,7 +303,8 @@ class NewsletterController extends Controller
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
         if (array_key_exists('sender', $configurations)
-            && !empty($configurations['sender']) ) {
+            && !empty($configurations['sender'])
+        ) {
             $mail_from = $configurations['sender'];
         } else {
             $mail_from = MAIL_FROM;
@@ -382,7 +407,7 @@ class NewsletterController extends Controller
             // Check that user has configured reCaptcha keys if newsletter is enabled
             $missingRecaptcha = false;
             if (empty($configurations['recaptcha']['public_key'])
-                 || empty($configurations['recaptcha']['private_key'])
+                || empty($configurations['recaptcha']['private_key'])
             ) {
                 $missingRecaptcha = true;
             }
@@ -400,13 +425,13 @@ class NewsletterController extends Controller
     /**
      * Checks if the module is activated, if not redirect to the configuration form
      *
-     * @return void
+     * @return boolean
      **/
     public function checkModuleActivated()
     {
         if (is_null(s::get('newsletter_maillist'))
-          || !(s::get('newsletter_subscriptionType') )
-          || !(s::get('newsletter_enable'))
+            || !(s::get('newsletter_subscriptionType') )
+            || !(s::get('newsletter_enable'))
         ) {
             m::add(
                 _('Please provide your Newsletter configuration to start to use your Newsletter module')

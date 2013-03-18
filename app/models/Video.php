@@ -1,4 +1,9 @@
 <?php
+/**
+ * Defintes the Video class
+ *
+ * @package    Model
+ **/
 /*
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -11,19 +16,44 @@ use Onm\Message as m;
 /**
  * Handles video CRUD actions.
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  **/
 class Video extends Content
 {
+    /**
+     * The video id
+     *
+     * @var  int
+     **/
     public $pk_video = null;
+
+    /**
+     * Serialized array with the video information
+     *
+     * @var string
+     **/
     public $information  = null;
+
+    /**
+     * The original video url, if it comes from an external source
+     *
+     * @var string
+     **/
     public $video_url  = null;
+
+    /**
+     * The video author name
+     *
+     * @var string
+     **/
     public $author_name = null;
-    public $content_type = null;
 
     /**
      * Initializes the Video object
+     *
+     * @param int $id the video id to load
+     *
+     * @return Video the video object instance
      **/
     public function __construct($id = null)
     {
@@ -35,6 +65,13 @@ class Video extends Content
         $this->content_type_l10n_name = _('Video');
     }
 
+    /**
+     * Magic function to get uninitilized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     **/
     public function __get($name)
     {
         switch ($name) {
@@ -54,12 +91,20 @@ class Video extends Content
 
                 break;
             default:
+                return parent::__get($name);
                 break;
         }
 
         return parent::__get($name);
     }
 
+    /**
+     * Creates a new video from a given data array
+     *
+     * @param array $data the video data
+     *
+     * @return boolean true if the videos was created
+     **/
     public function create($data)
     {
         parent::create($data);
@@ -82,6 +127,13 @@ class Video extends Content
         return $this->id;
     }
 
+    /**
+     * Loads a video identified by a the given id
+     *
+     * @param int $id the video id to load
+     *
+     * @return Video the video object instance
+     **/
     public function read($id)
     {
         parent::read($id);
@@ -101,9 +153,17 @@ class Video extends Content
         $this->information = unserialize($rs->fields['information']);
     }
 
+    /**
+     * Updates the video given an array of data
+     *
+     * @param array $data the new video data
+     *
+     * @return boolean true if the video was updated
+     **/
     public function update($data)
     {
         parent::update($data);
+
         $sql =  "UPDATE videos"
                 ." SET  `video_url`=?, `information`=?, `author_name`=?  "
                 ." WHERE pk_video=".$data['id'];
@@ -116,10 +176,19 @@ class Video extends Content
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Removes permanently a video given an id
+     *
+     * @param int $id the video id
+     *
+     * @return boolean true if the video was removed
+     **/
     public function remove($id)
     {
         parent::remove($id);
@@ -135,8 +204,70 @@ class Video extends Content
         return true;
     }
 
+
+    /**
+     * Removes videos given its id
+     *
+     * @param array $arrayId the video ids to delete
+     *
+     * @return boolean true if the videos was deleted
+     **/
+    public static function batchDelete($arrayIds)
+    {
+
+        $contents = implode(', ', $arrayIds);
+
+        $sql = "SELECT  video_url, information  FROM videos WHERE author_name='internal' "
+            ." AND pk_video IN (".$contents.")";
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        while (!$rs->EOF) {
+            $image       = MEDIA_PATH.DS . $rs->fields['video_url'];
+            $thumbs      = unserialize($rs->fields['information']);
+            $thumbSmall  = MEDIA_PATH.DS .$thumbs['thumbnails']['small'];
+            $thumbNormal = MEDIA_PATH.DS .$thumbs['thumbnails']['normal'];
+            $thumbBig    = MEDIA_PATH.DS .$thumbs['thumbnails']['big'];
+
+            if (file_exists($image)) {
+                @unlink($image);
+            }
+            if (file_exists($thumbSmall)) {
+                @unlink($thumbSmall);
+            }
+            if (file_exists($thumbNormal)) {
+                @unlink($thumbNormal);
+            }
+            if (file_exists($thumbBig)) {
+                @unlink($thumbBig);
+            }
+
+            $rs->MoveNext();
+        }
+
+        $sql = 'DELETE FROM videos '
+                .'WHERE `pk_video` IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+
+    }
+
     /**
      * Creates a video from a local file
+     *
+     * @param array $videoFileData the new video file data
      *
      * @return true
      * @throws Exception, if something goes wrong
@@ -172,6 +303,15 @@ class Video extends Content
         return $videoId;
     }
 
+    /**
+     * Stores and generates one FLV video given the original file name and the
+     * target path
+     *
+     * @param string $file the file path to the original FLV file
+     * @param string $baseUploadpath the path where to save the video
+     *
+     * @return string the video uri
+     **/
     public function upload($file, $baseUploadpath)
     {
         $videoInformation = array();
@@ -210,6 +350,9 @@ class Video extends Content
 
     /**
      * Converts a video to flv given a local path
+     *
+     * @param array $originalVideo the video file information
+     * @param string $baseUploadpath the target directory where upload the video file
      *
      * @return string the converted file path
      **/
@@ -278,12 +421,13 @@ class Video extends Content
         return $return;
     }
 
-    /*
-     * Function that creates thumbnails for one flv vídeo
+    /**
+     * Creates thumbnails from one flv vídeo
      *
-     * @param $flvPath, $sizes
+     * @param string $flvPath the path to the FLV file
+     * @param array $sizes list of thumbnail sizes to generate
      *
-     * return array the list of paths to the generated thumbnails
+     * @return array the list of paths to the generated thumbnails
      */
     public static function createThumbnailsfromFLV($flvPath, $sizes = array())
     {
@@ -348,7 +492,7 @@ class Video extends Content
     }
 
     /**
-     * Return the uri for this video
+     * Returns the uri for this video
      *
      * @return string the video uri
      **/
@@ -394,6 +538,8 @@ class Video extends Content
 
     /**
      * Renders the video object in frontpage
+     *
+     * @param array $params the parameters for changing the rendering behaviour
      *
      * @return string the final HTML for this video
      **/

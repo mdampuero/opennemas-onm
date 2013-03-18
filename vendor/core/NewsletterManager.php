@@ -1,16 +1,22 @@
 <?php
 /**
+ * Defines the NewsletterManager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Core
  */
 use Onm\Settings as s;
 use Onm\Message  as m;
 
 /**
- * Newsletter
+ * Handles the operations of Newsletters
+ *
+ * @package  Core
  */
 class NewsletterManager
 {
@@ -30,7 +36,7 @@ class NewsletterManager
         $page = null,
         $itemsPerPage = 20
     ) {
-        if (!is_null($page) ) {
+        if (!is_null($page)) {
             if ($page == 1) {
                 $limit = ' LIMIT '. $itemsPerPage;
             } else {
@@ -274,6 +280,13 @@ class NewsletterManager
         return $htmlContent;
     }
 
+    /**
+     * Converts to a json enconded string a HTML
+     *
+     * @param string $htmlContent the html content of a newsletter
+     *
+     * @return string the json-encoded HTML
+     **/
     public function saveNewsletter($htmlContent)
     {
         json_encode($htmlContent);

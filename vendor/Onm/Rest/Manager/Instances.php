@@ -97,7 +97,7 @@ class Instances extends \Onm\Rest\RestBase
         $data = $im->checkInternalShortName($data);
         $errors = $im->create($data);
 
-        if (is_array($errors) ) {
+        if (is_array($errors)) {
             return $errors;
         }
 

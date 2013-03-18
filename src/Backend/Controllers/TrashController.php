@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -19,7 +24,6 @@ use Onm\Message as m;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- * @author
  **/
 class TrashController extends Controller
 {
@@ -37,7 +41,9 @@ class TrashController extends Controller
         $this->page              = $this->request->query->getDigits('page', 1);
     }
     /**
-     * Description of the action
+     * Lists all the trashed elements
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -99,6 +105,8 @@ class TrashController extends Controller
     /**
      * Deletes trashed element/s given their ids
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
@@ -139,6 +147,8 @@ class TrashController extends Controller
     /**
      * Restores trashed element/s given their id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function restoreAction(Request $request)
@@ -178,6 +188,8 @@ class TrashController extends Controller
     /**
      * Deletes multiple contents given their ids sent in POST request
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchDeleteAction(Request $request)
@@ -215,6 +227,8 @@ class TrashController extends Controller
 
     /**
      * Deletes multiple contents given their ids sent in POST request
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -254,6 +268,8 @@ class TrashController extends Controller
     // TODO: not finished, but I think that is not neccesary
     /**
      * Deletes all the trashed elements
+     *
+     * @param Request $request the request object
      *
      * @return string the response string
      **/

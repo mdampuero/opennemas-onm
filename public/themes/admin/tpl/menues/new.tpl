@@ -8,6 +8,9 @@
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
     $('[rel=tooltip]').tooltip();
+    var menu_messages = {
+        remember_save: "{t}Please, remember save changes after finish.{/t}"
+    }
     </script>
 {/block}
 
@@ -38,6 +41,7 @@
     </div>
     <div class="wrapper-content">
 
+        <div id="warnings-validation"></div><!-- /warnings-validation -->
         {render_messages}
 
         <div class="form-vertical panel">

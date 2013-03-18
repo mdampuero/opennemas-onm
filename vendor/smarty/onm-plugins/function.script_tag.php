@@ -48,7 +48,6 @@ function smarty_function_script_tag($params, &$smarty) {
         $escape = true;
     }
 
-    unset($params['external']);
     unset($params['common']);
     unset($params['src']);
     unset($params['type']);
@@ -65,7 +64,9 @@ function smarty_function_script_tag($params, &$smarty) {
         $resource = $server.SS.$src;
     }
 
-    $resource = str_replace(SS.SS, SS, $resource);
+    if ($params['external'] != 1) {
+        $resource = str_replace(SS.SS, SS, $resource);
+    }
 
     // $resource = preg_replace('/(\/+)/','/',$resource);
     // $resource = preg_replace('@(?<!:)//@', '/', $resource);

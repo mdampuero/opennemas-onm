@@ -1,10 +1,14 @@
 <?php
-/*
+/**
+ * Defines the Attachment class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 use Onm\Message as m;
 
@@ -13,37 +17,49 @@ use Onm\Message as m;
  *
  * Handles all the functionality of Attachments and asociations with contents
  *
- * @package    Onm
- * @subpackage Model
+ * @package    Model
  */
 class Attachment extends Content
 {
+    /**
+     * The attachment id
+     *
+     * @var int
+     **/
     public $pk_attachment   = null;
-    public $title           = null;
-    public $path            = null;
-
-    public $file_path       = null;
 
     /**
-     * category Id
-    */
+     * The attachemnt title
+     *
+     * @var
+     **/
+    public $title           = null;
+
+    /**
+     * The relative path to the file
+     *
+     * @var
+     **/
+    public $path            = null;
+
+    /**
+     * The category Id
+     **/
     public $category        = null;
 
     /**
-     * category name text
-    */
-    // var $category_name   = null;
-
+     * Proxy handler for the object cache
+     *
+     * @var MethodCacheManager
+     **/
     public $cache = null;
 
     /**
      * Constructor for the Attachment class
      *
-     * Description
+     * @param  integer $id the id of the Attachment
      *
-     * @access public
-     * @param  integer $id, the id of the Attachment
-     * @return null
+     * @return void
      **/
     public function __construct($id = null)
     {
@@ -52,7 +68,7 @@ class Attachment extends Content
 
         $this->cache = new MethodCacheManager($this, array('ttl' => 30));
 
-        if ( !is_null($id) ) {
+        if (!is_null($id)) {
             $this->read($id);
         }
 
@@ -62,12 +78,60 @@ class Attachment extends Content
     }
 
     /**
+     * Magic function for getting uninitilized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     **/
+    public function __get($name)
+    {
+        switch ($name) {
+            case 'uri':
+                if (empty($this->category_name)) {
+                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                }
+                //media/nuevatribuna/files/2013/03/06/reiniciar-la-democracia-para-salir-de-la-crisis.pdf
+
+                $uri = "media".DS.INSTANCE_UNIQUE_NAME.DS.FILE_DIR . $this->path;
+
+                return ($uri !== '') ? $uri : $this->permalink;
+
+                break;
+            case 'slug':
+                return StringUtils::get_title($this->title);
+
+                break;
+            case 'content_type_name':
+                $contentTypeName = $GLOBALS['application']->conn->Execute(
+                    'SELECT * FROM `content_types` '
+                    .'WHERE pk_content_type = "'. $this->content_type
+                    .'" LIMIT 1'
+                );
+
+                if (isset($contentTypeName->fields['name'])) {
+                    $returnValue = $contentTypeName->fields['name'];
+                } else {
+                    $returnValue = $this->content_type;
+                }
+                $this->content_type_name = $returnValue;
+
+                return $returnValue;
+
+                break;
+            default:
+
+                break;
+        }
+
+        parent::__get($name);
+    }
+
+    /**
     * Creates a new attachment from the given data
     *
-    * Description
+    * @param array $data the data for create the new Attachment
     *
-    * @access public
-    * @param $data mixed, the data for create the new Attachment
     * @return bool if it is true all went well,
     *              if it is false something went wrong
     */
@@ -108,7 +172,7 @@ class Attachment extends Content
         }
 
         // Check if exist thumbnail for this PDF
-        if ( preg_match('/\.pdf$/', $data['path']) ) {
+        if (preg_match('/\.pdf$/', $data['path'])) {
             $dir_date = date("/Y/m/d/");
             $media_path =
                 $this->file_path.DIRECTORY_SEPARATOR.FILE_DIR.$dir_date;
@@ -135,8 +199,8 @@ class Attachment extends Content
     /**
      * Check if a attachment exists yet
      *
-     * @param  string  $path
-     * @param  string  $category
+     * @param  string  $path the path to check
+     * @param  string  $category the category where to check
      * @return boolean
     */
     public function exists($path, $category)
@@ -163,10 +227,12 @@ class Attachment extends Content
         if (!$rs) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
 
         $this->load($rs->fields);
+
+        return $this;
     }
 
     /**
@@ -196,17 +262,17 @@ class Attachment extends Content
     /**
      * Remoives permanently the attachment given its id
      *
-     * @return int $id the attachement id for delete
+     * @param int $id the attachement id for delete
+     *
+     * @return boolean
      **/
     public function remove($id)
     {
-        $dirDateComponent =
-            preg_replace("/\-/", '/', substr($this->created, 0, 10));
+        $dirDateComponent = preg_replace("/\-/", '/', substr($this->created, 0, 10));
 
-        $mediaPath =
-            MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR.'/'.$dirDateComponent;
+        $mediaPath = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR.'/'.$dirDateComponent;
 
-        $filename   = $mediaPath.'/'.$this->path;
+        $filename = $mediaPath.'/'.$this->path;
         if (file_exists($filename)) {
             unlink($filename);
         }
@@ -219,10 +285,64 @@ class Attachment extends Content
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return;
+            return false;
         }
+
+        return true;
     }
 
+    /**
+     * Removes files given its id
+     *
+     * @param array $arrayId the photo ids to delete
+     *
+     * @return boolean true if the photo was deleted
+     **/
+    public static function batchDelete($arrayIds)
+    {
+
+        $contents = implode(', ', $arrayIds);
+
+        $sql = 'SELECT  path  FROM attachments WHERE pk_attachment IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        while (!$rs->EOF) {
+            $file = MEDIA_PATH.DS.FILE_DIR.DS.$rs->fields['path'];
+            if (file_exists($file)) {
+                var_dump($file);
+                @unlink($file);
+            }
+
+            $rs->MoveNext();
+        }
+
+        $sql = 'DELETE FROM attachments '
+                .'WHERE `pk_attachment` IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * Fetches one Attachement by its id
+     *
+     * @param int $id the attachemnt id
+     *
+     * @return Attachment the attachment object
+     **/
     public function readone($id)
     {
         $sql = 'SELECT * FROM attachments WHERE pk_attachment=?';
@@ -233,15 +353,22 @@ class Attachment extends Content
 
             return;
         }
+        $attachemnt = new Attachment();
+        $attachement->pk_attachment = $rs->fields['pk_attachment'];
+        $attachement->title         = $rs->fields['title'];
+        $attachement->path          = $rs->fields['path'];
+        $attachement->category      = $rs->fields['category'];
 
-        $att->pk_attachment = $rs->fields['pk_attachment'];
-        $att->title         = $rs->fields['title'];
-        $att->path          = $rs->fields['path'];
-        $att->category      = $rs->fields['category'];
-
-        return $att;
+        return $attachemnt;
     }
 
+    /**
+     * Gets all the attachemnts  for a category
+     *
+     * @param int $cat the category id
+     *
+     * @return array a list of Attachemnt information
+     **/
     public function allread($cat)
     {
         $sql = 'SELECT * FROM attachments WHERE category=? '
@@ -267,6 +394,13 @@ class Attachment extends Content
         return $att;
     }
 
+    /**
+     * Gets the latest attachemnts for a category
+     *
+     * @param int $cat the category id
+     *
+     * @return array a list of Attachemnt information
+     **/
     public function find_lastest($cat)
     {
         $sql = 'SELECT * FROM `contents`, `attachments` '
@@ -288,7 +422,7 @@ class Attachment extends Content
 
         $img_name = null;
 
-        if ( preg_match('/\.pdf$/', $obj->path) ) {
+        if (preg_match('/\.pdf$/', $obj->path)) {
             $dirDateComponent = date("/Y/m/d/");
             $mediaPath        = MEDIA_IMG_PATH.'/'.$dirDateComponent;
 
@@ -297,7 +431,7 @@ class Attachment extends Content
 
             if (!file_exists($mediaPath . '/' . $img_name)) {
                 // Check if exists mediaPath
-                if ( !file_exists($mediaPath) ) {
+                if (!file_exists($mediaPath)) {
                     FilesManager::createDirectory($mediaPath);
                 }
 
@@ -321,6 +455,14 @@ class Attachment extends Content
         return array($obj, $img_name);
     }
 
+    /**
+     * Fetches one attachemnts by its path and cat
+     *
+     * @param string $ruta the attachemnt path
+     * @param int    $cat  the category id
+     *
+     * @return array a list of Attachemnt information
+     **/
     public function readid($ruta, $cat)
     {
         $sql = 'SELECT * FROM attachments WHERE path=? AND category=?';
@@ -339,6 +481,13 @@ class Attachment extends Content
         return $att;
     }
 
+    /**
+     * Fetches one attachment by its path
+     *
+     * @param string $ruta the attachment path
+     *
+     * @return array a list of Attachemnt information
+     **/
     public function readids($ruta)
     {
         $sql = 'SELECT * FROM attachments WHERE path=?';
@@ -357,6 +506,14 @@ class Attachment extends Content
         return $att;
     }
 
+    /**
+     * Updates the title for an attachement given its id
+     *
+     * @param int $id the attachemnt id
+     * @param string $title the new title
+     *
+     * @return array a list of Attachemnt information
+     **/
     public function updatetitle($id, $title)
     {
         $sql = "UPDATE attachments SET `title`=? WHERE pk_attachment=?";
@@ -370,6 +527,13 @@ class Attachment extends Content
         }
     }
 
+    /**
+     * Cleans the frontpage only if the category is equals to 8
+     *
+     * @param int $category the category id
+     *
+     * @return array a list of Attachemnt information
+     **/
     public function refreshHome($category = '')
     {
         if ($category == 8) {
@@ -380,11 +544,13 @@ class Attachment extends Content
     /**
      * Renders the file given a set of parameters
      *
+     * @param array $params the parameters
+     * @param Template $tpl the Template instance
+     *
      * @return string the final html for the article
      **/
     public function render($params, $tpl = null)
     {
-
         //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
         //}

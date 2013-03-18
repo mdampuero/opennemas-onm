@@ -332,6 +332,14 @@
                     </div>
                 </div>
 
+                <div class="control-group">
+                    <label for="youtube_page" class="control-label">{t}YouTube Page Url{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="youtube_page" name="youtube_page" value="{$configs['youtube_page']|default:""}" class="input-xlarge">
+                        <div class="help-block">{t escape=off}If you have a <b>Youtube page</b>, please complete the form with your youtube page url.{/t}</div>
+                    </div>
+                </div>
+
             </fieldset>
             <hr>
             <fieldset>

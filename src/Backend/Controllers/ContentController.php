@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles common actions for contents.
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -34,6 +39,8 @@ class ContentController extends Controller
     /**
      * Sets the available state for a content given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function setAvailableAction(Request $request)
@@ -64,6 +71,8 @@ class ContentController extends Controller
 
     /**
      * Sets the draft state for a content given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -99,6 +108,8 @@ class ContentController extends Controller
 
     /**
      * Sets the draft state for a content given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -137,6 +148,8 @@ class ContentController extends Controller
 
     /**
      * Archives contents given their ids
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -182,6 +195,8 @@ class ContentController extends Controller
 
     /**
      * Toggles the suggested state for contents given their ids
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

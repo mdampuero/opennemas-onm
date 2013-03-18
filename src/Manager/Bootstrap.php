@@ -1,5 +1,10 @@
 <?php
 /**
+ * Initializes the Backend Module
+ *
+ * @package Manager
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,8 +22,7 @@ use Onm\Settings as s;
 /**
  * Initializes the Backend Module
  *
- * @package default
- * @author
+ * @package Manager
  **/
 class Bootstrap extends ModuleBootstrap
 {
@@ -34,9 +38,9 @@ class Bootstrap extends ModuleBootstrap
     }
 
     /**
-     * Starts the authentication system for the backend
+     * Starts the authentication system for the manager
      *
-     * @return Boostrap the boostrap instance
+     * @return void
      **/
     public function initAuthenticationSystem()
     {
@@ -45,7 +49,7 @@ class Bootstrap extends ModuleBootstrap
 
         $sessionLifeTime = (int) s::get('max_session_lifetime', 60);
         if ((int) $sessionLifeTime > 0) {
-            ini_set('session.cookie_lifetime',  $sessionLifeTime*60);
+            ini_set('session.cookie_lifetime', $sessionLifeTime*60);
         } else {
             s::set('max_session_lifetime', 60*30);
         }
@@ -63,7 +67,7 @@ class Bootstrap extends ModuleBootstrap
                 $url = $request->getPathInfo();
 
                 if (!empty($url)) {
-                    $redirectTo = urlencode($request->getUri());
+                    $redirectTo = urlencode($request->getRequestUri());
                 }
                 $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
 
@@ -86,6 +90,11 @@ class Bootstrap extends ModuleBootstrap
 
     }
 
+    /**
+     * Starts the internationalization system for the manager
+     *
+     * @return void
+     **/
     public function initI18nSystem()
     {
 
@@ -131,7 +140,7 @@ class Bootstrap extends ModuleBootstrap
             define('CURRENT_LANGUAGE', $shortLanguage);
         }
 
-        $localeDir = realpath(APP_PATH.'/Backend/Resources/locale/');
+        $localeDir = realpath(APP_PATH.'/Resources/locale/');
 
         if (isset($_GET["locale"])) {
             $locale = $_GET["locale"].'.UTF-8';
@@ -142,5 +151,4 @@ class Bootstrap extends ModuleBootstrap
         bindtextdomain($domain, $localeDir);
         textdomain($domain);
     }
-
 }

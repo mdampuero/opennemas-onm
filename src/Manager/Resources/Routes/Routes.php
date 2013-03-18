@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines all the routes for the manager interface
+ *
+ * @package  Manager
+ */
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -137,6 +142,104 @@ $managerRoutes->add(
     new Route(
         '/logout',
         array('_controller' => 'Manager:Controllers:AuthenticationController:logout')
+    )
+);
+
+// User management routes
+$managerRoutes->add(
+    'manager_acl_user',
+    new Route(
+        '/acl/users',
+        array('_controller' => 'Manager:Controllers:AclUserController:list')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_user_create',
+    new Route(
+        '/acl/user/create',
+        array('_controller' => 'Manager:Controllers:AclUserController:create')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_user_show',
+    new Route(
+        '/acl/user/{id}/show',
+        array('_controller' => 'Manager:Controllers:AclUserController:show')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_user_update',
+    new Route(
+        '/acl/user/{id}/update',
+        array('_controller' => 'Manager:Controllers:AclUserController:update')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_user_delete',
+    new Route(
+        '/acl/user/{id}/delete',
+        array('_controller' => 'Manager:Controllers:AclUserController:delete')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_user_batchdelete',
+    new Route(
+        '/acl/user/batchdelete',
+        array('_controller' => 'Manager:Controllers:AclUserController:batchDelete')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_user_toogle_enabled',
+    new Route(
+        '/acl/user/{id}/toogle-enabled',
+        array('_controller' => 'Manager:Controllers:AclUserController:toogleEnabled')
+    )
+);
+
+// User groups managerment routes
+$managerRoutes->add(
+    'manager_acl_usergroups',
+    new Route(
+        '/acl/usergroups',
+        array('_controller' => 'Manager:Controllers:AclUserGroupsController:list')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_usergroups_show',
+    new Route(
+        '/acl/usergroup/{id}/show',
+        array('_controller' => 'Manager:Controllers:AclUserGroupsController:show')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_usergroups_create',
+    new Route(
+        '/acl/usergroup/create',
+        array('_controller' => 'Manager:Controllers:AclUserGroupsController:create')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_usergroups_update',
+    new Route(
+        '/acl/usergroup/{id}/update',
+        array('_controller' => 'Manager:Controllers:AclUserGroupsController:update')
+    )
+);
+
+$managerRoutes->add(
+    'manager_acl_usergroups_delete',
+    new Route(
+        '/acl/usergroup/{id}/delete',
+        array('_controller' => 'Manager:Controllers:AclUserGroupsController:delete')
     )
 );
 

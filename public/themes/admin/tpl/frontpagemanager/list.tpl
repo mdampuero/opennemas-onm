@@ -124,6 +124,7 @@
         {include file="frontpagemanager/_render_menu_categories.tpl"}
 
         <div id="warnings-validation"></div><!-- /warnings-validation -->
+        {render_messages}
 
         <div id="frontpagemanager" data-category="{$category_id}" class="{$category} clearfix">
             {$layout}

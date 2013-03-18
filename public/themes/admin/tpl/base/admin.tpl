@@ -59,15 +59,15 @@
                         </li>
                         {if {count_pending_comments} gt 0}
                         <li class="notification-messages">
-                            <a  class="comments-available" title="{t}There are new comments to moderate{/t}"
+                            <a class="" title="{count_pending_comments} {t}Pending comments{/t}"
                                 href="{url name=admin_comments}">
-                                <span class="icon-envelope-alt icon-large"></span>
-                                <span class="icon">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
+                                <span class="icon icon-inbox icon-large"></span>
+                                <span class="icon count">{count_pending_comments} <span class="longtext">{t}Pending comments{/t}</span></span>
                             </a>
                         </li>
                         {/if}
                         {is_module_activated name="USERVOICE_SUPPORT"}
-                        <li class="dropdown">
+                        <li class="help dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="icon-large icon-question-sign"></span>
                             </a>
@@ -79,7 +79,7 @@
                         </li>
                         {/is_module_activated}
                         <li class="dropdown usermenu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="usericon"></span> <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="18"} <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
                             <div class="dropdown-menu">
                                 <div class="avatar">
                                     {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="150"}

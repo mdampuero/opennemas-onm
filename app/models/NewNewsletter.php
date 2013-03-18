@@ -1,18 +1,20 @@
 <?php
 /**
+ * Defines the NewNewsletter class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Model
  */
 
 /**
  * Handles all the CRUD actions over newsletter.
  *
- * @package    Onm
- * @subpackage Model
- *
+ * @package    Model
  */
 class NewNewsletter
 {
@@ -96,7 +98,7 @@ class NewNewsletter
     /**
      * Updates the newsletter properties given an array of data
      *
-     * @param array $data array with data for update
+     * @param array $newdata array with data for update
      *
      * @return NewNewsletter the object instance
      **/

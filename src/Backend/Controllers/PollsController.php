@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the poll manager
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -59,6 +64,8 @@ class PollsController extends Controller
 
     /**
      * Lists all the available polls
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -153,7 +160,7 @@ class PollsController extends Controller
             $itemsPerPage
         );
 
-        if (count($polls) != $totalWidget ) {
+        if (count($polls) != $totalWidget) {
             m::add(sprintf(_("You must put %d polls in the HOME"), $totalWidget));
         }
 
@@ -362,6 +369,8 @@ class PollsController extends Controller
     /**
      * Change available status for one poll given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -399,6 +408,8 @@ class PollsController extends Controller
     /**
      * Change available status for one poll given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleFavoriteAction(Request $request)
@@ -432,6 +443,8 @@ class PollsController extends Controller
 
     /**
      * Change available status for one poll given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

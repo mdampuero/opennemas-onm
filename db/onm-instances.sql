@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `instances` (
   `contact_mail` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `domain_name` (`domains`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
 -- A extraer datos da táboa `instances`
@@ -44,7 +44,6 @@ CREATE TABLE IF NOT EXISTS `instances` (
 
 INSERT INTO `instances` (`internal_name`, `name`, `domains`, `settings`, `activated`, `contact_mail`) VALUES
 ('opennemas', 'Opennemas Default instance', 'opennemas.onm', 'a:7:{s:13:"TEMPLATE_USER";s:5:"admin";s:9:"MEDIA_URL";s:0:"";s:7:"BD_TYPE";s:6:"mysqli";s:7:"BD_HOST";s:9:"localhost";s:11:"BD_DATABASE";s:9:"c-default";s:7:"BD_USER";s:4:"root";s:7:"BD_PASS";s:4:"root";}', 1, 'devs@opennemas.com');
-
 
 -- --------------------------------------------------------
 
@@ -99,7 +98,24 @@ INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `
 (5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco Dieguez', 0, '0', NULL, 1, 4),
 (4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre Rico', 0, '0', NULL, 1, 4),
 (7, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra Pereira', 0, '0', NULL, 1, 4),
-(8, 'toni', 'aefe34008e63f1eb205dc4c4b8322253', 15, 'toni@openhost.es', 'Toni Martinez', 0, 0, NULL, 1, 4);
+(8, 'toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 15, 'toni@openhost.es', 'Toni Martinez', 0, 0, NULL, 1, 4);
+
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usermeta`
+--
+
+CREATE TABLE IF NOT EXISTS `usermeta` (
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) NOT NULL DEFAULT '',
+  `meta_value` longtext,
+  PRIMARY KEY (`user_id`,`meta_key`),
+  KEY `user_id` (`user_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 
 -- --------------------------------------------------------
 
@@ -119,6 +135,18 @@ CREATE TABLE IF NOT EXISTS `user_groups` (
 
 INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
 (4, 'Masters');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `user_groups_privileges`
+--
+
+CREATE TABLE IF NOT EXISTS `user_groups_privileges` (
+  `pk_fk_user_group` int(10) unsigned NOT NULL,
+  `pk_fk_privilege` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`pk_fk_user_group`,`pk_fk_privilege`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

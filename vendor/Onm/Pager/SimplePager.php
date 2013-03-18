@@ -1,27 +1,24 @@
 <?php
-/*
+/**
+ * Defines the Onm\Pager\SimplePager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package    Onm_UI
  */
 namespace Onm\Pager;
 
 /**
  * Class for generate image with next and previous.
  *
- * @package    Onm
- * @subpackage UI
+ * @package    Onm_UI
  */
 class SimplePager
 {
-    const ITEMS = 20;
-
-    public $next = null;
-
-    public $previous = null;
-
     /**
      * Returns the HTML paginate with js action onclick
      *

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -66,6 +71,8 @@ class VideosController extends Controller
     /**
      * List videos
      *
+     * @param Request $request the request object
+     *
      * @return void
      **/
     public function listAction(Request $request)
@@ -128,8 +135,10 @@ class VideosController extends Controller
         );
     }
 
-     /**
+    /**
      * List videos available for widget
+     *
+     * @param Request $request the request object
      *
      * @return void
      **/
@@ -169,6 +178,8 @@ class VideosController extends Controller
 
     /**
      * Handles the form for create a new video
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -272,6 +283,8 @@ class VideosController extends Controller
     /**
      * Handles the form for update a video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function updateAction(Request $request)
@@ -320,14 +333,16 @@ class VideosController extends Controller
     /**
      * Deletes a video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('VIDEO_DELETE');
 
-        $id = $request->getDigits('id');
-        $page = $request->getDigits('page', 1);
+        $id =  $request->query->getDigits('id');
+        $page = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
             $video = new \Video($id);
@@ -336,24 +351,31 @@ class VideosController extends Controller
             $rel->deleteAll($id);
 
             $video->delete($id, $_SESSION['userid']);
+
             m::add(_("Video '{$video->title}' deleted successfully."), m::SUCCESS);
         } else {
             m::add(_('You must give an id for delete the video.'), m::ERROR);
         }
 
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_videos',
-                array(
-                    'category' => $video->category,
-                    'page' => $page
+        if (!$request->isXmlHttpRequest()) {
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_videos',
+                    array(
+                        'category' => $video->category,
+                        'page' => $page
+                    )
                 )
-            )
-        );
+            );
+        } else {
+            return new Response('ok');
+        }
     }
 
     /**
      * Shows the form for a video given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -385,6 +407,8 @@ class VideosController extends Controller
     /**
      * Returns the video information for a given url
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function videoInformationAction(Request $request)
@@ -414,6 +438,8 @@ class VideosController extends Controller
 
     /**
      * Handles the form for configure the video module
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -449,6 +475,8 @@ class VideosController extends Controller
 
     /**
      * Deletes multiple videos at once given its ids
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -489,6 +517,8 @@ class VideosController extends Controller
     /**
      * Change availability for one video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -525,6 +555,8 @@ class VideosController extends Controller
     /**
      * Change suggested flag for one video given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleFavoriteAction(Request $request)
@@ -559,6 +591,8 @@ class VideosController extends Controller
     /**
      * Change in_home flag for one video given its id
      * Used for putting this content widgets in home
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -600,8 +634,9 @@ class VideosController extends Controller
     /**
      * Returns the relations for a given video
      *
-     * @return void
-     * @author
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function relationsAction(Request $request)
     {
@@ -627,6 +662,8 @@ class VideosController extends Controller
 
     /**
      * Save positions for widget
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -671,6 +708,8 @@ class VideosController extends Controller
     /**
      * Set the published flag for contents in batch
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function batchPublishAction(Request $request)
@@ -707,6 +746,8 @@ class VideosController extends Controller
 
     /**
      * Render the content provider for videos
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

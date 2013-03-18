@@ -55,32 +55,7 @@
                                     <label for="title">{t}Category{/t}</label>
                                 </td>
                                 <td nowrap="nowrap">
-                                    <select name="category" id="category" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                                        {section name=as loop=$allcategorys}
-                                            {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                            <option value="{$allcategorys[as]->pk_content_category}"  name="{$allcategorys[as]->title}"
-                                                {if $category eq $allcategorys[as]->pk_content_category}
-                                                    selected
-                                                {elseif $kiosko->category eq $allcategorys[as]->pk_content_category}
-                                                    selected
-                                                {/if} >
-                                                    {t 1=$allcategorys[as]->title}%1{/t}
-                                            </option>
-                                            {/acl}
-                                            {section name=su loop=$subcat[as]}
-                                                {acl hasCategoryAccess=$subcat[as]->pk_content_category}
-                                                <option value="{$subcat[as][su]->pk_content_category}" name="{$subcat[as][su]->title}"
-                                                    {if $category eq $subcat[as][su]->pk_content_category}
-                                                        selected
-                                                    {elseif $kiosko->category eq $subcat[as][su]->pk_content_category}
-                                                        selected
-                                                    {/if} >
-                                                        &nbsp;&nbsp;|_&nbsp;&nbsp;{t 1=$subcat[as][su]->title}%1{/t}
-                                                </option>
-                                                {/acl}
-                                            {/section}
-                                        {/section}
-                                    </select>
+                                    {include file="common/selector_categories.tpl" name="category" item=$kiosko}
                                 </td>
                             </tr>
                             <tr>

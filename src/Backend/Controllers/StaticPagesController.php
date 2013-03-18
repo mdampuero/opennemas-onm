@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -151,7 +156,7 @@ class StaticPagesController extends Controller
                 )
             );
 
-            $staticPage->save($data);
+            $staticPage->create($data);
             m::add(_('Static page created successfully.'));
 
             return $this->redirect($this->generateUrl('admin_staticpages'));
@@ -237,7 +242,7 @@ class StaticPagesController extends Controller
 
         if (!empty($id)) {
             $staticPage = new \StaticPage($id);
-            $staticPage->delete($id, $_SESSION['userid']);
+            $staticPage->delete($id);
             m::add(sprintf(_("Static Page '%s' deleted successfully."), $staticPage->title), m::SUCCESS);
         } else {
             m::add(_('You must provide a valid an id for delete the static page.'), m::ERROR);
@@ -294,7 +299,6 @@ class StaticPagesController extends Controller
      *
      * @return Ajax Response the response object
      **/
-
     public function buildSlugAction(Request $request)
     {
         // If the action is an Ajax request handle it, if not redirect to list

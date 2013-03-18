@@ -1,4 +1,9 @@
 <?php
+/**
+ * Defines the backend menu
+ *
+ * @package  Backend
+ */
 global $generator;
 $menuXml = '<?xml version="1.0"?>
 <menu>
@@ -55,7 +60,14 @@ $menuXml = '<?xml version="1.0"?>
             privilege="OPINION_ADMIN"
             title="'.htmlspecialchars(_("Opinions"), ENT_QUOTES).'"
             id="opinion_manager"
-            link="'.url('admin_opinions').'">
+            link="#">
+            <node
+                module_name="OPINION_MANAGER"
+                privilege="OPINION_ADMIN"
+                title="'.htmlspecialchars(_("Article opinions"), ENT_QUOTES).'"
+                id="mailman"
+                link="'.url('admin_opinions').'"
+            />
             <node
                 module_name="OPINION_MANAGER"
                 privilege="OPINION_ADMIN"
@@ -164,7 +176,7 @@ $menuXml = '<?xml version="1.0"?>
 
     <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#"
         privilege="SEARCH_ADMIN,TRASH_ADMIN,NEWSLETTER_ADMIN,PCLAVE_ADMIN,SCHEDULE_ADMIN,'
-                  .'IMPORT_EPRESS,IMPORT_EFE,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
+                  .'IMPORTER_ADMIN,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
@@ -200,17 +212,11 @@ $menuXml = '<?xml version="1.0"?>
             link="http://www.cronicasdelaemigracion.com//agenda/"
             privilege="SCHEDULE_ADMIN" />
         <node
-            module_name="EUROPAPRESS_IMPORTER"
-            title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"
-            id="europaPress_importer"
-            link="'.url('admin_importer_europapress').'"
-            privilege="IMPORT_EPRESS" />
-        <node
-            module_name="EFE_IMPORTER"
-            privilege="IMPORT_EFE"
-            title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
-            id="efe_importer"
-            link="'.url('admin_importer_efe').'"
+            module_name="NEWS_AGENCY_IMPORTER"
+            privilege="IMPORT_ADMIN"
+            title="'.htmlspecialchars(_("News Agency"), ENT_QUOTES).'"
+            id="news_agency"
+            link="'.url('admin_news_agency').'"
         />
         <node
             module_name="PAPER_IMPORT"
@@ -219,7 +225,6 @@ $menuXml = '<?xml version="1.0"?>
             id="xml_importer"
             link="'.url('admin_importer_xmlfile').'"
         />
-
         <node class="divider" />
         <node
             module_name="CRONICAS_MODULES"

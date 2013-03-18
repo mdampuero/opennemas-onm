@@ -16,18 +16,47 @@
  **/
 class Privilege
 {
-    public $id                = null;
+    /**
+     * The privilege id
+     *
+     * @var int
+     **/
     public $pk_privilege      = null;
+
+    /**
+     * The privilege description
+     *
+     * @var string
+     **/
     public $description       = null;
+
+    /**
+     * The privilege name
+     *
+     * @var string
+     **/
     public $name              = null;
+
+    /**
+     * The privilege module name
+     *
+     * @var string
+     **/
     public $module            = null;
+
+    /**
+     * the list of available privileges
+     *
+     * @var array
+     **/
     public static $privileges = null;
 
     /**
-     * Constructor
+     * Initializes the object isntance
      *
-     * @see Privilege::Privilege
      * @param int $id Privilege Id
+     *
+     * @return Privilege the object instance
     */
     public function __construct($id = null)
     {
@@ -39,9 +68,11 @@ class Privilege
     }
 
     /**
-     * Read a privilege
+     * Reads a privilege information given the id
      *
      * @param int $id Privilege Id
+     *
+     * @return Privilege the privilege object
      */
     public function read($id)
     {
@@ -59,6 +90,7 @@ class Privilege
      * Load properties in this instance
      *
      * @param  array|stdClass $data
+     *
      * @return Privilege      Return this instance to chaining of methods
      */
     public function load($data)
@@ -100,8 +132,8 @@ class Privilege
     /**
      * Get modules name
      *
-     * @param array Array of string
-     */
+     * @return array Array of string
+     **/
     public function getModuleNames()
     {
         $modules = array();
@@ -122,7 +154,7 @@ class Privilege
      *
      * @return array modules with each privileges
      *
-     */
+     **/
     public function getPrivilegesByModules($filter = null)
     {
         $groupedPrivileges = array();
@@ -146,10 +178,11 @@ class Privilege
      *
      * @return array the list of privilege names
      *
-     */
+     **/
     public static function getPrivilegesForUserGroup($userGroupId)
     {
         self::loadPrivileges();
+
         $sql = 'SELECT pk_fk_privilege FROM users, user_groups_privileges
                 WHERE pk_fk_user_group = ? ORDER BY pk_fk_privilege';
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($userGroupId)));
@@ -819,25 +852,13 @@ class Privilege
             125 => array(
                 'pk_privilege' => '125',
                 'name'         => 'IMPORT_ADMIN',
-                'description'  => _('Import agency'),
-                'module'       => 'IMPORT',
-            ),
-            126 => array(
-                'pk_privilege' => '126',
-                'name'         => 'IMPORT_EPRESS',
-                'description'  => _('Import EuropaPress articles'),
+                'description'  => _('Import news from agency'),
                 'module'       => 'IMPORT',
             ),
             127 => array(
                 'pk_privilege' => '127',
                 'name'         => 'IMPORT_XML',
                 'description'  => _('Import XML files'),
-                'module'       => 'IMPORT',
-            ),
-            128 => array(
-                'pk_privilege' => '128',
-                'name'         => 'IMPORT_EFE',
-                'description'  => _('Import EFE articles'),
                 'module'       => 'IMPORT',
             ),
             130 => array(
@@ -1110,17 +1131,10 @@ class Privilege
                 'description'  => _('Manage frontpage'),
                 'module'       => 'POLL',
             ),
-
-            176 => array(
-                'pk_privilege' => '176',
-                'name'         => 'IMPORT_EPRESS_CONFIG',
-                'description'  => _('Config Import EuropaPress'),
-                'module'       => 'IMPORT',
-            ),
             177 => array(
                 'pk_privilege' => '177',
-                'name'         => 'IMPORT_EFE_CONFIG',
-                'description'  => _('Config Import EFE'),
+                'name'         => 'IMPORT_NEWS_AGENCY_CONFIG',
+                'description'  => _('Config News Agency importer'),
                 'module'       => 'IMPORT',
             ),
         );

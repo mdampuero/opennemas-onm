@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -30,8 +35,6 @@ class AclUserGroupsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->checkAclOrForward('GROUP_ADMIN');
 
         $this->privilege = new \Privilege();
@@ -40,7 +43,9 @@ class AclUserGroupsController extends Controller
     /**
      * List all the user groups
      *
-     * @return void
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function listAction(Request $request)
     {
@@ -56,7 +61,9 @@ class AclUserGroupsController extends Controller
     /**
      * Shows the form for editting a user group
      *
-     * @return string the response string
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function showAction(Request $request)
     {
@@ -82,7 +89,9 @@ class AclUserGroupsController extends Controller
     /**
      * Handles the action of show creation form for user group and save it
      *
-     * @return string the response string
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function createAction(Request $request)
     {
@@ -99,18 +108,13 @@ class AclUserGroupsController extends Controller
         if ($this->request->getMethod() == 'POST') {
             // Try to save the new privilege
             if ($userGroup->create($data)) {
-                // If user group was saved successfully and the action
-                // is validate show again the form
-                if ($this->request->get('action') == 'validate') {
-                    return $this->redirect($this->generateUrl('admin_acl_usergroups'));
-                } else {
-                    return $this->redirect(
-                        $this->generateUrl(
-                            'admin_acl_usergroups_show',
-                            array('id' => $userGroup->id)
-                        )
-                    );
-                }
+                // If user group was saved successfully show again the form
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_acl_usergroups_show',
+                        array('id' => $userGroup->id)
+                    )
+                );
             } else {
                 $this->view->assign('errors', $userGroup->errors);
             }
@@ -128,7 +132,9 @@ class AclUserGroupsController extends Controller
     /**
      * Updates the user group information given its id and the new information
      *
-     * @return string the return string
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function updateAction(Request $request)
     {
@@ -151,10 +157,6 @@ class AclUserGroupsController extends Controller
             );
         }
 
-        if ($request->request->filter('action') != 'validate') {
-            return $this->redirect($this->generateUrl('admin_acl_usergroups'));
-        }
-
         return $this->redirect(
             $this->generateUrl('admin_acl_usergroups_show', array('id' => $userGroup->id))
         );
@@ -163,7 +165,9 @@ class AclUserGroupsController extends Controller
     /**
      * Deletes a user group given its id
      *
-     * @return string the string response
+     * @param Request $request the request object
+     *
+     * @return Response the response object
      **/
     public function deleteAction(Request $request)
     {

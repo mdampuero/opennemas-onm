@@ -1,11 +1,14 @@
 <?php
 /**
- * This file is part of the Onm package.
+ * Defines the Onm\Framework\Controller\Controller class
  *
+ * This file is part of the Onm package.
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
+ *
+ * @package  Onm_Framework_Controller_Controller
  **/
 namespace Onm\Framework\Controller;
 
@@ -19,15 +22,16 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * It provides methods to common features needed in controllers.
  *
- * @author Fran Diéguez <fran@openhost.es>
+ * @package  Onm_Framework_Controller_Controller
  */
 class Controller extends ContainerAware
 {
     /**
-     * Retrieve unsetted variables from the container
+     * Fetches unsetted variables from the container
      *
-     * @return void
-     * @author
+     * @param string $name the property name
+     *
+     * @return mixed the property value
      **/
     public function __get($name)
     {
@@ -223,7 +227,9 @@ class Controller extends ContainerAware
     /**
      * Checks if the user can access an specific aclname or redirects him to wellcome page
      *
-     * @return void
+     * @param string $aclName the name of the acl
+     *
+     * @return boolean true if the user has rights for the given ACL
      **/
     public function checkAclOrForward($aclName)
     {

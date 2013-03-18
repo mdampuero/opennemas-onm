@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for advertisements
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -22,7 +27,7 @@ use Onm\Settings as s;
 /**
  * Handles the actions for advertisements
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class PollsController extends Controller
 {
@@ -71,7 +76,7 @@ class PollsController extends Controller
     /**
      * Renders the album frontpage
      *
-     * @param int page the page to show
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -86,7 +91,8 @@ class PollsController extends Controller
         // Don't execute action logic if was cached before
         $cacheID = $this->view->generateCacheId('poll'.$this->categoryName, '', $this->page);
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('poll/poll-frontpage.tpl', $cacheID))) {
+            || (!$this->view->isCached('poll/poll-frontpage.tpl', $cacheID))
+        ) {
 
             if (isset($this->category) && !empty($this->category)) {
                 $polls = $this->cm->find_by_category(
@@ -142,8 +148,7 @@ class PollsController extends Controller
     /**
      * Shows a poll given its id
      *
-     * @param int id the identifier of the poll
-     * @param int page the page
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -206,14 +211,17 @@ class PollsController extends Controller
         $message = null;
         $alreadyVoted = false;
         $voted = (int) $request->query->getDigits('voted', 0);
-        $valid = (int) $request->query->getDigits('valid', null);
+        $valid = (int) $request->query->getDigits('valid', 3);
         if ($voted == 1) {
             if ($voted == 1 && $valid === 1) {
                 $message = _('Thanks for participating.');
             } elseif ($voted == 1 && $valid === 0) {
                 $message = _('Please select a valid poll answer.');
             }
-        } elseif(isset($cookie)) {
+        } elseif (isset($cookie)) {
+            $alreadyVoted = true;
+            $message = _('You have voted this poll previously.');
+        } elseif (($valid === 0) && ($voted == 0)) {
             $alreadyVoted = true;
             $message = _('You have voted this poll previously.');
         }
@@ -233,7 +241,7 @@ class PollsController extends Controller
     /**
      * Add vote & show poll result
      *
-     * @param string id the identificator of the poll
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -283,7 +291,13 @@ class PollsController extends Controller
         return $response;
     }
 
-
+    /**
+     * Fetches the ads given a context
+     *
+     * @param string $context the context to fetch ads from
+     *
+     * @return void
+     **/
     protected function getAds($context = 'frontpage')
     {
         $advertisement = \Advertisement::getInstance();
@@ -306,12 +320,13 @@ class PollsController extends Controller
         if (!empty($intersticial)) {
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
-
-        return new Response('ok');
     }
 
     /**
      * Clean the cache for a given poll
+     *
+     * @param string $categoryName the category where the clean has to be done
+     * @param int $pollId the poll id where the clean has to be done
      *
      * @return void
      **/

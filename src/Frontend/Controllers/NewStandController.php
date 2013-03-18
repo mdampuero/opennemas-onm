@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for newsstand
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,9 +22,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for newsstand
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class NewStandController extends Controller
 {
@@ -51,6 +56,8 @@ class NewStandController extends Controller
     /**
      * Renders the newstand frontpage
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function frontpageAction(Request $request)
@@ -63,24 +70,38 @@ class NewStandController extends Controller
         $order = $configurations['orderFrontpage'];
 
         if ($order =='grouped') {
-            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $year);
+            $cache_date = $year.$month;
+            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko =array();
             if (($this->view->caching == 0)
-               || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
+                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
                 $contentType = \Content::getIDContentType('kiosko');
                 $category = $ccm->get_id($this->category_name);
 
-                list($allcategorys, $subcat, $categoryData) =
-                    $ccm->getArraysMenu($category, $contentType);
+                list($allcategorys, $subcat, $categoryData)
+                    = $ccm->getArraysMenu($category, $contentType);
+                $where = "";
+                $limit = "LIMIT 48";
+                $month = $request->query->getDigits('month');
+                if (!empty($month)) {
+                    $where .= " AND MONTH(`kioskos`.date)='{$month}' ";
+                    $limit ="";
+                }
+                $year = $request->query->getDigits('year');
+                if (!empty($year)) {
+                    $where .= " AND YEAR(`kioskos`.date)='{$year}' ";
+                    $limit ="";
+                }
 
                 foreach ($allcategorys as $theCategory) {
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1   ',
-                        'ORDER BY `kioskos`.date DESC LIMIT 48 '
+                        ' `contents`.`available`=1   '.
+                        $where,
+                        "ORDER BY `kioskos`.date DESC  {$limit}"
                     );
                     if (!empty($portadas)) {
                         $kiosko[] = array (
@@ -96,12 +117,8 @@ class NewStandController extends Controller
             $cacheID    = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko     = array();
             if (($this->view->caching == 0)
-               || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
+                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
-                // $ccm = \ContentCategoryManager::get_instance();
-                // $category = $ccm->get_id($this->category_name);
-                // list($allcategorys, $subcat, $categoryData) =
-                //      $ccm->getArraysMenu($category, $contentType);
 
                 $date = "$year-$month-$day";
                 $portadas = $this->cm->findAll(
@@ -121,7 +138,7 @@ class NewStandController extends Controller
             $cacheID   = $this->view->generateCacheId('newsstand', $this->category_name, $cacheDate);
             $kiosko    = array();
             if (($this->view->caching == 0)
-               || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
+                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
                 $contentType = \Content::getIDContentType('kiosko');
@@ -159,6 +176,8 @@ class NewStandController extends Controller
                 'date'           => '1-'.$month.'-'.$year,
                 'MONTH'          => $month,
                 'YEAR'           => $year,
+                'year'           => $year,
+                'month'          => $month,
                 'kiosko'         => $kiosko
             )
         );
@@ -167,6 +186,8 @@ class NewStandController extends Controller
 
     /**
      * Renders a particular cover given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/

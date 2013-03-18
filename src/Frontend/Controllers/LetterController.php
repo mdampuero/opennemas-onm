@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for letters
+ *
+ * @package Frontend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -17,9 +22,9 @@ use Onm\Message as m;
 use Onm\Settings as s;
 
 /**
- * Handles the actions for advertisements
+ * Handles the actions for letters
  *
- * @package Backend_Controllers
+ * @package Frontend_Controllers
  **/
 class LetterController extends Controller
 {
@@ -34,7 +39,9 @@ class LetterController extends Controller
     }
 
     /**
-     * Description of the action
+     * Renders letters frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -74,7 +81,9 @@ class LetterController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows a letter
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -132,6 +141,8 @@ class LetterController extends Controller
     /**
      * Saves a letter into database
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function saveAction(Request $request)
@@ -161,7 +172,7 @@ class LetterController extends Controller
             $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-            if (!empty($lettertext) && empty($security_code) ) {
+            if (!empty($lettertext) && empty($security_code)) {
                 $data = array();
                 $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
                 $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
@@ -187,7 +198,7 @@ class LetterController extends Controller
     /**
      * Returns the advertisements for the letters frontpage
      *
-     * @return array
+     * @return void
      **/
     public function getAds()
     {
@@ -213,7 +224,7 @@ class LetterController extends Controller
     /**
      * Gets the advertisement
      *
-     * @return void
+     * @return Response void
      **/
     public function getAdsInner()
     {

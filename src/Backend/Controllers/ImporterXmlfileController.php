@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -30,8 +35,7 @@ class ImporterXmlfileController extends Controller
     public function init()
     {
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-        if (
-            is_null(s::get('xml_file_schema'))
+        if (is_null(s::get('xml_file_schema'))
             && $action != 'config'
         ) {
             m::add(_('Please provide XML file schema'));
@@ -41,7 +45,9 @@ class ImporterXmlfileController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the upload form for importing XML files
+     *
+     * @param Request $request the request object
      *
      * @return void
      **/
@@ -52,6 +58,8 @@ class ImporterXmlfileController extends Controller
 
     /**
      * Handles the action of importing a bunch of XML files or zippped ones
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -72,7 +80,9 @@ class ImporterXmlfileController extends Controller
 
         $numCategories='0';
 
-        if (count($_FILES["file"]["name"]) >= 1 && !empty($_FILES["file"]["name"][0]) ) {
+        if (count($_FILES["file"]["name"]) >= 1
+            && !empty($_FILES["file"]["name"][0])
+        ) {
 
             $dryRun = $this->request->query->filter('dry-run', FILTER_SANITIZE_STRING);
             for ($i=0, $j=0; $i<count($_FILES["file"]["name"]); $i++) {
@@ -174,6 +184,8 @@ class ImporterXmlfileController extends Controller
     /**
      * Handles the configuration form for the xml file
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function configAction(Request $request)
@@ -206,7 +218,7 @@ class ImporterXmlfileController extends Controller
                 'important'     => $config['important'],
             );
 
-            if (s::set('xml_file_schema', $schema) ) {
+            if (s::set('xml_file_schema', $schema)) {
                 m::add(_('Importer XML configuration saved successfully'), m::SUCCESS);
             } else {
                 m::add(_('There was an error while saving importer XML configuration'), m::ERROR);
@@ -214,7 +226,7 @@ class ImporterXmlfileController extends Controller
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));
         } else {
-            if ( $config = s::get('xml_file_schema') ) {
+            if ($config = s::get('xml_file_schema')) {
 
                 $this->view->assign(
                     array(

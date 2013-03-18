@@ -1,5 +1,10 @@
 <?php
 /**
+ * Defines all the routes for frontend interface
+ *
+ * @package  Frontend
+ */
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -949,7 +954,7 @@ $frontendRoutes->add(
         '/portadas-papel/{year}/{month}/{day}',
         array(
            '_controller' => 'Frontend:Controllers:NewStandController:frontpage',
-           'month'       => date('n'),
+           'month'       => 0,
            'day'         => 1,
         ),
         array(

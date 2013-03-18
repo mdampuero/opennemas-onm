@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for the system information
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -37,6 +42,8 @@ class FrontpagesController extends Controller
     /**
      * Displays the frontpage elements for a given frontpage id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function showAction(Request $request)
@@ -69,7 +76,7 @@ class FrontpagesController extends Controller
         // Check if the user can edit frontpages
         if (!\Acl::check('ARTICLE_FRONTPAGE')) {
             \Acl::deny();
-        } elseif (!\Acl::_C($categoryID)) {
+        } elseif (!\Acl::checkCategoryAccess($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
             $section = $ccm->get_name($categoryID);
             $_REQUEST['category'] = $categoryID;
@@ -146,6 +153,8 @@ class FrontpagesController extends Controller
 
     /**
      * Saves frontpage positions for given frontpage
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -260,7 +269,7 @@ class FrontpagesController extends Controller
     }
 
     /**
-     * Description of this action
+     * Changes the frontpage
      *
      * @param Request $request the request object
      *
@@ -308,6 +317,8 @@ class FrontpagesController extends Controller
     /**
      * Returns the last version for a particular frontpage
      *
+     * @param Request $request the request object
+     *
      * @return Response the response instance
      **/
     public function lastVersionAction(Request $request)
@@ -332,8 +343,9 @@ class FrontpagesController extends Controller
     /**
      * Generates a preview for a particular frontpage given the required information
      *
+     * @param Request $request the request object
+     *
      * @return void
-     * @author
      **/
     public function previewAction(Request $request)
     {

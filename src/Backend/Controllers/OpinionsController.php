@@ -1,5 +1,10 @@
 <?php
 /**
+ * Handles the actions for managing opinions
+ *
+ * @package Backend_Controllers
+ **/
+/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -40,7 +45,9 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Description of the action
+     * Lists all the opinions
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -456,6 +463,8 @@ class OpinionsController extends Controller
     /**
      * Change available status for one opinion given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleAvailableAction(Request $request)
@@ -507,6 +516,8 @@ class OpinionsController extends Controller
     /**
      * Change in_home status for one opinion given its id
      *
+     * @param Request $request the request object
+     *
      * @return Response the response object
      **/
     public function toggleInHomeAction(Request $request)
@@ -544,6 +555,8 @@ class OpinionsController extends Controller
 
     /**
      * Change favorite flag for one opinion given its id
+     *
+     * @param Request $request the request object
      *
      * @return Response the response object
      **/
@@ -653,15 +666,15 @@ class OpinionsController extends Controller
     {
         $this->checkAclOrForward('OPINION_DELETE');
 
-        $selected = $request->request->get('selected_fld', null);
-        $status = $request->request->getDigits('status');
-        $author = $request->request->getDigits('author');
-        $page     = $request->request->getDigits('page', 1);
+        $selected       = $request->query->get('selected_fld', null);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $author         = $request->query->getDigits('author');
+        $page           = $request->query->getDigits('page', 1);
 
+        $changes = 0;
         if (is_array($selected)
             && count($selected) > 0
         ) {
-            $changes = 0;
             foreach ($selected as $id) {
                 $opinion = new \Opinion((int) $id);
                 if (!is_null($opinion->id)) {
@@ -681,8 +694,9 @@ class OpinionsController extends Controller
                 $this->generateUrl(
                     'admin_opinions',
                     array(
-                        'status' => $status,
                         'author' => $author,
+                        'status' => $redirectStatus,
+                        'page' => $page,
                     )
                 )
             );
@@ -701,21 +715,23 @@ class OpinionsController extends Controller
     {
         $this->checkAclOrForward('OPINIONS_AVAILABLE');
 
-        $selected = $request->request->get('selected_fld', null);
-        $status = $request->request->getDigits('status', 0);
-        $author = $request->request->getDigits('author');
-        $page     = $request->request->getDigits('page', 1);
+        $selected       = $request->query->get('selected_fld', null);
+        $status         = $request->query->getDigits('new_status', 0);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $author         = $request->query->getDigits('author');
+        $page           = $request->query->getDigits('page', 1);
 
+        $changes = 0;
         if (is_array($selected)
             && count($selected) > 0
         ) {
-            $changes = 0;
             foreach ($selected as $id) {
                 $opinion = new \Opinion((int) $id);
                 if (!is_null($opinion->id)) {
                     if ($status == 0) {
                         $opinion->setDraft();
                         $opinion->set_favorite($status);
+                        $opinion->set_inhome($status);
                     } else {
                         $opinion->setAvailable();
                     }
@@ -734,11 +750,63 @@ class OpinionsController extends Controller
                 'admin_opinions',
                 array(
                     'author' => $author,
+                    'status' => $redirectStatus,
+                    'page' => $page,
                 )
             )
         );
     }
 
+      /**
+     * Changes home status for opinions given their ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchInHomeAction(Request $request)
+    {
+        $this->checkAclOrForward('OPINIONS_AVAILABLE');
+
+        $selected       = $request->query->get('selected_fld', null);
+        $status         = $request->query->getDigits('new_status', 0);
+        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
+        $author         = $request->query->getDigits('author');
+        $page           = $request->query->getDigits('page', 1);
+
+        $changes = 0;
+        if (is_array($selected)
+            && count($selected) > 0
+        ) {
+            foreach ($selected as $id) {
+                $opinion = new \Opinion((int) $id);
+                if (!is_null($opinion->id)) {
+                    if ($status == 0) {
+                        $opinion->set_inhome($status);
+                    } else {
+                        $opinion->set_inhome($status);
+                    }
+                    $changes++;
+                } else {
+                    m::add(sprintf(_('Unable to find a opinion with the id "%d"'), $id), m::ERROR);
+                }
+            }
+        }
+        if ($changes > 0) {
+            m::add(sprintf(_('Successfully changed the home status of %d opinions'), $changes), m::SUCCESS);
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_opinions',
+                array(
+                    'author' => $author,
+                    'status' => $redirectStatus,
+                    'page' => $page,
+                )
+            )
+        );
+    }
     /**
      * Lists the available opinions for the frontpage manager
      *
@@ -823,7 +891,7 @@ class OpinionsController extends Controller
         list($countOpinions, $opinions) = $cm->getCountAndSlice(
             'Opinion',
             null,
-            'contents.content_status=1',
+            '',
             ' ORDER BY created DESC ',
             $page,
             $itemsPerPage
