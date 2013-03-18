@@ -16,7 +16,7 @@
                 simple : {
                     plugins: 'basicstyles,clipboard,list,indent,enterkey,entities,link,pastetext,toolbar,undo,wysiwygarea',
                     forcePasteAsPlainText : true,
-                    removeButtons: 'Anchor,Underline,Strike,Subscript,Superscript',
+                    removeButtons: 'Anchor,Strike,Subscript,Superscript',
                     toolbarGroups: [
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
                       { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
@@ -30,11 +30,13 @@
                       { name: 'tools' },
                       { name: 'others' },
                       { name: 'about' }
-                    ]
+                    ],
+                    autoGrow_onStartup: true,
+                    autoGrow_maxHeight: 500
                 },
 
                 full : {
-                    plugins: 'a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wysiwygarea',
+                    plugins: 'autogrow,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wysiwygarea',
                     removeButtons: '',
                     toolbarGroups: [
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
@@ -52,11 +54,32 @@
                       { name: 'tools' },
                       { name: 'others' },
                       { name: 'about' }
-                    ]
+                    ],
+                    autoGrow_onStartup: true,
+                    autoGrow_maxHeight: 500
                   },
 
-                  standard: {}
+                  standard: {
+                    toolbarGroups : [
+                        { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+                        { name: 'links' },
+                        { name: 'insert' },
+                        { name: 'forms' },
+                        { name: 'tools' },
+                        { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
+                        { name: 'others' },
+                        '/',
+                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                        { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
+                        { name: 'styles' },
+                        { name: 'colors' },
+                        { name: 'about' }
+                    ],
 
+                    removeButtons : 'Underline,Subscript,Superscript',
+                    autoGrow_onStartup: true,
+                    autoGrow_maxHeight: 500
+                  }
             };
 
             var defaultOptions = {
