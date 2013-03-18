@@ -25,13 +25,6 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/ckeditor/ckeditor.js" common=1}
-    {script_tag src="/onm/jquery.onm-editor.js" common=1}
-    <script type="text/javascript">
-    $.onmEditor({
-        language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
-    });
-    </script>
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
 
     <script type="text/javascript">
@@ -176,7 +169,7 @@
                 <div class="control-group">
                     <label for="site_footer" class="control-label">{t}Footer text{/t}</label>
                     <div class="controls">
-                        <textarea id="site_footer" name="site_footer" cols="50" rows="7" class="onm-editor" data-preset="simple">{$configs['site_footer']|default:""}</textarea>
+                        <textarea id="site_footer" name="site_footer" class="onm-editor" data-preset="simple">{$configs['site_footer']|default:""}</textarea>
                         <div class="help-block">{t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}</div>
                     </div>
                 </div>
@@ -198,7 +191,7 @@
                 <div class="control-group">
                     <label for="site_description" class="control-label">{t}Site description{/t}</label>
                     <div class="controls">
-                        <textarea id="site_description" name="site_description" class="input-xxlarge" cols=50 rows=5>{$configs['site_description']|default:""}</textarea>
+                        <textarea id="site_description" name="site_description" class="input-xxlarge">{$configs['site_description']|default:""}</textarea>
                     </div>
                 </div>
 
