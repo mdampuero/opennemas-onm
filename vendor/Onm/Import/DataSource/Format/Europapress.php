@@ -377,7 +377,7 @@ class Europapress implements FormatInterface
      **/
     public static function checkFormat($data, $xmlFile)
     {
-        if ($data->CODIGO->count() <=0 ) {
+        if ($data->CODIGO->count() <= 0) {
             throw new \Exception(sprintf(_('File %s is not a valid Europapress file'), $xmlFile));
         }
 

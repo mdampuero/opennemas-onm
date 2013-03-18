@@ -123,7 +123,6 @@ class NITF implements FormatInterface
     public function getId()
     {
         $attributes = $this->getData()->attributes();
-var_dump($attributes);die();
 
         return (string) $attributes->Euid;
     }
