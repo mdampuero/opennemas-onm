@@ -17,14 +17,14 @@
                 simple : {
                     plugins: load_plugins,
                     forcePasteAsPlainText : true,
-                    removeButtons: 'Anchor,Strike,Subscript,Superscript',
+                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles',
                     toolbarGroups: [
+                      { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'editing',     groups: [ 'find', 'selection' ] },
                       { name: 'forms' },
-                      { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                      { name: 'links' },
                       { name: 'styles' },
+                      { name: 'links' },
                       { name: 'others' },
                       { name: 'about' },
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] }
@@ -65,18 +65,18 @@
                   standard: {
                     plugins: load_plugins,
                     toolbarGroups : [
-                        { name: 'align', groups: [ 'align' ]},
+                        { name: 'styles' },
                         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
-                        { name: 'links' },
-                        { name: 'insert' },
                         { name: 'forms' },
                         { name: 'tools' },
                         { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
                         { name: 'others' },
                         '/',
                         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                        { name: 'align', groups: [ 'align' ]},
                         { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks' ] },
-                        { name: 'styles' },
+                        { name: 'links' },
+                        { name: 'insert' },
                         { name: 'colors' },
                         { name: 'about' }
                     ],
