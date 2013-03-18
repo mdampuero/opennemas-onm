@@ -11,7 +11,7 @@
     $.extend({
         onmEditor: function( options ) {
 
-            var load_plugins = 'autogrow,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wysiwygarea';
+            var load_plugins = 'autogrow,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wordcount,wysiwygarea';
             var presets = {
 
                 simple : {
@@ -30,7 +30,11 @@
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] }
                     ],
                     autoGrow_onStartup: true,
-                    autoGrow_maxHeight: 500
+                    autoGrow_maxHeight: 500,
+                    wordcount: {
+                        showWordCount: false,
+                        showCharCount: false
+                    }
                 },
 
                 full : {
