@@ -21,7 +21,9 @@
                                 {if isset($photo1) && $photo1->name}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" id="frontpage_image" name="{$article->img1}" />
                                 {else}
-                                    <img src="http://placehold.it/290x226" id="frontpage_image" />
+                                    <div class="drop-here">
+                                        {t}Drop an image to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
@@ -50,7 +52,9 @@
                                 {if isset($photo2) && $photo2->name}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}" id="inner_image" name="{$article->img2}" />
                                 {else}
-                                    <img src="http://placehold.it/290x226" id="inner_image" />
+                                    <div class="drop-here">
+                                        {t}Drop an image to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
@@ -80,7 +84,9 @@
                                 {if isset($article->params['imageHome']) && $photo3->name}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}" id="home_image" name="{$photo3->name}" />
                                 {else}
-                                    <img src="http://placehold.it/290x226" id="home_image" />
+                                    <div class="drop-here">
+                                        {t}Drop an image to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
@@ -162,7 +168,9 @@
                                         <img src="{$video1->information['thumbnail']}" />
                                         {/if}
                                     {else}
-                                        <img src="http://placehold.it/290x226" />
+                                    <div class="drop-here">
+                                        {t}Drop a video to here{/t}
+                                    </div>
                                     {/if}
                                 {/if}
                             </div>
@@ -195,7 +203,9 @@
                                     <img src="{$video2->information['thumbnail']}"/>
                                     {/if}
                                 {else}
-                                    <img src="http://placehold.it/290x226" />
+                                    <div class="drop-here">
+                                        {t}Drop a video to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
