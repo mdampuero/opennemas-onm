@@ -8,7 +8,7 @@ CKEDITOR.plugins.setLang( 'font', 'gl', {
 		voiceLabel: 'Font Size',
 		panelTitle: 'Tamaño'
 	},
-	label: 'Tipo',
-	panelTitle: 'Tipo',
-	voiceLabel: 'Tipo'
+	label: 'Tipo de letra',
+	panelTitle: 'Tipo de letra',
+	voiceLabel: 'Tipo de letra'
 });

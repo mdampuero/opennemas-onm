@@ -2,30 +2,30 @@
  * @license Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
  * For licensing, see LICENSE.html or http://ckeditor.com/license
  */
- 
+
 CKEDITOR.plugins.add('wordcount', {
-    lang: ['de', 'en'],
+    lang: ['de', 'en', 'es', 'gl'],
     init: function (editor) {
-        
+
         var defaultLimit = 'unlimited';
         var defaultFormat = '<span class="cke_path_item">';
         var limit = defaultLimit;
-        
+
         var intervalId;
         var lastWordCount = 0;
         var lastCharCount = 0;
         var limitReachedNotified = false;
         var limitRestoredNotified = false;
-        
+
         // Default Config
         var defaultConfig = {
             showWordCount: true,
             showCharCount: false
         };
-        
+
         // Get Config & Lang
         var config = CKEDITOR.tools.extend(defaultConfig, editor.config.wordcount || {}, true);
-        
+
         if (config.showCharCount) {
             defaultFormat += editor.lang.wordcount.CharCount + '&nbsp;%charCount%';
         }
@@ -37,9 +37,9 @@ CKEDITOR.plugins.add('wordcount', {
         if (config.showWordCount) {
             defaultFormat += editor.lang.wordcount.WordCount + ' %wordCount%';
         }
-        
+
         defaultFormat += '</span>';
-        
+
         var format = defaultFormat;
 
         CKEDITOR.document.appendStyleSheet(this.path + 'css/wordcount.css');
