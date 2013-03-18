@@ -11,34 +11,33 @@
     $.extend({
         onmEditor: function( options ) {
 
+            var load_plugins = 'autogrow,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wysiwygarea';
             var presets = {
 
                 simple : {
-                    plugins: 'basicstyles,clipboard,list,indent,enterkey,entities,link,pastetext,toolbar,undo,wysiwygarea',
+                    plugins: load_plugins,
                     forcePasteAsPlainText : true,
                     removeButtons: 'Anchor,Strike,Subscript,Superscript',
                     toolbarGroups: [
-                      { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
-                      { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+                      { name: 'align', groups: [ 'align' ]},
+                      { name: 'editing',     groups: [ 'find', 'selection' ] },
                       { name: 'forms' },
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                      { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
                       { name: 'links' },
-                      { name: 'insert' },
                       { name: 'styles' },
-                      { name: 'colors' },
-                      { name: 'tools' },
                       { name: 'others' },
-                      { name: 'about' }
+                      { name: 'about' },
+                      { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] }
                     ],
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
                 },
 
                 full : {
-                    plugins: 'autogrow,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wysiwygarea',
+                    plugins: load_plugins,
                     removeButtons: '',
                     toolbarGroups: [
+                      { name: 'align', groups: [ 'align' ]},
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
                       { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
                       { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
@@ -60,7 +59,9 @@
                   },
 
                   standard: {
+                    plugins: load_plugins,
                     toolbarGroups : [
+                        { name: 'align', groups: [ 'align' ]},
                         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
                         { name: 'links' },
                         { name: 'insert' },
@@ -70,7 +71,7 @@
                         { name: 'others' },
                         '/',
                         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                        { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
+                        { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks' ] },
                         { name: 'styles' },
                         { name: 'colors' },
                         { name: 'about' }
