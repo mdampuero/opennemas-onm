@@ -891,7 +891,7 @@ class OpinionsController extends Controller
         list($countOpinions, $opinions) = $cm->getCountAndSlice(
             'Opinion',
             null,
-            'contents.content_status=1',
+            '',
             ' ORDER BY created DESC ',
             $page,
             $itemsPerPage
