@@ -11,7 +11,7 @@
  *
  * @package Onm_Import_DataSource_Format_NewsMLG1Component
  **/
-namespace Onm\Import\DataSource\NewsMLG1Component\Format;
+namespace Onm\Import\DataSource\Format\NewsMLG1Component;
 
 /**
  * Wrapper for Video component inside NewsMLG1
