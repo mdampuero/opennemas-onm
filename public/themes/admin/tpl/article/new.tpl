@@ -302,29 +302,29 @@
                         </div>
                     </div>
                 </div>
-        </div>
-        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-        <div id="avanced-custom">
-            {include file ="article/partials/_article_avanced_customize.tpl"}
-        </div>
-        {/is_module_activated}
+            </div>
+            {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+            <div id="avanced-custom">
+                {include file ="article/partials/_article_avanced_customize.tpl"}
+            </div>
+            {/is_module_activated}
 
-        <div id="related-contents">
-            {include file ="article/related/_related_list.tpl"}
-            <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
-            <input type="hidden" id="relatedInner" name="relatedInner" value="" />
+            <div id="related-contents">
+                {include file ="article/related/_related_list.tpl"}
+                <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
+                <input type="hidden" id="relatedInner" name="relatedInner" value="" />
 
-            <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
-            <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
+                <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
+                <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
 
-            <input type="hidden" id="relatedHome" name="relatedHome" value="" />
-            <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
-        </div>
+                <input type="hidden" id="relatedHome" name="relatedHome" value="" />
+                <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
+            </div>
+
 
             <input type="hidden" id="action" name="action" value="{$action}" />
             <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
-        </div>
-    </div>
+        </div><!-- tabs -->
+    </div><!-- /wrapper-content contentform -->
 </form>
-
 {/block}
