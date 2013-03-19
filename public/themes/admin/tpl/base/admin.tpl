@@ -33,7 +33,7 @@
     {block name="header-js"}
         {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
-        {script_tag src="/onm/scripts.js"}
+        {script_tag src="/onm/scripts.js" common=1}
         {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
