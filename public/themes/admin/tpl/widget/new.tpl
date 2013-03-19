@@ -87,7 +87,7 @@
                 <label for="description" class="control-label">{t}Content{/t}</label>
                 <div class="controls">
                     <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:none{else}display:inline{/if}">
-                        <textarea cols="80" id="widget_content" rows="20" name="content" class="input-xxlarge">{$widget->content|default:""}</textarea>
+                        <textarea id="widget_content" name="content" class="onm-editor">{$widget->content|default:""}</textarea>
                     </div>
 
                     <div id="select-widget" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:inline{else}display:none{/if}">
@@ -106,25 +106,12 @@
 
 
 {block name="footer-js" append}
-{script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript">
-//TinyMce scripts
-tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-OpenNeMas.tinyMceConfig.advanced.elements = "widget_content";
-{if isset($widget) && $widget->renderlet == 'html'}
-    tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-    jQuery(document).ready(function($) {
-        $('#formulario').on('submit', function() {
-            OpenNeMas.tinyMceFunctions.saveTiny('widget_content');
-            OpenNeMas.tinyMceFunctions.destroy('widget_content');
-        })
-    });
-
+{if isset($widget) && $widget->renderlet !== 'html'}
+    CKEDITOR.instances.widget_content.destroy();
 {/if}
 
 jQuery(document).ready(function($) {
-
-
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
@@ -134,14 +121,14 @@ jQuery(document).ready(function($) {
         if(value == 'html') {
             $('#widget_textarea').show();
             $('#select-widget').hide();
-            tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
+            $.onmEditor();
         } else if (value == 'intelligentwidget') {
             $('widget_textarea').hide();
             $('select-widget').show();
         } else {
             $('#widget_textarea').show();
             $('#select-widget').hide();
-            OpenNeMas.tinyMceFunctions.destroy( 'widget_content' );
+            CKEDITOR.instances.widget_content.destroy();
         }
     });
 });

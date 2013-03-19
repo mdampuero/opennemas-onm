@@ -55,7 +55,7 @@
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" rows="5" required="required" tabindex="5" style="height:20em;" class="input-xxxlarge">{$page->body|default:""}</textarea>
+                    <textarea name="body" id="body" required="required" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
                 </div>
             </div>
 
@@ -77,12 +77,8 @@
 
 {block name="footer-js" append}
 
-{script_tag src="/tiny_mce/opennemas-config.js"}
 <script type="text/javascript">
 /* <![CDATA[ */
-tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-OpenNeMas.tinyMceConfig.advanced.elements = "body";
-tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 
 jQuery(document).ready(function($){
 

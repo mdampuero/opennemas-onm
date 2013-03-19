@@ -12,12 +12,6 @@
 {/block}
 
 {block name="footer-js" append}
-    {script_tag src="/tiny_mce/opennemas-config.js"}
-    <script type="text/javascript" language="javascript">
-        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-        OpenNeMas.tinyMceConfig.advanced.elements = "body";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-    </script>
 {/block}
 
 {block name="content"}
@@ -104,7 +98,7 @@
             <div class="control-group">
                 <label class="control-label" for="body">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" style="width:100%; height:20em;">{$comment->body|clearslash}</textarea>
+                    <textarea name="body" id="body" class="onm-editor" data-preset="simple">{$comment->body|clearslash}</textarea>
                 </div>
             </div>
 

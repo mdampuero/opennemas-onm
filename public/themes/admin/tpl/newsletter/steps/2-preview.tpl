@@ -89,7 +89,7 @@ var  newsletter_urls = {
         <div class="control-group">
             <label for="htmlContent" class="control-label">{t}Preview{/t}</label>
             <div class="controls" >
-                <div id="html-content">{$newsletter->html}</div>
+                <div id="html_content">{$newsletter->html}</div>
             </div>
         </div>
     </div>

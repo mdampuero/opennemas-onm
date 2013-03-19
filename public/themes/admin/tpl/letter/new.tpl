@@ -3,8 +3,6 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-{script_tag src="/tiny_mce/opennemas-config.js"}
-
 <script>
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
@@ -37,10 +35,6 @@ jQuery(document).ready(function($) {
         }
     });
 });
-
-tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-OpenNeMas.tinyMceConfig.advanced.elements = "body";
-tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
 </script>
 {/block}
 
@@ -128,7 +122,7 @@ tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" style="width:100%; height:20em;" required="required">{$letter->body|clearslash}</textarea>
+                    <textarea name="body" id="body" required="required" class="onm-editor">{$letter->body|clearslash}</textarea>
                 </div>
             </div>
         </div>

@@ -28,7 +28,6 @@
     {script_tag src="/onm/article.js"}
     {script_tag src="/onm/content-provider.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
-    {script_tag src="/tiny_mce/opennemas-config.js"}
     <script>
         var article_urls = {
             preview : '{url name=admin_article_preview}'
@@ -56,13 +55,6 @@
             });
 
         });
-        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
-        OpenNeMas.tinyMceConfig.simple.elements = "summary";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
-
-        OpenNeMas.tinyMceConfig.advanced.elements = "body";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
     </script>
 {/block}
 
@@ -248,12 +240,9 @@
                     <div class="control-group">
                         <label for="summary" class="control-label">
                             {t}Summary{/t}
-                            <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
-                                <img src="{$params.IMAGE_DIR}/users_edit.png" />
-                            </a>
                         </label>
                         <div class="controls">
-                            <textarea name="summary" id="summary" style="width:100%">{$article->summary|clearslash|escape:"html"}</textarea>
+                            <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$article->summary|clearslash|escape:"html"}</textarea>
                         </div>
                     </div>
 
@@ -261,12 +250,9 @@
                     <div class="control-group">
                         <label for="metadata" class="control-label">
                             {t}Body{/t}
-                            <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="{t}Enable/disable enhanced editor{/t}">
-                                <img src="{$params.IMAGE_DIR}/users_edit.png" alt=""  />
-                            </a>
                         </label>
                         <div class="controls">
-                            <textarea name="body" id="body" style="width:100%;  height:20em;" >{$article->body|clearslash}</textarea>
+                            <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
                         </div>
                     </div>
                 </div>

@@ -1,16 +1,10 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-    {script_tag src="/tiny_mce/opennemas-config.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
-    {script_tag src="/jquery-onm/jquery.inputlength.js"}
     <script>
-        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-        OpenNeMas.tinyMceConfig.advanced.elements = "body";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
-
         $('.tabs').tabs();
 
         jQuery(document).ready(function ($){
@@ -31,9 +25,9 @@
                 }
             });
 
-            $('#formulario').on('change', function () {
-                OpenNeMas.tinyMceFunctions.saveTiny('body');
-            })
+            // $('#formulario').on('change', function () {
+            //     OpenNeMas.tinyMceFunctions.saveTiny('body');
+            // })
         });
     </script>
 {/block}
@@ -139,7 +133,7 @@
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" style="width:100%; min-height:600px;">{$opinion->body|clearslash}</textarea>
+                    <textarea name="body" id="body" class="onm-editor">{$opinion->body|clearslash}</textarea>
                 </div>
             </div>
 
