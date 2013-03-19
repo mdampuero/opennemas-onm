@@ -292,6 +292,51 @@ class Attachment extends Content
     }
 
     /**
+     * Removes files given its id
+     *
+     * @param array $arrayId the photo ids to delete
+     *
+     * @return boolean true if the photo was deleted
+     **/
+    public static function batchDelete($arrayIds)
+    {
+
+        $contents = implode(', ', $arrayIds);
+
+        $sql = 'SELECT  path  FROM attachments WHERE pk_attachment IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        while (!$rs->EOF) {
+            $file = MEDIA_PATH.DS.FILE_DIR.DS.$rs->fields['path'];
+            if (file_exists($file)) {
+                var_dump($file);
+                @unlink($file);
+            }
+
+            $rs->MoveNext();
+        }
+
+        $sql = 'DELETE FROM attachments '
+                .'WHERE `pk_attachment` IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
      * Fetches one Attachement by its id
      *
      * @param int $id the attachemnt id

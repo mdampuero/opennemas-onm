@@ -28,7 +28,7 @@
     {script_tag src="/onm/article.js"}
     {script_tag src="/onm/content-provider.js"}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
-    {script_tag src="/tiny_mce/opennemas-config.js"}
+    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
     <script>
         var article_urls = {
             preview : '{url name=admin_article_preview}'
@@ -41,6 +41,8 @@
 
             $('#article-form').tabs();
             $('#title, #title_int, #subtitle').inputLengthControl();
+            var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
+
             $('#title_input, #category').on('change', function() {
                 var title = $('#title_input');
                 var category = $('#category option:selected');
@@ -49,20 +51,12 @@
                 if (title_int_element.val().length == 0) {
                     title_int_element.val(title.val());
                 };
-                fill_tags(title.val() + " " + category.data('name') + " " + metatags.val(), '#metadata', '{url name=admin_utils_calculate_tags}');
+                fill_tags_improved(title.val() + " " + category.data('name') + " " + metatags.val(), tags_input, '{url name=admin_utils_calculate_tags}');
             });
             $('#formulario').on('submit', function(){
                 save_related_contents();
             });
-
         });
-        tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-
-        OpenNeMas.tinyMceConfig.simple.elements = "summary";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
-
-        OpenNeMas.tinyMceConfig.advanced.elements = "body";
-        tinyMCE.init( OpenNeMas.tinyMceConfig.advanced );
     </script>
 {/block}
 
@@ -95,7 +89,7 @@
         </div>
     </div>
 
-    <div class="wrapper-content">
+    <div class="wrapper-content contentform">
 
         {render_messages}
 
@@ -119,161 +113,168 @@
 
             </ul>
 
-            {* Pestaña de edición-contenido*}
             <div id="edicion-contenido">
 
-                <div class="form-vertical" style="position:relative">
-                    <div class="utilities-conf" style="width:200px; position:absolute; top:0px; right:0px">
-                        {is_module_activated name="COMMENT_MANAGER"}
-                        <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
-                        <label for="with_comment">{t}Allow coments{/t}</label>
-                        <br/>
-                        {/is_module_activated}
+                <div class="contentform-inner clearfix">
+                    <div class="contentform-main">
+                        <div class="form-vertical">
+                            <div class="control-group">
+                                <label for="title" class="control-label">{t}Title{/t}</label>
+                                <div class="controls">
+                                    <div class="input-append" id="title">
+                                        <input type="text" name="title" id="title_input" class="input-xxlarge"
+                                            value="{$article->title|clearslash|escape:"html"}" maxlength="256" required="required"/>
+                                        <span class="add-on"></span>
+                                    </div>
+                                </div>
+                            </div>
 
-                        {acl isAllowed="ARTICLE_AVAILABLE"}
-                            <input type="checkbox" name="content_status" id="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value=1/>
-                            <label for="content_status">{t}Available{/t}</label>
-                            <br/>
-                        {/acl}
-                        {acl isAllowed="ARTICLE_FRONTPAGE"}
-                            <input type="checkbox"  name="promoted_to_category_frontpage" id="promoted" {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} value=1/>
-                            <label for="promoted">{t}Put in category frontpage{/t}</label>
-                            <br/>
-                        {/acl}
-                        {acl isAllowed="ARTICLE_HOME"}
-                            <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} value=1/>
-                            <label for="frontpage">{t}Suggested for frontpage{/t}</label>
-                        {/acl}
-                    </div>
-
-                    <div class="control-group">
-                        <label for="title" class="control-label">{t}Title{/t}</label>
-                        <div class="controls">
-                            <div class="input-append" id="title">
-                                <input type="text" name="title" id="title_input" class="input-xxlarge"
-                                    value="{$article->title|clearslash|escape:"html"}" maxlength="256" required="required"/>
-                                <span class="add-on"></span>
+                            <div class="control-group">
+                                <label for="title_int" class="control-label">{t}Inner title{/t}</label>
+                                <div class="controls">
+                                    <div class="input-append" id="title_int">
+                                        <input type="text" name="title_int" id="title_int_input" maxlength="256" class="input-xxlarge"
+                                                value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
+                                        <span class="add-on"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label for="title_int" class="control-label">{t}Inner title{/t}</label>
-                        <div class="controls">
-                            <div class="input-append" id="title_int">
-                                <input type="text" name="title_int" id="title_int_input" maxlength="256" class="input-xxlarge"
-                                        value="{$article->title_int|clearslash|escape:"html"|default:$article->title}" required="required" />
-                                <span class="add-on"></span>
+                    <div class="contentbox-container">
+                        <div class="contentbox">
+                            <h3 class="title">{t}Attributes{/t}</h3>
+                            <div class="content">
+                                {is_module_activated name="COMMENT_MANAGER"}
+                                <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
+                                <label for="with_comment">{t}Allow coments{/t}</label>
+                                <br/>
+                                {/is_module_activated}
+
+                                {acl isAllowed="ARTICLE_AVAILABLE"}
+                                    <input type="checkbox" name="content_status" id="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value=1/>
+                                    <label for="content_status">{t}Available{/t}</label>
+                                    <br/>
+                                {/acl}
+                                {acl isAllowed="ARTICLE_FRONTPAGE"}
+                                    <input type="checkbox"  name="promoted_to_category_frontpage" id="promoted" {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} value=1/>
+                                    <label for="promoted">{t}Put in category frontpage{/t}</label>
+                                    <br/>
+                                {/acl}
+                                {acl isAllowed="ARTICLE_HOME"}
+                                    <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} value=1/>
+                                    <label for="frontpage">{t}Suggested for frontpage{/t}</label>
+                                {/acl}
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-inline-block">
-                    <div class="control-group">
-                        <label for="category" class="control-label">{t}Section:{/t}</label>
-                        <div class="controls">
-                            <select name="category" id="category">
-                                {section name=as loop=$allcategorys}
-                                    {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-                                    <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
-                                        {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
-                                        {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
-                                            {$allcategorys[as]->title}</option>
-                                    {/acl}
-                                    {section name=su loop=$subcat[as]}
-                                        {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
-                                        {if $subcat[as][su]->internal_category eq 1}
-                                            <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
-                                            {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
-                                            {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
-                                            &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/if}
+                        <div class="contentbox">
+                            <h3 class="title">{t}Category{/t}</h3>
+                            <div class="content">
+                                <select name="category" id="category">
+                                    {section name=as loop=$allcategorys}
+                                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
+                                        <option value="{$allcategorys[as]->pk_content_category}" data-name="{$allcategorys[as]->title}"
+                                            {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
+                                            {if (($category == $allcategorys[as]->pk_content_category) && !is_object($article)) || $article->category eq $allcategorys[as]->pk_content_category}selected{/if}>
+                                                {$allcategorys[as]->title}</option>
                                         {/acl}
+                                        {section name=su loop=$subcat[as]}
+                                            {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                            {if $subcat[as][su]->internal_category eq 1}
+                                                <option value="{$subcat[as][su]->pk_content_category}" data-name="{$subcat[as][su]->title}"
+                                                {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
+                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} >
+                                                &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
+                                            {/if}
+                                            {/acl}
+                                        {/section}
                                     {/section}
-                                {/section}
-                                <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
-                            </select>
+                                    <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="control-group">
-                        <label for="agency" class="control-label">{t}Signature{/t}</label>
-                        <div class="controls">
-                            <input  type="text" id="agency" name="agency"
-                                {if is_object($article)}
-                                    value="{$article->agency|clearslash|escape:"html"}"
-                                {else}
-                                    value="{setting name=site_agency}"
-                                {/if} />
-                        </div>
-                    </div>
-
-                    {is_module_activated name="CRONICAS_MODULES"}
-                    <div class="control-group">
-                        <label for="agency_bulletin" class="control-label">{t}Newsletter signature{/t}</label>
-                        <div class="">
-                            <input  type="text" id="agency_bulletin" name="params[agencyBulletin]"
-                                {if is_object($article)}
-                                    value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
-                                {else}
-                                    value="{setting name=site_agency}"
-                                {/if} />
-                        </div>
-                    </div>
-                    {/is_module_activated}
-
-                </div>
-
-                <div class="form-vertical">
-                    <div class="control-group">
-                        <label for="subtitle" class="control-label">{t}Pretitle{/t}</label>
-                        <div class="controls">
-                            <div class="input-append" id="subtitle">
-                                <input  type="text" name="subtitle" value="{$article->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
-                                <span class="add-on"></span>
+                        <div class="contentbox">
+                            <h3 class="title">{t}Tags{/t}</h3>
+                            <div class="content">
+                                <div class="control-group">
+                                    <div class="controls">
+                                        <input  type="text" id="metadata" name="metadata" required="required" value="{$article->metadata|clearslash|escape:"html"}"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label for="metadata" class="control-label">{t}Keywords{/t}</label>
-                        <div class="controls">
-                            <input  type="text" id="metadata" name="metadata" required="required" value="{$article->metadata|clearslash|escape:"html"}" class="input-xxlarge"/>
-                            <div class="help-block">{t}List of words separated by commas{/t}</div>
+                    <div class="form-inline-block contentform-main">
+                        <div class="control-group">
+                            <label for="agency" class="control-label">{t}Signature{/t}</label>
+                            <div class="controls">
+                                <input  type="text" id="agency" name="agency"
+                                    {if is_object($article)}
+                                        value="{$article->agency|clearslash|escape:"html"}"
+                                    {else}
+                                        value="{setting name=site_agency}"
+                                    {/if} />
+                            </div>
                         </div>
+
+                        {is_module_activated name="CRONICAS_MODULES"}
+                        <div class="control-group">
+                            <label for="agency_bulletin" class="control-label">{t}Newsletter signature{/t}</label>
+                            <div class="">
+                                <input  type="text" id="agency_bulletin" name="params[agencyBulletin]"
+                                    {if is_object($article)}
+                                        value="{$article->params['agencyBulletin']|clearslash|escape:"html"}"
+                                    {else}
+                                        value="{setting name=site_agency}"
+                                    {/if} />
+                            </div>
+                        </div>
+                        {/is_module_activated}
                     </div>
 
+                    <div class="form-vertical contentform-main">
+                        <div class="control-group">
+                            <label for="subtitle" class="control-label">{t}Pretitle{/t}</label>
+                            <div class="controls">
+                                <div class="input-append" id="subtitle">
+                                    <input  type="text" name="subtitle" value="{$article->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
+                                    <span class="add-on"></span>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="control-group">
-                        <label for="summary" class="control-label">
-                            {t}Summary{/t}
-                            <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('summary');return false;" title="Habilitar/Deshabilitar editor">
-                                <img src="{$params.IMAGE_DIR}/users_edit.png" />
-                            </a>
-                        </label>
-                        <div class="controls">
-                            <textarea name="summary" id="summary" style="width:100%">{$article->summary|clearslash|escape:"html"}</textarea>
+
+                        <div class="control-group clearfix">
+                            <label for="summary" class="control-label">
+                                {t}Summary{/t}
+                            </label>
+                            <div class="controls">
+                                <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$article->summary|clearslash|escape:"html"}</textarea>
+                            </div>
                         </div>
                     </div>
+                </div><!-- /contentform-main -->
 
-
-                    <div class="control-group">
-                        <label for="metadata" class="control-label">
-                            {t}Body{/t}
-                            <a href="#" onclick="OpenNeMas.tinyMceFunctions.toggle('body');return false;" title="{t}Enable/disable enhanced editor{/t}">
-                                <img src="{$params.IMAGE_DIR}/users_edit.png" alt=""  />
-                            </a>
-                        </label>
-                        <div class="controls">
-                            <textarea name="body" id="body" style="width:100%;  height:20em;" >{$article->body|clearslash}</textarea>
+                <div class="contentform-inner wide">
+                    <div class="form-vertical">
+                        <div class="control-group">
+                            <label for="metadata" class="control-label">
+                                {t}Body{/t}
+                            </label>
+                            <div class="controls">
+                                <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div id="article_images">
-                    {include  file="article/partials/_images.tpl"}
-                </div>
-            </div>
+                    <div id="article_images">
+                        {include  file="article/partials/_images.tpl"}
+                    </div>
+                </div><!-- /contentform-inner -->
+            </div><!-- /edicion-contenido -->
 
             {* Pestaña de parámetros de noticia *}
             <div id="edicion-extra">
@@ -301,29 +302,29 @@
                         </div>
                     </div>
                 </div>
-        </div>
-        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
-        <div id="avanced-custom">
-            {include file ="article/partials/_article_avanced_customize.tpl"}
-        </div>
-        {/is_module_activated}
+            </div>
+            {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+            <div id="avanced-custom">
+                {include file ="article/partials/_article_avanced_customize.tpl"}
+            </div>
+            {/is_module_activated}
 
-        <div id="related-contents">
-            {include file ="article/related/_related_list.tpl"}
-            <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
-            <input type="hidden" id="relatedInner" name="relatedInner" value="" />
+            <div id="related-contents">
+                {include file ="article/related/_related_list.tpl"}
+                <input type="hidden" id="relatedFrontpage" name="relatedFront" value="" />
+                <input type="hidden" id="relatedInner" name="relatedInner" value="" />
 
-            <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
-            <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
+                <input type="hidden" id="withGallery" name="params[withGallery]" value="" />
+                <input type="hidden" id="withGalleryInt" name="params[withGalleryInt]" value="" />
 
-            <input type="hidden" id="relatedHome" name="relatedHome" value="" />
-            <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
-        </div>
+                <input type="hidden" id="relatedHome" name="relatedHome" value="" />
+                <input type="hidden" id="withGalleryHome" name="params[withGalleryHome]" value="" />
+            </div>
+
 
             <input type="hidden" id="action" name="action" value="{$action}" />
             <input type="hidden" name="id" id="id" value="{$article->id|default:""}" />
-        </div>
-    </div>
+        </div><!-- tabs -->
+    </div><!-- /wrapper-content contentform -->
 </form>
-
 {/block}

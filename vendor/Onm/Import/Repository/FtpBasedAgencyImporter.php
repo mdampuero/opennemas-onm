@@ -92,6 +92,9 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
                 continue;
             }
 
+            if (is_null($element)) {
+                continue;
+            }
 
             if ($params['title'] != '*'
                 && !($element->hasContent($params['title']))

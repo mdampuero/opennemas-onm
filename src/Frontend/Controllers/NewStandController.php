@@ -70,7 +70,8 @@ class NewStandController extends Controller
         $order = $configurations['orderFrontpage'];
 
         if ($order =='grouped') {
-            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $year);
+            $cache_date = $year.$month;
+            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko =array();
             if (($this->view->caching == 0)
                 || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
@@ -118,10 +119,6 @@ class NewStandController extends Controller
             if (($this->view->caching == 0)
                 || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
-                // $ccm = \ContentCategoryManager::get_instance();
-                // $category = $ccm->get_id($this->category_name);
-                // list($allcategorys, $subcat, $categoryData) =
-                //      $ccm->getArraysMenu($category, $contentType);
 
                 $date = "$year-$month-$day";
                 $portadas = $this->cm->findAll(

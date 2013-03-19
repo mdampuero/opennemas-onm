@@ -19,6 +19,16 @@ function salir(msg,url) {
     }
 }
 
+function fill_tags_improved(raw_info, tags_input, url) {
+    jQuery.ajax({
+        url: url + '?data=' + raw_info,
+        async: false,
+        success: function(data){
+            tags_input.importTags(data);
+        }
+    });
+}
+
 function fill_tags(raw_info, target_element, url) {
     jQuery.ajax({
         url: url + '?data=' + raw_info

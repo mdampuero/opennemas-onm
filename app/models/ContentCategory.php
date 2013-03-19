@@ -321,18 +321,12 @@ class ContentCategory
             $sqls []= 'DELETE FROM albums_photos '
                 .'WHERE `pk_album` IN (' . $contents . ')  '
                 .'OR `pk_photo` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM videos '
-                .'WHERE `pk_video` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM photos '
-                .'WHERE `pk_photo` IN ('.$contents.')';
             $sqls []= 'DELETE FROM comments '
                 .'WHERE `pk_comment` IN ('.$contents.')';
             $sqls []= 'DELETE FROM votes '
                 .'WHERE `pk_vote` IN ('.$contents.')';
             $sqls []= 'DELETE FROM ratings '
                 .'WHERE `pk_rating` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM attachments '
-                .'WHERE `pk_attachment` IN ('.$contents.')';
             $sqls []= 'DELETE FROM polls '
                 .'WHERE `pk_poll` IN ('.$contents.')';
             $sqls []= 'DELETE FROM poll_items '
@@ -344,6 +338,10 @@ class ContentCategory
                 .'WHERE `pk_kiosko` IN ('.$contents.')';
             $sqls []= 'DELETE FROM static_pages '
                 .'WHERE `pk_static_page` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM content_positions '
+                .'WHERE `pk_fk_content` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM contentmeta '
+                .'WHERE `fk_content` IN ('.$contents.')';
 
             foreach ($sqls as $sql) {
                 if ($GLOBALS['application']->conn->Execute($sql) === false) {
@@ -352,6 +350,11 @@ class ContentCategory
                     return false;
                 }
             }
+
+
+            \Photo::batchDelete($contentsArray);
+            \Video::batchDelete($contentsArray);
+            \Attachment::batchDelete($contentsArray);
         }
 
         return true;

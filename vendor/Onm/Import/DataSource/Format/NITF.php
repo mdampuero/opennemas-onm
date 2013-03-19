@@ -16,18 +16,44 @@ use Onm\Import\DataSource\FormatInterface;
  *
  * @package Onm_Import
  **/
-class NITF implements FormatInterface
+class NITF extends NewsMLG1
 {
     /**
      * Instantiates the NITF DOM data from an SimpleXML object
      *
      * @return void
      **/
-    public function __construct($data)
+    public function __construct($xmlFile)
     {
-        $this->data = $data;
+        $this->xmlFile = basename($xmlFile);
 
-        self::checkFormat($data, null);
+        if (file_exists($xmlFile)) {
+            if (filesize($xmlFile) < 2) {
+                throw new \Exception(
+                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
+                );
+            }
+
+            $this->data = simplexml_load_file(
+                $xmlFile,
+                null,
+                LIBXML_NOERROR | LIBXML_NOWARNING
+            );
+
+            if (!$this->data) {
+                throw new \Exception(
+                    sprintf(_("File '%d' can't be loaded."), $xmlFile)
+                );
+            }
+
+            $this->checkFormat($this->data, $xmlFile);
+        } else {
+            throw new \Exception(
+                sprintf(_("File '%d' doesn't exists."), $xmlFile)
+            );
+        }
+
+        return $this;
     }
 
     /**
@@ -42,24 +68,45 @@ class NITF implements FormatInterface
                 return $this->getId();
 
                 break;
+            case 'urn':
+                return $this->getUrn();
+
+                break;
+            case 'pretitle':
+                return $this->getPretitle();
+
+                break;
             case 'title':
                 return $this->getTitle();
 
                 break;
-            case 'pretitle':
-                return $this->getPreTitle();
+            case 'priority':
+                return $this->getPriority();
 
                 break;
-            case 'summary':
-                return $this->getSummary();
+            case 'tags':
+                return $this->getTags();
+
+                break;
+            case 'created_time':
+                return $this->getCreatedTime();
 
                 break;
             case 'body':
                 return $this->getBody();
 
                 break;
-            case 'created_time':
-                return $this->getCreatedTime();
+            case 'agency_name':
+                return $this->getServiceName();
+
+                break;
+            case 'texts':
+            case 'photos':
+            case 'videos':
+            case 'audios':
+            case 'moddocs':
+            case 'files':
+                return array();
 
                 break;
         }
@@ -80,7 +127,9 @@ class NITF implements FormatInterface
      **/
     public function getServiceName()
     {
-        return '';
+        $docId = $this->getData()->body->{'body.head'}->rights->{'rights.owner'};
+
+        return (string) $docId;
     }
 
     /**
@@ -90,9 +139,11 @@ class NITF implements FormatInterface
      **/
     public function getId()
     {
-        $attributes = $this->getData()->attributes();
+        $docId = $this->getData()->head->docdata->xpath('//doc-id');
+        $docId = $docId[0];
+        $attributtes = $docId->attributes();
 
-        return (string) $attributes->Euid;
+        return (string) $attributtes->{'id-string'};
     }
 
     /**
@@ -102,9 +153,7 @@ class NITF implements FormatInterface
      **/
     public function getTitle()
     {
-        $titles = $this->getData()->xpath("//NewsLines/HeadLine");
-
-        return (string) $titles[0];
+        return (string) $this->getData()->head->title;
     }
 
     /**
@@ -114,9 +163,7 @@ class NITF implements FormatInterface
      **/
     public function getPreTitle()
     {
-        $pretitles = $this->getData()->xpath("//NewsLines/SubHeadLine");
-
-        return (string) $pretitles[0];
+        return '';
     }
 
     /**
@@ -126,15 +173,7 @@ class NITF implements FormatInterface
      **/
     public function getSummary()
     {
-        $summaries = $this->getData()->xpath(
-            "//nitf/body/body.head/abstract"
-        );
-        $summary   = "";
-        foreach ($summaries[0]->children() as $child) {
-            $summary .= "<p>".sprintf("%s", $child)."</p>";
-        }
-
-        return $summary;
+        return '';
     }
 
     /**
@@ -162,7 +201,9 @@ class NITF implements FormatInterface
      **/
     public function getUrn()
     {
-        return '';
+        $date = (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
+        $id = $this->getId();
+        return 'urn:newsml:multimedia.efeservicios.com:'.$date.':'.$id.':2';
     }
 
     /**
@@ -172,7 +213,26 @@ class NITF implements FormatInterface
      **/
     public function getPriority()
     {
-        return 1;
+        $priority = $this->getData()->xpath('//head/meta[@name="prioridad"]');
+        $priority = $priority[0]->attributes();
+        $priority = (string) $priority->content;
+
+        $priorities = array(
+            '10' => 1,
+            '20' => 2,
+            '25' => 3,
+            '30' => 4,
+            // From Pandora
+            'U'  => 4,
+            'R'  => 3,
+            'B'  => 2,
+        );
+
+        if (array_key_exists($priority, $priorities)) {
+            return $priorities[$priority];
+        } else {
+            return 1;
+        }
     }
 
     /**
@@ -202,12 +262,15 @@ class NITF implements FormatInterface
      **/
     public function getCreatedTime()
     {
-        $originalDate =
-            (string) $this->getData()->DescriptiveMetadata->DateLineDate;
+        $attributes =
+            (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
 
+        $attributes = explode('+', $attributes);
+
+        // '20130315T150100+0000'
         return \DateTime::createFromFormat(
-            \DateTime::ISO8601,
-            $originalDate
+            'Ymd\THis',
+            $attributes[0]
         );
     }
 
@@ -218,10 +281,6 @@ class NITF implements FormatInterface
      **/
     public static function checkFormat($data, $xmlFile)
     {
-        if (is_string($data)) {
-            throw new \Exception(sprintf(_('Not a valid NITF file')));
-        }
-
         $node = $data->xpath("//nitf");
 
         if (!is_array($node)) {

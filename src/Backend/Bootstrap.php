@@ -68,7 +68,7 @@ class Bootstrap extends ModuleBootstrap
             $url = $request->getPathInfo();
 
             if (!empty($url)) {
-                $redirectTo = urlencode($request->getUri());
+                $redirectTo = urlencode($request->getRequestUri());
             }
             $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
 
@@ -147,6 +147,11 @@ class Bootstrap extends ModuleBootstrap
 
         if (!defined('CURRENT_LANGUAGE')) {
             define('CURRENT_LANGUAGE', $shortLanguage);
+        }
+        if (!defined('CURRENT_LANGUAGE_SHORT')) {
+            $shortLanguageName = explode('_', \Application::$language);
+            $shortLanguageName = $shortLanguageName[0];
+            define('CURRENT_LANGUAGE_SHORT', $shortLanguageName);
         }
 
         $localeDir = realpath(APP_PATH.'/Resources/locale/');

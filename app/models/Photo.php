@@ -889,4 +889,53 @@ class Photo extends Content
 
         return $result;
     }
+
+    /**
+     * Removes photos given its id
+     *
+     * @param array $arrayId the photo ids to delete
+     *
+     * @return boolean true if the photo was deleted
+     **/
+    public static function batchDelete($arrayIds)
+    {
+
+        $contents = implode(', ', $arrayIds);
+
+        $sql = 'SELECT  path_file, name  FROM photos WHERE pk_photo IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        while (!$rs->EOF) {
+            $image      = MEDIA_IMG_PATH . $rs->fields['path_file'].$rs->fields['name'];
+            $thumbimage = MEDIA_IMG_PATH . $rs->fields['path_file'].'140-100-'.$rs->fields['name'];
+
+            if (file_exists($image)) {
+                @unlink($image);
+            }
+            if (file_exists($thumbimage)) {
+                @unlink($thumbimage);
+            }
+
+            $rs->MoveNext();
+        }
+
+        $sql = 'DELETE FROM photos '
+                .'WHERE `pk_photo` IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+
+    }
 }

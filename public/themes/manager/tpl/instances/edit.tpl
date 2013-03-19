@@ -53,6 +53,10 @@ table.adminform {
 <script>
 jQuery(document).ready(function($) {
     $('#instance-edit').tabs();
+
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
 });
 </script>
 {/block}
@@ -102,22 +106,22 @@ jQuery(document).ready(function($) {
             <div id="general">
                 <table>
                     <tbody>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="name">{t}Instance name{/t}:</label>
+                                <label for="name" class="control-label">{t}Instance name{/t}:</label>
                             </th>
-                            <td>
-                                <input type="text" id="name" name="site_name" value="{$instance->name}">
+                            <td class="controls">
+                                <input type="text" id="name" name="site_name" value="{$instance->name}" required="required">
                             </td>
                             <td>
                                 <span class="default-value">{t}(Human readable name){/t}</span>
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="activated">{t}Activated{/t}:</label>
+                                <label for="activated" class="control-label">{t}Activated{/t}:</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <select name="activated" id="activated">
                                     <option value="1" {if isset($instance) && $instance->activated == 1}selected="selected"{/if}>{t}Yes{/t}</option>
                                     <option value="0" {if isset($instance) && $instance->activated == 0}selected="selected"{/if}>{t}No{/t}</option>
@@ -125,12 +129,12 @@ jQuery(document).ready(function($) {
                             </td>
                             <td></td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="domains">{t}Domains:{/t}</label>
+                                <label for="domains" class="control-label">{t}Domains:{/t}</label>
                             </th>
-                            <td>
-                                <textarea id="domains" name="domains" cols="50" rows="5">{$instance->domains}</textarea>
+                            <td class="controls">
+                                <textarea id="domains" name="domains" cols="50" rows="5" required="required">{$instance->domains}</textarea>
                             </td>
                             <td>
                                 <div class="onm-help-block margin-left-1 red">
@@ -140,11 +144,11 @@ jQuery(document).ready(function($) {
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact">{t}User contact IP:{/t}</label>
+                                <label for="contact" class="control-label">{t}User contact IP:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" readonly id="contact_IP" name="contact_IP" value="{$configs['contact_IP']|default:""}">
                             </td>
                             <td>
@@ -152,11 +156,11 @@ jQuery(document).ready(function($) {
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title">{t}Created:{/t}</label>
+                                <label for="site_title" class="control-label">{t}Created:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" id="site_created" name="site_created" value="{if $configs['site_created']}{$configs['site_created']}{else}{$smarty.now|date_format:"%d-%m-%Y - %H:%M"}{/if}">
                             </td>
                             <td>
@@ -164,36 +168,36 @@ jQuery(document).ready(function($) {
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact">{t}User name:{/t}</label>
+                                <label for="contact" class="control-label">{t}User name:{/t}</label>
                             </th>
-                            <td>
-                                <input type="text" id="contact_name" name="contact_name" value="{$configs['contact_name']|default:""}">
+                            <td class="controls">
+                                <input type="text" id="contact_name" name="contact_name" value="{$configs['contact_name']|default:""}" required="required">
                             </td>
                             <td>
 
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact">{t}User password:{/t}</label>
+                                <label for="contact" class="control-label">{t}User password:{/t}</label>
                             </th>
-                            <td>
-                                <input type="password" id="password" class="{if $smarty.request.action eq "new"}required validate-password{/if}" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
+                            <td class="controls">
+                                <input type="password" id="password" class="{if !isset($instance)}required validate-password required="required"{/if}" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
                             </td>
                             <td>
                                 <span class="default-value">{t}(The password must have between 8 and 16 characters){/t}</span>
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact">{t}User contact mail:{/t}</label>
+                                <label for="contact" class="control-label">{t}User contact mail:{/t}</label>
                             </th>
-                            <td>
-                                <input type="text" id="contact_mail" name="contact_mail" value="{$configs['contact_mail']|default:""}">
+                            <td class="controls">
+                                <input type="email" id="contact_mail" name="contact_mail" value="{$configs['contact_mail']|default:""}" required="required">
                             </td>
                             <td>
 
@@ -207,67 +211,67 @@ jQuery(document).ready(function($) {
             <div id="general-information">
                 <table>
                     <tbody>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title">{t}Site title:{/t}</label>
+                                <label for="site_title" class="control-label">{t}Site title:{/t}</label>
                             </th>
-                            <td>
-                                <input type="text" id="site_title" name="site_title" value="{$configs['site_title']|default:""}">
+                            <td class="controls">
+                                <input type="text" id="site_title" name="site_title" value="{$configs['site_title']|default:""}" required="required">
                             </td>
                             <td>
 
                             </td>
                         </tr>
 
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title">{t}Site description:{/t}</label>
+                                <label for="site_title" class="control-label">{t}Site description:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <textarea id="site_description" name="site_description" cols="50" rows="7">{$configs['site_description']|default:""}</textarea>
                             </td>
                             <td>
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title">{t}Site keywords:{/t}</label>
+                                <label for="site_title" class="control-label">{t}Site keywords:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_keywords']|default:""}</textarea>
                             </td>
                             <td>
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title">{t}Site agency:{/t}</label>
+                                <label for="site_title" class="control-label">{t}Site agency:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}">
                             </td>
                             <td>
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title">{t}Time Zone:{/t}</label>
+                                <label for="site_title" class="control-label">{t}Time Zone:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 {html_options name=time_zone options=$timezones selected=$configs['time_zone']}
                             </td>
                             <td>
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title">{t}Language{/t}</label>
+                                <label for="site_title" class="control-label">{t}Language{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 {html_options name=site_language options=$languages selected=$configs['site_language']}
                             </td>
                             <td>
@@ -282,11 +286,11 @@ jQuery(document).ready(function($) {
             <div id="internals">
                 <table>
                     <tbody>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="internal_name">{t}Internal name:{/t}</label>
+                                <label for="internal_name" class="control-label">{t}Internal name:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" id="internal_name" name="internal_name" value="{$instance->internal_name}" {if isset($instance)}readonly="readonly"{/if}>
 
                             </td>
@@ -298,27 +302,29 @@ jQuery(document).ready(function($) {
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr class="control-group">
                             <th scope="row">
-                                <label for="template_user">{t}Template:{/t}</label>
+                                <label for="template_user" class="control-label">{t}Template:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 {html_options name="settings[TEMPLATE_USER]" options=$templates selected=$instance->settings['TEMPLATE_USER']}
                             </td>
                         </tr>
 
-                        <tr>
+                        <tr class="control-group">
                             <th scope="row">
-                                <label for="media_url">{t}External media url:{/t}</label>
+                                <label for="media_url" class="control-label">{t}External media url:{/t}</label>
                             </th>
-                            <td><input name="settings[MEDIA_URL]" value="{$instance->settings['MEDIA_URL']}" type="text" /></td>
+                            <td class="controls">
+                                <input name="settings[MEDIA_URL]" value="{$instance->settings['MEDIA_URL']}" type="text" />
+                            </td>
                         </tr>
 
-                          <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
                                 <label for="advertisements_enabled">{t}Enable advertisements:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="checkbox" id="advertisements_enabled" name="advertisements_enabled" {if ($configs['advertisements_enabled'])}checked{/if} />
                                 <span class="default-value">{t}Default: true{/t}</span>
                             </td>
@@ -326,11 +332,11 @@ jQuery(document).ready(function($) {
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="items_per_page">{t}Items per page:{/t}</label>
+                                <label for="items_per_page" class="control-label">{t}Items per page:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                                 <span class="default-value">{t}Default: 20 elements{/t}</span>
                             </td>
@@ -338,11 +344,11 @@ jQuery(document).ready(function($) {
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="refresh_interval">{t}Refresh page every (secs):{/t}</label>
+                                <label for="refresh_interval" class="control-label">{t}Refresh page every (secs):{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
                                 <span class="default-value">{t}Default: 900 secs{/t}</span>
                             </td>
@@ -356,11 +362,11 @@ jQuery(document).ready(function($) {
             <div id="database">
                 <table>
                     <tbody>
-                        <tr>
+                        <tr class="control-group">
                             <th>
-                                <label for="settings_bd_type">{t}Database Type:{/t}</label>
+                                <label for="settings_bd_type" class="control-label">{t}Database Type:{/t}</label>
                             </th>
-                            <td colspan=2>
+                            <td colspan=2 class="controls">
                                 <select name="settings[BD_TYPE]" id="settings_bd_type">
                                     <option value="mysqli"{if $instance->settings["BD_TYPE"] == "mysqli"} selected="selected"{/if}>{t}Mysql/Percona{/t}</option>
                                     <option value="mysql"{if $instance->settings["BD_TYPE"] == "mysql"} selected="selected"{/if} >{t}Mysql/Percona old driver{/t}</option>
@@ -375,33 +381,37 @@ jQuery(document).ready(function($) {
                                 </div>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="control-group">
                             <th>
-                                <label for="settings_bd_host">{t}Database server:{/t}</label>
+                                <label for="settings_bd_host" class="control-label">{t}Database server:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input name="settings[BD_HOST]" value="{$instance->settings['BD_HOST']|default:""}" type="text"></input>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="control-group">
                             <th>
-                                <label for="settings_bd_database">{t}Database name:{/t}</label>
+                                <label for="settings_bd_database" class="control-label">{t}Database name:{/t}</label>
                             </th>
-                            <td><input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']|default:""}" type="text" /></td>
+                            <td class="controls">
+                                <input name="settings[BD_DATABASE]" id="settings_bd_database" value="{$instance->settings['BD_DATABASE']|default:""}" type="text" />
+                            </td>
                         </tr>
-                        <tr>
+                        <tr class="control-group">
                             <th>
-                                <label for="settings_bd_user">{t}Database user:{/t}</label>
+                                <label for="settings_bd_user" class="control-label">{t}Database user:{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input name="settings[BD_USER]" id="settings_bd_user" value="{$instance->settings['BD_USER']|default:""}" type="text" readonly="readonly"></input>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="control-group">
                             <th>
-                                <label for="settings_bd_password">{t}Database password:{/t}</label>
+                                <label for="settings_bd_password" class="control-label">{t}Database password:{/t}</label>
                             </th>
-                            <td><input name="settings[BD_PASS]" id="settings_bd_password" value="{$instance->settings['BD_PASS']|default:""}" type="password" readonly="readonly"></input></td>
+                            <td class="controls">
+                                <input name="settings[BD_PASS]" id="settings_bd_password" value="{$instance->settings['BD_PASS']|default:""}" type="password" readonly="readonly"></input>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -410,33 +420,33 @@ jQuery(document).ready(function($) {
              <div id="mail">
                <table>
                     <tbody>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="mail_server">{t}Mail server{/t}</label>
+                                <label for="mail_server" class="control-label">{t}Mail server{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" id="mail_server" name="mail_server" value="{$configs['mail_server']|default:""}">
                             </td>
                             <td>
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="mail_username">{t}Username{/t}</label>
+                                <label for="mail_username" class="control-label">{t}Username{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="text" id="mail_username" name="mail_username" value="{$configs['mail_username']|default:""}">
                             </td>
                             <td>
 
                             </td>
                         </tr>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="mail_password">{t}Password{/t}</label>
+                                <label for="mail_password" class="control-label">{t}Password{/t}</label>
                             </th>
-                            <td>
+                            <td class="controls">
                                 <input type="password" id="mail_password" name="mail_password" value="{$configs['mail_password']|default:""}">
                             </td>
                             <td>
@@ -452,11 +462,11 @@ jQuery(document).ready(function($) {
                     <legend>{t}System log{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="log_enabled">{t}Enable Log:{/t}</label>
+                                    <label for="log_enabled" class="control-label">{t}Enable Log:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="checkbox" id="log_enabled" name="log_enabled" {if ($configs['log_enabled'])}checked{/if} />
                                     <span class="default-value">{t}Default: true{/t}</span>
                                 </td>
@@ -464,11 +474,11 @@ jQuery(document).ready(function($) {
 
                             </td>
                             </tr>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="site_title">{t}Log level:{/t}</label>
+                                    <label for="site_title" class="control-label">{t}Log level:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     {html_options name=log_level options=$logLevels selected=$configs['log_level']}
                                     <span class="default-value">{t}Default: true{/t}</span>
                                 </td>
@@ -483,11 +493,11 @@ jQuery(document).ready(function($) {
                     <legend>{t}Database log{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="log_db_enabled">{t}Enable Log:{/t}</label>
+                                    <label for="log_db_enabled" class="control-label">{t}Enable Log:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="checkbox" id="log_db_enabled" name="log_db_enabled" {if ($configs['log_db_enabled'])}checked{/if} />
                                     <span class="default-value">{t}Default: false{/t}</span>
                                 </td>
@@ -505,11 +515,11 @@ jQuery(document).ready(function($) {
                     <legend>{t}Google Services{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="google_maps_api_key">{t}Google Maps API key:{/t}</label>
+                                    <label for="google_maps_api_key" class="control-label">{t}Google Maps API key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="google_maps_api_key" name="google_maps_api_key" value="{$configs['google_maps_api_key']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
@@ -519,11 +529,11 @@ jQuery(document).ready(function($) {
                                     </div>
                                 </td>
                             </tr>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="google_custom_search_api_key">{t}Google Search API key:{/t}</label>
+                                    <label for="google_custom_search_api_key" class="control-label">{t}Google Search API key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="google_custom_search_api_key" name="google_custom_search_api_key" value="{$configs['google_custom_search_api_key']|default:""}">
                                 </td>
                             </tr>
@@ -536,11 +546,11 @@ jQuery(document).ready(function($) {
                     <legend>{t}Facebook{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="facebook_api_key">{t}APP key:{/t}</label>
+                                    <label for="facebook_api_key" class="control-label">{t}APP key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="facebook_api_key" name="facebook[api_key]" value="{$configs['facebook']['api_key']|default:""}">
                                 </td>
                                 <td rowspan=2>
@@ -550,11 +560,11 @@ jQuery(document).ready(function($) {
                                     </div>
                                 </td>
                             </tr>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="facebook_secret_key">{t}Secret key:{/t}</label>
+                                    <label for="facebook_secret_key" class="control-label">{t}Secret key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="facebook_secret_key" name="facebook[secret_key]" value="{$configs['facebook']['secret_key']|default:""}">
                                 </td>
                             </tr>
@@ -568,11 +578,11 @@ jQuery(document).ready(function($) {
                     <legend>{t}Google Analytics Statistics{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="google_analytics_api_key">{t}API key:{/t}</label>
+                                    <label for="google_analytics_api_key" class="control-label">{t}API key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="google_analytics_api_key" name="google_analytics[api_key]" value="{$configs['google_analytics']['api_key']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
@@ -582,11 +592,11 @@ jQuery(document).ready(function($) {
                                     </div>
                                 </td>
                             </tr>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="google_analytics_base_domain">{t}Base domain:{/t}</label>
+                                    <label for="google_analytics_base_domain" class="control-label">{t}Base domain:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="google_analytics_base_domain" name="google_analytics[base_domain]" value="{$configs['google_analytics']['base_domain']|default:""}">
                                 </td>
                             </tr>
@@ -599,11 +609,11 @@ jQuery(document).ready(function($) {
                     <legend>{t}Piwik Statistics{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="piwik_page_id">{t}Page ID:{/t}</label>
+                                    <label for="piwik_page_id" class="control-label">{t}Page ID:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="piwik_page_id" name="piwik[page_id]" value="{$configs['piwik']['page_id']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
@@ -613,11 +623,11 @@ jQuery(document).ready(function($) {
                                     </div>
                                 </td>
                             </tr>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="piwik_server_url">{t}Private key:{/t}</label>
+                                    <label for="piwik_server_url" class="control-label">{t}Private key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="piwik_server_url" name="piwik[server_url]" value="{$configs['piwik']['server_url']|default:""}">
                                 </td>
                             </tr>
@@ -630,11 +640,11 @@ jQuery(document).ready(function($) {
                     <legend>{t}Recaptcha{/t}</legend>
                     <table>
                         <tbody>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="recaptcha_public_key">{t}Public Key:{/t}</label>
+                                    <label for="recaptcha_public_key" class="control-label">{t}Public Key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="recaptcha_public_key" name="recaptcha[public_key]" value="{$configs['recaptcha']['public_key']|default:""}">
                                 </td>
                                 <td rowspan=2 valign="top">
@@ -644,11 +654,11 @@ jQuery(document).ready(function($) {
                                     </div>
                                 </td>
                             </tr>
-                            <tr valign="top">
+                            <tr valign="top" class="control-group">
                                 <th scope="row">
-                                    <label for="recaptcha_private_key">{t}Private key:{/t}</label>
+                                    <label for="recaptcha_private_key" class="control-label">{t}Private key:{/t}</label>
                                 </th>
-                                <td>
+                                <td class="controls">
                                     <input type="text" id="recaptcha_private_key" name="recaptcha[private_key]" value="{$configs['recaptcha']['private_key']|default:""}">
                                 </td>
                             </tr>
@@ -663,11 +673,11 @@ jQuery(document).ready(function($) {
             <div id="modules">
                <table>
                     <tbody>
-                        <tr valign="top">
+                        <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="mail_server">{t}Activated modules{/t}</label>
+                                <label for="mail_server" class="control-label">{t}Activated modules{/t}</label>
                             </th>
-                            <td class="form-inline">
+                            <td class="form-inline" class="controls">
                                 {html_checkboxes name='activated_modules' values=array_keys($available_modules) output=$available_modules selected=$configs['activated_modules']  separator='<br />'}
                             </td>
                         </tr>

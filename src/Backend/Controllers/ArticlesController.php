@@ -820,7 +820,7 @@ class ArticlesController extends Controller
         list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             $categoryFilter,
-            'contents.content_status=1',
+            '',
             ' ORDER BY created DESC ',
             $page,
             $itemsPerPage

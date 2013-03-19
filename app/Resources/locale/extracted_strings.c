@@ -3500,6 +3500,12 @@ gettext("Delete");
 gettext("Delete");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
 gettext("Save positions");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
@@ -5438,6 +5444,9 @@ gettext("No");
 gettext("You must select some elements.");
 
 /* public/themes/admin/tpl//menues/new.tpl */
+gettext("Please, remember save changes after finish.");
+
+/* public/themes/admin/tpl//menues/new.tpl */
 gettext("Editing menu");
 
 /* public/themes/admin/tpl//menues/new.tpl */
@@ -5547,6 +5556,15 @@ gettext("Articles");
 
 /* public/themes/admin/tpl//article/list.tpl */
 gettext("All categories");
+
+/* public/themes/admin/tpl//article/list.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//article/list.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//article/list.tpl */
+gettext("Delete");
 
 /* public/themes/admin/tpl//article/list.tpl */
 gettext("Delete");
@@ -5665,6 +5683,24 @@ gettext("Yes, delete");
 /* public/themes/admin/tpl//article/modals/_modalDelete.tpl */
 gettext("No");
 
+/* public/themes/admin/tpl//article/modals/_modalBatchDelete.tpl */
+gettext("Delete articles");
+
+/* public/themes/admin/tpl//article/modals/_modalBatchDelete.tpl */
+gettext("Are you sure you want to delete <span>%num%</span> articles?");
+
+/* public/themes/admin/tpl//article/modals/_modalBatchDelete.tpl */
+gettext("Yes, delete all");
+
+/* public/themes/admin/tpl//article/modals/_modalBatchDelete.tpl */
+gettext("No");
+
+/* public/themes/admin/tpl//article/modals/_modalBatchDelete.tpl */
+gettext("You must select some elements.");
+
+/* public/themes/admin/tpl//article/new.tpl */
+gettext("Write a tag and press Enter...");
+
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Creating article");
 
@@ -5708,6 +5744,15 @@ gettext("Customize");
 gettext("Related contents");
 
 /* public/themes/admin/tpl//article/new.tpl */
+gettext("Title");
+
+/* public/themes/admin/tpl//article/new.tpl */
+gettext("Inner title");
+
+/* public/themes/admin/tpl//article/new.tpl */
+gettext("Attributes");
+
+/* public/themes/admin/tpl//article/new.tpl */
 gettext("Allow coments");
 
 /* public/themes/admin/tpl//article/new.tpl */
@@ -5720,19 +5765,16 @@ gettext("Put in category frontpage");
 gettext("Suggested for frontpage");
 
 /* public/themes/admin/tpl//article/new.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl//article/new.tpl */
-gettext("Inner title");
-
-/* public/themes/admin/tpl//article/new.tpl */
-gettext("Section:");
+gettext("Category");
 
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Unknown");
 
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Unknown");
+
+/* public/themes/admin/tpl//article/new.tpl */
+gettext("Tags");
 
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Signature");
@@ -5744,19 +5786,10 @@ gettext("Newsletter signature");
 gettext("Pretitle");
 
 /* public/themes/admin/tpl//article/new.tpl */
-gettext("Keywords");
-
-/* public/themes/admin/tpl//article/new.tpl */
-gettext("List of words separated by commas");
-
-/* public/themes/admin/tpl//article/new.tpl */
 gettext("Summary");
 
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Body");
-
-/* public/themes/admin/tpl//article/new.tpl */
-gettext("Enable/disable enhanced editor");
 
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Slug");
@@ -5816,6 +5849,9 @@ gettext("Image for home:");
 gettext("Image for Home");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
+gettext("Drop an image to here");
+
+/* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("File name");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
@@ -5837,6 +5873,9 @@ gettext("Tags");
 gettext("Footer text for frontpage image:");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
+gettext("Drop an image to here");
+
+/* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("File name");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
@@ -5856,6 +5895,9 @@ gettext("Tags");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("Footer text for inner image:");
+
+/* public/themes/admin/tpl//article/partials/_images.tpl */
+gettext("Drop an image to here");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("File name");
@@ -5897,6 +5939,9 @@ gettext("Image for inner article page:");
 gettext("Video for inner article page");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
+gettext("Drop a video to here");
+
+/* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("File name");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
@@ -5910,6 +5955,9 @@ gettext("Tags");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("Footer text for frontpage image:");
+
+/* public/themes/admin/tpl//article/partials/_images.tpl */
+gettext("Drop a video to here");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("File name");
@@ -7943,7 +7991,7 @@ gettext("Cache manager");
 gettext("A new instance has been created");
 
 /* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
-gettext("New user data are as follows");
+gettext("You can access your newspaper with the information bellow");
 
 /* public/themes/manager/tpl/instances/mails/newInstanceToCompany.tpl */
 gettext("User");
@@ -7973,7 +8021,7 @@ gettext("User");
 gettext("Password");
 
 /* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
-gettext("You can acces to newspaper with this link");
+gettext("You can access to newspaper with this link");
 
 /* public/themes/manager/tpl/instances/mails/newInstanceToUser.tpl */
 gettext("You can also access the administrative area through this link");
@@ -8391,12 +8439,6 @@ gettext("Legal");
 
 /* public/themes/manager/tpl/base/base.tpl */
 gettext("Legal");
-
-/* public/themes/manager/tpl/base/base.tpl */
-gettext("Your password must contain 5 characters and dont contain the word <password> or your user name.");
-
-/* public/themes/manager/tpl/base/base.tpl */
-gettext("Please check your first password and check again.");
 
 /* public/themes/manager/tpl/cache_manager/index.tpl */
 gettext("Cache manager");

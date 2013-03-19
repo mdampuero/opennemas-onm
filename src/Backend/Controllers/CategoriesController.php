@@ -358,6 +358,8 @@ class CategoriesController extends Controller
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_categories'));
+        } else {
+            return new Response('ok');
         }
     }
 
@@ -395,6 +397,8 @@ class CategoriesController extends Controller
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_categories'));
+        } else {
+            return new Response('ok');
         }
     }
 
