@@ -41,7 +41,7 @@
 
             $('#article-form').tabs();
             $('#title, #title_int, #subtitle').inputLengthControl();
-            var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and push Enter...{/t}"});
+            var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
 
             $('#title_input, #category').on('change', function() {
                 var title = $('#title_input');

@@ -2258,6 +2258,10 @@ div.tagsinput span.tag a { font-weight: bold; text-decoration:none;  }
   margin:2px 5px 2px 0;
 }
 
+.tagsinput .tag span {
+  cursor: default !important;
+}
+
 .tagsinput .tag:hover {
   background-color:#dcdcdc;
   border-color:#cdcdcd;
