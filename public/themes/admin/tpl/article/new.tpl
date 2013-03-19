@@ -206,6 +206,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        {is_module_activated name="PAYWALL"}
+                        <div class="contentbox">
+                            <h3 class="title">{t}Paywall{/t}</h3>
+                            <div class="content">
+                                <input type="checkbox" id="for_sale" name="for_sale" {if $article->for_sale}checked=checked{/if}>
+                                <label for="for_sale">{t}Only available for subscribers{/t}</label>
+                            </div>
+                        </div>
+                        {/is_module_activated}
                     </div>
 
                     <div class="form-inline-block contentform-main">
