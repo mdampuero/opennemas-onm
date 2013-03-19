@@ -146,17 +146,17 @@
                         <div class="contentbox">
                             <h3 class="title">{t}Attributes{/t}</h3>
                             <div class="content">
-                                {is_module_activated name="COMMENT_MANAGER"}
-                                <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
-                                <label for="with_comment">{t}Allow coments{/t}</label>
-                                <br/>
-                                {/is_module_activated}
-
                                 {acl isAllowed="ARTICLE_AVAILABLE"}
                                     <input type="checkbox" name="content_status" id="content_status" {if (isset($article) && $article->content_status eq 1)}checked{/if}  value=1/>
                                     <label for="content_status">{t}Available{/t}</label>
                                     <br/>
                                 {/acl}
+                                {is_module_activated name="COMMENT_MANAGER"}
+                                <input type="checkbox" name="with_comment" id="with_comment"  {if (isset($article) && $article->with_comment eq 1)}checked{/if} value=1/>
+                                <label for="with_comment">{t}Allow coments{/t}</label>
+                                <br/>
+                                {/is_module_activated}
+                                <hr class="divisor">
                                 {acl isAllowed="ARTICLE_FRONTPAGE"}
                                     <input type="checkbox"  name="promoted_to_category_frontpage" id="promoted" {if (isset($article) && $article->promoted_to_category_frontpage == true)}checked{/if} value=1/>
                                     <label for="promoted">{t}Put in category frontpage{/t}</label>
@@ -166,12 +166,8 @@
                                     <input type="checkbox" name="frontpage" id="frontpage" {if (isset($article) && $article->frontpage eq '1')} checked {/if} value=1/>
                                     <label for="frontpage">{t}Suggested for frontpage{/t}</label>
                                 {/acl}
-                            </div>
-                        </div>
-
-                        <div class="contentbox">
-                            <h3 class="title">{t}Category{/t}</h3>
-                            <div class="content">
+                                <hr class="divisor">
+                                <h4>{t}Category{/t}</h4>
                                 <select name="category" id="category">
                                     {section name=as loop=$allcategorys}
                                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
