@@ -125,6 +125,7 @@ class ModuleManager
                 'USERVOICE_SUPPORT'         => _('UserVoice integration'),
                 'VIDEO_MANAGER'             => _('Videos'),
                 'WIDGET_MANAGER'            => _('Widgets'),
+                'PAYWALL'                   => _('Paywall'),
             );
         }
 
