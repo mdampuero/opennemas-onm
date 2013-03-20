@@ -251,7 +251,11 @@ class CommentsController extends Controller
             'fk_content'     => $request->request->getDigits('fk_content'),
             'category'       => $request->request->getDigits('category'),
         );
-
+        if ($data['content_status'] == 2) {
+            $data['available'] = 0;
+        } else {
+            $data['available'] = $data['content_status'];
+        }
         if (!is_null($comment->pk_comment)) {
             $comment->update($data);
             m::add(_('Comment saved successfully.'), m::SUCCESS);
