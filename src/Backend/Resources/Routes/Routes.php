@@ -1732,6 +1732,14 @@ $adminRoutes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_keyword_autolink',
+    new Route(
+        '/keywords/autolink',
+        array('_controller' => 'Backend:Controllers:KeywordsController:autolink')
+    )
+);
+
 // Statistics controller routes
 $adminRoutes->add(
     'admin_statistics',
