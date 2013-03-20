@@ -26,12 +26,8 @@
 
 {block name="footer-js" append}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
-    {script_tag src="/tiny_mce/opennemas-config.js"}
 
     <script type="text/javascript">
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.footer.elements = "site_footer";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.footer );
 
     jQuery(document).ready(function($) {
         $("#system-settings-tabbed").tabs();
@@ -173,7 +169,7 @@
                 <div class="control-group">
                     <label for="site_footer" class="control-label">{t}Footer text{/t}</label>
                     <div class="controls">
-                        <textarea id="site_footer" name="site_footer" cols="50" rows="7">{$configs['site_footer']|default:""}</textarea>
+                        <textarea id="site_footer" name="site_footer" class="onm-editor" data-preset="simple">{$configs['site_footer']|default:""}</textarea>
                         <div class="help-block">{t}Text showed at the bottom of your page. Usually used for copyright notice.{/t}</div>
                     </div>
                 </div>
@@ -195,7 +191,7 @@
                 <div class="control-group">
                     <label for="site_description" class="control-label">{t}Site description{/t}</label>
                     <div class="controls">
-                        <textarea id="site_description" name="site_description" class="input-xxlarge" cols=50 rows=5>{$configs['site_description']|default:""}</textarea>
+                        <textarea id="site_description" name="site_description" class="input-xxlarge">{$configs['site_description']|default:""}</textarea>
                     </div>
                 </div>
 

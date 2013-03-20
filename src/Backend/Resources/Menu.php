@@ -184,7 +184,7 @@ $menuXml = '<?xml version="1.0"?>
             id="advanced_search"
             link="'.url('admin_search').'"
         />
-         <node class="divider" />
+        <node class="divider" />
         <node
             module_name="TRASH_MANAGER"
             title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"

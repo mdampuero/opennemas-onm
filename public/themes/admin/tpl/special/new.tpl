@@ -6,13 +6,7 @@
 
 {block name="footer-js" append}
     {script_tag src="/onm/content-provider.js"}
-    {script_tag src="/tiny_mce/opennemas-config.js"}
-
     <script>
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.simple.elements = "description";
-    tinyMCE.init( OpenNeMas.tinyMceConfig.simple );
-
     jQuery(document).ready(function($){
         $("#formulario").on("submit", function(e, ui) {
             var els = [];
@@ -145,7 +139,7 @@
             <div class="control-group">
                 <label for="description" class="control-label">{t}Description{/t}</label>
                 <div class="controls">
-                    <textarea name="description" id="description" class="input-xxlarge">{t 1=$special->description|clearslash}%1{/t}</textarea>
+                    <textarea name="description" id="description" class="onm-editor">{t 1=$special->description|clearslash}%1{/t}</textarea>
                 </div>
             </div>
             {include file="special/partials/_load_images.tpl"}
