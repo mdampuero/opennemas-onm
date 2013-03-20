@@ -71,10 +71,15 @@ class InstancesController extends Controller
         $pager_options = array(
             'mode'        => 'Sliding',
             'perPage'     => $itemsPerPage,
+            'append'      => false,
+            'path'        => '',
             'delta'       => 4,
             'clearIfVoid' => true,
             'urlVar'      => 'page',
             'totalItems'  => count($instances),
+            'fileName'    => $this->generateUrl(
+                'manager_instances'
+            ).'?filter_name='.$findParams['name'].'&filter_per_page='.$itemsPerPage.'&page=%d',
         );
         $pager = \Pager::factory($pager_options);
 
