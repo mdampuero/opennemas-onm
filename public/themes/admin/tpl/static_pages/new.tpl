@@ -20,50 +20,68 @@
     		</ul>
     	</div>
     </div>
-    <div class="wrapper-content">
+    <div class="wrapper-content contentform clearfix">
         {render_messages}
-        <div class="form-horizontal panel">
-            <div class="control-group">
-                <label for="name" class="control-label">{t}Title{/t}</label>
-                <div class="controls">
-                    <input type="text" id="title" name="title" value="{$page->title|default:""}"
-                           maxlength="120" tabindex="1" required="required"  class="input-xlarge"/>
+
+        <div class="form-vertical contentform-inner">
+
+            <div class="contentform-main">
+                <div class="control-group">
+                    <label for="name" class="control-label">{t}Title{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="title" name="title" value="{$page->title|default:""}"
+                               maxlength="120" tabindex="1" required="required"  class="input-xlarge"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="slug" class="control-label">{t}URL{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="slug" name="slug" value="{$page->slug|default:""}"
+                               maxlength="120" tabindex="2" required="required"  class="input-xxlarge"/>
+                        <span class="help-block">{t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label for="slug" class="control-label">{t}URL{/t}</label>
-                <div class="controls">
-                    <input type="text" id="slug" name="slug" value="{$page->slug|default:""}"
-                           maxlength="120" tabindex="2" required="required"  class="input-xxlarge"/>
-                    <span class="help-block">{t}The slug component in the url{/t}: {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/slug.html
+            <div class="contentbox-container">
+
+                <div class="contentbox">
+                    <h3 class="title">{t}Attributes{/t}</h3>
+                    <div class="content">
+                        {acl isAllowed="STATIC_AVAILABLE"}
+                        <div class="control-group">
+                            <label for="available" class="control-label">{t}Published{/t}</label>
+                            <div class="controls">
+                                <select name="available" id="available" tabindex="3">
+                                    <option value="1"{if isset($page->available) && $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
+                                    <option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
+                                </select>
+                            </div>
+                        </div>
+                        {/acl}
+                    </div>
                 </div>
+
+                <div class="contentbox">
+                    <h3 class="title">{t}Tags{/t}</h3>
+                    <div class="content">
+                        <div class="control-group">
+                            <div class="controls">
+                                <input  type="text" id="metadata" name="metadata" required="required" value="{$page->metadata|clearslash|escape:"html"}"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            {acl isAllowed="STATIC_AVAILABLE"}
-            <div class="control-group">
-                <label for="available" class="control-label">{t}Published{/t}</label>
-                <div class="controls">
-                    <select name="available" id="available" tabindex="3">
-                        <option value="1"{if isset($page->available) && $page->available eq 1} selected="selected"{/if}>{t}Yes{/t}</option>
-                        <option value="0"{if isset($page->available) && $page->available eq 0} selected="selected"{/if}>{t}No{/t}</option>
-                    </select>
-                </div>
-            </div>
-            {/acl}
-
-            <div class="control-group">
-                <label for="body" class="control-label">{t}Body{/t}</label>
-                <div class="controls">
-                    <textarea name="body" id="body" required="required" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
-                <div class="controls">
-                    <input type="text" id="metadata" name="metadata" value="{$page->metadata|default:""}"
-                           tabindex="6" required="required"  class="input-xxlarge"/>
+            <div class="contentform-main">
+                <div class="control-group">
+                    <label for="body" class="control-label">{t}Body{/t}</label>
+                    <div class="controls">
+                        <textarea name="body" id="body" required="required" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -76,6 +94,7 @@
 {/block}
 
 {block name="footer-js" append}
+    {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
 
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -88,7 +107,11 @@ jQuery(document).ready(function($){
 
     var previous = null;
 
-    jQuery("#title").on('blur', '', function(e){
+    var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
+
+    $('#title').on('change', function(e, ui) {
+        fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+
         var slugy = jQuery.trim(jQuery('#slug').attr('value'));
         if ((slugy.length <= 0) && (previous!=slugy)) {
 

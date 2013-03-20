@@ -2282,3 +2282,14 @@ div.tagsinput span.tag a { font-weight: bold; text-decoration:none;  }
 .tagsinput input {
   margin-top:5px;
 }
+
+
+
+/* =============================================================================
+   Onm Editor
+   ========================================================================== */
+
+.onm-editor {
+  width:100%;
+  min-height:150px;
+}
