@@ -163,10 +163,6 @@ class VideosController extends Controller
             );
         }
 
-        // Get last comments to show in video frontpage
-        $latestComments = $this->cm->cache->getLastComentsContent('Video', true, $this->category, 4);
-        $this->view->assign('lasts_comments', $latestComments);
-
         if (isset($categoryName)
             && !empty($categoryName)
             && $categoryName != 'home'

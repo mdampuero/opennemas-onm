@@ -424,7 +424,7 @@ class Widget extends Content
 
         try {
             if (class_exists($className)) {
-                $class = new $className;
+                $class = new $className($this);
             } else {
                 throw new Exception('', 1);
 
