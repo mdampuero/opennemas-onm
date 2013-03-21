@@ -17,13 +17,14 @@
                 simple : {
                     plugins: load_plugins,
                     forcePasteAsPlainText : true,
-                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles',
+                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,Undo,Redo',
                     toolbarGroups: [
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'editing',     groups: [ 'find', 'selection' ] },
                       { name: 'forms' },
                       { name: 'styles' },
+                      { name: 'clipboard',   groups: [ 'clipboard' ] },
                       { name: 'links' },
                       { name: 'others' },
                       { name: 'about' },
@@ -39,11 +40,10 @@
 
                 full : {
                     plugins: load_plugins,
-                    removeButtons: '',
+                    removeButtons: 'Cut,Copy,Paste,Undo,Redo',
                     toolbarGroups: [
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
-                      { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
                       { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
                       { name: 'forms' },
                       '/',
@@ -52,6 +52,7 @@
                       { name: 'links' },
                       { name: 'insert' },
                       '/',
+                      { name: 'clipboard',   groups: [ 'clipboard' ] },
                       { name: 'styles' },
                       { name: 'colors' },
                       { name: 'tools' },
@@ -66,6 +67,7 @@
                     plugins: load_plugins,
                     toolbarGroups : [
                         { name: 'styles' },
+                        { name: 'clipboard',   groups: [ 'clipboard' ] },
                         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
                         { name: 'forms' },
                         { name: 'tools' },
@@ -81,7 +83,7 @@
                         { name: 'about' }
                     ],
 
-                    removeButtons : 'Underline,Subscript,Superscript',
+                    removeButtons : 'Underline,Subscript,Superscript,Cut,Copy,Paste,Undo,Redo',
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
                   }
