@@ -1,8 +1,7 @@
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-<table style="width:100%">
+<div class="contentform-inner clearfix">
     {is_module_activated name="IMAGE_MANAGER"}
-    <tr>
-        <td>
+    <div class="contentform-main">
             <div id="related-images" class="resource-container tabs">
                 <ul>
                     <li><a href="#frontpage-image" title="{t}Image or video for frontpage:{/t}">{t}Image for frontpage{/t}{if isset($photo1) && $photo1->name}<span class="marker">&#164;</span>{/if}</a></li>
@@ -108,16 +107,15 @@
 
                 {/is_module_activated}
             </div><!-- /related-images -->
+    </div>
 
-        </td>
-        <td style="width:430px">
-            <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
-                <strong>{t}Available images{/t}</strong>
-            </div>
-            <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
+    <div class="contentbox-container">
+        <div class="contentbox">
+            <h3 class="title">{t}Available images{/t}</h3>
+            <div id="photos_container" class="photos content">
                 <div class="input-append">
                     <input id="stringImageSearch" name="stringImageSearch" type="text"
-                       placeholder="{t}Search images by title...{/t}" style="width: 150px;" class="noentersubmit"/>
+                       placeholder="{t}Search images by title...{/t}" style="width: 150px !important;" class="noentersubmit"/>
                     <select style="width:140px" id="category_imag" name="category_imag">
                         <option value="0">GLOBAL</option>
                             {section name=as loop=$allcategorys}
@@ -131,19 +129,16 @@
                 <div id="photos">
                     {*AJAX imageGallery *}
                 </div>
-           </div>
-        </td>
-    </tr>
+            </div>
+        </div>
+    </div>
     {/is_module_activated}
+</div>
 
-
+<div class="contentform-inner clearfix">
     {acl isAllowed="VIDEO_ADMIN"}
     {is_module_activated name="VIDEO_MANAGER"}
-    <tr>
-        <td colspan=2><hr></td>
-    </tr>
-    <tr>
-        <td>
+    <div class="contentform-main">
             <div id="related-videos" class="resource-container tabs">
                 <ul>
                     <li><a href="#frontpage-video" title="{t}Image or video for frontpage:{/t}">{t}Video for frontpage{/t}{if isset($video1) && $video1->pk_video}<span class="marker">&#164;</span>{/if}</a></li>
@@ -223,15 +218,15 @@
                     </div>
                 </div><!-- /inner-video -->
             </div><!-- /related-videos -->
-        </td>
-        <td>
-            <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
-                <strong>{t}Available videos{/t}</strong>
-            </div>
-            <div id="videos-container" class="photos" style=" border:1px solid #ccc;  padding:7px;">
+
+    </div>
+    <div class="contentbox-container">
+        <div class="contentbox">
+            <h3 class="title">{t}Available videos{/t}</h3>
+            <div id="videos-container" class="photos content">
                 <div class="input-append">
                     <input class="textoABuscar noentersubmit" id="stringVideoSearch" name="stringVideoSearch" type="text"
-                           placeholder="{t}Search videos by title...{/t}"  style="width: 150px;"
+                           placeholder="{t}Search videos by title...{/t}"  style="width: 150px !important;"
                            />
                     <select style="width:140px"  id="category_video" name="category_video">
                         <option value="0">GLOBAL</option>
@@ -247,12 +242,11 @@
                     <!-- Ajax -->
                </div>
             </div>
-        </td>
-    </tr>
+        </div>
+    </div>
     {/is_module_activated}
     {/acl}
-</table>
-
+</div>
 {is_module_activated name="IMAGE_MANAGER"}
 <script>
 jQuery(document).ready(function($){
