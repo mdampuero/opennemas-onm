@@ -19,6 +19,7 @@
                     forcePasteAsPlainText : true,
                     removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles',
                     toolbarGroups: [
+                      { name: 'clipboard',   groups: [ 'clipboard'] },
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'editing',     groups: [ 'find', 'selection' ] },
@@ -65,6 +66,7 @@
                   standard: {
                     plugins: load_plugins,
                     toolbarGroups : [
+                        { name: 'clipboard',   groups: [ 'clipboard', 'undo' ] },
                         { name: 'styles' },
                         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
                         { name: 'forms' },
