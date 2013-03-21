@@ -135,6 +135,8 @@
     {/is_module_activated}
 </div>
 
+<hr>
+
 <div class="contentform-inner clearfix">
     {acl isAllowed="VIDEO_ADMIN"}
     {is_module_activated name="VIDEO_MANAGER"}
