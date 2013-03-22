@@ -13,9 +13,17 @@
 		exec: function( editor ) {
 			editor.getClipboardData({ title: editor.lang.pastetext.title }, function( data ) {
 
-				var newData = data.dataValue.
-					replace(/<div><br><\/div>/g, '').
-					replace(/<\/div><div>/g, '</div><div><br></div><div>');
+				var is_firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+
+				if (is_firefox) {
+					var newData = data.dataValue.replace(/<br>/g, '<br><br>');
+				} else {
+					var newData = data.dataValue.
+						replace(/<div><br><\/div>/g, '').
+						replace(/<\/div><div>/g, '</div><div><br></div><div>');
+				};
+
+				console.log(newData);
 
 				// Do not use editor#paste, because it would start from beforePaste event.
 				data && editor.fire( 'paste', { type: 'text', dataValue: newData } );
