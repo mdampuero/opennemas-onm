@@ -40,7 +40,7 @@
 
                 full : {
                     plugins: load_plugins,
-                    removeButtons: 'Cut,Copy,Paste,Undo,Redo',
+                    removeButtons: 'Cut,Copy,Paste,Undo,Redo,PasteText',
                     toolbarGroups: [
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
@@ -65,14 +65,15 @@
 
                   standard: {
                     plugins: load_plugins,
+                    removeButtons: 'Cut,Copy,Paste,Undo,Redo,PasteText',
                     toolbarGroups : [
                         { name: 'styles' },
-                        { name: 'clipboard',   groups: [ 'clipboard' ] },
+                        // { name: 'clipboard',   groups: [ 'clipboard' ] },
                         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
                         { name: 'forms' },
+                        { name: 'others' },
                         { name: 'tools' },
                         { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
-                        { name: 'others' },
                         '/',
                         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                         { name: 'align', groups: [ 'align' ]},
