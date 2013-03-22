@@ -79,10 +79,10 @@ jQuery(function($) {
     $('#button_preview').on('click', function(e, ui) {
         e.preventDefault();
 
-        CKEDITOR.instances.body.getData();
-        CKEDITOR.instances.summary.getData();
+        CKEDITOR.instances.body.updateElement();
+        CKEDITOR.instances.summary.updateElement();
 
-        // Fetch related news and others
+        // // Fetch related news and others
         save_related_contents();
 
         previewArticle('formulario');
