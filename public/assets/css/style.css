@@ -2230,6 +2230,15 @@ select#category option.unavailable {
             margin: 6px 0;
           }
 
+          #article_images .contentbox-container {
+            margin-right: -350px;
+            width: 350px;
+          }
+
+          #article_images .contentform-inner {
+            margin-right: 350px;
+          }
+
 @media only screen and (max-width:979px) {
   .contentform-inner {
       margin-right:0;
@@ -2239,6 +2248,15 @@ select#category option.unavailable {
   .contentbox-container {
     margin-right:0;
     width:100%;
+  }
+
+  #article_images .contentbox-container {
+    margin-right: 0;
+    width:100%;
+  }
+
+  #article_images .contentform-inner {
+    margin-right: 0;
   }
 
 }
