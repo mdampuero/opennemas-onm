@@ -79,11 +79,10 @@ jQuery(function($) {
     $('#button_preview').on('click', function(e, ui) {
         e.preventDefault();
 
-        // // Save tiny content to textarea
-        OpenNeMas.tinyMceFunctions.saveTiny('summary');
-        OpenNeMas.tinyMceFunctions.saveTiny('body');
+        CKEDITOR.instances.body.getData();
+        CKEDITOR.instances.summary.getData();
 
-        // // Fetch related news and others
+        // Fetch related news and others
         save_related_contents();
 
         previewArticle('formulario');
