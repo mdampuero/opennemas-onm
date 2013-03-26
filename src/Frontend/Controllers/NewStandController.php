@@ -199,7 +199,7 @@ class NewStandController extends Controller
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($epaperId)) {
-            return new RedirectResponse($this->generateUrl('frontend_newspaper_frontpage'));
+            return new RedirectResponse($this->generateUrl('frontend_newstandPaypal_frontpage'));
         }
 
         $cacheID = $this->view->generateCacheId('newsstand', null, $epaperId);

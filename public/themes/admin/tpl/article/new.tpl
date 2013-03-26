@@ -276,10 +276,11 @@
                             </div>
                         </div>
                     </div>
-                    <div id="article_images">
-                        {include  file="article/partials/_images.tpl"}
-                    </div>
                 </div><!-- /contentform-inner -->
+
+                <div id="article_images" class="clearfix">
+                    {include  file="article/partials/_images.tpl"}
+                </div>
             </div><!-- /edicion-contenido -->
 
             {* Pestaña de parámetros de noticia *}
