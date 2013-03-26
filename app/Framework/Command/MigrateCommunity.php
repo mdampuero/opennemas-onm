@@ -51,25 +51,37 @@ EOF
         $dataBaseUser = $input->getArgument('user');
         $dataBaseName = $input->getArgument('database');
 
+        define('BD_HOST', $dataBaseHost);
+        define('BD_USER', $dataBaseUser);
+        define('BD_TYPE', $dataBaseType);
+        define('BD_DATABASE', $dataBaseName);
+
         $dialog = $this->getHelperSet()->get('dialog');
 
         $validator = function ($value) {
             if (trim($value) == '') {
-                throw new \Exception('The password can not be empty');
+                throw new \Exception('The password can not be empty, please try again');
+            } elseif (!$connect = @mysql_connect('localhost', BD_USER, $value)) {
+                throw new \Exception('The password is wrong, please try again');
             }
+
+            // Close connection if opened
+            if ($connect) {
+                mysql_close($connect);
+            }
+
+            return $value;
         };
 
-        $dataBasePass = $password = $dialog->askHiddenResponse(
+        $dataBasePass = $dialog->askHiddenResponseAndValidate(
             $output,
             'What is the database user password?',
+            $validator,
+            5,
             false
         );
 
-        define('BD_HOST', $dataBaseHost);
-        define('BD_USER', $dataBaseUser);
         define('BD_PASS', $dataBasePass);
-        define('BD_TYPE', $dataBaseType);
-        define('BD_DATABASE', $dataBaseName);
 
         require_once $basePath.'/app/autoload.php';
         require_once 'Application.php';
@@ -347,7 +359,7 @@ EOF
 
         // Get database name and host from command line
         $dataBaseName = $input->getArgument('database');
-        $dataBaseHost = $input->getArgument('host');
+        $dataBaseHost = 'localhost';
 
         $sql = "SELECT `id`, `settings` FROM `instances`";
         $rs = $GLOBALS['application']->connInstaces->Execute($sql);
