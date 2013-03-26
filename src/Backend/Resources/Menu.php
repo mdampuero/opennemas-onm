@@ -204,6 +204,12 @@ $menuXml = '<?xml version="1.0"?>
             id="keyword_manager"
             link="'.url('admin_keywords', array()).'"
             privilege="PCLAVE_ADMIN" />
+        <node
+            module_name="PAYWALL"
+            title="'.htmlspecialchars(_("Paywall"), ENT_QUOTES).'"
+            id="keyword_manager"
+            link="'.url('admin_paywall', array()).'"
+            privilege="PAYWALL" />
         <node class="divider" />
          <node
             module_name="SCHEDULE_MANAGER"

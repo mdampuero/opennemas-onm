@@ -2253,6 +2253,25 @@ $adminRoutes->add(
     )
 );
 
+// Paywall controller routes
+$adminRoutes->add(
+    'admin_paywall',
+    new Route(
+        '/paywall/settings',
+        array('_controller' => 'Backend:Controllers:PaywallController:default')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_settings_save',
+    new Route(
+        '/paywall/settings/save',
+        array('_controller' => 'Backend:Controllers:PaywallController:settingsSave')
+    )
+);
+
+
+
 // Importer Efe controller routes
 $adminRoutes->add(
     'admin_news_agency',
