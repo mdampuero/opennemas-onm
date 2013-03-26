@@ -24,6 +24,7 @@ class MigrateCommunity extends Command
             ->setDefinition(
                 array(
                     new InputArgument('user', InputArgument::REQUIRED, 'user'),
+                    new InputOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The database password'),
                     new InputArgument('database', InputArgument::REQUIRED, 'database'),
                 )
             )
@@ -33,7 +34,7 @@ class MigrateCommunity extends Command
                 <<<EOF
 The <info>community:migrate</info> command migrates an old community DB to the new format with new schema and tables.
 
-<info>php bin/console community:migrate host user pass type database</info>
+<info>php bin/console community:migrate user [-p pass] database</info>
 
 EOF
             );
@@ -50,36 +51,51 @@ EOF
         $dataBaseType = 'mysqli';
         $dataBaseUser = $input->getArgument('user');
         $dataBaseName = $input->getArgument('database');
+        $dataBasePass = $input->getOption('password');
 
         define('BD_HOST', $dataBaseHost);
         define('BD_USER', $dataBaseUser);
         define('BD_TYPE', $dataBaseType);
         define('BD_DATABASE', $dataBaseName);
 
-        $dialog = $this->getHelperSet()->get('dialog');
+        if (!$dataBasePass) {
+            // Ask password
+            $dialog = $this->getHelperSet()->get('dialog');
 
-        $validator = function ($value) {
-            if (trim($value) == '') {
-                throw new \Exception('The password can not be empty, please try again');
-            } elseif (!$connect = @mysql_connect('localhost', BD_USER, $value)) {
-                throw new \Exception('The password is wrong, please try again');
-            }
+            $validator = function ($value) {
+                if (trim($value) == '') {
+                    throw new \Exception('The password can not be empty, please try again');
+                } elseif (!$connect = @mysql_connect('localhost', BD_USER, $value)) {
+                    throw new \Exception('The password is wrong, please try again');
+                }
 
-            // Close connection if opened
-            if ($connect) {
-                mysql_close($connect);
-            }
+                // Close connection if opened
+                if ($connect) {
+                    mysql_close($connect);
+                }
 
-            return $value;
-        };
+                return $value;
+            };
 
-        $dataBasePass = $dialog->askHiddenResponseAndValidate(
-            $output,
-            'What is the database user password?',
-            $validator,
-            5,
-            false
-        );
+            $dataBasePass = $dialog->askHiddenResponseAndValidate(
+                $output,
+                'What is the database user password?',
+                $validator,
+                5,
+                false
+            );
+        }
+
+        if (trim($dataBasePass) == '') {
+            throw new \Exception('The password can not be empty, please try again');
+        } elseif (!$connect = @mysql_connect('localhost', BD_USER, $dataBasePass)) {
+            throw new \Exception('The password is wrong, please try again');
+        }
+
+        // Close connection if opened
+        if ($connect) {
+            mysql_close($connect);
+        }
 
         define('BD_PASS', $dataBasePass);
 
