@@ -117,6 +117,13 @@ class User
     public $clientLoginToken = null;
 
     /**
+     * Meta information for the user
+     *
+     * @var string
+     **/
+    public $meta = array();
+
+    /**
      * Initializes the object instance
      *
      * @param int $id User Id
@@ -819,39 +826,28 @@ class User
      *
      * @return array/string an 2-dimensional array or an string with the user option values
      **/
-    public function getMeta($meta = array())
+    public function getMeta($meta = null)
     {
-        if (is_string($meta)) {
-            $cleanMeta = array($meta);
-        } else {
-            $cleanMeta = $meta;
-        }
+        if (count($this->meta) <= 0) {
+            $sql = 'SELECT * FROM usermeta WHERE `user_id` = ?';
 
-        $metaNameSQL = array();
-        foreach ($cleanMeta as $key) {
-            $metaNameSQL []= $GLOBALS['application']->conn->qstr($key);
-        }
-        $metaNameSQL = implode(', ', $metaNameSQL);
+            $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
-        $sql = 'SELECT * FROM usermeta WHERE `user_id` = ? AND `meta_key` IN ('.$metaNameSQL.')';
-
-        $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-
-        if (!$rs) {
-            return false;
-        }
-
-        if (is_array($meta)) {
-            $returnValues = array();
             foreach ($rs as $value) {
-                $returnValues [$rs->fields['meta_key']] = $rs->fields['meta_value'];
+                $this->meta[$rs->fields['meta_key']] = $rs->fields['meta_value'];
             }
-        } else {
-            $returnValues = $rs->fields['meta_value'];
         }
 
-        return $returnValues;
+        if (is_string($meta)) {
+            $value = $this->meta[$meta];
+        } elseif (is_array($meta)) {
+            $value = array_intersect_key($this->meta, array_flip($meta));
+        } else {
+            $value = $this->meta;
+        }
+
+        return $value;
     }
 
      /**
