@@ -2,7 +2,9 @@
 {block name="header-js" append}
     <script>
         var article_manager_urls = {
-            batch_delete: '{url name=admin_articles_batchdelete category=$category page=$page}'
+            batch_delete: '{url name=admin_articles_batchdelete category=$category page=$page}',
+            batch_publish: '{url name=admin_articles_batchpublish new_status=1}',
+            batch_unpublish: '{url name=admin_articles_batchpublish new_status=0}',
         }
     </script>
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
@@ -40,15 +42,20 @@
 
                     <ul class="dropdown-menu">
                         <li>
-                            <button type="submit" name="new_status" value="1" href="#" id="batch-publish">
+                            <a href="#" id="batch-publish">
                                 {t}Batch publish{/t}
-                            </button>
+                            </a>
                         </li>
                         <li>
-                            <button type="submit" name="new_status" value="0" id="batch-unpublish">
+                            <a href="#" id="batch-unpublish">
                                 {t}Batch unpublish{/t}
-                            </button>
+                            </a>
                         </li>
+                        <!-- <li>
+                            <a href="#" id="batch-delete">
+                                {t}Batch delete{/t}
+                            </a>
+                        </li> -->
                     </ul>
                 </li>
 
@@ -193,12 +200,38 @@
         });
 
         var form = $('#formulario');
-        $('#batch-publish, #batch-unpublish').on('click', function (e, ui) {
-            form.attr('action', '{url name=admin_articles_batchpublish}');
+
+        $('#batch-publish').on('click', function (e, ui) {
+            e.preventDefault();
+            $.get(
+                article_manager_urls.batch_publish,
+                form.serializeArray()
+            ).done(function(data) {
+                window.location.href = '{url name=admin_articles}';
+            }).fail(function(data) {
+            });
+        });
+
+        $('#batch-unpublish').on('click', function (e, ui) {
+            e.preventDefault();
+            $.get(
+                article_manager_urls.batch_unpublish,
+                form.serializeArray()
+            ).done(function(data) {
+                window.location.href = '{url name=admin_articles}';
+            }).fail(function(data) {
+            });
         });
 
         $('#batch-delete').on('click', function (e, ui) {
-            form.attr('action', '{url name=admin_articles_batchdelete}');
+            e.preventDefault();
+            $.get(
+                article_manager_urls.batch_delete,
+                form.serializeArray()
+            ).done(function(data) {
+                window.location.href = '{url name=admin_articles}';
+            }).fail(function(data) {
+            });
         });
     });
     </script>
