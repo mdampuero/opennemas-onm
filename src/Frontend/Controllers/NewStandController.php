@@ -68,7 +68,6 @@ class NewStandController extends Controller
         $year  = $request->query->getDigits('year', date('Y'));
 
         $order = $configurations['orderFrontpage'];
-
         if ($order =='grouped') {
             $cache_date = $year.$month;
             $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
@@ -173,11 +172,12 @@ class NewStandController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'date'           => '1-'.$month.'-'.$year,
+                'selected_date'  => '1-'.$month.'-'.$year,
                 'MONTH'          => $month,
                 'YEAR'           => $year,
                 'year'           => $year,
                 'month'          => $month,
+                'order'          => $order,
                 'kiosko'         => $kiosko
             )
         );
