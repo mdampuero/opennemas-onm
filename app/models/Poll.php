@@ -193,8 +193,8 @@ class Poll extends Content
             //Insertamos
             $keys =  '';
             foreach ($data['item'] as $k => $item) {
-                $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`) VALUES (?,?,?)';
-                $values = array((int) $k, $this->id, $item);
+                $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
+                $values = array((int) $k, (int) $this->id, $item, $data['votes'][$k]);
 
                 if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                     \Application::logDatabaseError();
