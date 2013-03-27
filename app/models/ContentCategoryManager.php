@@ -489,25 +489,27 @@ class ContentCategoryManager
     {
         $categories = array_values($categories);
 
-        usort(
-            $categories,
-            function (
-                $a,
-                $b
-            ) {
-                if ($b->inmenu == 0) {
-                    return 0;
-                }
-                if ($a->inmenu == 0) {
-                    return +1;
-                }
-                if ($a->posmenu == $b->posmenu) {
+        if (count($categories) > 0) {
+            usort(
+                $categories,
+                function (
+                    $a,
+                    $b
+                ) {
+                    if ($b->inmenu == 0) {
+                        return 0;
+                    }
+                    if ($a->inmenu == 0) {
+                        return +1;
+                    }
+                    if ($a->posmenu == $b->posmenu) {
 
-                }
+                    }
 
-                return ($a->posmenu > $b->posmenu) ? +1 : -1;
-            }
-        );
+                    return ($a->posmenu > $b->posmenu) ? +1 : -1;
+                }
+            );
+        }
 
         return $categories;
     }
@@ -523,27 +525,29 @@ class ContentCategoryManager
     {
         $categories = array_values($categories);
 
-        usort(
-            $categories,
-            function (
-                $a,
-                $b
-            ) {
-                //Las que no están en el menú colocarlas al final
-                if ($b->internal_category == 0) {
-                     return 0;
-                }
-                if ($a->internal_category == 0) {
-                     return +1;
-                }
-                if ($a->internal_category == $b->internal_category) {
-                    return ($a->posmenu > $b->posmenu) ? +1 : -1;
-                }
+        if (count($categories) > 0) {
+            usort(
+                $categories,
+                function (
+                    $a,
+                    $b
+                ) {
+                    //Las que no están en el menú colocarlas al final
+                    if ($b->internal_category == 0) {
+                         return 0;
+                    }
+                    if ($a->internal_category == 0) {
+                         return +1;
+                    }
+                    if ($a->internal_category == $b->internal_category) {
+                        return ($a->posmenu > $b->posmenu) ? +1 : -1;
+                    }
 
-                return ($a->internal_category < $b->internal_category) ? 1 : +1;
+                    return ($a->internal_category < $b->internal_category) ? 1 : +1;
 
-            }
-        );
+                }
+            );
+        }
 
         return $categories;
     }
