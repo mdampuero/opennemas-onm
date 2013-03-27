@@ -17,7 +17,7 @@
                 simple : {
                     plugins: load_plugins,
                     forcePasteAsPlainText : true,
-                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,Undo,Redo,PasteText',
+                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText',
                     toolbarGroups: [
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                       { name: 'align', groups: [ 'align' ]},
@@ -26,7 +26,8 @@
                       { name: 'styles' },
                       // { name: 'clipboard',   groups: [ 'PasteSpecial', 'clipboard' ] },
                       { name: 'links' },
-                      { name: 'others' },
+                      { name: 'others', groups: [ 'undo' ] },
+                      { items : [ 'Image' ] },
                       { name: 'about' },
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] }
                     ],
@@ -40,7 +41,7 @@
 
                 full : {
                     plugins: load_plugins,
-                    removeButtons: 'Cut,Copy,Paste,Undo,Redo,PasteText',
+                    removeButtons: 'Cut,Copy,Paste,PasteText',
                     toolbarGroups: [
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
@@ -56,7 +57,7 @@
                       { name: 'styles' },
                       { name: 'colors' },
                       { name: 'tools' },
-                      { name: 'others' },
+                      { name: 'others', groups: [ 'undo' ] },
                       { name: 'about' }
                     ],
                     autoGrow_onStartup: true,
@@ -65,13 +66,13 @@
 
                   standard: {
                     plugins: load_plugins,
-                    removeButtons: 'Cut,Copy,Paste,Undo,Redo,PasteText',
+                    removeButtons: 'Cut,Copy,Paste,PasteText',
                     toolbarGroups : [
                         { name: 'styles' },
                         // { name: 'clipboard',   groups: [ 'clipboard' ] },
                         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
                         { name: 'forms' },
-                        { name: 'others' },
+                        { name: 'others' , groups: [ 'undo' ]},
                         { name: 'tools' },
                         { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
                         '/',
@@ -84,7 +85,7 @@
                         { name: 'about' }
                     ],
 
-                    removeButtons : 'Underline,Subscript,Superscript,Cut,Copy,Paste,Undo,Redo',
+                    removeButtons : 'Underline,Subscript,Superscript,Cut,Copy,Paste',
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
                   }
