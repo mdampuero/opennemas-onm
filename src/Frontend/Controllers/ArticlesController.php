@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
+use Onm\Module\ModuleManager;
 use Onm\StringUtils;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -63,6 +64,16 @@ class ArticlesController extends Controller
 
         // Load config
         $this->view->setConfig('articles');
+
+        $activated = ModuleManager::isActivated('PAYWALL');
+        $isLogged = array_key_exists('userid', $_SESSION);
+
+        $hasSubscription = false;
+        if ($isLogged) {
+            $userSubscriptionDate = '';
+            // $hasSubscription =
+            // var_dump($_SESSION);die();
+        }
 
         $cm = new \ContentManager();
 

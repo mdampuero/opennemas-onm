@@ -70,7 +70,6 @@ class AuthenticationController extends Controller
                 m::add(_('Login token is not valid. Try to autenticate again.'), m::ERROR);
                 return $this->redirect($this->generateUrl('frontend_auth_login'));
             } else {
-
                 // Try to autenticate the user
                 if ($user->login($login, $password, $token, $captcha)
                     && $user->type == 0
@@ -101,7 +100,8 @@ class AuthenticationController extends Controller
                             'updated'          => time(),
                             'session_lifetime' => $maxSessionLifeTime * 60,
                             'user_language'    => $user->getMeta('user_language'),
-                            'csrf'             => md5(uniqid(mt_rand(), true))
+                            'csrf'             => md5(uniqid(mt_rand(), true)),
+                            'meta'             => $user->getMeta(),
                         );
 
                         m::add(_('Log in succesful.'), m::ERROR);
@@ -114,7 +114,6 @@ class AuthenticationController extends Controller
                     return $this->redirect($this->generateUrl('frontend_auth_login'));
                 }
             }
-
         }
 
         // If the session was already initialized redirect the user to user page
