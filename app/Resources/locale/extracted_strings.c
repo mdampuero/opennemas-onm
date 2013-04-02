@@ -1136,7 +1136,7 @@ gettext("Edit");
 gettext("Remove element from this frontpage");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
-gettext("Drop from this frontpage");
+gettext("Remove from this frontpage");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
 gettext("Customize in frontpage");
@@ -1145,16 +1145,10 @@ gettext("Customize in frontpage");
 gettext("Customize content");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
-gettext("Drop from all frontpages");
+gettext("Remove from all frontpages");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
 gettext("Arquive");
-
-/* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
-gettext("Suggest to home");
-
-/* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
-gettext("Suggest to home");
 
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
 gettext("Delete");
@@ -1604,6 +1598,9 @@ gettext("Batch publish");
 gettext("Batch unpublish");
 
 /* public/themes/admin/tpl//article/list.tpl */
+gettext("Batch delete");
+
+/* public/themes/admin/tpl//article/list.tpl */
 gettext("New article");
 
 /* public/themes/admin/tpl//article/list.tpl */
@@ -1670,7 +1667,7 @@ gettext("Edit");
 gettext("Remove element from this frontpage");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
-gettext("Drop from this frontpage");
+gettext("Remove from this frontpage");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
 gettext("Customize in frontpage");
@@ -1679,7 +1676,7 @@ gettext("Customize in frontpage");
 gettext("Customize content");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
-gettext("Drop from all frontpages");
+gettext("Remove from all frontpages");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
 gettext("Arquive");
@@ -1689,6 +1686,12 @@ gettext("Suggest this element to home");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
 gettext("Suggest to home");
+
+/* public/themes/admin/tpl//article/content-provider/article.tpl */
+gettext("Unsuggest this element to home");
+
+/* public/themes/admin/tpl//article/content-provider/article.tpl */
+gettext("Unsuggest to home");
 
 /* public/themes/admin/tpl//article/content-provider/article.tpl */
 gettext("Delete");
@@ -1922,19 +1925,13 @@ gettext("Edit");
 gettext("Delete");
 
 /* public/themes/admin/tpl//widget/content-provider/widget.tpl */
-gettext("Drop from this frontpage");
+gettext("Remove from this frontpage");
 
 /* public/themes/admin/tpl//widget/content-provider/widget.tpl */
-gettext("Drop from all frontpages");
+gettext("Remove from all frontpages");
 
 /* public/themes/admin/tpl//widget/content-provider/widget.tpl */
 gettext("Arquive");
-
-/* public/themes/admin/tpl//widget/content-provider/widget.tpl */
-gettext("Suggest to home");
-
-/* public/themes/admin/tpl//widget/content-provider/widget.tpl */
-gettext("Suggest to home");
 
 /* public/themes/admin/tpl//widget/content-provider/widget.tpl */
 gettext("Delete");
@@ -4214,7 +4211,7 @@ gettext("Edit");
 gettext("Delete");
 
 /* public/themes/admin/tpl//video/content-provider/video.tpl */
-gettext("Drop from this frontpage");
+gettext("Remove from this frontpage");
 
 /* public/themes/admin/tpl//video/content-provider/video.tpl */
 gettext("Customize in frontpage");
@@ -4223,16 +4220,10 @@ gettext("Customize in frontpage");
 gettext("Customize content");
 
 /* public/themes/admin/tpl//video/content-provider/video.tpl */
-gettext("Drop from all frontpages");
+gettext("Remove from all frontpages");
 
 /* public/themes/admin/tpl//video/content-provider/video.tpl */
 gettext("Arquive");
-
-/* public/themes/admin/tpl//video/content-provider/video.tpl */
-gettext("Suggest to home");
-
-/* public/themes/admin/tpl//video/content-provider/video.tpl */
-gettext("Suggest to home");
 
 /* public/themes/admin/tpl//video/content-provider/video.tpl */
 gettext("Delete");
@@ -4523,19 +4514,13 @@ gettext("Edit");
 gettext("Remove element from this frontpage");
 
 /* public/themes/admin/tpl//advertisement/content-provider/advertisement.tpl */
-gettext("Drop from this frontpage");
+gettext("Remove from this frontpage");
 
 /* public/themes/admin/tpl//advertisement/content-provider/advertisement.tpl */
-gettext("Drop from all frontpages");
+gettext("Remove from all frontpages");
 
 /* public/themes/admin/tpl//advertisement/content-provider/advertisement.tpl */
 gettext("Arquive");
-
-/* public/themes/admin/tpl//advertisement/content-provider/advertisement.tpl */
-gettext("Suggest to home");
-
-/* public/themes/admin/tpl//advertisement/content-provider/advertisement.tpl */
-gettext("Suggest to home");
 
 /* public/themes/admin/tpl//advertisement/content-provider/advertisement.tpl */
 gettext("Delete");
@@ -5954,7 +5939,7 @@ gettext("Edit");
 gettext("Remove element from this frontpage");
 
 /* public/themes/admin/tpl//album/content-provider/album.tpl */
-gettext("Drop from this frontpage");
+gettext("Remove from this frontpage");
 
 /* public/themes/admin/tpl//album/content-provider/album.tpl */
 gettext("Customize in frontpage");
@@ -5963,16 +5948,10 @@ gettext("Customize in frontpage");
 gettext("Customize content");
 
 /* public/themes/admin/tpl//album/content-provider/album.tpl */
-gettext("Drop from all frontpages");
+gettext("Remove from all frontpages");
 
 /* public/themes/admin/tpl//album/content-provider/album.tpl */
 gettext("Arquive");
-
-/* public/themes/admin/tpl//album/content-provider/album.tpl */
-gettext("Suggest this element to home");
-
-/* public/themes/admin/tpl//album/content-provider/album.tpl */
-gettext("Suggest to home");
 
 /* public/themes/admin/tpl//album/content-provider/album.tpl */
 gettext("Delete");
