@@ -187,7 +187,7 @@ class ContentController extends Controller
         }
 
         return new Response(
-            $error,
+            json_encode($error),
             $code,
             array('Content-Type' => 'application/json')
         );
