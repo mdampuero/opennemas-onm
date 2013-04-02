@@ -62,21 +62,15 @@ class ArticlesController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        $em = new \Onm\ORM\EntityRepository($this->container->get('cache'));
+        $article = $em->find('Article', $articleID);
+
         // Load config
         $this->view->setConfig('articles');
 
-        $activated = ModuleManager::isActivated('PAYWALL');
-        $isLogged = array_key_exists('userid', $_SESSION);
-
-        $hasSubscription = false;
-        if ($isLogged) {
-            $userSubscriptionDate = '';
-            // $hasSubscription =
-            // var_dump($_SESSION);die();
-        }
+        $this->paywallHook($article);
 
         $cm = new \ContentManager();
-
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
         $this->getInnerAds($actualCategoryId);
@@ -91,8 +85,6 @@ class ArticlesController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
-            $article = new \Article($articleID);
-
             if (($article->available == 1) && ($article->in_litter == 0)
                 && ($article->isStarted())
             ) {
@@ -113,13 +105,6 @@ class ArticlesController extends Controller
                         'actual_category'       => $actualCategory,
                         'actual_category_id'    => $actualCategoryId,
                         'category_data'         => $categoryData,
-                    )
-                );
-
-                $this->view->assign(
-                    array(
-                        'article' => $article,
-                        'content' => $article,
                     )
                 );
 
@@ -183,6 +168,8 @@ class ArticlesController extends Controller
                 'cache_id'      => $cacheID,
                 'contentId'     => $articleID,
                 'category_name' => $categoryName,
+                'article'       => $article,
+                'content'       => $article,
             )
         );
     }
@@ -289,6 +276,32 @@ class ArticlesController extends Controller
         $intersticial = $advertisement->getIntersticial(150, $category);
         if (!empty($intersticial)) {
             $advertisement->renderMultiple(array($intersticial), $advertisement);
+        }
+    }
+
+    /**
+     * Alteres the article given the paywall module status
+     *
+     * @return Article the article
+     **/
+    public function paywallHook(&$article)
+    {
+        $paywallActivated = ModuleManager::isActivated('PAYWALL');
+        $onlyAvailableSubscribers = $article->isOnlyAvailableForSubscribers();
+
+        if ($paywallActivated && $onlyAvailableSubscribers) {
+            $isLogged = array_key_exists('userid', $_SESSION);
+            if ($isLogged) {
+                $userSubscriptionDate = new \DateTime('2 weeks ago');
+                $now = new \DateTime();
+                $hasSubscription = $userSubscriptionDate > $now;
+
+                if (!$hasSubscription) {
+                    $article->body = $this->renderView('paywall/partials/content_form_subscribe.tpl');
+                }
+            } else {
+                $article->body = $this->renderView('paywall/partials/content_only_for_subscribers.tpl');
+            }
         }
     }
 }

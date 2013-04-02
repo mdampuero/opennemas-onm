@@ -332,12 +332,12 @@ class Content
     {
         $exists = false;
 
- 
+
         $sql = 'SELECT pk_content FROM `contents` '
              . 'WHERE pk_content = ? LIMIT 1';
         $values = array($id);
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
- 
+
 
         $exists = ($rs != false);
 
@@ -2237,6 +2237,16 @@ class Content
         }
 
         return $this;
+    }
+
+    /**
+     * Returns true if this content is only available from paywall
+     *
+     * @return boolean true if only avilable for subscribers
+     **/
+    public function isOnlyAvailableForSubscribers()
+    {
+        return $this->params['only_subscribers'] == true;
     }
 
     /**
