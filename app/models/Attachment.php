@@ -128,13 +128,13 @@ class Attachment extends Content
     }
 
     /**
-    * Creates a new attachment from the given data
-    *
-    * @param array $data the data for create the new Attachment
-    *
-    * @return bool if it is true all went well,
-    *              if it is false something went wrong
-    */
+     * Creates a new attachment from the given data
+     *
+     * @param array $data the data for create the new Attachment
+     *
+     * @return bool if it is true all went well,
+     *              if it is false something went wrong
+     */
     public function create($data)
     {
         //Si es portada renovar cache
@@ -197,10 +197,11 @@ class Attachment extends Content
     }
 
     /**
-     * Check if a attachment exists yet
+     * Check if an attachment already exists
      *
      * @param  string  $path the path to check
      * @param  string  $category the category where to check
+     *
      * @return boolean
     */
     public function exists($path, $category)
@@ -260,7 +261,7 @@ class Attachment extends Content
     }
 
     /**
-     * Remoives permanently the attachment given its id
+     * Removes permanently the attachment given its id
      *
      * @param int $id the attachement id for delete
      *

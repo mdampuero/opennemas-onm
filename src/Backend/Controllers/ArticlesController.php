@@ -82,7 +82,7 @@ class ArticlesController extends Controller
         }
 
         $page     =  $request->query->getDigits('page', 1);
-        $title    =  $request->query->filter('title', null, FILTER_VALIDATE_INT);
+        $title    =  $request->query->filter('title', null, FILTER_SANITIZE_STRING);
         $status   =  (int) $request->query->get('status', -1);
         $category =  $request->query->filter('category', 0, FILTER_VALIDATE_INT);
 

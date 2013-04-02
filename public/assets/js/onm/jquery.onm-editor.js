@@ -11,22 +11,23 @@
     $.extend({
         onmEditor: function( options ) {
 
-            var load_plugins = 'autogrow,autokeywords,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wordcount,wysiwygarea';
+            var load_plugins = 'autogrow,autokeywords,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,pastespecial,removeformat,resize,scayt,sourcearea,specialchar,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wordcount,wysiwygarea';
             var presets = {
 
                 simple : {
                     plugins: load_plugins,
                     forcePasteAsPlainText : true,
-                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,Undo,Redo',
+                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText',
                     toolbarGroups: [
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'editing',     groups: [ 'find', 'selection' ] },
                       { name: 'forms' },
                       { name: 'styles' },
-                      { name: 'clipboard',   groups: [ 'clipboard' ] },
+                      // { name: 'clipboard',   groups: [ 'PasteSpecial', 'clipboard' ] },
                       { name: 'links' },
-                      { name: 'others' },
+                      { name: 'others', groups: [ 'undo' ] },
+                      { items : [ 'Image' ] },
                       { name: 'about' },
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] }
                     ],
@@ -40,7 +41,7 @@
 
                 full : {
                     plugins: load_plugins,
-                    removeButtons: 'Cut,Copy,Paste,Undo,Redo',
+                    removeButtons: 'Cut,Copy,Paste,PasteText',
                     toolbarGroups: [
                       { name: 'align', groups: [ 'align' ]},
                       { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
@@ -52,11 +53,11 @@
                       { name: 'links' },
                       { name: 'insert' },
                       '/',
-                      { name: 'clipboard',   groups: [ 'clipboard' ] },
+                      // { name: 'clipboard',   groups: [ 'clipboard' ] },
                       { name: 'styles' },
                       { name: 'colors' },
                       { name: 'tools' },
-                      { name: 'others' },
+                      { name: 'others', groups: [ 'undo' ] },
                       { name: 'about' }
                     ],
                     autoGrow_onStartup: true,
@@ -65,14 +66,15 @@
 
                   standard: {
                     plugins: load_plugins,
+                    removeButtons: 'Cut,Copy,Paste,PasteText',
                     toolbarGroups : [
                         { name: 'styles' },
-                        { name: 'clipboard',   groups: [ 'clipboard' ] },
+                        // { name: 'clipboard',   groups: [ 'clipboard' ] },
                         { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
                         { name: 'forms' },
+                        { name: 'others' , groups: [ 'undo' ]},
                         { name: 'tools' },
                         { name: 'document',    groups: [ 'mode', 'document', 'doctools' ] },
-                        { name: 'others' },
                         '/',
                         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                         { name: 'align', groups: [ 'align' ]},
@@ -83,7 +85,7 @@
                         { name: 'about' }
                     ],
 
-                    removeButtons : 'Underline,Subscript,Superscript,Cut,Copy,Paste,Undo,Redo',
+                    removeButtons : 'Underline,Subscript,Superscript,Cut,Copy,Paste',
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
                   }
@@ -104,7 +106,8 @@
                 var editor_configuration = {
                     language: settings.language,
                     extraPlugins: 'magicline,font',
-                    magicline_color: 'blue'
+                    magicline_color: 'blue',
+                    forcePasteAsPlainText : true
                 };
 
                 var editor_preset;

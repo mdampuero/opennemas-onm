@@ -161,28 +161,37 @@ class FrontpagesController extends Controller
         // Setup view
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, 0);
 
-        // Fetch advertisement information from local
-        $this->getAds($categoryName);
+        // Get sync params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$categoryName.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        $cm = new \ContentManager;
+        // Get category id correspondence
+        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
+        // Fetch advertisement information from external
+        $advertisement = \Advertisement::getInstance();
+        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
+        $intersticial = $ads[0];
+        $banners      = $ads[1];
+
+        // Render advertisements
+        $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
+        }
 
         // Avoid to run the entire app logic if is available a cache for this page
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
-
-            // Init the Content and Database object
             $ccm = \ContentCategoryManager::get_instance();
-            $cm = new \ContentManager;
-
-            // Get sync params
-            $wsUrl = '';
-            $syncParams = s::get('sync_params');
-            foreach ($syncParams as $siteUrl => $categoriesToSync) {
-                foreach ($categoriesToSync as $value) {
-                    if (preg_match('/'.$categoryName.'/i', $value)) {
-                        $wsUrl = $siteUrl;
-                    }
-                }
-            }
 
             // Check if category exists
             $existsCategory = $cm->getUrlContent($wsUrl.'/ws/categories/exist/'.$categoryName);
@@ -196,8 +205,6 @@ class FrontpagesController extends Controller
             }
 
             $actualCategory = (empty($subcategory_name))? $categoryName : $subcategory_name;
-            // Get category id correspondence
-            $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
             $this->view->assign(
                 array(
                     'category_name'         => $categoryName,

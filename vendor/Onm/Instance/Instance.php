@@ -140,7 +140,7 @@ class Instance
         // External server or a local dir
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);
         // Full path to the instance media files
-        define('MEDIA_DIR_URL', MEDIA_URL.SS.MEDIA_DIR.SS);
+        define('MEDIA_DIR_URL', MEDIA_URL.MEDIA_DIR.SS);
 
         // local path to write media (/path/to/media)
         define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
@@ -149,12 +149,12 @@ class Instance
         define('ADS_DIR', "advertisements");
         define('OPINION_DIR', "opinions");
 
-        define('MEDIA_IMG_PATH_URL', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
+        define('MEDIA_IMG_PATH_URL', MEDIA_URL.MEDIA_DIR.SS.IMG_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
         define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR);
         // TODO: delete from application
-        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.SS.MEDIA_DIR.SS.IMG_DIR);
+        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.MEDIA_DIR.SS.IMG_DIR);
 
         /**
         * Template settings

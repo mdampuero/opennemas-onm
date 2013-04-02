@@ -206,10 +206,20 @@ jQuery(function($) {
         $.get(
             frontpage_urls.set_arquived,
             { 'ids': ids }
-        ).success(function(data) {
-            $('#warnings-validation').html("<div class='success'>" + data + '</div>');
-        }).error(function(data) {
-            $('#warnings-validation').html("<div class='error'>" + data.responseText + '</div>');
+        ).done(function(data) {
+            $('#warnings-validation').html(
+                "<div class='alert alert-success'>" +
+                    "<button class='close' data-dismiss='alert'>×</button>" +
+                    data +
+                '</div>'
+            );
+        }).fail(function(data) {
+            $('#warnings-validation').html(
+                "<div class='alert alert-error'>" +
+                    "<button class='close' data-dismiss='alert'>×</button>" +
+                    data.responseText +
+                '</div>'
+            );
         });
         $('#modal-batch-arquive').modal('hide');
         remove_element(contents);
@@ -270,11 +280,21 @@ jQuery(function($) {
             $.get(
                 frontpage_urls.set_arquived,
                 { 'ids': [delId] }
-            ).success(function(data) {
-                $('#warnings-validation').html("<div class='success'>" + data + '</div>');
-            }).error(function(data) {
-                $('#warnings-validation').html("<div class='error'>" + data.responseText + '</div>');
+            ).done(function(data) {
+                $('#warnings-validation').html(
+                    "<div class='alert alert-success'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        data +
+                    '</div>');
+            }).fail(function(data) {
+                $('#warnings-validation').html(
+                    "<div class='alert alert-error'>" +
+                        "<button class='close' data-dismiss='alert'>×</button>" +
+                        data.responseText +
+                    '</div>'
+                );
             });
+
         }
         $('#modal-element-archive').modal('hide');
         remove_element($('body').data('element-for-archive'));
@@ -303,8 +323,8 @@ jQuery(function($) {
             $.get(
                 frontpage_urls.toggle_suggested,
                 { 'ids': [contentId] }
-            ).success(function(data) {
-            }).error(function(data) {
+            ).done(function(data) {
+            }).fail(function(data) {
             });
         }
 
@@ -451,7 +471,7 @@ jQuery(function($) {
                   element.data('bg', 'background-color:'+bgcolor);
                   element.data('title', jsonTitle);
 
-            }).error(function(data) {
+            }).fail(function(data) {
                 //data.message
             });
         }

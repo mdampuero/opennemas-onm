@@ -14,6 +14,9 @@ body {
 #frontpagemanager.home .suggest-to-home {
     display:none;
 }
+#frontpagemanager.home .unsuggest-to-home {
+    display:none;
+}
 #frontpagemanager .wrapper,
 #frontpagemanager .placeholder {
     vertical-align:top;
@@ -368,6 +371,22 @@ div#content-provider #toggler{
 }
 
 #frontpagemanager:not(.home)  .content-icon-suggested {
+    display: none;
+}
+
+#frontpagemanager .remove.suggest-to-home {
+    display: none;
+}
+
+#frontpagemanager .suggest-to-home {
+    display: inline;
+}
+
+#frontpagemanager:not(.home) .suggested .remove.suggest-to-home {
+    display: inline;
+}
+
+#frontpagemanager:not(.home) .suggested .suggest-to-home {
     display: none;
 }
 

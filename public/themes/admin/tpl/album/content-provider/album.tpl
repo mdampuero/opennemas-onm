@@ -22,7 +22,7 @@
             </li>
             <li>
                 <a title="{t}Remove element from this frontpage{/t}" href="#" class="drop-element">
-                    <i class="icon-trash"></i> {t}Drop from this frontpage{/t}
+                    <i class="icon-remove"></i> {t}Remove from this frontpage{/t}
                 </a>
             </li>
             {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
@@ -33,24 +33,16 @@
             </li>
             {/is_module_activated}
             <li>
-                <a title="{t}Drop from all frontpages{/t}" href="#" class="arquive">
+                <a title="{t}Remove from all frontpages{/t}" href="#" class="arquive">
                     <i class="icon-inbox"></i> {t}Arquive{/t}
                 </a>
             </li>
-            <li>
-                {if !$params['home']}
-                <a title="{t}Suggest this element to home{/t}" href="#" class="suggest-to-home">
-                    <i class="icon-home"></i> {t}Suggest to home{/t}
-                </a>
-                {/if}
-            </li>
-            {*
             <li class="divider"></li>
             <li>
                 <a href="{url name=admin_album_delete id=$content->id category=$category}" title="{t}Delete{/t}" class="send-to-trash">
                     <i class="icon-trash"></i> {t}Send to trash{/t}
                 </a>
-            </li>*}
+            </li>
         </ul>
     </div>
 </div>

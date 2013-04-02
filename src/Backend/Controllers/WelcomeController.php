@@ -45,6 +45,12 @@ class WelcomeController extends Controller
     {
         // $this->dispatchEvent('content.update', array('content' => new \Article()));
         // $instances = $this->get('db_conn')->Execute('SELECT count(*) FROM instances');
+        //
+        $this->get('session')->setFlash(
+            'notice',
+            'Your changes were saved!'
+        );
+
 
         $feeds = array (
             array('name' => 'El pais', 'url'=> 'http://www.elpais.com/rss/feed.html?feedId=1022'),

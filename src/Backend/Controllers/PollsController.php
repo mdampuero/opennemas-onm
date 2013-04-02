@@ -304,8 +304,8 @@ class PollsController extends Controller
                 'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
                 'available'     => $request->request->getDigits('available', 0),
                 'item'          => $request->request->get('item'),
+                'votes'         => $request->request->get('votes'),
             );
-
             if ($poll->update($data)) {
                 m::add(_('Poll successfully updated.'), m::SUCCESS);
             } else {

@@ -9,14 +9,12 @@ class Ads
     */
     public function frontpage($category)
     {
-        $this->validateInt(func_get_args());
-
         $category = (!isset($category) || ($category=='home'))? 0: $category;
         $advertisement = Advertisement::getInstance();
 
         $banners = $advertisement->getAdvertisements(
             array(
-                1,2, 3,4, 5,6, 11,12,13,14,15,16, 21,22,24,25, 31,32,33,34,35,36,103,105
+                1,2, 3,4, 5,6, 11,12,13,14,15,16, 21,22,24,25, 31,32,33,34,35,36,103,105, 9, 91, 92
             ),
             $category
         );
@@ -27,7 +25,7 @@ class Ads
         // Get intersticial banner
         $intersticial = $advertisement->getIntersticial(50, $category);
 
-        return array($intersticial,$banners);
+        return serialize(array($intersticial,$banners));
     }
 
     /*
@@ -35,8 +33,6 @@ class Ads
     */
     public function article($category)
     {
-        $this->validateInt(func_get_args());
-
         $category = (!isset($category) || ($category=='home'))? 0: $category;
         $advertisement = Advertisement::getInstance();
 
@@ -53,7 +49,7 @@ class Ads
         // Get intersticial banner
         $intersticial = $advertisement->getIntersticial(150, $category);
 
-        return array($intersticial,$banners);
+        return serialize(array($intersticial,$banners));
     }
 
     /*
@@ -61,8 +57,6 @@ class Ads
     */
     public function opinion($category)
     {
-        $this->validateInt(func_get_args());
-
         $category = (!isset($category) || ($category=='home'))? 0: $category;
         $advertisement = Advertisement::getInstance();
 
@@ -79,19 +73,6 @@ class Ads
         // Get intersticial banner
         $intersticial = $advertisement->getIntersticial(750, $category);
 
-        return array($intersticial,$banners);
-    }
-
-    private function validateInt($number)
-    {
-        foreach ($number as $value) {
-            if (!is_numeric($value)) {
-                throw new RestException(400, 'parameter is not a number');
-            }
-            if (is_infinite($value)) {
-                throw new RestException(400, 'parameter is not finite');
-            }
-        }
+        return serialize(array($intersticial,$banners));
     }
 }
-
