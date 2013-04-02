@@ -1036,108 +1036,6 @@ class ContentManager
     }
 
     /**
-     * Returns an array of objects $contentType an the last comment.
-     *
-     * @param string  $contentType content type to fetch
-     * @param boolean $not_empty   If there are no results regarding the days
-     *                             indicated, the query is performed on the
-     *                             entire bd. For default is false
-     * @param integer $category    pk_content_category ok the contents. If value
-     *                             is 0, then does not filter by categories. (default is 0)
-     * @param integer $num Number of objects that the function returns. (default is 6)
-     * @param boolean $all Get all the content regardless of content status and endtime.
-     * @return array
-     */
-    public function getLastComentsContent(
-        $contentType,
-        $not_empty = false,
-        $category = 0,
-        $num = 6,
-        $all = false
-    ) {
-        $this->init($contentType);
-        $items = array();
-
-        $comments = $this->find(
-            'Comment',
-            'available=1 ',
-            ' GROUP BY fk_content ORDER BY changed DESC LIMIT 0 , 50'
-        );
-
-        $pk_list = '';
-        $pk_comment_list ='';
-        foreach ($comments as $comment) {
-            $pk_list .= ' '.$comment->fk_content.',';
-            $pk_comment_list .= ' '.$comment->pk_content.',';
-        }
-
-        if (strlen($pk_list)==0) {
-            return array();
-        }
-
-        $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-        $pk_comment_list = substr($pk_comment_list, 0, strlen($pk_comment_list)-1);
-
-        $items = $this->find(
-            $contentType,
-            'pk_content IN('.$pk_list.')',
-            '',
-            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`'
-        );
-        if (empty($items)) {
-            return array();
-        }
-
-        $sql = 'SELECT * FROM `contents` '
-             . 'WHERE `pk_content` IN ('.$pk_comment_list.')';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            Application::logDatabaseError();
-
-            return false;
-        } else {
-            while (!$rs->EOF) {
-                $contents []= $rs->fields;
-                $rs->MoveNext();
-            }
-            $rs->Close(); # optional
-        }
-
-        $filter    = (isset($filter)) ? $filter : "";
-        $_order_by = (isset($_order_by)) ? $_order_by : "";
-        $comment_title = $this->find($contentType, $filter, $_order_by);
-        foreach ($items as $item) {
-            $articles[$item->pk_content] = array(
-                'pk_content'    =>$item->pk_content,
-                'comment'       =>'',
-                'title'         =>$item->title,
-                'slug'          =>$item->slug,
-                'pk_comment'    =>'',
-                'author'        =>'',
-                'comment_title' =>''
-            );
-        }
-
-        foreach ($comments as $comment) {
-            if (array_key_exists($comment->fk_content, $articles)) {
-                $index = $comment->fk_content;
-                foreach ($contents as $cont) {
-                    if ($cont[0] == $index) {
-                        $articles[$index]['comment_title'] = $cont['title'];
-                    }
-                }
-
-                $articles[$index]['comment']    = $comment->body;
-                $articles[$index]['pk_comment'] = $comment->pk_comment;
-                $articles[$index]['author']     = $comment->author;
-            }
-        }
-
-        return $articles;
-    }
-
-    /**
      * Fetches the latest n comments done in the application
      *
      * @param int $num the number of comments to fetch
@@ -1147,31 +1045,57 @@ class ContentManager
     public function getLatestComments($num = 6)
     {
         $contents = array();
+        $possibleContents = array();
+        $comments = array();
+        $sql1 = "SELECT *
+                FROM `comments`,contents
+                WHERE comments.pk_comment = contents.pk_content
+                AND contents.available = 1
+                AND contents.content_status = 1
+                GROUP BY fk_content ORDER BY pk_comment DESC  LIMIT 50";
+
+        $latestCommentsSQL = $GLOBALS['application']->conn->Prepare($sql1);
+        $rs1 = $GLOBALS['application']->conn->Execute($latestCommentsSQL);
+        if (!$rs1) {
+            \Application::logDatabaseError();
+        } else {
+            while (!$rs1->EOF) {
+                $fk_content = $rs1->fields['fk_content'];
+                $possibleContents[] = $fk_content;
+                $comments[$fk_content] = $rs1->fields;
+
+                $rs1->MoveNext();
+            }
+            $rs1->Close(); # optional
+        }
 
         $sql = 'SELECT *
                 FROM contents
-                WHERE contents.fk_content_type=1 AND contents.pk_content IN
-                      (SELECT fk_content
-                       FROM `comments`,contents
-                       WHERE comments.pk_comment = contents.pk_content
-                       AND contents.available = 1
-                       AND contents.content_status = 1
-                       ORDER BY pk_comment DESC)
-                ORDER BY contents.created DESC
+                WHERE contents.fk_content_type=1 AND contents.pk_content IN ('.
+                implode(', ', $possibleContents).
+                ') ORDER BY contents.created DESC
                 LIMIT '. $num;
 
-        $latestCommenteSQL = $GLOBALS['application']->conn->Prepare($sql);
-        $rs = $GLOBALS['application']->conn->Execute($latestCommenteSQL);
+        $latestContentsSQL = $GLOBALS['application']->conn->Prepare($sql);
+        $rs = $GLOBALS['application']->conn->Execute($latestContentsSQL);
         if (!$rs) {
             \Application::logDatabaseError();
         } else {
             while (!$rs->EOF) {
-                $contents []= $rs->fields['pk_content'];
+                $content = new \Article();
+                $pk_content = $rs->fields['pk_content'];
+                $content->load($rs->fields);
+                $content->comment_title =  $comments[$pk_content]['title'];
+                $content->comment =  $comments[$pk_content]['body'];
+                $content->pk_comment =  $comments[$pk_content]['pk_comment'];
+                $content->comment_author =  $comments[$pk_content]['author'];
+
+                $contents[$content->pk_comment] = $content;
                 $rs->MoveNext();
             }
+
             $rs->Close(); # optional
         }
-
         return $contents;
     }
 
@@ -1862,6 +1786,53 @@ class ContentManager
                 /* to filter in getInTime() */
                 'starttime'      => $rs->fields['starttime'],
                 'endtime'        => $rs->fields['endtime']
+            );
+
+            $rs->MoveNext();
+        }
+
+        $items = $this->getInTime($items);
+
+        return $items;
+    }
+
+    /**
+     * Returns title, catName, slugs, dates and images of last headlines
+     *
+     * @return array a list of content information (not the object itself)
+     **/
+    public function findHeadlinesWithImage()
+    {
+        $sql =
+        'SELECT `contents`.`title`, `contents`.`pk_content` ,
+               `contents`.`created` ,  `contents`.`slug` ,
+               `contents`.`starttime` , `contents`.`endtime` ,
+               `articles`.`img1` , `articles`.`img2` ,
+               `contents_categories`.`pk_fk_content_category` AS `category_id`
+        FROM `contents`, contents_categories, articles
+        WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content`
+            AND `contents`.`pk_content`=`articles`.`pk_article`
+            AND `contents`.`content_status` =1
+            AND `contents`.`available` =1
+            AND `contents`.`fk_content_type` =1
+            AND `contents`.`in_litter` =0
+        ORDER BY `contents`.`placeholder` ASC, `created` DESC ';
+
+        $rs    = $GLOBALS['application']->conn->Execute($sql);
+        $ccm   = ContentCategoryManager::get_instance();
+        $items = array();
+        while (!$rs->EOF) {
+            $items[] = array(
+                'title'          => $rs->fields['title'],
+                'catName'        => $ccm->get_name($rs->fields['category_id']),
+                'slug'           => $rs->fields['slug'],
+                'created'        => $rs->fields['created'],
+                'category_title' => $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                'id'             => $rs->fields['pk_content'],
+                'starttime'      => $rs->fields['starttime'],
+                'endtime'        => $rs->fields['endtime'],
+                'img1'           => $rs->fields['img1'],
+                'img2'           => $rs->fields['img2'],
             );
 
             $rs->MoveNext();

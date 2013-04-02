@@ -22,7 +22,7 @@ class Instances
     }
 
     /*
-    * @url GET /instances/sitepath/
+    * @url GET /instances/siteurl/
     */
     public function siteUrl()
     {

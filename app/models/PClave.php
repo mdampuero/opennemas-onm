@@ -256,7 +256,7 @@ class PClave
         );
 
         foreach ($terms as $term) {
-            $method = 'cb_'.$term->tipo;
+            $method = 'cb'.ucfirst($term->tipo);
             if (method_exists($this, $method)) {
                 $replacement = $this->$method($term->pclave, $term->value);
 
@@ -265,13 +265,25 @@ class PClave
                 preg_quote(htmlentities(utf8_decode($term->pclave), ENT_COMPAT))
                 .')(?!(</a>|&|"))(\W)';
 
-                $regexp = '/' . preg_replace('@/@', '\/', $regexp).'/';
+                $regexp = '@' . preg_replace('@/@', '\/', $regexp).'@i';
 
                 $text = preg_replace($regexp, '\1'.$replacement.'\4', $text);
             }
         }
 
         return trim($text);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function cbUrl($name, $value)
+    {
+
+        return "<a href='$value' title='\\2'>\\2</a>";
     }
 
     /**

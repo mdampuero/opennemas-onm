@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `instances` (
   `contact_mail` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `domain_name` (`domains`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
 -- A extraer datos da táboa `instances`
@@ -100,6 +100,23 @@ INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `
 (7, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra Pereira', 0, '0', NULL, 1, 4),
 (8, 'toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 15, 'toni@openhost.es', 'Toni Martinez', 0, 0, NULL, 1, 4);
 
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usermeta`
+--
+
+CREATE TABLE IF NOT EXISTS `usermeta` (
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) NOT NULL DEFAULT '',
+  `meta_value` longtext,
+  PRIMARY KEY (`user_id`,`meta_key`),
+  KEY `user_id` (`user_id`),
+  KEY `meta_key` (`meta_key`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
 -- --------------------------------------------------------
 
 --
@@ -118,6 +135,18 @@ CREATE TABLE IF NOT EXISTS `user_groups` (
 
 INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
 (4, 'Masters');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `user_groups_privileges`
+--
+
+CREATE TABLE IF NOT EXISTS `user_groups_privileges` (
+  `pk_fk_user_group` int(10) unsigned NOT NULL,
+  `pk_fk_privilege` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`pk_fk_user_group`,`pk_fk_privilege`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

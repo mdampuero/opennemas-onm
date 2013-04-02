@@ -45,7 +45,7 @@ class ErrorController extends Controller
     public function defaultAction(Request $request)
     {
         global $error;
-        $error = unserialize($this->request->get('error'));
+        $error = $this->request->get('error');
 
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');

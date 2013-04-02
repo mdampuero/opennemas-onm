@@ -5,7 +5,7 @@
 {block name="footer-js" append}
 <script>
     jQuery(document).ready(function($){
-        $('[rel=tooltip]').tooltip({ placement: 'bottom' });
+        $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
         $("#user-editing-form").tabs();
 
         $('#formulario').onmValidate({

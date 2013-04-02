@@ -78,6 +78,56 @@ class Attachment extends Content
     }
 
     /**
+     * Magic function for getting uninitilized object properties.
+     *
+     * @param string $name the name of the property to get.
+     *
+     * @return mixed the value for the property
+     **/
+    public function __get($name)
+    {
+        switch ($name) {
+            case 'uri':
+                if (empty($this->category_name)) {
+                    $this->category_name = $this->loadCategoryName($this->pk_content);
+                }
+                //media/nuevatribuna/files/2013/03/06/reiniciar-la-democracia-para-salir-de-la-crisis.pdf
+
+                $uri = "media".DS.INSTANCE_UNIQUE_NAME.DS.FILE_DIR . $this->path;
+
+                return ($uri !== '') ? $uri : $this->permalink;
+
+                break;
+            case 'slug':
+                return StringUtils::get_title($this->title);
+
+                break;
+            case 'content_type_name':
+                $contentTypeName = $GLOBALS['application']->conn->Execute(
+                    'SELECT * FROM `content_types` '
+                    .'WHERE pk_content_type = "'. $this->content_type
+                    .'" LIMIT 1'
+                );
+
+                if (isset($contentTypeName->fields['name'])) {
+                    $returnValue = $contentTypeName->fields['name'];
+                } else {
+                    $returnValue = $this->content_type;
+                }
+                $this->content_type_name = $returnValue;
+
+                return $returnValue;
+
+                break;
+            default:
+
+                break;
+        }
+
+        parent::__get($name);
+    }
+
+    /**
     * Creates a new attachment from the given data
     *
     * @param array $data the data for create the new Attachment
@@ -239,6 +289,51 @@ class Attachment extends Content
         }
 
         return true;
+    }
+
+    /**
+     * Removes files given its id
+     *
+     * @param array $arrayId the photo ids to delete
+     *
+     * @return boolean true if the photo was deleted
+     **/
+    public static function batchDelete($arrayIds)
+    {
+
+        $contents = implode(', ', $arrayIds);
+
+        $sql = 'SELECT  path  FROM attachments WHERE pk_attachment IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        while (!$rs->EOF) {
+            $file = MEDIA_PATH.DS.FILE_DIR.DS.$rs->fields['path'];
+            if (file_exists($file)) {
+                var_dump($file);
+                @unlink($file);
+            }
+
+            $rs->MoveNext();
+        }
+
+        $sql = 'DELETE FROM attachments '
+                .'WHERE `pk_attachment` IN ('.$contents.')';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return true;
+
     }
 
     /**

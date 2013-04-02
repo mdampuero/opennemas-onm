@@ -217,20 +217,19 @@ class WidgetsController extends Controller
         }
 
         $widgetData = array(
-            'id'          => $id,
-            'action'      => $post->filter('action', null, FILTER_SANITIZE_STRING),
-            'title'       => $post->filter('title', null, FILTER_SANITIZE_STRING),
-            'available'   => $post->filter('available', null, FILTER_SANITIZE_STRING),
-            'renderlet'   => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
-            'metadata'    => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
-            'description' => $post->filter('description', null, FILTER_SANITIZE_STRING),
-            'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
+            'id'              => $id,
+            'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
+            'title'           => $post->filter('title', null, FILTER_SANITIZE_STRING),
+            'available'       => $post->filter('available', null, FILTER_SANITIZE_STRING),
+            'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
+            'metadata'        => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
+            'content'         => $post->filter('content', null, FILTER_SANITIZE_STRING),
+            'intelligentType' => $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING),
         );
-
-        if ($widgetData['renderlet'] == 'intelligentwidget') {
-            $widgetData['content'] = $post->filter('intelligent-type', null, FILTER_SANITIZE_STRING);
+        if ($widgetData['renderlet'] == 'intelligentwidget' && !empty($widgetData['intelligentType'])) {
+            $widgetData['content'] = $widgetData['intelligentType'];
         }
-
         $widget = new \Widget();
         if (!$widget->update($widgetData)) {
             m::add(_('There was an error while updating the widget.'), m::ERROR);

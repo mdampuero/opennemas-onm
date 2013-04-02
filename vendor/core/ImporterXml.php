@@ -100,12 +100,10 @@ class ImporterXml
     {
         if (!empty($text)
             && (in_array($text, $this->ignoreds)
-                || in_array($text, $this->labels))
+            || in_array($text, $this->labels))
         ) {
-
             return '';
         } else {
-
             return $text. ' ';
         }
     }
@@ -147,9 +145,9 @@ class ImporterXml
                     $point = next($array);
 
                     if (is_object($point) || is_array($point)) {
-                        $this->data[$label] .= $tag.$this->parseNodes($point).$end;
-                    } else {
-                        $this->data[$label] .= $tag. $this->checkBeIgnored($point).$end;
+                        $this->data[$label] = $tag.$this->parseNodes($point).$end;
+                    } elseif (empty($this->data[$label])) {
+                        $this->data[$label] = $tag. $this->checkBeIgnored($point).$end;
                     }
                 }
             } elseif (!in_array($key, $this->ignoreds)) {
@@ -257,7 +255,6 @@ class ImporterXml
         $this->data['img1_footer'] = $this->data['img_footer'];
         $this->data['img2']        = $imgImported;
         $this->data['img2_footer'] = $this->data['img_footer'];
-
         if (empty($this->data['title_int'])) {
             $this->data['title_int'] = $this->data['title'];
         }

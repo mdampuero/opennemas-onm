@@ -1,4 +1,15 @@
 {extends file="base/admin.tpl"}
+{block name="header-js" append}
+    <script>
+        var article_manager_urls = {
+            batch_delete: '{url name=admin_articles_batchdelete category=$category page=$page}',
+            batch_publish: '{url name=admin_articles_batchpublish new_status=1}',
+            batch_unpublish: '{url name=admin_articles_batchpublish new_status=0}',
+        }
+    </script>
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
+
+{/block}
 
 {block name="content"}
 <form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario">
@@ -16,9 +27,9 @@
             <ul class="old-button">
                 {acl isAllowed="ARTICLE_DELETE"}
                 <li>
-                    <button type="submit" id="batch-delete">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" alt="Eliminar"><br />{t}Delete{/t}
-                    </button>
+                    <a class="delChecked" data-controls-modal="modal-article-batchDelete" href="#" title="{t}Delete{/t}">
+                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                    </a>
                 </li>
                 {/acl}
                 {acl isAllowed="ARTICLE_AVAILABLE"}
@@ -31,15 +42,20 @@
 
                     <ul class="dropdown-menu">
                         <li>
-                            <button type="submit" name="new_status" value="1" href="#" id="batch-publish">
+                            <a href="#" id="batch-publish">
                                 {t}Batch publish{/t}
-                            </button>
+                            </a>
                         </li>
                         <li>
-                            <button type="submit" name="new_status" value="0" id="batch-unpublish">
+                            <a href="#" id="batch-unpublish">
                                 {t}Batch unpublish{/t}
-                            </button>
+                            </a>
                         </li>
+                        <!-- <li>
+                            <a href="#" id="batch-delete">
+                                {t}Batch delete{/t}
+                            </a>
+                        </li> -->
                     </ul>
                 </li>
 
@@ -164,6 +180,7 @@
     <input type="hidden" name="category" value="{$category}">
 </form>
 {include file="article/modals/_modalDelete.tpl"}
+{include file="article/modals/_modalBatchDelete.tpl"}
 {/block}
 
 
@@ -183,12 +200,38 @@
         });
 
         var form = $('#formulario');
-        $('#batch-publish, #batch-unpublish').on('click', function (e, ui) {
-            form.attr('action', '{url name=admin_articles_batchpublish}');
+
+        $('#batch-publish').on('click', function (e, ui) {
+            e.preventDefault();
+            $.get(
+                article_manager_urls.batch_publish,
+                form.serializeArray()
+            ).done(function(data) {
+                window.location.href = '{url name=admin_articles}';
+            }).fail(function(data) {
+            });
+        });
+
+        $('#batch-unpublish').on('click', function (e, ui) {
+            e.preventDefault();
+            $.get(
+                article_manager_urls.batch_unpublish,
+                form.serializeArray()
+            ).done(function(data) {
+                window.location.href = '{url name=admin_articles}';
+            }).fail(function(data) {
+            });
         });
 
         $('#batch-delete').on('click', function (e, ui) {
-            form.attr('action', '{url name=admin_articles_batchdelete}');
+            e.preventDefault();
+            $.get(
+                article_manager_urls.batch_delete,
+                form.serializeArray()
+            ).done(function(data) {
+                window.location.href = '{url name=admin_articles}';
+            }).fail(function(data) {
+            });
         });
     });
     </script>

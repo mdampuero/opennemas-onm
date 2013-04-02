@@ -83,15 +83,15 @@ class NewsletterController extends Controller
         $menu->getMenu('frontpage');
         $i = 1;
         foreach ($menu->items as $item) {
-            if ($item->type == 'category') {
-              $container               = new \stdClass();
-              $container->id           = $i;
-              $container->title        = $item->title;
-              $container->content_type =  'container';
-              $container->position     = $item->position;
-              $container->items        = array();
-              $newsletterContent[]     = $container;
-              $i++;
+            if ($item->type == 'category' || $item->type == 'internal') {
+                $container               = new \stdClass();
+                $container->id           = $i;
+                $container->title        = $item->title;
+                $container->content_type =  'container';
+                $container->position     = $item->position;
+                $container->items        = array();
+                $newsletterContent[]     = $container;
+                $i++;
             }
         }
 
@@ -303,7 +303,8 @@ class NewsletterController extends Controller
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
         if (array_key_exists('sender', $configurations)
-            && !empty($configurations['sender']) ) {
+            && !empty($configurations['sender'])
+        ) {
             $mail_from = $configurations['sender'];
         } else {
             $mail_from = MAIL_FROM;
@@ -406,7 +407,7 @@ class NewsletterController extends Controller
             // Check that user has configured reCaptcha keys if newsletter is enabled
             $missingRecaptcha = false;
             if (empty($configurations['recaptcha']['public_key'])
-                 || empty($configurations['recaptcha']['private_key'])
+                || empty($configurations['recaptcha']['private_key'])
             ) {
                 $missingRecaptcha = true;
             }
@@ -429,8 +430,8 @@ class NewsletterController extends Controller
     public function checkModuleActivated()
     {
         if (is_null(s::get('newsletter_maillist'))
-          || !(s::get('newsletter_subscriptionType') )
-          || !(s::get('newsletter_enable'))
+            || !(s::get('newsletter_subscriptionType') )
+            || !(s::get('newsletter_enable'))
         ) {
             m::add(
                 _('Please provide your Newsletter configuration to start to use your Newsletter module')

@@ -50,13 +50,13 @@
                         <img src="{$params.IMAGE_DIR}statistics.png" alt="{t}Statistics{/t}"><br />{t}Statistics{/t}
                     </a>
                 </li>
-                <li class="separator"></li>
+                {*<li class="separator"></li>
                 <li>
                     <a href="{url name=admin_images_config}">
                         <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt=""><br>
                         {t}Settings{/t}
                     </a>
-                </li>
+                </li> *}
             </ul>
         </div>
     </div>

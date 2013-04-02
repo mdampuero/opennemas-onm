@@ -68,26 +68,39 @@ class NewStandController extends Controller
         $year  = $request->query->getDigits('year', date('Y'));
 
         $order = $configurations['orderFrontpage'];
-
         if ($order =='grouped') {
-            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $year);
+            $cache_date = $year.$month;
+            $cacheID = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko =array();
             if (($this->view->caching == 0)
-               || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
+                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
                 $contentType = \Content::getIDContentType('kiosko');
                 $category = $ccm->get_id($this->category_name);
 
-                list($allcategorys, $subcat, $categoryData) =
-                    $ccm->getArraysMenu($category, $contentType);
+                list($allcategorys, $subcat, $categoryData)
+                    = $ccm->getArraysMenu($category, $contentType);
+                $where = "";
+                $limit = "LIMIT 48";
+                $month = $request->query->getDigits('month');
+                if (!empty($month)) {
+                    $where .= " AND MONTH(`kioskos`.date)='{$month}' ";
+                    $limit ="";
+                }
+                $year = $request->query->getDigits('year');
+                if (!empty($year)) {
+                    $where .= " AND YEAR(`kioskos`.date)='{$year}' ";
+                    $limit ="";
+                }
 
                 foreach ($allcategorys as $theCategory) {
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1   ',
-                        'ORDER BY `kioskos`.date DESC LIMIT 48 '
+                        ' `contents`.`available`=1   '.
+                        $where,
+                        "ORDER BY `kioskos`.date DESC  {$limit}"
                     );
                     if (!empty($portadas)) {
                         $kiosko[] = array (
@@ -103,12 +116,8 @@ class NewStandController extends Controller
             $cacheID    = $this->view->generateCacheId('newsstand', $this->category_name, $cache_date);
             $kiosko     = array();
             if (($this->view->caching == 0)
-               || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
+                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
-                // $ccm = \ContentCategoryManager::get_instance();
-                // $category = $ccm->get_id($this->category_name);
-                // list($allcategorys, $subcat, $categoryData) =
-                //      $ccm->getArraysMenu($category, $contentType);
 
                 $date = "$year-$month-$day";
                 $portadas = $this->cm->findAll(
@@ -128,7 +137,7 @@ class NewStandController extends Controller
             $cacheID   = $this->view->generateCacheId('newsstand', $this->category_name, $cacheDate);
             $kiosko    = array();
             if (($this->view->caching == 0)
-               || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
+                || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
                 $contentType = \Content::getIDContentType('kiosko');
@@ -163,9 +172,12 @@ class NewStandController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'date'           => '1-'.$month.'-'.$year,
+                'selected_date'  => '1-'.$month.'-'.$year,
                 'MONTH'          => $month,
                 'YEAR'           => $year,
+                'year'           => $year,
+                'month'          => $month,
+                'order'          => $order,
                 'kiosko'         => $kiosko
             )
         );
@@ -187,7 +199,7 @@ class NewStandController extends Controller
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($epaperId)) {
-            return new RedirectResponse($this->generateUrl('frontend_newspaper_frontpage'));
+            return new RedirectResponse($this->generateUrl('frontend_newstandPaypal_frontpage'));
         }
 
         $cacheID = $this->view->generateCacheId('newsstand', null, $epaperId);

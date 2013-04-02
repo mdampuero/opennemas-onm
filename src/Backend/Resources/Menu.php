@@ -176,7 +176,7 @@ $menuXml = '<?xml version="1.0"?>
 
     <submenu title="'.htmlspecialchars(_("Utilities"), ENT_QUOTES).'" id="util" link="#"
         privilege="SEARCH_ADMIN,TRASH_ADMIN,NEWSLETTER_ADMIN,PCLAVE_ADMIN,SCHEDULE_ADMIN,'
-                  .'IMPORT_EPRESS,IMPORT_EFE,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
+                  .'IMPORTER_ADMIN,IMPORT_EFE_FILE,IMPORT_XML,BACKEND_ADMIN">
         <node
             module_name="ADVANCED_SEARCH"
             privilege="SEARCH_ADMIN"
@@ -184,7 +184,7 @@ $menuXml = '<?xml version="1.0"?>
             id="advanced_search"
             link="'.url('admin_search').'"
         />
-         <node class="divider" />
+        <node class="divider" />
         <node
             module_name="TRASH_MANAGER"
             title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
@@ -212,17 +212,11 @@ $menuXml = '<?xml version="1.0"?>
             link="http://www.cronicasdelaemigracion.com//agenda/"
             privilege="SCHEDULE_ADMIN" />
         <node
-            module_name="EUROPAPRESS_IMPORTER"
-            title="'.htmlspecialchars(_("EuropaPress importer"), ENT_QUOTES).'"
-            id="europaPress_importer"
-            link="'.url('admin_importer_europapress').'"
-            privilege="IMPORT_EPRESS" />
-        <node
-            module_name="EFE_IMPORTER"
-            privilege="IMPORT_EFE"
-            title="'.htmlspecialchars(_("EFE Importer"), ENT_QUOTES).'"
-            id="efe_importer"
-            link="'.url('admin_importer_efe').'"
+            module_name="NEWS_AGENCY_IMPORTER"
+            privilege="IMPORT_ADMIN"
+            title="'.htmlspecialchars(_("News Agency"), ENT_QUOTES).'"
+            id="news_agency"
+            link="'.url('admin_news_agency').'"
         />
         <node
             module_name="PAPER_IMPORT"
@@ -231,7 +225,6 @@ $menuXml = '<?xml version="1.0"?>
             id="xml_importer"
             link="'.url('admin_importer_xmlfile').'"
         />
-
         <node class="divider" />
         <node
             module_name="CRONICAS_MODULES"

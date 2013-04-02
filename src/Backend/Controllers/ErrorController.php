@@ -46,7 +46,7 @@ class ErrorController extends Controller
     public function defaultAction(Request $request)
     {
         global $error;
-        $error = unserialize($this->request->get('error'));
+        $error = $this->request->get('error');
 
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
@@ -76,7 +76,7 @@ class ErrorController extends Controller
                             'error'         => $error,
                             'error_id'      => $errorID,
                             'environment'   => $environment,
-                            'backtrace'     => array_reverse($error->getTrace()),
+                            'backtrace'     => $error->getTrace(),
                         )
                     );
                 }
@@ -95,7 +95,7 @@ class ErrorController extends Controller
                         'error'         => $error,
                         'error_id'      => $errorID,
                         'environment'   => $environment,
-                        'backtrace'     => array_reverse($error->getTrace()),
+                        'backtrace'     => $error->getTrace(),
                     )
                 );
 

@@ -79,9 +79,8 @@ jQuery(function($) {
     $('#button_preview').on('click', function(e, ui) {
         e.preventDefault();
 
-        // // Save tiny content to textarea
-        OpenNeMas.tinyMceFunctions.saveTiny('summary');
-        OpenNeMas.tinyMceFunctions.saveTiny('body');
+        CKEDITOR.instances.body.updateElement();
+        CKEDITOR.instances.summary.updateElement();
 
         // // Fetch related news and others
         save_related_contents();

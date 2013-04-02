@@ -1,8 +1,7 @@
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-<table style="width:100%">
+<div class="contentform-inner clearfix">
     {is_module_activated name="IMAGE_MANAGER"}
-    <tr>
-        <td>
+    <div class="contentform-main">
             <div id="related-images" class="resource-container tabs">
                 <ul>
                     <li><a href="#frontpage-image" title="{t}Image or video for frontpage:{/t}">{t}Image for frontpage{/t}{if isset($photo1) && $photo1->name}<span class="marker">&#164;</span>{/if}</a></li>
@@ -21,7 +20,9 @@
                                 {if isset($photo1) && $photo1->name}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" id="frontpage_image" name="{$article->img1}" />
                                 {else}
-                                    <img src="http://placehold.it/290x226" id="frontpage_image" />
+                                    <div class="drop-here">
+                                        {t}Drop an image to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
@@ -50,7 +51,9 @@
                                 {if isset($photo2) && $photo2->name}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}" id="inner_image" name="{$article->img2}" />
                                 {else}
-                                    <img src="http://placehold.it/290x226" id="inner_image" />
+                                    <div class="drop-here">
+                                        {t}Drop an image to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
@@ -80,7 +83,9 @@
                                 {if isset($article->params['imageHome']) && $photo3->name}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}" id="home_image" name="{$photo3->name}" />
                                 {else}
-                                    <img src="http://placehold.it/290x226" id="home_image" />
+                                    <div class="drop-here">
+                                        {t}Drop an image to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
@@ -102,16 +107,15 @@
 
                 {/is_module_activated}
             </div><!-- /related-images -->
+    </div>
 
-        </td>
-        <td style="width:430px">
-            <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
-                <strong>{t}Available images{/t}</strong>
-            </div>
-            <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;">
+    <div class="contentbox-container">
+        <div class="contentbox">
+            <h3 class="title">{t}Available images{/t}</h3>
+            <div id="photos_container" class="photos content">
                 <div class="input-append">
                     <input id="stringImageSearch" name="stringImageSearch" type="text"
-                       placeholder="{t}Search images by title...{/t}" style="width: 150px;" class="noentersubmit"/>
+                       placeholder="{t}Search images by title...{/t}" style="width: 150px !important;" class="noentersubmit"/>
                     <select style="width:140px" id="category_imag" name="category_imag">
                         <option value="0">GLOBAL</option>
                             {section name=as loop=$allcategorys}
@@ -125,19 +129,18 @@
                 <div id="photos">
                     {*AJAX imageGallery *}
                 </div>
-           </div>
-        </td>
-    </tr>
+            </div>
+        </div>
+    </div>
     {/is_module_activated}
+</div>
 
+<hr>
 
+<div class="contentform-inner clearfix">
     {acl isAllowed="VIDEO_ADMIN"}
     {is_module_activated name="VIDEO_MANAGER"}
-    <tr>
-        <td colspan=2><hr></td>
-    </tr>
-    <tr>
-        <td>
+    <div class="contentform-main">
             <div id="related-videos" class="resource-container tabs">
                 <ul>
                     <li><a href="#frontpage-video" title="{t}Image or video for frontpage:{/t}">{t}Video for frontpage{/t}{if isset($video1) && $video1->pk_video}<span class="marker">&#164;</span>{/if}</a></li>
@@ -162,7 +165,9 @@
                                         <img src="{$video1->information['thumbnail']}" />
                                         {/if}
                                     {else}
-                                        <img src="http://placehold.it/290x226" />
+                                    <div class="drop-here">
+                                        {t}Drop a video to here{/t}
+                                    </div>
                                     {/if}
                                 {/if}
                             </div>
@@ -195,7 +200,9 @@
                                     <img src="{$video2->information['thumbnail']}"/>
                                     {/if}
                                 {else}
-                                    <img src="http://placehold.it/290x226" />
+                                    <div class="drop-here">
+                                        {t}Drop a video to here{/t}
+                                    </div>
                                 {/if}
                             </div>
                             <div class="article-resource-image-info">
@@ -213,15 +220,15 @@
                     </div>
                 </div><!-- /inner-video -->
             </div><!-- /related-videos -->
-        </td>
-        <td>
-            <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
-                <strong>{t}Available videos{/t}</strong>
-            </div>
-            <div id="videos-container" class="photos" style=" border:1px solid #ccc;  padding:7px;">
+
+    </div>
+    <div class="contentbox-container">
+        <div class="contentbox">
+            <h3 class="title">{t}Available videos{/t}</h3>
+            <div id="videos-container" class="photos content">
                 <div class="input-append">
                     <input class="textoABuscar noentersubmit" id="stringVideoSearch" name="stringVideoSearch" type="text"
-                           placeholder="{t}Search videos by title...{/t}"  style="width: 150px;"
+                           placeholder="{t}Search videos by title...{/t}"  style="width: 150px !important;"
                            />
                     <select style="width:140px"  id="category_video" name="category_video">
                         <option value="0">GLOBAL</option>
@@ -237,12 +244,11 @@
                     <!-- Ajax -->
                </div>
             </div>
-        </td>
-    </tr>
+        </div>
+    </div>
     {/is_module_activated}
     {/acl}
-</table>
-
+</div>
 {is_module_activated name="IMAGE_MANAGER"}
 <script>
 jQuery(document).ready(function($){

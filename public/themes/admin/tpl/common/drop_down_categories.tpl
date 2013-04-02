@@ -17,17 +17,16 @@
     {/if}
     <ul class="categories">
         {section name=as loop=$allcategorys}
-        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
-            {assign var=ca value=$allcategorys[as]->pk_content_category}
-
+        {assign var=ca value=$allcategorys[as]->pk_content_category}
             <li >
+                {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                 <a  {if $home}href="{$home}&amp;category={$ca}"{/if}
                     id="link_{$ca}"
                     class="links {if $category==$ca}active{/if}">
                     {$allcategorys[as]->title}
                     {if $allcategorys[as]->inmenu eq 0}<span class="inactive">{t}(inactive){/t}</span>{/if}
                 </a>
-
+                {/acl}
                 <ul>
                     {section name=su loop=$subcat[as]}
                     {assign var=subca value=$subcat[as][su]->pk_content_category}
@@ -54,7 +53,6 @@
                     {/section}
                 </ul>
             </li>
-        {/acl}
         {/section}
 
     </ul>

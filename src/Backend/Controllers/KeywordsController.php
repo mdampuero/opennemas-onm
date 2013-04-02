@@ -211,11 +211,17 @@ class KeywordsController extends Controller
      **/
     public function autolinkAction(Request $request)
     {
-        $content = json_decode($HTTP_RAW_POST_DATA)->content;
-        if (!empty($content)) {
-            $terms = $pclave->getList();
+        // $content = json_decode($HTTP_RAW_POST_DATA)->content;
+        $content = $request->request->filter('text', null, FILTER_SANITIZE_STRING);
 
-            return $pclave->replaceTerms($content, $terms);
+        $newContent = '';
+        if (!empty($content)) {
+            $keyword = new \PClave();
+            $terms = $keyword->find();
+
+            $newContent = $keyword->replaceTerms($content, $terms);
         }
+
+        return new Response($newContent);
     }
 }

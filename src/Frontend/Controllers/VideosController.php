@@ -163,10 +163,6 @@ class VideosController extends Controller
             );
         }
 
-        // Get last comments to show in video frontpage
-        $latestComments = $this->cm->cache->getLastComentsContent('Video', true, $this->category, 4);
-        $this->view->assign('lasts_comments', $latestComments);
-
         if (isset($categoryName)
             && !empty($categoryName)
             && $categoryName != 'home'
@@ -403,11 +399,11 @@ class VideosController extends Controller
     private function getAds($context = 'frontpage')
     {
         if ($context == 'inner') {
-            $positions = array(901, 902, 903, 905, 909, 910);
-            $intersticialId = 950;
+            $positions = array(301, 302, 303, 305, 309, 310);
+            $intersticialId = 350;
         } else {
-            $positions = array(801, 802, 803, 805, 809, 810);
-            $intersticialId = 850;
+            $positions = array(201, 202, 203, 205, 209, 210);
+            $intersticialId = 250;
         }
         // Asignacion de valores y comprobaciones realizadas en init
         // $ccm = ContentCategoryManager::get_instance();

@@ -223,7 +223,6 @@ $('div#newsletter-container').on('click', '.container-label .icon-pencil', funct
 /*****************************************************************************/
 
 //SETP 2 - Preview
-//
 $('#newsletter-preview-form').on('click', '#edit-button', function(e, ui) {
     e.preventDefault();
 
@@ -232,22 +231,20 @@ $('#newsletter-preview-form').on('click', '#edit-button', function(e, ui) {
     $('#li-save-button').toggle();
     $('#edit-button').toggle();
 
-    tinyMCE_GZ.init( OpenNeMas.tinyMceConfig.tinyMCE_GZ );
-    OpenNeMas.tinyMceConfig.advanced.elements = "html-content";
-    tinyMCE.init(OpenNeMas.tinyMceConfig.advanced);
+    $.onmEditor({
+        editor_class: '#html_content'
+    });
 
     return false;
 });
 
 $('#newsletter-preview-form').on('click', '#save-button', function() {
-    //Save updates
-    if (tinyMCE.get('html-content')) {
-        OpenNeMas.tinyMceFunctions.saveTiny('html-content');
-        OpenNeMas.tinyMceFunctions.destroy('html-content');
-    }
-    log(tinyMCE.get('html-content'));
-    var htmlContent = $('#html-content').html();
+    // Save updates
+    CKEDITOR.instances.html_content.destroy();
+
+    var htmlContent = $('#html_content').html();
     var title = $('#title').val();
+
 
     $('#li-save-button').toggle();
     $('#edit-button').toggle();

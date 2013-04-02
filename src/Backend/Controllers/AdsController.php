@@ -101,7 +101,7 @@ class AdsController extends Controller
         $cm = new \ContentManager();
         list($countAds, $ads)= $cm->getCountAndSlice(
             'Advertisement',
-            $categoryFilter,
+            null,
             $filter,
             'ORDER BY created DESC ',
             $page,

@@ -616,6 +616,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index.php$  /seccion/diosas-pronto/ [R=301,L,NC]
 
     #index.php?option=com_content&task=view&id=47077&Itemid=677
+    RewriteCond %{QUERY_STRING} ^option=com_content&?task=[^&]+&id=([^&]+)&Itemid=([^&]+)$
+    RewriteRule ^index.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
+
+    #index.php?option=com_content&task=view&id=47077&Itemid=677
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?Itemid=([^&]+)&?[^&]+
     RewriteRule ^index.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
 
@@ -628,6 +632,10 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
     RewriteRule ^index2.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
     RewriteCond %{QUERY_STRING} &?option=com_content&?task=[^&]+&?id=([^&]+)&?itemid=([^&]+)&?[^&]+
     RewriteRule ^index2.php$ /redirect/content?content_type=article&content_id=%1  [R=301,L,NC]
+
+    #index.php?option=com_content&task=rss&id=47077&Itemid=677
+    RewriteCond %{QUERY_STRING} task=rss
+    RewriteRule ^index.php$ /rss/  [R=301,L,NC]
   # ----------------------------------------------------------------------------
 
 
@@ -683,6 +691,8 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 
     RewriteRule ^especiales/union/?$ seccion/operacion-union/ [R=301,L,NC]
     RewriteRule ^especiales/cunion/?$ seccion/caso-union/ [R=301,L,NC]
+    RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
+    RewriteCond %{HTTP_HOST} ^www.canariasahora.es$ [NC]
     RewriteRule ^especiales/(.*)?$ album/  [R=301,L,NC]
 
     RewriteCond %{HTTP_HOST} ^canariasahora.es$ [OR]
