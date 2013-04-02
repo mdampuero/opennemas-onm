@@ -9,9 +9,14 @@
  **/
 use \Onm\Settings as s;
 
-function smarty_function_include_onm_stats_code($params, &$smarty) {
-
+function smarty_function_include_onm_stats_code($params, &$smarty)
+{
     $output = "";
+
+    // If comes from preview, don't render script
+    if (preg_match('@/admin/frontpages@', $_SERVER['HTTP_REFERER'])) {
+        return $output;
+    }
 
     $templateVars = $smarty->getTemplateVars();
 
@@ -21,7 +26,7 @@ function smarty_function_include_onm_stats_code($params, &$smarty) {
 
         // Get the script tag for onm-stats jquery plugin
         $output .= smarty_function_script_tag(
-            array('common' => 1, src => '/onm/jquery.onm-stats.js'),
+            array('common' => 1, 'src' => '/onm/jquery.onm-stats.js'),
             $smarty
         );
 
@@ -32,10 +37,5 @@ function smarty_function_include_onm_stats_code($params, &$smarty) {
             </script>';
     }
 
-
-
     return $output;
 }
-
-
-
