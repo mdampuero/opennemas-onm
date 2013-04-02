@@ -12,12 +12,12 @@ if (!window.google)  {
     return;
 }
 
-if (!google.feeds) google.load("feeds", "1");
+if (!google.feeds) google.load("feeds", "1", {"language" : "es"});
 
 $.fn.gFeed = function(options) {
     var opts = jQuery.extend({
         target: this,
-        max:   5   // max number of items per feed
+        max:   2   // max number of items per feed
     }, options || {});
 
     var g = new google.feeds.FeedControl();
@@ -27,10 +27,12 @@ $.fn.gFeed = function(options) {
         var title = opts.title || this.title || $(this).text();
         g.addFeed(url, title);
         g.setNumEntries(opts.max);
+        g.setLinkTarget(google.feeds.LINK_TARGET_BLANK);
     });
 
     $(opts.target).each(function() {
         g.draw(this, opts.tabs ? { drawMode: google.feeds.FeedControl.DRAW_MODE_TABBED } : null );
+
     });
 
     return this;
