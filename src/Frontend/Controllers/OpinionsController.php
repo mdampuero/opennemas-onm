@@ -389,9 +389,17 @@ class OpinionsController extends Controller
             );
 
             if (!empty($opinions)) {
+
                 foreach ($opinions as &$opinion) {
+                    $item = new \Content();
+                    $item->loadAllContentProperties($opinion['pk_content']);
+                    $opinion['summary'] = $item->summary;
+                    $opinion['img1_footer'] = $item->img1_footer;
                     $opinion['pk_author'] = $authorID;
                     $opinion['author_name_slug']  = $authorName;
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $opinion['img1'] = new \Photo($item->img1);
+                    }
 
                     $opinion['uri'] = $this->generateUrl(
                         'frontend_opinion_show_with_author_slug',
@@ -660,6 +668,11 @@ class OpinionsController extends Controller
                 4
             );
 
+            // Associated media code --------------------------------------
+            if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+                $photo = new \Photo($opinion->img2);
+                $this->view->assign('photo', $photo);
+            }
             // Get author slug for suggested opinions
             foreach ($suggestedContents as &$suggest) {
                 $element = new \Opinion($suggest['pk_content']);
@@ -760,6 +773,11 @@ class OpinionsController extends Controller
             $this->getAds('inner');
 
             if (($opinion->available==1) && ($opinion->in_litter == 0)) {
+
+                if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+                    $photo = new \Photo($opinion->img2);
+                    $this->view->assign('photo', $photo);
+                }
 
                 $this->view->assign(
                     array(
