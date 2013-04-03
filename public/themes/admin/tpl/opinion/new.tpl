@@ -6,10 +6,6 @@
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
     <script>
-<<<<<<< HEAD
-
-=======
->>>>>>> a37c362fcded207efe9b2695682bc8fdbfdd28a1
         $('.tabs').tabs();
 
         jQuery(document).ready(function ($){
@@ -55,18 +51,11 @@
         </ul>
     </div>
 </div>
-<<<<<<< HEAD
-=======
-<div class="wrapper-content contentform">
->>>>>>> a37c362fcded207efe9b2695682bc8fdbfdd28a1
 
 <div class="wrapper-content contentform">
 
-<<<<<<< HEAD
     {render_messages}
 
-=======
->>>>>>> a37c362fcded207efe9b2695682bc8fdbfdd28a1
     <div class="form-vertical clearfix">
         <div class="contentform-inner form-vertical clearfix">
             <div class="contentform-main">
@@ -81,17 +70,6 @@
                     </div>
                 </div>
 
-<<<<<<< HEAD
-                <div class="control-group">
-                    <label for="subtitle" class="control-label">{t}Pretitle{/t}</label>
-                    <div class="controls">
-                        <div class="input-append" id="subtitle">
-                            <input  type="text" name="subtitle" value="{$opinion->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
-                            <span class="add-on"></span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="form-inline-block">
                     <div class="control-group">
                         <label for="type_opinion" class="control-label">{t}Type{/t}</label>
@@ -105,21 +83,6 @@
                         </div>
                     </div>
 
-=======
-                <div class="form-inline-block">
-                    <div class="control-group">
-                        <label for="type_opinion" class="control-label">{t}Type{/t}</label>
-                        <div class="controls">
-                            <select name="type_opinion" id="type_opinion" required="required">
-                                <option value="-1">{t}-- Pick an author --{/t}</option>
-                                <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
-                                <option value="1" {if $opinion->type_opinion eq 1} selected {/if}>{t}Opinion from editorial{/t}</option>
-                                <option value="2" {if $opinion->type_opinion eq 2} selected {/if}>{t}Director's letter{/t}</option>
-                            </select>
-                        </div>
-                    </div>
-
->>>>>>> a37c362fcded207efe9b2695682bc8fdbfdd28a1
                     <div class="control-group" id="author" {if $opinion->type_opinion neq 0}style="display:none;"{/if}>
                         <label for="fk_author" class="control-label">{t}Author{/t}</label>
                         <div class="controls">
@@ -140,10 +103,8 @@
                     <div class="content">
                         <input type="checkbox" name="available" id="available" {if $opinion->available eq 1}checked="checked"{/if} />
                         <label for="available">{t}Available{/t}</label>
-<<<<<<< HEAD
 
                         <hr class="divisor">
-
 
                         {is_module_activated name="COMMENT_MANAGER"}
                             <input type="checkbox" name="with_comment" id="with_comment" {if $opinion->with_comment eq 1}checked="checked"{/if} />
@@ -196,68 +157,18 @@
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="image" class="control-label">{t}Image{/t}</label>
-                    <div class="controls">
-                        {include file="common/images_provider.tpl" image=$image category=4}
-                    </div>
-                </div>
-
-=======
-
-
-                        <hr class="divisor">
-
-                        {is_module_activated name="COMMENT_MANAGER"}
-                            <input type="checkbox" name="with_comment" id="with_comment" {if $opinion->with_comment eq 1}checked="checked"{/if} />
-                            <label for="with_comment">{t}Allow comments{/t}</label>
-                        {/is_module_activated}
-
-                        <hr class="divisor">
-
-                        <input type="checkbox" name="in_home" id="in_home" {if $opinion->in_home eq 1}checked="checked"{/if}>
-                        <label for="in_home">{t}In homepage{/t}</label>
-                        <br>
-                    </div>
-                </div>
-                <div class="contentbox">
-                    <h3 class="title">{t}Tags{/t}</h3>
-                    <div class="content">
-                        <div class="control-group">
-                            <div class="controls">
-                                <input  type="text" id="metadata" name="metadata" required="required" value="{$opinion->metadata|clearslash|escape:"html"}"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="contentbox">
-                    <h3 class="title">{t}Schedule{/t}</h3>
-                    <div class="content form-vertical">
-                        <div class="control-group">
-                            <label for="starttime" class="control-label">{t}Publication start date{/t}</label>
-                            <div class="controls">
-                                <input type="datetime" id="starttime" name="starttime" value="{$opinion->starttime}">
-                                <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label for="endtime" class="control-label">{t}Publication end date{/t}</label>
-                            <div class="controls">
-                                <input type="datetime" id="endtime" name="endtime" value="{$opinion->endtime}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="contentform-main">
->>>>>>> a37c362fcded207efe9b2695682bc8fdbfdd28a1
+            </div><!-- /contentform-main -->
+        </div><!-- /contentform-inner -->
+        <div class="contentform-inner wide">
+            <div class="form-vertical">
                 <div class="control-group">
                     <label for="body" class="control-label">{t}Body{/t}</label>
                     <div class="controls">
                         <textarea name="body" id="body" class="onm-editor">{$opinion->body|clearslash}</textarea>
                     </div>
+                </div>
+                <div id="article_images" class="clearfix">
+                    {include  file="article/partials/_images.tpl" article=$opinion withoutVideo='true'}
                 </div>
             </div><!-- /contentform-main -->
         </div><!-- /contentform-inner -->

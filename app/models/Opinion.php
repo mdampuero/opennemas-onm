@@ -218,12 +218,17 @@ class Opinion extends Content
             parent::setProperty('summary', $data['summary']);
         }
 
-        if (array_key_exists('subtitle', $data) && !empty($data['subtitle'])) {
-            parent::setProperty('subtitle', $data['subtitle']);
+        if (array_key_exists('img1', $data) && !empty($data['img1'])) {
+            parent::setProperty('img1', $data['img1']);
         }
-
-        if (array_key_exists('image', $data) && !empty($data['image'])) {
-            parent::setProperty('image', $data['image']);
+        if (array_key_exists('img2', $data) && !empty($data['img2'])) {
+            parent::setProperty('img2', $data['img2']);
+        }
+        if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
+            parent::setProperty('img1_footer', $data['img1_footer']);
+        }
+        if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
+            parent::setProperty('img2_footer', $data['img2_footer']);
         }
 
         return $this->id;
@@ -346,17 +351,27 @@ class Opinion extends Content
             parent::clearProperty('summary');
         }
 
-        if (array_key_exists('subtitle', $data) && !empty($data['subtitle'])) {
-            parent::setProperty('subtitle', $data['subtitle']);
+        if (array_key_exists('img1', $data) && !empty($data['img1'])) {
+            parent::setProperty('img1', $data['img1']);
         } else {
-            parent::clearProperty('subtitle');
+            parent::clearProperty('img1');
+        }
+        if (array_key_exists('img2', $data) && !empty($data['img2'])) {
+            parent::setProperty('img2', $data['img2']);
+        } else {
+            parent::clearProperty('img2');
+        }
+        if (array_key_exists('img1_footer', $data) && !empty($data['img1_footer'])) {
+            parent::setProperty('img1_footer', $data['img1_footer']);
+        } else {
+            parent::clearProperty('img1_footer');
+        }
+        if (array_key_exists('img2_footer', $data) && !empty($data['img2_footer'])) {
+            parent::setProperty('img2_footer', $data['img2_footer']);
+        } else {
+            parent::clearProperty('img2_footer');
         }
 
-        if (array_key_exists('image', $data) && !empty($data['image'])) {
-            parent::setProperty('image', $data['image']);
-        } else {
-            parent::clearProperty('image');
-        }
 
 
         $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);

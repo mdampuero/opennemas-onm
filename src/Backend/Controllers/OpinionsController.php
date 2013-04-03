@@ -279,6 +279,17 @@ class OpinionsController extends Controller
         $photoWidget = $author->get_photo($opinion->fk_author_img_widget);
         $photos      = $author->get_author_photos($opinion->fk_author);
 
+        // Photos de noticia
+        if (!empty($opinion->img1)) {
+            $photo1 = new \Photo($opinion->img1);
+            $this->view->assign('photo1', $photo1);
+        }
+
+        if (!empty($opinion->img2)) {
+            $photo2 = new \Photo($opinion->img2);
+            $this->view->assign('photo2', $photo2);
+        }
+
         return $this->render(
             'opinion/new.tpl',
             array(
@@ -316,9 +327,11 @@ class OpinionsController extends Controller
                 'available'            => (empty($available)) ? 0 : 1,
                 'in_home'              => (empty($inhome)) ? 0 : 1,
                 'with_comment'         => (empty($withComment)) ? 0 : 1,
-                'subtitle'             => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'summary'              => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
-                'image'                => $request->request->filter('image', '', FILTER_SANITIZE_STRING),
+                'img1'                 => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'img1_footer'          => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
+                'img2'                 => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
+                'img2_footer'          => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
                 'type_opinion'         => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
                 'fk_author'            => $request->request->getDigits('fk_author'),
                 'fk_user_last_editor'  => $request->request->getDigits('fk_user_last_editor'),
@@ -401,9 +414,11 @@ class OpinionsController extends Controller
                 'available'            => (empty($available)) ? 0 : 1,
                 'in_home'              => (empty($inhome)) ? 0 : 1,
                 'with_comment'         => (empty($withComment)) ? 0 : 1,
-                'subtitle'             => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'summary'              => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
-                'image'                => $request->request->filter('image', '', FILTER_SANITIZE_STRING),
+                'img1'                 => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'img1_footer'          => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
+                'img2'                 => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
+                'img2_footer'          => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
                 'type_opinion'         => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
                 'fk_author'            => $request->request->getDigits('fk_author'),
                 'fk_user_last_editor'  => $request->request->getDigits('fk_user_last_editor'),
@@ -412,8 +427,8 @@ class OpinionsController extends Controller
                 'fk_author_img'        => $request->request->getDigits('fk_author_img'),
                 'fk_author_img_widget' => $request->request->getDigits('fk_author_img_widget'),
                 'publisher'            => $_SESSION['userid'],
-                'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
+                'starttime'            => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'endtime'              => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
             );
 
             if ($opinion->update($data)) {
