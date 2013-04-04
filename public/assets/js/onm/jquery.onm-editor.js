@@ -16,7 +16,6 @@
 
                 simple : {
                     plugins: load_plugins,
-                    forcePasteAsPlainText : true,
                     removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText',
                     toolbarGroups: [
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
@@ -107,7 +106,7 @@
                     language: settings.language,
                     extraPlugins: 'magicline,font',
                     magicline_color: 'blue',
-                    forcePasteAsPlainText : true
+                    forcePasteAsPlainText : false
                 };
 
                 var editor_preset;
