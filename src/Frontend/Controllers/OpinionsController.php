@@ -127,6 +127,13 @@ class OpinionsController extends Controller
                 if (isset($foto->path_img)) {
                     $dir['photo'] = $foto->path_img;
                 }
+                $item = new \Content();
+                $item->loadAllContentProperties($director[0]->pk_content);
+                $dir['summary'] = $item->summary;
+                $dir['img1_footer'] = $item->img1_footer;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $dir['img1'] = new \Photo($item->img1);
+                }
                 $dir['name'] = $aut->name;
                 $item = new \Content();
                 $item->loadAllContentProperties($director[0]->pk_content);
