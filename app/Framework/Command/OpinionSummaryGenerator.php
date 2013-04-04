@@ -24,6 +24,7 @@ class OpinionSummaryGenerator extends Command
             ->setDefinition(
                 array(
                     new InputArgument('user', InputArgument::REQUIRED, 'user'),
+                    new InputOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The database password'),
                     new InputArgument('database', InputArgument::REQUIRED, 'database'),
                 )
             )
