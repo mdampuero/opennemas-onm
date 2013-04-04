@@ -337,7 +337,8 @@ div#content-provider #toggler{
 
 #content-provider .pagination {
     float:none;
-    text-align:left;
+    height: 35px;
+    text-align:center;
     padding:0;
     width:100%;
     background:#ccc;
@@ -350,7 +351,10 @@ div#content-provider #toggler{
     background:#222;
     color: #CFCFCF !important;
 }
-#content-provider .pagination *:first-child { margin-left:10px; }
+#content-provider .pagination *:first-child {
+    display: inline-block;
+    margin-top: 7px;
+}
 #content-provider .pagination a {
     float:none;
     background: none repeat scroll 0 0 #333333;
