@@ -166,6 +166,14 @@ class OpinionsController extends Controller
                 $opinion->author           = $authors[$opinion->fk_author];
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug =   \StringUtils::get_title($opinion->name);
+                $item = new \Content();
+                $item->loadAllContentProperties($opinion->pk_content);
+                $opinion->summary = $item->summary;
+                $opinion->img1_footer = $item->img1_footer;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $opinion->img1 = new \Photo($item->img1);
+                }
+
                 $opinion->author->uri = \Uri::generate(
                     'opinion_author_frontpage',
                     array(

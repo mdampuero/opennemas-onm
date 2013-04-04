@@ -31,7 +31,7 @@
             {is_module_activated name="AVANCED_FRONTPAGE_MANAGER"}
             <li>
                 <a title="{t}Customize in frontpage{/t}" href="#" class="change-color">
-                    <i class="icon-color"></i> {t}Customize content{/t}
+                    <i class="icon-cog"></i> {t}Customize content{/t}
                 </a>
             </li>
             {/is_module_activated}

@@ -54,14 +54,20 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#" id="button_multiple_delete">{t}Remove{/t}</a>
+                            <a href="#" id="button_multiple_delete">
+                                <i class="icon-remove"></i> {t}Remove from this frontpage{/t}
+                            </a>
                         </li>
                         <li>
-                            <a href="#" id="button_multiple_arquive">{t}Arquive{/t}</a>
+                            <a href="#" id="button_multiple_arquive">
+                                <i class="icon-inbox"></i> {t}Arquive{/t}
+                            </a>
                         </li>
                         {if $category_id != 0}
                         <li>
-                            <a href="#" id="button_multiple_suggest">{t}Toggle suggest{/t}</a>
+                            <a href="#" id="button_multiple_suggest">
+                                <i class="icon-star"></i>{t}Toggle suggest{/t}
+                            </a>
                         </li>
                         {/if}
                     </ul>
