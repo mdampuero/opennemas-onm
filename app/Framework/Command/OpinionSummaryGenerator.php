@@ -51,20 +51,35 @@ EOF
         $dataBaseType = 'mysqli';
         $dataBaseUser = $input->getArgument('user');
         $dataBaseName = $input->getArgument('database');
+        $dataBasePass = $input->getOption('password');
 
-        $dialog = $this->getHelperSet()->get('dialog');
+        if (!$dataBasePass) {
+            // Ask password
+            $dialog = $this->getHelperSet()->get('dialog');
 
-        $validator = function ($value) {
-            if (trim($value) == '') {
-                throw new \Exception('The password can not be empty');
-            }
-        };
+            $validator = function ($value) {
+                if (trim($value) == '') {
+                    throw new \Exception('The password can not be empty, please try again');
+                } elseif (!$connect = @mysql_connect('localhost', BD_USER, $value)) {
+                    throw new \Exception('The password is wrong, please try again');
+                }
 
-        $dataBasePass = $password = $dialog->askHiddenResponse(
-            $output,
-            'What is the database user password?',
-            false
-        );
+                // Close connection if opened
+                if ($connect) {
+                    mysql_close($connect);
+                }
+
+                return $value;
+            };
+
+            $dataBasePass = $dialog->askHiddenResponseAndValidate(
+                $output,
+                'What is the database user password?',
+                $validator,
+                5,
+                false
+            );
+        }
 
         define('BD_HOST', $dataBaseHost);
         define('BD_USER', $dataBaseUser);
@@ -93,6 +108,20 @@ EOF
 
     protected function updateOpinionFields($input, $output)
     {
+
+        $sql = "CREATE TABLE IF NOT EXISTS `contentmeta` (
+          `fk_content` bigint(20) NOT NULL,
+          `meta_name` varchar(255) NOT NULL,
+          `meta_value` text,
+          PRIMARY KEY (`fk_content`,`meta_name`),
+          KEY `fk_content` (`fk_content`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+
+        $rs =  $GLOBALS['application']->conn->Execute($sql);
+        if (!$rs) {
+            $output->writeln("\t[Database Error] creating table contentmeta");
+          //  return false;
+        }
         $sql = "SELECT pk_content, body FROM contents, opinions "
             ." WHERE pk_content=pk_opinion";
 
@@ -119,7 +148,7 @@ EOF
         $rs->Close();
 
         //Insert articles in table content_positions
-        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+        $sql = "REPLACE INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
                     ." VALUES (?, ? ,? )";
 
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
@@ -127,7 +156,7 @@ EOF
 
         if (!$rss) {
             $output->writeln("\t[Database Error] Executing ".$stmt);
-            return false;
+          //  return false;
         }
 
         $output->writeln("\tUpdated opinion in frontpage successfully");
