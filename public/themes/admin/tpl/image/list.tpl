@@ -20,7 +20,7 @@
                 <div class="section-picker">
                     <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title)}{t}All categories{/t}{elseif ($category == 2)}{t}Advertisement{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
                     <div class="options">
-                        {include file="common/drop_down_categories.tpl" home="{url name=admin_images l=a}" ads=1}
+                        {include file="common/drop_down_categories.tpl" home="{url name=admin_images l=a}" ads=1 opinion=1}
                     </div>
                 </div>
             </div>

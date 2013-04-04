@@ -1,9 +1,15 @@
 <?php
 use \Onm\Settings as s;
 
-function smarty_function_include_piwik_code($params, &$smarty) {
+function smarty_function_include_piwik_code($params, &$smarty)
+{
 
     $output = "";
+
+    // If comes from preview, don't render script
+    if (preg_match('@/admin/frontpages@', $_SERVER['HTTP_REFERER'])) {
+        return $output;
+    }
 
     // Fetch parameters
     $onlyImage = (isset($params['onlyimage']) ? $params['onlyimage'] : null);
@@ -31,21 +37,21 @@ function smarty_function_include_piwik_code($params, &$smarty) {
 
             $output = '<!-- Piwik -->
             <script type="text/javascript">
-            var pkBaseURL = (("https:" == document.location.protocol) ? "'.$httpsHost.'" : "'.  $piwikConfig['server_url'] .'");
-            document.write(unescape("%3Cscript src=\'" + pkBaseURL + "piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+            var pkBaseURL = (("https:" == document.location.protocol) ? "'.
+                $httpsHost.'" : "'.  $piwikConfig['server_url'] .'");
+            document.write(unescape("%3Cscript src=\'" + pkBaseURL + '.
+                '"piwik.js\' type=\'text/javascript\'%3E%3C/script%3E"));
             </script><script type="text/javascript">
             try {
             var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", '. $piwikConfig['page_id'] .');
             piwikTracker.trackPageView();
             piwikTracker.enableLinkTracking();
             } catch( err ) {}
-            </script><noscript><p><img src="'. $piwikConfig['server_url'] .'piwik.php?idsite='. $piwikConfig['page_id'] .'" style="border:0" alt="" /></p></noscript>
+            </script><noscript><p><img src="'. $piwikConfig['server_url'] .'piwik.php?idsite='.
+                $piwikConfig['page_id'] .'" style="border:0" alt="" /></p></noscript>
             <!-- End Piwik Tracking Code -->';
         }
     }
     return $output;
 
 }
-
-
-

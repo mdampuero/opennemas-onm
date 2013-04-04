@@ -93,16 +93,21 @@ class Message
     {
         self::initMessageHandler();
 
-        if (!isset($_SESSION)
-            || !is_array($_SESSION)
-            || !array_key_exists('messages', $_SESSION)
-        ) {
-
-        }
         if (is_null($priority)) {
-            $output =  $_SESSION['messages'];
+            $output = $_SESSION['messages'];
         } else {
-                $output =  $_SESSION['messages'][$priority];
+            $output = $_SESSION['messages'][$priority];
+        }
+
+        // Added support for symfony based flash messages
+        if (array_key_exists('_sf2_flashes', $_SESSION)) {
+            if (is_null($priority)) {
+                $output = array_merge($output, $_SESSION['_sf2_flashes']);
+            } else {
+                if (array_key_exists($priority, $_SESSION['_sf2_flashes'])) {
+                    $output = array_merge($output, $_SESSION['_sf2_flashes'][$priority]);
+                }
+            }
         }
 
         return $output;

@@ -165,7 +165,7 @@ class NewStandPaypalController extends Controller
         $this->view->assign(
             array(
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'date'           => '1-'.$month.'-'.$year,
+                'selected_date'  => '1-'.$month.'-'.$year,
                 'MONTH'          => $month,
                 'YEAR'           => $year,
                 'kiosko'         => $kiosko,

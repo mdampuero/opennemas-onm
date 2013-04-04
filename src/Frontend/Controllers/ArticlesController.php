@@ -194,27 +194,39 @@ class ArticlesController extends Controller
         $this->view->setConfig('articles');
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
 
-        // Advertisements for single article NO CACHE
-        $this->getInnerAds($categoryName);
+        // Get sync params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$categoryName.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
 
+        // Advertisements for single article NO CACHE
+        $cm = new \ContentManager;
+        // Get category id correspondence
+        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
+        // Fetch advertisement information from external
+        $advertisement = \Advertisement::getInstance();
+        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
+        $intersticial = $ads[0];
+        $banners      = $ads[1];
+
+        // Render advertisements
+        if (!empty($banners)) {
+            $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
+        }
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
+        }
+
+        // Cached article logic
         if ($this->view->caching == 0
             || !$this->view->isCached('article/article.tpl', $cacheID)
         ) {
-
-            // Init the Content and Database object
-            $cm = new \ContentManager();
-
-            // Getting Synchronize setting params
-            $wsUrl = '';
-            $syncParams = s::get('sync_params');
-            foreach ($syncParams as $siteUrl => $categoriesToSync) {
-                foreach ($categoriesToSync as $value) {
-                    if (preg_match('/'.$categoryName.'/i', $value)) {
-                        $wsUrl = $siteUrl;
-                    }
-                }
-            }
-
             // Get full article
             $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
             $article = unserialize($article);

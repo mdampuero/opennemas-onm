@@ -65,9 +65,6 @@ if (!interface_exists('SessionHandlerInterface')) {
     );
 }
 
-// Ŕegistering prefixes
-// $loader->registerPrefixes(array("Zend_" => __DIR__.'/../vendor/Zend/'));
-
 // Registering fallbacks and include path usage
 $loader->registerNamespaceFallback(SITE_MODELS_PATH);
 $loader->registerNamespaceFallback(SITE_WS_API_PATH);
