@@ -132,6 +132,16 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_frontpage_get_preview',
+    new Route(
+        '/frontpages/{category}/get-preview',
+        array(
+            '_controller' => 'Backend:Controllers:FrontpagesController:getPreview',
+        )
+    )
+);
+
+$adminRoutes->add(
     'admin_frontpage_pick_layout',
     new Route(
         '/frontpages/{category}/pick-layout',
@@ -1824,6 +1834,16 @@ $adminRoutes->add(
         '/article/preview',
         array(
             '_controller' => 'Backend:Controllers:ArticlesController:preview',
+        )
+    )
+);
+
+$adminRoutes->add(
+    'admin_article_get_preview',
+    new Route(
+        '/article/get-preview',
+        array(
+            '_controller' => 'Backend:Controllers:ArticlesController:getPreview',
         )
     )
 );

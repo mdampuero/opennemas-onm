@@ -31,7 +31,8 @@
     {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
     <script>
         var article_urls = {
-            preview : '{url name=admin_article_preview}'
+            preview : '{url name=admin_article_preview}',
+            get_preview : '{url name=admin_article_get_preview}'
         };
 
         jQuery(document).ready(function($){
