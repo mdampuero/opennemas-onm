@@ -99,7 +99,7 @@ EOF
 
         $values= array();
         while (!$rs->EOF) {
-            $summary = substr($rs->fields['body'], 0, 200);
+            $summary = substr($rs->fields['body'], 0, 500);
             $pos = strripos($summary, ".");
             if ($pos > 100) {
                 $summary = substr($summary, 0, $pos).".";
