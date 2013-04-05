@@ -360,7 +360,8 @@ class FrontpagesController extends Controller
                 $actual = $siteColor;
             }
 
-            $output.= "\tdiv.main-menu, div#footer-container  { background-color:" . $actual . " !important;}\n";
+            $output.= "\tdiv.main-menu, ul.nav-menu, div#footer-container
+                { background-color:" . $actual . " !important;}\n";
             $output.= "\tdiv.main-menu-border{ border-color:" . $actual . " !important;}\n";
             $output.= "\t.main-menu-border ul li a:hover, .main-menu-border ul li a:focus,
                 .main-menu-border ul li.active a, .main-menu-border ul.nav li.active a,
@@ -396,7 +397,8 @@ class FrontpagesController extends Controller
 
         } else {
 
-            $output.= "\tdiv.main-menu, div#footer-container  { background-color:" . $siteColor . " !important;}\n";
+            $output.= "\tdiv.main-menu, ul.nav-menu, div#footer-container
+                { background-color:" . $siteColor . " !important;}\n";
             $output.= "\tdiv.main-menu-border{ border-color:" . $siteColor . " !important;}\n";
             $output.= "\t.main-menu-border ul li a:hover, .main-menu-border ul li a:focus,
                 .main-menu-border ul li.active a, .main-menu-border ul.nav li.active a,
