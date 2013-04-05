@@ -67,7 +67,9 @@ function smarty_function_script_tag($params, &$smarty) {
         $resource = str_replace(SS.SS, SS, $resource);
     }
 
-    $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
+    if (!empty($mtime)) {
+        $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
+    }
 
     // $resource = preg_replace('/(\/+)/','/',$resource);
     // $resource = preg_replace('@(?<!:)//@', '/', $resource);
