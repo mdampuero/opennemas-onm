@@ -15,7 +15,7 @@ function smarty_function_script_tag($params, &$smarty) {
     }
 
     $src = $params['src'];
-    $mtime = '?';
+    $mtime = '';
     $server = '';
     //Comprobar si es un link externo
     if (!array_key_exists('external', $params)) {
@@ -28,7 +28,6 @@ function smarty_function_script_tag($params, &$smarty) {
             $serverUrl = SS."themes".SS.$smarty->theme.SS;
         }
 
-        $mtime = '?';
         if (file_exists($file)) {
             $mtime .= filemtime($file);
             $server = $serverUrl.$basepath;
@@ -68,10 +67,12 @@ function smarty_function_script_tag($params, &$smarty) {
         $resource = str_replace(SS.SS, SS, $resource);
     }
 
+    $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
+
     // $resource = preg_replace('/(\/+)/','/',$resource);
     // $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
-    $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties} ></script>";
+    $output = "<script {$type} src=\"{$resource}\" {$properties} ></script>";
 
     if ($escape) {
         $output = str_replace('</', '<\/', $output);
