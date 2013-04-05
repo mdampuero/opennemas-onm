@@ -406,7 +406,7 @@ class FrontpagesController extends Controller
 
         $session->set('last_preview', $this->renderView('frontpage/frontpage.tpl'));
 
-        return new Request('OK');
+        return new Response('OK');
     }
 
     /**
