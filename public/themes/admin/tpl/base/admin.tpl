@@ -136,6 +136,9 @@
         Tinycon.setBubble({count_pending_comments});
         </script>
         {uservoice_widget}
+        <script>
+        var CKEDITOR_BASEPATH = '/assets/js/ckeditor/';
+        </script>
         {script_tag src="/ckeditor/ckeditor.js" common=1}
         {script_tag src="/onm/jquery.onm-editor.js" common=1}
         <script type="text/javascript">
