@@ -182,7 +182,9 @@ class FrontpagesController extends Controller
         $banners      = $ads[1];
 
         // Render advertisements
-        $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
+        if (!empty($banners)) {
+            $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
+        }
         if (!empty($intersticial)) {
             $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
         }
