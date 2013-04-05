@@ -35,7 +35,6 @@ function smarty_function_script_tag($params, &$smarty)
         }
     }
 
-
     //Comprobar si tiene type definido
     if (isset($params['type'])) {
         $type = "type=\"{$params['type']}\"";
@@ -64,11 +63,10 @@ function smarty_function_script_tag($params, &$smarty)
         $resource = $server.SS.$src;
     }
 
-    if ($params['external'] != 1) {
+    if ($params['external'] != 1 || $server != '') {
         $resource = str_replace(SS.SS, SS, $resource);
+        $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
     }
-
-    $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
 
     // $resource = preg_replace('/(\/+)/','/',$resource);
     // $resource = preg_replace('@(?<!:)//@', '/', $resource);

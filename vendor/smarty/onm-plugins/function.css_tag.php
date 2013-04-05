@@ -60,7 +60,9 @@ function smarty_function_css_tag($params, &$smarty)
     $resource = preg_replace('/(\/+)/', '/', $server.SS.$href);
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
-    $resource = str_replace('.css', '.'.$mtime.'.css', $resource);
+    if ($params['external'] != 1) {
+        $resource = str_replace('.css', '.'.$mtime.'.css', $resource);
+    }
 
     $output = "<link {$rel} {$type} href=\"{$resource}\" {$properties}>";
 
