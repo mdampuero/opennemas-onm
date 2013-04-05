@@ -1075,7 +1075,7 @@ class ArticlesController extends Controller
             )
         );
 
-        return Response('OK');
+        return new Response('OK');
     }
 
     /**
