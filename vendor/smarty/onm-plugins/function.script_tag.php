@@ -5,17 +5,18 @@
  * Comprueba el tipo y escribe el nombre o la imag
  */
 
-function smarty_function_script_tag($params, &$smarty) {
+function smarty_function_script_tag($params, &$smarty)
+{
 
     $output = "";
 
     if (empty($params['src'])) {
-        trigger_error("[plugin] script_tag parameter 'src' cannot be empty",E_USER_NOTICE);
+        trigger_error("[plugin] script_tag parameter 'src' cannot be empty", E_USER_NOTICE);
         return;
     }
 
     $src = $params['src'];
-    $mtime = '';
+    $mtime = '1234';
     $server = '';
     //Comprobar si es un link externo
     if (!array_key_exists('external', $params)) {
@@ -29,7 +30,7 @@ function smarty_function_script_tag($params, &$smarty) {
         }
 
         if (file_exists($file)) {
-            $mtime .= filemtime($file);
+            $mtime = filemtime($file);
             $server = $serverUrl.$basepath;
         }
     }
@@ -67,9 +68,7 @@ function smarty_function_script_tag($params, &$smarty) {
         $resource = str_replace(SS.SS, SS, $resource);
     }
 
-    if (!empty($mtime)) {
-        $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
-    }
+    $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
 
     // $resource = preg_replace('/(\/+)/','/',$resource);
     // $resource = preg_replace('@(?<!:)//@', '/', $resource);

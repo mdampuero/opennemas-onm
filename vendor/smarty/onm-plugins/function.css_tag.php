@@ -28,9 +28,9 @@ function smarty_function_css_tag($params, &$smarty)
         $server = SS."themes".SS.$smarty->theme.SS.$basepath;
     }
 
-    $mtime = '?';
+    $mtime = '1234';
     if (file_exists($file)) {
-        $mtime .= filemtime($file);
+        $mtime = filemtime($file);
     }
 
     //Comprobar si tiene type definido
@@ -60,9 +60,7 @@ function smarty_function_css_tag($params, &$smarty)
     $resource = preg_replace('/(\/+)/', '/', $server.SS.$href);
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
-    if (!empty($mtime)) {
-        $resource = str_replace('.css', '.'.$mtime.'.css', $resource);
-    }
+    $resource = str_replace('.css', '.'.$mtime.'.css', $resource);
 
     $output = "<link {$rel} {$type} href=\"{$resource}\" {$properties}>";
 
