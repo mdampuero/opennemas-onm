@@ -62,8 +62,8 @@ class ArticlesController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $em = new \Onm\ORM\EntityRepository($this->container->get('cache'));
-        $article = $em->find('Article', $articleID);
+        $er = $this->get('entity_repository');
+        $article = $er->find('Article', $articleID);
 
         // Load config
         $this->view->setConfig('articles');
@@ -133,8 +133,7 @@ class ArticlesController extends Controller
 
                     // Add category name
                     foreach ($relatedContents as &$content) {
-                        $content->category_name =
-                            $this->ccm->get_category_name_by_content_id($content->id);
+                        $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
                     }
                 }
                 $this->view->assign('relationed', $relatedContents);
@@ -304,7 +303,7 @@ class ArticlesController extends Controller
         if ($paywallActivated && $onlyAvailableSubscribers) {
             $isLogged = array_key_exists('userid', $_SESSION);
             if ($isLogged) {
-                $userSubscriptionDate = new \DateTime('2 weeks ago');
+                $userSubscriptionDate = new \DateTime('2 weeks ago'); //mock User::getSubcriptionTime();
                 $now = new \DateTime();
                 $hasSubscription = $userSubscriptionDate > $now;
 

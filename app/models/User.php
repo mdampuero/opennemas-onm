@@ -840,7 +840,10 @@ class User
         }
 
         if (is_string($meta)) {
-            $value = $this->meta[$meta];
+            $value = null;
+            if (array_key_exists($meta, $this->meta)) {
+                $value = $this->meta[$meta];
+            }
         } elseif (is_array($meta)) {
             $value = array_intersect_key($this->meta, array_flip($meta));
         } else {

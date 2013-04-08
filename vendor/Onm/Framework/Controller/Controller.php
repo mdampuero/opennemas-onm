@@ -205,7 +205,7 @@ class Controller extends ContainerAware
             }
         }
 
-        return $this->container->get('event_dispatcher')->dispatch('content.update', $event);
+        return $this->container->get('event_dispatcher')->dispatch($eventName, $event);
     }
 
     /**
