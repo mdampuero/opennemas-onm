@@ -308,7 +308,12 @@ class ArticlesController extends Controller
                 $hasSubscription = $userSubscriptionDate > $now;
 
                 if (!$hasSubscription) {
-                    $article->body = $this->renderView('paywall/partials/content_form_subscribe.tpl');
+                    $settings = s::get('paywall_settings');
+
+                    $article->body = $this->renderView(
+                        'paywall/partials/content_form_subscribe.tpl',
+                        array('settings' => $settings)
+                    );
                 }
             } else {
                 $article->body = $this->renderView('paywall/partials/content_only_for_subscribers.tpl');

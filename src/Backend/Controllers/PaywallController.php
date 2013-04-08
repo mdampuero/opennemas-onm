@@ -49,8 +49,8 @@ class PaywallController extends Controller
         );
 
         $this->moneyUnits = array(
-            'dollar' => '$',
-            'euro'   => '€',
+            'USD' => '$',
+            'EUR' => '€',
         );
     }
 
