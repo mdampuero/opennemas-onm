@@ -125,6 +125,7 @@ class Message
         $notices = self::getAll(self::NOTICE);
         $errors  = self::getAll(self::ERROR);
         $sucess  = self::getAll(self::SUCCESS);
+        $created = time();
 
         $noticeHTML = '';
 
@@ -134,7 +135,7 @@ class Message
                 $messages .= "{$msg}<br>";
             }
             $noticeHTML = sprintf(
-                "<div class=\"alert alert-info\">"
+                "<div class=\"alert alert-info\" data-created=\"$created\">"
                 ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
                 ."%s"
                 ."</div>",
@@ -148,7 +149,7 @@ class Message
                 $messages .= "{$msg}<br>";
             }
             $noticeHTML .= sprintf(
-                "<div class=\"alert alert-error\">"
+                "<div class=\"alert alert-error\" data-created=\"$created\">"
                 ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
                 ."%s"
                 ."</div>",
@@ -162,7 +163,7 @@ class Message
                 $messages .= "{$msg}<br>";
             }
             $noticeHTML .= sprintf(
-                "<div class=\"alert alert-success\">"
+                "<div class=\"alert alert-success\" data-created=\"$created\">"
                 ."<button class=\"close\" data-dismiss=\"alert\">×</button>"
                 ."%s"
                 ."</div>",

@@ -613,14 +613,13 @@ jQuery(function($) {
                     "<div class='alert alert-notice'>" +
                         "<button class='close' data-dismiss='alert'>×</button>" +
                         "Generating frontpage. Please wait..." +
-                    '</div>'
+                    "</div>"
                 );
+            },
+            success: function() {
+                $.colorbox({href: frontpage_urls.get_preview_frontpage, iframe : true, width: '95%', height: '95%'});
+                $('#warnings-validation').html('');
             }
-        }).done(function(data) {
-            previewWindow = window.open('', '_blank', '');
-            previewWindow.document.write(data);
-            previewWindow.focus();
-            $('#warnings-validation').html('');
         });
     });
 

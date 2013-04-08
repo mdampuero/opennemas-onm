@@ -95,6 +95,16 @@ class OpinionsController extends Controller
                 );
             }
 
+            foreach ($editorial as &$opinion) {
+                $item = new \Content();
+                $item->loadAllContentProperties($opinion->pk_content);
+
+                $opinion->summary = $item->summary;
+                $opinion->img1_footer = $item->img1_footer;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $opinion->img1 = new \Photo($item->img1);
+                }
+            }
 
             // Fetch last opinions from director
             $director = array();
@@ -117,7 +127,22 @@ class OpinionsController extends Controller
                 if (isset($foto->path_img)) {
                     $dir['photo'] = $foto->path_img;
                 }
+                $item = new \Content();
+                $item->loadAllContentProperties($director[0]->pk_content);
+                $dir['summary'] = $item->summary;
+                $dir['img1_footer'] = $item->img1_footer;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $dir['img1'] = new \Photo($item->img1);
+                }
                 $dir['name'] = $aut->name;
+                $item = new \Content();
+                $item->loadAllContentProperties($director[0]->pk_content);
+                $director[0]->summary = $item->summary;
+                $director[0]->img1_footer = $item->img1_footer;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $director[0]->img1 = new \Photo($item->img1);
+                }
+
                 $this->view->assign(
                     array(
                         'dir'      => $dir,
@@ -166,6 +191,14 @@ class OpinionsController extends Controller
                 $opinion->author           = $authors[$opinion->fk_author];
                 $opinion->name             = $opinion->author->name;
                 $opinion->author_name_slug =   \StringUtils::get_title($opinion->name);
+                $item = new \Content();
+                $item->loadAllContentProperties($opinion->pk_content);
+                $opinion->summary = $item->summary;
+                $opinion->img1_footer = $item->img1_footer;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $opinion->img1 = new \Photo($item->img1);
+                }
+
                 $opinion->author->uri = \Uri::generate(
                     'opinion_author_frontpage',
                     array(
@@ -389,9 +422,17 @@ class OpinionsController extends Controller
             );
 
             if (!empty($opinions)) {
+
                 foreach ($opinions as &$opinion) {
+                    $item = new \Content();
+                    $item->loadAllContentProperties($opinion['pk_content']);
+                    $opinion['summary'] = $item->summary;
+                    $opinion['img1_footer'] = $item->img1_footer;
                     $opinion['pk_author'] = $authorID;
                     $opinion['author_name_slug']  = $authorName;
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $opinion['img1'] = new \Photo($item->img1);
+                    }
 
                     $opinion['uri'] = $this->generateUrl(
                         'frontend_opinion_show_with_author_slug',
@@ -660,6 +701,11 @@ class OpinionsController extends Controller
                 4
             );
 
+            // Associated media code --------------------------------------
+            if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+                $photo = new \Photo($opinion->img2);
+                $this->view->assign('photo', $photo);
+            }
             // Get author slug for suggested opinions
             foreach ($suggestedContents as &$suggest) {
                 $element = new \Opinion($suggest['pk_content']);
@@ -760,6 +806,11 @@ class OpinionsController extends Controller
             $this->getAds('inner');
 
             if (($opinion->available==1) && ($opinion->in_litter == 0)) {
+
+                if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+                    $photo = new \Photo($opinion->img2);
+                    $this->view->assign('photo', $photo);
+                }
 
                 $this->view->assign(
                     array(

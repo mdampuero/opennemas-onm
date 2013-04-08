@@ -16,7 +16,6 @@
 
                 simple : {
                     plugins: load_plugins,
-                    forcePasteAsPlainText : true,
                     removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText',
                     toolbarGroups: [
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
@@ -66,7 +65,7 @@
 
                   standard: {
                     plugins: load_plugins,
-                    removeButtons: 'Cut,Copy,Paste,PasteText',
+                    removeButtons: 'Strike,Subscript,Superscript,Cut,Copy,Paste,PasteText',
                     toolbarGroups : [
                         { name: 'styles' },
                         // { name: 'clipboard',   groups: [ 'clipboard' ] },
@@ -84,8 +83,6 @@
                         { name: 'colors' },
                         { name: 'about' }
                     ],
-
-                    removeButtons : 'Underline,Subscript,Superscript,Cut,Copy,Paste',
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
                   }
@@ -107,7 +104,7 @@
                     language: settings.language,
                     extraPlugins: 'magicline,font',
                     magicline_color: 'blue',
-                    forcePasteAsPlainText : true
+                    forcePasteAsPlainText : false
                 };
 
                 var editor_preset;

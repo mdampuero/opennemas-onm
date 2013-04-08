@@ -1060,16 +1060,40 @@ class ArticlesController extends Controller
 
         $this->view->caching = 0;
 
-        return $this->render(
-            'article/article.tpl',
-            array(
-                'relationed'            => $relat,
-                'suggested'             => $arrayResults,
-                'actual_category_title' => $actual_category_title,
-                'contentId'             => $article->id,
-                'article'               => $article,
-                'category_name'         => $category_name,
+        $session = $this->get('session');
+
+        $session->set(
+            'last_preview',
+            $this->renderView(
+                'article/article.tpl',
+                array(
+                    'relationed'            => $relat,
+                    'suggested'             => $arrayResults,
+                    'actual_category_title' => $actual_category_title,
+                    'contentId'             => $article->id,
+                    'article'               => $article,
+                    'category_name'         => $category_name,
+                )
             )
         );
+
+        return new Response('OK');
+    }
+
+    /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function getPreviewAction(Request $request)
+    {
+        $session = $this->get('session');
+
+        $content = $session->get('last_preview');
+        $session->remove('last_preview');
+
+        return new Response($content);
     }
 }

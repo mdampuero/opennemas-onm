@@ -123,6 +123,6 @@ class SystemSettingsController extends Controller
         m::add(_('Settings saved.'), m::SUCCESS);
 
         // Send the user back to the form
-        return $this->redirect($this->generateUrl('admin_system_settings', array(), true));
+        return $this->redirect($this->generateUrl('admin_system_settings'));
     }
 }

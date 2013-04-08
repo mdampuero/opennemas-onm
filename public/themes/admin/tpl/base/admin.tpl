@@ -66,18 +66,19 @@
                             </a>
                         </li>
                         {/if}
-                        {is_module_activated name="USERVOICE_SUPPORT"}
                         <li class="help dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="icon-large icon-question-sign"></span>
+                                <span class="icon-large icon-question-sign"></span> {t}Help{/t}
                             </a>
                             <ul class="dropdown-menu">
+                                <li>
+                                    <a href="http://opennemas.uservoice.com/knowledgebase">{t}FAQ{/t}</a>
+                                </li>
                                 <li>
                                     <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
                                 </li>
                             </ul>
                         </li>
-                        {/is_module_activated}
                         <li class="dropdown usermenu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="18"} <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
                             <div class="dropdown-menu">
@@ -135,6 +136,9 @@
         Tinycon.setBubble({count_pending_comments});
         </script>
         {uservoice_widget}
+        <script>
+        var CKEDITOR_BASEPATH = '/assets/js/ckeditor/';
+        </script>
         {script_tag src="/ckeditor/ckeditor.js" common=1}
         {script_tag src="/onm/jquery.onm-editor.js" common=1}
         <script type="text/javascript">

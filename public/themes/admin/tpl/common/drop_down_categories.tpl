@@ -10,6 +10,11 @@
         <a href="{$home}&category=2" class="all {if $category == 2}active{/if}">{t}Advertisement{/t}</a>
         {/acl}
     {/if}
+    {if $opinion == true}
+        {acl isAllowed="OPINION_CREATE"}
+        <a href="{$home}&category=4" class="all {if $category == 4}active{/if}">{t}Opinion{/t}</a>
+        {/acl}
+    {/if}
     <ul class="categories">
         {section name=as loop=$allcategorys}
         {assign var=ca value=$allcategorys[as]->pk_content_category}

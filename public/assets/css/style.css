@@ -685,6 +685,10 @@ div.utilities-conf input[type="text"]{
   }
 }
 
+.help .icon-question-sign {
+  font-size:1.1em;
+}
+
 .navbar .btn, .navbar .btn-group {
   margin-top: 8px;
 }
@@ -859,7 +863,12 @@ div.utilities-conf input[type="text"]{
             right:0px !important;
             left:auto;
         }
-
+        .dropdown-menu li > a {
+            font-weight: normal !important;
+            font-size: 13px !important;
+            text-align: left !important;
+            padding: 5px 20px;
+        }
 
 h2.disqus {
     background: url(../images/disqus.png) center left no-repeat;

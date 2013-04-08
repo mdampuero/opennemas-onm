@@ -5,17 +5,18 @@
  * Comprueba el tipo y escribe el nombre o la imag
  */
 
-function smarty_function_script_tag($params, &$smarty) {
+function smarty_function_script_tag($params, &$smarty)
+{
 
     $output = "";
 
     if (empty($params['src'])) {
-        trigger_error("[plugin] script_tag parameter 'src' cannot be empty",E_USER_NOTICE);
+        trigger_error("[plugin] script_tag parameter 'src' cannot be empty", E_USER_NOTICE);
         return;
     }
 
     $src = $params['src'];
-    $mtime = '?';
+    $mtime = '1234';
     $server = '';
     //Comprobar si es un link externo
     if (!array_key_exists('external', $params)) {
@@ -28,13 +29,11 @@ function smarty_function_script_tag($params, &$smarty) {
             $serverUrl = SS."themes".SS.$smarty->theme.SS;
         }
 
-        $mtime = '?';
         if (file_exists($file)) {
-            $mtime .= filemtime($file);
+            $mtime = filemtime($file);
             $server = $serverUrl.$basepath;
         }
     }
-
 
     //Comprobar si tiene type definido
     if (isset($params['type'])) {
@@ -64,14 +63,15 @@ function smarty_function_script_tag($params, &$smarty) {
         $resource = $server.SS.$src;
     }
 
-    if ($params['external'] != 1) {
+    if ($params['external'] != 1 || $server != '') {
         $resource = str_replace(SS.SS, SS, $resource);
+        $resource = str_replace('.js', '.'.$mtime.'.js', $resource);
     }
 
     // $resource = preg_replace('/(\/+)/','/',$resource);
     // $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
-    $output = "<script {$type} src=\"{$resource}{$mtime}\" {$properties} ></script>";
+    $output = "<script {$type} src=\"{$resource}\" {$properties} ></script>";
 
     if ($escape) {
         $output = str_replace('</', '<\/', $output);

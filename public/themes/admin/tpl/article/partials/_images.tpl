@@ -136,7 +136,7 @@
 </div>
 
 <hr>
-
+{if !isset($withoutVideo)}
 <div class="contentform-inner clearfix">
     {acl isAllowed="VIDEO_ADMIN"}
     {is_module_activated name="VIDEO_MANAGER"}
@@ -249,6 +249,7 @@
     {/is_module_activated}
     {/acl}
 </div>
+{/if}
 {is_module_activated name="IMAGE_MANAGER"}
 <script>
 jQuery(document).ready(function($){

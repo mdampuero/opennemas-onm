@@ -12,6 +12,7 @@
             var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
 
             $('#title').inputLengthControl();
+
             $('#title input').on('change', function(e, ui) {
                 fill_tags_improved($('#title input').val(), tags_input, '{url name=admin_utils_calculate_tags}');
             });
@@ -50,6 +51,7 @@
         </ul>
     </div>
 </div>
+
 <div class="wrapper-content contentform">
 
     {render_messages}
@@ -102,7 +104,6 @@
                         <input type="checkbox" name="available" id="available" {if $opinion->available eq 1}checked="checked"{/if} />
                         <label for="available">{t}Available{/t}</label>
 
-
                         <hr class="divisor">
 
                         {is_module_activated name="COMMENT_MANAGER"}
@@ -150,10 +151,24 @@
 
             <div class="contentform-main">
                 <div class="control-group">
+                    <label for="summary" class="control-label">{t}Summary{/t}</label>
+                    <div class="controls">
+                        <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$opinion->summary|clearslash|escape:"html"}</textarea>
+                    </div>
+                </div>
+
+            </div><!-- /contentform-main -->
+        </div><!-- /contentform-inner -->
+        <div class="contentform-inner wide">
+            <div class="form-vertical">
+                <div class="control-group">
                     <label for="body" class="control-label">{t}Body{/t}</label>
                     <div class="controls">
                         <textarea name="body" id="body" class="onm-editor">{$opinion->body|clearslash}</textarea>
                     </div>
+                </div>
+                <div id="article_images" class="clearfix">
+                    {include  file="article/partials/_images.tpl" article=$opinion withoutVideo='true'}
                 </div>
             </div><!-- /contentform-main -->
         </div><!-- /contentform-inner -->

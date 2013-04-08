@@ -1,41 +1,46 @@
-jQuery(document).ready(function($) {
-    toggleCheckbox = (function() {
-        var toggleElement = $('.table .toggleallcheckbox');
-        if (toggleElement !== null) {
+function hide_alerts () {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}
 
-            // check element if all its dependent checkboxes are checked
-            toggleElement.each(function() {
-                var allChecked = true;
+function toggleCheckbox()  {
+    var toggleElement = $('.table .toggleallcheckbox');
+    if (toggleElement !== null) {
 
-                $(this).closest('.table').find('tbody input[type=checkbox]').each(function() {
-                    allChecked = allChecked && $(this).prop('checked');
-                });
-                if (allChecked) {$(this).prop('checked', 'checked');}
+        // check element if all its dependent checkboxes are checked
+        toggleElement.each(function() {
+            var allChecked = true;
+
+            $(this).closest('.table').find('tbody input[type=checkbox]').each(function() {
+                allChecked = allChecked && $(this).prop('checked');
             });
-
-            $('.table').on('click', '.toggleallcheckbox', function() {
-                var toggle = $(this).attr('checked') == 'checked';
-                $(this).closest('.table').find('tbody input[type=checkbox]').each(function() {
-                    $(this).prop('checked', toggle);
-                });
-                if (toggle) {
-                    jQuery('.old-button .batch-actions').fadeIn('fast');
-                } else {
-                    jQuery('.old-button .batch-actions').fadeOut('fast');
-                }
-
-            });
-        }
-    })();
-
-    // TODO: think about make this function autoexecutable and avoid call it from views
-    toggleTiny = (function() {
-        $('.toggle-tinymce').on('click', function(e) {
-            var selector = $(this).data('selector-to-hide');
-            OpenNeMas.tinyMceFunctions.toggle(selector);
-            e.preventDefault();
+            if (allChecked) {$(this).prop('checked', 'checked');}
         });
-    })();
+
+        $('.table').on('click', '.toggleallcheckbox', function() {
+            var toggle = $(this).attr('checked') == 'checked';
+            $(this).closest('.table').find('tbody input[type=checkbox]').each(function() {
+                $(this).prop('checked', toggle);
+            });
+            if (toggle) {
+                jQuery('.old-button .batch-actions').fadeIn('fast');
+            } else {
+                jQuery('.old-button .batch-actions').fadeOut('fast');
+            }
+
+        });
+    }
+}
+
+jQuery(document).ready(function($) {
+
+    toggleCheckbox();
+
+    // Hide alerts after 5 seconds
+    window.setInterval(function() {
+        hide_alerts()
+    }, 5000);
 
     noentersubmit = (function() {
         $('.noentersubmit').keydown(function(event) {
@@ -54,11 +59,7 @@ jQuery(document).ready(function($) {
         jQuery(this).find('.dropdown-menu:first').hide();
     });
 
-    window.setTimeout(function() {
-        $(".alert").fadeTo(500, 0).slideUp(500, function(){
-            $(this).remove();
-        });
-    }, 5000);
+
 
     jQuery(window).scroll(function() {
         var $this = $(this);

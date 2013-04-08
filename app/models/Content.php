@@ -2393,10 +2393,13 @@ class Content
      * @return array if it is in the contentmeta table
      **/
 
-    public function loadAllContentProperties()
+    public function loadAllContentProperties($id = null)
     {
-        if ($this->id == null) {
+        if ($this->id == null && $id == null) {
             return false;
+        }
+        if (!empty($id)) {
+            $this->id = $id;
         }
 
         $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';

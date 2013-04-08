@@ -1038,11 +1038,12 @@ class Advertisement extends Content
             }
         }
 
-        // Array of photos objects,
-        // key is pk_content array( 'pk_content' => object )
+        // Array of photos objects,  key is pk_content array('pk_content' => object)
         $photos = array();
-        foreach ($objs as $obj) {
-            $photos[ $obj->pk_content ] = $obj;
+        if (!empty($objs)) {
+            foreach ($objs as $obj) {
+                $photos[ $obj->pk_content ] = $obj;
+            }
         }
 
         foreach ($banners as $banner) {

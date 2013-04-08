@@ -23,7 +23,8 @@
             set_arquived: '{url name=admin_content_set_archived}',
             send_to_trash: '{url name=admin_content_send_to_trash}',
             customize_content: '{url name=admin_content_update_property}',
-            check_version: '{url name=admin_frontpage_last_version category=$category}'
+            check_version: '{url name=admin_frontpage_last_version category=$category}',
+            get_preview_frontpage: '{url name=admin_frontpage_get_preview category=$category}',
         };
         var content_states = {
             {foreach from=$frontpage_articles item=content}
@@ -54,18 +55,18 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a href="#" id="button_multiple_delete">
-                                {t}Remove{/t}
+                                <i class="icon-remove"></i> {t}Remove from this frontpage{/t}
                             </a>
                         </li>
                         <li>
                             <a href="#" id="button_multiple_arquive">
-                                {t}Arquive{/t}
+                                <i class="icon-inbox"></i> {t}Arquive{/t}
                             </a>
                         </li>
                         {if $category_id != 0}
                         <li>
                             <a href="#" id="button_multiple_suggest">
-                                {t}Toggle suggest{/t}
+                                <i class="icon-star"></i>{t}Toggle suggest{/t}
                             </a>
                         </li>
                         {/if}

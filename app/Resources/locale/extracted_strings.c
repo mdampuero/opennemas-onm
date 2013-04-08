@@ -1364,6 +1364,9 @@ gettext("Server hour:");
 gettext("Publication end date");
 
 /* public/themes/admin/tpl//opinion/new.tpl */
+gettext("Summary");
+
+/* public/themes/admin/tpl//opinion/new.tpl */
 gettext("Body");
 
 /* public/themes/admin/tpl//article/modals/_modalBatchDelete.tpl */
@@ -2012,6 +2015,9 @@ gettext("All categories");
 gettext("Advertisement");
 
 /* public/themes/admin/tpl//common/drop_down_categories.tpl */
+gettext("Opinion");
+
+/* public/themes/admin/tpl//common/drop_down_categories.tpl */
 gettext("(inactive)");
 
 /* public/themes/admin/tpl//common/drop_down_categories.tpl */
@@ -2064,6 +2070,33 @@ gettext("Unknown");
 
 /* public/themes/admin/tpl//common/selector_categories.tpl */
 gettext("Unknown");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("File name");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("Image size");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("File size");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("Creation date");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("Description");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("Tags");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("Available images");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("Search images by title...");
+
+/* public/themes/admin/tpl//common/images_provider.tpl */
+gettext("Opinion");
 
 /* public/themes/admin/tpl//instance_sync/partials/_list_categories.tpl */
 gettext("There is no elements to sync");
@@ -2423,7 +2456,7 @@ gettext("Home");
 gettext("Batch actions");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
-gettext("Remove");
+gettext("Remove from this frontpage");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
 gettext("Arquive");
@@ -3882,6 +3915,12 @@ gettext("Pending comments");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Pending comments");
+
+/* public/themes/admin/tpl//base/admin.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//base/admin.tpl */
+gettext("FAQ");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Contact support");

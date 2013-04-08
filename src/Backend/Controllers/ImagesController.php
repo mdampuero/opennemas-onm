@@ -44,7 +44,7 @@ class ImagesController extends Controller
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
-        $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR.SS;
+        $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR;
 
         $this->view->assign(
             array(

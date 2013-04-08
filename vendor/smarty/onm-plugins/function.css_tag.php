@@ -5,12 +5,13 @@
  * Comprueba el tipo y escribe el nombre o la imag
  */
 
-function smarty_function_css_tag($params, &$smarty) {
+function smarty_function_css_tag($params, &$smarty)
+{
 
     $output = "";
 
     if (empty($params['href'])) {
-        trigger_error("[plugin] css_tag parameter 'href' cannot be empty",E_USER_NOTICE);
+        trigger_error("[plugin] css_tag parameter 'href' cannot be empty", E_USER_NOTICE);
         return;
     }
 
@@ -27,9 +28,9 @@ function smarty_function_css_tag($params, &$smarty) {
         $server = SS."themes".SS.$smarty->theme.SS.$basepath;
     }
 
-    $mtime = '?';
+    $mtime = '1234';
     if (file_exists($file)) {
-        $mtime .= filemtime($file);
+        $mtime = filemtime($file);
     }
 
     //Comprobar si tiene type definido
@@ -52,14 +53,18 @@ function smarty_function_css_tag($params, &$smarty) {
     unset($params['basepath']);
     unset($params['common']);
     $properties = '';
-    foreach($params as $key => $value) {
+    foreach ($params as $key => $value) {
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    $resource = preg_replace('/(\/+)/','/',$server.SS.$href);
+    $resource = preg_replace('/(\/+)/', '/', $server.SS.$href);
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
-    $output = "<link {$rel} {$type} href=\"{$resource}{$mtime}\" {$properties}>";
+    if ($params['external'] != 1) {
+        $resource = str_replace('.css', '.'.$mtime.'.css', $resource);
+    }
+
+    $output = "<link {$rel} {$type} href=\"{$resource}\" {$properties}>";
 
     return $output;
 }
