@@ -907,8 +907,7 @@ class Advertisement extends Content
                     '<iframe src="'.SITE_URL.'ads/get/' . date('YmdHis', strtotime($this->created))
                     .sprintf('%06d', $this->pk_content)  . '.html" ' .
                    'scrolling="no" frameborder="0" width="'.$this->params['width']
-                   .'" height="'.$this->params['height'].'" ' .
-                   'marginwidth="0" marginheight="0" rel="nofollow"></iframe>';
+                   .'" height="'.$this->params['height'].'"></iframe>';
             }
 
         } elseif (!empty($banner->pk_advertisement)) {

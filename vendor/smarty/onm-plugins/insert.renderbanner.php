@@ -156,8 +156,7 @@ JSINTERSTICIAL;
         } else {
             $output .= '<iframe src="'.$siteUrl.'ads/get/'
                 .date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
-               'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
-               'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
+               'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '">Publicidad</iframe>';
         }
 
     } elseif (!empty($banner->pk_advertisement)) {
