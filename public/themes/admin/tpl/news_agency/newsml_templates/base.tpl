@@ -19,7 +19,7 @@ Documentacion NewsML y últimos cambios: http://www.efe.com/documentosefe/efenew
         <!--Creation date.-->
         <DateId>{$article->created_datetime->format(DateTime::ISO8601)}</DateId>
         <!--Id of the news for THIS format.-->
-        <NewsItemId>2006824</NewsItemId>
+        <NewsItemId>{$article->id}</NewsItemId>
         <!--Use 'RevisionId' tags to check changes from the previous version of the news item.-->
         <RevisionId PreviousRevision="1" Update="U">2</RevisionId>
         <!--Usefull to check changes between versions on same news item. See NewsML documentation.-->
@@ -71,7 +71,7 @@ Documentacion NewsML y últimos cambios: http://www.efe.com/documentosefe/efenew
                 <head>
                   <title>{$article->title}</title>
                   <docdata management-status="usable">
-                    <doc-id id-string="5232938" />
+                    <doc-id id-string="{$article->id}" />
                   </docdata>
                 </head>
                 <body>
@@ -111,12 +111,6 @@ Documentacion NewsML y últimos cambios: http://www.efe.com/documentosefe/efenew
           <DescriptiveMetadata>
             <Language FormalName="es" />
             <DateLineDate>20130404T121800+0000</DateLineDate>
-            <Location HowPresent="Origin">
-              <Property FormalName="City" Value="Santiago de Compostela" />
-            </Location>
-            <!--Useful to identificate NewsComponents from the same kind (photo, audio, ...) and content, but with different Euids or Hrefs.
-Util para identificar NewsComponents del mismo tipo y contenido, pero con diferente Euids o Hrefs.-->
-            <Property FormalName="EFE_IdRefObject" Value="5232934" />
           </DescriptiveMetadata>
           <!--Photo binary data. Different sizes/formats about the same photo.-->
           <NewsComponent Duid="multimedia_2006824.multimedia.photos.5232934.file">
