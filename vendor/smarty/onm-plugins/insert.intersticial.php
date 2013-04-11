@@ -135,11 +135,12 @@ JSINTERSTICIAL;
         if (preg_match('/iframe/', $banner->script)) {
             $output .= $banner->script;
         } else {
-            $output .= '<iframe src="'.$siteUrl.'ads/get/'
-                . date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
-               'scrolling="no" frameborder="0" width="'.$banner->params['width']
-               .'" height="'.$banner->params['height'].'" ' .
-               'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
+            $url = $siteUrl.'ads/get/'
+                . date('YmdHis', strtotime($banner->created))
+                . sprintf('%06d', $banner->pk_content)  . '.html" ';
+            $output .= '<iframe src="'.$url.'"'
+               .' style="width:'.$banner->params['width'].'px; height:'.$banner->params['height'].'px" '
+               .'></iframe>';
         }
 
     } elseif (!empty($banner->pk_advertisement)) {

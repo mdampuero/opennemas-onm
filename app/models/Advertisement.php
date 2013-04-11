@@ -903,11 +903,13 @@ class Advertisement extends Content
             if (preg_match('/<iframe/', $this->script)) {
                 $output .= $this->script;
             } else {
+                $url = SITE_URL.'ads/get/'
+                    . date('YmdHis', strtotime($this->created))
+                    .sprintf('%06d', $this->pk_content)  . '.html' ;
                 $output .=
-                    '<iframe src="'.SITE_URL.'ads/get/' . date('YmdHis', strtotime($this->created))
-                    .sprintf('%06d', $this->pk_content)  . '.html" ' .
-                   'scrolling="no" frameborder="0" width="'.$this->params['width']
-                   .'" height="'.$this->params['height'].'"></iframe>';
+                    '<iframe src="'.$url.'" '
+                    .'style="width:'.$this->params['width'].'px '
+                    .'height:'.$this->params['height'].'px"></iframe>';
             }
 
         } elseif (!empty($banner->pk_advertisement)) {
