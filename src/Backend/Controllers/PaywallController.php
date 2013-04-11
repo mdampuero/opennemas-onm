@@ -65,8 +65,6 @@ class PaywallController extends Controller
     {
         $settings = s::get('paywall_settings');
 
-
-
         return $this->render(
             'paywall/settings.tpl',
             array(
@@ -103,10 +101,10 @@ class PaywallController extends Controller
                     'description' => $settingsForm['payment_modes']['description'][$i],
                     'price'       => $settingsForm['payment_modes']['price'][$i],
                 );
-
             }
-            // $settings['payment_modes'] = $paymentModes;
         }
+
+        $this->get('session')->setFlash('success', _("Paywall settings saved."));
 
         s::set('paywall_settings', $settings);
 
