@@ -908,7 +908,7 @@ class Advertisement extends Content
                     .sprintf('%06d', $this->pk_content)  . '.html' ;
                 $output .=
                     '<iframe src="'.$url.'" '
-                    .'style="width:'.$this->params['width'].'px '
+                    .'style="width:'.$this->params['width'].'px; '
                     .'height:'.$this->params['height'].'px"></iframe>';
             }
 
