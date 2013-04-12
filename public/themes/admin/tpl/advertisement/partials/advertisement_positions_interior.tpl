@@ -21,6 +21,23 @@
     <tr>
         <td>
             <label>
+                 Left Skyscraper (160 x 600)
+                <input type="radio" name="type_advertisement" value="191" {if isset($advertisement) && $advertisement->type_advertisement == 191}checked="checked" {/if}/>
+            </label>
+        </td>
+        <td>
+            <label>
+                 Right Skyscraper (160 x 600)
+                <input type="radio" name="type_advertisement" value="192" {if isset($advertisement) && $advertisement->type_advertisement == 192}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+        <td>
+            <label>
                 Big  Banner Top(I) (728X90)
                 <input type="radio" name="type_advertisement" value="101" {if $advertisement->type_advertisement == 101}checked="checked" {/if}/>
             </label>

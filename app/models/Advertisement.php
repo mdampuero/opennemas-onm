@@ -86,6 +86,8 @@ class Advertisement extends Content
 
         109 => "[I] Big Banner Inferior",
         110 => "[I] Banner Inferior Derecho",
+        191 => "[I] Left Skyscraper",
+        192 => "[I] Right Skyscraper",
 
         /* Intersticial banner video front */
         250 => "[V] Banner Interticial",
@@ -97,7 +99,8 @@ class Advertisement extends Content
 
         209 => "[V] Big Banner Inferior",
         210 => "[V] Banner Inferior Derecho",
-
+        291 => "[V] Left Skyscraper",
+        292 => "[V] Right Skyscraper",
         /* Intersticial banner video inner */
         350 => "[VI] Banner Interticial",
 
@@ -109,6 +112,8 @@ class Advertisement extends Content
 
         309 => "[VI] Big Banner Inferior",
         310 => "[VI] Banner Inferior Derecho",
+        391 => "[VI] Left Skyscraper",
+        392 => "[VI] Right Skyscraper",
 
         /* Intersticial banner album front */
         450 => "[A] Banner Interticial",
@@ -122,6 +127,8 @@ class Advertisement extends Content
 
         409 => "[A] Big Banner Inferior",
         410 => "[A] Banner Inferior Derecho",
+        491 => "[A] Left Skyscraper",
+        492 => "[A] Right Skyscraper",
 
         /* Intersticial banner album inner */
         550 => "[AI] Banner Interticial",
@@ -134,6 +141,8 @@ class Advertisement extends Content
 
         509 => "[AI] Big Banner Inferior",
         510 => "[AI] Banner Inferior Derecho",
+        591 => "[AI] Left Skyscraper",
+        592 => "[AI] Right Skyscraper",
 
        /* Intersticial banner opinion front */
         650 => "[O] Banner Interticial",
@@ -145,6 +154,8 @@ class Advertisement extends Content
         605 => "[O] Banner1 2Column Right",
         609 => "[O] Big Banner Inferior",
         610 => "[O] Banner Inferior Derecho",
+        691 => "[O] Left Skyscraper",
+        692 => "[O] Right Skyscraper",
 
         /* Intersticial banner opinion inner */
         750 => "[OI] Banner Intersticial - Inner (800X600)",
@@ -160,6 +171,8 @@ class Advertisement extends Content
         708 => "[OI] Banner5 Column Right(I) (300X*)",
         709 => "[OI] Big Banner Bottom(I) (728X90)",
         710 => "[OI] Banner Bottom Right(I) (234X90)",
+        791 => "[OI] Left Skyscraper",
+        792 => "[OI] Right Skyscraper",
 
           /* Intersticial banner polls front */
         850 => "[E] Banner Interticial",
@@ -173,6 +186,8 @@ class Advertisement extends Content
 
         809 => "[E] Big Banner Inferior",
         810 => "[E] Banner Inferior Derecho",
+        891 => "[E] Left Skyscraper",
+        892 => "[E] Right Skyscraper",
 
         /* Intersticial banner poll inner */
         950 => "[EI] Banner Interticial",
@@ -185,6 +200,8 @@ class Advertisement extends Content
 
         909 => "[EI] Big Banner Inferior",
         910 => "[EI] Banner Inferior Derecho",
+        991 => "[EI] Left Skyscraper",
+        992 => "[EI] Right Skyscraper",
 
           /* Newsletter  > 1000 */
         1001 => "[B] Big banner superior",
