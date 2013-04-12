@@ -304,10 +304,10 @@ class PollsController extends Controller
 
         // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
         if ($context == 'inner') {
-            $positions = array(901, 902, 903, 905, 909, 910);
+            $positions = array(901, 902, 903, 905, 909, 910, 991, 992);
             $intersticialId = 950;
         } else {
-            $positions = array(801, 802, 803, 805, 809, 810);
+            $positions = array(801, 802, 803, 805, 809, 810, 891, 892);
             $intersticialId = 850;
         }
         $banners = $advertisement->getAdvertisements($positions, $this->category);
