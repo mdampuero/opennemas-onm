@@ -366,11 +366,16 @@ jQuery(function($) {
     });
 
 
-    // Change-background-color
-    $('#modal-element-customize-content').modal({ backdrop: 'static', keyboard: true, show: false });
+    // CUSTOMIZE CONTENTS
     $('#frontpagemanager').on('click', 'div.placeholder div.content-provider-element a.change-color', function(e) {
         var element = $(this).closest('.content-provider-element');
         var elementID = element.data('content-id');
+
+        var title = element.data('title');
+
+        if(title.length>0) {
+             title = jQuery.parseJSON(title);
+        }
 
         var modal = $('#modal-element-customize-content');
         modal.data('element-for-customize-content', element);
@@ -378,31 +383,46 @@ jQuery(function($) {
         modal.data('selected-for-customize-content', elementID);
 
 
-        var title = element.data('title')
-
         if (title['font-size'] !== undefined) {
-            console.log(title['font-size']);
             var size = title['font-size'].substring(0,2);
-            modal.find('.modal-body #font-size option[value='+size+']').attr('selected', 'selected');
+           // modal.find('.modal-body #font-size option[value='+size+']').attr('selected', 'selected');
+           modal.find('.modal-body #font-size').val(size);
+        } else {
+            modal.find('.modal-body #font-size option[value=""]').attr('selected', 'selected');
         }
         if (title['font-family'] !== undefined) {
+          // modal.find('.modal-body #font-family').val(title['font-family']);
            modal.find('.modal-body #font-family').val(title['font-family']);
+        } else {
+            modal.find('.modal-body #font-family').val('Auto');
         }
         if (title['font-style'] !== undefined) {
             modal.find('.modal-body #font-style').val(title['font-style']);
+        } else {
+            modal.find('.modal-body #font-style').val('Auto');
         }
         if (title['font-weight'] !== undefined) {
             modal.find('.modal-body #font-weight').val(title['font-weight']);
+        } else {
+            modal.find('.modal-body #font-weight').val('Auto');
         }
         if (title['color'] !== undefined) {
             modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', title['color']);
             modal.find('.modal-body input#font-color').val(title['color']);
+            $('select[name="colorpicker-font"]').val(title['color']);
+        } else {
+            modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
+            modal.find('.modal-body #font-color').val('#000000');
         }
 
         if (element.data('bg').length>0) {
             var bgcolor = element.data('bg').substring(17,24);
             modal.find('.modal-body .background span.simplecolorpicker').css('background-color', bgcolor);
             modal.find('.modal-body input#bg-color').val(bgcolor);
+            $('select[name="colorpicker-background"]').val(bgcolor);
+        } else {
+            modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
+            modal.find('.modal-body #bg-color').val('#ffffff');
         }
         modal.modal('show');
         e.preventDefault();
@@ -446,7 +466,7 @@ jQuery(function($) {
         var jsonTitle = JSON.stringify(titleValues, keys);
         var properties = new Object();
 
-                    var name = 'title_' + $('#frontpagemanager').data('category');
+        var name = 'title_' + $('#frontpagemanager').data('category');
         if(!$.isEmptyObject(titleValues)) {
             properties[name] = jsonTitle;
         } else {
@@ -468,8 +488,8 @@ jQuery(function($) {
                 data: { 'id': elementID, 'properties' : properties}
             }).done(function(data) {
                  $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
-                  element.data('bg', 'background-color:'+bgcolor);
-                  element.data('title', jsonTitle);
+                    element.data('bg', 'background-color:'+bgcolor);
+                    element.data('title', jsonTitle);
 
             }).fail(function(data) {
                 //data.message
@@ -479,6 +499,21 @@ jQuery(function($) {
 
         e.preventDefault();
 
+    });
+
+    $('#modal-element-customize-content').on('click', 'a.btn.reset', function(e, ui) {
+        var modal = $('#modal-element-customize-content');
+
+        modal.find('.modal-body #font-size option[value=""]').attr('selected', 'selected');
+        modal.find('.modal-body #font-family').val('Auto');
+        modal.find('.modal-body #font-style').val('Auto');
+        modal.find('.modal-body #font-weight').val('Auto');
+        modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
+        modal.find('.modal-body #font-color').val('#000000');
+        modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
+        modal.find('.modal-body #bg-color').val('#ffffff');
+
+        e.preventDefault();
     });
 
     $('#modal-element-customize-content').on('click', 'a.btn.no', function(e) {
