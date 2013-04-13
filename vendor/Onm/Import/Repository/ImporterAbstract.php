@@ -210,11 +210,11 @@ abstract class ImporterAbstract
             $this->setupSyncEnvironment();
         }
 
-        if (file_exists($this->lockFile)) {
-            throw new LockException(
-                sprintf(_("Seems that other user is syncing the news."))
-            );
-        }
+        // if (file_exists($this->lockFile)) {
+        //     throw new LockException(
+        //         sprintf(_("Seems that other user is syncing the news."))
+        //     );
+        // }
 
         $serverSyncPath = $this->syncPath.DIRECTORY_SEPARATOR.$params['id'];
 
