@@ -42,6 +42,8 @@ class FTP
             );
         }
 
+        ftp_pasv($this->ftpConnection, true);
+
         // if there is a ftp login configuration use it
         if (isset($params['username'])) {
 
@@ -95,6 +97,7 @@ class FTP
             ftp_pwd($this->ftpConnection),
             true
         );
+
         $files = $this->_filterOldFiles(
             $this->formatRawFtpFileList($files),
             $maxAge
@@ -315,6 +318,9 @@ class FTP
             $files = array_filter(
                 $files,
                 function ($item) use ($maxAge) {
+                    if ($item['filename'] == '..' || $item['filename'] == '.') {
+                        return false;
+                    }
                     return (time() - $maxAge) < $item['date']->getTimestamp();
                 }
             );
