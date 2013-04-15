@@ -1,12 +1,11 @@
 <div class="modal hide fade" id="modal-element-customize-content">
   <form id="customize-content">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <button type="button" class="close shadow-close" data-dismiss="modal" aria-hidden="true"> </button>
       <h3>{t}Customize font and color for this element{/t}</h3>
     </div>
-    <div class="modal-body">
-        <p>
-            <div class="controls background">
+    <div class="modal-body form-vertical">
+        <div class="control-group background">
                 <label for="color" class="control-label">{t}Background Color{/t}</label>
                 <input type="text" id="bg-color" name="bg-color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
                 <select name="colorpicker-background">
@@ -36,9 +35,8 @@
                     <option value="#980101">{t}Bold red{/t}</option>
                 </select>
             </div>
-        </p>
-        <p>
-            <div class="controls">
+
+            <div class="control-group">
                 <label for="font-family" class="control-label">{t}Title font family{/t}</label>
                 {assign var='availableFonts' value=','|explode:"Auto,Arial,Verdana,Georgia,Helvetica"}
                 <select id="font-family" name="font-family">
@@ -46,27 +44,23 @@
 
                 </select>
             </div>
-        </p>
-        <p>
-            <div class="controls">
+
+            <div class="control-group">
                 <label for="font-style" class="control-label">{t}Title font style{/t}</label>
                 {assign var='availableStyle'  value=','|explode:"Auto,Italic,Oblique,Normal"}
                 <select id="font-style" name="font-style">
                     {html_options values=$availableStyle output=$availableStyle selected=Auto}
                 </select>
             </div>
-        </p>
-        <p>
-            <div class="controls">
+            <div class="control-group">
                 <label for="font-style" class="control-label">{t}Title font weight{/t}</label>
                 {assign var='availableStyle'  value=','|explode:"Auto,bolder,bold,lighter,Normal"}
                 <select id="font-weight" name="font-weight">
                     {html_options values=$availableStyle output=$availableStyle selected=Auto}
                 </select>
             </div>
-        </p>
-        <p>
-            <div class="controls">
+
+            <div class="control-group">
                 <label for="font-size" class="control-label">{t}Title font size{/t}</label>
                 {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30,32,36,40,48,72"}
                 <select id="font-size" name="font-size">
@@ -76,7 +70,7 @@
 
             </div>
 
-            <div class="controls fontcolor">
+            <div class="control-group fontcolor">
                 <label for="font-color" class="control-label">{t}Title font color{/t}</label>
                 <input type="text" id="font-color" name="font-color" value="">
                 <select name="colorpicker-font">
@@ -109,6 +103,7 @@
         </p>
     </div>
     <div class="modal-footer">
+        <a class="btn btn-secondary reset" href="#">{t}Reset{/t}</a>
         <a class="btn btn-primary yes" href="#">{t}Save{/t}</a>
         <a class="btn no" href="#">{t}Cancel{/t}</a>
     </div>
