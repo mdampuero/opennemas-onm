@@ -35,7 +35,7 @@
         <td colspan="2">
             <label>
                  InBody Skyscraper (120 x 600)
-                <input type="radio" name="type_advertisement" value="193" {if isset($advertisement) && $advertisement->type_advertisement == 793}checked="checked" {/if}/>
+                <input type="radio" name="type_advertisement" value="793" {if isset($advertisement) && $advertisement->type_advertisement == 793}checked="checked" {/if}/>
             </label>
         </td>
     </tr>
