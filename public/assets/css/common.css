@@ -1,0 +1,38 @@
+
+/***********************************************************
+  Definitions for ads
+************************************************************/
+div.ads-skyscraper-container{
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+div.ads-skyscraper-container >div {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 998px;
+
+}
+
+div.ad-skyscraper-left {
+    height: 600px;
+    left: -165px;
+    overflow: hidden;
+    position: absolute;
+    text-align: right;
+    width: 160px;
+}
+
+div.ad-skyscraper-right {
+    height: 600px;
+    right: -165px;
+    overflow: hidden;
+    position: absolute;
+    text-align: left;
+    width: 160px;
+}
+
+div.ad-skyscraper-left .ad, div.ad-skyscraper-right .ad {
+    height: 600px;
+}
