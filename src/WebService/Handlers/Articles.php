@@ -365,6 +365,76 @@ class Articles
     }
 
     /**
+     * Get an xml with elements containig url to the NewsML content
+     *
+     * @param type $timeLimit the mtime limit for the last content 1 day by default
+     *
+     * @return $output
+     */
+
+    public function export($timeLimit = '86400')
+    {
+        $timeLimit = date('Y-m-d H:i:s', time() - $timeLimit);
+
+        // Get articles by time limit
+        $articles = $this->cm->find(
+            'Article',
+            'fk_content_type=1 AND available=1 AND '.
+            'created >= \''.$timeLimit.'\'',
+            ' ORDER BY created DESC'
+        );
+
+        $tpl = new \TemplateAdmin('admin');
+
+        $output = $tpl->fetch('news_agency/newsml_templates/contents_list.tpl', array('articles' => $articles));
+
+        $xml = new \XmlFormat();
+
+        $output = $xml->toArray($output);
+
+        return $output;
+    }
+
+    /**
+     * Get an newsml given a content id
+     *
+     * @param type $id the id of the content
+     *
+     * @return $output
+     */
+    public function newsml($id = null)
+    {
+        $cm  = new \ContentManager();
+        $article = new \Article($id);
+
+        $tpl = new \TemplateAdmin('admin');
+
+        // Load category related information
+        $article->category_name  = $article->loadCategoryName($article->id);
+        $article->category_title = $article->loadCategoryTitle($article->id);
+
+        $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);
+        $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
+
+        $imageId = $article->img1;
+
+        if (!empty($imageId)) {
+            $image = $cm->find('Photo', 'pk_content = '.$imageId);
+        }
+
+        // Load attached and related contents from array
+        $article->loadFrontpageImageFromHydratedArray($image);
+
+        $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', array('article' => $article));
+
+        $xml = new \XmlFormat();
+
+        $output = $xml->toArray($output);
+
+        return $output;
+    }
+
+    /**
      * Validates a finite number
      *
      * This is used for checking the int parameters
@@ -398,4 +468,3 @@ class Articles
         throw new RestException(400, 'parameter is not valid');
     }
 }
-
