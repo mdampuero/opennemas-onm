@@ -377,6 +377,18 @@
                 </div>
 
             </fieldset>
+            <hr>
+            <fieldset>
+                <h3 class="settings-header">{t}Opennemas{/t}</h3>
+
+                <div class="control-group">
+                    <label for="onm_auth_key" class="control-label">{t}Opennemas Auth Key{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="onm_auth_key" name="onm_auth_key" value="{$configs['onm_auth_key']|default:""}" class="input-xlarge">
+                    </div>
+                </div>
+
+            </fieldset>
             {acl isAllowed="ONLY_MASTERS"}
             <hr>
             <fieldset>
