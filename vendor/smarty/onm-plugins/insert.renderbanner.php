@@ -53,7 +53,10 @@ JSINTERSTICIAL;
 
     $output = '';
     $type = $params['type'];
-    if (empty($type) || (defined('ADVERTISEMENT_ENABLE') && !ADVERTISEMENT_ENABLE)) {
+    if (empty($type)
+        || (defined('ADVERTISEMENT_ENABLE')
+            && !ADVERTISEMENT_ENABLE)
+    ) {
         // Banners not enabled
         return $output;
     }
@@ -154,10 +157,10 @@ JSINTERSTICIAL;
         if (preg_match('/iframe/', $banner->script)) {
             $output .= $banner->script;
         } else {
-            $output .= '<iframe src="'.$siteUrl.'ads/get/'
-                .date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_content)  . '.html" ' .
-               'scrolling="no" frameborder="0" width="' . $width . '" height="' . $height . '" ' .
-               'marginwidth="0" marginheight="0" rel="nofollow">Publicidad</iframe>';
+            $url = $siteUrl.'ads/get/'
+                .date('YmdHis', strtotime($banner->created))
+                .sprintf('%06d', $banner->pk_content)  . '.html';
+            $output .= '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
         }
 
     } elseif (!empty($banner->pk_advertisement)) {

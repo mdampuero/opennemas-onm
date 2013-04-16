@@ -286,7 +286,7 @@ class AlbumsController extends Controller
         $advertisement = \Advertisement::getInstance();
 
         // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        $banners = $advertisement->getAdvertisements(array(401, 402, 403, 405, 409, 410), $category);
+        $banners = $advertisement->getAdvertisements(array(401, 402, 403, 405, 409, 410, 491, 492), $category);
 
         $cm = new \ContentManager();
         $banners = $cm->getInTime($banners);
@@ -315,7 +315,7 @@ class AlbumsController extends Controller
 
         // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
         $banners = $advertisement->getAdvertisements(
-            array(501, 502, 503, 509, 510),
+            array(501, 502, 503, 509, 510, 591, 592),
             $category
         );
 

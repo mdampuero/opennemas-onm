@@ -272,7 +272,7 @@ class ArticlesController extends Controller
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110);
+        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
         $advertisement = \Advertisement::getInstance();
         $banners = $advertisement->getAdvertisements($positions, $category);
