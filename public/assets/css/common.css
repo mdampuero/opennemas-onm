@@ -41,6 +41,6 @@ div.ad-skyscraper-left .ad, div.ad-skyscraper-right .ad {
 div.ad-skyscraper-body {
     max-height: 600px;
     overflow: hidden;
-    text-align: right;
+    text-align: center;
     width: 120px;
 }

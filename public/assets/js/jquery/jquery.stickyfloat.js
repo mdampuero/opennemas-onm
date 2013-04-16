@@ -33,14 +33,19 @@ $.fn.stickyfloat = function(options, lockBottom) {
 
         var pastStartOffset         = $(document).scrollTop() > opts.startOffset;   // check if the window was scrolled down more than the start offset declared.
         var objFartherThanTopPos    = $obj.offset().top > startOffset;  // check if the object is at it's top position (starting point)
-        var objBiggerThanWindow     = $obj.outerHeight(false) < $(window).height();  // if the window size is smaller than the Obj size, then do not animate.
+        // Changed by opennemas developers
+        //   var objBiggerThanWindow     = $obj.outerHeight(false) < $(window).height();  // if the window size is smaller than the Obj size, then do not animate.
+        var objBiggerThanWindow     = $obj.outerHeight(false) < $obj.parent().height();  // if the container parent size is smaller than the Obj size, then do not animate.
 
         // if window scrolled down more than startOffset OR obj position is greater than
         // the top position possible (+ offsetY) AND window size must be bigger than Obj size
+
         if( (pastStartOffset || objFartherThanTopPos) && objBiggerThanWindow ){
             var newpos = ($(document).scrollTop() -startOffset + opts.offsetY );
             if ( newpos > bottomPos )
                 newpos = bottomPos;
+
+
             if ( $(document).scrollTop() < opts.startOffset ) // if window scrolled < starting offset, then reset Obj position (opts.offsetY);
                 newpos = parentPaddingTop;
             /**
