@@ -43,4 +43,5 @@ div.ad-skyscraper-body {
     overflow: hidden;
     text-align: center;
     width: 120px;
+    border: 0 none !important;
 }
