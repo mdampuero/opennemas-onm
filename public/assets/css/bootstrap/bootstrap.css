@@ -192,6 +192,11 @@ a.label:hover,a.badge:hover{color:#ffffff;text-decoration:none;cursor:pointer;}
 .btn .label,.btn .badge{position:relative;top:-1px;}
 .btn-mini .label,.btn-mini .badge{top:0;}
 table{max-width:100%;background-color:transparent;border-collapse:collapse;border-spacing:0;}
+table{width:100%;margin-bottom:18px;padding:0;font-size:13px;border-collapse:collapse;}
+table th,table td{padding:10px 10px 9px;line-height:18px;text-align:left;}
+table th{padding-top:9px;font-weight:bold;vertical-align:middle;}
+table td{vertical-align:top;border-top:1px solid #ddd;}
+table tbody th{border-top:1px solid #ddd;vertical-align:top;}
 .table{width:100%;margin-bottom:20px;}.table th,.table td{padding:8px;line-height:20px;text-align:left;vertical-align:top;border-top:1px solid #dddddd;}
 .table th{font-weight:bold;}
 .table thead th{vertical-align:bottom;}
@@ -232,6 +237,8 @@ table td[class*="span"],table th[class*="span"],.row-fluid table td[class*="span
 .table-hover tbody tr.error:hover td{background-color:#ebcccc;}
 .table-hover tbody tr.warning:hover td{background-color:#faf2cc;}
 .table-hover tbody tr.info:hover td{background-color:#c4e3f3;}
+.zebra-striped tbody tr:nth-child(odd) td,.zebra-striped tbody tr:nth-child(odd) th{background-color:#f9f9f9;}
+.zebra-striped tbody tr:hover td,.zebra-striped tbody tr:hover th{background-color:#f5f5f5;}
 form{margin:0 0 20px;}
 fieldset{padding:0;margin:0;border:0;}
 legend{display:block;width:100%;padding:0;margin-bottom:20px;font-size:19.5px;line-height:40px;color:#333333;border:0;border-bottom:1px solid #e5e5e5;}legend small{font-size:15px;color:#999999;}

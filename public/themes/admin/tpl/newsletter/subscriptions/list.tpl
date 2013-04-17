@@ -51,6 +51,9 @@
         {render_messages}
 
         <div class="table-info clearfix">
+            <div class="pull-left total">
+                {$pager->_totalItems} {t}Subscriptors{/t}
+            </div>
             <div class="pull-right form-inline">
                 <input type="search" name="filters[text]" id="filters_text" value="{$smarty.request.filters.text}" placeholder="{t}Search by name{/t}"/>
 

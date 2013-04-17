@@ -11,11 +11,6 @@ var image_uploader ={
 </script>
 {/block}
 
-{block name="header-css" append}
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
-    <!--[if lt IE 7]><link rel="stylesheet" href="http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-ie6.min.css"><![endif]-->
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
