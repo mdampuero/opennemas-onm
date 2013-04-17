@@ -34,7 +34,7 @@ function smarty_function_image_tag($params, &$smarty)
         $properties .= " {$key}=\"{$value}\"";
     }
 
-    $output = "<img src=\"{$resource}\" {$properties}></link>";
+    $output = "<img src=\"{$resource}\" {$properties}>";
 
     return $output;
 }

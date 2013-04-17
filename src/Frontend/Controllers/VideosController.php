@@ -399,10 +399,10 @@ class VideosController extends Controller
     private function getAds($context = 'frontpage')
     {
         if ($context == 'inner') {
-            $positions = array(301, 302, 303, 305, 309, 310);
+            $positions = array(301, 302, 303, 305, 309, 310, 391, 392);
             $intersticialId = 350;
         } else {
-            $positions = array(201, 202, 203, 205, 209, 210);
+            $positions = array(201, 202, 203, 205, 209, 210, 291, 292);
             $intersticialId = 250;
         }
         // Asignacion de valores y comprobaciones realizadas en init

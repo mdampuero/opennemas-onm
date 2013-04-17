@@ -15,7 +15,24 @@
             </div>
         </td>
     </tr>
-     <tr>
+    <tr>
+        <td colspan="2"><hr /></td>
+    </tr>
+    <tr>
+        <td>
+            <label>
+                 Left Skyscraper (160 x 600)
+                <input type="radio" name="type_advertisement" value="391" {if isset($advertisement) && $advertisement->type_advertisement == 391}checked="checked" {/if}/>
+            </label>
+        </td>
+        <td>
+            <label>
+                 Right Skyscraper (160 x 600)
+                <input type="radio" name="type_advertisement" value="392" {if isset($advertisement) && $advertisement->type_advertisement == 392}checked="checked" {/if}/>
+            </label>
+        </td>
+    </tr>
+    <tr>
         <td colspan="2"><hr /></td>
     </tr>
     <tr>
