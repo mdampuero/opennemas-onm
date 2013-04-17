@@ -160,7 +160,7 @@ JSINTERSTICIAL;
             $url = $siteUrl.'ads/get/'
                 .date('YmdHis', strtotime($banner->created))
                 .sprintf('%06d', $banner->pk_content)  . '.html';
-            $output .= '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
+            $output .= '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
         }
 
     } elseif (!empty($banner->pk_advertisement)) {
