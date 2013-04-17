@@ -32,6 +32,12 @@ jQuery(document).ready(function($) {
             .animate({ 'opacity': 0, 'height': 0 }, 300, function() {
                 $(this).remove();
             });
+
+        jQuery('#warnings-validation').html(
+            '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'
+                + menu_messages.remember_save +
+            '</div>'
+        );
     });
 
     jQuery('#elements-provider').on('click', '.add-item', function(e, ui) {
@@ -40,6 +46,11 @@ jQuery(document).ready(function($) {
         var clone = element.clone(true);
         jQuery('#menuelements').append(clone);
 
+        jQuery('#warnings-validation').html(
+            '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'
+                + menu_messages.remember_save +
+            '</div>'
+        );
     });
 
     jQuery('#menuelements').on('click', '.edit-menu-item', function(e, ui) {
@@ -139,6 +150,12 @@ jQuery(document).ready(function($) {
 
             jQuery('#external-link-title').attr('value', '');
             jQuery('#external-link-link').attr('value', '');
+
+            jQuery('#warnings-validation').html(
+                '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'
+                    + menu_messages.remember_save +
+                '</div>'
+            );
         }
     });
 });

@@ -1859,6 +1859,10 @@ div.newsletter-contents .container-buttons {
   margin-bottom:0 !important;
 }
 
+.pull-left.total {
+    padding: 3px 5px;
+    font-weight: bold;
+}
 
 /* =============================================================================
    Welcome page rules
