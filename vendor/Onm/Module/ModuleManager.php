@@ -98,6 +98,7 @@ class ModuleManager
                 'FILE_MANAGER'              => _('Files'),
                 'FRONTPAGE_MANAGER'         => _('Frontpages'),
                 'FRONTPAGES_LIBRARY'        => _('Frontpages library'),
+                'FRONTPAGES_LAYOUT'         => _('Frontpages layout'),
                 'IMAGE_MANAGER'             => _('Images'),
                 'KEYWORD_MANAGER'           => _('Keywords'),
                 'KIOSKO_MANAGER'            => _('Kiosko'),
