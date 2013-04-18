@@ -1061,7 +1061,7 @@ h6{
     left:auto;right:0
 }
 .post-list{
-    list-style-type:none;margin:0
+    list-style-type:none;margin:0;margin-right:10px;
 }
 .post-list>.post{
     padding-left:48px

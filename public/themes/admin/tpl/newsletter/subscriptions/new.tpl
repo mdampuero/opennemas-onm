@@ -26,20 +26,14 @@
             <ul class="old-button">
                 <li>
                     <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save_and_continue.png" alt="{t}Save and continue{/t}" ><br />
-                        {t}Save and continue{/t}
-                    </button>
-                </li>
-                <li>
-                    <button type="submit">
-                        <img src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="Guardar"><br />
-                        {t}Save and exit{/t}
+                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save{/t}" alt="{t}Save{/t}"><br />
+                        {if is_object($user)}{t}Update{/t}{else}{t}Save{/t}{/if}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_newsletter_subscriptors}" class="admin_add" title="Cancelar">
-                        <img src="{$params.IMAGE_DIR}previous.png" title="Cancelar" alt="Cancelar" ><br />
+                    <a href="{url name=admin_newsletter_subscriptors}" class="admin_add" title="{t}Cancel{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" ><br />
                         {t}Go back{/t}
                     </a>
                 </li>
