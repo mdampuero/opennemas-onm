@@ -53,8 +53,9 @@ class Instances extends \Onm\Rest\RestBase
         //If is creating a new instance, get DB params on the fly
         $internalNameShort = filter_var(trim(substr($internal_name, 0, 11)), FILTER_SANITIZE_STRING);
 
+        $instanceCreator = $this->restler->container->getParameter("instance_creator");
         $settings = array(
-            'TEMPLATE_USER' => "default",
+            'TEMPLATE_USER' => $instanceCreator['template'],
             'MEDIA_URL'     => "http://media.opennemas.com",
             'BD_TYPE'       => "mysqli",
             'BD_HOST'       => "localhost",
@@ -79,6 +80,8 @@ class Instances extends \Onm\Rest\RestBase
             'activated'     => 1,
             'settings'      => $settings,
             'site_created'  => $date->format('Y-m-d H:i:s'),
+            'owner_fk_user' => 0,
+            'price'         => 0,
         );
 
         // Also get timezone if comes from openhost form
@@ -102,7 +105,7 @@ class Instances extends \Onm\Rest\RestBase
         }
 
         $companyMail = $this->restler->wsParams["company_mail"];
-        $domain = $this->restler->container->getParameter("base_domain");
+        $domain = $instanceCreator['base_domain'];
         $this->sendMails($data, $companyMail, $domain, $language);
 
         return true;
