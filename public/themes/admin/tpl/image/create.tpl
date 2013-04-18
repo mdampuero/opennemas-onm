@@ -68,7 +68,7 @@ var image_uploader ={
             </div>
         </div>
         <div id="dropzone" class="fade well">{t}Drop files here{/t}</div>
-        <table class="zebra-striped condensed"><tbody class="files"></tbody></table>
+        <table class="table zebra-striped condensed"><tbody class="files"></tbody></table>
 
         <div class="well">
             <h3>{t}User notes{/t}</h3>
