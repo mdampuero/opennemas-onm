@@ -56,7 +56,7 @@ class Instances extends \Onm\Rest\RestBase
         $instanceCreator = $this->restler->container->getParameter("instance_creator");
         $settings = array(
             'TEMPLATE_USER' => $instanceCreator['template'],
-            'MEDIA_URL'     => "http://media.opennemas.com",
+            'MEDIA_URL'     => "",
             'BD_TYPE'       => "mysqli",
             'BD_HOST'       => "localhost",
             'BD_USER'       => $internalNameShort,
