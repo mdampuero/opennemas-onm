@@ -157,10 +157,20 @@ JSINTERSTICIAL;
         if (preg_match('/iframe/', $banner->script)) {
             $output .= $banner->script;
         } else {
+            // Get defined banner width and height for 'robapáxina' only
+            if (!is_null($banner->params['width']) &&
+                !is_null($banner->params['height']) &&
+                $banner->type_advertisement == '104'
+            ) {
+                $width = $banner->params['width'];
+                $height = $banner->params['height'];
+            }
+
             $url = $siteUrl.'ads/get/'
                 .date('YmdHis', strtotime($banner->created))
                 .sprintf('%06d', $banner->pk_content)  . '.html';
-            $output .= '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
+            $output .= '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.
+                        'px; height:'.$height.'px"></iframe>';
         }
 
     } elseif (!empty($banner->pk_advertisement)) {
