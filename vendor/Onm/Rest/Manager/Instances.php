@@ -104,7 +104,13 @@ class Instances extends \Onm\Rest\RestBase
             return $errors;
         }
 
-        $companyMail = $this->restler->wsParams["company_mail"];
+        $companyMail = array(
+            'company_mail' => $this->restler->wsParams["company_mail"],
+            'info_mail'    => $this->restler->wsParams["info_mail"],
+            'sender_mail'  => $this->restler->wsParams["no_reply_sender"],
+            'from_mail'    => $this->restler->wsParams["no_reply_from"],
+        );
+
         $domain = $instanceCreator['base_domain'];
         $this->sendMails($data, $companyMail, $domain, $language);
 
@@ -128,14 +134,15 @@ class Instances extends \Onm\Rest\RestBase
         $this->restler->view->assign(
             array(
                 'data'        => $data,
-                'companyMail' => $companyMail,
+                'companyMail' => $companyMail['company_mail'],
                 'domain'      => $domain,
             )
         );
         $body =  $this->restler->view->fetch('instances/mails/newInstanceToUser.tpl');
 
         $message->setBody($body);
-        $message->setFrom($companyMail, "no-reply");
+        $message->setFrom($companyMail['from_mail']);
+        $message->setSender($companyMail['sender_mail'], "Opennemas");
 
         // Send the email
         $mailer = $this->restler->container->get('mailer');
@@ -146,7 +153,7 @@ class Instances extends \Onm\Rest\RestBase
     {
         $message = \Swift_Message::newInstance();
         $message->setTo(
-            array($companyMail => $companyMail)
+            array($companyMail['info_mail'] => $companyMail['info_mail'])
         );
         $message->setSubject(_("A new opennemas instance has been created"));
         //Se ha creado una nueva instancia de Onm
@@ -154,14 +161,14 @@ class Instances extends \Onm\Rest\RestBase
         $this->restler->view->assign(
             array(
                 'data'        => $data,
-                'companyMail' => $companyMail,
                 'domain'      => $domain,
             )
         );
         $body =  $this->restler->view->fetch('instances/mails/newInstanceToCompany.tpl');
 
         $message->setBody($body);
-        $message->setFrom($companyMail, "no-reply");
+        $message->setFrom($companyMail['from_mail']);
+        $message->setSender($companyMail['sender_mail'], "Opennemas");
 
         // Send the email
         $mailer = $this->restler->container->get('mailer');
