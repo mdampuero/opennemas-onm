@@ -360,8 +360,8 @@ class InstanceManager
             $this->backupInstanceUserFromDatabaseManager($user, $backupPath);
             $this->deleteInstanceUserFromDatabaseManager($user);
 
-            $this->backupApacheConfAndReloadConfiguration($instance->internal_name, $backupPath);
-            $this->deleteApacheConfAndReloadConfiguration($instance->internal_name);
+            // $this->backupApacheConfAndReloadConfiguration($instance->internal_name, $backupPath);
+            // $this->deleteApacheConfAndReloadConfiguration($instance->internal_name);
         } catch (DeleteRegisteredInstanceException $e) {
             $errors []= $e->getMessage();
         } catch (DefaultAssetsForInstanceNotDeletedException $e) {
@@ -373,14 +373,15 @@ class InstanceManager
             $this->restoreAssetsForInstance($backupPath);
             $this->restoreDatabaseForInstance($backupPath);
             $this->restoreInstanceUserFromDatabaseManager($backupPath);
-        } catch (ApacheConfigurationNotDeletedException $e) {
-            $errors []= $e->getMessage();
-            $this->restoreInstanceReferenceInManager($backupPath);
-            $this->restoreAssetsForInstance($backupPath);
-            $this->restoreDatabaseForInstance($backupPath);
-            $this->restoreInstanceUserFromDatabaseManager($backupPath);
-            $this->restoreApacheConfAndReloadConfiguration($backupPath);
         }
+        // catch (ApacheConfigurationNotDeletedException $e) {
+        //     $errors []= $e->getMessage();
+        //     $this->restoreInstanceReferenceInManager($backupPath);
+        //     $this->restoreAssetsForInstance($backupPath);
+        //     $this->restoreDatabaseForInstance($backupPath);
+        //     $this->restoreInstanceUserFromDatabaseManager($backupPath);
+        //     $this->restoreApacheConfAndReloadConfiguration($backupPath);
+        // }
 
         if (count($errors) > 0) {
             return $errors;
@@ -409,7 +410,7 @@ class InstanceManager
 
             $this->copyDefaultAssetsForInstance($data['internal_name']);
 
-            $this->copyApacheAndReloadConfiguration($data);
+            //$this->copyApacheAndReloadConfiguration($data);
 
         } catch (InstanceNotRegisteredException $e) {
             $errors []= $e->getMessage();
@@ -423,9 +424,10 @@ class InstanceManager
             $assetFolder = SITE_PATH.DS.'media'.DS.$data['internal_name'];
             $this->deleteDefaultAssetsForInstance($assetFolder);
             $this->deleteDatabaseForInstance($data['settings']['BD_DATABASE']);
-        } catch (ApacheConfigurationNotCreatedException $e) {
-            $errors []= $e->getMessage();
         }
+        // catch (ApacheConfigurationNotCreatedException $e) {
+        //     $errors []= $e->getMessage();
+        // }
 
         if (count($errors) > 0) {
             return $errors;
