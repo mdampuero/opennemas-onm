@@ -53,8 +53,9 @@ class Instances extends \Onm\Rest\RestBase
         //If is creating a new instance, get DB params on the fly
         $internalNameShort = filter_var(trim(substr($internal_name, 0, 11)), FILTER_SANITIZE_STRING);
 
+        $instanceCreator = $this->restler->container->getParameter("instance_creator");
         $settings = array(
-            'TEMPLATE_USER' => "default",
+            'TEMPLATE_USER' => $instanceCreator['template'],
             'MEDIA_URL'     => "http://media.opennemas.com",
             'BD_TYPE'       => "mysqli",
             'BD_HOST'       => "localhost",
@@ -79,6 +80,8 @@ class Instances extends \Onm\Rest\RestBase
             'activated'     => 1,
             'settings'      => $settings,
             'site_created'  => $date->format('Y-m-d H:i:s'),
+            'owner_fk_user' => 0,
+            'price'         => 0,
         );
 
         // Also get timezone if comes from openhost form
@@ -101,8 +104,14 @@ class Instances extends \Onm\Rest\RestBase
             return $errors;
         }
 
-        $companyMail = $this->restler->wsParams["company_mail"];
-        $domain = $this->restler->container->getParameter("base_domain");
+        $companyMail = array(
+            'company_mail' => $this->restler->wsParams["company_mail"],
+            'info_mail'    => $this->restler->wsParams["info_mail"],
+            'sender_mail'  => $this->restler->wsParams["no_reply_sender"],
+            'from_mail'    => $this->restler->wsParams["no_reply_from"],
+        );
+
+        $domain = $instanceCreator['base_domain'];
         $this->sendMails($data, $companyMail, $domain, $language);
 
         return true;
@@ -125,14 +134,15 @@ class Instances extends \Onm\Rest\RestBase
         $this->restler->view->assign(
             array(
                 'data'        => $data,
-                'companyMail' => $companyMail,
+                'companyMail' => $companyMail['company_mail'],
                 'domain'      => $domain,
             )
         );
         $body =  $this->restler->view->fetch('instances/mails/newInstanceToUser.tpl');
 
         $message->setBody($body);
-        $message->setFrom($companyMail, "no-reply");
+        $message->setFrom($companyMail['from_mail']);
+        $message->setSender($companyMail['sender_mail'], "Opennemas");
 
         // Send the email
         $mailer = $this->restler->container->get('mailer');
@@ -143,7 +153,7 @@ class Instances extends \Onm\Rest\RestBase
     {
         $message = \Swift_Message::newInstance();
         $message->setTo(
-            array($companyMail => $companyMail)
+            array($companyMail['info_mail'] => $companyMail['info_mail'])
         );
         $message->setSubject(_("A new opennemas instance has been created"));
         //Se ha creado una nueva instancia de Onm
@@ -151,14 +161,14 @@ class Instances extends \Onm\Rest\RestBase
         $this->restler->view->assign(
             array(
                 'data'        => $data,
-                'companyMail' => $companyMail,
                 'domain'      => $domain,
             )
         );
         $body =  $this->restler->view->fetch('instances/mails/newInstanceToCompany.tpl');
 
         $message->setBody($body);
-        $message->setFrom($companyMail, "no-reply");
+        $message->setFrom($companyMail['from_mail']);
+        $message->setSender($companyMail['sender_mail'], "Opennemas");
 
         // Send the email
         $mailer = $this->restler->container->get('mailer');
