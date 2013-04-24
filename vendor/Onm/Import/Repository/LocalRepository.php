@@ -1,5 +1,7 @@
 <?php
 /**
+ * Defines the Onm\Import\Repository class
+ *
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
@@ -14,18 +16,16 @@ namespace Onm\Import\Repository;
 use \Onm\Import\DataSource\DataSourceFactory;
 
 /**
- * Class to import news from Efe Agency FTP
+ * Class to import news from any news Agency FTP / HTTP
  *
  * @package    Onm_Import
  */
-class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterface
+class LocalRepository
 {
     // the instance object
     private static $instance = null;
 
     private $config = array();
-
-    protected $lockFile = '';
 
     public $syncPath = '';
 
@@ -46,13 +46,13 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
     }
 
     /**
-     * gets an array of news from Efe
+     * Gets an array of news from Efe
      *
      * @return array, the array of objects with news from Efe
      */
     public function findAll($params = array())
     {
-        $filesSynced = $this->getLocalFileList($this->syncPath);
+        $filesSynced = \Onm\Import\Synchronizer\Synchronizer::getLocalFileList($this->syncPath);
 
         $counTotalElements = count($filesSynced);
         if ($params['title'] == '*'
@@ -143,7 +143,7 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
     }
 
     /**
-     * Fetches a DataSource\NewsMLG1 object from id
+     * Fetches a DataSource\NewsMLG1 object from file name
      *
      * @param $fileName
      *
@@ -160,21 +160,5 @@ class FtpBasedAgencyImporter extends ImporterAbstract implements ImporterInterfa
         $element = DataSourceFactory::get($file);
 
         return  $element;
-    }
-
-    /**
-     * Removes the local files for a given source id
-     *
-     * @return boolean true if the files were deleted
-     * @throws Exception If the files weren't deleted
-     **/
-    public function deleteFilesForSource($id)
-    {
-        $path = realpath($this->syncPath.DIRECTORY_SEPARATOR.$id);
-
-        if (!empty($path)) {
-            return \FilesManager::deleteDirectoryRecursively($path);
-        }
-        return false;
     }
 }

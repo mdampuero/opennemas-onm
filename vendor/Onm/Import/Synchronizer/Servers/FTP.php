@@ -1,19 +1,26 @@
 <?php
-/*
+/**
+ * Implements the FTP class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
-namespace Onm\Import\Synchronizer;
+ *
+ * @package Onm_Import
+ **/
+namespace Onm\Import\Synchronizer\Servers;
+
+use \Onm\Import\Synchronizer\ServerAbstract;
+use \Onm\Import\Synchronizer\ServerInterface;
 
 /**
  * Class to synchronize local folders with an external FTP folder.
  *
  * @package    Onm_Import
  */
-class FTP
+class FTP extends ServerAbstract implements ServerInterface
 {
     /**
      * Opens an FTP connection with the parameters of the object
@@ -24,6 +31,8 @@ class FTP
      */
     public function __construct($params = null)
     {
+        $this->canHandle($params);
+
         $this->params = $params;
 
         $this->serverUrl = parse_url($params['url']);
@@ -87,11 +96,8 @@ class FTP
      *
      * @throws <b>Exception</b> $cacheDir not writable.
      */
-    public function downloadFilesToCacheDir(
-        $cacheDir,
-        $excludedFiles = array(),
-        $maxAge = null
-    ) {
+    public function downloadFilesToCacheDir($params)
+    {
         $files = ftp_rawlist(
             $this->ftpConnection,
             ftp_pwd($this->ftpConnection),
@@ -100,21 +106,21 @@ class FTP
 
         $files = $this->_filterOldFiles(
             $this->formatRawFtpFileList($files),
-            $maxAge
+            $params['sync_from']
         );
 
         // Filter files by its creation
-        self::cleanWeirdFiles($cacheDir);
+        self::cleanWeirdFiles($params['sync_path']);
         $deletedFiles = self::cleanFiles(
-            $cacheDir,
+            $params['sync_path'],
             $files,
-            $excludedFiles,
-            $maxAge
+            $params['excludedFiles'],
+            $params['sync_from']
         );
 
         $downloadedFiles = 0;
 
-        if (is_writable($cacheDir)) {
+        if (is_writable($params['sync_path'])) {
             $elements = array();
             if (is_array($files) && count($files) > 0) {
                 foreach ($files as $file) {
@@ -127,7 +133,7 @@ class FTP
                     } else {
                         $elements[]    = $file;
                         $localFilePath =
-                            $cacheDir.DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
+                            $params['sync_path'].DIRECTORY_SEPARATOR.strtolower(basename($file['filename']));
                         if (!file_exists($localFilePath)) {
                             @ftp_get(
                                 $this->ftpConnection,
@@ -153,7 +159,7 @@ class FTP
             }
         } else {
             throw new Exception(
-                sprintf(_('Directory %s is not writable.'), $cacheDir)
+                sprintf(_('Directory %s is not writable.'), $params['sync_path'])
             );
         }
 
@@ -162,69 +168,6 @@ class FTP
             "downloaded" => $downloadedFiles
         );
 
-    }
-
-    /**
-     * Remove empty or invalid files from $cacheDir.
-     *
-     * @param string $cacheDir The directory where remove files from.
-     *
-     * @return array list of deleted files
-     */
-    public function cleanWeirdFiles($cacheDir)
-    {
-        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
-
-        $fileListingCleaned = array();
-
-        foreach ($fileListing as $file) {
-            if (filesize($file) < 2) {
-                unlink($file);
-                $fileListingCleaned []= basename($file);
-            }
-        }
-
-        return  $fileListingCleaned;
-    }
-
-    /**
-     * Clean downloaded files in cacheDir that are not present in server
-     *
-     * @param string $cacheDir    the directory where remove files
-     * @param string $serverFiles the list of files present in server
-     * @param string $localFiles  the list of local files
-     *
-     * @return boolean, true if all went well
-    */
-    public static function cleanFiles(
-        $cacheDir,
-        $serverFiles,
-        $localFileList,
-        $maxAge
-    ) {
-        $deletedFiles = 0;
-
-        if (count($localFileList) > 0) {
-            $serverFileList = array();
-            foreach ($serverFiles as $key) {
-                $serverFileList []= strtolower(basename($key['filename']));
-            }
-
-            foreach ($localFileList as $file) {
-                if (!in_array($file, $serverFileList)) {
-                    $file = basename($file);
-                    $filePath = $cacheDir.'/'.$file;
-
-                    if (file_exists($filePath)) {
-                        unlink($cacheDir.'/'.$file);
-
-                        $deletedFiles++;
-                    }
-                }
-            }
-        }
-
-        return $deletedFiles;
     }
 
     /**
@@ -327,5 +270,24 @@ class FTP
         }
 
         return $files;
+    }
+
+    public function canHandle($params)
+    {
+        // Check url
+        if (preg_match('@ftp://@', $params['url'])) {
+            return true;
+        }
+
+        throw new \Exception(
+            sprintf(
+                _(
+                    'Can\'t connect to server %s. Please check your'
+                    .' connection details.'
+                ),
+                $params['name']
+            )
+        );
+
     }
 }
