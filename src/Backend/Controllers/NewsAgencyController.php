@@ -78,7 +78,7 @@ class NewsAgencyController extends Controller
     {
         $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        $repository = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+        $repository = new \Onm\Import\Repository\LocalRepository();
 
         $servers = s::get('news_agency_config');
 
@@ -90,7 +90,8 @@ class NewsAgencyController extends Controller
         );
 
         // Get the amount of minutes from last sync
-        $minutesFromLastSync = $repository->minutesFromLastSync();
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         $queryParams  = $this->request->query;
         $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
@@ -186,8 +187,8 @@ class NewsAgencyController extends Controller
         $sourceId = $this->request->query->getDigits('source_id');
 
         try {
-            $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $element = $ep->findByFileName($sourceId, $id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $element = $repository->findByFileName($sourceId, $id);
             $element->source_id = $sourceId;
 
             $alreadyImported = false;
@@ -264,8 +265,8 @@ class NewsAgencyController extends Controller
 
         // Get EFE new from a filename
         try {
-            $efe = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $element = $efe->findByFileName($sourceId, $id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $element = $repository->findByFileName($sourceId, $id);
         } catch (\Exception $e) {
             m::add(_('Please specify the article to import.'), m::ERROR);
 
@@ -410,8 +411,8 @@ class NewsAgencyController extends Controller
             $categories [$category->pk_content_category]= $category->title;
         }
 
-        $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $element = $ep->findByFileName($sourceId, $id);
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        $element = $repository->findByFileName($sourceId, $id);
 
         return $this->render(
             'news_agency/import_select_category.tpl',
@@ -438,8 +439,8 @@ class NewsAgencyController extends Controller
         $sourceId = $this->request->query->getDigits('source_id');
         $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
-        $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $element = $ep->findById($sourceId, $id);
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        $element = $repository->findById($sourceId, $id);
 
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
@@ -469,8 +470,8 @@ class NewsAgencyController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $e = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $e->unlockSync();
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        $repository->unlockSync();
         unset($_SESSION['error']);
 
         $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
@@ -493,7 +494,7 @@ class NewsAgencyController extends Controller
 
         $servers = s::get('news_agency_config');
 
-        $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
 
         foreach ($servers as $server) {
             try {
@@ -699,8 +700,8 @@ class NewsAgencyController extends Controller
         }
 
         try {
-            $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $synchronizer->deleteFilesForSource($id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $repository->deleteFilesForSource($id);
 
             unset($servers[$id]);
 
@@ -742,8 +743,8 @@ class NewsAgencyController extends Controller
         }
 
         try {
-            $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $synchronizer->deleteFilesForSource($id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $repository->deleteFilesForSource($id);
 
             m::add(sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name']), m::SUCCESS);
         } catch (\Exception $e) {
