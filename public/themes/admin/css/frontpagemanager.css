@@ -451,11 +451,20 @@ div.menu-categories {
     vertical-align: top;
 }
 .settings-panel a {
-    color:White;
+    color: black;
+}
+.settings-panel .close {
+    color: white;
+    opacity: .8;
 }
 .settings-panel .thumbnail {
     display: inline-block;
     margin:0 10px 10px 0;
     width:100px;
     vertical-align: top;
+    border-color: black;
+}
+.settings-panel .thumbnail.active {
+    color: white;
+    border-color: white;
 }
