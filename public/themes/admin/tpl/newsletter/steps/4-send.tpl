@@ -31,9 +31,9 @@
 
             <ul class="old-button">
                 <li>
-                    <a href="{url name=admin_newsletter_pick_recipients id=$newsletter->id}" id="prev-button" class="admin_add" title="{t}Back{/t}">
-                        <img src="{$params.IMAGE_DIR}arrow_previous.png" alt="{t}Back{/t}" /><br />
-                        {t}View recipients{/t}
+                    <a href="{url name=admin_newsletters}" class="admin_add" title="{t}Back to list{/t}">
+                        <img src="{$params.IMAGE_DIR}previous.png" alt="" /><br />
+                        {t}Back to list{/t}
                     </a>
                 </li>
             </ul>

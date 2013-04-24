@@ -109,10 +109,18 @@ class NewsletterSubscriptorsController extends Controller
                 'status'       => $request->request->getDigits('status', 2),
             );
 
-            if ($user->create($data)) {
-                m::add(_('Subscription successfully created.'), m::SUCCESS);
+            // Check for repeated e-mail
+            if ($user->exists_email($data['email'])) {
+                m::add(_('Unable to create the new subscriptor. This email is already in use'), m::ERROR);
+                return $this->redirect(
+                    $this->generateUrl('admin_newsletter_subscriptor_create')
+                );
             } else {
-                m::add(sprintf(_('Unable to create the new subscriptor: %s', $user->_errors)), m::ERROR);
+                if ($user->create($data)) {
+                    m::add(_('Subscription successfully created.'), m::SUCCESS);
+                } else {
+                    m::add(sprintf(_('Unable to create the new subscriptor: %s', $user->_errors)), m::ERROR);
+                }
             }
 
             $continue = $request->request->filter('continue', 0);

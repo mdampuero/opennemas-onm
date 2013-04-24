@@ -11,11 +11,6 @@ var image_uploader ={
 </script>
 {/block}
 
-{block name="header-css" append}
-    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
-    <!--[if lt IE 7]><link rel="stylesheet" href="http://blueimp.github.com/Bootstrap-Image-Gallery/bootstrap-ie6.min.css"><![endif]-->
-{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -73,7 +68,7 @@ var image_uploader ={
             </div>
         </div>
         <div id="dropzone" class="fade well">{t}Drop files here{/t}</div>
-        <table class="zebra-striped condensed"><tbody class="files"></tbody></table>
+        <table class="table zebra-striped condensed"><tbody class="files"></tbody></table>
 
         <div class="well">
             <h3>{t}User notes{/t}</h3>

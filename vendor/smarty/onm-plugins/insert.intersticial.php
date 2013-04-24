@@ -149,7 +149,7 @@ JSINTERSTICIAL;
             if (!$overlap && !$banner->overlap) {
                 // Flash object
                 // FIXME: build flash object with all tags and params
-                $output .= '<a target="_blank" href="'.$siteUrl.'/ads/'.
+                $output .= '<a target="_blank" href="'.$siteUrl.'ads/'.
                             date('YmdHis', strtotime($banner->created)).
                             sprintf('%06d', $banner->pk_content) .
                             '.html" rel="nofollow">';
@@ -196,7 +196,7 @@ JSINTERSTICIAL;
             }
         } else {
             // Image
-            $output .= '<a target="_blank" href="'.$siteUrl.'/ads/'.
+            $output .= '<a target="_blank" href="'.$siteUrl.'ads/'.
                         date('YmdHis', strtotime($banner->created)).
                         sprintf('%06d', $banner->pk_content) .'.html" rel="nofollow">';
             $output .= '<img src="'. $mediaImgPathWeb. $photo->path_file. $photo->name.'"

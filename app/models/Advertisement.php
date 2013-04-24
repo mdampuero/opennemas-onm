@@ -88,6 +88,7 @@ class Advertisement extends Content
         110 => "[I] Banner Inferior Derecho",
         191 => "[I] Left Skyscraper",
         192 => "[I] Right Skyscraper",
+        193 => "[I] InBody Skyscraper",
 
         /* Intersticial banner video front */
         250 => "[V] Banner Interticial",
@@ -173,6 +174,7 @@ class Advertisement extends Content
         710 => "[OI] Banner Bottom Right(I) (234X90)",
         791 => "[OI] Left Skyscraper",
         792 => "[OI] Right Skyscraper",
+        793 => "[OI] InBody Skyscraper",
 
           /* Intersticial banner polls front */
         850 => "[E] Banner Interticial",

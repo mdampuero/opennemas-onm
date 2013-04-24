@@ -13,16 +13,18 @@
                                 <div id="flash-container-replace"></div>
                                 <!-- /flash-container-replace -->
                                 <script>
-                                        var flashvars = {};
-                                        var params = { wmode: "opaque" };
-                                        var attributes = {};
-                                        swfobject.embedSWF("{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}", "flash-container-replace", "270", "150", "9.0.0", false, flashvars, params, attributes);
-                                    </script>
+                                    var flashvars = {};
+                                    var params = { wmode: "opaque" };
+                                    var attributes = {};
+                                    swfobject.embedSWF("{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}", "flash-container-replace", "270", "150", "9.0.0", false, flashvars, params, attributes);
+                                </script>
                                 {elseif isset($photo1) && $photo1->name}
                                 <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->
-                                path_file}{$photo1->name}" />
+                                    path_file}{$photo1->name}" />
                                 {else}
-                                <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/default_img.jpg" width="270" />
+                                <div class="drop-here">
+                                    {t}Drop an image to here{/t}
+                                </div>
                                 {/if}
                             </div>
                             <div id="image-information" class="article-resource-image-info">

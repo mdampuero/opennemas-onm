@@ -29,6 +29,7 @@
                 {/section}
             </select>
         </div>
+        {is_module_activated name="FRONTPAGES_LAYOUT"}
         <div class="btn-group" id="frontpage-settings">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="icon-cog"></i>
@@ -40,6 +41,7 @@
             </ul>
             {/if}
         </div>
+        {/is_module_activated}
     </div>
 </div>
 

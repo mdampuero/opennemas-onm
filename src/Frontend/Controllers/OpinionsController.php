@@ -845,7 +845,7 @@ class OpinionsController extends Controller
     private function getAds($context = 'frontpage')
     {
         if ($context == 'inner') {
-            $positions = array(701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792);
+            $positions = array(701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
             $intersticialId = 750;
         } else {
             $positions = array(601, 602, 603, 605, 609, 610, 691, 692);
