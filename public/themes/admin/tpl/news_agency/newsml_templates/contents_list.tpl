@@ -3,7 +3,7 @@
     {foreach $articles as $article}
         <content id="{$article->id}">
             <text>
-                {$smarty.const.SITE_URL}ws/articles/newsml/{$article->id}.xml
+                {$smarty.const.SITE_URL}ws/agency/newsml/{$article->id}.xml
             </text>
         </content>
     {/foreach}

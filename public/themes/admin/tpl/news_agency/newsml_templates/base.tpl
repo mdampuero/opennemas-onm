@@ -6,8 +6,9 @@
         <Property FormalName="Organization" Value="{setting name=site_name}" />
       </Party>
     </SentFrom>
-    <DateAndTime></DateAndTime>
+    <DateAndTime>{$article->created_datetime->format('Ymd\THis')}</DateAndTime>
   </NewsEnvelope>
+  <!--** SUGGESTION FOR DEVS: Use 'Duid' attribute to help you on XPath navigation.-->
   <NewsItem Duid="multimedia_2006824">
     <Comment FormalName="NewsMLVersion">1.0.1</Comment>
     <Identification>
@@ -22,16 +23,16 @@
     <NewsManagement>
       <NewsItemType FormalName="News" />
       <!--Creation date.-->
-      <FirstCreated>{$article->created_datetime->format(DateTime::ISO8601)}</FirstCreated>
+      <FirstCreated>{$article->created_datetime->format('Ymd\THis')}</FirstCreated>
       <!--Last modification date.-->
-      <ThisRevisionCreated>{$article->updated_datetime->format(DateTime::ISO8601)}</ThisRevisionCreated>
+      <ThisRevisionCreated>{$article->updated_datetime->format('Ymd\THis')}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
     </NewsManagement>
     <NewsComponent Duid="multimedia_2006824.multimedia">
       <NewsLines>
-        <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
-        <SubHeadLine>{$article->subtitle|htmlspecialchars_decode}</SubHeadLine>
+        <HeadLine>{$article->title}</HeadLine>
+        <SubHeadLine>{$article->subtitle}</SubHeadLine>
       </NewsLines>
       <AdministrativeMetadata>
         <Provider>
@@ -47,12 +48,12 @@
         <NewsComponent Duid="multimedia_{$article->id}.multimedia.texts.{$article->id}" Euid="{$article->id}">
           <Role FormalName="Main" />
           <NewsLines>
-            <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
-            <SubHeadLine>{$article->subtitle|htmlspecialchars_decode}</SubHeadLine>
+            <HeadLine>{$article->title}</HeadLine>
+            <SubHeadLine>{$article->subtitle}</SubHeadLine>
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
-            <DateLineDate>{$article->created_datetime->format(DateTime::ISO8601)}</DateLineDate>
+            <DateLineDate>{$article->created_datetime->format('Ymd\THis')}</DateLineDate>
             <Property FormalName="IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
           <ContentItem>
@@ -62,7 +63,7 @@
             <DataContent>
               <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                 <head>
-                  <title>{$article->title|htmlspecialchars_decode}</title>
+                  <title>{$article->title}</title>
                   <docdata management-status="usable">
                     <doc-id id-string="{$article->id}" />
                   </docdata>
@@ -70,18 +71,18 @@
                 <body>
                   <body.head>
                     <hedline>
-                      <hl1>{$article->title|htmlspecialchars_decode}</hl1>
-                      <hl2>{$article->subtitle|htmlspecialchars_decode}</hl2>
+                      <hl1>{$article->title}</hl1>
+                      <hl2>{$article->subtitle}</hl2>
                     </hedline>
                     <dateline>
-                      <story.date norm="{$article->created_datetime->format(DateTime::ISO8601)}">{$article->created_datetime->format(DateTime::ISO8601)}</story.date>
+                      <story.date norm="{$article->created_datetime->format('Ymd\THis')}">{$article->created_datetime->format('Ymd\THis')}</story.date>
                     </dateline>
                     <abstract>
-                      <![CDATA[ {$article->summary} ]]>
+                      {$article->summary}
                     </abstract>
                   </body.head>
                   <body.content>
-                    <![CDATA[ {$article->body} ]]>
+                    {$article->content}
                   </body.content>
                 </body>
               </nitf>
