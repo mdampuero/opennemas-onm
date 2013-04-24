@@ -213,6 +213,11 @@ class NewsMLG1 implements FormatInterface
         $rawCategory =
             $this->getData()->NewsItem->NewsComponent->DescriptiveMetadata
             ->xpath("//Property[@FormalName=\"Tesauro\"]");
+
+        if (count($rawCategory) <= 0) {
+            return array();
+        }
+
         $rawTags = (string) $rawCategory[0]->attributes()->Value;
         $tagGroups = explode(";", $rawTags);
 
