@@ -22,7 +22,7 @@
     {html_options name="settings[payment_modes][time][]" options=$times required="required"}
     <input type="text" name="settings[payment_modes][description][]"  value="" placeholder="Name"  required="required">
     <div class="input-append" style="display:inline-block">
-        <input type="number" name="settings[payment_modes][price][]" value="" placeholder="Set a price" required="required"  class="input-small"/>
+        <input type="number" name="settings[payment_modes][price][]" value="" step="any" min="0" placeholder="Set a price" required="required"  class="input-small"/>
         <div class="btn addon">
             {if $settings['money_unit']}
                 {$money_units[$settings['money_unit']]}
@@ -68,6 +68,14 @@
         <div class="form-horizontal panel">
 
             <div id="money" class="control-group">
+                <label for="paypal_user_email" class="control-label">{t}Paypal user email{/t}</label>
+                <div class="controls">
+                    <input type="email" name="settings[paypal_user_email]" value="{$settings['paypal_user_email']}">
+                    <div class="help-block">{t}Fill this entry with your Paypal account where you want to receive the paywall payments.{/t}</div>
+                </div>
+            </div>
+
+            <div id="money" class="control-group">
                 <label for="money_unit" class="control-label">{t}Money unit{/t}</label>
                 <div class="controls">
                     {html_options name="settings[money_unit]" options=$money_units selected=$settings['money_unit']}
@@ -83,7 +91,7 @@
                             {html_options name="settings[payment_modes][time][]" options=$times selected=$payment_mode.time}
                             <input type="text" name="settings[payment_modes][description][]"  value="{$payment_mode.description}" placeholder="{t}Name{/t}">
                             <div class="input-append" style="display:inline-block">
-                                <input type="number" name="settings[payment_modes][price][]" value="{$payment_mode.price}" placeholder="{t}Set a price{/t}" required="required" class="input-small"/>
+                                <input type="number" name="settings[payment_modes][price][]" value="{$payment_mode.price}" step="any" min="0" placeholder="{t}Set a price{/t}" required="required" class="input-small"/>
                                 <div class="btn addon">
                                     {if $settings['money_unit']}
                                         {$money_units[$settings['money_unit']]}

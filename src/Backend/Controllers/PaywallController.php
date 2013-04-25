@@ -88,7 +88,8 @@ class PaywallController extends Controller
 
         $settings = array('payment_modes' => array());
 
-        // Check money unit
+        // Check values
+        $settings['paypal_user_email'] = $request->request->filter('settings[paypal_user_email]', 'dollar', FILTER_SANITIZE_STRING);
         $settings['money_unit'] = $request->request->filter('settings[money_unit]', 'dollar', FILTER_SANITIZE_STRING);
 
         // Check payment modes
@@ -97,9 +98,9 @@ class PaywallController extends Controller
             $paymentModes = array();
             for ($i=0; $i < $number; $i++) {
                 $settings['payment_modes'] []= array(
-                    'time'        => $settingsForm['payment_modes']['time'][$i],
-                    'description' => $settingsForm['payment_modes']['description'][$i],
-                    'price'       => $settingsForm['payment_modes']['price'][$i],
+                    'time'              => $settingsForm['payment_modes']['time'][$i],
+                    'description'       => $settingsForm['payment_modes']['description'][$i],
+                    'price'             => $settingsForm['payment_modes']['price'][$i],
                 );
             }
         }

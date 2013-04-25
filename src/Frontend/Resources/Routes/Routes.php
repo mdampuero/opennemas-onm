@@ -18,6 +18,16 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'frontend_paywall_test',
+    new Route(
+        '/paywall/test',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:test',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_newsletter_subscribe_show',
     new Route(
         '/newsletter',
