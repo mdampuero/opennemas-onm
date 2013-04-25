@@ -151,7 +151,7 @@
                             </a>
 
                             <a class="del btn btn-danger"
-                                data-title="{$article->title}"
+                                data-title="{$article->title|escape}"
                                 data-url="{url name=admin_article_delete id=$article->id category=$category page=$page title=$title status=$status}"
                                 href="{url name=admin_article_delete id=$article->id category=$category page=$page title=$title status=$status}">
                                 <i class="icon-trash icon-white"></i>
