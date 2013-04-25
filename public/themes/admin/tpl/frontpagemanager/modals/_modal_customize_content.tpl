@@ -4,7 +4,7 @@
       <button type="button" class="close shadow-close" data-dismiss="modal" aria-hidden="true"> </button>
       <h3>{t}Customize font and color for this element{/t}</h3>
     </div>
-    <div class="modal-body form-vertical">
+    <div class="modal-body form-vertical form-inline-block">
         <div class="control-group background">
                 <label for="color" class="control-label">{t}Background Color{/t}</label>
                 <input type="text" id="bg-color" name="bg-color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
@@ -34,40 +34,6 @@
                     <option value="#ff887c">{t}Red{/t}</option>
                     <option value="#980101">{t}Bold red{/t}</option>
                 </select>
-            </div>
-
-            <div class="control-group">
-                <label for="font-family" class="control-label">{t}Title font family{/t}</label>
-                {assign var='availableFonts' value=','|explode:"Auto,Arial,Verdana,Georgia,Helvetica"}
-                <select id="font-family" name="font-family">
-                    {html_options values=$availableFonts output=$availableFonts selected=22}
-
-                </select>
-            </div>
-
-            <div class="control-group">
-                <label for="font-style" class="control-label">{t}Title font style{/t}</label>
-                {assign var='availableStyle'  value=','|explode:"Auto,Italic,Oblique,Normal"}
-                <select id="font-style" name="font-style">
-                    {html_options values=$availableStyle output=$availableStyle selected=Auto}
-                </select>
-            </div>
-            <div class="control-group">
-                <label for="font-style" class="control-label">{t}Title font weight{/t}</label>
-                {assign var='availableStyle'  value=','|explode:"Auto,bolder,bold,lighter,Normal"}
-                <select id="font-weight" name="font-weight">
-                    {html_options values=$availableStyle output=$availableStyle selected=Auto}
-                </select>
-            </div>
-
-            <div class="control-group">
-                <label for="font-size" class="control-label">{t}Title font size{/t}</label>
-                {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30,32,36,40,48,72"}
-                <select id="font-size" name="font-size">
-                   <option value="">Auto</option>
-                    {html_options values=$availableSizes output=$availableSizes selected=Auto}
-                </select>
-
             </div>
 
             <div class="control-group fontcolor">
@@ -100,7 +66,78 @@
                   <option value="#980101">{t}Bold red{/t}</option>
                 </select>
             </div>
-        </p>
+            <div class="control-group">
+                <label for="font-family" class="control-label">{t}Title font family{/t}</label>
+                {assign var='availableFonts' value=','|explode:"Auto,Arial,Verdana,Georgia,Helvetica"}
+                <select id="font-family" name="font-family">
+                    {html_options values=$availableFonts output=$availableFonts selected=22}
+
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="font-style" class="control-label">{t}Title font style{/t}</label>
+                {assign var='availableStyle'  value=','|explode:"Auto,Italic,Oblique,Normal"}
+                <select id="font-style" name="font-style">
+                    {html_options values=$availableStyle output=$availableStyle selected=Auto}
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="font-style" class="control-label">{t}Title font weight{/t}</label>
+                {assign var='availableStyle'  value=','|explode:"Auto,bolder,bold,lighter,Normal"}
+                <select id="font-weight" name="font-weight">
+                    {html_options values=$availableStyle output=$availableStyle selected=Auto}
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="font-size" class="control-label">{t}Title font size{/t}</label>
+                {assign var='availableSizes'  value=','|explode:"12,14,16,18,20,22,24,26,28,30,32,36,40,48,72"}
+                <select id="font-size" name="font-size">
+                   <option value="">Auto</option>
+                    {html_options values=$availableSizes output=$availableSizes selected=Auto}
+                </select>
+            </div>
+            <hr>
+    </div>
+
+    <div class="modal-body form-vertical form-inline-block">
+      <div class="control-group background">
+            <label class="disposition" for="font-size" class="control-label">
+              {t}Auto Disposition{/t}<input name="imageDisposition" value="auto" type="radio"></label>
+            <img src="{$params.IMAGE_DIR}button0.png" alt="{t}righttop{/t}" >
+        </div>
+        <div class="control-group background">
+            <label class="disposition" for="font-size" class="control-label">
+              {t}Justify Disposition{/t}<input name="imageDisposition" value="justifyTop" type="radio"></label>
+            <img src="{$params.IMAGE_DIR}button6.png" alt="{t}righttop{/t}" >
+        </div>
+        <div class="control-group background">
+            <label class="disposition" for="font-size" class="control-label">
+              {t}Right top Disposition{/t}<input name="imageDisposition" value="rightTop" type="radio"></label>
+            <img src="{$params.IMAGE_DIR}button1.png" alt="{t}righttop{/t}" >
+        </div>
+        <div class="control-group background">
+            <label class="disposition" for="font-size" class="control-label">
+              {t}Left top Disposition{/t}<input name="imageDisposition" value="leftTop" type="radio"></label>
+            <img src="{$params.IMAGE_DIR}button3.png" alt="{t}righttop{/t}" >
+        </div>
+        <div class="control-group background">
+            <label for="font-size" class="control-label">
+              {t}JustifyUnder Disposition{/t}<input name="imageDisposition" value="justifyUnder" type="radio"></label>
+            <img class="disposition" src="{$params.IMAGE_DIR}button5.png" alt="{t}righttop{/t}" >
+        </div>
+        <div class="control-group background">
+            <label class="disposition" for="font-size" class="control-label">
+              {t}Right Under Disposition{/t}<input name="imageDisposition" value="rightUnder" type="radio"></label>
+            <img src="{$params.IMAGE_DIR}button4.png" alt="{t}righttop{/t}" >
+        </div>
+        <div class="control-group background">
+            <label class="disposition" for="font-size" class="control-label">
+              {t}Left Under Disposition{/t}<input name="imageDisposition" value="leftUnder" type="radio"></label>
+            <img src="{$params.IMAGE_DIR}button2.png" alt="{t}righttop{/t}" >
+        </div>
     </div>
     <div class="modal-footer">
         <a class="btn btn-secondary reset" href="#">{t}Reset{/t}</a>
