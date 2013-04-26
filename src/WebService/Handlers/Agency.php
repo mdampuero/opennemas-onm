@@ -28,8 +28,12 @@ class Agency
      * @return $output
      */
 
-    protected function export($until = '86400')
+    protected function export($until = 86400)
     {
+        if ($until == 'no_limits') {
+            $until = 604800;
+        }
+
         $this->validateInt($until);
 
         $timeLimit = date('Y-m-d H:i:s', time() - $until);
