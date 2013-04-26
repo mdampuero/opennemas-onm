@@ -235,6 +235,9 @@ class OpinionAuthorsController extends Controller
 
                 if ($author->update($data)) {
                     m::add(_('Author successfully updated.'), m::SUCCESS);
+                    $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                    $cacheid ='opinion|'. sprintf("%06d", $id).'_1';
+                    $tplManager->delete($cacheid);
                 } else {
                     m::add(_('Unable to update the author.'), m::ERROR);
                 }
