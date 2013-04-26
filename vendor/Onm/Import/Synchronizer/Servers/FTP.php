@@ -114,8 +114,7 @@ class FTP extends ServerAbstract implements ServerInterface
         $deletedFiles = self::cleanFiles(
             $params['sync_path'],
             $files,
-            $params['excludedFiles'],
-            $params['sync_from']
+            $params['excluded_files']
         );
 
         $downloadedFiles = 0;
@@ -246,30 +245,6 @@ class FTP extends ServerAbstract implements ServerInterface
         return array_sum(str_split($array[0]))
             . array_sum(str_split($array[1]))
             . array_sum(str_split($array[2]));
-    }
-
-    /**
-     * Filters files by its creation
-     *
-     * @param  array $files  the list of files for filtering
-     * @param  int   $maxAge timestamp of the max age allowed for files
-     * @return array the list of files without those with age > $magAge
-     **/
-    protected function _filterOldFiles($files, $maxAge)
-    {
-        if (!empty($maxAge)) {
-            $files = array_filter(
-                $files,
-                function ($item) use ($maxAge) {
-                    if ($item['filename'] == '..' || $item['filename'] == '.') {
-                        return false;
-                    }
-                    return (time() - $maxAge) < $item['date']->getTimestamp();
-                }
-            );
-        }
-
-        return $files;
     }
 
     public function canHandle($params)

@@ -201,13 +201,33 @@ class Synchronizer
             }
         );
 
-        $fileListingCleaned = array();
+        foreach ($fileListing as &$file) {
+            $file = str_replace($cacheDir.DIRECTORY_SEPARATOR, '', $file);
+        }
 
+        return $fileListing;
+    }
+
+    /**
+     * Fetches the files present in $cacheDir with source.
+     *
+     * @param string $cacheDir the directory where search files from.
+     *
+     * @return array the list of files
+     */
+    public static function getLocalFileListForSource($cacheDir, $sourceId, $pattern = '*.xml')
+    {
+        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$pattern);
+
+        usort(
+            $fileListing,
+            function ($a, $b) {
+                return filemtime($a) < filemtime($b);
+            }
+        );
 
         foreach ($fileListing as &$file) {
             $file = str_replace($cacheDir.DIRECTORY_SEPARATOR, '', $file);
-
-            // $fileListingCleaned []= basename($file);
         }
 
         return $fileListing;
@@ -243,7 +263,7 @@ class Synchronizer
 
         $this->lockSync();
 
-        $excludedFiles = self::getLocalFileList($serverSyncPath);
+        $excludedFiles = self::getLocalFileListForSource($this->syncPath, $params['id'], '*');
 
         $params['sync_path'] = $serverSyncPath;
         $params['excluded_files'] = $excludedFiles;

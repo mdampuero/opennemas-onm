@@ -19,5 +19,14 @@ namespace Onm\Import\Synchronizer;
  **/
 interface ServerInterface
 {
+    /**
+     * Check if this server class can handle the http service
+     *
+     * @param $params the http server parameters
+     *
+     * @return true if the url matches the pattern for this server
+     *
+     * @throws Exception, if this server class can't handle this service url
+     **/
     public function canHandle($params);
 }

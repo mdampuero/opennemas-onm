@@ -25,9 +25,7 @@ abstract class ServerAbstract
      * @param string $cacheDir Path to the directory where save files to.
      *
      * @return array counts of deleted and downloaded files
-     *
-     * @throws <b>Exception</b> $cacheDir not writable.
-     */
+     **/
     public function downloadFilesToCacheDir($params)
     {
         $downloadedFiles = 0;
@@ -36,14 +34,29 @@ abstract class ServerAbstract
         foreach ($this->contentList as $content) {
             $id = $content->attributes()->{'id'};
             $url = trim((string) $content);
+            $files[] = $id.'.xml';
+
 
             if ($this->fetchContentAndSave($id, $url)) {
                 $downloadedFiles++;
             }
-
-            // Calculate $deletedFiles
-
         }
+
+        foreach ($files as $file) {
+            $serverFiles[] = array(
+                'filename' => $file,
+            );
+        }
+
+        // Filter files by its creation
+        self::cleanWeirdFiles($params['sync_path']);
+        $deletedFiles = self::cleanFiles(
+            $params['sync_path'],
+            $serverFiles,
+            $params['excluded_files'],
+            $params['sync_from']
+        );
+
         return array(
             "deleted"    => $deletedFiles,
             "downloaded" => $downloadedFiles
@@ -56,7 +69,7 @@ abstract class ServerAbstract
      * @param string $cacheDir The directory where remove files from.
      *
      * @return array list of deleted files
-     */
+     **/
     public function cleanWeirdFiles($cacheDir)
     {
         $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
@@ -80,14 +93,10 @@ abstract class ServerAbstract
      * @param string $serverFiles the list of files present in server
      * @param string $localFiles  the list of local files
      *
-     * @return boolean, true if all went well
+     * @return int, number of total downloaded files
     */
-    public static function cleanFiles(
-        $cacheDir,
-        $serverFiles,
-        $localFileList,
-        $maxAge
-    ) {
+    public static function cleanFiles($cacheDir, $serverFiles, $localFileList)
+    {
         $deletedFiles = 0;
 
         if (count($localFileList) > 0) {
@@ -97,12 +106,11 @@ abstract class ServerAbstract
             }
 
             foreach ($localFileList as $file) {
+                $file = basename($file);
+                $filePath = $cacheDir.'/'.$file;
                 if (!in_array($file, $serverFileList)) {
-                    $file = basename($file);
-                    $filePath = $cacheDir.'/'.$file;
-
                     if (file_exists($filePath)) {
-                        unlink($cacheDir.'/'.$file);
+                        unlink($filePath);
 
                         $deletedFiles++;
                     }

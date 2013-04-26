@@ -161,4 +161,20 @@ class LocalRepository
 
         return  $element;
     }
+
+    /**
+     * Removes the local files for a given source id
+     *
+     * @return boolean true if the files were deleted
+     * @throws Exception If the files weren't deleted
+     **/
+    public function deleteFilesForSource($id)
+    {
+        $path = realpath($this->syncPath.DIRECTORY_SEPARATOR.$id);
+
+        if (!empty($path)) {
+            return \FilesManager::deleteDirectoryRecursively($path);
+        }
+        return false;
+    }
 }

@@ -31,8 +31,8 @@ class Opennemas extends ServerAbstract implements ServerInterface
 
         $this->params = $params;
 
-        if ($params['sync_from'] = 'no_limits') {
-            $params['sync_from'] = 3460000;
+        if ($params['sync_from'] == 'no_limits') {
+            $params['sync_from'] = 2460000;
         }
 
         $this->serverUrl = $params['url'].'/export.xml?until='.$params['sync_from'].'&auth='.$params['password'];

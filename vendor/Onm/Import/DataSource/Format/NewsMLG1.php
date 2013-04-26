@@ -214,10 +214,9 @@ class NewsMLG1 implements FormatInterface
             $this->getData()->NewsItem->NewsComponent->DescriptiveMetadata
             ->xpath("//Property[@FormalName=\"Tesauro\"]");
 
-        if (count($rawCategory) <= 0) {
+        if (empty($rawCategory)) {
             return array();
         }
-
         $rawTags = (string) $rawCategory[0]->attributes()->Value;
         $tagGroups = explode(";", $rawTags);
 
@@ -270,17 +269,19 @@ class NewsMLG1 implements FormatInterface
      **/
     public static function checkFormat($data = null, $xmlFile = null)
     {
+        $contents = $data->xpath(
+            "//NewsItem/NewsComponent/NewsComponent[@Duid]"
+        );
 
-        if ($data->NewsItem->count() <= 0) {
+        if (count($contents) == 0 || $data->NewsItem->count() <= 0) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
         }
         $title = (string) $data->NewsItem->NewsComponent->NewsLines->HeadLine;
 
-        if (!(string) $data->NewsEnvelope
-            || empty($title)
-        ) {
+        if (!(string) $data->NewsEnvelope || empty($title)) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLG1 file'), $xmlFile));
         }
+
         return true;
     }
 
