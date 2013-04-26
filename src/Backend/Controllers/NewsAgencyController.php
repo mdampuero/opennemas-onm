@@ -447,7 +447,10 @@ class NewsAgencyController extends Controller
 
             if (array_key_exists($attachmentId, $photos)) {
                 $photo = $photos[$attachmentId];
-                $filePath = realpath($ep->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$photo->file_path);
+                $filePath = realpath(
+                    $repository->syncPath.DIRECTORY_SEPARATOR.
+                    $sourceId.DIRECTORY_SEPARATOR.$photo->file_path
+                );
                 $content = file_get_contents($filePath);
                 $response = new Response($content, 200, array('content-type' => $photo->file_type));
             } else {
@@ -470,8 +473,8 @@ class NewsAgencyController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $repository = new \Onm\Import\Repository\LocalRepository();
-        $repository->unlockSync();
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $synchronizer->unlockSync();
         unset($_SESSION['error']);
 
         $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
