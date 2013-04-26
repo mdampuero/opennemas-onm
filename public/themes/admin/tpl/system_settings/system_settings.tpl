@@ -26,6 +26,7 @@
 
 {block name="footer-js" append}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
+    {script_tag src="/onm/md5.min.js" common=1}
 
     <script type="text/javascript">
 
@@ -55,6 +56,11 @@
                 $('#site_logo_block').show();
             }
         }
+
+        $('.btn-generate').on('click', function(){
+            var md5 = hex_md5('seed' + $.now());
+            $('#onm_auth_key').val(md5);
+        });
 
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
@@ -385,6 +391,7 @@
                     <label for="onm_auth_key" class="control-label">{t}Opennemas Auth Key{/t}</label>
                     <div class="controls">
                         <input type="text" id="onm_auth_key" name="onm_auth_key" value="{$configs['onm_auth_key']|default:""}" class="input-xlarge">
+                        <button class="btn btn-generate" type="button">{t}Generate{/t}</button>
                     </div>
                 </div>
 
