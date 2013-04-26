@@ -151,10 +151,16 @@ class CacheManagerController extends Controller
             $categoryName = $ccm->get_title($cacheGroup);
             $sections[$cacheGroup] = (empty($categoryName))? _('FRONTPAGE'): $categoryName;
         }
-
         foreach ($caches as &$cache) {
             $cache['cache_id'] = $cache["category"] . "|" . $cache["resource"];
             $cache['tpl'] = $cache["template"] . ".tpl";
+            if($cache["template"] == 'opinion_author_index') {
+                if (preg_match('/([0-9]+)_([0-9]+)/', $cache['resource'], $match)) {
+                    $cache["resource"] =(int)$match[1];
+                    $cache["page"] =$match[2];
+                }
+            }
+
         }
 
         return $this->render(

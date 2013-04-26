@@ -244,7 +244,7 @@ class OpinionsController extends Controller
             $orderBy='ORDER BY created DESC ';
         }
         // Index frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
+        $cacheID = $this->view->generateCacheId('sync'.$this->category_name, '', $this->page);
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
@@ -373,9 +373,8 @@ class OpinionsController extends Controller
         if (empty($authorID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
         }
-
         // Author frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
+        $cacheID = $this->view->generateCacheId($this->category_name, '', $authorID.'-'.$this->page);
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
@@ -519,7 +518,7 @@ class OpinionsController extends Controller
         }
 
         // Author frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
+        $cacheID = $this->view->generateCacheId('sync'.$this->category_name, null, $authorID.'-'.$this->page);
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)) {
@@ -678,7 +677,7 @@ class OpinionsController extends Controller
         $this->getAds('inner');
 
         // Don't execute the app logic if there are caches available
-        $cacheID = $this->view->generateCacheId($this->category_name, '', $opinionID);
+        $cacheID = $this->view->generateCacheId($this->category_name, null, $opinionID);
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion.tpl', $cacheID)
         ) {
