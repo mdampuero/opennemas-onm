@@ -2,21 +2,20 @@
 <NewsML Version="1.2">
   <NewsEnvelope>
     <SentFrom>
-      <Party FormalName="{setting name=site_name}">
+      <Party FormalName="Opennemas">
         <Property FormalName="Organization" Value="{setting name=site_name}" />
       </Party>
     </SentFrom>
-    <DateAndTime>{$article->created_datetime->format('Ymd\THis')}</DateAndTime>
+    <DateAndTime></DateAndTime>
   </NewsEnvelope>
-  <!--** SUGGESTION FOR DEVS: Use 'Duid' attribute to help you on XPath navigation.-->
-  <NewsItem Duid="multimedia_2006824">
-    <Comment FormalName="NewsMLVersion">1.0.1</Comment>
+  <NewsItem Duid="multimedia_{$article->id}">
+    <Comment FormalName="OnmNewsMLVersion"><text>1.0.1</text></Comment>
     <Identification>
       <NewsIdentifier>
         <ProviderId>{setting name=site_name}</ProviderId>
-        <DateId>{$article->created_datetime->format(DateTime::ISO8601)}</DateId>
+        <DateId>{$article->created_datetime->format('Ymd\THis')}</DateId>
         <NewsItemId>{$article->id}</NewsItemId>
-        <RevisionId PreviousRevision="1" Update="U">2</RevisionId>
+        <RevisionId PreviousRevision="1" Update="U"><text>2</text></RevisionId>
         <PublicIdentifier>{$article->urn}</PublicIdentifier>
       </NewsIdentifier>
     </Identification>
@@ -31,8 +30,8 @@
     </NewsManagement>
     <NewsComponent Duid="multimedia_2006824.multimedia">
       <NewsLines>
-        <HeadLine>{$article->title}</HeadLine>
-        <SubHeadLine>{$article->subtitle}</SubHeadLine>
+        <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
+        <SubHeadLine>{$article->subtitle|htmlspecialchars_decode}</SubHeadLine>
       </NewsLines>
       <AdministrativeMetadata>
         <Provider>
@@ -48,13 +47,13 @@
         <NewsComponent Duid="multimedia_{$article->id}.multimedia.texts.{$article->id}" Euid="{$article->id}">
           <Role FormalName="Main" />
           <NewsLines>
-            <HeadLine>{$article->title}</HeadLine>
-            <SubHeadLine>{$article->subtitle}</SubHeadLine>
+            <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
+            <SubHeadLine>{$article->subtitle|htmlspecialchars_decode}</SubHeadLine>
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
             <DateLineDate>{$article->created_datetime->format('Ymd\THis')}</DateLineDate>
-            <Property FormalName="IdRefObject" Value="{$article->id}" />
+            <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
           <ContentItem>
             <MediaType FormalName="Text" />
@@ -63,7 +62,7 @@
             <DataContent>
               <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
                 <head>
-                  <title>{$article->title}</title>
+                  <title>{$article->title|htmlspecialchars_decode}</title>
                   <docdata management-status="usable">
                     <doc-id id-string="{$article->id}" />
                   </docdata>
@@ -71,18 +70,18 @@
                 <body>
                   <body.head>
                     <hedline>
-                      <hl1>{$article->title}</hl1>
-                      <hl2>{$article->subtitle}</hl2>
+                      <hl1>{$article->title|htmlspecialchars_decode}</hl1>
+                      <hl2>{$article->subtitle|htmlspecialchars_decode}</hl2>
                     </hedline>
                     <dateline>
-                      <story.date norm="{$article->created_datetime->format('Ymd\THis')}">{$article->created_datetime->format('Ymd\THis')}</story.date>
+                      <story.date norm="{$article->created_datetime->format('Ymd\THis')}"><text>{$article->created_datetime->format('Ymd\THis')}</text></story.date>
                     </dateline>
                     <abstract>
-                      {$article->summary}
+                      {$article->summary|unescape:"htmlall"}
                     </abstract>
                   </body.head>
                   <body.content>
-                    {$article->content}
+                    {$article->body|unescape:"htmlall"}
                   </body.content>
                 </body>
               </nitf>
