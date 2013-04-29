@@ -2331,7 +2331,20 @@ div.tagsinput span.tag a { font-weight: bold; text-decoration:none;  }
 }
 
 
+/* =============================================================================
+   Disposition images
+   ========================================================================== */
+div#modal-element-customize-content img.image-disposition {
+    height: 130px;
+}
+div#modal-element-customize-content div.background {
+    width: 126px;
+    overflow: hidden;
+}
 
+div#modal-element-customize-content div.select-disposition{
+    display: none;
+}
 /* =============================================================================
    Onm Editor
    ========================================================================== */

@@ -7,7 +7,7 @@
     <div class="modal-body form-vertical form-inline-block">
         <div class="control-group background">
                 <label for="color" class="control-label">{t}Background Color{/t}</label>
-                <input type="text" id="bg-color" name="bg-color" value="{$category->color|default:$smarty.capture.websiteColor|trim}">
+                <input type="text" id="bg-color" name="bg-color" value="">
                 <select name="colorpicker-background">
                     <option value="#ffffff">{t}White{/t}</option>
                     <option value="#e8edfa">{t}Light Blue{/t}</option>
@@ -99,44 +99,51 @@
                     {html_options values=$availableSizes output=$availableSizes selected=Auto}
                 </select>
             </div>
-            <hr>
     </div>
 
-    <div class="modal-body form-vertical form-inline-block">
+    <div class="modal-body form-vertical form-inline-block select-disposition">
+      <hr>
       <div class="control-group background">
-            <label class="disposition" for="font-size" class="control-label">
+            <label class="radio">
               {t}Auto Disposition{/t}<input name="imageDisposition" value="auto" type="radio"></label>
-            <img src="{$params.IMAGE_DIR}button0.png" alt="{t}righttop{/t}" >
+            <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition0.png" name ="auto" checked="checked" alt="{t}auto{/t}" >
         </div>
         <div class="control-group background">
-            <label class="disposition" for="font-size" class="control-label">
-              {t}Justify Disposition{/t}<input name="imageDisposition" value="justifyTop" type="radio"></label>
-            <img src="{$params.IMAGE_DIR}button6.png" alt="{t}righttop{/t}" >
+            <label class="radio">
+                {t}Justify Disposition{/t}<input name="imageDisposition" value="justifyTop" type="radio">
+                <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition1.png"
+                name="justifyTop" alt="{t}justifyTop{/t}" >
+            </label>
         </div>
         <div class="control-group background">
-            <label class="disposition" for="font-size" class="control-label">
-              {t}Right top Disposition{/t}<input name="imageDisposition" value="rightTop" type="radio"></label>
-            <img src="{$params.IMAGE_DIR}button1.png" alt="{t}righttop{/t}" >
+            <label class="radio">
+                {t}Right top Disposition{/t}<input name="imageDisposition" value="rightTop" type="radio">
+                <img  class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition2.png" name="rightTop" alt="{t}rightTop{/t}" >
+            </label>
         </div>
         <div class="control-group background">
-            <label class="disposition" for="font-size" class="control-label">
-              {t}Left top Disposition{/t}<input name="imageDisposition" value="leftTop" type="radio"></label>
-            <img src="{$params.IMAGE_DIR}button3.png" alt="{t}righttop{/t}" >
+            <label class="radio">
+                {t}Left top Disposition{/t}<input name="imageDisposition" value="leftTop" type="radio">
+                <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition3.png" name="leftTop" alt="{t}leftTop{/t}" >
+            </label>
         </div>
         <div class="control-group background">
-            <label for="font-size" class="control-label">
-              {t}JustifyUnder Disposition{/t}<input name="imageDisposition" value="justifyUnder" type="radio"></label>
-            <img class="disposition" src="{$params.IMAGE_DIR}button5.png" alt="{t}righttop{/t}" >
+            <label class="radio">
+                {t}JustifyUnder Disposition{/t}<input name="imageDisposition" value="justifyUnder" type="radio">
+                <img class="image-disposition" class="disposition" src="{$params.IMAGE_DIR}dispositions/disposition4.png" name="justifyUnder" alt="{t}justifyUnder{/t}" >
+            </label>
         </div>
         <div class="control-group background">
-            <label class="disposition" for="font-size" class="control-label">
-              {t}Right Under Disposition{/t}<input name="imageDisposition" value="rightUnder" type="radio"></label>
-            <img src="{$params.IMAGE_DIR}button4.png" alt="{t}righttop{/t}" >
+            <label class="radio">
+                {t}Right Under Disposition{/t}<input name="imageDisposition" value="rightUnder" type="radio">
+                <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition6.png" name="rightUnder" alt="{t}rightUnder{/t}">
+            </label>
         </div>
         <div class="control-group background">
-            <label class="disposition" for="font-size" class="control-label">
-              {t}Left Under Disposition{/t}<input name="imageDisposition" value="leftUnder" type="radio"></label>
-            <img src="{$params.IMAGE_DIR}button2.png" alt="{t}righttop{/t}" >
+            <label class="radio">
+                {t}Left Under Disposition{/t}<input name="imageDisposition" value="leftUnder" type="radio">
+                <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition5.png" name="leftUnder" alt="{t}leftUnder{/t}" >
+            </label>
         </div>
     </div>
     <div class="modal-footer">

@@ -385,14 +385,14 @@ jQuery(function($) {
 
         if (title['font-size'] !== undefined) {
             var size = title['font-size'].substring(0,2);
-           // modal.find('.modal-body #font-size option[value='+size+']').attr('selected', 'selected');
-           modal.find('.modal-body #font-size').val(size);
+            // modal.find('.modal-body #font-size option[value='+size+']').attr('selected', 'selected');
+            modal.find('.modal-body #font-size').val(size);
         } else {
             modal.find('.modal-body #font-size option[value=""]').attr('selected', 'selected');
         }
         if (title['font-family'] !== undefined) {
-          // modal.find('.modal-body #font-family').val(title['font-family']);
-           modal.find('.modal-body #font-family').val(title['font-family']);
+            // modal.find('.modal-body #font-family').val(title['font-family']);
+            modal.find('.modal-body #font-family').val(title['font-family']);
         } else {
             modal.find('.modal-body #font-family').val('Auto');
         }
@@ -413,6 +413,18 @@ jQuery(function($) {
         } else {
             modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
             modal.find('.modal-body #font-color').val('#000000');
+        }
+
+        if (element.data('class') == 'Article' || element.data('class') == 'Opinion') {
+            modal.find('.select-disposition').css('display', 'inline-block');
+            if(element.data('format').length>0) {
+                var format = element.data('format');
+                modal.find('.modal-body .radio input[value='+format+']').prop('checked', true);
+            } else {
+                modal.find('.modal-body .radio input[value=auto]').prop('checked', true);
+            }
+        } else {
+            modal.find('.select-disposition').css('display', 'none');
         }
 
         if (element.data('bg').length>0) {
@@ -480,6 +492,14 @@ jQuery(function($) {
             properties[name2] = '';
         }
 
+        var format = $(".modal-body .radio input[type='radio']:checked").val();
+        var vformat ='format_' + $('#frontpagemanager').data('category');
+        if(format.length>0 && (format != 'auto')) {
+            properties[vformat] = format;
+        } else {
+            properties[vformat] = '';
+        }
+
         if (elementID) {
             $.ajax({
                 url:url,
@@ -489,6 +509,7 @@ jQuery(function($) {
             }).done(function(data) {
                  $('#modal-element-customize-content').data('element-for-customize-content').animate({ 'backgroundColor': bgcolor },300);
                     element.data('bg', 'background-color:'+bgcolor);
+                    element.data('format', format);
                     element.data('title', jsonTitle);
 
             }).fail(function(data) {
@@ -512,6 +533,7 @@ jQuery(function($) {
         modal.find('.modal-body #font-color').val('#000000');
         modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
         modal.find('.modal-body #bg-color').val('#ffffff');
+        modal.find('.modal-body .radio input[value=auto]').prop('checked', true);
 
         e.preventDefault();
     });
