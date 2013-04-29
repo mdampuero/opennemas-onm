@@ -101,7 +101,7 @@ class ContentCategory
      **/
     public function __construct($id = null)
     {
-        if (!is_null($id) && is_numeric($id)) {
+        if (!empty($id) && is_numeric($id)) {
             $this->read($id);
         }
     }
