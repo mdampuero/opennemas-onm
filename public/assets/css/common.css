@@ -1,5 +1,58 @@
 
 /***********************************************************
+    Frontpage content disposition
+************************************************************/
+.justifyTop div.article-media,
+.justifyUnder div.article-media{
+    width: 100%;
+}
+
+.rightTop div.article-media{
+    width: 49%;
+    float: right;
+    padding-left: 1%;
+}
+
+.rightTop div.article-data {
+    float: left;
+    width: 50%;
+}
+
+.leftTop div.article-media{
+    width: 49%;
+    float: left;
+    padding-right: 1%;
+}
+
+.leftTop div.article-data {
+    float: right;
+    width: 50%;
+}
+
+.rightUnder div.article-media{
+    width: 49%;
+    float: right;
+    padding-left: 1%;
+}
+
+.rightUnder div.article-data {
+    float: left;
+    width: 50%;
+}
+
+.leftUnder div.article-media{
+    width: 49%;
+    float: left;
+    padding-right: 1%;
+}
+
+.leftUnder div.article-data {
+    float: right;
+    width: 50%;
+}
+
+
+/***********************************************************
   Definitions for ads
 ************************************************************/
 div.ads-skyscraper-container{
@@ -82,4 +135,33 @@ div.ad-skyscraper-body {
     font-size: 12px;
     margin-top: 5px;
 }
+
+
+
+
+string 'format_0' (length=8)
+
+string 'leftTop' (length=7)
+
+null
+
+string 'leftTop' (length=7)
+
+null
+
+string 'rightUnder' (length=10)
+
+null
+
+string 'justifyUnder' (length=12)
+
+null
+
+string 'leftTop' (length=7)
+
+null
+
+string 'justifyUnder' (length=12)
+
+null
 
