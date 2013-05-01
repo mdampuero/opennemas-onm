@@ -63,6 +63,7 @@
         </div>
     </div>
     <div class="wrapper-content clearfix">
+
         {render_messages}
 
         <div class="form-horizontal panel">

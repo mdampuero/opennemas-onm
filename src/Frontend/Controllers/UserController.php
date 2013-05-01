@@ -66,6 +66,8 @@ class UserController extends Controller
         return $this->redirect($this->generateUrl('frontend_auth_login'));
     }
 
+
+
     /**
      * Handles the registration of a new user in frontend
      *
@@ -99,80 +101,81 @@ class UserController extends Controller
         );
 
         // What happens when the CAPTCHA was entered incorrectly
-        if (!$resp->is_valid) {
-            $this->view->assign('error', _('Verification image not valid. Try to fill it again.'));
+        if ($request->getMethod() != 'POST') {
         } else {
-
+            $this->view->assign('error', _('Verification image not valid. Try to fill it again.'));
             // Correct CAPTCHA - Filter $_POST vars from FORM
-            $data['login']         = $request->request->filter('user_name', null, FILTER_SANITIZE_STRING);
-            $data['name']          = $request->request->filter('full_name', null, FILTER_SANITIZE_STRING);
-            $data['password']      = $request->request->filter('pwd', null, FILTER_SANITIZE_STRING);
-            $data['cpwd']          = $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING);
-            $data['sessionexpire'] = 15;
-            $data['email']         = $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL);
-            $data['type']          = 1; // It is a frontend user registration.
-            $data['token']         = md5(uniqid(mt_rand(), true)); // Token for activation
-            $data['authorize']     = 0; // Before activation by mail, user is not allowed
-
-            //Build mail body
-            $mailSubject  = utf8_decode("Alta usuario - ".$configSiteName);
-            $mailBody = "Estimad@ ". $data['name'] .", \r\n";
-            $mailBody.= "Bienvenido a  ".$configSiteName.". ";
-            $mailBody.= "Para activar su cuenta clica en el siguiente enlace:\r\n";
-            $mailBody.= SITE_URL."activate/".$data['token']."/\r\n\n";
-            $mailBody.= "Una vez activada, ";
-            $mailBody.= "podrás modificar tus datos siempre que quieras en las opciones de usuario.\r\n";
-            $mailBody.= "Gracias por formar parte de la comunidad de ".$configSiteName.".\r\n";
-            $mailBody.= "Un saludo,\r\n";
-            $mailBody.= "El equipo de ".$configSiteName;
+            //
+            $data = array(
+                'authorize'     => 0, // Before activation by mail, user is not allowed
+                'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
+                'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
+                'login'         => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
+                'name'          => $request->request->filter('full_name', null, FILTER_SANITIZE_STRING),
+                'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
+                'sessionexpire' => 15,
+                'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
+                'type'          => 1, // It is a frontend user registration.
+            );
 
             // Before send mail and create user on DB, do some checks
-            $user = new User();
+            $user = new \User();
+
+            $errors = array();
 
             // Check if pwd and cpwd are the same
-            $isValidPass = ($data['password'] == $data['cpwd']);
-            if (!$isValidPass) {
-                $warningPass = 'Contrasinal e a confirmación teñen que ser iguales.';
-                $this->view->assign('warning_pass', $warningPass);
+            if (($data['password'] != $data['cpwd'])) {
+                $errors []= _('Contrasinal e a confirmación teñen que ser iguales.');
             }
 
             // Check existing mail
-            $mailAlreadyExists = $user->checkIfExistsUserEmail($data['email']);
-            if ($mailAlreadyExists) {
-                $warningMail = 'O enderezo eletrónico xa está en uso.';
-                $this->view->assign('warning_mail', $warningMail);
+            if ($user->checkIfExistsUserEmail($data['email'])) {
+                $errors []= _('O enderezo eletrónico xa está en uso.');
             }
 
             // Check existing user name
-            $userNameAlreadyExists = $user->checkIfExistsUserName($data['name']);
-            if ($userNameAlreadyExists) {
-                $warningUserName = 'O nome de usuario xa está en uso.';
-                $this->view->assign('warning_user_name', $warningUserName);
+            if ($user->checkIfExistsUserName($data['name'])) {
+                $errors []= _('O nome de usuario xa está en uso.');
             }
 
             // If checks are both false and pass is valid then send mail
-            if (!$mailAlreadyExists && !$userNameAlreadyExists && $isValidPass) {
-                $to = $data['email'];
+            if (count($errors) <= 0) {
 
-                $mail = new PHPMailer();
-                $mail->SetLanguage('es');
-                $mail->IsSMTP();
-                $mail->Host = MAIL_HOST;
-                $mail->Username = MAIL_USER;
-                $mail->Password = MAIL_PASS;
+                $url = $this->generateUrl('frontend_user_activate', array('token' => $data['token']), true);
 
-                if (!empty($mail->Username) && !empty($mail->Password)) {
-                    $mail->SMTPAuth = true;
-                } else {
-                    $mail->SMTPAuth = false;
+                $tplMail = new \Template(TEMPLATE_USER);
+                $tplMail->caching = 0;
+                $mailSubject = sprintf(_('New user account in %s'), s::get('site_title'));
+                $mailBody = $tplMail->fetch(
+                    'user/emails/register.tpl',
+                    array(
+                        'name' => $data['name'],
+                        'url'  => $url,
+                    )
+                );
+
+                // Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/plain')
+                    ->setTo($user->email)
+                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $this->view->assign('mailSent', true);
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('logger')->notice(
+                        "Unable to send the user activation email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
                 }
-
-                $mail->Subject = $mailSubject;
-                $mail->From = "mailer@opennemas.com";
-                $mail->FromName = $configSiteName;
-                $mail->Body = utf8_decode($mailBody);
-
-                $mail->AddAddress($to, $to);
 
                 if (true) {
                     $sentMail = true;
@@ -194,7 +197,7 @@ class UserController extends Controller
             }
         }
 
-        return $this->render('login/register.tpl');
+        return $this->render('authentication/register.tpl');
     }
 
     /**
@@ -297,7 +300,7 @@ class UserController extends Controller
 
             return $this->render('login/deposit.tpl');
         } else {
-            m::add('A ocurrido un erro na activación. Volva rexistrarse.', m::ERROR);
+            m::add(_('There was an error while creating your user account. Please try again'), m::ERROR);
 
             return $this->redirect($this->generateUrl('frontend_user_register'));
         }

@@ -35,12 +35,13 @@ class EntityRepository
     public function find($contentType, $id)
     {
         $entity = null;
-        if ($this->hasCache()) {
-            $cacheId = INSTANCE_UNIQUE_NAME . "_" . $contentType . "_" . $id;
-            $entity = $this->cache->fetch($cacheId);
-        }
 
-        if (!is_object($entity)) {
+        $cacheId = INSTANCE_UNIQUE_NAME . "_" . $contentType . "_" . $id;
+
+        if (!$this->hasCache()
+            || ($entity = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
+        ) {
             $entity = new $contentType($id);
 
             if ($this->hasCache()) {

@@ -295,28 +295,36 @@ class ArticlesController extends Controller
      *
      * @return Article the article
      **/
-    public function paywallHook(&$article)
+    public function paywallHook(&$content)
     {
         $paywallActivated = ModuleManager::isActivated('PAYWALL');
-        $onlyAvailableSubscribers = $article->isOnlyAvailableForSubscribers();
+        $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
 
         if ($paywallActivated && $onlyAvailableSubscribers) {
+            $newContent = $this->renderView('paywall/partials/content_only_for_subscribers.tpl');
+
             $isLogged = array_key_exists('userid', $_SESSION);
             if ($isLogged) {
-                $userSubscriptionDate = new \DateTime('2 weeks ago'); //mock User::getSubcriptionTime();
-                $now = new \DateTime();
+                if (array_key_exists('meta', $_SESSION)
+                    && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {
+                    $userSubscriptionDateString = $_SESSION['meta']['paywall_time_limit'];
+                } else {
+                    $userSubscriptionDateString = '';
+                }
+                $userSubscriptionDate = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $userSubscriptionDateString,
+                    new \DateTimeZone('UTC')
+                );
+                $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
                 $hasSubscription = $userSubscriptionDate > $now;
 
                 if (!$hasSubscription) {
-                    $settings = s::get('paywall_settings');
-
-                    $article->body = $this->renderView(
-                        'paywall/partials/content_form_subscribe.tpl',
-                        array('settings' => $settings)
-                    );
+                    $content->body = $newContent;
                 }
             } else {
-                $article->body = $this->renderView('paywall/partials/content_only_for_subscribers.tpl');
+                $content->body = $newContent;
             }
         }
     }

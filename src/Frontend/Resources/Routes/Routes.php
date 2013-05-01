@@ -18,14 +18,46 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
-    'frontend_paywall_test',
+    'frontend_paywall_showcase',
     new Route(
-        '/paywall/test',
+        '/paywall',
         array(
-            '_controller' => 'Frontend:Controllers:PaywallController:test',
+            '_controller' => 'Frontend:Controllers:PaywallController:showcase',
         )
     )
 );
+
+$frontendRoutes->add(
+    'frontend_paywall_prepare_payment',
+    new Route(
+        '/paywall/prepare_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:preparePayment',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_paywall_success_payment',
+    new Route(
+        '/paywall/success_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:returnSuccessPayment',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_paywall_cancel_payment',
+    new Route(
+        '/paywall/cancel_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:returnCancelPayment',
+        )
+    )
+);
+
+
 
 $frontendRoutes->add(
     'frontend_newsletter_subscribe_show',
