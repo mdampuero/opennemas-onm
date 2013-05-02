@@ -57,11 +57,6 @@
             }
         }
 
-        $('.btn-generate').on('click', function(){
-            var md5 = hex_md5('seed' + $.now());
-            $('#onm_auth_key').val(md5);
-        });
-
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
@@ -388,10 +383,16 @@
                 <h3 class="settings-header">{t}Opennemas{/t}</h3>
 
                 <div class="control-group">
-                    <label for="onm_auth_key" class="control-label">{t}Opennemas Auth Key{/t}</label>
+                    <label for="onm_digest_user" class="control-label">{t}Opennemas Digest User{/t}</label>
                     <div class="controls">
-                        <input type="text" id="onm_auth_key" name="onm_auth_key" value="{$configs['onm_auth_key']|default:""}" class="input-xlarge">
-                        <button class="btn btn-generate" type="button">{t}Generate{/t}</button>
+                        <input type="text" id="onm_digest_user" name="onm_digest_user" value="{$configs['onm_digest_user']|default:""}" class="input-xlarge">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="onm_digest_pass" class="control-label">{t}Opennemas Digest Pass{/t}</label>
+                    <div class="controls">
+                        <input type="password" id="onm_digest_pass" name="onm_digest_pass" value="{$configs['onm_digest_pass']|default:""}" class="input-large">
                     </div>
                 </div>
 
