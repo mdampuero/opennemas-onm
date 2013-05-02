@@ -56,9 +56,9 @@ class NewsletterController extends Controller
         if ($configuredRedirection != false) {
             return $configuredRedirection;
         }
-
+        $page = $request->query->getDigits('page', 1);
         $nm = new \NewsletterManager();
-        $newsletters = $nm->find();
+        $newsletters = $nm->find('1 = 1', 'created DESC', $page);
 
         return $this->render(
             'newsletter/list.tpl',
