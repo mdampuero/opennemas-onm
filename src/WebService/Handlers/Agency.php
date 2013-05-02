@@ -82,6 +82,7 @@ class Agency
         $article->category_name  = $article->loadCategoryName($article->id);
         $article->category_title = $article->loadCategoryTitle($article->id);
 
+        // Add DateTime with format Y-m-d H:i:s
         $article->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->created);
         $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
 
@@ -91,9 +92,18 @@ class Agency
             $image = $this->cm->find('Photo', 'pk_content = '.$imageId);
             // Load attached and related contents from array
             $article->loadFrontpageImageFromHydratedArray($image);
+            // Add DateTime with format Y-m-d H:i:s
+            $article->img1->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->created);
+            $article->img1->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->changed);
         }
 
-        $output = $tpl->fetch('news_agency/newsml_templates/base.tpl', array('article' => $article));
+        $output = $tpl->fetch(
+            'news_agency/newsml_templates/base.tpl',
+            array(
+                'article' => $article,
+                'photo'   => $article->img1,
+            )
+        );
 
         $xml = new \XmlFormat();
 
