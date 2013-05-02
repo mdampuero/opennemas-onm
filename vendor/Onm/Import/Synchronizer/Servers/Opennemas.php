@@ -23,7 +23,7 @@ class Opennemas extends ServerAbstract implements ServerInterface
      *
      * @param array $params the list of params to the http connection
      *
-     * @throws Exception, if something went wrong while connecting to FTP server
+     * @throws Exception, if something went wrong while connecting to HTTP server
      */
     public function __construct($params = null)
     {
@@ -31,13 +31,10 @@ class Opennemas extends ServerAbstract implements ServerInterface
 
         $this->params = $params;
 
-        if ($params['sync_from'] == 'no_limits') {
-            $params['sync_from'] = 2460000;
-        }
+        $this->serverUrl = $params['url'].'/export.xml?until='.$params['sync_from'];
 
-        $this->serverUrl = $params['url'].'/export.xml?until='.$params['sync_from'].'&auth='.$params['password'];
+        $contentListString = $this->getContentFromUrlWithDigestAuth($this->serverUrl);
 
-        $contentListString = @file_get_contents($this->serverUrl);
         // test if the connection was successful
         if (!$contentListString) {
             throw new \Exception(
@@ -54,33 +51,6 @@ class Opennemas extends ServerAbstract implements ServerInterface
         $this->contentList = simplexml_load_string($contentListString);
 
         return $this;
-    }
-
-    /**
-     * Fetch content from an url and save the file into a local path
-     *
-     * @param $id the id of the file to be saved
-     * @param $url the url from where to get the file content
-     *
-     * @return true if the file has been saved correctly
-     **/
-    public function fetchContentAndSave($id, $url)
-    {
-        $articleString = @file_get_contents($url.'?auth='.$this->params['password']);
-
-        $localFilePath = $this->params['sync_path'].DIRECTORY_SEPARATOR.strtolower($id.'.xml');
-        if (!file_exists($localFilePath)) {
-            @file_put_contents($localFilePath, $articleString);
-
-            // $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
-            // if (is_object($element)) {
-            //     $date = $element->getCreatedTime();
-            //     touch($localFilePath, $date->getTimestamp());
-            // }
-
-            return true;
-        }
-
     }
 
     /**
@@ -109,6 +79,5 @@ class Opennemas extends ServerAbstract implements ServerInterface
                 $params['name']
             )
         );
-
     }
 }

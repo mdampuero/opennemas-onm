@@ -33,13 +33,9 @@ class EFE extends ServerAbstract implements ServerInterface
 
         $this->params = $params;
 
-        $this->serverUrl = str_replace(
-            'http://',
-            'http://'.$params['username'].':'.$params['password'].'@',
-            $params['url']
-        );
+        $this->serverUrl = $params['url'];
 
-        $contentListString = @file_get_contents($this->serverUrl);
+        $contentListString = $this->getContentFromUrlWithDigestAuth($this->serverUrl);
         // test if the connection was successful
         if (!$contentListString) {
             throw new \Exception(
@@ -68,20 +64,26 @@ class EFE extends ServerAbstract implements ServerInterface
      **/
     public function fetchContentAndSave($id, $url)
     {
-        $url = str_replace(
-            'http://',
-            'http://'.$this->params['username'].':'.$this->params['password'].'@',
-            $url
-        );
+        $content = $this->getContentFromUrlWithDigestAuth($url);
 
-        $articleString = @file_get_contents($url);
+        $localFilePath = $this->params['sync_path'].DS.strtolower($id.'.xml');
 
-        $localFilePath = $this->params['sync_path'].DIRECTORY_SEPARATOR.strtolower($id.'.xml');
         if (!file_exists($localFilePath)) {
-            @file_put_contents($localFilePath, $articleString);
-
+            @file_put_contents($localFilePath, $content);
             $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
             if (is_object($element)) {
+                if ($element->hasPhotos()) {
+                    $photos = $element->getPhotos();
+                    foreach ($photos as $photo) {
+                        $rawImage = $this->getContentFromUrlWithDigestAuth($photo->file_path);
+                        $localImagePath = $this->params['sync_path'].DS.$photo->name;
+                        if (file_exists($localImagePath)) {
+                            unlink($localImagePath);
+                        }
+                        file_put_contents($localImagePath, $rawImage);
+                    }
+                }
+
                 $date = $element->getCreatedTime();
                 touch($localFilePath, $date->getTimestamp());
             }
@@ -89,6 +91,27 @@ class EFE extends ServerAbstract implements ServerInterface
             return true;
         }
 
+    }
+
+    /**
+     * Get content from a given url using http digest auth
+     *
+     * @param $url the http server url
+     *
+     * @return $content the content from this url
+     *
+     **/
+    public function getContentFromUrlWithDigestAuth($url)
+    {
+        $url = str_replace(
+            'http://',
+            'http://'.$this->params['username'].':'.$this->params['password'].'@',
+            $url
+        );
+
+        $content = @file_get_contents($url);
+
+        return $content;
     }
 
     /**

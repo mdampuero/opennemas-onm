@@ -36,7 +36,6 @@ abstract class ServerAbstract
             $url = trim((string) $content);
             $files[] = $id.'.xml';
 
-
             if ($this->fetchContentAndSave($id, $url)) {
                 $downloadedFiles++;
             }
@@ -64,6 +63,45 @@ abstract class ServerAbstract
     }
 
     /**
+     * Fetch content from an url and save the file into a local path
+     *
+     * @param $id the id of the file to be saved
+     * @param $url the url from where to get the file content
+     *
+     * @return true if the file has been saved correctly
+     **/
+    public function fetchContentAndSave($id, $url)
+    {
+        $content = $this->getContentFromUrlWithDigestAuth($url);
+
+        $localFilePath = $this->params['sync_path'].DS.strtolower($id.'.xml');
+        if (!file_exists($localFilePath)) {
+            @file_put_contents($localFilePath, $content);
+
+            $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
+            if (is_object($element)) {
+                if ($element->hasPhotos()) {
+                    $photos = $element->getPhotos();
+                    foreach ($photos as $photo) {
+                        $rawImage = $this->getContentFromUrlWithDigestAuth($photo->file_path);
+                        $localImagePath = $this->params['sync_path'].DS.$photo->name;
+                        if (file_exists($localImagePath)) {
+                            unlink($localImagePath);
+                        }
+                        @file_put_contents($localImagePath, $rawImage);
+                    }
+                }
+
+                $date = $element->getCreatedTime();
+                touch($localFilePath, $date->getTimestamp());
+            }
+
+            return true;
+        }
+
+    }
+
+    /**
      * Remove empty or invalid files from $cacheDir.
      *
      * @param string $cacheDir The directory where remove files from.
@@ -72,7 +110,7 @@ abstract class ServerAbstract
      **/
     public function cleanWeirdFiles($cacheDir)
     {
-        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.'*.xml');
+        $fileListing = glob($cacheDir.DS.'*.xml');
 
         $fileListingCleaned = array();
 
@@ -143,5 +181,27 @@ abstract class ServerAbstract
         }
 
         return $files;
+    }
+
+    /**
+     * Get content from a given url using http digest auth and curl
+     *
+     * @param $url the http server url
+     *
+     * @return $content the content from this url
+     *
+     **/
+    public function getContentFromUrlWithDigestAuth($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+        curl_setopt($ch, CURLOPT_USERPWD, "{$this->params['username']}:{$this->params['password']}");
+
+        $content = curl_exec($ch);
+        curl_close($ch);
+
+        return $content;
     }
 }
