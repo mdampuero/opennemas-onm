@@ -36,16 +36,16 @@ class PaywallController extends Controller
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->times = array(
-            '1d' => _('1 day'),
-            '2d' => sprintf(_('%d days'), '2'),
-            '1w' => sprintf(_('1 week')),
-            '2w' => sprintf(_('%d week'), '2'),
-            '1m' => sprintf(_('1 month')),
-            '3m' => sprintf(_('%d months'), '3'),
-            '6m' => sprintf(_('6 months'), '3'),
-            '1y' => sprintf(_('1 year')),
-            '2y' => sprintf(_('%d years'), '2'),
-            'unlimited' => sprintf(_('Unlimited'))
+            '1D' => _('1 day'),
+            '2D' => sprintf(_('%d days'), '2'),
+            '1W' => sprintf(_('1 week')),
+            '2W' => sprintf(_('%d week'), '2'),
+            '1M' => sprintf(_('1 month')),
+            '3M' => sprintf(_('%d months'), '3'),
+            '6M' => sprintf(_('6 months'), '3'),
+            '1Y' => sprintf(_('1 year')),
+            '2Y' => sprintf(_('%d years'), '2'),
+            // 'unlimited' => sprintf(_('Unlimited'))
         );
 
         $this->moneyUnits = array(
@@ -89,8 +89,9 @@ class PaywallController extends Controller
         $settings = array('payment_modes' => array());
 
         // Check values
-        $settings['paypal_user_email'] = $request->request->filter('settings[paypal_user_email]', 'dollar', FILTER_SANITIZE_STRING);
-        $settings['money_unit'] = $request->request->filter('settings[money_unit]', 'dollar', FILTER_SANITIZE_STRING);
+        $settings['paypal_user_email'] = $request->request->filter('settings[paypal_user_email]', 'test@test.com', FILTER_SANITIZE_STRING);
+        $settings['money_unit']        = $request->request->filter('settings[money_unit]', 'dollar', FILTER_SANITIZE_STRING);
+        $settings['vat_percentage']    = (int) $settingsForm['vat_percentage'];
 
         // Check payment modes
         $number = count($settingsForm['payment_modes']['time']);

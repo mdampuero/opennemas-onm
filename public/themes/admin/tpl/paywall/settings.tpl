@@ -83,6 +83,13 @@
                 </div>
             </div>
 
+            <div id="money" class="control-group">
+                <label for="vat_percentage" class="control-label">{t}VAT %{/t}</label>
+                <div class="controls">
+                    <input type="number" name="settings[vat_percentage]" value="{$settings['vat_percentage']}" step="any" min="0">
+                </div>
+            </div>
+
             <div id="payment_modes" class="control-group">
                 <label class="control-label" for="subtitle">{t}Payment modes{/t}</label>
                 <div class="controls">

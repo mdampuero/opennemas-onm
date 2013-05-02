@@ -84,41 +84,38 @@ class PaywallController extends Controller
 
         // URL to which the buyer's browser is returned after choosing to pay with PayPal
         $returnUrl = $this->generateUrl('frontend_paywall_success_payment', array('user' => $_SESSION['userid']), true);
-
-        // URL to which the buyer is returned if the buyer does not approve the use of PayPal to pay you
         $cancelUrl = $this->generateUrl('frontend_paywall_cancel_payment', array(), true);
 
-        $orderTotal = new \BasicAmountType();
-        $orderTotal->currencyID = $paywallSettings['money_unit'];
-        $orderTotal->value      = $selectedPlan['price'];
+        // Total costs of this operation
+        $orderTotalAmount = $selectedPlan['price'];
+        $orderTotal = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
 
-        $taxTotal = new \BasicAmountType();
-        $taxTotal->currencyID = $paywallSettings['money_unit'];
-        $taxTotal->value      = '0.0';
+        $taxesTotal = (string) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
+        $taxTotal = new \BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
 
+        // Information about the products to buy
         $itemDetails = new \PaymentDetailsItemType();
         $itemDetails->Name         = $selectedPlan['description'];
         $itemDetails->Amount       = $orderTotal;
         $itemDetails->Quantity     = '1';
         $itemDetails->ItemCategory = 'Digital';
 
+        // Complete informatin about the buy
         $paymentDetails = new \PaymentDetailsType();
         $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
-        $paymentDetails->OrderTotal            = $orderTotal;
         $paymentDetails->PaymentAction         = 'Sale';
-
-        // Sum of cost of all items in this order. For digital goods, this field is required.
+        $paymentDetails->OrderTotal            = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount + $taxesTotal);
         $paymentDetails->ItemTotal             = $orderTotal;
         $paymentDetails->TaxTotal              = $taxTotal;
 
+        // Information about the purchase
         $setECDetails = new \SetExpressCheckoutRequestDetailsType();
         $setECDetails->PaymentDetails[0] = $paymentDetails;
         $setECDetails->CancelURL         = $cancelUrl;
         $setECDetails->ReturnURL         = $returnUrl;
-
-        // Without shipping address. Required for digital goods
-        $setECDetails->ReqConfirmShipping = 0;
-        $setECDetails->NoShipping         = 1;
+        $setECDetails->ReqConfirmShipping = 0; // no shipping
+        $setECDetails->NoShipping         = 1; // no shipping
+        $setECDetails->BrandName          = s::get('site_name');
 
         $setECReqType = new \SetExpressCheckoutRequestType();
         $setECReqType->SetExpressCheckoutRequestDetails = $setECDetails;
@@ -126,8 +123,10 @@ class PaywallController extends Controller
         $setECReq = new \SetExpressCheckoutReq();
         $setECReq->SetExpressCheckoutRequest = $setECReqType;
 
+        // Perform the paypal API call
         $paypalService = new \PayPalAPIInterfaceServiceService(array());
         $setECResponse = $paypalService->SetExpressCheckout($setECReq);
+
         if ($setECResponse->Ack == 'Success') {
             $token = $setECResponse->Token;
 
@@ -140,11 +139,12 @@ class PaywallController extends Controller
             return $this->redirect('https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token='.$token);
 
         } else {
-            var_dump($setECResponse);
+            // var_dump($setECResponse);
             $this->get('logger')->notice(
                 "Paywall: Error in SetEC API call"
-                ."user {$user->id}: ".$e->getMessage()
+                ."user {$_SESSION['userid']}: ".$e->getMessage()
             );
+
         }
 
     }
@@ -161,6 +161,13 @@ class PaywallController extends Controller
         $token = $request->query->get('token');
         $paywallSettings = s::get('paywall_settings');
 
+        // Some sanity checks before continue with the payment
+        if (!array_key_exists('paywall_transaction', $_SESSION)
+            || $token != $_SESSION['paywall_transaction']['token']
+        ) {
+            return $this->render('paywall/payment_error.tpl');
+        }
+
         $getExpressCheckoutDetailsRequest = new \GetExpressCheckoutDetailsRequestType($token);
 
         $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
@@ -174,19 +181,20 @@ class PaywallController extends Controller
                 "Paywall: Error in GetExpressCheckoutDetils API call"
                 ."user {$user->id}: ".$e->getMessage()
             );
-            exit;
+
+            return $this->render('paywall/payment_error.tpl');
         }
-        if (isset($getECResponse)) {
-            echo "<table>";
-            echo "<tr><td>Ack :</td><td><div id='Ack'>".$getECResponse->Ack."</div> </td></tr>";
-            echo "<tr><td>Token :</td><td><div id='Token'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->Token."</div></td></tr>";
-            echo "<tr><td>PayerID :</td><td><div id='PayerID'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID."</div></td></tr>";
-            echo "<tr><td>PayerStatus :</td><td><div id='PayerStatus'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerStatus."</div></td></tr>";
-            echo "</table>";
-            echo '<pre>';
-            print_r($getECResponse);
-            echo '</pre>';
-        }
+        // if (isset($getECResponse)) {
+        //     echo "<table>";
+        //     echo "<tr><td>Ack :</td><td><div id='Ack'>".$getECResponse->Ack."</div> </td></tr>";
+        //     echo "<tr><td>Token :</td><td><div id='Token'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->Token."</div></td></tr>";
+        //     echo "<tr><td>PayerID :</td><td><div id='PayerID'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID."</div></td></tr>";
+        //     echo "<tr><td>PayerStatus :</td><td><div id='PayerStatus'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerStatus."</div></td></tr>";
+        //     echo "</table>";
+        //     echo '<pre>';
+        //     print_r($getECResponse);
+        //     echo '</pre>';
+        // }
 
         $payerId = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
 
@@ -217,22 +225,40 @@ class PaywallController extends Controller
                 "Paywall: Error in DoExpressCheckoutPayment API call"
                 ."user {$user->id}: ".$e->getMessage()
             );
-
-            exit;
-        }
-        if (isset($DoECResponse)) {
-            echo "<table>";
-            echo "<tr><td>Ack :</td><td><div id='Ack'>$DoECResponse->Ack</div> </td></tr>";
-            if(isset($DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo)) {
-                echo "<tr><td>TransactionID :</td><td><div id='TransactionID'>". $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0]->TransactionID."</div> </td></tr>";
-            }
-            echo "</table>";
-            echo "<pre>";
-            print_r($DoECResponse);
-            echo "</pre>";
         }
 
-        return $this->render('paywall/payment_success.tpl');
+        // Payment done, let's update some registries in the app
+        if (isset($DoECResponse) && strstr($DoECResponse->Ack, 'Success')) {
+            // echo "<pre>";
+            // echo "Ack : $DoECResponse->Ack";
+            // if (isset($DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo)) {
+            //     echo "TransactionID : ".
+            //         $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0]->TransactionID;
+            // }
+            // // print_r($DoECResponse);
+            // echo "</pre>";
+
+
+            $planTime = strtoupper($_SESSION['paywall_transaction']['plan']['time']);
+
+            $newUserSubscriptionDate = new \DateTime();
+            $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
+            $newUserSubscriptionDate->add(new \DateInterval('P'.$planTime));
+
+            $newTime = $newUserSubscriptionDate->format('Y-m-d H:i:s');
+
+            // TODO: Check if the payment was done before
+
+            $user = new \User($_SESSION['userid']);
+            $user->setMeta(array('paywall_time_limit' => $newTime));
+
+            $_SESSION['meta'] = $user->getMeta();
+            unset($_SESSION['paywall_transaction']);
+
+            return $this->render('paywall/payment_success.tpl', array('time' => $newUserSubscriptionDate));
+        }
+
+        return $this->render('paywall/payment_error.tpl');
     }
 
     /**
