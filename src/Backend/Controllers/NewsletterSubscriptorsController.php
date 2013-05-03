@@ -230,6 +230,8 @@ class NewsletterSubscriptorsController extends Controller
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_newsletter_subscriptors'));
+        } else {
+            return new Response('Ok', 200);
         }
     }
 

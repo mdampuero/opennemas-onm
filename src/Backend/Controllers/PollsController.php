@@ -363,6 +363,8 @@ class PollsController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('Ok', 200);
         }
     }
 
@@ -520,6 +522,8 @@ class PollsController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('Ok', 200);
         }
 
     }
