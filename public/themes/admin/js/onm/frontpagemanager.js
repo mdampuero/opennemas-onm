@@ -381,7 +381,7 @@ jQuery(function($) {
         modal.data('element-for-customize-content', element);
 
         modal.data('selected-for-customize-content', elementID);
-
+        modal.find('.modal-header #content-title').html(element.find('.title').html());
 
         if (title['font-size'] !== undefined) {
             var size = title['font-size'].substring(0,2);
@@ -409,6 +409,7 @@ jQuery(function($) {
         if (title['color'] !== undefined) {
             modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', title['color']);
             modal.find('.modal-body input#font-color').val(title['color']);
+            //$('select[name="colorpicker-font"]').simplecolorpicker('selectColor', title['color']);
             $('select[name="colorpicker-font"]').val(title['color']);
         } else {
             modal.find('.modal-body .fontcolor span.simplecolorpicker').css('background-color', '#000000');
@@ -416,22 +417,23 @@ jQuery(function($) {
         }
 
         if (element.data('class') == 'Article' || element.data('class') == 'Opinion') {
-            modal.find('.select-disposition').css('display', 'inline-block');
-            if(element.data('format').length>0) {
+            modal.find('.image-disposition').css('display', 'inline-block');
+            if(element.data('format') !== undefined && element.data('format').length>0) {
                 var format = element.data('format');
                 modal.find('.modal-body .radio input[value='+format+']').prop('checked', true);
             } else {
                 modal.find('.modal-body .radio input[value=auto]').prop('checked', true);
             }
         } else {
-            modal.find('.select-disposition').css('display', 'none');
+            modal.find('.image-disposition').css('display', 'none');
         }
 
         if (element.data('bg').length>0) {
             var bgcolor = element.data('bg').substring(17,24);
             modal.find('.modal-body .background span.simplecolorpicker').css('background-color', bgcolor);
             modal.find('.modal-body input#bg-color').val(bgcolor);
-            $('select[name="colorpicker-background"]').val(bgcolor);
+           $('select[name="colorpicker-background"]').val(bgcolor);
+           // $('select[name="colorpicker-background"]').simplecolorpicker('selectColor', bgcolor);
         } else {
             modal.find('.modal-body .background span.simplecolorpicker').css('background-color', '#ffffff');
             modal.find('.modal-body #bg-color').val('#ffffff');
@@ -494,11 +496,12 @@ jQuery(function($) {
 
         var format = $(".modal-body .radio input[type='radio']:checked").val();
         var vformat ='format_' + $('#frontpagemanager').data('category');
-        if(format.length>0 && (format != 'auto')) {
+        if((typeof format != "undefined") && (format.length>0 && format != 'auto')) {
             properties[vformat] = format;
         } else {
             properties[vformat] = '';
         }
+
 
         if (elementID) {
             $.ajax({

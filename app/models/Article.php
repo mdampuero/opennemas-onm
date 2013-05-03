@@ -532,9 +532,6 @@ class Article extends Content
      **/
     public function render($params, $tpl = null)
     {
-        $category = $tpl->getTemplateVars('actual_category_id');
-        $format = 'format_'.$category;
-
         //  if (!isset($tpl)) {
             $tpl = new Template(TEMPLATE_USER);
         //}
@@ -543,12 +540,7 @@ class Article extends Content
         // $params'cssclass', $params['cssclass']);
         // $tpl->assign('categoryId', $params['categoryId']);
 
-        if (isset($this->$format)) {
-            if (preg_match('/Under/', $this->$format)) {
-                $matches = preg_split('/\./', $params['tpl']);
-                $params['tpl'] = $matches[0].'_under.'.$matches[1];
-            }
-        }
+
         try {
             $html = $tpl->fetch($params['tpl'], $params);
         } catch (\Exception $e) {
