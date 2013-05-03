@@ -26,6 +26,7 @@
 
 {block name="footer-js" append}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
+    {script_tag src="/onm/md5.min.js" common=1}
 
     <script type="text/javascript">
 
@@ -373,6 +374,25 @@
                     <div class="controls">
                         <input type="text" id="twitter_page" name="twitter_page" value="{$configs['twitter_page']|default:""}" class="input-xxlarge">
                         <div class="help-block">{t escape=off}If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
+                    </div>
+                </div>
+
+            </fieldset>
+            <hr>
+            <fieldset>
+                <h3 class="settings-header">{t}Opennemas{/t}</h3>
+
+                <div class="control-group">
+                    <label for="onm_digest_user" class="control-label">{t}Opennemas Digest User{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="onm_digest_user" name="onm_digest_user" value="{$configs['onm_digest_user']|default:""}" class="input-xlarge">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="onm_digest_pass" class="control-label">{t}Opennemas Digest Pass{/t}</label>
+                    <div class="controls">
+                        <input type="password" id="onm_digest_pass" name="onm_digest_pass" value="{$configs['onm_digest_pass']|default:""}" class="input-large">
                     </div>
                 </div>
 

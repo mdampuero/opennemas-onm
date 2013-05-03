@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the Onm\Import\Repository\ImporterAbstract class
+ * Defines the Onm\Import\Synchronizer\Synchronizer class
  *
  * This file is part of the Onm package.
  *
@@ -9,18 +9,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package Onm_Importer
+ * @package Onm_Import
  **/
-namespace Onm\Import\Repository;
+namespace Onm\Import\Synchronizer;
 
 use Onm\Import\Synchronizer\LockException;
 
 /**
  * Handles all the common methods in the importers
  *
- * @package Onm_Importer
+ * @package Onm_Import
  **/
-abstract class ImporterAbstract
+class Synchronizer
 {
 
     /**
@@ -29,6 +29,25 @@ abstract class ImporterAbstract
      * @var string
      **/
     public $syncPath = '';
+
+
+    protected $lockFile = '';
+
+    /**
+     * Initializes the object and initializes configuration
+     *
+     * @return void
+     */
+    public function __construct($config = array())
+    {
+        $this->syncPath = implode(
+            DIRECTORY_SEPARATOR,
+            array(CACHE_PATH, 'importers')
+        );
+        $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
+
+        $this->lockFile = $this->syncPath.DIRECTORY_SEPARATOR.".lock";
+    }
 
     /**
      * Creates a lock for avoid concurrent sync by multiple users
@@ -182,13 +201,33 @@ abstract class ImporterAbstract
             }
         );
 
-        $fileListingCleaned = array();
+        foreach ($fileListing as &$file) {
+            $file = str_replace($cacheDir.DIRECTORY_SEPARATOR, '', $file);
+        }
 
+        return $fileListing;
+    }
+
+    /**
+     * Fetches the files present in $cacheDir with source.
+     *
+     * @param string $cacheDir the directory where search files from.
+     *
+     * @return array the list of files
+     */
+    public static function getLocalFileListForSource($cacheDir, $sourceId, $pattern = '*.xml')
+    {
+        $fileListing = glob($cacheDir.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$pattern);
+
+        usort(
+            $fileListing,
+            function ($a, $b) {
+                return filemtime($a) < filemtime($b);
+            }
+        );
 
         foreach ($fileListing as &$file) {
             $file = str_replace($cacheDir.DIRECTORY_SEPARATOR, '', $file);
-
-            // $fileListingCleaned []= basename($file);
         }
 
         return $fileListing;
@@ -224,29 +263,34 @@ abstract class ImporterAbstract
 
         $this->lockSync();
 
-        $excludedFiles = self::getLocalFileList($serverSyncPath);
+        $excludedFiles = self::getLocalFileListForSource($this->syncPath, $params['id'], '*');
 
-        $synchronizer = new \Onm\Import\Synchronizer\FTP($params);
-        $ftpSync = $synchronizer->downloadFilesToCacheDir(
-            $serverSyncPath,
-            $excludedFiles,
-            $params['sync_from']
-        );
+        $params['sync_path'] = $serverSyncPath;
+        $params['excluded_files'] = $excludedFiles;
+        // Needs an abstraction
+
+        $synchronizer = \Onm\Import\Synchronizer\ServerFactory::get($params);
+
+        $report = $synchronizer->downloadFilesToCacheDir($params);
 
         $this->unlockSync();
 
-        return $ftpSync;
+        return $report;
     }
 
     /**
-     * gets a list of stored elements filtered by some params
+     * Removes the local files for a given source id
      *
-     * @param array $params array of params to filter elements with
-     *
-     * @return array elements    stored
-     */
-    public function findAllBy($params = array())
+     * @return boolean true if the files were deleted
+     * @throws Exception If the files weren't deleted
+     **/
+    public function deleteFilesForSource($id)
     {
+        $path = realpath($this->syncPath.DIRECTORY_SEPARATOR.$id);
 
+        if (!empty($path)) {
+            return \FilesManager::deleteDirectoryRecursively($path);
+        }
+        return false;
     }
 }

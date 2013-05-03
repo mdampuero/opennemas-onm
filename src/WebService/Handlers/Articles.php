@@ -398,4 +398,3 @@ class Articles
         throw new RestException(400, 'parameter is not valid');
     }
 }
-
