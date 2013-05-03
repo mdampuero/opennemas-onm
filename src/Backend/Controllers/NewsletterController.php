@@ -368,6 +368,8 @@ class NewsletterController extends Controller
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('admin_newsletters'));
+        } else {
+            return new Response('Ok', 200);
         }
     }
 
