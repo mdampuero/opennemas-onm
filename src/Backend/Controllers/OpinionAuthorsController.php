@@ -283,6 +283,8 @@ class OpinionAuthorsController extends Controller
             return $this->redirect(
                 $this->generateUrl('admin_opinion_authors', array('page' => $page))
             );
+        } else {
+            return new Response('Ok', 200);
         }
     }
 
