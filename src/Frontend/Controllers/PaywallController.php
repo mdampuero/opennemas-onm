@@ -87,10 +87,10 @@ class PaywallController extends Controller
         $cancelUrl = $this->generateUrl('frontend_paywall_cancel_payment', array(), true);
 
         // Total costs of this operation
-        $orderTotalAmount = $selectedPlan['price'];
+        $orderTotalAmount = (int) $selectedPlan['price'];
         $orderTotal = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
 
-        $taxesTotal = (string) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
+        $taxesTotal = (int) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
         $taxTotal = new \BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
 
         // Information about the products to buy
@@ -104,7 +104,10 @@ class PaywallController extends Controller
         $paymentDetails = new \PaymentDetailsType();
         $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
         $paymentDetails->PaymentAction         = 'Sale';
-        $paymentDetails->OrderTotal            = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount + $taxesTotal);
+        $paymentDetails->OrderTotal            = new \BasicAmountType(
+            $paywallSettings['money_unit'],
+            $orderTotalAmount + $taxesTotal
+        );
         $paymentDetails->ItemTotal             = $orderTotal;
         $paymentDetails->TaxTotal              = $taxTotal;
 
