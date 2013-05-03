@@ -2,55 +2,34 @@
 /***********************************************************
     Frontpage content disposition
 ************************************************************/
-.justifyTop div.article-media,
-.justifyUnder div.article-media{
+.image-top-wide div.article-media,
+.image-middle-wide div.article-media{
     width: 100%;
 }
 
-.rightTop div.article-media{
+.image-top-right div.article-media{
     width: 49%;
     float: right;
-    padding-left: 1%;
+    padding-left: 10px;
 }
 
-.rightTop div.article-data {
-    float: left;
-    width: 50%;
-}
-
-.leftTop div.article-media{
+.image-top-left div.article-media{
     width: 49%;
     float: left;
-    padding-right: 1%;
+    padding-right: 10px;
 }
 
-.leftTop div.article-data {
-    float: right;
-    width: 50%;
-}
-
-.rightUnder div.article-media{
+.image-middle-right div.article-media{
     width: 49%;
     float: right;
-    padding-left: 1%;
+    padding-left: 10px;
 }
 
-.rightUnder div.article-data {
-    float: left;
-    width: 50%;
-}
-
-.leftUnder div.article-media{
+.image-middle-left div.article-media{
     width: 49%;
     float: left;
-    padding-right: 1%;
+    padding-right: 10px;
 }
-
-.leftUnder div.article-data {
-    float: right;
-    width: 50%;
-}
-
 
 /***********************************************************
   Definitions for ads
