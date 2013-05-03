@@ -493,7 +493,7 @@ class OpinionsController extends Controller
                 )
             );
         } else {
-            return new Response('ok');
+            return new Response('Ok', 200);
         }
     }
 
@@ -737,6 +737,8 @@ class OpinionsController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('Ok', 200);
         }
 
     }

@@ -222,12 +222,12 @@ class FilesManager
     /**
      * Compress archives in a Tgz
      *
-     * @param string $file the file compress
+     * @param string $compressFile the file compress
      * @param string $destination the target destionation
      *
      * @return boolean true if the file was compresed
      */
-    public static function compressTgz($file, $destination)
+    public static function compressTgz($compressFile, $destination)
     {
         $command = "tar cpfz $compressFile $destination";
 

@@ -58,6 +58,21 @@ abstract class ResourceAbstract
                 return (string) $content[1]->p;
 
                 break;
+            case 'name':
+                $content =
+                    $this->getData()
+                    ->NewsComponent->ContentItem->Characteristics
+                    ->xpath("//Property[contains(@FormalName,'Filename')]");
+
+                if (stripos($content[0]->attributes()->FormalName, 'EFE') !== false) {
+                    $imageName = (string) $content[1]->attributes()->Value;
+                } else {
+                    $imageName = (string) $content[0]->attributes()->Value;
+                }
+
+                return $imageName;
+
+                break;
             case 'file_type':
                 $fileType =
                     $this->getData()
@@ -68,10 +83,14 @@ abstract class ResourceAbstract
 
                 break;
             case 'file_path':
-                $filePath =
-                    $this->getData()
-                    ->NewsComponent->ContentItem
-                    ->attributes()->Href;
+
+                $imageContentItems = $this->getData()->NewsComponent->ContentItem;
+
+                if (count($imageContentItems) > 1) {
+                    $filePath =  $imageContentItems[1]->attributes()->Href;
+                } else {
+                    $filePath =  $imageContentItems->attributes()->Href;
+                }
 
                 return (string) $filePath;
 
