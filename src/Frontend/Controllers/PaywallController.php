@@ -71,6 +71,9 @@ class PaywallController extends Controller
      **/
     public function preparePaymentAction(Request $request)
     {
+        if (!array_key_exists('userid', $_SESSION)) {
+            return $this->redirect($this->generateUrl('frontend_auth_login'));
+        }
         $selectedPlanId = $request->request->filter('plan');
 
         $paywallSettings = s::get('paywall_settings');
@@ -90,7 +93,7 @@ class PaywallController extends Controller
         $orderTotalAmount = (int) $selectedPlan['price'];
         $orderTotal = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
 
-        $taxesTotal = (int) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
+        $taxesTotal = 0; //(int) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
         $taxTotal = new \BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
 
         // Information about the products to buy

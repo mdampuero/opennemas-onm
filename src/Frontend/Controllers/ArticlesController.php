@@ -316,6 +316,7 @@ class ArticlesController extends Controller
                     $userSubscriptionDateString,
                     new \DateTimeZone('UTC')
                 );
+
                 $now = new \DateTime('now', new \DateTimeZone('UTC'));
 
                 $hasSubscription = $userSubscriptionDate > $now;
