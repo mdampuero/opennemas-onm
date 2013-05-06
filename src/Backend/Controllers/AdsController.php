@@ -376,6 +376,8 @@ class AdsController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('Ok', 200);
         }
     }
 
@@ -422,6 +424,8 @@ class AdsController extends Controller
                     )
                 )
             );
+        } else {
+            return new Response('Ok', 200);
         }
 
     }
