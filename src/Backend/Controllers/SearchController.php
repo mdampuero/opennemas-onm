@@ -50,7 +50,7 @@ class SearchController extends Controller
         $contentTypes = $this->getContentTypesFiltered();
 
         $searchString = $this->request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
-        $contentTypesSelected = $this->request->get('content_types', array());
+        $contentTypesSelected = $this->request->get('content_types', array('article'));
         $page         = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
 
         $itemsPerPage = s::get('items_per_page') ?: 20;
