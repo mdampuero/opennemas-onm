@@ -130,7 +130,9 @@ class PaywallController extends Controller
         $setECReq->SetExpressCheckoutRequest = $setECReqType;
 
         // Perform the paypal API call
-        $paypalService = new \PayPalAPIInterfaceServiceService(array());
+        // $paypalService = new \PayPalAPIInterfaceServiceService(array());
+        $paypalService = $this->get('paypal_connection');
+
         $setECResponse = $paypalService->SetExpressCheckout($setECReq);
 
         if ($setECResponse->Ack == 'Success') {
