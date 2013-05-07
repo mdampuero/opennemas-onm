@@ -260,6 +260,9 @@ gettext("Go back");
 gettext("Newsletters");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
+gettext("Subscriptors");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
 gettext("Search by name");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
@@ -323,13 +326,25 @@ gettext("Creating subscriptor");
 gettext("Editing subscriptor \"%1\"");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Save and continue");
+gettext("Save");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Save and continue");
+gettext("Save");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Save and exit");
+gettext("Update");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Cancel");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Cancel");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Cancel");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
 gettext("Go back");
@@ -488,13 +503,10 @@ gettext("Preview");
 gettext("Delivered newsletter report");
 
 /* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
-gettext("Back");
+gettext("Back to list");
 
 /* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
-gettext("Back");
-
-/* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
-gettext("View recipients");
+gettext("Back to list");
 
 /* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
 gettext("OK");
@@ -707,7 +719,7 @@ gettext("Mobile: frontpages");
 gettext("RSS");
 
 /* public/themes/admin/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion: frontpage");
+gettext("Opinion: Authors");
 
 /* public/themes/admin/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Opinion: inner");
@@ -2430,6 +2442,9 @@ gettext("Red");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Bold red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Reset");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Save");
@@ -4386,6 +4401,9 @@ gettext("This settings allow printing home ads when ads in category are empty.")
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_positions.tpl */
 gettext("Floating ads (for drop them into columns)");
+
+/* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Drop an image to here");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("File name");
@@ -7511,9 +7529,6 @@ gettext("Other attachments");
 gettext("Pretitle:");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
-gettext("Title:");
-
-/* public/themes/admin/tpl//news_agency/show.tpl */
 gettext("Priority:");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
@@ -7523,7 +7538,7 @@ gettext("Date:");
 gettext("Summary:");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
-gettext("Body");
+gettext("Description");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
 gettext("Files:");
@@ -7941,6 +7956,15 @@ gettext("Twitter Page");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Opennemas News Agency");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("User");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Password");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Piwik Statistics");
