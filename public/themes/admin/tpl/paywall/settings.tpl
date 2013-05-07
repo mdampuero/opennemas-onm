@@ -47,7 +47,6 @@
 </style>
 {/block}
 
-
 {block name="content"}
 <form action="{url name=admin_paywall_settings_save}" method="post">
     <div class="top-action-bar clearfix">
@@ -121,7 +120,7 @@
             <hr>
 
             <fieldset>
-                <h3>{t}Transaction details{/t}</h3>
+                <h3 class="settings-header">{t}Transaction details{/t}</h3>
 
                 <div id="money" class="control-group">
                     <label for="money_unit" class="control-label">{t}Money unit{/t}</label>

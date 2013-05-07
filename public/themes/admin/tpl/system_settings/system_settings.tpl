@@ -12,11 +12,6 @@
         margin-top:0px !important;
         margin-bottom:10px !important;
     }
-    .settings-header {
-        font-weight: bold;
-        color: #333;
-        font-size:14px;
-    }
     .colorpicker_input, colorpicker_viewer {
         display:inline-block;
         float:none;

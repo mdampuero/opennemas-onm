@@ -2338,3 +2338,9 @@ div.tagsinput span.tag a { font-weight: bold; text-decoration:none;  }
   width:100%;
   min-height:150px;
 }
+
+.settings-header {
+    font-weight: bold;
+    color: #333;
+    font-size:14px;
+}
