@@ -236,6 +236,7 @@ class SearchController extends Controller
 
             if (mod::moduleExists(strtoupper($contentType['name']).'_MANAGER')
                 && mod::isActivated(strtoupper($contentType['name']).'_MANAGER')
+                && in_array($contentType['name'], $selected)
             ) {
                 $szTypes []= $contentType['name'];
             }
