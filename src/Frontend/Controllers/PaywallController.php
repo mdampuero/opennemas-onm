@@ -74,7 +74,11 @@ class PaywallController extends Controller
         if (!array_key_exists('userid', $_SESSION)) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
-        $selectedPlanId = $request->request->filter('plan');
+        $selectedPlanId = $request->query->filter('plan');
+
+        if (empty($selectedPlanId)) {
+            return $this->redirect($this->generateUrl('frontend_paywall_showcase'));
+        }
 
         $paywallSettings = s::get('paywall_settings');
 
@@ -130,8 +134,8 @@ class PaywallController extends Controller
         $setECReq->SetExpressCheckoutRequest = $setECReqType;
 
         // Perform the paypal API call
-        // $paypalService = new \PayPalAPIInterfaceServiceService(array());
-        $paypalService = $this->get('paypal_connection');
+        $paypalWrapper = $this->getPaypalService();
+        $paypalService = $paypalWrapper->getMerchantService();
 
         $setECResponse = $paypalService->SetExpressCheckout($setECReq);
 
@@ -144,7 +148,8 @@ class PaywallController extends Controller
                 'token' => $token,
             );
 
-            return $this->redirect('https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token='.$token);
+            $paypalUrl = $paypalWrapper->getServiceUrl().'&token='.$token;
+            return $this->redirect($paypalUrl);
 
         } else {
             // var_dump($setECResponse);
@@ -181,7 +186,9 @@ class PaywallController extends Controller
         $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
         $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
-        $paypalService = $this->get('paypal_connection');
+        // Perform the paypal API call
+        $paypalWrapper = $this->getPaypalService();
+        $paypalService = $paypalWrapper->getMerchantService();
 
         try {
             $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
@@ -293,5 +300,26 @@ class PaywallController extends Controller
     {
         return $this->redirect($this->generateUrl(''));
         var_dump('IPN_PAYMENT_ACTION', $request);die();
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    private function getPaypalService()
+    {
+        $settings = array();
+
+        $databaseSettings = s::get('paywall_settings');
+        $settings = array(
+            "acct1.UserName"  => $databaseSettings['paypal_username'],
+            "acct1.Password"  => $databaseSettings['paypal_password'],
+            "acct1.Signature" => $databaseSettings['paypal_signature'],
+            "mode"            => ($databaseSettings['developer_mode']) ? 'sandbox' : 'live',
+        );
+
+        return  new \Onm\Merchant\PaypalWrapper($settings);
     }
 }

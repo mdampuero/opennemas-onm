@@ -43,23 +43,3 @@ parameters:
         end_point:   https://manager.onm.local/managerws/
         base_domain: opennemas.com
         template:    retrincos
-
-    paypal_connection_params:
-        acct1.UserName : fran-facilitator_api1.openhost.es
-        acct1.Password : 1366062129
-        acct1.Signature : AVw5ZzM-y7sHMMfMx4b4YIFUb8DLAEG9qsmMbb4E0rn1Obd04zmhgtgx
-        acct1.AppId : APP-80W284485P519543T
-        acct1.Subject :
-
-        acct2.UserName : platfo_1255170694_biz_api1.gmail.com
-        acct2.Password : 2DPPKUPKB7DQLXNR
-        # acct2.CertPath : cert_key.pem
-
-        http.ConnectionTimeOut : 30
-        http.Retry : 5
-
-        mode : sandbox #live
-
-        log.FileName : ../PayPal.log
-        log.LogLevel : INFO
-        log.LogEnabled : false

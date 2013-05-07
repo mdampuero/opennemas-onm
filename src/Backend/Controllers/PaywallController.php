@@ -49,8 +49,8 @@ class PaywallController extends Controller
         );
 
         $this->moneyUnits = array(
-            'USD' => '$',
             'EUR' => '€',
+            'USD' => '$',
         );
     }
 
@@ -89,11 +89,12 @@ class PaywallController extends Controller
         $settings = array('payment_modes' => array());
 
         // Check values
-        $settings['paypal_user_email'] = $request->request->filter('settings[paypal_user_email]', 'test@test.com', FILTER_SANITIZE_STRING);
+        $settings['paypal_username'] = $request->request->filter('settings[paypal_username]', '', FILTER_SANITIZE_STRING);
+        $settings['paypal_password'] = $request->request->filter('settings[paypal_password]', '', FILTER_SANITIZE_STRING);
+        $settings['paypal_signature'] = $request->request->filter('settings[paypal_signature]', '', FILTER_SANITIZE_STRING);
         $settings['money_unit']        = $request->request->filter('settings[money_unit]', 'dollar', FILTER_SANITIZE_STRING);
         $settings['developer_mode']    = (boolean) $settingsForm['developer_mode'];
         $settings['vat_percentage']    = (int) $settingsForm['vat_percentage'];
-
 
         // Check payment modes
         $number = count($settingsForm['payment_modes']['time']);

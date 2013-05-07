@@ -41,7 +41,3 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
-    paypal_connection:
-        class: \PayPalAPIInterfaceServiceService
-        arguments: [ %paypal_connection_params% ]
-
