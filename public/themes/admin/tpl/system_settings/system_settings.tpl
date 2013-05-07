@@ -60,6 +60,15 @@
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
+
+        $('.check-pass').on('click', function(){
+            var passInput = $('#onm_digest_pass');
+            if ($(this).is(':checked')) {
+                passInput.prop('type','text');
+            } else {
+                passInput.prop('type','password');
+            }
+        });
     });
     </script>
 {/block}
@@ -380,19 +389,20 @@
             </fieldset>
             <hr>
             <fieldset>
-                <h3 class="settings-header">{t}Opennemas{/t}</h3>
+                <h3 class="settings-header">{t}Opennemas News Agency{/t}</h3>
 
                 <div class="control-group">
-                    <label for="onm_digest_user" class="control-label">{t}Opennemas Digest User{/t}</label>
+                    <label for="onm_digest_user" class="control-label">{t}User{/t}</label>
                     <div class="controls">
                         <input type="text" id="onm_digest_user" name="onm_digest_user" value="{$configs['onm_digest_user']|default:""}" class="input-xlarge">
                     </div>
                 </div>
 
                 <div class="control-group">
-                    <label for="onm_digest_pass" class="control-label">{t}Opennemas Digest Pass{/t}</label>
+                    <label for="onm_digest_pass" class="control-label">{t}Password{/t}</label>
                     <div class="controls">
                         <input type="password" id="onm_digest_pass" name="onm_digest_pass" value="{$configs['onm_digest_pass']|default:""}" class="input-large">
+                        <input type="checkbox" class="check-pass" value="">&nbsp;{t}Show password{/t}
                     </div>
                 </div>
 

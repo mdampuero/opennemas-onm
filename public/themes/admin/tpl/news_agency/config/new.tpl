@@ -6,6 +6,15 @@ jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
+
+    $('.check-pass').on('click', function(){
+        var passInput = $('#password');
+        if ($(this).is(':checked')) {
+            passInput.prop('type','text');
+        } else {
+            passInput.prop('type','password');
+        }
+    });
 });
 </script>
 {/block}
@@ -68,7 +77,8 @@ jQuery(document).ready(function($) {
         <div class="control-group">
             <label for="password" class="control-label">{t}Password{/t}</label>
             <div class="controls">
-                <input type="text" id="password" name="password" value="{$server['password']}" class="input-xlarge" required="required"/>
+                <input type="password" id="password" name="password" value="{$server['password']}" class="input-xlarge" required="required"/>
+                <input type="checkbox" class="check-pass" value="">&nbsp;{t}Show password{/t}
             </div>
         </div>
 
