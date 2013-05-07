@@ -29,6 +29,7 @@ if (!isset($routes)) {
 
 // Create the request object
 $request = Request::createFromGlobals();
+$request->setTrustedProxies(array('127.0.0.1'));
 
 // Create the Request context from the request, useful for the matcher
 $context = new RequestContext();
