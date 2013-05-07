@@ -181,7 +181,8 @@ class PaywallController extends Controller
         $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
         $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
 
-        $paypalService = new \PayPalAPIInterfaceServiceService();
+        $paypalService = $this->get('paypal_connection');
+
         try {
             $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
         } catch (\Exception $ex) {
