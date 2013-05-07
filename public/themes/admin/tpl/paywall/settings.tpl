@@ -90,6 +90,14 @@
                 </div>
             </div>
 
+            <div id="money" class="control-group">
+                <label for="developer_mode" class="control-label"></label>
+                <div class="controls">
+                    <input type="checkbox" id="developer_mode" name="settings[developer_mode]" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}  /> {t}Developer mode{/t}
+                    <div class="help-block">{t}Mark this if you want {/t}</div>
+                </div>
+            </div>
+
             <div id="payment_modes" class="control-group">
                 <label class="control-label" for="subtitle">{t}Payment modes{/t}</label>
                 <div class="controls">
