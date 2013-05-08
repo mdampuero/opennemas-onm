@@ -54,13 +54,32 @@ class PaywallController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows a list of purchases for the paywall module
      *
      * @param Request $request the request object
      *
      * @return Response the response object
      **/
     public function defaultAction(Request $request)
+    {
+        return $this->render(
+            'paywall/list.tpl',
+            array(
+                'settings'    => $settings,
+                'times'       => $this->times,
+                'money_units' => $this->moneyUnits,
+            )
+        );
+    }
+
+    /**
+     * Description of the action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function settingsAction(Request $request)
     {
         $settings = s::get('paywall_settings');
 
