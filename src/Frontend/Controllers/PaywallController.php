@@ -278,36 +278,51 @@ class PaywallController extends Controller
             );
         }
 
-        // Payment done, let's update some registries in the app
-        if (isset($DoECResponse) && strstr($DoECResponse->Ack, 'Success')) {
-            // echo "<pre>";
-            // echo "Ack : $DoECResponse->Ack";
-            // if (isset($DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo)) {
-            //     echo "TransactionID : ".
-            //         $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0]->TransactionID;
-            // }
-            // // print_r($DoECResponse);
-            // echo "</pre>";
+        $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
 
+        // Payment done, let's update some registries in the app
+        if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
+
+            $order = new \Order();
+            $order->create(
+                array(
+                    'user_id'        => $_SESSION['userid'],
+                    'content_id'     => 0,
+                    'created'        => new \DateTime(),
+                    'payment_id'     => $paymentInfo->TransactionID,
+                    'payment_status' => $paymentInfo->PaymentStatus,
+                    'payment_amount' => (int) $paymentInfo->GrossAmount->value,
+                    'payment_method' => $paymentInfo->TransactionType,
+                    'type'           => 'paywall',
+                    'params'         => array(
+                        ''
+                    ),
+                )
+            );
 
             $planTime = strtoupper($_SESSION['paywall_transaction']['plan']['time']);
 
-            // TODO: Check if the payment was done before
+            $newUserSubscriptionDate = new \DateTime();
+            $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
+            $newUserSubscriptionDate->modify("+{$planTime} hours");
 
             $user = new \User($_SESSION['userid']);
 
-            $user->addSubscriptionLimit($planTime);
+            $user->addSubscriptionLimit($newUserSubscriptionDate);
 
             $_SESSION['meta'] = $user->getMeta();
             unset($_SESSION['paywall_transaction']);
 
             return $this->render('paywall/payment_success.tpl', array('time' => $newUserSubscriptionDate));
+        } elseif ($DoECResponse->Errors[0]->ErrorCode == '11607') {
+            $message = _('Your payment was already registered');
         }
 
         return $this->render(
             'paywall/payment_error.tpl',
             array(
-                'settings' => $paywallSettings
+                'settings' => $paywallSettings,
+                'message'  => $message,
             )
         );
     }
