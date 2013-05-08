@@ -118,7 +118,7 @@ class Order
             return array();
         }
 
-        $order = array();
+        $orders = array();
         while (!$rs->EOF) {
             $order = new \Order();
 
