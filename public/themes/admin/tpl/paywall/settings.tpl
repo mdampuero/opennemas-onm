@@ -58,6 +58,12 @@
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
+                <li class="separator"></li>
+                <li>
+                    <a href="{url name=admin_paywall}" title="{t}Go back to list{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back{/t}
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

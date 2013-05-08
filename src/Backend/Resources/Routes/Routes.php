@@ -2298,8 +2298,6 @@ $adminRoutes->add(
     )
 );
 
-
-
 // Importer Efe controller routes
 $adminRoutes->add(
     'admin_news_agency',

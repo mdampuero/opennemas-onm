@@ -62,6 +62,17 @@ class PaywallController extends Controller
      **/
     public function defaultAction(Request $request)
     {
+        $settings = s::get('paywall_settings');
+
+        if (empty($settings)) {
+            $session = $this->get('session');
+            $session->start();
+            $this->get('session')->setFlash(
+                'notice',
+                _('Please configure your Paywall module before using it.')
+            );
+            return $this->redirect($this->generateUrl('admin_paywall_settings'));
+        }
         $users = \User::getUsersWithSubscription(10);
 
         $purchases = \Order::find();
