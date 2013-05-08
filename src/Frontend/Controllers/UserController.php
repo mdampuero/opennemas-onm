@@ -125,17 +125,17 @@ class UserController extends Controller
 
             // Check if pwd and cpwd are the same
             if (($data['password'] != $data['cpwd'])) {
-                $errors []= _('Contrasinal e a confirmación teñen que ser iguales.');
+                $errors []= _('Password and confirmation must be equal.');
             }
 
             // Check existing mail
             if ($user->checkIfExistsUserEmail($data['email'])) {
-                $errors []= _('O enderezo eletrónico xa está en uso.');
+                $errors []= _('The email address is already in use.');
             }
 
             // Check existing user name
             if ($user->checkIfExistsUserName($data['name'])) {
-                $errors []= _('O nome de usuario xa está en uso.');
+                $errors []= _('The user name is already in use.');
             }
 
             // If checks are both false and pass is valid then send mail
