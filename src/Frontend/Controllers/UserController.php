@@ -102,7 +102,9 @@ class UserController extends Controller
 
         $errors = array();
         // What happens when the CAPTCHA was entered incorrectly
-        if (!$resp->is_valid) {
+        if ('POST' != $request->getMethod()) {
+            // Do nothing
+        } elseif (!$resp->is_valid) {
             $errors []= _('Verification image not valid. Try to fill it again.');
         } else {
             // Correct CAPTCHA - Filter $_POST vars from FORM
