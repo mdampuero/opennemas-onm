@@ -34,7 +34,7 @@
                 </div>
 
 
-                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                {is_module_activated name="CRONICAS_MODULES"}
                     <div id="home_related" class="column-receiver">
                         <h5>{t}Related in home{/t}</h5>
                         <ul class="content-receiver" >
