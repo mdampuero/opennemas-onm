@@ -1005,13 +1005,14 @@ class User
      *
      * @return void
      **/
-    public function addSubscriptionLimit($planTime)
+    public function addSubscriptionLimit($planTime = 0)
     {
         $newUserSubscriptionDate = new \DateTime();
         $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
-        $newUserSubscriptionDate->modify('+{$planTime} hours');
+        $newUserSubscriptionDate->modify("+{$planTime} hours");
 
         $newTime = $newUserSubscriptionDate->format('Y-m-d H:i:s');
+
         $this->setMeta(array('paywall_time_limit' => $newTime));
     }
 
