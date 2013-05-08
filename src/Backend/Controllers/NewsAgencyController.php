@@ -76,12 +76,21 @@ class NewsAgencyController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $queryParams  = $this->request->query;
+        $page         = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
+        $filterTitle  = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
+        $itemsPage    = s::get('items_per_page') ?: 20;
 
+        // Get the amount of minutes from last sync
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $minutesFromLastSync = $synchronizer->minutesFromLastSync();
+
+        // Get LocalRepository instance
         $repository = new \Onm\Import\Repository\LocalRepository();
 
+        // Fetch all servers and activated sources
         $servers = s::get('news_agency_config');
-
         $sources = array_map(
             function ($server) {
                 return $server['name'];
@@ -89,16 +98,7 @@ class NewsAgencyController extends Controller
             $servers
         );
 
-        // Get the amount of minutes from last sync
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
-        $minutesFromLastSync = $synchronizer->minutesFromLastSync();
-
-        $queryParams  = $this->request->query;
-        $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
-        $filterTitle  = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
-        $page         = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
-        $itemsPage    = s::get('items_per_page') ?: 20;
-
+        // Fetch filter params
         $findParams = array(
             'source'     => $filterSource,
             'title'      => $filterTitle,
@@ -291,7 +291,7 @@ class NewsAgencyController extends Controller
                 }
 
                 // Check if the file apc_exists(keys)
-                if ($filePath) {
+                if (file_exists($filePath)) {
                     $data = array(
                         'title'         => $fileName,
                         'description'   => $photo->title,
