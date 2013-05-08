@@ -97,6 +97,9 @@ class AuthenticationController extends Controller
                 if ($user->authorize != 1) {
                     m::add(_('This user was deactivated. Please ask your administrator.'), m::ERROR);
                     return $this->redirect($this->generateUrl('admin_login_form'));
+                } elseif ($user->type != 0) {
+                    m::add(_('This user has no access to de control panel.'), m::ERROR);
+                    return $this->redirect($this->generateUrl('admin_login_form'));
                 } else {
                     // Increase security by regenerating the id
                     $request->getSession()->migrate();
