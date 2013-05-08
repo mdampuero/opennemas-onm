@@ -122,7 +122,8 @@ class AuthenticationController extends Controller
                         'updated'          => time(),
                         'session_lifetime' => $maxSessionLifeTime * 60,
                         'user_language'    => $user->getMeta('user_language'),
-                        'csrf'             => md5(uniqid(mt_rand(), true))
+                        'csrf'             => md5(uniqid(mt_rand(), true)),
+                        'meta'             => $user->getMeta(),
                     );
 
                     $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
