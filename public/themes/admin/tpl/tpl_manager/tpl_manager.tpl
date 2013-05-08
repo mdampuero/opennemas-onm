@@ -80,7 +80,7 @@
                         <option value="articles" {if isset($smarty.request.type) && $smarty.request.type eq 'articles'}selected="selected"{/if}>{t}Article: inner{/t}</option>
                         <option value="mobilepages" {if isset($smarty.request.type) && $smarty.request.type eq 'mobilepages'}selected="selected"{/if}>{t}Mobile: frontpages{/t}</option>
                         <option value="rss" {if isset($smarty.request.type) && $smarty.request.type eq 'rss'}selected="selected"{/if}>{t}RSS{/t}</option>
-                        <option value="frontpage-opinions" {if isset($smarty.request.type) && $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>{t}Opinion: frontpage{/t}</option>
+                        <option value="frontpage-opinions" {if isset($smarty.request.type) && $smarty.request.type eq 'frontpage-opinions'}selected="selected"{/if}>{t}Opinion: Authors{/t}</option>
                         <option value="opinions" {if isset($smarty.request.type) && $smarty.request.type eq 'opinions'}selected="selected"{/if}>{t}Opinion: inner{/t}</option>
                         <option value="video-frontpage" {if isset($smarty.request.type) && $smarty.request.type eq 'video-frontpage'}selected="selected"{/if}>{t}Video: frontpage{/t}</option>
                         <option value="video-inner" {if isset($smarty.request.type) && $smarty.request.type eq 'video-inner'}selected="selected"{/if}>{t}Video: inner{/t}</option>
@@ -205,10 +205,12 @@
                             <input type="hidden" name="uris[]" value="opinion/" />
                             {* Opinion author index*}
                         {elseif ($caches[c].template == 'opinion_author_index')}
+                        {assign var="authorid" value=$caches[c].authorid}
                             {capture "uriAuthor"}{generate_uri content_type="opinion_author_frontpage"
-                                        title=$allAuthors.$resource
-                                        id=$caches[c].resource}{/capture}
-                            <a href="{$smarty.const.SITE_URL}/{$smarty.capture.uriAuthor|trim}" target="_blank">{t 1=$allAuthors.$resource}Opinion of Author "%1"{/t}</a>
+                                        title=$allAuthors.$authorid
+                                        id=$caches[c].authorid}{/capture}
+                            <a href="{$smarty.const.SITE_URL}{$smarty.capture.uriAuthor|trim}" target="_blank">
+                                {t 1=$allAuthors.$authorid}Opinion of Author "%1"{/t}</a>
                             <input type="hidden" name="uris[]" value="{$smarty.capture.uriAuthor|trim}" />
                             {* Gallery frontpage *}
                         {elseif ($caches[c].template == 'album_frontpage')}

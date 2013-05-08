@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 </div><!-- /inner-image -->
-                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                {is_module_activated name="CRONICAS_MODULES"}
                 <div id="home-image" class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button">
