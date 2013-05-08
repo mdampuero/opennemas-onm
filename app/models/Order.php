@@ -100,4 +100,43 @@ class Order
 
         return $this;
     }
+
+    /**
+     * Returns the list of orders
+     *
+     * @return array
+     **/
+    public static function find()
+    {
+        $sql = "SELECT * FROM orders WHERE type='paywall' ORDER BY created DESC";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return array();
+        }
+
+        $order = array();
+        while (!$rs->EOF) {
+            $order = new \Order();
+
+            $order->id             = $rs->fields['id'];
+            $order->user_id        = $rs->fields['user_id'];
+            $order->content_id     = $rs->fields['content_id'];
+            $order->created        = $rs->fields['created'];
+            $order->payment_id     = $rs->fields['payment_id'];
+            $order->payment_status = $rs->fields['id'];
+            $order->payment_method = $rs->fields['id'];
+            $order->type           = $rs->fields['type'];
+            $order->params         = @unserialize($element['params']);
+
+            $orders []= $order;
+
+            $rs->MoveNext();
+        }
+
+        return $orders;
+    }
 }

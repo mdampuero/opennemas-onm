@@ -2277,8 +2277,16 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_paywall',
     new Route(
-        '/paywall/settings',
+        '/paywall',
         array('_controller' => 'Backend:Controllers:PaywallController:default')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_settings',
+    new Route(
+        '/paywall/settings',
+        array('_controller' => 'Backend:Controllers:PaywallController:settings')
     )
 );
 

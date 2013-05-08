@@ -62,12 +62,19 @@ class PaywallController extends Controller
      **/
     public function defaultAction(Request $request)
     {
+        $users = \User::getUsersWithSubscription(10);
+
+        $purchases = \Order::find();
+
+        $purchasesLastMonth = count($purchases);
+
         return $this->render(
             'paywall/list.tpl',
             array(
-                'settings'    => $settings,
-                'times'       => $this->times,
-                'money_units' => $this->moneyUnits,
+                'users'                      => $users,
+                'count_users_paywall'        => count($users),
+                'purchases'                  => $purchases,
+                'count_purchases_last_month' => count($purchases),
             )
         );
     }

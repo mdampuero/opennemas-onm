@@ -1012,6 +1012,36 @@ class User
         $this->setMeta(array('paywall_time_limit' => $newTime));
     }
 
+    /**
+     * Returns a list of User objects where the users has paywall subscription
+     *
+     * @return void
+     **/
+    public static function getUsersWithSubscription($limit = 10)
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $sql = "SELECT user_id FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return array();
+        }
+        $users = array();
+        foreach ($rs->fields as $userId) {
+            $user = new \User($userId);
+            $user->meta = $user->getMeta();
+            $users []= $user;
+        }
+
+        return $users;
+    }
+
 
     /**
      * Returns a valid SQL WHERE clause for the given filter
