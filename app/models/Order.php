@@ -127,8 +127,9 @@ class Order
             $order->content_id     = $rs->fields['content_id'];
             $order->created        = $rs->fields['created'];
             $order->payment_id     = $rs->fields['payment_id'];
-            $order->payment_status = $rs->fields['id'];
-            $order->payment_method = $rs->fields['id'];
+            $order->payment_status = $rs->fields['payment_status'];
+            $order->payment_amount = $rs->fields['payment_amount'];
+            $order->payment_method = $rs->fields['payment_method'];
             $order->type           = $rs->fields['type'];
             $order->params         = @unserialize($element['params']);
 

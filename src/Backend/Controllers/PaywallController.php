@@ -86,6 +86,8 @@ class PaywallController extends Controller
                 'count_users_paywall'        => count($users),
                 'purchases'                  => $purchases,
                 'count_purchases_last_month' => count($purchases),
+                'settings'                   => $settings,
+                'money_units'                => $this->moneyUnits,
             )
         );
     }

@@ -183,9 +183,10 @@
                 {if count($purchases) > 0}
                 <thead>
                     <tr>
+                        <th class="left">{t}User id{/t}</th>
                         <th class="left">{t}Order id{/t}</th>
                         <th class="left">{t}Created{/t}</th>
-                        <th class="left">{t}User{/t}</th>
+                        <th class="left">{t}Amount{/t}</th>
                     </tr>
                 </thead>
                 {else}
@@ -202,13 +203,16 @@
                 {foreach from=$purchases item=purchase}
                 <tr data-id="{$order->id}">
                     <td class="left">
+                        {$purchase->user_id|clearslash}
+                    </td>
+                    <td class="left">
                         {$purchase->payment_id|clearslash}
                     </td>
                     <td class="left">
                         {$purchase->created}
                     </td>
                     <td class="left">
-                        {$purchase->id|clearslash}
+                        {$purchase->payment_amount|clearslash} {$money_units[$settings['money_unit']]}
                     </td>
 
                 </tr>
