@@ -322,6 +322,10 @@ class ArticlesController extends Controller
                 $hasSubscription = $userSubscriptionDate > $now;
 
                 if (!$hasSubscription) {
+                    $newContent = $this->renderView(
+                        'paywall/partials/content_only_for_subscribers.tpl',
+                        array('logged' => $isLogged)
+                    );
                     $content->body = $newContent;
                 }
             } else {
