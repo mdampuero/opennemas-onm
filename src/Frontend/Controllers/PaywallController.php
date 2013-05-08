@@ -161,7 +161,12 @@ class PaywallController extends Controller
                 "Paywall: Error in SetEC API call. Original errors: ".implode(' ;', $errors)
             );
 
-            return $this->render('paywall/payment_error.tpl');
+            return $this->render(
+                'paywall/payment_error.tpl',
+                array(
+                    'settings' => $paywallSettings
+                )
+            );
         }
 
     }
@@ -182,7 +187,12 @@ class PaywallController extends Controller
         if (!array_key_exists('paywall_transaction', $_SESSION)
             || $token != $_SESSION['paywall_transaction']['token']
         ) {
-            return $this->render('paywall/payment_error.tpl');
+            return $this->render(
+                'paywall/payment_error.tpl',
+                array(
+                    'settings' => $paywallSettings
+                )
+            );
         }
 
         $getExpressCheckoutDetailsRequest = new \GetExpressCheckoutDetailsRequestType($token);
@@ -206,7 +216,12 @@ class PaywallController extends Controller
                 "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
 
-            return $this->render('paywall/payment_error.tpl');
+            return $this->render(
+                'paywall/payment_error.tpl',
+                array(
+                    'settings' => $paywallSettings
+                )
+            );
         }
 
         // if (isset($getECResponse)) {
@@ -255,7 +270,12 @@ class PaywallController extends Controller
                 "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
 
-            return $this->render('paywall/payment_error.tpl');
+            return $this->render(
+                'paywall/payment_error.tpl',
+                array(
+                    'settings' => $paywallSettings
+                )
+            );
         }
 
         // Payment done, let's update some registries in the app
@@ -276,7 +296,7 @@ class PaywallController extends Controller
 
             $user = new \User($_SESSION['userid']);
 
-            $user->addSubscriptionLimit($planTime)
+            $user->addSubscriptionLimit($planTime);
 
             $_SESSION['meta'] = $user->getMeta();
             unset($_SESSION['paywall_transaction']);
@@ -284,7 +304,12 @@ class PaywallController extends Controller
             return $this->render('paywall/payment_success.tpl', array('time' => $newUserSubscriptionDate));
         }
 
-        return $this->render('paywall/payment_error.tpl');
+        return $this->render(
+            'paywall/payment_error.tpl',
+            array(
+                'settings' => $paywallSettings
+            )
+        );
     }
 
     /**
@@ -296,7 +321,14 @@ class PaywallController extends Controller
      **/
     public function returnCancelPaymentAction(Request $request)
     {
-        return $this->render('paywall/payment_error.tpl');
+        $paywallSettings = s::get('paywall_settings');
+
+        return $this->render(
+            'paywall/payment_error.tpl',
+            array(
+                'settings' => $paywallSettings
+            )
+        );
     }
 
     /**
