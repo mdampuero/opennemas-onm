@@ -100,12 +100,12 @@ class UserController extends Controller
             $recaptcha_response_field
         );
 
+        $errors = array();
         // What happens when the CAPTCHA was entered incorrectly
-        if ($request->getMethod() != 'POST') {
+        if (!$resp->is_valid) {
+            $errors []= _('Verification image not valid. Try to fill it again.');
         } else {
-            $this->view->assign('error', _('Verification image not valid. Try to fill it again.'));
             // Correct CAPTCHA - Filter $_POST vars from FORM
-            //
             $data = array(
                 'authorize'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
@@ -116,12 +116,11 @@ class UserController extends Controller
                 'sessionexpire' => 15,
                 'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
                 'type'          => 1, // It is a frontend user registration.
+                'id_user_group' => null,
             );
 
             // Before send mail and create user on DB, do some checks
             $user = new \User();
-
-            $errors = array();
 
             // Check if pwd and cpwd are the same
             if (($data['password'] != $data['cpwd'])) {
@@ -134,7 +133,7 @@ class UserController extends Controller
             }
 
             // Check existing user name
-            if ($user->checkIfExistsUserName($data['name'])) {
+            if ($user->checkIfExistsUserName($data['login'])) {
                 $errors []= _('The user name is already in use.');
             }
 
@@ -180,14 +179,11 @@ class UserController extends Controller
                 if (true) {
                     $sentMail = true;
                     if (!$user->create($data)) {
-                        $this->view->assign(
-                            'error',
-                            'A ocurrido un erro. Intente completar o formulario con datos válidos.'
-                        );
+                        $errors []=_('An error has occurred. Try to complete the form with valid data.');
                     } else {
                         $this->view->assign(
                             'success',
-                            'A sua conta xa está creada. Comprobe o seu correo para activala.'
+                            _('Your account is now set up. Check your email to activate.')
                         );
                     }
                 } else {
@@ -197,7 +193,12 @@ class UserController extends Controller
             }
         }
 
-        return $this->render('authentication/register.tpl');
+        return $this->render(
+            'authentication/register.tpl',
+            array(
+                'errors' => $errors,
+            )
+        );
     }
 
     /**
@@ -220,7 +221,7 @@ class UserController extends Controller
         $data['password'] = $request->request->filter('pwd', '', FILTER_SANITIZE_STRING);
         $data['password-verify']     = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
 
-        if ($data['password'] != $data['cpwd']) {
+        if ($data['password'] != $data['password-verify']) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
         // Get user data, check token and confirm pass

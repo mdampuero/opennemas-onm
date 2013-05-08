@@ -104,7 +104,7 @@ class AuthenticationController extends Controller
                             'meta'             => $user->getMeta(),
                         );
 
-                        m::add(_('Log in succesful.'), m::ERROR);
+                        m::add(_('Log in succesful.'), m::SUCCESS);
 
                         return $this->redirect($this->generateUrl('frontend_user_show'));
                     }
