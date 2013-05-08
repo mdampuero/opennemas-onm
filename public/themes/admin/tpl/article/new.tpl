@@ -103,7 +103,7 @@
                 <li>
                     <a href="#edicion-extra">{t}Parameters{/t}</a>
                 </li>
-                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                {is_module_activated name="CRONICAS_MODULES"}
                 <li>
                     <a id="avanced-custom-button" href="#avanced-custom">{t}Customize{/t}</a>
                 </li>
@@ -229,9 +229,9 @@
                             </div>
                         </div>
 
-                        {is_module_activated name="CRONICAS_MODULES"}
+                        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
                         <div class="control-group">
-                            <label for="agency_bulletin" class="control-label">{t}Newsletter signature{/t}</label>
+                            <label for="agency_bulletin" class="control-label">{t}Signature{/t} #2</label>
                             <div class="">
                                 <input  type="text" id="agency_bulletin" name="params[agencyBulletin]"
                                     {if is_object($article)}
@@ -312,7 +312,7 @@
                     </div>
                 </div>
             </div>
-            {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+            {is_module_activated name="CRONICAS_MODULES"}
             <div id="avanced-custom">
                 {include file ="article/partials/_article_avanced_customize.tpl"}
             </div>

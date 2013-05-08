@@ -2307,6 +2307,10 @@ class Content
             return false;
         }
 
+        if (isset($this->$property)) {
+            return $this->$property;
+        }
+
         $sql = 'SELECT `meta_value` FROM `contentmeta` WHERE fk_content=? AND `meta_name`=?';
         $values = array($this->id, $property);
 
