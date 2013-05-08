@@ -68,26 +68,26 @@
         <div class="form-horizontal panel">
 
             <fieldset>
-                <h3 class="settings-header">{t}Paypal authentication{/t}</h3>
+                <h3 class="settings-header">{t}Paypal API authentication{/t}</h3>
 
                 <p>{t escape=off}In order to <strong>connect Opennemas with Paypal</strong> you have to fill your Paypal API credentials below:{/t}</p>
 
                 <div id="money" class="control-group">
-                    <label for="paypal_username" class="control-label">{t}Paypal API user name{/t}</label>
+                    <label for="paypal_username" class="control-label">{t}User name{/t}</label>
                     <div class="controls">
                         <input type="text" name="settings[paypal_username]" value="{$settings['paypal_username']}" class="input-xlarge" required>
                     </div>
                 </div>
 
                 <div id="money" class="control-group">
-                    <label for="paypal_password" class="control-label">{t}Paypal API password{/t}</label>
+                    <label for="paypal_password" class="control-label">{t}Password{/t}</label>
                     <div class="controls">
                         <input type="text" name="settings[paypal_password]" value="{$settings['paypal_password']}" class="input-xlarge" required>
                     </div>
                 </div>
 
                 <div id="money" class="control-group">
-                    <label for="paypal_signature" class="control-label">{t}Paypal API signature{/t}</label>
+                    <label for="paypal_signature" class="control-label">{t}Signature{/t}</label>
                     <div class="controls">
                         <input type="text" name="settings[paypal_signature]" value="{$settings['paypal_signature']}" class="input-xlarge" required>
                     </div>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
                 <div class="help-block">
-                    <p>{t escape=off}Paypal allows you to enable a testing environment where <strong>all the translations will not be real</strong>, so you can test the if the paywall is working well.{/t}</p>
+                    <p>{t escape=off}Paypal allows you to enable a testing environment where <strong>all the transactions will not be real</strong>, so you can test if the paywall is working well.{/t}</p>
                     {t}Active a testing environment in your Paypal account (only if you are a developer){/t} <a href="https://developer.paypal.com/">{t}More information{/t}</a>
                 </div>
             </fieldset>
