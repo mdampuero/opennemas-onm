@@ -1007,7 +1007,7 @@ class User
      **/
     public function addSubscriptionLimit($planTime = 0)
     {
-        $newTime = $newUserSubscriptionDate->format('Y-m-d H:i:s');
+        $newTime = $planTime->format('Y-m-d H:i:s');
 
         $this->setMeta(array('paywall_time_limit' => $newTime));
     }
