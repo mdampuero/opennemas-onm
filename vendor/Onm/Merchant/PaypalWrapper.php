@@ -43,7 +43,6 @@ class PaypalWrapper
      **/
     public function getMerchantService()
     {
-
         return new \PayPalAPIInterfaceServiceService($this->settings);
     }
 
@@ -51,7 +50,6 @@ class PaypalWrapper
      * undocumented function
      *
      * @return void
-     * @author
      **/
     public function getServiceUrl()
     {

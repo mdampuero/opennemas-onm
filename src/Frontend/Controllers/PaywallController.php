@@ -152,12 +152,16 @@ class PaywallController extends Controller
             return $this->redirect($paypalUrl);
 
         } else {
-            // var_dump($setECResponse);
+            $errors = array();
+
+            foreach ($setECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
             $this->get('logger')->notice(
-                "Paywall: Error in SetEC API call"
-                ."user {$_SESSION['userid']}: ".$e->getMessage()
+                "Paywall: Error in SetEC API call. Original errors: ".implode(' ;', $errors)
             );
 
+            return $this->render('paywall/payment_error.tpl');
         }
 
     }
@@ -193,13 +197,18 @@ class PaywallController extends Controller
         try {
             $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
         } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($setECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
             $this->get('logger')->notice(
-                "Paywall: Error in GetExpressCheckoutDetils API call"
-                ."user {$user->id}: ".$e->getMessage()
+                "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
 
             return $this->render('paywall/payment_error.tpl');
         }
+
         // if (isset($getECResponse)) {
         //     echo "<table>";
         //     echo "<tr><td>Ack :</td><td><div id='Ack'>".$getECResponse->Ack."</div> </td></tr>";
@@ -237,10 +246,16 @@ class PaywallController extends Controller
         try {
             $DoECResponse = $paypalService->DoExpressCheckoutPayment($DoECReq);
         } catch (Exception $ex) {
+            $errors = array();
+
+            foreach ($setECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
             $this->get('logger')->notice(
-                "Paywall: Error in DoExpressCheckoutPayment API call"
-                ."user {$user->id}: ".$e->getMessage()
+                "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
             );
+
+            return $this->render('paywall/payment_error.tpl');
         }
 
         // Payment done, let's update some registries in the app
@@ -257,16 +272,11 @@ class PaywallController extends Controller
 
             $planTime = strtoupper($_SESSION['paywall_transaction']['plan']['time']);
 
-            $newUserSubscriptionDate = new \DateTime();
-            $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
-            $newUserSubscriptionDate->add(new \DateInterval('P'.$planTime));
-
-            $newTime = $newUserSubscriptionDate->format('Y-m-d H:i:s');
-
             // TODO: Check if the payment was done before
 
             $user = new \User($_SESSION['userid']);
-            $user->setMeta(array('paywall_time_limit' => $newTime));
+
+            $user->addSubscriptionLimit($planTime)
 
             $_SESSION['meta'] = $user->getMeta();
             unset($_SESSION['paywall_transaction']);
@@ -317,7 +327,7 @@ class PaywallController extends Controller
             "acct1.UserName"  => $databaseSettings['paypal_username'],
             "acct1.Password"  => $databaseSettings['paypal_password'],
             "acct1.Signature" => $databaseSettings['paypal_signature'],
-            "mode"            => ($databaseSettings['developer_mode']) ? 'sandbox' : 'live',
+            "mode"            => ($databaseSettings['developer_mode'] == false) ? 'sandbox' : 'live',
         );
 
         return  new \Onm\Merchant\PaypalWrapper($settings);

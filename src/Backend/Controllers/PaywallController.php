@@ -36,16 +36,15 @@ class PaywallController extends Controller
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->times = array(
-            '1D' => _('1 day'),
-            '2D' => sprintf(_('%d days'), '2'),
-            '1W' => sprintf(_('1 week')),
-            '2W' => sprintf(_('%d week'), '2'),
-            '1M' => sprintf(_('1 month')),
-            '3M' => sprintf(_('%d months'), '3'),
-            '6M' => sprintf(_('6 months'), '3'),
-            '1Y' => sprintf(_('1 year')),
-            '2Y' => sprintf(_('%d years'), '2'),
-            // 'unlimited' => sprintf(_('Unlimited'))
+            '24'    => _('1 day'),
+            '48'    => sprintf(_('%d days'), '2'),
+            '168'   => sprintf(_('1 week')),
+            '336'   => sprintf(_('%d week'), '2'),
+            '744'   => sprintf(_('1 month')),
+            '2232'  => sprintf(_('%d months'), '3'),
+            '4464'  => sprintf(_('6 months'), '3'),
+            '8928'  => sprintf(_('1 year')),
+            '17856' => sprintf(_('%d years'), '2'),
         );
 
         $this->moneyUnits = array(

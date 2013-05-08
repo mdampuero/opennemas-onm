@@ -998,6 +998,23 @@ class User
         return true;
     }
 
+    /**
+     * Increases the paywall subscription time given the subscription name
+     *
+     * @param string $planTime the name of the plan
+     *
+     * @return void
+     **/
+    public function addSubscriptionLimit($planTime)
+    {
+        $newUserSubscriptionDate = new \DateTime();
+        $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
+        $newUserSubscriptionDate->modify('+{$planTime} hours');
+
+        $newTime = $newUserSubscriptionDate->format('Y-m-d H:i:s');
+        $this->setMeta(array('paywall_time_limit' => $newTime));
+    }
+
 
     /**
      * Returns a valid SQL WHERE clause for the given filter
