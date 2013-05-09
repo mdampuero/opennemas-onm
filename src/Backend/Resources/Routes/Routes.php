@@ -2283,6 +2283,22 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_paywall_users',
+    new Route(
+        '/paywall/users',
+        array('_controller' => 'Backend:Controllers:PaywallController:users')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_purchases',
+    new Route(
+        '/paywall/purchases',
+        array('_controller' => 'Backend:Controllers:PaywallController:purchases')
+    )
+);
+
+$adminRoutes->add(
     'admin_paywall_settings',
     new Route(
         '/paywall/settings',

@@ -1,42 +1,4 @@
 {extends file="base/admin.tpl"}
-{block name="footer-js" append}
-    <script type="text/javascript">
-    jQuery(document).ready(function ($){
-        $('#payment_modes').on('click', '.del', function() {
-            var button = $(this);
-            button.closest('.payment_mode').each(function(){
-                $(this).remove();
-            });
-        })
-
-        $('#add_payment_mode').on('click', function(){
-            var source = $('#payment-template').html();
-            $('.nopaymentmodes').remove();
-            $('#payment_modes .modes').append(source);
-        });
-
-    });
-    </script>
-<script id="payment-template" type="text/x-handlebars-template">
-<div class="payment_mode">
-    {html_options name="settings[payment_modes][time][]" options=$times required="required"}
-    <input type="text" name="settings[payment_modes][description][]"  value="" placeholder="Name"  required="required">
-    <div class="input-append" style="display:inline-block">
-        <input type="number" name="settings[payment_modes][price][]" value="" step="any" min="0" placeholder="Set a price" required="required"  class="input-small"/>
-        <div class="btn addon">
-            {if $settings['money_unit']}
-                {$money_units[$settings['money_unit']]}
-            {else}
-                <i class="icon-money"></i>
-            {/if}
-        </div>
-    </div>
-    <div class="btn del">
-        <i class="icon-trash"></i>
-    </div>
-</div>
-</script>
-{/block}
 
 {block name="header-css" append}
 <style>
@@ -85,6 +47,15 @@
     .premium-users {
         margin-right:10px;
     }
+
+    .premium-users h3, .latest-purchases h3 {
+        display:inline-block;
+    }
+    .more {
+        float:right;
+        display:inline-block;
+        margin-top:20px;
+    }
 </style>
 {/block}
 
@@ -121,117 +92,22 @@
 
 
         <div class="premium-users">
-            <table class="table table-hover table-condensed">
 
-                <h3>{t}Premium users{/t}</h3>
+            <h3>{t}Premium users{/t}</h3>
 
-                {if count($users) > 0}
-                <thead>
-                    <tr>
-                        <th class="center">{t}User id{/t}</th>
-                        <th class="right">{t}User name{/t}</th>
-                        <th class="right">{t}End of subscription{/t}</th>
-                    </tr>
-                </thead>
-                {else}
-                <thead>
-                    <tr>
-                        <th colspan="11">
-                            &nbsp;
-                        </th>
+            <a href="{url name=admin_paywall_users}" class="more">{t}Show all…{/t}</a>
 
-                    </tr>
-                </thead>
-                {/if}
-                <tbody class="sortable">
-                {foreach from=$users item=user}
-                <tr data-id="{$user->id}">
-                    <td class="center">
-                        {$user->id|clearslash}
-                    </td>
-                    <td class="right">
-                        {$user->name|clearslash}
-                    </td>
-                    <td class="right">
-                        {$user->meta['paywall_time_limit']|clearslash}
-                    </td>
-
-                </tr>
-                {foreachelse}
-                <tr>
-                    <td class="empty" colspan="11">{t}No users with paywall{/t}</td>
-                </tr>
-                {/foreach}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="11" class="center">
-                            <div class="pagination">
-                                {*$pagination->links*}
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+            {include file="paywall/partials/user_listing.tpl"}
         </div>
 
         <div class="latest-purchases">
-            <table class="table table-hover table-condensed">
 
-                <h3>{t}Lastest purchases{/t}</h3>
+            <h3>{t}Lastest purchases{/t}</h3>
 
-                {if count($purchases) > 0}
-                <thead>
-                    <tr>
-                        <th class="left">{t}User id{/t}</th>
-                        <th class="left">{t}Order id{/t}</th>
-                        <th class="left">{t}Created{/t}</th>
-                        <th class="left">{t}Amount{/t}</th>
-                    </tr>
-                </thead>
-                {else}
-                <thead>
-                    <tr>
-                        <th colspan="11">
-                            &nbsp;
-                        </th>
+            <a href="{url name=admin_paywall_purchases}" class="more">{t}Show all…{/t}</a>
 
-                    </tr>
-                </thead>
-                {/if}
-                <tbody class="sortable">
-                {foreach from=$purchases item=purchase}
-                <tr data-id="{$order->id}">
-                    <td class="left">
-                        {$purchase->user_id|clearslash}
-                    </td>
-                    <td class="left">
-                        {$purchase->payment_id|clearslash}
-                    </td>
-                    <td class="left">
-                        {$purchase->created}
-                    </td>
-                    <td class="left">
-                        {$purchase->payment_amount|clearslash} {$money_units[$settings['money_unit']]}
-                    </td>
+            {include file="paywall/partials/purchases_listing.tpl"}
 
-                </tr>
-                {foreachelse}
-                <tr>
-                    <td class="empty" colspan="11">{t}No purchases available{/t}</td>
-                </tr>
-                {/foreach}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="11" class="center">
-                            <div class="pagination">
-                                {*$pagination->links*}
-                            </div>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
         </div>
 
     </div>

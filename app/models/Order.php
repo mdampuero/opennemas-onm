@@ -102,13 +102,43 @@ class Order
     }
 
     /**
+     * Fills the user attribute from the user information
+     *
+     * @return void
+     **/
+    public function getUser()
+    {
+        $this->user = new \User($this->user_id);
+    }
+
+    /**
      * Returns the list of orders
      *
      * @return array
      **/
-    public static function find()
+    public static function find($filter = '', $config = array())
     {
-        $sql = "SELECT * FROM orders WHERE type='paywall' ORDER BY created DESC";
+        $defaultParams = array(
+            'order' => 'created DESC',
+            'limit' => 10
+        );
+        $order = $limit = $where = '';
+
+        $config = array_merge($defaultParams, $config);
+
+        if (!empty($filter)) {
+            $where = 'WHERE '.$filter;
+        }
+
+        if (!empty($config['order'])) {
+            $order = 'ORDER BY '.$config['order'];
+        }
+
+        if ($config['limit'] > 0) {
+            $limit = 'LIMIT '.$config['limit'];
+        }
+
+        $sql = "SELECT * FROM orders $where $order $limit";
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -117,6 +147,7 @@ class Order
 
             return array();
         }
+
 
         $orders = array();
         while (!$rs->EOF) {
@@ -132,6 +163,7 @@ class Order
             $order->payment_method = $rs->fields['payment_method'];
             $order->type           = $rs->fields['type'];
             $order->params         = @unserialize($element['params']);
+            $order->getUser();
 
             $orders []= $order;
 
@@ -139,5 +171,32 @@ class Order
         }
 
         return $orders;
+    }
+
+    /**
+     * Returns the list of orders
+     *
+     * @return array
+     **/
+    public static function count($filter = '', $config = array())
+    {
+        $where = '';
+
+        if (!empty($filter)) {
+            $where = 'WHERE '.$filter;
+        }
+        $sql = "SELECT count(id) as count FROM orders $where";
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return 0;
+        }
+
+
+        return $rs->fields['count'];
     }
 }

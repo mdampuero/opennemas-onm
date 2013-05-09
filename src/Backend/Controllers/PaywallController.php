@@ -73,19 +73,85 @@ class PaywallController extends Controller
             );
             return $this->redirect($this->generateUrl('admin_paywall_settings'));
         }
-        $users = \User::getUsersWithSubscription(10);
+        $users = \User::getUsersWithSubscription(array('limit' => 10));
 
-        $purchases = \Order::find();
+        $countUsersPaywall = \User::countUsersWithSubscription();
 
-        $purchasesLastMonth = count($purchases);
+        // Get the last purchases
+        $purchases = \Order::find(
+            "type='paywall'",
+            array(
+                'limit' => 10
+            )
+        );
+
+
+        // Count how many purchases were done in the last month
+        $time = new \DateTime();
+        $time->setTimezone(new \DateTimeZone('UTC'))
+             ->modify("-1 month");
+        $time = $time->format('Y-m-d H:i:s');
+
+        $purchasesLastMonth = \Order::count(
+            "type='paywall' AND created > '$time'",
+            array()
+        );
 
         return $this->render(
             'paywall/list.tpl',
             array(
                 'users'                      => $users,
-                'count_users_paywall'        => count($users),
+                'count_users_paywall'        => $countUsersPaywall,
                 'purchases'                  => $purchases,
-                'count_purchases_last_month' => count($purchases),
+                'count_purchases_last_month' => $purchasesLastMonth,
+                'settings'                   => $settings,
+                'money_units'                => $this->moneyUnits,
+            )
+        );
+    }
+
+    /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function usersAction(Request $request)
+    {
+        $settings = s::get('paywall_settings');
+        $users = \User::getUsersWithSubscription(array('limit' => 10));
+
+        return $this->render(
+            'paywall/users.tpl',
+            array(
+                'users'                      => $users,
+                'settings'                   => $settings,
+                'money_units'                => $this->moneyUnits,
+            )
+        );
+    }
+
+    /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function purchasesAction(Request $request)
+    {
+        $settings = s::get('paywall_settings');
+
+        $purchases = \Order::find(
+            "type='paywall'",
+            array()
+        );
+
+        return $this->render(
+            'paywall/purchases.tpl',
+            array(
+                'purchases'                  => $purchases,
                 'settings'                   => $settings,
                 'money_units'                => $this->moneyUnits,
             )

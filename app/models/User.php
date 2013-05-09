@@ -1017,14 +1017,24 @@ class User
      *
      * @return void
      **/
-    public static function getUsersWithSubscription($limit = 10)
+    public static function getUsersWithSubscription($config = array())
     {
+        $defaultConfig = array(
+            'limit' => null,
+        );
+
+        $config = array_merge($defaultConfig, $config);
+
+        $limit = '';
+        if ($config['limit'] > 0) {
+            $limit = 'LIMIT '.$config['limit'];
+        }
         $currentTime = new \DateTime();
         $currentTime->setTimezone(new \DateTimeZone('UTC'));
 
         $currentTime = $currentTime->format('Y-m-d H:i:s');
 
-        $sql = "SELECT user_id FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
+        $sql = "SELECT user_id FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ? $limit";
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
 
@@ -1033,13 +1043,42 @@ class User
             return array();
         }
         $users = array();
-        foreach ($rs->fields as $userId) {
-            $user = new \User($userId);
+        while (!$rs->EOF) {
+
+            $user = new \User($rs->fields['user_id']);
             $user->meta = $user->getMeta();
             $users []= $user;
+
+            $rs->MoveNext();
         }
 
         return $users;
+    }
+
+    /**
+     * Returns a list of User objects where the users has paywall subscription
+     *
+     * @return void
+     **/
+    public static function countUsersWithSubscription($limit = array())
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $sql = "SELECT count(user_id) as count FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return 0;
+        }
+
+
+
+        return $rs->fields['count'];
     }
 
 
