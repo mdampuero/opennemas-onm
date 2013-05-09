@@ -45,8 +45,10 @@ class PaywallController extends Controller
      **/
     public function showcaseAction(Request $request)
     {
+        if (empty($_SESSION['userid'])) {
+            return $this->redirect($this->generateUrl('frontend_auth_login'));
+        }
         $settings = s::get('paywall_settings');
-
 
         $articleID = $request->query->getDigits('content_id');
 
