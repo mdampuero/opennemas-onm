@@ -429,4 +429,43 @@ class UserController extends Controller
         return $this->render('user/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
 
     }
+
+    /**
+     * Generates the HTML for the user menu by ajax
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function getUserMenuAction(Request $request)
+    {
+        $login = $this->generateUrl('frontend_auth_login');
+        $logout = $this->generateUrl('frontend_auth_logout');
+        $register = $this->generateUrl('frontend_user_register');
+        $myAccount = $this->generateUrl('frontend_user_show');
+
+        if (isset($_SESSION['userid'])) {
+            $output =
+                '<ul>
+                    <li>
+                        <a href="'.$logout.'">'._("Logout").'</a>
+                    </li>
+                    <li>
+                        <a href="'.$myAccount.'">'._("My account").'</a>
+                    </li>
+                </ul>';
+        } else {
+            $output =
+                '<ul>
+                    <li>
+                        <a href="'.$register.'">'._("Register").'</a>
+                    </li>
+                    <li>
+                        <a href="'.$login.'">'._("Login").'</a>
+                    </li>
+                </ul>';
+        }
+
+        return $output;
+    }
 }

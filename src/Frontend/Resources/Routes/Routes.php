@@ -169,6 +169,15 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_user_menu',
+    new Route(
+        '/user/get/menu',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:getUserMenu',
+        )
+    )
+);
 
 $frontendRoutes->add(
     'frontend_user_user_box',
@@ -1288,7 +1297,7 @@ $frontendRoutes->add(
             'category'    => 'home'
         ),
         array(
-            'category'          => '[a-z0-9\-]+',
+            'category'    => '[a-z0-9\-]+',
         )
     )
 );
@@ -1302,18 +1311,8 @@ $frontendRoutes->add(
             'category'    => 'home'
         ),
         array(
-            'category'          => '[a-z0-9\-]+',
-            'page'          => '[0-9]+',
-        )
-    )
-);
-
-$frontendRoutes->add(
-    'frontend_user_user_box',
-    new Route(
-        '/user/user_box',
-        array(
-            '_controller' => 'Frontend:Controllers:UserController:userBox',
+            'category'    => '[a-z0-9\-]+',
+            'page'        => '[0-9]+',
         )
     )
 );
