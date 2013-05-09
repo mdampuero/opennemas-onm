@@ -31,6 +31,7 @@ abstract class ServerAbstract
         $downloadedFiles = 0;
         $deletedFiles = 0;
 
+        $files = array();
         foreach ($this->contentList as $content) {
             $id = $content->attributes()->{'id'};
             $url = trim((string) $content);
@@ -41,6 +42,7 @@ abstract class ServerAbstract
             }
         }
 
+        $serverFiles = array();
         foreach ($files as $file) {
             $serverFiles[] = array(
                 'filename' => $file,
