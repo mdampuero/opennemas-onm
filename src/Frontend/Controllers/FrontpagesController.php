@@ -303,6 +303,10 @@ class FrontpagesController extends Controller
                     $rules .="#content-{$item->pk_content}.onm-new {\n";
                     $rules .= "\tbackground-color:{$bgcolor} !important; \n";
                     $rules .= "}\n";
+                    $rules .="#content-{$item->pk_content}.colorize {\n";
+                    $rules .= "\tpadding:10px !important; \n";
+                    $rules .= "\border-radius:5px !important; \n";
+                    $rules .= "}\n";
                 }
 
                 $element = 'title'."_".$actualCategoryId;
@@ -430,6 +434,8 @@ class FrontpagesController extends Controller
 
             $output.= "\tdiv.list-of-videos article.interested-video div.info-interested-video ".
                 "div.category a{ color:" . $siteColor . " !important;}\n";
+
+            $output.= "\t.category-color:" . $siteColor . " !important;}\n";
         }
 
         return new Response(
