@@ -356,9 +356,16 @@ $menuXml = '<?xml version="1.0"?>
                 <node
                     module_name="USER_MANAGER"
                     privilege="USER_ADMIN"
-                    title="'.htmlspecialchars(_("Users"), ENT_QUOTES).'"
-                    id="user_manager"
+                    title="'.htmlspecialchars(_("Users Backend"), ENT_QUOTES).'"
+                    id="user_backend_manager"
                     link="'.url("admin_acl_user", array()).'"
+                />
+                <node
+                    module_name="PAYWALL"
+                    privilege="PAYWALL"
+                    title="'.htmlspecialchars(_("Users Frontend"), ENT_QUOTES).'"
+                    id="user_frontend_manager"
+                    link="'.url("admin_acl_user_front", array()).'"
                 />
                 <node
                     module_name="USER_GROUP_MANAGER"

@@ -64,7 +64,7 @@ label {
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_acl_user}">
+                    <a href="{if strpos($smarty.server.HTTP_REFERER, 'users/frontend') eq 0}{url name=admin_acl_user}{else}{url name=admin_acl_user_front}{/if}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>

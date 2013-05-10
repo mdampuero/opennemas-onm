@@ -764,8 +764,8 @@ class User
         if ($rs !== false) {
             while (!$rs->EOF) {
                 $user = new User();
-
                 $user->setValues($rs->fields);
+                $user->meta = $user->getMeta();
                 $items[] = $user;
 
                 $rs->MoveNext();
@@ -1075,7 +1075,8 @@ class User
 
         $currentTime = $currentTime->format('Y-m-d H:i:s');
 
-        $sql = "SELECT count(user_id) as count FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
+        $sql = "SELECT count(user_id) as count FROM usermeta ".
+               "WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
 
@@ -1089,6 +1090,21 @@ class User
         return $rs->fields['count'];
     }
 
+    /**
+     * Increases the paywall subscription time given the subscription name
+     *
+     * @param string $planTime the name of the plan
+     *
+     * @return void
+     **/
+    public function addRegisterDate()
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('register_date' => $currentTime));
+    }
 
     /**
      * Returns a valid SQL WHERE clause for the given filter
@@ -1113,7 +1129,7 @@ class User
             }
 
             if (isset($filter['login']) && !empty($filter['login'])) {
-                $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
+                $parts[] = '`login` LIKE "%' . $filter['login'] . '%"';
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {
@@ -1124,8 +1140,12 @@ class User
                 $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
             }
 
+            if (isset($filter['email']) && !empty($filter['email'])>0) {
+                $parts[] = '`email` LIKE "%' . $filter['email'] . '%"';
+            }
+
             if (count($parts) > 0) {
-                $newFilter .= ' AND ' . implode(' OR ', $parts);
+                $newFilter .= ' AND ' . implode(' AND ', $parts);
             }
         }
 

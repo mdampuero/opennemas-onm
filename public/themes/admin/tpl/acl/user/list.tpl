@@ -16,7 +16,7 @@ jQuery(function($){
 <form action="{url name=admin_user_list}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{t}Users{/t}</h2></div>
+			<div class="title"><h2>{if $type eq 1}{t}Users frontend{/t}{else}{t}Users Backend{/t}{/if}</h2></div>
 			<ul class="old-button">
 				<li>
 					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
@@ -43,7 +43,13 @@ jQuery(function($){
 				<label for="userlogin">{t}or{/t}</label>
 				<input type="text" id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
 
-
+				{if $type eq 1}
+				<label for="usergroup">{t}or e-mail:{/t}</label>
+				<div class="input-append">
+					<input type="text" id="email" name="filter[email]" value="{$smarty.request.filter.email|default:""}" placeholder="{t}e-mail{/t}" />
+					<button type="submit" class="btn"><i class="icon-search"></i></button>
+				</div>
+				{else}
 				<label for="usergroup">{t}and group:{/t}</label>
 				<div class="input-append">
 					<select id="usergroup" name="filter[group]" class="span2">
@@ -54,6 +60,7 @@ jQuery(function($){
 					</select>
 					<button type="submit" class="btn"><i class="icon-search"></i></button>
 				</div>
+				{/if}
 			</div>
 		</div>
 		<table class="table table-hover table-condensed">
@@ -64,8 +71,13 @@ jQuery(function($){
                         <input type="checkbox" class="toggleallcheckbox">
                     </th>
 					<th class="left">{t}Full name{/t}</th>
-					<th class="left" style="width:110px">{t}Username{/t}</th>
-					<th class="left" >{t}Group{/t}</th>
+					<th class="center" style="width:110px">{t}Username{/t}</th>
+					{if $type eq 1}
+					<th class="center" >{t}E-mail{/t}</th>
+					<th class="center" >{t}Register date{/t}</th>
+					{else}
+					<th class="center" >{t}Group{/t}</th>
+					{/if}
 					<th class="center" >{t}Activated{/t}</th>
 					<th class="center" style="width:10px">{t}Actions{/t}</th>
 				</tr>
@@ -82,16 +94,26 @@ jQuery(function($){
 							{$user->name}
 						</a>
 					</td>
-					<td class="left">
+					<td class="center">
 						{$user->login}
 					</td>
-					<td class="left">
+
+					{if $type eq 1}
+					<td class="center">
+						{$user->email}
+					</td>
+					<td class="center">
+						{$user->meta['register_date']}
+					</td>
+					{else}
+					<td class="center">
 						{section name=u loop=$user_groups}
 							{if $user_groups[u]->id == $user->fk_user_group}
 								{$user_groups[u]->name}
 							{/if}
 						{/section}
 					</td>
+					{/if}
 					<td class="center">
 						<div class="btn-group">
 							<a class="btn" href="{url name=admin_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">
@@ -122,7 +144,7 @@ jQuery(function($){
 
 				{foreachelse}
 				<tr>
-					<td colspan="5" class="empty">
+					<td colspan="7" class="empty">
 						{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
 					</td>
 				</tr>
@@ -130,7 +152,7 @@ jQuery(function($){
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="6">
+					<td colspan="7">
 						&nbsp;
 					</td>
 				</tr>
