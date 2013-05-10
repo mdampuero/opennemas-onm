@@ -142,7 +142,12 @@ class AclUserController extends Controller
         $user->meta = array();
         $user->meta['user_language'] = $user->getMeta('user_language') ?: 'default';
 
-        $user->meta['paywall_time_limit'] = new \DateTime($user->meta['paywall_time_limit'], new \DateTimeZone('UTC'));
+        if (array_key_exists('paywall_time_limit', $user->meta)) {
+            $user->meta['paywall_time_limit'] = new \DateTime(
+                $user->meta['paywall_time_limit'],
+                new \DateTimeZone('UTC')
+            );
+        }
 
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();

@@ -204,12 +204,21 @@ $menuXml = '<?xml version="1.0"?>
             id="keyword_manager"
             link="'.url('admin_keywords', array()).'"
             privilege="PCLAVE_ADMIN" />
-        <node
+        <submenu title="'.htmlspecialchars(_("Paywall"), ENT_QUOTES).'" id="paywall" link="#"
+            privilege="PAYWALL">
+            <node
             module_name="PAYWALL"
-            title="'.htmlspecialchars(_("Paywall"), ENT_QUOTES).'"
+            title="'.htmlspecialchars(_("Paywall users"), ENT_QUOTES).'"
             id="keyword_manager"
-            link="'.url('admin_paywall', array()).'"
+            link="'.url('admin_paywall_users', array()).'"
             privilege="PAYWALL" />
+            <node
+            module_name="PAYWALL"
+            title="'.htmlspecialchars(_("Paywall purchases"), ENT_QUOTES).'"
+            id="keyword_manager"
+            link="'.url('admin_paywall_purchases', array()).'"
+            privilege="PAYWALL" />
+        </submenu>
         <node class="divider" />
          <node
             module_name="SCHEDULE_MANAGER"
