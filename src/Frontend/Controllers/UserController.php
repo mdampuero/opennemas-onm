@@ -183,6 +183,8 @@ class UserController extends Controller
                     if (!$user->create($data)) {
                         $errors []=_('An error has occurred. Try to complete the form with valid data.');
                     } else {
+                        // Set registration date
+                        $user->addRegisterDate();
                         $this->view->assign(
                             'success',
                             _('Your account is now set up. Check your email to activate.')
