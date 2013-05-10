@@ -532,7 +532,7 @@ class User
      */
     public function authDatabase($login, $password, $managerDb = false)
     {
-        $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
+        $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\' OR email=\''.strval($login).'\'';
         if (!$managerDb) {
             $rs = $GLOBALS['application']->conn->Execute($sql);
         } else {
