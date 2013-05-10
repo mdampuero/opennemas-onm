@@ -84,6 +84,9 @@ class AuthenticationController extends Controller
 
                         $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
+                        // Set last login date
+                        $user->setLastLoginDate();
+
                         $group = \UserGroup::getGroupName($user->fk_user_group);
 
                         $_SESSION = array(

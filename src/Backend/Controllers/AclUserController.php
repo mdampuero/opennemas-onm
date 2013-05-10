@@ -43,14 +43,11 @@ class AclUserController extends Controller
      *
      * @return Response the response object
      **/
-    public function listBackendUsersAction(Request $request)
+    public function listAction(Request $request)
     {
         $this->checkAclOrForward('USER_ADMIN');
 
         $filter = $request->query->get('filter', array());
-
-        // Get only backend users
-        $filter ['base'] = 'type = 0';
 
         if (!$_SESSION['isMaster']) {
             $filter ['base'] = 'fk_user_group != 4';
@@ -77,35 +74,6 @@ class AclUserController extends Controller
             )
         );
     }
-
-    /**
-     * Show a paginated list of frontend users
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function listFrontendUsersAction(Request $request)
-    {
-        $this->checkAclOrForward('USER_ADMIN');
-
-        $filter    = $request->query->get('filter', array());
-
-        // Get only frontend users
-        $filter ['base'] = 'type = 1';
-
-        $user  = new \User();
-        $users = $user->getUsers($filter, ' ORDER BY login ');
-
-        return $this->render(
-            'acl/user/list.tpl',
-            array(
-                'users' => $users,
-                'type'  => 1,
-            )
-        );
-    }
-
 
     /**
      * Shows the user information given its id

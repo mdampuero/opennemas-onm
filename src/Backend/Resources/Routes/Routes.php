@@ -2521,16 +2521,8 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_acl_user',
     new Route(
-        '/acl/users/backend',
-        array('_controller' => 'Backend:Controllers:AclUserController:listBackendUsers')
-    )
-);
-
-$adminRoutes->add(
-    'admin_acl_user_front',
-    new Route(
-        '/acl/users/frontend',
-        array('_controller' => 'Backend:Controllers:AclUserController:listFrontendUsers')
+        '/acl/users',
+        array('_controller' => 'Backend:Controllers:AclUserController:list')
     )
 );
 

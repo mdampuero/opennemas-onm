@@ -16,7 +16,7 @@ jQuery(function($){
 <form action="{url name=admin_user_list}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
-			<div class="title"><h2>{if $type eq 1}{t}Users frontend{/t}{else}{t}Users Backend{/t}{/if}</h2></div>
+			<div class="title"><h2>{t}Users{/t}</h2></div>
 			<ul class="old-button">
 				<li>
 					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
@@ -37,19 +37,22 @@ jQuery(function($){
 		{render_messages}
 
 		<div class="table-info clearfix">
-			<div class="pull-right form-inline">
-				<input type="text" id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}"  />
-
-				<label for="userlogin">{t}or{/t}</label>
-				<input type="text" id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
-
-				{if $type eq 1}
-				<label for="usergroup">{t}or e-mail:{/t}</label>
+			<div class="pull-left form-inline">
+				<label for="usergroup">{t}Type{/t}:</label>
 				<div class="input-append">
-					<input type="text" id="email" name="filter[email]" value="{$smarty.request.filter.email|default:""}" placeholder="{t}e-mail{/t}" />
-					<button type="submit" class="btn"><i class="icon-search"></i></button>
+					<select id="usertype" name="filter[type]" class="span2">
+						{assign var=type value=$smarty.request.filter.type}
+						<option value="" {if ($type eq "")}selected{/if}>{t}--All--{/t}</option>
+                        <option value="0" {if ($type eq "0")}selected{/if}>{t}Backend{/t}</option>
+                        <option value="1" {if ($type eq "1")}selected{/if}>{t}Frontend{/t}</option>
+					</select>
 				</div>
-				{else}
+			</div>
+			<div class="pull-right form-inline">
+				<input type="text" id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}" />
+
+				<input type="text" id="email" name="filter[email]" value="{$smarty.request.filter.email|default:""}" placeholder="{t}e-mail{/t}" />
+
 				<label for="usergroup">{t}and group:{/t}</label>
 				<div class="input-append">
 					<select id="usergroup" name="filter[group]" class="span2">
@@ -60,7 +63,6 @@ jQuery(function($){
 					</select>
 					<button type="submit" class="btn"><i class="icon-search"></i></button>
 				</div>
-				{/if}
 			</div>
 		</div>
 		<table class="table table-hover table-condensed">
@@ -72,12 +74,11 @@ jQuery(function($){
                     </th>
 					<th class="left">{t}Full name{/t}</th>
 					<th class="center" style="width:110px">{t}Username{/t}</th>
-					{if $type eq 1}
+
 					<th class="center" >{t}E-mail{/t}</th>
-					<th class="center" >{t}Register date{/t}</th>
-					{else}
+
 					<th class="center" >{t}Group{/t}</th>
-					{/if}
+
 					<th class="center" >{t}Activated{/t}</th>
 					<th class="center" style="width:10px">{t}Actions{/t}</th>
 				</tr>
@@ -98,14 +99,10 @@ jQuery(function($){
 						{$user->login}
 					</td>
 
-					{if $type eq 1}
 					<td class="center">
 						{$user->email}
 					</td>
-					<td class="center">
-						{$user->meta['register_date']}
-					</td>
-					{else}
+
 					<td class="center">
 						{section name=u loop=$user_groups}
 							{if $user_groups[u]->id == $user->fk_user_group}
@@ -113,7 +110,7 @@ jQuery(function($){
 							{/if}
 						{/section}
 					</td>
-					{/if}
+
 					<td class="center">
 						<div class="btn-group">
 							<a class="btn" href="{url name=admin_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">

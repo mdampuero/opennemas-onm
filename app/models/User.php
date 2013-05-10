@@ -1055,6 +1055,13 @@ class User
                     new \DateTimeZone('UTC')
                 );
             }
+            if ($user->meta['last_login']) {
+                $user->meta['last_login'] = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $user->meta['last_login'],
+                    new \DateTimeZone('UTC')
+                );
+            }
             $users []= $user;
 
             $rs->MoveNext();
@@ -1085,15 +1092,11 @@ class User
             return 0;
         }
 
-
-
         return $rs->fields['count'];
     }
 
     /**
-     * Increases the paywall subscription time given the subscription name
-     *
-     * @param string $planTime the name of the plan
+     * Stores the register date for a frontend user
      *
      * @return void
      **/
@@ -1104,6 +1107,20 @@ class User
         $currentTime = $currentTime->format('Y-m-d H:i:s');
 
         $this->setMeta(array('register_date' => $currentTime));
+    }
+
+    /**
+     * Set the last login date for a frontend user
+     *
+     * @return void
+     **/
+    public function setLastLoginDate()
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('last_login' => $currentTime));
     }
 
     /**
@@ -1128,12 +1145,13 @@ class User
                 $parts[] = $filter['base'];
             }
 
-            if (isset($filter['login']) && !empty($filter['login'])) {
-                $parts[] = '`login` LIKE "%' . $filter['login'] . '%"';
+            if (isset($filter['type']) && $filter['type'] != '') {
+                $parts[] = '`type` = '.$filter['type'].'';
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = 'MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
+                $parts[] = '(MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE) OR '.
+                           '`login` LIKE "%' . $filter['name'] . '%")';
             }
 
             if (isset($filter['group']) && intval($filter['group'])>0) {

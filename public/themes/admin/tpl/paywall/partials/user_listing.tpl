@@ -3,6 +3,7 @@
     <thead>
         <tr>
             <th class="left">{t}User name{/t}</th>
+            <th class="left">{t}Last login{/t}</th>
             <th class="left">{t}End of subscription{/t}</th>
             {if $show_edit_button}
             <th style="width:10px"></th>
@@ -25,6 +26,9 @@
     <tr data-id="{$user->id}">
         <td class="left">
             <a href="{url name=admin_acl_user_show id=$user->id}#paywall">{$user->name|clearslash}</a>
+        </td>
+        <td class="left">
+            {datetime date=$user->meta['last_login']}
         </td>
         <td class="left">
             {datetime date=$user->meta['paywall_time_limit']}

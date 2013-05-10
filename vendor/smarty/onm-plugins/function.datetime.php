@@ -5,7 +5,7 @@ function smarty_function_datetime($params, &$smarty)
 {
     $output = '';
 
-    if (isset($params['date']) && !is_object($params['date'])) {
+    if (isset($params['date']) && is_object($params['date'])) {
         $format = (array_key_exists('format', $params)) ? $params['format'] : 'Y-m-d H:i:s';
 
         $availableTimeZones = \DateTimeZone::listIdentifiers();
