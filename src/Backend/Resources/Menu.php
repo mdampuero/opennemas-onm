@@ -208,6 +208,12 @@ $menuXml = '<?xml version="1.0"?>
             privilege="PAYWALL">
             <node
             module_name="PAYWALL"
+            title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
+            id="keyword_manager"
+            link="'.url('admin_paywall', array()).'"
+            privilege="PAYWALL" />
+            <node
+            module_name="PAYWALL"
             title="'.htmlspecialchars(_("Paywall users"), ENT_QUOTES).'"
             id="keyword_manager"
             link="'.url('admin_paywall_users', array()).'"
