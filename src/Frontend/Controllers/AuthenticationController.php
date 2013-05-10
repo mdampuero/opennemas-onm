@@ -71,12 +71,10 @@ class AuthenticationController extends Controller
                 return $this->redirect($this->generateUrl('frontend_auth_login'));
             } else {
                 // Try to autenticate the user
-                if ($user->login($login, $password, $token, $captcha)
-                    && $user->type == 0
-                ) {
+                if ($user->login($login, $password, $token, $captcha)) {
                     // Check if user account is activated
                     if ($user->authorize != 1) {
-                        m::add(_('This user was deactivated.'), m::ERROR);
+                        m::add(_('This user is not activated. Check your e-mail for the activation link.'), m::ERROR);
                         return $this->redirect($this->generateUrl('frontend_auth_login'));
                     } else {
                         // Increase security by regenerating the id
