@@ -416,7 +416,18 @@
                     </div>
                 </div>
             </fieldset>
+            <hr>
+            <fieldset>
+                <h3 class="settings-header">{t}ComScore Statistics{/t}</h3>
 
+                <div class="control-group">
+                    <label for="comscore_page_id" class="control-label">{t}comScore Page ID{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="comscore_page_id" name="comscore[page_id]" value="{$configs['comscore']['page_id']|default:""}" class="input-xlarge">
+                        <div class="help-block">{t escape=off}If you also have a <b>comScore statistics service</b>, add your page id{/t}</div>
+                    </div>
+                </div>
+            </fieldset>
             <hr>
             <fieldset>
                 <h3 class="settings-header">{t}Recaptcha{/t}</h3>
