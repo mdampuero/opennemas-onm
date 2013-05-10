@@ -156,7 +156,11 @@ class Order
             $order->id             = $rs->fields['id'];
             $order->user_id        = $rs->fields['user_id'];
             $order->content_id     = $rs->fields['content_id'];
-            $order->created        = $rs->fields['created'];
+            $order->created        = \DateTime::createFromFormat(
+                'Y-m-d H:i:s',
+                $rs->fields['created'],
+                new \DateTimeZone('UTC')
+            );
             $order->payment_id     = $rs->fields['payment_id'];
             $order->payment_status = $rs->fields['payment_status'];
             $order->payment_amount = $rs->fields['payment_amount'];

@@ -29,7 +29,7 @@
             {$purchase->payment_id|clearslash}
         </td>
         <td class="left">
-            {$purchase->created}
+            {datetime date=$purchase->created}
         </td>
         <td class="right">
             {$purchase->payment_amount|clearslash} {$money_units[$settings['money_unit']]}

@@ -27,7 +27,7 @@
             <a href="{url name=admin_acl_user_show id=$user->id}#paywall">{$user->name|clearslash}</a>
         </td>
         <td class="left">
-            {$user->meta['paywall_time_limit']|clearslash}
+            {datetime date=$user->meta['paywall_time_limit']}
         </td>
         {if $show_edit_button}
         <td class="center">
