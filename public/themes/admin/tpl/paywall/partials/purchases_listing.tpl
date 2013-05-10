@@ -23,7 +23,7 @@
     {foreach from=$purchases item=purchase}
     <tr data-id="{$order->id}">
         <td class="left">
-            <a href="{url name=admin_acl_user_show id=$purchase->user_id}">{$purchase->user->name}</a>
+            <a href="{url name=admin_acl_user_show id=$purchase->user_id}#paywall">{$purchase->user->name}</a>
         </td>
         <td class="left">
             {$purchase->payment_id|clearslash}

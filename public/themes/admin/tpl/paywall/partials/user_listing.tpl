@@ -24,7 +24,7 @@
     {foreach from=$users item=user}
     <tr data-id="{$user->id}">
         <td class="left">
-            <a href="{url name=admin_acl_user_show id=$user->id}">{$user->name|clearslash}</a>
+            <a href="{url name=admin_acl_user_show id=$user->id}#paywall">{$user->name|clearslash}</a>
         </td>
         <td class="left">
             {$user->meta['paywall_time_limit']|clearslash}

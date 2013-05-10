@@ -111,6 +111,8 @@ class AclUserController extends Controller
         $user->meta = array();
         $user->meta['user_language'] = $user->getMeta('user_language') ?: 'default';
 
+        $user->meta['paywall_time_limit'] = new \DateTime($user->meta['paywall_time_limit'], new \DateTimeZone('UTC'));
+
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
         $languages = $this->container->getParameter('available_languages');
@@ -163,6 +165,14 @@ class AclUserController extends Controller
 
         $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
         $user->setMeta(array('user_language' => $userLanguage));
+
+        $paywallTimeLimit = $request->request->filter('meta[paywall_time_limit]', '', FILTER_SANITIZE_STRING);
+        if (!is_null($paywallTimeLimit)) {
+            $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+            $time->setTimeZone(new \DateTimeZone('UTC'));
+
+            $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+        }
 
         if ($user->id == $_SESSION['userid']) {
             $_SESSION['user_language'] = $userLanguage;

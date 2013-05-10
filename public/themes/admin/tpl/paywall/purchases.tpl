@@ -25,7 +25,6 @@
 
         {render_messages}
 
-
         {include file="paywall/partials/purchases_listing.tpl"}
 
     </div>
