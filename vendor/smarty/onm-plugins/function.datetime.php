@@ -3,15 +3,19 @@ use Onm\Settings as s;
 
 function smarty_function_datetime($params, &$smarty)
 {
-    $format = (array_key_exists('format', $params)) ? $params['format'] : 'Y-m-d H:i:s';
+    $output = '';
 
-    $availableTimeZones = \DateTimeZone::listIdentifiers();
+    if (isset($params['date']) && !empty($params['date'])) {
+        $format = (array_key_exists('format', $params)) ? $params['format'] : 'Y-m-d H:i:s';
 
-    $timeZone = new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]);
-    $time = $params['date'];
-    $time->setTimeZone($timeZone);
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
 
-    $output = $time->format($format);
+        $timeZone = new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]);
+        $time = $params['date'];
+        $time->setTimeZone($timeZone);
+
+        $output = $time->format($format);
+    }
 
     return $output;
 }
