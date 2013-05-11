@@ -1048,14 +1048,14 @@ class User
             $user = new \User($rs->fields['user_id']);
             $user->meta = $user->getMeta();
 
-            if ($user->meta['paywall_time_limit']) {
+            if (array_key_exists('paywall_time_limit', $user->meta)) {
                 $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $user->meta['paywall_time_limit'],
                     new \DateTimeZone('UTC')
                 );
             }
-            if ($user->meta['last_login']) {
+            if (array_key_exists('last_login', $user->meta)) {
                 $user->meta['last_login'] = \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $user->meta['last_login'],
