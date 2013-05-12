@@ -47,8 +47,9 @@ class NewsletterManager
         }
 
         $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
-
+        $sql2 = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
         $rs = $GLOBALS['application']->conn->Execute($sql);
+        $countNm = $GLOBALS['application']->conn->GetOne($sql2);
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -65,8 +66,7 @@ class NewsletterManager
 
             $rs->MoveNext();
         }
-
-        return $newsletters;
+        return array($countNm, $newsletters);
     }
 
     /**
