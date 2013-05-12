@@ -1790,6 +1790,11 @@ div#content-provider span.icon {
 div#related-contents div#content-provider.related-content-provider  div.contents ul {
   margin-left:0px;
 }
+
+div#newsletter-content-provider div#content-provider  div.ui-tabs-panel div.contents{
+  height: 500px;
+  overflow-y: scroll;
+}
 div#newsletter-container.column-receiver ul.content-receiver li,
 div#article-form.tabs div#related-contents div.column-receiver ul.content-receiver li,
 div#related-contents div#content-provider ul li,
@@ -1811,8 +1816,11 @@ div#newsletter-container.column-receiver ul{
     min-height: 200px;
     padding: 5px;
     margin: 0px 0px 10px 0px;
+    display: none;
 }
-
+div#newsletter-container.column-receiver ul:first {
+  display:block;
+}
 div#related-contents .column-receiver h5,
 div#newsletter-container.column-receiver h5 {
     margin-bottom:0;

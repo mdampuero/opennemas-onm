@@ -9,12 +9,14 @@ jQuery(document).ready(function($){
 
     //If selected manage newsletter by e-mail, show e-mail address field
     newsletterType.on('change', function() {
-        var divMail = $('#sub-mail');
-
+        var divExternal= $('.external-config');
+        var divInternal = $('.internal-config');
         if ($(this).val() == 'submit') {
-            divMail.css('display', 'table-row');
+            divExternal.css('display', 'table-row');
+            divInternal.css('display', 'none');
         } else {
-            divMail.css('display', 'none');
+            divExternal.css('display', 'none');
+            divInternal.css('display', 'table-row');
         }
     });
 
@@ -71,72 +73,72 @@ jQuery(document).ready(function($){
 
         <div class="form-horizontal panel">
             <fieldset>
-            <div class="control-group">
-                <label for="name" class="control-label">{t}Newsletter subject{/t}</label>
-                <div class="controls">
-                    <input type="text" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="input-xlarge"/>
-                    <div class="help-block">{t}The subject of the emails in this bulletin{/t}</div>
-                </div>
-             </div>
-
-            <div class="control-group">
-                <label for="email" class="control-label">{t}Mailing list address{/t}</label>
-                <div class="controls">
-                    <input type="email" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
-                    <div class="help-block">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="newsletter_maillist_link" class="control-label">{t}Newsletter links points to{/t}</label>
-                <div class="controls">
-                    <select name="newsletter_maillist[link]" id="newsletter_maillist_link">
-                        <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
-                        <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
-                    </select>
-                    <div class="help-block">{t}You can choose if you prefer that the links of the contents of the bulletin point within the content or contents on the frontpage{/t}</div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="newsletter_subscriptionType" class="control-label">{t}Newsletter subscription type{/t}</label>
-                <div class="controls">
-                    <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
-                        <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}Manage newsletter by e-mail{/t}</option>
-                        <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Manage newsletter by subscriptors table{/t}</option>
-                    </select>
-                    <div class="help-block">
-                        {t escape=off}You can choose to receive new subscriptions with a checking email or using the <a href="{url name=admin_newsletter_subscriptions}" target="_blank">table of subscribers of the application</a>.
-                        </br>If you choose email subscription, you must enter the address on a field that will appear{/t}
+                <div class="control-group">
+                    <label for="name" class="control-label">{t}Newsletter subject{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="input-xlarge"/>
+                        <div class="help-block">{t}The subject of the emails in this bulletin{/t}</div>
+                    </div>
+                 </div>
+                <div class="control-group">
+                    <label for="sender" class="control-label">{t}Sender{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge"/>
+                    <div class="help-block">{t escape=off}Email sender{/t}</div>
                     </div>
                 </div>
-            </div>
-
-            <div class="control-group" id="sub-mail" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'}style="display:none"{/if}>
-                <label for="subscription" class="control-label">{t}Mail address to receive new subscriptions{/t}</label>
-                <div class="controls">
-                    <input type="text" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
+                 <div class="control-group">
+                    <label for="newsletter_maillist_link" class="control-label">{t}Newsletter links points to{/t}</label>
+                    <div class="controls">
+                        <select name="newsletter_maillist[link]" id="newsletter_maillist_link">
+                            <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
+                            <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
+                        </select>
+                        <div class="help-block">{t}You can choose if you prefer that the links of the contents of the bulletin point within the content or contents on the frontpage{/t}</div>
+                    </div>
                 </div>
-            </div>
+            </fieldset>
+            <hr>
 
-            <div class="control-group">
-                <label for="sender" class="control-label">{t}Mail sender{/t}</label>
-                <div class="controls">
-                    <input type="text" id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge"/>
-                <div class="help-block">{t escape=off}Verify that the domain has enabled <a href="http://en.wikipedia.org/wiki/Sender_Policy_Framework" target="_blank">SPF</a> settings for sending{/t}</div>
+            <fieldset>
+                <div class="control-group">
+                    <label for="newsletter_subscriptionType" class="control-label">{t}Newsletter type{/t}</label>
+                    <div class="controls">
+                        <select name="newsletter_subscriptionType" id="newsletter_subscriptionType">
+                            <option value="submit" {if $configs['newsletter_subscriptionType'] eq 'submit'} selected {/if}>{t}External Send{/t}</option>
+                            <option value="create_subscriptor" {if $configs['newsletter_subscriptionType'] eq 'create_subscriptor'} selected {/if}>{t}Internal Send{/t}</option>
+                        </select>
+                        <div class="help-block">
+                            {t escape=off}You can choose if receive
+                            new subscriptions with a checking email or using the
+                            <a href="{url name=admin_newsletter_subscriptions}" target="_blank">
+                                table of subscribers from the application</a>.{/t}
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                <label for="sender" class="control-label">{t}Enable frontpage subscription{/t}</label>
-                <div class="controls">
-                    <select name="newsletter_enable" id="newsletter_enable">
-                        <option value="yes" {if $configs['newsletter_enable'] eq 'yes'} selected {/if}>{t}Enabled{/t}</option>
-                        <option value="no" {if $configs['newsletter_enable'] eq 'no' || is_null($configs['newsletter_enable'])} selected {/if}>{t}Disabled{/t}</option>
-                    </select>
-                    <div class="help-block">{t}If enabled, a link to newsletter subscription will appear at home frontpage header{/t}</div>
+                <div class="external-config" {if $configs['newsletter_subscriptionType'] neq 'submit'}style="display:none"{/if}>
+
+                    <div class="control-group">
+                        <label for="email" class="control-label">{t}Mailing list address{/t}</label>
+                        <div class="controls">
+                            <input type="email" name="newsletter_maillist[email]" value="{$configs['newsletter_maillist']['email']|default:""}" id="email" class="input-xlarge" />
+                            <div class="help-block">{t}If you have a mailing list service to deliver newsletters add the address here{/t}</div>
+                        </div>
+                    </div>
+
+                    <div class="control-group" >
+                        <label for="subscription" class="control-label">{t}Mail address to receive new subscriptions{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="subscription" name="newsletter_maillist[subscription]" value="{$configs['newsletter_maillist']['subscription']|default:""}" class="input-xlarge" />
+                        </div>
+                    </div>
                 </div>
-            </div>
+                <div class="internal-config"  {if $configs['newsletter_subscriptionType'] neq 'create_subscriptor'}style="display:none"{/if}>
+                    <div class="control-group">
+                         <div class="controls"> {t}Your max limit are %num subscriptors{/t} </div>
+                    </div>
+                </div>
             </fieldset>
         </div>
 
