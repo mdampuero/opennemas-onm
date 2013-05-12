@@ -78,10 +78,10 @@ class NewNewsletter
     {
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`)'
-             . ' VALUES (?,?,?,?)';
+        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`, `updated`)'
+             . ' VALUES (?,?,?,?,?)';
 
-        $values = array($data['title'], $data['data'], $data['html'], $data['created']);
+        $values = array($data['title'], $data['data'], $data['html'], $data['created'], $data['created']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
@@ -211,6 +211,7 @@ class NewNewsletter
         $this->title         = $fields['title'];
         $this->data          = $fields['data'];
         $this->created       = $fields['created'];
+        $this->updated       = $fields['updated'];
         $this->html          = $fields['html'];
         $this->sent          = $fields['sent'];
 

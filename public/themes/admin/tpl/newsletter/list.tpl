@@ -47,6 +47,7 @@
                     </th>
                     <th>{t}Title{/t}</th>
                     <th class="left"  style="width:150px;">{t}Created{/t}</th>
+                    <th class="left"  style="width:150px;">{t}Updated{/t}</th>
                     <th class="left">{t}Sent{/t}</th>
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                     {else}
@@ -71,6 +72,9 @@
                     </td>
                     <td class="left">
                         {$newsletter->created}
+                    </td>
+                    <td class="left">
+                        {$newsletter->updated}
                     </td>
                     <td class="left">
                     {if $newsletter->sent}
@@ -109,7 +113,7 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pagination">
-                            {$pagination->links}
+                            {$pagination->links|default:""}
                         </div>
                     </td>
                 </tr>
