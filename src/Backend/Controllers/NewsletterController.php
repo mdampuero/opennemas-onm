@@ -56,13 +56,35 @@ class NewsletterController extends Controller
         if ($configuredRedirection != false) {
             return $configuredRedirection;
         }
+        $itemsPerPage = 20;
         $page = $request->query->getDigits('page', 1);
         $nm = new \NewsletterManager();
-        $newsletters = $nm->find('1 = 1', 'created DESC', $page);
+        list($nmCount, $newsletters) = $nm->find('1 = 1', 'created DESC', $page, $itemsPerPage);
+
+        // Build the pager
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $nmCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_newsletters'
+                ).'?page=%d',
+            )
+        );
 
         return $this->render(
             'newsletter/list.tpl',
-            array('newsletters'     => $newsletters)
+            array(
+                'newsletters'     => $newsletters,
+                'pagination' => $pagination,
+                'page'       => $page,
+                )
         );
     }
 
