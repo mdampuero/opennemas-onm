@@ -72,7 +72,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="http://opennemas.uservoice.com/knowledgebase">{t}FAQ{/t}</a>
+                                    <a href="http://help.opennemas.com">{t}FAQ{/t}</a>
                                 </li>
                                 <li>
                                     <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>
