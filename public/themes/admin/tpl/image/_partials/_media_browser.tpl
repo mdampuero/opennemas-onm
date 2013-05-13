@@ -12,6 +12,17 @@
     {/if}
     <tbody>
     {foreach name=n from=$photos item=photo}
+    {$allowed = 'false'}
+    {if $photo->category_name eq 'publicidad'}
+        {if $adsModule eq 'true'}
+        {$allowed = 'true'}
+        {/if}
+    {else}
+        {acl hasCategoryAccess=$photo->category}
+            {$allowed = 'true'}
+        {/acl}
+    {/if}
+    {if $allowed eq 'true'}
     <tr>
         <td>
             <input type="checkbox"  id="selected_{$smarty.section.n.iteration}" name="selected_fld[]" value="{$photo->id}" class ="minput" />
@@ -98,6 +109,7 @@
             </div>
         </td>
     </tr>
+    {/if}
     {foreachelse}
     <tr>
         <td class="empty">
