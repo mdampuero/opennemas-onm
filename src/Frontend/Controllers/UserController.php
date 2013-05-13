@@ -160,7 +160,7 @@ class UserController extends Controller
                 $message
                     ->setSubject($mailSubject)
                     ->setBody($mailBody, 'text/plain')
-                    ->setTo($user->email)
+                    ->setTo($data['email'])
                     ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
 
                 // If user is successfully created, send an email
@@ -325,7 +325,7 @@ class UserController extends Controller
             $user->findByEmail($email);
 
             // If e-mail exists in DB
-            if (($user !== false)) {
+            if (!is_null($user->id)) {
                 // Generate and update user with new token
                 $token = md5(uniqid(mt_rand(), true));
                 $user->updateUserToken($user->id, $token);
