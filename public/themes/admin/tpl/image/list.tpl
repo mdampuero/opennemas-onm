@@ -42,7 +42,7 @@
                 <li class="separator"></li>
                 <li>
                     <a class="admin_add" href="{url name=admin_images_search category=$category}">
-                        <img src="{$params.IMAGE_DIR}search.png" alt="{t}Search images{/t}"><br />{t}Search{/t}</i>
+                        <img src="{$params.IMAGE_DIR}search.png" alt="{t}Search images{/t}"><br />{t}Search{/t}
                     </a>
                 </li>
                 <li>
