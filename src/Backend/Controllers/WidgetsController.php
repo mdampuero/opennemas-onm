@@ -305,7 +305,7 @@ class WidgetsController extends Controller
         list($countWidgets, $widgets) = $cm->getCountAndSlice(
             'Widget',
             null,
-            'contents.available=1 '.$sqlExcludedOpinions,
+            'contents.available=1 AND contents.in_litter != 1 '.$sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             8
