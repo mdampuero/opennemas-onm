@@ -69,13 +69,13 @@
             {if preg_match('@^/authors/@', $photo->path_file)}
                 <span class="url">
                     <a href="{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}" target="_blank">
-                        {$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}
+                        {t}[Link]{/t}
                     </a>
                 </span>
             {else}
                 <span class="url">
                     <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">
-                        {$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}
+                        {t}[Link]{/t}
                     </a>
                 </span>
             {/if}
