@@ -163,37 +163,31 @@ class UserController extends Controller
                     ->setTo($user->email)
                     ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
 
-                try {
-                    $mailer = $this->get('mailer');
-                    $mailer->send($message);
-
-                    $this->view->assign('mailSent', true);
-                } catch (\Exception $e) {
-                    // Log this error
-                    $this->get('logger')->notice(
-                        "Unable to send the user activation email for the "
-                        ."user {$user->id}: ".$e->getMessage()
-                    );
-
-                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
-                }
-
-                if (true) {
-                    $sentMail = true;
-                    if (!$user->create($data)) {
-                        $errors []=_('An error has occurred. Try to complete the form with valid data.');
-                    } else {
-                        // Set registration date
-                        $user->addRegisterDate();
-                        $this->view->assign(
-                            'success',
-                            _('Your account is now set up. Check your email to activate.')
-                        );
-                    }
+                // If user is successfully created, send an email
+                if (!$user->create($data)) {
+                    $errors []=_('An error has occurred. Try to complete the form with valid data.');
                 } else {
-                    $sentMail = false;
+                    try {
+                        $mailer = $this->get('mailer');
+                        $mailer->send($message);
+
+                        $this->view->assign('mailSent', true);
+                    } catch (\Exception $e) {
+                        // Log this error
+                        $this->get('logger')->notice(
+                            "Unable to send the user activation email for the "
+                            ."user {$user->id}: ".$e->getMessage()
+                        );
+
+                        m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                    }
+                    // Set registration date
+                    $user->addRegisterDate();
+                    $this->view->assign(
+                        'success',
+                        _('Your account is now set up. Check your email to activate.')
+                    );
                 }
-                $this->view->assign('sent_mail', $sentMail);
             }
         }
 
