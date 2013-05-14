@@ -150,6 +150,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_user_recoverusername',
+    new Route(
+        '/user/recover-user',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:recoverUsername',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_user_resetpass',
     new Route(
         '/user/reset-pass/{token}',

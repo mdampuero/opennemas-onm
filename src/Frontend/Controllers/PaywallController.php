@@ -47,6 +47,27 @@ class PaywallController extends Controller
     {
         if (empty($_SESSION['userid'])) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
+        } elseif (isset($_SESSION['meta']['paywall_time_limit'])) {
+            $currentTime = new \DateTime();
+            $currentTime->setTimezone(new \DateTimeZone('UTC'));
+            $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+            if ($currentTime < $_SESSION['meta']['paywall_time_limit']) {
+                $user = new \User($_SESSION['userid']);
+                $user->getMeta();
+
+                m::add(
+                    sprintf(
+                        _('You already have an active Subscription till: %s'),
+                        $_SESSION['meta']['paywall_time_limit']
+                    ),
+                    m::ERROR
+                );
+
+                return $this->redirect(
+                    $this->generateUrl('frontend_user_show').'#subscription'
+                );
+            }
         }
         $settings = s::get('paywall_settings');
 

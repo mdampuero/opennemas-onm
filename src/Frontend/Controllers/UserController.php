@@ -54,6 +54,7 @@ class UserController extends Controller
     {
         if (array_key_exists('userid', $_SESSION) && !empty($_SESSION['userid'])) {
             $user = new \User($_SESSION['userid']);
+            $user->getMeta();
 
             return $this->render(
                 'user/show.tpl',
@@ -356,7 +357,12 @@ class UserController extends Controller
                     $mailer = $this->get('mailer');
                     $mailer->send($message);
 
-                    $this->view->assign('mailSent', true);
+                    $this->view->assign(
+                        array(
+                            'mailSent' => true,
+                            'user' => $user
+                        )
+                    );
                 } catch (\Exception $e) {
                     // Log this error
                     $this->get('logger')->notice(
@@ -376,6 +382,78 @@ class UserController extends Controller
         }
     }
 
+    /**
+     * Shows the form for recovering the username of a user and
+     * sends the mail to the user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function recoverUsernameAction(Request $request)
+    {
+        if ('POST' != $request->getMethod()) {
+            return $this->render('user/recover_username.tpl');
+        } else {
+            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+
+            // Get user by email
+            $user = new \User();
+            $user->findByEmail($email);
+
+            // If e-mail exists in DB
+            if (!is_null($user->id)) {
+                // Generate and update user with new token
+                $token = md5(uniqid(mt_rand(), true));
+                $user->updateUserToken($user->id, $token);
+
+                $tplMail = new \Template(TEMPLATE_USER);
+                $tplMail->caching = 0;
+
+                $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
+                $mailBody = $tplMail->fetch(
+                    'user/emails/recoverusername.tpl',
+                    array(
+                        'user' => $user,
+                    )
+                );
+
+                //  Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/plain')
+                    ->setTo($user->email)
+                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $this->view->assign(
+                        array(
+                            'mailSent' => true,
+                            'user' => $user
+                        )
+                    );
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('logger')->notice(
+                        "Unable to send the recover password email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                }
+
+            } else {
+                m::add(_('Unable to find an user with that email.'), m::ERROR);
+            }
+
+            // Display form
+            return $this->render('user/recover_username.tpl');
+        }
+    }
     /**
      * Regenerates the pass for a user
      *
