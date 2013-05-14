@@ -263,14 +263,21 @@ class UserController extends Controller
         $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
         $captcha = '';
         $user = new \User();
-        $userData = $user->getUserByToken($token);
+        $userData = $user->findByToken($token);
 
         if ($userData) {
-            $user->authorizeUser($userData['pk_user']);
+            $user->authorizeUser($userData->id);
 
-            if ($user->login($userData['login'], $userData['password'], $userData['token'], $captcha)) {
+            if ($user->login($userData->login, $userData->password, $userData->token, $captcha)) {
                 // Increase security by regenerating the id
-                session_regenerate_id();
+                $request->getSession()->migrate();
+
+                $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
+
+                // Set last login date
+                $user->setLastLoginDate();
+
+                $group = \UserGroup::getGroupName($user->fk_user_group);
 
                 $_SESSION = array(
                     'userid'           => $user->id,
@@ -280,25 +287,18 @@ class UserController extends Controller
                     'deposit'          => $user->deposit,
                     'authMethod'       => $user->authMethod,
                     'default_expire'   => $user->sessionexpire,
-                    'csrf'             => md5(uniqid(mt_rand(), true))
+                    'session_lifetime' => $maxSessionLifeTime * 60,
+                    'csrf'             => md5(uniqid(mt_rand(), true)),
+                    'meta'             => $user->getMeta(),
                 );
 
                 // Store default expire time
                 \Application::setCookieSecure('default_expire', $user->sessionexpire, 0);
-                PrivilegesCheck::loadSessionExpireTime();
             }
 
-            $paypalEmail = s::get("paypal_settings");
-            $subscriptionItems = \Kiosko::getSubscriptionItems();
+            m::add(_('Log in succesful.'), m::SUCCESS);
 
-            $this->view->assign(
-                array(
-                    'paypal_email'       => $paypalEmail['email'],
-                    'subscription_items' => $subscriptionItems,
-                )
-            );
-
-            return $this->render('login/deposit.tpl');
+            return $this->redirect($this->generateUrl('frontend_user_show'));
         } else {
             m::add(_('There was an error while creating your user account. Please try again'), m::ERROR);
 
