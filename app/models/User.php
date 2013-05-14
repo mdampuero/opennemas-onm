@@ -248,7 +248,7 @@ class User
         if (isset($data['password']) && (strlen($data['password']) > 0)) {
             $sql = "UPDATE users
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
-                        `email`=?, `name`=?, `fk_user_group`=?
+                        `email`=?, `name`=?, `fk_user_group`=?, type=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -258,13 +258,14 @@ class User
                 $data['email'],
                 $data['name'],
                 $data['id_user_group'],
+                $data['type'],
                 intval($data['id'])
             );
 
         } else {
             $sql = "UPDATE users
                     SET `login`=?, `sessionexpire`=?, `email`=?,
-                        `name`=?, `fk_user_group`=?
+                        `name`=?, `fk_user_group`=?, type=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -273,6 +274,7 @@ class User
                 $data['email'],
                 $data['name'],
                 $data['id_user_group'],
+                $data['type'],
                 intval($data['id'])
             );
         }
@@ -311,6 +313,10 @@ class User
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
             \Application::logDatabaseError();
 
+            return false;
+        }
+
+        if (!$this->deleteMeta($id)) {
             return false;
         }
 
@@ -814,6 +820,7 @@ class User
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
         if (!$rs) {
             return false;
         }

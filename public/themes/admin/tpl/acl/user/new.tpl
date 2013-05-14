@@ -11,6 +11,25 @@
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
 
+        if($('select#usertype').val() == '1'){
+                $('#id_user_group').removeAttr('required');
+                $('#privileges').hide();
+                $('.privileges-tab').hide();
+            }
+
+
+        $('select#usertype').change(function(){
+            if($(this).val() == '1'){
+                $('#id_user_group').removeAttr('required');
+                $('#privileges').hide();
+                $('.privileges-tab').hide();
+            } else {
+                $('#privileges').show();
+                $('.privileges-tab').show();
+                $("#id_user_group").attr("required", "required");
+            }
+        });
+
         {acl isAllowed="USER_ADMIN"}
             {is_module_activated name="PAYWALL"}
             jQuery('#paywall_time_limit').datetimepicker({
@@ -78,7 +97,7 @@ label {
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
                 <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
-                <li><a href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
+                <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
                 {acl isAllowed="USER_ADMIN"}
                 {is_module_activated name="PAYWALL"}
                 <li><a href="#paywall" title="{t}Paywall{/t}">{t}Paywall{/t}</a></li>
@@ -159,6 +178,18 @@ label {
                         </div>
                     </div>
 
+                    {is_module_activated name="PAYWALL"}
+                    <div class="control-group">
+                        <label for="user_language" class="control-label">{t}User type{/t}</label>
+                        <div class="controls">
+                            <select id="usertype" name="type">
+                                <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
+                                <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
+                            </select>
+                        </div>
+                    </div>
+                    {/is_module_activated}
+
                     <div class="control-group">
                         <label for="user_language" class="control-label">{t}User language{/t}</label>
                         <div class="controls">
@@ -168,6 +199,7 @@ label {
                     </div>
                 </div>
             </div>
+
             <div id="privileges">
                 <table style="margin:1em;">
                     <tbody>
