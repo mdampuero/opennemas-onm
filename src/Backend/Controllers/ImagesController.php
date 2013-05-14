@@ -117,6 +117,12 @@ class ImagesController extends Controller
             )
         );
 
+        $adsModule = 'false';
+        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+            $adsModule = 'true';
+        }
+
+
         return $this->render(
             'image/list.tpl',
             array(
