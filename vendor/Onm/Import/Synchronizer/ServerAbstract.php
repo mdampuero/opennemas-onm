@@ -32,6 +32,8 @@ abstract class ServerAbstract
         $deletedFiles = 0;
 
         $files = array();
+        $imagesName = array();
+        $serverFiles = array();
         foreach ($this->contentList as $content) {
             $id = $content->attributes()->{'id'};
             $url = trim((string) $content);
@@ -40,13 +42,26 @@ abstract class ServerAbstract
             if ($this->fetchContentAndSave($id, $url)) {
                 $downloadedFiles++;
             }
+            // Fetch all images name
+            $imagesName[] = $this->getImagesNameFromLocalContent($id);
         }
 
-        $serverFiles = array();
+        // Add all xml files name on serverFiles array
         foreach ($files as $file) {
             $serverFiles[] = array(
                 'filename' => $file,
             );
+        }
+
+        // Add all images name on serverFiles array
+        foreach ($imagesName as $names) {
+            if (!empty($names)) {
+                foreach ($names as $name) {
+                    $serverFiles[] = array(
+                        'filename' => $name,
+                    );
+                }
+            }
         }
 
         // Filter files by its creation
@@ -99,6 +114,32 @@ abstract class ServerAbstract
             }
 
             return true;
+        }
+    }
+
+    /**
+     * Fetch images from a given xml content
+     *
+     * @param $id the id of the local file
+     *
+     * @return array $imagesName an array with all images from xml contents
+     **/
+    public function getImagesNameFromLocalContent($id)
+    {
+        $localFilePath = $this->params['sync_path'].DS.strtolower($id.'.xml');
+        if (file_exists($localFilePath)) {
+            $imagesName = array();
+            $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
+            if (is_object($element)) {
+                if ($element->hasPhotos()) {
+                    $photos = $element->getPhotos();
+                    foreach ($photos as $photo) {
+                        $imagesName[] = $photo->name;
+                    }
+                }
+            }
+
+            return $imagesName;
         }
 
     }
