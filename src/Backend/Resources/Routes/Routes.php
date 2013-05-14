@@ -2273,6 +2273,47 @@ $adminRoutes->add(
     )
 );
 
+// Paywall controller routes
+$adminRoutes->add(
+    'admin_paywall',
+    new Route(
+        '/paywall',
+        array('_controller' => 'Backend:Controllers:PaywallController:default')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_users',
+    new Route(
+        '/paywall/users',
+        array('_controller' => 'Backend:Controllers:PaywallController:users')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_purchases',
+    new Route(
+        '/paywall/purchases',
+        array('_controller' => 'Backend:Controllers:PaywallController:purchases')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_settings',
+    new Route(
+        '/paywall/settings',
+        array('_controller' => 'Backend:Controllers:PaywallController:settings')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_settings_save',
+    new Route(
+        '/paywall/settings/save',
+        array('_controller' => 'Backend:Controllers:PaywallController:settingsSave')
+    )
+);
+
 // Importer Efe controller routes
 $adminRoutes->add(
     'admin_news_agency',

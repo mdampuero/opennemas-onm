@@ -25,6 +25,30 @@ use Onm\Settings as s;
 class Bootstrap extends ModuleBootstrap
 {
     /**
+     * Starts the session layer for the backend
+     *
+     * @return Boostrap the boostrap instance
+     **/
+    public function initSessionLayer()
+    {
+        $request = $this->container->get('request');
+
+        $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
+        if ($isAsset) {
+            // Log this error event to the webserver logging sysmte
+            error_log("File does not exist: ".$request->getPathInfo(), 0);
+
+            $response = new Response('Content not available', 404);
+            $response->send();
+            exit();
+        }
+
+        $session = $this->container->get('session');
+        $session->start();
+        $this->container->get('request')->setSession($session);
+    }
+
+    /**
      * Initializes the internationalization system for the frontend module
      *
      * @return void

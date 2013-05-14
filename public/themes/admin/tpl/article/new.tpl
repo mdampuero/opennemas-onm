@@ -208,8 +208,9 @@
                         <div class="contentbox">
                             <h3 class="title">{t}Paywall{/t}</h3>
                             <div class="content">
-                                <input type="checkbox" id="for_sale" name="for_sale" {if $article->for_sale}checked=checked{/if}>
-                                <label for="for_sale">{t}Only available for subscribers{/t}</label>
+                                <input type="checkbox" id="only_subscribers" name="params[only_subscribers]" {if $article->params["only_subscribers"] == "1"}checked=checked{/if} value="1">
+                                <label for="only_subscribers">{t}Only available for subscribers{/t}</label>
+
                             </div>
                         </div>
                         {/is_module_activated}

@@ -33,6 +33,10 @@ services:
         class: Onm\Mailer
         arguments: [ %swiftmailer% ]
 
+    entity_repository:
+        class: Onm\ORM\EntityRepository
+        arguments: [ @cache ]
+
     cache:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]

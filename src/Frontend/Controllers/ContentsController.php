@@ -155,7 +155,7 @@ class ContentsController extends Controller
             $senderEmail  = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
             $senderName   = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
             $mailSubject  = sprintf(
-                _('%s ha compartido contigo un contenido de %s.'),
+                _('%s has shared with you a content from %s.'),
                 $senderName,
                 s::get('site_name')
             );

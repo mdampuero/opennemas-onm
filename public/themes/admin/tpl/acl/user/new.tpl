@@ -1,8 +1,7 @@
 {extends file="base/admin.tpl"}
 
-{block name="prototype"}{/block}
-
 {block name="footer-js" append}
+{script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
 <script>
     jQuery(document).ready(function($){
         $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
@@ -11,10 +10,40 @@
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
+
+        if($('select#usertype').val() == '1'){
+                $('#id_user_group').removeAttr('required');
+                $('#privileges').hide();
+                $('.privileges-tab').hide();
+            }
+
+
+        $('select#usertype').change(function(){
+            if($(this).val() == '1'){
+                $('#id_user_group').removeAttr('required');
+                $('#privileges').hide();
+                $('.privileges-tab').hide();
+            } else {
+                $('#privileges').show();
+                $('.privileges-tab').show();
+                $("#id_user_group").attr("required", "required");
+            }
+        });
+
+        {acl isAllowed="USER_ADMIN"}
+            {is_module_activated name="PAYWALL"}
+            jQuery('#paywall_time_limit').datetimepicker({
+                hourGrid: 4,
+                showAnim: 'fadeIn',
+                dateFormat: 'yy-mm-dd',
+                timeFormat: 'hh:mm:ss',
+                minuteGrid: 10
+            });
+            {/is_module_activated}
+        {/acl}
     });
 </script>
 {/block}
-
 
 {block name="header-css" append}
 <style type="text/css">
@@ -68,7 +97,12 @@ label {
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
                 <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
-                <li><a href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
+                <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
+                {acl isAllowed="USER_ADMIN"}
+                {is_module_activated name="PAYWALL"}
+                <li><a href="#paywall" title="{t}Paywall{/t}">{t}Paywall{/t}</a></li>
+                {/is_module_activated}
+                {/acl}
             </ul><!-- / -->
             <div id="basic">
                 <div class="avatar">
@@ -144,6 +178,18 @@ label {
                         </div>
                     </div>
 
+                    {is_module_activated name="PAYWALL"}
+                    <div class="control-group">
+                        <label for="user_language" class="control-label">{t}User type{/t}</label>
+                        <div class="controls">
+                            <select id="usertype" name="type">
+                                <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
+                                <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
+                            </select>
+                        </div>
+                    </div>
+                    {/is_module_activated}
+
                     <div class="control-group">
                         <label for="user_language" class="control-label">{t}User language{/t}</label>
                         <div class="controls">
@@ -153,6 +199,7 @@ label {
                     </div>
                 </div>
             </div>
+
             <div id="privileges">
                 <table style="margin:1em;">
                     <tbody>
@@ -219,6 +266,22 @@ label {
                     </tbody>
                 </table>
             </div><!-- /privileges -->
+
+            {acl isAllowed="USER_ADMIN"}
+            {is_module_activated name="PAYWALL"}
+            <div id="paywall">
+                <div class="form-horizontal">
+                        <div class="control-group">
+                        <label for="sessionexpire" class="control-label">{t}Paywall time limit:{/t}</label>
+                        <div class="controls">
+                            <input type="datetime" id="paywall_time_limit" name="meta[paywall_time_limit]" value="{datetime date=$user->meta['paywall_time_limit']}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/is_module_activated}
+            {/acl}
+            <!-- paywall -->
         </div>
     </div>
 </form>
