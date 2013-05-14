@@ -30,9 +30,9 @@
         <td style="width:50px;" class="thumb">
             {if preg_match('/^swf$/i', $photo->type_img)}
                 <object>
-                    <param name="wmode" value="transparent"
+                    <param name="wmode" value="window"
                            value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                    <embed wmode="transparent"
+                    <embed wmode="window"
                            src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
                            width="140" height="80" ></embed>
                 </object>
@@ -46,8 +46,8 @@
                 <div class="resource">
                     {if preg_match('/^swf$/i', $photo->type_img)}
                         <object>
-                            <param name="wmode" value="transparent" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                            <embed wmode="transparent" width="400" height="400"
+                            <param name="wmode" value="window" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
+                            <embed wmode="window" width="400" height="400"
                                    src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
                         </object>
                         <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />

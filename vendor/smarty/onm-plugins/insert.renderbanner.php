@@ -187,13 +187,13 @@ JSINTERSTICIAL;
                     .sprintf('%06d', $banner->pk_advertisement)
                     .'.html" rel="nofollow" style="display:block;cursor:pointer">';
                 $output .= '<object width="'.$width.'" height="'.$height.'" >
-                        <param name="wmode" value="transparent" />
+                        <param name="wmode" value="window" />
                         <param name="movie" value="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '" />
                         <param name="width" value="'.$width.'" />
                         <param name="height" value="'.$height.'" />
                         <embed src="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '"
                             width="'.$width.'" height="'.$height.'" alt="Publicidad '.
-                            $banner->title. '" wmode="transparent"></embed>
+                            $banner->title. '" wmode="window"></embed>
                     </object>';
             } else {
                 if (!$isBastardIE) {
@@ -215,7 +215,7 @@ JSINTERSTICIAL;
                                 .'.html\', \'_blank\');return false;"></div>';
                 }
 
-                $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
+                $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;  height: '.$height.'px;">
                         <object width="'.$width.'" height="'.$height.'">
                             <param name="movie" value="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '" />
                             <param name="wmode" value="opaque" />

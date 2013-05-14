@@ -945,14 +945,14 @@ class Advertisement extends Content
                                 .sprintf('%06d', $banner->pk_advertisement)
                                 .'.html" rel="nofollow" style="display:block;cursor:pointer">';
                     $output .= '<object width="'.$width.'" height="'.$height.'" >
-                            <param name="wmode" value="transparent" />
+                            <param name="wmode" value="window" />
                             <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
                             <param name="width" value="'.$width.'" />
                             <param name="height" value="'.$height.'" />
                             <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
                                 width="'.$width.'" height="'.$height.'" SCALE="exactfit" alt="Publicidad '
                                 .$banner->title
-                                .'" wmode="transparent"></embed>
+                                .'" wmode="window"></embed>
                         </object>';
                 } else {
                     if (!$isBastardIE) {
@@ -974,7 +974,7 @@ class Advertisement extends Content
                                 .'.html\', \'_blank\');return false;"></div>';
                     }
 
-                    $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
+                    $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px; height: '.$height.'px;">
                             <object width="'.$width.'" height="'.$height.'">
                                 <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
                                 <param name="wmode" value="opaque" />
