@@ -5,11 +5,13 @@
         <a href="{$home}" class="all {if $category == 'all'}active{/if}">{t}All categories{/t}</a>
         {/acl}
     {/if}
+    {is_module_activated name="ADS_MANAGER"}
     {if $ads == true}
         {acl isAllowed="ADVERTISEMENT_CREATE"}
         <a href="{$home}&category=2" class="all {if $category == 2}active{/if}">{t}Advertisement{/t}</a>
         {/acl}
     {/if}
+    {/is_module_activated}
     {if $opinion == true}
         {acl isAllowed="OPINION_CREATE"}
         <a href="{$home}&category=4" class="all {if $category == 4}active{/if}">{t}Opinion{/t}</a>

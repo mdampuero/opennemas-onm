@@ -96,6 +96,7 @@ class ImagesController extends Controller
         foreach ($images as &$image) {
             $image->description_utf = html_entity_decode($image->description);
             $image->metadata_utf    = html_entity_decode($image->metadata);
+            $image->category_name   = $image->loadCategoryName($image->id);
         }
 
         // Build the pager
@@ -116,13 +117,20 @@ class ImagesController extends Controller
             )
         );
 
+        $adsModule = 'false';
+        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+            $adsModule = 'true';
+        }
+
+
         return $this->render(
             'image/list.tpl',
             array(
                 'pages'    => $pagination,
                 'photos'   => $images,
                 'category' => $this->category,
-                'page'     => $page
+                'page'     => $page,
+                'adsModule'=> $adsModule,
             )
         );
     }
@@ -242,35 +250,38 @@ class ImagesController extends Controller
 
         // FIXME: eliminar as dependencias xeradas por un mal
         // Eliminada categoria album del array $especials:  3 => 'album'
-        $especials = array(2 => _('Advertisement'));
-        foreach ($especials as $key => $cat) {
-            $num_especials[$j] =  new \stdClass;
-            $num_especials[$j]->id    = $key;
-            $num_especials[$j]->title = $cat;
-            $num_especials[$j]->total = (isset($photoSet[$key]->total))? $photoSet[$key]->total : 0;
-            $num_especials[$j]->size  = (isset($photoSet[$key]->size))? $photoSet[$key]->size : 0;
-            $num_especials[$j]->jpg   = (isset($photoSetJPG[$key]))? $photoSetJPG[$key] : 0;
-            $num_especials[$j]->gif   = (isset($photoSetGIF[$key]))? $photoSetGIF[$key] : 0;
-            $num_especials[$j]->png   = (isset($photoSetPNG[$key]))? $photoSetPNG[$key] : 0;
-            $num_especials[$j]->other = $photoSet[$key]->total
-                                        - $num_especials[$j]->jpg
-                                        - $num_especials[$j]->gif
-                                        - $num_especials[$j]->png;
-            $num_especials[$j]->BN    = (isset($photoSetBN[$key]))? $photoSetBN[$key] : 0;
-            $num_especials[$j]->color = $photoSet[$key]->total - $num_especials[$j]->BN ;
+        $especials = null;
+        $num_especials = null;
+        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+            $especials = array(2 => _('Advertisement'));
+            foreach ($especials as $key => $cat) {
+                $num_especials[$j] =  new \stdClass;
+                $num_especials[$j]->id    = $key;
+                $num_especials[$j]->title = $cat;
+                $num_especials[$j]->total = (isset($photoSet[$key]->total))? $photoSet[$key]->total : 0;
+                $num_especials[$j]->size  = (isset($photoSet[$key]->size))? $photoSet[$key]->size : 0;
+                $num_especials[$j]->jpg   = (isset($photoSetJPG[$key]))? $photoSetJPG[$key] : 0;
+                $num_especials[$j]->gif   = (isset($photoSetGIF[$key]))? $photoSetGIF[$key] : 0;
+                $num_especials[$j]->png   = (isset($photoSetPNG[$key]))? $photoSetPNG[$key] : 0;
+                $num_especials[$j]->other = $photoSet[$key]->total
+                                            - $num_especials[$j]->jpg
+                                            - $num_especials[$j]->gif
+                                            - $num_especials[$j]->png;
+                $num_especials[$j]->BN    = (isset($photoSetBN[$key]))? $photoSetBN[$key] : 0;
+                $num_especials[$j]->color = $photoSet[$key]->total - $num_especials[$j]->BN ;
 
-            // TOTALES
-            $statistics['num_especials']['jpg']   += $num_especials[$j]->jpg;
-            $statistics['num_especials']['gif']   += $num_especials[$j]->gif;
-            $statistics['num_especials']['png']   += $num_especials[$j]->png;
-            $statistics['num_especials']['other'] += $num_especials[$j]->other;
-            $statistics['num_especials']['bn']    += $num_especials[$j]->BN;
-            $statistics['num_especials']['color'] += $num_especials[$j]->color;
-            $statistics['num_especials']['size']  += $num_especials[$j]->size;
+                // TOTALES
+                $statistics['num_especials']['jpg']   += $num_especials[$j]->jpg;
+                $statistics['num_especials']['gif']   += $num_especials[$j]->gif;
+                $statistics['num_especials']['png']   += $num_especials[$j]->png;
+                $statistics['num_especials']['other'] += $num_especials[$j]->other;
+                $statistics['num_especials']['bn']    += $num_especials[$j]->BN;
+                $statistics['num_especials']['color'] += $num_especials[$j]->color;
+                $statistics['num_especials']['size']  += $num_especials[$j]->size;
 
-            $j++;
+                $j++;
+            }
         }
-
         $photoFileTypes = array('jpg', 'gif', 'png', 'other', 'bn', 'color', 'size');
         foreach ($photoFileTypes as $type) {
             $statistics['totals'][$type] = $statistics['num_photos'][$type]  + $statistics['num_sub_photos'][$type]
@@ -440,6 +451,7 @@ class ImagesController extends Controller
                 $photo->extension       = strtolower($photo->type_img);
                 $photo->description_utf = html_entity_decode($photo->description);
                 $photo->metadata_utf    = html_entity_decode($photo->metadata);
+                $photo->category_name   = $photo->loadCategoryName($photo->id);
             }
 
             $pagination = \Pager::factory(
@@ -457,6 +469,11 @@ class ImagesController extends Controller
             );
 
             $_SESSION['desde'] = 'search';
+            $adsModule = 'false';
+            if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+                $adsModule = 'true';
+            }
+
 
             return $this->render(
                 'image/search.tpl',
@@ -468,6 +485,7 @@ class ImagesController extends Controller
                     'search'          => $search,
                     'pages'           => $pagination,
                     'category'        => $category,
+                    'adsModule'       => $adsModule,
                 )
             );
         }

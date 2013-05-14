@@ -12,6 +12,17 @@
     {/if}
     <tbody>
     {foreach name=n from=$photos item=photo}
+    {$allowed = 'false'}
+    {if $photo->category_name eq 'publicidad'}
+        {if $adsModule eq 'true'}
+        {$allowed = 'true'}
+        {/if}
+    {else}
+        {acl hasCategoryAccess=$photo->category}
+            {$allowed = 'true'}
+        {/acl}
+    {/if}
+    {if $allowed eq 'true'}
     <tr>
         <td>
             <input type="checkbox"  id="selected_{$smarty.section.n.iteration}" name="selected_fld[]" value="{$photo->id}" class ="minput" />
@@ -19,9 +30,9 @@
         <td style="width:50px;" class="thumb">
             {if preg_match('/^swf$/i', $photo->type_img)}
                 <object>
-                    <param name="wmode" value="transparent"
+                    <param name="wmode" value="window"
                            value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                    <embed wmode="transparent"
+                    <embed wmode="window"
                            src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
                            width="140" height="80" ></embed>
                 </object>
@@ -35,8 +46,8 @@
                 <div class="resource">
                     {if preg_match('/^swf$/i', $photo->type_img)}
                         <object>
-                            <param name="wmode" value="transparent" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                            <embed wmode="transparent" width="400" height="400"
+                            <param name="wmode" value="window" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
+                            <embed wmode="window" width="400" height="400"
                                    src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
                         </object>
                         <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
@@ -69,13 +80,13 @@
             {if preg_match('@^/authors/@', $photo->path_file)}
                 <span class="url">
                     <a href="{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}" target="_blank">
-                        {$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}
+                        {t}[Link]{/t}
                     </a>
                 </span>
             {else}
                 <span class="url">
                     <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">
-                        {$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}
+                        {t}[Link]{/t}
                     </a>
                 </span>
             {/if}
@@ -98,6 +109,7 @@
             </div>
         </td>
     </tr>
+    {/if}
     {foreachelse}
     <tr>
         <td class="empty">
