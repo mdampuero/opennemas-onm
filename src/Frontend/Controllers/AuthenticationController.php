@@ -54,13 +54,14 @@ class AuthenticationController extends Controller
         $session = $this->container->get('session');
         $session->start();
         $this->container->get('request')->setSession($session);
+        $contentId = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
 
         if ('POST' == $request->getMethod()) {
             //  Get values from post
-            $login    = $request->request->filter('login', null, FILTER_SANITIZE_STRING);
-            $password = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
-            $token    = $request->request->filter('token', null, FILTER_SANITIZE_STRING);
-            $captcha  = '';
+            $login     = $request->request->filter('login', null, FILTER_SANITIZE_STRING);
+            $password  = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
+            $token     = $request->request->filter('token', null, FILTER_SANITIZE_STRING);
+            $captcha   = '';
 
             $user = new \User();
 
@@ -107,6 +108,11 @@ class AuthenticationController extends Controller
 
                         m::add(_('Log in succesful.'), m::SUCCESS);
 
+                        if (!empty($contentId)) {
+                            $article = new \Article($contentId);
+                            return $this->redirect($article->uri);
+                        }
+
                         return $this->redirect($this->generateUrl('frontend_user_show'));
                     }
 
@@ -128,7 +134,8 @@ class AuthenticationController extends Controller
         return $this->render(
             'authentication/login.tpl',
             array(
-                'token' => $token
+                'token' => $token,
+                'id'    => $contentId
             )
         );
     }

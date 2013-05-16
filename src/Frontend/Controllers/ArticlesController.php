@@ -301,7 +301,10 @@ class ArticlesController extends Controller
         $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
 
         if ($paywallActivated && $onlyAvailableSubscribers) {
-            $newContent = $this->renderView('paywall/partials/content_only_for_subscribers.tpl');
+            $newContent = $this->renderView(
+                'paywall/partials/content_only_for_subscribers.tpl',
+                array('id' => $content->id)
+            );
 
             $isLogged = array_key_exists('userid', $_SESSION);
             if ($isLogged) {
@@ -324,7 +327,10 @@ class ArticlesController extends Controller
                 if (!$hasSubscription) {
                     $newContent = $this->renderView(
                         'paywall/partials/content_only_for_subscribers.tpl',
-                        array('logged' => $isLogged)
+                        array(
+                            'logged' => $isLogged,
+                            'id'     => $content->id
+                        )
                     );
                     $content->body = $newContent;
                 }
