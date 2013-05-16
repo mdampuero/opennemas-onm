@@ -185,6 +185,12 @@ gettext("Paywall");
 gettext("Premium users");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Create new user");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("New user");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
 gettext("Config newsletter module");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
@@ -3864,6 +3870,12 @@ gettext("No tags");
 
 /* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
 gettext("Author:");
+
+/* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
+gettext("[Link]");
+
+/* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
+gettext("[Link]");
 
 /* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
 gettext("Edit");
@@ -8193,6 +8205,15 @@ gettext("OJD Page ID");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("If you also have a <b>OJD statistics service</b>, add your page id");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("ComScore Statistics");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("comScore Page ID");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("If you also have a <b>comScore statistics service</b>, add your page id");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Recaptcha");
