@@ -180,7 +180,7 @@ class UserController extends Controller
                             ."user {$user->id}: ".$e->getMessage()
                         );
 
-                        m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                        m::add(_('Unable to send your registration email. Please try it later.'), m::ERROR);
                     }
                     // Set registration date
                     $user->addRegisterDate();
@@ -221,18 +221,19 @@ class UserController extends Controller
         $data['password-verify']     = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
 
         if ($data['password'] != $data['password-verify']) {
-            return $this->redirect($this->generateUrl('frontend_auth_login'));
+            m::add(_('Password and confirmation must be equal.'), m::ERROR);
+            return $this->redirect($this->generateUrl('frontend_user_show'));
         }
         // Get user data, check token and confirm pass
         $user = new \User($userId);
         if ($user->id <= 0) {
             if ($user->update($data)) {
-                m::add('Data updated successfully', m::SUCCESS);
+                m::add(_('Data updated successfully'), m::SUCCESS);
             } else {
-                m::add('There was an error while updating the user data.', m::ERROR);
+                m::add(_('There was an error while updating the user data.'), m::ERROR);
             }
         } else {
-            m::add('The user does not exists.', m::ERROR);
+            m::add(_('The user does not exists.'), m::ERROR);
         }
 
         return $this->redirect($this->generateUrl('frontend_user_show'));
@@ -297,6 +298,44 @@ class UserController extends Controller
             }
 
             m::add(_('Log in succesful.'), m::SUCCESS);
+
+            // Send welcome mail with link to subscribe action
+            $url = $this->generateUrl('frontend_paywall_showcase');
+
+            $tplMail = new \Template(TEMPLATE_USER);
+            $tplMail->caching = 0;
+            $mailSubject = sprintf(_('Welcome to %s'), s::get('site_name'));
+            $mailBody = $tplMail->fetch(
+                'user/emails/welcome.tpl',
+                array(
+                    'name' => $user->name,
+                    'url'  => $url,
+                )
+            );
+
+            // Build the message
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($mailSubject)
+                ->setBody($mailBody, 'text/plain')
+                ->setTo($user->email)
+                ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+
+            try {
+                $mailer = $this->get('mailer');
+                $mailer->send($message);
+
+                $this->view->assign('mailSent', true);
+            } catch (\Exception $e) {
+                // Log this error
+                $this->get('logger')->notice(
+                    "Unable to send the user welcome email for the "
+                    ."user {$user->id}: ".$e->getMessage()
+                );
+
+                m::add(_('Unable to send your welcome email. Please try it later.'), m::ERROR);
+            }
 
             return $this->redirect($this->generateUrl('frontend_user_show'));
         } else {
@@ -430,10 +469,13 @@ class UserController extends Controller
                     $mailer = $this->get('mailer');
                     $mailer->send($message);
 
+                    $url = $this->generateUrl('frontend_auth_login');
+
                     $this->view->assign(
                         array(
                             'mailSent' => true,
-                            'user' => $user
+                            'user' => $user,
+                            'url' => $url
                         )
                     );
                 } catch (\Exception $e) {
