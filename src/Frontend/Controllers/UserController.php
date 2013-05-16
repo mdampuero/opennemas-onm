@@ -300,7 +300,7 @@ class UserController extends Controller
             m::add(_('Log in succesful.'), m::SUCCESS);
 
             // Send welcome mail with link to subscribe action
-            $url = $this->generateUrl('frontend_paywall_showcase');
+            $url = $this->generateUrl('frontend_paywall_showcase', array(), true);
 
             $tplMail = new \Template(TEMPLATE_USER);
             $tplMail->caching = 0;
@@ -469,7 +469,7 @@ class UserController extends Controller
                     $mailer = $this->get('mailer');
                     $mailer->send($message);
 
-                    $url = $this->generateUrl('frontend_auth_login');
+                    $url = $this->generateUrl('frontend_auth_login', array(), true);
 
                     $this->view->assign(
                         array(
