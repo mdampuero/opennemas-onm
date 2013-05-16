@@ -7,6 +7,11 @@
             <div class="title"><h2>{t}Paywall{/t} :: {t}Premium users{/t}</h2></div>
             <ul class="old-button">
                 <li>
+                    <a href="{url name=admin_acl_user_create}" title="{t}Create new user{/t}">
+                        <img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New user{/t}
+                    </a>
+                </li>
+                <li>
                     <a href="{url name=admin_paywall_settings}" class="admin_add" title="{t}Config newsletter module{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
                         {t}Settings{/t}
