@@ -41,7 +41,11 @@ jQuery(function($){
 				<label for="usergroup">{t}Type{/t}:</label>
 				<div class="input-append">
 					<select id="usertype" name="filter[type]" class="span2">
-						{assign var=type value=$smarty.request.filter.type}
+						{if isset($smarty.request.filter.type)}
+							{assign var=type value=$smarty.request.filter.type}
+						{else}
+							{assign var=type value=$smarty.request.type}
+						{/if}
 						<option value="" {if ($type eq "")}selected{/if}>{t}--All--{/t}</option>
                         <option value="0" {if ($type eq "0")}selected{/if}>{t}Backend{/t}</option>
                         <option value="1" {if ($type eq "1")}selected{/if}>{t}Frontend{/t}</option>

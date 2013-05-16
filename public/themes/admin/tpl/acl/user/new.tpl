@@ -83,7 +83,7 @@ label {
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_acl_user}">
+                    <a href="{url name=admin_acl_user type=$user->type}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
