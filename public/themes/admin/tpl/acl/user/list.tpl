@@ -13,7 +13,7 @@ jQuery(function($){
 
 
 {block name="content"}
-<form action="{url name=admin_user_list}" method="get" id="userform">
+<form action="{url name=admin_acl_user}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Users{/t}</h2></div>
@@ -37,33 +37,23 @@ jQuery(function($){
 		{render_messages}
 
 		<div class="table-info clearfix">
-			<div class="pull-left form-inline">
-				<label for="usergroup">{t}Type{/t}:</label>
+			<div class="pull-right form-inline">
+				<input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" />
+
+				<label for="usergroup">{t}type{/t}</label>
 				<div class="input-append">
-					<select id="usertype" name="filter[type]" class="span2">
-						{if isset($smarty.request.filter.type)}
-							{assign var=type value=$smarty.request.filter.type}
-						{else}
-							{assign var=type value=$smarty.request.type}
-						{/if}
+					<select id="usertype" name="type" class="span2">
+						{assign var=type value=$smarty.request.type}
 						<option value="" {if ($type eq "")}selected{/if}>{t}--All--{/t}</option>
                         <option value="0" {if ($type eq "0")}selected{/if}>{t}Backend{/t}</option>
                         <option value="1" {if ($type eq "1")}selected{/if}>{t}Frontend{/t}</option>
 					</select>
 				</div>
-			</div>
-			<div class="pull-right form-inline">
-				<input type="text" id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}" />
 
-				<input type="text" id="email" name="filter[email]" value="{$smarty.request.filter.email|default:""}" placeholder="{t}e-mail{/t}" />
-
-				<label for="usergroup">{t}and group:{/t}</label>
+				<label for="usergroup">{t}and group{/t}</label>
 				<div class="input-append">
-					<select id="usergroup" name="filter[group]" class="span2">
-						{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
-							{assign var=filter_selected value=$smarty.request.filter.group}
-						{/if}
-						{html_options options=$groupsOptions selected=$filter_selected|default:""}
+					<select id="usergroup" name="group" class="span2">
+						{html_options options=$groupsOptions selected=$smarty.request.group|default:""}
 					</select>
 					<button type="submit" class="btn"><i class="icon-search"></i></button>
 				</div>
