@@ -1286,7 +1286,7 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_frontpage_category_css',
     new Route(
-        '/css/{cb}/{category}.css',
+        'nocache/css/{cb}/{category}.css',
         array(
             '_controller' => 'Frontend:Controllers:FrontpagesController:css',
             'category'    => 'home',
