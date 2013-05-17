@@ -2,33 +2,33 @@
 <NewsML Version="1.2">
   <NewsEnvelope>
     <SentFrom>
-      <Party FormalName="{setting name=site_name}">
+      <Party FormalName="Opennemas">
         <Property FormalName="Organization" Value="{setting name=site_name}" />
       </Party>
     </SentFrom>
-    <DateAndTime></DateAndTime>
+    <DateAndTime>{$article->created_datetime->format('Ymd\THis')}</DateAndTime>
   </NewsEnvelope>
-  <NewsItem Duid="multimedia_2006824">
-    <Comment FormalName="NewsMLVersion">1.0.1</Comment>
+  <NewsItem Duid="multimedia_{$article->id}">
+    <Comment FormalName="OnmNewsMLVersion"><text>1.0.1</text></Comment>
     <Identification>
       <NewsIdentifier>
         <ProviderId>{setting name=site_name}</ProviderId>
-        <DateId>{$article->created_datetime->format(DateTime::ISO8601)}</DateId>
+        <DateId>{$article->created_datetime->format('Ymd\THis')}</DateId>
         <NewsItemId>{$article->id}</NewsItemId>
-        <RevisionId PreviousRevision="1" Update="U">2</RevisionId>
-        <PublicIdentifier>{$article->urn}</PublicIdentifier>
+        <RevisionId PreviousRevision="1" Update="U"><text>2</text></RevisionId>
+        <PublicIdentifier>{$article->urn_source}</PublicIdentifier>
       </NewsIdentifier>
     </Identification>
     <NewsManagement>
       <NewsItemType FormalName="News" />
       <!--Creation date.-->
-      <FirstCreated>{$article->created_datetime->format(DateTime::ISO8601)}</FirstCreated>
+      <FirstCreated>{$article->created_datetime->format('Ymd\THis')}</FirstCreated>
       <!--Last modification date.-->
-      <ThisRevisionCreated>{$article->updated_datetime->format(DateTime::ISO8601)}</ThisRevisionCreated>
+      <ThisRevisionCreated>{$article->updated_datetime->format('Ymd\THis')}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
     </NewsManagement>
-    <NewsComponent Duid="multimedia_2006824.multimedia">
+    <NewsComponent Duid="multimedia_{$article->id}.multimedia">
       <NewsLines>
         <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
         <SubHeadLine>{$article->subtitle|htmlspecialchars_decode}</SubHeadLine>
@@ -52,8 +52,9 @@
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
-            <DateLineDate>{$article->created_datetime->format(DateTime::ISO8601)}</DateLineDate>
-            <Property FormalName="IdRefObject" Value="{$article->id}" />
+            <DateLineDate>{$article->created_datetime->format('Ymd\THis')}</DateLineDate>
+            <Property FormalName="Tesauro" Value="CAT:{$article->category_name|upper}"/>
+            <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
           <ContentItem>
             <MediaType FormalName="Text" />
@@ -74,14 +75,16 @@
                       <hl2>{$article->subtitle|htmlspecialchars_decode}</hl2>
                     </hedline>
                     <dateline>
-                      <story.date norm="{$article->created_datetime->format(DateTime::ISO8601)}">{$article->created_datetime->format(DateTime::ISO8601)}</story.date>
+                      <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
+                        <text>{$article->created_datetime->format('Ymd\THis')}</text>
+                      </story.date>
                     </dateline>
                     <abstract>
-                      <![CDATA[ {$article->summary} ]]>
+                      {$article->summary|unescape:"htmlall"}
                     </abstract>
                   </body.head>
                   <body.content>
-                    <![CDATA[ {$article->body} ]]>
+                    {$article->body|unescape:"htmlall"}
                   </body.content>
                 </body>
               </nitf>
@@ -89,12 +92,13 @@
           </ContentItem>
         </NewsComponent>
       </NewsComponent>
+      {if !empty($photo)}
       <!--Photo collection.-->
-      {*<NewsComponent Duid="multimedia_2006824.multimedia.photos">
+      <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos">
         <Role FormalName="Content list" />
-        <NewsComponent Duid="multimedia_2006824.multimedia.photos.5232934" Euid="5232934">
+        <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
           <NewsLines>
-            <HeadLine>{$article->title}</HeadLine>
+            <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
           </NewsLines>
           <AdministrativeMetadata>
             <Provider>
@@ -103,24 +107,62 @@
           </AdministrativeMetadata>
           <DescriptiveMetadata>
             <Language FormalName="es" />
-            <DateLineDate>20130404T121800+0000</DateLineDate>
+            <DateLineDate>{$photo->created_datetime->format('Ymd\THis')}</DateLineDate>
+            <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
           </DescriptiveMetadata>
-          <!--Photo binary data. Different sizes/formats about the same photo.-->
-          <NewsComponent Duid="multimedia_2006824.multimedia.photos.5232934.file">
+          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
             <Role FormalName="Main" />
-            <ContentItem Href="5232934m.jpg">
+            <!-- The link to download image -->
+            <ContentItem Href="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
               <MediaType FormalName="Photo" />
-              <MimeType FormalName="image/jpeg" />
+              <MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />
               <Characteristics>
-                <SizeInBytes>42699</SizeInBytes>
-                <Property FormalName="Height" Value="362" />
+                <SizeInBytes>{$photo->size*1024}</SizeInBytes>
+                <Property FormalName="Onm_Filename" Value="{$photo->name}" />
+                <Property FormalName="Height" Value="{$photo->height}" />
                 <Property FormalName="PixelDepth" Value="24" />
-                <Property FormalName="Width" Value="550" />
+                <Property FormalName="Width" Value="{$photo->width}" />
               </Characteristics>
             </ContentItem>
           </NewsComponent>
+          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.text">
+            <Role FormalName="Caption" />
+            <ContentItem>
+              <MediaType FormalName="Text" />
+              <Format FormalName="NITF" />
+              <MimeType FormalName="text/vnd.IPTC.NITF" />
+              <DataContent>
+                <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                  <head>
+                    <title>{$article->title|htmlspecialchars_decode}</title>
+                    <docdata management-status="usable">
+                      <doc-id id-string="{$photo->id}" />
+                    </docdata>
+                  </head>
+                  <body>
+                    <body.head>
+                      <hedline>
+                        <hl1>{$article->title|htmlspecialchars_decode}</hl1>
+                      </hedline>
+                      <dateline>
+                        <story.date norm="{$photo->created_datetime->format('Ymd\THis')}">
+                          {$photo->created_datetime->format('Ymd\THis')}
+                        </story.date>
+                      </dateline>
+                    </body.head>
+                    <body.content>
+                      <p>
+                        {$photo->description|htmlspecialchars_decode}
+                      </p>
+                    </body.content>
+                  </body>
+                </nitf>
+              </DataContent>
+            </ContentItem>
+          </NewsComponent>
         </NewsComponent>
-      </NewsComponent>*}
+      </NewsComponent>
+      {/if}
     </NewsComponent>
   </NewsItem>
 </NewsML>

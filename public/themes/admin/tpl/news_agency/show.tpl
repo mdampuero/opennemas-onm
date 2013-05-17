@@ -8,10 +8,14 @@
         border:1px solid #ccc;
         margin-bottom:10px;
     }
-    .photo > *{
-        float: left;
-        display:inline-block;
+    .photo {
+        display: inline-block;
     }
+        .photo img {
+            float: left;
+            width: 220px;
+            margin-right: 10px;
+        }
 </style>
 {/block}
 
@@ -60,17 +64,20 @@
             {/if}
         </ul><!-- / -->
         <div id="basic">
+            <fieldset>
             {if count($element->photos) > 0}
+            <div style="float:left; margin-right: 20px">
                 {foreach from=$element->photos item=photo}
-                <div class="photo" style="width:220px; float:left; margin-right:20px;">
+                <div class="photo" style="width:220px;display:block;">
                     <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
                     <div>
                         <p>{$photo->title}</p>
                     </div>
                 </div>
                 {/foreach}
+            </div>
             {/if}
-            <fieldset>
+                <fieldset>
                     {if $element->pretitle}
                     <p>
                         <strong>{t}Pretitle:{/t}</strong>
@@ -78,7 +85,6 @@
                     </p>
                     {/if}
                     <p>
-                        <strong>{t}Title:{/t}</strong>
                         <h4>{$element->title}</h4>
                     </p>
 
@@ -95,16 +101,17 @@
                         {$element->summary}
                     {/if}
 
-                    <strong>{t}Body{/t}</strong>
                     <p>{$element->body}</p>
                 </fieldset>
+            </fieldset>
         </div>
         {if count($element->photos) > 0}
         <div id="photos" class="clearfix">
             {foreach from=$element->photos item=photo}
             <div class="photo">
-                <img style="width:220px" src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
+                <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
                 <div>
+                    <strong>{t}Description{/t}:</strong>
                     <p>{$photo->title}</p>
                 </div>
             </div>

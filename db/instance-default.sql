@@ -1234,7 +1234,8 @@ CREATE TABLE IF NOT EXISTS `newsletter_archive` (
   `title` varchar(255) NOT NULL,
   `data` longtext,
   `html` longtext,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `sent` varchar(255) NOT NULL,
   PRIMARY KEY (`pk_newsletter`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -2084,9 +2085,7 @@ INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `
 (5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco Dieguez', 0, 0, NULL, 1, 4),
 (4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre Rico', 0, 0, NULL, 1, 4),
 (7, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra Pereira', 0, 0, NULL, 1, 4),
-(9, 'toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 66, 'toni@openhost.es', 'Toni Martinez Carballo', 0, 0, NULL, 1, 4),
-(132, 'admin', 'b7592fd66feb65282791ab64685e4af4', 45, 'admin@opennemas.com', 'administrator', 0, 0, NULL, 1, 5),
-(137, 'zihuadigital', 'c93f59a8c83329416236f6a39364f66c', 60, 'zihuadigital@hotmail.com', 'zihuadigital', 0, 0, NULL, 0, 5);
+(9, 'toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 66, 'toni@openhost.es', 'Toni Martinez Carballo', 0, 0, NULL, 1, 4);
 
 -- --------------------------------------------------------
 

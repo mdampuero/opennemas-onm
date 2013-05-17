@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
+use Onm\Module\ModuleManager;
 use Onm\StringUtils;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -61,11 +62,15 @@ class ArticlesController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        $er = $this->get('entity_repository');
+        $article = $er->find('Article', $articleID);
+
         // Load config
         $this->view->setConfig('articles');
 
-        $cm = new \ContentManager();
+        $this->paywallHook($article);
 
+        $cm = new \ContentManager();
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
         $this->getInnerAds($actualCategoryId);
@@ -80,8 +85,6 @@ class ArticlesController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
-            $article = new \Article($articleID);
-
             if (($article->available == 1) && ($article->in_litter == 0)
                 && ($article->isStarted())
             ) {
@@ -102,13 +105,6 @@ class ArticlesController extends Controller
                         'actual_category'       => $actualCategory,
                         'actual_category_id'    => $actualCategoryId,
                         'category_data'         => $categoryData,
-                    )
-                );
-
-                $this->view->assign(
-                    array(
-                        'article' => $article,
-                        'content' => $article,
                     )
                 );
 
@@ -137,8 +133,7 @@ class ArticlesController extends Controller
 
                     // Add category name
                     foreach ($relatedContents as &$content) {
-                        $content->category_name =
-                            $this->ccm->get_category_name_by_content_id($content->id);
+                        $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
                     }
                 }
                 $this->view->assign('relationed', $relatedContents);
@@ -172,6 +167,8 @@ class ArticlesController extends Controller
                 'cache_id'      => $cacheID,
                 'contentId'     => $articleID,
                 'category_name' => $categoryName,
+                'article'       => $article,
+                'content'       => $article,
             )
         );
     }
@@ -290,6 +287,56 @@ class ArticlesController extends Controller
         $intersticial = $advertisement->getIntersticial(150, $category);
         if (!empty($intersticial)) {
             $advertisement->renderMultiple(array($intersticial), $advertisement);
+        }
+    }
+
+    /**
+     * Alteres the article given the paywall module status
+     *
+     * @return Article the article
+     **/
+    public function paywallHook(&$content)
+    {
+        $paywallActivated = ModuleManager::isActivated('PAYWALL');
+        $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
+
+        if ($paywallActivated && $onlyAvailableSubscribers) {
+            $newContent = $this->renderView(
+                'paywall/partials/content_only_for_subscribers.tpl',
+                array('id' => $content->id)
+            );
+
+            $isLogged = array_key_exists('userid', $_SESSION);
+            if ($isLogged) {
+                if (array_key_exists('meta', $_SESSION)
+                    && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {
+                    $userSubscriptionDateString = $_SESSION['meta']['paywall_time_limit'];
+                } else {
+                    $userSubscriptionDateString = '';
+                }
+                $userSubscriptionDate = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $userSubscriptionDateString,
+                    new \DateTimeZone('UTC')
+                );
+
+                $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+                $hasSubscription = $userSubscriptionDate > $now;
+
+                if (!$hasSubscription) {
+                    $newContent = $this->renderView(
+                        'paywall/partials/content_only_for_subscribers.tpl',
+                        array(
+                            'logged' => $isLogged,
+                            'id'     => $content->id
+                        )
+                    );
+                    $content->body = $newContent;
+                }
+            } else {
+                $content->body = $newContent;
+            }
         }
     }
 }

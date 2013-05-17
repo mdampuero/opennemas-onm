@@ -12,11 +12,6 @@
         margin-top:0px !important;
         margin-bottom:10px !important;
     }
-    .settings-header {
-        font-weight: bold;
-        color: #333;
-        font-size:14px;
-    }
     .colorpicker_input, colorpicker_viewer {
         display:inline-block;
         float:none;
@@ -26,6 +21,7 @@
 
 {block name="footer-js" append}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
+    {script_tag src="/onm/md5.min.js" common=1}
 
     <script type="text/javascript">
 
@@ -58,6 +54,15 @@
 
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
+
+        $('.check-pass').on('click', function(){
+            var passInput = $('#onm_digest_pass');
+            if ($(this).is(':checked')) {
+                passInput.prop('type','text');
+            } else {
+                passInput.prop('type','password');
+            }
         });
     });
     </script>
@@ -373,6 +378,26 @@
                     <div class="controls">
                         <input type="text" id="twitter_page" name="twitter_page" value="{$configs['twitter_page']|default:""}" class="input-xxlarge">
                         <div class="help-block">{t escape=off}If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.{/t}</div>
+                    </div>
+                </div>
+
+            </fieldset>
+            <hr>
+            <fieldset>
+                <h3 class="settings-header">{t}Opennemas News Agency{/t}</h3>
+
+                <div class="control-group">
+                    <label for="onm_digest_user" class="control-label">{t}User{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="onm_digest_user" name="onm_digest_user" value="{$configs['onm_digest_user']|default:""}" class="input-xlarge">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="onm_digest_pass" class="control-label">{t}Password{/t}</label>
+                    <div class="controls">
+                        <input type="password" id="onm_digest_pass" name="onm_digest_pass" value="{$configs['onm_digest_pass']|default:""}" class="input-large">
+                        <input type="checkbox" class="check-pass" value="">&nbsp;{t}Show password{/t}
                     </div>
                 </div>
 

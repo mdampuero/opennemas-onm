@@ -97,6 +97,9 @@ class AuthenticationController extends Controller
                 if ($user->authorize != 1) {
                     m::add(_('This user was deactivated. Please ask your administrator.'), m::ERROR);
                     return $this->redirect($this->generateUrl('admin_login_form'));
+                } elseif ($user->type != 0) {
+                    m::add(_('This user has no access to the control panel.'), m::ERROR);
+                    return $this->redirect($this->generateUrl('admin_login_form'));
                 } else {
                     // Increase security by regenerating the id
                     $request->getSession()->migrate();
@@ -119,7 +122,8 @@ class AuthenticationController extends Controller
                         'updated'          => time(),
                         'session_lifetime' => $maxSessionLifeTime * 60,
                         'user_language'    => $user->getMeta('user_language'),
-                        'csrf'             => md5(uniqid(mt_rand(), true))
+                        'csrf'             => md5(uniqid(mt_rand(), true)),
+                        'meta'             => $user->getMeta(),
                     );
 
                     $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);

@@ -450,3 +450,19 @@ ALTER TABLE `videos` ADD `favorite` SMALLINT( 1 ) NULL DEFAULT '0';
 --New Feature for enable/disable users
 
 ALTER TABLE `users` ADD `authorize` TINYINT( 1 ) NOT NULL DEFAULT '1' COMMENT '1 authorized - 0 unauthorized' AFTER `phone`
+
+-- 10-10-2012
+CREATE TABLE IF NOT EXISTS `contentmeta` (
+  `fk_content` bigint(20) NOT NULL,
+  `meta_name` varchar(255) NOT NULL,
+  `meta_value` text,
+  PRIMARY KEY (`fk_content`,`meta_name`),
+  KEY `fk_content` (`fk_content`)
+) ENGINE = MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+-- 01-08-2012
+DROP TABLE privileges;
+
+-- 01-09-2012
+UPDATE users SET name = CONCAT(name, ' ', firstname, ' ', lastname);
+ALTER TABLE  `users` DROP  `firstname` , DROP  `lastname` ;

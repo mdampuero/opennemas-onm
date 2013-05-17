@@ -1777,30 +1777,13 @@ class Content
      **/
     public function onUpdateClearCacheContent()
     {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+        global $sc;
+        $eventDispatcher = $sc->get('event_dispatcher');
 
-        if (property_exists($this, 'pk_article')) {
-            $tplManager->delete(
-                preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|' . $this->pk_article
-            );
+        $event = new \Symfony\Component\EventDispatcher\GenericEvent();
 
-            // Deleting home cache files
-            // if (isset($this->in_home) && $this->in_home) {
-                $tplManager->delete('home|0');
-            // }
-            $tplManager->delete('home|RSS');
-            $tplManager->delete('last|RSS');
-
-            if (isset($this->frontpage)
-                && $this->frontpage
-            ) {
-                $tplManager->delete(
-                    preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|0'
-                );
-                $tplManager->fetch(SITE_URL . 'seccion/' .$this->category_name);
-                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|RSS');
-            }
-        }
+        $event->setArgument('content', $this);
+        $eventDispatcher->dispatch('content.update', $event);
     }
 
     // TODO: move to a Cache handler
@@ -2237,6 +2220,20 @@ class Content
         }
 
         return $this;
+    }
+
+    /**
+     * Returns true if this content is only available from paywall
+     *
+     * @return boolean true if only avilable for subscribers
+     **/
+    public function isOnlyAvailableForSubscribers()
+    {
+        $onlySubscribers = false;
+        if (array_key_exists('only_subscribers', $this->params)) {
+            $onlySubscribers = ($this->params['only_subscribers'] == true);
+        }
+        return $onlySubscribers;
     }
 
     /**

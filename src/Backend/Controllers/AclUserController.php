@@ -36,9 +36,8 @@ class AclUserController extends Controller
     public function init()
     {
     }
-
     /**
-     * Show a paginated list of users
+     * Show a paginated list of backend users
      *
      * @param Request $request the request object
      *
@@ -48,8 +47,12 @@ class AclUserController extends Controller
     {
         $this->checkAclOrForward('USER_ADMIN');
 
-        $filter    = $request->query->get('filter', array());
+        $filter = $request->query->get('filter', array());
+        $type   = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
 
+        if (!is_null($type)) {
+            $filter['type'] = $type;
+        }
         if (!$_SESSION['isMaster']) {
             $filter ['base'] = 'fk_user_group != 4';
         }
@@ -108,8 +111,14 @@ class AclUserController extends Controller
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
-        $user->meta = array();
-        $user->meta['user_language'] = $user->getMeta('user_language') ?: 'default';
+        $user->meta = $user->getMeta();
+
+        if (array_key_exists('paywall_time_limit', $user->meta)) {
+            $user->meta['paywall_time_limit'] = new \DateTime(
+                $user->meta['paywall_time_limit'],
+                new \DateTimeZone('UTC')
+            );
+        }
 
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
@@ -152,6 +161,7 @@ class AclUserController extends Controller
             'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
             'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'id_user_group'   => $request->request->getDigits('id_user_group'),
             'ids_category'    => $request->request->get('ids_category'),
@@ -163,6 +173,14 @@ class AclUserController extends Controller
 
         $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
         $user->setMeta(array('user_language' => $userLanguage));
+
+        $paywallTimeLimit = $request->request->filter('meta[paywall_time_limit]', '', FILTER_SANITIZE_STRING);
+        if (!is_null($paywallTimeLimit) && !empty($paywallTimeLimit)) {
+            $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+            $time->setTimeZone(new \DateTimeZone('UTC'));
+
+            $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+        }
 
         if ($user->id == $_SESSION['userid']) {
             $_SESSION['user_language'] = $userLanguage;
@@ -212,7 +230,7 @@ class AclUserController extends Controller
                 'id_user_group'   => $request->request->getDigits('id_user_group'),
                 'ids_category'    => $request->request->get('ids_category'),
                 'authorize'       => 1,
-                'type'            => 0,
+                'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
                 'deposit'         => 0,
                 'token'           => null,
             );
@@ -221,6 +239,17 @@ class AclUserController extends Controller
                 if ($user->create($data)) {
                     $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
                     $user->setMeta(array('user_language' => $userLanguage));
+                    $paywallTimeLimit = $request->request->filter(
+                        'meta[paywall_time_limit]',
+                        '',
+                        FILTER_SANITIZE_STRING
+                    );
+                    if (!is_null($paywallTimeLimit) && !empty($paywallTimeLimit)) {
+                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                        $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                    }
 
                     m::add(_('User created successfully.'), m::SUCCESS);
 
@@ -304,7 +333,13 @@ class AclUserController extends Controller
             m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl('admin_acl_user'));
+        if (strpos($request->server->get('HTTP_REFERER'), 'users/frontend') !== false) {
+            return $this->redirect($this->generateUrl('admin_acl_user_front'));
+        } else {
+            return $this->redirect($this->generateUrl('admin_acl_user'));
+        }
+
+
     }
 
     /**

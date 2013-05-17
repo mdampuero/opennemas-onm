@@ -117,6 +117,13 @@ class User
     public $clientLoginToken = null;
 
     /**
+     * Meta information for the user
+     *
+     * @var string
+     **/
+    public $meta = array();
+
+    /**
      * Initializes the object instance
      *
      * @param int $id User Id
@@ -195,8 +202,8 @@ class User
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM users WHERE pk_user = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM users WHERE pk_user = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -241,7 +248,7 @@ class User
         if (isset($data['password']) && (strlen($data['password']) > 0)) {
             $sql = "UPDATE users
                     SET `login`=?, `password`= ?, `sessionexpire`=?,
-                        `email`=?, `name`=?, `fk_user_group`=?
+                        `email`=?, `name`=?, `fk_user_group`=?, type=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -251,13 +258,14 @@ class User
                 $data['email'],
                 $data['name'],
                 $data['id_user_group'],
+                $data['type'],
                 intval($data['id'])
             );
 
         } else {
             $sql = "UPDATE users
                     SET `login`=?, `sessionexpire`=?, `email`=?,
-                        `name`=?, `fk_user_group`=?
+                        `name`=?, `fk_user_group`=?, type=?
                     WHERE pk_user=?";
 
             $values = array(
@@ -266,6 +274,7 @@ class User
                 $data['email'],
                 $data['name'],
                 $data['id_user_group'],
+                $data['type'],
                 intval($data['id'])
             );
         }
@@ -304,6 +313,10 @@ class User
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
             \Application::logDatabaseError();
 
+            return false;
+        }
+
+        if (!$this->deleteMeta($id)) {
             return false;
         }
 
@@ -525,7 +538,7 @@ class User
      */
     public function authDatabase($login, $password, $managerDb = false)
     {
-        $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
+        $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\' OR email=\''.strval($login).'\'';
         if (!$managerDb) {
             $rs = $GLOBALS['application']->conn->Execute($sql);
         } else {
@@ -564,18 +577,31 @@ class User
      * @param  string     $email
      * @return array|null
      */
-    public function getUserDataByEmail($email)
+    public function findByEmail($email)
     {
         $sql = 'SELECT * FROM users WHERE email=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
-        if (!$rs) {
+        if (!$rs->fields) {
             \Application::logDatabaseError();
 
             return null;
         }
 
-        return $rs->fields;
+        $this->id               = $rs->fields['pk_user'];
+        $this->login            = $rs->fields['login'];
+        $this->password         = $rs->fields['password'];
+        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->email            = $rs->fields['email'];
+        $this->name             = $rs->fields['name'];
+        $this->deposit          = $rs->fields['deposit'];
+        $this->type             = $rs->fields['type'];
+        $this->token            = $rs->fields['token'];
+        $this->authorize        = $rs->fields['authorize'];
+        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->accesscategories = $this->readAccessCategories();
+
+        return $this;
     }
 
     /**
@@ -585,21 +611,31 @@ class User
      *
      * @return user if exists false otherwise
      **/
-    public function getUserByToken($token)
+    public function findByToken($token)
     {
-        $sql   = 'SELECT count(*) FROM users WHERE token=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $token);
+        $sql   = 'SELECT * FROM users WHERE token=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, $token);
 
-        if ($rs === false) {
-            return 0;
-        } elseif ($rs != 1) {
-            return 0;
+        if (!$rs->fields) {
+            \Application::logDatabaseError();
+
+            return null;
         }
 
-        $sql2   = 'SELECT * FROM users WHERE token=?';
-        $rs2 = $GLOBALS['application']->conn->Execute($sql2, $token);
+        $this->id               = $rs->fields['pk_user'];
+        $this->login            = $rs->fields['login'];
+        $this->password         = $rs->fields['password'];
+        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->email            = $rs->fields['email'];
+        $this->name             = $rs->fields['name'];
+        $this->deposit          = $rs->fields['deposit'];
+        $this->type             = $rs->fields['type'];
+        $this->token            = $rs->fields['token'];
+        $this->authorize        = $rs->fields['authorize'];
+        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->accesscategories = $this->readAccessCategories();
 
-        return $rs2->fields;
+        return $this;
     }
 
     /**
@@ -736,8 +772,8 @@ class User
         if ($rs !== false) {
             while (!$rs->EOF) {
                 $user = new User();
-
                 $user->setValues($rs->fields);
+                $user->meta = $user->getMeta();
                 $items[] = $user;
 
                 $rs->MoveNext();
@@ -784,6 +820,7 @@ class User
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
         if (!$rs) {
             return false;
         }
@@ -798,39 +835,31 @@ class User
      *
      * @return array/string an 2-dimensional array or an string with the user option values
      **/
-    public function getMeta($meta = array())
+    public function getMeta($meta = null)
     {
-        if (is_string($meta)) {
-            $cleanMeta = array($meta);
-        } else {
-            $cleanMeta = $meta;
-        }
+        if (count($this->meta) <= 0) {
+            $sql = 'SELECT * FROM usermeta WHERE `user_id` = ?';
 
-        $metaNameSQL = array();
-        foreach ($cleanMeta as $key) {
-            $metaNameSQL []= $GLOBALS['application']->conn->qstr($key);
-        }
-        $metaNameSQL = implode(', ', $metaNameSQL);
+            $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
-        $sql = 'SELECT * FROM usermeta WHERE `user_id` = ? AND `meta_key` IN ('.$metaNameSQL.')';
-
-        $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-
-        if (!$rs) {
-            return false;
-        }
-
-        if (is_array($meta)) {
-            $returnValues = array();
             foreach ($rs as $value) {
-                $returnValues [$rs->fields['meta_key']] = $rs->fields['meta_value'];
+                $this->meta[$rs->fields['meta_key']] = $rs->fields['meta_value'];
             }
-        } else {
-            $returnValues = $rs->fields['meta_value'];
         }
 
-        return $returnValues;
+        if (is_string($meta)) {
+            $value = null;
+            if (array_key_exists($meta, $this->meta)) {
+                $value = $this->meta[$meta];
+            }
+        } elseif (is_array($meta)) {
+            $value = array_intersect_key($this->meta, array_flip($meta));
+        } else {
+            $value = $this->meta;
+        }
+
+        return $value;
     }
 
      /**
@@ -978,6 +1007,130 @@ class User
         return true;
     }
 
+    /**
+     * Increases the paywall subscription time given the subscription name
+     *
+     * @param string $planTime the name of the plan
+     *
+     * @return void
+     **/
+    public function addSubscriptionLimit($planTime = 0)
+    {
+        $newTime = $planTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('paywall_time_limit' => $newTime));
+    }
+
+    /**
+     * Returns a list of User objects where the users has paywall subscription
+     *
+     * @return void
+     **/
+    public static function getUsersWithSubscription($config = array())
+    {
+        $defaultConfig = array(
+            'limit' => null,
+        );
+
+        $config = array_merge($defaultConfig, $config);
+
+        $limit = '';
+        if ($config['limit'] > 0) {
+            $limit = 'LIMIT '.$config['limit'];
+        }
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $sql = "SELECT user_id FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ? $limit";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return array();
+        }
+        $users = array();
+        while (!$rs->EOF) {
+
+            $user = new \User($rs->fields['user_id']);
+            $user->meta = $user->getMeta();
+
+            if (isset($user->meta['paywall_time_limit'])) {
+                $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $user->meta['paywall_time_limit'],
+                    new \DateTimeZone('UTC')
+                );
+            }
+            if (isset($user->meta['last_login'])) {
+                $user->meta['last_login'] = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $user->meta['last_login'],
+                    new \DateTimeZone('UTC')
+                );
+            }
+            $users []= $user;
+
+            $rs->MoveNext();
+        }
+
+        return $users;
+    }
+
+    /**
+     * Returns a list of User objects where the users has paywall subscription
+     *
+     * @return void
+     **/
+    public static function countUsersWithSubscription($limit = array())
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $sql = "SELECT count(user_id) as count FROM usermeta ".
+               "WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return 0;
+        }
+
+        return $rs->fields['count'];
+    }
+
+    /**
+     * Stores the register date for a frontend user
+     *
+     * @return void
+     **/
+    public function addRegisterDate()
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('register_date' => $currentTime));
+    }
+
+    /**
+     * Set the last login date for a frontend user
+     *
+     * @return void
+     **/
+    public function setLastLoginDate()
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('last_login' => $currentTime));
+    }
 
     /**
      * Returns a valid SQL WHERE clause for the given filter
@@ -1001,20 +1154,25 @@ class User
                 $parts[] = $filter['base'];
             }
 
-            if (isset($filter['login']) && !empty($filter['login'])) {
-                $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
+            if (isset($filter['type']) && $filter['type'] != '') {
+                $parts[] = '`type` = '.$filter['type'].'';
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = 'MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
+                $parts[] = '(MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE) OR '.
+                           '`login` LIKE "%' . $filter['name'] . '%")';
             }
 
             if (isset($filter['group']) && intval($filter['group'])>0) {
                 $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
             }
 
+            if (isset($filter['email']) && !empty($filter['email'])>0) {
+                $parts[] = '`email` LIKE "%' . $filter['email'] . '%"';
+            }
+
             if (count($parts) > 0) {
-                $newFilter .= ' AND ' . implode(' OR ', $parts);
+                $newFilter .= ' AND ' . implode(' AND ', $parts);
             }
         }
 

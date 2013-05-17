@@ -18,6 +18,48 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'frontend_paywall_showcase',
+    new Route(
+        '/paywall',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:showcase',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_paywall_prepare_payment',
+    new Route(
+        '/paywall/prepare_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:preparePayment',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_paywall_success_payment',
+    new Route(
+        '/paywall/success_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:returnSuccessPayment',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_paywall_cancel_payment',
+    new Route(
+        '/paywall/cancel_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:returnCancelPayment',
+        )
+    )
+);
+
+
+
+$frontendRoutes->add(
     'frontend_newsletter_subscribe_show',
     new Route(
         '/newsletter',
@@ -102,15 +144,25 @@ $frontendRoutes->add(
     new Route(
         '/user/recover-pass',
         array(
-            '_controller' => 'Frontend:Controllers:UserController:recoverPass',
+            '_controller' => 'Frontend:Controllers:UserController:recoverPassword',
         )
     )
 );
 
 $frontendRoutes->add(
-    'frontend_user_regeneratepass',
+    'frontend_user_recoverusername',
     new Route(
-        '/user/regenerate-pass',
+        '/user/recover-user',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:recoverUsername',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_user_resetpass',
+    new Route(
+        '/user/reset-pass/{token}',
         array(
             '_controller' => 'Frontend:Controllers:UserController:regeneratePassword',
         )
@@ -127,6 +179,15 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_user_menu',
+    new Route(
+        '/user/get/menu',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:getUserMenu',
+        )
+    )
+);
 
 $frontendRoutes->add(
     'frontend_user_user_box',
@@ -1246,7 +1307,7 @@ $frontendRoutes->add(
             'category'    => 'home'
         ),
         array(
-            'category'          => '[a-z0-9\-]+',
+            'category'    => '[a-z0-9\-]+',
         )
     )
 );
@@ -1260,18 +1321,8 @@ $frontendRoutes->add(
             'category'    => 'home'
         ),
         array(
-            'category'          => '[a-z0-9\-]+',
-            'page'          => '[0-9]+',
-        )
-    )
-);
-
-$frontendRoutes->add(
-    'frontend_user_user_box',
-    new Route(
-        '/user/user_box',
-        array(
-            '_controller' => 'Frontend:Controllers:UserController:userBox',
+            'category'    => '[a-z0-9\-]+',
+            'page'        => '[0-9]+',
         )
     )
 );

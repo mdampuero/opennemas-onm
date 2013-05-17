@@ -34,6 +34,198 @@ gettext("Config");
 /* public/themes/admin/tpl//disqus/list.tpl */
 gettext("Disqus not configured");
 
+/* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
+gettext("Last login");
+
+/* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
+gettext("End of subscription");
+
+/* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
+gettext("Edit");
+
+/* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
+gettext("No users with paywall");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("User");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("Order id");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("Created");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("Amount");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("No purchases available");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Paywall");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Config newsletter module");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Settings");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Subscribed users");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Purchases last month");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Premium users");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Show all…");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Lastest purchases");
+
+/* public/themes/admin/tpl//paywall/list.tpl */
+gettext("Show all…");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Paywall");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Settings");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Go back");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Paypal API authentication");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("In order to <strong>connect Opennemas with Paypal</strong> you have to fill your Paypal API credentials below:");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Password");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Signature");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("If you don't have these identification params click on the next link");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Obtain your Paypal identification data");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Use the testing environment Sandbox");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Real mode (recommended)");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Testing mode");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Paypal allows you to enable a testing environment where <strong>all the transactions will not be real</strong>, so you can test if the paywall is working well.");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Active a testing environment in your Paypal account (only if you are a developer)");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("More information");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Transaction details");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Money unit");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("VAT %");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Payment modes");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Below you can add different payment modes by including the time range that the user can purchase, the description and the price");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Name");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Set a price");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("No available payment modes. Add a new one with the button below.");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Add new payment mode");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Paywall");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Premium users");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Create new user");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("New user");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Config newsletter module");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Settings");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Go back");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Paywall");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Purchases listing");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Config newsletter module");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Settings");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Go back");
+
 /* public/themes/admin/tpl//newsletter/modals/_add_container_label.tpl */
 gettext("Add Container label");
 
@@ -260,6 +452,9 @@ gettext("Go back");
 gettext("Newsletters");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
+gettext("Subscriptors");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
 gettext("Search by name");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/list.tpl */
@@ -323,13 +518,25 @@ gettext("Creating subscriptor");
 gettext("Editing subscriptor \"%1\"");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Save and continue");
+gettext("Save");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Save and continue");
+gettext("Save");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
-gettext("Save and exit");
+gettext("Update");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Cancel");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Cancel");
+
+/* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
+gettext("Cancel");
 
 /* public/themes/admin/tpl//newsletter/subscriptions/new.tpl */
 gettext("Go back");
@@ -488,13 +695,10 @@ gettext("Preview");
 gettext("Delivered newsletter report");
 
 /* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
-gettext("Back");
+gettext("Back to list");
 
 /* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
-gettext("Back");
-
-/* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
-gettext("View recipients");
+gettext("Back to list");
 
 /* public/themes/admin/tpl//newsletter/steps/4-send.tpl */
 gettext("OK");
@@ -707,7 +911,7 @@ gettext("Mobile: frontpages");
 gettext("RSS");
 
 /* public/themes/admin/tpl//tpl_manager/tpl_manager.tpl */
-gettext("Opinion: frontpage");
+gettext("Opinion: Authors");
 
 /* public/themes/admin/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Opinion: inner");
@@ -1838,7 +2042,7 @@ gettext("Only available for subscribers");
 gettext("Signature");
 
 /* public/themes/admin/tpl//article/new.tpl */
-gettext("Newsletter signature");
+gettext("Signature");
 
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Pretitle");
@@ -2430,6 +2634,9 @@ gettext("Red");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Bold red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Reset");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Save");
@@ -3665,6 +3872,12 @@ gettext("No tags");
 gettext("Author:");
 
 /* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
+gettext("[Link]");
+
+/* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
+gettext("[Link]");
+
+/* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
 gettext("Edit");
 
 /* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
@@ -3885,21 +4098,6 @@ gettext("Go back");
 
 /* public/themes/admin/tpl//image/new.tpl */
 gettext("Go back to listing");
-
-/* public/themes/admin/tpl//base/admin-ajax.tpl */
-gettext(" made by OpenHost S.L.");
-
-/* public/themes/admin/tpl//base/admin-ajax.tpl */
-gettext("All rights reserved &copy; 2008 - %1");
-
-/* public/themes/admin/tpl//base/admin-ajax.tpl */
-gettext("Support & Help");
-
-/* public/themes/admin/tpl//base/admin-ajax.tpl */
-gettext("Your password must contain 5 characters and dont contain the word <password> or your user name.");
-
-/* public/themes/admin/tpl//base/admin-ajax.tpl */
-gettext("Please check your first password and check again.");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("OpenNeMaS administration");
@@ -4386,6 +4584,9 @@ gettext("This settings allow printing home ads when ads in category are empty.")
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_positions.tpl */
 gettext("Floating ads (for drop them into columns)");
+
+/* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
+gettext("Drop an image to here");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
 gettext("File name");
@@ -7061,13 +7262,22 @@ gettext("Create new user");
 gettext("New user");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("Type");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("--All--");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("Backend");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("Frontend");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("Filter by name");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
-gettext("or");
-
-/* public/themes/admin/tpl//acl/user/list.tpl */
-gettext("username");
+gettext("e-mail");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("and group:");
@@ -7077,6 +7287,9 @@ gettext("Full name");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("Username");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("E-mail");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("Group");
@@ -7163,6 +7376,12 @@ gettext("Privileges");
 gettext("Privileges");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Paywall");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Paywall");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
@@ -7187,6 +7406,15 @@ gettext("Session expire time:");
 gettext("minutes");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("User type");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Backend");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Frontend");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("User language");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
@@ -7209,6 +7437,9 @@ gettext("Categories");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("HOME");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Paywall time limit:");
 
 /* public/themes/admin/tpl//agency_importer/xml-file/show.tpl */
 gettext("EuropaPress importer");
@@ -7511,9 +7742,6 @@ gettext("Other attachments");
 gettext("Pretitle:");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
-gettext("Title:");
-
-/* public/themes/admin/tpl//news_agency/show.tpl */
 gettext("Priority:");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
@@ -7523,7 +7751,7 @@ gettext("Date:");
 gettext("Summary:");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
-gettext("Body");
+gettext("Description");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
 gettext("Files:");
@@ -7745,6 +7973,9 @@ gettext("Username");
 gettext("Password");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Show password");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Agency");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
@@ -7943,6 +8174,18 @@ gettext("Twitter Page");
 gettext("If you also have a <b>twitter page</b>, add your profile name on the form. <br/>Default will be set with Opennemas.");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Opennemas News Agency");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("User");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Password");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Show password");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Piwik Statistics");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
@@ -7962,6 +8205,15 @@ gettext("OJD Page ID");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("If you also have a <b>OJD statistics service</b>, add your page id");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("ComScore Statistics");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("comScore Page ID");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("If you also have a <b>comScore statistics service</b>, add your page id");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Recaptcha");
