@@ -2230,7 +2230,7 @@ class Content
     public function isOnlyAvailableForSubscribers()
     {
         $onlySubscribers = false;
-        if (array_key_exists('only_subscribers', $this->params)) {
+        if (is_array($this->params) && array_key_exists('only_subscribers', $this->params)) {
             $onlySubscribers = ($this->params['only_subscribers'] == true);
         }
         return $onlySubscribers;
