@@ -35,6 +35,9 @@ class Bootstrap extends ModuleBootstrap
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset) {
+            if (strstr($request->getPathInfo(), 'nocache') ) {
+                return false;
+            }
             // Log this error event to the webserver logging sysmte
             error_log("File does not exist: ".$request->getPathInfo(), 0);
 
