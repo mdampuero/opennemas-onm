@@ -1141,7 +1141,7 @@ class User
      **/
     private function buildFilter($filter)
     {
-        $newFilter = ' WHERE 1=1 ';
+        $newFilter = ' WHERE ';
 
         if (!is_null($filter) && is_string($filter)) {
             if (preg_match('/^[ ]*where/i', $filter)) {
@@ -1161,18 +1161,15 @@ class User
             if (isset($filter['name']) && !empty($filter['name'])) {
                 $parts[] = '(MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE) OR '.
                            '`login` LIKE "%' . $filter['name'] . '%")';
+                $parts[] = '`email` LIKE "%' . $filter['name'] . '%"';
             }
 
             if (isset($filter['group']) && intval($filter['group'])>0) {
                 $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
             }
 
-            if (isset($filter['email']) && !empty($filter['email'])>0) {
-                $parts[] = '`email` LIKE "%' . $filter['email'] . '%"';
-            }
-
             if (count($parts) > 0) {
-                $newFilter .= ' AND ' . implode(' AND ', $parts);
+                $newFilter .= implode(' AND ', $parts);
             }
         }
 

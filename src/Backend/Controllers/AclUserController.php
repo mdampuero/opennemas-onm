@@ -47,12 +47,13 @@ class AclUserController extends Controller
     {
         $this->checkAclOrForward('USER_ADMIN');
 
-        $filter = $request->query->get('filter', array());
-        $type   = $request->query->filter('type', null, FILTER_SANITIZE_STRING);
+        $filter = array(
+            'name'  => $request->query->filter('name', null),
+            'group' => $request->query->getDigits('group', null),
+            'type'  => $request->query->getDigits('type', null),
+        );
 
-        if (!is_null($type)) {
-            $filter['type'] = $type;
-        }
+        // var_dump($filter);die();
         if (!$_SESSION['isMaster']) {
             $filter ['base'] = 'fk_user_group != 4';
         }
