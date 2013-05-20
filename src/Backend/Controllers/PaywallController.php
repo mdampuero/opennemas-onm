@@ -119,15 +119,36 @@ class PaywallController extends Controller
      **/
     public function usersAction(Request $request)
     {
+        $page   = $this->request->query->getDigits('page', 1);
+
         $settings = s::get('paywall_settings');
-        $users = \User::getUsersWithSubscription(array('limit' => 10));
+        $users = \User::getUsersWithSubscription();
+
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
+
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => count($users),
+                'fileName'    => $this->generateUrl('admin_paywall_users').'?page=%d',
+            )
+        );
 
         return $this->render(
             'paywall/users.tpl',
             array(
-                'users'                      => $users,
-                'settings'                   => $settings,
-                'money_units'                => $this->moneyUnits,
+                'users'       => $usersPage,
+                'settings'    => $settings,
+                'money_units' => $this->moneyUnits,
+                'pagination'  => $pagination,
             )
         );
     }
@@ -141,19 +162,41 @@ class PaywallController extends Controller
      **/
     public function purchasesAction(Request $request)
     {
-        $settings = s::get('paywall_settings');
+        $page = $this->request->query->getDigits('page', 1);
 
+        $settings = s::get('paywall_settings');
         $purchases = \Order::find(
             "type='paywall'",
-            array()
+            array(
+                'limit' => 0
+            )
+        );
+
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        $purchasesPage = array_slice($purchases, ($page-1)*$itemsPerPage, $itemsPerPage);
+
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => count($purchases),
+                'fileName'    => $this->generateUrl('admin_paywall_purchases').'?page=%d',
+            )
         );
 
         return $this->render(
             'paywall/purchases.tpl',
             array(
-                'purchases'                  => $purchases,
-                'settings'                   => $settings,
-                'money_units'                => $this->moneyUnits,
+                'purchases'   => $purchasesPage,
+                'settings'    => $settings,
+                'money_units' => $this->moneyUnits,
+                'pagination'  => $pagination,
             )
         );
     }
