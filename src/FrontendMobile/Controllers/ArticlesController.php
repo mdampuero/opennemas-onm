@@ -12,6 +12,7 @@ namespace FrontendMobile\Controllers;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
+use Onm\Module\ModuleManager;
 use Onm\Message as m;
 use Onm\Settings as s;
 
@@ -45,6 +46,13 @@ class ArticlesController extends Controller
 
         $articleID = \Content::resolveID($dirtyID);
 
+        // Get entity repository for article
+        $er = $this->get('entity_repository');
+        $article = $er->find('Article', $articleID);
+
+        // Check for paywall
+        $this->paywallHook($article);
+
         $cacheID = $this->view->generateCacheId('articles-mobile', '', $articleID);
         if ($this->view->caching == 0
             || ! $this->view->isCached('mobile/article-inner.tpl', $cacheID)
@@ -56,7 +64,6 @@ class ArticlesController extends Controller
             // TODO: Get rid of this when posible
             require __DIR__.'/../sections.php';
 
-            $article = new \Article($articleID);
             $article->category_name = $ccm->get_name($article->category);
 
             // Set inner photo if available
@@ -90,5 +97,54 @@ class ArticlesController extends Controller
             )
         );
     }
-}
 
+    /**
+     * Alteres the article given the paywall module status
+     *
+     * @return Article the article
+     **/
+    public function paywallHook(&$content)
+    {
+        $paywallActivated = ModuleManager::isActivated('PAYWALL');
+        $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
+
+        if ($paywallActivated && $onlyAvailableSubscribers) {
+            $newContent = $this->renderView(
+                'paywall/partials/content_only_for_subscribers.tpl',
+                array('id' => $content->id)
+            );
+
+            $isLogged = array_key_exists('userid', $_SESSION);
+            if ($isLogged) {
+                if (array_key_exists('meta', $_SESSION)
+                    && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {
+                    $userSubscriptionDateString = $_SESSION['meta']['paywall_time_limit'];
+                } else {
+                    $userSubscriptionDateString = '';
+                }
+                $userSubscriptionDate = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $userSubscriptionDateString,
+                    new \DateTimeZone('UTC')
+                );
+
+                $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+                $hasSubscription = $userSubscriptionDate > $now;
+
+                if (!$hasSubscription) {
+                    $newContent = $this->renderView(
+                        'paywall/partials/content_only_for_subscribers.tpl',
+                        array(
+                            'logged' => $isLogged,
+                            'id'     => $content->id
+                        )
+                    );
+                    $content->body = $newContent;
+                }
+            } else {
+                $content->body = $newContent;
+            }
+        }
+    }
+}
