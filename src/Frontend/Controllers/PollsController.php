@@ -270,7 +270,7 @@ class PollsController extends Controller
         $voted = 0;
 
         if (!empty($answer) && !isset($cookie)) {
-            $ip = $request->server->get('REMOTE_ADDR');
+            $ip = \Application::getRealIp();
             $voted = $poll->vote($answer, $ip);
 
             $valid = 1;
