@@ -316,15 +316,17 @@ class Application
         // por los que ha pasado.
 
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-            && $_SERVER['HTTP_X_FORWARDED_FOR'] != ''
-        ) {
-            $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
+            && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+            $clientIp =
+                ( isset($_SERVER['REMOTE_ADDR'])
+                    && !empty($_SERVER['REMOTE_ADDR']) ) ?
                 $_SERVER['REMOTE_ADDR']
-                :
-                ( ( !empty($_ENV['REMOTE_ADDR']) ) ?
-                    $_ENV['REMOTE_ADDR']
                     :
-                    "unknown" );
+                    ( ( isset($_ENV['REMOTE_ADDR'])
+                        && !empty($_ENV['REMOTE_ADDR']) ) ?
+                    $_ENV['REMOTE_ADDR']
+                        :
+                        "unknown" );
 
             // los proxys van añadiendo al final de esta cabecera
             // las direcciones ip que van "ocultando". Para localizar la ip real
@@ -332,37 +334,39 @@ class Application
             // una dirección ip que no sea del rango privado. En caso de no
             // encontrarse ninguna se toma como valor el REMOTE_ADDR
 
-            $entries = split('[, ]', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $entries = preg_split('/[, ]/', $_SERVER['HTTP_X_FORWARDED_FOR']);
 
             reset($entries);
             while (list(, $entry) = each($entries)) {
                 $entry = trim($entry);
-                $foundRegExp = preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList);
-                if ($foundRegExp) {
+                if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
                     // http://www.faqs.org/rfcs/rfc1918.html
                     $privateIp = array(
-                          '/^0\./',
-                          '/^127\.0\.0\.1/',
-                          '/^192\.168\..*/',
-                          '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
-                          '/^10\..*/');
+                        '/^0\./',
+                        '/^127\.0\.0\.1/',
+                        '/^192\.168\..*/',
+                        '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
+                        '/^10\..*/'
+                    );
 
-                    $foundIP = preg_replace($privateIp, $clientIp, $ipList[1]);
+                    $foundIp = preg_replace($privateIp, $clientIp, $ipList[1]);
 
-                    if ($clientIp != $foundIP) {
-                        $clientIp = $foundIP;
-                        break;
+                    if ($clientIp != $foundIp) {
+                        return  $foundIp;
                     }
                 }
             }
         } else {
-            $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
+            $clientIp =
+                ( isset($_SERVER['REMOTE_ADDR'])
+                    && !empty($_SERVER['REMOTE_ADDR']) ) ?
                 $_SERVER['REMOTE_ADDR']
-                :
-                ( ( !empty($_ENV['REMOTE_ADDR']) ) ?
-                    $_ENV['REMOTE_ADDR']
                     :
-                    "unknown" );
+                    ( ( isset($_ENV['REMOTE_ADDR'])
+                        && !empty($_ENV['REMOTE_ADDR']) ) ?
+                    $_ENV['REMOTE_ADDR']
+                        :
+                        "unknown" );
         }
 
         return $clientIp;
