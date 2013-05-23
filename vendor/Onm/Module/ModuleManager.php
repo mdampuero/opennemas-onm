@@ -171,6 +171,10 @@ class ModuleManager
      */
     public static function isActivated($module = '')
     {
+        if (\Acl::isMaster()) {
+            return true;
+        }
+
         if (!isset($module) || empty($module)) {
             // Check if module name is properly setted
 

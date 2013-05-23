@@ -303,6 +303,10 @@ class FrontpagesController extends Controller
                     $rules .="#content-{$item->pk_content}.onm-new {\n";
                     $rules .= "\tbackground-color:{$bgcolor} !important; \n";
                     $rules .= "}\n";
+                    $rules .="#content-{$item->pk_content}.colorize {\n";
+                    $rules .= "\tpadding:10px !important; \n";
+                    $rules .= "\border-radius:5px !important; \n";
+                    $rules .= "}\n";
                 }
 
                 $element = 'title'."_".$actualCategoryId;
@@ -353,6 +357,26 @@ class FrontpagesController extends Controller
                 $output.= "\tarticle.onm-new div.". $theCategory->name .
                           " { color:" . $theCategory->color . "; }\n\t\t";
 
+                $output.= "\tarticle.onm-new hr.category-line.". $theCategory->name .
+                          " { border-color:" . $theCategory->color . "; }\n".
+                          "\tarticle.onm-new .content-category.". $theCategory->name ." a:hover
+                           { color:" . $theCategory->color . "; }\n
+                          \t\t";
+                $output.= "\t nav#menu.menu div.mainmenu ul li.cat.". $theCategory->name .":hover a,
+                            nav#menu.menu div.submenu ul li.subcat.". $theCategory->name .":hover a
+                           { color:" . $theCategory->color . ";
+                            text-decoration: underline; }\n
+                          \t\t";
+
+                $output.= "\t.widget .category-color.". $theCategory->name .
+                          " { color:" . $theCategory->color . "; }\n".
+                          ".widget div.tab-lastest.". $theCategory->name .":hover".
+                          " { background-color:" . $theCategory->color . "; }\n".
+                          ".widget div.tab-lastest.". $theCategory->name .":hover .category-color".
+                          " { color:#FFF; }\n
+                          \t\t";
+
+
                 if ($current == $theCategory->name) {
                     $actual = $theCategory->color;
                 }
@@ -388,6 +412,13 @@ class FrontpagesController extends Controller
 
             $output.= "\tdiv.widget .title h5, div.widget .title h5 {color: ". $actual. " !important; }\n";
             $output.= "\tdiv.widget-today-news .number {background-color: ". $actual. " !important; }\n";
+
+            $output.="\tnav .submenu.colorized {
+                background-color:". $actual. ";}\n";
+
+            $output.="\t div.mainmenu ul li.active, .article-inner h1.title,
+                .article-inner div.content-category a:hover, .article-inner blockquote {
+                    color:". $actual. ";}\n";
 
         } elseif ($current == "mobile") {
             $output.= "\t#footerwrap { background-color: ".$siteColor." !important;}";
