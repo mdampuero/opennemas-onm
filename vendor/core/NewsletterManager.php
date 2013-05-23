@@ -120,6 +120,7 @@ class NewsletterManager
         // Inject values by $params array
         $mail->From     = $params['mail_from'];
         $mail->FromName = $params['mail_from_name'];
+        $mail->Sender   = $params['mail_sender'];
         $mail->IsHTML(true);
         $this->HTML = $htmlcontent;
 

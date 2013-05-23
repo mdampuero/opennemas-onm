@@ -3,7 +3,6 @@
 {block name="footer-js" append}
 <script type="text/javascript">
 jQuery(document).ready(function($){
-    var newsletterStatus = $('#newsletter_enable');
     var newsletterType = $('#newsletter_subscriptionType');
     var reCaptcha = '{$missing_recaptcha}';
 
@@ -20,23 +19,13 @@ jQuery(document).ready(function($){
         }
     });
 
-    //If newsletter is changed to activated and recaptcha is missing show warning
-    newsletterStatus.on('change', function() {
-        if ($(this).val() == 'yes' && reCaptcha) {
-            $('#warnings-validation').replaceWith('<div class="alert alert-error">{t escape=off}Before using newsletter you have to fill the <a href="{url name=admin_system_settings}#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
-        } else {
-            if ($('div.notice')) {
-                $('div.notice').replaceWith('<div id="warnings-validation"></div>');
-            }
-        }
-    });
+
 
     //If newsletter is activated and recaptcha is missing don't send form
     $('#formulario').on('submit', function(){
-        if (newsletterStatus.val() == 'yes' && reCaptcha) {
+        if (reCaptcha) {
             if ($('#warnings-validation')) {
                 $('#warnings-validation').replaceWith('<div class="alert alert-error">{t escape=off}Before using newsletter you have to fill the <a href="{url name=admin_system_settings}#external"  target="_blank">reCaptcha keys on system settings</a>{/t}</div>');
-
             }
             return false;
         }

@@ -48,7 +48,7 @@
                     <th>{t}Title{/t}</th>
                     <th class="left"  style="width:150px;">{t}Created{/t}</th>
                     <th class="left"  style="width:150px;">{t}Updated{/t}</th>
-                    <th class="left">{t}Sent{/t}</th>
+                    <th class="left">{t}Sent{/t}/{t}Mailings{/t}</th>
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
@@ -78,7 +78,7 @@
                     </td>
                     <td class="left">
                     {if $newsletter->sent gt 0}
-                        {t}Yes{/t}
+                        {$newsletter->sent}
                     {else}
                         {t}No{/t}
                     {/if}

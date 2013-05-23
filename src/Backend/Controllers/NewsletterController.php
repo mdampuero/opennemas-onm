@@ -421,7 +421,6 @@ class NewsletterController extends Controller
             $configurations = array(
                 'newsletter_maillist'         => $request->request->get('newsletter_maillist'),
                 'newsletter_subscriptionType' => $request->request->get('newsletter_subscriptionType'),
-                'newsletter_enable'           => $request->request->get('newsletter_enable'),
             );
 
             foreach ($configurations as $key => $value) {
@@ -436,7 +435,6 @@ class NewsletterController extends Controller
                 array(
                     'newsletter_maillist',
                     'newsletter_subscriptionType',
-                    'newsletter_enable',
                     'recaptcha',
                     'newsletter_mailling_counter',
                     'max_mailing'
@@ -520,7 +518,6 @@ class NewsletterController extends Controller
     {
         if (is_null(s::get('newsletter_maillist'))
             || !(s::get('newsletter_subscriptionType') )
-            || !(s::get('newsletter_enable'))
         ) {
             m::add(
                 _('Please provide your Newsletter configuration to start to use your Newsletter module')
