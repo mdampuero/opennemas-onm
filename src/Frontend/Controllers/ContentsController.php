@@ -60,7 +60,9 @@ class ContentsController extends Controller
         $content = $content->get($contentID);
 
         // Check for paywall
-        $this->paywallHook($content);
+        if (!is_null($content)) {
+            $this->paywallHook($content);
+        }
 
 
         if (isset($content->img2) && ($content->img2 != 0)) {
