@@ -148,8 +148,8 @@ class CommentsController extends Controller
         // Retrieve request data
         $voteValue = $request->request->filter('vote', null, FILTER_SANITIZE_STRING);
         $commentId = $request->request->getDigits('comment_id', 0);
-        $ip        = $request->getClientIp();
         $cookie    = $request->cookies->get('comment-vote-'.$commentId);
+        $ip        = \Application::getRealIp();
 
         // User already voted this comment
         if (!is_null($cookie)) {
@@ -205,7 +205,7 @@ class CommentsController extends Controller
         $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
         $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
-        $ip          = $request->getClientIp();
+        $ip          = \Application::getRealIp();
 
         $session = $this->get('session')->start();
 
