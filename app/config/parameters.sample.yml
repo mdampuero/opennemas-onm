@@ -23,7 +23,15 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-    cache_handler:     apc
+    cache_handler:     Onm\Cache\Apc
+    cache_handler_params:
+        server: 127.0.0.1
+        port: 11211
+        connection_string: tcp:\\127.0.0.1
+        options:
+            server: localhost
+            prefix: onm
+
     dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
     session_params:
         save_path:     tmp/instances
