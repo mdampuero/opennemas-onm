@@ -136,7 +136,7 @@ jQuery(document).ready(function($){
                 </div>
                 <div class="internal-config"  {if $configs['newsletter_subscriptionType'] neq 'create_subscriptor'}style="display:none"{/if}>
                     <div class="control-group">
-                         <div class="controls"> {t}Your max limit are %num subscriptors{/t} </div>
+                         <div class="controls">  </div>
                     </div>
                 </div>
             </fieldset>

@@ -324,7 +324,11 @@ class NewsletterController extends Controller
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (array_key_exists('sender', $configurations)
+        if (array_key_exists('newsletter_sender', $configurations)
+            && !empty($configurations['newsletter_sender'])
+        ) {
+            $mail_from = $configurations['newsletter_sender'];
+        } elseif (array_key_exists('sender', $configurations)
             && !empty($configurations['sender'])
         ) {
             $mail_from = $configurations['sender'];
@@ -343,21 +347,25 @@ class NewsletterController extends Controller
         );
 
         $sentResult = array();
+        $countMailing = 0;
         foreach ($recipients as $mailbox) {
             // Replace name destination
             $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
 
             // Send the mail
             $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
-
+         //   if ($properlySent) {
+                $countMailing++;
+           // }
             // Register the
-            $sentResult []= array(
+            $sentResult[]= array(
                 $mailbox,
                 $properlySent
             );
         }
 
-        $newsletter->update(array('sent' => 1));
+        $newsletter->update(array('sent' => $countMailing));
+        $this->updateMailing(array('counter' => $countMailing));
 
         return $this->render(
             'newsletter/steps/4-send.tpl',
@@ -425,6 +433,8 @@ class NewsletterController extends Controller
                     'newsletter_subscriptionType',
                     'newsletter_enable',
                     'recaptcha',
+                    'newsletter_mailling_counter',
+                    'max_mailing',
                 )
             );
 
@@ -436,6 +446,18 @@ class NewsletterController extends Controller
                 $missingRecaptcha = true;
             }
 
+            $date = new \DateTime();
+
+            $keyMonth ='counter_'.$date->format("m");
+            if (array_key_exists($keyMonth, $configurations['newsletter_mailling_counter'])
+                && !is_null($configurations['newsletter_mailling_counter'][$keyMonth])) {
+
+                $counterValue = $configurations['newsletter_mailling_counter'][$keyMonth];
+                if ($counterValue >= $configurations['max_mailing']) {
+                    m::add(_('You have send max mailing allowed').$counterValue);
+                }
+            }
+
             return $this->render(
                 'newsletter/config.tpl',
                 array(
@@ -445,6 +467,44 @@ class NewsletterController extends Controller
             );
         }
     }
+
+
+    /**
+     * Updates the counter by month with given an array of data
+     *
+     * @param array $newdata array with data for update
+     *
+     * @return NewNewsletter the object instance
+     **/
+    public function updateMailing($newdata)
+    {
+        $configurations = s::get('newsletter_mailling_counter');
+        if (array_key_exists('counter', $newdata) && !is_null($newdata['counter'])) {
+            $counter = $newdata['counter'];
+            $date = new \DateTime();
+            $keyMonth ='counter_'.$date->format("m");
+            if (!empty($configurations)
+                && array_key_exists($keyMonth, $configurations)
+                && !is_null($configurations[$keyMonth])) {
+
+                foreach ($configurations as $key => $value) {
+                    if ($key == $keyMonth) {
+                        $value = (int)$value + $counter;
+                        $configurations[$keyMonth] = $value;
+                        if ($value >= s::get('max_mailing')) {
+                            m::add(_('You have send max mailing allowed'));
+                        }
+                    }
+                }
+            } else {
+                $configurations[$keyMonth] = $counter;
+            }
+
+            s::set('newsletter_mailling_counter', $configurations);
+
+        }
+    }
+
 
     /**
      * Checks if the module is activated, if not redirect to the configuration form

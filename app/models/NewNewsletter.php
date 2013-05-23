@@ -126,7 +126,11 @@ class NewNewsletter
             $data = $this->data;
         }
         if (array_key_exists('sent', $newdata) && !is_null($newdata['sent'])) {
-            $sent = $newdata['sent'];
+            if (!empty($this->sent)) {
+                $sent = (int)$this->sent + (int)$newdata['sent'];
+            } else {
+                $sent = $newdata['sent'];
+            }
         } else {
             $sent = $this->sent;
         }

@@ -467,7 +467,7 @@ jQuery(document).ready(function($) {
                                 <label for="newsletter_sender" class="control-label">{t}Newsletter sender{/t}</label>
                             </th>
                             <td class="controls">
-                                <input type="text" id="newsletter_sender" name="newsletter_sender" value="{$configs['newsletter_sender']|default:'noreply@opennemas.com'}">
+                                <input type="text" id="newsletter_sender" name="newsletter_sender" value="{$configs['newsletter_sender']|default:'no-reply@postman.opennemas.com'}">
                             </td>
                             <td>
 
@@ -475,10 +475,10 @@ jQuery(document).ready(function($) {
                         </tr>
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="max_nl_subscriptor" class="control-label">{t}Num Max subscriptors{/t}</label>
+                                <label for="max_mailing" class="control-label">{t}Num Max Mailing by month{/t}</label>
                             </th>
                             <td class="controls">
-                                <input type="text" id="max_nl_subscriptor" name="max_nl_subscriptor" value="{$configs['max_nl_subscriptor']|default:'1000'}">
+                                <input type="text" id="max_mailing" name="max_mailing" value="{$configs['max_mailing']|default:'12000'}">
                             </td>
                             <td>
 

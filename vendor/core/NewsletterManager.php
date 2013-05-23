@@ -125,10 +125,7 @@ class NewsletterManager
 
         $mail->AddAddress($mailbox->email, $mailbox->name);
 
-        // embed image logo
-        $mail->AddEmbeddedImage(SITE_PATH . 'themes/xornal/images/xornal-boletin.jpg', 'logo-cid', 'Logotipo');
-
-        $subject = (!isset($params['subject']))? '[Xornal]': $params['subject'];
+        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
         $mail->Subject  = $subject;
 
         // TODO: crear un filtro

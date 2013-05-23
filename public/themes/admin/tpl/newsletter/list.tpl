@@ -77,7 +77,7 @@
                         {$newsletter->updated}
                     </td>
                     <td class="left">
-                    {if $newsletter->sent}
+                    {if $newsletter->sent gt 0}
                         {t}Yes{/t}
                     {else}
                         {t}No{/t}
