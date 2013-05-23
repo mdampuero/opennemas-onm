@@ -81,7 +81,7 @@ jQuery(document).ready(function($){
                     </div>
                  </div>
                 <div class="control-group">
-                    <label for="sender" class="control-label">{t}Sender{/t}</label>
+                    <label for="sender" class="control-label">{t}Email from{/t}</label>
                     <div class="controls">
                         <input type="text" id="sender" name="newsletter_maillist[sender]" value="{$configs['newsletter_maillist']['sender']|default:""}" class="input-xlarge"/>
                     <div class="help-block">{t escape=off}Email sender{/t}</div>

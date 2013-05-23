@@ -324,16 +324,20 @@ class NewsletterController extends Controller
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (array_key_exists('newsletter_sender', $configurations)
-            && !empty($configurations['newsletter_sender'])
-        ) {
-            $mail_from = $configurations['newsletter_sender'];
-        } elseif (array_key_exists('sender', $configurations)
+        if (array_key_exists('sender', $configurations)
             && !empty($configurations['sender'])
         ) {
             $mail_from = $configurations['sender'];
         } else {
             $mail_from = MAIL_FROM;
+        }
+
+        if (array_key_exists('newsletter_sender', $configurations)
+            && !empty($configurations['newsletter_sender'])
+        ) {
+            $mail_sender = $configurations['newsletter_sender'];
+        } else {
+            $mail_sender = MAIL_FROM;
         }
 
         // TODO: Fetch this params from the container
@@ -343,6 +347,7 @@ class NewsletterController extends Controller
             'mail_user'      => MAIL_USER,
             'mail_pass'      => MAIL_PASS,
             'mail_from'      => $mail_from,
+            'mail_sender'    => $mail_sender,
             'mail_from_name' => s::get('site_name'),
         );
 
@@ -434,7 +439,7 @@ class NewsletterController extends Controller
                     'newsletter_enable',
                     'recaptcha',
                     'newsletter_mailling_counter',
-                    'max_mailing',
+                    'max_mailing'
                 )
             );
 
