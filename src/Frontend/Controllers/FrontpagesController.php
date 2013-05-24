@@ -407,8 +407,8 @@ class FrontpagesController extends Controller
                 "article.onm-new.highlighted-3-cols div.nw-subtitle div { background-color:" . $actual . " !important;}\n";
 
             $output.= "\t.frontpage article.album .nw-subtitle, .frontpage article.video .nw-subtitle, ".
+                "\t div.opinion-list article.opinion-element h1.title a, ".
                 ".frontpage article.opinion .nw-subtitle a { color:" . $actual . " !important;}\n";
-
 
             $output.= "\tdiv.widget .title h5, div.widget .title h5 {color: ". $actual. " !important; }\n";
             $output.= "\tdiv.widget-today-news .number {background-color: ". $actual. " !important; }\n";

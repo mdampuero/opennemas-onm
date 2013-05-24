@@ -88,6 +88,23 @@ div.ad-skyscraper-body {
     PAYWALL
 ************************************************************/
 
+div.user-ajax{
+    float: right;
+}
+
+div.user-ajax li {
+    float: right;
+    list-style: none outside none;
+    margin: 0 2px;
+}
+
+div.user-ajax li a {
+    color: #111;
+    font-size: 11px;
+    padding: 0px 5px;
+    text-decoration: none;
+}
+
 .showcase {
     padding: 50px 60px 120px 60px;
     text-align: center;
