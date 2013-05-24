@@ -1816,24 +1816,31 @@ class ContentManager
             AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0
-        ORDER BY `contents`.`placeholder` ASC, `created` DESC ';
+        ORDER BY `created` DESC ';
 
         $rs    = $GLOBALS['application']->conn->Execute($sql);
         $ccm   = ContentCategoryManager::get_instance();
         $items = array();
         while (!$rs->EOF) {
-            $items[] = array(
-                'title'          => $rs->fields['title'],
-                'catName'        => $ccm->get_name($rs->fields['category_id']),
-                'slug'           => $rs->fields['slug'],
-                'created'        => $rs->fields['created'],
-                'category_title' => $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
-                'id'             => $rs->fields['pk_content'],
-                'starttime'      => $rs->fields['starttime'],
-                'endtime'        => $rs->fields['endtime'],
-                'img1'           => $rs->fields['img1'],
-                'img2'           => $rs->fields['img2'],
-            );
+
+            $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
+            $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
+
+            if ($rsAux->fields['num'] <= 0) {
+                $items[] = array(
+                    'title'          => $rs->fields['title'],
+                    'catName'        => $ccm->get_name($rs->fields['category_id']),
+                    'slug'           => $rs->fields['slug'],
+                    'created'        => $rs->fields['created'],
+                    'category_title' => $ccm->get_title($ccm->get_name($rs->fields['category_id'])),
+                    'id'             => $rs->fields['pk_content'],
+                    'starttime'      => $rs->fields['starttime'],
+                    'endtime'        => $rs->fields['endtime'],
+                    'img1'           => $rs->fields['img1'],
+                    'img2'           => $rs->fields['img2'],
+                );
+            }
+
 
             $rs->MoveNext();
         }
