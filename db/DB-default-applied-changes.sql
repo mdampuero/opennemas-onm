@@ -1,9 +1,17 @@
+-- This file contains all the changes applied in the default instance database.
+-- Please refer to DB-default-new-changes.sql to see what changes has to be applied
 
- <===========  Please use new changes sql file. (changes-01102012.sql) ==========================>
+-- Please check rigth sql, use ; in the end of lines & -- for comments.
+-- Write date with each sentence and with stack method. (last writed in the top)
 
--- This changes are doing in instance-default.sql until 01-10-2012
+--- 09-04-2013
+ALTER TABLE  `orders` ADD  `type` VARCHAR( 50 ) NOT NULL AFTER  `payment_method`
 
-
+--- 06-05-2013
+ALTER TABLE `newsletter_archive` CHANGE `created` `created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00';
+ALTER TABLE `newsletter_archive` ADD `updated` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `created`;
+UPDATE `newsletter_archive` SET  `updated` = `created` WHERE `updated`='0000-00-00 00:00:00';
+DROP TABLE `bulletins_archive`;
 
 -- 27-09-2012
 ALTER TABLE  `menues` ADD  `position` VARCHAR( 50 ) AFTER  `type`;
@@ -45,7 +53,6 @@ CREATE TABLE IF NOT EXISTS `usermeta` (
 );
 DROP TABLE  `articles_clone`;
 
-
 -- 16-08-2012
 ALTER TABLE  `users` DROP  `address` , DROP  `phone`, DROP `online` ;
 
@@ -58,8 +65,6 @@ ALTER TABLE  `author_imgs` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_img` ,  `fk
 
 -- 13-07-2012
 ALTER TABLE  `menu_items` DROP PRIMARY KEY , ADD PRIMARY KEY (  `pk_item` ,  `pk_menu` );
-
-<===================================== Changes to do in productoin
 
 --11-06-2012
 ALTER TABLE `authors` ADD `params` TEXT NULL DEFAULT NULL;
