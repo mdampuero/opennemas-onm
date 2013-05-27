@@ -312,3 +312,13 @@ JSINTERSTICIAL;
     return $content;
 }
 
+/**
+ * Returns the current time in UNIX forma including microsecs
+ *
+ * @return float
+ **/
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}
