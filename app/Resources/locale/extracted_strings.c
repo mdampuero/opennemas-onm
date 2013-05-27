@@ -7262,7 +7262,10 @@ gettext("Create new user");
 gettext("New user");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
-gettext("Type");
+gettext("Filter by name or email");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("type");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("--All--");
@@ -7274,13 +7277,7 @@ gettext("Backend");
 gettext("Frontend");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
-gettext("Filter by name");
-
-/* public/themes/admin/tpl//acl/user/list.tpl */
-gettext("e-mail");
-
-/* public/themes/admin/tpl//acl/user/list.tpl */
-gettext("and group:");
+gettext("and group");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("Full name");
@@ -7626,6 +7623,222 @@ gettext("Config");
 
 /* public/themes/admin/tpl//agency_importer/xml-file/list.tpl */
 gettext("Photos:");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("The journalism CMS");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Check Your E-Mail");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("We've sent an e-mail to");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Please check your e-mail now for a message with the subject line \"Username reminder\" from");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("To protect your privacy, we only send this information to the e-mail address associated with this account.");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("PLEASE NOTE");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("If this is not the e-mail address associated with your account, click the link to resubmit request with the correct e-mail address");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Recover your username");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("If you use e-mail filtering or anti-spam software,please make sure our e-mail is not filtered or blocked.");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Enter your e-mail address and click Submit to recover your username.");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("E-mail");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Submit");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("About");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl//login/recover_username.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("The journalism CMS");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Password");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Enter");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Forgot Password?");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Password successfully updated");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Your password has been updated");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Password");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Enter");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Forgot Password?");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Please enter your new password in both fields below, and then click Submit.");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Password");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Re-Enter Password");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Submit");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("About");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl//login/regenerate_pass.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("The journalism CMS");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Check Your E-Mail");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("We've sent an e-mail to");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Please check your e-mail now for a message with the subject line \"Password reminder\" from");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Click the link in the e-mail to set a password for your account.");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("To protect your privacy, we only send this information to the e-mail address associated with this account.");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("PLEASE NOTE");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("If this is not the e-mail address associated with your account, click the link to resubmit the \"Reset Your Password\" request with the correct e-mail address");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Recover password");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("If you use e-mail filtering or anti-spam software,please make sure our e-mail is not filtered or blocked.");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Enter your e-mail address and click Submit to recover your password.");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("E-mail");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Submit");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("About");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl//login/recover_pass.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("Dear member");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("Per your request, please follow these steps to regain access to");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("Click the link below to choose a new password");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("If the link is not clickable, you can copy and paste the address into your Web browser's address window");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("Follow the instructions on the screen to choose a new password.  After you have chosen a password you will automatically enter");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("In the future you can login to");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("by entering your e-mail address and this password");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("If you did not request your ID and password for");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("someone has mistakenly entered your e-mail address when requesting their password");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("Please ignore this message, or, if you wish, you may go to the address above to select a new password for your account");
+
+/* public/themes/admin/tpl//login/emails/recoverpassword.tpl */
+gettext("To protect your privacy, we will only send this information to the e-mail address on file for this account");
 
 /* public/themes/admin/tpl//login/login.tpl */
 gettext("The journalism CMS");
