@@ -1292,6 +1292,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `payment_status` varchar(150) NOT NULL,
   `payment_amount` decimal(10,2) NOT NULL,
   `payment_method` varchar(200) NOT NULL,
+  `type` VARCHAR( 50 ) NOT NULL,
   `params` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
