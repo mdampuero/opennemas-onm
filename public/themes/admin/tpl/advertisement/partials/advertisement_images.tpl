@@ -129,8 +129,8 @@
                 article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
                 article_inputs.find("textarea").attr('value', image.data("description"));
 
-                $('#params_width').val(image.data("width"));
-                $('#params_height').val(image.data("height"));
+                // $('#params_width').val(image.data("width"));
+                // $('#params_height').val(image.data("height"));
             }
         });
     });
