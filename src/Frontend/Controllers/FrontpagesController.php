@@ -360,7 +360,7 @@ class FrontpagesController extends Controller
                 $output.= "\tarticle.onm-new hr.category-line.". $theCategory->name .
                           " { border-color:" . $theCategory->color . "; }\n".
                           "\tarticle.onm-new .content-category.". $theCategory->name ." a:hover
-                           { color:" . $theCategory->color . "; }\n
+                           { color:" . $theCategory->color . " !important; }\n
                           \t\t";
                 $output.= "\t nav#menu.menu div.mainmenu ul li.cat.". $theCategory->name .":hover a,
                             nav#menu.menu div.submenu ul li.subcat.". $theCategory->name .":hover a
@@ -368,12 +368,13 @@ class FrontpagesController extends Controller
                             text-decoration: underline; }\n
                           \t\t";
 
-                $output.= "\t.widget .category-color.". $theCategory->name .
-                          " { color:" . $theCategory->color . "; }\n".
+                $output.= "\t.widget a.category-color.". $theCategory->name .
+                          "\t.widget .category-color.". $theCategory->name .
+                          " { color:" . $theCategory->color . " !important; }\n".
                           ".widget div.tab-lastest.". $theCategory->name .":hover".
                           " { background-color:" . $theCategory->color . "; }\n".
                           ".widget div.tab-lastest.". $theCategory->name .":hover .category-color".
-                          " { color:#FFF; }\n
+                          " { color:#FFF !important;}\n
                           \t\t";
 
 
