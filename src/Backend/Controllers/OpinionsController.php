@@ -167,7 +167,7 @@ class OpinionsController extends Controller
 
         $cm = new \ContentManager();
         $rating = new \Rating();
-        $comment = new \Comment();
+        $commentManager = new \Repository\CommentsManager();
 
         $opinions = $cm->find(
             'Opinion',
@@ -200,7 +200,7 @@ class OpinionsController extends Controller
 
         if (isset($editorial) && is_array($editorial)) {
             foreach ($editorial as &$opin) {
-                $todos = $comment->get_comments($opin->id);
+                $todos = $commentsManager->getCommentsForContentId($opin->id);
                 $opin->comments = count($todos);
                 $opin->ratings = $rating->getValue($opin->id);
             }
@@ -210,7 +210,7 @@ class OpinionsController extends Controller
 
         if (isset($director) && is_array($director)) {
             foreach ($director as &$opin) {
-                $todos = $comment->get_comments($opin->id);
+                $todos = $commentsManager->getCommentsForContentId($opin->id);
                 $opin->comments = count($todos);
                 $opin->ratings = $rating->getValue($opin->id);
             }
@@ -221,7 +221,8 @@ class OpinionsController extends Controller
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
                 $opinion->author = new \Author($opinion->fk_author);
-                $opinion->comments = count($comment->get_comments($opinion->id));
+                $opinion->comments = $commentsManager->getCommentsForContentId($opinion->id);
+                $opinion->comments = count($opinion->comments);
                 $opinion->ratings = $rating->getValue($opinion->id);
             }
         } else {

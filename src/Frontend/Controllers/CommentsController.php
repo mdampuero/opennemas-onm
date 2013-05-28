@@ -234,7 +234,7 @@ class CommentsController extends Controller
             } else {
                 $created = $comment->create(
                     array(
-                        'id'   => $contentId,
+                        'content_id'   => $contentId,
                         'data' => $data,
                         'ip'   => $ip
                     )

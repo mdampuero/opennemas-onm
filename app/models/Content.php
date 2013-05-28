@@ -2438,4 +2438,21 @@ class Content
 
         return true;
     }
+
+    /**
+     * Deletes all comments related with a given content id
+     * WARNING: this is very dangerous, the action can't be undone
+     *
+     * @param  int $contentID the content id to delete comments that referent to it
+     *
+     * @return boolean true if comments were deleted
+     **/
+    public static function deleteComments($contentID)
+    {
+        if (empty($contentID)) {
+            return false;
+        }
+
+        return Comment::deleteFromFilter("`content_id` = {$contentID}");
+    }
 }

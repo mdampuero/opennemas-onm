@@ -428,8 +428,7 @@ class Article extends Content
         $rel = new RelatedContent();
         $rel->delete($id); //Eliminamos con los que esta relacionados.
 
-        $rel = new Comment();
-        $rel->deleteComments($id); //Eliminamos  los comentarios.
+        self::deleteComments($id); //Eliminamos  los comentarios.
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             \Application::logDatabaseError();
