@@ -68,8 +68,8 @@ class CommentsController extends Controller
         $commentManager = new \Repository\CommentsManager();
 
         $searchCriteria =  "`status`='$filterStatus'";
-        if (!empty($search)) {
-            $searchCriteria .= " AND `search` LIKE '%$filterSearch%'";
+        if (!empty($filterSearch)) {
+            $searchCriteria .= " AND `body` LIKE '%$filterSearch%'";
         }
         $commentsCount = $commentManager->count($searchCriteria);
         $comments      = $commentManager->find($searchCriteria, 'date DESC', $page, $itemsPerPage);

@@ -81,7 +81,6 @@ class CommentsManager
         $start = microtime(true);
         // Executing the SQL
         $sql = "SELECT count(id) FROM `comments` WHERE $filterSQL";
-        // $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         if ($rs === false) {
@@ -118,39 +117,6 @@ class CommentsManager
     }
 
     /**
-     * Returns all the comments from a given content's id
-     *
-     * @param  integer $contentID the content id to fetch comments with it
-     *
-     * @return array the list of comment's objects
-     **/
-    public function getCommentsForContentId($contentID)
-    {
-        $related = array();
-
-        if ($contentID) {
-            $sql = 'SELECT * FROM `comments` '
-                    .'WHERE `content_id`=? AND `status`='.\Comment::STATUS_ACCEPTED
-                    .'ORDER BY `pk_comment` DESC';
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-            if ($rs !== false) {
-                \Application::logDatabaseError();
-
-                return false;
-            }
-
-            while (!$rs->EOF) {
-                $related[] = $rs->fields['pk_comment'];
-                $rs->MoveNext();
-            }
-        }
-
-        return $related;
-    }
-
-    /**
      * Gets the public comments from a given content's id.
      *
      * @param int $contentID the content id for fetching its comments
@@ -159,10 +125,15 @@ class CommentsManager
      *
      * @return array  array of comment's objects
      **/
-    public static function get_public_comments($contentID, $elemsByPage = null, $page = null)
+    public static function getCommentsforContentId($contentID, $elemsByPage = null, $page = null)
     {
-        $related = array();
+        $comments = array();
 
+        if (empty($contentID)) {
+            return $comments;
+        }
+
+        // Preparing limit
         $limitSQL = '';
         if (!empty($elemsByPage) && !empty($page)) {
             if ($page == 1) {
@@ -172,25 +143,31 @@ class CommentsManager
             }
         }
 
-        if ($contentID) {
-            $sql = 'SELECT * FROM comments, contents
-                    WHERE fk_content =?
-                      AND content_status=1
-                      AND in_litter=0
-                      AND pk_content=pk_comment
-                    ORDER BY pk_comment DESC '.$limitSQL;
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            while (!$rs->EOF) {
-                $obj       = new Comment();
-                $obj->load($rs->fields);
-                $related[] = $obj;
-                $rs->MoveNext();
-            }
+        $sql = "SELECT * FROM `comments`
+                WHERE `content_id`=? AND `status`='".\Comment::STATUS_ACCEPTED."'
+                ORDER BY `date` DESC $limitSQL";
+        $values = array($contentID);
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if ($rs == false) {
+            \Application::logDatabaseError();
+
+            return false;
         }
 
-        return $related;
+        while (!$rs->EOF) {
+            $comment = new \Comment();
+            $comment->load($rs->fields);
+            $comments[] = $comment;
+
+            $rs->MoveNext();
+        }
+
+        return $comments;
     }
+
+
 
     /**
      * Gets the number of public comments
@@ -199,14 +176,14 @@ class CommentsManager
      *
      * @return integer the number of public comments
      **/
-    public static function count_public_comments($contentID)
+    public static function countCommentsForContentId($contentID)
     {
         if (empty($contentID)) {
             return false;
         }
 
-        $sql = 'SELECT count(id) FROM comments
-                WHERE content_id = ? AND status='.\Comment::STATUS_ACCEPTED;
+        $sql = "SELECT count(id) FROM comments
+                WHERE content_id = ? AND `status` ='".\Comment::STATUS_ACCEPTED."'";
         $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentID));
 
         return intval($rs);
@@ -250,20 +227,15 @@ class CommentsManager
     }
 
     /**
-     * Gets the number of pending comments
+     * Returns the number of pending comments
+     *
      **/
     public function countPendingComments()
     {
-        $sql = 'SELECT count(pk_content)
-                FROM `contents`
-                WHERE `fk_content_type` =6
-                AND `content_status` =0
-                AND `available` =0
-                AND `in_litter` =0
-                ORDER BY `created` ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "SELECT count(id) FROM `comments` WHERE `status` ='".\Comment::STATUS_PENDING."'";
+        $rs = $GLOBALS['application']->conn->GetOne($sql);
 
-        return intval($rs->fields['count(pk_content)']);
+        return intval($rs);
     }
 
     /**
@@ -328,5 +300,19 @@ class CommentsManager
             $rs->Close(); # optional
         }
         return $contents;
+    }
+
+    /**
+     * Checks if the content of a comment has bad words
+     *
+     * @param  array $data the data of the comment
+     *
+     * @return integer higher values means more bad words
+     **/
+    public static function hasBadWordsComment($string)
+    {
+        $weight = \Onm\StringUtils::getWeightBadWords($string);
+
+        return $weight > 100;
     }
 }

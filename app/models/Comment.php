@@ -140,40 +140,41 @@ class Comment
      **/
     public function create($params)
     {
-        $fkContent = $params['id'];
-        $data      = $params['data'];
-        $ip        = $params['ip'];
-        $data = array(
-
+        $currentDate = new \DateTime('', new \DateTimeZone('UTC'));
+        $defaultData = array(
+            'content_id'   => null,
+            'author'       => '',
+            'author_email' => '',
+            'author_url'   => '',
+            'author_ip'    => '',
+            'date'         => $currentDate->format('Y-m-d H:i:s'),
+            'body'         => '',
+            'status'       => \Comment::STATUS_PENDING,
         );
 
-        var_dump($data, $params);die();
 
-        parent::create($data);
+        $data = array_merge($defaultData, $params);
 
-        $sql = 'INSERT INTO comments (
-                `content_id`,
-                `author`,
-                `body`,
-                                      `ip`,`email`,)
-                VALUES (?,?,?,?,?,?,?)';
+        $sql = 'INSERT INTO comments
+                    (`content_id`, `author`, `author_email`, `author_url`, `author_ip`, `date`, `body`, `status`)
+                VALUES
+                    (?,?,?,?,?,?,?,?)';
         $values = array(
-            $this->id,
+            $data['content_id'],
             $data['author'],
+            $data['author_email'],
+            $data['author_url'],
+            $data['author_ip'],
+            $data['date'],
             $data['body'],
-            $data['ciudad'],
-            $ip,
-            $data['email'],
-            $fkContent
+            $data['status'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return (false);
+            throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
         }
-
-        return $this->id;
     }
 
     /**

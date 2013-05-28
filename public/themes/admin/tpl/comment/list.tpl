@@ -83,7 +83,7 @@
                     </th>
                     <th>{t}Author{/t}</th>
                     <th>{t}Comment{/t}</th>
-                    <th>{t}In response to{/t}</th>
+                    <th class="wrap">{t}In response to{/t}</th>
                     <th style='width:20px;' class="center">{t}Published{/t}</th>
                     <th style='width:80px;' class="right">{t}Actions{/t}</th>
 			   </tr>
