@@ -11,7 +11,7 @@
         {t}Select an author{/t}
         <div class="input-append">
             <select name="author" id="author">
-                <option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All{/t} </option>
+                <option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All authors{/t} </option>
                 <option value="-1" {if isset($author) && $author eq "-1"} selected {/if}> {t}Director{/t} </option>
                 <option value="-2" {if isset($author) && $author eq "-2"} selected {/if}> {t}Editorial{/t} </option>
                 {section name=as loop=$autores}
@@ -28,8 +28,6 @@
 			<th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
 			<th>{t}Author name{/t} - {t}Title{/t}</th>
             <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
-			<th class="center"><img src="{$params.IMAGE_DIR}votes.png" alt="{t}Votes{/t}" width="22"></th>
-            <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}" title="{t}Comments{/t}"></th>
 			<th class="center" style="width:110px;">{t}Created in{/t}</th>
 			<th class="center" style="width:70px;">{t}In home{/t}</th>
 			<th class="center" style="width:20px;">{t}Published{/t}</th>
@@ -54,12 +52,6 @@
 			</td>
 			<td class="center">
 				{$opinion->views}
-			</td>
-			<td class="center">
-				{$op_rating[c]|default:0}
-			</td>
-			<td class="center">
-				{$op_comment[c]|default:0}
 			</td>
 			<td class="center">
 				{$opinion->created}

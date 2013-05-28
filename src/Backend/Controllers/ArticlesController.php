@@ -138,14 +138,11 @@ class ArticlesController extends Controller
         if (isset($articles) && is_array($articles)) {
             $user    = new \User();
             $rating  = new \Rating();
-            $comment = new \Comment();
 
             foreach ($articles as &$article) {
                 $article->category_name = $article->loadCategoryName($article->id);
                 $article->publisher = $user->getUserName($article->fk_publisher);
                 $article->editor    = $user->getUserName($article->fk_user_last_editor);
-                $article->rating    = $rating->getValue($article->id);
-                $article->comment   = $comment->count_public_comments($article->id);
             }
         } else {
             $articles = array();
