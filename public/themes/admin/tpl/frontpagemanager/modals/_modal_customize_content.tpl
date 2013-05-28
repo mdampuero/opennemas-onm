@@ -118,11 +118,7 @@
         </div>
 
         <div class="tab-pane form-inline-block select-disposition" id="tab2">
-            <div class="control-group disposition">
-                  <label class="radio">
-                    {t}Auto Disposition{/t}<input name="imageDisposition" value="default" type="radio"></label>
-                  <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition0.png" name ="default" checked="checked" alt="{t}Default{/t}" >
-              </div>
+
               <div class="control-group disposition">
                   <label class="radio">
                       {t}Top Wide Image{/t}<input name="imageDisposition" value="image-top-wide" type="radio">
@@ -133,13 +129,13 @@
               <div class="control-group disposition">
                   <label class="radio">
                       {t}Top right Image{/t}<input name="imageDisposition" value="image-top-right" type="radio">
-                      <img  class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition2.png" name="image-top-right" alt="{t}image-top-right{/t}" >
+                      <img  class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition3.png" name="image-top-right" alt="{t}image-top-right{/t}" >
                   </label>
               </div>
               <div class="control-group disposition">
                   <label class="radio">
                       {t}Top Left Image{/t}<input name="imageDisposition" value="image-top-left" type="radio">
-                      <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition3.png" name="image-top-left" alt="{t}image-top-left{/t}" >
+                      <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition2.png" name="image-top-left" alt="{t}image-top-left{/t}" >
                   </label>
               </div>
               <div class="control-group disposition">

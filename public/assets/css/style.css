@@ -2352,7 +2352,7 @@ div#modal-element-customize-content img.image-disposition {
     border: 1px solid #E1E1E1;
 }
 div#modal-element-customize-content div.disposition {
-    width: 126px;
+    width: 140px;
     overflow: hidden;
     text-align: left;
 }
@@ -2363,7 +2363,7 @@ div#modal-element-customize-content ul > li.image-disposition{
     display: none;
 }
 div#modal-element-customize-content div.select-disposition{
-    text-align: right;
+    margin-left: 20px;
 }
 
  div#modal-element-customize-content div.modal-footer a.reset {

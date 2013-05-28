@@ -9,26 +9,26 @@
 
 .image-top-right div.article-media{
     width: 49%;
-    float: right;
-    padding-left: 10px;
+    float: right !important;
+    margin-left: 10px;
 }
 
 .image-top-left div.article-media{
     width: 49%;
-    float: left;
-    padding-right: 10px;
+    float: left !important;
+    margin-right: 10px;
 }
 
 .image-middle-right div.article-media{
     width: 49%;
-    float: right;
-    padding-left: 10px;
+    float: right !important;
+    margin-left: 10px;
 }
 
 .image-middle-left div.article-media{
     width: 49%;
-    float: left;
-    padding-right: 10px;
+    float: left !important;
+    margin-right: 10px;
 }
 
 /***********************************************************
