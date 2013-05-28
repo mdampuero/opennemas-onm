@@ -1,7 +1,55 @@
 
 /***********************************************************
+    Frontpage content disposition
+************************************************************/
+.image-top-wide div.article-media,
+.image-middle-wide div.article-media{
+    width: 100%;
+}
+
+.image-top-right div.article-media{
+    width: 49%;
+    float: right;
+    padding-left: 10px;
+}
+
+.image-top-left div.article-media{
+    width: 49%;
+    float: left;
+    padding-right: 10px;
+}
+
+.image-middle-right div.article-media{
+    width: 49%;
+    float: right;
+    padding-left: 10px;
+}
+
+.image-middle-left div.article-media{
+    width: 49%;
+    float: left;
+    padding-right: 10px;
+}
+
+/***********************************************************
   Definitions for ads
 ************************************************************/
+
+/***********************************************************
+  Definitions for ads inside HEADER
+************************************************************/
+div.ads_footer, div.ads_header { width: 100%; }
+.ad_728 { width:728px; display:inline; float:left; }
+.ad_728 a, .ad_244 a, .ad_in_column a{  min-height:90px; }
+.ad_in_column div { margin:0 auto; }
+div.ads_footer div.ad_728, div.ads_header div.ad_728 {  margin-right:0px; }
+.ad_244{ width:244px; display:inline; float:right; max-height:90px; text-align: right; }
+div.ads_footer div.ad_244, div.ads_header div.ad_244 { float:right; }
+div.ad_in_column > div { text-align:center; border:1px solid #E9E9E9; padding:5px; }
+
+.ads_break_frontpage { clear:both; margin:10px 0; }
+.ads_break_frontpage > div { background-color:White; }
+
 div.ads-skyscraper-container{
     position: fixed;
     top: 0;
@@ -83,60 +131,3 @@ div.ad-skyscraper-body {
     margin-top: 5px;
 }
 
-
-/***********************************************************
-    PAYWALL
-************************************************************/
-
-div.user-ajax{
-    float: right;
-}
-
-div.user-ajax li {
-    float: right;
-    list-style: none outside none;
-    margin: 0 2px;
-}
-
-div.user-ajax li a {
-    color: #111;
-    font-size: 11px;
-    padding: 0px 5px;
-    text-decoration: none;
-}
-
-.showcase {
-    padding: 50px 60px 120px 60px;
-    text-align: center;
-}
-.showcase .inner-article-content {
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    padding: 10px;
-    background-color: #f9f9f9;
-}
-    .showcase .inner-article-content table {
-        border: 1px solid #ccc;
-    }
-    .showcase .inner-article-content table tbody{
-        padding: 10px;
-    }
-
-section.form {
-    margin-top: 20px;
-}
-
-.subscription-require {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    display: inline-block;
-    margin: 30px 0;
-}
-    .subscription-require h3 {
-        margin-bottom: 0;
-    }
-    .subscription-require ul {
-        padding-left: 20px;
-    }

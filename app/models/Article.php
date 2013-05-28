@@ -457,6 +457,7 @@ class Article extends Content
         // $params'cssclass', $params['cssclass']);
         // $tpl->assign('categoryId', $params['categoryId']);
 
+
         try {
             $html = $tpl->fetch($params['tpl'], $params);
         } catch (\Exception $e) {

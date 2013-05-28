@@ -462,6 +462,8 @@ class FrontpagesController extends Controller
 
             $output.= "\tdiv.list-of-videos article.interested-video div.info-interested-video ".
                 "div.category a{ color:" . $siteColor . " !important;}\n";
+
+            $output.= "\t.category-color:" . $siteColor . " !important;}\n";
         }
 
         return new Response(
