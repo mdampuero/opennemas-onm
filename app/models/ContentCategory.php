@@ -322,7 +322,7 @@ class ContentCategory
                 .'WHERE `pk_album` IN (' . $contents . ')  '
                 .'OR `pk_photo` IN ('.$contents.')';
             $sqls []= 'DELETE FROM comments '
-                .'WHERE `pk_comment` IN ('.$contents.')';
+                .'WHERE `content_id` IN ('.$contents.')';
             $sqls []= 'DELETE FROM votes '
                 .'WHERE `pk_vote` IN ('.$contents.')';
             $sqls []= 'DELETE FROM ratings '

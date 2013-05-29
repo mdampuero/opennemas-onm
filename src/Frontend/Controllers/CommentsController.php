@@ -65,6 +65,11 @@ class CommentsController extends Controller
                 $offset
             );
 
+            foreach ($comments as &$comment) {
+                $vote = new \Vote($comment->id);
+                $comment->votes = $vote;
+            }
+
             $output = $this->renderView(
                 'comments/loader.tpl',
                 array(
@@ -108,6 +113,11 @@ class CommentsController extends Controller
                 $elemsByPage,
                 $offset
             );
+
+            foreach ($comments as &$comment) {
+                $vote = new \Vote($comment->id);
+                $comment->votes = $vote;
+            }
 
             $contents = $this->renderView(
                 'comments/partials/comment_element.tpl',
