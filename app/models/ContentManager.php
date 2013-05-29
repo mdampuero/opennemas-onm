@@ -2153,4 +2153,51 @@ class ContentManager
 
         return $content;
     }
+
+    /**
+     * Fetches the latest n articles commented
+     *
+     * @param int $count the number of comments to fetch
+     *
+     * @return array the list of comment objects
+     **/
+    public function getLatestComments($count = 6)
+    {
+        $contents = array();
+
+        $sql = 'SELECT DISTINCT comments.content_id,
+                       contents.*,
+                       comments.body as comment_body, comments.author as comment_author, comments.id as comment_id
+                FROM  contents, comments
+                WHERE contents.fk_content_type=1
+                  AND contents.in_litter !=1
+                  AND comments.status = ?
+                  AND contents.pk_content = comments.content_id
+                GROUP BY contents.pk_content
+                ORDER BY comments.date DESC
+                LIMIT ?';
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(\Comment::STATUS_ACCEPTED, $count));
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+        } else {
+            while (!$rs->EOF) {
+                $content = new \Article();
+                $pk_content = $rs->fields['pk_content'];
+                $content->load($rs->fields);
+                $content->comment        =  $rs->fields['comment_body'];
+                $content->pk_comment     =  $rs->fields['comment_id'];
+                $content->comment_author =  $rs->fields['comment_author'];
+
+                $contents[$content->pk_comment] = $content;
+                $rs->MoveNext();
+            }
+
+            $rs->Close(); # optional
+        }
+
+        return $contents;
+    }
 }

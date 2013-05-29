@@ -205,8 +205,7 @@ class CommentsManager
         // Get the total number of comments
         $sql = 'SELECT count(pk_comment)
                 FROM comments
-                WHERE content_id = ?
-                  AND content_status=='.\Comment::STATUS_ACCEPTED;
+                WHERE content_id = ? AND content_status=='.\Comment::STATUS_ACCEPTED;
         $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
 
         // If there is no comments do a early return
@@ -236,70 +235,6 @@ class CommentsManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         return intval($rs);
-    }
-
-    /**
-     * Fetches the latest n comments done in the application
-     *
-     * @param int $num the number of comments to fetch
-     *
-     * @return array the list of comment objects
-     **/
-    public function getLatestComments($num = 6)
-    {
-        $contents = array();
-        $possibleContents = array();
-        $comments = array();
-        $sql1 = "SELECT *
-                FROM `comments`,contents
-                WHERE comments.pk_comment = contents.pk_content
-                AND contents.available = 1
-                AND contents.content_status = 1
-                GROUP BY fk_content ORDER BY pk_comment DESC  LIMIT 50";
-
-        $latestCommentsSQL = $GLOBALS['application']->conn->Prepare($sql1);
-        $rs1 = $GLOBALS['application']->conn->Execute($latestCommentsSQL);
-        if (!$rs1) {
-            \Application::logDatabaseError();
-        } else {
-            while (!$rs1->EOF) {
-                $fk_content = $rs1->fields['fk_content'];
-                $possibleContents[] = $fk_content;
-                $comments[$fk_content] = $rs1->fields;
-
-                $rs1->MoveNext();
-            }
-            $rs1->Close(); # optional
-        }
-
-        $sql = 'SELECT *
-                FROM contents
-                WHERE contents.fk_content_type=1 AND contents.pk_content IN ('.
-                implode(', ', $possibleContents).
-                ') ORDER BY contents.created DESC
-                LIMIT '. $num;
-
-        $latestContentsSQL = $GLOBALS['application']->conn->Prepare($sql);
-        $rs = $GLOBALS['application']->conn->Execute($latestContentsSQL);
-        if (!$rs) {
-            \Application::logDatabaseError();
-        } else {
-            while (!$rs->EOF) {
-                $content = new \Article();
-                $pk_content = $rs->fields['pk_content'];
-                $content->load($rs->fields);
-                $content->comment_title =  $comments[$pk_content]['title'];
-                $content->comment =  $comments[$pk_content]['body'];
-                $content->pk_comment =  $comments[$pk_content]['pk_comment'];
-                $content->comment_author =  $comments[$pk_content]['author'];
-
-                $contents[$content->pk_comment] = $content;
-                $rs->MoveNext();
-            }
-
-            $rs->Close(); # optional
-        }
-        return $contents;
     }
 
     /**
