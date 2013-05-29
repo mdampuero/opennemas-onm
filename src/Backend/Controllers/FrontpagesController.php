@@ -404,8 +404,7 @@ class FrontpagesController extends Controller
         $layoutFile = 'layouts/'.$layout.'.tpl';
 
         $this->view->assign('layoutFile', $layoutFile);
-        $this->view->assign('time', time());
-var_dump(time());
+
         $session = $this->get('session');
 
         $session->set('last_preview', $this->renderView('frontpage/frontpage.tpl'));
