@@ -862,6 +862,8 @@ class Advertisement extends Content
                 ' ORDER BY `contents`.created'
             );
 
+            $rsBanner = $cm->getInTime($rsBanner);
+
             $numBanner = array_rand($rsBanner);
             if (!is_null($numBanner)) {
                 $interstitial = $rsBanner[$numBanner];
