@@ -18,68 +18,96 @@
  **/
 class Comment
 {
-     /**
+    /**
      * The id of the comment
      *
      * @var int
      **/
-     public $id           = null;
+    public $id           = null;
 
-     /**
+    /**
      * Content id that is referencing this comment
      *
      * @var int
      **/
-     public $content_id   = 0;
+    public $content_id   = 0;
 
-     /**
+    /**
      * The name of the author that sent this comment
      *
      * @var int
      **/
-     public $author       = '';
+    public $author       = '';
 
      /**
      * The email of the author that sent the comment
      *
      * @var string
      **/
-     public $author_email = '';
+    public $author_email = '';
 
-     /**
+    /**
      * The url of the author that sent the comment
      *
      * @var string
      **/
-     public $author_url   = null;
+    public $author_url   = null;
 
-     /**
+    /**
      * The IP of the author that sent the comment
      *
      * @var string
      **/
-     public $author_ip    = '';
+    public $author_ip    = '';
 
-     /**
-     * The email of the comment author
+    /**
+     * The date when was created this content
      *
      * @var string
      **/
-     public $date         = null;
+    public $date         = null;
 
-     /**
+    /**
      * The content body
      *
      * @var string
      **/
      public $body         = '';
 
-     /**
+    /**
      * Whether this comment is published or not
+     *
+     * @var string
+     **/
+    public $status       = '';
+
+     /**
+     * The type of comment
+     *
+     * @var string
+     **/
+    public $type       = '';
+
+    /**
+     * The agent that sent this comment
+     *
+     * @var string
+     **/
+    public $agent       = '';
+
+    /**
+     * The id of the comment that references this element
      *
      * @var int
      **/
-     public $status       = '';
+    public $parent_id       = 0;
+
+    /**
+     * The user id that sent this comment
+     *
+     * @var int
+     **/
+    public $user_id       = 0;
 
 
     const STATUS_ACCEPTED = 'accepted';
@@ -150,15 +178,19 @@ class Comment
             'date'         => $currentDate->format('Y-m-d H:i:s'),
             'body'         => '',
             'status'       => \Comment::STATUS_PENDING,
+            'agent'        => '',
+            'type'         => '',
+            'parent_id'    => 0,
+            'user_id'      => 0,
         );
-
 
         $data = array_merge($defaultData, $params);
 
         $sql = 'INSERT INTO comments
-                    (`content_id`, `author`, `author_email`, `author_url`, `author_ip`, `date`, `body`, `status`)
+                    (`content_id`, `author`, `author_email`, `author_url`, `author_ip`,
+                     `date`, `body`, `status`, `agent`,`type`,`parent_id`,`user_id`)
                 VALUES
-                    (?,?,?,?,?,?,?,?)';
+                    (?,?,?,?,?,?,?,?,?,?,?,?)';
         $values = array(
             $data['content_id'],
             $data['author'],
@@ -168,6 +200,10 @@ class Comment
             $data['date'],
             $data['body'],
             $data['status'],
+            $data['agent'],
+            $data['type'],
+            $data['parent_id'],
+            $data['user_id'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

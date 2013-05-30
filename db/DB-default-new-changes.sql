@@ -28,10 +28,10 @@ ALTER TABLE  `comments`
     ADD INDEX  `comment_status_date` (  `status` ,  `date` ),
     ADD INDEX  `comment_parent_id` (  `parent_id` ),
     ADD INDEX  `comment_date` (  `date` ),
-    DROP INDEX `fk_content`
+    DROP INDEX `fk_content`;
 
 -- update comment date
-UPDATE  `comments` SET  `comments`.`date` = (SELECT `created` FROM  `contents` WHERE `comments`.`id` = `contents`.`pk_content`)
+UPDATE  `comments` SET  `comments`.`date` = (SELECT `created` FROM  `contents` WHERE `comments`.`id` = `contents`.`pk_content`);
 -- update comment status from contents (accepted, rejected, pending)
 UPDATE  `comments`,`contents` SET  `comments`.`status` = 'accepted' WHERE `comments`.`id` = `contents`.`pk_content` AND `contents`.`content_status` = 1;
 UPDATE  `comments`,`contents` SET  `comments`.`status` = 'rejected' WHERE `comments`.`id` = `contents`.`pk_content` AND `contents`.`content_status` = 2;
