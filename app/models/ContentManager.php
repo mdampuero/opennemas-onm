@@ -1838,9 +1838,7 @@ class ContentManager
             return false;
         }
 
-        // Raise an error if $contentID is not a number
         if (!is_numeric($id)) {
-
             $name = ($ucfirst === true) ? ucfirst($id) : strtolower($id);
         } else {
             $contentTypes = \ContentManager::getContentTypes();
