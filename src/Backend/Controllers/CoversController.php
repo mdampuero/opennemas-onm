@@ -46,7 +46,7 @@ class CoversController extends Controller
             define('KIOSKO_DIR', "kiosko".SS);
         }
 
-        $contentType = \Content::getIDContentType('kiosko');
+        $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
 
         $category = $this->get('request')->query->getDigits('category', 'all');
 

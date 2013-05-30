@@ -44,7 +44,7 @@ class AlbumsController extends Controller
 
         $request = $this->get('request');
 
-        $contentType = \Content::getIDContentType('album');
+        $contentType = \ContentManager::getContentTypeIdFromName('album');
 
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 

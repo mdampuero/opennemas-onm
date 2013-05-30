@@ -755,41 +755,75 @@ class ContentTest extends PHPUnit_Framework_TestCase
     //     );
     // }
 
-    // /**
-    //  * @covers Content::getContentTypes
-    //  * @todo   Implement testGetContentTypes().
-    //  */
-    // public function testGetContentTypes()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
 
-    // /**
-    //  * @covers Content::getIdContentType
-    //  * @todo   Implement testGetIdContentType().
-    //  */
-    // public function testGetIdContentType()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
+    /**
+     * @covers Content::getContentTypeName
+     */
+    public function testGetContentTypeName()
+    {
+        $content = new \Content();
+        $content->content_type = 1;
 
-    // /**
-    //  * @covers Content::setNumViews
-    //  * @todo   Implement testSetNumViews().
-    //  */
-    // public function testSetNumViews()
-    // {
-    //     // Remove the following lines when you implement this test.
-    //     $this->markTestIncomplete(
-    //       'This test has not been implemented yet.'
-    //     );
-    // }
+        $contentTypeName = $content->getContentTypeName();
+
+        $this->assertEquals('article', $contentTypeName);
+    }
+
+    /**
+     * @covers Content::getContentTypeName
+     */
+    public function testGetContentTypeNameWithEmptyContentType()
+    {
+        $content = new \Content();
+        $content->content_type = '';
+
+        $contentTypeName = $content->getContentTypeName();
+
+        $this->assertEquals(false, $contentTypeName);
+    }
+
+    /**
+     * @covers Content::getContentTypeName
+     */
+    public function testGetContentTypeNameWithNotValidContentType()
+    {
+        $content = new \Content();
+        $content->content_type = -1;
+
+        $contentTypeName = $content->getContentTypeName();
+
+        $this->assertEquals(false, $contentTypeName);
+    }
+
+    /**
+     * @covers Content::setNumViews
+     */
+    public function testDisallowGoogleToIncrementSetNumViews()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'google';
+        $setNumViews = \Content::setNumViews(650);
+
+        $this->assertFalse($setNumViews);
+    }
+
+    /**
+     * @covers Content::setNumViews
+     */
+    public function testDisallowEmptyIdOnSetNumViews()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'Firefox';
+        $setNumViews = \Content::setNumViews(0);
+        $this->assertFalse($setNumViews);
+
+        $setNumViews = \Content::setNumViews('');
+        $this->assertFalse($setNumViews);
+
+        $setNumViews = \Content::setNumViews();
+        $this->assertFalse($setNumViews);
+
+        $setNumViews = \Content::setNumViews(array());
+        $this->assertFalse($setNumViews);
+    }
 
     // /**
     //  * @covers Content::pkExists

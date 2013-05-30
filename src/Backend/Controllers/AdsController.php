@@ -38,7 +38,7 @@ class AdsController extends Controller
 
         $this->checkAclOrForward('ADVERTISEMENT_ADMIN');
 
-        $contentType = \Content::getIDContentType('advertisement');
+        $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
 
         // Sometimes category is array. When create & update advertisement
         $this->category = $this->get('request')->query->getDigits('category', 0);

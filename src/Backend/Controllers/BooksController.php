@@ -37,7 +37,7 @@ class BooksController extends Controller
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         // Take out this crap from this PLEASE ---------------------------------
-        $contentType = \Content::getIDContentType('book');
+        $contentType = \ContentManager::getContentTypeIdFromName('book');
 
         $this->category = $this->request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 

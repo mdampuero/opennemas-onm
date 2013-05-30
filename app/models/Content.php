@@ -367,27 +367,6 @@ class Content
     }
 
     /**
-     * Return the content type name for this content
-     *
-     * @return void
-     **/
-    public function getContentTypeName()
-    {
-        $sql = 'SELECT * FROM `content_types` WHERE pk_content_type = ? LIMIT 1';
-        $values = array($this->content_type);
-        $contentTypeName = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if (isset($contentTypeName->fields['name'])) {
-            $returnValue =
-                mb_strtolower($contentTypeName->fields['name']);
-        } else {
-            $returnValue = $this->content_type;
-        }
-
-        return $returnValue;
-    }
-
-    /**
      * Creates one content given an array of data
      *
      * @param array $data array with data for create the article
@@ -1585,72 +1564,18 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    /**
-     * Fetches available content types.
-     *
-     * @return array an array with each content type with id, name and title.
-     */
-    public static function getContentTypes()
-    {
-        $fetchedFromAPC = false;
-        if (extension_loaded('apc')) {
-            $key = APC_PREFIX . "_getContentTypes";
-            $resultArray = apc_fetch($key, $fetchedFromAPC);
-        }
 
-        // If was not fetched from APC now is turn of DB
-        if (!$fetchedFromAPC) {
-
-            $szSqlContentTypes =
-                "SELECT pk_content_type, name, title FROM content_types";
-            $rs = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
-
-            if (!$rs) {
-                $message = "There was an error while fetching available content"
-                         . " types. '$szSqlContentTypes'.";
-                throw new \Exception($message);
-            }
-
-            try {
-                $resultArray = $rs->GetArray();
-                $i = 0;
-                foreach ($resultArray as &$res) {
-                    $resultArray[$i]['title'] = htmlentities($res['title']);
-                    $resultArray[$i]['2'] = htmlentities($res['2']);
-                    $i++;
-                }
-            } catch (exception $e) {
-                printf("Excepcion: " . $e->message);
-
-                return null;
-            }
-
-            if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX . "_getContentTypes", $resultArray);
-            }
-        }
-
-        return $resultArray;
-    }
 
     /**
-     * Returns the id of a content type given its name.
+     * Return the content type name for this content
      *
-     * @param string $name the name of the content type
-     *
-     * @return int the content type id
-     */
-    public static function getIdContentType($name)
+     * @return void
+     **/
+    public function getContentTypeName()
     {
-        $contenTypes = self::getContentTypes();
+        $id = $this->content_type;
 
-        foreach ($contenTypes as $types) {
-            if ($types['name'] == $name) {
-                return $types['pk_content_type'];
-            }
-        }
-
-        return false;
+        return \ContentManager::getContentTypeNameFromId($id);
     }
 
     /**
@@ -1710,7 +1635,7 @@ class Content
         if (is_array($id)) {
             $ads = array();
 
-            if (count($id)>0) {
+            if (count($id) > 0) {
                 foreach ($id as $item) {
                     if (is_object($item)
                        && isset($item->pk_advertisement)

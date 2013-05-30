@@ -42,7 +42,7 @@ class SpecialsController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        $this->contentType = \Content::getIDContentType('special');
+        $this->contentType = \ContentManager::getContentTypeIdFromName('special');
 
         $this->category = $this->get('request')->query->getDigits('category', null);
 

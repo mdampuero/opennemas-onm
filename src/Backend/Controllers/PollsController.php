@@ -40,7 +40,7 @@ class PollsController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        $contentType = \Content::getIDContentType('poll');
+        $contentType = \ContentManager::getContentTypeIdFromName('poll');
 
         $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
 

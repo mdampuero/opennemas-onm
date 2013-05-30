@@ -42,7 +42,7 @@ class VideosController extends Controller
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         /******************* GESTION CATEGORIAS  *****************************/
-        $this->contentType = \Content::getIDContentType('video');
+        $this->contentType = \ContentManager::getContentTypeIdFromName('video');
 
         $request = $this->get('request');
 

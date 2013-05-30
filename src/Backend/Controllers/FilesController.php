@@ -41,7 +41,7 @@ class FilesController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        $this->contentType = \Content::getIDContentType('attachment');
+        $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
         $this->category    = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $this->ccm         = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->datos_cat) =

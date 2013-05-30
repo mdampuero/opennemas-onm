@@ -632,45 +632,6 @@ class ContentManager
     }
 
     /**
-     * Gets the name of one content type by its ID
-     *
-     * @param int $contentID the id of the content we want to work with
-     * @param boolean $ucfirst true if the contentID should be converted with ucfirst
-     *
-     * @return string the name of the content
-     */
-    public static function getContentTypeNameFromId(
-        $contentID,
-        $ucfirst = false
-    ) {
-        // Raise an error if $contentID is not a number
-        if (!is_numeric($contentID)) {
-            // Try to uniformize this, cause if $contentID comes from an widget
-            // this raises an error cause the contentID is 'Widget'
-            // throw new InvalidArgumentException('getContentTypeNameFromId
-            // function only accepts integers. Input was: '.$int);
-            $return_value = ($ucfirst === true)
-                ? ucfirst($contentID) : strtolower($contentID);
-        } else {
-
-            // retrieve the name for this id
-            $sql = "SELECT name FROM content_types "
-                 . "WHERE `pk_content_type`=$contentID";
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            if ($rs->_numOfRows < 1) {
-                $return_value = false;
-            } else {
-                $return_value = ($ucfirst === true)
-                    ? ucfirst($rs->fields['name']) : $rs->fields['name'];
-            }
-        }
-
-        return $return_value;
-
-    }
-
-    /**
      * Gets the path of one file type by its ID
      *
      * @param int $contentID the id of the content we want to work with
@@ -1742,23 +1703,158 @@ class ContentManager
     }
 
     /**
-     * Returns the list of content types available in the application
+     * Fetches available content types.
      *
-     * @return array a list of content types
-     **/
-    public function getContentTypes()
+     * @return array an array with each content type with id, name and title.
+     */
+    public static function getContentTypes()
     {
-        $items = array();
-        $sql   = 'SELECT pk_content_type, name, title FROM content_types ';
+        $contentTypes = array(
+            array(
+                'pk_content_type' => 1,
+                'name'            => 'article',
+                'title'           => _('Article')
+            ),
+            array(
+                'pk_content_type' => 2,
+                'name'            => 'advertisement',
+                'title'           => _('Advertisement')
+            ),
+            array(
+                'pk_content_type' => 3,
+                'name'            => 'attachment',
+                'title'           => _('File')
+            ),
+            array(
+                'pk_content_type' => 4,
+                'name'            => 'opinion',
+                'title'           => _('Opinion')
+            ),
+            array(
+                'pk_content_type' => 5,
+                'name'            => 'event',
+                'title'           => _('Event')
+            ),
+            array(
+                'pk_content_type' => 6,
+                'name'            => 'comment',
+                'title'           => _('Comment')
+            ),
+            array(
+                'pk_content_type' => 7,
+                'name'            => 'album',
+                'title'           => _('Album')
+            ),
+            array(
+                'pk_content_type' => 8,
+                'name'            => 'photo',
+                'title'           => _('Image')
+            ),
+            array(
+                'pk_content_type' => 9,
+                'name'            => 'video',
+                'title'           => _('Video')
+            ),
+            array(
+                'pk_content_type' => 10,
+                'name'            => 'special',
+                'title'           => _('Special')
+            ),
+            array(
+                'pk_content_type' => 11,
+                'name'            => 'poll',
+                'title'           => _('Poll')
+            ),
+            array(
+                'pk_content_type' => 12,
+                'name'            => 'widget',
+                'title'           => _('Widget')
+            ),
+            array(
+                'pk_content_type' => 13,
+                'name'            => 'static_page',
+                'title'           => _('Static page')
+            ),
+            array(
+                'pk_content_type' => 14,
+                'name'            => 'kiosko',
+                'title'           => _('Kiosko')
+            ),
+            array(
+                'pk_content_type' => 15,
+                'name'            => 'book',
+                'title'           => _('Book')
+            ),
+            array(
+                'pk_content_type' => 16,
+                'name'            => 'schedule',
+                'title'           => _('Agenda')
+            ),
+            array(
+                'pk_content_type' => 17,
+                'name'            => 'letter',
+                'title'           => _('Letter to editor')
+            ),
+            array(
+                'pk_content_type' => 18,
+                'name'            => 'frontpage',
+                'title'           => _('Frontpage')
+            ),
+        );
 
-        $rs    = $GLOBALS['application']->conn->Execute($sql);
-        while (!$rs->EOF) {
-            $pk_content_type = $rs->fields['pk_content_type'];
-            $items[$pk_content_type] = htmlentities($rs->fields['title']);
-            $rs->MoveNext();
+        return $contentTypes;
+    }
+
+    /**
+     * Returns the id of a content type given its name.
+     *
+     * @param string $name the name of the content type
+     *
+     * @return int the content type id
+     */
+    public static function getContentTypeIdFromName($name)
+    {
+        $contenTypes = \ContentManager::getContentTypes();
+
+        foreach ($contenTypes as $types) {
+            if ($types['name'] == $name) {
+                return $types['pk_content_type'];
+            }
         }
 
-        return $items;
+        return false;
+    }
+
+    /**
+     * Returns the name of a content type given its id.
+     *
+     * @param  int $id the content type id
+     *
+     * @return string the content type name
+     **/
+    public static function getContentTypeNameFromId($id, $ucfirst = false)
+    {
+        if (empty($id)) {
+            return false;
+        }
+
+        // Raise an error if $contentID is not a number
+        if (!is_numeric($id)) {
+
+            $name = ($ucfirst === true) ? ucfirst($id) : strtolower($id);
+        } else {
+            $contentTypes = \ContentManager::getContentTypes();
+            foreach ($contentTypes as $types) {
+                if ($types['pk_content_type'] == $id) {
+
+                    $name = ($ucfirst === true) ? ucfirst($types['name']) : $types['name'];
+
+                    return $name;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -7,6 +7,9 @@
 -- Please check rigth sql, use ; in the end of lines & -- for comments.
 -- Write date with each sentence and with stack method. (last writed in the top)
 
+-- 05-30-2013
+DROP TABLE content_types;
+
 -- 05-27-2013
 ALTER TABLE  `comments`
     DROP    `sexo`,

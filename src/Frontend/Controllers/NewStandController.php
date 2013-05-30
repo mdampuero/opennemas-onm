@@ -76,7 +76,7 @@ class NewStandController extends Controller
                 || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
-                $contentType = \Content::getIDContentType('kiosko');
+                $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
                 $category = $ccm->get_id($this->category_name);
 
                 list($allcategorys, $subcat, $categoryData)
@@ -140,7 +140,7 @@ class NewStandController extends Controller
                 || !$this->view->isCached('newsstand/newsstand.tpl', $cacheID)
             ) {
                 $ccm = \ContentCategoryManager::get_instance();
-                $contentType = \Content::getIDContentType('kiosko');
+                $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
                 $category = $ccm->get_id($this->category_name);
                 list($allcategorys, $subcat, $categoryData) = $ccm->getArraysMenu($category, $contentType);
 
