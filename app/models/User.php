@@ -1141,7 +1141,7 @@ class User
      **/
     private function buildFilter($filter)
     {
-        $newFilter = ' WHERE ';
+        $newFilter = '';
 
         if (!is_null($filter) && is_string($filter)) {
             if (preg_match('/^[ ]*where/i', $filter)) {
@@ -1169,6 +1169,7 @@ class User
             }
 
             if (count($parts) > 0) {
+                $newFilter = 'WHERE ';
                 $newFilter .= implode(' AND ', $parts);
             }
         }
