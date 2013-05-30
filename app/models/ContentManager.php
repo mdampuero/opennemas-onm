@@ -813,144 +813,47 @@ class ContentManager
         $notEmpty = false,
         $category = 0,
         $days = 2,
-        $num = 9,
+        $maxElements = 9,
         $all = false
     ) {
         $this->init($contentType);
         $items = array();
 
-        $_where_slave = ' 1=1 ';
-        $_days = 'AND created>=DATE_SUB(CURDATE(), INTERVAL ' .$days.' DAY) ';
-        if (!$all) {
-            $_where_slave = ' available=1 ';
-            $_days = 'AND created>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
+        $sql = "SELECT COUNT(comments.content_id) as num_comments, contents.*, articles.*
+                FROM contents, comments, articles
+                WHERE contents.pk_content = comments.content_id
+                AND contents.pk_content = articles.pk_article
+                AND contents.available=1
+                AND created >= DATE_SUB(CURDATE(), INTERVAL $days DAY)
+                GROUP BY contents.pk_content
+                ORDER BY num_comments DESC, contents.created DESC
+                LIMIT ?";
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($maxElements));
+
+        $contents = array();
+        while (!$rs->EOF) {
+            $content = new $contentType();
+            $content->load($rs->fields);
+
+            $contents []= $content;
+
+            $rs->MoveNext();
         }
 
-        $_comented = 'AND pk_content IN (SELECT DISTINCT(fk_content) FROM comments) ';
-        $_limit = 'LIMIT '.$num;
-
-        if (intval($category)>0) {
-
-            $pks = $this->find_by_category(
-                $contentType,
-                $category,
-                $_where_slave.$_days.$_comented
-            );
-            if (!$all) {
-                $pks = $this->getInTime($pks);
-            }
-
-            if (count($pks)<$num && $notEmpty) {
-                // En caso de que existan menos de 6 contenidos,
-                // lo hace referente a los 200 últimos contenidos
-                $pks = $this->find_by_category(
-                    $contentType,
-                    $category,
-                    $_where_slave.$_comented,
-                    'ORDER BY `contents`.`content_status` DESC, created DESC LIMIT 200',
-                    'pk_content, starttime, endtime'
-                );
-                if (!$all) {
-                    $pks = $this->getInTime($pks);
-                }
-            }
-        } else {
-            $pks = $this->find(
-                $contentType,
-                $_where_slave.$_days.$_comented,
-                null,
-                'pk_content, starttime, endtime'
-            );
-
-            if (!$all) {
-                $pks = $this->getInTime($pks);
-            }
-
-            if (count($pks)< $num && $notEmpty) {
-                // En caso de que existan menos de $num contenidos,
-                // lo hace referente a los 200 últimos contenidos
-                $pks = $this->getInTime(
-                    $this->find(
-                        $contentType,
-                        $_where_slave.$_comented,
-                        'ORDER BY created DESC LIMIT 200',
-                        'pk_content, starttime, endtime'
-                    )
-                );
-                if (!$all) {
-                    $pks = $this->getInTime($pks);
-                }
-                array_splice($pks, $num);
-            }
-        }
-
-        $pk_list = '';
-        foreach ($pks as $pk) {
-            $pk_list .= ' '.$pk->id.',';
-        }
-        if (strlen($pk_list)==0) {
-            return array();
-        }
-        $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-
-        $comments = $this->find(
-            'Comment',
-            'available=1 AND fk_content IN ('.$pk_list.')',
-            ' GROUP BY fk_content ORDER BY num DESC LIMIT 0 , 80',
-            ' fk_content, count(pk_comment) AS num'
-        );
-
-        $pk_list = '';
-        foreach ($comments as $comment) {
-            $pk_list .= ' '.$comment->fk_content.',';
-        }
-
-        if (strlen($pk_list)==0) {
-            return array();
-        }
-
-        $pk_list = substr($pk_list, 0, strlen($pk_list)-1);
-        $items = $this->find(
-            $contentType,
-            'pk_content IN('.$pk_list.')',
-            $_limit,
-            '`contents`.`pk_content`, `contents`.`title`, `contents`.`slug`'
-        );
-        if (empty($items)) {
-            return array();
-        }
-
-        foreach ($items as $item) {
-            $articles[$item->pk_content] = array(
+        $contentsArray = array();
+        foreach ($contents as $item) {
+            $contentsArray[$item->pk_content] = array(
                 'pk_content' => $item->pk_content,
-                'num'        => 0,
+                'num'        => $item->num_comments,
                 'title'      => $item->title,
                 'permalink'  => $item->slug,
                 'uri'        => $item->uri
             );
         }
 
-        foreach ($comments as $comment) {
-            if (array_key_exists($comment->fk_content, $articles)) {
-                $articles[$comment->fk_content]['num'] = $comment->num;
-            }
-        }
-
-        uasort(
-            $articles,
-            function (
-                $a,
-                $b
-            ) {
-                if ($a['num'] == $b['num']) {
-                    return 0;
-                }
-
-                return ($a['num'] > $b['num']) ? -1 : 1;
-            }
-        );
-
-        return $articles;
+        return $contentsArray;
     }
 
     /**
