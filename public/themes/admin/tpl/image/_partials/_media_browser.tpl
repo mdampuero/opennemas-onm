@@ -59,22 +59,22 @@
                 </div>
 
                 <div class="details">
-                    <h3>{if !empty($photo->description)}{$photo->description|clearslash|escape:'html'}{else}{t}No available description{/t}{/if}</h3>
+                    <h3>{if !empty($photo->description)}{$photo->description|clearslash}{else}{t}No available description{/t}{/if}</h3>
                     <p><strong>{t}Filename{/t}</strong> {$photo->title}</p>
-                    <p><img src="{$params.IMAGE_DIR}tag_red.png" /> {if !empty($photo->metadata_utf)}{$photo->metadata_utf|clearslash|escape:'html'}{else}{t}No tags{/t}{/if}</p>
+                    <p><img src="{$params.IMAGE_DIR}tag_red.png" /> {if !empty($photo->metadata)}{$photo->metadata|clearslash}{else}{t}No tags{/t}{/if}</p>
                     {if !empty($photo->author_name)}
-                        <p><span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|escape:'html'|default:""}</span></p>
+                        <p><span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}</span></p>
                     {/if}
                     <p><strong>{t}Created{/t}</strong> {$photo->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}</p>
                 </div>
             </div>
         </td>
         <td>
-            {if !empty($photo->description)}{$photo->description|clearslash|escape:'html'}{else}{t}No available description{/t}{/if}
+            {if !empty($photo->description)}{$photo->description|clearslash}{else}{t}No available description{/t}{/if}
             <br>
-            <span class="tags"><img src="{$params.IMAGE_DIR}tag_red.png" /> {if !empty($photo->metadata_utf)}{$photo->metadata_utf|clearslash|escape:'html'}{else}{t}No tags{/t}{/if}</span>
+            <span class="tags"><img src="{$params.IMAGE_DIR}tag_red.png" /> {if !empty($photo->metadata)}{$photo->metadata|clearslash}{else}{t}No tags{/t}{/if}</span>
             {if !empty($photo->author_name)}
-                <span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|escape:'html'|default:""}</span>
+                <span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}</span>
             {/if}
             <br>
             {if preg_match('@^/authors/@', $photo->path_file)}
