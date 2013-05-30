@@ -94,8 +94,6 @@ class ImagesController extends Controller
         );
 
         foreach ($images as &$image) {
-            $image->description_utf = html_entity_decode($image->description);
-            $image->metadata_utf    = html_entity_decode($image->metadata);
             $image->category_name   = $image->loadCategoryName($image->id);
         }
 
