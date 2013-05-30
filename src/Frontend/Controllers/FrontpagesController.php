@@ -368,7 +368,7 @@ class FrontpagesController extends Controller
                             text-decoration: underline; }\n
                           \t\t";
 
-                $output.= "\t.widget a.category-color.". $theCategory->name .
+                $output.= "\t.widget a.category-color.". $theCategory->name .", ".
                           "\t.widget .category-color.". $theCategory->name .
                           " { color:" . $theCategory->color . " !important; }\n".
                           ".widget div.tab-lastest.". $theCategory->name .":hover".
@@ -402,8 +402,8 @@ class FrontpagesController extends Controller
             $output.= "\tdiv.widget .widget-header, ".
                 ".frontpage article .article-info span { color:" . $actual . " !important;}\n";
 
-
-            $output.= "\tdiv.widget-last-articles .header-title { background-color:" . $actual . " !important;}\n";
+            $output.= "\tdiv.widget .category-header, "
+                    ."\tdiv.widget-last-articles .header-title { background-color:" . $actual . " !important;}\n";
             $output.= "\tarticle.onm-new.highlighted-2-cols div.nw-subtitle div, ".
                 "article.onm-new.highlighted-3-cols div.nw-subtitle div { background-color:" . $actual . " !important;}\n";
 
@@ -411,7 +411,9 @@ class FrontpagesController extends Controller
                 "\t div.opinion-list article.opinion-element h1.title a, ".
                 ".frontpage article.opinion .nw-subtitle a { color:" . $actual . " !important;}\n";
 
-            $output.= "\tdiv.widget .title h5, div.widget .title h5 {color: ". $actual. " !important; }\n";
+            $output.= "\tdiv.widget .title h5, div.widget .title h5, ".
+                "div.widget-content time ".
+                "\t{color: ". $actual. " !important; }\n";
             $output.= "\tdiv.widget-today-news .number {background-color: ". $actual. " !important; }\n";
 
             $output.="\tnav .submenu.colorized {
