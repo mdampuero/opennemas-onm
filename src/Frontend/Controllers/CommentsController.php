@@ -161,7 +161,7 @@ class CommentsController extends Controller
         $voteValue = $request->request->filter('vote', null, FILTER_SANITIZE_STRING);
         $commentId = $request->request->getDigits('comment_id', 0);
         $cookie    = $request->cookies->get('comment-vote-'.$commentId);
-        $ip        = \Application::getRealIp();
+        $ip        = $request->getClientip();
 
         // User already voted this comment
         if (!is_null($cookie)) {
