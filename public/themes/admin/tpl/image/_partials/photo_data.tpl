@@ -39,7 +39,7 @@
                     <label for="description-{$photo->id}" class="control-label">{t}Description{/t}</label>
                     <div class="controls">
                         <textarea required="required" id="description-{$photo->id}" name="description[{$photo->id}]"  class="input-xxlarge"
-                            rows="2">{$photo->description|clearslash|escape:'html'}</textarea>
+                            rows="2">{$photo->description|clearslash}</textarea>
                     </div>
                     <script type="text/javascript">
                     jQuery(document).ready(function() {
@@ -61,7 +61,7 @@
                     <label for="author_name[{$photo->id}]" class="control-label">{t}Copyright{/t}</label>
                     <div class="controls">
                         <input type="text" id="author_name[{$photo->id}]" name="author_name[{$photo->id}]"
-                            value='{$photo->author_name|clearslash|escape:'html'}'/>
+                            value='{$photo->author_name|clearslash}'/>
                     </div>
                 </div>
 
