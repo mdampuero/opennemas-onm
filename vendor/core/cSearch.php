@@ -163,65 +163,6 @@ class cSearch
     }
 
     /**
-     * Busca en la base de datos todos los contenidos que sean del tipo
-     * indicado en szContentsType y los tag tenga alguna coincidencia con los
-     * proporcionados en szSource. Permiete relacionar la tabla contents con
-     * otra tabla.
-     *
-     * @param string $szReturnValues      Cadena con las columnas a devolver.
-     * @param string $szSourceTags        Cadena con los tags a buscar en los fulltext.
-     * @param string $szContentsTypeTitle Titulos de los tipos de contenidos en donde buscar.
-     * @param string $szWhere             operaciones logicas a añadir a la parte
-     *                                    where de la sentencia.
-     * @param string $szNewTable          tabla a añadir a la sentencia.
-     * @param int    $iLimit              Max number of elements to return
-     *
-     * @return array pk_content de todos los contendios ordenado por el n�mero de coincidencias.
-     */
-    public function searchContentsSelectMerge(
-        $szReturnValues,
-        $szSourceTags,
-        $szContentsTypeTitle,
-        $szWhere,
-        $szNewTable,
-        $iLimit
-    ) {
-        if (!isset($szNewTable) || empty($szNewTable)
-            || !isset($szWhere) || empty($szWhere)
-        ) {
-            return -1;
-        }
-
-        //Transform the input string to search like: 'La via del tren' => '+via +tren'
-        $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
-        $szSourceTags2=array();
-        $i = 0;
-        foreach ($szSourceTags as $key) {
-            $szSourceTags2[$i] = '+'.$key.'*';
-            $i++;
-        }
-        $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
-
-        $szMatch0 = $this->defineMatchOfSentence0($szSourceTags2);//Match with both
-
-        $szSqlSentence = 'SELECT '. $szReturnValues . ", " . (($szMatch0)) ." as _height";
-
-        $szSqlSentence .= " FROM contents, " . $szNewTable;
-        $szSqlSentence .= " WHERE " . $szMatch0;
-        $szSqlSentence .= " AND ( " . $this->parseTypes($szContentsTypeTitle) . ") AND (" . $szWhere . ") ";
-        $szSqlSentence .= " ORDER BY _height DESC, created DESC";
-        $szSqlSentence .= " LIMIT " . $iLimit;
-
-        $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
-
-        if ($resultSet!=null) {
-            return $resultSet->GetArray();
-        }
-
-        return null;
-    }
-
-    /**
      * Busca en la base de datos todos los contenidos con Available a 1
      * (Publicados) que sean del tipo indicado en szContentsType y los tag
      * tengan alguna coincidencia con los proporcionados en szSource.
@@ -332,59 +273,6 @@ class cSearch
         }
 
         return $result;
-    }
-
-    /**
-     * pagina los resultado proporcionados por $cItems.
-     *
-     * @param Pager  $PageReturn the pager instance
-     * @param array  $cItems contenidos a paginar.
-     * @param array  $szId Elemento del objeto que tomamos como id. Valor único en el array.
-     * @param string $iPaging Número de contenidos por página.
-     *
-     * @return  array contendios para mostrar en la pagina actual.
-     *
-     */
-    public static function Paginate(&$PageReturn, $cItems, $szId, $iPaging)
-    {
-        $items = array();
-        $itemsPerPage = (empty($iPaging) && define(ITEMS_PAGE))?ITEMS_PAGE: $iPaging;
-
-        foreach ($cItems as $v) {
-            $items[] = $v[$szId];
-        }
-
-        $params = array(
-            'itemData'              => $items,
-            'perPage'               => $itemsPerPage,
-            'delta'                 => 1,
-            'append'                => true,
-            'separator'             => '|',
-            'spacesBeforeSeparator' => 1,
-            'spacesAfterSeparator'  => 1,
-            'clearIfVoid'           => true,
-            'urlVar'                => 'page',
-            'mode'                  => 'Sliding',
-            'linkClass'             => 'pagination',
-            'altFirst'              => 'primera p&aacute;gina',
-            'altLast'               => '&uacute;ltima p&aacute;gina',
-            'altNext'               => 'p&aacute;gina seguinte',
-            'altPrev'               => 'p&aacute;gina anterior',
-            'altPage'               => 'p&aacute;gina'
-        );
-
-        $pager = &Pager::factory($params);
-        $data  = $pager->getPageData();
-
-        $aResult = array();
-        foreach ($cItems as $v) {
-            if (in_array($v[$szId], $data)) {
-                $aResult[] = $v; // Array 0-n compatible con sections Smarty
-            }
-        }
-        $PageReturn = $pager;
-
-        return $aResult;
     }
 
     /**
