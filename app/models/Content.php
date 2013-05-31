@@ -1677,13 +1677,14 @@ class Content
     */
     public static function get($contentId)
     {
-        $sql  = 'SELECT `content_types`.name '
-              . 'FROM `contents`, `content_types` '
-              . 'WHERE pk_content=? AND fk_content_type=pk_content_type';
-        $type = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
+        $sql  = 'SELECT fk_content_type '
+              . 'FROM `contents` '
+              . 'WHERE pk_content=?';
+        $contentTypeId = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
+
+        $type = \ContentManager::getContentTypeNameFromId($contentTypeId);
 
         if (empty($type)) {
-
             return null;
         }
 
