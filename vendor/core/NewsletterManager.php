@@ -115,8 +115,8 @@ class NewsletterManager
         $message
             ->setSubject($subject)
             ->setBody($this->HTML, 'text/html')
-            ->setBody($mailBodyPlain, 'text/plain')
-            ->setTo($mailbox)
+            ->setBody(strip_tags($this->HTML), 'text/plain')
+            ->setTo(array($mailbox->email => $mailbox->name))
             ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
             ->setSender(array($params['mail_sender'] => s::get('site_name')));
 
