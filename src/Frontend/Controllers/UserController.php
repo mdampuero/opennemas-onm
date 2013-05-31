@@ -119,7 +119,7 @@ class UserController extends Controller
                 'sessionexpire' => 15,
                 'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
                 'type'          => 1, // It is a frontend user registration.
-                'id_user_group' => null,
+                'id_user_group' => 0,
             );
 
             // Before send mail and create user on DB, do some checks
