@@ -271,6 +271,12 @@ class Synchronizer
 
         $synchronizer = \Onm\Import\Synchronizer\ServerFactory::get($params);
 
+        if (is_null($synchronizer)) {
+            throw new \Exception(
+                sprintf(_("Seems that the server configuration for %s is not correct."), $params['name'])
+            );
+        }
+
         $report = $synchronizer->downloadFilesToCacheDir($params);
 
         $this->unlockSync();

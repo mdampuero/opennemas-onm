@@ -55,45 +55,6 @@ class EFE extends ServerAbstract implements ServerInterface
     }
 
     /**
-     * Fetch content from an url and save the file into a local path
-     *
-     * @param $id the id of the file to be saved
-     * @param $url the url from where to get the file content
-     *
-     * @return true if the file has been saved correctly
-     **/
-    public function fetchContentAndSave($id, $url)
-    {
-        $content = $this->getContentFromUrlWithDigestAuth($url);
-
-        $localFilePath = $this->params['sync_path'].DS.strtolower($id.'.xml');
-
-        if (!file_exists($localFilePath)) {
-            @file_put_contents($localFilePath, $content);
-            $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
-            if (is_object($element)) {
-                if ($element->hasPhotos()) {
-                    $photos = $element->getPhotos();
-                    foreach ($photos as $photo) {
-                        $rawImage = $this->getContentFromUrlWithDigestAuth($photo->file_path);
-                        $localImagePath = $this->params['sync_path'].DS.$photo->name;
-                        if (file_exists($localImagePath)) {
-                            unlink($localImagePath);
-                        }
-                        file_put_contents($localImagePath, $rawImage);
-                    }
-                }
-
-                $date = $element->getCreatedTime();
-                touch($localFilePath, $date->getTimestamp());
-            }
-
-            return true;
-        }
-
-    }
-
-    /**
      * Get content from a given url using http digest auth
      *
      * @param $url the http server url

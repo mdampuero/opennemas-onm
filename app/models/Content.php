@@ -2121,7 +2121,7 @@ class Content
 
 
     /**
-     * Loads all the attached images for this content given an array of images
+     * Loads all Frontpage attached images for this content given an array of images
      *
      * @param array $images list of Image object to hydrate the current content
      *
@@ -2136,6 +2136,31 @@ class Content
                     if ($image->pk_content == $this->img1) {
                         $this->img1_path = $image->path_file.$image->name;
                         $this->img1 = $image;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Loads all inner attached images for this content given an array of images
+     *
+     * @param array $images list of Image object to hydrate the current content
+     *
+     * @return Content the object with the images loaded
+     **/
+    public function loadInnerImageFromHydratedArray($images)
+    {
+        if (isset($this->img2)) {
+            // Buscar la imagen
+            if (!empty($images)) {
+                foreach ($images as $image) {
+                    if ($image->pk_content == $this->img2) {
+                        $this->img2_path = $image->path_file.$image->name;
+                        $this->img2 = $image;
                         break;
                     }
                 }

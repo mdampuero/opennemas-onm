@@ -128,6 +128,19 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        $agencyName = $this->getData()
+            ->NewsEnvelope->SentFrom->Party->attributes()->FormalName;
+
+        return (string) $agencyName;
+    }
+
+    /**
      * Returns the id of the element
      *
      * @return string the title

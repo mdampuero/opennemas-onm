@@ -69,7 +69,7 @@
             <div style="float:left; margin-right: 20px">
                 {foreach from=$element->photos item=photo}
                 <div class="photo" style="width:220px;display:block;">
-                    <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
+                    <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title[$photo@index+1]}" class="thumbnail">
                     <div>
                         <p>{$photo->title}</p>
                     </div>
@@ -109,7 +109,7 @@
         <div id="photos" class="clearfix">
             {foreach from=$element->photos item=photo}
             <div class="photo">
-                <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id}" alt="{$photo->title}" class="thumbnail">
+                <img src="{url name=admin_news_agency_showattachment source_id=$element->source_id id=$element->id attachment_id=$photo->id index=$photo@index}" alt="{$photo->title[$photo@index+1]}" class="thumbnail">
                 <div>
                     <strong>{t}Description{/t}:</strong>
                     <p>{$photo->title}</p>
