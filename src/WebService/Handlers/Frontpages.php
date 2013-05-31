@@ -91,10 +91,8 @@ class Frontpages
                     }
                 }
             }
-
-            return serialize($contentsInHomepage);
-
+            // Use htmlspecialchars to avoid utf-8 erros with json_encode
+            return htmlspecialchars(serialize($contentsInHomepage));
         }
     }
 }
-
