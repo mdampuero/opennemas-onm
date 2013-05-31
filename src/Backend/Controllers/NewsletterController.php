@@ -471,6 +471,30 @@ class NewsletterController extends Controller
         }
     }
 
+    /**
+     * Check if mailing is over the counter by month
+     *
+     * @param array $newdata array with data for update
+     *
+     * @return NewNewsletter the object instance
+     **/
+    public function checkMailing($endDate)
+    {
+        $date = new \DateTime($endDate);
+        $initDate =$date->format("d-m-Y");
+        $where =  " updated >= $initDate AND updated <= $endDate ";
+        list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
+        $total = 0;
+        if ($nmCount > 0) {
+            foreach ($newsletters as $newsletter) {
+                $total += $newsletter->sent;
+            }
+
+            if ($total >= s::get('max_mailing')) {
+                m::add(_('You have send max mailing allowed'));
+            }
+        }
+    }
 
     /**
      * Updates the counter by month with given an array of data

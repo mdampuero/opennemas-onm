@@ -98,37 +98,8 @@ class NewsletterManager
      */
     public function sendToUser($mailbox, $htmlcontent, $params)
     {
-        require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
 
-        $mail = new PHPMailer();
-        $mail->SetLanguage('es');
-        $mail->IsSMTP();
-        $mail->Host = $params['mail_host'];
-        if (!empty($params['mail_user'])
-            && !empty($params['mail_password'])
-        ) {
-            $mail->SMTPAuth = true;
-        } else {
-            $mail->SMTPAuth = false;
-        }
-
-        $mail->CharSet = 'utf-8';
-
-        $mail->Username = $params['mail_user'];
-        $mail->Password = $params['mail_pass'];
-
-        // Inject values by $params array
-        $mail->From     = $params['mail_from'];
-        $mail->FromName = $params['mail_from_name'];
-        $mail->Sender   = $params['mail_sender'];
-        $mail->IsHTML(true);
         $this->HTML = $htmlcontent;
-
-        $mail->AddAddress($mailbox->email, $mailbox->name);
-
-        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
-        $mail->Subject  = $subject;
-
         // TODO: crear un filtro
         $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $this->HTML);
         $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $this->HTML);
@@ -137,12 +108,30 @@ class NewsletterManager
         $this->HTML = str_replace('‘', '&#8216;', $this->HTML);
         $this->HTML = str_replace('’', '&#8217;', $this->HTML);
 
-        $mail->Body = $this->HTML;
+        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
-        if (!$mail->Send()) {
+        //  Build the message
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($subject)
+            ->setBody($this->HTML, 'text/html')
+            ->setBody($mailBodyPlain, 'text/plain')
+            ->setTo($mailbox)
+            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+            ->setSender(array($params['mail_sender'] => s::get('site_name')));
+
+        try {
+            $mailer = $this->get('mailer');
+            $mailer->send($message);
+
+        } catch (\Exception $e) {
+            // Log this error
+            $logger = $this->get('logger');
+            $logger->notice("Unable to send newsletter: ".$e->getMessage());
+
             $this->errors[] = "Error en el envío del mensaje " . $mail->ErrorInfo;
-
             return false;
+
         }
 
         return true;
