@@ -1826,6 +1826,26 @@ class ContentManager
     }
 
     /**
+     * Returns the user readable name of a content type given its id.
+     *
+     * @param int $id the id of the content type
+     *
+     * @return string the content type title
+     */
+    public static function getContentTypeTitleFromId($id)
+    {
+        $contenTypes = \ContentManager::getContentTypes();
+
+        foreach ($contenTypes as $types) {
+            if ($types['pk_content_type'] == $id) {
+                return $types['title'];
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the name of a content type given its id.
      *
      * @param  int $id the content type id
