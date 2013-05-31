@@ -34,11 +34,12 @@
     <div class="form-wrapper">
         {render_messages}
 
-    	<form method="post" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
-			<div class="input-wrapper">
+        {if $userNotValid == true}
+        <form method="post" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
+            <div class="input-wrapper">
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
                 <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
-                <button id="submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
+                <button id="login-submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
                 <br><br><br>
                 <p class="right">
                     <a href="{url name=admin_acl_user_recover_pass}">{t domain=base}Forgot Password?{/t}</a>
@@ -47,7 +48,46 @@
             <input type="hidden" name="token" value="{$smarty.session.csrf}">
             <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
             <input type="hidden" name="time" value="{$smarty.now}">
-    	</form>
+        </form>
+        {elseif $updated}
+        <div id="inner-article-body">
+            <div class="doubleRule">
+                <div class="mcSectionHeader opposingFloatControl wrap">
+                    <h2 class="element1">{t}Password successfully updated{/t}</h2>
+                </div>
+                <div>
+                    <div class="insetV">
+                        <p>{t}Your password has been updated{/t}.</p>
+                    </div>
+                </div>
+            </div>
+                    <form method="post" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
+            <div class="input-wrapper">
+                <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
+                <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
+                <button id="login-submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
+                <br><br><br>
+                <p class="right">
+                    <a href="{url name=admin_acl_user_recover_pass}">{t domain=base}Forgot Password?{/t}</a>
+                </p>
+            </div>
+            <input type="hidden" name="token" value="{$smarty.session.csrf}">
+            <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
+            <input type="hidden" name="time" value="{$smarty.now}">
+        </form>
+        </div>
+        {else}
+        <form class="form-horizontal" action="{url name=admin_acl_user_reset_pass}" method="POST">
+            <p>
+                {t}Please enter your new password in both fields below, and then click Submit.{/t}
+            </p>
+
+            <input type="password" name="password" class="input-medium" required="required" tabindex="1" value="" placeholder="{t}Password{/t}">
+            <input type="password" name="password-verify" class="input-medium" required="required" tabindex="2" value="" placeholder="{t}Re-Enter Password{/t}">
+
+            <button type="submit" tabindex="3" class="onm-button blue">{t}Submit{/t}</button>
+        </form>
+        {/if}
     </div>
 
     <footer>

@@ -21,6 +21,17 @@
         {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}
         {css_tag href="/style.css" media="screen" common=1}
         {css_tag href="/loginadmin.css" media="screen" common=1}
+        <style type="text/css">
+            .form-wrapper button[type="submit"] {
+                float: none;
+                max-width: 100px;
+                height: 34px;
+                margin-bottom: 9px;
+            }
+            .input-wrapper {
+                text-align: center;
+            }
+        </style>
     {/block}
 
 </head>
@@ -34,20 +45,48 @@
     <div class="form-wrapper">
         {render_messages}
 
-    	<form method="post" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
-			<div class="input-wrapper">
-                <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
-                <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
-                <button id="submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
-                <br><br><br>
-                <p class="right">
-                    <a href="{url name=admin_acl_user_recover_pass}">{t domain=base}Forgot Password?{/t}</a>
-                </p>
+        {if $mailSent}
+        <div class="doubleRule">
+            <div class="mcSectionHeader opposingFloatControl wrap">
+                <h2 class="element1">{t}Check Your E-Mail{/t}</h2>
             </div>
-            <input type="hidden" name="token" value="{$smarty.session.csrf}">
-            <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
-            <input type="hidden" name="time" value="{$smarty.now}">
-    	</form>
+            <div>
+                <div class="insetV">
+                    <p>
+                        {t}We've sent an e-mail to{/t}:<strong>&nbsp;&nbsp;{$user->email}</strong>.
+                    </p>
+                    <p>
+                        {t}Please check your e-mail now for a message with the subject line "Username reminder" from{/t}&nbsp;{setting name="site_title"}.
+                    </p>
+                    <p>
+                        {t}To protect your privacy, we only send this information to the e-mail address associated with this account.{/t}
+                    </p>
+                </div>
+                <div class="insetV">
+                    <p>
+                        <strong>{t}PLEASE NOTE{/t}:</strong>
+                        {t}If this is not the e-mail address associated with your account, click the link to resubmit request with the correct e-mail address{/t}:&nbsp;&nbsp;<a href="{url name=admin_acl_user_recover_user}">{t}Recover your username{/t}</a>
+                    </p>
+                    <p>
+                        {t}If you use e-mail filtering or anti-spam software,please make sure our e-mail is not filtered or blocked.{/t}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {else}
+        <form class="form-horizontal" id="formulario" action="{url name=admin_acl_user_recover_user}" method="POST">
+
+            <div class="input-wrapper">
+                <p>
+                    {t}Enter your e-mail address and click Submit to recover your username.{/t}
+                </p>
+
+                <input type="email" class="input-xlarge" name="email" required="required" autofocus placeholder="{t}E-mail{/t}">
+
+                <button type="submit" class="onm-button blue">{t}Submit{/t}</button>
+            </div>
+        </form>
+        {/if}
     </div>
 
     <footer>
