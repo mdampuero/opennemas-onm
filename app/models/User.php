@@ -389,7 +389,7 @@ class User
     {
         global $sc;
         $cache = $sc->get('cache');
-        $cache->delete(APC_PREFIX . "categoriesForUser_".$idUser);
+        $cache->delete(APC_PREFIX . "categories_for_user_".$idUser);
 
         $sql = "INSERT INTO users_content_categories "
              . "(`pk_fk_user`, `pk_fk_content_category`) "
@@ -420,7 +420,7 @@ class User
     {
         global $sc;
         $cache = $sc->get('cache');
-        $cache->delete(APC_PREFIX . "categoriesForUser_".$idUser);
+        $cache->delete(APC_PREFIX . "categories_for_user_".$idUser);
 
         $sql = 'DELETE FROM users_content_categories '
              . 'WHERE pk_fk_content_category=?';
@@ -450,7 +450,7 @@ class User
 
         $id = (!is_null($id))? $id: $this->id;
 
-        $contentCategories = $cache->fetch(APC_PREFIX . "categoriesForUser_".$id);
+        $contentCategories = $cache->fetch(APC_PREFIX . "categories_for_user_".$id);
          // If was not fetched from APC now is turn of DB
         if (!$contentCategories) {
 
@@ -474,7 +474,7 @@ class User
                  $rs->MoveNext();
             }
 
-            $cache->save(APC_PREFIX . "categoriesForUser_".$id);
+            $cache->save(APC_PREFIX . "categories_for_user_".$id);
         }
 
         return $contentCategories;
@@ -501,7 +501,7 @@ class User
             return false;
         }
 
-        $cache->delete(APC_PREFIX . "categoriesForUser_".$this->id)
+        $cache->delete(APC_PREFIX . "categories_for_user_".$this->id);
 
         return true;
     }
