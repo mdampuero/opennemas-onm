@@ -224,21 +224,18 @@ class InstanceManager
      */
     public function getDBInformation($settings)
     {
+        global $sc;
+        $cache = $sc->get('cache');
 
-        $fetchedFromAPC = false;
-        $fetchedFromAPCInfor = false;
-        $totals = array();
-        $information = array();
+        // Fetch caches if exist
+        $key = APC_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
+        $totals = $cache->fetch($key);
+        $key = APC_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
+        $information = $cache->fetch($key);
 
-        if (extension_loaded('apc')) {
-            $key = APC_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
-            $totals = apc_fetch($key, $fetchedFromAPC);
-            $key = APC_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
-            $information = apc_fetch($key, $fetchedFromAPCInfor);
-        }
 
         // If was not fetched from APC now is turn of DB
-        if (!$fetchedFromAPC) {
+        if (!$totals) {
             $dbConection = self::getConnection($settings);
 
             $sql = 'SELECT count(*) as total, fk_content_type as type '
@@ -253,16 +250,15 @@ class InstanceManager
                     $rs->MoveNext();
                 }
             }
-            if (extension_loaded('apc')) {
-                apc_store(
-                    APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
-                    $totals,
-                    300
-                );
-            }
+
+            $cache->save(
+                APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
+                $totals,
+                300
+            );
         }
 
-        if (!$fetchedFromAPCInfor) {
+        if (!$information) {
             if (!isset($dbConection) || empty($dbConection)) {
                 $dbConection = self::getConnection($settings);
             }
@@ -278,6 +274,12 @@ class InstanceManager
                     $rs->MoveNext();
                 }
             }
+
+            $cache->save(
+                APC_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'],
+                $information,
+                300
+            );
         }
 
         return array($totals, $information);
