@@ -283,7 +283,7 @@ jQuery(document).ready(function($){
     $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
         return load_image_results();
     });
-    $('#stringVideoSearch').keydown(function(event) {
+    $('#stringImageSearch').keydown(function(event) {
         if (event.keyCode == 13) {
             event.preventDefault();
             return load_image_results();
