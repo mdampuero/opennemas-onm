@@ -850,7 +850,7 @@ class InstanceManager
                     VALUES (?,?,?,?,?,?)";
 
             $values = array($data['user_name'], md5($data['user_pass']),  60,
-                            $data['user_mail'], $data['user_name'],6);
+                            $data['user_mail'], $data['user_name'],5);
 
             if (!$GLOBALS['application']->conn->Execute($sql, $values)) {
                 throw new DatabaseForInstanceNotCreatedException(
