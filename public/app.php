@@ -22,6 +22,12 @@ require 'bootstrap.php';
 
 $sc = include __DIR__.'/../app/container.php';
 
+$timezone = \Onm\Settings::get('time_zone');
+if (isset($timezone)) {
+    $availableTimezones = \DateTimeZone::listIdentifiers();
+    date_default_timezone_set($availableTimezones[$timezone]);
+}
+
 if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
 } elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
