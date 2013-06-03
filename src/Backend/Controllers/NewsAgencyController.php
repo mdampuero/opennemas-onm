@@ -291,7 +291,7 @@ class NewsAgencyController extends Controller
                     $fileName = $photo->name[$i];
                 }
 
-                // Check if the file apc_exists(keys)
+                // Check if the file cache exists(keys)
                 if (file_exists($filePath)) {
                     $data = array(
                         'title'         => $fileName,
