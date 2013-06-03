@@ -387,7 +387,9 @@ class User
      **/
     public function addCategoryToUser ($idUser, $idCategory)
     {
-        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        global $sc;
+        $cache = $sc->get('cache');
+        $cache->delete(APC_PREFIX . "categoriesForUser_".$idUser);
 
         $sql = "INSERT INTO users_content_categories "
              . "(`pk_fk_user`, `pk_fk_content_category`) "
@@ -416,7 +418,9 @@ class User
      **/
     public function delCategoryToUser($idUser, $idCategory)
     {
-        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        global $sc;
+        $cache = $sc->get('cache');
+        $cache->delete(APC_PREFIX . "categoriesForUser_".$idUser);
 
         $sql = 'DELETE FROM users_content_categories '
              . 'WHERE pk_fk_content_category=?';
@@ -441,14 +445,14 @@ class User
      **/
     private function readAccessCategories($id = null)
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         $id = (!is_null($id))? $id: $this->id;
-        $fetchedFromAPC = false;
-        if (extension_loaded('apc')) {
-            $key = APC_PREFIX . "_readAccessCategories".$id;
-            $contentCategories = apc_fetch($key, $fetchedFromAPC);
-        }
+
+        $contentCategories = $cache->fetch(APC_PREFIX . "categoriesForUser_".$id);
          // If was not fetched from APC now is turn of DB
-        if (!$fetchedFromAPC) {
+        if (!$contentCategories) {
 
             $sql = 'SELECT pk_fk_content_category '
                  . 'FROM users_content_categories '
@@ -469,10 +473,8 @@ class User
                  $contentCategories[] = $contentCategory;
                  $rs->MoveNext();
             }
-            if (extension_loaded('apc')) {
-                $key = APC_PREFIX . "_readAccessCategories".$id;
-                apc_store($key, $contentCategories);
-            }
+
+            $cache->save(APC_PREFIX . "categoriesForUser_".$id);
         }
 
         return $contentCategories;
@@ -485,6 +487,9 @@ class User
      **/
     private function deleteAccessCategoriesDb()
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
         $values = array(intval($this->id));
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -495,7 +500,8 @@ class User
 
             return false;
         }
-         apc_delete(APC_PREFIX . "_readAccessCategories".$this->id);
+
+        $cache->delete(APC_PREFIX . "categoriesForUser_".$this->id)
 
         return true;
     }
