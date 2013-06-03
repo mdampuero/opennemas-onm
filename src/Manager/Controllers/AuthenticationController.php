@@ -78,6 +78,7 @@ class AuthenticationController extends Controller
         $login    = $this->request->request->filter('login', null, FILTER_SANITIZE_STRING);
         $password = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING);
         $token    = $this->request->request->filter('token', null, FILTER_SANITIZE_STRING);
+        $time     = $this->request->request->filter('time', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
 
         $user = new \User();
@@ -87,7 +88,7 @@ class AuthenticationController extends Controller
         } else {
 
             // Try to autenticate the user
-            if ($user->login($login, $password, $token, $captcha)) {
+            if ($user->login($login, $password, $token, $captcha, $time)) {
 
                 // Check if user account is activated
                 if ($user->authorize != 1) {

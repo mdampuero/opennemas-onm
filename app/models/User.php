@@ -514,6 +514,7 @@ class User
      * @param string $password the password
      * @param string $loginToken the login token provided
      * @param string $loginCaptcha
+     * @param int    $time
      *
      * @return boolean true if the user has access
      **/
@@ -521,13 +522,14 @@ class User
         $login,
         $password,
         $loginToken = null,
-        $loginCaptcha = null
+        $loginCaptcha = null,
+        $time = null
     ) {
         $result = false;
 
-        $result = $this->authDatabase($login, $password);
+        $result = $this->authDatabase($login, $password, false, $time);
         if (!$result) {
-            $result = $this->authDatabase($login, $password, true);
+            $result = $this->authDatabase($login, $password, true, $time);
         }
 
         return $result;
@@ -538,11 +540,12 @@ class User
      *
      * @param  string  $login
      * @param  string  $password
-     * @param  loolean $managerDb
+     * @param  boolean $managerDb
+     * @param  int     $time
      *
      * @return boolean Return true if login exists and password match
      */
-    public function authDatabase($login, $password, $managerDb = false)
+    public function authDatabase($login, $password, $managerDb = false, $time = null)
     {
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\' OR email=\''.strval($login).'\'';
         if (!$managerDb) {
@@ -558,17 +561,22 @@ class User
         }
 
         $this->setValues($rs->fields);
-        if ($this->password === md5($password)) {
+
+        // Check if password came with md5 tag otherwise js is disabled
+        if (strstr($password, 'md5:') && 'md5:'.md5($this->password.$time) === $password) {
             // Set access categories
             $this->accesscategories = $this->readAccessCategories();
             $this->authMethod = 'database';
 
             return true;
-        } elseif ($this->password === $password) {
-            // Frontend login from mail activation
+        } elseif ($this->password === md5($password)) { // Pass not md5 ecrypted, js disabled
+            // Set access categories
+            $this->accesscategories = $this->readAccessCategories();
             $this->authMethod = 'database';
 
             return true;
+        } elseif ($this->password === $password) { // Frontend login from mail activation
+            $this->authMethod = 'database';
         }
 
         // Reset members properties

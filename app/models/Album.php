@@ -97,14 +97,10 @@ class Album extends Content
 
                 break;
             case 'content_type_name':
-                $contentTypeName = $GLOBALS['application']->conn->Execute(
-                    'SELECT * FROM `content_types` '
-                    .'WHERE pk_content_type = "'. $this->content_type
-                    .'" LIMIT 1'
-                );
+                $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
 
-                if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = $contentTypeName->fields['name'];
+                if (isset($contentTypeName)) {
+                    $returnValue = $contentTypeName;
                 } else {
                     $returnValue = $this->content_type;
                 }

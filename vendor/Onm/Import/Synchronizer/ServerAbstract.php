@@ -97,15 +97,32 @@ abstract class ServerAbstract
 
             $element = \Onm\Import\DataSource\DataSourceFactory::get($localFilePath);
             if (is_object($element)) {
+                // Check for photos
                 if ($element->hasPhotos()) {
                     $photos = $element->getPhotos();
+                    $i = 0;
                     foreach ($photos as $photo) {
                         $rawImage = $this->getContentFromUrlWithDigestAuth($photo->file_path);
-                        $localImagePath = $this->params['sync_path'].DS.$photo->name;
+                        $localImagePath = $this->params['sync_path'].DS.$photo->name[$i];
                         if (file_exists($localImagePath)) {
                             unlink($localImagePath);
                         }
                         @file_put_contents($localImagePath, $rawImage);
+                        $i++;
+                    }
+                }
+
+                // Check for videos
+                if ($element->hasVideos()) {
+                    $videos = $element->getVideos();
+                    foreach ($videos as $video) {
+                        $rawVideo = $this->getContentFromUrlWithDigestAuth($video->file_path);
+                        $localVideoPath = $this->params['sync_path'].DS.$video->name[$i];
+                        if (file_exists($localVideoPath)) {
+                            unlink($localVideoPath);
+                        }
+                        @file_put_contents($localVideoPath, $rawVideo);
+                        $i++;
                     }
                 }
 
@@ -133,8 +150,10 @@ abstract class ServerAbstract
             if (is_object($element)) {
                 if ($element->hasPhotos()) {
                     $photos = $element->getPhotos();
+                    $i = 0;
                     foreach ($photos as $photo) {
-                        $imagesName[] = $photo->name;
+                        $imagesName[] = $photo->name[$i];
+                        $i++;
                     }
                 }
             }

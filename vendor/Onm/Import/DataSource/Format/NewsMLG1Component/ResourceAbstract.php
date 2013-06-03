@@ -50,12 +50,12 @@ abstract class ResourceAbstract
 
                 break;
             case 'title':
-                $content =
+                $contentTitle =
                     $this->getData()
-                    ->NewsComponent->ContentItem->DataContent
-                    ->xpath('//body.content');
+                    ->NewsComponent[1]->ContentItem->DataContent
+                    ->nitf->body->{'body.content'}->p;
 
-                return (string) $content[1]->p;
+                return $contentTitle;
 
                 break;
             case 'name':
@@ -65,21 +65,30 @@ abstract class ResourceAbstract
                     ->xpath("//Property[contains(@FormalName,'Filename')]");
 
                 if (stripos($content[0]->attributes()->FormalName, 'EFE') !== false) {
-                    $imageName = (string) $content[1]->attributes()->Value;
+                    foreach ($content as $key => $image) {
+                        if ($key % 4 == 1) {
+                            $imageName[] = (string) $image->attributes()->Value;
+                        }
+                    }
                 } else {
-                    $imageName = (string) $content[0]->attributes()->Value;
+                    foreach ($content as $image) {
+                        $imageName[] = (string) $image->attributes()->Value;
+                    }
                 }
 
                 return $imageName;
 
                 break;
             case 'file_type':
-                $fileType =
-                    $this->getData()
-                    ->NewsComponent->ContentItem->MimeType
-                    ->attributes()->FormalName;
+                $fileType = $this->getData()->NewsComponent;
 
-                return (string) $fileType;
+                if (count($fileType->ContentItem) > 1) {
+                    $fileType = (string) $fileType->ContentItem[1]->MimeType->attributes()->FormalName;
+                } else {
+                    $fileType = (string) $fileType->ContentItem->MimeType->attributes()->FormalName;
+                }
+
+                return $fileType;
 
                 break;
             case 'file_path':

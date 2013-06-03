@@ -414,4 +414,230 @@ class AclUserController extends Controller
             }
         }
     }
+
+
+    /**
+     * Shows the form for recovering the pass of a user and
+     * sends the mail to the user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function recoverPasswordAction(Request $request)
+    {
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('current_language', \Application::$language);
+
+        if ('POST' != $request->getMethod()) {
+            return $this->render('login/recover_pass.tpl');
+        } else {
+            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+
+            // Get user by email
+            $user = new \User();
+            $user->findByEmail($email);
+
+            // If e-mail exists in DB
+            if (!is_null($user->id)) {
+                // Generate and update user with new token
+                $token = md5(uniqid(mt_rand(), true));
+                $user->updateUserToken($user->id, $token);
+
+                $url = $this->generateUrl('admin_acl_user_reset_pass', array('token' => $token), true);
+
+                $tplMail = new \TemplateAdmin(TEMPLATE_ADMIN);
+                $tplMail->caching = 0;
+
+                $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
+                $mailBody = $tplMail->fetch(
+                    'login/emails/recoverpassword.tpl',
+                    array(
+                        'user' => $user,
+                        'url'  => $url,
+                    )
+                );
+
+                //  Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/plain')
+                    ->setTo($user->email)
+                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $this->view->assign(
+                        array(
+                            'mailSent' => true,
+                            'user' => $user
+                        )
+                    );
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('logger')->notice(
+                        "Unable to send the recover password email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                }
+
+            } else {
+                m::add(_('Unable to find an user with that email.'), m::ERROR);
+            }
+
+            // Display form
+            return $this->render('login/recover_pass.tpl');
+        }
+    }
+
+    /**
+     * Shows the form for recovering the username of a user and
+     * sends the mail to the user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function recoverUsernameAction(Request $request)
+    {
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('current_language', \Application::$language);
+
+        if ('POST' != $request->getMethod()) {
+            return $this->render('login/recover_username.tpl');
+        } else {
+            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+
+            // Get user by email
+            $user = new \User();
+            $user->findByEmail($email);
+
+            // If e-mail exists in DB
+            if (!is_null($user->id)) {
+                // Generate and update user with new token
+                $token = md5(uniqid(mt_rand(), true));
+                $user->updateUserToken($user->id, $token);
+
+                $tplMail = new \TemplateAdmin(TEMPLATE_ADMIN);
+                $tplMail->caching = 0;
+
+                $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
+                $mailBody = $tplMail->fetch(
+                    'login/emails/recoverusername.tpl',
+                    array(
+                        'user' => $user,
+                    )
+                );
+
+                //  Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/plain')
+                    ->setTo($user->email)
+                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $url = $this->generateUrl('admin_login_form', array(), true);
+
+                    $this->view->assign(
+                        array(
+                            'mailSent' => true,
+                            'user' => $user,
+                            'url' => $url
+                        )
+                    );
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('logger')->notice(
+                        "Unable to send the recover password email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    m::add(_('Unable to send your recover username email. Please try it later.'), m::ERROR);
+                }
+
+            } else {
+                m::add(_('Unable to find an user with that email.'), m::ERROR);
+            }
+
+            // Display form
+            return $this->render('login/recover_username.tpl');
+        }
+    }
+
+    /**
+     * Regenerates the pass for a user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function regeneratePasswordAction(Request $request)
+    {
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('current_language', \Application::$language);
+
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+
+        $user = new \User();
+        $user = $user->findByToken($token);
+
+        if ('POST' !== $request->getMethod()) {
+            if (empty($user->id)) {
+                m::add(
+                    _(
+                        'Unable to find the password reset request. '
+                        .'Please check the url we sent you in the email.'
+                    ),
+                    m::ERROR
+                );
+                $this->view->assign('userNotValid', true);
+            } else {
+                $this->view->assign(
+                    array(
+                        'user' => $user
+                    )
+                );
+            }
+        } else {
+            $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
+            $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
+
+            if ($password == $passwordVerify && !empty($password) && !is_null($user)) {
+                $user->updateUserPassword($user->id, $password);
+                $user->updateUserToken($user->id, null);
+
+                $this->view->assign('updated', true);
+            } elseif ($password != $passwordVerify) {
+                m::add(_('Password and confirmation must be equal.'), m::ERROR);
+            } else {
+                m::add(
+                    _(
+                        'Unable to find the password reset request. '
+                        .'Please check the url we sent you in the email.'
+                    ),
+                    m::ERROR
+                );
+            }
+
+        }
+
+        return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+
+    }
 }

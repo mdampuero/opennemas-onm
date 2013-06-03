@@ -208,6 +208,90 @@ class ContentManager
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public static function search($params = array())
+    {
+        $defaultParams = array(
+            'text'                   => '',
+            'content_types_selected' => 'all',
+            'page'                   => 1,
+            'elements_per_page'      => 20,
+            'order'                  => 'contents.created DESC '
+        );
+
+        $params = array_merge($defaultParams, $params);
+
+        // Return empty array if the search text is empty
+        if (empty($params['text'])) {
+            return array();
+        }
+
+        // Preparing the search SQL
+        $searchSQL = " AND (contents.title LIKE '%{$params['text']}%'"
+                    ." OR contents.description LIKE '%{$params['text']}%'"
+                    ." OR contents.metadata LIKE '%{$params['text']}%')";
+
+        // Preparing limit
+        $limitSQL = '';
+        if ($params['page'] <= 1) {
+            $limitSQL = ' LIMIT '. $params['elements_per_page'];
+        } else {
+            $limitSQL = ' LIMIT '.($params['page']-1)*$params['elements_per_page'].', '.$params['elements_per_page'];
+        }
+
+        // Preparing the order SQL
+        $orderBySQL = ' ORDER BY '.$params['order'];
+
+
+        // Preparing filter for content types
+        $contentTypesFilterSQL = '';
+        if ($params['content_types_selected'] != 'all'
+            && !empty($params['content_types_selected'])
+        ) {
+            if (is_string($params['content_types_selected'])) {
+                $contentTypesFilterSQL = ' AND `fk_content_type` = '.$params['content_types_selected']. " ";
+            } else {
+                $contentTypesFilterSQL =
+                    ' AND `fk_content_type` IN ('.implode(', ', $params['content_types_selected']). ") ";
+            }
+        }
+
+        $sql = "SELECT  contents.*,
+                        `contents_categories`.`pk_fk_content_category` as category_id,
+                        `contents_categories`.`catName`  as category_name "
+               ."FROM `contents`, `contents_categories` "
+               ."WHERE `contents`.`pk_content`=`contents_categories`.`pk_fk_content` "
+               .$contentTypesFilterSQL
+               .$searchSQL
+               .$orderBySQL
+               .$limitSQL;
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            return array();
+        }
+
+        $contents = array();
+        $contentsData = $rs->getArray();
+        foreach ($contentsData as $data) {
+            $contenType = self::getContentTypeNameFromId($data['fk_content_type']);
+            $contentTypeClass = classify($contenType);
+            $content = new $contentTypeClass();
+            $content->load($data);
+
+            $contents []= $content;
+        }
+
+        return $contents;
+    }
+
+    /**
      * Fetches all the contents (articles, widgets, etc) for one specific
      * category with its placeholder and position
      *
@@ -1819,6 +1903,26 @@ class ContentManager
         foreach ($contenTypes as $types) {
             if ($types['name'] == $name) {
                 return $types['pk_content_type'];
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the user readable name of a content type given its id.
+     *
+     * @param int $id the id of the content type
+     *
+     * @return string the content type title
+     */
+    public static function getContentTypeTitleFromId($id)
+    {
+        $contenTypes = \ContentManager::getContentTypes();
+
+        foreach ($contenTypes as $types) {
+            if ($types['pk_content_type'] == $id) {
+                return $types['title'];
             }
         }
 

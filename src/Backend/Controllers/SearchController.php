@@ -47,64 +47,55 @@ class SearchController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $contentTypes = $this->getContentTypesFiltered();
+        $searchString         = $this->request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
+        $contentTypesSelected = $this->request->get('content_types', array('article', 'opinion'));
+        $page                 = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
-        $searchString = $this->request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
-        $contentTypesSelected = $this->request->get('content_types', array('article'));
-        $page         = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
+        $contentTypesAvailable = $this->getContentTypesFiltered();
+        $itemsPerPage         = s::get('items_per_page') ?: 20;
 
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $contents             = array();
 
         // If search string is empty skip executing some logic
         if (!empty($searchString)) {
+            $contentTypesSelected = $this->getCheckedContentTypes($contentTypesSelected);
 
-            $htmlChecks     = null;
-            $contentTypesChecked = $this->checkTypes($contentTypesSelected);
-            $szTags         = trim($searchString);
-            $objSearch      = new \cSearch();
-            $contents   = $objSearch->SearchContentsSelectMerge(
-                "contents.title as titule, contents.metadata, contents.slug,
-                contents.description, contents.created, contents.pk_content as id,
-                contents_categories.catName, contents_categories.pk_fk_content_category as category,
-                content_types.title as type, contents.available, contents.content_status,
-                contents.in_litter, content_types.name as content_type",
-                $szTags,
-                $contentTypesChecked,
-                "pk_content = pk_fk_content AND fk_content_type = pk_content_type",
-                "contents_categories, content_types",
-                100
+            $contents = \ContentManager::search(
+                array(
+                    'text'                   => $searchString,
+                    'content_types_selected' => $contentTypesSelected,
+                    'page'                   => $page,
+                    'elements_per_page'      => $itemsPerPage
+                )
             );
 
-            $szTagsArray  = explode(', ', \StringUtils::get_tags($szTags));
 
             foreach ($contents as &$content) {
-                for ($ind=0; $ind < sizeof($szTagsArray); $ind++) {
-                    $content['titule']   = \Onm\StringUtils::extStrIreplace(
-                        $szTagsArray[$ind],
-                        '<span class="highlighted">$1</span>',
-                        $content['titule']
-                    );
-                    $content['metadata'] = \Onm\StringUtils::extStrIreplace(
-                        $szTagsArray[$ind],
-                        '<span class="highlighted">$1</span>',
-                        $content['metadata']
-                    );
-                }
+                $content->title   = \Onm\StringUtils::extStrIreplace(
+                    $searchString,
+                    '<span class="highlighted">$1</span>',
+                    $content->title
+                );
+                $content->metadata = \Onm\StringUtils::extStrIreplace(
+                    $searchString,
+                    '<span class="highlighted">$1</span>',
+                    $content->metadata
+                );
+                $content->content_type_name = \ContentManager::getContentTypeNameFromId($content->fk_content_type);
             }
 
             $this->view->assign(
                 array(
                     'search_string'          => $searchString,
-                    'contents'               => $contents,
-                    'content_types'          => $contentTypes,
                     'content_types_selected' => $contentTypesSelected,
+                    'contents'               => $contents,
                 )
             );
         }
 
         return $this->render(
             'search_advanced/index.tpl',
-            array('arrayTypes' => $contentTypes)
+            array('content_types' => $contentTypesAvailable)
         );
     }
 
@@ -210,39 +201,26 @@ class SearchController extends Controller
     }
 
     /**
-     * Converts and filters a list of content types into a SQL sentence
+     * Returns a list of content type definitions taking in place the modules activated
+     * and those selected by user
      *
      * @param array $selected array of content types selected
      *
      * @return  string string with all the content types comma separated.
      */
-    private function checkTypes($selected)
+    private function getCheckedContentTypes($selected)
     {
-        $contentTypes = \Content::getContentTypes();
-        $szTypes =  '';
-        foreach ($contentTypes as $contentType) {
-            if ($contentType['name']== 'advertisement') {
-                $contentType['name']= 'ads';
-            }
-            if ($contentType['name']== 'attachment') {
-                $contentType['name']= 'file';
-            }
-            if ($contentType['name']== 'photo') {
-                $contentType['name']= 'image';
-            }
-            if ($contentType['name']== 'static_page') {
-                $contentType['name']= 'static_pages';
-            }
+        $contentTypes = self::getContentTypesFiltered();
 
-            if (mod::moduleExists(strtoupper($contentType['name']).'_MANAGER')
-                && mod::isActivated(strtoupper($contentType['name']).'_MANAGER')
-                && in_array($contentType['name'], $selected)
+        $contentTypesChecked =  array();
+        foreach ($contentTypes as $contentTypeId => $contentTypeName) {
+            if (in_array($contentTypeId, $selected)
             ) {
-                $szTypes []= $contentType['name'];
+                $contentTypesChecked []= $contentTypeId;
             }
         }
 
-        return implode(',', $szTypes);
+        return $contentTypesChecked;
     }
 
     /**
@@ -250,16 +228,34 @@ class SearchController extends Controller
      *
      * @return array the list of content types
      **/
-    public function getContentTypesFiltered()
+    private function getContentTypesFiltered()
     {
-        $contentTypes = \Content::getContentTypes();
+        $contentTypes = \ContentManager::getContentTypes();
         $contentTypesFiltered = array();
 
         foreach ($contentTypes as $contentType) {
-            if (mod::moduleExists(strtoupper($contentType['name']).'_MANAGER')
-                && mod::isActivated(strtoupper($contentType['name']).'_MANAGER')
+            switch ($contentType['name']) {
+                case 'advertisement':
+                    $moduleName = 'ads';
+                    break;
+                case 'attachment':
+                    $moduleName = 'file';
+                    break;
+                case 'photo':
+                    $moduleName = 'image';
+                    break;
+                case 'static_page':
+                    $moduleName = 'static_pages';
+                    break;
+                default:
+                    $moduleName = $contentType['name'];
+                    break;
+            }
+            $moduleName = strtoupper($moduleName.'_MANAGER');
+
+            if (mod::moduleExists($moduleName) && mod::isActivated($moduleName)
             ) {
-                $contentTypesFiltered [] = $contentType;
+                $contentTypesFiltered [$contentType['pk_content_type']] = $contentType['title'];
             }
         }
 

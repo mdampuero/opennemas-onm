@@ -56,12 +56,16 @@
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
 
-        $('.check-pass').on('click', function(){
+        $('.check-pass').on('click', function(e, ui){
+            e.preventDefault();
             var passInput = $('#onm_digest_pass');
-            if ($(this).is(':checked')) {
+            var btn = $(this);
+            if (passInput.attr('type') == 'password') {
                 passInput.prop('type','text');
+                btn.html('{t}Hide password{/t}');
             } else {
                 passInput.prop('type','password');
+                btn.html('{t}Show password{/t}');
             }
         });
     });
@@ -397,7 +401,7 @@
                     <label for="onm_digest_pass" class="control-label">{t}Password{/t}</label>
                     <div class="controls">
                         <input type="password" id="onm_digest_pass" name="onm_digest_pass" value="{$configs['onm_digest_pass']|default:""}" class="input-large">
-                        <input type="checkbox" class="check-pass" value="">&nbsp;{t}Show password{/t}
+                        <button class="check-pass">{t}Show password{/t}</button>
                     </div>
                 </div>
 

@@ -5,38 +5,38 @@
         <th class="right" style="width:10px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
-        {foreach name=c from=$contents item=content}
+        {foreach $contents as $content}
         <tr>
             <td style="padding:10px;">
-                <strong>[{$content.content_type|ucfirst|htmlentities}] {$content.titule|clearslash}</strong>
+                <strong>[{$content->content_type_l10n_name}] {$content->title|clearslash}</strong>
                 <br>
-                {if $content.content_type neq 'comment'}
-                <img src="{$params.IMAGE_DIR}/tag_red.png" alt="">  {$content.metadata|clearslash}
+                {if $content->content_type neq 'comment'}
+                <img src="{$params.IMAGE_DIR}/tag_red.png" alt="">  {$content->metadata|clearslash}
                 {/if}<br>
-                <strong>{t}Category{/t}:</strong> {$content.catName}
+                <strong>{t}Category{/t}:</strong> {$content->category_name}
                 <br>
-                <strong>{t}Created{/t}:</strong> {$content.created}
+                <strong>{t}Created{/t}:</strong> {$content->created}
             </td>
             <td class="center">
-                {if ($content.in_litter == 1)}
+                {if ($content->in_litter == 1)}
                     <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera"/>
                 {else}
-                    {if ($content.type == '')}
-                        {if ($content.available eq 1) && ($content.content_status eq 1)}
+                    {if ($content->type == '')}
+                        {if ($content->available eq 1) && ($content->content_status eq 1)}
                             <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicada" title="Publicada"/>
-                        {elseif ($content.available eq 1) && ($content.content_status eq 0)}
+                        {elseif ($content->available eq 1) && ($content->content_status eq 0)}
                             <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="{t}In library{/t}" title="{t}In library{/t}" />
                         {else}
                             <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="En Pendientes" />
                         {/if}
-                        {elseif $content.content_type eq 'photo'}
-                            {if ($content.content_status eq 1)}
+                        {elseif $content->content_type eq 'photo'}
+                            {if ($content->content_status eq 1)}
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
                             {else}
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
                             {/if}
                         {else}
-                            {if ($content.available eq 1)}
+                            {if ($contentvavailable eq 1)}
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
                             {else}
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
@@ -46,7 +46,7 @@
             </td>
             <td class="right">
                 <div class="btn-group right">
-                    <a class="btn" href="{url name="admin_"|cat:$content['content_type']|cat:"_show" id=$content.id}" title="Editar">
+                    <a class="btn" href="{url name="admin_"|cat:$content->content_type_name|cat:"_show" id=$content->id}" title="Editar">
                         <i class="icon-pencil"></i>
                     </a>
                 </div>

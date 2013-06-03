@@ -2,6 +2,7 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+{script_tag src="/onm/jquery.password-strength.js" common=1}
 <script>
     jQuery(document).ready(function($){
         $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
@@ -28,6 +29,10 @@
                 $('.privileges-tab').show();
                 $("#id_user_group").attr("required", "required");
             }
+        });
+
+        var strength = $("#password").passStrength({
+            userid: "#login"
         });
 
         {acl isAllowed="USER_ADMIN"}
@@ -65,7 +70,18 @@ label {
 .tooltip {
     max-width:160px;
 }
-
+.alert-pass {
+    background: #F8D47A url("/assets/images/alert-ok-small.png") no-repeat 16px;
+    display: inline-block;
+    margin: 0;
+    padding: 5px 15px 5px 50px;
+    margin-left: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: white;
+}
+.alert-pass.alert-success { background: #468847 url("/assets/images/alert-ok-small.png") no-repeat 16px; }
+.alert-pass.alert-error { background: #B22222 url("/assets/images/alert-error-small.png") no-repeat 16px; }
 </style>
 {/block}
 
@@ -121,7 +137,7 @@ label {
                         <div class="control-group">
                             <label for="name" class="control-label">{t}Display name{/t}</label>
                             <div class="controls">
-                                <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" maxlength="50"/>
+                                <input type="text" id="name" name="name" value="{$user->name|default:""}" class="input-xlarge required" required="required" maxlength="50"/>
                             </div>
                         </div>
                     </fieldset>
@@ -150,7 +166,7 @@ label {
                             <div class="controls">
                                 <div class="input-prepend">
                                     <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="password" name="password" value="" class="input-medium {if $smarty.request.action eq "new"}required{/if}" maxlength="20"/>
+                                    <input type="password" id="password" name="password" value="" class="input-medium" {if $user->id eq null}required="required"{/if} maxlength="20"/>
                                 </div>
                             </div>
                         </div>

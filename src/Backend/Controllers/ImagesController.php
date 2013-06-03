@@ -880,7 +880,7 @@ class ImagesController extends Controller
      **/
     public function contentProviderGalleryAction(Request $request)
     {
-        $metadatas = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+        $metadata = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
         $category = $request->query->getDigits('category', 0);
         $page     = $request->query->getDigits('page', 1);
 
@@ -895,45 +895,33 @@ class ImagesController extends Controller
 
         $cm = new \ContentManager();
 
-        if (!empty($metadatas)) {
-            $search = \cSearch::getInstance();
-            $arrayIds      = $search->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
-            if (!empty($arrayIds)) {
-                $szWhere   = '( FALSE ';
-                foreach ($arrayIds as $id) {
-                    $szWhere .= ' OR pk_content = ' . $id[0];
-                }
-                $szWhere .= ')';
-            } else {
-                $szWhere = "TRUE";
-
-                return new Response(
-                    sprintf(
-                        "<div><p>"._("Unable to find any content matching your search criterira.")."</p></div>",
-                        $metadatas
-                    )
-                );
-            }
-
-        } else {
-            $szWhere = "TRUE";
+        $szWhere = '';
+        if (empty($metadata)) {
+            $szWhere = "AND  (`metadata` LIKE '%$metadata%')";
         }
 
         if (empty($category)) {
             $photos = $cm->find(
                 'Photo',
                 'contents.fk_content_type = 8 AND photos.media_type="image" '
-                .'AND contents.content_status=1 AND ' . $szWhere,
+                .'AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         } else {
             $photos = $cm->find_by_category(
                 'Photo',
                 $category,
-                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 AND ' . $szWhere,
+                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         }
+
+        if (empty($photos)) {
+            return new Response(
+                _("<div><p>Unable to find any image matching your search criteria.</p></div>")
+            );
+        }
+
         $total = count($photos);
         if ($total > $itemsPerPage) {
             array_pop($photos);
@@ -948,7 +936,7 @@ class ImagesController extends Controller
                     'admin_images_content_provider_gallery',
                     array(
                         'category'  => $category,
-                        'metadatas' => $metadatas,
+                        'metadatas' => $metadata,
                     )
                 )
             )

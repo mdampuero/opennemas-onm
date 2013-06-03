@@ -119,11 +119,7 @@ class TrashController extends Controller
             if (!empty($content->id)) {
                 $contentTypeId = $content->content_type;
 
-                // TODO: Use parameter binding
-                $name = $GLOBALS['application']->conn->GetOne(
-                    'SELECT name FROM `content_types` '
-                    .'WHERE pk_content_type = "'. $contentTypeId.'"'
-                );
+                $name = \ContentManager::getContentTypeNameFromId($contentTypeId);
 
                 $contentTypeName = classify($name);
                 $content = new $contentTypeName($contentId);
@@ -161,10 +157,7 @@ class TrashController extends Controller
                 $contentTypeId = $content->content_type;
 
                 // TODO: Use parameter binding
-                $name = $GLOBALS['application']->conn->GetOne(
-                    'SELECT name FROM `content_types` '
-                    .'WHERE pk_content_type = "'. $contentTypeId.'"'
-                );
+                $name = \ContentManager::getContentTypeNameFromId($contentTypeId);
 
                 $contentTypeName = ucwords($name);
                 $content = new $contentTypeName($contentId);
@@ -201,10 +194,7 @@ class TrashController extends Controller
                 $content = new \Content((int) $contentId);
 
                 if (!empty($content->id)) {
-                    $name = $GLOBALS['application']->conn->GetOne(
-                        'SELECT name FROM `content_types` WHERE pk_content_type = "'
-                        .$content->content_type.'"'
-                    );
+                    $name = \ContentManager::getContentTypeNameFromId($contentTypeId);
 
                     $contentClassName = ucwords($name);
                     $content = new $contentClassName($contentId);
@@ -241,10 +231,7 @@ class TrashController extends Controller
                 $content = new \Content((int) $contentId);
 
                 if (!empty($content->id)) {
-                    $name = $GLOBALS['application']->conn->GetOne(
-                        'SELECT name FROM `content_types` WHERE pk_content_type = "'
-                        .$content->content_type.'"'
-                    );
+                    $name = \ContentManager::getContentTypeNameFromId($contentTypeId);
 
                     $contentClassName = classify($name);
                     $content = new $contentClassName($contentId);

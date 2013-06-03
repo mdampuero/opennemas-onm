@@ -36,14 +36,7 @@ class Contents
     {
         $this->validateInt($contentID);
 
-        $sql = "SELECT name FROM content_types WHERE `pk_content_type`=$contentID";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if ($rs->_numOfRows < 1) {
-            $return_value = false;
-        } else {
-            $return_value = ucfirst($rs->fields['name']);
-        }
+        $returnValue = \ContentManager::getContentTypeNameFromId($contentID, true);
 
         return $return_value;
     }
@@ -55,8 +48,8 @@ class Contents
     {
         $this->validateInt($contentID);
 
-        $sql = "SELECT path FROM attachments WHERE `pk_attachment`=$contentID";
-        $rs  = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "SELECT path FROM attachments WHERE `pk_attachment`=?";
+        $rs  = $GLOBALS['application']->conn->Execute($sql, $contentID);
 
         if ($rs->_numOfRows < 1) {
             $returnValue = false;

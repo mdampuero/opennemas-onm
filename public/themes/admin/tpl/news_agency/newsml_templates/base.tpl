@@ -92,75 +92,144 @@
           </ContentItem>
         </NewsComponent>
       </NewsComponent>
-      {if !empty($photo)}
+      {if !empty($photo) || !empty($photoInner)}
       <!--Photo collection.-->
       <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos">
         <Role FormalName="Content list" />
-        <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
-          <NewsLines>
-            <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
-          </NewsLines>
-          <AdministrativeMetadata>
-            <Provider>
-              <Party FormalName="{setting name=site_name}" />
-            </Provider>
-          </AdministrativeMetadata>
-          <DescriptiveMetadata>
-            <Language FormalName="es" />
-            <DateLineDate>{$photo->created_datetime->format('Ymd\THis')}</DateLineDate>
-            <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
-          </DescriptiveMetadata>
-          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
-            <Role FormalName="Main" />
-            <!-- The link to download image -->
-            <ContentItem Href="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
-              <MediaType FormalName="Photo" />
-              <MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />
-              <Characteristics>
-                <SizeInBytes>{$photo->size*1024}</SizeInBytes>
-                <Property FormalName="Onm_Filename" Value="{$photo->name}" />
-                <Property FormalName="Height" Value="{$photo->height}" />
-                <Property FormalName="PixelDepth" Value="24" />
-                <Property FormalName="Width" Value="{$photo->width}" />
-              </Characteristics>
-            </ContentItem>
+        {if !empty($photo)}
+          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}" Euid="{$photo->id}">
+            <NewsLines>
+              <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
+            </NewsLines>
+            <AdministrativeMetadata>
+              <Provider>
+                <Party FormalName="{setting name=site_name}" />
+              </Provider>
+            </AdministrativeMetadata>
+            <DescriptiveMetadata>
+              <Language FormalName="es" />
+              <DateLineDate>{$photo->created_datetime->format('Ymd\THis')}</DateLineDate>
+              <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
+            </DescriptiveMetadata>
+            <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
+              <Role FormalName="Main" />
+              <!-- The link to download image -->
+              <ContentItem Href="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+                <MediaType FormalName="Photo" />
+                <MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />
+                <Characteristics>
+                  <SizeInBytes>{$photo->size*1024}</SizeInBytes>
+                  <Property FormalName="Onm_Filename" Value="{$photo->name}" />
+                  <Property FormalName="Height" Value="{$photo->height}" />
+                  <Property FormalName="PixelDepth" Value="24" />
+                  <Property FormalName="Width" Value="{$photo->width}" />
+                </Characteristics>
+              </ContentItem>
+            </NewsComponent>
+            <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.text">
+              <Role FormalName="Caption" />
+              <ContentItem>
+                <MediaType FormalName="Text" />
+                <Format FormalName="NITF" />
+                <MimeType FormalName="text/vnd.IPTC.NITF" />
+                <DataContent>
+                  <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                    <head>
+                      <title>{$article->title|htmlspecialchars_decode}</title>
+                      <docdata management-status="usable">
+                        <doc-id id-string="{$photo->id}" />
+                      </docdata>
+                    </head>
+                    <body>
+                      <body.head>
+                        <hedline>
+                          <hl1>{$article->title|htmlspecialchars_decode}</hl1>
+                        </hedline>
+                        <dateline>
+                          <story.date norm="{$photo->created_datetime->format('Ymd\THis')}">
+                            {$photo->created_datetime->format('Ymd\THis')}
+                          </story.date>
+                        </dateline>
+                      </body.head>
+                      <body.content>
+                        <p>
+                          {$photo->description|htmlspecialchars_decode}
+                        </p>
+                      </body.content>
+                    </body>
+                  </nitf>
+                </DataContent>
+              </ContentItem>
+            </NewsComponent>
           </NewsComponent>
-          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.text">
-            <Role FormalName="Caption" />
-            <ContentItem>
-              <MediaType FormalName="Text" />
-              <Format FormalName="NITF" />
-              <MimeType FormalName="text/vnd.IPTC.NITF" />
-              <DataContent>
-                <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
-                  <head>
-                    <title>{$article->title|htmlspecialchars_decode}</title>
-                    <docdata management-status="usable">
-                      <doc-id id-string="{$photo->id}" />
-                    </docdata>
-                  </head>
-                  <body>
-                    <body.head>
-                      <hedline>
-                        <hl1>{$article->title|htmlspecialchars_decode}</hl1>
-                      </hedline>
-                      <dateline>
-                        <story.date norm="{$photo->created_datetime->format('Ymd\THis')}">
-                          {$photo->created_datetime->format('Ymd\THis')}
-                        </story.date>
-                      </dateline>
-                    </body.head>
-                    <body.content>
-                      <p>
-                        {$photo->description|htmlspecialchars_decode}
-                      </p>
-                    </body.content>
-                  </body>
-                </nitf>
-              </DataContent>
-            </ContentItem>
+        {/if}
+        {if !empty($photoInner)}
+          <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}" Euid="{$photoInner->id}">
+            <NewsLines>
+              <HeadLine>{$article->title|htmlspecialchars_decode}</HeadLine>
+            </NewsLines>
+            <AdministrativeMetadata>
+              <Provider>
+                <Party FormalName="{setting name=site_name}" />
+              </Provider>
+            </AdministrativeMetadata>
+            <DescriptiveMetadata>
+              <Language FormalName="es" />
+              <DateLineDate>{$photoInner->created_datetime->format('Ymd\THis')}</DateLineDate>
+              <Property FormalName="Onm_IdRefObject" Value="{$photoInner->id}" />
+            </DescriptiveMetadata>
+            <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.file">
+              <Role FormalName="Main" />
+              <!-- The link to download image -->
+              <ContentItem Href="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
+                <MediaType FormalName="Photo" />
+                <MimeType FormalName="{$photoInner->media_type}/{$photoInner->type_img}" />
+                <Characteristics>
+                  <SizeInBytes>{$photoInner->size*1024}</SizeInBytes>
+                  <Property FormalName="Onm_Filename" Value="{$photoInner->name}" />
+                  <Property FormalName="Height" Value="{$photoInner->height}" />
+                  <Property FormalName="PixelDepth" Value="24" />
+                  <Property FormalName="Width" Value="{$photoInner->width}" />
+                </Characteristics>
+              </ContentItem>
+            </NewsComponent>
+            <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.text">
+              <Role FormalName="Caption" />
+              <ContentItem>
+                <MediaType FormalName="Text" />
+                <Format FormalName="NITF" />
+                <MimeType FormalName="text/vnd.IPTC.NITF" />
+                <DataContent>
+                  <nitf version="-//IPTC//DTD NITF 3.2//EN" change.date="October 10, 2003" change.time="19:30" baselang="es-ES">
+                    <head>
+                      <title>{$article->title|htmlspecialchars_decode}</title>
+                      <docdata management-status="usable">
+                        <doc-id id-string="{$photoInner->id}" />
+                      </docdata>
+                    </head>
+                    <body>
+                      <body.head>
+                        <hedline>
+                          <hl1>{$article->title|htmlspecialchars_decode}</hl1>
+                        </hedline>
+                        <dateline>
+                          <story.date norm="{$photoInner->created_datetime->format('Ymd\THis')}">
+                            {$photoInner->created_datetime->format('Ymd\THis')}
+                          </story.date>
+                        </dateline>
+                      </body.head>
+                      <body.content>
+                        <p>
+                          {$photoInner->description|htmlspecialchars_decode}
+                        </p>
+                      </body.content>
+                    </body>
+                  </nitf>
+                </DataContent>
+              </ContentItem>
+            </NewsComponent>
           </NewsComponent>
-        </NewsComponent>
+        {/if}
       </NewsComponent>
       {/if}
     </NewsComponent>
