@@ -91,8 +91,8 @@ class MethodCacheManager
         if (in_array($method, $class_methods)) {
 
             $key = $this->classname.$method.md5(serialize($args));
-            if (defined('APC_PREFIX')) {
-                $key = APC_PREFIX . $key;
+            if (defined('CACHE_PREFIX')) {
+                $key = CACHE_PREFIX . $key;
             }
 
             if (false === ($result = $this->cache->fetch($key))) {
