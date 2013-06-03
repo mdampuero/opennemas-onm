@@ -55,7 +55,7 @@ class Settings
 
         if (!is_array($settingName)) {
             // Try to fetch the setting from cache first
-            $settingValue = $cache->fetch(APC_PREFIX . $settingName);
+            $settingValue = $cache->fetch(CACHE_PREFIX . $settingName);
 
             // If was not fetched from cache now is turn of DB
             if (!$settingValue) {
@@ -74,13 +74,13 @@ class Settings
                     $settingValue = unserialize($rs);
                 }
 
-                $cache->save(APC_PREFIX . $settingName, $settingValue);
+                $cache->save(CACHE_PREFIX . $settingName, $settingValue);
             }
         } else {
             // Try to fetch each setting from cache first
             $cacheSettingName = array();
             foreach ($settingName as $key) {
-                $cacheSettingName []= APC_PREFIX . $key;
+                $cacheSettingName []= CACHE_PREFIX . $key;
             }
 
             $cacheSettingValue = $cache->fetch($cacheSettingName);
@@ -90,7 +90,7 @@ class Settings
             if (!empty($cacheSettingValue)) {
                 foreach ($cacheSettingValue as $key => $value) {
 
-                    $keyName = str_replace(APC_PREFIX, "", $key);
+                    $keyName = str_replace(CACHE_PREFIX, "", $key);
 
                     $settingValue[$keyName] = $value;
                 }
@@ -117,7 +117,7 @@ class Settings
 
                 $cacheSettingName = array();
                 foreach ($settingValue as $key => $option) {
-                    $cacheSettingName [APC_PREFIX . $key] = $option;
+                    $cacheSettingName [CACHE_PREFIX . $key] = $option;
                 }
                 $cache->save($settingName, $cacheSettingName);
 
@@ -161,7 +161,7 @@ class Settings
             \Application::logDatabaseError();
             return false;
         }
-        $cache->save(APC_PREFIX . $settingName, $settingValue);
+        $cache->save(CACHE_PREFIX . $settingName, $settingValue);
 
 
         return true;
@@ -182,7 +182,7 @@ class Settings
     public static function invalidate($settingName, $instanceName = null)
     {
         if (is_null($instanceName)) {
-            $instanceName = APC_PREFIX;
+            $instanceName = CACHE_PREFIX;
         }
 
         // the setting name must be setted

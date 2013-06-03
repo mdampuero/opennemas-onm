@@ -26,7 +26,7 @@ define('DS', '/');
 define('APPLICATION_PATH', realpath(__DIR__.'/../../../'));
 define('SITE_PATH', realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR ."public").DIRECTORY_SEPARATOR);
 
-define('APC_PREFIX', 'onm-importer');
+define('CACHE_PREFIX', 'onm-importer');
 
 require 'libs/onm-config.inc.php';
 

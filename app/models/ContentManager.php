@@ -2240,12 +2240,12 @@ class ContentManager
         global $sc;
         $cache = $sc->get('cache');
 
-        $externalContent = $cache->fetch(APC_PREFIX.$url);
+        $externalContent = $cache->fetch(CACHE_PREFIX.$url);
         if (!$externalContent) {
             $c  = curl_init($url);
             curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
             $externalContent = curl_exec($c);
-            $cache->save(APC_PREFIX.$url, $externalContent, 300);
+            $cache->save(CACHE_PREFIX.$url, $externalContent, 300);
             curl_close($c);
         }
 

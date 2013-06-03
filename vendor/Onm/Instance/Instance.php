@@ -90,7 +90,7 @@ class Instance
 
         define('SS', "/");
 
-        define('APC_PREFIX', INSTANCE_UNIQUE_NAME);
+        define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 
         define('SITE', $_SERVER['SERVER_NAME']);
 

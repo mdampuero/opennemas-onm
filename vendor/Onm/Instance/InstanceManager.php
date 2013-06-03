@@ -243,9 +243,9 @@ class InstanceManager
         $cache = $sc->get('cache');
 
         // Fetch caches if exist
-        $key = APC_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
+        $key = CACHE_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
         $totals = $cache->fetch($key);
-        $key = APC_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
+        $key = CACHE_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
         $information = $cache->fetch($key);
 
 
@@ -267,7 +267,7 @@ class InstanceManager
             }
 
             $cache->save(
-                APC_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
+                CACHE_PREFIX . "getDBInformation_totals_".$settings['BD_DATABASE'],
                 $totals,
                 300
             );
@@ -291,7 +291,7 @@ class InstanceManager
             }
 
             $cache->save(
-                APC_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'],
+                CACHE_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'],
                 $information,
                 300
             );

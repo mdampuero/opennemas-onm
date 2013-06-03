@@ -83,7 +83,7 @@ class ContentCategoryManager
         global $sc;
         $cache = $sc->get('cache');
 
-        $cacheKey = APC_PREFIX.'_content_categories';
+        $cacheKey = CACHE_PREFIX.'_content_categories';
         $categories = $cache->fetch($cacheKey);
 
         if (!$categories) {
