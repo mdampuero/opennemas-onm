@@ -33,6 +33,13 @@ class MethodCacheManager
     private $object    = null;
 
     /**
+     * The object with cache service
+     *
+     * @var mixed
+     **/
+    private $cache    = null;
+
+    /**
      * A list of methods that the object has
      *
      * @var array
@@ -84,6 +91,9 @@ class MethodCacheManager
         if (in_array($method, $class_methods)) {
 
             $key = $this->classname.$method.md5(serialize($args));
+            if (defined('APC_PREFIX')) {
+                $key = APC_PREFIX . $key;
+            }
 
             if (false === ($result = $this->cache->fetch($key))) {
 
