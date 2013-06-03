@@ -173,7 +173,7 @@ class CategoriesController extends Controller
                 $user->addCategoryToUser($_SESSION['userid'], $category->pk_content_category);
                 $_SESSION['accesscategories'] = $user->getAccessCategoryIds($_SESSION['userid']);
 
-                $ccm->reloadCategories();
+                $this->get('cache')->delete(APC_PREFIX.'_content_categories');
             }
 
             $continue = $request->request->getDigits('continue', 0);
@@ -302,8 +302,8 @@ class CategoriesController extends Controller
         $category = new \ContentCategory($id);
 
         if ($category->update($data)) {
-            $ccm = \ContentCategoryManager::get_instance();
-            $ccm->reloadCategories();
+            $this->get('cache')->delete(APC_PREFIX.'_content_categories');
+
             m::add(sprintf(_('Category "%s" updated successfully.'), $data['title']), m::SUCCESS);
         }
 
@@ -346,7 +346,7 @@ class CategoriesController extends Controller
                 $_SESSION['accesscategories'] =
                     $user->getAccessCategoryIds($_SESSION['userid']);
 
-                $ccm->reloadCategories();
+                $this->get('cache')->delete(APC_PREFIX.'_content_categories');
                 m::add(_("Category deleted successfully."), m::SUCCESS);
             } else {
                 m::add(_("To delete a category previously you have to empty it."), m::ERROR);
@@ -424,8 +424,7 @@ class CategoriesController extends Controller
         } else {
             $category->setInMenu($status);
 
-            $ccm = \ContentCategoryManager::get_instance();
-            $ccm->reloadCategories();
+            $this->get('cache')->delete(APC_PREFIX.'_content_categories');
 
             // Limpiar la cache de portada de todas las categorias
             // $refresh = Content::refreshFrontpageForAllCategories();
@@ -458,8 +457,7 @@ class CategoriesController extends Controller
         } else {
             $category->setInRss($status, $id);
 
-            $ccm = \ContentCategoryManager::get_instance();
-            $ccm->reloadCategories();
+            $this->get('cache')->delete(APC_PREFIX.'_content_categories');
 
             // Limpiar la cache de portada de todas las categorias
             // $refresh = Content::refreshFrontpageForAllCategories();
