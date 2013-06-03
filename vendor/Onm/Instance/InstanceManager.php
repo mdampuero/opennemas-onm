@@ -70,59 +70,74 @@ class InstanceManager
      */
     public function load($serverName)
     {
-        //TODO: improve search for allowing subdomains with wildcards
-        $sql = "SELECT SQL_CACHE * FROM instances"
-            ." WHERE domains LIKE '%{$serverName}%' LIMIT 1";
-        $rs = $this->connection->Execute($sql);
+        // global $sc;
+        // $cache = $sc->get('cache');
 
-        if (!$rs) {
-            $this->connection->ErrorMsg();
-            return false;
-        }
-
+        $instance = false;
         if (preg_match("@\/manager@", $_SERVER["REQUEST_URI"])) {
-            global $onmInstancesConnection;
+            // $instance = $cache->fetch('manager_instance_'.$serverName);
+            if (!$instance) {
+                global $onmInstancesConnection;
 
-            $instance = new Instance();
-            $instance->internal_name = 'onm_manager';
-            $instance->activated = true;
+                $instance = new Instance();
+                $instance->internal_name = 'onm_manager';
+                $instance->activated = true;
 
-            $instance->settings = array(
-                'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
-                'MEDIA_URL'            => '',
-                'TEMPLATE_USER'        => '',
-                'BD_HOST'              => $onmInstancesConnection['BD_HOST'],
-                'BD_USER'              => $onmInstancesConnection['BD_USER'],
-                'BD_PASS'              => $onmInstancesConnection['BD_PASS'],
-                'BD_DATABASE'          => $onmInstancesConnection['BD_DATABASE'],
-                'BD_TYPE'              => $onmInstancesConnection['BD_TYPE'],
-            );
+                $instance->settings = array(
+                    'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
+                    'MEDIA_URL'            => '',
+                    'TEMPLATE_USER'        => '',
+                    'BD_HOST'              => $onmInstancesConnection['BD_HOST'],
+                    'BD_USER'              => $onmInstancesConnection['BD_USER'],
+                    'BD_PASS'              => $onmInstancesConnection['BD_PASS'],
+                    'BD_DATABASE'          => $onmInstancesConnection['BD_DATABASE'],
+                    'BD_TYPE'              => $onmInstancesConnection['BD_TYPE'],
+                );
+
+                // $cache->save('manager_instance_'.$serverName, $instance);
+            }
 
             $instance->boot();
 
             return $instance;
         }
-        //If found matching instance initialize its contants and return it
-        if ($rs->fields) {
 
-            $instance = new Instance();
-            foreach ($rs->fields as $key => $value) {
-                $instance->{$key} = $value;
-            }
-            define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
+        // $instance = $cache->fetch('instance_'.$serverName);
+        if (!$instance) {
+            //TODO: improve search for allowing subdomains with wildcards
+            $sql = "SELECT SQL_CACHE * FROM instances"
+                ." WHERE domains LIKE '%{$serverName}%' LIMIT 1";
+            $rs = $this->connection->Execute($sql);
 
-            $instance->boot();
-
-            // If this instance is not activated throw an exception
-            if ($instance->activated != '1') {
-                $message =_('Instance not activated');
-                throw new \Onm\Instance\NotActivatedException($message);
+            if (!$rs) {
+                $this->connection->ErrorMsg();
+                return false;
             }
 
-        } else {
-            // If this instance doesn't exist check if the request is from manager
-            // in that case return a dummie instance.
-            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+            //If found matching instance initialize its contants and return it
+            if ($rs->fields) {
+
+                $instance = new Instance();
+                foreach ($rs->fields as $key => $value) {
+                    $instance->{$key} = $value;
+                }
+                define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
+
+                // $cache->save('instance_'.$serverName, $instance);
+
+                $instance->boot();
+
+                // If this instance is not activated throw an exception
+                if ($instance->activated != '1') {
+                    $message =_('Instance not activated');
+                    throw new \Onm\Instance\NotActivatedException($message);
+                }
+
+            } else {
+                // If this instance doesn't exist check if the request is from manager
+                // in that case return a dummie instance.
+                throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+            }
         }
 
         return $instance;
