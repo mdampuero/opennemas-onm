@@ -474,7 +474,7 @@ class User
                  $rs->MoveNext();
             }
 
-            $cache->save(APC_PREFIX . "categories_for_user_".$id);
+            $cache->save(APC_PREFIX . "categories_for_user_".$id, $contentCategories);
         }
 
         return $contentCategories;
