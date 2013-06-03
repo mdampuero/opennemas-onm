@@ -85,6 +85,9 @@ class ContentCategoryManager
      **/
     public function reloadCategories()
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         $this->categories = null;
         $method ='populateCategories';
         $args   = array();
@@ -93,12 +96,12 @@ class ContentCategoryManager
             $key = APC_PREFIX . $key;
         }
 
-        $result = apc_delete($key);
+        $result = $cache->delete($key);
         $result = call_user_func_array(
             array('ContentCategoryManager', $method),
             $args
         );
-        apc_store($key, serialize($result), 300);
+        $cache->save($key, serialize($result), 300);
 
         return $result ;
     }

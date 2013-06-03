@@ -2133,12 +2133,15 @@ class ContentManager
     */
     public function getUrlContent($url, $decodeJson = false)
     {
-        $externalContent = apc_fetch(APC_PREFIX.$url, $success);
-        if (!$success) {
+        global $sc;
+        $cache = $sc->get('cache');
+
+        $externalContent = $cache->fetch(APC_PREFIX.$url);
+        if (!$externalContent) {
             $c  = curl_init($url);
             curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
             $externalContent = curl_exec($c);
-            apc_add(APC_PREFIX.$url, $externalContent, 300);
+            $cache->save(APC_PREFIX.$url, $externalContent, 300);
             curl_close($c);
         }
 
