@@ -1,5 +1,7 @@
 <?php
 /*
+ * Defines the MethodCacheManager class
+ *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
  *
@@ -9,10 +11,11 @@
 /**
  * Handles caching functionality over function and class calling.
  *
- * @package    Onm
+ * @package    Core
  * @subpackage Cache
  * @author     Fran Dieguez <fran@openhost.es>
  **/
+
 class MethodCacheManager
 {
     /**
@@ -46,7 +49,7 @@ class MethodCacheManager
     /**
      * Initializes the instance
      *
-     * @param mixed $object the object to interact with
+     * @param mixed $object  the object to interact with
      * @param array $options some options to change the behaviour of this class
      *                       like ttl, ...
      *
@@ -54,6 +57,10 @@ class MethodCacheManager
      **/
     public function __construct($object, $options = array())
     {
+
+        global $sc;
+        $this->cache = $sc->get('cache');
+
         $this->object = $object;
 
         if (isset($options['ttl'])) {
@@ -66,7 +73,7 @@ class MethodCacheManager
      * if the result was previously cached returns the result directly from the cache
      *
      * @param string $method the method to call
-     * @param array $args the arguments to pass to the method
+     * @param array  $args   the arguments to pass to the method
      *
      * @return mixed the result of the called
      **/
@@ -75,14 +82,13 @@ class MethodCacheManager
         $class_methods = $this->getInternalObjectMethods();
 
         if (in_array($method, $class_methods)) {
-            $key = $this->classname.$method.md5(serialize($args));
-            if (defined('APC_PREFIX')) {
-                $key = APC_PREFIX . $key;
-            }
 
-            if (false === ($result = apc_fetch($key))) {
+            $key = $this->classname.$method.md5(serialize($args));
+
+            if (false === ($result = $this->cache->fetch($key))) {
+
                 $result = call_user_func_array(array($this->object, $method), $args);
-                apc_store($key, serialize($result), $this->ttl);
+                $this->cache->save($key, serialize($result), $this->ttl);
 
                 return $result;
             }
@@ -118,7 +124,7 @@ class MethodCacheManager
      **/
     public function clearCache($key)
     {
-        apc_delete($key);
+        $this->cache->delete($key);
 
         return $this;
     }
@@ -130,7 +136,7 @@ class MethodCacheManager
      **/
     public function clearAllCaches()
     {
-        apc_clear_cache('user');
+        $this->cache->deleteAll();
 
         return $this;
     }
