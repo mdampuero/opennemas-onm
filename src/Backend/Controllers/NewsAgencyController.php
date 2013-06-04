@@ -34,6 +34,9 @@ class NewsAgencyController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWS_AGENCY_IMPORTER');
+
         // Check ACL
         $this->checkAclOrForward('IMPORT_ADMIN');
 
@@ -618,7 +621,7 @@ class NewsAgencyController extends Controller
      **/
     public function configUpdateServerAction(Request $request)
     {
-        $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
 
         $id = $request->query->getDigits('id');
 
@@ -683,9 +686,9 @@ class NewsAgencyController extends Controller
      **/
     public function configCreateServerAction(Request $request)
     {
-        if ('POST' != $request->getMethod()) {
-            $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
 
+        if ('POST' != $request->getMethod()) {
             $this->view->assign(
                 array(
                     'server'        => array(),

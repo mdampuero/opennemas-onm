@@ -34,6 +34,11 @@ class CategoriesController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('CATEGORY_MANAGER');
+
+        $this->checkAclOrForward('CATEGORY_ADMIN');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
@@ -46,7 +51,6 @@ class CategoriesController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_ADMIN');
         $ccm = \ContentCategoryManager::get_instance();
 
         // Get contents by group
@@ -444,7 +448,7 @@ class CategoriesController extends Controller
      **/
     public function toggleRssAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_AVAILABLE');
+        $this->checkAclOrForward('CATEGORY_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);

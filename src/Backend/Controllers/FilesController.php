@@ -34,7 +34,9 @@ class FilesController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('FILE_MANAGER');
+
         $this->checkAclOrForward('FILE_ADMIN');
 
         $request = $this->request;
@@ -74,7 +76,6 @@ class FilesController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_ADMIN');
         $cm           = new \ContentManager();
         $itemsPerPage = s::get('items_per_page');
 
@@ -153,7 +154,6 @@ class FilesController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_ADMIN');
         $request = $this->request;
         $cm      = new \ContentManager();
         $category = $request->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
@@ -489,7 +489,6 @@ class FilesController extends Controller
      **/
     public function toggleFavoriteAction(Request $request)
     {
-
         $this->checkAclOrForward('FILE_AVAILABLE');
 
         $request = $this->request;

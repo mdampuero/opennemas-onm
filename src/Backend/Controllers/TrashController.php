@@ -35,6 +35,11 @@ class TrashController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('TRASH_MANAGER');
+
+        $this->checkAclOrForward('TRASH_ADMIN');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->filterContentType = $this->request->query->get('mytype', 'article');

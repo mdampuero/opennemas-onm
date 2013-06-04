@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
-use \Onm\Module\ModuleManager;
 
 /**
  * Handles the actions for managing articles
@@ -36,7 +35,7 @@ class ArticlesController extends Controller
     public function init()
     {
         //Check if module is activated in this onm instance
-        ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
+        \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
 
         // Check if the user can admin video
         $this->checkAclOrForward('ARTICLE_ADMIN');
@@ -391,7 +390,7 @@ class ArticlesController extends Controller
         }
         $this->view->assign('orderInner', $orderInner);
 
-        if (ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
+        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
             $galleries = array();
             if (array_key_exists('withGalleryHome', $article->params)) {
                 $galleries['home'] = new \Album($article->params['withGalleryHome']);

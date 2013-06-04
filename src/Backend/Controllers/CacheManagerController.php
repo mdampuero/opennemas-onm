@@ -35,8 +35,10 @@ class CacheManagerController extends Controller
      **/
     public function init()
     {
-        // Show review this
-        // $this->checkAclOrForward('CACHE_TPL_ADMIN');
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('CACHE_MANAGER');
+
+        $this->checkAclOrForward('CACHE_TPL_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 

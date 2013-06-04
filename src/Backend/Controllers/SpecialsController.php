@@ -69,8 +69,6 @@ class SpecialsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_ADMIN');
-
         $category = $request->query->getDigits('category', null);
         $page = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page') ?: 20;
@@ -127,8 +125,6 @@ class SpecialsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_ADMIN');
-
         $page = $request->query->getDigits('page', 1);
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
@@ -480,7 +476,7 @@ class SpecialsController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_DELETE');
+        $this->checkAclOrForward('SPECIAL_AVAILABLE');
 
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
@@ -603,7 +599,7 @@ class SpecialsController extends Controller
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_HOME');
+        $this->checkAclOrForward('SPECIAL_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);

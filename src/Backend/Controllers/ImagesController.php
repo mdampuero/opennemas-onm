@@ -34,6 +34,11 @@ class ImagesController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('IMAGE_MANAGER');
+
+        $this->checkAclOrForward('IMAGE_ADMIN');
+
         $request = $this->request;
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
@@ -498,6 +503,8 @@ class ImagesController extends Controller
      **/
     public function newAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_CREATE');
+
         $request = $this->request;
         $category = $request->query->getDigits('category', '');
 
@@ -535,6 +542,8 @@ class ImagesController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_UPDATE');
+
         $request     = $this->request;
         $ids         = $request->query->get('id');
         $page        = $request->query->getDigits('page', 1);
@@ -591,6 +600,8 @@ class ImagesController extends Controller
      **/
     public function updateAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_UPDATE');
+
         $request   = $this->request;
         $photosRAW = $request->request->get('description');
         $action    = $request->request->filter('action', 'update');
@@ -649,6 +660,8 @@ class ImagesController extends Controller
      **/
     public function deleteAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_DELETE');
+
         $request = $this->get('request');
         $id   = $request->query->getDigits('id', null);
         $page = $request->query->getDigits('page', 1);
@@ -682,6 +695,8 @@ class ImagesController extends Controller
      **/
     public function createAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_CREATE');
+
         $response = new Response();
         $response->headers->add(
             array(
@@ -841,7 +856,6 @@ class ImagesController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
-
         $this->checkAclOrForward('IMAGE_DELETE');
 
         $request = $this->get('request');

@@ -33,6 +33,9 @@ class NewsletterSubscriptorsController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
+
         $this->checkAclOrForward('NEWSLETTER_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
@@ -95,8 +98,6 @@ class NewsletterSubscriptorsController extends Controller
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $user = new \Subscriptor();
 
@@ -147,8 +148,6 @@ class NewsletterSubscriptorsController extends Controller
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $id = $request->query->getDigits('id');
 

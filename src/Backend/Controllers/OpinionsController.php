@@ -725,7 +725,7 @@ class OpinionsController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('OPINIONS_AVAILABLE');
+        $this->checkAclOrForward('OPINION_AVAILABLE');
 
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);
@@ -778,7 +778,7 @@ class OpinionsController extends Controller
      **/
     public function batchInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('OPINIONS_AVAILABLE');
+        $this->checkAclOrForward('OPINION_AVAILABLE');
 
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);

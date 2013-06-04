@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
-use Onm\Module\ModuleManager as mod;
 
 /**
  * Handles the actions for the system information
@@ -35,6 +34,11 @@ class SearchController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('ADVANCED_SEARCH');
+
+        $this->checkAclOrForward('SEARCH_ADMIN');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
@@ -253,7 +257,8 @@ class SearchController extends Controller
             }
             $moduleName = strtoupper($moduleName.'_MANAGER');
 
-            if (mod::moduleExists($moduleName) && mod::isActivated($moduleName)
+            if (\Onm\Module\ModuleManager::moduleExists($moduleName) &&
+                \Onm\Module\ModuleManager::isActivated($moduleName)
             ) {
                 $contentTypesFiltered [$contentType['pk_content_type']] = $contentType['title'];
             }
