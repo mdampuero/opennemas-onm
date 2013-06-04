@@ -121,7 +121,8 @@ class NewsletterManager
             ->setSender(array($params['mail_sender'] => s::get('site_name')));
 
         try {
-            $mailer = $this->get('mailer');
+            global  $sc;
+            $mailer = $sc->get('mailer');
             $mailer->send($message);
 
         } catch (\Exception $e) {
