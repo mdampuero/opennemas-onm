@@ -209,8 +209,8 @@
                             {capture "uriAuthor"}{generate_uri content_type="opinion_author_frontpage"
                                         title=$allAuthors.$authorid
                                         id=$authorid}{/capture}
-                            <a href="{$smarty.const.SITE_URL}{$smarty.capture.uriAuthor|trim}" target="_blank">
-                                {t 1=$allAuthors.$authorid}Opinion of Author "%1"{/t}</a>
+                            <a href="{$smarty.const.SITE_URL}{$smarty.capture.uriAuthor|trim}?page={$caches[c].resource}" target="_blank">
+                                {t 1=$allAuthors.$authorid}Opinion of Author "%1"{/t} {t 1=$caches[c].resource}(Page %1){/t}</a>
                             <input type="hidden" name="uris[]" value="{$smarty.capture.uriAuthor|trim}" />
                             {* Gallery frontpage *}
                         {elseif ($caches[c].template == 'album_frontpage')}

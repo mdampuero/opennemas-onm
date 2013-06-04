@@ -376,6 +376,7 @@ class OpinionsController extends Controller
 
         // Author frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
+
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
@@ -466,7 +467,7 @@ class OpinionsController extends Controller
                     'fileName'    => $this->generateUrl(
                         'frontend_opinion_author_frontpage',
                         array(
-                            'author_id' => $author->pk_author,
+                            'author_id' => $authorID,
                             'author_slug' => $authorName,
                         )
                     ).'/?page=%d',
