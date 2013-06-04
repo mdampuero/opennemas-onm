@@ -205,10 +205,10 @@
                             <input type="hidden" name="uris[]" value="opinion/" />
                             {* Opinion author index*}
                         {elseif ($caches[c].template == 'opinion_author_index')}
-                        {assign var="authorid" value=$caches[c].authorid}
+                        {assign var="authorid" value=$caches[c].category|string_format:"%d"}
                             {capture "uriAuthor"}{generate_uri content_type="opinion_author_frontpage"
                                         title=$allAuthors.$authorid
-                                        id=$caches[c].authorid}{/capture}
+                                        id=$authorid}{/capture}
                             <a href="{$smarty.const.SITE_URL}{$smarty.capture.uriAuthor|trim}" target="_blank">
                                 {t 1=$allAuthors.$authorid}Opinion of Author "%1"{/t}</a>
                             <input type="hidden" name="uris[]" value="{$smarty.capture.uriAuthor|trim}" />
