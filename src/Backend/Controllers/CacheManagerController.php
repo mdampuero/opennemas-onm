@@ -156,7 +156,7 @@ class CacheManagerController extends Controller
         foreach ($caches as &$cache) {
             $cache['cache_id'] = $cache["category"] . "|" . $cache["resource"];
             $cache['tpl'] = $cache["template"] . ".tpl";
-            if($cache["template"] == 'opinion_author_index') {
+            if ($cache["template"] == 'opinion_author_index') {
                 if (preg_match('/([0-9]+)_([0-9]+)/', $cache['resource'], $match)) {
                     $cache["authorid"] =(int)$match[1];
                     $cache["page"] =$match[2];
