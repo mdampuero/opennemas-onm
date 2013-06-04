@@ -181,6 +181,9 @@ class Settings
      */
     public static function invalidate($settingName, $instanceName = null)
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         if (is_null($instanceName)) {
             $instanceName = CACHE_PREFIX;
         }
