@@ -91,6 +91,9 @@ class NewsAgencyController extends Controller
 
         // Fetch all servers and activated sources
         $servers = s::get('news_agency_config');
+        if (!is_array($servers)) {
+            $servers = array();
+        }
         $sources = array_map(
             function ($server) {
                 return $server['name'];
