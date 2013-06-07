@@ -700,6 +700,7 @@ class OpinionsController extends Controller
                 " contents.available=1 AND pk_content = pk_fk_content",
                 4
             );
+
             // Get author slug for suggested opinions
             foreach ($machineSuggestedContents as &$suggest) {
                 $element = new \Opinion($suggest['pk_content']);
@@ -711,7 +712,8 @@ class OpinionsController extends Controller
                 }
                 $suggest['uri'] = $element->uri;
             }
-            $this->view->assign('suggested', $suggestedContents);
+
+            $this->view->assign('suggested', $machineSuggestedContents);
 
             // Associated media code --------------------------------------
             if (isset($opinion->img2) && ($opinion->img2 > 0)) {

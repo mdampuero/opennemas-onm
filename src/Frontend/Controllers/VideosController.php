@@ -231,7 +231,7 @@ class VideosController extends Controller
             $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
                 $video->metadata,
                 'video',
-                "pk_fk_content_category= ".$video->category.
+                "pk_fk_content_category = ".$video->category.
                 " AND contents.available=1 AND pk_content = pk_fk_content",
                 4
             );
@@ -245,7 +245,7 @@ class VideosController extends Controller
                     'contentId'     => $video->id,
                     'action'        => 'inner',
                     'others_videos' => $otherVideos,
-                    'suggested'     => $machineRelatedContent
+                    'suggested'     => $machineSuggestedContents
                 )
             );
         } //end iscached

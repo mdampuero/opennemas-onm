@@ -149,6 +149,19 @@ class ArticlesController extends Controller
                     " AND contents.available=1 AND pk_content = pk_fk_content",
                     4
                 );
+
+                foreach ($machineSuggestedContents as &$element) {
+                    $element['uri'] = \Uri::generate(
+                        'article',
+                        array(
+                            'id'       => $element['pk_content'],
+                            'date'     => date('YmdHis', strtotime($element['created'])),
+                            'category' => $element['catName'],
+                            'slug'     => StringUtils::get_title($element['title']),
+                        )
+                    );
+                }
+
                 $this->view->assign('suggested', $machineSuggestedContents);
             } else {
                 throw new ResourceNotFoundException();

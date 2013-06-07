@@ -83,19 +83,6 @@ class MachineSearcher
                 $result= $resultSet->GetArray();
             }
 
-            foreach ($result as &$res) {
-                $res['uri'] = \Uri::generate(
-                    'article',
-                    array(
-                        'id'       => $res['pk_content'],
-                        'date'     => date('YmdHis', strtotime($res['created'])),
-                        'category' => $res['catName'],
-                        'slug'     => StringUtils::get_title($res['title']),
-                    )
-                );
-            }
-
-
             $cm = new \ContentManager();
             $result = $cm->getInTime($result);
 

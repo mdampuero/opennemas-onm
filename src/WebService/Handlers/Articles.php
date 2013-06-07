@@ -154,28 +154,36 @@ class Articles
 
                 $this->validateInt($param1);
 
-                $article = new Article($param1);
+                // Fetch services
+                $er              = $this->container->get('entity_repository');
+                $machineSearcher = $this->container->get('automatic_contents');
 
-                $machineSuggestedContents = array();
-                if (!empty($article->metadata)) {
-                    $objSearch = cSearch::getInstance();
-                    $machineSuggestedContents = $objSearch->SearchSuggestedContents(
-                        $article->metadata,
-                        'article',
-                        "pk_fk_content_category= ".$article->category.
-                        " AND contents.available=1 AND pk_content = pk_fk_content",
-                        4
-                    );
-                    $machineSuggestedContents = $this->cm->getInTime($machineSuggestedContents);
-                }
+                // Fetch the content to work with
+                $this->validateInt($param1);
+                $article = $er->find('Article', $param1);
+
+                // Retrieve the related contents for the given
+                $machineSuggestedContents = $machineSearcher->searchSuggestedContents(
+                    $article->metadata,
+                    'article',
+                    "pk_fk_content_category= ".$article->category.
+                    " AND contents.available=1 AND pk_content = pk_fk_content",
+                    4
+                );
 
                 return $machineSuggestedContents;
 
                 break;
             case 'print':
 
-                // Article
-                $article = new Article($articleID);
+                $this->validateInt($param1);
+
+                // Fetch services
+                $machineSearcher = $this->container->get('automatic_contents');
+
+                // Fetch the content to work with
+                $this->validateInt($param1);
+                $article = $er->find('Article', $param1);
 
                 // Breadcrub/Pathway
                 $breadcrub   = array();
@@ -270,18 +278,19 @@ class Articles
      */
     public function complete($id = null)
     {
-        $ccm = ContentCategoryManager::get_instance();
-        $cm  = new ContentManager();
+        $ccm             = ContentCategoryManager::get_instance();
+        $cm              = new ContentManager();
+        $er              = $this->container->get('entity_repository');
+        $machineSearcher = $this->container->get('automatic_contents');
 
         // Resolve dirty Id
         $articleId = Content::resolveID($id);
 
-        // Load article
-        $article = new Article($articleId);
+        // Fetch the content to work with
+        $article = $er->find('Article', $articleId);
 
         // Get category title used on tpl's
         $article->category_title = $ccm->get_title($article->category_name);
-
         $article->actualCategoryId = $ccm->get_id($article->category_name);
 
         // Get inner image for this article
@@ -341,24 +350,26 @@ class Articles
         }
         $article->relatedContents = $relatedContents;
 
-        // Get Machine suggested
-        $machineSuggestedContents = array();
-        if (!empty($article->metadata)) {
-            $objSearch    = cSearch::getInstance();
-            $machineSuggestedContents =
-                $objSearch->searchSuggestedContents(
-                    $article->metadata,
-                    'article',
-                    "pk_fk_content_category= ".$article->category.
-                    " AND contents.available=1 AND pk_content = pk_fk_content",
-                    4
-                );
-            $machineSuggestedContents = $cm->getInTime($machineSuggestedContents);
-
-            foreach ($machineSuggestedContents as &$content) {
-                $content['uri'] = 'ext'.$content['uri'];
-            }
+        // Retrieve the related contents for the given
+        $machineSuggestedContents = $machineSearcher->searchSuggestedContents(
+            $article->metadata,
+            'article',
+            "pk_fk_content_category= ".$article->category.
+            " AND contents.available=1 AND pk_content = pk_fk_content",
+            4
+        );
+        foreach ($machineSuggestedContents as &$element) {
+            $element['uri'] = 'ext'.\Uri::generate(
+                'article',
+                array(
+                    'id'       => $element['pk_content'],
+                    'date'     => date('YmdHis', strtotime($element['created'])),
+                    'category' => $element['catName'],
+                    'slug'     => StringUtils::get_title($element['title']),
+                )
+            );
         }
+
         $article->suggested = $machineSuggestedContents;
 
         return serialize($article);

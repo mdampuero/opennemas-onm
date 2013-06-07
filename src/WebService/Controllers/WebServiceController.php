@@ -48,6 +48,7 @@ class WebServiceController extends Controller
         }
 
         $r = new \Restler();
+        $r->container = $this->container;
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
         $r->addAPIClass('Instances');
         $r->addAPIClass('Ads');

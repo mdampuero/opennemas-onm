@@ -346,37 +346,33 @@ class Opinions
 
         $opinion = new Opinion($id);
 
-        $objSearch = cSearch::getInstance();
+        $machineSearcher = $this->restler->container->get('automatic_contents');
 
-        $suggestedContents = array();
-        if (!empty($opinion->metadata)) {
-            $suggestedContents = $objSearch->SearchSuggestedContents(
-                $opinion->metadata,
-                'opinion',
-                " contents.available=1 AND pk_content = pk_fk_content",
-                4
-            );
+        $suggestedContents = $machineSearcher->SearchSuggestedContents(
+            $opinion->metadata,
+            'opinion',
+            " contents.available=1 AND pk_content = pk_fk_content",
+            4
+        );
 
-            foreach ($suggestedContents as &$suggest) {
-                $element = new Opinion($suggest['pk_content']);
-                if (!empty($element->author)) {
-                    $suggest['author_name'] = $element->author;
-                    $suggest['author_name_slug'] = StringUtils::get_title($element->author);
-                } else {
-                    $suggest['author_name_slug'] = "author";
-                }
-                $suggest['uri'] = 'ext'.Uri::generate(
-                    'opinion',
-                    array(
-                        'id'       => $suggest['pk_content'],
-                        'date'     => date('YmdHis', strtotime($suggest['created'])),
-                        'category' => $suggest['author_name_slug'],
-                        'slug'     => StringUtils::get_title($suggest['title']),
-                    )
-                );
+        foreach ($suggestedContents as &$element) {
+            $origElem = $element;
+            $element = new \Opinion($origElem['pk_content']);
+            if (!empty($element->author)) {
+                $origElem['author_name'] = $element->author;
+                $origElem['author_name_slug'] = StringUtils::get_title($element->author);
+            } else {
+                $origElem['author_name_slug'] = "author";
             }
-            $cm = new ContentManager();
-            $suggestedContents= $cm->getInTime($suggestedContents);
+            $origElem['uri'] = 'ext'.Uri::generate(
+                'opinion',
+                array(
+                    'id'       => $origElem['pk_content'],
+                    'date'     => date('YmdHis', strtotime($origElem['created'])),
+                    'category' => $origElem['author_name_slug'],
+                    'slug'     => StringUtils::get_title($origElem['title']),
+                )
+            );
         }
 
         return $suggestedContents;
@@ -392,4 +388,3 @@ class Opinions
         }
     }
 }
-

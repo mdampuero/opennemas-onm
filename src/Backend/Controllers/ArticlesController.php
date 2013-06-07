@@ -1057,6 +1057,18 @@ class ArticlesController extends Controller
             4
         );
 
+        foreach ($machineSuggestedContents as &$element) {
+            $element['uri'] = \Uri::generate(
+                'article',
+                array(
+                    'id'       => $element['pk_content'],
+                    'date'     => date('YmdHis', strtotime($element['created'])),
+                    'category' => $element['catName'],
+                    'slug'     => StringUtils::get_title($element['title']),
+                )
+            );
+        }
+
         $this->view->caching = 0;
 
         $session = $this->get('session');
