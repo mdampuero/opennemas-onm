@@ -352,7 +352,7 @@ class Opinions
         if (!empty($opinion->metadata)) {
             $suggestedContents = $objSearch->SearchSuggestedContents(
                 $opinion->metadata,
-                'Opinion',
+                'opinion',
                 " contents.available=1 AND pk_content = pk_fk_content",
                 4
             );

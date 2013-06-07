@@ -137,22 +137,6 @@ class cSearch
      *
      * @return string Parte "WHERE" de la sentencia SQL.
      */
-    public function defineMatchOfSentence0($szSourceTags)
-    {
-        $szSourceTags = trim($szSourceTags);
-        $szSqlMatch = " MATCH (" . cSearch::FULL_TEXT_COLUMN0 .
-            ") AGAINST ( '" . $szSourceTags . "' IN BOOLEAN MODE)";
-
-        return $szSqlMatch;
-    }
-
-    /**
-     * Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
-     *
-     * @param string $szSourceTags Cadena a parsear con los Tags.
-     *
-     * @return string Parte "WHERE" de la sentencia SQL.
-     */
     public function defineMatchOfSentence($szSourceTags)
     {
         $szSourceTags = trim($szSourceTags);
@@ -192,61 +176,24 @@ class cSearch
             return 'TRUE';
         }
 
-        $szColumn = 'fk_content_type';
         //Obtener los id de los tipos a traves de su titulo.
-        $szContentsTypeId = $this->getPkContentsType($szSource);
+        $szContentsType    = trim($szSource);
 
-        $vWordsTemp = preg_split(cSearch::PARSE_STRING, $szContentsTypeId);
+        $contentTypeNames = explode(',', $szContentsType);
 
-        $szIdTypes  = array();
-        foreach ($vWordsTemp as $szId) {
-            $szIdTypes []= $szColumn . " LIKE '" . $szId . "'";
-        }
-        $szIdTypes = "( FALSE OR ". implode(' OR ', $szIdTypes)." )";
-
-        return $szIdTypes;
-    }
-
-    /**
-     * Busca en la base de datos todos los pk de la tabla Contents_type cuyo titulo
-     * coincida con los proporcionados en el parametro de entrada.
-     *
-     * @param  string $szContentsType Cadena fuente con los titulos de los tipos de contenido.
-     *
-     * @return array  lista de todas las coincidencias con los titulos.
-     */
-    public function getPkContentsType($szContentsType)
-    {
-        $szContentsType    = trim($szContentsType);
-        $szSqlContentTypes = "SELECT `pk_content_type` FROM `content_types`";
-        $vWordsTemp = preg_split(cSearch::PARSE_STRING, strtolower($szContentsType));
-
-        $szSqlContentTypes .= " WHERE FALSE ";
-        for ($iIndex=0; $iIndex<sizeof($vWordsTemp); $iIndex++) {
-            $szSqlContentTypes .= " OR name LIKE '" . $vWordsTemp[$iIndex] . "'";
-        }
-        $resultSet = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
-        if (!$resultSet) {
-            printf(
-                "Get Content Types: Error al obtener el record Set.<br/>" .
-                "<pre>" . $szSqlContentTypes . "</pre><br/><br/>"
-            );
-
-            return null;
+        $ids = array();
+        foreach ($contentTypeNames as $contentTypeName) {
+            $contentTypeIds []= \ContentManager::getContentTypeIdFromName($contentTypeName);
         }
 
-        try {
-            $resultArray = $resultSet->GetArray();
-            $szResult='';
-            foreach ($resultArray as $vAux) {
-                $szResult .= $vAux[0] . " ";
+        $contentTypesSQL = '';
+        if (!empty($contentTypeIds)) {
+            foreach ($contentTypeIds as $szId) {
+                $contentTypesSQL []= "`fk_content_type` = {$szId}";
             }
-        } catch (exception $e) {
-            printf("Excepcion: " . $e->message);
-
-            return null;
+            $contentTypesSQL = "( ". implode(' OR ', $contentTypesSQL)." )";
         }
 
-        return trim($szResult);
+        return $contentTypesSQL;
     }
 }
