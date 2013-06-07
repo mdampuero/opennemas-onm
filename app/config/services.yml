@@ -41,3 +41,6 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
+    automatic_contents:
+        class: Onm\MachineSearcher
+        arguments: [ @cache ]
