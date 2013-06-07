@@ -77,90 +77,57 @@ class cSearch
      */
     public function searchSuggestedContents($szSourceTags, $szContentsTypeTitle, $filter, $iLimit)
     {
-        if (is_null($filter)) {
-            $filter = "1=1";
-        }
+        global $sc;
+        $cache = $sc->get('cache');
 
-        //Transform the input string to search like: 'La via del tren' => '+via +tren'
-        $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
-        $szSourceTags2=array();
-        $i = 0;
-        foreach ($szSourceTags as $key) {
-            $szSourceTags2[$i] = '+'.$key;
-            $i++;
-        }
-        $szSourceTags2 = implode(' ', $szSourceTags2);// Con + obligatorio
-        $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
+        $cacheKey = CACHE_PREFIX.'_suggested_contents_'.md5(implode(',', func_get_args()));
+        $result = $cache->fetch($cacheKey);
 
-        $szMatch = $this->defineMatchOfSentence($szSourceTags2); //Match con metadata
-        $szMatch2 = $this->defineMatchOfSentence2($szSourceTags);//Match con contents.title
+        if (!is_array($result)) {
 
-        $szSqlSentence = "SELECT `contents`.`pk_content`, `contents`.`title`, `contents_categories`.`catName` ,"
-            ."`contents`.`metadata`, `contents`.`created`,  `contents`.`category_name`," . (($szMatch))
-            .'+'.(($szMatch2)) . " AS rel  FROM contents, contents_categories ";
-        //$szSqlWhere  = " WHERE MATCH ( " . cSearch::FULL_TEXT_COLUMN . ")
-        // AGAINST ( '" . $szSourceTags . "  IN BOOLEAN MODE') ";
-        $szSqlWhere = " WHERE " . $szMatch.' + '. $szMatch2
-                    . " AND ( " . $this->parseTypes($szContentsTypeTitle) . ") "
-                    . " AND  ".$filter
-                    . " AND `contents`.`available` = 1 "
-                    . "AND `contents`.`in_litter` = 0 "
-                    . "AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`";
-        $szSqlSentence .= $szSqlWhere;
-        $szSqlSentence .= " GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT ".$iLimit;
+            $filter = (empty($filter) ? "" : " AND ".$filter);
 
-        $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
-        $result = null;
-        if (!empty($resultSet)) {
-            $result= $resultSet->GetArray();
-        }
+            // Transform the input string to search like: 'La via del tren' => '+via +tren'
+            $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
+            $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
 
-        foreach ($result as &$res) {
-            $res['uri'] = Uri::generate(
-                'article',
-                array(
-                    'id'       => $res['pk_content'],
-                    'date'     => date('YmdHis', strtotime($res['created'])),
-                    'category' => $res['catName'],
-                    'slug'     => StringUtils::get_title($res['title']),
-                )
-            );
+            $matchSQL =  " MATCH (contents.metadata) AGAINST ( '{$szSourceTags}' IN BOOLEAN MODE)";
+            $selectedContentTypesSQL = $this->parseTypes($szContentsTypeTitle);
+
+            $szSqlSentence = "SELECT {$matchSQL} AS rel, `contents`.*, `contents_categories`.`catName`"
+                        ."  FROM contents, contents_categories "
+                        ." WHERE " . $matchSQL
+                        .$selectedContentTypesSQL
+                        .$filter
+                        ." AND `contents`.`available` = 1 "
+                        ." AND `contents`.`in_litter` = 0 "
+                        ." AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`"
+                        ." GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT ". $iLimit;
+
+            $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
+            $result = null;
+            if (!empty($resultSet)) {
+                $result= $resultSet->GetArray();
+            }
+
+            foreach ($result as &$res) {
+                $res['uri'] = Uri::generate(
+                    'article',
+                    array(
+                        'id'       => $res['pk_content'],
+                        'date'     => date('YmdHis', strtotime($res['created'])),
+                        'category' => $res['catName'],
+                        'slug'     => StringUtils::get_title($res['title']),
+                    )
+                );
+            }
+
+            $cache->save($cacheKey, $result, 300);
         }
 
         return $result;
     }
 
-    /**
-     * Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
-     *
-     * @param string $szSourceTags Cadena a parsear con los Tags.
-     *
-     * @return string Parte "WHERE" de la sentencia SQL.
-     */
-    public function defineMatchOfSentence($szSourceTags)
-    {
-        $szSourceTags = trim($szSourceTags);
-        $szSqlMatch = " MATCH (" . cSearch::FULL_TEXT_COLUMN  .
-            ") AGAINST ( '" . $szSourceTags . "' IN BOOLEAN MODE)";
-
-        return $szSqlMatch;
-    }
-    /**
-     * Crea la parte del Match de la sentencia sql que nos proporciona el vector de pesos.
-     *
-     * @param string $szSourceTags Cadena a parsear con los Tags.
-     *
-     * @return string Parte "WHERE" de la sentencia SQL.
-     *
-     */
-    private function defineMatchOfSentence2($szSourceTags)
-    {
-        $szSourceTags = trim($szSourceTags);
-        $szSqlMatch = " MATCH (" . cSearch::FULL_TEXT_COLUMN2  .
-            ") AGAINST ( '" . $szSourceTags . "' IN BOOLEAN MODE)";
-
-        return $szSqlMatch;
-    }
     /**
      * Parsea la cadena fuente comprobando posibles operaciones lógicas.
      *
@@ -191,7 +158,7 @@ class cSearch
             foreach ($contentTypeIds as $szId) {
                 $contentTypesSQL []= "`fk_content_type` = {$szId}";
             }
-            $contentTypesSQL = "( ". implode(' OR ', $contentTypesSQL)." )";
+            $contentTypesSQL = " AND ( ". implode(' OR ', $contentTypesSQL)." ) ";
         }
 
         return $contentTypesSQL;
