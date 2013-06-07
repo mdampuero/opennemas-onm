@@ -127,19 +127,13 @@ class SearchController extends Controller
                 explode(',', $searchString)
             );
 
-            $searcher    = \cSearch::getInstance();
-            $matchString = '';
+            $matchString = implode($searchStringArray, ' ');
 
-            foreach ($searchStringArray as $key) {
-                $matchString[] = $searcher->defineMatchOfSentence($key);
-            }
-
-            $matchString = implode($matchString, ' AND ');
-
-            $sql = "SELECT pk_content, fk_content_type FROM contents".
-                  " WHERE contents.available=1 AND fk_content_type ".
-                  " IN(1, 2, 3, 4, 7, 8, 9, 10, 11) AND ".$matchString.
-                  " ORDER BY starttime DESC";
+            $sql = "SELECT pk_content, fk_content_type FROM contents"
+                  ." WHERE contents.available=1 "
+                  ." AND fk_content_type IN (1, 2, 3, 4, 7, 8, 9, 10, 11) "
+                  ." AND MATCH (contents.metadata) AGAINST ( '{$matchString}' IN BOOLEAN MODE)"
+                  ." ORDER BY starttime DESC";
 
             $rs  = $GLOBALS['application']->conn->GetArray($sql);
 
@@ -155,21 +149,14 @@ class SearchController extends Controller
                     $results[] = $content;
                 }
 
-                $pagination = \Pager::factory(
-                    array(
-                        'mode'        => 'Sliding',
-                        'perPage'     => s::get('items_per_page') ?: 20,
-                        'append'      => false,
-                        'path'        => '',
-                        'delta'       => 1,
-                        'clearIfVoid' => true,
-                        'urlVar'      => 'page',
-                        'totalItems'  => $resultSetSize,
-                        'fileName'    => $this->generateUrl(
-                            'admin_search_content_provider',
-                            array('search_string' => $searchString, 'related' => $related)
-                        ).'&page=%d',
-                    )
+                // Build the pager
+                $pagination = \Onm\Pager\Slider::create(
+                    $resultSetSize,
+                    s::get('items_per_page') ?: 20,
+                    $this->generateUrl(
+                        'admin_search_content_provider',
+                        array('search_string' => $searchString, 'related' => $related)
+                    ).'&page=%d'
                 );
                 $this->view->assign('pagination', $pagination->links);
             }
