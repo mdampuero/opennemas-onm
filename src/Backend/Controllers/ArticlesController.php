@@ -1048,13 +1048,12 @@ class ArticlesController extends Controller
                 $ccm->get_category_name_by_content_id($ril->id);
         }
 
-        // Get suggested contents to the article
-        $objSearch = \cSearch::getInstance();
-        $arrayResults=$objSearch->searchSuggestedContents(
+        // Machine suggested contents code -----------------------------
+        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
             $article->metadata,
             'article',
-            'pk_fk_content_category= '.$article->category.
-            ' AND contents.available=1 AND pk_content = pk_fk_content',
+            "pk_fk_content_category= ".$article->category.
+            " AND contents.available=1 AND pk_content = pk_fk_content",
             4
         );
 
@@ -1068,7 +1067,7 @@ class ArticlesController extends Controller
                 'article/article.tpl',
                 array(
                     'relationed'            => $relat,
-                    'suggested'             => $arrayResults,
+                    'suggested'             => $machineSuggestedContents,
                     'actual_category_title' => $actual_category_title,
                     'contentId'             => $article->id,
                     'article'               => $article,

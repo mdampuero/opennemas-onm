@@ -227,15 +227,15 @@ class VideosController extends Controller
                 }
             }
 
-            /******* SUGGESTED CONTENTS *******/
-            $objSearch = \cSearch::getInstance();
-            $machineRelatedContent = $objSearch->searchSuggestedContents(
+            // Machine suggested contents code -----------------------------
+            $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
                 $video->metadata,
                 'video',
                 "pk_fk_content_category= ".$video->category.
                 " AND contents.available=1 AND pk_content = pk_fk_content",
                 4
             );
+
             $this->view->assign(
                 array(
                     'video'         => $video,

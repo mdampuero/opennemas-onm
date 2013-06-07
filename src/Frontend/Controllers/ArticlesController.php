@@ -142,21 +142,13 @@ class ArticlesController extends Controller
                 $this->view->assign('relationed', $relatedContents);
 
                 // Machine suggested contents code -----------------------------
-                $machineSuggestedContents = array();
-                if (!empty($article->metadata)) {
-
-                    $objSearch    = \cSearch::getInstance();
-                    $machineSuggestedContents =
-                        $objSearch->searchSuggestedContents(
-                            $article->metadata,
-                            'article',
-                            "pk_fk_content_category= ".$article->category.
-                            " AND contents.available=1 AND pk_content = pk_fk_content",
-                            4
-                        );
-                    $machineSuggestedContents =
-                        $cm->getInTime($machineSuggestedContents);
-                }
+                $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
+                    $article->metadata,
+                    'article',
+                    "pk_fk_content_category= ".$article->category.
+                    " AND contents.available=1 AND pk_content = pk_fk_content",
+                    4
+                );
                 $this->view->assign('suggested', $machineSuggestedContents);
             } else {
                 throw new ResourceNotFoundException();
