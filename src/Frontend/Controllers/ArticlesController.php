@@ -73,7 +73,9 @@ class ArticlesController extends Controller
         $cm = new \ContentManager();
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
-        $this->getInnerAds($actualCategoryId);
+        $ads = $this->getInnerAds($actualCategoryId);
+        var_dump($ads);die();
+
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
@@ -280,22 +282,10 @@ class ArticlesController extends Controller
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        // I have added the element 150 in order to integrate all the code in the same query
+        $positions = array(150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        $advertisement = \Advertisement::getInstance();
-        $banners = $advertisement->getAdvertisements($positions, $category);
-
-        if (count($banners<=0)) {
-            $cm = new \ContentManager();
-            $banners = $cm->getInTime($banners);
-            //$advertisement->renderMultiple($banners, &$tpl);
-            $advertisement->renderMultiple($banners, $advertisement);
-        }
-        // Get intersticial banner,1,2,9,10
-        $intersticial = $advertisement->getIntersticial(150, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 
     /**

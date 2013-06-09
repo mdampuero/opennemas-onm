@@ -312,25 +312,6 @@ class Advertisement extends Content
      **/
     public $timeout     = null;
 
-    /**
-     * Instance of MethodCacheManager
-     *
-     * @var MethodCacheManager
-     **/
-    public $cache = null;
-
-    /**
-     * Advertisement instance, singleton pattern
-     *
-     * @var Advertisement
-     **/
-    private static $singleton = null;
-
-    /**
-     * The registry for banners
-     * @var array
-     **/
-    protected $_registry = array();
 
     /**
      * Initializes the Advertisement class
@@ -348,34 +329,12 @@ class Advertisement extends Content
             $this->read($id);
         }
 
-        // Store this object into the cache manager for better performance
-        if (is_null($this->cache)) {
-            $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
-        } else {
-            $this->cache->setCacheLife(20); // 20 seconds
-        }
-
         // Set the content_type
-        // FIXME: this should be into the __construct method of Content class.
         $this->content_type = get_class();
 
         return $this;
     }
 
-    /**
-     * Method to fetch or create the object by the singleton pattern
-     *
-     * @see Advertisement::__construct()
-     **/
-    public static function getInstance()
-    {
-        // Create a unique instance if not available
-        if (is_null(self::$singleton)) {
-            self::$singleton = new Advertisement();
-        }
-
-        return self::$singleton;
-    }
 
     /**
      * Create and save into database the ad instance from one array
@@ -408,12 +367,20 @@ class Advertisement extends Content
                      `script`, `overlap`, `timeout`)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        // $this->id was setted in parent::create($data)
         $values = array(
-            $this->id, $data['type_advertisement'], $data['category'],
-            $data['img'], $data['url'], $data['type_medida'], $data['num_clic'],
-            0, $data['num_view'], $data['with_script'],
-            $data['script'], $data['overlap'], $data['timeout']
+            $this->id,
+            $data['type_advertisement'],
+            $data['category'],
+            $data['img'],
+            $data['url'],
+            $data['type_medida'],
+            $data['num_clic'],
+            0, // num_clic_count
+            $data['num_view'],
+            $data['with_script'],
+            $data['script'],
+            $data['overlap'],
+            $data['timeout']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -421,15 +388,6 @@ class Advertisement extends Content
             \Application::logDatabaseError();
 
             return null;
-        }
-
-        $rel = new RelatedContent();
-        if (isset($data['selectos'])) {
-            $pos = 1;
-            foreach ($data['selectos'] as $relac) {
-                $rel->setRelationPosition($this->id, $pos, $relac);
-                $pos++;
-            }
         }
 
         // Needed for onAfterCreateAdvertisement callback
@@ -455,8 +413,8 @@ class Advertisement extends Content
     {
         parent::read($id); // Read content of Content
 
-        $sql = 'SELECT * FROM advertisements WHERE pk_advertisement = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM advertisements WHERE pk_advertisement = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -500,16 +458,13 @@ class Advertisement extends Content
         parent::update($data);
 
         if (!empty($data['script'])) {
-            //$data['script'] = StringUtils::fixScriptDeclaration($data['script']);
             $data['script'] = base64_encode($data['script']);
         }
 
-        $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: 0;
-        $data['with_script'] =
-            (isset($data['with_script']))? $data['with_script']: 0;
-        $data['type_medida'] =
-            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+        $data['overlap']     = (isset($data['overlap']))? $data['overlap']: 0;
+        $data['timeout']     = (isset($data['timeout']))? $data['timeout']: 0;
+        $data['with_script'] = (isset($data['with_script']))? $data['with_script']: 0;
+        $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
         $sql = "UPDATE advertisements
                 SET `type_advertisement`=?, `fk_content_categories`=?,
@@ -519,27 +474,23 @@ class Advertisement extends Content
                 WHERE pk_advertisement=".($data['id']);
 
         $values = array(
-            $data['type_advertisement'], $data['categories'],
-            $data['img'], $data['url'], $data['type_medida'],
+            $data['type_advertisement'],
+            $data['categories'],
+            $data['img'],
+            $data['url'],
+            $data['type_medida'],
             $data['num_clic'],
-            $data['num_view'], $data['with_script'], $data['script'],
-            $data['overlap'], $data['timeout']
+            $data['num_view'],
+            $data['with_script'],
+            $data['script'],
+            $data['overlap'],
+            $data['timeout']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
             return null;
-        }
-
-        $rel = new RelatedContent();
-        $rel->delete($data['id']);
-        if (isset($data['selectos'])) {
-            $pos=1;
-            foreach ($data['selectos'] as $relac) {
-                $rel->setRelationPosition($data['id'], $pos, $relac);
-                $pos++;
-            }
         }
 
         // Necesarios para evento
@@ -566,42 +517,13 @@ class Advertisement extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM advertisements WHERE pk_advertisement ='.($id);
+        $sql = 'DELETE FROM advertisements WHERE pk_advertisement = ?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             \Application::logDatabaseError();
 
             return;
         }
-    }
-
-    /**
-     * Get url of advertisement
-     *
-     * @param int $id Advertisement Id
-     *
-     * @return string
-     **/
-    public function getUrl($id)
-    {
-        // Try to minimize the database overload if this object was preloaded
-        // or doesn't fit the rules
-        if (isset($this) && isset($this->url) && ($this->id == $id)) {
-            return $this->url;
-        }
-
-        // Fetch data for the ad from the database
-        $sql = 'SELECT url FROM `advertisements` '
-                .'WHERE `advertisements`.`pk_advertisement`=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return null;
-        }
-
-        return $rs->fields['url'];
     }
 
     /**
@@ -648,71 +570,15 @@ class Advertisement extends Content
      **/
     public static function setNumClics($id)
     {
-        $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 "
+        $sql =  "UPDATE advertisements "
+                ." SET `num_clic_count`=`num_clic_count`+1 "
                 ." WHERE `pk_advertisement`=?";
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return;
-        }
-
-        $ad = new Advertisement($id);
-
-        //No publicado
-        if ($ad->type_medida == 'CLIC'
-            && ($ad->num_clic <= $ad->num_clic_count)
-        ) {
-            $status = 0;
-            parent::set_status($status, 'NULL');
-        }
-    }
-
-    /**
-     * Set num views
-     *
-     * @param int $id The id of the advertisement to increase num_views
-     *
-     * @return void
-     **/
-    public static function setNumViews($id = null)
-    {
-        // if $id was not given return null and do nothing
-        if (is_null($id)) {
-            return null;
-        }
-
-        parent::setNumViews($id);
-
-        // if this ad has views limit and it has reached unpublish it
-        if (is_array($id)) {
-            foreach ($id as $banner) {
-                // if this ad has views limit and it has reached unpublish it
-                if (isset($banner)
-                    && is_object($banner)
-                    && property_exists($banner, 'type_medida')
-                ) {
-                    $banner->unpublishIfMaxViewsReached();
-                }
-            }
-        } else {
-            $ad = new Advertisement($id);
-            $ad->unpublishIfMaxViewsReached();
-        }
-    }
-
-    /**
-     * Marks an ad as unpublished if has reached its max allowed views
-     *
-     * @return void
-     **/
-    public function unpublishIfMaxViewsReached()
-    {
-        if (($this->type_medida == 'VIEW')
-            && ($this->num_view <= $this->views)
-        ) {
-            parent::set_status(0, 'NULL');
+            return false;
         }
     }
 
@@ -724,113 +590,137 @@ class Advertisement extends Content
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public function getAdvertisements($types = array(), $category = 'home')
+    public static function findForPositionIdsAndCategory($types = array(), $category = 'home', $wsUrl = null)
     {
+        global $sc;
+
         $banners = array();
         $finalBanners = array();
 
-        // See if advertisements are enabled
-        // $types must be an array and not empty
-        if (is_array($types) && count($types)>0 && ADVERTISEMENT_ENABLE) {
-            // Check category
-            $category = (empty($category) || ($category=='home'))? 0: $category;
+        if (!is_array($types) || count($types) <= 0 && !ADVERTISEMENT_ENABLE) {
+            return $banners;
+        }
 
-            // Get string of types separeted by coma
-            $types = implode(',', $types);
+        // Check category
+        $category = (empty($category) || ($category=='home')) ? 0 : $category;
+
+        // Get string of types separeted by coma
+        $types = implode(',', $types);
+
+        // Generate sql with or without category
+        $cm = new \ContentManager();
+        if ($category !== 0) {
             $config = s::get(array('ads_settings'));
             if (isset($config['ads_settings']['no_generics'])
-                && ($config['ads_settings']['no_generics'] == '1')) {
+                && ($config['ads_settings']['no_generics'] == '1')
+            ) {
                 $generics = '';
             } else {
                 $generics = ' OR fk_content_categories=0';
             }
+            $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')';
+        } else {
+            $catsSQL = 'AND advertisements.fk_content_categories=0';
+        }
 
-            // Generate sql with or without category
-            $cm = new \ContentManager();
-            if ($category !== 0) {
-                $rsBanner = $cm->find(
-                    'Advertisement',
-                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
-                    (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')',
-                    'ORDER BY contents.created'
-                );
+        $rsBanner = $cm->find(
+            'Advertisement',
+            ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.')'.
+            $catsSQL,
+            'ORDER BY contents.created'
+        );
+
+        // If this banner is not in time don't add it to the final results
+        $rsBanner = $cm->getInTime($rsBanner);
+
+        // Extract pk_photos to perform one query
+        foreach ($rsBanner as &$banner) {
+            if (!empty($banner->path)) {
+                //Get photos
+                $cm = new ContentManager();
+                if (!$wsUrl) {
+                    $banner->image = $sc->get('entity_repository')->find('Photo', $banner->path);
+                } else {
+                    // Load images from the remote server
+
+                    // $objsArray = array();
+                    // foreach ($pk_photos as $photo) {
+                    //     $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int) $photo));
+                    // }
+                    // foreach ($objsArray as $item) {
+                    //     $content = new Advertisement();
+                    //     $content->load($item);
+                    //     $objs[] = $content;
+                    // }
+                }
+            }
+        }
+
+
+        // $advertisements is an array of all banners, grouped by ad type
+        $advertisements = array();
+        foreach ($rsBanner as $adv) {
+            // Get array of types for this advertisement
+            $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
+
+            // If the ad don't belongs to category and home, skip it
+            if (!in_array($category, $adv->fk_content_categories)
+                && $adv->fk_content_categories != array(0)
+            ) {
+                continue;
+            }
+
+            // Initialize array of advertisements with type as array key
+            if (!isset($advertisements[$adv->type_advertisement])) {
+                $advertisements[$adv->type_advertisement] = array();
+            }
+
+            // Check if this advertisement belongs to this category
+            $hasCategoryAdvertisement = in_array($category, $adv->fk_content_categories);
+
+            // Check if this advertisement belongs to home
+            $hasHomeAdvertisement = in_array(0, $adv->fk_content_categories);
+
+            // If ad belongs to (category) or (category + home)
+            if ($hasCategoryAdvertisement || ($hasHomeAdvertisement && $hasCategoryAdvertisement)) {
+                array_push($advertisements[$adv->type_advertisement], $adv);
             } else {
-                $rsBanner = $cm->find(
-                    'Advertisement',
-                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
-                    advertisements.fk_content_categories=0',
-                    'ORDER BY contents.created'
-                );
-            }
-
-            // If this banner is not in time don't add it to the final results
-            $rsBanner = $cm->getInTime($rsBanner);
-
-            // $advertisements is an array of all banners, grouped by ad type
-            $advertisements = array();
-            foreach ($rsBanner as $adv) {
-                // Get array of types for this advertisement
-                $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
-
-                // If the ad don't belongs to category and home, skip it
-                if (!in_array($category, $adv->fk_content_categories)
-                    && $adv->fk_content_categories != array(0)
-                ) {
-                    continue;
-                }
-
-                // Initialize array of advertisements with type as array key
-                if (!isset($advertisements[$adv->type_advertisement])) {
-                    $advertisements[$adv->type_advertisement] = array();
-                }
-
-                // Check if this advertisement belongs to this category
-                $hasCategoryAdvertisement = in_array($category, $adv->fk_content_categories);
-
-                // Check if this advertisement belongs to home
-                $hasHomeAdvertisement = in_array(0, $adv->fk_content_categories);
-
-                // If ad belongs to (category) or (category + home)
-                if ($hasCategoryAdvertisement || ($hasHomeAdvertisement && $hasCategoryAdvertisement)) {
+                // If ad belongs to home but not to category
+                if ($hasHomeAdvertisement) {
                     array_push($advertisements[$adv->type_advertisement], $adv);
-                } else {
-                    // If ad belongs to home but not to category
-                    if ($hasHomeAdvertisement) {
-                        array_push($advertisements[$adv->type_advertisement], $adv);
-                    }
                 }
             }
+        }
 
-            // Perform operations for each advertisement type
-            foreach ($advertisements as $adType => $advs) {
-                // Initialize banners arrays
-                $banners[$adType] = array();
-                $homeBanners[$adType] = array();
-                if (count($advs) > 1) {
-                    foreach ($advs as $ad) {
-                        if (in_array(0, $ad->fk_content_categories)) {
-                            array_push($homeBanners[$adType], $ad); // Home banners
-                            if (in_array($category, $ad->fk_content_categories)) {
-                                array_push($banners[$adType], $ad); // Category+Home banners
-                            }
-                        } else {
-                            array_push($banners[$adType], $ad); // Category banners
+        // Perform operations for each advertisement type
+        foreach ($advertisements as $adType => $advs) {
+            // Initialize banners arrays
+            $banners[$adType] = array();
+            $homeBanners[$adType] = array();
+            if (count($advs) > 1) {
+                foreach ($advs as $ad) {
+                    if (in_array(0, $ad->fk_content_categories)) {
+                        array_push($homeBanners[$adType], $ad); // Home banners
+                        if (in_array($category, $ad->fk_content_categories)) {
+                            array_push($banners[$adType], $ad); // Category+Home banners
                         }
+                    } else {
+                        array_push($banners[$adType], $ad); // Category banners
                     }
-                    // If this ad-type don't has any banner, get all from home
-                    if (empty($banners[$adType])) {
-                        $banners[$adType] = $homeBanners[$adType];
-                    }
-                } else {
-                    // If this ad-type only has one ad, add it to array
-                    $banners[$adType] = $advs;
                 }
+                // If this ad-type don't has any banner, get all from home
+                if (empty($banners[$adType])) {
+                    $banners[$adType] = $homeBanners[$adType];
+                }
+            } else {
+                // If this ad-type only has one ad, add it to array
+                $banners[$adType] = $advs;
             }
+        }
 
-            // Generate final banners array with random selection by ad-type
-            foreach ($banners as $adv) {
-                $finalBanners[] = $adv[array_rand($adv)];
-            }
+        // Generate final banners array with random selection by ad-type
+        foreach ($banners as $adv) {
+            $finalBanners[] = $adv[array_rand($adv)];
         }
 
         return $finalBanners;
@@ -1113,37 +1003,7 @@ class Advertisement extends Content
         }
 
         // Update numviews
-        Advertisement::setNumViews($banners_selected);
-    }
-
-    /**
-     * Emulate smarty method,
-     * workaround for Advertisement::render
-     *
-     * @param string $entry
-     * @param mixed  $value
-     **/
-    public function assign($entry, $value)
-    {
-        $this->_registry[$entry] = $value;
-    }
-
-    /**
-     * Fetch a entry from set of banners,
-     * workaround for Advertisement::render
-     *
-     * @param  string $entry
-     * @return mixed
-     **/
-    public function fetch($entry)
-    {
-        if (isset($this->_registry[$entry])) {
-            $value = $this->_registry[$entry];
-        } else {
-            $value = null;
-        }
-
-        return $value;
+        self::setNumViews($banners_selected);
     }
 
     /**
