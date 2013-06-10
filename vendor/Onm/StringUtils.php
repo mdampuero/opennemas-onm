@@ -630,4 +630,24 @@ EOF;
 
         return $text;
     }
+
+    /**
+     * Clear the special quotes
+     *
+     * @param  string  $text the string to transform
+     *
+     * @return string the string cleaned
+     **/
+    public static function clearQuotes($text)
+    {
+
+        $text = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $text);
+        $text = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $text);
+        $text = str_replace('“', '&#8220;', $text);
+        $text = str_replace('”', '&#8221;', $text);
+        $text = str_replace('‘', '&#8216;', $text);
+        $text = str_replace('’', '&#8217;', $text);
+
+        return $text;
+    }
 }

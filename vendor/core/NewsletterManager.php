@@ -100,13 +100,6 @@ class NewsletterManager
     {
 
         $this->HTML = $htmlcontent;
-        // TODO: crear un filtro
-        $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $this->HTML);
-        $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $this->HTML);
-        $this->HTML = str_replace('“', '&#8220;', $this->HTML);
-        $this->HTML = str_replace('”', '&#8221;', $this->HTML);
-        $this->HTML = str_replace('‘', '&#8216;', $this->HTML);
-        $this->HTML = str_replace('’', '&#8217;', $this->HTML);
 
         $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
@@ -118,12 +111,10 @@ class NewsletterManager
             ->setBody(strip_tags($this->HTML), 'text/plain')
             ->setTo(array($mailbox->email => $mailbox->name))
             ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-            ->setSender(array($params['mail_sender'] => s::get('site_name')));
+            ->setSender(array($params['mail_sender'] => $params['mail_from_name']));
 
         try {
-            global  $sc;
-            $mailer = $sc->get('mailer');
-            $mailer->send($message);
+            $params['mailer']->send($message);
 
         } catch (\Exception $e) {
             // Log this error

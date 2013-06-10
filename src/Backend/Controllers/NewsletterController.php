@@ -322,6 +322,7 @@ class NewsletterController extends Controller
         $nManager->setConfigMailing();
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+        $htmlContent = \Onm\StringUtils::clearQuotes($htmlContent);
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
         if (array_key_exists('sender', $configurations)
@@ -329,26 +330,24 @@ class NewsletterController extends Controller
         ) {
             $mail_from = $configurations['sender'];
         } else {
-            $mail_from = MAIL_FROM;
+            m::add(_('You must give an sender for send a newsletter.'), m::ERROR);
+            return $this->redirect($this->generateUrl('admin_newsletter_config'));
         }
 
-        if (array_key_exists('newsletter_sender', $configurations)
-            && !empty($configurations['newsletter_sender'])
-        ) {
-            $mail_sender = $configurations['newsletter_sender'];
-        } else {
-            $mail_sender = MAIL_FROM;
+        $mail_sender = \Onm\Settings::get('newsletter_sender');
+        if (empty($mail_sender)) {
+            m::add(_('Newsletter hasnt been sent. Contact with Opennemas administrator to check sender service configuration.'), m::ERROR);
+            return $this->redirect($this->generateUrl('admin_newsletters'));
         }
 
-        // TODO: Fetch this params from the container
+        global $sc;
+
         $params = array(
             'subject'        => $newsletter->title,
-            'mail_host'      => MAIL_HOST,
-            'mail_user'      => MAIL_USER,
-            'mail_pass'      => MAIL_PASS,
             'mail_from'      => $mail_from,
             'mail_sender'    => $mail_sender,
             'mail_from_name' => s::get('site_name'),
+            'mailer'         => $sc->get('mailer'),
         );
 
         $sentResult = array();
@@ -359,9 +358,9 @@ class NewsletterController extends Controller
 
             // Send the mail
             $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
-         //   if ($properlySent) {
+            if ($properlySent) {
                 $countMailing++;
-           // }
+            }
             // Register the
             $sentResult[]= array(
                 $mailbox,
@@ -371,6 +370,9 @@ class NewsletterController extends Controller
 
         $newsletter->update(array('sent' => $countMailing));
         $this->updateMailing(array('counter' => $countMailing));
+      //  $dateMailing = \Onm\Settings::get['newsletter_date_mailing'];
+      // $dateMailing = new \DateTime();
+      //  $this->checkMailing($dateMailing->date);
 
         return $this->render(
             'newsletter/steps/4-send.tpl',
@@ -478,11 +480,18 @@ class NewsletterController extends Controller
      *
      * @return NewNewsletter the object instance
      **/
-    public function checkMailing($endDate)
+    public function checkMailing($endDate = null)
     {
-        $date = new \DateTime($endDate);
-        $initDate =$date->format("d-m-Y");
-        $where =  " updated >= $initDate AND updated <= $endDate ";
+        $endDate = new \DateTime($endDate);
+
+        $initDate = clone $endDate;
+
+        $initDate->modify('-1 month');
+
+        $where =  " updated >= '".$initDate->format('Y-m-d 00:00:00').
+            "' AND updated <= '".$endDate->format('Y-m-d 00:00:00')."' ";
+
+        $nm = new \NewsletterManager();
         list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
         $total = 0;
         if ($nmCount > 0) {
