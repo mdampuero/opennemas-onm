@@ -77,6 +77,13 @@ class Theme
     public $l10ndomain = null;
 
     /**
+     * Default disposition defined for the theme
+     *
+     * @var string
+     **/
+    public $disposition = null;
+
+    /**
      * Default property definitions for a menu
      *
      * @var array
@@ -286,5 +293,34 @@ class Theme
     public function hasL10nSupport()
     {
         return ($this->l10ndomain !== null);
+    }
+
+      /**
+     * Registers a defautl disposition for image in the theme
+     *
+     * @param array $menuDefinition the menu definition
+     *
+     * @return Theme the object
+     **/
+    public function registerDisposition($disposition)
+    {
+
+        $this->disposition = $disposition;
+
+        return $this;
+    }
+
+    /**
+     * Returns the default disposition for images in this theme or false if it doesn't have
+     * support for translations
+     *
+     * @return string|false the default disposition defined
+     **/
+    public function getDisposition()
+    {
+        if ($this->disposition()) {
+            return $this->disposition;
+        }
+        return false;
     }
 }
