@@ -616,9 +616,9 @@ class Advertisement extends Content
             } else {
                 $generics = ' OR fk_content_categories=0';
             }
-            $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')';
+            $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.') ';
         } else {
-            $catsSQL = 'AND advertisements.fk_content_categories=0';
+            $catsSQL = 'AND advertisements.fk_content_categories=0 ';
         }
 
         $sql = "SELECT * FROM contents, advertisements "

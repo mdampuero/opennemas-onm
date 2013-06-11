@@ -12,6 +12,10 @@ function smarty_insert_renderbanner($params, &$smarty)
     $ads      = $smarty->tpl_vars['advertisements']->value;
     $category = $smarty->tpl_vars['category']->value;
 
+    if (!is_array($ads)) {
+        $ads = array();
+    }
+
     // Filter advertisements by position
     $ads = array_filter(
         $ads,
