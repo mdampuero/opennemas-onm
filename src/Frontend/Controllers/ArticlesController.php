@@ -277,7 +277,7 @@ class ArticlesController extends Controller
      *
      * @param string category the category identifier
      *
-     * @return void
+     * @return array the list of advertisements for this page
      **/
     public static function getInnerAds($category = 'home')
     {

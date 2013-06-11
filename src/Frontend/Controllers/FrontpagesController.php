@@ -63,24 +63,24 @@ class FrontpagesController extends Controller
             )
         );
 
-        $this->getAds($categoryName);
+        // Fetch ads
+        $ccm = \ContentCategoryManager::get_instance();
+        $actualCategoryId    = $ccm->get_id($categoryName);
+        $ads = $this->getAds($actualCategoryId);
+        $this->view->assign('advertisements', $ads);
 
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
             // Init the Content and Database object
-            $ccm = \ContentCategoryManager::get_instance();
 
             // If no home category name
-            if ($categoryName != 'home') {
-                // Redirect to home page if the desired category doesn't exist
-                if (empty($categoryName) || !$ccm->exists($categoryName)) {
-                    throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-                }
+            if (($categoryName != 'home')
+                && (empty($categoryName) || !$ccm->exists($categoryName))
+            ) {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
 
-
-            $actualCategoryId = $ccm->get_id($actualCategory);
             $categoryData = null;
             if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
                 $categoryData = $ccm->categories[$actualCategoryId];
@@ -250,29 +250,16 @@ class FrontpagesController extends Controller
      **/
     public static function getAds($categoryName = 'home')
     {
-        $ccm = \ContentCategoryManager::get_instance();
-        $category = $ccm->get_id($categoryName);
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load 1-16 banners and use cache to performance
-        //$banners = $advertisement->getAdvertisements(range(1, 16), $category); // 4,9 unused
-        $banners = $advertisement->getAdvertisements(
-            array(1,2, 3,4, 5,6, 11,12,13,14,15,16, 21,22,24,25, 31,32,33,34,35,36,103,105, 9, 91, 92),
-            $category
+        // I have added the element 50 in order to integrate interstitial position
+        $positions = array(
+            50, 1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15,
+            16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
+            36, 103, 105, 9, 91, 92
         );
 
-        $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        // Get intersticial banner
-        $intersticial = $advertisement->getIntersticial(50, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 
      /**
