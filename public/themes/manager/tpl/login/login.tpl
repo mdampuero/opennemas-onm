@@ -35,7 +35,7 @@
     <div class="form-wrapper">
         {render_messages}
 
-        <form method="post" action="{url name=manager_login_processform}" id="loginform" name="loginform" class="clearfix">
+        <form method="post" autocomplete="off" action="{url name=manager_login_processform}" id="loginform" name="loginform" class="clearfix">
 
             <div class="input-wrapper">
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
