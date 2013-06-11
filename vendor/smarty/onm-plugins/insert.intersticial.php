@@ -23,6 +23,9 @@ function smarty_insert_intersticial($params, &$smarty)
         }
     );
 
+    $params['insterstitial'] = true;
+    $params['cssclass'] = '';
+
     // Render the advertisement content
     $content = '';
     if (count($ads) > 0) {

@@ -23,6 +23,8 @@ function smarty_insert_renderbanner($params, &$smarty)
         }
     );
 
+    $params['cssclass'] = 'ad';
+
     // Render the advertisement content
     $content = '';
     if (count($ads) > 0) {
