@@ -416,6 +416,8 @@ class Content
 
         if (!isset($data['slug']) || empty($data['slug'])) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+        } else {
+            $data['slug'] = StringUtils::get_title($data['slug']);
         }
 
         $data['views']   = 1;
@@ -578,10 +580,12 @@ class Content
         }
         if (!isset($data['slug']) || empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = $this->slug;
+                $data['slug'] = StringUtils::get_title($this->slug);
             } else {
                 $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
             }
+        } else {
+            $data['slug'] = StringUtils::get_title($data['slug']);
         }
         if (empty($data['description'] ) && !isset ($data['description'])) {
             $data['description']='';
