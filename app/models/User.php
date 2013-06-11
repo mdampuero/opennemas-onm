@@ -23,77 +23,98 @@ class User
      *
      * @var int
      **/
-    public $id               = null;
+    public $id = null;
 
     /**
-     * The login name aka username
+     * The username
      *
      * @var string
      **/
-    public $login            = null;
+    public $username = null;
 
     /**
      * Encrypted password
      *
      * @var string
      **/
-    public $password         = null;
-
-    /**
-     * Seconds the session will be valid
-     *
-     * @var int
-     **/
-    public $sessionexpire    = null;
+    public $password = null;
 
     /**
      * The user email
      *
      * @var
      **/
-    public $email            = null;
+    public $email = null;
 
     /**
-     * The user name
+     * The user real name
      *
      * @var string
      **/
-    public $name             = null;
+    public $name = null;
+
+    /**
+     * Seconds the session will be valid
+     *
+     * @var int
+     **/
+    public $sessionexpire = null;
+
+    /**
+     * The user blog/page url
+     *
+     * @var int
+     **/
+    public $url = null;
+
+    /**
+     * The user biography
+     *
+     * @var int
+     **/
+    public $bio = null;
+
+    /**
+     * The user avatar image id
+     *
+     * @var string
+     **/
+    public $avatar_img_id = null;
 
     /**
      * The type of user
      *
      * @var string
      **/
-    public $type             = null;
+    public $type = null;
 
     /**
      * The amount of money in the user wallet
      *
      * @var int
      **/
-    public $deposit          = null;
+    public $deposit = null;
 
     /**
      * The login token, used for restore passwords and more
      *
      * @var string
      **/
-    public $token            = null;
+    public $token = null;
 
     /**
      * Whether the user can login or not
      *
      * @var string
      **/
-    public $authorize        = null;
+    public $activated = null;
 
     /**
      * The user group id
      *
      * @var id
      **/
-    public $id_user_group    = null;
+    public $id_user_group = null;
 
     /**
      * The list of categories this user has access
@@ -107,7 +128,7 @@ class User
      *
      * @var int
      **/
-    public $fk_user_group    = null;
+    public $fk_user_group = null;
 
     /**
      * User login token
@@ -163,18 +184,18 @@ class User
 
         $sql =
             "INSERT INTO users "
-            ."(`login`, `password`, `sessionexpire`, `email`, `name`, "
-            ."`type`, `token`, `authorize`, `fk_user_group`) "
+            ."(`username`, `password`, `sessionexpire`, `email`, `name`, "
+            ."`type`, `token`, `activated`, `fk_user_group`) "
             ."VALUES (?,?,?,?,?,?,?,?,?)";
         $values = array(
-            $data['login'],
+            $data['username'],
             md5($data['password']),
             $data['sessionexpire'],
             $data['email'],
             $data['name'],
             $data['type'],
             $data['token'],
-            $data['authorize'],
+            $data['activated'],
             $data['id_user_group']
         );
 
@@ -212,7 +233,7 @@ class User
         }
 
         $this->id               = $rs->fields['pk_user'];
-        $this->login            = $rs->fields['login'];
+        $this->username            = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
         $this->email            = $rs->fields['email'];
@@ -220,7 +241,7 @@ class User
         $this->deposit          = $rs->fields['deposit'];
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
-        $this->authorize        = $rs->fields['authorize'];
+        $this->activated        = $rs->fields['activated'];
         $this->id_user_group    = $rs->fields['fk_user_group'];
         $this->accesscategories = $this->readAccessCategories();
 
@@ -247,12 +268,12 @@ class User
 
         if (isset($data['password']) && (strlen($data['password']) > 0)) {
             $sql = "UPDATE users
-                    SET `login`=?, `password`= ?, `sessionexpire`=?,
+                    SET `username`=?, `password`= ?, `sessionexpire`=?,
                         `email`=?, `name`=?, `fk_user_group`=?, type=?
                     WHERE pk_user=?";
 
             $values = array(
-                $data['login'],
+                $data['username'],
                 md5($data['password']),
                 $data['sessionexpire'],
                 $data['email'],
@@ -264,12 +285,12 @@ class User
 
         } else {
             $sql = "UPDATE users
-                    SET `login`=?, `sessionexpire`=?, `email`=?,
+                    SET `username`=?, `sessionexpire`=?, `email`=?,
                         `name`=?, `fk_user_group`=?, type=?
                     WHERE pk_user=?";
 
             $values = array(
-                $data['login'],
+                $data['username'],
                 $data['sessionexpire'],
                 $data['email'],
                 $data['name'],
@@ -326,15 +347,15 @@ class User
     /**
      * Checks if a user exists given some information.
      *
-     * @param array $data tuple with the login and email params
+     * @param array $data tuple with the username and email params
      *
      * @return boolean true if user exists
      **/
     public function checkIfUserExists($data)
     {
-        $sql = "SELECT login FROM users WHERE login=? OR email=?";
+        $sql = "SELECT username FROM users WHERE username=? OR email=?";
 
-        $values = array($data['login'], $data['email']);
+        $values = array($data['username'], $data['email']);
         $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
 
         return ($rs != false);
@@ -508,9 +529,9 @@ class User
 
 
     /**
-     * Tries to login a user given a login information
+     * Tries to login a user given a username information
      *
-     * @param string $login the username
+     * @param string $username the username
      * @param string $password the password
      * @param string $loginToken the login token provided
      * @param string $loginCaptcha
@@ -519,7 +540,7 @@ class User
      * @return boolean true if the user has access
      **/
     public function login(
-        $login,
+        $username,
         $password,
         $loginToken = null,
         $loginCaptcha = null,
@@ -527,9 +548,9 @@ class User
     ) {
         $result = false;
 
-        $result = $this->authDatabase($login, $password, false, $time);
+        $result = $this->authDatabase($username, $password, false, $time);
         if (!$result) {
-            $result = $this->authDatabase($login, $password, true, $time);
+            $result = $this->authDatabase($username, $password, true, $time);
         }
 
         return $result;
@@ -538,16 +559,16 @@ class User
     /**
      * Aauthenticate by using the database
      *
-     * @param  string  $login
+     * @param  string  $username
      * @param  string  $password
      * @param  boolean $managerDb
      * @param  int     $time
      *
-     * @return boolean Return true if login exists and password match
+     * @return boolean Return true if username exists and password match
      */
-    public function authDatabase($login, $password, $managerDb = false, $time = null)
+    public function authDatabase($username, $password, $managerDb = false, $time = null)
     {
-        $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\' OR email=\''.strval($login).'\'';
+        $sql = 'SELECT * FROM users WHERE username=\''.strval($username).'\' OR email=\''.strval($username).'\'';
         if (!$managerDb) {
             $rs = $GLOBALS['application']->conn->Execute($sql);
         } else {
@@ -603,7 +624,7 @@ class User
         }
 
         $this->id               = $rs->fields['pk_user'];
-        $this->login            = $rs->fields['login'];
+        $this->username            = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
         $this->email            = $rs->fields['email'];
@@ -611,7 +632,7 @@ class User
         $this->deposit          = $rs->fields['deposit'];
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
-        $this->authorize        = $rs->fields['authorize'];
+        $this->activated        = $rs->fields['activated'];
         $this->id_user_group    = $rs->fields['fk_user_group'];
         $this->accesscategories = $this->readAccessCategories();
 
@@ -637,7 +658,7 @@ class User
         }
 
         $this->id               = $rs->fields['pk_user'];
-        $this->login            = $rs->fields['login'];
+        $this->username            = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
         $this->email            = $rs->fields['email'];
@@ -645,7 +666,7 @@ class User
         $this->deposit          = $rs->fields['deposit'];
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
-        $this->authorize        = $rs->fields['authorize'];
+        $this->activated        = $rs->fields['activated'];
         $this->id_user_group    = $rs->fields['fk_user_group'];
         $this->accesscategories = $this->readAccessCategories();
 
@@ -662,7 +683,7 @@ class User
     {
         if (!empty($data)) {
             $this->id            = $data['pk_user'];
-            $this->login         = $data['login'];
+            $this->username         = $data['username'];
             $this->password      = $data['password'];
             $this->sessionexpire = $data['sessionexpire'];
             $this->email         = $data['email'];
@@ -670,7 +691,7 @@ class User
             $this->deposit       = array_key_exists('deposit', $data) ? $data['deposit'] : '';
             $this->type          = $data['type'];
             $this->token         = $data['token'];
-            $this->authorize     = $data['authorize'];
+            $this->activated     = $data['activated'];
             $this->fk_user_group = $data['fk_user_group'];
 
             if (isset($data['ids_category'])) {
@@ -687,12 +708,12 @@ class User
     public function resetValues()
     {
         $this->id           = null;
-        $this->login        = null;
+        $this->username        = null;
         $this->password     = null;
         $this->sessionexpire= null;
         $this->email        = null;
         $this->name         = null;
-        $this->authorize    = null;
+        $this->activated    = null;
         $this->fk_user_group= null;
         $this->accesscategories = null;
     }
@@ -806,7 +827,7 @@ class User
      **/
     public function getUserName($id)
     {
-        $sql = 'SELECT name, login FROM users WHERE pk_user=?';
+        $sql = 'SELECT name, username FROM users WHERE pk_user=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             \Application::logDatabaseError();
@@ -814,7 +835,7 @@ class User
             return false;
         }
 
-        return $rs->fields['login'];
+        return $rs->fields['username'];
     }
 
     /**
@@ -898,15 +919,15 @@ class User
     }
 
     /**
-     * Sets an user state to disabled/not authorized
+     * Sets an user state to disabled/not activated
      *
      * @param  int $id the use id
      *
      * @return boolean true if the action was done
      */
-    public function unauthorizeUser($id)
+    public function deactivateUser($id)
     {
-        $sql = "UPDATE users SET `authorize`=0 WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `activated`=0 WHERE pk_user=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
@@ -924,9 +945,9 @@ class User
      *
      * @return boolean true if the action was done
      */
-    public function authorizeUser($id)
+    public function activateUser($id)
     {
-        $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `activated`=1 WHERE pk_user=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
@@ -959,15 +980,15 @@ class User
     }
 
     /**
-     * Checks if an user name (login) is already in use by frontend users
+     * Checks if an username is already in use by frontend users
      *
      * @param  $userName The user name to log in
-     * @return bool if is in use this user name (login)
+     * @return bool if is in use this username
      */
     public function checkIfExistsUserName($userName)
     {
         $sql = 'SELECT count(*) AS num '
-            . 'FROM `users` WHERE login = "'.$userName.'"';
+            . 'FROM `users` WHERE username = "'.$userName.'"';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
@@ -1174,7 +1195,7 @@ class User
 
             if (isset($filter['name']) && !empty($filter['name'])) {
                 $parts[] = '(MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE) OR '.
-                           '`login` LIKE "%' . $filter['name'] . '%")';
+                           '`username` LIKE "%' . $filter['name'] . '%")';
                 $parts[] = '`email` LIKE "%' . $filter['name'] . '%"';
             }
 

@@ -146,7 +146,7 @@ label {
                         <div class="control-group">
                             <label for="login" class="control-label">{t}User name{/t}</label>
                             <div class="controls">
-                                <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge" required="required" maxlength="20"/>
+                                <input type="text" id="login" name="login" value="{$user->username|default:""}" class="input-xlarge" required="required" maxlength="20"/>
                             </div>
                         </div>
 

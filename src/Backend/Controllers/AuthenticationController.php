@@ -95,7 +95,7 @@ class AuthenticationController extends Controller
             ) {
 
                 // Check if user account is activated
-                if ($user->authorize != 1) {
+                if ($user->activated != 1) {
                     m::add(_('This user was deactivated. Please ask your administrator.'), m::ERROR);
                     return $this->redirect($this->generateUrl('admin_login_form'));
                 } elseif ($user->type != 0) {
@@ -112,7 +112,7 @@ class AuthenticationController extends Controller
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
-                        'username'         => $user->login,
+                        'username'         => $user->username,
                         'email'            => $user->email,
                         'deposit'          => $user->deposit,
                         'type'             => $user->type,

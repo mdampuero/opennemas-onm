@@ -110,7 +110,7 @@ class UserController extends Controller
         } else {
             // Correct CAPTCHA - Filter $_POST vars from FORM
             $data = array(
-                'authorize'     => 0, // Before activation by mail, user is not allowed
+                'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
                 'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
                 'login'         => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
@@ -267,9 +267,9 @@ class UserController extends Controller
         $userData = $user->findByToken($token);
 
         if ($userData) {
-            $user->authorizeUser($userData->id);
+            $user->activateUser($userData->id);
 
-            if ($user->login($userData->login, $userData->password, $userData->token, $captcha)) {
+            if ($user->login($userData->username, $userData->password, $userData->token, $captcha)) {
                 // Increase security by regenerating the id
                 $request->getSession()->migrate();
 
@@ -283,7 +283,7 @@ class UserController extends Controller
                 $_SESSION = array(
                     'userid'           => $user->id,
                     'realname'         => $user->name,
-                    'username'         => $user->login,
+                    'username'         => $user->username,
                     'email'            => $user->email,
                     'deposit'          => $user->deposit,
                     'authMethod'       => $user->authMethod,

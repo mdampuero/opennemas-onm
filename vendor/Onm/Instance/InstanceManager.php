@@ -862,7 +862,7 @@ class InstanceManager
             && isset ($data['user_pass'])
             && isset ($data['user_mail'])
         ) {
-            $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
+            $sql = "INSERT INTO users (`username`, `password`, `sessionexpire`,
                                        `email`, `name`, `fk_user_group`)
                     VALUES (?,?,?,?,?,?)";
 
