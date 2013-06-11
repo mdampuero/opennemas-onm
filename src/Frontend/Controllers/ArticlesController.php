@@ -71,11 +71,12 @@ class ArticlesController extends Controller
         $this->paywallHook($article);
 
         $cm = new \ContentManager();
+
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
         $ads = $this->getInnerAds($actualCategoryId);
-        var_dump($ads);die();
 
+        $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
@@ -280,7 +281,7 @@ class ArticlesController extends Controller
      **/
     public static function getInnerAds($category = 'home')
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // I have added the element 150 in order to integrate all the code in the same query
         $positions = array(150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
