@@ -153,7 +153,7 @@ class CommentsManager
         if ($rs == false) {
             \Application::logDatabaseError();
 
-            return false;
+            return array();
         }
 
         while (!$rs->EOF) {
