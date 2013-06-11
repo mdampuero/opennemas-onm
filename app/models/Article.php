@@ -294,8 +294,8 @@ class Article extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT * FROM articles WHERE pk_article = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM articles WHERE pk_article = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             \Application::logDatabaseError();

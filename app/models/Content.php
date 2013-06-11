@@ -330,12 +330,9 @@ class Content
     {
         $exists = false;
 
-
         $sql = 'SELECT pk_content FROM `contents` '
              . 'WHERE pk_content = ? LIMIT 1';
-        $values = array($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         $exists = ($rs != false);
 
@@ -489,11 +486,10 @@ class Content
      **/
     public function read($id)
     {
-        // Fire event onBeforeXxx
-        $GLOBALS['application']->dispatch('onBeforeRead', $this);
         if (empty($id)) {
             return false;
         }
+
         $sql = 'SELECT * FROM contents, contents_categories
                 WHERE pk_content = ? AND pk_content = pk_fk_content';
 
@@ -507,9 +503,6 @@ class Content
         // Load object properties
         $this->load($rs->fields);
         $this->fk_user = $this->fk_author;
-
-        // Fire event onAfterXxx
-        $GLOBALS['application']->dispatch('onAfterRead', $this);
 
         return $this;
     }
@@ -711,9 +704,7 @@ class Content
     public function restoreFromTrash()
     {
         $changed = date("Y-m-d H:i:s");
-        $sql  =   'UPDATE contents SET `in_litter`=?, '
-                .'`changed`=?'
-                .'WHERE pk_content=?';
+        $sql  =   'UPDATE contents SET `in_litter`=?, `changed`=? WHERE pk_content=?';
 
         $values = array(0, $changed, $this->id);
 
@@ -1823,7 +1814,6 @@ class Content
      **/
     public function dropFromAllHomePages()
     {
-
         $cm = new ContentManager();
         $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
 
@@ -1979,6 +1969,7 @@ class Content
      */
     public static function resolveID($dirtyID)
     {
+        $contentID = 0;
         if (!empty($dirtyID)) {
             if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
                 || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
@@ -1989,18 +1980,9 @@ class Content
 
             preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
             $contentID = self::searchContentID((int) $matches["digit"]);
-
-            if (empty($contentID)) {
-                // header("HTTP/1.0 404 Not Found");
-            }
-
-            return $contentID;
-        } else {
-            return 0;
-            // header("HTTP/1.0 404 Not Found");
-            // Can't do because sometimes id is empty,
-            // example rss in article.php
         }
+
+        return $contentID;
     }
 
 
@@ -2078,8 +2060,8 @@ class Content
     public function isReadyForPublish()
     {
         return ($this->isInTime()
-                && $this->available==1
-                && $this->in_litter==0);
+                && $this->available == 1
+                && $this->in_litter == 0);
     }
 
 
@@ -2313,9 +2295,8 @@ class Content
             return false;
         }
 
-        $sql = "DELETE FROM contentmeta WHERE `fk_content` = '{$this->id}' "
-            ."AND `meta_name` = '{$property}'";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "DELETE FROM contentmeta WHERE `fk_content`=? AND `meta_name`=?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id, $property));
 
         if ($rs === false) {
             Application::logDatabaseError();
@@ -2343,8 +2324,7 @@ class Content
         }
 
         $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
-        $values = array($this->id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
         $items = array();
 
         if ($rs !== false) {
@@ -2374,8 +2354,7 @@ class Content
             return false;
         }
 
-        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content)
-                            VALUES (?, ?, ?)";
+        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content) VALUES (?, ?, ?)";
         if (count($values) > 0) {
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
