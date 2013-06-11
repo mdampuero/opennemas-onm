@@ -403,7 +403,12 @@ class FrontpagesController extends Controller
         $layout = s::get('frontpage_layout_'.$categoryID, 'default');
         $layoutFile = 'layouts/'.$layout.'.tpl';
 
-        $this->view->assign('layoutFile', $layoutFile);
+        $this->view->assign(
+            array(
+                'layoutFile' => $layoutFile,
+                'actual_category_id' => $categoryID,
+            )
+        );
 
         $session = $this->get('session');
 
