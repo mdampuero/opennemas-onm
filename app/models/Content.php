@@ -413,6 +413,8 @@ class Content
 
         if (!isset($data['slug']) || empty($data['slug'])) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+        } else {
+            $data['slug'] = StringUtils::get_title($data['slug']);
         }
 
         $data['views']   = 1;
@@ -432,8 +434,7 @@ class Content
         $data['fk_user_last_editor'] = $data['fk_user'];
         $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_user'];
 
-        $fk_content_type = $GLOBALS['application']->conn->
-            GetOne('SELECT * FROM `content_types` WHERE name = "'. $this->content_type.'"');
+        $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
         $ccm     = ContentCategoryManager::get_instance();
         $catName = $ccm->get_name($data['category']);
@@ -571,10 +572,12 @@ class Content
         }
         if (!isset($data['slug']) || empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = $this->slug;
+                $data['slug'] = StringUtils::get_title($this->slug);
             } else {
                 $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
             }
+        } else {
+            $data['slug'] = StringUtils::get_title($data['slug']);
         }
         if (empty($data['description'] ) && !isset ($data['description'])) {
             $data['description']='';
