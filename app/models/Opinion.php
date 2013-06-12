@@ -89,14 +89,10 @@ class Opinion extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
         $this->content_type = 'Opinion';
         $this->content_type_l10n_name = _('Opinion');
+
+        parent::__construct($id);
     }
 
     /**
@@ -244,6 +240,7 @@ class Opinion extends Content
     public function read($id)
     {
         parent::read($id);
+
         $sql = 'SELECT opinions.*, authors.name, authors.condition, '
             .'authors.blog, authors.politics, author_imgs.path_img  '
             .'FROM opinions '

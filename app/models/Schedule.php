@@ -28,14 +28,9 @@ class Schedule extends Content
      **/
     public function __construct($id = null)
     {
-        //  parent::__construct($id);
-
-        // Si existe idcontenido, entonces cargamos los datos correspondientes
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
         $this->content_type = 'Schedule';
+
+        parent::__construct($id);
     }
 
 

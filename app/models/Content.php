@@ -251,8 +251,6 @@ class Content
      **/
     public function __construct($id = null)
     {
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-
         if (!is_null($id)) {
             return $this->read($id);
         }

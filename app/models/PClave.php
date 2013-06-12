@@ -55,20 +55,6 @@ class PClave
     public $cache = null;
 
     /**
-     * Initializes the keyword object instance
-     *
-     * @param int $id
-     */
-    public function __construct($id = null)
-    {
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-
-        $this->cache = new MethodCacheManager($this, array('ttl' => 330));
-    }
-
-    /**
      * Read, get a specific object
      *
      * @param  int    $id Object ID
