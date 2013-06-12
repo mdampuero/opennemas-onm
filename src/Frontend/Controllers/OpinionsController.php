@@ -219,7 +219,8 @@ class OpinionsController extends Controller
             );
         }
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'opinion/opinion_frontpage.tpl',
@@ -381,7 +382,6 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
         ) {
-
             // Get author info
             $author = new \Author($authorID);
             $photos = $author->get_author_photos();
@@ -802,7 +802,8 @@ class OpinionsController extends Controller
             $opinion->category_name = $this->category_name;
 
             // Fetch information for Advertisements
-            $this->getAds('inner');
+            $ads = $this->getAds('inner');
+            $this->view->assign('advertisements', $ads);
 
             if (($opinion->available==1) && ($opinion->in_litter == 0)) {
 
@@ -841,7 +842,7 @@ class OpinionsController extends Controller
      *
      * @param string $context the context to fetch ads from
      */
-    private function getAds($context = 'frontpage')
+    private function getAds($context = '')
     {
         if ($context == 'inner') {
             $positions = array(750, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
@@ -853,7 +854,6 @@ class OpinionsController extends Controller
         $category = $ccm->get_id($this->category_name);
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
-        $this->view->assign('advertisements', $ads);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

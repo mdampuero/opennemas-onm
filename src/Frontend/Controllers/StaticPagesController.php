@@ -56,8 +56,8 @@ class StaticPagesController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // TODO: review this advertisement
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'static_pages/statics.tpl',
@@ -77,12 +77,10 @@ class StaticPagesController extends Controller
      **/
     public static function getAds()
     {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+        $category = 0;
 
-        // I have added the element 150 in order to integrate all the code in the same query
         $positions = array(1, 2, 103, 105, 9, 10);
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
-        $this->view->assign('advertisements', $ads);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

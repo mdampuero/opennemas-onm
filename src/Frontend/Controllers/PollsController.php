@@ -135,7 +135,8 @@ class PollsController extends Controller
             );
         }
 
-        $this->getAds('frontpage');
+        $ads = $this->getAds('frontpage');
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'poll/poll_frontpage.tpl',
@@ -226,7 +227,8 @@ class PollsController extends Controller
             $message = _('You have voted this poll previously.');
         }
 
-        $this->getAds('inner');
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'poll/poll.tpl',
@@ -313,8 +315,7 @@ class PollsController extends Controller
             );
         }
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
-        $this->view->assign('advertisements', $ads);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
     }
 
     /**

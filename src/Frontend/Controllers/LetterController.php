@@ -70,7 +70,8 @@ class LetterController extends Controller
             );
         }
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'letter/letter_frontpage.tpl',
@@ -128,7 +129,8 @@ class LetterController extends Controller
             );
         }
 
-        $this->getAds('inner');
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'letter/letter.tpl',
@@ -211,7 +213,6 @@ class LetterController extends Controller
             $positions = array(50, 1, 2, 103, 105, 5, 6);
         }
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
-        $this->view->assign('advertisements', $ads);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

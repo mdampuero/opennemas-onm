@@ -83,7 +83,8 @@ class VideosController extends Controller
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($categoryName, '', $this->page);
@@ -200,7 +201,8 @@ class VideosController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $this->getAds('inner');
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, null, $videoID);
@@ -407,7 +409,6 @@ class VideosController extends Controller
             $positions = array(250, 201, 202, 203, 205, 209, 210, 291, 292);
         }
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
-        $this->view->assign('advertisements', $ads);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
     }
 }

@@ -174,7 +174,9 @@ class NewStandPaypalController extends Controller
         );
 
         $this->widgetNewsstandDates();
-        $this->advertisements();
+
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         // Show in Frontpage
         return $this->render(
@@ -274,7 +276,7 @@ class NewStandPaypalController extends Controller
      *
      * @return void
      **/
-    private function advertisements()
+    private function getAds()
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
@@ -284,8 +286,7 @@ class NewStandPaypalController extends Controller
             1,2, 3,4, 5,6, 11,12,13,14,15,16, 21,22,24,25, 31,32,33,34,35,36,103,105, 9, 91, 92
         );
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
-        $this->view->assign('advertisements', $ads);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 
     /**

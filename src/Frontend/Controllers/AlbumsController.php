@@ -166,7 +166,7 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-inner');
 
         // Load advertisement for this action
-        $ads = $this->getAdsInner($category);
+        $ads = $this->getAds('innner');
         $this->view->assign('advertisments', $ads);
 
 
@@ -281,35 +281,22 @@ class AlbumsController extends Controller
      *
      * @return void
      **/
-    public static function getAds()
+    public static function getAds($position = '')
     {
         $ccm = \ContentCategoryManager::get_instance();
         $categoryName = 'album';
         $category = $ccm->get_id($categoryName);
 
         // I have added the element 450 in order to integrate interstitial position
-        $positions = array(
-            450, 401, 402, 403, 405, 409, 410, 491, 492
-        );
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
-    }
-
-    /**
-     * Fetches the advertisement
-     *
-     * @return
-     **/
-    private function getAdsInner()
-    {
-        $ccm = \ContentCategoryManager::get_instance();
-        $categoryName ='album';
-        $category = $ccm->get_id($categoryName);
-
-        // I have added the element 450 in order to integrate interstitial position
-        $positions = array(
-            501, 502, 503, 509, 510, 591, 592
-        );
+        if ($position == 'inner') {
+            $positions = array(
+                501, 502, 503, 509, 510, 591, 592
+            );
+        } else {
+            $positions = array(
+                450, 401, 402, 403, 405, 409, 410, 491, 492
+            );
+        }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

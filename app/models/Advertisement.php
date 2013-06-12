@@ -745,7 +745,7 @@ class Advertisement extends Content
                         <param name="width" value="'.$width.'" />
                         <param name="height" value="'.$height.'" />
                         <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
-                            .'SCALE="exactfit wmode="window"></embed>
+                            .'SCALE="exactfit" wmode="window"></embed>
                     </object>';
 
                 if (!$overlap && !$this->overlap) {

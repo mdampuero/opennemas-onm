@@ -164,7 +164,8 @@ class NewStandController extends Controller
         }
 
         $this->widgetNewsstandDates();
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         // Show in Frontpage
         return $this->render(
@@ -267,7 +268,7 @@ class NewStandController extends Controller
     /**
      * Fetches the advertisement
      *
-     * @return
+     * @return array of advertisements
      **/
     private function getAds()
     {
@@ -281,7 +282,6 @@ class NewStandController extends Controller
             36, 103, 105, 9, 91, 92
         );
 
-        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
-        $this->view->assign('advertisements', $ads);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }
