@@ -37,8 +37,7 @@ ALTER TABLE  `comments`
     ADD INDEX  `comment_content_id`  (  `content_id` ),
     ADD INDEX  `comment_status_date` (  `status` ,  `date` ),
     ADD INDEX  `comment_parent_id` (  `parent_id` ),
-    ADD INDEX  `comment_date` (  `date` ),
-    DROP INDEX `fk_content`;
+    ADD INDEX  `comment_date` (  `date` );
 
 -- update comment date
 UPDATE  `comments` SET  `comments`.`date` = (SELECT `created` FROM  `contents` WHERE `comments`.`id` = `contents`.`pk_content`);
