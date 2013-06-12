@@ -74,9 +74,7 @@ class ArticlesController extends Controller
 
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
-        $ads = $this->getInnerAds($actualCategoryId);
-
-        $this->view->assign('advertisements', $ads);
+        $this->getInnerAds($actualCategoryId);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
@@ -286,7 +284,8 @@ class ArticlesController extends Controller
         // I have added the element 150 in order to integrate all the code in the same query
         $positions = array(150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $this->view->assign('advertisements', $ads);
     }
 
     /**

@@ -66,8 +66,7 @@ class FrontpagesController extends Controller
         // Fetch ads
         $ccm = \ContentCategoryManager::get_instance();
         $actualCategoryId    = $ccm->get_id($categoryName);
-        $ads = $this->getAds($actualCategoryId);
-        $this->view->assign('advertisements', $ads);
+        $this->getAds($actualCategoryId);
 
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
@@ -259,7 +258,8 @@ class FrontpagesController extends Controller
             36, 103, 105, 9, 91, 92
         );
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $this->view->assign('advertisements', $ads);
     }
 
      /**

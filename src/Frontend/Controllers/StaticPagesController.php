@@ -77,13 +77,12 @@ class StaticPagesController extends Controller
      **/
     public static function getAds()
     {
-        $advertisement = \Advertisement::getInstance();
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // APC cache version
-        $banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 9, 10));
+        // I have added the element 150 in order to integrate all the code in the same query
+        $positions = array(1, 2, 103, 105, 9, 10);
 
-        $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-        $advertisement->renderMultiple($banners, $advertisement);
+        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $this->view->assign('advertisements', $ads);
     }
 }

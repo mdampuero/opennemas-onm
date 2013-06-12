@@ -398,31 +398,16 @@ class VideosController extends Controller
      */
     private function getAds($context = 'frontpage')
     {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
+        // I have added the element 150 in order to integrate all the code in the same query
         if ($context == 'inner') {
-            $positions = array(301, 302, 303, 305, 309, 310, 391, 392);
-            $intersticialId = 350;
+            $positions = array(350, 301, 302, 303, 305, 309, 310, 391, 392);
         } else {
-            $positions = array(201, 202, 203, 205, 209, 210, 291, 292);
-            $intersticialId = 250;
+            $positions = array(250, 201, 202, 203, 205, 209, 210, 291, 292);
         }
-        // Asignacion de valores y comprobaciones realizadas en init
-        // $ccm = ContentCategoryManager::get_instance();
-        // $category = $ccm->get_id($category_name);
-        // $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
-        $banners = $advertisement->getAdvertisements($positions, $this->category);
-        $banners = $this->cm->getInTime($banners);
-
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial($intersticialId, '$category');
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        $ads = \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
+        $this->view->assign('advertisements', $ads);
     }
 }
