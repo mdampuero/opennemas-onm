@@ -203,7 +203,6 @@ class CommentsController extends Controller
 
         $id           = $request->query->getDigits('id');
         $status       = $request->query->filter('status');
-        $returnStatus = $request->query->filter('return_status', 0);
 
         try {
             $comment = new \Comment($id);
@@ -217,7 +216,7 @@ class CommentsController extends Controller
         $params = array(
             'page'   => $request->query->getDigits('page', 1),
             'filter_search' => $request->query->filter('search', '', FILTER_SANITIZE_STRING),
-            'filter_status' => $returnStatus
+            'filter_status' => $request->query->filter('return_status', 'accepted', FILTER_SANITIZE_STRING)
         );
 
         return $this->redirect($this->generateUrl('admin_comments', $params));
@@ -236,7 +235,7 @@ class CommentsController extends Controller
 
         // Get request data
         $selected = $request->query->get('selected_fld');
-        $status   = $request->query->filter('status');
+        $status   = $request->query->filter('status', 'accepted');
 
         if (count($selected) > 0) {
 
