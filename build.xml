@@ -59,17 +59,10 @@
     </target>
 
     <target name="lint">
-        <apply executable="php" failonerror="true">
-            <arg value="-l" />
-            <fileset dir=".">
-                <include name="src/Backend/" />
-                <include name="src/Frontend/" />
-                <include name="src/Manager/" />
-                <include name="app/models/" />
-                <include name="vendor/Onm/" />
-                <include name="vendor/core/" />
-            </fileset>
-        </apply>
+        <exec executable="sh" failonerror="true">
+            <arg value="-c" />
+            <arg value="find ${project.paths.php.space-separated} -name *.php -print0 | xargs -0 -n1 -P0 php -l"/>
+        </exec>
     </target>
 
     <target name="phploc" description="Measure project size using PHPLOC">
