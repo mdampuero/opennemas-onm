@@ -33,6 +33,8 @@ class PaywallController extends Controller
      **/
     public function init()
     {
+        \Onm\Module\ModuleManager::checkActivatedOrForward('PAYWALL');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->times = array(

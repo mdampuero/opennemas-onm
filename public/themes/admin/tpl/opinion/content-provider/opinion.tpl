@@ -1,6 +1,7 @@
 <div data-content-id="{$content->id}" data-class="Opinion" {getProperty item=$content category=$params['category'] property='bgcolor' style='true'}
     data-bg ='{getProperty item=$content category=$params['category'] property='bgcolor'}'
     data-title='{getProperty item=$content category=$params['category'] property='title'}'
+    data-format ='{getProperty item=$content category=$params['category'] property='format'}'
     class="content-provider-element {schedule_class item=$content} {suggested_class item=$content} clearfix">
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$content->id}">

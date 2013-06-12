@@ -14,11 +14,11 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
-use Onm\Module\ModuleManager;
 
 /**
  * Handles the actions for managing ads
@@ -34,11 +34,11 @@ class AdsController extends Controller
      **/
     public function init()
     {
-        ModuleManager::checkActivatedOrForward('ADS_MANAGER');
+        \Onm\Module\ModuleManager::checkActivatedOrForward('ADS_MANAGER');
 
         $this->checkAclOrForward('ADVERTISEMENT_ADMIN');
 
-        $contentType = \Content::getIDContentType('advertisement');
+        $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
 
         // Sometimes category is array. When create & update advertisement
         $this->category = $this->get('request')->query->getDigits('category', 0);
@@ -390,7 +390,7 @@ class AdsController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_DELETE');
+        $this->checkAclOrForward('ADVERTISEMENT_DELETE');
 
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->getDigits('category', 'all');
@@ -439,7 +439,7 @@ class AdsController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_DELETE');
+        $this->checkAclOrForward('ADVERTISEMENT_AVAILA');
 
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
@@ -635,7 +635,7 @@ class AdsController extends Controller
     }
 
     /**
-     * Handles and shows the album configuration form
+     * Handles and shows the advertisement configuration form
      *
      * @param Request $request the request object
      *
@@ -643,8 +643,6 @@ class AdsController extends Controller
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('ADS_SETTINGS');
-
         if ('POST' == $this->request->getMethod()) {
 
             $formValues = $this->get('request')->request;

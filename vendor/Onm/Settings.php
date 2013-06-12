@@ -13,7 +13,7 @@
 namespace Onm;
 
 /**
- * Wrapper class to get/set settings in db with support of APC caching.
+ * Wrapper class to get/set settings in db with support of cache.
  *
  * Conventions:
  *    All the setting names should have the next format:
@@ -50,17 +50,17 @@ class Settings
             return false;
         };
 
-        if (!is_array($settingName)) {
-            // Try to fetch the setting from APC first
-            $fetchedFromAPC = false;
-            if (extension_loaded('apc')) {
-                $settingValue = apc_fetch(APC_PREFIX . ".". $settingName, $fetchedFromAPC);
-            }
+        global $sc;
+        $cache = $sc->get('cache');
 
-            // If was not fetched from APC now is turn of DB
-            if (!$fetchedFromAPC) {
-                $sql = "SELECT value FROM `settings` WHERE name = \"{$settingName}\"";
-                $rs = $GLOBALS['application']->conn->GetOne($sql);
+        if (!is_array($settingName)) {
+            // Try to fetch the setting from cache first
+            $settingValue = $cache->fetch(CACHE_PREFIX . $settingName);
+
+            // If was not fetched from cache now is turn of DB
+            if (!$settingValue) {
+                $sql = "SELECT value FROM `settings` WHERE name = ?";
+                $rs = $GLOBALS['application']->conn->GetOne($sql, array($settingName));
 
                 if ($rs === false) {
                     \Application::logDatabaseError();
@@ -68,46 +68,40 @@ class Settings
                     return false;
                 }
 
-
                 if ($rs === null && !is_null($default)) {
                     $settingValue = $default;
                 } else {
                     $settingValue = unserialize($rs);
                 }
 
-                if (extension_loaded('apc')) {
-                    apc_store(APC_PREFIX . ".".$settingName, $settingValue);
-                }
-
+                $cache->save(CACHE_PREFIX . $settingName, $settingValue);
             }
         } else {
-            // Try to fetch each setting from APC first
-            $fetchedFromAPC = false;
-            if (extension_loaded('apc')) {
-                $apcSettingName = array();
-                foreach ($settingName as $key) {
-                    $apcSettingName []= APC_PREFIX . ".". $key;
-                }
-
-                $apcSettingValue = apc_fetch($apcSettingName, $fetchedFromAPC);
-
-                $settingValue = array();
-                if (!empty($apcSettingValue)) {
-                    foreach ($apcSettingValue as $key => $value) {
-                        $key = preg_replace("@".APC_PREFIX . "\.@", "", $key);
-                        $settingValue[$key] = $value;
-                    }
-                }
-
+            // Try to fetch each setting from cache first
+            $cacheSettingName = array();
+            foreach ($settingName as $key) {
+                $cacheSettingName []= CACHE_PREFIX . $key;
             }
 
-            // If all the keys were not fetched from APC now is turn of DB
+            $cacheSettingValue = $cache->fetch($cacheSettingName);
+
+            $settingValue = array();
+
+            if (!empty($cacheSettingValue)) {
+                foreach ($cacheSettingValue as $key => $value) {
+
+                    $keyName = str_replace(CACHE_PREFIX, "", $key);
+
+                    $settingValue[$keyName] = $value;
+                }
+            }
+
+            // If all the keys were not fetched from cache now is turn of DB
             if (!is_null($settingValue)
-                && (count($settingValue) != count($settingName))
             ) {
-                $settingName = implode("', '", $settingName);
+                $settings = implode("', '", $settingName);
                 $sql         = "SELECT name, value FROM `settings` "
-                               ."WHERE name IN ('{$settingName}') ";
+                               ."WHERE name IN ('{$settings}') ";
                 $rs          = $GLOBALS['application']->conn->Execute($sql);
 
                 if (!$rs) {
@@ -121,13 +115,11 @@ class Settings
                     $settingValue[$option['name']] = unserialize($option['value']);
                 }
 
-                if (extension_loaded('apc')) {
-                    $apcSettingName = array();
-                    foreach ($settingValue as $key => $option) {
-                        $apcSettingName [APC_PREFIX . ".". $key] = $option;
-                    }
-                    apc_store($apcSettingName);
+                $cacheSettingName = array();
+                foreach ($settingValue as $key => $option) {
+                    $cacheSettingName [CACHE_PREFIX . $key] = $option;
                 }
+                $cache->save($settingName, $cacheSettingName);
 
             }
 
@@ -137,7 +129,7 @@ class Settings
     }
 
     /**
-     * Stores a setting in DB and updates apc cache entry for it.
+     * Stores a setting in DB and updates cache entry for it.
      *
      * Example:
      *  use Onm\Settings as s;
@@ -150,6 +142,8 @@ class Settings
      */
     public static function set($settingName, $settingValue)
     {
+        global $sc;
+        $cache = $sc->get('cache');
         // the setting name must be setted
         if (!isset($settingName) || empty($settingName)) {
             return false;
@@ -158,8 +152,8 @@ class Settings
         $settingValueSerialized = serialize($settingValue);
 
         $sql = "INSERT INTO settings (name,value)
-                            VALUES ('{$settingName}','{$settingValueSerialized}')
-                            ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
+                VALUES ('{$settingName}','{$settingValueSerialized}')
+                ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -167,15 +161,14 @@ class Settings
             \Application::logDatabaseError();
             return false;
         }
-        if (extension_loaded('apc')) {
-            apc_store(APC_PREFIX . ".".$settingName, $settingValue);
-        }
+        $cache->save(CACHE_PREFIX . $settingName, $settingValue);
+
 
         return true;
     }
 
     /**
-     * Invalidates the apc_cache for a setting from its name.
+     * Invalidates the cache for a setting from its name.
      *
      * Example:
      *  use Onm\Settings as s;
@@ -184,12 +177,15 @@ class Settings
      * @param string $settingName  the name of the setting.
      * @param string $instanceName the name of the instance.
      *
-     * @return boolean true if the setting apc_cache was invalidated.
+     * @return boolean true if the setting cache was invalidated.
      */
     public static function invalidate($settingName, $instanceName = null)
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         if (is_null($instanceName)) {
-            $instanceName = APC_PREFIX;
+            $instanceName = CACHE_PREFIX;
         }
 
         // the setting name must be setted
@@ -197,11 +193,7 @@ class Settings
             return false;
         }
 
-        if (extension_loaded('apc')) {
-            apc_delete($instanceName . ".".$settingName);
-        } else {
-            return false;
-        }
+        $cache->delete($instanceName . $settingName);
 
         return true;
     }

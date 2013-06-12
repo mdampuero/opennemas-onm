@@ -729,12 +729,6 @@ class Privilege
                 'description'  => _('Delete'),
                 'module'       => 'GROUP',
             ),
-            98 => array(
-                'pk_privilege' => '98',
-                'name'         => 'GROUP_ADMIN',
-                'description'  => _('List'),
-                'module'       => 'GROUP',
-            ),
             99 => array(
                 'pk_privilege' => '99',
                 'name'         => 'GROUP_CREATE',

@@ -132,28 +132,36 @@ class ArticlesController extends Controller
                     $relatedContents = $cm->getAvailable($relatedContents);
 
                     // Add category name
-                    foreach ($relatedContents as &$content) {
+                    foreach ($relatedContents as $key => &$content) {
                         $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
+                        if ($key == 0 && $content->content_type == 'Article' && !empty($content->img1)) {
+                             $content->photo = new \Photo($content->img1);
+                        }
                     }
                 }
                 $this->view->assign('relationed', $relatedContents);
 
                 // Machine suggested contents code -----------------------------
-                $machineSuggestedContents = array();
-                if (!empty($article->metadata)) {
+                $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
+                    $article->metadata,
+                    'article',
+                    "pk_fk_content_category= ".$article->category.
+                    " AND contents.available=1 AND pk_content = pk_fk_content",
+                    4
+                );
 
-                    $objSearch    = \cSearch::getInstance();
-                    $machineSuggestedContents =
-                        $objSearch->searchSuggestedContents(
-                            $article->metadata,
-                            'Article',
-                            "pk_fk_content_category= ".$article->category.
-                            " AND contents.available=1 AND pk_content = pk_fk_content",
-                            4
-                        );
-                    $machineSuggestedContents =
-                        $cm->getInTime($machineSuggestedContents);
+                foreach ($machineSuggestedContents as &$element) {
+                    $element['uri'] = \Uri::generate(
+                        'article',
+                        array(
+                            'id'       => $element['pk_content'],
+                            'date'     => date('YmdHis', strtotime($element['created'])),
+                            'category' => $element['catName'],
+                            'slug'     => StringUtils::get_title($element['title']),
+                        )
+                    );
                 }
+
                 $this->view->assign('suggested', $machineSuggestedContents);
             } else {
                 throw new ResourceNotFoundException();

@@ -1007,6 +1007,9 @@ gettext("Frontpage %1");
 gettext("Opinion of Author \"%1\"");
 
 /* public/themes/admin/tpl//tpl_manager/tpl_manager.tpl */
+gettext("(Page %1)");
+
+/* public/themes/admin/tpl//tpl_manager/tpl_manager.tpl */
 gettext("Album %1");
 
 /* public/themes/admin/tpl//tpl_manager/tpl_manager.tpl */
@@ -1133,7 +1136,7 @@ gettext("No published");
 gettext("Select an author");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list.tpl */
-gettext("All");
+gettext("All authors");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list.tpl */
 gettext("Director");
@@ -1152,15 +1155,6 @@ gettext("Views");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list.tpl */
 gettext("Views");
-
-/* public/themes/admin/tpl//opinion/partials/_opinion_list.tpl */
-gettext("Votes");
-
-/* public/themes/admin/tpl//opinion/partials/_opinion_list.tpl */
-gettext("Comments");
-
-/* public/themes/admin/tpl//opinion/partials/_opinion_list.tpl */
-gettext("Comments");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list.tpl */
 gettext("Created in");
@@ -1202,10 +1196,10 @@ gettext("Title");
 gettext("Views");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
-gettext("Votes");
+gettext("Date");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
-gettext("Comments");
+gettext("Home");
 
 /* public/themes/admin/tpl//opinion/partials/_opinion_list_home.tpl */
 gettext("Available");
@@ -2471,7 +2465,10 @@ gettext("Drop suggest");
 gettext("Cancel");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
-gettext("Customize font and color for this element");
+gettext("Customize font and color style");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Image disposition in frontpage");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Background Color");
@@ -2549,18 +2546,6 @@ gettext("Red");
 gettext("Bold red");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
-gettext("Title font family");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
-gettext("Title font style");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
-gettext("Title font weight");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
-gettext("Title font size");
-
-/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Title font color");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
@@ -2634,6 +2619,54 @@ gettext("Red");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Bold red");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Title font family");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Title font style");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Title font weight");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Title font size");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Top Wide Image");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Image wide");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Top right Image");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("image-top-right");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Top Left Image");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("image-top-left");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Wide image");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("image-middle-wide");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Right image");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("image-middle-left");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("Left image");
+
+/* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
+gettext("image-middle-left");
 
 /* public/themes/admin/tpl//frontpagemanager/modals/_modal_customize_content.tpl */
 gettext("Reset");
@@ -3236,7 +3269,10 @@ gettext("Global search");
 gettext("Please fill the form for searching contents");
 
 /* public/themes/admin/tpl//search_advanced/index.tpl */
-gettext("Content name");
+gettext("Text to search");
+
+/* public/themes/admin/tpl//search_advanced/index.tpl */
+gettext("Search");
 
 /* public/themes/admin/tpl//search_advanced/index.tpl */
 gettext("Content type");
@@ -6722,46 +6758,16 @@ gettext("Config comments module");
 gettext("Settings");
 
 /* public/themes/admin/tpl//comment/list.tpl */
-gettext("Status:");
+gettext("Search");
 
 /* public/themes/admin/tpl//comment/list.tpl */
-gettext("Pending");
+gettext("Author");
 
 /* public/themes/admin/tpl//comment/list.tpl */
-gettext("Published");
+gettext("Comment");
 
 /* public/themes/admin/tpl//comment/list.tpl */
-gettext("Rejected");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Category:");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("-- All --");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Module:");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("-- All --");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Comment (50 chars)");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("IP");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Category");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Date");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Votes");
+gettext("In response to");
 
 /* public/themes/admin/tpl//comment/list.tpl */
 gettext("Published");
@@ -6770,19 +6776,13 @@ gettext("Published");
 gettext("Actions");
 
 /* public/themes/admin/tpl//comment/list.tpl */
-gettext("Edit comment %1");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("Author");
-
-/* public/themes/admin/tpl//comment/list.tpl */
-gettext("from facebook");
+gettext("Submitted on:");
 
 /* public/themes/admin/tpl//comment/list.tpl */
 gettext("Edit");
 
 /* public/themes/admin/tpl//comment/list.tpl */
-gettext("There is no comments here.");
+gettext("No comments matched your criteria.");
 
 /* public/themes/admin/tpl//comment/read.tpl */
 gettext("Editing comment");
@@ -6827,7 +6827,7 @@ gettext("Nickname");
 gettext("Email");
 
 /* public/themes/admin/tpl//comment/read.tpl */
-gettext("Written on");
+gettext("Submitted on");
 
 /* public/themes/admin/tpl//comment/read.tpl */
 gettext("Sent from IP address");
@@ -6836,22 +6836,7 @@ gettext("Sent from IP address");
 gettext("Commented on");
 
 /* public/themes/admin/tpl//comment/read.tpl */
-gettext("Published");
-
-/* public/themes/admin/tpl//comment/read.tpl */
-gettext("Yes");
-
-/* public/themes/admin/tpl//comment/read.tpl */
-gettext("No");
-
-/* public/themes/admin/tpl//comment/read.tpl */
-gettext("Rejected");
-
-/* public/themes/admin/tpl//comment/read.tpl */
-gettext("Title");
-
-/* public/themes/admin/tpl//comment/read.tpl */
-gettext("Comment title");
+gettext("Status");
 
 /* public/themes/admin/tpl//comment/read.tpl */
 gettext("Body");
@@ -7853,6 +7838,9 @@ gettext("Password");
 gettext("Enter");
 
 /* public/themes/admin/tpl//login/login.tpl */
+gettext("Forgot Password?");
+
+/* public/themes/admin/tpl//login/login.tpl */
 gettext("About");
 
 /* public/themes/admin/tpl//login/login.tpl */
@@ -7910,10 +7898,25 @@ gettext("In which category you want to import this element?");
 gettext("Syncing from sources");
 
 /* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
+gettext("Loading...");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
 gettext("Downloading articles from news agencies, please wait...");
 
 /* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
 gettext("Stop sync");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_remove_config.tpl */
+gettext("Remove the server configuration");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_remove_config.tpl */
+gettext("Are you sure that you want to delete the selected server configuration?");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_remove_config.tpl */
+gettext("Remove");
+
+/* public/themes/admin/tpl//news_agency/modals/_modal_remove_config.tpl */
+gettext("Cancel");
 
 /* public/themes/admin/tpl//news_agency/show.tpl */
 gettext("News Agency");
@@ -8138,6 +8141,12 @@ gettext("Disabled");
 gettext("Removes the synchronized files for this source");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Hide password");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Show password");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("News agency");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
@@ -8195,10 +8204,94 @@ gettext("Agency");
 gettext("When importing elements this will be the signature");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Color");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Dark Gray");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("White");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Light Blue");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Light Red");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Light Orange");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Light purple");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Light green");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Green");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Bold blue");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Blue");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Turquoise");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Light green");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Bold green");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Yellow");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Orange");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Light Red");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Red");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Purple");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Gray");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Black");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Yellow");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Orange");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Red");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Bold red");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Color to distinguish between other agencies");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Sync elements newer than");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Set this to you preferences to fetch elements since a fixed date.<br>Less time means faster synchronizations.");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Hide password");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Show password");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("System settings");

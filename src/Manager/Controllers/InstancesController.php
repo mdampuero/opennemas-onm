@@ -371,9 +371,9 @@ class InstancesController extends Controller
             'activated_modules'
         );
 
-        // Delete the 'activated_modules' apc_cache for this instance
+        // Delete the 'activated_modules' from cache service for this instance
         s::invalidate('activated_modules', $data['internal_name']);
-        // Delete the 'site_name' apc_cache for this instance
+        // Delete the 'site_name' from cache service for this instance
         s::invalidate('site_name', $data['internal_name']);
 
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set

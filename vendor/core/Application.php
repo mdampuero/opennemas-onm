@@ -100,8 +100,6 @@ class Application
 
             // Setting up Logger
             self::initLogger();
-
-            self::initTimeZone();
         }
 
         return $GLOBALS['application'];
@@ -133,19 +131,6 @@ class Application
         $GLOBALS['application']->logger = self::$loggerStatic;
     }
 
-    /**
-     * Sets the timezone for this app from the instance settings
-     *
-     * @return void
-     **/
-    public static function initTimeZone()
-    {
-        $timezone = s::get('time_zone');
-        if (isset($timezone)) {
-            $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[$timezone]);
-        }
-    }
 
     /**
      * Sets the PHP environment given an environmen

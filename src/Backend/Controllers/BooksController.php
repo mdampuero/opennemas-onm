@@ -34,10 +34,15 @@ class BooksController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('BOOK_MANAGER');
+
+        $this->checkAclOrForward('BOOK_ADMIN');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         // Take out this crap from this PLEASE ---------------------------------
-        $contentType = \Content::getIDContentType('book');
+        $contentType = \ContentManager::getContentTypeIdFromName('book');
 
         $this->category = $this->request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
@@ -81,8 +86,6 @@ class BooksController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_ADMIN');
-
         $page           = $request->query->getDigits('page', 1);
         $status         = $request->query->getDigits('status');
 
@@ -171,8 +174,7 @@ class BooksController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-
-        $this->checkAclOrForward('BOOK_ADMIN');
+        $this->checkAclOrForward('BOOK_FAVORITE');
 
         $configurations = s::get('books_settings');
         $numFavorites   = $configurations['total_widget'];

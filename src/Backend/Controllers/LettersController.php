@@ -259,7 +259,7 @@ class LettersController extends Controller
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('LETTER_AVAILABLE');
 
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);

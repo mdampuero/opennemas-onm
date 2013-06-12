@@ -34,6 +34,10 @@ class MenusController extends Controller
      **/
     public function init()
     {
+        \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
+
+        $this->checkAclOrForward('MENU_ADMIN');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->pages = array(
@@ -67,9 +71,7 @@ class MenusController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_ADMIN');
-
-        $menues    = \Menu::find();
+        $menues = \Menu::find();
 
         return $this->render('menues/list.tpl', array('menues' => $menues,));
     }
@@ -83,7 +85,7 @@ class MenusController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_AVAILABLE');
+        $this->checkAclOrForward('MENU_UPDATE');
 
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 

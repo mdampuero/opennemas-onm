@@ -96,6 +96,14 @@ class NewsMLG1 implements FormatInterface
                 return $this->getBody();
 
                 break;
+            case 'summary':
+                return $this->getSummary();
+
+                break;
+            case 'pretitle':
+                return $this->getPretitle();
+
+                break;
             case 'agency_name':
                 $this->getServiceName();
 
@@ -128,6 +136,19 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        $agencyName = $this->getData()
+            ->NewsEnvelope->SentFrom->Party->attributes()->FormalName;
+
+        return (string) $agencyName;
+    }
+
+    /**
      * Returns the id of the element
      *
      * @return string the title
@@ -155,7 +176,7 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getPretitle()
     {
-        return '';
+        return (string) $this->getData()->NewsItem->NewsComponent->NewsLines->SubHeadLine;
     }
 
     /**
@@ -165,7 +186,15 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getSummary()
     {
-        return '';
+        $summaries = $this->getData()->xpath(
+            "//nitf/body/body.head/abstract"
+        );
+        $summary   = "";
+        foreach ($summaries[0]->children() as $child) {
+            $summary .= "<p>".sprintf("%s", $child)."</p>";
+        }
+
+        return $summary;
     }
 
     /**

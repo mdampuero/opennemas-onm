@@ -428,8 +428,7 @@ class Article extends Content
         $rel = new RelatedContent();
         $rel->delete($id); //Eliminamos con los que esta relacionados.
 
-        $rel = new Comment();
-        $rel->deleteComments($id); //Eliminamos  los comentarios.
+        self::deleteComments($id); //Eliminamos  los comentarios.
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             \Application::logDatabaseError();
@@ -456,6 +455,7 @@ class Article extends Content
         $params['item'] = $this;
         // $params'cssclass', $params['cssclass']);
         // $tpl->assign('categoryId', $params['categoryId']);
+
 
         try {
             $html = $tpl->fetch($params['tpl'], $params);

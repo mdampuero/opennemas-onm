@@ -35,6 +35,9 @@ class AclUserGroupsController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('USER_GROUP_MANAGER');
+
         $this->checkAclOrForward('GROUP_ADMIN');
 
         $this->privilege = new \Privilege();
@@ -67,6 +70,8 @@ class AclUserGroupsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->checkAclOrForward('GROUP_UPDATE');
+
         $id = $request->query->filter('id', FILTER_VALIDATE_INT);
 
         $userGroup = new \UserGroup($id);
@@ -95,7 +100,7 @@ class AclUserGroupsController extends Controller
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('GROUP_GREATE');
+        $this->checkAclOrForward('GROUP_CREATE');
 
         $userGroup = new \UserGroup();
         $privilege = new \Privilege();

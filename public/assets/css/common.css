@@ -1,7 +1,55 @@
 
 /***********************************************************
+    Frontpage content disposition
+************************************************************/
+.image-top-wide div.article-media,
+.image-middle-wide div.article-media{
+    width: 100%;
+}
+
+.image-top-right div.article-media{
+    width: 49%;
+    float: right !important;
+    margin-left: 10px;
+}
+
+.image-top-left div.article-media{
+    width: 49%;
+    float: left !important;
+    margin-right: 10px;
+}
+
+.image-middle-right div.article-media{
+    width: 49%;
+    float: right !important;
+    margin-left: 10px;
+}
+
+.image-middle-left div.article-media{
+    width: 49%;
+    float: left !important;
+    margin-right: 10px;
+}
+
+/***********************************************************
   Definitions for ads
 ************************************************************/
+
+/***********************************************************
+  Definitions for ads inside HEADER
+************************************************************/
+div.ads_footer, div.ads_header { width: 100%; }
+.ad_728 { width:728px; display:inline; float:left; }
+.ad_728 a, .ad_244 a, .ad_in_column a{  min-height:90px; }
+.ad_in_column div { margin:0 auto; }
+div.ads_footer div.ad_728, div.ads_header div.ad_728 {  margin-right:0px; }
+.ad_244{ width:244px; display:inline; float:right; max-height:90px; text-align: right; }
+div.ads_footer div.ad_244, div.ads_header div.ad_244 { float:right; }
+div.ad_in_column > div { text-align:center; border:1px solid #E9E9E9; padding:5px; }
+
+.ads_break_frontpage { clear:both; margin:10px 0; }
+.ads_break_frontpage > div { background-color:White; }
+
 div.ads-skyscraper-container{
     position: fixed;
     top: 0;

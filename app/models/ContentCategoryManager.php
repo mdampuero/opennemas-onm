@@ -46,18 +46,15 @@ class ContentCategoryManager
     public function __construct()
     {
         if (is_null(self::$instance)) {
-            // Posibilidad de cachear resultados de métodos
             $this->cache = new MethodCacheManager($this, array('ttl' => 300));
 
-            // Rellenar categorías dende caché
-            $this->categories = $this->cache->populateCategories();
+            // Fill categories from cache
+            $this->categories = $this->findAll();
 
             self::$instance = $this;
-
-            return self::$instance;
-        } else {
-            return self::$instance;
         }
+
+        return self::$instance;
     }
 
     /**
@@ -77,55 +74,44 @@ class ContentCategoryManager
     }
 
     /**
-     * Reloads the internal categories array and purges the APC cache
-     *
-     * Used after creating/updating categories
-     *
-     * @return array Array with Content_category objects
-     **/
-    public function reloadCategories()
-    {
-        $this->categories = null;
-        $method ='populateCategories';
-        $args   = array();
-        $key    = 'ContentCategoryManager'.$method.md5(serialize($args));
-        if (defined('APC_PREFIX')) {
-            $key = APC_PREFIX . $key;
-        }
-
-        $result = apc_delete($key);
-        $result = call_user_func_array(
-            array('ContentCategoryManager', $method),
-            $args
-        );
-        apc_store($key, serialize($result), 300);
-
-        return $result ;
-    }
-
-    /**
      * Fetches the available categories and stores them into a property
      *
      * @return array List of ContentCategory objects
     */
-    public function populateCategories()
+    public function findAll()
     {
-        $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        global $sc;
+        $cache = $sc->get('cache');
 
-        if (!$rs) {
-            \Application::logDatabaseError();
+        $cacheKey = CACHE_PREFIX.'_content_categories';
+        $categories = $cache->fetch($cacheKey);
 
-            return false;
-        }
+        if (!$categories) {
+            $sql = 'SELECT * FROM content_categories ORDER BY posmenu ASC';
+            $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+            $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        // clear content
-        $this->categories = array();
-        if ($rs!=false) {
-            while ($obj = $rs->FetchNextObject($toupper = false)) {
-                $this->categories[$obj->pk_content_category] = $obj;
+            if (!$rs) {
+                \Application::logDatabaseError();
+
+                return false;
             }
+
+            $categories = array();
+            if ($rs != false) {
+                $data = $rs->getArray();
+
+                foreach ($data as $catData) {
+                    $category = new \ContentCategory();
+                    $category->load($catData);
+                    $categories[$category->id] = $category;
+                }
+            }
+
+            $cache->save($cacheKey, $categories, 300);
         }
+
+        $this->categories = $categories;
 
         return $this->categories;
     }

@@ -40,7 +40,7 @@ class PollsController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        $contentType = \Content::getIDContentType('poll');
+        $contentType = \ContentManager::getContentTypeIdFromName('poll');
 
         $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
 
@@ -537,7 +537,7 @@ class PollsController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_DELETE');
+        $this->checkAclOrForward('POLL_AVAILABLE');
 
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
@@ -644,7 +644,7 @@ class PollsController extends Controller
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('POLLS_SETTINGS');
+        $this->checkAclOrForward('POLL_SETTINGS');
 
         if ('POST' == $request->getMethod()) {
             $settingsRAW = $request->request->get('poll_settings');

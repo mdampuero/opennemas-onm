@@ -68,7 +68,7 @@ EOF
 
         // Update dependencies
         $output->writeln(" - Updating vendor libraries");
-        $composerOutput = exec($phpBinPath.' '.$basePath.'/bin/composer.phar install');
+        $composerOutput = exec($phpBinPath.' '.$basePath.'/bin/composer.phar install -o');
         $output->writeln($composerOutput."\n");
 
         $skipCleaning = $input->getOption('skip-cleaning');

@@ -87,6 +87,7 @@ class Agency
         $article->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->changed);
 
         $imageId = $article->img1;
+        $imageInnerId = $article->img2;
 
         if (!empty($imageId)) {
             $image = $this->cm->find('Photo', 'pk_content = '.$imageId);
@@ -97,11 +98,21 @@ class Agency
             $article->img1->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->changed);
         }
 
+        if (!empty($imageInnerId)) {
+            $image = $this->cm->find('Photo', 'pk_content = '.$imageInnerId);
+            // Load attached and related contents from array
+            $article->loadInnerImageFromHydratedArray($image);
+            // Add DateTime with format Y-m-d H:i:s
+            $article->img2->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->created);
+            $article->img2->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->changed);
+        }
+
         $output = $tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
             array(
-                'article' => $article,
-                'photo'   => $article->img1,
+                'article'    => $article,
+                'photo'      => $article->img1,
+                'photoInner' => $article->img2,
             )
         );
 

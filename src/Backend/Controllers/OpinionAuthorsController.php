@@ -34,9 +34,12 @@ class OpinionAuthorsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('OPINION_MANAGER');
 
         $this->checkAclOrForward('AUTHOR_ADMIN');
+
+        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**
@@ -48,8 +51,6 @@ class OpinionAuthorsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('AUTHOR_ADMIN');
-
         $page = $request->query->getDigits('page', 1);
         $name = $request->query->filter('name', null, FILTER_SANITIZE_STRING);
 
@@ -101,7 +102,6 @@ class OpinionAuthorsController extends Controller
      **/
     public function showAction(Request $request)
     {
-
         $this->checkAclOrForward('AUTHOR_UPDATE');
 
         $id = $request->query->getDigits('id', null);
@@ -138,7 +138,6 @@ class OpinionAuthorsController extends Controller
      **/
     public function createAction(Request $request)
     {
-
         $this->checkAclOrForward('AUTHOR_CREATE');
 
         if ('POST' == $request->getMethod()) {

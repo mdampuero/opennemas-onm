@@ -34,12 +34,17 @@ class ImagesController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('IMAGE_MANAGER');
+
+        $this->checkAclOrForward('IMAGE_ADMIN');
+
         $request = $this->request;
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
-        $this->contentType = \Content::getIDContentType('album');
+        $this->contentType = \ContentManager::getContentTypeIdFromName('album');
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
@@ -498,6 +503,8 @@ class ImagesController extends Controller
      **/
     public function newAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_CREATE');
+
         $request = $this->request;
         $category = $request->query->getDigits('category', '');
 
@@ -535,6 +542,8 @@ class ImagesController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_UPDATE');
+
         $request     = $this->request;
         $ids         = $request->query->get('id');
         $page        = $request->query->getDigits('page', 1);
@@ -591,6 +600,8 @@ class ImagesController extends Controller
      **/
     public function updateAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_UPDATE');
+
         $request   = $this->request;
         $photosRAW = $request->request->get('description');
         $action    = $request->request->filter('action', 'update');
@@ -649,6 +660,8 @@ class ImagesController extends Controller
      **/
     public function deleteAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_DELETE');
+
         $request = $this->get('request');
         $id   = $request->query->getDigits('id', null);
         $page = $request->query->getDigits('page', 1);
@@ -682,6 +695,8 @@ class ImagesController extends Controller
      **/
     public function createAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_CREATE');
+
         $response = new Response();
         $response->headers->add(
             array(
@@ -841,7 +856,6 @@ class ImagesController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
-
         $this->checkAclOrForward('IMAGE_DELETE');
 
         $request = $this->get('request');
@@ -880,7 +894,7 @@ class ImagesController extends Controller
      **/
     public function contentProviderGalleryAction(Request $request)
     {
-        $metadatas = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+        $metadata = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
         $category = $request->query->getDigits('category', 0);
         $page     = $request->query->getDigits('page', 1);
 
@@ -895,45 +909,33 @@ class ImagesController extends Controller
 
         $cm = new \ContentManager();
 
-        if (!empty($metadatas)) {
-            $search = \cSearch::getInstance();
-            $arrayIds      = $search->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
-            if (!empty($arrayIds)) {
-                $szWhere   = '( FALSE ';
-                foreach ($arrayIds as $id) {
-                    $szWhere .= ' OR pk_content = ' . $id[0];
-                }
-                $szWhere .= ')';
-            } else {
-                $szWhere = "TRUE";
-
-                return new Response(
-                    sprintf(
-                        "<div><p>"._("Unable to find any content matching your search criterira.")."</p></div>",
-                        $metadatas
-                    )
-                );
-            }
-
-        } else {
-            $szWhere = "TRUE";
+        $szWhere = '';
+        if (empty($metadata)) {
+            $szWhere = "AND  (`metadata` LIKE '%$metadata%')";
         }
 
         if (empty($category)) {
             $photos = $cm->find(
                 'Photo',
                 'contents.fk_content_type = 8 AND photos.media_type="image" '
-                .'AND contents.content_status=1 AND ' . $szWhere,
+                .'AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         } else {
             $photos = $cm->find_by_category(
                 'Photo',
                 $category,
-                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 AND ' . $szWhere,
+                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         }
+
+        if (empty($photos)) {
+            return new Response(
+                _("<div><p>Unable to find any image matching your search criteria.</p></div>")
+            );
+        }
+
         $total = count($photos);
         if ($total > $itemsPerPage) {
             array_pop($photos);
@@ -948,7 +950,7 @@ class ImagesController extends Controller
                     'admin_images_content_provider_gallery',
                     array(
                         'category'  => $category,
-                        'metadatas' => $metadatas,
+                        'metadatas' => $metadata,
                     )
                 )
             )

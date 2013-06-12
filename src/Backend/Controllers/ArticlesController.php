@@ -19,7 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
-use \Onm\Module\ModuleManager;
 
 /**
  * Handles the actions for managing articles
@@ -36,7 +35,7 @@ class ArticlesController extends Controller
     public function init()
     {
         //Check if module is activated in this onm instance
-        ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
+        \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
 
         // Check if the user can admin video
         $this->checkAclOrForward('ARTICLE_ADMIN');
@@ -138,14 +137,11 @@ class ArticlesController extends Controller
         if (isset($articles) && is_array($articles)) {
             $user    = new \User();
             $rating  = new \Rating();
-            $comment = new \Comment();
 
             foreach ($articles as &$article) {
                 $article->category_name = $article->loadCategoryName($article->id);
                 $article->publisher = $user->getUserName($article->fk_publisher);
                 $article->editor    = $user->getUserName($article->fk_user_last_editor);
-                $article->rating    = $rating->getValue($article->id);
-                $article->comment   = $comment->count_public_comments($article->id);
             }
         } else {
             $articles = array();
@@ -394,7 +390,7 @@ class ArticlesController extends Controller
         }
         $this->view->assign('orderInner', $orderInner);
 
-        if (ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
+        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES') && is_array($article->params)) {
             $galleries = array();
             if (array_key_exists('withGalleryHome', $article->params)) {
                 $galleries['home'] = new \Album($article->params['withGalleryHome']);
@@ -1052,15 +1048,26 @@ class ArticlesController extends Controller
                 $ccm->get_category_name_by_content_id($ril->id);
         }
 
-        // Get suggested contents to the article
-        $objSearch = \cSearch::getInstance();
-        $arrayResults=$objSearch->searchSuggestedContents(
+        // Machine suggested contents code -----------------------------
+        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
             $article->metadata,
-            'Article',
-            'pk_fk_content_category= '.$article->category.
-            ' AND contents.available=1 AND pk_content = pk_fk_content',
+            'article',
+            "pk_fk_content_category= ".$article->category.
+            " AND contents.available=1 AND pk_content = pk_fk_content",
             4
         );
+
+        foreach ($machineSuggestedContents as &$element) {
+            $element['uri'] = \Uri::generate(
+                'article',
+                array(
+                    'id'       => $element['pk_content'],
+                    'date'     => date('YmdHis', strtotime($element['created'])),
+                    'category' => $element['catName'],
+                    'slug'     => StringUtils::get_title($element['title']),
+                )
+            );
+        }
 
         $this->view->caching = 0;
 
@@ -1072,7 +1079,7 @@ class ArticlesController extends Controller
                 'article/article.tpl',
                 array(
                     'relationed'            => $relat,
-                    'suggested'             => $arrayResults,
+                    'suggested'             => $machineSuggestedContents,
                     'actual_category_title' => $actual_category_title,
                     'contentId'             => $article->id,
                     'article'               => $article,

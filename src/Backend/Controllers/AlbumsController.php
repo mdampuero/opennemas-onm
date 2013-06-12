@@ -44,7 +44,7 @@ class AlbumsController extends Controller
 
         $request = $this->get('request');
 
-        $contentType = \Content::getIDContentType('album');
+        $contentType = \ContentManager::getContentTypeIdFromName('album');
 
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
@@ -71,8 +71,6 @@ class AlbumsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_ADMIN');
-
         $itemsPerPage = s::get('items_per_page');
 
         $page           = $this->get('request')->query->getDigits('page', 1);
@@ -140,8 +138,6 @@ class AlbumsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_ADMIN');
-
         $page           = $this->get('request')->query->getDigits('page', 1);
         $category       = $this->get('request')->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
 

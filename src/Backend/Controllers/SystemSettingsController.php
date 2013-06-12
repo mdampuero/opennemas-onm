@@ -87,6 +87,7 @@ class SystemSettingsController extends Controller
         unset($_POST['action']);
         unset($_POST['submit']);
 
+        $_POST['site_logo'] = '';
         if (!empty($_FILES) && isset($_FILES['site_logo'])) {
             $nameFile = $_FILES['site_logo']['name'];
             $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
@@ -95,6 +96,8 @@ class SystemSettingsController extends Controller
                 $_POST['site_logo'] = $nameFile;
             }
         }
+
+        $_POST['favico'] = '';
         if (!empty($_FILES) && isset($_FILES['favico'])) {
             $nameFile = $_FILES['favico']['name'];
             $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
@@ -103,6 +106,8 @@ class SystemSettingsController extends Controller
                 $_POST['favico'] = $nameFile;
             }
         }
+
+        $_POST['mobile_logo'] = '';
         if (!empty($_FILES) && isset($_FILES['mobile_logo'])) {
             $nameFile = $_FILES['mobile_logo']['name'];
             $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;

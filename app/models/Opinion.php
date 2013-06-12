@@ -424,7 +424,7 @@ class Opinion extends Content
      *
      * @return string the generated HTML for the opinion
      **/
-    public function render()
+    public function render($params)
     {
         $tpl = new Template(TEMPLATE_USER);
 
@@ -440,6 +440,8 @@ class Opinion extends Content
         }
 
         $tpl->assign('item', $this);
+        $tpl->assign('actual_category', $params['actual_category']);
+        $tpl->assign('actual_category_id', $params['actual_category_id']);
         $tpl->assign('cssclass', 'opinion');
 
         return $tpl->fetch('frontpage/contents/_opinion.tpl');

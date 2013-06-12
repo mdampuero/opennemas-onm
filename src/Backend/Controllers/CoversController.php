@@ -46,7 +46,7 @@ class CoversController extends Controller
             define('KIOSKO_DIR', "kiosko".SS);
         }
 
-        $contentType = \Content::getIDContentType('kiosko');
+        $contentType = \ContentManager::getContentTypeIdFromName('kiosko');
 
         $category = $this->get('request')->query->getDigits('category', 'all');
 
@@ -443,7 +443,7 @@ class CoversController extends Controller
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_AVAILABLE');
+        $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
@@ -517,7 +517,7 @@ class CoversController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_DELETE');
+        $this->checkAclOrForward('KIOSKO_DELETE');
 
         $request       = $this->request;
         $category      = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -640,8 +640,6 @@ class CoversController extends Controller
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_ADMIN');
-
         if ('POST' != $request->getMethod()) {
             $configurationsKeys = array('kiosko_settings',);
             $configurations = s::get($configurationsKeys);

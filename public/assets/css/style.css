@@ -2330,6 +2330,46 @@ div.tagsinput span.tag a { font-weight: bold; text-decoration:none;  }
   margin-top:5px;
 }
 
+
+/* =============================================================================
+   Disposition images
+   ========================================================================== */
+
+div#modal-element-customize-content div.modal-header {
+  border: 0;
+}
+div#modal-element-customize-content .nav-tabs > li > a.active,
+div#modal-element-customize-content .nav-tabs > li > a:hover {
+      box-shadow: inset 0 0 15px rgba(0,0,0,.1);
+      background-color: none;
+   }
+div#modal-element-customize-content span.type{
+    color: #555;
+
+}
+div#modal-element-customize-content img.image-disposition {
+    width: 104px;
+    border: 1px solid #E1E1E1;
+}
+div#modal-element-customize-content div.disposition {
+    width: 140px;
+    overflow: hidden;
+    text-align: left;
+}
+div#modal-element-customize-content ul > li a{
+    color: #333;
+}
+div#modal-element-customize-content ul > li.image-disposition{
+    display: none;
+}
+div#modal-element-customize-content div.select-disposition{
+    margin-left: 20px;
+}
+
+ div#modal-element-customize-content div.modal-footer a.reset {
+    float: left;
+    color: #0B55C4;
+ }
 /* =============================================================================
    Onm Editor
    ========================================================================== */
@@ -2337,10 +2377,4 @@ div.tagsinput span.tag a { font-weight: bold; text-decoration:none;  }
 .onm-editor {
   width:100%;
   min-height:150px;
-}
-
-.settings-header {
-    font-weight: bold;
-    color: #333;
-    font-size:14px;
 }

@@ -36,6 +36,9 @@ class StaticPagesController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('STATIC_PAGES_MANAGER');
+
         $this->checkAclOrForward('STATIC_ADMIN');
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
@@ -103,6 +106,8 @@ class StaticPagesController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->checkAclOrForward('STATIC_UPDATE');
+
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         if (!is_null($id)) {
@@ -132,6 +137,8 @@ class StaticPagesController extends Controller
      **/
     public function createAction(Request $request)
     {
+        $this->checkAclOrForward('STATIC_CREATE');
+
         if ('POST' != $request->getMethod()) {
             return $this->render('static_pages/new.tpl');
         } else {

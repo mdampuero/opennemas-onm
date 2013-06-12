@@ -387,7 +387,9 @@ class User
      **/
     public function addCategoryToUser ($idUser, $idCategory)
     {
-        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        global $sc;
+        $cache = $sc->get('cache');
+        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
         $sql = "INSERT INTO users_content_categories "
              . "(`pk_fk_user`, `pk_fk_content_category`) "
@@ -416,7 +418,9 @@ class User
      **/
     public function delCategoryToUser($idUser, $idCategory)
     {
-        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        global $sc;
+        $cache = $sc->get('cache');
+        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
         $sql = 'DELETE FROM users_content_categories '
              . 'WHERE pk_fk_content_category=?';
@@ -441,14 +445,14 @@ class User
      **/
     private function readAccessCategories($id = null)
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         $id = (!is_null($id))? $id: $this->id;
-        $fetchedFromAPC = false;
-        if (extension_loaded('apc')) {
-            $key = APC_PREFIX . "_readAccessCategories".$id;
-            $contentCategories = apc_fetch($key, $fetchedFromAPC);
-        }
+
+        $contentCategories = $cache->fetch(CACHE_PREFIX . "categories_for_user_".$id);
          // If was not fetched from APC now is turn of DB
-        if (!$fetchedFromAPC) {
+        if (!$contentCategories) {
 
             $sql = 'SELECT pk_fk_content_category '
                  . 'FROM users_content_categories '
@@ -469,10 +473,8 @@ class User
                  $contentCategories[] = $contentCategory;
                  $rs->MoveNext();
             }
-            if (extension_loaded('apc')) {
-                $key = APC_PREFIX . "_readAccessCategories".$id;
-                apc_store($key, $contentCategories);
-            }
+
+            $cache->save(CACHE_PREFIX . "categories_for_user_".$id, $contentCategories);
         }
 
         return $contentCategories;
@@ -485,6 +487,9 @@ class User
      **/
     private function deleteAccessCategoriesDb()
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
         $values = array(intval($this->id));
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -495,7 +500,8 @@ class User
 
             return false;
         }
-         apc_delete(APC_PREFIX . "_readAccessCategories".$this->id);
+
+        $cache->delete(CACHE_PREFIX . "categories_for_user_".$this->id);
 
         return true;
     }
@@ -508,6 +514,7 @@ class User
      * @param string $password the password
      * @param string $loginToken the login token provided
      * @param string $loginCaptcha
+     * @param int    $time
      *
      * @return boolean true if the user has access
      **/
@@ -515,13 +522,14 @@ class User
         $login,
         $password,
         $loginToken = null,
-        $loginCaptcha = null
+        $loginCaptcha = null,
+        $time = null
     ) {
         $result = false;
 
-        $result = $this->authDatabase($login, $password);
+        $result = $this->authDatabase($login, $password, false, $time);
         if (!$result) {
-            $result = $this->authDatabase($login, $password, true);
+            $result = $this->authDatabase($login, $password, true, $time);
         }
 
         return $result;
@@ -532,11 +540,12 @@ class User
      *
      * @param  string  $login
      * @param  string  $password
-     * @param  loolean $managerDb
+     * @param  boolean $managerDb
+     * @param  int     $time
      *
      * @return boolean Return true if login exists and password match
      */
-    public function authDatabase($login, $password, $managerDb = false)
+    public function authDatabase($login, $password, $managerDb = false, $time = null)
     {
         $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\' OR email=\''.strval($login).'\'';
         if (!$managerDb) {
@@ -552,17 +561,22 @@ class User
         }
 
         $this->setValues($rs->fields);
-        if ($this->password === md5($password)) {
+
+        // Check if password came with md5 tag otherwise js is disabled
+        if (strstr($password, 'md5:') && 'md5:'.md5($this->password.$time) === $password) {
             // Set access categories
             $this->accesscategories = $this->readAccessCategories();
             $this->authMethod = 'database';
 
             return true;
-        } elseif ($this->password === $password) {
-            // Frontend login from mail activation
+        } elseif ($this->password === md5($password)) { // Pass not md5 ecrypted, js disabled
+            // Set access categories
+            $this->accesscategories = $this->readAccessCategories();
             $this->authMethod = 'database';
 
             return true;
+        } elseif ($this->password === $password) { // Frontend login from mail activation
+            $this->authMethod = 'database';
         }
 
         // Reset members properties

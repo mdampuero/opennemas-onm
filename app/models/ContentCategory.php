@@ -269,6 +269,10 @@ class ContentCategory
     public function load($properties)
     {
         if (is_array($properties)) {
+            if (array_key_exists('pk_content_category', $properties)) {
+                $this->id = $properties['pk_content_category'];
+            }
+
             foreach ($properties as $k => $v) {
 
                 if (!is_numeric($k)) {
@@ -277,6 +281,11 @@ class ContentCategory
             }
         } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
+
+            if (array_key_exists('pk_content_category', $properties)) {
+                $this->id = $properties['pk_content_category'];
+            }
+
             foreach ($properties as $k => $v) {
 
                 if (!is_numeric($k)) {
@@ -322,7 +331,7 @@ class ContentCategory
                 .'WHERE `pk_album` IN (' . $contents . ')  '
                 .'OR `pk_photo` IN ('.$contents.')';
             $sqls []= 'DELETE FROM comments '
-                .'WHERE `pk_comment` IN ('.$contents.')';
+                .'WHERE `content_id` IN ('.$contents.')';
             $sqls []= 'DELETE FROM votes '
                 .'WHERE `pk_vote` IN ('.$contents.')';
             $sqls []= 'DELETE FROM ratings '

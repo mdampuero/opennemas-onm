@@ -34,6 +34,9 @@ class NewsAgencyController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWS_AGENCY_IMPORTER');
+
         // Check ACL
         $this->checkAclOrForward('IMPORT_ADMIN');
 
@@ -279,6 +282,7 @@ class NewsAgencyController extends Controller
         // If the new has photos import them
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
+            $i = 0;
             foreach ($photos as $photo) {
                 // Get image from FTP
                 $filePath = realpath(
@@ -289,11 +293,11 @@ class NewsAgencyController extends Controller
                 // If no image from FTP check HTTP
                 if (!$filePath) {
                     $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$photo->name;
-                    $fileName = $photo->name;
+                        $sourceId.DS.$photo->name[$i];
+                    $fileName = $photo->name[$i];
                 }
 
-                // Check if the file apc_exists(keys)
+                // Check if the file cache exists(keys)
                 if (file_exists($filePath)) {
                     $data = array(
                         'title'         => $fileName,
@@ -310,11 +314,20 @@ class NewsAgencyController extends Controller
                     $photo = new \Photo();
                     $photoObject = $photo->createFromLocalFileAjax($data);
 
-                    // If this article has more than one photo take the first one
-                    if (!isset($innerPhoto)) {
+                    // Check if sync is from Opennemas instances
+                    if ($element->getServicePartyName() == 'Opennemas') {
+                        // If this article has more than one photo take the first one to front
+                        if (!isset($frontPhoto)) {
+                            $frontPhoto = new \Photo($photoObject->id);
+                        } elseif (!isset($innerPhoto)) {
+                            $innerPhoto = new \Photo($photoObject->id);
+                        }
+                    } elseif (!isset($innerPhoto)) {
                         $innerPhoto = new \Photo($photoObject->id);
                     }
+
                 }
+                $i++;
             }
         }
 
@@ -322,15 +335,23 @@ class NewsAgencyController extends Controller
         if ($element->hasVideos()) {
             $videos = $element->getVideos();
             foreach ($videos as $video) {
-                $filepath = realpath(
+                $filePath = realpath(
                     $repository->syncPath.DS.$sourceId.DS.$video->file_path
                 );
+
+                // If no video from FTP check HTTP
+                if (!$filePath) {
+                    $filePath = $repository->syncPath.DS.
+                        $sourceId.DS.$video->name[$i];
+                    $fileName = $video->name[$i];
+                }
+
 
                 // Check if the file exists
                 if ($filePath) {
                     $videoFileData = array(
                         'file_type'      => $video->file_type,
-                        'file_path'      => $filepath,
+                        'file_path'      => $filePath,
                         'category'       => $category,
                         'available'      => 1,
                         'content_status' => 0,
@@ -348,6 +369,7 @@ class NewsAgencyController extends Controller
                         $innerVideo = new \Video($videoID);
                     }
                 }
+                $i++;
             }
         }
 
@@ -370,8 +392,8 @@ class NewsAgencyController extends Controller
             'posic'          => 0,
             'id'             => 0,
             'fk_publisher'   => $_SESSION['userid'],
-            'img1'           => '',
-            'img1_footer'    => '',
+            'img1'           => (isset($frontPhoto) ? $frontPhoto->id : ''),
+            'img1_footer'    => (isset($frontPhoto) ? $frontPhoto->description : ''),
             'img2'           => (isset($innerPhoto) ? $innerPhoto->id : ''),
             'img2_footer'    => (isset($innerPhoto) ? $innerPhoto->description : ''),
             'fk_video'       => '',
@@ -452,24 +474,27 @@ class NewsAgencyController extends Controller
     public function showAttachmentAction(Request $request)
     {
         $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
+        $index        = $this->request->query->getDigits('index');
+        $sourceId     = $this->request->query->getDigits('source_id');
         $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
         $repository = new \Onm\Import\Repository\LocalRepository();
-        $element = $repository->findById($sourceId, $id);
+        $element    = $repository->findById($sourceId, $id);
 
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
+
             if (array_key_exists($attachmentId, $photos)) {
                 $photo = $photos[$attachmentId];
                 // Get image from FTP
                 $filePath = realpath(
                     $repository->syncPath.DS.$sourceId.DS.$photo->file_path
                 );
+
                 // If no image from FTP check HTTP
                 if (!$filePath) {
                     $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$photo->name;
+                        $sourceId.DS.$photo->name[$index];
                 }
                 $content = @file_get_contents($filePath);
 
@@ -532,7 +557,7 @@ class NewsAgencyController extends Controller
 
                 $server['allowed_file_extesions_pattern'] = '.*';
 
-                $message      = $synchronizer->sync($server);
+                $message = $synchronizer->sync($server);
 
                 m::add(
                     sprintf(
@@ -599,7 +624,7 @@ class NewsAgencyController extends Controller
      **/
     public function configUpdateServerAction(Request $request)
     {
-        $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
 
         $id = $request->query->getDigits('id');
 
@@ -664,9 +689,9 @@ class NewsAgencyController extends Controller
      **/
     public function configCreateServerAction(Request $request)
     {
-        if ('POST' != $request->getMethod()) {
-            $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
 
+        if ('POST' != $request->getMethod()) {
             $this->view->assign(
                 array(
                     'server'        => array(),

@@ -8,16 +8,14 @@
 
 {block name="header-css" append}
 <style type="text/css">
-    .table td { line-height:14px; }
-    .tooltip-inner {
-        max-width:500px !important;
-        text-align: justify;
+    .submitted-on {
+        color: #777;
     }
 </style>
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{url name=admin_comments}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -36,14 +34,14 @@
                 {acl isAllowed="COMMENT_AVAILABLE"}
                 {if $status neq '2'}
                 <li>
-                    <button name="status" value="0" id="buton-batchReject" type="submit">
+                    <button name="status" value="rejected" id="buton-batchReject" type="submit">
                        <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
                    </button>
                 </li>
                 {/if}
                 {if $status neq '1'}
                 <li>
-                   <button name="status" value="1" id="buton-batchFrontpage" type="submit">
+                   <button name="status" value="accepted" id="buton-batchFrontpage" type="submit">
                        <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
                    </button>
                 </li>
@@ -66,43 +64,11 @@
 
         <div class="table-info clearfix">
             <div class="pull-right form-inline">
-                <label>{t}Status:{/t}
-                <select name="filter[status]" class="form-filters">
-                    <option value="0" {if $status eq '0'}selected{/if}>{t}Pending{/t}</option>
-                    <option value="1" {if $status eq '1'}selected{/if}>{t}Published{/t}</option>
-                    <option value="2" {if $status eq '2'}selected{/if}>{t}Rejected{/t}</option>
-                </select>
-                </label>
-
-                <label for="category">
-                    {t}Category:{/t}
-                    <select name="category" class="form-filters">
-                        <option value="all" {if $category eq '0'}selected{/if}>{t}-- All --{/t} </option>
-                        {section name=as loop=$allcategorys}
-                             <option value="{$allcategorys[as]->pk_content_category}"
-                                {if $allcategorys[as]->inmenu eq 0} class="unavailable" {/if}
-                                {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>
-                                {$allcategorys[as]->title}</option>
-                                {section name=su loop=$subcat[as]}
-                                    {if $subcat[as][su]->internal_category eq 1}
-                                    <option value="{$subcat[as][su]->pk_content_category}"
-                                        {if $subcat[as][su]->inmenu eq 0} class="unavailable" {/if}
-                                        {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">
-                                        &nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                    {/if}
-                                {/section}
-                        {/section}
-                    </select>
-                </label>
                 <div class="input-append">
-                    <label>{t}Module:{/t}
-                    <select name="filter[module]" class="form-filters">
-                        <option value="0" {if $module eq '0'}selected{/if}>{t}-- All --{/t}</option>
-                        {foreach from=$content_types key=i item=type}
-                        <option value="{$i}" {if $module eq $i}selected{/if}>{$type}</option>
-                        {/foreach}
+                    <input name="filter_search" type="search" value="{$filter_search}" placeholder="{t}Search{/t}">
+                    <select name="filter_status" class="form-filters">
+                        {html_options options=$statuses selected=$filter_status}
                     </select>
-                    </label>
                     <button type="submit" class="btn"><i class="icon-search"></i></button>
                 </div>
             </div>
@@ -115,14 +81,10 @@
                     <th style='width:15px'>
                         <input type="checkbox" class="toggleallcheckbox">
                     </th>
-                    <th>{t}Title{/t} - {t}Comment (50 chars){/t}</th>
-                    <th style='width:6%;' class="left">{t}IP{/t}</th>
-                    {if $category eq 'all'}
-                        <th class="left">{t}Category{/t}</th>
-                    {/if}
-                    <th style='width:110px;' class="left">{t}Date{/t}</th>
-                    <th style='width:20px;' class="center">{t}Votes{/t}</th>
-                    <th style="width:10px;" class="center">{t}Published{/t}</th>
+                    <th>{t}Author{/t}</th>
+                    <th>{t}Comment{/t}</th>
+                    <th class="wrap">{t}In response to{/t}</th>
+                    <th style='width:20px;' class="center">{t}Published{/t}</th>
                     <th style='width:80px;' class="right">{t}Actions{/t}</th>
 			   </tr>
                {else}
@@ -135,76 +97,61 @@
             </thead>
 
 			<tbody>
-            	{section name=c loop=$comments|default:array()}
+            	{foreach $comments as $comment}
 				<tr style="cursor:pointer;" >
 					<td >
 						<input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}"
-                            name="selected_fld[]" value="{$comments[c]->id}">
+                            name="selected_fld[]" value="{$comment->id}">
 					</td>
 					<td>
-						<a href="{url name=admin_comments_show id=$comments[c]->id}" title="{t 1=$articles[c]->title}Edit comment %1{/t}">
-                            <strong>[{$comments[c]->title|strip_tags|clearslash|truncate:40:"..."}]</strong>
-                            <span rel="tooltip" data-original-title="{$comments[c]->body|strip_tags|clearslash}">{$comments[c]->body|strip_tags|clearslash|truncate:50}</span>
-                        </a>
-                        <br>
-                        <strong>{t}Author{/t}</strong>
-                        {$comments[c]->author|strip_tags}
-                        {if preg_match('/@proxymail\.facebook\.com$/i', $comments[c]->email)}
-                            &lt;<span title="{$comments[c]->email}">{t}from facebook{/t}</span>&gt;
-                        {else}
-                            &lt;{$comments[c]->email}&gt;
+                        <strong>{$comment->author|strip_tags}</strong> <br>
+                        {if $comment->author_email}
+                        <a href="mailto:{$comment->author_email}">{$comment->author_email}</a>
                         {/if}
                         <br>
-                        {assign var=type value=$contents[c]->content_type}
-                        <strong>[{$content_types[$type]}]</strong>
-                        {$contents[c]->title|strip_tags|clearslash}
+                        {$comment->author_ip}
 					</td>
 					<td class="left">
-						{$comments[c]->ip}
+						<div class="submitted-on">{t}Submitted on:{/t} {date_format date=$comment->date}</div>
+                        <p>
+                            {$comment->body|strip_tags|clearslash|truncate:250:"..."}
+                        </p>
 					</td>
-					{if $category eq 'all'}
-					<td class="left">
-						{$contents[c]->category_name}
-                        {if $contents[c]->content_type==4}Opini&oacute;n{/if}
-					</td>
-					{/if}
-					<td class="left">
-						{$comments[c]->created}
-					</td>
-					<td class="center">
-						{$votes[c]->value_pos} /  {$votes[c]->value_pos}
-					</td>
-					<td class="center">
+                    <td >
+                        {$comment->content->title}
+                    </td>
+                    <td class="center">
                         {acl isAllowed="COMMENT_AVAILABLE"}
-							{if $status eq 0}
-								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page return_status=$status}" title="Publicar">
-									<img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=2 category=$category page=$page return_status=$status}" title="Rechazar">
-									<img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-							{elseif $status eq 2}
-								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page return_status=$status}" title="Publicar">
-									<img border="0" src="{$params.IMAGE_DIR}publish_r.png">
-								</a>
-							{else}
-								<a href="{url name=admin_comments_toggle_status id=$comments[c]->id status=1 category=$category page=$page return_status=$status}" title="Rechazar">
-									<img border="0" src="{$params.IMAGE_DIR}publish_g.png">
-								</a>
-							{/if}
+                            {if $status eq 0}
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=accepted category=$category page=$page return_status=$status}" title="Publicar">
+                                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=rejected category=$category page=$page return_status=$status}" title="Rechazar">
+                                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
+                            {elseif $status eq 2}
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=accepted category=$category page=$page return_status=$status}" title="Publicar">
+                                    <img border="0" src="{$params.IMAGE_DIR}publish_r.png">
+                                </a>
+                            {else}
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=rejected category=$category page=$page return_status=$status}" title="Rechazar">
+                                    <img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+                                </a>
+                            {/if}
                         {/acl}
-					</td>
-                    <td style="padding:1px; font-size:11px;" class="right">
+                    </td>
+					<td class="right">
+
                         <div class="btn-group">
                             {acl isAllowed="COMMENT_UPDATE"}
-                                <a class="btn" href="{url name=admin_comments_show id=$comments[c]->id}" title="{t}Edit{/t}" >
+                                <a class="btn" href="{url name=admin_comments_show id=$comment->id}" title="{t}Edit{/t}" >
                                     <i class="icon-pencil"></i>
                                 </a>
                             {/acl}
                             {acl isAllowed="COMMENT_DELETE"}
 								<a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                   data-id="{$comments[c]->id}"
-                                   data-title="{$comments[c]->title|capitalize}"
-                                   data-url="{url name=admin_comments_delete id=$comments[c]->id}"
-                                   href="{url name=admin_comments_delete id=$comments[c]->id}" >
+                                   data-id="{$comment->id}"
+                                   data-title="{$comment->title|capitalize}"
+                                   data-url="{url name=admin_comments_delete id=$comment->id}"
+                                   href="{url name=admin_comments_delete id=$comment->id}" >
 								   <i class="icon-trash icon-white"></i>
                                 </a>
                             {/acl}
@@ -212,20 +159,18 @@
 					</td>
 				</tr>
 
-				{sectionelse}
+				{foreachelse}
 				<tr>
-					<td class="empty" colspan=10>
-						{t}There is no comments here.{/t}
+					<td class="empty" colspan="6">
+						{t}No comments matched your criteria.{/t}
 					</td>
 				</tr>
-				{/section}
+				{/foreach}
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="13">
-                        <div class="pagination">
-                            {$paginacion->links|default:""}
-                        </div>
+					<td class="center" colspan="6">
+                        <div class="pagination">{$pagination->links|default:""}</div>
                     </td>
 				</tr>
 			</tfoot>

@@ -35,7 +35,7 @@
     <div class="form-wrapper">
         {render_messages}
 
-        <form method="post" action="{url name=manager_login_processform}" id="loginform" name="loginform" class="clearfix">
+        <form method="post" autocomplete="off" action="{url name=manager_login_processform}" id="loginform" name="loginform" class="clearfix">
 
             <div class="input-wrapper">
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
@@ -45,6 +45,7 @@
             </div>
         <input type="hidden" name="token" value="{$smarty.session.csrf}">
         <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
+        <input type="hidden" name="time" value="{$smarty.now}">
         </form>
     </div>
 
@@ -73,6 +74,7 @@
         {script_tag src="/jquery/jquery.min.js" common=1}
         {script_tag src="/libs/bootstrap.js" common=1}
         {script_tag src="/libs/modernizr.min.js" common=1}
+        {script_tag src="/onm/md5.min.js" common=1}
         {script_tag src="/admin.js" common=1}
         <script type="text/javascript">
         jQuery(document).ready(function($) {

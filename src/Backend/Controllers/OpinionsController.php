@@ -89,8 +89,6 @@ class OpinionsController extends Controller
         $filterSQL = implode(' AND ', $filterSQL);
 
         $cm      = new \ContentManager();
-        $rating  = new \Rating();
-        $comment = new \Comment();
 
         list($countOpinions, $opinions)= $cm->getCountAndSlice(
             'Opinion',
@@ -124,8 +122,6 @@ class OpinionsController extends Controller
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
                 $opinion->author = new \Author($opinion->fk_author);
-                $opinion->comments = count($comment->get_comments($opinion->id));
-                $opinion->ratings = $rating->getValue($opinion->id);
             }
         } else {
             $opinions = array();
@@ -167,7 +163,7 @@ class OpinionsController extends Controller
 
         $cm = new \ContentManager();
         $rating = new \Rating();
-        $comment = new \Comment();
+        $commentManager = new \Repository\CommentsManager();
 
         $opinions = $cm->find(
             'Opinion',
@@ -179,50 +175,27 @@ class OpinionsController extends Controller
             $editorial = $cm->find(
                 'Opinion',
                 'in_home=1 and available=1 and type_opinion=1',
-                'ORDER BY position ASC, created DESC LIMIT 0,'.$numEditorial
+                'ORDER BY position ASC, created DESC LIMIT '.$numEditorial
             );
         }
         if ($numDirector >0) {
             $director = $cm->find(
                 'Opinion',
                 'in_home=1 and available=1 and type_opinion=2',
-                'ORDER BY position ASC , created DESC LIMIT 0,'.$numDirector
+                'ORDER BY position ASC , created DESC LIMIT '.$numDirector
             );
         }
+
         if (($numEditorial > 0) && (count($editorial) != $numEditorial)) {
-            $type = 'editorial';
-            m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, $type));
+            m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numEditorial, 'editorial'));
         }
         if (($numDirector>0) && (count($director) != $numDirector)) {
-             $type = 'opinion del director';
-             m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, $type));
-        }
-
-        if (isset($editorial) && is_array($editorial)) {
-            foreach ($editorial as &$opin) {
-                $todos = $comment->get_comments($opin->id);
-                $opin->comments = count($todos);
-                $opin->ratings = $rating->getValue($opin->id);
-            }
-        } else {
-            $editorial = array();
-        }
-
-        if (isset($director) && is_array($director)) {
-            foreach ($director as &$opin) {
-                $todos = $comment->get_comments($opin->id);
-                $opin->comments = count($todos);
-                $opin->ratings = $rating->getValue($opin->id);
-            }
-        } else {
-            $director = array();
+             m::add(sprintf(_("You must put %d opinions %s in the home widget"), $numDirector, 'opinion del director'));
         }
 
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
                 $opinion->author = new \Author($opinion->fk_author);
-                $opinion->comments = count($comment->get_comments($opinion->id));
-                $opinion->ratings = $rating->getValue($opinion->id);
             }
         } else {
             $opinions = array();
@@ -752,7 +725,7 @@ class OpinionsController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('OPINIONS_AVAILABLE');
+        $this->checkAclOrForward('OPINION_AVAILABLE');
 
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);
@@ -805,7 +778,7 @@ class OpinionsController extends Controller
      **/
     public function batchInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('OPINIONS_AVAILABLE');
+        $this->checkAclOrForward('OPINION_AVAILABLE');
 
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);

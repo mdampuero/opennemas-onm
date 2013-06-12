@@ -2727,4 +2727,28 @@ $routes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_acl_user_recover_pass',
+    new Route(
+        '/login/user/recover-pass',
+        array('_controller' => 'Backend:Controllers:AclUserController:recoverPassword')
+    )
+);
+
+$adminRoutes->add(
+    'admin_acl_user_recover_user',
+    new Route(
+        '/login/user/recover-user',
+        array('_controller' => 'Backend:Controllers:AclUserController:recoverUsername')
+    )
+);
+
+$adminRoutes->add(
+    'admin_acl_user_reset_pass',
+    new Route(
+        '/login/user/reset-pass/{token}',
+        array('_controller' => 'Backend:Controllers:AclUserController:regeneratePassword')
+    )
+);
+
 $routes->addCollection($adminRoutes, '/admin');

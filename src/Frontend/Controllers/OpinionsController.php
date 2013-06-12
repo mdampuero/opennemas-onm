@@ -693,22 +693,16 @@ class OpinionsController extends Controller
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
             $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
 
-            // Fetch suggested contents
-            $objSearch = \cSearch::getInstance();
-            $suggestedContents = $objSearch->searchSuggestedContents(
+            // Machine suggested contents code -----------------------------
+            $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
                 $opinion->metadata,
-                'Opinion',
+                'opinion',
                 " contents.available=1 AND pk_content = pk_fk_content",
                 4
             );
 
-            // Associated media code --------------------------------------
-            if (isset($opinion->img2) && ($opinion->img2 > 0)) {
-                $photo = new \Photo($opinion->img2);
-                $this->view->assign('photo', $photo);
-            }
             // Get author slug for suggested opinions
-            foreach ($suggestedContents as &$suggest) {
+            foreach ($machineSuggestedContents as &$suggest) {
                 $element = new \Opinion($suggest['pk_content']);
                 if (!empty($element->author)) {
                     $suggest['author_name'] = $element->author;
@@ -717,11 +711,15 @@ class OpinionsController extends Controller
                     $suggest['author_name_slug'] = "author";
                 }
                 $suggest['uri'] = $element->uri;
-
             }
 
-            $suggestedContents= $this->cm->getInTime($suggestedContents);
-            $this->view->assign('suggested', $suggestedContents);
+            $this->view->assign('suggested', $machineSuggestedContents);
+
+            // Associated media code --------------------------------------
+            if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+                $photo = new \Photo($opinion->img2);
+                $this->view->assign('photo', $photo);
+            }
 
             // Fetch the other opinions for this author
             if ($opinion->type_opinion == 1) {

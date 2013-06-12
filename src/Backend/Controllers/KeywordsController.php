@@ -122,8 +122,6 @@ class KeywordsController extends Controller
         $this->checkAclOrForward('PCLAVE_CREATE');
 
         if ('POST' == $this->request->getMethod()) {
-            $this->checkAclOrForward('PCLAVE_CREATE');
-
             $data = array(
                 'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
                 'tipo'   => $request->request->filter('tipo', '', FILTER_SANITIZE_STRING),
