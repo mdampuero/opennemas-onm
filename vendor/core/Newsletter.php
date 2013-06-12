@@ -90,7 +90,7 @@ class Newsletter
         $tpl->assign('data', $data);
 
         //render menu
-        $menuFrontpage= Menu::renderMenu('frontpage');
+        $menuFrontpage = Menu::renderMenu('frontpage');
         $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         //render ads

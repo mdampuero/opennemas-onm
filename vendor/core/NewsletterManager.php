@@ -242,11 +242,8 @@ class NewsletterManager
         $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         //render ads
-        $advertisement = Advertisement::getInstance();
-        $banners       = $advertisement->getAdvertisements(array(1001, 1009), 0);
-        $banners       = $cm->getInTime($banners);
-
-        $advertisement->renderMultiple($banners, $advertisement);
+        $ads = \Advertisement::findForPositionIdsAndCategory(array(1001, 1009), 0);
+        $tpl->assign('advertisements', $ads);
 
          // VIERNES 4 DE SEPTIEMBRE 2009
         $days = array(

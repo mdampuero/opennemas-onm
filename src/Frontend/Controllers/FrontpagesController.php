@@ -179,16 +179,7 @@ class FrontpagesController extends Controller
         // Fetch advertisement information from external
         $advertisement = \Advertisement::getInstance();
         $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
-        $intersticial = $ads[0];
-        $banners      = $ads[1];
-
-        // Render advertisements
-        if (!empty($banners)) {
-            $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
-        }
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
-        }
+        $this->view->assign('advertisements', $ads);
 
         // Avoid to run the entire app logic if is available a cache for this page
         if ($this->view->caching == 0
