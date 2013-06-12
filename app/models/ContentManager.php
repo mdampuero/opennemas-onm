@@ -1011,7 +1011,7 @@ class ContentManager
         if (!$all) {
             $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
         }
-        $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_order_by = 'ORDER BY `contents`.`views` DESC LIMIT 0 , '.$num;
 
         if (intval($category) > 0) {
@@ -1029,7 +1029,7 @@ class ContentManager
 
         if ($rs->_numOfRows<$num && $notEmpty) {
             while ($rs->_numOfRows<$num && $days<30) {
-                $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+                $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
 
                 $sql = 'SELECT * FROM '.$_tables .
                         'WHERE '.$_where.$_category. $_days.
@@ -1079,7 +1079,7 @@ class ContentManager
         if (!$all) {
             $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
         }
-        $_days = 'AND  `contents`.changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_days = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_tables_relations = ' AND `ratings`.pk_rating=`contents`.pk_content ';
         $_order_by = 'ORDER BY `ratings`.total_votes DESC ';
         $_limit = 'LIMIT 0 , '.$num;
@@ -1137,15 +1137,15 @@ class ContentManager
         $items = array();
 
         $_where_slave = '';
-        $_days = 'changed>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
+        $_days = 'starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         if (!$all) {
             $_where_slave = ' content_status=1 AND available=1 ';
-            $_days = 'AND changed>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
+            $_days = 'AND starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         }
 
         $_comented = 'AND pk_content IN (SELECT DISTINCT(fk_content) FROM comments) ';
         $_limit    = 'LIMIT 0 , '.$num;
-        $_order_by = 'ORDER BY changed DESC';
+        $_order_by = 'ORDER BY starttime DESC';
 
         $_where= $_where_slave.$_days.$_comented;
         if (intval($category)>0) {
