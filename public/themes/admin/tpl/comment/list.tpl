@@ -122,18 +122,18 @@
                     </td>
                     <td class="center">
                         {acl isAllowed="COMMENT_AVAILABLE"}
-                            {if $status eq 0}
-                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=accepted category=$category page=$page return_status=$status}" title="Publicar">
+                            {if $comment->status eq Comment::STATUS_PENDING}
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=accepted category=$category page=$page return_status=$filter_status}" title="Publicar">
                                     <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicar" /></a>
-                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=rejected category=$category page=$page return_status=$status}" title="Rechazar">
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=rejected category=$category page=$page return_status=$filter_status}" title="Rechazar">
                                     <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Rechazar" /></a>
-                            {elseif $status eq 2}
-                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=accepted category=$category page=$page return_status=$status}" title="Publicar">
-                                    <img border="0" src="{$params.IMAGE_DIR}publish_r.png">
+                            {elseif $comment->status eq Comment::STATUS_REJECTED}
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=accepted category=$category page=$page return_status=$filter_status}" title="Publicar">
+                                    <img border="0" src="{$params.IMAGE_DIR}publish_g.png">
                                 </a>
                             {else}
-                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=rejected category=$category page=$page return_status=$status}" title="Rechazar">
-                                    <img border="0" src="{$params.IMAGE_DIR}publish_g.png">
+                                <a href="{url name=admin_comments_toggle_status id=$comment->id status=rejected category=$category page=$page return_status=$filter_status}" title="Rechazar">
+                                    <img border="0" src="{$params.IMAGE_DIR}publish_r.png">
                                 </a>
                             {/if}
                         {/acl}
