@@ -47,14 +47,10 @@ class Letter extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = __CLASS__;
+        $this->content_type           = __CLASS__;
         $this->content_type_l10n_name = _('Letter');
+
+        parent::__construct($id);
     }
 
     /**
