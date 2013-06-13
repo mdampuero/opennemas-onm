@@ -63,7 +63,6 @@ class StaticPage extends Content
      */
     public function __construct($id = null)
     {
-        $this->content_type = __CLASS__;
         $this->content_type_l10n_name = _('Static Page');
 
         parent::__construct($id);

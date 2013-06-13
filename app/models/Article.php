@@ -147,7 +147,6 @@ class Article extends Content
      **/
     public function __construct($id = null)
     {
-        $this->content_type = 'Article';
         $this->content_type_l10n_name = _('Article');
 
         parent::__construct($id);

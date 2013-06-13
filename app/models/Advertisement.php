@@ -341,17 +341,9 @@ class Advertisement extends Content
      **/
     public function __construct($id = null)
     {
-        // Fetch information from Content class
-        parent::__construct($id);
-
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-        // Set the content_type
-        // FIXME: this should be into the __construct method of Content class.
         $this->content_type = get_class();
 
-        return $this;
+        parent::__construct($id);
     }
 
     /**

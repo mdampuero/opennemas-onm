@@ -62,7 +62,6 @@ class Poll extends Content
      **/
     public function __construct($id = null)
     {
-        $this->content_type = 'Poll';
         $this->content_type_l10n_name = _('Poll');
 
         parent::__construct($id);

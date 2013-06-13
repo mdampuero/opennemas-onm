@@ -89,7 +89,6 @@ class Opinion extends Content
      **/
     public function __construct($id = null)
     {
-        $this->content_type = 'Opinion';
         $this->content_type_l10n_name = _('Opinion');
 
         parent::__construct($id);

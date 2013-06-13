@@ -83,7 +83,6 @@ class Kiosko extends Content
       */
     public function __construct($id = null)
     {
-        $this->content_type = 'Kiosko';
         $this->content_type_l10n_name = _('Cover');
         $this->kiosko_path = INSTANCE_MEDIA_PATH.'kiosko'.DS;
 
