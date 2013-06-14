@@ -18,7 +18,7 @@ services:
             - [ connect, [ %database_params%] ]
 
     session_storage:
-        class: Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage
+        class: %session_storage_class%
         arguments: [ %session_params% ]
 
     session:

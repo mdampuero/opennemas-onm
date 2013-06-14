@@ -254,6 +254,8 @@ class Content
         if (!is_null($id)) {
             return $this->read($id);
         }
+
+        $this->content_type = get_class($this);
     }
 
     /**
@@ -327,7 +329,6 @@ class Content
     public static function checkExists($id)
     {
         $exists = false;
-
 
         $sql = 'SELECT pk_content FROM `contents` '
              . 'WHERE pk_content = ? LIMIT 1';

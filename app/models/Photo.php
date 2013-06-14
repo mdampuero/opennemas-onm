@@ -108,7 +108,6 @@ class Photo extends Content
      **/
     public function __construct($id = null)
     {
-        $this->content_type = 'Photo';
         $this->content_type_l10n_name = _('Image');
 
         parent::__construct($id);
