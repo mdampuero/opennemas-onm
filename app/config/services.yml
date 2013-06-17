@@ -37,6 +37,10 @@ services:
         class: Onm\ORM\EntityRepository
         arguments: [ @cache ]
 
+    users_repository:
+        class: Repository\UsersManager
+        arguments: [ @cache, @logger ]
+
     cache:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
