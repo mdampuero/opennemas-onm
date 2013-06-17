@@ -34,7 +34,7 @@ services:
         arguments: [ %swiftmailer% ]
 
     entity_repository:
-        class: Onm\ORM\EntityRepository
+        class: Repository\EntityManager
         arguments: [ @cache ]
 
     users_repository:

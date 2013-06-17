@@ -16,7 +16,6 @@ namespace Repository;
  */
 class CommentsManager
 {
-
     /**
      * undocumented function
      *
