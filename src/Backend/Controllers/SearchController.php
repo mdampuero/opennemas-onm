@@ -51,7 +51,7 @@ class SearchController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $searchString         = $this->request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
+        $searchString             = $this->request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
         $contentTypesSelected = $this->request->get('content_types', array('article', 'opinion'));
         $page                 = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
@@ -120,19 +120,18 @@ class SearchController extends Controller
 
         if (!empty($searchString)) {
 
-            $searchStringArray = array_map(
-                function ($element) {
-                    return trim($element);
-                },
-                explode(',', $searchString)
-            );
+            $metadata = \Onm\StringUtils::get_tags($searchString);
+            $metadata = explode(', ', $metadata);
 
-            $matchString = implode($searchStringArray, ' ');
+            foreach ($metadata as &$meta) {
+                $meta = "`metadata` LIKE '%".trim($meta)."%'";
+            }
+            $szWhere = "AND  (".implode(' OR ', $metadata).") ";
 
             $sql = "SELECT pk_content, fk_content_type FROM contents"
                   ." WHERE contents.available=1 "
-                  ." AND fk_content_type IN (1, 2, 3, 4, 7, 8, 9, 10, 11) "
-                  ." AND MATCH (contents.metadata) AGAINST ( '{$matchString}' IN BOOLEAN MODE)"
+                  ." AND fk_content_type IN (1, 2, 3, 4, 7, 9, 10, 11) "
+                  .$szWhere
                   ." ORDER BY starttime DESC";
 
             $rs  = $GLOBALS['application']->conn->GetArray($sql);

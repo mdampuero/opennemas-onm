@@ -910,8 +910,14 @@ class ImagesController extends Controller
         $cm = new \ContentManager();
 
         $szWhere = '';
-        if (empty($metadata)) {
-            $szWhere = "AND  (`metadata` LIKE '%$metadata%')";
+        if (!empty($metadata)) {
+            $metadata = \Onm\StringUtils::get_tags($metadata);
+            $metadata = explode(', ', $metadata);
+
+            foreach ($metadata as &$meta) {
+                $meta = "`metadata` LIKE '%".trim($meta)."%'";
+            }
+            $szWhere = "AND  (".implode(' OR ', $metadata).") ";
         }
 
         if (empty($category)) {
