@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Onm\ORM;
+namespace Repository;
 
 /**
  * An EntityRepository serves as a repository for entities with generic as well as
@@ -18,7 +18,7 @@ namespace Onm\ORM;
  *
  * @package Onm_ORM
  **/
-class EntityRepository
+class EntityManager
 {
     /**
      * Initializes a new <tt>EntityRepository</tt>.
