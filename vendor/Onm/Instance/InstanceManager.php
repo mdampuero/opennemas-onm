@@ -917,8 +917,7 @@ class InstanceManager
         }
         if (!s::set(
             'site_title',
-            $data['name'].' - OpenNemas - Servicio online para tu periódico'
-            .' digital - Online service for digital newspapers'
+            $data['name'].' - '.s::get('site_title')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
                 'Could not create the default database for the instance'
@@ -926,8 +925,7 @@ class InstanceManager
         }
         if (!s::set(
             'site_description',
-            $data['name'].' - OpenNemas - Servicio online para tu periódico'
-            .' digital - Online service for digital newspapers'
+            $data['name'].' - '.s::get('site_description')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
                 'Could not create the default database for the instance'
@@ -935,8 +933,7 @@ class InstanceManager
         }
         if (!s::set(
             'site_keywords',
-            $data['internal_name'].', openNemas, servicio, online, '
-            .'periódico, digital, service, newspapers'
+            $data['name'].' - '.s::get('site_keywords')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
                 'Could not create the default database for the instance'
