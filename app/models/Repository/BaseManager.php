@@ -89,6 +89,16 @@ class BaseManager
     }
 
     /**
+     * Indicates if the EntityRepository has the cache handler enabled
+     *
+     * @return boolean true if it has cache
+     **/
+    protected function hasCache()
+    {
+        return $this->cache != null;
+    }
+
+    /**
      * Removes the object into database
      *
      * @param Object $object the object instance to remove

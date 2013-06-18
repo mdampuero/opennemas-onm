@@ -20,7 +20,7 @@ use Onm\Cache\CacheInterface;
  *
  * @package Repository
  **/
-class EntityManager
+class EntityManager extends BaseManager
 {
     /**
      * Initializes a new <tt>EntityRepository</tt>.
@@ -39,7 +39,7 @@ class EntityManager
     {
         $entity = null;
 
-        $cacheId = $this->cachePrefix . "_" . $contentType . "_" . $id;
+        $cacheId = $this->cachePrefix . "_" . \underscore($contentType) . "_" . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -53,15 +53,6 @@ class EntityManager
         }
 
         return $entity;
-    }
-
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-    }
-
-    public function findOneBy(array $criteria)
-    {
-
     }
 
     /**

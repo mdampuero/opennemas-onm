@@ -16,7 +16,7 @@ use Onm\Cache\CacheInterface;
  *
  * @package Repository
  **/
-class UserGroupManager
+class UserGroupManager extends BaseManager
 {
     /**
      * Initializes the menu manager
@@ -27,5 +27,25 @@ class UserGroupManager
     {
         $this->cache = $cache;
         $this->cachePrefix = $cachePrefix;
+    }
+
+    public function find($id)
+    {
+        $user = null;
+
+        $cacheId = $this->cachePrefix . "_usergroup_" . $id.microtime(true);
+
+        if (!$this->hasCache()
+            || ($user = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
+        ) {
+            $user = new \UserGroup($id);
+
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $user);
+            }
+        }
+
+        return $user;
     }
 }

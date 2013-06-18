@@ -16,7 +16,7 @@ use Onm\Cache\CacheInterface;
  *
  * @package Repository
  */
-class UsersManager
+class UserManager extends BaseManager
 {
     /**
      * Initializes the Users Manager
@@ -29,18 +29,23 @@ class UsersManager
         $this->cachePrefix = $cachePrefix;
     }
 
-    /**
-     * Fetches a Users instance given its id
-     *
-     * @param int $id the user id
-     *
-     * @return Users the object instance
-     **/
     public function find($id)
     {
-        // search in cache
-        // - if not in cache fetch from database
-        //   * store new User object filled with information into cache
-        // return the User object
+        $user = null;
+
+        $cacheId = $this->cachePrefix . "_user_" . $id.microtime(true);
+
+        if (!$this->hasCache()
+            || ($user = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
+        ) {
+            $user = new \User($id);
+
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $user);
+            }
+        }
+
+        return $user;
     }
 }

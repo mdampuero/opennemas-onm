@@ -18,6 +18,26 @@ use Onm\Cache\CacheInterface;
  **/
 class CommentManager extends BaseManager
 {
+    public function find($id)
+    {
+        $comment = null;
+
+        $cacheId = $this->cachePrefix . "_comment_" . $id;
+
+        if (!$this->hasCache()
+            || ($comment = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
+        ) {
+            $comment = new Comment($id);
+
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $comment);
+            }
+        }
+
+        return $comment;
+    }
+
     /**
      * undocumented function
      *
