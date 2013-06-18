@@ -119,14 +119,16 @@ class SearchController extends Controller
         $this->view->assign('related', $related);
 
         if (!empty($searchString)) {
+            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = explode(', ', $tokens);
 
-            $metadata = \Onm\StringUtils::get_tags($searchString);
-            $metadata = explode(', ', $metadata);
-
-            foreach ($metadata as &$meta) {
-                $meta = "`metadata` LIKE '%".trim($meta)."%'";
+            $szWhere = '';
+            if (count($tokens) > 0) {
+                foreach ($tokens as &$meta) {
+                    $szWhere []= "`metadata` LIKE '%".trim($meta)."%'";
+                }
+                $szWhere = "AND  (".implode(' OR ', $szWhere).") ";
             }
-            $szWhere = "AND  (".implode(' OR ', $metadata).") ";
 
             $sql = "SELECT pk_content, fk_content_type FROM contents"
                   ." WHERE contents.available=1 "
