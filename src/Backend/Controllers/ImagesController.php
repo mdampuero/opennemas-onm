@@ -911,13 +911,16 @@ class ImagesController extends Controller
 
         $szWhere = '';
         if (!empty($metadata)) {
-            $metadata = \Onm\StringUtils::get_tags($metadata);
-            $metadata = explode(', ', $metadata);
+            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = explode(', ', $tokens);
 
-            foreach ($metadata as &$meta) {
-                $meta = "`metadata` LIKE '%".trim($meta)."%'";
+
+            if (count($tokens) > 0) {
+                foreach ($tokens as &$meta) {
+                    $szWhere []= "`metadata` LIKE '%".trim($meta)."%'";
+                }
+                $szWhere = "AND  (".implode(' OR ', $szWhere).") ";
             }
-            $szWhere = "AND  (".implode(' OR ', $metadata).") ";
         }
 
         if (empty($category)) {
