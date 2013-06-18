@@ -1885,6 +1885,7 @@ INSERT INTO `user_groups_privileges` (`pk_fk_user_group`, `pk_fk_privilege`) VAL
 (6, 107),
 (6, 108),
 (6, 109),
+(6, 114),
 (6, 115),
 (6, 116),
 (6, 117),
