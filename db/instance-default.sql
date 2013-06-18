@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 18, 2013 at 06:12 PM
--- Server version: 5.5.30
+-- Generation Time: Jun 17, 2013 at 02:58 PM
+-- Server version: 5.5.31
 -- PHP Version: 5.3.10-1ubuntu3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
@@ -17,24 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `920`
+-- Database: `64`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `adodb_logsql`
---
-
-DROP TABLE IF EXISTS `adodb_logsql`;
-CREATE TABLE IF NOT EXISTS `adodb_logsql` (
-  `created` datetime NOT NULL,
-  `sql0` varchar(250) NOT NULL,
-  `sql1` text NOT NULL,
-  `params` text NOT NULL,
-  `tracer` text NOT NULL,
-  `timer` decimal(16,6) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -42,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `adodb_logsql` (
 -- Table structure for table `advertisements`
 --
 
-DROP TABLE IF EXISTS `advertisements`;
 CREATE TABLE IF NOT EXISTS `advertisements` (
   `pk_advertisement` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_advertisement` smallint(2) unsigned DEFAULT '1',
@@ -69,30 +52,30 @@ CREATE TABLE IF NOT EXISTS `advertisements` (
 INSERT INTO `advertisements` (`pk_advertisement`, `type_advertisement`, `fk_content_categories`, `path`, `url`, `type_medida`, `num_clic`, `num_clic_count`, `num_view`, `with_script`, `script`, `overlap`, `timeout`) VALUES
 (128, 2, '0,25,27,29,28,24,26,23,22', '126', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (129, 50, '0', '124', 'http://www.openhost.es/es/opennemas', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
-(130, 5, '0,25,27,29,28,24,26,23,22', '123', 'http://www.openhost.es/es/opennemas', 'NULL', 0, 1228, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
-(239, 193, '0,25,27,29,28,24,26,23,22', '', 'http://www.opennemas.com', 'NULL', 0, 6, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTEyMHg2MDAtU2t5Y3JhcGVyICovDQpnb29nbGVfYWRfc2xvdCA9ICIyNDA3NDA1Njk2IjsNCmdvb2dsZV9hZF93aWR0aCA9IDEyMDsNCmdvb2dsZV9hZF9oZWlnaHQgPSA2MDA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
+(130, 5, '0,25,27,29,28,24,26,23,22', '123', 'http://www.openhost.es/es/opennemas', 'NULL', 0, 1247, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
+(239, 193, '0,25,27,29,28,24,26,23,22', '', 'http://www.opennemas.com', 'NULL', 0, 14, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTEyMHg2MDAtU2t5Y3JhcGVyICovDQpnb29nbGVfYWRfc2xvdCA9ICIyNDA3NDA1Njk2IjsNCmdvb2dsZV9hZF93aWR0aCA9IDEyMDsNCmdvb2dsZV9hZF9oZWlnaHQgPSA2MDA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
 (131, 6, '0,25,27,29,28,24,26,23,22', '117', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (132, 32, '0,25,27,29,28,24,26,23,22', '116', 'http://www.opennemas.com', 'NULL', 0, 2, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPg0KdmFyIHVyaSA9ICdodHRwOi8vaW1wZXMudHJhZGVkb3VibGVyLmNvbS9pbXA/dHlwZShpbWcpZygxOTY2MTE0NClhKDIwMjMzMzApJyArIG5ldyBTdHJpbmcgKE1hdGgucmFuZG9tKCkpLnN1YnN0cmluZyAoMiwgMTEpOw0KZG9jdW1lbnQud3JpdGUoJzxhIGhyZWY9Imh0dHA6Ly9jbGsudHJhZGVkb3VibGVyLmNvbS9jbGljaz9wPTgwODIwJmE9MjAyMzMzMCZnPTE5NjYxMTQ0IiB0YXJnZXQ9Il9CTEFOSyI+PGltZyBzcmM9IicrdXJpKyciIGJvcmRlcj0wPjwvYT4nKTsNCjwvc2NyaXB0Pg==', 0, 4),
 (133, 3, '0,25,27,29,28,24,26,23,22', '115', 'http://www.opennemas.com', 'NULL', 0, 1, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (134, 110, '0,25,27,29,28,24,26,23,22', '126', 'http://www.opennemas.com', 'NULL', 0, 1, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (135, 4, '0,25,27,29,28,24,26,23,22', '126', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
-(136, 31, '0,25,27,28,24,26,23,22', '119', 'http://www.opennemas.com', 'NULL', 0, 823, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTMwMHgyNTAgLSBNZWRpdW0gUmVjdGFuZ2xlIC0gIzEgKi8NCmdvb2dsZV9hZF9zbG90ID0gIjkwNTUwMDYyNzAiOw0KZ29vZ2xlX2FkX3dpZHRoID0gMzAwOw0KZ29vZ2xlX2FkX2hlaWdodCA9IDI1MDsNCi8vLS0+DQo8L3NjcmlwdD4NCjxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ig0Kc3JjPSJodHRwOi8vcGFnZWFkMi5nb29nbGVzeW5kaWNhdGlvbi5jb20vcGFnZWFkL3Nob3dfYWRzLmpzIj4NCjwvc2NyaXB0Pg==', 0, 4),
+(136, 31, '0,25,27,28,24,26,23,22', '119', 'http://www.opennemas.com', 'NULL', 0, 842, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTMwMHgyNTAgLSBNZWRpdW0gUmVjdGFuZ2xlIC0gIzEgKi8NCmdvb2dsZV9hZF9zbG90ID0gIjkwNTUwMDYyNzAiOw0KZ29vZ2xlX2FkX3dpZHRoID0gMzAwOw0KZ29vZ2xlX2FkX2hlaWdodCA9IDI1MDsNCi8vLS0+DQo8L3NjcmlwdD4NCjxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ig0Kc3JjPSJodHRwOi8vcGFnZWFkMi5nb29nbGVzeW5kaWNhdGlvbi5jb20vcGFnZWFkL3Nob3dfYWRzLmpzIj4NCjwvc2NyaXB0Pg==', 0, 4),
 (238, 703, '4', '', 'http://www.opennemas.com', 'NULL', 0, 8, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTMwMHgyNTAgLSBNZWRpdW0gUmVjdGFuZ2xlIC0gIzEgKi8NCmdvb2dsZV9hZF9zbG90ID0gIjkwNTUwMDYyNzAiOw0KZ29vZ2xlX2FkX3dpZHRoID0gMzAwOw0KZ29vZ2xlX2FkX2hlaWdodCA9IDI1MDsNCi8vLS0+DQo8L3NjcmlwdD4NCjxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ig0Kc3JjPSJodHRwOi8vcGFnZWFkMi5nb29nbGVzeW5kaWNhdGlvbi5jb20vcGFnZWFkL3Nob3dfYWRzLmpzIj4NCjwvc2NyaXB0Pg==', 0, 4),
-(137, 101, '0,25,27,29,28,24,26,23,22', '115', 'http://www.retrincos.info', 'NULL', 0, 92, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
+(137, 101, '0,25,27,29,28,24,26,23,22', '115', 'http://www.retrincos.info', 'NULL', 0, 100, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
 (138, 102, '0,25,27,29,28,24,26,23,22', '117', 'http://www.opennemas.com', 'NULL', 0, 4, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPg0KdmFyIHVyaSA9ICdodHRwOi8vaW1wZXMudHJhZGVkb3VibGVyLmNvbS9pbXA/dHlwZShpbWcpZygxOTYyMzYzNilhKDIwMjMzMzApJyArIG5ldyBTdHJpbmcgKE1hdGgucmFuZG9tKCkpLnN1YnN0cmluZyAoMiwgMTEpOw0KZG9jdW1lbnQud3JpdGUoJzxhIGhyZWY9Imh0dHA6Ly9jbGsudHJhZGVkb3VibGVyLmNvbS9jbGljaz9wPTgwODIwJmE9MjAyMzMzMCZnPTE5NjIzNjM2IiB0YXJnZXQ9Il9CTEFOSyI+PGltZyBzcmM9IicrdXJpKyciIGJvcmRlcj0wPjwvYT4nKTsNCjwvc2NyaXB0Pg==', 0, 4),
-(139, 104, '0,25,27,28,24,26,23,22', '123', 'http://retrincos.info', 'NULL', 0, 92, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTQ2OHg2MC1yb2JhcMOhZ2luYSAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiNzc1NTkzNTI5NCI7DQpnb29nbGVfYWRfd2lkdGggPSA0Njg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gNjA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
-(141, 601, '4', '115', 'http://www.opennemas.com', 'NULL', 0, 6, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
+(139, 104, '0,25,27,28,24,26,23,22', '123', 'http://retrincos.info', 'NULL', 0, 100, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTQ2OHg2MC1yb2JhcMOhZ2luYSAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiNzc1NTkzNTI5NCI7DQpnb29nbGVfYWRfd2lkdGggPSA0Njg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gNjA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
+(141, 601, '4', '115', 'http://www.opennemas.com', 'NULL', 0, 9, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
 (143, 602, '4', '126', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (144, 605, '4', '116', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (145, 609, '4', '115', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (146, 610, '4', '126', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (147, 702, '4', '126', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
 (148, 701, '4', '115', 'http://www.opennemas.com', 'NULL', 0, 5, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
-(149, 603, '4', '119', 'http://www.opennemas.com', 'NULL', 0, 1, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTMwMHgyNTAgLSBNZWRpdW0gUmVjdGFuZ2xlIC0gIzEgKi8NCmdvb2dsZV9hZF9zbG90ID0gIjkwNTUwMDYyNzAiOw0KZ29vZ2xlX2FkX3dpZHRoID0gMzAwOw0KZ29vZ2xlX2FkX2hlaWdodCA9IDI1MDsNCi8vLS0+DQo8L3NjcmlwdD4NCjxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ig0Kc3JjPSJodHRwOi8vcGFnZWFkMi5nb29nbGVzeW5kaWNhdGlvbi5jb20vcGFnZWFkL3Nob3dfYWRzLmpzIj4NCjwvc2NyaXB0Pg==', 0, 4),
-(156, 109, '0,25,27,29,28,24,26,23,22', '115', 'http://www.opennemas.com', 'NULL', 0, 9, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
-(157, 1, '0,25,27,28,24,26,23,22', '123', 'http://www.openhost.es/es/opennemas', 'NULL', 0, 854, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
+(149, 603, '4', '119', 'http://www.opennemas.com', 'NULL', 0, 4, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTMwMHgyNTAgLSBNZWRpdW0gUmVjdGFuZ2xlIC0gIzEgKi8NCmdvb2dsZV9hZF9zbG90ID0gIjkwNTUwMDYyNzAiOw0KZ29vZ2xlX2FkX3dpZHRoID0gMzAwOw0KZ29vZ2xlX2FkX2hlaWdodCA9IDI1MDsNCi8vLS0+DQo8L3NjcmlwdD4NCjxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ig0Kc3JjPSJodHRwOi8vcGFnZWFkMi5nb29nbGVzeW5kaWNhdGlvbi5jb20vcGFnZWFkL3Nob3dfYWRzLmpzIj4NCjwvc2NyaXB0Pg==', 0, 4),
+(156, 109, '0,25,27,29,28,24,26,23,22', '115', 'http://www.opennemas.com', 'NULL', 0, 17, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
+(157, 1, '0,25,27,28,24,26,23,22', '123', 'http://www.openhost.es/es/opennemas', 'NULL', 0, 873, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogT25tLTcyOHg5MCBMZWFkZXJib2FyZCAqLw0KZ29vZ2xlX2FkX3Nsb3QgPSAiMjcyMTc3NTA3NyI7DQpnb29nbGVfYWRfd2lkdGggPSA3Mjg7DQpnb29nbGVfYWRfaGVpZ2h0ID0gOTA7DQovLy0tPg0KPC9zY3JpcHQ+DQo8c2NyaXB0IHR5cGU9InRleHQvamF2YXNjcmlwdCINCnNyYz0iaHR0cDovL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9zaG93X2Fkcy5qcyI+DQo8L3NjcmlwdD4=', 0, 4),
 (159, 705, '4', '119', 'http://www.opennemas.com', 'NULL', 0, 0, 0, 0, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPi8qIEPDs2RpZ28gamF2YXNjcmlwdCAqLzwvc2NyaXB0Pg==', 0, 4),
-(224, 103, '0,25,27,29,28,24,26,23,22', '116', 'http://openhost.es/opennemas', 'NULL', 0, 7, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogSWRlYWxHYWxsZWdvIC0gMzAweDI1MCBNZWRpdW0gUmVjdGFuZ2xlIC0gIzEgKi8NCmdvb2dsZV9hZF9zbG90ID0gIjcyNjQyNjk1MjEiOw0KZ29vZ2xlX2FkX3dpZHRoID0gMzAwOw0KZ29vZ2xlX2FkX2hlaWdodCA9IDI1MDsNCi8vLS0+DQo8L3NjcmlwdD4NCjxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ig0Kc3JjPSJodHRwOi8vcGFnZWFkMi5nb29nbGVzeW5kaWNhdGlvbi5jb20vcGFnZWFkL3Nob3dfYWRzLmpzIj4NCjwvc2NyaXB0Pg==', 0, 4);
+(224, 103, '0,25,27,29,28,24,26,23,22', '116', 'http://openhost.es/opennemas', 'NULL', 0, 15, 0, 1, 'PHNjcmlwdCB0eXBlPSJ0ZXh0L2phdmFzY3JpcHQiPjwhLS0NCmdvb2dsZV9hZF9jbGllbnQgPSAiY2EtcHViLTc2OTQwNzM5ODM4MTYyMDQiOw0KLyogSWRlYWxHYWxsZWdvIC0gMzAweDI1MCBNZWRpdW0gUmVjdGFuZ2xlIC0gIzEgKi8NCmdvb2dsZV9hZF9zbG90ID0gIjcyNjQyNjk1MjEiOw0KZ29vZ2xlX2FkX3dpZHRoID0gMzAwOw0KZ29vZ2xlX2FkX2hlaWdodCA9IDI1MDsNCi8vLS0+DQo8L3NjcmlwdD4NCjxzY3JpcHQgdHlwZT0idGV4dC9qYXZhc2NyaXB0Ig0Kc3JjPSJodHRwOi8vcGFnZWFkMi5nb29nbGVzeW5kaWNhdGlvbi5jb20vcGFnZWFkL3Nob3dfYWRzLmpzIj4NCjwvc2NyaXB0Pg==', 0, 4);
 
 -- --------------------------------------------------------
 
@@ -100,7 +83,6 @@ INSERT INTO `advertisements` (`pk_advertisement`, `type_advertisement`, `fk_cont
 -- Table structure for table `albums`
 --
 
-DROP TABLE IF EXISTS `albums`;
 CREATE TABLE IF NOT EXISTS `albums` (
   `pk_album` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `subtitle` varchar(250) DEFAULT NULL,
@@ -131,7 +113,6 @@ INSERT INTO `albums` (`pk_album`, `subtitle`, `agency`, `fuente`, `cover_id`) VA
 -- Table structure for table `albums_photos`
 --
 
-DROP TABLE IF EXISTS `albums_photos`;
 CREATE TABLE IF NOT EXISTS `albums_photos` (
   `pk_album` bigint(20) unsigned NOT NULL,
   `pk_photo` bigint(20) unsigned NOT NULL,
@@ -199,7 +180,6 @@ INSERT INTO `albums_photos` (`pk_album`, `pk_photo`, `position`, `description`) 
 -- Table structure for table `articles`
 --
 
-DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles` (
   `pk_article` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `summary` text,
@@ -279,7 +259,6 @@ INSERT INTO `articles` (`pk_article`, `summary`, `body`, `img1`, `subtitle`, `im
 -- Table structure for table `attachments`
 --
 
-DROP TABLE IF EXISTS `attachments`;
 CREATE TABLE IF NOT EXISTS `attachments` (
   `pk_attachment` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
@@ -302,7 +281,6 @@ INSERT INTO `attachments` (`pk_attachment`, `title`, `path`, `category`) VALUES
 -- Table structure for table `authors`
 --
 
-DROP TABLE IF EXISTS `authors`;
 CREATE TABLE IF NOT EXISTS `authors` (
   `pk_author` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -330,7 +308,6 @@ INSERT INTO `authors` (`pk_author`, `name`, `politics`, `date_nac`, `fk_user`, `
 -- Table structure for table `author_imgs`
 --
 
-DROP TABLE IF EXISTS `author_imgs`;
 CREATE TABLE IF NOT EXISTS `author_imgs` (
   `pk_img` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_author` int(10) NOT NULL,
@@ -347,7 +324,6 @@ CREATE TABLE IF NOT EXISTS `author_imgs` (
 -- Table structure for table `books`
 --
 
-DROP TABLE IF EXISTS `books`;
 CREATE TABLE IF NOT EXISTS `books` (
   `pk_book` bigint(20) unsigned NOT NULL,
   `author` varchar(250) DEFAULT NULL,
@@ -359,52 +335,36 @@ CREATE TABLE IF NOT EXISTS `books` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bulletins_archive`
---
-
-DROP TABLE IF EXISTS `bulletins_archive`;
-CREATE TABLE IF NOT EXISTS `bulletins_archive` (
-  `pk_bulletin` int(11) NOT NULL AUTO_INCREMENT,
-  `data` longtext CHARACTER SET latin1,
-  `contact_list` longtext CHARACTER SET latin1,
-  `attach_pdf` tinyint(4) DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `cron_timestamp` datetime DEFAULT NULL,
-  PRIMARY KEY (`pk_bulletin`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `comments`
 --
 
-DROP TABLE IF EXISTS `comments`;
 CREATE TABLE IF NOT EXISTS `comments` (
-  `pk_comment` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `content_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `author` varchar(150) DEFAULT NULL,
-  `ciudad` varchar(150) DEFAULT NULL,
-  `sexo` varchar(50) DEFAULT NULL,
-  `email` varchar(150) DEFAULT NULL,
+  `author_email` varchar(100) NOT NULL DEFAULT '',
+  `author_url` varchar(200) NOT NULL DEFAULT '',
+  `author_ip` varchar(100) NOT NULL DEFAULT '',
+  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `body` text,
-  `ip` varchar(20) DEFAULT NULL,
-  `published` datetime DEFAULT NULL,
-  `fk_content` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`pk_comment`),
-  KEY `fk_content` (`fk_content`)
+  `status` varchar(20) NOT NULL DEFAULT 'pending',
+  `agent` varchar(255) NOT NULL DEFAULT '',
+  `type` varchar(20) NOT NULL DEFAULT '',
+  `parent_id` bigint(20) NOT NULL DEFAULT '0',
+  `user_id` int(10) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `comment_content_id` (`content_id`),
+  KEY `comment_status_date` (`status`,`date`),
+  KEY `comment_parent_id` (`parent_id`),
+  KEY `comment_date` (`date`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=224 ;
 
 --
 -- Dumping data for table `comments`
 --
 
-INSERT INTO `comments` (`pk_comment`, `author`, `ciudad`, `sexo`, `email`, `body`, `ip`, `published`, `fk_content`) VALUES
-(218, 'tincidunt', '', NULL, 'tincidunt@tincidunt.df', 'Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti.', '77.209.125.150', NULL, 184),
-(219, 'Quis', '', NULL, 'uis@quis.es', 'Mauris porta quam quis tortor fermentum tempus. Suspendisse pellentesque leo risus. Nullam sed nulla tellus. Vestibulum adipiscing justo ac odio feugiat eget lacinia purus malesuada. Quis nunc consequat ornare a nec nibh. Vestibulum convallis eros at sapien sagittis porttitor. Aenean lacus lacus, feugiat vel euismod nec, imperdiet ut justo. Quisque tincidunt eros a magna pretium a ornare urna dignissim. Phasellus ut orci ligula, nec venenatis lacus. Nullam egestas accumsan facilisis. Vestibulum nunc erat, consequat a euismod sed, malesuada nec sapien.', '77.209.125.150', NULL, 79),
-(220, 'Pellentesque', '', NULL, 'pellentesque@morbi.com', 'Duis massa neque, ullamcorper in sodales et, adipiscing sed lectus. Donec hendrerit sodales erat vitae ultrices. Sed eget vestibulum lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.', '77.209.125.150', NULL, 74),
-(221, 'Cras', '', NULL, 'convallis@justo.tij', 'Cras neque nulla, dapibus id tempor et, scelerisque ut arcu.  Justo vitae quam tempor euismod. In blandit placerat congue. Suspendisse tempor mi et nisi faucibus congue. Curabitur in lobortis quam. Nam blandit arcu vel metus sollicitudin adipiscing. ', '77.209.125.150', NULL, 51),
-(222, 'Curabitur', '', NULL, 'era@lectus.es', ' In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. ', '77.209.125.150', NULL, 82),
-(223, 'nulla', '', NULL, 'nulla@vitae.id', 'Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.', '77.209.125.150', NULL, 53);
+INSERT INTO `comments` (`id`, `content_id`, `author`, `author_email`, `author_url`, `author_ip`, `date`, `body`, `status`, `agent`, `type`, `parent_id`, `user_id`) VALUES
+(1, 184, 'John Doe', 'autor@ejemplo.com', '', '77.209.125.150', '2013-06-17 13:51:43', 'Este es un comentario de prueba', 'accepted', '', '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -412,14 +372,13 @@ INSERT INTO `comments` (`pk_comment`, `author`, `ciudad`, `sexo`, `email`, `body
 -- Table structure for table `contentmeta`
 --
 
-DROP TABLE IF EXISTS `contentmeta`;
 CREATE TABLE IF NOT EXISTS `contentmeta` (
   `fk_content` bigint(20) NOT NULL,
-  `meta_name` varchar(255) NOT NULL,
-  `meta_value` text,
+  `meta_name` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `meta_value` text CHARACTER SET latin1,
   PRIMARY KEY (`fk_content`,`meta_name`),
   KEY `fk_content` (`fk_content`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `contentmeta`
@@ -442,7 +401,6 @@ INSERT INTO `contentmeta` (`fk_content`, `meta_name`, `meta_value`) VALUES
 -- Table structure for table `contents`
 --
 
-DROP TABLE IF EXISTS `contents`;
 CREATE TABLE IF NOT EXISTS `contents` (
   `pk_content` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_content_type` int(10) unsigned NOT NULL,
@@ -495,10 +453,10 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (7, 8, 'swimming-photography-652-6.jpg', '', '', '2011-09-23 18:44:09', '0000-00-00 00:00:00', '2011-09-23 18:44:09', '2011-10-11 19:17:12', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, 'swimming-photography-652-6-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (8, 8, 'swimming-photography-652-8.jpg', '', '', '2011-09-23 18:44:09', '0000-00-00 00:00:00', '2011-09-23 18:44:09', '2011-10-11 19:17:12', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, 'swimming-photography-652-8-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (10, 1, 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet.', 'Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales...', 'neque,porro,quisquam,est,qui,dolorem,ipsum,quia,dolor,sit,amet,economÃ­a,consectetur,adipisci,velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2013-04-18 09:58:42', 1, 7, 0, 3, 6, 1, 0, 0, 0, 100, '-neque-porro-quisquam-est-qui-dolorem-ipsum-quia-dolor-sit-amet-consectetur-adipisci-velit', 1, 'placeholder_1_0', 'placeholder_0_1', 'a:13:{s:14:"agencyBulletin";s:0:"";s:15:"imageHomeFooter";s:0:"";s:9:"imageHome";s:0:"";s:9:"titleSize";s:0:"";s:13:"imagePosition";s:0:"";s:9:"titleHome";s:0:"";s:13:"titleHomeSize";s:0:"";s:12:"subtitleHome";s:0:"";s:11:"summaryHome";s:0:"";s:17:"imageHomePosition";s:0:"";s:11:"withGallery";s:0:"";s:14:"withGalleryInt";s:0:"";s:15:"withGalleryHome";s:0:"";}', 'economia', NULL, NULL),
-(11, 1, 'Morbi venenatis laoreet justo, nec vestibulum mi sodales sit amet', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam   magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis   libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae   nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ...', 'economÃ­a, morbi, venenatis, laoreet, justo, nec, vestibulum, sodales, sit, amet, neque, porro, quisquam, est, qui, dolorem, ipsum, quia, dolor, consectetur, adipisci, velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2013-04-18 05:36:51', 1, 7, 0, 3, 5, 2, 0, 0, 0, 100, 'morbi-venenatis-laoreet-justo-nec-vestibulum-mi-sodales-sit-amet', 1, 'placeholder_0_0', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
+(11, 1, 'Morbi venenatis laoreet justo, nec vestibulum mi sodales sit amet', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam   magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis   libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae   nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ...', 'economÃ­a, morbi, venenatis, laoreet, justo, nec, vestibulum, sodales, sit, amet, neque, porro, quisquam, est, qui, dolorem, ipsum, quia, dolor, consectetur, adipisci, velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2013-04-18 05:36:51', 1, 7, 0, 3, 8, 2, 0, 0, 0, 100, 'morbi-venenatis-laoreet-justo-nec-vestibulum-mi-sodales-sit-amet', 1, 'placeholder_0_0', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
 (12, 1, 'Cras metus dui, elementum id convallis vitae, feugiat nec nulla.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam  magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis  libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae  nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam  ultrices fermentum massa....', 'economÃ­a, neque, porro, quisquam, est, qui, dolorem, ipsum, quia, dolor, sit, amet, consectetur, adipisci, velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2011-10-13 01:54:54', 1, 7, 0, 3, 5, 1, 1, 0, 1, 1, 'cras-metus-dui-elementum-id-convallis-vitae-feugiat-nec-nulla', 1, 'placeholder_1_3', 'placeholder_2_3', NULL, 'economia', NULL, NULL),
 (13, 1, 'Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...', '\r\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet...', 'economÃ­a,neque,porro,quisquam,est,qui,dolorem,ipsum,quia,dolor,sit,amet,consectetur,adipisci,velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2013-04-18 09:57:07', 1, 7, 0, 3, 3, 3, 1, 0, 0, 100, 'neque-porro-quisquam-est-qui-dolorem-ipsum-quia-dolor-sit-amet-consectetur-adipisci-velit', 1, 'placeholder_2_0', 'placeholder_0_1', 'a:13:{s:14:"agencyBulletin";s:0:"";s:15:"imageHomeFooter";s:0:"";s:9:"imageHome";s:0:"";s:9:"titleSize";s:0:"";s:13:"imagePosition";s:0:"";s:9:"titleHome";s:0:"";s:13:"titleHomeSize";s:0:"";s:12:"subtitleHome";s:0:"";s:11:"summaryHome";s:0:"";s:17:"imageHomePosition";s:0:"";s:11:"withGallery";s:0:"";s:14:"withGalleryInt";s:0:"";s:15:"withGalleryHome";s:0:"";}', 'economia', NULL, NULL),
-(14, 1, 'Nam viverra auctor orci id accumsan.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam  magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis  libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae  nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam  ultrices fermentum massa....', 'economÃ­a, neque, porro, quisquam, est, qui, dolorem, ipsum, quia, dolor, sit, amet, consectetur, adipisci, velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2011-10-13 01:43:58', 1, 7, 0, 3, 337, 1, 1, 0, 1, 1, 'nam-viverra-auctor-orci-id-accumsan', 1, 'placeholder_highlighted_0', 'placeholder_highlighted_0', NULL, 'economia', NULL, NULL),
+(14, 1, 'Nam viverra auctor orci id accumsan.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam  magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis  libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae  nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam  ultrices fermentum massa....', 'economÃ­a, neque, porro, quisquam, est, qui, dolorem, ipsum, quia, dolor, sit, amet, consectetur, adipisci, velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2011-10-13 01:43:58', 1, 7, 0, 3, 338, 1, 1, 0, 1, 1, 'nam-viverra-auctor-orci-id-accumsan', 1, 'placeholder_highlighted_0', 'placeholder_highlighted_0', NULL, 'economia', NULL, NULL),
 (15, 8, 'stock-photo-speed_rev100.jpg', '', '', '2011-09-26 23:42:32', '0000-00-00 00:00:00', '2011-09-26 23:42:32', '2011-10-11 19:17:03', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, 'stock-photo-speedrev100-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
 (16, 8, 'samsung-galaxy-tab-1-wallpaper.jpg', '', '', '2011-09-26 23:42:32', '0000-00-00 00:00:00', '2011-09-26 23:42:32', '2011-10-11 19:17:03', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, 'samsung-galaxy-tab-1-wallpaper-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
 (17, 8, 'samsung-galaxy-s-official-21.jpg', '', '', '2011-09-26 23:42:32', '0000-00-00 00:00:00', '2011-09-26 23:42:32', '2011-10-11 19:17:03', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, 'samsung-galaxy-s-official-21-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
@@ -590,7 +548,7 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (106, 9, 'Ð¤ÐµÐ¹ÐµÑ€Ð²ÐµÑ€Ðº Ñ€Ð°Ð·Ð±ÑƒÑˆÐµÐ²Ð°Ð»ÑÑ', 'video con servicio de Rutube', 'rutube', '2011-09-28 13:11:10', '0000-00-00 00:00:00', '2011-09-28 13:11:10', '2011-09-28 13:11:10', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, '', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (107, 9, 'Pau entra por la puerta grande en el club de los 10.000', 'Pau entra por la puerta grande en el club de los 10.000', 'pau, entra, puerta, grande, club, 000', '2011-09-28 13:14:00', '0000-00-00 00:00:00', '2011-09-28 13:14:00', '2012-07-27 11:18:30', 1, 7, 7, 7, 7, 2, 0, 0, 1, 100, 'pau-entra-por-la-puerta-grande-en-el-club-de-los-10-000', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (108, 9, 'Camelos.Semos. Jonathan. TÃº si que vales.', 'Camelos.Semos. Jonathan. TÃº si que vales.', 'camelos, semos, jonathan, tÃº, vales', '2012-07-30 10:17:50', '0000-00-00 00:00:00', '2011-09-28 13:14:30', '2011-09-28 13:14:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'camelos-semos-jonathan-tu-si-que-vales', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'curiosidades', 0, NULL),
-(109, 9, 'X men first class reviewed by rotten tomatoes on infomania', 'X men first class reviewed by rotten tomatoes on infomania', 'men, first, class, reviewed, by, rotten, tomatoes, on, infomania, neither, user, id, nor, item, is, specified, for, rss, feed', '2011-09-28 13:16:05', '0000-00-00 00:00:00', '2011-09-28 13:16:05', '2012-07-27 11:18:30', 1, 7, 7, 7, 5, 2, 0, 0, 0, 100, 'x-men-first-class-reviewed-by-rotten-tomatoes-on-infomania', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
+(109, 9, 'X men first class reviewed by rotten tomatoes on infomania', 'X men first class reviewed by rotten tomatoes on infomania', 'men, first, class, reviewed, by, rotten, tomatoes, on, infomania, neither, user, id, nor, item, is, specified, for, rss, feed', '2011-09-28 13:16:05', '0000-00-00 00:00:00', '2011-09-28 13:16:05', '2013-06-17 16:03:30', 0, 7, 7, 5, 5, 2, 0, 1, 0, 100, 'x-men-first-class-reviewed-by-rotten-tomatoes-on-infomania', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (110, 9, 'Discurso de Ãlex de la Iglesia en los Goya 2011', 'Discurso de Ãlex de la Iglesia en los Goya 2011', 'discurso, Ã¡lex, iglesia, goya', '2011-09-28 13:16:18', '0000-00-00 00:00:00', '2011-09-28 13:16:18', '2013-04-03 20:53:04', 1, 7, 7, 3, 105, 2, 0, 0, 1, 100, 'discurso-de-alex-de-la-iglesia-en-los-goya-2011', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (115, 8, '2011091915514950772.jpg', 'gestor de contenidos para periÃ³dicos digitales', 'gestor, contenidos, periÃ³dicos, digitales, periodicos', '2011-09-28 22:58:28', '0000-00-00 00:00:00', '2011-09-28 22:58:28', '2011-10-11 20:51:55', 1, 7, 0, 3, 2, 2, 0, 0, 0, 100, '2011091915514950772-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'publicidad', NULL, NULL),
 (116, 8, '2011091915514971387.jpg', 'gestor de contenidos para periÃ³dicos digitales', 'gestor, contenidos, periÃ³dicos, digitales', '2011-09-28 22:58:28', '0000-00-00 00:00:00', '2011-09-28 22:58:28', '2011-10-11 20:51:55', 1, 7, 0, 3, 3, 2, 0, 0, 0, 100, '2011091915514971387-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'publicidad', NULL, NULL),
@@ -601,28 +559,28 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (124, 8, '2010052616215165008.jpg', 'opennemas, gestor de contenidos para periÃ³dicos digitales', 'opennemas, gestor, contenidos, periÃ³dicos, digitales', '2011-09-28 23:06:58', '0000-00-00 00:00:00', '2011-09-28 23:06:58', '2011-10-11 20:51:55', 1, 7, 0, 3, 3, 2, 0, 0, 0, 100, '2010052616215165008-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'publicidad', NULL, NULL),
 (125, 8, '2010052616215162000.jpg', 'opennemas, gestor de contenidos para periÃ³dicos digitales', 'opennemas, gestor, contenidos, periÃ³dicos, digitales', '2011-09-28 23:06:58', '0000-00-00 00:00:00', '2011-09-28 23:06:58', '2011-10-11 20:51:55', 1, 7, 0, 3, 2, 2, 0, 0, 0, 100, '2010052616215162000-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'publicidad', NULL, NULL),
 (126, 8, '2010052616215164250.jpg', 'opennemas, gestor de contenidos para periÃ³dicos digitales', 'opennemas, gestor, contenidos, periÃ³dicos, digitales', '2011-09-28 23:06:58', '0000-00-00 00:00:00', '2011-09-28 23:06:58', '2011-10-11 20:51:55', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, '2010052616215164250-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'publicidad', NULL, NULL),
-(128, 2, 'Top right leaderboard - Frontpage - 234x90 - Openhost Ads', '', 'top,right,leaderboard,frontpage,234x90,openhost,ads', '2011-09-28 23:14:50', '0000-00-00 00:00:00', '2011-09-28 23:14:50', '2013-04-18 09:42:56', 1, 7, 7, 3, 7702, 2, 0, 0, 0, 100, 'publicidad-portada-top-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(128, 2, 'Top right leaderboard - Frontpage - 234x90 - Openhost Ads', '', 'top,right,leaderboard,frontpage,234x90,openhost,ads', '2011-09-28 23:14:50', '0000-00-00 00:00:00', '2011-09-28 23:14:50', '2013-04-18 09:42:56', 1, 7, 7, 3, 7721, 2, 0, 0, 0, 100, 'publicidad-portada-top-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
 (129, 2, 'Publicidad Portada intersticial', '', 'publicidad, portada, intersticial', '2011-09-28 23:15:49', '0000-00-00 00:00:00', '2011-09-28 23:15:49', '2011-10-18 01:13:16', 0, 7, 7, 3, 691, 2, 0, 0, 0, 100, 'publicidad-portada-intersticial', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, '', NULL, NULL),
-(130, 2, 'Bottom left leaderboard - Frontpage - 728x90 - Openhost Ads', '', 'bottom,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:16:43', '0000-00-00 00:00:00', '2011-09-28 23:16:43', '2013-04-18 05:07:30', 1, 7, 7, 3, 1387, 2, 0, 0, 0, 100, 'publicidad-portada-botton-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(131, 2, 'Bottom right Leaderboard - Frontpage - 234x90 - Openhost Ads', '', 'bottom,right,leaderboard,frontpage,234x90,openhost,ads', '2011-09-28 23:17:47', '0000-00-00 00:00:00', '2011-09-28 23:17:47', '2013-04-18 09:41:52', 1, 7, 7, 3, 1387, 2, 0, 0, 0, 100, 'publicidad-portada-botton-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(132, 2, 'Medium Rectangle - Pos2 Col3 - Frontpage - 300x250 - Openhost Ads', '', 'publicidad, portada, columna1', '2011-09-28 23:19:00', '0000-00-00 00:00:00', '2011-09-28 23:19:00', '2013-04-18 05:54:20', 1, 7, 7, 3, 1328, 2, 0, 0, 0, 100, 'publicidad-portada-columna1', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', '0', NULL, NULL),
-(133, 2, 'Center left leaderboard - Frontpage - 728x90 - Openhost Ads', '', 'center,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:19:44', '0000-00-00 00:00:00', '2011-09-28 23:19:44', '2013-04-18 05:59:00', 1, 7, 7, 3, 1350, 2, 0, 0, 0, 100, 'publicidad-portada-middle-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(134, 2, 'Bottom right leaderboard - Inner Article - 234x90 - Openhost Ads', '', 'bottom,right,leaderboard,inner,article,234x90,openhost,ads', '2011-09-28 23:20:24', '0000-00-00 00:00:00', '2011-09-28 23:20:24', '2013-04-18 05:50:31', 1, 7, 7, 3, 824, 2, 0, 0, 0, 100, 'publicidad-portada-middle-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(135, 2, 'Center rigth leaderboard - Frontpage - 234x90 - Openhost Ads', '', 'center,rigth,leaderboard,frontpage,234x90,openhost,ads', '2011-09-28 23:20:48', '0000-00-00 00:00:00', '2011-09-28 23:20:48', '2013-04-18 05:04:19', 1, 7, 7, 3, 1354, 2, 0, 0, 0, 100, 'publicidad-portada-middle-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(136, 2, 'Medium Rectangle - Pos1 Col3 - Frontpage - 300x250 - Openhost Ads', '', 'medium,rectangle,pos2,col3,frontpage,300x250,openhost,ads', '2011-09-28 23:23:16', '0000-00-00 00:00:00', '2011-09-28 23:23:16', '2013-04-18 05:55:37', 1, 7, 7, 3, 1355, 2, 0, 0, 0, 100, 'publicidad-portada-columna3', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', '0', NULL, NULL),
-(137, 2, 'Top left leaderboard - Inner Article - 728x90 - Openhost Ads', '', 'top,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:24:19', '0000-00-00 00:00:00', '2011-09-28 23:24:19', '2013-04-18 05:00:27', 1, 7, 7, 3, 854, 2, 0, 0, 0, 100, 'publicidad-inner-top-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(138, 2, 'Top right leaderboard - Inner Article - 234x90 - Openhost Ads', '', 'top,right,leaderboard,inner,article,234x90,openhost,ads', '2011-09-28 23:25:19', '0000-00-00 00:00:00', '2011-09-28 23:25:19', '2013-04-18 04:31:36', 1, 7, 7, 3, 824, 2, 0, 0, 0, 100, 'publicidad-inner-top-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(139, 2, 'Full banner - Inner Article - 468x60 - Openhost Ads', '', 'full,banner,inner,article,468x60,openhost,ads', '2011-09-28 23:26:10', '0000-00-00 00:00:00', '2011-09-28 23:26:10', '2013-04-18 09:40:22', 1, 7, 7, 3, 827, 2, 0, 0, 0, 100, 'publicidad-inner-robapage', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"468";s:6:"height";s:2:"60";}', '0', NULL, NULL),
-(141, 2, 'Top left leaderboard - Frontpage Opinion - 728x90 - Openhost Ads', '', 'top,left,leaderboard,frontpage,opinion,728x90,openhost,ads', '2011-09-28 23:28:18', '0000-00-00 00:00:00', '2011-09-28 23:28:18', '2013-04-18 06:02:09', 1, 7, 7, 3, 168, 2, 0, 0, 0, 100, 'publicidad-opinion-top-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
-(143, 2, 'Top right leaderboard - Opinion Frontpage - 234x90 - Openhost Ads', '', 'top,right,leaderboard,opinion,frontpage,234x90,openhost,ads', '2011-09-28 23:29:47', '0000-00-00 00:00:00', '2011-09-28 23:29:47', '2013-04-18 09:10:49', 1, 7, 7, 3, 78, 2, 0, 0, 0, 100, 'publicidad-opinion-column', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
-(144, 2, 'Medium Rectangle - Pos2 - Opinion Frontpage - 300x250 - Openhost Ads', '', 'medium,rectangle,pos2,opinion,frontpage,300x250,openhost,ads', '2011-09-28 23:30:45', '0000-00-00 00:00:00', '2011-09-28 23:30:45', '2013-04-18 09:27:43', 1, 7, 7, 3, 168, 2, 0, 0, 0, 100, 'publicidad-opinion-column3', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', 'opinion', NULL, NULL),
-(145, 2, 'Bottom Left leaderboard - Opinion Frontpage - 728x90 - Openhost Ads', '', 'bottom,left,leaderboard,opinion,frontpage,728x90,openhost,ads', '2011-09-28 23:31:31', '0000-00-00 00:00:00', '2011-09-28 23:31:31', '2013-04-18 09:45:08', 1, 7, 7, 3, 168, 2, 0, 0, 0, 100, 'publicidad-opinion-bottom-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
-(146, 2, 'Bottom right leaderboard - Frontpage Opinion - 300x250 - Openhost Ads', '', 'bottom,right,leaderboard,frontpage,opinion,300x250,openhost,ads', '2011-09-28 23:32:19', '0000-00-00 00:00:00', '2011-09-28 23:32:19', '2013-04-18 06:14:58', 1, 7, 7, 3, 168, 2, 0, 0, 0, 100, 'publicidad-opinion-bottom-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
+(130, 2, 'Bottom left leaderboard - Frontpage - 728x90 - Openhost Ads', '', 'bottom,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:16:43', '0000-00-00 00:00:00', '2011-09-28 23:16:43', '2013-04-18 05:07:30', 1, 7, 7, 3, 1406, 2, 0, 0, 0, 100, 'publicidad-portada-botton-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(131, 2, 'Bottom right Leaderboard - Frontpage - 234x90 - Openhost Ads', '', 'bottom,right,leaderboard,frontpage,234x90,openhost,ads', '2011-09-28 23:17:47', '0000-00-00 00:00:00', '2011-09-28 23:17:47', '2013-04-18 09:41:52', 1, 7, 7, 3, 1406, 2, 0, 0, 0, 100, 'publicidad-portada-botton-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(132, 2, 'Medium Rectangle - Pos2 Col3 - Frontpage - 300x250 - Openhost Ads', '', 'publicidad, portada, columna1', '2011-09-28 23:19:00', '0000-00-00 00:00:00', '2011-09-28 23:19:00', '2013-04-18 05:54:20', 1, 7, 7, 3, 1347, 2, 0, 0, 0, 100, 'publicidad-portada-columna1', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', '0', NULL, NULL),
+(133, 2, 'Center left leaderboard - Frontpage - 728x90 - Openhost Ads', '', 'center,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:19:44', '0000-00-00 00:00:00', '2011-09-28 23:19:44', '2013-04-18 05:59:00', 1, 7, 7, 3, 1369, 2, 0, 0, 0, 100, 'publicidad-portada-middle-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(134, 2, 'Bottom right leaderboard - Inner Article - 234x90 - Openhost Ads', '', 'bottom,right,leaderboard,inner,article,234x90,openhost,ads', '2011-09-28 23:20:24', '0000-00-00 00:00:00', '2011-09-28 23:20:24', '2013-04-18 05:50:31', 1, 7, 7, 3, 832, 2, 0, 0, 0, 100, 'publicidad-portada-middle-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(135, 2, 'Center rigth leaderboard - Frontpage - 234x90 - Openhost Ads', '', 'center,rigth,leaderboard,frontpage,234x90,openhost,ads', '2011-09-28 23:20:48', '0000-00-00 00:00:00', '2011-09-28 23:20:48', '2013-04-18 05:04:19', 1, 7, 7, 3, 1373, 2, 0, 0, 0, 100, 'publicidad-portada-middle-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(136, 2, 'Medium Rectangle - Pos1 Col3 - Frontpage - 300x250 - Openhost Ads', '', 'medium,rectangle,pos2,col3,frontpage,300x250,openhost,ads', '2011-09-28 23:23:16', '0000-00-00 00:00:00', '2011-09-28 23:23:16', '2013-04-18 05:55:37', 1, 7, 7, 3, 1374, 2, 0, 0, 0, 100, 'publicidad-portada-columna3', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', '0', NULL, NULL),
+(137, 2, 'Top left leaderboard - Inner Article - 728x90 - Openhost Ads', '', 'top,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:24:19', '0000-00-00 00:00:00', '2011-09-28 23:24:19', '2013-04-18 05:00:27', 1, 7, 7, 3, 862, 2, 0, 0, 0, 100, 'publicidad-inner-top-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(138, 2, 'Top right leaderboard - Inner Article - 234x90 - Openhost Ads', '', 'top,right,leaderboard,inner,article,234x90,openhost,ads', '2011-09-28 23:25:19', '0000-00-00 00:00:00', '2011-09-28 23:25:19', '2013-04-18 04:31:36', 1, 7, 7, 3, 832, 2, 0, 0, 0, 100, 'publicidad-inner-top-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(139, 2, 'Full banner - Inner Article - 468x60 - Openhost Ads', '', 'full,banner,inner,article,468x60,openhost,ads', '2011-09-28 23:26:10', '0000-00-00 00:00:00', '2011-09-28 23:26:10', '2013-04-18 09:40:22', 1, 7, 7, 3, 835, 2, 0, 0, 0, 100, 'publicidad-inner-robapage', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"468";s:6:"height";s:2:"60";}', '0', NULL, NULL),
+(141, 2, 'Top left leaderboard - Frontpage Opinion - 728x90 - Openhost Ads', '', 'top,left,leaderboard,frontpage,opinion,728x90,openhost,ads', '2011-09-28 23:28:18', '0000-00-00 00:00:00', '2011-09-28 23:28:18', '2013-04-18 06:02:09', 1, 7, 7, 3, 172, 2, 0, 0, 0, 100, 'publicidad-opinion-top-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
+(143, 2, 'Top right leaderboard - Opinion Frontpage - 234x90 - Openhost Ads', '', 'top,right,leaderboard,opinion,frontpage,234x90,openhost,ads', '2011-09-28 23:29:47', '0000-00-00 00:00:00', '2011-09-28 23:29:47', '2013-04-18 09:10:49', 1, 7, 7, 3, 82, 2, 0, 0, 0, 100, 'publicidad-opinion-column', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
+(144, 2, 'Medium Rectangle - Pos2 - Opinion Frontpage - 300x250 - Openhost Ads', '', 'medium,rectangle,pos2,opinion,frontpage,300x250,openhost,ads', '2011-09-28 23:30:45', '0000-00-00 00:00:00', '2011-09-28 23:30:45', '2013-04-18 09:27:43', 1, 7, 7, 3, 172, 2, 0, 0, 0, 100, 'publicidad-opinion-column3', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', 'opinion', NULL, NULL),
+(145, 2, 'Bottom Left leaderboard - Opinion Frontpage - 728x90 - Openhost Ads', '', 'bottom,left,leaderboard,opinion,frontpage,728x90,openhost,ads', '2011-09-28 23:31:31', '0000-00-00 00:00:00', '2011-09-28 23:31:31', '2013-04-18 09:45:08', 1, 7, 7, 3, 172, 2, 0, 0, 0, 100, 'publicidad-opinion-bottom-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
+(146, 2, 'Bottom right leaderboard - Frontpage Opinion - 300x250 - Openhost Ads', '', 'bottom,right,leaderboard,frontpage,opinion,300x250,openhost,ads', '2011-09-28 23:32:19', '0000-00-00 00:00:00', '2011-09-28 23:32:19', '2013-04-18 06:14:58', 1, 7, 7, 3, 172, 2, 0, 0, 0, 100, 'publicidad-opinion-bottom-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
 (147, 2, 'Top right leaderboard - Inner Opinion - 234x90 - Openhost Ads', '', 'top,right,leaderboard,inner,opinion,234x90,openhost,ads', '2011-09-28 23:33:12', '0000-00-00 00:00:00', '2011-09-28 23:33:12', '2013-04-18 06:10:14', 1, 7, 7, 3, 333, 2, 0, 0, 0, 100, 'publicidad-opinion-inner-top-right', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"234";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
 (148, 2, 'Top left leaderboard - Inner Opinion - 728x90 - Openhost Ads', '', 'top,left,leaderboard,inner,opinion,728x90,openhost,ads', '2011-09-28 23:33:49', '0000-00-00 00:00:00', '2011-09-28 23:33:49', '2013-04-18 06:08:48', 1, 7, 7, 3, 337, 2, 0, 0, 0, 100, 'publicidad-opinion-inner-top-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', 'opinion', NULL, NULL),
-(149, 2, 'Medium Rectangle - Pos1 - Opinion Frontpage - 300x250 - Openhost Ads', '', 'medium,rectangle,pos1,opinion,frontpage,300x250,openhost,ads', '2011-09-28 23:34:30', '0000-00-00 00:00:00', '2011-09-28 23:34:30', '2013-04-18 09:30:05', 1, 7, 7, 3, 168, 2, 0, 0, 0, 100, 'publicidad-opinion-inner-columna', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', 'opinion', NULL, NULL),
-(156, 2, 'Bottom left leaderboard - Inner Article - 300x250 - Openhost Ads', '', 'bottom,left,leaderboard,inner,article,300x250,openhost,ads', '2011-09-28 23:43:15', '0000-00-00 00:00:00', '2011-09-28 23:43:15', '2013-04-18 04:59:09', 1, 7, 7, 3, 851, 2, 0, 0, 0, 100, 'publicidad-inner-bottom-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
-(157, 2, 'Top left leaderboard - Frontpage - 728x90 - Openhost Ads', '', 'top,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:44:24', '0000-00-00 00:00:00', '2011-09-28 23:44:24', '2013-04-18 04:31:03', 1, 7, 7, 3, 7266, 2, 0, 0, 0, 100, 'publicidad-portada-top-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(149, 2, 'Medium Rectangle - Pos1 - Opinion Frontpage - 300x250 - Openhost Ads', '', 'medium,rectangle,pos1,opinion,frontpage,300x250,openhost,ads', '2011-09-28 23:34:30', '0000-00-00 00:00:00', '2011-09-28 23:34:30', '2013-04-18 09:30:05', 1, 7, 7, 3, 172, 2, 0, 0, 0, 100, 'publicidad-opinion-inner-columna', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', 'opinion', NULL, NULL),
+(156, 2, 'Bottom left leaderboard - Inner Article - 300x250 - Openhost Ads', '', 'bottom,left,leaderboard,inner,article,300x250,openhost,ads', '2011-09-28 23:43:15', '0000-00-00 00:00:00', '2011-09-28 23:43:15', '2013-04-18 04:59:09', 1, 7, 7, 3, 859, 2, 0, 0, 0, 100, 'publicidad-inner-bottom-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
+(157, 2, 'Top left leaderboard - Frontpage - 728x90 - Openhost Ads', '', 'top,left,leaderboard,frontpage,728x90,openhost,ads', '2011-09-28 23:44:24', '0000-00-00 00:00:00', '2011-09-28 23:44:24', '2013-04-18 04:31:03', 1, 7, 7, 3, 7285, 2, 0, 0, 0, 100, 'publicidad-portada-top-left', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"728";s:6:"height";s:2:"90";}', '0', NULL, NULL),
 (159, 2, 'Medium Rectangle - Pos2 - Inner Opinion - 300x250 - Openhost Ads', '', 'medium,rectangle,pos2,inner,opinion,300x250,openhost,ads', '2011-09-28 23:48:57', '0000-00-00 00:00:00', '2011-09-28 23:48:57', '2013-04-18 06:04:05', 1, 7, 7, 3, 332, 2, 0, 0, 0, 100, 'publicidad-opinion-inner-column', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', 'opinion', NULL, NULL),
 (163, 11, 'Curabitur lacinia mi a elit ullamcorper non lacinia nisl mollis', '', 'curabitur, lacinia, elit, ullamcorper, non, nisl, mollis', '2011-09-28 23:54:46', '0000-00-00 00:00:00', '2011-09-28 23:54:46', '2011-09-29 00:07:17', 1, 7, 0, 7, 14, 2, 0, 0, 0, 100, 'curabitur-lacinia-mi-a-elit-ullamcorper-non-lacinia-nisl-mollis', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (164, 11, 'Maecenas adipiscing tortor commodo enim accumsan volutpat', '', 'maecenas, adipiscing, tortor, commodo, enim, accumsan, volutpat, phasellus, pellentesque', '2011-09-28 23:57:02', '0000-00-00 00:00:00', '2011-09-28 23:57:02', '2011-09-28 23:57:02', 0, 7, 7, 7, 37, 2, 0, 0, 1, 100, 'maecenas-adipiscing-tortor-commodo-enim-accumsan-volutpat', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'cultura', NULL, NULL),
@@ -653,19 +611,13 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (195, 12, 'Album -favoritos', '', '', '2011-10-05 13:26:14', '0000-00-00 00:00:00', '2011-10-05 13:26:14', '2013-04-18 05:36:51', 0, 5, 5, 3, 1, 2, 0, 0, 1, 100, 'album-favoritos', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '', NULL, NULL),
 (200, 12, 'MostSeeingVotedCommentedContent', '', '', '2011-10-05 13:27:03', '0000-00-00 00:00:00', '2011-10-05 13:27:03', '2013-04-18 05:36:51', 0, 5, 5, 3, 1, 2, 0, 0, 1, 100, 'mostseeingvotedcommentedcontent', 1, 'placeholder_0_1', '0', NULL, '', NULL, NULL),
 (202, 12, 'OpinionAuthorList **', 'Solo se visualiza en opinion', '', '2011-10-05 13:27:55', '0000-00-00 00:00:00', '2011-10-05 13:27:55', '2012-10-01 13:05:09', 0, 5, 5, 7, 2, 2, 0, 0, 1, 100, 'opinionauthorlist', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '', NULL, NULL),
-(216, 1, 'Sed bibendum justo sit amet dolor mollis quis egestas purus iaculis', '', 'economÃ­a, sed, bibendum, justo, sit, amet, dolor, mollis, quis, egestas, purus, iaculis', '2011-10-11 19:49:43', '0000-00-00 00:00:00', '2011-10-11 19:49:43', '2013-04-18 05:36:51', 1, 3, 3, 3, 15, 1, 0, 0, 2, 100, 'sed-bibendum-justo-sit-amet-dolor-mollis-quis-egestas-purus-iaculis', 1, 'placeholder_0_3', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
+(216, 1, 'Sed bibendum justo sit amet dolor mollis quis egestas purus iaculis', '', 'economÃ­a, sed, bibendum, justo, sit, amet, dolor, mollis, quis, egestas, purus, iaculis', '2011-10-11 19:49:43', '0000-00-00 00:00:00', '2011-10-11 19:49:43', '2013-04-18 05:36:51', 1, 3, 3, 3, 19, 1, 0, 0, 2, 100, 'sed-bibendum-justo-sit-amet-dolor-mollis-quis-egestas-purus-iaculis', 1, 'placeholder_0_3', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
 (206, 12, 'PastHeadlinesMostViewed', '', '', '2011-10-05 13:28:37', '0000-00-00 00:00:00', '2011-10-05 13:28:37', '2013-04-18 05:36:51', 0, 5, 5, 3, 1, 2, 0, 0, 1, 100, 'pastheadlinesmostviewed', 1, 'placeholder_0_1', '0', NULL, '', NULL, NULL),
 (209, 3, 'prueba', 'prueba', 'prueba', '2011-10-06 12:45:06', '0000-00-00 00:00:00', '2011-10-06 12:45:06', '2011-10-06 12:45:06', 0, 4, 4, 4, 1, 2, 0, 0, 0, 100, 'prueba', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '', NULL, NULL),
 (210, 1, 'Praesent ornare enim quis purus faucibus mollis.', 'Nullam sodales, arcu at posuere gravida, ipsum odio ornare mauris, in facilisis nibh magna in lacus. Suspendisse quis tincidunt mauris. Phasellus eu hendrerit eros. Praesent ornare enim quis purus faucibus mollis. Proin volutpat aliquam orci ac congue. Morbi id vehicula dui. Donec sed tempus nunc. Cras erat nunc, fringilla...', 'sociedad, praesent, ornare, enim, quis, purus, faucibus, mollis', '2011-10-06 13:40:14', '0000-00-00 00:00:00', '2011-10-06 13:40:14', '2012-10-01 12:46:05', 1, 4, 4, 7, 11, 1, 0, 0, 2, 100, 'praesent-ornare-enim-quis-purus-faucibus-mollis', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (212, 3, 'testing upload files', 'testing upload files', 'testing, upload, files', '2011-10-06 23:04:54', '0000-00-00 00:00:00', '2011-10-06 23:04:54', '2011-10-06 23:04:54', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'testing-upload-files', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '', NULL, NULL),
-(218, 6, 'mauris, mattis quis', '', '', '2011-10-11 20:21:25', '0000-00-00 00:00:00', '2011-10-11 20:21:25', '2011-10-11 20:26:41', 1, NULL, 0, 3, 1, 2, 0, 0, 0, 100, 'mauris-mattis-quis', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'opinion', NULL, NULL),
-(219, 6, 'Quisque sed mauris', '', '', '2011-10-11 20:22:01', '0000-00-00 00:00:00', '2011-10-11 20:22:01', '2011-10-11 20:26:41', 1, NULL, 0, 3, 1, 2, 0, 0, 0, 100, 'quisque-sed-mauris', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'cultura', NULL, NULL),
-(220, 6, 'Donec hendrerit', '', '', '2011-10-11 20:22:51', '0000-00-00 00:00:00', '2011-10-11 20:22:51', '2011-10-11 20:26:41', 1, NULL, 0, 3, 1, 2, 0, 0, 0, 100, 'donec-hendrerit', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'cultura', NULL, NULL),
-(221, 6, 'Cras neque nulla', '', '', '2011-10-11 20:23:48', '0000-00-00 00:00:00', '2011-10-11 20:23:48', '2011-10-11 20:26:41', 1, NULL, 0, 3, 1, 2, 0, 0, 0, 100, 'cras-neque-nulla', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'cultura', NULL, NULL),
-(222, 6, 'Curabitur eu magna eget nisi tincidunt lobortis non vitae purus.', '', '', '2011-10-11 20:24:58', '0000-00-00 00:00:00', '2011-10-11 20:24:58', '2011-10-11 20:26:41', 1, NULL, 0, 3, 1, 2, 0, 0, 0, 100, 'curabitur-eu-magna-eget-nisi-tincidunt-lobortis-non-vitae-purus', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
-(223, 6, 'Feugiat nec nulla. Vivamus id nibh orci', '', '', '2011-10-11 20:25:33', '0000-00-00 00:00:00', '2011-10-11 20:25:33', '2011-10-11 20:26:41', 1, NULL, 0, 3, 1, 2, 0, 0, 0, 100, 'feugiat-nec-nulla-vivamus-id-nibh-orci', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'economia', NULL, NULL),
-(224, 2, 'Medium Rectangle - Pos1 - Inner Article - 300x250 - Openhost Ads', '', 'medium,rectangle,pos1,inner,article,300x250,openhost,ads', '2011-10-18 01:14:09', '0000-00-00 00:00:00', '2011-10-18 01:14:09', '2013-04-18 04:33:07', 1, 3, 3, 3, 7097, 2, 0, 0, 0, 100, 'publicidad-inner-top-right-columna1', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', '0', NULL, NULL),
-(225, 13, 'testing', 'sdfsdf', '', '2012-07-23 09:01:27', '0000-00-00 00:00:00', '2012-07-23 09:01:27', '2012-07-23 09:01:27', 0, 7, 7, 7, 4, 2, 0, 0, 0, 100, 'test', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
+(224, 2, 'Medium Rectangle - Pos1 - Inner Article - 300x250 - Openhost Ads', '', 'medium,rectangle,pos1,inner,article,300x250,openhost,ads', '2011-10-18 01:14:09', '0000-00-00 00:00:00', '2011-10-18 01:14:09', '2013-04-18 04:33:07', 1, 3, 3, 3, 7124, 2, 0, 0, 0, 100, 'publicidad-inner-top-right-columna1', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', '0', NULL, NULL),
+(225, 13, 'PÃ¡gina estÃ¡tica', '', 'pagina,estatica', '2012-07-23 09:01:27', '0000-00-00 00:00:00', '2012-07-23 09:01:27', '2013-06-17 16:14:25', 0, 7, 7, 5, 4, 2, 0, 0, 0, 100, 'estatica', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (226, 12, 'Videos mÃ¡s votados, comentados', '', '', '2012-07-30 10:43:22', '0000-00-00 00:00:00', '2012-07-30 10:43:22', '2013-04-03 20:53:04', 0, 7, 7, 3, 1, 2, 0, 0, 0, 100, 'videos-mas-votados-comentados', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (227, 17, 'El problema con esta postura es que ignora u oculta varios hechos esenciales', '', '', '2012-07-31 14:46:40', '0000-00-00 00:00:00', '2012-07-31 14:46:40', '2012-07-31 14:50:56', 1, 0, 0, 7, 15, 1, 0, 0, 0, 100, 'el-problema-con-esta-postura-es-que-ignora-u-oculta-varios-hechos-esenciales', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:1:{s:2:"ip";s:9:"127.0.0.1";}', '0', NULL, NULL),
 (228, 17, 'La economÃ­a alemana no es un ejemplo', '', '', '2012-07-31 14:46:51', '0000-00-00 00:00:00', '2012-07-31 14:46:51', '2012-07-31 14:50:32', 1, 0, 0, 7, 14, 1, 0, 0, 0, 100, 'la-economia-alemana-no-es-un-ejemplo', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:1:{s:2:"ip";s:9:"127.0.0.1";}', '0', NULL, NULL),
@@ -674,12 +626,11 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (231, 12, 'Hemeroteca Calendario', '', '', '2012-10-01 13:06:06', '0000-00-00 00:00:00', '2012-10-01 13:06:06', '2012-10-01 13:06:06', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'hemeroteca-calendario', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (232, 12, 'Facebook - botÃ³n like', '', '', '2012-10-01 13:06:30', '0000-00-00 00:00:00', '2012-10-01 13:06:30', '2012-10-01 13:06:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-boton-like', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (233, 12, 'Facebook like with faces', '', '', '2012-10-01 13:06:42', '0000-00-00 00:00:00', '2012-10-01 13:06:42', '2012-10-01 13:06:42', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-like-with-faces', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
-(234, 12, 'Twitter', '', '', '2012-10-01 13:06:56', '0000-00-00 00:00:00', '2012-10-01 13:06:56', '2012-10-01 13:06:56', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'twitter', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (235, 12, 'Opinion- otras del autor **', 'Solo se visualiza en opinion del autor', '', '2012-10-01 13:09:22', '0000-00-00 00:00:00', '2012-10-01 13:09:22', '2012-10-01 13:09:22', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'opinion-otras-del-autor', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (236, 12, 'Opinion - Lista de opiniones favoritas', '', '', '2012-10-01 13:09:37', '0000-00-00 00:00:00', '2012-10-01 13:09:37', '2012-10-01 13:09:37', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'opinion-lista-de-opiniones-favoritas', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (237, 12, 'Noticias de Hoy', '', '', '2012-10-01 13:09:57', '0000-00-00 00:00:00', '2012-10-01 13:09:57', '2012-10-01 13:09:57', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'noticias-de-hoy', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (238, 2, 'Medium Rectangle - Pos1 - Inner Opinion - 300x250 - Openhost Ads', '', 'medium,rectangle,pos1,inner,opinion,300x250,openhost,ads', '2013-04-18 06:05:41', '0000-00-00 00:00:00', '2013-04-18 06:05:41', '2013-04-18 06:05:41', 1, 3, 3, 3, 9, 2, 0, 0, 0, 100, 'medium-rectangle-pos1-inner-opinion-300x250-openhost-ads', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"300";s:6:"height";s:3:"250";}', 'opinion', NULL, NULL),
-(239, 2, 'Body skycraper - Inner Article - 120x600 - Openhost Ads', '', 'body,skycraper,inner,article,120x600,openhost,ads', '2013-04-18 06:40:33', '0000-00-00 00:00:00', '2013-04-18 06:40:33', '2013-04-18 06:41:53', 1, 3, 3, 3, 7, 2, 0, 0, 0, 100, 'body-skycraper-inner-article-120x600-openhost-ads', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"120";s:6:"height";s:3:"600";}', '0', NULL, NULL);
+(239, 2, 'Body skycraper - Inner Article - 120x600 - Openhost Ads', '', 'body,skycraper,inner,article,120x600,openhost,ads', '2013-04-18 06:40:33', '0000-00-00 00:00:00', '2013-04-18 06:40:33', '2013-04-18 06:41:53', 1, 3, 3, 3, 15, 2, 0, 0, 0, 100, 'body-skycraper-inner-article-120x600-openhost-ads', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:2:{s:5:"width";s:3:"120";s:6:"height";s:3:"600";}', '0', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -687,7 +638,6 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 -- Table structure for table `contents_categories`
 --
 
-DROP TABLE IF EXISTS `contents_categories`;
 CREATE TABLE IF NOT EXISTS `contents_categories` (
   `pk_fk_content` bigint(20) unsigned NOT NULL,
   `pk_fk_content_category` int(10) unsigned NOT NULL,
@@ -886,7 +836,6 @@ INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_content_category`, `c
 (231, 0, '0'),
 (232, 0, '0'),
 (233, 0, '0'),
-(234, 0, '0'),
 (235, 0, '0'),
 (236, 0, '0'),
 (237, 0, '0'),
@@ -899,7 +848,6 @@ INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_content_category`, `c
 -- Table structure for table `content_categories`
 --
 
-DROP TABLE IF EXISTS `content_categories`;
 CREATE TABLE IF NOT EXISTS `content_categories` (
   `pk_content_category` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -919,15 +867,15 @@ CREATE TABLE IF NOT EXISTS `content_categories` (
 --
 
 INSERT INTO `content_categories` (`pk_content_category`, `title`, `name`, `inmenu`, `posmenu`, `internal_category`, `fk_content_category`, `params`, `logo_path`, `color`) VALUES
-(1, 'fotografias', 'photo', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(2, 'publicidad', 'publicidad', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(3, 'ALBUM', 'album', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(4, 'OPINIÃ“N', 'opinion', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(5, 'comentarios', 'comment', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(6, 'videos', 'video', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(7, 'author', 'author', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(8, 'PORTADA', 'portada', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
-(20, 'UNKNOWN', 'unknown', 0, 0, 0, 0, NULL, NULL, '#B0113A'),
+(1, 'fotografias', 'photo', 0, 0, 0, 0, NULL, NULL, ''),
+(2, 'publicidad', 'publicidad', 0, 0, 0, 0, NULL, NULL, ''),
+(3, 'ALBUM', 'album', 0, 0, 0, 0, NULL, NULL, ''),
+(4, 'OPINIÃ“N', 'opinion', 0, 0, 0, 0, NULL, NULL, ''),
+(5, 'comentarios', 'comment', 0, 0, 0, 0, NULL, NULL, ''),
+(6, 'videos', 'video', 0, 0, 0, 0, NULL, NULL, ''),
+(7, 'author', 'author', 0, 0, 0, 0, NULL, NULL, ''),
+(8, 'PORTADA', 'portada', 0, 0, 0, 0, NULL, NULL, ''),
+(20, 'UNKNOWN', 'unknown', 0, 0, 0, 0, NULL, NULL, ''),
 (22, 'Deportes', 'deportes', 1, 10, 1, 0, NULL, '', ''),
 (23, 'EconomÃ­a', 'economia', 1, 10, 1, 0, NULL, '', ''),
 (24, 'PolÃ­tica', 'politica', 1, 10, 1, 0, NULL, '', ''),
@@ -946,16 +894,15 @@ INSERT INTO `content_categories` (`pk_content_category`, `title`, `name`, `inmen
 -- Table structure for table `content_positions`
 --
 
-DROP TABLE IF EXISTS `content_positions`;
 CREATE TABLE IF NOT EXISTS `content_positions` (
   `pk_fk_content` bigint(20) NOT NULL,
   `fk_category` int(11) NOT NULL,
   `position` int(11) NOT NULL DEFAULT '0',
-  `placeholder` varchar(45) NOT NULL DEFAULT '',
-  `params` text,
-  `content_type` varchar(45) DEFAULT NULL,
+  `placeholder` varchar(45) CHARACTER SET latin1 NOT NULL DEFAULT '',
+  `params` text CHARACTER SET latin1,
+  `content_type` varchar(45) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`pk_fk_content`,`fk_category`,`position`,`placeholder`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `content_positions`
@@ -1038,50 +985,9 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 -- --------------------------------------------------------
 
 --
--- Table structure for table `content_types`
---
-
-DROP TABLE IF EXISTS `content_types`;
-CREATE TABLE IF NOT EXISTS `content_types` (
-  `pk_content_type` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `title` varchar(100) NOT NULL COMMENT 'utilizado en permalink',
-  `fk_template_default` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`pk_content_type`),
-  KEY `fk_template_default` (`fk_template_default`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
-
---
--- Dumping data for table `content_types`
---
-
-INSERT INTO `content_types` (`pk_content_type`, `name`, `title`, `fk_template_default`) VALUES
-(1, 'article', 'Artículo', NULL),
-(2, 'advertisement', 'Publicidad', NULL),
-(3, 'attachment', 'Fichero', NULL),
-(4, 'opinion', 'Opinión', NULL),
-(5, 'event', 'Evento', NULL),
-(6, 'comment', 'Comentario', NULL),
-(7, 'album', 'Álbum', NULL),
-(8, 'photo', 'Imagen', NULL),
-(9, 'video', 'Vídeo', NULL),
-(10, 'special', 'Especiales', NULL),
-(11, 'poll', 'Encuesta', NULL),
-(12, 'widget', 'Widget', NULL),
-(13, 'static_page', 'Página estática', NULL),
-(14, 'kiosko', 'Kiosko', NULL),
-(15, 'book', 'Libro', NULL),
-(16, 'schedule', 'Agenda', NULL),
-(17, 'letter', 'Letters to the Editor', NULL),
-(18, 'frontpage', 'Portadas', NULL);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `frontpages`
 --
 
-DROP TABLE IF EXISTS `frontpages`;
 CREATE TABLE IF NOT EXISTS `frontpages` (
   `pk_frontpage` bigint(20) NOT NULL,
   `date` int(11) NOT NULL COMMENT 'date as 20110720',
@@ -1100,13 +1006,11 @@ CREATE TABLE IF NOT EXISTS `frontpages` (
 -- Table structure for table `kioskos`
 --
 
-DROP TABLE IF EXISTS `kioskos`;
 CREATE TABLE IF NOT EXISTS `kioskos` (
   `pk_kiosko` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `path` varchar(200) NOT NULL,
   `date` date NOT NULL,
-  `favorite` tinyint(1) NOT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-item, 1-subscription',
   `price` decimal(10,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`pk_kiosko`)
@@ -1118,7 +1022,6 @@ CREATE TABLE IF NOT EXISTS `kioskos` (
 -- Table structure for table `letters`
 --
 
-DROP TABLE IF EXISTS `letters`;
 CREATE TABLE IF NOT EXISTS `letters` (
   `pk_letter` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `author` varchar(255) DEFAULT NULL,
@@ -1141,19 +1044,18 @@ INSERT INTO `letters` (`pk_letter`, `author`, `email`, `body`) VALUES
 -- Table structure for table `menues`
 --
 
-DROP TABLE IF EXISTS `menues`;
 CREATE TABLE IF NOT EXISTS `menues` (
   `pk_menu` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
-  `position` varchar(50) DEFAULT NULL,
-  `site` text NOT NULL,
-  `params` varchar(255) DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `type` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `position` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `site` text CHARACTER SET latin1 NOT NULL,
+  `params` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   `pk_father` int(11) DEFAULT NULL,
   PRIMARY KEY (`pk_menu`),
   UNIQUE KEY `name` (`name`),
   KEY `position` (`position`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `menues`
@@ -1174,18 +1076,17 @@ INSERT INTO `menues` (`pk_menu`, `name`, `type`, `position`, `site`, `params`, `
 -- Table structure for table `menu_items`
 --
 
-DROP TABLE IF EXISTS `menu_items`;
 CREATE TABLE IF NOT EXISTS `menu_items` (
   `pk_item` int(11) NOT NULL AUTO_INCREMENT,
   `pk_menu` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `link_name` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL COMMENT '''category'',''external'',''static'', internal''',
+  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `link_name` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `type` varchar(255) CHARACTER SET latin1 NOT NULL COMMENT '''category'',''external'',''static'', internal''',
   `position` int(11) NOT NULL,
   `pk_father` int(11) DEFAULT NULL,
   PRIMARY KEY (`pk_item`,`pk_menu`),
   KEY `pk_item` (`pk_item`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=45 ;
 
 --
 -- Dumping data for table `menu_items`
@@ -1228,14 +1129,13 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 -- Table structure for table `newsletter_archive`
 --
 
-DROP TABLE IF EXISTS `newsletter_archive`;
 CREATE TABLE IF NOT EXISTS `newsletter_archive` (
   `pk_newsletter` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `data` longtext,
   `html` longtext,
   `created` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated` TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `sent` varchar(255) NOT NULL,
   PRIMARY KEY (`pk_newsletter`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1246,7 +1146,6 @@ CREATE TABLE IF NOT EXISTS `newsletter_archive` (
 -- Table structure for table `opinions`
 --
 
-DROP TABLE IF EXISTS `opinions`;
 CREATE TABLE IF NOT EXISTS `opinions` (
   `pk_opinion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_content_categories` int(10) unsigned DEFAULT '7',
@@ -1282,7 +1181,6 @@ INSERT INTO `opinions` (`pk_opinion`, `fk_content_categories`, `fk_author`, `bod
 -- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
@@ -1292,7 +1190,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `payment_status` varchar(150) NOT NULL,
   `payment_amount` decimal(10,2) NOT NULL,
   `payment_method` varchar(200) NOT NULL,
-  `type` VARCHAR( 50 ) NOT NULL,
+  `type` varchar(50) NOT NULL,
   `params` longtext,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -1303,7 +1201,6 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Table structure for table `pclave`
 --
 
-DROP TABLE IF EXISTS `pclave`;
 CREATE TABLE IF NOT EXISTS `pclave` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `pclave` varchar(60) NOT NULL,
@@ -1318,17 +1215,16 @@ CREATE TABLE IF NOT EXISTS `pclave` (
 -- Table structure for table `pc_users`
 --
 
-DROP TABLE IF EXISTS `pc_users`;
 CREATE TABLE IF NOT EXISTS `pc_users` (
   `pk_pc_user` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `firstname` varchar(255) NOT NULL,
-  `lastname` varchar(255) NOT NULL,
+  `email` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `name` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `firstname` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `lastname` varchar(255) CHARACTER SET latin1 NOT NULL,
   `status` int(11) NOT NULL,
   `subscription` int(11) NOT NULL,
   PRIMARY KEY (`pk_pc_user`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1336,7 +1232,6 @@ CREATE TABLE IF NOT EXISTS `pc_users` (
 -- Table structure for table `photos`
 --
 
-DROP TABLE IF EXISTS `photos`;
 CREATE TABLE IF NOT EXISTS `photos` (
   `pk_photo` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
@@ -1428,7 +1323,6 @@ INSERT INTO `photos` (`pk_photo`, `name`, `path_file`, `date`, `size`, `resoluti
 -- Table structure for table `polls`
 --
 
-DROP TABLE IF EXISTS `polls`;
 CREATE TABLE IF NOT EXISTS `polls` (
   `pk_poll` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `total_votes` int(11) NOT NULL DEFAULT '0',
@@ -1455,7 +1349,6 @@ INSERT INTO `polls` (`pk_poll`, `total_votes`, `used_ips`, `subtitle`, `visualiz
 -- Table structure for table `poll_items`
 --
 
-DROP TABLE IF EXISTS `poll_items`;
 CREATE TABLE IF NOT EXISTS `poll_items` (
   `pk_item` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `fk_pk_poll` bigint(20) unsigned NOT NULL,
@@ -1491,300 +1384,25 @@ INSERT INTO `poll_items` (`pk_item`, `fk_pk_poll`, `item`, `metadata`, `votes`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `privileges`
---
-
-DROP TABLE IF EXISTS `privileges`;
-CREATE TABLE IF NOT EXISTS `privileges` (
-  `pk_privilege` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `description` varchar(100) DEFAULT NULL,
-  `module` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`pk_privilege`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=176 ;
-
---
--- Dumping data for table `privileges`
---
-
-INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
-(1, 'CATEGORY_ADMIN', 'Listado de secciones', 'CATEGORY'),
-(2, 'CATEGORY_AVAILABLE', 'Aprobar SecciÃ³n', 'CATEGORY'),
-(3, 'CATEGORY_UPDATE', 'Modificar SecciÃ³n', 'CATEGORY'),
-(4, 'CATEGORY_DELETE', 'Eliminar SecciÃ³n', 'CATEGORY'),
-(5, 'CATEGORY_CREATE', 'Crear SecciÃ³n', 'CATEGORY'),
-(6, 'ARTICLE_ADMIN', 'Listados de ArtÃ­culos', 'ARTICLE'),
-(7, 'ARTICLE_FRONTPAGE', 'AdministraciÃ³n de portadas', 'ARTICLE'),
-(8, 'ARTICLE_PENDINGS', 'Listar noticias pendientes', 'ARTICLE'),
-(9, 'ARTICLE_AVAILABLE', 'Aprobar Noticia', 'ARTICLE'),
-(10, 'ARTICLE_UPDATE', 'Modificar ArtÃ­culo', 'ARTICLE'),
-(11, 'ARTICLE_DELETE', 'Eliminar ArtÃ­culo', 'ARTICLE'),
-(12, 'ARTICLE_CREATE', 'Crear ArtÃ­culo', 'ARTICLE'),
-(13, 'ARTICLE_ARCHIVE', 'Recuperar/Archivar ArtÃ­culos de/a hemeroteca', 'ARTICLE'),
-(14, 'ARTICLE_CLONE', 'Clonar ArtÃ­culo', 'ARTICLE'),
-(15, 'ARTICLE_HOME', 'GestiÃ³n portada Home de artÃ­culos', 'ARTICLE'),
-(16, 'ARTICLE_TRASH', 'gestiÃ³n papelera ArtÃ­culo', 'ARTICLE'),
-(17, 'ARTICLE_ARCHIVE_ADMI', 'Listado de hemeroteca', 'ARTICLE'),
-(18, 'ADVERTISEMENT_ADMIN', 'Listado de  publicidad', 'ADVERTISEMENT'),
-(19, 'ADVERTISEMENT_AVAILA', 'Aprobar publicidad', 'ADVERTISEMENT'),
-(20, 'ADVERTISEMENT_UPDATE', 'Modificar publicidad', 'ADVERTISEMENT'),
-(21, 'ADVERTISEMENT_DELETE', 'Eliminar publicidad', 'ADVERTISEMENT'),
-(22, 'ADVERTISEMENT_CREATE', 'Crear publicidad', 'ADVERTISEMENT'),
-(23, 'ADVERTISEMENT_TRASH', 'gestiÃ³n papelera publicidad', 'ADVERTISEMENT'),
-(24, 'ADVERTISEMENT_HOME', 'gestiÃ³n de publicidad en Home', 'ADVERTISEMENT'),
-(26, 'OPINION_ADMIN', 'Listado de  opiniÃ³n', 'OPINION'),
-(27, 'OPINION_FRONTPAGE', 'Portada Opinion', 'OPINION'),
-(28, 'OPINION_AVAILABLE', 'Aprobar OpiniÃ³n', 'OPINION'),
-(29, 'OPINION_UPDATE', 'Modificar OpiniÃ³n', 'OPINION'),
-(30, 'OPINION_HOME', 'Publicar widgets home OpiniÃ³n', 'OPINION'),
-(31, 'OPINION_DELETE', 'Eliminar OpiniÃ³n', 'OPINION'),
-(32, 'OPINION_CREATE', 'Crear OpiniÃ³n', 'OPINION'),
-(33, 'OPINION_TRASH', 'gestion papelera OpiniÃ³n', 'OPINION'),
-(34, 'COMMENT_ADMIN', 'Listado de comentarios', 'COMMENT'),
-(35, 'COMMENT_POLL', 'Gestionar Comentarios de encuestas', 'COMMENT'),
-(36, 'COMMENT_HOME', 'Gestionar Comentarios de Home', 'COMMENT'),
-(37, 'COMMENT_AVAILABLE', 'Aprobar/Rechazar Comentario', 'COMMENT'),
-(38, 'COMMENT_UPDATE', 'Modificar Comentario', 'COMMENT'),
-(39, 'COMMENT_DELETE', 'Eliminar Comentario', 'COMMENT'),
-(40, 'COMMENT_CREATE', 'Crear Comentario', 'COMMENT'),
-(41, 'COMMENT_TRASH', 'gestiÃ³n papelera Comentarios', 'COMMENT'),
-(42, 'ALBUM_ADMIN', 'Listado de Ã¡lbumes', 'ALBUM'),
-(43, 'ALBUM_AVAILABLE', 'Aprobar Album', 'ALBUM'),
-(44, 'ALBUM_UPDATE', 'Modificar Album', 'ALBUM'),
-(45, 'ALBUM_DELETE', 'Eliminar Album', 'ALBUM'),
-(46, 'ALBUM_CREATE', 'Crear Album', 'ALBUM'),
-(47, 'ALBUM_TRASH', 'gestion papelera Album', 'ALBUM'),
-(48, 'VIDEO_ADMIN', 'Listado de videos', 'VIDEO'),
-(49, 'VIDEO_AVAILABLE', 'Aprobar video', 'VIDEO'),
-(50, 'VIDEO_UPDATE', 'Modificar video', 'VIDEO'),
-(51, 'VIDEO_DELETE', 'Eliminar video', 'VIDEO'),
-(52, 'VIDEO_CREATE', 'Crear video', 'VIDEO'),
-(53, 'VIDEO_TRASH', 'gestiÃ³n papelera video', 'VIDEO'),
-(133, 'CONTENT_OTHER_DELETE', 'Poder eliminar contenido de otros usuarios', 'CONTENT'),
-(130, 'ONM_CONFIG', 'Configurar Onm', 'ONM'),
-(131, 'ONM_MANAGER', 'Gestionar Onm', 'ONM'),
-(132, 'CONTENT_OTHER_UPDATE', 'Poder modificar contenido de otros usuarios', 'CONTENT'),
-(129, 'CACHE_APC_ADMIN', 'Gestion cache de APC', 'CACHE'),
-(60, 'IMAGE_ADMIN', 'Listado de imÃ¡genes', 'IMAGE'),
-(61, 'IMAGE_AVAILABLE', 'Aprobar Imagen', 'IMAGE'),
-(62, 'IMAGE_UPDATE', 'Modificar Imagen', 'IMAGE'),
-(63, 'IMAGE_DELETE', 'Eliminar Imagen', 'IMAGE'),
-(64, 'IMAGE_CREATE', 'Subir Imagen', 'IMAGE'),
-(65, 'IMAGE_TRASH', 'gestiÃ³n papelera Imagen', 'IMAGE'),
-(66, 'STATIC_ADMIN', 'Listado pÃ¡ginas estÃ¡ticas', 'STATIC'),
-(67, 'STATIC_AVAILABLE', 'Aprobar PÃ¡gina EstÃ¡tica', 'STATIC'),
-(68, 'STATIC_UPDATE', 'Modificar PÃ¡gina EstÃ¡tica', 'STATIC'),
-(69, 'STATIC_DELETE', 'Eliminar PÃ¡gina EstÃ¡tica', 'STATIC'),
-(70, 'STATIC_CREATE', 'Crear PÃ¡gina EstÃ¡tica', 'STATIC'),
-(71, 'KIOSKO_ADMIN', 'Listar PÃ¡gina Papel', 'KIOSKO'),
-(72, 'KIOSKO_AVAILABLE', 'Aprobar PÃ¡gina Papel', 'KIOSKO'),
-(73, 'KIOSKO_UPDATE', 'Modificar PÃ¡gina Papel', 'KIOSKO'),
-(74, 'KIOSKO_DELETE', 'Eliminar PÃ¡gina Papel', 'KIOSKO'),
-(75, 'KIOSKO_CREATE', 'Crear PÃ¡gina Papel', 'KIOSKO'),
-(76, 'KIOSKO_HOME', 'Incluir en portada como favorito', 'KIOSKO'),
-(77, 'POLL_ADMIN', 'Listado encuestas', 'POLL'),
-(78, 'POLL_AVAILABLE', 'Aprobar Encuesta', 'POLL'),
-(79, 'POLL_UPDATE', 'Modificar Encuesta', 'POLL'),
-(80, 'POLL_DELETE', 'Eliminar Encuesta', 'POLL'),
-(81, 'POLL_CREATE', 'Crear Encuesta', 'POLL'),
-(82, 'AUTHOR_ADMIN', 'Listado autores OpiniÃ³n', 'AUTHOR'),
-(83, 'AUTHOR_UPDATE', 'Modificar Autor', 'AUTHOR'),
-(84, 'AUTHOR_DELETE', 'Eliminar Autor', 'AUTHOR'),
-(85, 'AUTHOR_CREATE', 'Crear Autor', 'AUTHOR'),
-(86, 'USER_ADMIN', 'Listado de usuarios', 'USER'),
-(87, 'USER_UPDATE', 'Modificar Usuario', 'USER'),
-(88, 'USER_DELETE', 'Eliminar Usuario', 'USER'),
-(89, 'USER_CREATE', 'Crear Usuario', 'USER'),
-(90, 'PCLAVE_ADMIN', 'Listado de palabras clave', 'PCLAVE'),
-(91, 'PCLAVE_UPDATE', 'Modificar Palabra Clave', 'PCLAVE'),
-(92, 'PCLAVE_DELETE', 'Eliminar Palabra Clave', 'PCLAVE'),
-(93, 'PCLAVE_CREATE', 'Crear Palabra Clave', 'PCLAVE'),
-(95, 'GROUP_ADMIN', 'Grupo usuarios Admin', 'GROUP'),
-(96, 'GROUP_UPDATE', 'Modificar Grupo Usuarios', 'GROUP'),
-(97, 'GROUP_DELETE', 'Eliminar Grupo Usuarios', 'GROUP'),
-(98, 'GROUP_ADMIN', 'Listado de Grupo Usuarios', 'GROUP'),
-(99, 'GROUP_CREATE', 'Crear Grupo Usuarios', 'GROUP'),
-(100, 'PRIVILEGE_UPDATE', 'Modificar Privilegio', 'PRIVILEGE'),
-(101, 'PRIVILEGE_DELETE', 'Eliminar Privilegio', 'PRIVILEGE'),
-(102, 'PRIVILEGE_ADMIN', 'Listado de Privilegios', 'PRIVILEGE'),
-(103, 'PRIVILEGE_CREATE', 'Crear Privilegio', 'PRIVILEGE'),
-(104, 'FILE_ADMIN', 'Listado de ficheros y portadas', 'FILE'),
-(105, 'FILE_FRONTS', 'GestiÃ³n de portadas', 'FILE'),
-(106, 'FILE_UPDATE', 'Modificar Fichero', 'FILE'),
-(107, 'FILE_DELETE', 'Eliminar Fichero', 'FILE'),
-(108, 'FILE_CREATE', 'Crear Fichero', 'FILE'),
-(109, 'MENU_CREATE', 'Crear menu', 'MENU'),
-(117, 'WIDGET_ADMIN', 'Listado de widgets', 'WIDGET'),
-(110, 'BADLINK_ADMIN', 'Control Link Admin', 'BADLINK'),
-(111, 'STATS_ADMIN', 'Admin EstadÃ­sticas', 'STATS'),
-(112, 'NEWSLETTER_ADMIN', 'AdministraciÃ³n del boletÃ­n', 'NEWSLETTER'),
-(113, 'BACKEND_ADMIN', 'ConfiguraciÃ³n de backend', 'BACKEND'),
-(114, 'CACHE_TPL_ADMIN', 'GestiÃ³n de CachÃ©s Portadas', 'CACHE'),
-(115, 'SEARCH_ADMIN', 'Utilidades: bÃºsqueda avanzada', 'SEARCH'),
-(116, 'TRASH_ADMIN', 'GestiÃ³n papelera', 'TRASH'),
-(118, 'WIDGET_AVAILABLE', 'Aprobar Widget', 'WIDGET'),
-(119, 'WIDGET_UPDATE', 'Modificar Widget', 'WIDGET'),
-(120, 'WIDGET_DELETE', 'Eliminar Widget', 'WIDGET'),
-(121, 'WIDGET_CREATE', 'Crear Widget', 'WIDGET'),
-(122, 'MENU_ADMIN', 'Listado de menus', 'MENU'),
-(123, 'MENU_AVAILABLE', 'Leer menu', 'MENU'),
-(124, 'MENU_UPDATE', 'Modificar menu', 'MENU'),
-(125, 'IMPORT_ADMIN', 'Importar', 'IMPORT'),
-(126, 'IMPORT_EPRESS', 'Importar EuropaPress', 'IMPORT'),
-(127, 'IMPORT_XML', 'Importar XML', 'IMPORT'),
-(128, 'IMPORT_EFE', 'Importar EFE', 'IMPORT'),
-(134, 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM'),
-(135, 'GROUP_CHANGE', ' Cambiar de grupo al usuario ', 'GROUP'),
-(165, 'IMPORT_EFE_FILE', 'Importar ficheros EFE', 'IMPORT'),
-(164, 'MENU_DELETE', 'Eliminar menu', 'MENU'),
-(163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'VIDEO'),
-(162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'CATEGORY'),
-(161, 'OPINION_SETTINGS', 'Configurar módulo de opinion', 'OPINION'),
-(160, 'POLL_SETTINGS', 'Configurar módulos de encuestas', 'POLL'),
-(159, 'ALBUM_SETTINGS', 'Configurar módulo de álbumes', 'ALBUM'),
-(158, 'ALBUM_FAVORITE', 'Gestionar álbumes favoritos', 'ALBUM'),
-(157, 'ALBUM_HOME', 'Publicar album para home', 'ALBUM'),
-(156, 'VIDEO_FAVORITE', 'Gestionar Videos favoritos', 'VIDEO'),
-(155, 'VIDEO_HOME', 'Publicar video en home', 'VIDEO'),
-(154, 'SCHEDULE_ADMIN', 'Gestionar la agenda ', 'SCHEDULE'),
-(153, 'SCHEDULE_SETTINGS', 'Gestionar la agenda ', 'SCHEDULE'),
-(152, 'SPECIAL_TRASH', 'Gestionar papelera especiales', 'SPECIAL'),
-(151, 'SPECIAL_DELETE', 'Eliminar especiales', 'SPECIAL'),
-(150, 'SPECIAL_UPDATE', 'Modificar especiales', 'SPECIAL'),
-(149, 'SPECIAL_SETTINGS', 'Configurar modulo de especiales', 'SPECIAL'),
-(148, 'SPECIAL_AVAILABLE', 'Aprobar especiales', 'SPECIAL'),
-(147, 'SPECIAL_FAVORITE', 'Gestionar widget especiales', 'SPECIAL'),
-(146, 'SPECIAL_CREATE', 'Crear especiales', 'SPECIAL'),
-(145, 'SPECIAL_ADMIN', 'Administrar modulo de especiales ', 'SPECIAL'),
-(144, 'BOOK_TRASH', 'Vaciar papelera de libros', 'BOOK'),
-(143, 'BOOK_DELETE', 'Eliminar libros', 'BOOK'),
-(142, 'BOOK_UPDATE', 'Modificar libros', 'BOOK'),
-(141, 'BOOK_SETTINGS', 'Configurar modulo de libros', 'BOOK'),
-(140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
-(139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
-(138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
-(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK'),
-(166, 'LETTER_TRASH', 'Vaciar papelera de cartas', 'LETTER'),
-(167, 'LETTER_DELETE', 'Eliminar cartas', 'LETTER'),
-(168, 'LETTER_UPDATE', 'Modificar cartas', 'LETTER'),
-(169, 'LETTER_SETTINGS', 'Configurar modulo de cartas', 'LETTER'),
-(170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
-(171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
-(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER'),
-(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),
-(174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
-(175, 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ratings`
 --
 
-DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
   `pk_rating` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `total_votes` smallint(5) unsigned NOT NULL DEFAULT '0',
   `total_value` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `ips_count_rating` longtext,
   PRIMARY KEY (`pk_rating`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=218 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=217 ;
 
 --
 -- Dumping data for table `ratings`
 --
 
 INSERT INTO `ratings` (`pk_rating`, `total_votes`, `total_value`, `ips_count_rating`) VALUES
-(82, 0, 0, 'a:0:{}'),
-(80, 0, 0, 'a:0:{}'),
-(10, 0, 0, 'a:0:{}'),
-(87, 0, 0, 'a:0:{}'),
-(63, 0, 0, 'a:0:{}'),
-(62, 0, 0, 'a:0:{}'),
 (14, 0, 0, 'a:0:{}'),
-(52, 0, 0, 'a:0:{}'),
-(86, 0, 0, 'a:0:{}'),
-(54, 0, 0, 'a:0:{}'),
-(58, 0, 0, 'a:0:{}'),
-(103, 0, 0, 'a:0:{}'),
-(56, 0, 0, 'a:0:{}'),
-(60, 0, 0, 'a:0:{}'),
-(64, 1, 5, 'a:1:{i:0;a:2:{s:2:"ip";s:14:"79.147.235.170";s:5:"count";i:1;}}'),
-(49, 0, 0, 'a:0:{}'),
-(53, 0, 0, 'a:0:{}'),
-(96, 0, 0, 'a:0:{}'),
-(55, 0, 0, 'a:0:{}'),
-(12, 0, 0, 'a:0:{}'),
-(73, 0, 0, 'a:0:{}'),
-(46, 0, 0, 'a:0:{}'),
-(68, 0, 0, 'a:0:{}'),
-(81, 0, 0, 'a:0:{}'),
-(148, 0, 0, 'a:0:{}'),
-(116, 0, 0, 'a:0:{}'),
-(164, 0, 0, 'a:0:{}'),
-(171, 0, 0, 'a:0:{}'),
-(178, 0, 0, 'a:0:{}'),
-(105, 0, 0, 'a:0:{}'),
-(111, 0, 0, 'a:0:{}'),
-(119, 0, 0, 'a:0:{}'),
-(177, 0, 0, 'a:0:{}'),
-(180, 0, 0, 'a:0:{}'),
-(126, 0, 0, 'a:0:{}'),
-(144, 0, 0, 'a:0:{}'),
-(170, 0, 0, 'a:0:{}'),
-(107, 0, 0, 'a:0:{}'),
-(125, 0, 0, 'a:0:{}'),
-(114, 0, 0, 'a:0:{}'),
-(117, 0, 0, 'a:0:{}'),
-(142, 0, 0, 'a:0:{}'),
-(168, 0, 0, 'a:0:{}'),
-(104, 0, 0, 'a:0:{}'),
-(112, 0, 0, 'a:0:{}'),
-(147, 0, 0, 'a:0:{}'),
-(146, 0, 0, 'a:0:{}'),
-(176, 0, 0, 'a:0:{}'),
-(149, 0, 0, 'a:0:{}'),
-(118, 0, 0, 'a:0:{}'),
 (11, 0, 0, 'a:0:{}'),
-(59, 0, 0, 'a:0:{}'),
-(152, 0, 0, 'a:0:{}'),
-(184, 0, 0, 'a:0:{}'),
-(99, 0, 0, 'a:0:{}'),
-(102, 0, 0, 'a:0:{}'),
-(113, 0, 0, 'a:0:{}'),
-(165, 0, 0, 'a:0:{}'),
-(101, 0, 0, 'a:0:{}'),
-(157, 0, 0, 'a:0:{}'),
-(194, 0, 0, 'a:0:{}'),
-(204, 0, 0, 'a:0:{}'),
-(183, 0, 0, 'a:0:{}'),
-(115, 0, 0, 'a:0:{}'),
-(85, 0, 0, 'a:0:{}'),
-(189, 0, 0, 'a:0:{}'),
-(72, 0, 0, 'a:0:{}'),
-(67, 0, 0, 'a:0:{}'),
-(75, 0, 0, 'a:0:{}'),
-(47, 0, 0, 'a:0:{}'),
-(13, 0, 0, 'a:0:{}'),
-(57, 0, 0, 'a:0:{}'),
-(61, 0, 0, 'a:0:{}'),
-(210, 1, 4, 'a:1:{i:0;a:2:{s:2:"ip";s:12:"178.139.2.60";s:5:"count";i:1;}}'),
-(124, 0, 0, 'a:0:{}'),
-(167, 0, 0, 'a:0:{}'),
-(84, 0, 0, 'a:0:{}'),
-(48, 0, 0, 'a:0:{}'),
-(76, 0, 0, 'a:0:{}'),
-(190, 0, 0, 'a:0:{}'),
-(202, 0, 0, 'a:0:{}'),
-(74, 0, 0, 'a:0:{}'),
-(79, 0, 0, 'a:0:{}'),
-(51, 0, 0, 'a:0:{}'),
-(217, 0, 0, 'a:0:{}'),
-(215, 0, 0, 'a:0:{}'),
-(216, 0, 0, 'a:0:{}'),
-(78, 0, 0, 'a:0:{}'),
-(70, 0, 0, 'a:0:{}'),
-(110, 0, 0, 'a:0:{}');
+(216, 0, 0, 'a:0:{}');
 
 -- --------------------------------------------------------
 
@@ -1792,7 +1410,6 @@ INSERT INTO `ratings` (`pk_rating`, `total_votes`, `total_value`, `ips_count_rat
 -- Table structure for table `related_contents`
 --
 
-DROP TABLE IF EXISTS `related_contents`;
 CREATE TABLE IF NOT EXISTS `related_contents` (
   `pk_content1` bigint(20) unsigned NOT NULL,
   `pk_content2` bigint(20) unsigned NOT NULL,
@@ -1890,12 +1507,11 @@ INSERT INTO `related_contents` (`pk_content1`, `pk_content2`, `relationship`, `t
 -- Table structure for table `settings`
 --
 
-DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
-  `name` varchar(128) NOT NULL DEFAULT '',
-  `value` longtext NOT NULL,
+  `name` varchar(128) CHARACTER SET latin1 NOT NULL DEFAULT '',
+  `value` longtext CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `settings`
@@ -1905,12 +1521,12 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('facebook_page', 's:52:"http://www.facebook.com/pages/OpenNemas/282535299100";'),
 ('twitter_page', 's:28:"http://twitter.com/opennemas";'),
 ('facebook_id', 's:12:"282535299100";'),
-('site_footer', 's:195:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\r\nCalle Noriega Varela 16 BAJO<br />\r\n32004, Ourense (Spain)<br />\r\n+34 655172329<br />\r\nOpenHost Media Press S.L.</p>\r\n";'),
-('site_title', 's:94:"OpenNemas - Servicio online para tu periÃ³dico digital - Online service for digital newspapers";'),
-('site_description', 's:94:"OpenNemas - Servicio online para tu periÃ³dico digital - Online service for digital newspapers";'),
+('site_footer', 's:221:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\r\nPorto Cabeanca-Boveda s/n<br />\r\n32980 Boveda, Amoeiro<br />\r\nOurense - Spain<br />\r\nTelf/Phone: +34 655172329<br />\r\nOpenHost Media Press</p>\r\n";'),
+('site_title', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
+('site_description', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
 ('europapress_server_auth', 'a:3:{s:6:"server";s:0:"";s:8:"username";s:0:"";s:8:"password";s:0:"";}'),
-('site_keywords', 's:83:"zihuadigital, openNemas, servicio, online, periÃ³dico, digital, service, newspapers";'),
-('time_zone', 's:3:"144";'),
+('site_keywords', 's:74:"CMS, openNemas, servicio, online, periÃ³dico, digital, service, newspapers";'),
+('time_zone', 's:3:"335";'),
 ('site_language', 's:5:"es_ES";'),
 ('mail_server', 's:9:"localhost";'),
 ('mail_username', 's:9:"webmaster";'),
@@ -1922,7 +1538,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('piwik', 'a:3:{s:7:"page_id";s:0:"";s:10:"server_url";s:0:"";s:10:"token_auth";s:0:"";}'),
 ('recaptcha', 'a:2:{s:10:"public_key";s:40:"6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is";s:11:"private_key";s:40:"6LfpY8ISAAAAAAuChcU2Agdwg8YzhprxZZ55B7Is";}'),
 ('items_per_page', 's:2:"20";'),
-('refresh_interval', 's:4:"1900";'),
+('refresh_interval', 's:3:"900";'),
 ('advertisements_enabled', 'b:0;'),
 ('log_level', 's:6:"normal";'),
 ('log_enabled', 's:2:"on";'),
@@ -1930,7 +1546,6 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('newsletter_maillist', 'a:2:{s:4:"name";s:8:"Openhost";s:5:"email";s:30:"newsletter@lists.opennemas.com";}'),
 ('site_agency', 's:13:"opennemas.com";'),
 ('activated_modules', 'a:17:{i:0;s:15:"ADVANCED_SEARCH";i:1;s:15:"ARTICLE_MANAGER";i:2;s:13:"CACHE_MANAGER";i:3;s:16:"CATEGORY_MANAGER";i:4;s:15:"COMMENT_MANAGER";i:5;s:12:"FILE_MANAGER";i:6;s:17:"FRONTPAGE_MANAGER";i:7;s:13:"IMAGE_MANAGER";i:8;s:15:"KEYWORD_MANAGER";i:9;s:15:"LIBRARY_MANAGER";i:10;s:12:"MENU_MANAGER";i:11;s:15:"OPINION_MANAGER";i:12;s:16:"SETTINGS_MANAGER";i:13;s:20:"STATIC_PAGES_MANAGER";i:14;s:13:"TRASH_MANAGER";i:15;s:17:"USERVOICE_SUPPORT";i:16;s:14:"WIDGET_MANAGER";}'),
-('europapress_sync_from_limit', 's:6:"604800";'),
 ('album_settings', 'a:6:{s:12:"total_widget";s:1:"4";s:10:"crop_width";s:3:"300";s:11:"crop_height";s:3:"240";s:14:"orderFrontpage";s:8:"favorite";s:9:"time_last";s:3:"100";s:11:"total_front";s:1:"6";}'),
 ('video_settings', 'a:3:{s:12:"total_widget";s:1:"4";s:11:"total_front";s:1:"2";s:13:"total_gallery";s:2:"20";}'),
 ('poll_settings', 'a:3:{s:9:"typeValue";s:7:"percent";s:9:"widthPoll";s:3:"600";s:10:"heightPoll";s:3:"500";}'),
@@ -1938,29 +1553,25 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('image_front_thumb_size', 'a:2:{s:5:"width";s:3:"350";s:6:"height";s:3:"250";}'),
 ('image_inner_thumb_size', 'a:2:{s:5:"width";s:3:"480";s:6:"height";s:3:"250";}'),
 ('image_thumb_size', 'a:2:{s:5:"width";s:3:"140";s:6:"height";s:3:"100";}'),
-('contact_mail', 's:24:"zihuadigital@hotmail.com";'),
-('contact_name', 's:24:"zihuadigital@hotmail.com";'),
-('contact_IP', 's:14:"187.198.84.201";'),
-('site_name', 's:13:"zihua digital";'),
-('site_created', 's:19:"2013-04-17 18:16:41";'),
-('site_color', 's:0:"";'),
+('favico', 's:0:"";'),
+('site_name', 's:19:"Opennemas newspaper";'),
+('site_logo', 's:0:"";'),
+('webmastertools_bing', 's:0:"";'),
 ('section_settings', 'a:1:{s:9:"allowLogo";s:1:"1";}'),
 ('webmastertools_google', 's:0:"";'),
-('webmastertools_bing', 's:0:"";'),
-('frontpage_0_last_saved', 's:24:"2013-04-18T05:36:51-0500";'),
+('site_color', 's:0:"";'),
 ('continue', 's:1:"1";'),
 ('max_session_lifetime', 's:2:"30";'),
-('google_page', 's:0:"";'),
-('google_news_name', 's:0:"";'),
-('youtube_page', 's:0:"";'),
+('frontpage_0_last_saved', 's:24:"2013-06-17T08:21:43-0500";'),
 ('ojd', 'a:1:{s:7:"page_id";s:0:"";}'),
 ('paypal_mail', 's:0:"";'),
-('frontpage_24_last_saved', 's:24:"2013-04-18T09:48:09-0500";'),
-('frontpage_23_last_saved', 's:24:"2013-04-18T09:59:28-0500";'),
-('frontpage_26_last_saved', 's:24:"2013-04-18T10:03:36-0500";'),
-('frontpage_22_last_saved', 's:24:"2013-04-18T10:13:01-0500";'),
-('frontpage_25_last_saved', 's:24:"2013-04-18T10:17:30-0500";'),
-('mobile_logo', 's:13:"onm-login.png";');
+('onm_digest_user', 's:0:"";'),
+('youtube_page', 's:0:"";'),
+('google_news_name', 's:0:"";'),
+('google_page', 's:0:"";'),
+('mobile_logo', 's:0:"";'),
+('onm_digest_pass', 's:0:"";'),
+('comscore', 'a:1:{s:7:"page_id";s:0:"";}');
 
 -- --------------------------------------------------------
 
@@ -1968,14 +1579,13 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 -- Table structure for table `specials`
 --
 
-DROP TABLE IF EXISTS `specials`;
 CREATE TABLE IF NOT EXISTS `specials` (
   `pk_special` int(10) unsigned NOT NULL,
-  `subtitle` varchar(250) CHARACTER SET utf8 DEFAULT NULL,
-  `pdf_path` varchar(250) CHARACTER SET utf8 DEFAULT '0',
-  `img1` varchar(255) DEFAULT NULL,
+  `subtitle` varchar(250) DEFAULT NULL,
+  `pdf_path` varchar(250) DEFAULT '0',
+  `img1` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
   PRIMARY KEY (`pk_special`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1983,15 +1593,14 @@ CREATE TABLE IF NOT EXISTS `specials` (
 -- Table structure for table `special_contents`
 --
 
-DROP TABLE IF EXISTS `special_contents`;
 CREATE TABLE IF NOT EXISTS `special_contents` (
-  `fk_content` varchar(250) CHARACTER SET utf8 NOT NULL,
+  `fk_content` varchar(250) NOT NULL,
   `fk_special` int(10) NOT NULL,
-  `name` varchar(200) CHARACTER SET utf8 DEFAULT NULL,
+  `name` varchar(200) DEFAULT NULL,
   `position` int(10) DEFAULT '10',
   `visible` smallint(1) DEFAULT '1',
-  `type_content` varchar(100) CHARACTER SET utf8 NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `type_content` varchar(100) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1999,7 +1608,6 @@ CREATE TABLE IF NOT EXISTS `special_contents` (
 -- Table structure for table `static_pages`
 --
 
-DROP TABLE IF EXISTS `static_pages`;
 CREATE TABLE IF NOT EXISTS `static_pages` (
   `pk_static_page` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'BIGINT(20)',
   `body` text NOT NULL COMMENT 'HTML content for static page',
@@ -2012,7 +1620,7 @@ CREATE TABLE IF NOT EXISTS `static_pages` (
 --
 
 INSERT INTO `static_pages` (`pk_static_page`, `body`, `slug`) VALUES
-(225, '<p>fsdf</p>', 'test');
+(225, '<p>P&aacute;gina est&aacute;tica de ejemplo</p>\r\n', 'estatica');
 
 -- --------------------------------------------------------
 
@@ -2020,13 +1628,12 @@ INSERT INTO `static_pages` (`pk_static_page`, `body`, `slug`) VALUES
 -- Table structure for table `translation_ids`
 --
 
-DROP TABLE IF EXISTS `translation_ids`;
 CREATE TABLE IF NOT EXISTS `translation_ids` (
   `pk_content_old` bigint(10) NOT NULL,
   `pk_content` bigint(10) NOT NULL,
-  `type` varchar(20) NOT NULL,
+  `type` varchar(20) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`pk_content_old`,`pk_content`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2034,15 +1641,14 @@ CREATE TABLE IF NOT EXISTS `translation_ids` (
 -- Table structure for table `usermeta`
 --
 
-DROP TABLE IF EXISTS `usermeta`;
 CREATE TABLE IF NOT EXISTS `usermeta` (
   `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `meta_key` varchar(255) NOT NULL DEFAULT '',
-  `meta_value` longtext,
+  `meta_key` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
+  `meta_value` longtext CHARACTER SET latin1,
   PRIMARY KEY (`user_id`,`meta_key`),
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `usermeta`
@@ -2061,7 +1667,6 @@ INSERT INTO `usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `pk_user` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `login` varchar(100) DEFAULT NULL,
@@ -2094,12 +1699,11 @@ INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `
 -- Table structure for table `users_content_categories`
 --
 
-DROP TABLE IF EXISTS `users_content_categories`;
 CREATE TABLE IF NOT EXISTS `users_content_categories` (
   `pk_fk_user` int(10) unsigned NOT NULL,
   `pk_fk_content_category` int(10) unsigned NOT NULL,
   PRIMARY KEY (`pk_fk_user`,`pk_fk_content_category`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users_content_categories`
@@ -2161,7 +1765,6 @@ INSERT INTO `users_content_categories` (`pk_fk_user`, `pk_fk_content_category`) 
 -- Table structure for table `user_groups`
 --
 
-DROP TABLE IF EXISTS `user_groups`;
 CREATE TABLE IF NOT EXISTS `user_groups` (
   `pk_user_group` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -2183,7 +1786,6 @@ INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
 -- Table structure for table `user_groups_privileges`
 --
 
-DROP TABLE IF EXISTS `user_groups_privileges`;
 CREATE TABLE IF NOT EXISTS `user_groups_privileges` (
   `pk_fk_user_group` int(10) unsigned NOT NULL,
   `pk_fk_privilege` int(10) unsigned NOT NULL,
@@ -2268,7 +1870,6 @@ INSERT INTO `user_groups_privileges` (`pk_fk_user_group`, `pk_fk_privilege`) VAL
 -- Table structure for table `videos`
 --
 
-DROP TABLE IF EXISTS `videos`;
 CREATE TABLE IF NOT EXISTS `videos` (
   `pk_video` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `video_url` varchar(255) NOT NULL,
@@ -2305,7 +1906,6 @@ INSERT INTO `videos` (`pk_video`, `video_url`, `information`, `author_name`) VAL
 -- Table structure for table `votes`
 --
 
-DROP TABLE IF EXISTS `votes`;
 CREATE TABLE IF NOT EXISTS `votes` (
   `pk_vote` bigint(20) NOT NULL AUTO_INCREMENT,
   `value_pos` smallint(4) NOT NULL DEFAULT '0',
@@ -2320,11 +1920,6 @@ CREATE TABLE IF NOT EXISTS `votes` (
 --
 
 INSERT INTO `votes` (`pk_vote`, `value_pos`, `value_neg`, `ips_count_vote`, `karma`) VALUES
-(223, 0, 0, 'a:0:{}', 100),
-(222, 0, 0, 'a:0:{}', 100),
-(221, 0, 0, 'a:0:{}', 100),
-(220, 0, 0, 'a:0:{}', 100),
-(219, 0, 0, 'a:0:{}', 100),
 (218, 0, 0, 'a:0:{}', 100);
 
 -- --------------------------------------------------------
@@ -2333,7 +1928,6 @@ INSERT INTO `votes` (`pk_vote`, `value_pos`, `value_neg`, `ips_count_vote`, `kar
 -- Table structure for table `widgets`
 --
 
-DROP TABLE IF EXISTS `widgets`;
 CREATE TABLE IF NOT EXISTS `widgets` (
   `pk_widget` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
@@ -2359,7 +1953,6 @@ INSERT INTO `widgets` (`pk_widget`, `content`, `renderlet`) VALUES
 (231, 'CalendarNewslibrary', 'intelligentwidget'),
 (232, 'FacebookButton', 'intelligentwidget'),
 (233, 'Facebook', 'intelligentwidget'),
-(234, 'OnmTwitter', 'intelligentwidget'),
 (235, 'OpinionByauthor', 'intelligentwidget'),
 (236, 'OpinionFavorite', 'intelligentwidget'),
 (237, 'TodayNews', 'intelligentwidget');

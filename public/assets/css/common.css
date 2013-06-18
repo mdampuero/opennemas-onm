@@ -8,25 +8,25 @@
 }
 
 .image-top-right div.article-media{
-    width: 49%;
+    max-width: 60%;
     float: right !important;
     margin-left: 10px;
 }
 
 .image-top-left div.article-media{
-    width: 49%;
+    max-width: 60%;
     float: left !important;
     margin-right: 10px;
 }
 
 .image-middle-right div.article-media{
-    width: 49%;
+    max-width: 60%;
     float: right !important;
     margin-left: 10px;
 }
 
 .image-middle-left div.article-media{
-    width: 49%;
+    max-width: 60%;
     float: left !important;
     margin-right: 10px;
 }
@@ -92,6 +92,78 @@ div.ad-skyscraper-body {
     text-align: center;
     width: 120px;
     border: 0 none !important;
+}
+
+div#intesticial-ad {
+    position: fixed;
+    display: inline;
+    top: 0;
+    left: 0;
+    background-color: #FFF;
+    width: 100%;
+    height: 100%;
+    z-index: 33333;
+    padding-top:1em
+}
+
+body > div#intesticial-ad {
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+}
+
+div#intesticial-ad div.wrapper {
+    position:relative;
+    display:block;
+    width:800px;
+    margin:0 auto;
+    margin-top:20px;
+}
+
+div#intesticial-ad div.header {
+    position:relative;
+    height:25px;
+    font-size:.9em;
+    color:#999;
+    height:30px;
+    border-bottom:1px solid #ccc;
+
+}
+    div#intesticial-ad div.logo-and-phrase {
+        text-align:left;
+        width:400px;
+        padding-top:10px;
+    }
+
+
+
+    div#intesticial-ad div.closeButton {
+        position:absolute;
+        top:1px;
+        right:0;
+    }
+        div#intesticial-ad div.closeButton a {
+            font-size: 1em;
+            color:White;
+            background:url(../../images/close.png) top right no-repeat;
+            width:128px;
+            height:28px;
+            font-weight:bold;
+            display:block;
+            text-align:left;
+            padding:6px 0 0 6px;
+        }
+
+div#intesticial-ad div.content {
+    margin: 0 auto;
+    padding: 1em;
+    height: 100%;
+    cursor: pointer;
+}
+
+div#intesticial-ad .wrapper_intersticial {
+    padding-top: 1em;
 }
 
 /* -------------------------------------------------------------
