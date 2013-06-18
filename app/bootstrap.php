@@ -32,6 +32,7 @@ if (file_exists($configFile)) {
         $instance = $im->load($_SERVER['SERVER_NAME']);
 
         $sc->setParameter('instance', $instance);
+        $sc->setParameter('cache_prefix', $instance->internal_name);
     } catch (\Onm\Instance\NotActivatedException $e) {
         echo 'Instance not activated';
         die();

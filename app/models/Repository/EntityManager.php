@@ -9,6 +9,8 @@
  **/
 namespace Repository;
 
+use Onm\Cache\CacheInterface;
+
 /**
  * An EntityRepository serves as a repository for entities with generic as well as
  * business specific methods for retrieving entities.
@@ -16,7 +18,7 @@ namespace Repository;
  * This class is designed for inheritance and users can subclass this class to
  * write their own repositories with business-specific methods to locate entities.
  *
- * @package Onm_ORM
+ * @package Repository
  **/
 class EntityManager
 {
@@ -26,17 +28,18 @@ class EntityManager
      * @param DatabaseConnection $em The EntityManager to use.
      * @param ClassMetadata $classMetadata The class descriptor.
      **/
-    public function __construct($cacheHandler = null)
+    public function __construct(CacheInterface $cacheHandler, $cachePrefix)
     {
         // $this->dbConn = $databaseConnection;
-        $this->cache  = $cacheHandler;
+        $this->cache       = $cacheHandler;
+        $this->cachePrefix = $cachePrefix;
     }
 
     public function find($contentType, $id)
     {
         $entity = null;
 
-        $cacheId = INSTANCE_UNIQUE_NAME . "_" . $contentType . "_" . $id;
+        $cacheId = $this->cachePrefix . "_" . $contentType . "_" . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false

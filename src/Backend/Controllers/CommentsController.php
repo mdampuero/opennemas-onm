@@ -65,20 +65,23 @@ class CommentsController extends Controller
         $filterSearch = $request->query->filter('filter_search', '', FILTER_SANITIZE_STRING);
         $filterStatus = $request->query->filter('filter_status', \Comment::STATUS_PENDING, FILTER_SANITIZE_STRING);
 
-        $commentManager = new \Repository\CommentsManager();
 
         $searchCriteria =  "`status`='$filterStatus'";
         if (!empty($filterSearch)) {
             $searchCriteria .= " AND `body` LIKE '%$filterSearch%'";
         }
-        $commentsCount = $commentManager->count($searchCriteria);
-        $comments      = $commentManager->find($searchCriteria, 'date DESC', $page, $itemsPerPage);
+        $commentManager = $this->get('comment_repository');
+        $commentsCount  = $commentManager->count($searchCriteria);
+        $comments       = $commentManager->findBy($searchCriteria, 'date DESC', $itemsPerPage, $page);
 
         // Build the pager
         $pagination = \Onm\Pager\Slider::create(
             $commentsCount,
             $itemsPerPage,
-            $this->generateUrl('admin_comments', array('status' => $filterStatus, 'search' => $filterSearch,))
+            $this->generateUrl(
+                'admin_comments',
+                array('filter_status' => $filterStatus, 'filter_search' => $filterSearch,)
+            )
         );
 
         if (!empty($comments)) {
