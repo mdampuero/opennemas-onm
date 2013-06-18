@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 18, 2013 at 09:58 AM
+-- Generation Time: Jun 18, 2013 at 10:29 AM
 -- Server version: 5.5.31
 -- PHP Version: 5.3.10-1ubuntu3.6
 
@@ -20,6 +20,7 @@ SET time_zone = "+00:00";
 -- Table structure for table `advertisements`
 --
 
+DROP TABLE IF EXISTS `advertisements`;
 CREATE TABLE IF NOT EXISTS `advertisements` (
   `pk_advertisement` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `type_advertisement` smallint(2) unsigned DEFAULT '1',
@@ -77,6 +78,7 @@ INSERT INTO `advertisements` (`pk_advertisement`, `type_advertisement`, `fk_cont
 -- Table structure for table `albums`
 --
 
+DROP TABLE IF EXISTS `albums`;
 CREATE TABLE IF NOT EXISTS `albums` (
   `pk_album` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `subtitle` varchar(250) DEFAULT NULL,
@@ -107,6 +109,7 @@ INSERT INTO `albums` (`pk_album`, `subtitle`, `agency`, `fuente`, `cover_id`) VA
 -- Table structure for table `albums_photos`
 --
 
+DROP TABLE IF EXISTS `albums_photos`;
 CREATE TABLE IF NOT EXISTS `albums_photos` (
   `pk_album` bigint(20) unsigned NOT NULL,
   `pk_photo` bigint(20) unsigned NOT NULL,
@@ -174,6 +177,7 @@ INSERT INTO `albums_photos` (`pk_album`, `pk_photo`, `position`, `description`) 
 -- Table structure for table `articles`
 --
 
+DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `articles` (
   `pk_article` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `summary` text,
@@ -253,6 +257,7 @@ INSERT INTO `articles` (`pk_article`, `summary`, `body`, `img1`, `subtitle`, `im
 -- Table structure for table `attachments`
 --
 
+DROP TABLE IF EXISTS `attachments`;
 CREATE TABLE IF NOT EXISTS `attachments` (
   `pk_attachment` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(200) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
@@ -275,6 +280,7 @@ INSERT INTO `attachments` (`pk_attachment`, `title`, `path`, `category`) VALUES
 -- Table structure for table `authors`
 --
 
+DROP TABLE IF EXISTS `authors`;
 CREATE TABLE IF NOT EXISTS `authors` (
   `pk_author` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -302,6 +308,7 @@ INSERT INTO `authors` (`pk_author`, `name`, `politics`, `date_nac`, `fk_user`, `
 -- Table structure for table `author_imgs`
 --
 
+DROP TABLE IF EXISTS `author_imgs`;
 CREATE TABLE IF NOT EXISTS `author_imgs` (
   `pk_img` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_author` int(10) NOT NULL,
@@ -318,6 +325,7 @@ CREATE TABLE IF NOT EXISTS `author_imgs` (
 -- Table structure for table `books`
 --
 
+DROP TABLE IF EXISTS `books`;
 CREATE TABLE IF NOT EXISTS `books` (
   `pk_book` bigint(20) unsigned NOT NULL,
   `author` varchar(250) DEFAULT NULL,
@@ -332,6 +340,7 @@ CREATE TABLE IF NOT EXISTS `books` (
 -- Table structure for table `comments`
 --
 
+DROP TABLE IF EXISTS `comments`;
 CREATE TABLE IF NOT EXISTS `comments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` bigint(20) unsigned NOT NULL DEFAULT '0',
@@ -366,6 +375,7 @@ INSERT INTO `comments` (`id`, `content_id`, `author`, `author_email`, `author_ur
 -- Table structure for table `contentmeta`
 --
 
+DROP TABLE IF EXISTS `contentmeta`;
 CREATE TABLE IF NOT EXISTS `contentmeta` (
   `fk_content` bigint(20) NOT NULL,
   `meta_name` varchar(255) CHARACTER SET latin1 NOT NULL,
@@ -395,6 +405,7 @@ INSERT INTO `contentmeta` (`fk_content`, `meta_name`, `meta_value`) VALUES
 -- Table structure for table `contents`
 --
 
+DROP TABLE IF EXISTS `contents`;
 CREATE TABLE IF NOT EXISTS `contents` (
   `pk_content` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_content_type` int(10) unsigned NOT NULL,
@@ -633,6 +644,7 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 -- Table structure for table `contents_categories`
 --
 
+DROP TABLE IF EXISTS `contents_categories`;
 CREATE TABLE IF NOT EXISTS `contents_categories` (
   `pk_fk_content` bigint(20) unsigned NOT NULL,
   `pk_fk_content_category` int(10) unsigned NOT NULL,
@@ -844,6 +856,7 @@ INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_content_category`, `c
 -- Table structure for table `content_categories`
 --
 
+DROP TABLE IF EXISTS `content_categories`;
 CREATE TABLE IF NOT EXISTS `content_categories` (
   `pk_content_category` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -890,6 +903,7 @@ INSERT INTO `content_categories` (`pk_content_category`, `title`, `name`, `inmen
 -- Table structure for table `content_positions`
 --
 
+DROP TABLE IF EXISTS `content_positions`;
 CREATE TABLE IF NOT EXISTS `content_positions` (
   `pk_fk_content` bigint(20) NOT NULL,
   `fk_category` int(11) NOT NULL,
@@ -985,6 +999,7 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 -- Table structure for table `frontpages`
 --
 
+DROP TABLE IF EXISTS `frontpages`;
 CREATE TABLE IF NOT EXISTS `frontpages` (
   `pk_frontpage` bigint(20) NOT NULL,
   `date` int(11) NOT NULL COMMENT 'date as 20110720',
@@ -1003,6 +1018,7 @@ CREATE TABLE IF NOT EXISTS `frontpages` (
 -- Table structure for table `kioskos`
 --
 
+DROP TABLE IF EXISTS `kioskos`;
 CREATE TABLE IF NOT EXISTS `kioskos` (
   `pk_kiosko` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -1019,6 +1035,7 @@ CREATE TABLE IF NOT EXISTS `kioskos` (
 -- Table structure for table `letters`
 --
 
+DROP TABLE IF EXISTS `letters`;
 CREATE TABLE IF NOT EXISTS `letters` (
   `pk_letter` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `author` varchar(255) DEFAULT NULL,
@@ -1041,6 +1058,7 @@ INSERT INTO `letters` (`pk_letter`, `author`, `email`, `body`) VALUES
 -- Table structure for table `menues`
 --
 
+DROP TABLE IF EXISTS `menues`;
 CREATE TABLE IF NOT EXISTS `menues` (
   `pk_menu` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET latin1 NOT NULL,
@@ -1073,6 +1091,7 @@ INSERT INTO `menues` (`pk_menu`, `name`, `type`, `position`, `site`, `params`, `
 -- Table structure for table `menu_items`
 --
 
+DROP TABLE IF EXISTS `menu_items`;
 CREATE TABLE IF NOT EXISTS `menu_items` (
   `pk_item` int(11) NOT NULL AUTO_INCREMENT,
   `pk_menu` int(11) NOT NULL,
@@ -1126,6 +1145,7 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 -- Table structure for table `newsletter_archive`
 --
 
+DROP TABLE IF EXISTS `newsletter_archive`;
 CREATE TABLE IF NOT EXISTS `newsletter_archive` (
   `pk_newsletter` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
@@ -1143,6 +1163,7 @@ CREATE TABLE IF NOT EXISTS `newsletter_archive` (
 -- Table structure for table `opinions`
 --
 
+DROP TABLE IF EXISTS `opinions`;
 CREATE TABLE IF NOT EXISTS `opinions` (
   `pk_opinion` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `fk_content_categories` int(10) unsigned DEFAULT '7',
@@ -1178,6 +1199,7 @@ INSERT INTO `opinions` (`pk_opinion`, `fk_content_categories`, `fk_author`, `bod
 -- Table structure for table `orders`
 --
 
+DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) NOT NULL,
@@ -1198,6 +1220,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
 -- Table structure for table `pclave`
 --
 
+DROP TABLE IF EXISTS `pclave`;
 CREATE TABLE IF NOT EXISTS `pclave` (
   `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
   `pclave` varchar(60) NOT NULL,
@@ -1212,6 +1235,7 @@ CREATE TABLE IF NOT EXISTS `pclave` (
 -- Table structure for table `pc_users`
 --
 
+DROP TABLE IF EXISTS `pc_users`;
 CREATE TABLE IF NOT EXISTS `pc_users` (
   `pk_pc_user` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) CHARACTER SET latin1 NOT NULL,
@@ -1229,6 +1253,7 @@ CREATE TABLE IF NOT EXISTS `pc_users` (
 -- Table structure for table `photos`
 --
 
+DROP TABLE IF EXISTS `photos`;
 CREATE TABLE IF NOT EXISTS `photos` (
   `pk_photo` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
@@ -1320,6 +1345,7 @@ INSERT INTO `photos` (`pk_photo`, `name`, `path_file`, `date`, `size`, `resoluti
 -- Table structure for table `polls`
 --
 
+DROP TABLE IF EXISTS `polls`;
 CREATE TABLE IF NOT EXISTS `polls` (
   `pk_poll` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `total_votes` int(11) NOT NULL DEFAULT '0',
@@ -1346,6 +1372,7 @@ INSERT INTO `polls` (`pk_poll`, `total_votes`, `used_ips`, `subtitle`, `visualiz
 -- Table structure for table `poll_items`
 --
 
+DROP TABLE IF EXISTS `poll_items`;
 CREATE TABLE IF NOT EXISTS `poll_items` (
   `pk_item` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `fk_pk_poll` bigint(20) unsigned NOT NULL,
@@ -1384,6 +1411,7 @@ INSERT INTO `poll_items` (`pk_item`, `fk_pk_poll`, `item`, `metadata`, `votes`) 
 -- Table structure for table `ratings`
 --
 
+DROP TABLE IF EXISTS `ratings`;
 CREATE TABLE IF NOT EXISTS `ratings` (
   `pk_rating` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `total_votes` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -1407,6 +1435,7 @@ INSERT INTO `ratings` (`pk_rating`, `total_votes`, `total_value`, `ips_count_rat
 -- Table structure for table `related_contents`
 --
 
+DROP TABLE IF EXISTS `related_contents`;
 CREATE TABLE IF NOT EXISTS `related_contents` (
   `pk_content1` bigint(20) unsigned NOT NULL,
   `pk_content2` bigint(20) unsigned NOT NULL,
@@ -1503,6 +1532,7 @@ INSERT INTO `related_contents` (`pk_content1`, `pk_content2`, `relationship`, `t
 -- Table structure for table `settings`
 --
 
+DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(128) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `value` longtext CHARACTER SET latin1 NOT NULL,
@@ -1575,6 +1605,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 -- Table structure for table `specials`
 --
 
+DROP TABLE IF EXISTS `specials`;
 CREATE TABLE IF NOT EXISTS `specials` (
   `pk_special` int(10) unsigned NOT NULL,
   `subtitle` varchar(250) DEFAULT NULL,
@@ -1589,6 +1620,7 @@ CREATE TABLE IF NOT EXISTS `specials` (
 -- Table structure for table `special_contents`
 --
 
+DROP TABLE IF EXISTS `special_contents`;
 CREATE TABLE IF NOT EXISTS `special_contents` (
   `fk_content` varchar(250) NOT NULL,
   `fk_special` int(10) NOT NULL,
@@ -1604,6 +1636,7 @@ CREATE TABLE IF NOT EXISTS `special_contents` (
 -- Table structure for table `static_pages`
 --
 
+DROP TABLE IF EXISTS `static_pages`;
 CREATE TABLE IF NOT EXISTS `static_pages` (
   `pk_static_page` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'BIGINT(20)',
   `body` text NOT NULL COMMENT 'HTML content for static page',
@@ -1624,6 +1657,7 @@ INSERT INTO `static_pages` (`pk_static_page`, `body`, `slug`) VALUES
 -- Table structure for table `translation_ids`
 --
 
+DROP TABLE IF EXISTS `translation_ids`;
 CREATE TABLE IF NOT EXISTS `translation_ids` (
   `pk_content_old` bigint(10) NOT NULL,
   `pk_content` bigint(10) NOT NULL,
@@ -1637,6 +1671,7 @@ CREATE TABLE IF NOT EXISTS `translation_ids` (
 -- Table structure for table `usermeta`
 --
 
+DROP TABLE IF EXISTS `usermeta`;
 CREATE TABLE IF NOT EXISTS `usermeta` (
   `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `meta_key` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
@@ -1663,6 +1698,7 @@ INSERT INTO `usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `pk_user` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `login` varchar(100) DEFAULT NULL,
@@ -1695,6 +1731,7 @@ INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `
 -- Table structure for table `users_content_categories`
 --
 
+DROP TABLE IF EXISTS `users_content_categories`;
 CREATE TABLE IF NOT EXISTS `users_content_categories` (
   `pk_fk_user` int(10) unsigned NOT NULL,
   `pk_fk_content_category` int(10) unsigned NOT NULL,
@@ -1761,6 +1798,7 @@ INSERT INTO `users_content_categories` (`pk_fk_user`, `pk_fk_content_category`) 
 -- Table structure for table `user_groups`
 --
 
+DROP TABLE IF EXISTS `user_groups`;
 CREATE TABLE IF NOT EXISTS `user_groups` (
   `pk_user_group` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) DEFAULT NULL,
@@ -1782,6 +1820,7 @@ INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
 -- Table structure for table `user_groups_privileges`
 --
 
+DROP TABLE IF EXISTS `user_groups_privileges`;
 CREATE TABLE IF NOT EXISTS `user_groups_privileges` (
   `pk_fk_user_group` int(10) unsigned NOT NULL,
   `pk_fk_privilege` int(10) unsigned NOT NULL,
@@ -1866,6 +1905,7 @@ INSERT INTO `user_groups_privileges` (`pk_fk_user_group`, `pk_fk_privilege`) VAL
 -- Table structure for table `videos`
 --
 
+DROP TABLE IF EXISTS `videos`;
 CREATE TABLE IF NOT EXISTS `videos` (
   `pk_video` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `video_url` varchar(255) NOT NULL,
@@ -1902,6 +1942,7 @@ INSERT INTO `videos` (`pk_video`, `video_url`, `information`, `author_name`) VAL
 -- Table structure for table `votes`
 --
 
+DROP TABLE IF EXISTS `votes`;
 CREATE TABLE IF NOT EXISTS `votes` (
   `pk_vote` bigint(20) NOT NULL AUTO_INCREMENT,
   `value_pos` smallint(4) NOT NULL DEFAULT '0',
@@ -1924,6 +1965,7 @@ INSERT INTO `votes` (`pk_vote`, `value_pos`, `value_neg`, `ips_count_vote`, `kar
 -- Table structure for table `widgets`
 --
 
+DROP TABLE IF EXISTS `widgets`;
 CREATE TABLE IF NOT EXISTS `widgets` (
   `pk_widget` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `content` text NOT NULL,
