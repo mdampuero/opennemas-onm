@@ -14,20 +14,19 @@ use Onm\Cache\CacheInterface;
 /**
  * Handles common operations with users
  *
- * @package    Model
+ * @package Repository
  */
 class UsersManager
 {
-
     /**
      * Initializes the Users Manager
      *
-     * @return void
-     * @author
+     * @param CacheInterface $cache the cache handler
      **/
-    public function __construct(CacheInterface $cache = null, $logger = null)
+    public function __construct(CacheInterface $cache, $cachePrefix)
     {
         $this->cache = $cache;
+        $this->cachePrefix = $cachePrefix;
     }
 
     /**

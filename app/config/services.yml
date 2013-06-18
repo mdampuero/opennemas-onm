@@ -49,7 +49,21 @@ services:
         class: Repository\EntityManager
         arguments: [ @cache, %cache_prefix% ]
 
+    user_repository:
+        class: Repository\UserManager
+        arguments: [ @cache, %cache_prefix% ]
 
+    menu_repository:
+        class: Repository\MenuManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    usergroup_repository:
+        class: Repository\UserGroupManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    setting_repository:
+        class: Repository\SettingManager
+        arguments: [ @cache, %cache_prefix% ]
 
     automatic_contents:
         class: Onm\MachineSearcher
