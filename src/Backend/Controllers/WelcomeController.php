@@ -50,21 +50,6 @@ class WelcomeController extends Controller
         //     'notice',
         //     'Your changes were saved!'
         // );
-
-
-        $feeds = array (
-            array('name' => 'El pais', 'url'=> 'http://www.elpais.com/rss/feed.html?feedId=1022'),
-            array('name' => '20 minutos', 'url'=> 'http://20minutos.feedsportal.com/c/32489/f/478284/index.rss'),
-            array('name' => 'Publico.es', 'url'=> 'http://www.publico.es/rss/'),
-            array('name' => 'El mundo', 'url'=> 'http://elmundo.feedsportal.com/elmundo/rss/portada.xml'),
-        );
-
-        return $this->render(
-            'welcome/index.tpl',
-            array(
-                'feeds' => $feeds
-            )
-        );
-
+        return $this->render('welcome/index.tpl');
     }
 }
