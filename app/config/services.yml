@@ -33,17 +33,37 @@ services:
         class: Onm\Mailer
         arguments: [ %swiftmailer% ]
 
-    entity_repository:
-        class: Repository\EntityManager
-        arguments: [ @cache ]
-
-    users_repository:
-        class: Repository\UsersManager
-        arguments: [ @cache, @logger ]
-
     cache:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
+
+    category_repository:
+        class: Repository\CategoryManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    comment_repository:
+        class: Repository\CommentManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    entity_repository:
+        class: Repository\EntityManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    user_repository:
+        class: Repository\UserManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    menu_repository:
+        class: Repository\MenuManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    usergroup_repository:
+        class: Repository\UserGroupManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    setting_repository:
+        class: Repository\SettingManager
+        arguments: [ @cache, %cache_prefix% ]
 
     automatic_contents:
         class: Onm\MachineSearcher
