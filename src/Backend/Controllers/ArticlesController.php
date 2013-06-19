@@ -1014,7 +1014,7 @@ class ArticlesController extends Controller
         $actual_category_title = $ccm->get_title($category_name);
 
         // Get advertisements for single article
-        $actualCategoryId = $ccm->get_id($categoryName);
+        $actualCategoryId = $ccm->get_id($category_name);
         \Frontend\Controllers\ArticlesController::getInnerAds($actualCategoryId);
 
         // Fetch media associated to the article
@@ -1036,7 +1036,7 @@ class ArticlesController extends Controller
         $relationes = array();
         $innerRelations = json_decode($article->relatedInner, true);
         foreach ($innerRelations as $key => $value) {
-            $relationes[$key] = $value->id;
+            $relationes[$key] = $value['id'];
         }
 
         $relat = $cm->cache->getContents($relationes);
@@ -1064,7 +1064,7 @@ class ArticlesController extends Controller
                     'id'       => $element['pk_content'],
                     'date'     => date('YmdHis', strtotime($element['created'])),
                     'category' => $element['catName'],
-                    'slug'     => StringUtils::get_title($element['title']),
+                    'slug'     => \StringUtils::get_title($element['title']),
                 )
             );
         }
