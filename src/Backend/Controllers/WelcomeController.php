@@ -46,7 +46,7 @@ class WelcomeController extends Controller
         // $this->dispatchEvent('content.update', array('content' => new \Article()));
         // $instances = $this->get('db_conn')->Execute('SELECT count(*) FROM instances');
         //
-        // $this->get('session')->setFlash(
+        // $this->get('request')->getSession()->getFlashBag()->add(
         //     'notice',
         //     'Your changes were saved!'
         // );
