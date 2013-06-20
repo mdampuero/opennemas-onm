@@ -2707,7 +2707,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_login_processform',
     new Route(
-        '/login/process',
+        '/ogin/process',
         array('_controller' => 'Backend:Controllers:AuthenticationController:processform'),
         array('_method' => 'POST')
     )
@@ -2717,13 +2717,6 @@ $adminRoutes->add(
     new Route(
         '/logout',
         array('_controller' => 'Backend:Controllers:AuthenticationController:logout')
-    )
-);
-$routes->add(
-    'admin_welcome',
-    new Route(
-        '/admin',
-        array('_controller' => 'Backend:Controllers:WelcomeController:default')
     )
 );
 
@@ -2751,4 +2744,14 @@ $adminRoutes->add(
     )
 );
 
-$routes->addCollection($adminRoutes, '/admin');
+$adminRoutes->addPrefix('/admin');
+
+$routes->add(
+    'admin_welcome',
+    new Route(
+        '/admin',
+        array('_controller' => 'Backend:Controllers:WelcomeController:default')
+    )
+);
+
+$routes->addCollection($adminRoutes);
