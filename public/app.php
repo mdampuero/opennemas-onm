@@ -48,14 +48,23 @@ if (isset($timezone)) {
     date_default_timezone_set($availableTimezones[$timezone]);
 }
 
-if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
-    $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
-} elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
-    $sc->setParameter('dispatcher.exceptionhandler', 'Manager:Controllers:ErrorController:default');
-} else {
-    $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
-}
+// if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
+//     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
+// } elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
+//     $sc->setParameter('dispatcher.exceptionhandler', 'Manager:Controllers:ErrorController:default');
+// } else {
+//     $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
+// }
 
-// Dispatch the response
-$dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
-$dispatcher->dispatch();
+// // Dispatch the response
+// $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
+// $dispatcher->dispatch();
+
+require_once __DIR__.'/../app/AppKernel.php';
+
+$kernel = new AppKernel('prod', true);
+$kernel->loadClassCache();
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();
+$kernel->terminate($request, $response);
