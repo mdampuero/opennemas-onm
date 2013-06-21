@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrateOnmCategory extends Command
+class MigrateWordpressToOnm extends Command
 {
 
 
@@ -428,7 +428,7 @@ EOF
      *
      * @return string
      **/
-    protected public function convertoUTF8($string)
+    protected function convertoUTF8($string)
     {
         return mb_convert_encoding($string, 'UTF-8');
     }
