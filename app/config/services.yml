@@ -1,21 +1,21 @@
 services:
-    context:
-        class: Symfony\Component\Routing\RequestContext
-        calls:
-            - [ fromRequest, [ %request% ] ]
+    # context:
+    #     class: Symfony\Component\Routing\RequestContext
+    #     calls:
+    #         - [ fromRequest, [ %request% ] ]
 
-    matcher:
-        class: Symfony\Component\Routing\Matcher\UrlMatcher
-        arguments: [ %routes%, @context ]
+    # matcher:
+    #     class: Symfony\Component\Routing\Matcher\UrlMatcher
+    #     arguments: [ %routes%, @context ]
 
-    url_generator:
-        class: Symfony\Component\Routing\Generator\UrlGenerator
-        arguments: [ %routes%, @context ]
+    # url_generator:
+    #     class: Symfony\Component\Routing\Generator\UrlGenerator
+    #     arguments: [ %routes%, @context ]
 
-    db_conn:
-        class: Onm\DatabaseConnection
-        calls:
-            - [ connect, [ %database_params%] ]
+    # db_conn:
+    #     class: Onm\DatabaseConnection
+    #     calls:
+    #         - [ connect, [ %database_params%] ]
 
     session_storage:
         class: %session_storage_class%
@@ -25,9 +25,9 @@ services:
         class: %session_handler_class%
         arguments: [ @session_storage ]
 
-    logger:
-        class: Onm\Log
-        arguments: [ 'normal' ]
+    # logger:
+    #     class: Onm\Log
+    #     arguments: [ 'normal' ]
 
     mailer:
         class: Onm\Mailer
@@ -37,34 +37,34 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
-    category_repository:
-        class: Repository\CategoryManager
-        arguments: [ @cache, %cache_prefix% ]
+    # category_repository:
+    #     class: Repository\CategoryManager
+    #     arguments: [ @cache, %cache_prefix% ]
 
-    comment_repository:
-        class: Repository\CommentManager
-        arguments: [ @cache, %cache_prefix% ]
+    # comment_repository:
+    #     class: Repository\CommentManager
+    #     arguments: [ @cache, %cache_prefix% ]
 
-    entity_repository:
-        class: Repository\EntityManager
-        arguments: [ @cache, %cache_prefix% ]
+    # entity_repository:
+    #     class: Repository\EntityManager
+    #     arguments: [ @cache, %cache_prefix% ]
 
-    user_repository:
-        class: Repository\UserManager
-        arguments: [ @cache, %cache_prefix% ]
+    # user_repository:
+    #     class: Repository\UserManager
+    #     arguments: [ @cache, %cache_prefix% ]
 
-    menu_repository:
-        class: Repository\MenuManager
-        arguments: [ @cache, %cache_prefix% ]
+    # menu_repository:
+    #     class: Repository\MenuManager
+    #     arguments: [ @cache, %cache_prefix% ]
 
-    usergroup_repository:
-        class: Repository\UserGroupManager
-        arguments: [ @cache, %cache_prefix% ]
+    # usergroup_repository:
+    #     class: Repository\UserGroupManager
+    #     arguments: [ @cache, %cache_prefix% ]
 
-    setting_repository:
-        class: Repository\SettingManager
-        arguments: [ @cache, %cache_prefix% ]
+    # setting_repository:
+    #     class: Repository\SettingManager
+    #     arguments: [ @cache, %cache_prefix% ]
 
-    automatic_contents:
-        class: Onm\MachineSearcher
-        arguments: [ @cache ]
+    # automatic_contents:
+    #     class: Onm\MachineSearcher
+    #     arguments: [ @cache ]

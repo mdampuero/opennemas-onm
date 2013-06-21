@@ -1,23 +1,24 @@
 parameters:
     # Framework Base Configuration
+    kernel.secret:
     framework:
         secret:          %secret%
         charset:         UTF-8
         csrf_protection: true
         default_locale:  %locale%
 
-    # Database Configuration
-    database:
-        connection:
-            driver:   %database_driver%
-            host:     %database_host%
-            port:     %database_port%
-            dbname:   %database_name%
-            user:     %database_user%
-            password: %database_password%
-            charset:  UTF8
+#     # Database Configuration
+#     database:
+#         connection:
+#             driver:   %database_driver%
+#             host:     %database_host%
+#             port:     %database_port%
+#             dbname:   %database_name%
+#             user:     %database_user%
+#             password: %database_password%
+#             charset:  UTF8
 
-    # Swiftmailer Configuration
+#     # Swiftmailer Configuration
     swiftmailer:
         transport: %mailer_transport%
         host:      %mailer_host%
@@ -27,20 +28,20 @@ parameters:
         port:      %mailer_port%
         spool:     { type: memory }
 
-    # Cache Configuration
+#     # Cache Configuration
     cache:
         default:
             handler: %cache_handler%
 
-    logger:
-        level: %logger_level%
+    # logger:
+    #     level: %logger_level%
 
-    # Session Configuration
+#     # Session Configuration
     session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\\NativeSessionStorage"
     session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
-    session:
-        handler: %session_handler%
-        params:  %session_params%
+    # session:
+    #     handler: %session_handler%
+    #     params:  %session_params%
 
     available_languages: {'en_US' : "English", 'es_ES' : "Español", 'gl_ES' : "Galego"}
 

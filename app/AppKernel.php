@@ -14,8 +14,8 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        // $bundles = array(
-        //     new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+        $bundles = array(
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
         //     new Symfony\Bundle\SecurityBundle\SecurityBundle(),
         //     new Symfony\Bundle\TwigBundle\TwigBundle(),
         //     new Symfony\Bundle\MonologBundle\MonologBundle(),
@@ -23,7 +23,7 @@ class AppKernel extends Kernel
         //     new Symfony\Bundle\AsseticBundle\AsseticBundle(),
         //     new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
         //     new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-        // );
+        );
 
         // if (in_array($this->getEnvironment(), array('dev', 'test'))) {
         //     $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
@@ -32,8 +32,7 @@ class AppKernel extends Kernel
         //     $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         // }
 
-        // return $bundles;
-        return array();
+        return $bundles;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

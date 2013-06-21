@@ -27,6 +27,17 @@ foreach ($routeFiles as $routeFile) {
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
+
+require_once __DIR__.'/../app/AppKernel.php';
+
+$kernel = new AppKernel('prod', true);
+$kernel->loadClassCache();
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+$response->send();
+$kernel->terminate($request, $response);
+die();
+
 // Create the Request context from the request, useful for the matcher
 $context = new RequestContext();
 $context->fromRequest($request);
@@ -59,12 +70,3 @@ if (isset($timezone)) {
 // // Dispatch the response
 // $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
 // $dispatcher->dispatch();
-
-require_once __DIR__.'/../app/AppKernel.php';
-
-$kernel = new AppKernel('prod', true);
-$kernel->loadClassCache();
-$request = Request::createFromGlobals();
-$response = $kernel->handle($request);
-$response->send();
-$kernel->terminate($request, $response);
