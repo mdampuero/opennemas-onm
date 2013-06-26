@@ -294,7 +294,7 @@ class UserController extends Controller
                 );
 
                 // Store default expire time
-                \Application::setCookieSecure('default_expire', $user->sessionexpire, 0);
+                setCookieSecure('default_expire', $user->sessionexpire, 0);
             }
 
             m::add(_('Log in succesful.'), m::SUCCESS);
