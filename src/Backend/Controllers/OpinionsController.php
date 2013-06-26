@@ -121,19 +121,19 @@ class OpinionsController extends Controller
 
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
-                $opinion->author = new \Author($opinion->fk_author);
+                $opinion->author = new \User($opinion->fk_author);
             }
         } else {
             $opinions = array();
         }
 
-        $aut     = new \Author();
-        $authors = $aut->all_authors(null, 'ORDER BY name');
+        // Fetch all authors
+        $allAuthors = \User::getAllUsersAuthors();
 
         return $this->render(
             'opinion/list.tpl',
             array(
-                'autores'    => $authors,
+                'autores'    => $allAuthors,
                 'opinions'   => $opinions,
                 'page'       => $page,
                 'status'     => $status,
@@ -195,19 +195,19 @@ class OpinionsController extends Controller
 
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
-                $opinion->author = new \Author($opinion->fk_author);
+                $opinion->author = new \User($opinion->fk_author);
             }
         } else {
             $opinions = array();
         }
 
-        $aut     = new \Author();
-        $authors = $aut->all_authors(null, 'ORDER BY name');
+        // Fetch all authors
+        $allAuthors = \User::getAllUsersAuthors();
 
         return $this->render(
             'opinion/list.tpl',
             array(
-                'autores'    => $authors,
+                'autores'    => $allAuthors,
                 'opinions'   => $opinions,
                 'director'   => $director,
                 'editorial'  => $editorial,
@@ -233,26 +233,33 @@ class OpinionsController extends Controller
 
         $opinion = new \Opinion($id);
 
+        // Check if opinion id exists
         if (is_null($opinion->id)) {
             m::add(sprintf(_('Unable to find the opinion with the id "%d"'), $id));
 
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
 
+        // Check if you can see others opinions
+        if (!\Acl::isAdmin()
+            && !\Acl::check('CONTENT_OTHER_UPDATE')
+            && $opinion->fk_author != $_SESSION['userid']
+        ) {
+            m::add(_("You can't modify this opinion because you don't have enought privileges."));
+
+            return $this->redirect($this->generateUrl('admin_opinions'));
+        }
+
+        // Fetch author data and allAuthors
+        $author = new \User($opinion->fk_author);
+        $allAuthors = \User::getAllUsersAuthors();
+
+        // Fetch associated photos with opinion
         if (!empty($opinion->image)) {
             $image = new \Photo($opinion->image);
             $this->view->assign('image', $image);
         }
 
-        $author      = new \Author();
-        $allAuthors  = $author->all_authors(null, 'ORDER BY name');
-        $author      = new \Author($opinion->fk_author);
-
-        $photo       = $author->get_photo($opinion->fk_author_img);
-        $photoWidget = $author->get_photo($opinion->fk_author_img_widget);
-        $photos      = $author->get_author_photos($opinion->fk_author);
-
-        // Photos de noticia
         if (!empty($opinion->img1)) {
             $photo1 = new \Photo($opinion->img1);
             $this->view->assign('photo1', $photo1);
@@ -268,10 +275,7 @@ class OpinionsController extends Controller
             array(
                 'opinion'      => $opinion,
                 'all_authors'  => $allAuthors,
-                'author'       => $author->name,
-                'photo'        => $photo,
-                'photo_widget' => $photoWidget,
-                'photos'       => $photos,
+                'author'       => $author,
             )
         );
     }
@@ -311,7 +315,6 @@ class OpinionsController extends Controller
                 'metadata'             => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'body'                 => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
                 'fk_author_img'        => $request->request->getDigits('fk_author_img'),
-                'fk_author_img_widget' => $request->request->getDigits('fk_author_img_widget'),
                 'publisher'            => $_SESSION['userid'],
                 'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
@@ -334,13 +337,10 @@ class OpinionsController extends Controller
                 );
             }
         } else {
-            $author   = new \Author();
-            $authors = $author->all_authors(null, 'ORDER BY name');
+            // Fetch all authors
+            $allAuthors = \User::getAllUsersAuthors();
 
-            return $this->render(
-                'opinion/new.tpl',
-                array('all_authors' => $authors,)
-            );
+            return $this->render('opinion/new.tpl', array('all_authors' => $allAuthors));
         }
     }
 
@@ -362,7 +362,7 @@ class OpinionsController extends Controller
         if ($opinion->id != null) {
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $opinionCheck->fk_user != $_SESSION['userid']
+                && $opinion->fk_author != $_SESSION['userid']
             ) {
                 m::add(_("You can't modify this opinion because you don't have enought privileges."));
 
@@ -398,7 +398,6 @@ class OpinionsController extends Controller
                 'metadata'             => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'body'                 => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
                 'fk_author_img'        => $request->request->getDigits('fk_author_img'),
-                'fk_author_img_widget' => $request->request->getDigits('fk_author_img_widget'),
                 'publisher'            => $_SESSION['userid'],
                 'starttime'            => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'              => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
@@ -857,7 +856,7 @@ class OpinionsController extends Controller
         );
 
         foreach ($opinions as &$opinion) {
-            $opinion->author = new \Author($opinion->fk_author);
+            $opinion->author = new \User($opinion->fk_author);
         }
 
         $pagination = \Pager::factory(
@@ -872,7 +871,7 @@ class OpinionsController extends Controller
                 'totalItems'  => $countOpinions,
                 'fileName'    => $this->generateUrl(
                     'admin_opinions_content_provider',
-                    array('category' => $category,)
+                    array('category' => $category)
                 ).'&page=%d',
             )
         );
@@ -965,11 +964,11 @@ class OpinionsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_opinions_config'));
         } else {
-            $configurations = s::get(array('opinion_settings',));
+            $configurations = s::get(array('opinion_settings'));
 
             return $this->render(
                 'opinion/config.tpl',
-                array('configs'   => $configurations,)
+                array('configs'   => $configurations)
             );
         }
     }

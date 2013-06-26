@@ -238,7 +238,6 @@ class NewsletterController extends Controller
         $newsletterOld = new \Newsletter(array('namespace' => 'PConecta_'));
         $account    = $newsletterOld->getAccountsProvider();
         $accounts   = $account->getAccounts();
-        $receiver   = array();
         $mailList   = array();
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
