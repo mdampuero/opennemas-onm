@@ -17,23 +17,20 @@ printf("Welcome to OpenNemas data importer from WordPress\n");
 error_reporting(E_ALL ^ E_NOTICE);
 
 require_once __DIR__.'/../../../app/autoload.php';
-
-require SITE_PATH.'../app/autoload.php';
-
-require SITE_PATH.'../config/config.inc.php';
+require_once __DIR__.'/../../../app/container.php';
 
 require 'libs/RegionImporter.php';
-//$ihelper = new wpHelper(dirname(__FILE__) . '/import.log');
-
-/**
- * General configurations
-*/
+require __DIR__.'/../wordpress/libs/ImportHelper.php';
 
 $migrationHandler = new RegionImporter();
 
 $migrationHandler
     ->importCategories()
-    ->importOpinions()
-    ->importImages()
-    ->importArticles()
-    ->printResults();
+    ->loadCategories()
+    // ->importArticles()
+    // ->importMedia()
+    // ->assignMediaToArticles();
+    // ->importAuthors()
+    // ->importOpinions()
+    // ->printResults()
+    ;

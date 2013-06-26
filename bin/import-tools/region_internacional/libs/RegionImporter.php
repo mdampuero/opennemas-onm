@@ -1,7 +1,7 @@
 <?php
-class WordPressToOnm
+class RegionImporter
 {
-    const CONF_FILE = 'source/config-data.ini';
+    const CONF_FILE = 'config/config.ini';
 
     public static $configuration = '';
 
@@ -19,12 +19,11 @@ class WordPressToOnm
 
     public function __construct ()
     {
-
         self::loadConfiguration();
 
         define('INSTANCE_UNIQUE_NAME', self::$configuration['instanceData']['INSTANCE_UNIQUE_NAME']);
 
-        Application::initInternalConstants();
+        // Application::initInternalConstants();
 
         self::initDatabaseConnections();
 
@@ -55,7 +54,7 @@ class WordPressToOnm
     public static function initDatabaseConnections()
     {
         $configOriginDB = self::$configuration['original-database'];
-        echo "Initialicing source database connection...".PHP_EOL;
+        echo "Connecting to the original database...".PHP_EOL;
         if (isset($configOriginDB['host'])
             && isset($configOriginDB['database'])
             && isset($configOriginDB['user'])
@@ -70,128 +69,95 @@ class WordPressToOnm
                 $configOriginDB['password'],
                 $configOriginDB['database']
             );
+            self::$originConn->SetFetchMode(ADODB_FETCH_ASSOC);
+            self::$originConn->Execute('SET NAMES UTF8');
         }
 
+
         $config = self::$configuration['onm-database'];
-        echo "Initialicing Onm database connection...".PHP_EOL;
+        echo "Connecting to the new Onm database...".PHP_EOL;
         define('BD_HOST', $config['host']);
         define('BD_USER', $config['user']);
         define('BD_PASS', $config['password']);
         define('BD_TYPE', $config['type']);
         define('BD_DATABASE', $config['database']);
 
+
         $GLOBALS['application'] = new Application();
         Application::initDatabase();
         Application::initLogger();
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $GLOBALS['application']->conn->Execute('SET NAMES UTF8');
     }
-
-
-
-    /*************CATEGORIES MANAGE*************************/
 
     public function importCategories()
     {
-
         $ih = new ImportHelper();
 
+        $rs = self::$originConn->Execute('SELECT * FROM Noticias_Categorias');
+        $categories = $rs->getArray();
 
-        foreach ($this->originalCategories as $originalID => $newID) {
+        foreach ($categories as $category) {
+            if ($category['idNoticias_Categorias'] == 0) {
+                continue;
+            }
+            $originalID = $category['idNoticias_Categorias'];
 
             if ($ih->elementIsImported($originalID, 'category')) {
                 echo "Category with id {$originalID} already imported\n";
             } else {
-                if ($newID==0) {
-                    $newID = $this->insertNewCategory($originalID);
-                    $this->originalCategories[$originalID]= $newID;
-                }
+                $data = array(
+                    'name'              => (StringUtils::get_title($category['Nombre'])),
+                    'title'             => $category['Nombre'],
+                    'inmenu'            => 1,
+                    'subcategory'       => 0,
+                    'internal_category' => 0,
+                    'color'             => '',
+                    'params'            => array(
+                        'title'         => $elem[0],
+                        'inrss'         => 1,
+                    ),
+                );
+
+                $sql = "INSERT INTO content_categories
+                    (`name`, `title`,`inmenu`,`fk_content_category`,
+                    `internal_category`, `logo_path`,`color`, `params`)
+                    VALUES (?,?,?,?,?,?,?,?)";
+                $values = array(
+                    $data['name'],
+                    $data['title'],
+                    $data['inmenu'],
+                    $data['subcategory'],
+                    $data['internal_category'],
+                    $data['logo_path'],
+                    $data['color'],
+                    serialize($data['params']),
+                );
+
+                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+                $newID = $GLOBALS['application']->conn->Insert_ID();
                 echo "Importing category with id {$originalID} - ";
                 $ih->logElementInsert($originalID, $newID, 'category');
                 echo "new id {$newID} [DONE]\n";
             }
-
         }
 
-        $this->categoriesOpinion = $this->getOpinionCategories();
-
+        return $this;
     }
 
-    /**
-     * Fetches the original categories
-     *
-     **/
-    public function getOriginalCategories()
+    public function loadCategories()
     {
-        return array_keys(self::$configuration['categories']);
-    }
+        $this->categories = array();
 
-    /**
-     * Fetches the opinion categories
-     *
-     **/
-    public function getOpinionCategories()
-    {
-        $categoriesOpinion= array();
-        foreach ($this->originalCategories as $originalID => $newID) {
-            if ($newID =='4') {
-                $categoriesOpinion[$originalID] = $newID;
-            }
-        }
-        return $categoriesOpinion;
-    }
+        $ccm = ContentCategoryManager::get_instance();
 
-
-    /**
-     * Fetches the target categories
-     *
-     **/
-    public function getTargetCategories()
-    {
-        return array_values(self::$configuration['categories']);
-    }
-
-
-    public function matchCategory($category)
-    {
-
-        return $this->originalCategories[$category];
-
-    }
-
-    public function insertNewCategory($originalID)
-    {
-
-        $categories = self::$configuration['newCategories'];
-        foreach ($categories as $key => $categoryData) {
-            if ($key == $originalID) {
-                $elem= explode(':', $categoryData);
-
-                $data = array(
-                    'title'             => $elem[0],
-                    'name'              => (StringUtils::get_title(ImportHelper::convertoUTF8($elem[0]))),
-                    'inmenu'            => 1,
-                    'internal_category' => 0,
-                    'subcategory'       => $this->matchCategory($elem[1]),
-                );
-
-                $data['params']['title']  = $elem[0];
-                $data['params']['inrss']  = 1;
-
-                $category = new ContentCategory();
-
-                if ($category->create($data)) {
-                    echo "Creating category with id {$originalID} - newid: {$category->pk_content_category} ";
-                    $user = new User();
-                    $user->addCategoryToUser(self::$configuration['idUser']['id'], $category->pk_content_category);
-
-                    return $category->pk_content_category;
-                }
-            }
-        }
+        $this->categories = $ccm->findAll();
     }
 
     public function importArticles()
     {
-
         $_sql_where = ' `wp_term_relationships`.`term_taxonomy_id` IN ('
             .implode(', ', array_keys($this->originalCategories)).") ";
         $_limit = '';
