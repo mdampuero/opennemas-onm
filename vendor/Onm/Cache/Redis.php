@@ -33,10 +33,8 @@ class Redis extends AbstractCache
             throw new \Exception('Predis library not installed');
         }
 
-        if (
-            // is_string($options)
-            true
-        ) {
+        // is_string($options)
+        if (true) {
             // $redis = new \Predis\Client($options);
             $redis = new \Predis\Client();
 
@@ -125,4 +123,3 @@ class Redis extends AbstractCache
         return $this->redis->delete($id);
     }
 }
-

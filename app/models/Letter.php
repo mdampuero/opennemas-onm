@@ -244,7 +244,7 @@ class Letter extends Content
                 ."de palabras malsonantes.";
         }
 
-        $ip = Application::getRealIp();
+        $ip = getRealIp();
         $data["params"] = array('ip'=> $ip);
         if ($letter->create($data)) {
             return "Su carta ha sido guardada y está pendiente de publicación.";

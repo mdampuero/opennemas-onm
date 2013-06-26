@@ -2707,7 +2707,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_login_processform',
     new Route(
-        '/ogin/process',
+        '/login/process',
         array('_controller' => 'Backend:Controllers:AuthenticationController:processform'),
         array('_method' => 'POST')
     )
