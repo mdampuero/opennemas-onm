@@ -162,15 +162,19 @@ EOF
 
         // Insert authors user group privileges (create and update only)
         $sql1 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,26)";
-        $sql1 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,29)";
-        $sql2 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,32)";
+        $sql2 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,29)";
+        $sql3 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,32)";
         $rs1 = $GLOBALS['application']->conn->Execute($sql1);
         $rs2 = $GLOBALS['application']->conn->Execute($sql2);
+        $rs3 = $GLOBALS['application']->conn->Execute($sql3);
         if (!$rs1) {
             $output->writeln("\t<error>[Database Error] Failed insert user_groups_privileges: ".$sql1."</error>");
         }
         if (!$rs2) {
             $output->writeln("\t<error>[Database Error] Failed insert user_groups_privileges: ".$sql2."</error>");
+        }
+        if (!$rs3) {
+            $output->writeln("\t<error>[Database Error] Failed insert user_groups_privileges: ".$sql3."</error>");
         }
 
         $output->writeln("\t<info>Authors group created successfully</info>");
