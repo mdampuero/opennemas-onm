@@ -96,13 +96,12 @@ jQuery(function($){
 					<td class="center">
 						{$user->email}
 					</td>
-
 					<td class="center">
-						{section name=u loop=$user_groups}
-							{if $user_groups[u]->id == $user->fk_user_group}
-								{$user_groups[u]->name}
+						{foreach $user_groups as $group}
+							{if in_array($group->id, $user->fk_user_group)}
+								{$group->name}<br>
 							{/if}
-						{/section}
+						{/foreach}
 					</td>
 
 					<td class="center">

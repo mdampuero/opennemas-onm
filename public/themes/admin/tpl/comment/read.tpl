@@ -58,7 +58,7 @@
                     <div class="author-info-title">{t}Email{/t}</div> {$comment->author_email|clearslash}
                     <br>
 
-                    <div class="author-info-title">{t}Submitted on{/t}}</div>  {date_format date=$comment->date}
+                    <div class="author-info-title">{t}Submitted on{/t}</div>  {date_format date=$comment->date}
                     <br>
 
                     <div class="author-info-title">{t}Sent from IP address{/t}</div> {$comment->author_ip}

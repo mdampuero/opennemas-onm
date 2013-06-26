@@ -17,9 +17,14 @@
         <div class="title">
             <h2>{t}Opinions{/t} :: </h2>
             <div class="section-picker">
-                <div class="title-picker btn"><span class="text">{if $home}{t}Opinion frontpage{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
+                <div class="title-picker btn">
+                    <span class="text">{if $home}{t}Opinion frontpage{/t}{else}{t}Listing{/t}{/if}</span>
+                    <span class="caret"></span>
+                </div>
                 <div class="options">
+                    {acl isAllowed="OPINION_FRONTPAGE"}
                     <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
+                    {/acl}
                     <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
                 </div>
             </div>
@@ -58,7 +63,8 @@
                 {acl isAllowed="OPINION_DELETE"}
                 <li>
                     <a class="delChecked" data-controls-modal="modal-opinion-batchDelete" href="#" title="{t}Delete{/t}">
-                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />
+                    {t}Delete{/t}
                 </a>
                 </li>
                 {/acl}
@@ -70,7 +76,8 @@
             {if $home}
                 <li>
                     <button id="save_positions" title="{t}Save positions{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="Guardar Cambios" alt="Guardar Posiciones"><br />{t}Save positions{/t}
+                        <img border="0" src="{$params.IMAGE_DIR}save.png" title="{t}Save positions{/t}" alt="{t}Save positions{/t}"><br />
+                        {t}Save positions{/t}
                     </button>
                 </li>
             {/if}
@@ -78,22 +85,22 @@
             {acl isAllowed="OPINION_SETTINGS"}
             <li>
                 <button type="submit" id="opinion_clearcache">
-                    <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}"/>
+                    <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="{t}Clean cache{/t}"/>
                     <br />{t}Clean cache{/t}
                 </button>
             </li>
             <li>
-                <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config album module{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" /><br />
+                <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config opinion module{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config opinion module{/t}"/><br />
                     {t}Settings{/t}
                 </a>
             </li>
             {/acl}
-            <li class="separator"></li>
             {acl isAllowed="OPINION_CREATE"}
             <li>
-                <a href="{url name=admin_opinion_create}" class="admin_add" accesskey="N" tabindex="1">
-                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="Nuevo" alt="Nuevo"><br />{t escape="off"}New opinion{/t}
+                <a href="{url name=admin_opinion_create}" class="admin_add" title="{t}New opinion{/t}">
+                    <img border="0" src="{$params.IMAGE_DIR}opinion.png" title="{t}New opinion{/t}" alt="{t}New opinion{/t}"><br />
+                    {t}New opinion{/t}
                 </a>
             </li>
             {/acl}

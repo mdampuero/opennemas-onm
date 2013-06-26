@@ -180,7 +180,7 @@
                 {t}Director{/t}
             {else}
                 {acl isAllowed="AUTHOR_UPDATE"}
-                <a href="author.php?action=read&id={$opinion->fk_author}">
+                <a href="{url name=admin_acl_user_show id=$opinion->author->id}">
                     {$opinion->author->name}
                 </a>
                 {/acl}
