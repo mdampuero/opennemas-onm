@@ -1964,7 +1964,7 @@ class Content
             $content = new Content($refactorID);
             $content = $content->get($refactorID);
 
-            Application::forward301('/'.$content->uri);
+            forward301('/'.$content->uri);
         }
 
         return $oldID;

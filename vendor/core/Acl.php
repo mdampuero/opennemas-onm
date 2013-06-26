@@ -68,7 +68,7 @@ class Acl
 
         if (!\PrivilegesCheck::CheckPrivileges($rule)) {
             m::add(_("Sorry, you don't have enought privileges"));
-            Application::forward301('/admin/');
+            forward301('/admin/');
         }
 
         return true;

@@ -252,21 +252,6 @@ class Application
         return $isMobileDevice;
     }
 
-
-    /**
-    * Perform a permanently redirection (301)
-    *
-    * Use the header PHP function to redirect browser to another page
-    *
-    * @param string $url the url to redirect to
-    */
-    public static function forward301($url)
-    {
-        header('HTTP/1.1 301 Moved Permanently');
-        header('Location: ' . $url);
-        exit(0);
-    }
-
     /**
      * Stablishes a cookie value in a secure way
      *
