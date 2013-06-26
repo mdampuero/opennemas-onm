@@ -156,7 +156,7 @@ function logContentEvent($action=NULL, $content=NULL)
         $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
     }
 
-    $logger->notice( $msg );
+    $logger->notice($msg);
 }
 
 /**
@@ -455,4 +455,10 @@ function getRealIp()
     }
 
     return $clientIp;
+}
+
+function getService($serviceName)
+{
+    global $sc;
+    return $sc->get($serviceName);
 }

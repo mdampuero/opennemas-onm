@@ -42,7 +42,7 @@ class StringUtils
      **/
     public static function normalize($name)
     {
-        $name = mb_strtolower($name, 'UTF-8');
+        $newname = mb_strtolower($name, 'UTF-8');
         $trade = array(
             'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
             'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
@@ -58,10 +58,10 @@ class StringUtils
             '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'',
             ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n'
         );
-        $name = strtr($name, $trade);
-        $name = rtrim($name);
+        $newname = strtr($newname, $trade);
+        $newname = rtrim($newname);
 
-        return $name;
+        return $newname;
     }
 
     /**
@@ -109,9 +109,8 @@ class StringUtils
      **/
     public static function get_title($title, $useStopList = true)
     {
-
-        $title = self::clearSpecialChars($title);
         $title = self::normalize_name($title);
+        $title = self::clearSpecialChars($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
 
         if ($useStopList) {
