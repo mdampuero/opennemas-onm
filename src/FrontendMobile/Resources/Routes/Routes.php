@@ -128,6 +128,8 @@ $mobileRoutes->add(
     )
 );
 
+$mobileRoutes->addPrefix('/mobile');
+
 $routes->add(
     'frontendmobile_root',
     new Route(
@@ -136,4 +138,4 @@ $routes->add(
     )
 );
 
-$routes->addCollection($mobileRoutes, 'mobile');
+$routes->addCollection($mobileRoutes);

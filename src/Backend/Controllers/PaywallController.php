@@ -69,7 +69,7 @@ class PaywallController extends Controller
         if (empty($settings)) {
             $session = $this->get('session');
             $session->start();
-            $this->get('session')->setFlash(
+            $this->get('session')->getFlashBag()->add(
                 'notice',
                 _('Please configure your Paywall module before using it.')
             );
@@ -258,10 +258,10 @@ class PaywallController extends Controller
             }
         }
 
-        $this->get('session')->setFlash('success', _("Paywall settings saved."));
+        $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
 
         s::set('paywall_settings', $settings);
 
-        return $this->redirect($this->generateUrl('admin_paywall'));
+        return $this->redirect($this->generateUrl('admin_paywall_settings'));
     }
 }

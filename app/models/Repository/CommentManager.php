@@ -26,7 +26,7 @@ class CommentManager extends BaseManager
 
         if (!$this->hasCache()
             || ($comment = $this->cache->fetch($cacheId)) === false
-            || !is_object($entity)
+            || !is_object($comment)
         ) {
             $comment = new Comment($id);
 
@@ -39,20 +39,25 @@ class CommentManager extends BaseManager
     }
 
     /**
-     * undocumented function
+     * Searches for comments given a criteria
      *
-     * @return void
+     * @param array $criteria        the criteria used to search the comments
+     * @param array $order           the order applied in the search
+     * @param int   $elementsPerPage the max number of elements to return
+     * @param int   $page            the offset to start with
+     *
+     * @return array the matched elements
      **/
-    public function findBy($filter, $order, $page = null, $elemsPerPage = null)
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($filter);
+        $filterSQL  = $this->getFilterSQL($criteria);
 
         $orderBySQL  = '`id` DESC';
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($page, $elemsPerPage);
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
         $sql = "SELECT * FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
