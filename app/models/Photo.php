@@ -504,6 +504,9 @@ class Photo extends Content
         $this->pk_photo    = $rs->fields['pk_photo'];
         $this->name        = $rs->fields['name'];
         $this->path_file   = $rs->fields['path_file'];
+        if (!empty($rs->fields['path_file'])) {
+            $this->path_img = $rs->fields['path_file'].DS.$rs->fields['name'];
+        }
         $this->size        = $rs->fields['size'];
         $this->resolution  = $rs->fields['resolution'];
         $this->width       = $rs->fields['width'];
@@ -544,6 +547,9 @@ class Photo extends Content
         $photo->description = $this->description ;
         $photo->metadata    = $this->metadata ;
         $photo->path_file   = $this->path_file;
+        if (!empty($this->path_file)) {
+            $photo->path_img    = $this->path_file.DS.$this->name;
+        }
         $photo->size        = $this->size;
         $photo->resolution  = $this->resolution;
         $photo->width       = $this->width;
@@ -838,6 +844,27 @@ class Photo extends Content
         }
 
         return true;
+    }
+
+    /**
+     * Returns the photo path associated to an id.
+     *
+     * @param string $id the photo id.
+     *
+     * @return int the photo path
+     */
+    public static function getPhotoPath($id)
+    {
+        $sql = 'SELECT `path_file`, `name` FROM photos WHERE pk_photo = ?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+        return (string) $rs->fields['path_file'].DS.$rs->fields['name'];
     }
 
     /**

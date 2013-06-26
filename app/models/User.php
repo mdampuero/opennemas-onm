@@ -82,6 +82,13 @@ class User
     public $avatar_img_id = null;
 
     /**
+     * The user avatar image id
+     *
+     * @var string
+     **/
+    public $photo = null;
+
+    /**
      * The type of user
      *
      * @var string
@@ -182,15 +189,21 @@ class User
             throw new \Exception(_('Already exists one user with that information'));
         }
 
+        // Transform groups array to a string separated by comma
+        $data['id_user_group'] = implode(',', $data['id_user_group']);
+
         $sql =
             "INSERT INTO users "
-            ."(`username`, `password`, `sessionexpire`, `email`, `name`, "
-            ."`type`, `token`, `activated`, `fk_user_group`) "
-            ."VALUES (?,?,?,?,?,?,?,?,?)";
+            ."(`username`, `password`, `sessionexpire`, `url`, `bio`, `avatar_img_id`, "
+            ."`email`, `name`, `type`, `token`, `activated`, `fk_user_group`) "
+            ."VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
             $data['username'],
             md5($data['password']),
             $data['sessionexpire'],
+            $data['url'],
+            $data['bio'],
+            $data['avatar_img_id'],
             $data['email'],
             $data['name'],
             $data['type'],
@@ -223,7 +236,7 @@ class User
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM users WHERE pk_user = ?';
+        $sql = 'SELECT * FROM users WHERE id = ?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
@@ -232,18 +245,24 @@ class User
             return;
         }
 
-        $this->id               = $rs->fields['pk_user'];
-        $this->username            = $rs->fields['username'];
+        $this->id               = $rs->fields['id'];
+        $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->url              = $rs->fields['url'];
+        $this->bio              = $rs->fields['bio'];
+        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
         $this->deposit          = $rs->fields['deposit'];
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
         $this->activated        = $rs->fields['activated'];
-        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
         $this->accesscategories = $this->readAccessCategories();
+
+        // Get photo object from avatar_img_id
+        $this->photo = new \Photo($rs->fields['avatar_img_id']);
 
         return $this;
     }
@@ -266,16 +285,25 @@ class User
         // Init transaction
         $GLOBALS['application']->conn->BeginTrans();
 
-        if (isset($data['password']) && (strlen($data['password']) > 0)) {
+        // Transform groups array to a string separated by comma
+        $data['id_user_group'] = implode(',', $data['id_user_group']);
+
+        if (isset($data['password'])
+            && (strlen($data['password']) > 0)
+            && $data['password'] === $data['passwordconfirm']
+        ) {
             $sql = "UPDATE users
-                    SET `username`=?, `password`= ?, `sessionexpire`=?,
-                        `email`=?, `name`=?, `fk_user_group`=?, type=?
-                    WHERE pk_user=?";
+                    SET `username`=?, `password`= ?, `sessionexpire`=?, `url`=?, `bio`=?,
+                        `avatar_img_id`=?, `email`=?, `name`=?, `fk_user_group`=?, type=?
+                    WHERE id=?";
 
             $values = array(
                 $data['username'],
                 md5($data['password']),
                 $data['sessionexpire'],
+                $data['url'],
+                $data['bio'],
+                $data['avatar_img_id'],
                 $data['email'],
                 $data['name'],
                 $data['id_user_group'],
@@ -285,14 +313,17 @@ class User
 
         } else {
             $sql = "UPDATE users
-                    SET `username`=?, `sessionexpire`=?, `email`=?,
-                        `name`=?, `fk_user_group`=?, type=?
-                    WHERE pk_user=?";
+                    SET `username`=?, `sessionexpire`=?, `email`=?, `url`=?, `bio`=?,
+                        `avatar_img_id`=?, `name`=?, `fk_user_group`=?, type=?
+                    WHERE id=?";
 
             $values = array(
                 $data['username'],
                 $data['sessionexpire'],
                 $data['email'],
+                $data['url'],
+                $data['bio'],
+                $data['avatar_img_id'],
                 $data['name'],
                 $data['id_user_group'],
                 $data['type'],
@@ -308,6 +339,7 @@ class User
 
             return false;
         }
+
 
         $this->id = $data['id'];
         if (isset($data['ids_category'])) {
@@ -329,7 +361,7 @@ class User
      **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM users WHERE pk_user=?';
+        $sql = 'DELETE FROM users WHERE id=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
             \Application::logDatabaseError();
@@ -406,7 +438,7 @@ class User
      *
      * @return boolean true if the action was done
      **/
-    public function addCategoryToUser ($idUser, $idCategory)
+    public function addCategoryToUser($idUser, $idCategory)
     {
         global $sc;
         $cache = $sc->get('cache');
@@ -623,8 +655,8 @@ class User
             return null;
         }
 
-        $this->id               = $rs->fields['pk_user'];
-        $this->username            = $rs->fields['username'];
+        $this->id               = $rs->fields['id'];
+        $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
         $this->email            = $rs->fields['email'];
@@ -633,7 +665,7 @@ class User
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
         $this->activated        = $rs->fields['activated'];
-        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->id_user_group    = explode(',', $data['fk_user_group']);
         $this->accesscategories = $this->readAccessCategories();
 
         return $this;
@@ -657,8 +689,8 @@ class User
             return null;
         }
 
-        $this->id               = $rs->fields['pk_user'];
-        $this->username            = $rs->fields['username'];
+        $this->id               = $rs->fields['id'];
+        $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
         $this->email            = $rs->fields['email'];
@@ -667,7 +699,7 @@ class User
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
         $this->activated        = $rs->fields['activated'];
-        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->id_user_group    = explode(',', $data['fk_user_group']);
         $this->accesscategories = $this->readAccessCategories();
 
         return $this;
@@ -682,8 +714,8 @@ class User
     public function setValues($data)
     {
         if (!empty($data)) {
-            $this->id            = $data['pk_user'];
-            $this->username         = $data['username'];
+            $this->id            = $data['id'];
+            $this->username      = $data['username'];
             $this->password      = $data['password'];
             $this->sessionexpire = $data['sessionexpire'];
             $this->email         = $data['email'];
@@ -692,7 +724,7 @@ class User
             $this->type          = $data['type'];
             $this->token         = $data['token'];
             $this->activated     = $data['activated'];
-            $this->fk_user_group = $data['fk_user_group'];
+            $this->fk_user_group = explode(',', $data['fk_user_group']);
 
             if (isset($data['ids_category'])) {
                 $this->accesscategories = $this->setAccessCategories($data['ids_category']);
@@ -707,14 +739,14 @@ class User
      */
     public function resetValues()
     {
-        $this->id           = null;
-        $this->username        = null;
-        $this->password     = null;
-        $this->sessionexpire= null;
-        $this->email        = null;
-        $this->name         = null;
-        $this->activated    = null;
-        $this->fk_user_group= null;
+        $this->id               = null;
+        $this->username         = null;
+        $this->password         = null;
+        $this->sessionexpire    = null;
+        $this->email            = null;
+        $this->name             = null;
+        $this->activated        = null;
+        $this->fk_user_group    = null;
         $this->accesscategories = null;
     }
 
@@ -827,7 +859,7 @@ class User
      **/
     public function getUserName($id)
     {
-        $sql = 'SELECT name, username FROM users WHERE pk_user=?';
+        $sql = 'SELECT name, username FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             \Application::logDatabaseError();
@@ -838,6 +870,56 @@ class User
         return $rs->fields['username'];
     }
 
+    /**
+     * Returns the photo id associated to an user.
+     *
+     * @param string $id the user id.
+     *
+     * @return int the photo id
+     */
+    public function getUserPhotoId($id)
+    {
+        $sql = 'SELECT `avatar_img_id` FROM users WHERE id = ?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+        return $rs->fields['avatar_img_id'];
+    }
+
+    /**
+     * Returns all the authors ORDER BY name.
+     *
+     * @return array multidimensional array with information about authors
+     */
+    public static function getAllUsersAuthors()
+    {
+        $sql = 'SELECT `id` FROM users WHERE fk_user_group  LIKE "%3%" ORDER BY `name`';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+        $i = 0;
+        while (!$rs->EOF) {
+            $authors[$i]         = new \User($rs->fields['id']);
+            $authors[$i]->params = $authors[$i]->getMeta();
+
+            $rs->MoveNext();
+            $i++;
+        }
+
+        return $authors;
+
+    }
     /**
      * Sets user configurations given a named array
      *
@@ -927,7 +1009,7 @@ class User
      */
     public function deactivateUser($id)
     {
-        $sql = "UPDATE users SET `activated`=0 WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `activated`=0 WHERE id=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
@@ -947,7 +1029,7 @@ class User
      */
     public function activateUser($id)
     {
-        $sql = "UPDATE users SET `activated`=1 WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `activated`=1 WHERE id=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
@@ -1010,7 +1092,7 @@ class User
      **/
     public function updateUserToken($id, $token)
     {
-        $sql = "UPDATE users SET `token`= '".$token."' WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `token`= '".$token."' WHERE id=".intval($id);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
@@ -1031,7 +1113,7 @@ class User
      **/
     public function updateUserPassword($id, $pass)
     {
-        $sql = "UPDATE users SET `password`= '".$pass."' WHERE pk_user=?";
+        $sql = "UPDATE users SET `password`= '".$pass."' WHERE id=?";
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if ($rs === false) {
@@ -1194,13 +1276,13 @@ class User
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = '(MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE) OR '.
-                           '`username` LIKE "%' . $filter['name'] . '%")';
+                $parts[] = '`name` LIKE "%' . $filter['name'] . '%" OR '.
+                           '`username` LIKE "%' . $filter['name'] . '%"';
                 $parts[] = '`email` LIKE "%' . $filter['name'] . '%"';
             }
 
             if (isset($filter['group']) && intval($filter['group'])>0) {
-                $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
+                $parts[] = '`fk_user_group` LIKE "%' . $filter['group'] . '%"';
             }
 
             if (count($parts) > 0) {
