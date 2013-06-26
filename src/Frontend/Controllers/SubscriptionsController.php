@@ -181,9 +181,9 @@ class SubscriptionsController extends Controller
 
                                 if (!$mail->Send()) {
                                     $message = _(
-                                    "Sorry, we were unable to complete your request.\n"
-                                    ."Check the form and try again"
-                                );
+                                        "Sorry, we were unable to complete your request.\n"
+                                        ."Check the form and try again"
+                                    );
                                     $class = 'error';
                                 }
                                 break;

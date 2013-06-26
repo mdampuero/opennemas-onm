@@ -2719,13 +2719,6 @@ $adminRoutes->add(
         array('_controller' => 'Backend:Controllers:AuthenticationController:logout')
     )
 );
-$routes->add(
-    'admin_welcome',
-    new Route(
-        '/admin',
-        array('_controller' => 'Backend:Controllers:WelcomeController:default')
-    )
-);
 
 $adminRoutes->add(
     'admin_acl_user_recover_pass',
@@ -2751,4 +2744,14 @@ $adminRoutes->add(
     )
 );
 
-$routes->addCollection($adminRoutes, '/admin');
+$adminRoutes->addPrefix('/admin');
+
+$routes->add(
+    'admin_welcome',
+    new Route(
+        '/admin',
+        array('_controller' => 'Backend:Controllers:WelcomeController:default')
+    )
+);
+
+$routes->addCollection($adminRoutes);

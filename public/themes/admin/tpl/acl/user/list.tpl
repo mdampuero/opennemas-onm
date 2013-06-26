@@ -90,25 +90,24 @@ jQuery(function($){
 						</a>
 					</td>
 					<td class="center">
-						{$user->login}
+						{$user->username}
 					</td>
 
 					<td class="center">
 						{$user->email}
 					</td>
-
 					<td class="center">
-						{section name=u loop=$user_groups}
-							{if $user_groups[u]->id == $user->fk_user_group}
-								{$user_groups[u]->name}
+						{foreach $user_groups as $group}
+							{if in_array($group->id, $user->fk_user_group)}
+								{$group->name}<br>
 							{/if}
-						{/section}
+						{/foreach}
 					</td>
 
 					<td class="center">
 						<div class="btn-group">
 							<a class="btn" href="{url name=admin_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">
-								{if $user->authorize eq 1}
+								{if $user->activated eq 1}
 									<i class="icon16 icon-ok"></i>
 								{else}
 									<i class="icon16 icon-remove"></i>

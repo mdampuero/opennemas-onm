@@ -243,6 +243,8 @@ $managerRoutes->add(
     )
 );
 
+$managerRoutes->addPrefix('/manager');
+
 $routes->add(
     'manager_welcome',
     new Route(
@@ -251,4 +253,4 @@ $routes->add(
     )
 );
 
-$routes->addCollection($managerRoutes, 'manager');
+$routes->addCollection($managerRoutes);

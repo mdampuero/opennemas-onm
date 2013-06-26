@@ -10,11 +10,11 @@
 namespace Repository;
 
 /**
- * Default BaseManager
+ * Default BaseManager contains common functions to the rest of Entity Managers
  *
  * @package Repository
  **/
-class BaseManager
+abstract class BaseManager
 {
     /**
      * Builds the SQL WHERE filter given an array or string with the desired filter
@@ -30,10 +30,12 @@ class BaseManager
         } elseif (is_array($filter)) {
             $filterSQL = array();
             foreach ($filter as $field => $value) {
-                if (strpos('SEARCH ', $value)) {
-
+                // TODO : detect LIKE sqls
+                if ($value[0] == '%' && $value[strlen($value) -1] == '%') {
+                    $filterSQL []= "`$field` LIKE '$value'";
+                } else {
+                    $filterSQL []= "`$field`='$value'";
                 }
-                $filterSQL []= "`$field`='$value'";
             }
             $filterSQL = implode(' AND ', $filterSQL);
         } else {
@@ -79,13 +81,31 @@ class BaseManager
     public function getLimitSQL($elements = 20, $offset = 1)
     {
         $limitSQL = '';
-        if ($offset <= 1) {
+        if ($offset == 1) {
             $limitSQL = ' LIMIT '. $elements;
         } elseif ($offset > 1) {
             $limitSQL = ' LIMIT '.($offset-1)*$elements.', '.$elements;
         }
 
         return $limitSQL;
+    }
+
+    /**
+     * Searches one entity given a criteria and an order
+     *
+     * @param array|string $criteria the criteria to search for an entity
+     * @param array $order the order to
+     *
+     * @return Object the object searched
+     **/
+    public function findOneBy($criteria, $order)
+    {
+        $elements = $this->findBy($criteria, $order, 1);
+        $element  = null;
+        if (!empty($elements)) {
+            $element = $elements[0];
+        }
+        return $element;
     }
 
     /**

@@ -51,7 +51,7 @@ class AclUserController extends Controller
         }
 
         $user      = new \User();
-        $users     = $user->getUsers($filter, ' ORDER BY login ');
+        $users     = $user->getUsers($filter, ' ORDER BY username ');
 
         $userGroup = new \UserGroup();
         $groups     = $userGroup->find();
@@ -137,7 +137,7 @@ class AclUserController extends Controller
 
         $data = array(
             'id'              => $userId,
-            'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
             'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
             'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
@@ -192,14 +192,14 @@ class AclUserController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $data = array(
-                'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
                 'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
                 'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
                 'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
                 'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'sessionexpire'   => $request->request->getDigits('sessionexpire'),
                 'id_user_group'   => $request->request->getDigits('id_user_group'),
-                'authorize'       => 1,
+                'activated'       => 1,
                 'type'            => 0,
                 'deposit'         => 0,
                 'token'           => null,
@@ -350,10 +350,10 @@ class AclUserController extends Controller
         if (!is_null($userId)) {
             $user = new \User($userId);
 
-            if ($user->authorize == 1) {
-                $user->unauthorizeUser($userId);
+            if ($user->activated == 1) {
+                $user->deactivateUser($userId);
             } else {
-                $user->authorizeUser($userId);
+                $user->activateUser($userId);
             }
 
             if (!$request->isXmlHttpRequest()) {

@@ -37,7 +37,7 @@ class UserManager extends BaseManager
 
         if (!$this->hasCache()
             || ($user = $this->cache->fetch($cacheId)) === false
-            || !is_object($entity)
+            || !is_object($user)
         ) {
             $user = new \User($id);
 
@@ -47,5 +47,49 @@ class UserManager extends BaseManager
         }
 
         return $user;
+    }
+
+    /**
+     * Searches for users given a criteria
+     *
+     * @param array $criteria        the criteria used to search the users
+     * @param array $order           the order applied in the search
+     * @param int   $elementsPerPage the max number of elements to return
+     * @param int   $page            the offset to start with
+     *
+     * @return array the matched elements
+     **/
+    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null)
+    {
+        // Building the SQL filter
+        $filterSQL  = $this->getFilterSQL($criteria);
+
+        $orderBySQL  = '`pk_user` DESC';
+        if (!empty($order)) {
+            $orderBySQL = $this->getOrderBySQL($order);
+        }
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+
+        // Executing the SQL
+        $sql = "SELECT * FROM `users` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        $users = array();
+        while (!$rs->EOF) {
+            $user = new \User();
+            $user->load($rs->fields);
+
+            $users []= $user;
+            $rs->MoveNext();
+        }
+
+        return $users;
     }
 }

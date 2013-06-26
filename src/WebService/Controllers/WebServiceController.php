@@ -50,18 +50,18 @@ class WebServiceController extends Controller
         $r = new \Restler();
         $r->container = $this->container;
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
-        $r->addAPIClass('Instances');
         $r->addAPIClass('Ads');
-        $r->addAPIClass('Contents');
-        $r->addAPIClass('Articles');
         $r->addAPIClass('Agency');
-        $r->addAPIClass('Opinions');
-        $r->addAPIClass('Comments');
-        $r->addAPIClass('Images');
-        $r->addAPIClass('Videos');
-        $r->addAPIClass('Categories');
+        $r->addAPIClass('Articles');
         $r->addAPIClass('Authors');
+        $r->addAPIClass('Categories');
+        $r->addAPIClass('Comments');
+        $r->addAPIClass('Contents');
         $r->addAPIClass('Frontpages');
+        $r->addAPIClass('Images');
+        $r->addAPIClass('Instances');
+        $r->addAPIClass('Opinions');
+        $r->addAPIClass('Videos');
 
         $r->addAuthenticationClass('OnmAuth');
 

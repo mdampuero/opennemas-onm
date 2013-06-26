@@ -1761,26 +1761,26 @@ class ContentManager
         //necesita el as id para paginacion
 
         $sql =
-            'SELECT contents.pk_content, contents.position,
-                opinions.pk_opinion as id, authors.name, authors.pk_author,
-                authors.condition, contents.title, author_imgs.path_img,
+            'SELECT contents.pk_content, contents.position, users.avatar_img_id,
+                opinions.pk_opinion as id, users.name, users.bio, contents.title,
                 contents.slug, opinions.type_opinion, opinions.body,
-                contents.changed, contents.created, contents.starttime,
-                contents.endtime
+                contents.changed, contents.created,
+                contents.starttime, contents.endtime
             FROM contents, opinions
-            LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
-            LEFT JOIN author_imgs ON (opinions.fk_author_img=author_imgs.pk_img)
+            LEFT JOIN users ON (users.id=opinions.fk_author)
             WHERE `contents`.`fk_content_type`=4
             AND contents.pk_content=opinions.pk_opinion
-            AND '.$where.' '
-            .$orderBy;
+            AND '.$where.' '.$orderBy;
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs    = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $items = null;
         if (!empty($rs)) {
             $items = $rs->GetArray();
+            foreach ($items as &$item) {
+                $item['path_img'] = \Photo::getPhotoPath($item['avatar_img_id']);
+            }
         }
 
         return $items ;

@@ -42,13 +42,11 @@
 				<input type="checkbox" class="minput"  id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$opinion->id}">
 			</td>
 			<td>
-                <a href="{url name=admin_opinion_author_show id=$opinion->author->pk_author}">
-                    {$opinion->author->name}
-                </a>
+                <strong>
+                {$opinion->author->name}
                 -
-				<a href="{url name=admin_opinion_show id=$opinion->id}" title="Modificar">
-					{$opinion->title|clearslash}
-                </a>
+                {$opinion->title|clearslash}
+                </strong>
 			</td>
 			<td class="center">
 				{$opinion->views}
@@ -79,7 +77,7 @@
                 {/acl}
 			</td>
             <td class="center">
-                {acl isAllowed="OPINION_ADMIN"}
+                {acl isAllowed="OPINION_HOME"}
                 {if $opinion->favorite == 1 && $opinion->type_opinion == 0}
                 <a href="{url name=admin_opinion_togglefavorite id=$opinion->id status=0  type=$type page=$page}" class="favourite_on" title="{t}Favorite{/t}">
                     &nbsp;
