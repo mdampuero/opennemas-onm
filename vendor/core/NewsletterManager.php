@@ -222,10 +222,8 @@ class NewsletterManager
                             $item->summary = substr($content->body, 0, 250).'...';
                         }
                         //Fetch opinion author photos
-                        if (!empty($content->fk_author_img)) {
-                            $item->author = new Author($content->fk_author);
-                            $item->authorPhoto = $item->author->get_photo($content->fk_author_img);
-                            $item->authorPhotoWidget = $item->author->get_photo($content->fk_author_img_widget);
+                        if ($content->content_type == '4') {
+                            $item->author = new \User($content->fk_author);
                         }
 
                     }

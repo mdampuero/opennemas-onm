@@ -22,8 +22,6 @@ class Acl
     /**
      * Shortcut to check privilege
      *
-     * @see Privileges_check::CheckPrivileges()
-     *
      * @param string $rule
      * @param string $module
      *
@@ -35,26 +33,56 @@ class Acl
             $rule = strtoupper($module) . '_' . strtoupper($rule);
         }
 
-        return PrivilegesCheck::CheckPrivileges($rule);
+        return self::checkPrivileges($rule);
     }
 
     /**
-     * Shortcut to check access to category
+     * Checks if the current user has access to category given its id.
      *
-     * @see Privileges_check::CheckAccessCategories()
      * @param  string  $category
      *
      * @return boolean
     */
     public static function checkCategoryAccess($category)
     {
-        return PrivilegesCheck::CheckAccessCategories($category);
+        try {
+            if (!isset($categoryID)
+                || is_null($categoryID)
+            ) {
+                $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
+
+                return true;
+            }
+
+            if (isset($_SESSION['isMaster'])
+                && $_SESSION['isMaster']
+            ) {
+                return true;
+            }
+
+            if (isset($_SESSION['isAdmin'])
+                && $_SESSION['isAdmin']
+            ) {
+                return true;
+            }
+
+            if (!isset($_SESSION['accesscategories'])
+                || empty($_SESSION['accesscategories'])
+                || !in_array($categoryID, $_SESSION['accesscategories'])
+            ) {
+                return false;
+            }
+
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Shortcut to check privilege and forward
+     * Checks if the current user has an acl
      *
-     * @see Privileges_check::CheckPrivileges()
      * @param  string  $rule
      * @param  string  $module
      *
@@ -66,7 +94,7 @@ class Acl
             $rule = strtoupper($module) . '_' . strtoupper($rule);
         }
 
-        if (!\PrivilegesCheck::CheckPrivileges($rule)) {
+        if (!self::checkPrivileges($rule)) {
             m::add(_("Sorry, you don't have enought privileges"));
             forward301('/admin/');
         }
@@ -126,6 +154,45 @@ class Acl
         }
 
         m::add(_("Sorry, you don't have enought privileges"));
-        Application::forward('/admin/');
+        forward('/admin/');
+    }
+
+    /**
+     * Checks if the current user has access to one privilege and category.
+     *
+     * @param string $privilege  the privelege token.
+     * @param string $categoryID the category id
+     *
+     * @return boolean true if the user has access
+     **/
+    public static function checkPrivileges($privilege, $categoryID = null)
+    {
+        try {
+            if (isset($_SESSION['isMaster'])
+            && $_SESSION['isMaster']
+            ) {
+                return true;
+            }
+
+            if (isset($_SESSION['isAdmin'])
+                && $_SESSION['isAdmin']
+                && ($privilege !='ONLY_MASTERS')
+            ) {
+                return true;
+            }
+
+            if (!isset($_SESSION['privileges'])
+                || empty($_SESSION['userid'])
+                || !in_array($privilege, $_SESSION['privileges'])
+                || (!is_null($categoryID) && !(self::checkAccessCategories($categoryID)))
+            ) {
+                return false;
+            }
+
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }
