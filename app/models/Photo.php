@@ -255,9 +255,13 @@ class Photo extends Content
                     );
 
                     // Thumbnail handler
-                    $thumb = new Imagick(
-                        realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
-                    );
+                    try {
+                        $thumb = new Imagick(
+                            realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
+                        );
+                    } catch (\ImagickException $e) {
+                        return false;
+                    }
 
                     // Main thumbnail
                     $thumb->thumbnailImage(
