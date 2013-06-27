@@ -151,25 +151,34 @@ class RegionImporter
     {
         $this->categories = array();
 
-        $ccm = ContentCategoryManager::get_instance();
+        $sql = "SELECT * FROM translation_ids WHERE type='category'";
 
-        $this->categories = $ccm->findAll();
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        $categories = $rs->GetArray();
+
+        foreach ($categories as $category) {
+            $this->categories [$category['pk_content_old']] = $category['pk_content'];
+        }
+
+        return $this;
+    }
+
+    public function matchCategory($categoryId)
+    {
+        return $this->categories[$categoryId];
     }
 
     public function importArticles()
     {
-        $_sql_where = ' `wp_term_relationships`.`term_taxonomy_id` IN ('
-            .implode(', ', array_keys($this->originalCategories)).") ";
-        $_limit = '';
+        $sql = "SELECT  idNoticias as id, Titulo as title, Antetitulo as subtitle,
+                        Subtitulo as summary, Entradilla as body1, Contenido as body2,
+                        Publicada as published,
+                        Categoria as category_id, HoraPublicacion as created,
+                        Fuente as agency, Visitas as views,
+                        Keywords as metadata  FROM Noticias";
 
-        $sql = "SELECT * FROM `wp_posts`, `wp_term_relationships` WHERE ".
-            "`post_type` = 'post' AND `ID`=`object_id` AND post_status='publish' ".
-            " AND ".$_sql_where." ".$_limit;
-
-        // Fetch the list of Articles available in EditMaker
-        $request = self::$originConn->Prepare($sql);
-        $rs = self::$originConn->Execute($request);
-
+        $rs = self::$originConn->Execute($sql);
 
         if (!$rs) {
             ImportHelper::messageStatus(self::$originConn->ErrorMsg());
@@ -180,51 +189,50 @@ class RegionImporter
 
             while (!$rs->EOF) {
 
-                if ($ih->elementIsImported($rs->fields['ID'], 'article')) {
-                    echo "[{$current}/{$totalRows}] Article with id {$rs->fields['ID']} already imported\n";
+                if ($ih->elementIsImported($rs->fields['id'], 'article')) {
+                    echo "[{$current}/{$totalRows}] Article with id {$rs->fields['id']} already imported\n";
                 } else {
-                    echo "[{$current}/{$totalRows}] Importing article with id {$rs->fields['ID']} - ";
+                    echo "[{$current}/{$totalRows}] Importing article with id {$rs->fields['id']} - ";
 
-                    $originalArticleID = $rs->fields['ID'];
-                    $data = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
+                    $originalArticleID = $rs->fields['id'];
+                    $body =  $rs->fields['body1']. ' '.$rs->fields['body2'];
+                    $date = new DateTime();
+                    $date->setTimestamp($rs->fields['created']);
+                    $dateString = $date->format('Y-m-d H:i:s');
+
                     $values = array(
-                        'title'          => ImportHelper::convertoUTF8($rs->fields['post_title']),
-                        'category'       => $this->matchCategory($rs->fields['term_taxonomy_id']),
+                        'title'          => $rs->fields['title'],
+                        'category'       => $this->matchCategory($rs->fields['category_id']),
                         'with_comment'   => 1,
                         'available'      => 1,
                         'content_status' => 0,
                         'frontpage'      => 0,
                         'in_home'        => 0,
-                        'title_int'      => ImportHelper::convertoUTF8($rs->fields['post_title']),
-                        'metadata'       => StringUtils::get_tags(
-                            ImportHelper::convertoUTF8($rs->fields['post_title'])
-                        ),
-                        'subtitle'       => '',
-                        'agency'         => self::$configuration['agency']['name'],
-                        'summary'        => substr($data['body'], 0, 250 . '...'),
-                        'description'    => strip_tags(substr($data['body'], 0, 150)),
-                        'body'           => $data['body'],
+                        'title_int'      => $rs->fields['title'],
+                        'metadata'       => $rs->fields['metadata'],
+                        'subtitle'       => $rs->fields['subtitle'],
+                        'agency'         => $rs->fields['agency'],
+                        'summary'        => $rs->fields['summary'],
+                        'description'    => '',
+                        'body'           => $body,
                         'posic'          => 0,
                         'id'             => 0,
-                        'img1'           =>$data['img'],
-                        'img2'           =>$data['img'],
-                        'created'        => $rs->fields['post_date'],
-                        'starttime'      => $rs->fields['post_date'],
-                        'changed'        => $rs->fields['post_modified'],
-                        'fk_user'        => self::$configuration['idUser']['id'],
-                        'fk_publisher'   => self::$configuration['idUser']['id'],
+                        'img1'           => 0,
+                        'img2'           => 0,
+                        'created'        => $dateString,
+                        'starttime'      => $dateString,
+                        'changed'        => $dateString,
+                        'fk_user'        => 0,
+                        'fk_publisher'   => 0,
                     );
 
                     $article = new Article();
                     $newArticleID = $article->create($values);
                     if (is_string($newArticleID)) {
-
                         $ih->logElementInsert($originalArticleID, $newArticleID, 'article');
-
                     }
                     echo "new id {$newArticleID} [DONE]\n";
-                    //ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
-                    //sleep(0.12);
+
                 }
 
                 $current++;
@@ -233,9 +241,7 @@ class RegionImporter
             }
 
             $rs->Close(); # optional
-
         }
-
     }
 
     public function importOpinions()
@@ -311,95 +317,110 @@ class RegionImporter
 
     }
 
-    public function importImages()
+    public function importPhotos()
     {
-        echo "IMPORTING IMAGES\n";
-        if (!isset(self::$configuration['mediaCategory'])) {
-            $data = array(
-                'title'=> 'WP Old',
-                'name' => 'wp-old',
-                'inmenu'=> 1,
-                'internal_category' => 7,
-                'fk_content_category' => '0',
-                );
+        echo "\nIMPORTING IMAGES\n";
 
-            $data['params']['title']  = 'Imagenes WordPress';
+        // Create category where import images into if not exists
+        $categoryName = self::$configuration['media']['category_name'];
+        $rs = $GLOBALS['application']->conn->GetOne(
+            'SELECT * FROM content_categories WHERE title = ?',
+            $categoryName
+        );
+
+        if ($rs == null) {
+            $data = array(
+                'title'               => $categoryName,
+                'name'                => \Onm\StringUtils::get_title($categoryName),
+                'inmenu'              => 1,
+                'internal_category'   => 7,
+                'fk_content_category' => '0',
+            );
+
+            $data['params']['title']  = 'Importadas';
             $data['params']['inrss']  = 0;
 
             $category = new ContentCategory();
             $category->create($data);
-            $IDCategory = $category->pk_content_category;
+            $categoryId = $category->pk_content_category;
         } else {
-             $IDCategory =self::$configuration['mediaCategory'];
+            $categoryId = $rs;
         }
 
-        if (!$IDCategory) {
-            echo "Needs category id for images. can't import images\n";
-            die();
-        }
-        echo "Created new category WP Old with {$IDCategory} id, for import images\n";
+        // Get images from previous database
+        // - Create the image from the local file
+        // - Register the image
+        // if (!$categoryID) {
+        //     echo "Needs category id for images. Unable to import images without a category to add to\n";
+        //     die();
+        // }
 
+        // echo "Created new category WP Old with {$IDCategory} id, to import images\n";
 
-        $sql = "SELECT * FROM `wp_posts` WHERE ".
-            "`post_type` = 'attachment'  AND post_status !='trash' ";
+        $sql = "SELECT idElemento as id, Archivo as file_name,
+                Alt as title, Pie as description, Nombre as title2,
+                Fecha as created FROM Elementos WHERE Tipo = 'foto'";
 
         // Fetch the list of post type attachment = images
-        $request = self::$originConn->Prepare($sql);
-        $rs = self::$originConn->Execute($request);
-
+        $rs = self::$originConn->Execute($sql);
 
         if (!$rs) {
             ImportHelper::messageStatus(self::$originConn->ErrorMsg());
         } else {
             $totalRows = $rs->_numOfRows;
-            $current = 1;
+            $current   = 1;
             $ih = new ImportHelper();
 
             while (!$rs->EOF) {
+                $basePath = self::$configuration['media']['images_directory'];
 
-                if ($ih->elementIsImported($rs->fields['ID'], 'image')) {
-                    echo "[{$current}/{$totalRows}] image with id {$rs->fields['ID']} already imported\n";
+                if ($ih->elementIsImported($rs->fields['id'], 'image')) {
+                    echo "[{$current}/{$totalRows}] image with id {$rs->fields['id']} already imported\n";
                 } else {
-                    echo "[{$current}/{$totalRows}] Importing image with id {$rs->fields['ID']} - ";
+                    echo "[{$current}/{$totalRows}] Importing image with id {$rs->fields['id']} - ";
 
-                    $originalImageID = $rs->fields['ID'];
+                    $filePath = $basePath.$rs->fields['file_name'];
+                    if (!file_exists($filePath)) {
+                        echo "File not available in local [FAILED]\n";
 
-                    $local_file =
-                        str_replace('http://www.correodiplomatico.com/wp-content/uploads', '', $rs->fields['guid']);
+                        $current++;
+                        $rs->MoveNext();
+                        continue;
+                    }
+
+                    $time = (empty($rs->fields['created'])) ? time() : $rs->fields['created'];
+                    $originalImageID = $rs->fields['id'];
+                    $date = new DateTime();
+                    $date->setTimestamp($time);
+                    $dateString = $date->format('Y-m-d H:i:s');
 
                     $values = array(
-                        'title' => ImportHelper::convertoUTF8(strip_tags($rs->fields['post_title'])),
-                        'category' => $IDCategory,
-                        'fk_category' => $IDCategory,
-                        'category_name'=> '',
+                        'title'          => strip_tags($rs->fields['title']),
+                        'category'       => $categoryId,
+                        'fk_category'    => $categoryId,
+                        'category_name'  => self::$configuration['media']['category_name'],
                         'content_status' => 1,
-                        'frontpage' => 0,
-                        'in_home' => 0,
-                        'metadata' => StringUtils::get_tags(
-                            ImportHelper::convertoUTF8($rs->fields['post_title'].$rs->fields['post_excerpt'])
-                        ),
-                        'description' => ImportHelper::convertoUTF8(
-                            strip_tags(substr($rs->fields['post_excerpt'], 0, 150))
-                        ),
-                        'id' => 0,
-                        'created' => $rs->fields['post_date'],
-                        'starttime' => $rs->fields['post_date'],
-                        'changed' => $rs->fields['post_modified'],
-                        'fk_user' => self::$configuration['idUser']['id'],
-                        'fk_author' => self::$configuration['idUser']['id'],
-                        'local_file' => self::$originMedia.$local_file,
+                        'frontpage'      => 0,
+                        'in_home'        => 0,
+                        'metadata'       => StringUtils::get_tags($rs->fields['title']),
+                        'description'    => $rs->fields['description'],
+                        'id'             => 0,
+                        'created'        => $dateString,
+                        'starttime'      => $dateString,
+                        'changed'        => $dateString,
+                        'fk_user'        => 0,
+                        'fk_author'      => 0,
+                        'local_file'     => $filePath,
                     );
 
+
                     $image = new Photo();
-                    $newimageID= $image->createFromLocalFile($values);
+                    $newimageID = $image->createFromLocalFile($values);
+
                     if (is_string($newimageID)) {
-
                         $ih->logElementInsert($originalImageID, $newimageID, 'image');
-
                     }
                     echo "new id {$newimageID} [DONE]\n";
-                    //ImportHelper::messageStatus("Importing Articles: $current/$totalRows");
-                    //sleep(0.12);
                 }
                 $current++;
 
@@ -408,92 +429,9 @@ class RegionImporter
 
             $rs->Close(); # optional
         }
+        return $this;
     }
 
-
-    public function importComments()
-    {
-        echo "IMPORTING COMMENTS\n";
-
-        $sql = "SELECT * FROM `wp_comments`, `wp_posts` WHERE ".
-        " `comment_approved`=1 AND `ID`=`comment_post_ID` ";
-
-        // Fetch the list of Opinions available for one author in EditMaker
-        $request = self::$originConn->Prepare($sql);
-        $rs = self::$originConn->Execute($request);
-
-
-        if (!$rs) {
-            ImportHelper::messageStatus(self::$originConn->ErrorMsg());
-        } else {
-
-            $totalRows = $rs->_numOfRows;
-            $current = 1;
-            $ih = new ImportHelper();
-
-            while (!$rs->EOF) {
-
-                $originalCommentID = $rs->fields['comment_ID'];
-
-                if ($ih->elementIsImported($originalCommentID, 'comment')) {
-                    echo "[{$current}/{$totalRows}] Comments with id {$originalCommentID} already imported\n";
-                } else {
-
-                    $articleID =$ih->elementIsImported($rs->fields['comment_post_ID'], 'article');
-                    $ccm = ContentCategoryManager::get_instance();
-
-                    if (!empty($articleID)) {
-                        $article= new Article($articleID);
-                        if (!empty($article->pk_content)) {
-
-                            echo "[{$current}/{$totalRows}] Importing comment with id {$originalCommentID} - ";
-
-                            $comment = ImportHelper::convertoUTF8(strip_tags($rs->fields['comment_content']));
-                            $title   =  ImportHelper::convertoUTF8(substr($comment, 0, 100));
-                            $data = array(
-                                'title' => $title,
-                                'category' => $article->category,
-                                'category_name' =>$article->loadCategoryName($articleID),
-                                'body' =>  strip_tags($rs->fields['comment_content']),
-                                'metadata' => StringUtils::get_tags($title),
-                                'description' => substr($comment, 0, 150),
-                                'content_status' => 1,
-                                'created' => $rs->fields['comment_date'],
-                                'starttime' => $rs->fields['comment_date'],
-                                'changed' => $rs->fields['comment_date'],
-                                'published' => $rs->fields['comment_date'],
-                                'fk_publisher' => self::$configuration['idUser']['id'],
-                                'fk_user' => self::$configuration['idUser']['id'],
-                                'author' => ImportHelper::convertoUTF8(strip_tags($rs->fields['comment_author'])),
-                                'ip'=>$rs->fields['comment_author_IP'],
-                                'email'=>ImportHelper::convertoUTF8($rs->fields['comment_author_email']),
-                                'ciudad'=>'',
-                            );
-
-                            $values = array(
-                                'id' =>   $articleID,
-                                'data' => $data,
-                                'ip' =>   $rs->fields['comment_author_IP'],
-                            );
-
-                            $comment = new Comment();
-                            $newCommentID = $comment->create($values);
-
-                            if (is_string($newCommentID)) {
-                                $ih->logElementInsert($originalCommentID, $newCommentID, 'comment');
-                                // $ih->updateCreateDate($newOpinionID, $rs->fields['fecha']);
-                            }
-                            echo "new id {$newCommentID} [DONE]\n";
-                        }
-                    }
-                }
-
-                $current++;
-                $rs->MoveNext();
-            }
-            $rs->Close(); # optional
-        }
-    }
 
     public function getOnmIdImage($guid)
     {

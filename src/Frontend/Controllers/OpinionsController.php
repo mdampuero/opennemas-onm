@@ -69,7 +69,6 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/opinion_index.tpl', $cacheID)
         ) {
-
             // Fetch last opinions from editorial
             $configurations = s::get('opinion_settings');
 
