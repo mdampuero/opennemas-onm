@@ -261,9 +261,15 @@ EOF
                 ."VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
             // Get authors img id for $author['avatar_img_id'] and opinion fk_author_img
-            $sqlPhoto = 'SELECT max(fk_photo) as img_id FROM author_imgs WHERE fk_author='.$author->id;
-            $rsPhoto  = $GLOBALS['application']->conn->Execute($sqlPhoto);
+            $sqlPhoto = 'SELECT max(fk_photo) as img_id FROM author_imgs WHERE fk_author=?';
+            $rsPhoto  = $GLOBALS['application']->conn->Execute($sqlPhoto, array($author->id));
 
+            if (!$rsPhoto) {
+                $output->writeln(
+                    "\t<error>[Database Error] Fetching author image info: author id ".$author->id."</error>\n".
+                    "\t\t<error>[Sql]".$sql."</error>\n"
+                );
+            }
             $avatar_img_id = $rsPhoto->fields['img_id'];
             if (!$avatar_img_id) {
                 $avatar_img_id = 0;
@@ -272,10 +278,10 @@ EOF
             $values = array(
                 $author->id,
                 'autor'.$author->id,
-                md5('autor'.$author->id.'##'),
+                md5(generateRandomString(15)),
                 15,
-                $author->url,
-                $author->bio,
+                (!empty($author->url)) ? $author->url : '',
+                (!empty($author->bio)) ? $author->bio : '',
                 $avatar_img_id,
                 'autor'.$author->id.'@opennemas.com',
                 $author->name,
@@ -287,14 +293,15 @@ EOF
 
             if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                 $output->writeln(
-                    "\t<error>[Database Error] Inserting author: ".$author->id." -> ".$author->name."</error>\n".
+                    "\t<error>[Database Error] Inserting author: ".$author->id." -> ".$author->name." ".var_export($values)."</error>\n".
                     "\t\t<error>[Sql]".$sql."</error>\n"
                 );
+                $output->writeln($GLOBALS['application']->conn->ErrorMsg());
             }
 
             // Update fk_author_img with avatar_img_id on opinions table
-            $sqlOp = "UPDATE `opinions` SET `fk_author_img` ={$avatar_img_id} WHERE `fk_author` =".$author->id;
-            if ($GLOBALS['application']->conn->Execute($sqlOp) === false) {
+            $sqlOp = "UPDATE `opinions` SET `fk_author_img` =? WHERE `fk_author` =?";
+            if ($GLOBALS['application']->conn->Execute($sqlOp, array($avatar_img_id, $author->id)) === false) {
                 $output->writeln(
                     "\t<error>[Database Error] Updating fk_author_img on author: "
                     .$author->id." -> ".$author->name."</error>\n".
@@ -342,9 +349,9 @@ EOF
                 } else {
                     // Replace user id on user_content_categories table with new id
                     $id = $rs1->fields['id'];
-                    $sql2 = "UPDATE `users_content_categories` SET `pk_fk_user` ={$id} WHERE `pk_fk_user` =".$user->id;
+                    $sql2 = "UPDATE `users_content_categories` SET `pk_fk_user`=? WHERE `pk_fk_user`=?";
 
-                    $rs2 = $GLOBALS['application']->conn->Execute($sql2);
+                    $rs2 = $GLOBALS['application']->conn->Execute($sql2, array($id, $user->id));
                     if ($rs2 === false) {
                         $output->writeln(
                             "\t<error>[Database Error] Updating user categories: ".$sql2."</error>"
@@ -352,8 +359,8 @@ EOF
                     }
 
                     // Replace usermeta id for this user too
-                    $sql3 = "UPDATE `usermeta` SET `user_id` ={$id} WHERE `user_id` =".$user->id;
-                    $rs3 = $GLOBALS['application']->conn->Execute($sql3);
+                    $sql3 = "UPDATE `usermeta` SET `user_id` =? WHERE `user_id`=?";
+                    $rs3 = $GLOBALS['application']->conn->Execute($sql3, array($id, $user->id));
                     if ($rs3 === false) {
                         $output->writeln(
                             "\t<error>[Database Error] Updating user categories: ".$sql3."</error>"
