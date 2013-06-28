@@ -62,7 +62,7 @@ class AclUserController extends Controller
         $users     = $user->getUsers($filter, ' ORDER BY username ');
 
         $userGroup = new \UserGroup();
-        $groups     = $userGroup->find();
+        $groups    = $userGroup->find();
 
         $groupsOptions = array();
         $groupsOptions[] = _('--All--');
@@ -189,19 +189,20 @@ class AclUserController extends Controller
 
             // Process data
             if ($user->update($data)) {
-                // Set all usermeta information (paywall, twitter, rss, language)
+                // Set all usermeta information (twitter, rss, language)
                 $meta = $request->request->get('meta');
                 foreach ($meta as $key => $value) {
-                    if ($key == 'paywall_time_limit' && !empty($value)) {
-                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
-                        $time->setTimeZone(new \DateTimeZone('UTC'));
-
-                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
-                    } else {
-                        $user->setMeta(array($key => $value));
-                    }
+                    $user->setMeta(array($key => $value));
                 }
 
+                // Set usermeta paywall time limit
+                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                if (!empty($paywallTimeLimit)) {
+                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                    $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                }
 
                 if ($user->id == $_SESSION['userid']) {
                     $_SESSION['user_language'] = $userLanguage;
@@ -276,20 +277,14 @@ class AclUserController extends Controller
                 }
 
                 if ($user->create($data)) {
-                    // Set usermeta language
-                    $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
-                    $user->setMeta(array('user_language' => $userLanguage));
-
-                    // Set usermeta twitter
-                    $userTwitter = $request->request->filter('twitter', '', FILTER_SANITIZE_STRING);
-                    $user->setMeta(array('twitter' => $userTwitter));
+                    // Set all usermeta information (twitter, rss, language)
+                    $meta = $request->request->get('meta');
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
 
                     // Set usermeta paywall time limit
-                    $paywallTimeLimit = $request->request->filter(
-                        'meta[paywall_time_limit]',
-                        '',
-                        FILTER_SANITIZE_STRING
-                    );
+                    $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
                     if (!empty($paywallTimeLimit)) {
                         $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
                         $time->setTimeZone(new \DateTimeZone('UTC'));

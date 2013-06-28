@@ -105,10 +105,10 @@
 
             // Create our element to hold the selections and the buttons for moving elements
             var htmlBlock = "<div class=\"" + nameModifier + "options\">" +
-            "<p class=\"AddOne\" rel=\"" + newName + "\" title=\"Add Selected\">&rsaquo;</p>" +
-            "<p class=\"AddAll\" rel=\"" + newName + "\" title=\"Add All\">&raquo;</p>" +
-            "<p class=\"RemoveOne\" rel=\"" + newName + "\" title=\"Remove Selected\">&lsaquo;</p>" +
-            "<p class=\"RemoveAll\" rel=\"" + newName + "\" title=\"Remove All\">&laquo;</p>" +
+            "<p class=\"AddOne\" rel=\"" + newName + "\" title=\"Add Selected\"><span class='icon-chevron-right'></span></p>" +
+            // "<p class=\"AddAll\" rel=\"" + newName + "\" title=\"Add All\">&raquo;</p>" +
+            "<p class=\"RemoveOne\" rel=\"" + newName + "\" title=\"Remove Selected\"><span class='icon-chevron-left'></span></p>" +
+            // "<p class=\"RemoveAll\" rel=\"" + newName + "\" title=\"Remove All\">&laquo;</p>" +
             "</div>" +
             "<div class=\"" + nameModifier + "select\">" +
             "<select name=\"" + originalName + arrayName + "\" id=\"" + newName + "\" size=\"" + size + "\"multiple=\"multiple\" size=\"8\" class=\"" + originalClass + "TakeOver\"></select>" +

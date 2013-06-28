@@ -103,16 +103,14 @@ label {
 .alert-pass.alert-error { background: #B22222 url("/assets/images/alert-error-small.png") no-repeat 16px; }
 /* Recommended styles tsms */
 .tsmsselect {
-        width: 40%;
         float: left;
 }
 
 .tsmsselect select {
-        width: 100%;
 }
 
 .tsmsoptions {
-        width: 20%;
+        width: 10%;
         float: left;
 }
 
@@ -126,6 +124,10 @@ label {
 .tsmsoptions p:hover {
         color: White;
         background-color: Silver;
+}
+.groups, .categorys {
+    display: inline-block;
+    width: 100%;
 }
 </style>
 {/block}
@@ -225,20 +227,20 @@ label {
                         </div>
 
                         <div class="control-group">
-                            <label for="bio" class="control-label">{t}Biography{/t}</label>
-                            <div class="controls">
-                                <input type="text" class="input-xxlarge" id="bio" name="bio" value="{$user->bio|default:""}">
-                            </div>
-                        </div>
-
-                        <div class="control-group">
-                            <label for="url" class="control-label">{t}Url{/t}</label>
+                            <label for="url" class="control-label">{t}Blog Url{/t}</label>
                             <div class="controls">
                                 <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="input-xxlarge" >
                             </div>
                         </div>
 
                         <div class="control-group">
+                            <label for="bio" class="control-label">{t}Biography{/t}</label>
+                            <div class="controls">
+                                <textarea id="bio" name="bio" rows="3" class="input-xxlarge">{$user->bio|default:""}</textarea>
+                            </div>
+                        </div>
+
+                        {*<div class="control-group">
                             <label for="meta[inrss]" class="control-label">{t}Show in RSS{/t}</label>
                             <div class="controls">
                                 <label class="checkbox">
@@ -246,7 +248,7 @@ label {
                                     {t}If this option is activated this author will be showed in rss{/t}
                                 </label>
                             </div>
-                        </div>
+                        </div>*}
                     </fieldset>
 
                     <fieldset>
@@ -307,36 +309,41 @@ label {
 
             <div id="privileges">
             {acl isAllowed="GROUP_CHANGE"}
-                <label for="id_user_group">{t}User group:{/t}</label>
-                <select id="id_user_group" name="id_user_group[]" size="8" multiple="multiple" title="{t}User group:{/t}" class="validate-selection">
-                    {if $smarty.session.isMaster}
-                        <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
-                    {/if}
-                    {foreach $user_groups as $group}
-                        {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
-                            <option  value="{$group->id}" selected="selected">{$group->name}</option>
-                        {else}
-                            <option  value="{$group->id}">{$group->name}</option>
+                <div class="groups">
+                    <label for="id_user_group">{t}User group:{/t}</label>
+                    <select id="id_user_group" name="id_user_group[]" size="8" multiple="multiple" title="{t}User group:{/t}" class="validate-selection">
+                        {if $smarty.session.isMaster}
+                            <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
                         {/if}
-                    {/foreach}
-                </select>
+                        {foreach $user_groups as $group}
+                            {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
+                                <option  value="{$group->id}" selected="selected">{$group->name}</option>
+                            {else}
+                                <option  value="{$group->id}">{$group->name}</option>
+                            {/if}
+                        {/foreach}
+                    </select>
+                </div>
             {/acl}
+            <label>&nbsp;</label>
             {acl isAllowed="USER_CATEGORY"}
-                <label>&nbsp;</label>
-                <label for="id_user_group">{t}Categories{/t}:</label>
-                <select id="ids_category" name="ids_category[]" size="12" title="{t}Categories{/t}" class="validate-selection" multiple="multiple">
-                    <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
-                    {foreach item="c_it" from=$content_categories}
-                        <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
-                        {if count($c_it->childNodes)>0}
-                            {foreach item="sc_it" from=$c_it->childNodes}
-                                <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
-                                        &nbsp; &rArr; {$sc_it->title}
-                                </option>
-                            {/foreach}
-                        {/if}
-                    {/foreach}
-                </select>
+                <div class="categorys">
+                    <label>&nbsp;</label>
+                    <label for="id_user_group">{t}Categories{/t}:</label>
+                    <select id="ids_category" name="ids_category[]" size="12" title="{t}Categories{/t}" class="validate-selection" multiple="multiple">
+                        <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
+                        {foreach item="c_it" from=$content_categories}
+                            <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
+                            {if count($c_it->childNodes)>0}
+                                {foreach item="sc_it" from=$c_it->childNodes}
+                                    <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
+                                            &nbsp; &rArr; {$sc_it->title}
+                                    </option>
+                                {/foreach}
+                            {/if}
+                        {/foreach}
+                    </select>
+                </div>
                 <label>&nbsp;</label>
             {/acl}
             </div><!-- /privileges -->
@@ -346,9 +353,9 @@ label {
             <div id="paywall">
                 <div class="form-horizontal">
                         <div class="control-group">
-                        <label for="meta[paywall_time_limit]" class="control-label">{t}Paywall time limit:{/t}</label>
+                        <label for="paywall_time_limit" class="control-label">{t}Paywall time limit:{/t}</label>
                         <div class="controls">
-                            <input type="datetime" id="meta[paywall_time_limit]" name="meta[paywall_time_limit]" value="{datetime date=$user->meta['paywall_time_limit']}" />
+                            <input type="datetime" id="paywall_time_limit" name="paywall_time_limit" value="{datetime date=$user->meta['paywall_time_limit']}" />
                         </div>
                     </div>
                 </div>
