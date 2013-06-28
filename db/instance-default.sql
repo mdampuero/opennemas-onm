@@ -10,6 +10,11 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
 --
 -- Database: `64`
 --
@@ -378,8 +383,8 @@ INSERT INTO `comments` (`id`, `content_id`, `author`, `author_email`, `author_ur
 DROP TABLE IF EXISTS `contentmeta`;
 CREATE TABLE IF NOT EXISTS `contentmeta` (
   `fk_content` bigint(20) NOT NULL,
-  `meta_name` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `meta_value` text CHARACTER SET latin1,
+  `meta_name` varchar(255) NOT NULL,
+  `meta_value` text,
   PRIMARY KEY (`fk_content`,`meta_name`),
   KEY `fk_content` (`fk_content`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -492,7 +497,7 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (43, 8, 'stock-photo-ecological-breeze_rev100.jpg', 'aire, viento, ', 'aire, viento, ', '2011-09-26 23:53:56', '0000-00-00 00:00:00', '2011-09-26 23:53:56', '2011-10-11 19:16:41', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, 'stock-photo-ecological-breezerev100-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (44, 8, 'Want-a-Free-Xbox-Buy-a-Laptop-for-College2.jpg', 'mac, ipad, portatil', 'mac, ipad, portatil', '2011-09-26 23:53:56', '0000-00-00 00:00:00', '2011-09-26 23:53:56', '2011-10-11 19:16:41', 1, 7, 0, 3, 1, 2, 0, 0, 0, 100, 'want-a-free-xbox-buy-a-laptop-for-college2-jpg', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (45, 7, 'jumping', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue. ', 'jumping', '2011-09-27 11:41:24', '0000-00-00 00:00:00', '2011-09-27 11:41:24', '2011-09-27 11:41:24', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'jumping', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
-(46, 1, 'Dolorem ipsum quia dolor sit amet, consectetur, adipisci velit', 'Â \r\nCurabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna,  vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend  bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel,  congue id ante. Donec non sapien purus. Pellentesque dignissim elementum  arcu ut...', 'neque,porro,quisquam,est,qui,dolorem,ipsum,quia,dolor,sit,amet,consectetur,adipisci,velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2011-10-11 19:20:08', 1, 7, 0, 3, 7, 1, 1, 0, 1, 1, 'dolorem-ipsum-quia-dolor-sit-amet-consectetur-adipisci-velit', 1, 'placeholder_2_3', 'placeholder_1_0', NULL, 'sociedad', NULL, NULL),
+(46, 1, 'Dolorem ipsum quia dolor sit amet, consectetur, adipisci velit', 'Ã \r\nCurabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna,  vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend  bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel,  congue id ante. Donec non sapien purus. Pellentesque dignissim elementum  arcu ut...', 'neque,porro,quisquam,est,qui,dolorem,ipsum,quia,dolor,sit,amet,consectetur,adipisci,velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2011-10-11 19:20:08', 1, 7, 0, 3, 7, 1, 1, 0, 1, 1, 'dolorem-ipsum-quia-dolor-sit-amet-consectetur-adipisci-velit', 1, 'placeholder_2_3', 'placeholder_1_0', NULL, 'sociedad', NULL, NULL),
 (47, 1, ' Pellentesque vehicula tortor venenatis eros ultricies iaculis quis aliquet nunc.', 'Morbi gravida varius orci iaculis semper. Aenean nisi ipsum, convallis at suscipit non, ornare ac lorem. Cras sed leo turpis, eu lacinia orci. Donec magna nunc, suscipit vitae condimentum sed, tincidunt nec tellus. Quisque convallis porta urna nec suscipit. Nulla eu tortor commodo nulla dignissim dignissim eget et mi. Duis...', 'economÃ­a,pellentesque,vehicula,tortor,venenatis,eros,ultricies,iaculis,quis,aliquet,nunc,neque,porro,quisquam,est,qui,dolorem,ipsum,quia,dolor,sit,amet,consectetur,adipisci,velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2013-04-18 09:55:32', 1, 7, 0, 3, 4, 1, 1, 0, 0, 100, '-pellentesque-vehicula-tortor-venenatis-eros-ultricies-iaculis-quis-aliquet-nunc', 1, 'placeholder_2_2', 'placeholder_0_1', 'a:13:{s:14:"agencyBulletin";s:0:"";s:15:"imageHomeFooter";s:0:"";s:9:"imageHome";s:0:"";s:9:"titleSize";s:0:"";s:13:"imagePosition";s:0:"";s:9:"titleHome";s:0:"";s:13:"titleHomeSize";s:0:"";s:12:"subtitleHome";s:0:"";s:11:"summaryHome";s:0:"";s:17:"imageHomePosition";s:0:"";s:11:"withGallery";s:0:"";s:14:"withGalleryInt";s:0:"";s:15:"withGalleryHome";s:0:"";}', 'economia', NULL, NULL),
 (48, 1, 'Maecenas vitae nisi dui, nec commodo magna.', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam   magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis   libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae   nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ...', 'sociedad, maecenas, vitae, nisi, dui, nec, commodo, magna, neque, porro, quisquam, est, qui, dolorem, ipsum, quia, dolor, sit, amet, consectetur, adipisci, velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2011-10-13 02:01:00', 1, 7, 0, 3, 2, 1, 1, 0, 0, 100, 'maecenas-vitae-nisi-dui-nec-commodo-magna', 1, 'placeholder_0_3', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (49, 1, 'Quia dolor sit amet, consectetur, adipisci velit', 'Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum...', 'neque,porro,quisquam,est,qui,dolorem,ipsum,quia,dolor,sit,amet,consectetur,adipisci,velit', '2011-09-23 20:51:11', '0000-00-00 00:00:00', '2011-09-23 20:51:11', '2011-10-13 01:45:54', 1, 7, 0, 3, 5, 1, 1, 0, 1, 2, 'quia-dolor-sit-amet-consectetur-adipisci-velit', 1, 'placeholder_0_1', 'placeholder_0_3', NULL, 'economia', NULL, NULL),
@@ -550,7 +555,7 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (103, 9, 'How to Get Fit - P90X Video with Tony Horton!', 'p90x', 'how, to, get, fit, p90x, video, with, tony, horton', '2011-09-28 12:58:48', '0000-00-00 00:00:00', '2011-09-28 12:58:48', '2011-09-28 12:58:48', 1, 7, 7, 7, 13, 2, 0, 0, 0, 100, 'how-to-get-fit-p90x-video-with-tony-horton', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', 1, NULL),
 (104, 9, 'Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA', 'Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA', 'larry, johnson, abuela, mÃ¡s, famosa, nba', '2011-09-28 13:04:58', '0000-00-00 00:00:00', '2011-09-28 13:04:58', '2011-09-28 13:04:58', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'larry-johnson-la-abuela-mas-famosa-de-la-nba', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (105, 9, 'Video de la cabaÃ±a argentina', 'Video de la cabaÃ±a argentina', 'video, cabaÃ±a, argentina, deo, caba', '2011-09-28 13:10:34', '0000-00-00 00:00:00', '2011-09-28 13:10:34', '2011-09-28 13:10:34', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'video-de-la-cabana-argentina', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'curiosidades', NULL, NULL),
-(106, 9, 'Ð¤ÐµÐ¹ÐµÑ€Ð²ÐµÑ€Ðº Ñ€Ð°Ð·Ð±ÑƒÑˆÐµÐ²Ð°Ð»ÑÑ', 'video con servicio de Rutube', 'rutube', '2011-09-28 13:11:10', '0000-00-00 00:00:00', '2011-09-28 13:11:10', '2011-09-28 13:11:10', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, '', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
+(106, 9, 'video con servicio de Rutube', 'video con servicio de Rutube', 'rutube', '2011-09-28 13:11:10', '0000-00-00 00:00:00', '2011-09-28 13:11:10', '2011-09-28 13:11:10', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, '', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (107, 9, 'Pau entra por la puerta grande en el club de los 10.000', 'Pau entra por la puerta grande en el club de los 10.000', 'pau, entra, puerta, grande, club, 000', '2011-09-28 13:14:00', '0000-00-00 00:00:00', '2011-09-28 13:14:00', '2012-07-27 11:18:30', 1, 7, 7, 7, 7, 2, 0, 0, 1, 100, 'pau-entra-por-la-puerta-grande-en-el-club-de-los-10-000', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (108, 9, 'Camelos.Semos. Jonathan. TÃº si que vales.', 'Camelos.Semos. Jonathan. TÃº si que vales.', 'camelos, semos, jonathan, tÃº, vales', '2012-07-30 10:17:50', '0000-00-00 00:00:00', '2011-09-28 13:14:30', '2011-09-28 13:14:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'camelos-semos-jonathan-tu-si-que-vales', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'curiosidades', 0, NULL),
 (109, 9, 'X men first class reviewed by rotten tomatoes on infomania', 'X men first class reviewed by rotten tomatoes on infomania', 'men, first, class, reviewed, by, rotten, tomatoes, on, infomania, neither, user, id, nor, item, is, specified, for, rss, feed', '2011-09-28 13:16:05', '0000-00-00 00:00:00', '2011-09-28 13:16:05', '2013-06-17 16:03:30', 0, 7, 7, 5, 5, 2, 0, 1, 0, 100, 'x-men-first-class-reviewed-by-rotten-tomatoes-on-infomania', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
@@ -627,7 +632,7 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (227, 17, 'El problema con esta postura es que ignora u oculta varios hechos esenciales', '', '', '2012-07-31 14:46:40', '0000-00-00 00:00:00', '2012-07-31 14:46:40', '2012-07-31 14:50:56', 1, 0, 0, 7, 15, 1, 0, 0, 0, 100, 'el-problema-con-esta-postura-es-que-ignora-u-oculta-varios-hechos-esenciales', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:1:{s:2:"ip";s:9:"127.0.0.1";}', '0', NULL, NULL),
 (228, 17, 'La economÃ­a alemana no es un ejemplo', '', '', '2012-07-31 14:46:51', '0000-00-00 00:00:00', '2012-07-31 14:46:51', '2012-07-31 14:50:32', 1, 0, 0, 7, 14, 1, 0, 0, 0, 100, 'la-economia-alemana-no-es-un-ejemplo', 1, 'placeholder_0_1', 'placeholder_0_1', 'a:1:{s:2:"ip";s:9:"127.0.0.1";}', '0', NULL, NULL),
 (229, 12, 'Albumes - Ultimos publicados', '', '', '2012-10-01 13:05:32', '0000-00-00 00:00:00', '2012-10-01 13:05:32', '2012-10-01 13:05:32', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'albumes-ultimos-publicados', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
-(230, 12, 'Noticias - Ãšltimas', '', '', '2012-10-01 13:05:50', '0000-00-00 00:00:00', '2012-10-01 13:05:50', '2012-10-01 13:05:50', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'noticias-ultimas', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
+(230, 12, 'Noticias - Ãltimas', '', '', '2012-10-01 13:05:50', '0000-00-00 00:00:00', '2012-10-01 13:05:50', '2012-10-01 13:05:50', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'noticias-ultimas', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (231, 12, 'Hemeroteca Calendario', '', '', '2012-10-01 13:06:06', '0000-00-00 00:00:00', '2012-10-01 13:06:06', '2012-10-01 13:06:06', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'hemeroteca-calendario', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (232, 12, 'Facebook - botÃ³n like', '', '', '2012-10-01 13:06:30', '0000-00-00 00:00:00', '2012-10-01 13:06:30', '2012-10-01 13:06:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-boton-like', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (233, 12, 'Facebook like with faces', '', '', '2012-10-01 13:06:42', '0000-00-00 00:00:00', '2012-10-01 13:06:42', '2012-10-01 13:06:42', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-like-with-faces', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
@@ -879,7 +884,7 @@ INSERT INTO `content_categories` (`pk_content_category`, `title`, `name`, `inmen
 (1, 'fotografias', 'photo', 0, 0, 0, 0, NULL, NULL, ''),
 (2, 'publicidad', 'publicidad', 0, 0, 0, 0, NULL, NULL, ''),
 (3, 'ALBUM', 'album', 0, 0, 0, 0, NULL, NULL, ''),
-(4, 'OPINIÃ“N', 'opinion', 0, 0, 0, 0, NULL, NULL, ''),
+(4, 'OPINIÃN', 'opinion', 0, 0, 0, 0, NULL, NULL, ''),
 (5, 'comentarios', 'comment', 0, 0, 0, 0, NULL, NULL, ''),
 (6, 'videos', 'video', 0, 0, 0, 0, NULL, NULL, ''),
 (7, 'author', 'author', 0, 0, 0, 0, NULL, NULL, ''),
@@ -965,11 +970,11 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 (13, 23, 0, 'placeholder_0_1', NULL, 'Article'),
 (56, 26, 1, 'placeholder_1_0', NULL, 'Opinion'),
 (60, 26, 0, 'placeholder_1_0', NULL, 'Opinion'),
+(14, 23, 0, 'placeholder_2_columns', NULL, 'Article'),
+(82, 26, 2, 'placeholder_0_0', NULL, 'Article'),
 (215, 0, 0, 'placeholder_0_1', NULL, 'Article'),
 (67, 24, 0, 'placeholder_2_columns', NULL, 'Article'),
 (184, 0, 0, 'placeholder_1_0', NULL, 'Opinion'),
-(14, 23, 0, 'placeholder_2_columns', NULL, 'Article'),
-(82, 26, 2, 'placeholder_0_0', NULL, 'Article'),
 (68, 26, 0, 'placeholder_0_0', NULL, 'Article'),
 (200, 22, 0, 'placeholder_2_0', NULL, 'Widget'),
 (59, 22, 0, 'placeholder_1_1', NULL, 'Opinion'),
@@ -987,10 +992,10 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 (73, 22, 0, 'placeholder_2_columns', NULL, 'Article'),
 (60, 25, 1, 'placeholder_1_0', NULL, 'Opinion'),
 (86, 25, 0, 'placeholder_0_1', NULL, 'Article'),
+(11, 0, 0, 'placeholder_1_3', NULL, 'Article'),
 (79, 25, 0, 'placeholder_2_columns', NULL, 'Article'),
 (167, 0, 0, 'placeholder_0_0', NULL, 'Article'),
 (216, 0, 0, 'placeholder_2_columns', NULL, 'Article'),
-(11, 0, 0, 'placeholder_1_3', NULL, 'Article'),
 (195, 0, 0, 'placeholder_2_3', NULL, 'Widget');
 
 -- --------------------------------------------------------
@@ -1061,11 +1066,11 @@ INSERT INTO `letters` (`pk_letter`, `author`, `email`, `body`) VALUES
 DROP TABLE IF EXISTS `menues`;
 CREATE TABLE IF NOT EXISTS `menues` (
   `pk_menu` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `type` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `position` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
-  `site` text CHARACTER SET latin1 NOT NULL,
-  `params` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `position` varchar(50) DEFAULT NULL,
+  `site` text NOT NULL,
+  `params` varchar(255) DEFAULT NULL,
   `pk_father` int(11) DEFAULT NULL,
   PRIMARY KEY (`pk_menu`),
   UNIQUE KEY `name` (`name`),
@@ -1095,9 +1100,9 @@ DROP TABLE IF EXISTS `menu_items`;
 CREATE TABLE IF NOT EXISTS `menu_items` (
   `pk_item` int(11) NOT NULL AUTO_INCREMENT,
   `pk_menu` int(11) NOT NULL,
-  `title` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `link_name` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `type` varchar(255) CHARACTER SET latin1 NOT NULL COMMENT '''category'',''external'',''static'', internal''',
+  `title` varchar(255) NOT NULL,
+  `link_name` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL COMMENT '''category'',''external'',''static'', internal''',
   `position` int(11) NOT NULL,
   `pk_father` int(11) DEFAULT NULL,
   PRIMARY KEY (`pk_item`,`pk_menu`),
@@ -1238,10 +1243,10 @@ CREATE TABLE IF NOT EXISTS `pclave` (
 DROP TABLE IF EXISTS `pc_users`;
 CREATE TABLE IF NOT EXISTS `pc_users` (
   `pk_pc_user` int(11) NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `name` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `firstname` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `lastname` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `firstname` varchar(255) NOT NULL,
+  `lastname` varchar(255) NOT NULL,
   `status` int(11) NOT NULL,
   `subscription` int(11) NOT NULL,
   PRIMARY KEY (`pk_pc_user`)
@@ -1418,16 +1423,7 @@ CREATE TABLE IF NOT EXISTS `ratings` (
   `total_value` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `ips_count_rating` longtext,
   PRIMARY KEY (`pk_rating`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=217 ;
-
---
--- Dumping data for table `ratings`
---
-
-INSERT INTO `ratings` (`pk_rating`, `total_votes`, `total_value`, `ips_count_rating`) VALUES
-(14, 0, 0, 'a:0:{}'),
-(11, 0, 0, 'a:0:{}'),
-(216, 0, 0, 'a:0:{}');
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=218 ;
 
 -- --------------------------------------------------------
 
@@ -1534,8 +1530,8 @@ INSERT INTO `related_contents` (`pk_content1`, `pk_content2`, `relationship`, `t
 
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
-  `name` varchar(128) CHARACTER SET latin1 NOT NULL DEFAULT '',
-  `value` longtext CHARACTER SET latin1 NOT NULL,
+  `name` varchar(128) NOT NULL DEFAULT '',
+  `value` longtext NOT NULL,
   PRIMARY KEY (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1551,7 +1547,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('site_title', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
 ('site_description', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
 ('europapress_server_auth', 'a:3:{s:6:"server";s:0:"";s:8:"username";s:0:"";s:8:"password";s:0:"";}'),
-('site_keywords', 's:74:"CMS, openNemas, servicio, online, periÃ³dico, digital, service, newspapers";'),
+('site_keywords', 's:73:"CMS, openNemas, servicio, online, periÃ³dico, digital, service, newspapers";'),
 ('time_zone', 's:3:"335";'),
 ('site_language', 's:5:"es_ES";'),
 ('mail_server', 's:9:"localhost";'),
@@ -1661,7 +1657,7 @@ DROP TABLE IF EXISTS `translation_ids`;
 CREATE TABLE IF NOT EXISTS `translation_ids` (
   `pk_content_old` bigint(10) NOT NULL,
   `pk_content` bigint(10) NOT NULL,
-  `type` varchar(20) CHARACTER SET latin1 NOT NULL,
+  `type` varchar(20) NOT NULL,
   PRIMARY KEY (`pk_content_old`,`pk_content`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1674,8 +1670,8 @@ CREATE TABLE IF NOT EXISTS `translation_ids` (
 DROP TABLE IF EXISTS `usermeta`;
 CREATE TABLE IF NOT EXISTS `usermeta` (
   `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `meta_key` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-  `meta_value` longtext CHARACTER SET latin1,
+  `meta_key` varchar(255) NOT NULL DEFAULT '',
+  `meta_value` longtext,
   PRIMARY KEY (`user_id`,`meta_key`),
   KEY `user_id` (`user_id`),
   KEY `meta_key` (`meta_key`)
@@ -1929,13 +1925,13 @@ INSERT INTO `videos` (`pk_video`, `video_url`, `information`, `author_name`) VAL
 (101, 'http://www.youtube.com/watch?v=DUx4CPEhSD8', 'a:8:{s:5:"title";s:59:"Trailer Millennium: Los hombres que no amaban a las mujeres";s:9:"thumbnail";s:39:"http://i.ytimg.com/vi/DUx4CPEhSD8/0.jpg";s:8:"embedUrl";s:63:"http://www.youtube.com/v/DUx4CPEhSD8?f=videos&app=youtube_gdata";s:9:"embedHTML";s:647:"<object width=''560'' height=''349''>\n                    <param name=''movie'' value=''http://www.youtube.com/v/DUx4CPEhSD8?f=videos&app=youtube_gdata''>\n                    <param name=''allowFullScreen'' value=''true''>\n                    <param name=''allowscriptaccess'' value=''always''>\n                    <param name=''wmode'' value=''transparent''>\n                    <embed\n                        src=''http://www.youtube.com/v/DUx4CPEhSD8?f=videos&app=youtube_gdata'' type=''application/x-shockwave-flash''\n                        allowscriptaccess=''always'' allowfullscreen=''true''\n                        width=''560'' height=''349''>\n                </object>";s:3:"FLV";s:63:"http://www.youtube.com/v/DUx4CPEhSD8?f=videos&app=youtube_gdata";s:11:"downloadUrl";s:63:"http://www.youtube.com/v/DUx4CPEhSD8?f=videos&app=youtube_gdata";s:7:"service";s:7:"Youtube";s:8:"duration";s:3:"125";}', 'Youtube'),
 (102, 'http://vimeo.com/4794462', 'a:8:{s:5:"title";s:8:"Mystique";s:9:"thumbnail";s:49:"http://b.vimeocdn.com/ts/131/835/13183512_640.jpg";s:8:"embedUrl";s:119:"http://vimeo.com/moogaloop.swf?clip_id=4794462&server=vimeo.com&fullscreen=1&show_title=1&show_byline=1&show_portrait=1";s:9:"embedHTML";s:860:"<object width=''560'' height=''349''>\n                        <param name=''movie'' value=''http://vimeo.com/moogaloop.swf?clip_id=4794462&server=vimeo.com&fullscreen=1&show_title=1&show_byline=1&show_portrait=1''></param>\n                        <param name=''allowFullScreen'' value=''true''></param>\n                        <param name=''allowscriptaccess'' value=''always''></param>\n                        <param name=''wmode'' value=''transparent''></param>\n                        <embed\n                            src=''http://vimeo.com/moogaloop.swf?clip_id=4794462&server=vimeo.com&fullscreen=1&show_title=1&show_byline=1&show_portrait=1'' type=''application/x-shockwave-flash''\n                            allowscriptaccess=''always'' allowfullscreen=''true''\n                            width=''560'' height=''349''>\n                        </embed>\n                    </object>";s:3:"FLV";s:84:"http://www.vimeo.com/moogaloop/play/clip:4794462/16de187d327ab74f8267b53add963be7/1/";s:11:"downloadUrl";s:84:"http://www.vimeo.com/moogaloop/play/clip:4794462/16de187d327ab74f8267b53add963be7/1/";s:7:"service";s:5:"Vimeo";s:8:"duration";s:2:"45";}', 'Vimeo'),
 (103, 'http://www.youtube.com/watch?v=OIyjnyHj1mk', 'a:8:{s:5:"title";s:45:"How to Get Fit - P90X Video with Tony Horton!";s:9:"thumbnail";s:39:"http://i.ytimg.com/vi/OIyjnyHj1mk/0.jpg";s:8:"embedUrl";s:63:"http://www.youtube.com/v/OIyjnyHj1mk?f=videos&app=youtube_gdata";s:9:"embedHTML";s:647:"<object width=''560'' height=''349''>\n                    <param name=''movie'' value=''http://www.youtube.com/v/OIyjnyHj1mk?f=videos&app=youtube_gdata''>\n                    <param name=''allowFullScreen'' value=''true''>\n                    <param name=''allowscriptaccess'' value=''always''>\n                    <param name=''wmode'' value=''transparent''>\n                    <embed\n                        src=''http://www.youtube.com/v/OIyjnyHj1mk?f=videos&app=youtube_gdata'' type=''application/x-shockwave-flash''\n                        allowscriptaccess=''always'' allowfullscreen=''true''\n                        width=''560'' height=''349''>\n                </object>";s:3:"FLV";s:63:"http://www.youtube.com/v/OIyjnyHj1mk?f=videos&app=youtube_gdata";s:11:"downloadUrl";s:63:"http://www.youtube.com/v/OIyjnyHj1mk?f=videos&app=youtube_gdata";s:7:"service";s:7:"Youtube";s:8:"duration";s:2:"89";}', 'Youtube'),
-(104, 'http://www.marca.com/tv/?v=9JoC4PE1rp8', 'a:8:{s:5:"title";s:48:"Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA";s:9:"thumbnail";s:73:"http://estaticos.marca.com/consolamultimedia/elementos/2011/07/16/382.jpg";s:8:"embedUrl";s:91:"http://www.marca.com/componentes/flash/embed.swf?ba=0&cvol=1&bt=1&lg=1&vID=9JoC4PE1rp8&ba=1";s:9:"embedHTML";s:1215:"<object\n                    width=''560'' height=''349''\n                    classid=''clsid:d27cdb6e-ae6d-11cf-96b8-444553540000''\n                    codebase=''http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0''>\n                    <param name=''movie'' value=''http://estaticos.marca.com/multimedia/reproductores/newPlayer.swf''>\n                    <param name=''quality'' value=''high''>\n                    <param name=''allowFullScreen'' value=''true''>\n                    <param name=''wmode'' value=''transparent''>\n                    <param name=''FlashVars'' value=''ba=1&amp;cvol=1&amp;bt=1&amp;lg=0&amp;width=560&amp;height=349&amp;vID=9JoC4PE1rp8''>\n                    <embed\n                        width=''560'' height=''349''\n                        src=''http://estaticos03.marca.com/multimedia/reproductores/newPlayer.swf''\n                        quality=''high''\n                        flashvars=''ba=1&amp;cvol=1&amp;bt=1&amp;lg=0&amp;vID=9JoC4PE1rp8'' allowfullscreen=''true''\n                        type=''application/x-shockwave-flash''\n                        pluginspage=''http://www.macromedia.com/go/getflashplayer''\n                        wmode=''transparent''>\n                </object>";s:3:"FLV";s:65:"http://cachevideos.marca.com/estaticos/2011/07/16/110716larry.flv";s:11:"downloadUrl";N;s:7:"service";s:5:"Marca";s:8:"duration";N;}', 'Marca'),
-(105, 'http://11870.com/pro/la-cabana-argentina/videos/25f8deec', 'a:8:{s:5:"title";s:34:"vÃƒÂ­deo de La CabaÃƒÂ±a Argentina";s:9:"thumbnail";s:78:"http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg";s:8:"embedUrl";s:348:"http://m0.11870.com/multimedia/11870/player.swf?file=http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4&image=http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png&icons=false&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png";s:9:"embedHTML";s:1190:"<object\n                    type=''application/x-shockwave-flash''\n                    data=''http://11870.com/multimedia/11870/player.swf''\n                    width=''560'' height=''349''\n                    bgcolor=''#000000''>\n                    <param name=''movie'' value=''http://m0.11870.com/multimedia/11870/player.swf?file=http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4&image=http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png&icons=false&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png'' />\n                    <param name=''allowfullscreen'' value=''true''>\n                    <param name=''allowscriptaccess'' value=''always''>\n                    <param name=''seamlesstabbing'' value=''true''>\n                    <param name=''wmode'' value=''window''>\n                    <param name=''flashvars'' value=''file=http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4&image=http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png&icons=false''>\n                </object>";s:3:"FLV";s:74:"http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4";s:11:"downloadUrl";s:74:"http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4";s:7:"service";s:5:"11870";s:8:"duration";N;}', '11870'),
-(106, 'http://rutube.ru/tracks/4436308.html?v=da5ede8f5aa5832e74b8afec8bd1818f', 'a:8:{s:5:"title";s:43:"Ð¤ÐµÐ¹ÐµÑ€Ð²ÐµÑ€Ðº Ñ€Ð°Ð·Ð±ÑƒÑˆÐµÐ²Ð°Ð»ÑÑ";s:9:"thumbnail";s:72:"http://img.rutube.ru/thumbs/da/5e/da5ede8f5aa5832e74b8afec8bd1818f-2.jpg";s:8:"embedUrl";s:55:"http://video.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f";s:9:"embedHTML";s:647:"<object width=''560'' height=''349''>\n                    <param name=''movie'' value=''http://video.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f''></param>\n                    <param name=''wmode'' value=''window''></param>\n                    <param name=''allowFullScreen'' value=''true''></param>\n                    <embed\n                        src=''http://video.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f''\n                        type=''application/x-shockwave-flash''\n                        wmode=''window''\n                        width=''560'' height=''349''\n                        allowFullScreen=''true''>\n                    </embed>\n                </object>";s:3:"FLV";s:57:"http://bl.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f.iflv";s:11:"downloadUrl";N;s:7:"service";s:6:"Rutube";s:8:"duration";N;}', 'Rutube'),
+(104, 'http://www.marca.com/tv/?v=9JoC4PE1rp8', 'a:8:{s:5:"title";s:47:"Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA";s:9:"thumbnail";s:73:"http://estaticos.marca.com/consolamultimedia/elementos/2011/07/16/382.jpg";s:8:"embedUrl";s:91:"http://www.marca.com/componentes/flash/embed.swf?ba=0&cvol=1&bt=1&lg=1&vID=9JoC4PE1rp8&ba=1";s:9:"embedHTML";s:1215:"<object\n                    width=''560'' height=''349''\n                    classid=''clsid:d27cdb6e-ae6d-11cf-96b8-444553540000''\n                    codebase=''http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0''>\n                    <param name=''movie'' value=''http://estaticos.marca.com/multimedia/reproductores/newPlayer.swf''>\n                    <param name=''quality'' value=''high''>\n                    <param name=''allowFullScreen'' value=''true''>\n                    <param name=''wmode'' value=''transparent''>\n                    <param name=''FlashVars'' value=''ba=1&amp;cvol=1&amp;bt=1&amp;lg=0&amp;width=560&amp;height=349&amp;vID=9JoC4PE1rp8''>\n                    <embed\n                        width=''560'' height=''349''\n                        src=''http://estaticos03.marca.com/multimedia/reproductores/newPlayer.swf''\n                        quality=''high''\n                        flashvars=''ba=1&amp;cvol=1&amp;bt=1&amp;lg=0&amp;vID=9JoC4PE1rp8'' allowfullscreen=''true''\n                        type=''application/x-shockwave-flash''\n                        pluginspage=''http://www.macromedia.com/go/getflashplayer''\n                        wmode=''transparent''>\n                </object>";s:3:"FLV";s:65:"http://cachevideos.marca.com/estaticos/2011/07/16/110716larry.flv";s:11:"downloadUrl";N;s:7:"service";s:5:"Marca";s:8:"duration";N;}', 'Marca'),
+(105, 'http://11870.com/pro/la-cabana-argentina/videos/25f8deec', 'a:8:{s:5:"title";s:29:"VÃ­Â­deo de La CabaÃ±a Argentina";s:9:"thumbnail";s:78:"http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg";s:8:"embedUrl";s:348:"http://m0.11870.com/multimedia/11870/player.swf?file=http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4&image=http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png&icons=false&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png";s:9:"embedHTML";s:1190:"<object\n                    type=''application/x-shockwave-flash''\n                    data=''http://11870.com/multimedia/11870/player.swf''\n                    width=''560'' height=''349''\n                    bgcolor=''#000000''>\n                    <param name=''movie'' value=''http://m0.11870.com/multimedia/11870/player.swf?file=http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4&image=http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png&icons=false&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png'' />\n                    <param name=''allowfullscreen'' value=''true''>\n                    <param name=''allowscriptaccess'' value=''always''>\n                    <param name=''seamlesstabbing'' value=''true''>\n                    <param name=''wmode'' value=''window''>\n                    <param name=''flashvars'' value=''file=http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4&image=http://m1.11870.com/multimedia/videos/vlp_22c16ba2bb50b4adfe67271f4fa8a345.jpg&logo=http://m0.11870.com/multimedia/11870/embed_watermark.png&icons=false''>\n                </object>";s:3:"FLV";s:74:"http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4";s:11:"downloadUrl";s:74:"http://m0.11870.com/multimedia/videos/22c16ba2bb50b4adfe67271f4fa8a345.mp4";s:7:"service";s:5:"11870";s:8:"duration";N;}', '11870'),
+(106, 'http://rutube.ru/tracks/4436308.html?v=da5ede8f5aa5832e74b8afec8bd1818f', 'a:8:{s:5:"title";s:6:"Rutube";s:9:"thumbnail";s:72:"http://img.rutube.ru/thumbs/da/5e/da5ede8f5aa5832e74b8afec8bd1818f-2.jpg";s:8:"embedUrl";s:55:"http://video.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f";s:9:"embedHTML";s:647:"<object width=''560'' height=''349''>\n                    <param name=''movie'' value=''http://video.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f''></param>\n                    <param name=''wmode'' value=''window''></param>\n                    <param name=''allowFullScreen'' value=''true''></param>\n                    <embed\n                        src=''http://video.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f''\n                        type=''application/x-shockwave-flash''\n                        wmode=''window''\n                        width=''560'' height=''349''\n                        allowFullScreen=''true''>\n                    </embed>\n                </object>";s:3:"FLV";s:57:"http://bl.rutube.ru/da5ede8f5aa5832e74b8afec8bd1818f.iflv";s:11:"downloadUrl";N;s:7:"service";s:6:"Rutube";s:8:"duration";N;}', 'Rutube'),
 (107, 'http://www.marca.com/tv/?v=DN23wG8c1Rj', 'a:8:{s:5:"title";s:55:"Pau entra por la puerta grande en el club de los 10.000";s:9:"thumbnail";s:67:"http://www.marca.com/consolamultimedia/elementos/2009/01/03/306.jpg";s:8:"embedUrl";s:91:"http://www.marca.com/componentes/flash/embed.swf?ba=0&cvol=1&bt=1&lg=1&vID=DN23wG8c1Rj&ba=1";s:9:"embedHTML";s:1215:"<object\n                    width=''560'' height=''349''\n                    classid=''clsid:d27cdb6e-ae6d-11cf-96b8-444553540000''\n                    codebase=''http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0''>\n                    <param name=''movie'' value=''http://estaticos.marca.com/multimedia/reproductores/newPlayer.swf''>\n                    <param name=''quality'' value=''high''>\n                    <param name=''allowFullScreen'' value=''true''>\n                    <param name=''wmode'' value=''transparent''>\n                    <param name=''FlashVars'' value=''ba=1&amp;cvol=1&amp;bt=1&amp;lg=0&amp;width=560&amp;height=349&amp;vID=DN23wG8c1Rj''>\n                    <embed\n                        width=''560'' height=''349''\n                        src=''http://estaticos03.marca.com/multimedia/reproductores/newPlayer.swf''\n                        quality=''high''\n                        flashvars=''ba=1&amp;cvol=1&amp;bt=1&amp;lg=0&amp;vID=DN23wG8c1Rj'' allowfullscreen=''true''\n                        type=''application/x-shockwave-flash''\n                        pluginspage=''http://www.macromedia.com/go/getflashplayer''\n                        wmode=''transparent''>\n                </object>";s:3:"FLV";s:72:"http://cachevideos.elmundo.es/cr4ip/ES/marca/2009/01/03/090103lakers.flv";s:11:"downloadUrl";N;s:7:"service";s:5:"Marca";s:8:"duration";N;}', 'Marca'),
 (108, 'http://www.dailymotion.com/video/x7u5kn_parkour-dayyy_sport', 'N;', 'Dalealplay'),
 (109, 'http://www.metacafe.com/watch/6541907/x_men_first_class_reviewed_by_rotten_tomatoes_on_infomania/?source=playlist', 'a:8:{s:5:"title";s:58:"X men first class reviewed by rotten tomatoes on infomania";s:9:"thumbnail";s:41:"http://www.metacafe.com/thumb/6541907.jpg";s:8:"embedUrl";s:102:"http://www.metacafe.com/fplayer/6541907/x_men_first_class_reviewed_by_rotten_tomatoes_on_infomania.swf";s:9:"embedHTML";s:477:"<embed\n                                    src=''http://www.metacafe.com/fplayer/6541907/x_men_first_class_reviewed_by_rotten_tomatoes_on_infomania.swf''\n                                    width=''560'' height=''349''\n                                    wmode=''transparent''\n                                    pluginspage=''http://www.macromedia.com/go/getflashplayer''\n                                    type=''application/x-shockwave-flash''>\n                                </embed>";s:3:"FLV";s:0:"";s:11:"downloadUrl";N;s:7:"service";s:8:"Metacafe";s:8:"duration";N;}', 'Metacafe'),
-(110, 'http://www.youtube.com/watch?v=HjAg4pWxW0A', 'a:8:{s:5:"title";s:48:"Discurso de Ãlex de la Iglesia en los Goya 2011";s:9:"thumbnail";s:39:"http://i.ytimg.com/vi/HjAg4pWxW0A/0.jpg";s:8:"embedUrl";s:63:"http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata";s:9:"embedHTML";s:647:"<object width=''560'' height=''349''>\n                    <param name=''movie'' value=''http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata''>\n                    <param name=''allowFullScreen'' value=''true''>\n                    <param name=''allowscriptaccess'' value=''always''>\n                    <param name=''wmode'' value=''transparent''>\n                    <embed\n                        src=''http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata'' type=''application/x-shockwave-flash''\n                        allowscriptaccess=''always'' allowfullscreen=''true''\n                        width=''560'' height=''349''>\n                </object>";s:3:"FLV";s:63:"http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata";s:11:"downloadUrl";s:63:"http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata";s:7:"service";s:7:"Youtube";s:8:"duration";s:3:"397";}', 'Youtube');
+(110, 'http://www.youtube.com/watch?v=HjAg4pWxW0A', 'a:8:{s:5:"title";s:47:"Discurso de Ãlex de la Iglesia en los Goya 2011";s:9:"thumbnail";s:39:"http://i.ytimg.com/vi/HjAg4pWxW0A/0.jpg";s:8:"embedUrl";s:63:"http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata";s:9:"embedHTML";s:647:"<object width=''560'' height=''349''>\n                    <param name=''movie'' value=''http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata''>\n                    <param name=''allowFullScreen'' value=''true''>\n                    <param name=''allowscriptaccess'' value=''always''>\n                    <param name=''wmode'' value=''transparent''>\n                    <embed\n                        src=''http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata'' type=''application/x-shockwave-flash''\n                        allowscriptaccess=''always'' allowfullscreen=''true''\n                        width=''560'' height=''349''>\n                </object>";s:3:"FLV";s:63:"http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata";s:11:"downloadUrl";s:63:"http://www.youtube.com/v/HjAg4pWxW0A?f=videos&app=youtube_gdata";s:7:"service";s:7:"Youtube";s:8:"duration";s:3:"397";}', 'Youtube');
 
 -- --------------------------------------------------------
 
@@ -1953,12 +1949,6 @@ CREATE TABLE IF NOT EXISTS `votes` (
   PRIMARY KEY (`pk_vote`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=224 ;
 
---
--- Dumping data for table `votes`
---
-
-INSERT INTO `votes` (`pk_vote`, `value_pos`, `value_neg`, `ips_count_vote`, `karma`) VALUES
-(218, 0, 0, 'a:0:{}', 100);
 
 -- --------------------------------------------------------
 
