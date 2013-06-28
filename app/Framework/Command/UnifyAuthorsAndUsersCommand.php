@@ -160,23 +160,6 @@ EOF
             return false;
         }
 
-        // Insert authors user group privileges (create and update only)
-        $sql1 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,26)";
-        $sql2 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,29)";
-        $sql3 = "INSERT INTO user_groups_privileges (`pk_fk_user_group`, `pk_fk_privilege`) VALUES (3,32)";
-        $rs1 = $GLOBALS['application']->conn->Execute($sql1);
-        $rs2 = $GLOBALS['application']->conn->Execute($sql2);
-        $rs3 = $GLOBALS['application']->conn->Execute($sql3);
-        if (!$rs1) {
-            $output->writeln("\t<error>[Database Error] Failed insert user_groups_privileges: ".$sql1."</error>");
-        }
-        if (!$rs2) {
-            $output->writeln("\t<error>[Database Error] Failed insert user_groups_privileges: ".$sql2."</error>");
-        }
-        if (!$rs3) {
-            $output->writeln("\t<error>[Database Error] Failed insert user_groups_privileges: ".$sql3."</error>");
-        }
-
         $output->writeln("\t<info>Authors group created successfully</info>");
     }
 
@@ -293,7 +276,7 @@ EOF
 
             if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
                 $output->writeln(
-                    "\t<error>[Database Error] Inserting author: ".$author->id." -> ".$author->name." ".var_export($values)."</error>\n".
+                    "\t<error>[Database Error] Inserting author: ".$author->id." -> ".$author->name."</error>\n".
                     "\t\t<error>[Sql]".$sql."</error>\n"
                 );
                 $output->writeln($GLOBALS['application']->conn->ErrorMsg());
@@ -364,6 +347,29 @@ EOF
                     if ($rs3 === false) {
                         $output->writeln(
                             "\t<error>[Database Error] Updating user categories: ".$sql3."</error>"
+                        );
+                    }
+
+                    // Replace content fk_author, fk_publisher and fk_user_last_editor for this user too
+                    $sql4 = "UPDATE `contents` SET `fk_author` =? WHERE `fk_author` =?";
+                    $sql5 = "UPDATE `contents` SET `fk_publisher` =? WHERE `fk_publisher` =?";
+                    $sql6 = "UPDATE `contents` SET `fk_user_last_editor` =? WHERE `fk_user_last_editor` =?";
+                    $rs4 = $GLOBALS['application']->conn->Execute($sql4, array($id, $user->id));
+                    $rs5 = $GLOBALS['application']->conn->Execute($sql5, array($id, $user->id));
+                    $rs6 = $GLOBALS['application']->conn->Execute($sql6, array($id, $user->id));
+                    if ($rs4 === false) {
+                        $output->writeln(
+                            "\t<error>[Database Error] Updating user content info: ".$sql4."</error>"
+                        );
+                    }
+                    if ($rs5 === false) {
+                        $output->writeln(
+                            "\t<error>[Database Error] Updating user content info: ".$sql5."</error>"
+                        );
+                    }
+                    if ($rs6 === false) {
+                        $output->writeln(
+                            "\t<error>[Database Error] Updating user content info: ".$sql6."</error>"
                         );
                     }
                 }
