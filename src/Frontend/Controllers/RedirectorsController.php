@@ -45,6 +45,7 @@ class RedirectorsController extends Controller
      **/
     public function contentAction(Request $request)
     {
+
         $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
         $oldVersion   = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
 
@@ -54,7 +55,7 @@ class RedirectorsController extends Controller
              $newContentID = \Content::resolveID($newContentID);
         }
 
-        if ($type == 'article') {
+        if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = new \Article($newContentID);
             $content->category_name = $content->catName;
         } elseif ($type == 'opinion') {
