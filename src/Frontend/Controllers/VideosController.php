@@ -93,7 +93,7 @@ class VideosController extends Controller
             $videosSettings = s::get('video_settings');
 
             $totalVideosFrontpage = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
-            $days = isset($videosSettings['time_last']) ?: 365;
+            $days = isset($videosSettings['time_last']) ? $videosSettings['time_last']: 365;
 
             if (isset($categoryName)
                 && !empty($categoryName)
@@ -114,7 +114,7 @@ class VideosController extends Controller
 
                 $othersVideos = $this->cm->find_all(
                     'Video',
-                    'available=1 AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    'available=1 ',
                     'ORDER BY views DESC LIMIT 3, 6'
                 );
 
@@ -135,9 +135,10 @@ class VideosController extends Controller
 
                 $othersVideos = $this->cm->find_all(
                     'Video',
-                    ' available=1 AND created >= DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
+                    ' available=1 ',
                     'ORDER BY starttime DESC LIMIT 3,12'
                 );
+
             }
 
             if (count($videos) > 0) {
