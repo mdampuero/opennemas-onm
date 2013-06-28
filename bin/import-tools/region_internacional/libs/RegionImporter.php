@@ -195,24 +195,24 @@ class RegionImporter
                     echo "[{$current}/{$totalRows}] Importing article with id {$rs->fields['id']} - ";
 
                     $originalArticleID = $rs->fields['id'];
-                    $body =  $rs->fields['body1']. ' '.$rs->fields['body2'];
+                    $body =  ImportHelper::convertoUTF8($rs->fields['body1']. ' '.$rs->fields['body2']);
                     $date = new DateTime();
                     $date->setTimestamp($rs->fields['created']);
                     $dateString = $date->format('Y-m-d H:i:s');
 
                     $values = array(
-                        'title'          => $rs->fields['title'],
+                        'title'          => ImportHelper::convertoUTF8($rs->fields['title']),
                         'category'       => $this->matchCategory($rs->fields['category_id']),
                         'with_comment'   => 1,
                         'available'      => 1,
-                        'content_status' => 0,
+                        'content_status' => 1,
                         'frontpage'      => 0,
                         'in_home'        => 0,
-                        'title_int'      => $rs->fields['title'],
-                        'metadata'       => $rs->fields['metadata'],
-                        'subtitle'       => $rs->fields['subtitle'],
-                        'agency'         => $rs->fields['agency'],
-                        'summary'        => $rs->fields['summary'],
+                        'title_int'      => ImportHelper::convertoUTF8($rs->fields['title']),
+                        'metadata'       => ImportHelper::convertoUTF8($rs->fields['metadata']),
+                        'subtitle'       => ImportHelper::convertoUTF8($rs->fields['subtitle']),
+                        'agency'         => ImportHelper::convertoUTF8($rs->fields['agency']),
+                        'summary'        => ImportHelper::convertoUTF8($rs->fields['summary']),
                         'description'    => '',
                         'body'           => $body,
                         'posic'          => 0,
@@ -232,7 +232,6 @@ class RegionImporter
                         $ih->logElementInsert($originalArticleID, $newArticleID, 'article');
                     }
                     echo "new id {$newArticleID} [DONE]\n";
-
                 }
 
                 $current++;
@@ -277,24 +276,24 @@ class RegionImporter
                     $data = $this->clearLabelsInBodyArticle($rs->fields['post_content']); //extract image html in body
                     $values =
                         array(
-                            'title' => ImportHelper::convertoUTF8($rs->fields['post_title']),
-                            'category' => '4',
+                            'title'        => ImportHelper::convertoUTF8($rs->fields['post_title']),
+                            'category'     => '4',
                             'type_opinion' => self::$configuration['opinion']['typeOpinion'],
-                            'body' => $data['body'],
-                            'metadata' => strip_tags(
+                            'body'         => $data['body'],
+                            'metadata'     => strip_tags(
                                 StringUtils::get_tags(ImportHelper::convertoUTF8($rs->fields['post_title']))
                             ),
-                            'description' => strip_tags(substr($data['body'], 0, 150)),
-                            'fk_author' => self::$configuration['opinion']['authorOpinion'],
-                            'available' => 1,
-                            'with_comment' => 1,
-                            'in_home' => 0,
+                            'description'    => strip_tags(substr($data['body'], 0, 150)),
+                            'fk_author'      => self::$configuration['opinion']['authorOpinion'],
+                            'available'      => 1,
+                            'with_comment'   => 1,
+                            'in_home'        => 0,
                             'content_status' => 1,
-                            'created' => $rs->fields['post_date'],
-                            'starttime' => $rs->fields['post_date'],
-                            'changed' => $rs->fields['post_modified'],
-                            'fk_user' => self::$configuration['idUser']['id'],
-                            'fk_publisher' => self::$configuration['idUser']['id'],
+                            'created'        => $rs->fields['post_date'],
+                            'starttime'      => $rs->fields['post_date'],
+                            'changed'        => $rs->fields['post_modified'],
+                            'fk_user'        => self::$configuration['idUser']['id'],
+                            'fk_publisher'   => self::$configuration['idUser']['id'],
                         );
 
 
@@ -347,15 +346,10 @@ class RegionImporter
             $categoryId = $rs;
         }
 
-        // Get images from previous database
-        // - Create the image from the local file
-        // - Register the image
-        // if (!$categoryID) {
-        //     echo "Needs category id for images. Unable to import images without a category to add to\n";
-        //     die();
-        // }
-
-        // echo "Created new category WP Old with {$IDCategory} id, to import images\n";
+        if (!$categoryId) {
+            echo "Needs category id for images. Unable to import images without a category to add to\n";
+            die();
+        }
 
         $sql = "SELECT idElemento as id, Archivo as file_name,
                 Alt as title, Pie as description, Nombre as title2,
@@ -395,6 +389,7 @@ class RegionImporter
                     $dateString = $date->format('Y-m-d H:i:s');
 
                     $values = array(
+                        'id'             => 0,
                         'title'          => strip_tags($rs->fields['title']),
                         'category'       => $categoryId,
                         'fk_category'    => $categoryId,
@@ -404,7 +399,6 @@ class RegionImporter
                         'in_home'        => 0,
                         'metadata'       => StringUtils::get_tags($rs->fields['title']),
                         'description'    => $rs->fields['description'],
-                        'id'             => 0,
                         'created'        => $dateString,
                         'starttime'      => $dateString,
                         'changed'        => $dateString,
@@ -412,7 +406,6 @@ class RegionImporter
                         'fk_author'      => 0,
                         'local_file'     => $filePath,
                     );
-
 
                     $image = new Photo();
                     $newimageID = $image->createFromLocalFile($values);
@@ -433,31 +426,55 @@ class RegionImporter
     }
 
 
-    public function getOnmIdImage($guid)
+    public function assignMediaToArticles()
     {
-          $sql = "SELECT ID FROM `wp_posts` WHERE ".
-            "`post_type` = 'attachment'  AND post_status !='trash' ".
-            " AND guid= '".$guid."'";
+        echo "Assigning photos to articles\n";
+        $rs = self::$originConn->Execute("SELECT idElemento, idNoticia FROM Elementos WHERE Tipo = 'foto'");
 
-        // Fetch the list of Opinions available for one author in EditMaker
-        $request = self::$originConn->Prepare($sql);
-        $rs = self::$originConn->Execute($request);
-
-        $imageID='';
         if (!$rs) {
             ImportHelper::messageStatus(self::$originConn->ErrorMsg());
-        } else {
-            $ih = new ImportHelper();
-            $imageID = $ih->elementIsImported($rs->fields['ID'], 'image');
 
+            return $this;
         }
-        return $imageID;
 
+        $photos = array();
+        $originalPhotos = $rs->GetArray();
+        foreach ($originalPhotos as $originalPhoto) {
+            $photos [$originalPhoto['idElemento']] = $originalPhoto['idNoticia'];
+        }
+
+        $sql = "SELECT pk_content_old, pk_content, type FROM translation_ids WHERE type = 'image' OR type = 'article'";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        if (!$rs) {
+            ImportHelper::messageStatus($GLOBALS['application']->conn->ErrorMsg());
+
+            return $this;
+        }
+        $importedElements = $rs->GetArray();
+        $articleTranslations = $photoTranslations = array();
+        foreach ($importedElements as $importedElement) {
+            if ($importedElement['type'] == 'article') {
+                $articleTranslations [$importedElement['pk_content_old']] = $importedElement['pk_content'];
+            } else {
+                $photoTranslations  [$importedElement['pk_content_old']] = $importedElement['pk_content'];
+            }
+        }
+        unset($importedElements, $rs);
+
+        foreach ($photos as $originalPhotoId => $originalArticleID) {
+            $newImageID   = $photoTranslations[$originalPhotoId];
+            $newArticleID = $articleTranslations[$originalArticleID];
+
+            $sql = "UPDATE articles SET img2 = ? WHERE pk_article=?";
+
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($newImageID, $newArticleID));
+        }
+
+        return $this;
     }
 
     public function clearLabelsInBodyArticle($body)
     {
-
         $result = array();
 
         $newBody='';
@@ -468,11 +485,10 @@ class RegionImporter
 
             $newBody = preg_replace('/(<a .*?href="(.+?)".*?><img .*?src=".+?".*?><\/a>)/', '', $body);
             $newBody = ImportHelper::convertoUTF8(strip_tags($newBody, '<p><a><br>'));
-            $img     = self::getOnmIdImage($guid);
         }
-        $newBody= preg_replace('/(\[caption .*?\]\[\/caption\])/', '', $newBody);
-        return array('img'=>$img, 'body'=>$newBody);
+        $newBody = preg_replace('/(\[caption .*?\]\[\/caption\])/', '', $newBody);
 
+        return array('img'=>$img, 'body'=>$newBody);
     }
 
     public function printResults()
