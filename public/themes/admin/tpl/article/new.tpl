@@ -285,13 +285,16 @@
                 </div>
             </div><!-- /edicion-contenido -->
 
-            {* Pestaña de parámetros de noticia *}
+            <!-- Parameters -->
             <div id="edicion-extra">
                 <div class="form-vertical">
                     <div class="control-group">
                         <label for="slug" class="control-label">{t}Slug{/t}</label>
                         <div class="controls">
                             <input type="text" id="slug" name="slug" class="input-xxlarge" value="{$article->slug|clearslash}">
+                            {if $article}
+                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$article->uri|clearslash}</span>
+                            {/if}
                         </div>
                     </div>
                 </div>
