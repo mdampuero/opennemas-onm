@@ -83,9 +83,9 @@
                     <th class="right" style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th>{t}Attachments{/t}</th>
-                    <th>{t}Origin{/t}</th>
-                    <th style='width:10px !important;'>{t}Date{/t}</th>
-                    <th style="width:20px;">{t}Actions{/t}</th>
+                    <th class="center">{t}Origin{/t}</th>
+                    <th class="center" style='width:10px !important;'>{t}Date{/t}</th>
+                    <th class="right" style="width:20px;">{t}Actions{/t}</th>
                 </tr>
                 {/if}
             </thead>
@@ -116,6 +116,7 @@
                     <td>
                         {if $element->hasPhotos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
+                            {count($element->getPhotos())}
                         {/if}
                         {if $element->hasVideos()}
                             <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With video{/t}] " title="{t}This new has attached videos{/t}">
@@ -129,12 +130,14 @@
                             <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
                         {/if}
                     </td>
-                    <td class="nowrap">{$servers[$element->source_id]['name']}</td>
-                    <td class="nowrap">
-                        <span title="{$element->created_time->format(DateTime::RSS)}">{$element->created_time->getTimestamp()|relative_date}</span>
+                    <td class="nowrap center">
+                        <span class="label" style="background-color:{$servers[$element->source_id]['color']};">{$servers[$element->source_id]['name']}</span>
+                    </td>
+                    <td class="nowrap center">
+                        <span title="{$element->created_time->format('d/m/Y - H:i')}">{$element->created_time->format('d/m/Y - H:i')}</span>
                     </td>
 
-                    <td class="right nowrap">
+                    <td class="nowrap">
                         <ul class="btn-group">
                             <li>
                                 <a class="btn btn-small" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
