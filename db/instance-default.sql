@@ -23,22 +23,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `adodb_logsql`
---
-
-DROP TABLE IF EXISTS `adodb_logsql`;
-CREATE TABLE IF NOT EXISTS `adodb_logsql` (
-  `created` datetime NOT NULL,
-  `sql0` varchar(250) NOT NULL,
-  `sql1` text NOT NULL,
-  `params` text NOT NULL,
-  `tracer` text NOT NULL,
-  `timer` decimal(16,6) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `advertisements`
 --
 
@@ -359,23 +343,6 @@ CREATE TABLE IF NOT EXISTS `books` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bulletins_archive`
---
-
-DROP TABLE IF EXISTS `bulletins_archive`;
-CREATE TABLE IF NOT EXISTS `bulletins_archive` (
-  `pk_bulletin` int(11) NOT NULL AUTO_INCREMENT,
-  `data` longtext CHARACTER SET latin1,
-  `contact_list` longtext CHARACTER SET latin1,
-  `attach_pdf` tinyint(4) DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `cron_timestamp` datetime DEFAULT NULL,
-  PRIMARY KEY (`pk_bulletin`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `comments`
 --
 
@@ -589,7 +556,7 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (103, 9, 'How to Get Fit - P90X Video with Tony Horton!', 'p90x', 'how, to, get, fit, p90x, video, with, tony, horton', '2011-09-28 12:58:48', '0000-00-00 00:00:00', '2011-09-28 12:58:48', '2011-09-28 12:58:48', 1, 7, 7, 7, 13, 2, 0, 0, 0, 100, 'how-to-get-fit-p90x-video-with-tony-horton', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', 1, NULL),
 (104, 9, 'Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA', 'Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA', 'larry, johnson, abuela, mÃ¡s, famosa, nba', '2011-09-28 13:04:58', '0000-00-00 00:00:00', '2011-09-28 13:04:58', '2011-09-28 13:04:58', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'larry-johnson-la-abuela-mas-famosa-de-la-nba', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (105, 9, 'Video de la cabaÃ±a argentina', 'Video de la cabaÃ±a argentina', 'video, cabaÃ±a, argentina, deo, caba', '2011-09-28 13:10:34', '0000-00-00 00:00:00', '2011-09-28 13:10:34', '2011-09-28 13:10:34', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'video-de-la-cabana-argentina', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'curiosidades', NULL, NULL),
-(106, 9, 'Ð¤ÐµÐ¹ÐµÑ€Ð²ÐµÑ€Ðº Ñ€Ð°Ð·Ð±ÑƒÑˆÐµÐ²Ð°Ð»ÑÑ', 'video con servicio de Rutube', 'rutube', '2011-09-28 13:11:10', '0000-00-00 00:00:00', '2011-09-28 13:11:10', '2011-09-28 13:11:10', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, '', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
+(106, 9, 'video con servicio de Rutube', 'video con servicio de Rutube', 'rutube', '2011-09-28 13:11:10', '0000-00-00 00:00:00', '2011-09-28 13:11:10', '2011-09-28 13:11:10', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, '', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (107, 9, 'Pau entra por la puerta grande en el club de los 10.000', 'Pau entra por la puerta grande en el club de los 10.000', 'pau, entra, puerta, grande, club, 000', '2011-09-28 13:14:00', '0000-00-00 00:00:00', '2011-09-28 13:14:00', '2012-07-27 11:18:30', 1, 7, 7, 7, 7, 2, 0, 0, 1, 100, 'pau-entra-por-la-puerta-grande-en-el-club-de-los-10-000', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (108, 9, 'Camelos.Semos. Jonathan. TÃº si que vales.', 'Camelos.Semos. Jonathan. TÃº si que vales.', 'camelos, semos, jonathan, tÃº, vales', '2012-07-30 10:17:50', '0000-00-00 00:00:00', '2011-09-28 13:14:30', '2011-09-28 13:14:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'camelos-semos-jonathan-tu-si-que-vales', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'curiosidades', 0, NULL),
 (109, 9, 'X men first class reviewed by rotten tomatoes on infomania', 'X men first class reviewed by rotten tomatoes on infomania', 'men, first, class, reviewed, by, rotten, tomatoes, on, infomania, neither, user, id, nor, item, is, specified, for, rss, feed', '2011-09-28 13:16:05', '0000-00-00 00:00:00', '2011-09-28 13:16:05', '2013-06-17 16:03:30', 0, 7, 7, 5, 5, 2, 0, 1, 0, 100, 'x-men-first-class-reviewed-by-rotten-tomatoes-on-infomania', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
@@ -670,7 +637,6 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (231, 12, 'Hemeroteca Calendario', '', '', '2012-10-01 13:06:06', '0000-00-00 00:00:00', '2012-10-01 13:06:06', '2012-10-01 13:06:06', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'hemeroteca-calendario', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (232, 12, 'Facebook - botÃ³n like', '', '', '2012-10-01 13:06:30', '0000-00-00 00:00:00', '2012-10-01 13:06:30', '2012-10-01 13:06:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-boton-like', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (233, 12, 'Facebook like with faces', '', '', '2012-10-01 13:06:42', '0000-00-00 00:00:00', '2012-10-01 13:06:42', '2012-10-01 13:06:42', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-like-with-faces', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
-(234, 12, 'Twitter', '', '', '2012-10-01 13:06:56', '0000-00-00 00:00:00', '2012-10-01 13:06:56', '2012-10-01 13:06:56', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'twitter', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (235, 12, 'Opinion- otras del autor **', 'Solo se visualiza en opinion del autor', '', '2012-10-01 13:09:22', '0000-00-00 00:00:00', '2012-10-01 13:09:22', '2012-10-01 13:09:22', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'opinion-otras-del-autor', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (236, 12, 'Opinion - Lista de opiniones favoritas', '', '', '2012-10-01 13:09:37', '0000-00-00 00:00:00', '2012-10-01 13:09:37', '2012-10-01 13:09:37', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'opinion-lista-de-opiniones-favoritas', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (237, 12, 'Noticias de Hoy', '', '', '2012-10-01 13:09:57', '0000-00-00 00:00:00', '2012-10-01 13:09:57', '2012-10-01 13:09:57', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'noticias-de-hoy', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
@@ -883,7 +849,6 @@ INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_content_category`, `c
 (231, 0, '0'),
 (232, 0, '0'),
 (233, 0, '0'),
-(234, 0, '0'),
 (235, 0, '0'),
 (236, 0, '0'),
 (237, 0, '0'),
@@ -992,7 +957,6 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 (76, 26, 0, 'placeholder_1_1', NULL, 'Article'),
 (210, 26, 2, 'placeholder_1_0', NULL, 'Article'),
 (72, 24, 0, 'placeholder_0_0', NULL, 'Article'),
-(11, 0, 0, 'placeholder_1_3', NULL, 'Article'),
 (206, 0, 0, 'placeholder_2_2', NULL, 'Widget'),
 (193, 0, 0, 'placeholder_2_1', NULL, 'Widget'),
 (200, 0, 1, 'placeholder_2_0', NULL, 'Widget'),
@@ -1001,14 +965,15 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 (84, 0, 3, 'placeholder_1_0', NULL, 'Article'),
 (60, 0, 2, 'placeholder_1_0', NULL, 'Opinion'),
 (56, 0, 1, 'placeholder_1_0', NULL, 'Opinion'),
-(184, 0, 0, 'placeholder_1_0', NULL, 'Opinion'),
-(215, 0, 0, 'placeholder_0_1', NULL, 'Article'),
 (62, 22, 0, 'placeholder_2_2', NULL, 'Article'),
 (71, 25, 0, 'placeholder_1_3', NULL, 'Article'),
 (51, 25, 0, 'placeholder_2_0', NULL, 'Article'),
 (13, 23, 0, 'placeholder_0_1', NULL, 'Article'),
 (56, 26, 1, 'placeholder_1_0', NULL, 'Opinion'),
 (60, 26, 0, 'placeholder_1_0', NULL, 'Opinion'),
+(215, 0, 0, 'placeholder_0_1', NULL, 'Article'),
+(67, 24, 0, 'placeholder_2_columns', NULL, 'Article'),
+(184, 0, 0, 'placeholder_1_0', NULL, 'Opinion'),
 (14, 23, 0, 'placeholder_2_columns', NULL, 'Article'),
 (82, 26, 2, 'placeholder_0_0', NULL, 'Article'),
 (68, 26, 0, 'placeholder_0_0', NULL, 'Article'),
@@ -1031,6 +996,7 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 (79, 25, 0, 'placeholder_2_columns', NULL, 'Article'),
 (167, 0, 0, 'placeholder_0_0', NULL, 'Article'),
 (216, 0, 0, 'placeholder_2_columns', NULL, 'Article'),
+(11, 0, 0, 'placeholder_1_3', NULL, 'Article'),
 (195, 0, 0, 'placeholder_2_3', NULL, 'Widget');
 
 -- --------------------------------------------------------
@@ -1064,7 +1030,6 @@ CREATE TABLE IF NOT EXISTS `kioskos` (
   `name` varchar(100) NOT NULL,
   `path` varchar(200) NOT NULL,
   `date` date NOT NULL,
-  `favorite` tinyint(1) NOT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-item, 1-subscription',
   `price` decimal(10,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`pk_kiosko`)
@@ -1504,11 +1469,6 @@ INSERT INTO `related_contents` (`pk_content1`, `pk_content2`, `relationship`, `t
 (216, 52, NULL, NULL, 3, 0, 1, 0),
 (216, 46, NULL, NULL, 2, 3, 1, 1),
 (216, 61, NULL, NULL, 1, 0, 1, 0),
-(216, 46, NULL, NULL, 2, 0, 1, 0),
-(216, 52, NULL, NULL, 3, 0, 1, 0),
-(216, 210, NULL, NULL, 0, 1, 0, 1),
-(216, 82, NULL, NULL, 0, 2, 0, 1),
-(216, 46, NULL, NULL, 0, 3, 0, 1),
 (217, 46, NULL, NULL, 1, 0, 1, 0),
 (217, 52, NULL, NULL, 2, 0, 1, 0),
 (217, 46, NULL, NULL, 0, 1, 0, 1),
@@ -1609,7 +1569,6 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('newsletter_maillist', 'a:2:{s:4:"name";s:8:"Openhost";s:5:"email";s:30:"newsletter@lists.opennemas.com";}'),
 ('site_agency', 's:13:"opennemas.com";'),
 ('activated_modules', 'a:17:{i:0;s:15:"ADVANCED_SEARCH";i:1;s:15:"ARTICLE_MANAGER";i:2;s:13:"CACHE_MANAGER";i:3;s:16:"CATEGORY_MANAGER";i:4;s:15:"COMMENT_MANAGER";i:5;s:12:"FILE_MANAGER";i:6;s:17:"FRONTPAGE_MANAGER";i:7;s:13:"IMAGE_MANAGER";i:8;s:15:"KEYWORD_MANAGER";i:9;s:15:"LIBRARY_MANAGER";i:10;s:12:"MENU_MANAGER";i:11;s:15:"OPINION_MANAGER";i:12;s:16:"SETTINGS_MANAGER";i:13;s:20:"STATIC_PAGES_MANAGER";i:14;s:13:"TRASH_MANAGER";i:15;s:17:"USERVOICE_SUPPORT";i:16;s:14:"WIDGET_MANAGER";}'),
-('europapress_sync_from_limit', 's:6:"604800";'),
 ('album_settings', 'a:6:{s:12:"total_widget";s:1:"4";s:10:"crop_width";s:3:"300";s:11:"crop_height";s:3:"240";s:14:"orderFrontpage";s:8:"favorite";s:9:"time_last";s:3:"100";s:11:"total_front";s:1:"6";}'),
 ('video_settings', 'a:3:{s:12:"total_widget";s:1:"4";s:11:"total_front";s:1:"2";s:13:"total_gallery";s:2:"20";}'),
 ('poll_settings', 'a:3:{s:9:"typeValue";s:7:"percent";s:9:"widthPoll";s:3:"600";s:10:"heightPoll";s:3:"500";}'),
@@ -2024,12 +1983,10 @@ INSERT INTO `widgets` (`pk_widget`, `content`, `renderlet`) VALUES
 (231, 'CalendarNewslibrary', 'intelligentwidget'),
 (232, 'FacebookButton', 'intelligentwidget'),
 (233, 'Facebook', 'intelligentwidget'),
-(234, 'OnmTwitter', 'intelligentwidget'),
 (235, 'OpinionByauthor', 'intelligentwidget'),
 (236, 'OpinionFavorite', 'intelligentwidget'),
 (237, 'TodayNews', 'intelligentwidget'),
 (240, '<div class="social-follow"><a class="twitter-follow-button" data-lang="pt" data-show-count="true" data-size="small" href="https://twitter.com/Opennemas">Follow @Opennemas</a> <script type="text/javascript">// <![CDATA[\r\n!function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){ js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs); } }(document,"script","twitter-wjs");\r\n// ]]></script></div>\r\n\r\n<a class="twitter-timeline" href="https://twitter.com/search?q=opennemas+OR+%40opennemas+OR+%23opennemas" data-widget-id="346651300093640705">Opennemas Newspapers Tweets</a>\r\n<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?''http'':''https'';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>\r\n', 'html');
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
