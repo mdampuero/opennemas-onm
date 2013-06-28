@@ -637,6 +637,7 @@ class NewsAgencyController extends Controller
             'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
             'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
             'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
             'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->getDigits('activated', 0),
         );
@@ -716,6 +717,7 @@ class NewsAgencyController extends Controller
                 'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
                 'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
                 'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+                'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
                 'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
                 'activated'     => $request->request->getDigits('activated', 0),
             );
