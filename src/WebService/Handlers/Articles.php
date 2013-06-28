@@ -155,8 +155,8 @@ class Articles
                 $this->validateInt($param1);
 
                 // Fetch services
-                $er              = $this->container->get('entity_repository');
-                $machineSearcher = $this->container->get('automatic_contents');
+                $er              = $this->restler->container->get('entity_repository');
+                $machineSearcher = $this->restler->container->get('automatic_contents');
 
                 // Fetch the content to work with
                 $this->validateInt($param1);
@@ -179,7 +179,7 @@ class Articles
                 $this->validateInt($param1);
 
                 // Fetch services
-                $machineSearcher = $this->container->get('automatic_contents');
+                $machineSearcher = $this->restler->container->get('automatic_contents');
 
                 // Fetch the content to work with
                 $this->validateInt($param1);
@@ -280,8 +280,8 @@ class Articles
     {
         $ccm             = ContentCategoryManager::get_instance();
         $cm              = new ContentManager();
-        $er              = $this->container->get('entity_repository');
-        $machineSearcher = $this->container->get('automatic_contents');
+        $er              = $this->restler->container->get('entity_repository');
+        $machineSearcher = $this->restler->container->get('automatic_contents');
 
         // Resolve dirty Id
         $articleId = Content::resolveID($id);
