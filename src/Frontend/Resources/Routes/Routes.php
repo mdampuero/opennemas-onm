@@ -18,6 +18,21 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'asset_image',
+    new Route(
+        '/asset/{parameters}/x/{real_path}.{_format}',
+        array(
+            '_controller' => 'Frontend:Controllers:AssetController:image',
+        ),
+        array(
+            'parameters'  => '.+',
+            'real_path'  => '.+',
+            '_format'    => 'jpg|gif|png|jpeg',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_paywall_showcase',
     new Route(
         '/paywall',

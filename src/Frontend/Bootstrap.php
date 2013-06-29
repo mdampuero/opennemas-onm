@@ -33,7 +33,7 @@ class Bootstrap extends ModuleBootstrap
     {
         $request = $this->container->get('request');
 
-        $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
+        $isAsset = preg_match('@^(?!/asset).*\.(png|gif|jpg|jpeg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset) {
             if (strstr($request->getPathInfo(), 'nocache')) {
                 return false;
