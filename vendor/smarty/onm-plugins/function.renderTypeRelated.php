@@ -75,7 +75,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
             $content->uri = $content->fullFilePath;
         }
 
-        $html =' <a title="Relacionado: '.$title_cleaned.'" href="'.$uri .'"';
+        $html =' <a title="Relacionado: '.$title_cleaned.'" href="'.$content->uri .'"';
     } else {
         $html =' <a title="Relacionado: '.$title_cleaned.'" href="'. SITE_URL . $uri .'"';
     }
