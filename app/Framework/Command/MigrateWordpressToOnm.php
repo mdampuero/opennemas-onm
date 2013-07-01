@@ -196,7 +196,7 @@ EOF
 
             while (!$rs->EOF) {
                 if ($this->elementIsImported($rs->fields['ID'], 'user')) {
-                    $this->output->writeln("[{$current}/{$totalRows}] Image already imported");
+                    $this->output->writeln("[{$current}/{$totalRows}] user already imported");
                 } else {
                     $originalID = $rs->fields['ID'];
                     $photoId    = '';
@@ -483,9 +483,9 @@ EOF
                             'author_name' => '',
                         );
 
-                    $newimageID= @$photo->createFromLocalFile($imageData);
+                    $imageID= @$photo->createFromLocalFile($imageData);
 
-                    if (!empty($newimageID)) {
+                    if (!empty($imageID)) {
                         $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                         //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
                         $this->output->writeln('- Image '. $imageID. ' ok');
