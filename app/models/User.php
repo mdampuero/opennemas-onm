@@ -659,6 +659,9 @@ class User
         $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->url              = $rs->fields['url'];
+        $this->bio              = $rs->fields['bio'];
+        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
         $this->deposit          = $rs->fields['deposit'];
@@ -693,6 +696,9 @@ class User
         $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->url              = $rs->fields['url'];
+        $this->bio              = $rs->fields['bio'];
+        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
         $this->deposit          = $rs->fields['deposit'];
@@ -718,6 +724,9 @@ class User
             $this->username      = $data['username'];
             $this->password      = $data['password'];
             $this->sessionexpire = $data['sessionexpire'];
+            $this->url           = $data['url'];
+            $this->bio           = $data['bio'];
+            $this->avatar_img_id = $data['avatar_img_id'];
             $this->email         = $data['email'];
             $this->name          = $data['name'];
             $this->deposit       = array_key_exists('deposit', $data) ? $data['deposit'] : '';
@@ -743,8 +752,14 @@ class User
         $this->username         = null;
         $this->password         = null;
         $this->sessionexpire    = null;
+        $this->url              = null;
+        $this->bio              = null;
+        $this->avatar_img_id    = null;
         $this->email            = null;
         $this->name             = null;
+        $this->deposit          = null;
+        $this->type             = null;
+        $this->token            = null;
         $this->activated        = null;
         $this->fk_user_group    = null;
         $this->accesscategories = null;
