@@ -260,13 +260,13 @@ EOF
 
             $values = array(
                 $author->id,
-                'autor'.$author->id,
+                \Onm\StringUtils::get_title($author->name),
                 md5(generateRandomString(15)),
                 15,
                 (!empty($author->url)) ? $author->url : '',
                 (!empty($author->bio)) ? $author->bio : '',
                 $avatar_img_id,
-                'autor'.$author->id.'@opennemas.com',
+                \Onm\StringUtils::get_title($author->name).'@opennemas.com',
                 $author->name,
                 0,
                 null,
