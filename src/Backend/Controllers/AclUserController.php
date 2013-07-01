@@ -205,7 +205,7 @@ class AclUserController extends Controller
                 }
 
                 if ($user->id == $_SESSION['userid']) {
-                    $_SESSION['user_language'] = $userLanguage;
+                    $_SESSION['user_language'] = $meta['user_language'];
                 }
 
                 m::add(_('User data updated successfully.'), m::SUCCESS);

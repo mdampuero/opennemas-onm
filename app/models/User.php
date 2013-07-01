@@ -261,6 +261,9 @@ class User
         $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
         $this->accesscategories = $this->readAccessCategories();
 
+        // Get user meta information
+        $this->meta = $this->getMeta();
+
         // Get photo object from avatar_img_id
         $this->photo = new \Photo($rs->fields['avatar_img_id']);
 
