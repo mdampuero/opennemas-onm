@@ -62,7 +62,7 @@ EOF
 
         $dialog = $this->getHelperSet()->get('dialog');
 
-        $validator = function ($value) {
+        $validator = function($value) {
             if (trim($value) == '') {
                 throw new \Exception('The password can not be empty');
             }
@@ -74,18 +74,21 @@ EOF
             false
         );
 
+        $originalUrl = $password = $dialog->ask(
+            $output,
+            'What is the wordpress site URL?',
+            false
+        );
 
-       /* $originalMedia = $password = $dialog->askHiddenResponse(
+        $originalDirectory = $password = $dialog->ask(
             $output,
             'Where is the wordpress media directory?',
             false
         );
 
-        define('ORIGINAL_URL', $originalMedia); */
 
-
-        define('ORIGINAL_URL', 'http://mundiario.com');
-        define('ORIGINAL_MEDIA', '/wp-content/uploads/');
+        define('ORIGINAL_URL', $originalUrl);
+        define('ORIGINAL_MEDIA', $originalDirectory.'/wp-content/uploads/');
 
         define('BD_HOST', $dataBaseHost);
         define('BD_USER', $dataBaseUser);
@@ -112,25 +115,26 @@ EOF
         $GLOBALS['application']->connOrigin->Connect(BD_HOST, BD_USER, BD_PASS, ORIGIN_BD_DATABASE);
 
         $_SESSION['username'] = 'script';
-        $_SESSION['userid'] = 11;
+        $_SESSION['userid']   = 11;
         // Execute functions
         $output->writeln("\t<fg=blue>Migrating: ".$originDataBaseName."->".$dataBaseName."</fg=blue>");
 
         $this->output = $output;
 
-     //   $this->prepareDatabase();
+        $this->prepareDatabase();
 
-     //   $this->importUsers();
+        $this->importUsers();
 
-       $this->importCategories();
+        $this->importCategories();
         $this->loadCategories();
 
-      //  $this->importImages();
+        $this->importImages();
+
         $this->importArticles();
-/*
+
         $this->importGalleries();
-         $this->importVideos();
-*/
+
+
 
         $output->writeln(
             "\n\t ***Migration finished for Database: ".$dataBaseName."***"
@@ -160,14 +164,14 @@ EOF
             "WHERE  meta_key IN ('first_name', 'last_name', 'description', 'userphoto_image_file','twitter' )";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql2);
-        $rs2 = $GLOBALS['application']->connOrigin->Execute($request);
+        $rs2     = $GLOBALS['application']->connOrigin->Execute($request);
 
         $usersMeta = $rs2->getArray();
-        $data = array();
+        $data      = array();
         foreach ($usersMeta as $user) {
             $userID = $user['user_id'];
 
-            $key = $user['meta_key'];
+            $key                 = $user['meta_key'];
             $data[$userID][$key] = $user['meta_value'];
 
         }
@@ -178,58 +182,63 @@ EOF
             ." `display_name`, `spam`, `deleted` FROM `wp_users` ";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs = $GLOBALS['application']->connOrigin->Execute($request);
+        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
-        $IDCategory=1; //assign category for media elements
+        $IDCategory = 1; //assign category for media elements
 
         if (!$rs) {
-            $this->output->writeln(self::$originConn->ErrorMsg());
+            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
         } else {
 
             $totalRows = $rs->_numOfRows;
-            $current = 1;
-            $user = new \User();
+            $current   = 1;
+            $user      = new \User();
 
             while (!$rs->EOF) {
                 if ($this->elementIsImported($rs->fields['ID'], 'user')) {
                     $this->output->writeln("[{$current}/{$totalRows}] Image already imported");
                 } else {
-
                     $originalID = $rs->fields['ID'];
+                    $photoId    = '';
 
                     if (!empty($data[$originalID]['userphoto_image_file'])
                          && is_null($data[$originalID]['userphoto_image_file'])) {
 
-                        $file = ORIGINAL_MEDIA.'userphoto/'.$data[$originalID]['userphoto_image_file'];
+                        $file    = ORIGINAL_MEDIA.'userphoto/'.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
-                        $data['avatar_img_id'] = $photoId;
                     }
 
                     $values = array(
-                        'username' => $rs->fields['user_nicename'],
-                        'password' => $rs->fields['user_pass'],
+                        'username'      => $rs->fields['user_nicename'],
+                        'password'      => $rs->fields['user_pass'],
                         'sessionexpire' =>'30',
-                        'email' => $rs->fields['user_email'],
-                        'name' => $data[$originalID]['first_name']." ".$data[$originalID]['last_name'],
-                        'type' => '',
-                        'deposit' => '',
-                        'token' => '',
-                        'activated' => $rs->fields['user_status'],
+                        'email'         => $rs->fields['user_email'],
+                        'name'          => $data[$originalID]['first_name']." ".$data[$originalID]['last_name'],
+                        'type'          => '',
+                        'deposit'       => '',
+                        'token'         => '',
+                        'activated'     => $rs->fields['user_status'],
                         'fk_user_group' => '',
-                        'avatar_img_id' => $data[$originalID]['userphoto_image_file'],
-                        'bio' => $data[$originalID]['description'],
-                        'url' => $rs->fields['user_url'],
+                        'avatar_img_id' => $photoId,
+                        'bio'           => $data[$originalID]['description'],
+                        'url'           => $rs->fields['user_url'],
                         'id_user_group' => array('3'),
                     );
 
-                    $userID = $user->create($values);
-                    $user->setMeta(array('twitter' => $data[$originalID]['twitter']));
+                    $user->create($values);
+                    $userID = $user->id;
 
                     if (!empty($userID)) {
-                        $this->insertRefactorID($originalID, $userID, 'user');
+                        if (isset($data[$originalID])
+                            && isset($data[$originalID]['twitter'])
+                            && !empty($data[$originalID]['twitter'])) {
+                            $user->setMeta(array('twitter' => $data[$originalID]['twitter']));
+                        }
+
+                        $this->insertRefactorID($originalID, $userID, 'user', $rs->fields['user_login']);
                         $this->output->writeln('- User '. $userID. ' ok');
                     } else {
-                        $this->output->writeln('Problem inserting image '.$originalID.' - '.$rs->fields['user_login'] .'\n');
+                        $this->output->writeln('Problem inserting id'.$originalID.'-'.$rs->fields['user_login'] .'\n');
                     }
                 }
                 $current++;
@@ -242,11 +251,10 @@ EOF
 
     protected function importCategories()
     {
-
         $this->output->writeln("Importing Categories");
 
-        $sql ="SELECT * FROM wp_terms, wp_term_taxonomy ".
-                "WHERE wp_terms.term_id = wp_term_taxonomy.term_id AND taxonomy='category'";
+        $sql = "SELECT * FROM wp_terms, wp_term_taxonomy ".
+               "WHERE wp_terms.term_id = wp_term_taxonomy.term_id AND taxonomy='category'";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs = $GLOBALS['application']->connOrigin->Execute($request);
@@ -265,7 +273,8 @@ EOF
                     'title'             => $category['name'],
                     'inmenu'            => 1,
                     'subcategory'       => 0,
-                    'internal_category' => 0,
+                    'internal_category' => 1,
+                    'logo_path'         => '',
                     'color'             => '',
                     'params'            => array(
                         'title'         => $category['name'],
@@ -288,8 +297,7 @@ EOF
                     serialize($data['params']),
                 );
 
-                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
+                $rs    = $GLOBALS['application']->conn->Execute($sql, $values);
                 $newID = $GLOBALS['application']->conn->Insert_ID();
 
                 $this->output->writeln("Importing category with id {$originalID} - ");
@@ -309,7 +317,7 @@ EOF
     {
         $this->categories = array();
 
-        $sql = "SELECT * FROM translation_ids WHERE type='category'";
+        $sql = "SELECT * FROM translation_ids WHERE type ='category'";
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -344,13 +352,13 @@ EOF
             " AND ".$where." ".$limit;
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs = $GLOBALS['application']->connOrigin->Execute($request);
+        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
         if (!$rs) {
             $this->output->writeln('DB problem: '. $GLOBALS['application']->connOrigin->ErrorMsg());
         } else {
             $totalRows = $rs->_numOfRows;
-            $current = 1;
+            $current   = 1;
 
             while (!$rs->EOF) {
                 $originalArticleID = $rs->fields['ID'];
@@ -370,7 +378,7 @@ EOF
                         'category' => $this->matchCategory($rs->fields['term_taxonomy_id']),
                         'with_comment' => 1,
                         'available' => 1,
-                        'content_status' => 0,
+                        'content_status' => 1,
                         'frontpage' => 0,
                         'in_home' => 0,
                         'title_int' => $this->convertoUTF8($rs->fields['post_title']),
@@ -390,29 +398,32 @@ EOF
                         'footer_video2' => '',
                         'created' => $rs->fields['post_date_gmt'],
                         'starttime' => $rs->fields['post_date_gmt'],
-                        'changed' => $rs->fields['post_modified'],
+                        'changed' => $rs->fields['post_modified_gmt'],
                         'fk_user' => $this->elementIsImported($rs->fields['post_author'], 'user'),
                         'fk_author' => $this->elementIsImported($rs->fields['post_author'], 'user'),
                         'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
                         'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
                     );
 
-                    $article = new \Article();
+                    $article      = new \Article();
                     $newArticleID = $article->create($values);
 
                     if (!empty($newArticleID)) {
-                        $this->insertRefactorID($originalArticleID, $newArticleID,'article', $rs->fields['post_name']);
-                        $this->output->writeln('-'. $originalArticleID.'->'. $newArticleID. ' article ok');
+                        $this->insertRefactorID($originalArticleID, $newArticleID, 'article', $rs->fields['post_name']);
+                        $this->output->writeln('-'. $originalArticleID.'->'.
+                            $newArticleID. ' article ok');
                     } else {
-                        $this->output->writeln('Problem inserting article '.$originalArticleID.' - '. $rs->fields['post_name'] .'\n');
+                        $this->output->writeln('Problem inserting article '.$originalArticleID.
+                            ' - '. $rs->fields['post_name'] .'\n');
                     }
                 }
                 $current++;
                 $rs->MoveNext();
             }
             $this->output->writeln('Imported  '.$current.' articles \n');
-        }
+
         $rs->Close();
+        }
         return true;
     }
 
@@ -428,17 +439,17 @@ EOF
             "`post_type` = 'attachment'  AND post_status !='trash' ";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs = $GLOBALS['application']->connOrigin->Execute($request);
+        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
-        $IDCategory=$this->matchCategory('62'); //assign category 'Fotos' for media elements
+        $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
 
         if (!$rs) {
-            $this->output->writeln(self::$originConn->ErrorMsg());
+            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
         } else {
 
             $totalRows = $rs->_numOfRows;
-            $current = 1;
-            $photo = new \Photo();
+            $current   = 1;
+            $photo     = new \Photo();
 
             while (!$rs->EOF) {
                 if ($this->elementIsImported($rs->fields['ID'], 'image')) {
@@ -448,8 +459,7 @@ EOF
                     $originalImageID = $rs->fields['ID'];
 
                     ///http://mundiario.com/wp-content/uploads/2013/06/Brasil-360x225.png
-                    $local_file = str_replace(ORIGINAL_URL,'',$rs->fields['guid']);
-                  //  $local_file = str_replace(self::$originMedia['originUrl'],'',$rs->fields['guid']);
+                    $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $rs->fields['guid']);
 
                     $imageData = array(
                             'title' => $this->convertoUTF8(strip_tags($rs->fields['post_title'])),
@@ -467,10 +477,11 @@ EOF
                             'changed' => $rs->fields['post_modified_gmt'],
                             'fk_user' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
                             'fk_author' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
                             'local_file' => $local_file,
                             'author_name' => '',
                         );
-
 
                     $newimageID= @$photo->createFromLocalFile($imageData);
 
@@ -491,107 +502,88 @@ EOF
         }
     }
 
+
     protected function importGalleries()
     {
+        $sql = "SELECT * FROM `wp_posts` WHERE ".
+            "`post_content` LIKE '%gallery%'  AND post_status !='trash' ";
          /*[gallery link="file" ids="8727,8728,8729,8730,8731,8732"]*/
-    }
+
+        $request    = $GLOBALS['application']->connOrigin->Prepare($sql);
+        $rs         = $GLOBALS['application']->connOrigin->Execute($request);
+        $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
 
 
-     protected function importVideos()
-    {
-        //wp_postmeta  -> meta_key = usn_videolink
-    }
-
-    protected function importComments()
-    {
-
-        echo "IMPORTING COMMENTS\n";
-
-        $sql = "SELECT * FROM `wp_comments`, `wp_posts` WHERE ".
-        " `comment_approved`=1 AND `ID`=`comment_post_ID` ";
-
-        // Fetch the list of Opinions available for one author in EditMaker
-        $request = self::$originConn->Prepare($sql);
-        $rs = self::$originConn->Execute($request);
-
-
-        if(!$rs) {
-            ImportHelper::messageStatus(self::$originConn->ErrorMsg());
+        if (!$rs) {
+            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
         } else {
 
             $totalRows = $rs->_numOfRows;
-            $current = 1;
-            $ih = new ImportHelper();
+            $current   = 1;
+            $album     = new \Album();
 
             while (!$rs->EOF) {
-
-                $originalCommentID = $rs->fields['comment_ID'];
-
-                if ($ih->elementIsImported($originalCommentID, 'comment') ) {
-                    echo "[{$current}/{$totalRows}] Comments with id {$originalCommentID} already imported\n";
+                 $originalID = $rs->fields['ID'];
+                if ($this->elementIsImported($originalID, 'gallery')) {
+                    $this->output->writeln("[{$current}/{$totalRows}] Gallery already imported");
                 } else {
 
-                    $articleID =$ih->elementIsImported($rs->fields['comment_post_ID'], 'article');
-                    $ccm = ContentCategoryManager::get_instance();
+                    preg_match_all('/\[gallery.*?ids="(.*)".*?\]/', $rs->fields['post_content'], $result);
 
-                    if(!empty($articleID)) {
-                        $article= new Article($articleID);
-                        if(!empty($article->pk_content)) {
+                    if (!empty($result[0]) ) {
 
-                        echo "[{$current}/{$totalRows}] Importing comment with id {$originalCommentID} - ";
+                        $ids = explode(',',$result[1][0]);
 
-                        $comment = ImportHelper::convertoUTF8(strip_tags($rs->fields['comment_content']));
-                        $title =  ImportHelper::convertoUTF8(substr($comment,0,100));
-                        $data =
-                            array(
-                                'title' => $title,
-                                'category' => $article->category,
-                                'category_name' =>$article->loadCategoryName($articleID),
-                                'body' =>  strip_tags($rs->fields['comment_content']),
-                                'metadata' => \Onm\StringUtils::get_tags($title),
-                                'description' => substr($comment, 0, 150),
-                                'content_status' => 1,
-                                'created' => $rs->fields['comment_date'],
-                                'starttime' => $rs->fields['comment_date'],
-                                'changed' => $rs->fields['comment_date'],
-                                'published' => $rs->fields['comment_date'],
-                                'fk_publisher' => self::$configuration['idUser']['id'],
-                                'fk_user' => self::$configuration['idUser']['id'],
-                                'author' => ImportHelper::convertoUTF8(strip_tags($rs->fields['comment_author'])),
-                                'ip'=>$rs->fields['comment_author_IP'],
-                                'email'=>ImportHelper::convertoUTF8($rs->fields['comment_author_email']),
-                                'ciudad'=>'',
-                            );
+                        $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $rs->fields['post_content']);
+                        $newBody = $this->convertoUTF8(strip_tags($newBody, '<p><a><br>'));
 
-                        $values = array(
-                            'id' =>   $articleID,
-                            'data' => $data,
-                            'ip' =>   $rs->fields['comment_author_IP'],
+                        $data = array(
+                            'title'          => $this->convertoUTF8($rs->fields['post_title']),
+                            'category'       => $IDCategory,
+                            'with_comment'   => 1,
+                            'content_status' => 1,
+                            'available'      => 1,
+                            'metadata'       => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_title'])),
+                            'subtitle'       => $newBody,
+                            'agency'         => '',
+                            'summary'        => $newBody,
+                            'fuente'         => '',
+                            'category_name'  => 'fotos',
+                            'description'    => $newBody,
+                            'created'        => $rs->fields['post_date_gmt'],
+                            'starttime'      => $rs->fields['post_date_gmt'],
+                            'changed'        => $rs->fields['post_modified_gmt'],
+                            'fk_user'        => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_author'      => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_publisher'   => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'slug'           => $rs->fields['post_name'],
+                            'album_photos_id' => $ids,
+                            'album_photos_footer'=> null,
+                            'album_frontpage_image' => $ids[0],
                         );
 
-                        $comment = new Comment();
-                        $newCommentID = $comment->create($values);
+                        $album->cover_id = $ids[0];
 
-                        if(is_string($newCommentID)) {
-
-                            $ih->logElementInsert($originalCommentID, $newCommentID, 'comment');
-
-                    //     $ih->updateCreateDate($newOpinionID, $rs->fields['fecha']);
-
-                        }
-                        echo "new id {$newCommentID} [DONE]\n";
+                        $result  = $album->create($data);
+                        $albumID = $result->id;
+                        if (!empty($albumID)) {
+                            $this->insertRefactorID($originalID, $albumID, 'gallery', $rs->fields['post_name']);
+                            //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
+                            $this->output->writeln('- Gallery '. $albumID. ' ok');
+                        } else {
+                            $this->output->writeln('Problem inserting image '.$originalID.' - '.$rs->fields['post_name'] ."\n");
                         }
                     }
-
                 }
 
                 $current++;
                 $rs->MoveNext();
             }
-            $rs->Close(); # optional
         }
-    }
+        $rs->Close(); # optional
 
+    }
 
     /**
      *  insert the correspondence between identifiers
@@ -600,12 +592,12 @@ EOF
      **/
     protected function insertRefactorID($contentID, $newID, $type, $slug="")
     {
-        $sql = 'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`, `slug`)
+        $sql    = 'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`, `slug`)
                 VALUES (?, ?, ?, ?)';
         $values = array($contentID, $newID, $type, $slug);
 
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
-        $rss = $GLOBALS['application']->conn->Execute($stmt, $values);
+        $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
 
         if (!$rss) {
             $this->output->writeln('\n insertRefactorID: '.$GLOBALS['application']->conn->ErrorMsg());
@@ -626,7 +618,7 @@ EOF
             $values = array($contentID, $contentType);
 
             $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss = $GLOBALS['application']->conn->Execute($stmt, $values);
+            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
 
             if (!$rss) {
                 $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
@@ -650,11 +642,11 @@ EOF
     protected  function updateFields($contentID, $params)
     {
         if (isset($contentID) && isset($params)) {
-            $sql = 'UPDATE `contents` SET {$params}  WHERE pk_content=?';
+            $sql    = 'UPDATE `contents` SET {$params}  WHERE pk_content=?';
             $values = array($params, $contentID);
 
             $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss = $GLOBALS['application']->conn->Execute($stmt, $values);
+            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
             if (!$rss) {
                 $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
             }
@@ -669,7 +661,6 @@ EOF
      *
      * @return string
      **/
-
     protected function getOnmIdImage($guid) {
         $sql = "SELECT ID FROM `wp_posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ".
@@ -678,10 +669,10 @@ EOF
 
         // Fetch the list of Opinions available for one author in EditMaker
         $request = $GLOBALS['application']->conn->Prepare($sql);
-        $rs = $GLOBALS['application']->conn->Execute($request);
+        $rs      = $GLOBALS['application']->conn->Execute($request);
 
         $imageID='';
-        if(!$rs) {
+        if (!$rs) {
             $this->output->writeln('- Image '. $guid. ' ok');
         } else {
             $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
@@ -699,20 +690,41 @@ EOF
         */
         $result = array();
         #Deleted [caption id="attachment_2302" align="aligncenter" width="300" caption="El partido ultra Jobbik siembra el terror entre las minorías y los extranjeros en Hungría."][/caption]
-        //OJO!!<a title="Kobe Bryant" href="http://www.flickr.com/photos/42161969@N03/4067656449/" target="_blank"><img title="Kobe Bryant" alt="Kobe Bryant" src="http://farm3.staticflickr.com/2493/4067656449_a576ba8a59.jpg" /></a>
-        //permitir//
-        $newBody='';
-        $img='';
-        preg_match_all('/(<a .*?href="(.+?)".*?><img .*?src=".+?".*?><\/a>)/', $body, $result);
-        if(!empty($result)) {
-            $guid = $result[2][0];
+        //Allow!!<a title="Kobe Bryant" href="http://www.flickr.com/photos/42161969@N03/4067656449/" target="_blank"><img title="Kobe Bryant" alt="Kobe Bryant" src="http://farm3.staticflickr.com/2493/4067656449_a576ba8a59.jpg" /></a>
 
-            $newBody =preg_replace('/(<a .*?href="(.+?)".*?><img .*?src=".+?".*?><\/a>)/', '', $body);
-            $newBody = $this->convertoUTF8(strip_tags($newBody, '<p><a><br>'));
-            $img = $this->getOnmIdImage($guid);
+        $newBody = '';
+        $img     = '';
+        $gallery = '';
+        $allowed = '<i><b><p><a><br><ol><ul><li>';
+        $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?><\/a>@';
+        preg_match_all($patern, $body, $result);
+        if (!empty($result[1])) {
+            $guid    = $result[1][0];
+            $img     = $this->getOnmIdImage($guid);
+            $newBody = $body;
+            if (!empty($img)) {
+                $newBody = preg_replace($patern, '', $body);
+                $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+            }
         }
-        $newBody = preg_replace('/(\[caption .*?\]\[\/caption\])/', '', $newBody);
-        return array('img'=>$img, 'body'=>$newBody);
+
+        preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\].*?\[\/caption\]@', $body, $result);
+        if (!empty($result[1]) ) {
+            $id      = $result[1][0];
+            $img     = $this->elementIsImported($id, 'image');
+            $newBody = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $body);
+            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+        }
+
+        preg_match_all('@\[gallery.*?ids="(.*)".*?\]@', $body, $result);
+        if (!empty($result[0]) ) {
+            $id      = $result[1][0];
+            $gallery = $this->elementIsImported($id, 'gallery');
+            $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $body);
+            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+        }
+
+        return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery);
 
     }
 
@@ -727,9 +739,9 @@ EOF
     protected function uploadUserAvatar($file, $userName)
     {
         // Generate image path and upload directory
-        $userNameNormalized = \Onm\StringUtils::normalize_name($userName);
+        $userNameNormalized      = \Onm\StringUtils::normalize_name($userName);
         $relativeAuthorImagePath ="/images/authors/".$userName;
-        $uploadDirectory =  MEDIA_PATH .$relativeAuthorImagePath;
+        $uploadDirectory         =  MEDIA_PATH .$relativeAuthorImagePath;
 
         // Get original information of the uploaded image
         $originalFileName = $file;
@@ -752,7 +764,7 @@ EOF
         if ($fileCopied) {
             // Get all necessary data for the photo
             $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
-            $data = array(
+            $data  = array(
                 'title'       => $originalFileName,
                 'name'        => $newFileName,
                 'user_name'   => $newFileName,
@@ -790,7 +802,31 @@ EOF
      **/
     protected function convertoUTF8($string)
     {
-        return mb_convert_encoding($string, 'UTF-8');
+       // return mb_convert_encoding($string, 'UTF-8');
+       return $string;
     }
+
+
+    public function printResults()
+    {
+
+        $sql = "SELECT type , count( * ) AS `total` FROM `translation_ids` GROUP BY type";
+
+        $count_sql = $GLOBALS['application']->conn->Prepare($sql);
+        $rs        = $GLOBALS['application']->conn->Execute($count_sql);
+
+        if (!$rs) {
+            $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+        } else {
+            while (!$rs->EOF) {
+                $this->output->writeln("There are imported {$rs->fields['total']} ".
+                    "type {$rs->fields['type']}.\n");
+                $rs->MoveNext();
+            }
+            $rs->Close(); # optional
+        }
+
+    }
+
 }
 
