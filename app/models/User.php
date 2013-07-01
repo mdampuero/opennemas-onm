@@ -978,6 +978,10 @@ class User
             $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
             $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
+            if (!$rs) {
+                return false;
+            }
+
             foreach ($rs as $value) {
                 $this->meta[$rs->fields['meta_key']] = $rs->fields['meta_value'];
             }
