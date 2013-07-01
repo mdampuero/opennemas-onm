@@ -299,6 +299,9 @@ class Article extends Content
 
         $this->load($rs->fields);
 
+        // Get author data for this article
+        $this->author = new \User($this->fk_author);
+
         $this->permalink = Uri::generate(
             'article',
             array(
