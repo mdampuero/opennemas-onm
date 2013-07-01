@@ -46,11 +46,19 @@ function clearslash($string)
     return stripslashes($string);
 }
 
-// TODO: move to a separated file called functions.php
+
 /**
-* Stablishes a cookie value in a secure way
-*/
-function setCookieSecure($name, $value, $expires = 0, $domain = '/') {
+ * Stablishes a cookie value in a secure way
+ *
+ * @param string $name the name of the cookie
+ * @param mixed $value the value to set into the cookie
+ * @param int $expires the seconds during the cookie will be valid
+ * @param int $domain the path for which the cookie will be valid
+ *
+ * @return void
+ */
+function setCookieSecure($name, $value, $expires = 0, $domain = '/')
+{
     setcookie(
         $name,
         $value,
@@ -148,7 +156,7 @@ function logContentEvent($action=NULL, $content=NULL)
         $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
     }
 
-    $logger->notice( $msg );
+    $logger->notice($msg);
 }
 
 /**
@@ -321,4 +329,146 @@ function microtime_float()
 {
     list($usec, $sec) = explode(" ", microtime());
     return ((float)$usec + (float)$sec);
+}
+
+/**
+ * Detect a mobile device and redirect to mobile version
+ *
+ * @param  boolean $autoRedirect
+ *
+ * @return boolean True if it's a mobile device and $autoRedirect is false
+ */
+function mobileRouter($autoRedirect = true)
+{
+    $isMobileDevice = false;
+    $showDesktop = filter_input(INPUT_GET, 'show_desktop', FILTER_DEFAULT);
+    if ($showDesktop) {
+        $autoRedirect = false;
+        $_COOKIE['confirm_mobile'] = 1;
+    }
+
+    // Browscap library
+    require APPLICATION_PATH .DS.'vendor'.DS.'Browscap.php';
+
+    // Creates a new Browscap object (loads or creates the cache)
+    $bc = new \Browscap(APPLICATION_PATH .DS.'tmp'.DS.'cache');
+    $browser = $bc->getBrowser(); //isBanned
+
+    if (!empty($browser->isMobileDevice)
+        && ($browser->isMobileDevice == true)
+        && !(isset($_COOKIE['confirm_mobile']))
+    ) {
+        if ($autoRedirect) {
+            header("Location: ".'/mobile' . $_SERVER['REQUEST_URI']);
+            exit(0);
+        } else {
+            $isMobileDevice = true;
+        }
+    }
+
+    return $isMobileDevice;
+}
+
+/**
+* Perform a permanently redirection (301)
+*
+* Use the header PHP function to redirect browser to another page
+*
+* @param string $url the url to redirect to
+*/
+function forward301($url)
+{
+    header('HTTP/1.1 301 Moved Permanently');
+    header('Location: ' . $url);
+    exit(0);
+}
+
+/**
+ * Try to get the real IP of the client
+ *
+ * @return string the client ip
+ **/
+function getRealIp()
+{
+    // REMOTE_ADDR: dirección ip del cliente
+    // HTTP_X_FORWARDED_FOR: si no está vacío indica que se ha utilizado
+    // un proxy. Al pasar por el proxy lo que hace este es poner su
+    // dirección IP como REMOTE_ADDR y añadir la que estaba como
+    // REMOTE_ADDR al final de esta cabecera.
+    // En el caso de que la petición pase por varios proxys cada uno
+    // repite la operación, por lo que tendremos una lista de direcciones
+    // IP que partiendo del REMOTE_ADDR original irá indicando los proxys
+    // por los que ha pasado.
+
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+        && !empty($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+        $clientIp =
+            ( isset($_SERVER['REMOTE_ADDR'])
+                && !empty($_SERVER['REMOTE_ADDR']) ) ?
+            $_SERVER['REMOTE_ADDR']
+                :
+                ( ( isset($_ENV['REMOTE_ADDR'])
+                    && !empty($_ENV['REMOTE_ADDR']) ) ?
+                $_ENV['REMOTE_ADDR']
+                    :
+                    "unknown" );
+
+        // los proxys van añadiendo al final de esta cabecera
+        // las direcciones ip que van "ocultando". Para localizar la ip real
+        // del usuario se comienza a mirar por el principio hasta encontrar
+        // una dirección ip que no sea del rango privado. En caso de no
+        // encontrarse ninguna se toma como valor el REMOTE_ADDR
+
+        $entries = preg_split('/[, ]/', $_SERVER['HTTP_X_FORWARDED_FOR']);
+
+        reset($entries);
+        while (list(, $entry) = each($entries)) {
+            $entry = trim($entry);
+            if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
+                // http://www.faqs.org/rfcs/rfc1918.html
+                $privateIp = array(
+                    '/^0\./',
+                    '/^127\.0\.0\.1/',
+                    '/^192\.168\..*/',
+                    '/^172\.((1[6-9])|(2[0-9])|(3[0-1]))\..*/',
+                    '/^10\..*/'
+                );
+
+                $foundIp = preg_replace($privateIp, $clientIp, $ipList[1]);
+
+                if ($clientIp != $foundIp) {
+                    return  $foundIp;
+                }
+            }
+        }
+    } else {
+        $clientIp =
+            ( isset($_SERVER['REMOTE_ADDR'])
+                && !empty($_SERVER['REMOTE_ADDR']) ) ?
+            $_SERVER['REMOTE_ADDR']
+                :
+                ( ( isset($_ENV['REMOTE_ADDR'])
+                    && !empty($_ENV['REMOTE_ADDR']) ) ?
+                $_ENV['REMOTE_ADDR']
+                    :
+                    "unknown" );
+    }
+
+    return $clientIp;
+}
+
+function getService($serviceName)
+{
+    global $sc;
+    return $sc->get($serviceName);
+}
+
+function generateRandomString($length = 10)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $randomString;
 }

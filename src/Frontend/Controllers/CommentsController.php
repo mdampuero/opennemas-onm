@@ -58,8 +58,9 @@ class CommentsController extends Controller
             && \Content::checkExists($contentID)
         ) {
             // Getting comments and total count comments for current article
-            $total    = \Repository\CommentsManager::countCommentsForContentId($contentID);
-            $comments = \Repository\CommentsManager::getCommentsforContentId(
+            $commentManager = $this->get('comment_repository');
+            $total    = $commentManager->countCommentsForContentId($contentID);
+            $comments = $commentManager->getCommentsforContentId(
                 $contentID,
                 $elemsByPage,
                 $offset
@@ -107,8 +108,9 @@ class CommentsController extends Controller
             && \Content::checkExists($contentID)
         ) {
             // Getting comments for current article
-            $total    = \Repository\CommentsManager::countCommentsForContentId($contentID);
-            $comments = \Repository\CommentsManager::getCommentsforContentId(
+            $commentManager = $this->get('comment_repository');
+            $total    = $commentManager->countCommentsForContentId($contentID);
+            $comments = $commentManager->getCommentsforContentId(
                 $contentID,
                 $elemsByPage,
                 $offset
@@ -229,7 +231,7 @@ class CommentsController extends Controller
             // Prevent XSS attack
 
             $comment = new \Comment();
-            if (\Repository\CommentsManager::hasBadWordsComment($authorName.' '.$body)) {
+            if (\Repository\CommentManager::hasBadWordsComment($authorName.' '.$body)) {
                 $message = _('Your comment was rejected due insults usage.');
             } else {
                 try {

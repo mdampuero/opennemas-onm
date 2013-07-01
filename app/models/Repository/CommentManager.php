@@ -9,42 +9,58 @@
  **/
 namespace Repository;
 
+use Onm\Cache\CacheInterface;
+
 /**
  * Handles common operations with comments
  *
- * @package    Model
- */
-class CommentsManager
+ * @package Repository
+ **/
+class CommentManager extends BaseManager
 {
+    public function find($id)
+    {
+        $comment = null;
+
+        $cacheId = $this->cachePrefix . "_comment_" . $id;
+
+        if (!$this->hasCache()
+            || ($comment = $this->cache->fetch($cacheId)) === false
+            || !is_object($comment)
+        ) {
+            $comment = new Comment($id);
+
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $comment);
+            }
+        }
+
+        return $comment;
+    }
 
     /**
-     * undocumented function
+     * Searches for comments given a criteria
      *
-     * @return void
+     * @param array $criteria        the criteria used to search the comments
+     * @param array $order           the order applied in the search
+     * @param int   $elementsPerPage the max number of elements to return
+     * @param int   $page            the offset to start with
+     *
+     * @return array the matched elements
      **/
-    public function find($filter, $order, $page = null, $elemsPerPage = null)
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
-        $filterSQL = $this->buildFilter($filter);
+        $filterSQL  = $this->getFilterSQL($criteria);
 
-        // Building the SQL order
-        $orderSQL  = '`id` DESC';
+        $orderBySQL  = '`id` DESC';
         if (!empty($order)) {
-            $orderSQL = $order;
+            $orderBySQL = $this->getOrderBySQL($order);
         }
+        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
 
-        // Building the SQL limit
-        if ($page < 1) {
-            $limitSQL = '';
-        } elseif ($page == 1) {
-            $limitSQL = ' LIMIT '. $elemsPerPage;
-        } else {
-            $limitSQL = ' LIMIT '.($page-1)*$elemsPerPage.', '.$elemsPerPage;
-        }
-
-        $start = microtime(true);
         // Executing the SQL
-        $sql = "SELECT * FROM `comments` WHERE $filterSQL ORDER BY $orderSQL $limitSQL";
+        $sql = "SELECT * FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -76,9 +92,8 @@ class CommentsManager
     public function count($filter)
     {
         // Building the SQL filter
-        $filterSQL = $this->buildFilter($filter);
+        $filterSQL = $this->getFilterSQL($filter);
 
-        $start = microtime(true);
         // Executing the SQL
         $sql = "SELECT count(id) FROM `comments` WHERE $filterSQL";
         $rs = $GLOBALS['application']->conn->GetOne($sql);
@@ -93,30 +108,6 @@ class CommentsManager
     }
 
     /**
-     * Builds the SQL WHERE filter given an array or string with the desired filter
-     *
-     * @param string|array $filter the filter params
-     *
-     * @return string the SQL WHERE filter
-     **/
-    protected function buildFilter($filter)
-    {
-        if (is_array($filter)) {
-            foreach ($filter as $field => $value) {
-                if (strpos('SEARCH ', $value)) {
-
-                }
-                $filterSQL []= "`$field`='$value'";
-            }
-            $filterSQL = implode(' AND ', $filterSQL);
-        } else {
-            $filterSQL = $filter;
-        }
-
-        return $filterSQL;
-    }
-
-    /**
      * Gets the public comments from a given content's id.
      *
      * @param int $contentID the content id for fetching its comments
@@ -125,7 +116,7 @@ class CommentsManager
      *
      * @return array  array of comment's objects
      **/
-    public static function getCommentsforContentId($contentID, $elemsByPage = null, $page = null)
+    public function getCommentsforContentId($contentID, $elemsByPage = null, $page = null)
     {
         $comments = array();
 
@@ -134,14 +125,7 @@ class CommentsManager
         }
 
         // Preparing limit
-        $limitSQL = '';
-        if (!empty($elemsByPage) && !empty($page)) {
-            if ($page == 1) {
-                $limitSQL = ' LIMIT '. $elemsByPage;
-            } else {
-                $limitSQL = ' LIMIT '.($page-1)*$elemsByPage.', '.$elemsByPage;
-            }
-        }
+        $limitSQL = $this->getLimitSQL($elemsByPage, $page);
 
         $sql = "SELECT * FROM `comments`
                 WHERE `content_id`=? AND `status`='".\Comment::STATUS_ACCEPTED."'

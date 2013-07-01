@@ -19,16 +19,6 @@
 class Order
 {
     /**
-     * Creates an order object instance
-     *
-     * @return void
-     **/
-    public function __construct()
-    {
-        return $this;
-    }
-
-    /**
      * Loads the order information given its id
      *
      * @param int $id the order id

@@ -251,11 +251,11 @@ class Content
      **/
     public function __construct($id = null)
     {
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-
         if (!is_null($id)) {
             return $this->read($id);
         }
+
+        $this->content_type = get_class($this);
     }
 
     /**
@@ -306,7 +306,7 @@ class Content
 
                 break;
             case 'comments':
-                return $this->comments = \Repository\CommentsManager::countCommentsForContentId($this->id);
+                return $this->comments = \Repository\CommentManager::countCommentsForContentId($this->id);
 
                 break;
             case 'content_type_l10n_name':
@@ -329,7 +329,6 @@ class Content
     public static function checkExists($id)
     {
         $exists = false;
-
 
         $sql = 'SELECT pk_content FROM `contents` '
              . 'WHERE pk_content = ? LIMIT 1';
@@ -1965,7 +1964,7 @@ class Content
             $content = new Content($refactorID);
             $content = $content->get($refactorID);
 
-            Application::forward301('/'.$content->uri);
+            forward301('/'.$content->uri);
         }
 
         return $oldID;

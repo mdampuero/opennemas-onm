@@ -47,14 +47,9 @@ class Letter extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = __CLASS__;
         $this->content_type_l10n_name = _('Letter');
+
+        parent::__construct($id);
     }
 
     /**
@@ -249,7 +244,7 @@ class Letter extends Content
                 ."de palabras malsonantes.";
         }
 
-        $ip = Application::getRealIp();
+        $ip = getRealIp();
         $data["params"] = array('ip'=> $ip);
         if ($letter->create($data)) {
             return "Su carta ha sido guardada y está pendiente de publicación.";

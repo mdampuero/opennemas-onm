@@ -341,25 +341,9 @@ class Advertisement extends Content
      **/
     public function __construct($id = null)
     {
-        // Fetch information from Content class
-        parent::__construct($id);
-
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
-        // Store this object into the cache manager for better performance
-        if (is_null($this->cache)) {
-            $this->cache = new MethodCacheManager($this, array('ttl' => (20)));
-        } else {
-            $this->cache->setCacheLife(20); // 20 seconds
-        }
-
-        // Set the content_type
-        // FIXME: this should be into the __construct method of Content class.
         $this->content_type = get_class();
 
-        return $this;
+        parent::__construct($id);
     }
 
     /**

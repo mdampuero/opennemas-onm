@@ -83,14 +83,9 @@ class Frontpage extends Content
      */
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-        $this->cache = new MethodCacheManager($this, array('ttl' => 300));
-        $this->content_type = __CLASS__;
         $this->content_type_l10n_name = _('Frontpage');
+
+        parent::__construct($id);
     }
 
     /**

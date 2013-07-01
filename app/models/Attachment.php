@@ -63,18 +63,10 @@ class Attachment extends Content
      **/
     public function __construct($id = null)
     {
-        $this->content_type = 'attachment';
-        parent::__construct($id);
-
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'attachment';
         $this->content_type_l10n_name = _('File');
         $this->file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR;
+
+        parent::__construct($id);
     }
 
     /**

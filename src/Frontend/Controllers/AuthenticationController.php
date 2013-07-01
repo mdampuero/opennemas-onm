@@ -74,7 +74,7 @@ class AuthenticationController extends Controller
                 // Try to autenticate the user
                 if ($user->login($login, $password, $token, $captcha)) {
                     // Check if user account is activated
-                    if ($user->authorize != 1) {
+                    if ($user->activated != 1) {
                         m::add(_('This user is not activated. Check your e-mail for the activation link.'), m::ERROR);
                         return $this->redirect($this->generateUrl('frontend_auth_login'));
                     } else {
@@ -91,7 +91,7 @@ class AuthenticationController extends Controller
                         $_SESSION = array(
                             'userid'           => $user->id,
                             'realname'         => $user->name,
-                            'username'         => $user->login,
+                            'username'         => $user->username,
                             'email'            => $user->email,
                             'deposit'          => $user->deposit,
                             'type'             => $user->type,

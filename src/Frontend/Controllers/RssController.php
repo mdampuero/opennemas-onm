@@ -57,7 +57,7 @@ class RssController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
 
             $categoriesTree = $ccm->getCategoriesTreeMenu();
-            $opinionAuthors = \Author::list_authors();
+            $opinionAuthors = \User::getAllUsersAuthors();
 
             $this->view->assign('categoriesTree', $categoriesTree);
             $this->view->assign('opinionAuthors', $opinionAuthors);

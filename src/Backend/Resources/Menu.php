@@ -58,15 +58,15 @@ $menuXml = '<?xml version="1.0"?>
                 module_name="OPINION_MANAGER"
                 privilege="OPINION_ADMIN"
                 title="'.htmlspecialchars(_("Article opinions"), ENT_QUOTES).'"
-                id="mailman"
+                id="opinion_manager"
                 link="'.url('admin_opinions').'"
             />
             <node
-                module_name="OPINION_MANAGER"
-                privilege="OPINION_ADMIN"
+                module_name="USER_MANAGER"
+                privilege="USER_ADMIN"
                 title="'.htmlspecialchars(_("Authors"), ENT_QUOTES).'"
-                id="mailman"
-                link="'.url('admin_opinion_authors').'"
+                id="authors"
+                link="'.url('admin_acl_user', array('group' => 3)).'"
             />
         </submenu>
         <node

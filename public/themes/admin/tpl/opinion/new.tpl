@@ -87,9 +87,9 @@
                         <label for="fk_author" class="control-label">{t}Author{/t}</label>
                         <div class="controls">
                             <select id="fk_author" name="fk_author" required="required">
-                                <option value="0" {if isset($author) && $author eq "0"}selected{/if}>{t} - Select one author - {/t}</option>
+                                <option value="0" {if is_null($author->id)}selected{/if}>{t} - Select one author - {/t}</option>
                                 {foreach from=$all_authors item=author}
-                                <option value="{$author->pk_author}" {if $opinion->fk_author eq $author->pk_author}selected{/if}>{$author->name}</option>
+                                <option value="{$author->id}" {if $opinion->fk_author eq $author->id}selected{/if}>{$author->name}</option>
                                 {/foreach}
                             </select>
                         </div>

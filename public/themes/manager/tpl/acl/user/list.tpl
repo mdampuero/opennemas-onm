@@ -83,7 +83,7 @@ jQuery(function($){
 						</a>
 					</td>
 					<td class="left">
-						{$user->login}
+						{$user->username}
 					</td>
 					<td class="left">
 						{section name=u loop=$user_groups}
@@ -95,7 +95,7 @@ jQuery(function($){
 					<td class="center">
 						<div class="btn-group">
 							<a class="btn" href="{url name=manager_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">
-								{if $user->authorize eq 1}
+								{if $user->activated eq 1}
 									<i class="icon16 icon-ok"></i>
 								{else}
 									<i class="icon16 icon-remove"></i>
