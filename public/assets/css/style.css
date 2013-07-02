@@ -346,7 +346,7 @@ table.adminform tfoot tr td{
   width:70px; height:70px;
   overflow:hidden !important;
 }
-.gallery_list li img { cursor:pointer; border:0px; width:100% }
+.gallery_list li img { cursor:pointer; border:0px; width:64px; height:64px; }
 .gallery_list li{ display: inline !important;  max-height:67px;}
 
 .gallery_list li div { display: table-cell !important; width:67px; height: 67px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}

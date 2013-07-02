@@ -40,7 +40,7 @@
             {elseif preg_match('@^/authors/@', $photo->path_file)}
                 <img class="image-preview" rel="#image-{$smarty.foreach.n.index}" src='{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}' />
             {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
-                <img class="image-preview" rel="#image-{$smarty.foreach.n.index}" src='{$MEDIA_IMG_URL}{$photo->path_file}140-100-{$photo->name}' />
+                {dynamic_image src="{$photo->path_file}{$photo->name}" transform="thumbnail,160,160" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
             {/if}
             <div class="simple_overlay" id="image-{$smarty.foreach.n.index}">
                 <div class="resource">

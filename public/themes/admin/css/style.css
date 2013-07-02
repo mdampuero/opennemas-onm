@@ -211,7 +211,7 @@ table.adminform tfoot tr td{
   width:70px; height:70px;
   overflow:hidden !important;
 }
-.gallery_list li img { cursor:pointer; border:0px; width:100% }
+.gallery_list li img { cursor:pointer; border:0px; width:64px; height:64px; }
 .gallery_list li{ display: inline !important;  max-height:67px;}
 
 .gallery_list li div { display: table-cell !important; width:67px; height: 67px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
@@ -510,34 +510,8 @@ div.utilities-conf input[type="text"]{
   margin-top: 8px;
 }
 .global-nav .notification-messages { padding:0 5px;}
-.global-nav  .notification-messages .comments-available {
-    background: #4a9cdd; /* for non-css3 browsers */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4a9cdd', endColorstr='#1d68a7'); /* for IE */
-    background: -webkit-gradient(linear, left top, left bottom, from(#4a9cdd), to(#1d68a7)); /* for webkit browsers */
-    background: -moz-linear-gradient(top,  #4a9cdd,  #1d68a7); /* for firefox 3.6+ */
-    border-radius:5px;
-    /*padding:0 !important;*/
-    line-height:1em;
-    display:inline-block;
-    border:1px solid #111111;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset;
-    color: White;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3) !important;
-    outline:none;
-    margin-top:5px;
-    display:block;
-    padding:5px 8px;
-    color:White
-}
 
-.global-nav .notification-messages .comments-available:hover {
-  background: #5babe4; /* for non-css3 browsers */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#5babe4', endColorstr='#2578b4'); /* for IE */
-  background: -webkit-gradient(linear, left top, left bottom, from(#5babe4), to(#2578b4)); /* for webkit browsers */
-  background: -moz-linear-gradient(top,  #5babe4,  #2578b4); /* for firefox 3.6+ */
-}
 .global-nav .notification-messages .comments-available a, .comments-available a:hover { text-decoration:none;  }
-.global-nav .notification-messages .comments-available span.icon { margin: 0; display:block; padding: 2px 0px 2px 20px; background: url(../images/messaging_system/new-message-icon.png) top left no-repeat; vertical-align:middle; }
 /*.global-nav .notification-messages .comments-available:hover span.icon { background-position:bottom left; }*/
 
 /* -------------------------------------------------------------

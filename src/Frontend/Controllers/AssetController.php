@@ -9,10 +9,12 @@
  **/
 namespace Frontend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
+use Imagine\Image\ImageInterface;
 
 /**
  * Handles the actions for assets
@@ -39,63 +41,79 @@ class AssetController extends Controller
     public function imageAction(Request $request)
     {
         $parameters = $request->query->get('parameters');
+        $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
 
         $finalParameters = array();
-        $parameters = explode('x', $parameters);
-        foreach ($parameters as &$parameter) {
-            $pars = explode('-', $parameter);
-            $finalParameters[$pars[0]] = $pars[1];
-        }
+        $parameters      = explode(',', urldecode($parameters));
 
-        $path = realpath(SITE_PATH.'/'.$request->query->get('real_path') .'.'.$request->query->get('_format'));
-        $hash = substr(md5($parameters.$path), 0, 2);
+        $method = array_shift($parameters);
 
-// var_dump($hash);die();
+        // $hash = substr(md5($parameters.$path), 0, 2);
 
-//         if ($finalParameters['hash'] !== $hash) {
-//             die('Me cago en tu puta madre hickajer de los webos');
-//         }
+        // var_dump($hash);die();
 
+        // if ($finalParameters['hash'] !== $hash) {
+        //     die('Me cago en tu puta madre hickajer de los webos');
+        // }
 
         if (file_exists($path)) {
             $imagine = new \Imagine\Imagick\Imagine();
 
             $image = $imagine->open($path);
 
-            $imageSize = $image->getSize();
+            $imageSize   = $image->getSize();
+            $imageWidth  = $imageSize->getWidth();
+            $imageHeight = $imageSize->getHeight();
 
-            $topX = $imageSize->getWidth() / 2 - $finalParameters['w']/2;
-            $topY = $imageSize->getHeight() / 2 - $finalParameters['h']/2;
+            if ($method == 'crop') {
+                $topX = $parameters[0];
+                $topY = $parameters[1];
 
-            if (array_key_exists('crop', $finalParameters)
-                && $finalParameters['crop'] == 1
-            ) {
+                $width  = $parameters[2];
+                $height = $parameters[3];
+
                 $image->crop(
                     new \Imagine\Image\Point($topX, $topY),
-                    new \Imagine\Image\Box($finalParameters['w'], $finalParameters['h'])
+                    new \Imagine\Image\Box($width, $height)
                 );
-            } elseif (array_key_exists('thumb', $finalParameters)) {
-                $image->thumbnail(
-                    new \Imagine\Image\Box($finalParameters['w'], $finalParameters['h'])
+            } elseif ($method == 'thumbnail') {
+                $width  = $parameters[0];
+                $height = $parameters[1];
+
+                if (isset($parameters[3]) && $parameters[3] == 'in') {
+                    $mode = ImageInterface::THUMBNAIL_INSET;
+                } else {
+                    $mode = ImageInterface::THUMBNAIL_OUTBOUND;
+                }
+
+                $image = $image->thumbnail(
+                    new \Imagine\Image\Box($width, $height, $mode)
                 );
             } else {
-                $image
-                    ->resize(new \Imagine\Image\Box($finalParameters['w'], $finalParameters['h']));
+
+                $width  = $parameters[0];
+                $height = $parameters[1];
+
+                $image->resize(new \Imagine\Image\Box($width, $height));
             }
 
+            $originalFormat = strtolower($image->getImagick()->getImageFormat());
+
             $blob = $image->show(
-                'jpg',
+                $originalFormat,
                 array(
                     'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
                     'resolution-x'     => 300,
                     'resolution-y'     => 300,
-                    'quality' => 100,
+                    'quality'          => 85,
                 )
             );
 
             die();
 
+        } else {
+            return new Response('', 404);
         }
-        var_dump($finalParameters, $path);die();
+        // var_dump($finalParameters, $path);die();
     }
 }

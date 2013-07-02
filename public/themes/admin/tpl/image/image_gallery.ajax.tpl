@@ -35,8 +35,9 @@
                                  />
                         </span>
                     {else}
-                        <img style="{cssphotoscale width=$photos[n]->width height=$photos[n]->height resolution=67 photo=$photos[n]}"
-                            src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}140-100-{$photos[n]->name}"
+                        {dynamic_image
+                            transform="thumbnail,200,200"
+                            src="{$photos[n]->path_file}{$photos[n]->name}"
                             id="draggable_img{$num}"
                             class="draggable-handler"
                             data-id="{$photos[n]->pk_photo}"
@@ -51,8 +52,7 @@
                             data-description="{$photos[n]->description|clearslash|escape:'html'}"
                             data-tags="{$photos[n]->metadata}"
                             alt="{$photos[n]->description}"
-                            title="({$photos[n]->width}x{$photos[n]->height}) {$photos[n]->description}"
-                            />
+                            title="({$photos[n]->width}x{$photos[n]->height}) {$photos[n]->description}"}
                     {/if}
                 </a>
             </div>
