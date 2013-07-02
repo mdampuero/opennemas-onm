@@ -927,6 +927,7 @@ class User
         }
 
         $i = 0;
+        $authors = array();
         while (!$rs->EOF) {
             $authors[$i]         = new \User($rs->fields['id']);
             $authors[$i]->params = $authors[$i]->getMeta();
