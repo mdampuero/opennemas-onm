@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-{script_tag src="/jquery/jquery.multiselect.js"}
+{script_tag src="/jquery/jquery.multiselect.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>

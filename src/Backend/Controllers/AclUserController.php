@@ -119,7 +119,7 @@ class AclUserController extends Controller
 
         $user->meta = $user->getMeta();
 
-        if (array_key_exists('paywall_time_limit', $user->meta)) {
+        if ($user->meta && array_key_exists('paywall_time_limit', $user->meta)) {
             $user->meta['paywall_time_limit'] = new \DateTime(
                 $user->meta['paywall_time_limit'],
                 new \DateTimeZone('UTC')
@@ -181,7 +181,7 @@ class AclUserController extends Controller
         try {
             // Upload user avatar if exists
             if (!is_null($file)) {
-                $photoId = $this->uploadUserAvatar($file, $data['name']);
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
                 $data['avatar_img_id'] = $photoId;
             } elseif (($data['avatar_img_id']) == 1) {
                 $data['avatar_img_id'] = $user->avatar_img_id;
@@ -270,7 +270,7 @@ class AclUserController extends Controller
             try {
                 // Upload user avatar if exists
                 if (!is_null($file)) {
-                    $photoId = $this->uploadUserAvatar($file, $data['name']);
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
                     $data['avatar_img_id'] = $photoId;
                 } else {
                     $data['avatar_img_id'] = 0;
@@ -379,67 +379,6 @@ class AclUserController extends Controller
         } else {
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
-    }
-
-    /**
-     * Process an uploaded photo for user
-     *
-     * @param Symfony\Component\HttpFoundation\File\UploadedFile $file the uploaded file
-     * @param string $userName the user real name
-     *
-     * @return Response the response object
-     **/
-    public function uploadUserAvatar($file, $userName)
-    {
-        // Generate image path and upload directory
-        $userNameNormalized = \Onm\StringUtils::normalize_name($userName);
-        $relativeAuthorImagePath ="/authors/".$userName;
-        $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
-
-        // Get original information of the uploaded image
-        $originalFileName = $file->getClientOriginalName();
-        $originalFileData = pathinfo($originalFileName);
-        $fileExtension    = strtolower($originalFileData['extension']);
-
-        // Generate new file name
-        $currentTime = gettimeofday();
-        $microTime   = intval(substr($currentTime['usec'], 0, 5));
-        $newFileName = date("YmdHis").$microTime.".".$fileExtension;
-
-        // Check upload directory
-        if (!is_dir($uploadDirectory)) {
-            \FilesManager::createDirectory($uploadDirectory);
-        }
-
-        // Upload file
-        $file->move($uploadDirectory, $newFileName);
-
-        // Get all necessary data for the photo
-        $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
-        $data = array(
-            'title'       => $originalFileName,
-            'name'        => $newFileName,
-            'user_name'   => $newFileName,
-            'path_file'   => $relativeAuthorImagePath,
-            'nameCat'     => $userName,
-            'category'    => '',
-            'created'     => $infor->atime,
-            'changed'     => $infor->mtime,
-            'date'        => $infor->mtime,
-            'size'        => round($infor->size/1024, 2),
-            'width'       => $infor->width,
-            'height'      => $infor->height,
-            'type'        => $infor->type,
-            'type_img'    => $fileExtension,
-            'media_type'  => 'image',
-            'author_name' => '',
-        );
-
-        // Create new photo
-        $photo = new \Photo();
-        $photoId = $photo->create($data);
-
-        return $photoId;
     }
 
     /**
