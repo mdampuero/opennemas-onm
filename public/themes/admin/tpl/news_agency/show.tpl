@@ -94,7 +94,7 @@
                     </p>
 
                     <p>
-                        <strong>{t}Date:{/t}</strong> {$element->created_time->format("H:i:s d-m-Y")}
+                        <strong>{t}Date:{/t}</strong> {date_format date=$element->created_time}
                     </p>
                     {if $element->summary}
                         <strong>{t}Summary:{/t}</strong> <br/>

@@ -134,7 +134,7 @@
                         <span class="label" style="background-color:{$servers[$element->source_id]['color']};">{$servers[$element->source_id]['name']}</span>
                     </td>
                     <td class="nowrap center">
-                        <span title="{$element->created_time->format('d/m/Y - H:i')}">{$element->created_time->format('d/m/Y - H:i')}</span>
+                        <span title="{date_format date=$element->created_time}">{date_format date=$element->created_time}</span>
                     </td>
 
                     <td class="nowrap">
