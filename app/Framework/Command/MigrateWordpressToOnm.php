@@ -86,7 +86,6 @@ EOF
             false
         );
 
-
         define('ORIGINAL_URL', $originalUrl);
         define('ORIGINAL_MEDIA', $originalDirectory.'/wp-content/uploads/');
 
@@ -134,11 +133,10 @@ EOF
 
         $this->importGalleries();
 
-
-
         $output->writeln(
             "\n\t ***Migration finished for Database: ".$dataBaseName."***"
         );
+        $this->printResults();
     }
 
     protected function prepareDatabase()
@@ -150,6 +148,8 @@ EOF
 
         $sql = "INSERT INTO user_groups (`pk_user_group`, `name`) VALUES (3, 'autores')";
         $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        $sql="DELETE FROM `wp-mundiario`.`wp_users` WHERE `wp_users`.`user_login` = 'macada'";
     }
 
 
@@ -161,7 +161,8 @@ EOF
     protected function importUsers()
     {
         $sql2 = "SELECT umeta_id, user_id, meta_key, meta_value  FROM `wp_usermeta` ".
-            "WHERE  meta_key IN ('first_name', 'last_name', 'description', 'userphoto_image_file','twitter' )";
+            "WHERE  meta_key IN ('first_name', 'last_name', 'description', ".
+            "'wp_biographia_short_bio', 'userphoto_image_file','twitter' )";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql2);
         $rs2     = $GLOBALS['application']->connOrigin->Execute($request);
@@ -175,7 +176,6 @@ EOF
             $data[$userID][$key] = $user['meta_value'];
 
         }
-
 
         $sql = "SELECT `ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, "
             ." `user_url`, `user_registered`, `user_activation_key`, `user_status`, "
@@ -192,20 +192,24 @@ EOF
 
             $totalRows = $rs->_numOfRows;
             $current   = 1;
-            $user      = new \User();
+
 
             while (!$rs->EOF) {
-                if ($this->elementIsImported($rs->fields['ID'], 'user')) {
+                if (1!=1 && $this->elementIsImported($rs->fields['ID'], 'user')) {
                     $this->output->writeln("[{$current}/{$totalRows}] user already imported");
                 } else {
                     $originalID = $rs->fields['ID'];
                     $photoId    = '';
 
                     if (!empty($data[$originalID]['userphoto_image_file'])
-                         && is_null($data[$originalID]['userphoto_image_file'])) {
+                         && !is_null($data[$originalID]['userphoto_image_file'])) {
 
                         $file    = ORIGINAL_MEDIA.'userphoto/'.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
+                        var_dump($file, $photoId);
+                        if($photoId) {
+                            die();
+                        }
                     }
 
                     $values = array(
@@ -217,14 +221,15 @@ EOF
                         'type'          => '',
                         'deposit'       => '',
                         'token'         => '',
-                        'activated'     => $rs->fields['user_status'],
+                        'activated'     => 1,
                         'fk_user_group' => '',
                         'avatar_img_id' => $photoId,
-                        'bio'           => $data[$originalID]['description'],
+                        'bio'           => $data[$originalID]['wp_biographia_short_bio'],
                         'url'           => $rs->fields['user_url'],
                         'id_user_group' => array('3'),
                     );
 
+                    $user   = new \User();
                     $user->create($values);
                     $userID = $user->id;
 
@@ -234,9 +239,13 @@ EOF
                             && !empty($data[$originalID]['twitter'])) {
                             $user->setMeta(array('twitter' => $data[$originalID]['twitter']));
                         }
+                        if (isset($data[$originalID])
+                            && isset($data[$originalID]['description'])) {
+                                $user->setMeta(array('bio_description' => $data[$originalID]['description']));
+                        }
 
                         $this->insertRefactorID($originalID, $userID, 'user', $rs->fields['user_login']);
-                        $this->output->writeln('- User '. $userID. ' ok');
+                //        $this->output->writeln('- User '. $userID. ' ok');
                     } else {
                         $this->output->writeln('Problem inserting id'.$originalID.'-'.$rs->fields['user_login'] .'\n');
                     }
@@ -302,7 +311,7 @@ EOF
 
                 $this->output->writeln("Importing category with id {$originalID} - ");
                 $this->insertRefactorID($originalID, $newID, 'category', $category['slug']);
-                $this->output->writeln("new id {$newID} [DONE]\n");
+              //  $this->output->writeln("new id {$newID} [DONE]\n");
             }
         }
 
@@ -410,8 +419,8 @@ EOF
 
                     if (!empty($newArticleID)) {
                         $this->insertRefactorID($originalArticleID, $newArticleID, 'article', $rs->fields['post_name']);
-                        $this->output->writeln('-'. $originalArticleID.'->'.
-                            $newArticleID. ' article ok');
+                 //       $this->output->writeln('-'. $originalArticleID.'->'.
+                   //         $newArticleID. ' article ok');
                     } else {
                         $this->output->writeln('Problem inserting article '.$originalArticleID.
                             ' - '. $rs->fields['post_name'] .'\n');
@@ -486,11 +495,11 @@ EOF
                     $imageID= @$photo->createFromLocalFile($imageData);
 
                     if (!empty($imageID)) {
-                        $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
+                        $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name'], $rs->fields['guid']);
                         //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
-                        $this->output->writeln('- Image '. $imageID. ' ok');
+                   //     $this->output->writeln('- Image '. $imageID. ' ok');
                     } else {
-                        $this->output->writeln('Problem inserting image '.$originalImageID.' - '.$rs->fields['post_name'] ."\n");
+                        $this->output->writeln('Problem image '.$originalImageID.' - '.$local_file.'-'.$rs->fields['post_name'] ."\n");
                     }
 
                 }
@@ -531,8 +540,11 @@ EOF
                     preg_match_all('/\[gallery.*?ids="(.*)".*?\]/', $rs->fields['post_content'], $result);
 
                     if (!empty($result[0]) ) {
-
-                        $ids = explode(',',$result[1][0]);
+                        $ids = array();
+                        $originIds = explode(',', $result[1][0]);
+                        foreach ($originIds as $id) {
+                            $ids[] =$this->elementIsImported($id, 'image');
+                        }
 
                         $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $rs->fields['post_content']);
                         $newBody = $this->convertoUTF8(strip_tags($newBody, '<p><a><br>'));
@@ -544,7 +556,7 @@ EOF
                             'content_status' => 1,
                             'available'      => 1,
                             'metadata'       => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_title'])),
-                            'subtitle'       => $newBody,
+                            'subtitle'       => '',
                             'agency'         => '',
                             'summary'        => $newBody,
                             'fuente'         => '',
@@ -570,9 +582,9 @@ EOF
                         if (!empty($albumID)) {
                             $this->insertRefactorID($originalID, $albumID, 'gallery', $rs->fields['post_name']);
                             //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
-                            $this->output->writeln('- Gallery '. $albumID. ' ok');
+                         //   $this->output->writeln('- Gallery '. $albumID. ' ok');
                         } else {
-                            $this->output->writeln('Problem inserting image '.$originalID.' - '.$rs->fields['post_name'] ."\n");
+                            $this->output->writeln('Problem inserting album '.$originalID.' - '.$rs->fields['post_name'] ."\n");
                         }
                     }
                 }
@@ -759,7 +771,7 @@ EOF
         }
 
         // Upload file
-        $fileCopied = copy($uploadDirectory, $newFileName);
+        $fileCopied = copy($file, $uploadDirectory."/".$newFileName);
 
         if ($fileCopied) {
             // Get all necessary data for the photo
@@ -789,10 +801,8 @@ EOF
 
             return $photoId;
         } else {
-             $this->output->writeln('- No photo move');
+             $this->output->writeln('- No photo move -',"{$file}, '-> '.{$uploadDirectory}."/".{$newFileName}");
         }
-
-
     }
 
     /**
