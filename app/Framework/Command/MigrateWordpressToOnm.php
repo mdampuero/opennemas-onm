@@ -206,10 +206,7 @@ EOF
 
                         $file    = ORIGINAL_MEDIA.'userphoto/'.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
-                        var_dump($file, $photoId);
-                        if($photoId) {
-                            die();
-                        }
+
                     }
 
                     $values = array(
