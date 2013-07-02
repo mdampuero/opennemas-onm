@@ -72,6 +72,7 @@ class UserManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT * FROM `users` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -84,7 +85,7 @@ class UserManager extends BaseManager
         $users = array();
         while (!$rs->EOF) {
             $user = new \User();
-            $user->load($rs->fields);
+            $user->setValues($rs->fields);
 
             $users []= $user;
             $rs->MoveNext();

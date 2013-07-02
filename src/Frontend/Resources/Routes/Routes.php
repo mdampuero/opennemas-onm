@@ -213,6 +213,29 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_author_frontpage',
+    new Route(
+        '/author/{slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:authorFrontpage',
+        ),
+        array(
+            'slug' => '[A-Za-z\d-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_frontpage_authors',
+    new Route(
+        '/authors',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:frontpageAuthors',
+        )
+    )
+);
+
 // Common content management routes
 $frontendRoutes->add(
     'frontend_ad_get',
