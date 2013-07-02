@@ -6,3 +6,4 @@
 
 -- Please check rigth sql, use ; in the end of lines & -- for comments.
 -- Write date with each sentence and with stack method. (last writed in the top)
+ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT  '' AFTER  `type`;

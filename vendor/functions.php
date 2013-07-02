@@ -243,16 +243,35 @@ function getOriginalIdAndContentTypeFromID($content_id)
     $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
 
     if (!$rss) {
-        $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-        $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-        $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        logDatabaseError();
 
         $returnValue = false;
     } else {
         if ($rss->_numOfRows > 0) {
+            $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
 
-            $returnValue =  array($rss->fields['type'],
-                                  $rss->fields['pk_content']);
+        } else {
+            $returnValue = false;
+        }
+    }
+
+    return $returnValue;
+}
+
+function getOriginalIdAndContentTypeFromSlug($slug)
+{
+    $sql = 'SELECT * FROM `translation_ids` WHERE `slug`=? LIMIT 1';
+
+    $_sql = $GLOBALS['application']->conn->Prepare($sql);
+    $rss = $GLOBALS['application']->conn->Execute($sql, array($slug));
+
+    if (!$rss) {
+        logDatabaseError();
+
+        $returnValue = false;
+    } else {
+        if ($rss->_numOfRows > 0) {
+            $returnValue =  array($rss->fields['type'], $rss->fields['pk_content']);
 
         } else {
             $returnValue = false;

@@ -45,15 +45,23 @@ class RedirectorsController extends Controller
      **/
     public function contentAction(Request $request)
     {
+        $contentId  = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
+        $slug       = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
+        $oldVersion = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
 
-        $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
-        $oldVersion   = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
 
-        list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+        if ($slug === 'none') {
+            list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+        } else {
+
+            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+        }
 
         if ($oldVersion == 'editmaker') {
-             $newContentID = \Content::resolveID($newContentID);
+            $newContentID = \Content::resolveID($newContentID);
         }
+
+        $er = $this->get('entity_repository');
 
         if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = new \Article($newContentID);
