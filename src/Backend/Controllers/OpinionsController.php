@@ -171,6 +171,7 @@ class OpinionsController extends Controller
             'ORDER BY position ASC , created DESC'
         );
 
+        $editorial = array();
         if ($numEditorial > 0) {
             $editorial = $cm->find(
                 'Opinion',
@@ -178,6 +179,7 @@ class OpinionsController extends Controller
                 'ORDER BY position ASC, created DESC LIMIT '.$numEditorial
             );
         }
+        $director = array();
         if ($numDirector >0) {
             $director = $cm->find(
                 'Opinion',
