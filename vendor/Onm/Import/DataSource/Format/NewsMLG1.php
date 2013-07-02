@@ -287,7 +287,8 @@ class NewsMLG1 implements FormatInterface
 
         return \DateTime::createFromFormat(
             'Ymd\THis',
-            $originalDate
+            $originalDate,
+            new \DateTimeZone('UTC')
         );
     }
 
