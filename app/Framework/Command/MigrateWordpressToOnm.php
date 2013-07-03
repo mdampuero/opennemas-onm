@@ -434,8 +434,9 @@ EOF
 
                     if (!empty($newArticleID)) {
                         $this->insertRefactorID($originalArticleID, $newArticleID, 'article', $rs->fields['post_name']);
-                 //       $this->output->writeln('-'. $originalArticleID.'->'.
-                   //         $newArticleID. ' article ok');
+                    //  $this->output->writeln('-'. $originalArticleID.'->'.
+                    //         $newArticleID. ' article ok');
+                    $this->output->writeln('.');
                     } else {
                         $this->output->writeln('Problem inserting article '.$originalArticleID.
                             ' - '. $rs->fields['post_name'] .'\n');
@@ -515,11 +516,12 @@ EOF
                         );
 
                         $date = new \DateTime($rs->fields['post_date_gmt']);
-                        $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d'));
+                        $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
 
                         if (!empty($imageID)) {
                             $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                             // $this->output->writeln('- Image '. $imageID. ' ok');
+                            $this->output->writeln('.');
                         } else {
                             $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
                                 "-". $rs->fields['guid'] .' -> '.$local_file."\n");
@@ -739,10 +741,7 @@ EOF
             $guid    = $result[1][0];
             $img     = $this->getOnmIdImage($guid);
             $newBody = $body;
-            if (!empty($img)) {
-                $newBody = preg_replace($patern, '', $body);
-                $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
-            } else {
+            if (empty($img)) {
                 $this->output->writeln('- Image from Body '. $guid. ' fault');
                 $date = new DateTime();
                 $date = $date->format('Y-m-d H:i:s');
@@ -773,6 +772,8 @@ EOF
                 $img  = $photo->createFromLocalFile($imageData);
                 $this->output->writeln('- Image from Body inserted'. $img. ' ');
             }
+            $newBody = preg_replace($patern, '', $body);
+            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
         preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\].*?\[\/caption\]@', $body, $result);
@@ -807,7 +808,7 @@ EOF
     {
         // Generate image path and upload directory
         $userNameNormalized      = \Onm\StringUtils::normalize_name($userName);
-        $relativeAuthorImagePath ="/authors/".$userName;
+        $relativeAuthorImagePath ="/images/authors/".$userName;
         $uploadDirectory         =  MEDIA_PATH .$relativeAuthorImagePath;
 
         // Get original information of the uploaded image
