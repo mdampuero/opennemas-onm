@@ -236,7 +236,7 @@ label {
                         <div class="control-group">
                             <label for="bio" class="control-label">{t}Short Biography{/t}</label>
                             <div class="controls">
-                                <textarea id="bio" name="bio" rows="3" class="input-xxlarge">{$user->bio|default:""}</textarea>
+                                <input type="text" id="bio" name="bio" class="input-xxlarge">{$user->bio|default:""}</textarea>
                             </div>
                         </div>
 

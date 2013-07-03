@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th style="width:15px"><input type="checkbox" class="toggleallcheckbox"></th>
-            <th>{t}Preview{/t}</th>
+            <th style="width:130px">{t}Preview{/t}</th>
             <th>{t}Information{/t}</th>
             <th>{t}Created{/t}</th>
             <th class="center" style="width:100px;">{t}Actions{/t}</th>
@@ -27,7 +27,7 @@
         <td>
             <input type="checkbox"  id="selected_{$smarty.section.n.iteration}" name="selected_fld[]" value="{$photo->id}" class ="minput" />
         </td>
-        <td style="width:50px;" class="thumb">
+        <td class="thumb">
             {if preg_match('/^swf$/i', $photo->type_img)}
                 <object>
                     <param name="wmode" value="window"
@@ -38,7 +38,7 @@
                 </object>
                 <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
             {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
-                {dynamic_image src="{$photo->path_file}{$photo->name}" transform="thumbnail,160,160" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
+                {dynamic_image src="{$photo->path_file}/{$photo->name}" width="130" transform="thumbnail,130,130" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
             {/if}
             <div class="simple_overlay modal hide fade" id="image-{$smarty.foreach.n.index}">
                 <div class="modal-header">

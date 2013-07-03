@@ -1060,6 +1060,9 @@ img[src="non"] { display:none !important; }
 .image-preview {
     cursor: pointer;
 }
+.simple_overlay .details{
+  margin-bottom:10px;
+}
 
     #exif table td {
       padding:0;

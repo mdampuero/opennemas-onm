@@ -66,6 +66,7 @@ jQuery(function($){
 					<th style="width:15px;">
                         <input type="checkbox" class="toggleallcheckbox">
                     </th>
+                    <th></th>
 					<th class="left">{t}Full name{/t}</th>
 					<th class="center" style="width:110px">{t}Username{/t}</th>
 
@@ -83,6 +84,13 @@ jQuery(function($){
 				<tr>
 					<td>
 						<input type="checkbox" name="selected[]" value="{$user->id}">
+					</td>
+					<td>
+                        {if $user->photo->name}
+                        {dynamic_image src="{$user->photo->path_file}/{$user->photo->name}" transform="thumbnail,40,40"}
+                        {else}
+                        {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="40"}
+                        {/if}
 					</td>
 					<td class="left">
 						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
@@ -134,7 +142,7 @@ jQuery(function($){
 
 				{foreachelse}
 				<tr>
-					<td colspan="7" class="empty">
+					<td colspan="8" class="empty">
 						{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
 					</td>
 				</tr>
@@ -142,7 +150,7 @@ jQuery(function($){
 			</tbody>
 			<tfoot>
 				<tr >
-					<td colspan="7" class="center">
+					<td colspan="8" class="center">
 		                <div class="pagination">
 		    				{$pagination->links|default:""}&nbsp;
 		                </div>

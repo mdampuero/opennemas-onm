@@ -73,6 +73,11 @@ class AclUserController extends Controller
             $page
         );
 
+        $er = $this->get('entity_repository');
+        foreach ($users as &$user) {
+            $user->photo = $er->find('Photo', $user->avatar_img_id);
+        }
+
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
 
