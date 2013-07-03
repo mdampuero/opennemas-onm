@@ -215,6 +215,27 @@
                             </div>
                         </div>
 
+                        <div class="contentbox">
+                            <h3 class="title">{t}Schedule{/t}</h3>
+                            <div class="content">
+                                <div class="form-inline-block">
+                                    <div class="control-group">
+                                        <label for="starttime" class="control-label">{t}Publication start date{/t}</label>
+                                        <div class="controls">
+                                            <input type="datetime" id="starttime" name="starttime" value="{$article->starttime}">
+                                            <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="endtime" class="control-label">{t}Publication end date{/t}</label>
+                                        <div class="controls">
+                                            <input type="datetime" id="endtime" name="endtime" value="{$article->endtime}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {is_module_activated name="PAYWALL"}
                         <div class="contentbox">
                             <h3 class="title">{t}Paywall{/t}</h3>
@@ -276,21 +297,19 @@
                                 <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$article->summary|clearslash|escape:"html"}</textarea>
                             </div>
                         </div>
-                    </div>
-                </div><!-- /contentform-main -->
 
-                <div class="contentform-inner wide">
-                    <div class="form-vertical">
-                        <div class="control-group">
-                            <label for="metadata" class="control-label">
-                                {t}Body{/t}
-                            </label>
-                            <div class="controls">
-                                <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
+                        <div class="form-vertical">
+                            <div class="control-group">
+                                <label for="metadata" class="control-label">
+                                    {t}Body{/t}
+                                </label>
+                                <div class="controls">
+                                    <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div><!-- /contentform-inner -->
+                </div><!-- /contentform-main -->
 
                 <div id="article_images" class="clearfix">
                     {include  file="article/partials/_images.tpl"}
@@ -307,22 +326,6 @@
                             {if $article}
                             <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$article->uri|clearslash}</span>
                             {/if}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-inline-block">
-                    <div class="control-group">
-                        <label for="starttime" class="control-label">{t}Publication start date{/t}</label>
-                        <div class="controls">
-                            <input type="datetime" id="starttime" name="starttime" value="{$article->starttime}">
-                            <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="endtime" class="control-label">{t}Publication end date{/t}</label>
-                        <div class="controls">
-                            <input type="datetime" id="endtime" name="endtime" value="{$article->endtime}">
                         </div>
                     </div>
                 </div>
