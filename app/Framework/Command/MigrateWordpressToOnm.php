@@ -227,7 +227,7 @@ EOF
                         'sessionexpire' =>'30',
                         'email'         => $rs->fields['user_email'],
                         'name'          => $data[$originalID]['first_name']." ".$data[$originalID]['last_name'],
-                        'type'          => '',
+                        'type'          => 1,
                         'deposit'       => '',
                         'token'         => '',
                         'activated'     => 1,
@@ -238,26 +238,30 @@ EOF
                         'id_user_group' => array('3'),
                     );
 
-                    $user   = new \User();
-                    $user->create($values);
-                    $userID = $user->id;
+                    try {
+                        $user   = new \User();
+                        $user->create($values);
+                        $userID = $user->id;
 
-                    if (!empty($userID)) {
-                        $user->updateUserPassword($userID, $rs->fields['user_pass']);
-                        if (isset($data[$originalID])
-                            && isset($data[$originalID]['twitter'])
-                            && !empty($data[$originalID]['twitter'])) {
-                            $user->setMeta(array('twitter' => $data[$originalID]['twitter']));
-                        }
-                        if (isset($data[$originalID])
-                            && isset($data[$originalID]['description'])) {
-                                $user->setMeta(array('bio_description' => $data[$originalID]['description']));
-                        }
+                        if (!empty($userID)) {
+                            $user->updateUserPassword($userID, $rs->fields['user_pass']);
+                            if (isset($data[$originalID])
+                                && isset($data[$originalID]['twitter'])
+                                && !empty($data[$originalID]['twitter'])) {
+                                $user->setMeta(array('twitter' => $data[$originalID]['twitter']));
+                            }
+                            if (isset($data[$originalID])
+                                && isset($data[$originalID]['description'])) {
+                                    $user->setMeta(array('bio_description' => $data[$originalID]['description']));
+                            }
 
-                        $this->insertRefactorID($originalID, $userID, 'user', $rs->fields['user_login']);
-                //        $this->output->writeln('- User '. $userID. ' ok');
-                    } else {
-                        $this->output->writeln('Problem inserting id'.$originalID.'-'.$rs->fields['user_login'] .'\n');
+                            $this->insertRefactorID($originalID, $userID, 'user', $rs->fields['user_login']);
+                    //        $this->output->writeln('- User '. $userID. ' ok');
+                        } else {
+                            $this->output->writeln('Problem inserting id'.$originalID.'-'.$rs->fields['user_login'] .'\n');
+                        }
+                    } catch (\Exception $e) {
+
                     }
                 }
                 $current++;
@@ -509,8 +513,7 @@ EOF
                             'local_file' => $local_file,
                             'author_name' => '',
                         );
-var_dump($imageData);
-die();
+
                         $date = new \DateTime($rs->fields['post_date_gmt']);
                         $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d'));
 
@@ -824,7 +827,7 @@ die();
 
         // Upload file
         $fileCopied = copy($file, $uploadDirectory."/".$newFileName);
-
+        $photoId = 0;
         if ($fileCopied) {
             // Get all necessary data for the photo
             $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
@@ -852,10 +855,10 @@ die();
             $photo = new \Photo();
             $photoId = $photo->create($data);
 
-            return $photoId;
         } else {
              $this->output->writeln('- No photo move -',"{$file}, '-> '.{$uploadDirectory}."/".{$newFileName}");
         }
+        return $photoId;
     }
 
     /**
