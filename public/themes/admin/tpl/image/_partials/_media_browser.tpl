@@ -37,8 +37,6 @@
                            width="140" height="80" ></embed>
                 </object>
                 <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
-            {elseif preg_match('@^/authors/@', $photo->path_file)}
-                <img class="image-preview" rel="#image-{$smarty.foreach.n.index}" src='{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}' />
             {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
                 {dynamic_image src="{$photo->path_file}{$photo->name}" transform="thumbnail,160,160" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
             {/if}
@@ -57,7 +55,7 @@
                             </object>
                             <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
                         {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
-                            <img src='{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}'/>
+                            <img src='{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}'/>
                         {/if}
                     </div>
 
@@ -92,7 +90,7 @@
                 </span>
             {else}
                 <span class="url">
-                    <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">
+                    <a href="{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}" target="_blank">
                         {t}[Link]{/t}
                     </a>
                 </span>
