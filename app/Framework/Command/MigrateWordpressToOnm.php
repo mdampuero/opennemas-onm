@@ -500,13 +500,14 @@ EOF
                             'author_name' => '',
                         );
                     $date = new \DateTime($rs->fields['post_date_gmt']);
-                    $imageID= $photo->createFromLocalFile($imageData, $date->format('Y/m/d'));
+                    $imageID = $photo->createFromLocalFile($imageData, $date->format('Y/m/d'));
 
                     if (!empty($imageID)) {
-                        $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name'], $rs->fields['guid']);
+                        $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                         // $this->output->writeln('- Image '. $imageID. ' ok');
                     } else {
-                        $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['guid'] .' -> '.$local_file."\n");
+                        $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
+                            "-". $rs->fields['guid'] .' -> '.$local_file."\n");
                     }
 
                 }

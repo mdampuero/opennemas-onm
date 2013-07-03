@@ -279,7 +279,7 @@ class Photo extends Content
 
             Application::getLogger()->notice(
                 sprintf(
-                    'EFE Importer: Unable to creathe the '
+                    'EFE Importer: Unable to create the '
                     .'photo file %s (destination: %s).',
                     $dataSource['local_file'],
                     $uploadDir.$finalPhotoFileName
