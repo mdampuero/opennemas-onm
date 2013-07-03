@@ -189,20 +189,6 @@ function url($urlName, $params = array(), $absolute = false)
 }
 
 /**
-* Wrapper to output content to AJAX requests
-*
-* @param string $htmlout, the content to output
-* @return null
-*/
-function ajax_out($htmlout)
-{
-    header("Cache-Control: no-cache");
-    header("Pragma: nocache");
-    echo $htmlout;
-    exit(0);
-}
-
-/**
  * Helper function to check existance one element in translation_ids table
  */
 function getOriginalIDForContentTypeAndID($content_type, $content_id)
@@ -214,9 +200,7 @@ function getOriginalIDForContentTypeAndID($content_type, $content_id)
     $rss = $GLOBALS['application']->conn->Execute($_sql, $_values);
 
     if (!$rss) {
-        $error_msg = $GLOBALS['application']->conn->ErrorMsg();
-        $GLOBALS['application']->logger->debug('Error: '.$error_msg);
-        $GLOBALS['application']->errors[] = 'Error: '.$error_msg;
+        logDatabaseError();
 
         $returnValue = false;
     } else {
@@ -262,7 +246,7 @@ function getOriginalIdAndContentTypeFromSlug($slug)
 {
     $sql = 'SELECT * FROM `translation_ids` WHERE `slug`=? LIMIT 1';
 
-    $_sql = $GLOBALS['application']->conn->Prepare($sql);
+    $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
     $rss = $GLOBALS['application']->conn->Execute($sql, array($slug));
 
     if (!$rss) {
