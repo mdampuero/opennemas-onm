@@ -398,8 +398,11 @@ class FrontpagesController extends Controller
         /**
          * Getting categories
         */
-        $categoryID = ($categoryName == 'home') ? 0 : $category;
+        $ccm = \ContentCategoryManager::get_instance();
+        $actualCategoryId = $ccm->get_id($categoryName);
+        $categoryID = ($categoryName == 'home') ? 0 : $actualCategoryId;
 
+        // Fetch category layout
         $layout = s::get('frontpage_layout_'.$categoryID, 'default');
         $layoutFile = 'layouts/'.$layout.'.tpl';
 
