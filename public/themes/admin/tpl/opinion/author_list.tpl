@@ -57,10 +57,10 @@ jQuery(function($){
                         <input type="checkbox" name="selected[]" value="{$user->id}">
                     </td>
                     <td class="center">
-                        {if $user->photo->name}
+                        {if is_object($user->photo) && !is_null($user->photo->name)}
                         {dynamic_image src="{$user->photo->path_file}/{$user->photo->name}" transform="thumbnail,40,40"}
                         {else}
-                        {dynamic_image src="{$params.IMAGE_DIR}default_avatar.png" transform="thumbnail,40,40" base_url=""}
+                        {gravatar email="{$user->email}" image_dir=$params.IMAGE_DIR image=true size="40"}
                         {/if}
                     </td>
 

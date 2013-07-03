@@ -80,16 +80,16 @@ jQuery(function($){
 			</thead>
 			{/if}
 			<tbody>
-				{foreach from=$users item=user name=user_listing}
+				{foreach $users as $user}
 				<tr>
 					<td>
 						<input type="checkbox" name="selected[]" value="{$user->id}">
 					</td>
 					<td>
-                        {if $user->photo->name}
+                        {if is_object($user->photo) && !is_null($user->photo->name)}
                         {dynamic_image src="{$user->photo->path_file}/{$user->photo->name}" transform="thumbnail,40,40"}
                         {else}
-                        {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="40"}
+                        {gravatar email="{$user->email}" image_dir=$params.IMAGE_DIR image=true size="40"}
                         {/if}
 					</td>
 					<td class="left">

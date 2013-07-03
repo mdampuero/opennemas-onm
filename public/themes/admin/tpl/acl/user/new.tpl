@@ -186,7 +186,7 @@ label {
                                 <input type="file"/>
                                 <input type="hidden" name="avatar" class="file-input" value="1">
                             </span>
-                            <a href="#" class="btn fileupload-exists delete" data-dismiss="fileupload">{t}Remove{/t}</a>
+                            <a href="#" class="btn fileupload-exists delete" data-dismiss="fileupload" title="{t}Remove image{/t}"><i class="icon-trash"></i></a>
                         </div>
                     </div>
                 </div>

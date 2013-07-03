@@ -923,7 +923,7 @@ class User
         if (!$rs) {
             Application::logDatabaseError();
 
-            return false;
+            return array();
         }
 
         $i = 0;

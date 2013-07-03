@@ -216,7 +216,7 @@
                         </div>
 
                         <div class="contentbox">
-                            <h3 class="title">{t}Schedule{/t}</h3>
+                            <h3 class="title"><i class="icon-time"></i> {t}Schedule{/t}</h3>
                             <div class="content">
                                 <div class="form-inline-block">
                                     <div class="control-group">
