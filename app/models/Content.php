@@ -431,7 +431,7 @@ class Content
         }
 
 
-        $data['fk_author'] =  (is_null($data['fk_author']))? $_SESSION['userid'] : $data['fk_author'];
+        $data['fk_author'] = (!array_key_exists('fk_author', $data)) ? $_SESSION['userid'] : $data['fk_author'];
         $data['fk_user_last_editor'] = $data['fk_author'];
         $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_author'];
 
