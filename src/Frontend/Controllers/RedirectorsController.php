@@ -53,7 +53,6 @@ class RedirectorsController extends Controller
         if ($slug === 'none') {
             list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
         } else {
-
             list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
         }
 
@@ -86,14 +85,23 @@ class RedirectorsController extends Controller
      **/
     public function categoryAction(Request $request)
     {
-        $contentType   = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
-        $contentId     = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
+        $contentType = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
+        $slug        = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
+        $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
 
-        $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
+        if ($slug == 'none') {
+            $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
+        } else {
+            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+        }
 
-        $cc = new \ContentCategory($newContentID);
+        $category = new \ContentCategory($newContentID);
 
-        $url = SITE_URL . \Uri::generate('section', array('id' => $cc->name));
+        if (!isset($category) || is_null($category->pk_content_category)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        $url = SITE_URL . \Uri::generate('section', array('id' => $category->name));
 
         return new RedirectResponse($url, 301);
     }
