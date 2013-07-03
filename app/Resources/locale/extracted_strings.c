@@ -1235,7 +1235,7 @@ gettext("New article");
 gettext("Welcome to your OpenNemas site!");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("If you need help getting started, check out our documentation on <a href=\"#\">First Steps with OpenNemas</a>.\n           If you’d rather dive right in, here are a few things most people do first when they set up\n           a new OpenNemas site.");
+gettext("If you need help getting started, check out our documentation on <a href=\"%1\">First Steps with OpenNemas</a>.\n           If you’d rather dive right in, here are a few things most people do first when they set up\n           a new OpenNemas site.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Learn more");
@@ -3702,12 +3702,6 @@ gettext("Show in RSS");
 
 /* public/themes/admin/tpl//opinion/author_new.tpl */
 gettext("If this option is activated this author will be showed in rss");
-
-/* public/themes/admin/tpl//opinion/author_new.tpl */
-gettext("Password");
-
-/* public/themes/admin/tpl//opinion/author_new.tpl */
-gettext("Confirm password");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
 gettext("Opinions");
@@ -6758,7 +6752,7 @@ gettext("Add new photo");
 gettext("Change");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
-gettext("Remove");
+gettext("Remove image");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Display name");
