@@ -42,30 +42,37 @@
             {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
                 {dynamic_image src="{$photo->path_file}{$photo->name}" transform="thumbnail,160,160" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
             {/if}
-            <div class="simple_overlay" id="image-{$smarty.foreach.n.index}">
-                <div class="resource">
-                    {if preg_match('/^swf$/i', $photo->type_img)}
-                        <object>
-                            <param name="wmode" value="window" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                            <embed wmode="window" width="400" height="400"
-                                   src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
-                        </object>
-                        <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
-                    {elseif preg_match('@^/authors/@', $photo->path_file)}
-                        <img src='{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}'/>
-                    {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
-                        <img src='{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}'/>
-                    {/if}
+            <div class="simple_overlay modal hide fade" id="image-{$smarty.foreach.n.index}">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                  <h3>{t}Image preview{/t}</h3>
                 </div>
+                <div class="modal-body">
+                    <div class="resource">
+                        {if preg_match('/^swf$/i', $photo->type_img)}
+                            <object>
+                                <param name="wmode" value="window" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
+                                <embed wmode="window" width="400" height="400"
+                                       src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
+                            </object>
+                            <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
+                        {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
+                            <img src='{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}'/>
+                        {/if}
+                    </div>
 
-                <div class="details">
-                    <h3>{if !empty($photo->description)}{$photo->description|clearslash}{else}{t}No available description{/t}{/if}</h3>
-                    <p><strong>{t}Filename{/t}</strong> {$photo->title}</p>
-                    <p><img src="{$params.IMAGE_DIR}tag_red.png" /> {if !empty($photo->metadata)}{$photo->metadata|clearslash}{else}{t}No tags{/t}{/if}</p>
-                    {if !empty($photo->author_name)}
-                        <p><span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}</span></p>
-                    {/if}
-                    <p><strong>{t}Created{/t}</strong> {$photo->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}</p>
+                    <div class="details">
+                        <h4>{if !empty($photo->description)}{$photo->description|clearslash}{else}{t}No available description{/t}{/if}</h4>
+                        <div><strong>{t}Filename{/t}</strong> {$photo->title}</div>
+                        <div><img src="{$params.IMAGE_DIR}tag_red.png" /> {if !empty($photo->metadata)}{$photo->metadata|clearslash}{else}{t}No tags{/t}{/if}</div>
+                        {if !empty($photo->author_name)}
+                            <div><span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}</span></div>
+                        {/if}
+                        <div><strong>{t}Created{/t}</strong> {$photo->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}</div>
+
+                        <div><strong>{t}Resolution:{/t}</strong> {$photo->width} x {$photo->height} (px)</div>
+                        <div><strong>{t}Size:{/t}</strong> {$photo->size} Kb</div>
+                    </div>
                 </div>
             </div>
         </td>
