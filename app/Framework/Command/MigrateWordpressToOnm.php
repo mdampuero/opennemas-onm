@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Onm\Settings as s;
 
 class MigrateWordpressToOnm extends Command
 {
@@ -77,24 +78,28 @@ EOF
         $originalUrl = $password = $dialog->ask(
             $output,
             'What is the wordpress site URL?',
-            false
+            'http://www.mundiario.com'
         );
+        $output->writeln("Default: ".$originalUrl);
 
         $originalDirectory = $password = $dialog->ask(
             $output,
             'Where is the wordpress media directory?',
-            false
+            '/opt/backup_opennemas/mundiario/'
         );
+        $output->writeln("Default: ".$originalDirectory);
 
         define('ORIGINAL_URL', $originalUrl);
         define('ORIGINAL_MEDIA', $originalDirectory.'/wp-content/uploads/');
 
+        define('CACHE_PREFIX', 'wordpress');
         define('BD_HOST', $dataBaseHost);
         define('BD_USER', $dataBaseUser);
         define('BD_PASS', $dataBasePass);
         define('BD_TYPE', $dataBaseType);
         define('BD_DATABASE', $dataBaseName);
         define('ORIGIN_BD_DATABASE', $originDataBaseName);
+
 
         // Initialize internal constants for logger
         // Logger in content class when creating widgets
@@ -127,7 +132,7 @@ EOF
         $this->importCategories();
         $this->loadCategories();
 
-        $this->importImages();
+     //  $this->importImages();
 
         $this->importArticles();
 
@@ -206,7 +211,6 @@ EOF
 
                         $file    = ORIGINAL_MEDIA.'userphoto/'.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
-
                     }
 
                     $values = array(
@@ -252,12 +256,12 @@ EOF
             }
 
             $rs->Close();
+            $this->output->writeln("Importer Users Finished");
         }
     }
 
     protected function importCategories()
     {
-        $this->output->writeln("Importing Categories");
 
         $sql = "SELECT * FROM wp_terms, wp_term_taxonomy ".
                "WHERE wp_terms.term_id = wp_term_taxonomy.term_id AND taxonomy='category'";
@@ -310,8 +314,9 @@ EOF
                 $this->insertRefactorID($originalID, $newID, 'category', $category['slug']);
               //  $this->output->writeln("new id {$newID} [DONE]\n");
             }
-        }
 
+        }
+        $this->output->writeln("Importer Categories Finished");
         return $this;
     }
 
@@ -371,7 +376,7 @@ EOF
                 if ($this->elementIsImported($originalArticleID, 'article') ) {
                      $this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
                 } else {
-                    $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
+                   // $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
 
                     $data = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
                     if (!empty($rs->fields['post_excerpt'])) {
@@ -441,6 +446,12 @@ EOF
     protected function importImages()
     {
 
+        $settings = array( 'image_thumb_size'=>'140',
+                            'image_inner_thumb_size'=>'470',
+                            'image_front_thumb_size'=>'350');
+        foreach ($settings as $key => $value) {
+            s::set($key, $value);
+        }
         $sql = "SELECT * FROM `wp_posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ";
 
@@ -488,22 +499,21 @@ EOF
                             'local_file' => $local_file,
                             'author_name' => '',
                         );
-
-                    $imageID= @$photo->createFromLocalFile($imageData);
+                    $date = new \DateTime($rs->fields['post_date_gmt']);
+                    $imageID= $photo->createFromLocalFile($imageData, $date->format('Y/m/d'));
 
                     if (!empty($imageID)) {
                         $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name'], $rs->fields['guid']);
-                        //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
-                   //     $this->output->writeln('- Image '. $imageID. ' ok');
+                        // $this->output->writeln('- Image '. $imageID. ' ok');
                     } else {
-                        $this->output->writeln('Problem image '.$originalImageID.' - '.$local_file.'-'.$rs->fields['post_name'] ."\n");
+                        $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['guid'] .' -> '.$local_file."\n");
                     }
 
                 }
                 $current++;
                 $rs->MoveNext();
             }
-
+            $this->output->writeln("Importer Images Finished");
             $rs->Close();
         }
     }
@@ -591,6 +601,7 @@ EOF
             }
         }
         $rs->Close(); # optional
+        $this->output->writeln("Importer Galleries Finished");
 
     }
 
@@ -682,7 +693,7 @@ EOF
 
         $imageID='';
         if (!$rs) {
-            $this->output->writeln('- Image '. $guid. ' ok');
+            $this->output->writeln('- Image '. $guid. ' fault');
         } else {
             $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
 
@@ -714,6 +725,36 @@ EOF
             if (!empty($img)) {
                 $newBody = preg_replace($patern, '', $body);
                 $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+            } else {
+                $this->output->writeln('- Image from Body '. $guid. ' fault');
+                $date = new DateTime();
+                $date = $date->format('Y-m-d H:i:s');
+                $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
+                $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
+                $imageData = array(
+                        'title' => $this->convertoUTF8(strip_tags($guid)),
+                        'category' => $IDCategory,
+                        'fk_category' => $IDCategory,
+                        'category_name'=> '',
+                        'content_status' => 1,
+                        'frontpage' => 0,
+                        'in_home' => 0,
+                        'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
+                        'description' => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
+                        'id' => 0,
+                        'created' => $rs->fields['post_date_gmt'],
+                        'starttime' => $rs->fields['post_date_gmt'],
+                        'changed' => $rs->fields['post_modified_gmt'],
+                        'fk_user' =>  $this->elementIsImported(7, 'user'),
+                        'fk_author' =>  $this->elementIsImported(7, 'user'),
+                        'fk_publisher' => $this->elementIsImported(7, 'user'),
+                        'fk_user_last_editor' => $this->elementIsImported(7, 'user'),
+                        'local_file' => $local_file,
+                        'author_name' => '',
+                    );
+
+                $img  = $photo->createFromLocalFile($imageData);
+                $this->output->writeln('- Image from Body inserted'. $img. ' ');
             }
         }
 
@@ -749,7 +790,7 @@ EOF
     {
         // Generate image path and upload directory
         $userNameNormalized      = \Onm\StringUtils::normalize_name($userName);
-        $relativeAuthorImagePath ="/images/authors/".$userName;
+        $relativeAuthorImagePath ="/authors/".$userName;
         $uploadDirectory         =  MEDIA_PATH .$relativeAuthorImagePath;
 
         // Get original information of the uploaded image
