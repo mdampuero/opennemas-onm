@@ -2,7 +2,7 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-{script_tag src="/jquery/jquery.multiselect.js"}
+{script_tag src="/jquery/jquery.multiselect.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
@@ -186,7 +186,7 @@ label {
                                 <input type="file"/>
                                 <input type="hidden" name="avatar" class="file-input" value="1">
                             </span>
-                            <a href="#" class="btn fileupload-exists delete" data-dismiss="fileupload">{t}Remove{/t}</a>
+                            <a href="#" class="btn fileupload-exists delete" data-dismiss="fileupload" title="{t}Remove image{/t}"><i class="icon-trash"></i></a>
                         </div>
                     </div>
                 </div>
@@ -234,21 +234,19 @@ label {
                         </div>
 
                         <div class="control-group">
-                            <label for="bio" class="control-label">{t}Biography{/t}</label>
+                            <label for="bio" class="control-label">{t}Short Biography{/t}</label>
                             <div class="controls">
-                                <textarea id="bio" name="bio" rows="3" class="input-xxlarge">{$user->bio|default:""}</textarea>
+                                <input type="text" id="bio" name="bio" class="input-xxlarge">{$user->bio|default:""}</textarea>
                             </div>
                         </div>
 
-                        {*<div class="control-group">
-                            <label for="meta[inrss]" class="control-label">{t}Show in RSS{/t}</label>
+                        <div class="control-group">
+                            <label for="meta[bio_description]" class="control-label">{t}Biography{/t}</label>
                             <div class="controls">
-                                <label class="checkbox">
-                                    <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on'} checked="checked"{/if}>
-                                    {t}If this option is activated this author will be showed in rss{/t}
-                                </label>
+                                <textarea id="meta[bio_description]" name="meta[bio_description]" rows="3" class="input-xxlarge">{$user->meta['bio_description']|default:""}</textarea>
                             </div>
-                        </div>*}
+                        </div>
+
                     </fieldset>
 
                     <fieldset>

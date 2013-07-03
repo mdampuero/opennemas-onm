@@ -14,6 +14,7 @@
     ],
     "require": {
         "frandieguez/panorama-php"       : "1.0.2",
+        "imagine/imagine"                : "dev-develop",
         "monolog/monolog"                : "1.3.*",
         "paypal/adaptivepayments-sdk-php": "dev-master",
         "paypal/merchant-sdk-php"        : "dev-master",

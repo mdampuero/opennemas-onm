@@ -617,7 +617,6 @@ class ImagesController extends Controller
                 'metadata'    => filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING),
                 'author_name' => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
                 'date'        => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
-                'color'       => filter_var($_POST['color'][$id], FILTER_SANITIZE_STRING),
                 'address'     => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'    => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
                 'available'   => 1
@@ -727,14 +726,6 @@ class ImagesController extends Controller
                 }
                 $category_name = $this->ccm->categories[$category]->name;
 
-                $fileSizesSettings = s::get(
-                    array(
-                        'image_thumb_size',
-                        'image_inner_thumb_size',
-                        'image_front_thumb_size',
-                    )
-                );
-
                 $upload = isset($_FILES['files']) ? $_FILES['files'] : null;
                 $info = array();
 
@@ -755,10 +746,14 @@ class ImagesController extends Controller
                             $photo = new \Photo();
                             $photo = $photo->createFromLocalFileAjax($data);
 
-                            $thumbnailUrl = $this->imgUrl.$photo->path_file."/"
-                                            .$fileSizesSettings['image_thumb_size']['width']."-"
-                                            .$fileSizesSettings['image_thumb_size']['height']
-                                            ."-".$photo->name;
+
+                            $thumbnailUrl = $this->generateUrl(
+                                'asset_image',
+                                array(
+                                    'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
+                                    'parameters' => urlencode('thumbnail,150,150'),
+                                )
+                            );
 
                             $info [] = array(
                                 'id'            => $photo->id,
@@ -795,10 +790,13 @@ class ImagesController extends Controller
                         $photo = new Photo();
                         $photo = $photo->createFromLocalFileAjax($data);
 
-                        $thumbnailUrl = $this->imgUrl.$photo->path_file."/"
-                                        .$fileSizesSettings['image_thumb_size']['width']."-"
-                                        .$fileSizesSettings['image_thumb_size']['height']
-                                        ."-".$photo->name;
+                        $thumbnailUrl = $this->generateUrl(
+                            'asset_image',
+                            array(
+                                'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
+                                'parameters' => urlencode('thumbnail,150,150'),
+                            )
+                        );
 
                         $info [] = array(
                             'id'            => $photo->id,

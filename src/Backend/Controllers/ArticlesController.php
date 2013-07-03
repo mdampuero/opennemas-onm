@@ -251,6 +251,7 @@ class ArticlesController extends Controller
                 'relatedHome'       => json_decode(
                     $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
                 ),
+                'fk_author'         => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
             );
 
             if ($article->create($data)) {
@@ -286,6 +287,14 @@ class ArticlesController extends Controller
 
             $cm = new \ContentManager();
 
+
+
+            $authorsComplete = \User::getAllUsersAuthors();
+            $authors = array( '0' => _(' - Select one author - '));
+            foreach ($authorsComplete as $author) {
+                $authors[$author->id] = $author->name;
+            }
+
             return $this->render(
                 'article/new.tpl',
                 array(
@@ -301,6 +310,7 @@ class ArticlesController extends Controller
                         32 => '32',
                         34 => '34'
                     ),
+                    'authors' => $authors,
                     // TODO: clean this from here
                     'MEDIA_IMG_PATH_WEB' => MEDIA_IMG_PATH_WEB,
                 )
@@ -423,10 +433,17 @@ class ArticlesController extends Controller
 
         }
 
+        $authorsComplete = \User::getAllUsersAuthors();
+        $authors = array( '0' => _(' - Select one author - '));
+        foreach ($authorsComplete as $author) {
+            $authors[$author->id] = $author->name;
+        }
+
         return $this->render(
             'article/new.tpl',
             array(
                 'article'      => $article,
+                'authors'      => $authors,
                 'availableSizes' => array(
                     16 => '16', 18 => '18', 20 => '20', 22 => '22',
                     24 => '24', 26 => '26', 28 => '28',30 => '30',
@@ -540,6 +557,7 @@ class ArticlesController extends Controller
                 'relatedHome'       => json_decode(
                     $request->request->filter('relatedHome', '', FILTER_SANITIZE_STRING)
                 ),
+                'fk_author'         => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
             );
 
             if ($article->update($data)) {

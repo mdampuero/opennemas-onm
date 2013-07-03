@@ -346,7 +346,7 @@ table.adminform tfoot tr td{
   width:70px; height:70px;
   overflow:hidden !important;
 }
-.gallery_list li img { cursor:pointer; border:0px; width:100% }
+.gallery_list li img { cursor:pointer; border:0px; width:64px; height:64px; }
 .gallery_list li{ display: inline !important;  max-height:67px;}
 
 .gallery_list li div { display: table-cell !important; width:67px; height: 67px; margin:0; vertical-align: middle !important; text-align: center; float: none !important;}
@@ -1055,58 +1055,13 @@ div.ui-blocker-message img {
 /* -------------------------------------------------------------
   media-browser
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
-.simple_overlay {
-    display:none;
-    z-index:10000;
-    background-color:#333;
-
-    width:650px;
-    min-height:200px;
-    border:1px solid #666;
-
-    /* CSS3 styling for latest browsers */
-    -moz-box-shadow:0 0 90px 5px #000;
-    -webkit-box-shadow: 0 0 90px #000;
-}
-
-.simple_overlay .resource {
-    width:450px;
-    overflow:hidden;
-}
-
-.simple_overlay .resource > * {
-    max-width:450px;
-}
-
-/* close button positioned on upper right corner */
-.simple_overlay .close {
-    background-image:url(../images/close.png);
-    position:absolute;
-    right:-15px;
-    top:-15px;
-    cursor:pointer;
-    height:35px;
-    width:35px;
-}
-  /* styling for elements inside overlay */
-.simple_overlay .details {
-    position:absolute;
-    top:0;
-    right:0;
-    font-size:11px;
-    color:#fff;
-    width:180px;
-}
-
-.simple_overlay .details h3 {
-    line-height:18px;
-    font-size:15px !important;
-    margin-top:40px;
-}
 img[src="non"] { display:none !important; }
 
 .image-preview {
     cursor: pointer;
+}
+.simple_overlay .details{
+  margin-bottom:10px;
 }
 
     #exif table td {
@@ -1368,6 +1323,8 @@ img[src="non"] { display:none !important; }
 
 .fileupload-progressbar {
     width: 350px;
+    margin-top: 3px;
+    margin-left: 10px;
 }
 .template-upload td:last-child,
 .template-download td:last-child {

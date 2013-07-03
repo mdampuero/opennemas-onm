@@ -817,8 +817,10 @@ class InstanceManager
         $rs4 = $conn->Execute($sql4);
 
         if (!$rs) {
+
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance '.
+                $conn->ErrorMsg()
             );
         }
         if (!$rs2) {
@@ -870,8 +872,9 @@ class InstanceManager
                             $data['user_mail'], $data['user_name'],5);
 
             if (!$GLOBALS['application']->conn->Execute($sql, $values)) {
+
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance -creating user'
                 );
             }
 
@@ -884,22 +887,22 @@ class InstanceManager
 
             if (!$GLOBALS['application']->conn->Execute($userPrivSql)) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - privileges'
                 );
             }
             if (!s::set('contact_mail', $data['user_mail'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - user_mail'
                 );
             }
             if (!s::set('contact_name', $data['user_name'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - user_name'
                 );
             }
             if (!s::set('contact_IP', $data['contact_IP'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - content_IP'
                 );
             }
         }
@@ -907,12 +910,12 @@ class InstanceManager
         //Change and insert some data with instance information
         if (!s::set('site_name', $data['name'])) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_name'
             );
         }
         if (!s::set('site_created', $data['site_created'])) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance site_created'
             );
         }
         if (!s::set(
@@ -920,7 +923,7 @@ class InstanceManager
             $data['name'].' - '.s::get('site_title')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_title'
             );
         }
         if (!s::set(
@@ -928,7 +931,7 @@ class InstanceManager
             $data['name'].' - '.s::get('site_description')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_description'
             );
         }
         if (!s::set(
@@ -936,18 +939,18 @@ class InstanceManager
             $data['name'].' - '.s::get('site_keywords')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance site_keywords'
             );
         }
         if (!s::set('site_agency', $data['internal_name'].'.opennemas.com')) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_keywords'
             );
         }
         if (isset ($data['timezone'])) {
             if (!s::set('time_zone', $data['timezone'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - timezone'
                 );
             }
         }

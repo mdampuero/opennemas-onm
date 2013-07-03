@@ -72,6 +72,7 @@ class UserManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT * FROM `users` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -84,7 +85,7 @@ class UserManager extends BaseManager
         $users = array();
         while (!$rs->EOF) {
             $user = new \User();
-            $user->load($rs->fields);
+            $user->setValues($rs->fields);
 
             $users []= $user;
             $rs->MoveNext();
@@ -92,4 +93,30 @@ class UserManager extends BaseManager
 
         return $users;
     }
+
+    /**
+     * Returns the number of comments given a filter
+     *
+     * @param string|array $filter the filter to apply
+     *
+     * @return int the number of comments
+     **/
+    public function count($filter)
+    {
+        // Building the SQL filter
+        $filterSQL = $this->getFilterSQL($filter);
+
+        // Executing the SQL
+        $sql = "SELECT count(id) FROM `users` WHERE $filterSQL";
+        $rs = $GLOBALS['application']->conn->GetOne($sql);
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return $rs;
+    }
+
 }

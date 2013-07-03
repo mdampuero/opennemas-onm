@@ -174,8 +174,7 @@ class Photo extends Content
         if (empty($dateForDirectory)) {
             $dateForDirectory = date("/Y/m/d/");
         }
-        $uploadDir =
-            MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
+        $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
         if (!is_dir($uploadDir)) {
             FilesManager::createDirectory($uploadDir);
@@ -186,8 +185,7 @@ class Photo extends Content
         // Getting information for creating
         $t                  = gettimeofday();
         $micro              = intval(substr($t['usec'], 0, 5));
-        $finalPhotoFileName =
-            date("YmdHis").$micro.".".strtolower($filePathInfo['extension']);
+        $finalPhotoFileName = date("YmdHis").$micro.".".strtolower($filePathInfo['extension']);
         $fileInformation    = new MediaItem($filePath);
 
         if (!array_key_exists('created', $dataSource)) {
@@ -253,29 +251,6 @@ class Photo extends Content
                             'image_front_thumb_size',
                         )
                     );
-
-                    // Thumbnail handler
-                    try {
-                        $thumb = new Imagick(
-                            realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
-                        );
-                    } catch (\ImagickException $e) {
-                        return false;
-                    }
-
-                    // Main thumbnail
-                    $thumb->thumbnailImage(
-                        $imageThumbSize['image_thumb_size']['width'] ?: 140,
-                        $imageThumbSize['image_thumb_size']['height'] ?: 100,
-                        true
-                    );
-                    //Write the new image to a file
-                    $thumb->writeImage(
-                        $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                        .'-'.$imageThumbSize['image_thumb_size']['height']
-                        .'-'.$finalPhotoFileName
-                    );
-
                 }
 
             } else {
@@ -304,7 +279,7 @@ class Photo extends Content
 
             Application::getLogger()->notice(
                 sprintf(
-                    'EFE Importer: Unable to creathe the '
+                    'EFE Importer: Unable to create the '
                     .'photo file %s (destination: %s).',
                     $dataSource['local_file'],
                     $uploadDir.$finalPhotoFileName
@@ -411,40 +386,10 @@ class Photo extends Content
                 $photo = new Photo();
                 $photoID = $photo->create($data);
 
-                if ($photoID) {
-
-                    if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
-
-                        $imageThumbSize = s::get(
-                            array(
-                                'image_thumb_size',
-                                'image_inner_thumb_size',
-                                'image_front_thumb_size',
-                            )
-                        );
-
-                        // Thumbnail handler
-                        $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
-
-                        // Main thumbnail
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_thumb_size']['width'] ?: 140,
-                            $imageThumbSize['image_thumb_size']['height'] ?: 100,
-                            true
-                        );
-                        //Write the new image to a file
-                        $thumb->writeImage(
-                            $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                            .'-'.$imageThumbSize['image_thumb_size']['height']
-                            .'-'.$finalPhotoFileName
-                        );
-                    }
-
-                } else {
+                if (!$photoID) {
                     Application::getLogger()->notice(
                         sprintf(
-                            'EFE Importer: Unable to register '
-                            .'the photo object %s (destination: %s).',
+                            'EFE Importer: Unable to register the photo object %s (destination: %s).',
                             $dataSource['local_file'],
                             $uploadDir.$finalPhotoFileName
                         )
@@ -465,8 +410,7 @@ class Photo extends Content
 
                 Application::getLogger()->notice(
                     sprintf(
-                        'EFE Importer: Unable to creathe the '
-                        .'photo file %s (destination: %s).',
+                        'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
                         $dataSource['local_file'],
                         $uploadDir.$finalPhotoFileName
                     )
@@ -772,13 +716,12 @@ class Photo extends Content
         parent::update($data);
 
         $sql = "UPDATE `photos`
-                SET `author_name`=?, `address`=?, `color`=?, `date`=?, `resolution`=?
+                SET `author_name`=?, `address`=?, `date`=?, `resolution`=?
                 WHERE `pk_photo`=?";
 
         $values = array(
             $data['author_name'],
             $data['address'],
-            $data['color'],
             $data['date'],
             $data['resolution'],
             $data['id']
@@ -814,13 +757,9 @@ class Photo extends Content
         }
 
         $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
-        $thumbimage = MEDIA_IMG_PATH . $this->path_file.'140-100-'.$this->name;
 
         if (file_exists($image)) {
             @unlink($image);
-        }
-        if (file_exists($thumbimage)) {
-            @unlink($thumbimage);
         }
 
         return true;

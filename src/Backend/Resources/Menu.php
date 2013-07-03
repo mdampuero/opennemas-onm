@@ -62,11 +62,11 @@ $menuXml = '<?xml version="1.0"?>
                 link="'.url('admin_opinions').'"
             />
             <node
-                module_name="USER_MANAGER"
-                privilege="USER_ADMIN"
+                module_name="OPINION_MANAGER"
+                privilege="OPINION_ADMIN"
                 title="'.htmlspecialchars(_("Authors"), ENT_QUOTES).'"
                 id="authors"
-                link="'.url('admin_acl_user', array('group' => 3)).'"
+                link="'.url('admin_opinion_authors').'"
             />
         </submenu>
         <node

@@ -69,32 +69,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="form-inline-block">
-                    <div class="control-group">
-                        <label for="type_opinion" class="control-label">{t}Type{/t}</label>
-                        <div class="controls">
-                            <select name="type_opinion" id="type_opinion" required="required">
-                                <option value="-1">{t}-- Pick an author --{/t}</option>
-                                <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
-                                <option value="1" {if $opinion->type_opinion eq 1} selected {/if}>{t}Opinion from editorial{/t}</option>
-                                <option value="2" {if $opinion->type_opinion eq 2} selected {/if}>{t}Director's letter{/t}</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="control-group" id="author" {if $opinion->type_opinion neq 0}style="display:none;"{/if}>
-                        <label for="fk_author" class="control-label">{t}Author{/t}</label>
-                        <div class="controls">
-                            <select id="fk_author" name="fk_author" required="required">
-                                <option value="0" {if is_null($author->id)}selected{/if}>{t} - Select one author - {/t}</option>
-                                {foreach from=$all_authors item=author}
-                                <option value="{$author->id}" {if $opinion->fk_author eq $author->id}selected{/if}>{$author->name}</option>
-                                {/foreach}
-                            </select>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div class="contentbox-container">
@@ -116,6 +90,25 @@
                         <input type="checkbox" name="in_home" id="in_home" {if $opinion->in_home eq 1}checked="checked"{/if}>
                         <label for="in_home">{t}In homepage{/t}</label>
                         <br>
+                        <hr class="divisor">
+                        <label for="type_opinion" class="control-label">{t}Type{/t}</label>
+                        <div class="controls">
+                            <select name="type_opinion" id="type_opinion" required="required">
+                                <option value="-1">{t}-- Pick an author --{/t}</option>
+                                <option value="0" {if $opinion->type_opinion eq 0} selected {/if}>{t}Opinion from author{/t}</option>
+                                <option value="1" {if $opinion->type_opinion eq 1} selected {/if}>{t}Opinion from editorial{/t}</option>
+                                <option value="2" {if $opinion->type_opinion eq 2} selected {/if}>{t}Director's letter{/t}</option>
+                            </select>
+                        </div>
+                        <label for="fk_author" class="control-label">{t}Author{/t}</label>
+                        <div class="controls">
+                            <select id="fk_author" name="fk_author" required="required">
+                                <option value="0" {if is_null($author->id)}selected{/if}>{t} - Select one author - {/t}</option>
+                                {foreach from=$all_authors item=author}
+                                <option value="{$author->id}" {if $opinion->fk_author eq $author->id}selected{/if}>{$author->name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="contentbox">
@@ -156,21 +149,20 @@
                         <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$opinion->summary|clearslash|escape:"html"}</textarea>
                     </div>
                 </div>
-
-            </div><!-- /contentform-main -->
-        </div><!-- /contentform-inner -->
-        <div class="contentform-inner wide">
-            <div class="form-vertical">
+                <div class="form-vertical">
                 <div class="control-group">
                     <label for="body" class="control-label">{t}Body{/t}</label>
                     <div class="controls">
                         <textarea name="body" id="body" class="onm-editor">{$opinion->body|clearslash}</textarea>
                     </div>
                 </div>
-                <div id="article_images" class="clearfix">
-                    {include  file="article/partials/_images.tpl" article=$opinion withoutVideo='true'}
-                </div>
             </div><!-- /contentform-main -->
+            </div><!-- /contentform-main -->
+        </div><!-- /contentform-inner -->
+        <div class="contentform-inner wide">
+            <div id="article_images" class="clearfix">
+                {include  file="article/partials/_images.tpl" article=$opinion withoutVideo='true'}
+            </div>
         </div><!-- /contentform-inner -->
 
         <input type="hidden" id="fk_user_last_editor" name="fk_user_last_editor" value="{$publisher|default:""}"/>

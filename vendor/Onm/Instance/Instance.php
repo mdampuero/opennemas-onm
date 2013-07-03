@@ -42,10 +42,7 @@ class Instance
         }
 
         if (empty($this->settings['MEDIA_URL'])) {
-            $this->settings['MEDIA_URL'] = implode(
-                '',
-                array('http://' , $_SERVER['HTTP_HOST'], '/media'.'/')
-            );
+            $this->settings['MEDIA_URL'] = '/media/';
 
         }
 
