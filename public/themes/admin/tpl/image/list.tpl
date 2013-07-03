@@ -75,7 +75,6 @@
 {include file="image/modals/_modalDelete.tpl"}
 {include file="image/modals/_modalBatchDelete.tpl"}
 {include file="image/modals/_modalAccept.tpl"}
-{include file="image/modals/_modal_preview.tpl"}
 
 <script>
 jQuery(".simple_overlay").modal({
