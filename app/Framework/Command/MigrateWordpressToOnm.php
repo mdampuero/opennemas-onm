@@ -364,7 +364,7 @@ EOF
     protected function importArticles()
     {
 
-        $where = ' `".PREFIX."term_relationships`.`term_taxonomy_id` IN ('.implode(', ', array_keys($this->originalCategories)).") ";
+        $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_keys($this->originalCategories)).") ";
         $limit = '';
 
         $sql = "SELECT * FROM `".PREFIX."posts`, `".PREFIX."term_relationships` WHERE ".
@@ -489,26 +489,28 @@ EOF
                         $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $rs->fields['guid']);
 
                         $imageData = array(
-                                'title' => $this->convertoUTF8(strip_tags($rs->fields['post_title'])),
-                                'category' => $IDCategory,
-                                'fk_category' => $IDCategory,
-                                'category_name'=> '',
-                                'content_status' => 1,
-                                'frontpage' => 0,
-                                'in_home' => 0,
-                                'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_name'].$rs->fields['post_excerpt'])),
-                                'description' => $this->convertoUTF8(strip_tags(substr($rs->fields['post_excerpt'], 0, 150))),
-                                'id' => 0,
-                                'created' => $rs->fields['post_date_gmt'],
-                                'starttime' => $rs->fields['post_date_gmt'],
-                                'changed' => $rs->fields['post_modified_gmt'],
-                                'fk_user' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
-                                'fk_author' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
-                                'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                                'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                                'local_file' => $local_file,
-                                'author_name' => '',
-                            );
+                            'title' => $this->convertoUTF8(strip_tags($rs->fields['post_title'])),
+                            'category' => $IDCategory,
+                            'fk_category' => $IDCategory,
+                            'category_name'=> '',
+                            'content_status' => 1,
+                            'frontpage' => 0,
+                            'in_home' => 0,
+                            'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_name'].$rs->fields['post_excerpt'])),
+                            'description' => $this->convertoUTF8(strip_tags(substr($rs->fields['post_excerpt'], 0, 150))),
+                            'id' => 0,
+                            'created' => $rs->fields['post_date_gmt'],
+                            'starttime' => $rs->fields['post_date_gmt'],
+                            'changed' => $rs->fields['post_modified_gmt'],
+                            'fk_user' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_author' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                            'local_file' => $local_file,
+                            'author_name' => '',
+                        );
+var_dump($imageData);
+die();
                         $date = new \DateTime($rs->fields['post_date_gmt']);
                         $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d'));
 
@@ -660,6 +662,7 @@ EOF
         } else {
             //$this->output->writeln("There is imported {$contentID} - {$contentType}\n.");
         }
+        return 0;
     }
 
     /**
@@ -840,6 +843,7 @@ EOF
                 'height'      => $infor->height,
                 'type'        => $infor->type,
                 'type_img'    => $fileExtension,
+                'fk_author'   => $this->elementIsImported(7, 'user'),
                 'media_type'  => 'image',
                 'author_name' => '',
             );
