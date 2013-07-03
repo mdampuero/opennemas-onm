@@ -75,6 +75,13 @@ EOF
             false
         );
 
+        $dbPrefix = $password = $dialog->ask(
+            $output,
+            'What is the prefix in database tables (Ex: wp_2_)?',
+            'wp_'
+        );
+        $output->writeln("Default: ".$dbPrefix);
+
         $originalUrl = $password = $dialog->ask(
             $output,
             'What is the wordpress site URL?',
@@ -99,7 +106,7 @@ EOF
         define('BD_TYPE', $dataBaseType);
         define('BD_DATABASE', $dataBaseName);
         define('ORIGIN_BD_DATABASE', $originDataBaseName);
-
+        define('PREFIX', $dbPrefix);
 
         // Initialize internal constants for logger
         // Logger in content class when creating widgets
@@ -155,6 +162,7 @@ EOF
         $rss = $GLOBALS['application']->conn->Execute($sql);
 
         $sql="DELETE FROM `wp-mundiario`.`wp_users` WHERE `wp_users`.`user_login` = 'macada'";
+        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
     }
 
 
@@ -235,6 +243,7 @@ EOF
                     $userID = $user->id;
 
                     if (!empty($userID)) {
+                        $user->updateUserPassword($userID, $rs->fields['user_pass']);
                         if (isset($data[$originalID])
                             && isset($data[$originalID]['twitter'])
                             && !empty($data[$originalID]['twitter'])) {
@@ -263,8 +272,8 @@ EOF
     protected function importCategories()
     {
 
-        $sql = "SELECT * FROM wp_terms, wp_term_taxonomy ".
-               "WHERE wp_terms.term_id = wp_term_taxonomy.term_id AND taxonomy='category'";
+        $sql = "SELECT * FROM ".PREFIX."terms, ".PREFIX."term_taxonomy ".
+               "WHERE ".PREFIX."terms.term_id = ".PREFIX."term_taxonomy.term_id AND taxonomy='category'";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs = $GLOBALS['application']->connOrigin->Execute($request);
@@ -355,10 +364,10 @@ EOF
     protected function importArticles()
     {
 
-        $where = ' `wp_term_relationships`.`term_taxonomy_id` IN ('.implode(', ', array_keys($this->originalCategories)).") ";
+        $where = ' `".PREFIX."term_relationships`.`term_taxonomy_id` IN ('.implode(', ', array_keys($this->originalCategories)).") ";
         $limit = '';
 
-        $sql = "SELECT * FROM `wp_posts`, `wp_term_relationships` WHERE ".
+        $sql = "SELECT * FROM `".PREFIX."posts`, `".PREFIX."term_relationships` WHERE ".
             "`post_type` = 'post' AND `ID`=`object_id` AND post_status='publish' ".
             " AND ".$where." ".$limit;
 
@@ -452,7 +461,7 @@ EOF
         foreach ($settings as $key => $value) {
             s::set($key, $value);
         }
-        $sql = "SELECT * FROM `wp_posts` WHERE ".
+        $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
@@ -469,47 +478,48 @@ EOF
             $photo     = new \Photo();
 
             while (!$rs->EOF) {
-                if ($this->elementIsImported($rs->fields['ID'], 'image')) {
-                    $this->output->writeln("[{$current}/{$totalRows}] Image already imported");
-                } else {
-
-                    $originalImageID = $rs->fields['ID'];
-
-                    ///http://mundiario.com/wp-content/uploads/2013/06/Brasil-360x225.png
-                    $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $rs->fields['guid']);
-
-                    $imageData = array(
-                            'title' => $this->convertoUTF8(strip_tags($rs->fields['post_title'])),
-                            'category' => $IDCategory,
-                            'fk_category' => $IDCategory,
-                            'category_name'=> '',
-                            'content_status' => 1,
-                            'frontpage' => 0,
-                            'in_home' => 0,
-                            'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_name'].$rs->fields['post_excerpt'])),
-                            'description' => $this->convertoUTF8(strip_tags(substr($rs->fields['post_excerpt'], 0, 150))),
-                            'id' => 0,
-                            'created' => $rs->fields['post_date_gmt'],
-                            'starttime' => $rs->fields['post_date_gmt'],
-                            'changed' => $rs->fields['post_modified_gmt'],
-                            'fk_user' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_author' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'local_file' => $local_file,
-                            'author_name' => '',
-                        );
-                    $date = new \DateTime($rs->fields['post_date_gmt']);
-                    $imageID = $photo->createFromLocalFile($imageData, $date->format('Y/m/d'));
-
-                    if (!empty($imageID)) {
-                        $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
-                        // $this->output->writeln('- Image '. $imageID. ' ok');
+                if(!empty($rs->fields['guid'])) {
+                    if ($this->elementIsImported($rs->fields['ID'], 'image')) {
+                        $this->output->writeln("[{$current}/{$totalRows}] Image already imported");
                     } else {
-                        $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
-                            "-". $rs->fields['guid'] .' -> '.$local_file."\n");
-                    }
 
+                        $originalImageID = $rs->fields['ID'];
+
+                        ///http://mundiario.com/wp-content/uploads/2013/06/Brasil-360x225.png
+                        $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $rs->fields['guid']);
+
+                        $imageData = array(
+                                'title' => $this->convertoUTF8(strip_tags($rs->fields['post_title'])),
+                                'category' => $IDCategory,
+                                'fk_category' => $IDCategory,
+                                'category_name'=> '',
+                                'content_status' => 1,
+                                'frontpage' => 0,
+                                'in_home' => 0,
+                                'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_name'].$rs->fields['post_excerpt'])),
+                                'description' => $this->convertoUTF8(strip_tags(substr($rs->fields['post_excerpt'], 0, 150))),
+                                'id' => 0,
+                                'created' => $rs->fields['post_date_gmt'],
+                                'starttime' => $rs->fields['post_date_gmt'],
+                                'changed' => $rs->fields['post_modified_gmt'],
+                                'fk_user' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
+                                'fk_author' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
+                                'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                                'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+                                'local_file' => $local_file,
+                                'author_name' => '',
+                            );
+                        $date = new \DateTime($rs->fields['post_date_gmt']);
+                        $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d'));
+
+                        if (!empty($imageID)) {
+                            $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
+                            // $this->output->writeln('- Image '. $imageID. ' ok');
+                        } else {
+                            $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
+                                "-". $rs->fields['guid'] .' -> '.$local_file."\n");
+                        }
+                    }
                 }
                 $current++;
                 $rs->MoveNext();
@@ -522,7 +532,7 @@ EOF
 
     protected function importGalleries()
     {
-        $sql = "SELECT * FROM `wp_posts` WHERE ".
+        $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
             "`post_content` LIKE '%gallery%'  AND post_status !='trash' ";
          /*[gallery link="file" ids="8727,8728,8729,8730,8731,8732"]*/
 
@@ -683,7 +693,7 @@ EOF
      * @return string
      **/
     protected function getOnmIdImage($guid) {
-        $sql = "SELECT ID FROM `wp_posts` WHERE ".
+        $sql = "SELECT ID FROM `".PREFIX."posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ".
             " AND guid= '".$guid."'";
 
