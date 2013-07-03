@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-07-03 20:13+0200\n"
-"PO-Revision-Date: 2013-07-03 20:15+0200\n"
+"PO-Revision-Date: 2013-07-03 21:14+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -5790,7 +5790,7 @@ msgstr "Favico"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2093
 msgid "Site Mobile logo"
-msgstr "Logo del sitio.para.móvil"
+msgstr "Logotipo del sitio para móvil"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2096
 msgid "Footer text"
