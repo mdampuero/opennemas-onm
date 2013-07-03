@@ -1307,16 +1307,37 @@ gettext("Save positions");
 gettext("Save positions");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Save positions");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Save positions");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Clean cache");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
 gettext("Clean cache");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
 gettext("Clean cache");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
-gettext("Config album module");
+gettext("Config opinion module");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("Config opinion module");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
 gettext("Settings");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("New opinion");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("New opinion");
+
+/* public/themes/admin/tpl//opinion/list.tpl */
+gettext("New opinion");
 
 /* public/themes/admin/tpl//opinion/list.tpl */
 gettext("New opinion");
@@ -1354,137 +1375,86 @@ gettext("Delete");
 /* public/themes/admin/tpl//opinion/content-provider/opinion.tpl */
 gettext("Send to trash");
 
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Editing author");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Creating author");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Save and exit");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Save and exit");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Go back");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Go back");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Go back");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Photo");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Add new photo");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Change");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Remove");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Display name");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Email");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Twitter user");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Username");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Blog Url");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Short Biography");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Biography");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Show in RSS");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("If this option is activated this author will be showed in rss");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Password");
+
+/* public/themes/admin/tpl//opinion/author_new.tpl */
+gettext("Confirm password");
+
 /* public/themes/admin/tpl//opinion/newPhoto.tpl */
 gettext("Invalid image: the filename name contains spaces or special chars.");
 
 /* public/themes/admin/tpl//opinion/newPhoto.tpl */
 gettext("Upload photo");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalAccept.tpl */
-gettext("Delete authors");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalAccept.tpl */
-gettext("You must select some elements.");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalAccept.tpl */
-gettext("Accept");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
-gettext("Delete author");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
-gettext("Are you sure you want to delete <span>%num%</span> authors?");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
-gettext("Yes, delete all");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
-gettext("No");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalBatchDelete.tpl */
-gettext("You must select some elements.");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalDelete.tpl */
-gettext("Delete author");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalDelete.tpl */
-gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalDelete.tpl */
-gettext("Yes, delete");
-
-/* public/themes/admin/tpl//opinion/authors/modals/_modalDelete.tpl */
-gettext("No");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Opinion authors");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Delete");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Delete");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("New author");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("New author");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("New author");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Filter by name");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Author name");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Condition");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Photos (#)");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("Actions");
-
-/* public/themes/admin/tpl//opinion/authors/list.tpl */
-gettext("There is no available authors");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Creating opinion author");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Editing opinion author");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Save");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Save");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Go back");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Go back");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Go back");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Name");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Condition");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Blog name");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Blog url");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Twitter user");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Show in RSS");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("If this option is activated this author will be showed in rss");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Author photos");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Delete");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("You can change the image order by drag and drop them.");
-
-/* public/themes/admin/tpl//opinion/authors/new.tpl */
-gettext("Add new photo");
 
 /* public/themes/admin/tpl//opinion/new.tpl */
 gettext("Write a tag and press Enter...");
@@ -1566,6 +1536,51 @@ gettext("Summary");
 
 /* public/themes/admin/tpl//opinion/new.tpl */
 gettext("Body");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Authors");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Delete selected authors");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Create new author");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("New author");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Avatar");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Biography");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Actions");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Edit user");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Edit user");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Edit");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("Delete this user");
+
+/* public/themes/admin/tpl//opinion/author_list.tpl */
+gettext("There is no users created yet or <br/>your search don't match your criteria");
 
 /* public/themes/admin/tpl//article/modals/_modalBatchDelete.tpl */
 gettext("Delete articles");
@@ -3818,9 +3833,6 @@ gettext("Basic information");
 gettext("Geolocation");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("EXIF &amp; IPTC");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("Original filename:");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
@@ -3848,28 +3860,22 @@ gettext("Copyright");
 gettext("Date");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Color");
+gettext("View advanced data");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Color");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("B/W");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Geolocate photo with my position");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("EXIF Data:");
+gettext("EXIF Data");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("No available EXIF data.");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("IPTC Data:");
+gettext("IPTC Data");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("No available IPTC data.");
+
+/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
+gettext("Geolocate photo with my position");
 
 /* public/themes/admin/tpl//image/_partials/_media_browser.tpl */
 gettext("Preview");
@@ -7364,7 +7370,19 @@ gettext("Paywall");
 gettext("Paywall");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Photo");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Add new photo");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Change");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Remove");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Display name");
@@ -7374,6 +7392,21 @@ gettext("User name");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Email");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Twitter user");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Username");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Blog Url");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Short Biography");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Biography");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Password");
@@ -7409,10 +7442,10 @@ gettext("User group:");
 gettext("User group:");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
-gettext("--Select one--");
+gettext("Master");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
-gettext("Master");
+gettext("Categories");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Categories");
@@ -7898,9 +7931,6 @@ gettext("In which category you want to import this element?");
 gettext("Syncing from sources");
 
 /* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
-gettext("Loading...");
-
-/* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
 gettext("Downloading articles from news agencies, please wait...");
 
 /* public/themes/admin/tpl//news_agency/modals/_modal_sync_dialog.tpl */
@@ -8210,28 +8240,13 @@ gettext("Color");
 gettext("Dark Gray");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("White");
+gettext("Black");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Light Blue");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Light Red");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Light Orange");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Light purple");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Light green");
+gettext("Bold red");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Green");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Bold blue");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Blue");
@@ -8252,31 +8267,10 @@ gettext("Yellow");
 gettext("Orange");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Light Red");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Red");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Purple");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Gray");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Black");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Yellow");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Orange");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Red");
-
-/* public/themes/admin/tpl//news_agency/config/new.tpl */
-gettext("Bold red");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Color to distinguish between other agencies");
@@ -9224,7 +9218,25 @@ gettext("Privileges");
 gettext("Privileges");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Paywall");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Paywall");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Photo");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
 gettext("If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Add new photo");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Change");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Remove");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
 gettext("Display name");
@@ -9234,6 +9246,18 @@ gettext("User name");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
 gettext("Email");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Twitter user");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Username");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Blog Url");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Biography");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
 gettext("Password");
@@ -9248,6 +9272,15 @@ gettext("Session expire time:");
 gettext("minutes");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("User type");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Backend");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
+gettext("Frontend");
+
+/* public/themes/manager/tpl/acl/user/new.tpl */
 gettext("User language");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
@@ -9260,10 +9293,10 @@ gettext("User group:");
 gettext("User group:");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
-gettext("--Select one--");
+gettext("Master");
 
 /* public/themes/manager/tpl/acl/user/new.tpl */
-gettext("Master");
+gettext("Paywall time limit:");
 
 /* public/themes/manager/tpl/login/login.tpl */
 gettext("The journalism CMS");
