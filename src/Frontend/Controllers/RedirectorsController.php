@@ -74,7 +74,7 @@ class RedirectorsController extends Controller
         }
         $url =  SITE_URL . $content->uri;
 
-        return new RedirectResponse($url);
+        return new RedirectResponse($url, 301);
     }
 
     /**
@@ -95,6 +95,6 @@ class RedirectorsController extends Controller
 
         $url = SITE_URL . \Uri::generate('section', array('id' => $cc->name));
 
-        return new RedirectResponse($url);
+        return new RedirectResponse($url, 301);
     }
 }
