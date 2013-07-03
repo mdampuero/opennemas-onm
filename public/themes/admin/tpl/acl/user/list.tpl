@@ -141,9 +141,11 @@ jQuery(function($){
 				{/foreach}
 			</tbody>
 			<tfoot>
-				<tr>
-					<td colspan="7">
-						&nbsp;
+				<tr >
+					<td colspan="7" class="center">
+		                <div class="pagination">
+		    				{$pagination->links|default:""}&nbsp;
+		                </div>
 					</td>
 				</tr>
 			</tfoot>

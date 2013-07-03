@@ -984,9 +984,35 @@ class OpinionsController extends Controller
      **/
     public function listAuthorAction(Request $request)
     {
+        $page   = $this->request->query->getDigits('page', 1);
+
         $users = \User::getAllUsersAuthors();
 
-        return $this->render('opinion/author_list.tpl', array('users' => $users));
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
+
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => count($users),
+                'fileName'    => $this->generateUrl('admin_opinion_authors').'?page=%d',
+            )
+        );
+
+        return $this->render(
+            'opinion/author_list.tpl',
+            array(
+                'users' => $usersPage,
+                'pagination' => $pagination,
+            )
+        );
     }
 
     /**

@@ -1340,7 +1340,7 @@ class User
      *
      * @return string the WHERE clause
      **/
-    private function buildFilter($filter)
+    public function buildFilter($filter)
     {
         $newFilter = '';
 
@@ -1361,8 +1361,8 @@ class User
 
             if (isset($filter['name']) && !empty($filter['name'])) {
                 $parts[] = '`name` LIKE "%' . $filter['name'] . '%" OR '.
-                           '`username` LIKE "%' . $filter['name'] . '%"';
-                $parts[] = '`email` LIKE "%' . $filter['name'] . '%"';
+                           '`username` LIKE "%' . $filter['name'] . '%" OR '.
+                           '`email` LIKE "%' . $filter['name'] . '%"';
             }
 
             if (isset($filter['group']) && intval($filter['group'])>0) {
@@ -1370,7 +1370,7 @@ class User
             }
 
             if (count($parts) > 0) {
-                $newFilter = 'WHERE ';
+                $newFilter = '';
                 $newFilter .= implode(' AND ', $parts);
             }
         }

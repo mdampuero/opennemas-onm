@@ -48,18 +48,30 @@ class AclUserController extends Controller
     {
         $this->checkAclOrForward('USER_ADMIN');
 
+        $page   =  $request->query->getDigits('page', 1);
         $filter = array(
-            'name'  => $request->query->filter('name', null),
-            'group' => $request->query->getDigits('group', null),
-            'type'  => $request->query->getDigits('type', null),
+            'name'  => $request->query->filter('name', ''),
+            'group' => $request->query->getDigits('group', ''),
+            'type'  => $request->query->getDigits('type', ''),
         );
 
         if (!$_SESSION['isMaster']) {
             $filter ['base'] = 'fk_user_group != 4';
         }
 
-        $user      = new \User();
-        $users     = $user->getUsers($filter, ' ORDER BY username ');
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        // Fetch users paginated and filtered
+        $user           = new \User();
+        $searchCriteria = $user->buildFilter($filter);
+        $userManager    = $this->get('user_repository');
+        $usersCount     = $userManager->count($searchCriteria);
+        $users          = $userManager->findBy(
+            $searchCriteria,
+            'name',
+            $itemsPerPage,
+            $page
+        );
 
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
@@ -70,12 +82,34 @@ class AclUserController extends Controller
             $groupsOptions[$cat->id] = $cat->name;
         }
 
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $usersCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_acl_user',
+                    array(
+                        'name'  => $filter['name'],
+                        'group' => $filter['group'],
+                        'type'  => $filter['type'],
+                    )
+                ).'&page=%d',
+            )
+        );
+
         return $this->render(
             'acl/user/list.tpl',
             array(
                 'users'         => $users,
                 'user_groups'   => $groups,
                 'groupsOptions' => $groupsOptions,
+                'pagination'    => $pagination,
             )
         );
     }
