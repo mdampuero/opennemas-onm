@@ -23,10 +23,7 @@
 
             <div class="well well-small">
                 <div><strong>{t}Original filename:{/t}</strong> {$photo->title}</div>
-                <div><strong>{t}File:{/t}</strong> <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                       title="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                       target="_blank">{$photo->name}</a></div>
-                <div><strong>{t}Resolution:{/t}</strong> {$photo->width} x {$photo->height} (px)</div>
+                <div><strong>{t}Resolution:{/t}</strong> {$photo->width}px x {$photo->height}px</div>
                 <div><strong>{t}Size:{/t}</strong> {$photo->size} Kb</div>
             </div>
 
@@ -35,6 +32,12 @@
         <div class="photo-basic-information">
 
             <div>
+                <div class="control-group">
+                    <label class="control-label">{t}Link{/t}</label>
+                    <div class="controls">
+                        <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" target="_blank">{$smarty.const.SITE_URL}{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}</a>
+                    </div>
+                </div>
                 <div class="control-group">
                     <label for="description-{$photo->id}" class="control-label">{t}Description{/t}</label>
                     <div class="controls">
