@@ -170,8 +170,8 @@ class AclUserController extends Controller
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-            'id_user_group'   => $request->request->getDigits('id_user_group'),
-            'ids_category'    => $request->request->get('ids_category'),
+            'id_user_group'   => $request->request->get('id_user_group', array()),
+            'ids_category'    => $request->request->get('ids_category', array()),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
 
@@ -257,8 +257,8 @@ class AclUserController extends Controller
                 'sessionexpire'   => $request->request->getDigits('sessionexpire'),
                 'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'id_user_group'   => $request->request->getDigits('id_user_group'),
-                'ids_category'    => $request->request->get('ids_category'),
+                'id_user_group'   => $request->request->get('id_user_group', array()),
+                'ids_category'    => $request->request->get('ids_category', array()),
                 'activated'       => 1,
                 'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
                 'deposit'         => 0,

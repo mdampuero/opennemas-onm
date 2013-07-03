@@ -1,35 +1,14 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
-{script_tag src="/jquery/jquery.multiselect.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
     jQuery(document).ready(function($){
         $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
-        $('#user-editing-form').tabs();
 
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
-        // Show/hide privilege tab depending on userType backend/frontend
-        if($('select#usertype').val() == '1') {
-            $('#id_user_group').removeAttr('required');
-            $('#privileges').hide();
-            $('.privileges-tab').hide();
-        }
-        $('select#usertype').change(function() {
-            if($(this).val() == '1'){
-                $('#id_user_group').removeAttr('required');
-                $('#privileges').hide();
-                $('.privileges-tab').hide();
-            } else {
-                $('#privileges').show();
-                $('.privileges-tab').show();
-                $('#id_user_group').attr('required', 'required');
-            }
         });
 
         // PAssword strength checker
@@ -46,23 +25,6 @@
         $('.delete').on('click', function(){
             $('.file-input').val('0');
         })
-
-        // Use multiselect on user groups and categories
-        $('select#id_user_group').twosidedmultiselect();
-        $('select#ids_category').twosidedmultiselect();
-
-        // Paywall datepicker only if available
-        {acl isAllowed='USER_ADMIN'}
-            {is_module_activated name='PAYWALL'}
-            jQuery('#paywall_time_limit').datetimepicker({
-                hourGrid: 4,
-                showAnim: 'fadeIn',
-                dateFormat: 'yy-mm-dd',
-                timeFormat: 'hh:mm:ss',
-                minuteGrid: 10
-            });
-            {/is_module_activated}
-        {/acl}
     });
 </script>
 {/block}
@@ -101,44 +63,16 @@ label {
 }
 .alert-pass.alert-success { background: #468847 url("/assets/images/alert-ok-small.png") no-repeat 16px; }
 .alert-pass.alert-error { background: #B22222 url("/assets/images/alert-error-small.png") no-repeat 16px; }
-/* Recommended styles tsms */
-.tsmsselect {
-        float: left;
-}
-
-.tsmsselect select {
-}
-
-.tsmsoptions {
-        width: 10%;
-        float: left;
-}
-
-.tsmsoptions p {
-        margin: 2px;
-        text-align: center;
-        font-size: larger;
-        cursor: pointer;
-}
-
-.tsmsoptions p:hover {
-        color: White;
-        background-color: Silver;
-}
-.groups, .categorys {
-    display: inline-block;
-    width: 100%;
-}
 </style>
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
+<form action="{if isset($user->id)}{url name=admin_opinion_author_update id=$user->id}{else}{url name=admin_opinion_author_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
 
-	<div class="top-action-bar clearfix">
-		<div class="wrapper-content">
-			<div class="title"><h2>{if isset($user->id)}{t}Editing user{/t}{else}{t}Creating user{/t}{/if}</h2></div>
-			<ul class="old-button">
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>{if isset($user->id)}{t}Editing author{/t}{else}{t}Creating author{/t}{/if}</h2></div>
+            <ul class="old-button">
                 <li>
                     <button action="submit"  name="action" value="validate">
                         <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
@@ -146,27 +80,16 @@ label {
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_acl_user type=$user->type}">
+                    <a href="{url name=admin_opinion_authors}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
-			</ul>
-		</div>
-	</div>
+            </ul>
+        </div>
+    </div>
 
     <div class="wrapper-content">
         {render_messages}
-        <div id="user-editing-form" class="wrapper-content tabs">
-            <ul>
-                <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
-                <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
-                <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
-                {acl isAllowed="USER_ADMIN"}
-                {is_module_activated name="PAYWALL"}
-                <li><a href="#paywall" title="{t}Paywall{/t}">{t}Paywall{/t}</a></li>
-                {/is_module_activated}
-                {/acl}
-            </ul><!-- / -->
             <div id="basic">
                 <div class="avatar">
                     <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
@@ -247,6 +170,15 @@ label {
                             </div>
                         </div>
 
+                        <div class="control-group">
+                            <label for="meta[inrss]" class="control-label">{t}Show in RSS{/t}</label>
+                            <div class="controls">
+                                <label class="checkbox">
+                                    <input type="checkbox" name="meta[inrss]" id="meta[inrss]" {if !isset($user->meta['inrss']) || $user->meta['inrss'] eq 'on'} checked="checked"{/if}>
+                                    {t}If this option is activated this author will be showed in rss{/t}
+                                </label>
+                            </div>
+                        </div>
                     </fieldset>
 
                     <fieldset>
@@ -271,96 +203,7 @@ label {
                         </div>
                     <fieldset>
                 </div>
-            </div><!-- /personal -->
-
-            <div id="settings">
-                <div class="form-horizontal">
-                        <div class="control-group">
-                        <label for="sessionexpire" class="control-label">{t}Session expire time:{/t}</label>
-                        <div class="controls">
-                            <input type="number" id="sessionexpire" name="sessionexpire" value="{$user->sessionexpire|default:"15"}" class="input-mini validate-digits" maxlength="20"/>
-                            <span>{t}minutes{/t}</span>
-                        </div>
-                    </div>
-
-                    {is_module_activated name="PAYWALL"}
-                    <div class="control-group">
-                        <label for="user_language" class="control-label">{t}User type{/t}</label>
-                        <div class="controls">
-                            <select id="usertype" name="type">
-                                <option value="0" {if ($user->type eq "0")}selected{/if}>{t}Backend{/t}</option>
-                                <option value="1" {if ($user->type eq "1")}selected{/if}>{t}Frontend{/t}</option>
-                            </select>
-                        </div>
-                    </div>
-                    {/is_module_activated}
-
-                    <div class="control-group">
-                        <label for="meta[user_language]" class="control-label">{t}User language{/t}</label>
-                        <div class="controls">
-                            {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
-                            <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            <div id="privileges">
-            {acl isAllowed="GROUP_CHANGE"}
-                <div class="groups">
-                    <label for="id_user_group">{t}User group:{/t}</label>
-                    <select id="id_user_group" name="id_user_group[]" size="8" multiple="multiple" title="{t}User group:{/t}" class="validate-selection">
-                        {if $smarty.session.isMaster}
-                            <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
-                        {/if}
-                        {foreach $user_groups as $group}
-                            {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
-                                <option  value="{$group->id}" selected="selected">{$group->name}</option>
-                            {else}
-                                <option  value="{$group->id}">{$group->name}</option>
-                            {/if}
-                        {/foreach}
-                    </select>
-                </div>
-            {/acl}
-            <label>&nbsp;</label>
-            {acl isAllowed="USER_CATEGORY"}
-                <div class="categorys">
-                    <label>&nbsp;</label>
-                    <label for="id_user_group">{t}Categories{/t}:</label>
-                    <select id="ids_category" name="ids_category[]" size="12" title="{t}Categories{/t}" class="validate-selection" multiple="multiple">
-                        <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
-                        {foreach item="c_it" from=$content_categories}
-                            <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
-                            {if count($c_it->childNodes)>0}
-                                {foreach item="sc_it" from=$c_it->childNodes}
-                                    <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
-                                            &nbsp; &rArr; {$sc_it->title}
-                                    </option>
-                                {/foreach}
-                            {/if}
-                        {/foreach}
-                    </select>
-                </div>
-                <label>&nbsp;</label>
-            {/acl}
-            </div><!-- /privileges -->
-
-            {acl isAllowed="USER_ADMIN"}
-            {is_module_activated name="PAYWALL"}
-            <div id="paywall">
-                <div class="form-horizontal">
-                        <div class="control-group">
-                        <label for="paywall_time_limit" class="control-label">{t}Paywall time limit:{/t}</label>
-                        <div class="controls">
-                            <input type="datetime" id="paywall_time_limit" name="paywall_time_limit" value="{datetime date=$user->meta['paywall_time_limit']}" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/is_module_activated}
-            {/acl}
-            <!-- paywall -->
         </div>
     </div>
 </form>

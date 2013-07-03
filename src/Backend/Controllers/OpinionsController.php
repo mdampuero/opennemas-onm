@@ -974,4 +974,219 @@ class OpinionsController extends Controller
             );
         }
     }
+
+    /**
+     * Show a non paginated list of backend users
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function listAuthorAction(Request $request)
+    {
+        $users = \User::getAllUsersAuthors();
+
+        return $this->render('opinion/author_list.tpl', array('users' => $users));
+    }
+
+    /**
+     * Shows the author information given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function showAuthorAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+
+        $user = new \User($id);
+        if (is_null($user->id)) {
+            m::add(sprintf(_("Unable to find the author with the id '%d'"), $id), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_opinion_authors'));
+        }
+
+        // Fetch user photo if exists
+        if (!empty($user->avatar_img_id)) {
+            $user->photo = new \Photo($user->avatar_img_id);
+        }
+
+        $user->meta = $user->getMeta();
+
+        return $this->render('opinion/author_new.tpl', array('user' => $user));
+    }
+
+    /**
+     * Creates an author give some information
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function createAuthorAction(Request $request)
+    {
+        $user = new \User();
+
+        if ($request->getMethod() == 'POST') {
+            $data = array(
+                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+                'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+                'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+                'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+                'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+                'sessionexpire'   => 60,
+                'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+                'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+                'id_user_group'   => array(3),
+                'ids_category'    => array(),
+                'activated'       => 0,
+                'type'            => 0,
+                'deposit'         => 0,
+                'token'           => null,
+            );
+
+            $file = $request->files->get('avatar');
+
+            try {
+                // Upload user avatar if exists
+                if (!is_null($file)) {
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $data['avatar_img_id'] = $photoId;
+                } else {
+                    $data['avatar_img_id'] = 0;
+                }
+
+                if ($user->create($data)) {
+                    // Set all usermeta information (twitter, rss, language)
+                    $meta = $request->request->get('meta');
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
+
+                    m::add(_('Author created successfully.'), m::SUCCESS);
+
+                    return $this->redirect(
+                        $this->generateUrl(
+                            'admin_opinion_author_show',
+                            array('id' => $user->id)
+                        )
+                    );
+                } else {
+                    m::add(_('Unable to create the author with that information'), m::ERROR);
+                }
+            } catch (\Exception $e) {
+                m::add($e->getMessage(), m::ERROR);
+            }
+        }
+
+        return $this->render('opinion/author_new.tpl', array('user' => $user));
+    }
+
+    /**
+     * Handles the update action for an author given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function updateAuthorAction(Request $request)
+    {
+        $userId = $request->query->getDigits('id');
+        $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
+
+        $data = array(
+            'id'              => $userId,
+            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
+            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
+            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'sessionexpire'   => 60,
+            'id_user_group'   => array(3),
+            'ids_category'    => array(),
+            'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
+        );
+
+        $file = $request->files->get('avatar');
+        $user = new \User($userId);
+
+        try {
+            // Upload user avatar if exists
+            if (!is_null($file)) {
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $data['avatar_img_id'] = $photoId;
+            } elseif (($data['avatar_img_id']) == 1) {
+                $data['avatar_img_id'] = $user->avatar_img_id;
+            }
+
+            // Process data
+            if ($user->update($data)) {
+                // Set all usermeta information (twitter, rss, language)
+                $meta = $request->request->get('meta');
+                foreach ($meta as $key => $value) {
+                    $user->setMeta(array($key => $value));
+                }
+
+                m::add(_('Author data updated successfully.'), m::SUCCESS);
+            } else {
+                m::add(_('Unable to update the author with that information'), m::ERROR);
+            }
+        } catch (FileException $e) {
+            m::add($e->getMessage(), m::ERROR);
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
+        );
+    }
+
+    /**
+     * Deletes an author given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function deleteAuthorAction(Request $request)
+    {
+        $userId = $request->query->getDigits('id');
+
+        if (!is_null($userId)) {
+            $user = new \User();
+            $user->delete($userId);
+            if (!$request->isXmlHttpRequest()) {
+                return $this->redirect($this->generateUrl('admin_opinion_authors'));
+            } else {
+                return new Response('ok');
+            }
+        }
+    }
+
+    /**
+     * Deletes multiple authors at once given their ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAuthorAction(Request $request)
+    {
+        $selected = $request->query->get('selected');
+
+        if (count($selected) > 0) {
+            $user = new \User();
+            foreach ($selected as $userId) {
+                $user->delete((int) $userId);
+            }
+            m::add(sprintf(_('You have deleted %d authors.'), count($selected)), m::SUCCESS);
+        } else {
+            m::add(_('You haven\'t selected any author to delete.'), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl('admin_opinion_authors'));
+    }
 }
