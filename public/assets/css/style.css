@@ -1368,6 +1368,8 @@ img[src="non"] { display:none !important; }
 
 .fileupload-progressbar {
     width: 350px;
+    margin-top: 3px;
+    margin-left: 10px;
 }
 .template-upload td:last-child,
 .template-download td:last-child {
