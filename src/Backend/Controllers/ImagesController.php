@@ -617,7 +617,6 @@ class ImagesController extends Controller
                 'metadata'    => filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING),
                 'author_name' => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
                 'date'        => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
-                'color'       => filter_var($_POST['color'][$id], FILTER_SANITIZE_STRING),
                 'address'     => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'    => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
                 'available'   => 1

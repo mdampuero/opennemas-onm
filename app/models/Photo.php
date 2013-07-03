@@ -716,13 +716,12 @@ class Photo extends Content
         parent::update($data);
 
         $sql = "UPDATE `photos`
-                SET `author_name`=?, `address`=?, `color`=?, `date`=?, `resolution`=?
+                SET `author_name`=?, `address`=?, `date`=?, `resolution`=?
                 WHERE `pk_photo`=?";
 
         $values = array(
             $data['author_name'],
             $data['address'],
-            $data['color'],
             $data['date'],
             $data['resolution'],
             $data['id']
