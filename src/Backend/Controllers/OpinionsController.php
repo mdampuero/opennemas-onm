@@ -1058,8 +1058,6 @@ class OpinionsController extends Controller
             $data = array(
                 'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
                 'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
-                'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
-                'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
                 'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'sessionexpire'   => 60,
                 'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
@@ -1125,8 +1123,6 @@ class OpinionsController extends Controller
             'id'              => $userId,
             'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
-            'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
-            'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
