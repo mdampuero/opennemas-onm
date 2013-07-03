@@ -132,7 +132,7 @@ EOF
         $this->importCategories();
         $this->loadCategories();
 
-     //  $this->importImages();
+        $this->importImages();
 
         $this->importArticles();
 
