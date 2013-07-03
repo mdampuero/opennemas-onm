@@ -436,7 +436,7 @@ EOF
                         $this->insertRefactorID($originalArticleID, $newArticleID, 'article', $rs->fields['post_name']);
                     //  $this->output->writeln('-'. $originalArticleID.'->'.
                     //         $newArticleID. ' article ok');
-                    $this->output->writeln('.');
+                    $this->output->write('.');
                     } else {
                         $this->output->writeln('Problem inserting article '.$originalArticleID.
                             ' - '. $rs->fields['post_name'] .'\n');
@@ -521,7 +521,7 @@ EOF
                         if (!empty($imageID)) {
                             $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                             // $this->output->writeln('- Image '. $imageID. ' ok');
-                            $this->output->writeln('.');
+                            $this->output->write('.');
                         } else {
                             $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
                                 "-". $rs->fields['guid'] .' -> '.$local_file."\n");
@@ -808,8 +808,8 @@ EOF
     {
         // Generate image path and upload directory
         $userNameNormalized      = \Onm\StringUtils::normalize_name($userName);
-        $relativeAuthorImagePath ="/images/authors/".$userName;
-        $uploadDirectory         =  MEDIA_PATH .$relativeAuthorImagePath;
+        $relativeAuthorImagePath ="/authors/".$userName;
+        $uploadDirectory         =  MEDIA_PATH."/images".$relativeAuthorImagePath;
 
         // Get original information of the uploaded image
         $originalFileName = $file;
