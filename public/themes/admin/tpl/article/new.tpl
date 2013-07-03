@@ -190,6 +190,17 @@
                                     {/section}
                                     <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
                                 </select>
+                                <br>
+                                <hr class="divisor" style="margin-top:8px;">
+                                <h4>{t}Author{/t}</h4>
+                                {acl isAllowed="CONTENT_OTHER_UPDATE"}
+                                    <select name="fk_author" id="fk_author">
+                                        {html_options options=$authors selected=$article->fk_author}
+                                    </select>
+                                {aclelse}
+                                    {if !isset($article->author->name)}{t}No author assigned{/t}{else}{$article->author->name}{/if}
+                                    <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                                {/acl}
                             </div>
                         </div>
 
@@ -214,6 +225,7 @@
                             </div>
                         </div>
                         {/is_module_activated}
+
                     </div>
 
                     <div class="form-inline-block contentform-main">

@@ -430,11 +430,10 @@ class Content
             $data['metadata']='';
         }
 
-        $data['fk_user'] =
-            (empty($data['fk_user']) && !isset ($data['fk_user']))
-            ? $_SESSION['userid'] :$data['fk_user'] ;
-        $data['fk_user_last_editor'] = $data['fk_user'];
-        $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_user'];
+
+        $data['fk_author'] =  (is_null($data['fk_author']))? $_SESSION['userid'] : $data['fk_author'];
+        $data['fk_user_last_editor'] = $data['fk_author'];
+        $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_author'];
 
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
@@ -447,7 +446,7 @@ class Content
             $data['created'], $data['changed'], $data['content_status'],
             $data['views'], $data['position'],$data['frontpage'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user'], $data['fk_publisher'],
+            $data['fk_author'], $data['fk_publisher'],
             $data['fk_user_last_editor'], $data['in_home'],
             $data['home_pos'],$data['available'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
@@ -531,7 +530,8 @@ class Content
                     `changed`=?, `in_home`=?, `frontpage`=?,
                     `available`=?, `content_status`=?,
                     `placeholder`=?, `home_placeholder`=?,
-                    `fk_user_last_editor`=?, `slug`=?, `category_name`=?, `params`=?
+                    `fk_author`=?, `fk_user_last_editor`=?,
+                    `slug`=?, `category_name`=?, `params`=?
                 WHERE pk_content= ?";
 
         $this->read($data['id']);
@@ -566,7 +566,10 @@ class Content
                 (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'home_placeholder' =>
                 (empty($this->home_placeholder)) ? 'placeholder_0_1': $this->home_placeholder,
+            'fk_author' =>
+                (is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
         );
+
         $data = array_merge($data, $values);
 
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
@@ -590,9 +593,6 @@ class Content
         }
         if (empty($data['metadata']) && !isset ($data['metadata'])) {
             $data['metadata']='';
-        }
-        if (empty($data['pk_author']) && !isset ($data['pk_author'])) {
-            $data['pk_author']='';
         }
 
         if ($data['category'] != $this->category) {
@@ -620,11 +620,12 @@ class Content
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user_last_editor'], $data['slug'],
+            $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
             $this->category_name, $data['params'], $data['id']
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return false;
