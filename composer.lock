@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "58a09c987965c7e6f7428ba93bfc6984",
+    "hash": "57e88487d0ac98fb459e4790c2d96fd3",
     "packages": [
         {
             "name": "frandieguez/panorama-php",
@@ -50,12 +50,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "9c70f0d12b44e16f31fc7a4701082aa46d523761"
+                "reference": "06639db40fc2edccda499883b8f04b45b684fc1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/9c70f0d12b44e16f31fc7a4701082aa46d523761",
-                "reference": "9c70f0d12b44e16f31fc7a4701082aa46d523761",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/06639db40fc2edccda499883b8f04b45b684fc1b",
+                "reference": "06639db40fc2edccda499883b8f04b45b684fc1b",
                 "shasum": ""
             },
             "require": {
@@ -94,7 +94,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2013-04-29 19:10:37"
+            "time": "2013-07-03 18:07:10"
         },
         {
             "name": "monolog/monolog",
@@ -476,26 +476,32 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.2.3",
+            "version": "v2.3.1",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "v2.2.3"
+                "reference": "v2.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.2.3",
-                "reference": "v2.2.3",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/v2.3.1",
+                "reference": "v2.3.1",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
+            "require-dev": {
+                "symfony/event-dispatcher": ">=2.1,<3.0"
+            },
+            "suggest": {
+                "symfony/event-dispatcher": ""
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 }
             },
             "autoload": {
@@ -519,7 +525,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-13 07:47:06"
+            "time": "2013-06-11 07:15:14"
         },
         {
             "name": "symfony/dependency-injection",
