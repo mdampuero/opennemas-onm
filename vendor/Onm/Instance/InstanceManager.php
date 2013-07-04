@@ -116,14 +116,24 @@ class InstanceManager
             }
             $data = $rs->GetArray();
 
+
             $matchedInstance = null;
             foreach ($data as $instanceData) {
                 $domains = explode(',', $instanceData['domains']);
+                $domains = array_map(
+                    function ($instanceDataElem) {
+                        return trim($instanceDataElem);
+                    },
+                    $domains
+                );
+
                 if (in_array($serverName, $domains)) {
+
                     $matchedInstance = $instanceData;
                     break;
                 }
             }
+
 
             if (is_null($matchedInstance)) {
                 return false;
