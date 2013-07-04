@@ -106,19 +106,34 @@ class InstanceManager
         if (!$instance) {
             //TODO: improve search for allowing subdomains with wildcards
             $sql = "SELECT SQL_CACHE * FROM instances"
-                ." WHERE domains LIKE '%{$serverName}%' LIMIT 1";
+                ." WHERE domains LIKE '%{$serverName}%'";
+            $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
             $rs = $this->connection->Execute($sql);
 
             if (!$rs) {
                 $this->connection->ErrorMsg();
                 return false;
             }
+            $data = $rs->GetArray();
+
+            $matchedInstance = null;
+            foreach ($data as $instanceData) {
+                $domains = explode(',', $instanceData['domains']);
+                if (in_array($serverName, $domains)) {
+                    $matchedInstance = $instanceData;
+                    break;
+                }
+            }
+
+            if (is_null($matchedInstance)) {
+                return false;
+            }
 
             //If found matching instance initialize its contants and return it
-            if ($rs->fields) {
+            if ($matchedInstance) {
 
                 $instance = new Instance();
-                foreach ($rs->fields as $key => $value) {
+                foreach ($matchedInstance as $key => $value) {
                     $instance->{$key} = $value;
                 }
                 define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
