@@ -36,7 +36,7 @@
                         </span>
                     {else}
                         {dynamic_image
-                            transform="thumbnail,200,200"
+                            transform="zoomcrop,80,80,center,center"
                             src="{$photos[n]->path_file}{$photos[n]->name}"
                             id="draggable_img{$num}"
                             class="draggable-handler"

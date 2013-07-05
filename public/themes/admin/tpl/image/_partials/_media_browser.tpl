@@ -38,7 +38,7 @@
                 </object>
                 <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
             {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
-                {dynamic_image src="{$photo->path_file}/{$photo->name}" width="80" transform="thumbnail,80,80" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
+                {dynamic_image src="{$photo->path_file}/{$photo->name}" width="80" transform="zoomcrop,80,80,center,center" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
             {/if}
             <div class="simple_overlay modal hide fade" id="image-{$smarty.foreach.n.index}">
                 <div class="modal-header">

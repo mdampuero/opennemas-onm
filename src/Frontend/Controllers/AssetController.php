@@ -89,6 +89,32 @@ class AssetController extends Controller
                 $image = $image->thumbnail(
                     new \Imagine\Image\Box($width, $height, $mode)
                 );
+            } elseif ($method == 'zoomcrop') {
+                $width         = $parameters[0];
+                $height        = $parameters[1];
+                $verticalPos   = $parameters[2];
+                $horizontalPos = $parameters[3];
+                $mode = ImageInterface::THUMBNAIL_OUTBOUND;
+
+                if ($imageWidth >= $imageHeight) {
+                    $widthResize = $height*$imageWidth/$imageHeight;
+                    $heightResize = $height;
+                    $topX = $widthResize/2 - $width/2;
+                    $topY = 0;
+                } else {
+                    $widthResize = $width;
+                    $heightResize = $width*$imageHeight/$imageWidth;
+                    $topX = 0;
+                    $topY = $heightResize/2 - $height/2;
+                }
+                $newSize = $image->getSize();
+
+                $image = $image->resize(
+                    new \Imagine\Image\Box($widthResize, $heightResize, $mode)
+                )->crop(
+                    new \Imagine\Image\Point($topX, $topY),
+                    new \Imagine\Image\Box($width, $height)
+                );
             } else {
 
                 $width  = $parameters[0];
@@ -103,8 +129,8 @@ class AssetController extends Controller
                 $originalFormat,
                 array(
                     'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
-                    'resolution-x'     => 300,
-                    'resolution-y'     => 300,
+                    'resolution-x'     => 72,
+                    'resolution-y'     => 72,
                     'quality'          => 85,
                 )
             );
