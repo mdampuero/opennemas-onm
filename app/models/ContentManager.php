@@ -2034,14 +2034,12 @@ class ContentManager
         // METER TB LEFT JOIN
         //necesita el as id para paginacion
 
-         $sql= 'SELECT contents.pk_content as id, contents.title, authors.name,
+         $sql= 'SELECT contents.pk_content as id, contents.title, users.name,
                        contents.metadata, contents.slug, contents.changed,
                        contents.starttime, contents.endtime
                 FROM contents, opinions
-                LEFT JOIN authors
-                    ON (authors.pk_author=opinions.fk_author)
-                LEFT JOIN author_imgs
-                    ON (opinions.fk_author_img=author_imgs.pk_img)
+                LEFT JOIN users
+                    ON (users.id=opinions.fk_author)
                 WHERE `contents`.`fk_content_type`=4
                 AND contents.pk_content=opinions.pk_opinion
                 AND '.$_where.' '
@@ -2049,6 +2047,7 @@ class ContentManager
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs    = $GLOBALS['application']->conn->Execute($sql);
+
         $items = $rs->GetArray();
 
         return $items;
