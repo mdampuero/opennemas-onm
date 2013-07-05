@@ -744,6 +744,7 @@ EOF
         $newBody = '';
         $img     = '';
         $gallery = '';
+        $photo     = new \Photo();
         $allowed = '<i><b><p><a><br><ol><ul><li>';
         $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?><\/a>@';
         preg_match_all($patern, $body, $result);
