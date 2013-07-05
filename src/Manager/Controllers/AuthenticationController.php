@@ -83,7 +83,7 @@ class AuthenticationController extends Controller
 
         $user = new \User();
 
-        if ($_SESSION['csrf'] !== $token) {
+        if (array_key_exists('csrf', $_SESSION) && $_SESSION['csrf'] !== $token) {
             $this->view->assign('message', _('Login token is not valid. Try to autenticate again.'));
         } else {
 
