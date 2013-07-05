@@ -306,7 +306,7 @@ class InstanceManager
             if ($rs !== false) {
                 while (!$rs->EOF) {
                     $information[ $rs->fields['name'] ] =
-                        unserialize($rs->fields['value']);
+                        @unserialize($rs->fields['value']);
                     $rs->MoveNext();
                 }
             }
