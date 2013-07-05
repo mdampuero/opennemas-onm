@@ -110,7 +110,7 @@ class UserController extends Controller
         } else {
             // Correct CAPTCHA - Filter $_POST vars from FORM
             $data = array(
-                'authorize'     => 0, // Before activation by mail, user is not allowed
+                'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
                 'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
                 'login'         => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
@@ -267,9 +267,9 @@ class UserController extends Controller
         $userData = $user->findByToken($token);
 
         if ($userData) {
-            $user->authorizeUser($userData->id);
+            $user->activateUser($userData->id);
 
-            if ($user->login($userData->login, $userData->password, $userData->token, $captcha)) {
+            if ($user->login($userData->username, $userData->password, $userData->token, $captcha)) {
                 // Increase security by regenerating the id
                 $request->getSession()->migrate();
 
@@ -283,7 +283,7 @@ class UserController extends Controller
                 $_SESSION = array(
                     'userid'           => $user->id,
                     'realname'         => $user->name,
-                    'username'         => $user->login,
+                    'username'         => $user->username,
                     'email'            => $user->email,
                     'deposit'          => $user->deposit,
                     'authMethod'       => $user->authMethod,
@@ -294,7 +294,7 @@ class UserController extends Controller
                 );
 
                 // Store default expire time
-                \Application::setCookieSecure('default_expire', $user->sessionexpire, 0);
+                setCookieSecure('default_expire', $user->sessionexpire, 0);
             }
 
             m::add(_('Log in succesful.'), m::SUCCESS);
@@ -584,4 +584,162 @@ class UserController extends Controller
 
         return $output;
     }
+
+    /**
+     * Shows the author frontpage
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function authorFrontpageAction(Request $request)
+    {
+
+        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = 15;
+
+        $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
+
+
+        if (($this->view->caching == 0)
+           || (!$this->view->isCached('user/author_frontpage.tpl', $cacheID))
+        ) {
+            // Get user by slug
+            $ur = $this->get('user_repository');
+            $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
+            $user->photo = new \Photo($user->avatar_img_id);
+
+
+            $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
+                ."AND available=1 AND in_litter=0";
+
+            $er = $this->get('entity_repository');
+            $contentsCount  = $er->count($searchCriteria);
+            $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
+
+            foreach ($contents as &$item) {
+                $item = $item->get($item->id);
+                $item->author = $user;
+                if (isset($item->img1) && ($item->img1 > 0)) {
+                    $image = new \Photo($item->img1);
+                    $item->img1_path = $image->path_file.$image->name;
+                    $item->img1 = $image;
+                }
+
+                if ($item->fk_content_type == 7) {
+                    $image = new \Photo($item->cover_id);
+                    $item->img1_path = $image->path_file.$image->name;
+                    $item->img1 = $image;
+                    $item->summary = $item->subtitle;
+                    $item->subtitle= '';
+
+                }
+                 if ($item->fk_content_type == 9) {
+                    $item->obj_video = $item;
+                    $item->summary = $item->description;
+
+                }
+
+                if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                    $item->video = new \Video($item->fk_video2);
+                }
+            }
+            // Build the pager
+            $pagination = \Onm\Pager\Slider::create(
+                $contentsCount,
+                $itemsPerPage,
+                $this->generateUrl(
+                    'frontend_author_frontpage',
+                    array('slug' => $slug,)
+                )
+            );
+
+            $this->view->assign(
+                array(
+                    'contents'   => $contents,
+                    'author'     => $user,
+                    'pagination' => $pagination,
+                )
+            );
+        }
+
+        return $this->render(
+            'user/author_frontpage.tpl',
+            array(
+                'cache_id' => $cacheID,
+            )
+        );
+
+    }
+
+    /**
+     * Shows the author frontpage
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function frontpageAuthorsAction(Request $request)
+    {
+
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 15;
+
+        $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
+
+        if (($this->view->caching == 0)
+           || (!$this->view->isCached('user/frontpage_author.tpl', $cacheID))
+        ) {
+            $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "
+                ."WHERE contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
+                ."AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
+
+            $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+            $rs = $GLOBALS['application']->conn->Execute($sql);
+
+
+            $authorsContents = $rs->GetArray();
+
+            $totalUsers = count($authorsContents);
+
+            if ($page <= 1) {
+                $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
+            } else {
+                $authorsContents = array_slice($authorsContents, $page*$itemsPerPage, $itemsPerPage);
+            }
+
+            // Build the pager
+            $pagination = \Onm\Pager\Slider::create(
+                $totalUsers,
+                $itemsPerPage,
+                $this->generateUrl('frontend_frontpage_authors')
+            );
+
+
+            // Get user by slug
+            $ur = $this->get('user_repository');
+            foreach ($authorsContents as &$element) {
+                $user = $ur->find($element['id']);
+                $user->total_contents = $element['total_contents'];
+                $element = $user;
+            }
+
+            $this->view->assign(
+                array(
+                    'authors_contents' => $authorsContents,
+                    'pagination'       => $pagination,
+                )
+            );
+        }
+
+        return $this->render(
+            'user/frontpage_authors.tpl',
+            array(
+                'cache_id' => $cacheID,
+            )
+        );
+
+    }
+
 }

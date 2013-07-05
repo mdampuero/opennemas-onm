@@ -150,7 +150,7 @@
                     {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
                         <label for="site_logo"></label>
                         <div class="controls" >
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:100px;">
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:100px;">
                         </div>
                     {/if}
                 </div>
@@ -160,7 +160,7 @@
                     <div class="controls">
                         <input type="file" id="favico" name="favico">
                         {if isset($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
                         {/if}
                     </div>
                 </div>
@@ -170,7 +170,7 @@
                     <div class="controls">
                         <input type="file" id="mobile_logo" name="mobile_logo">
                         {if isset($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
                         {/if}
                     </div>
                 </div>

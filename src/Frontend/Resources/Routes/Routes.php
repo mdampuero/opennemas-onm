@@ -18,6 +18,20 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'asset_image',
+    new Route(
+        '/asset/{parameters}/{real_path}',
+        array(
+            '_controller' => 'Frontend:Controllers:AssetController:image',
+        ),
+        array(
+            'parameters'  => '[^/]+',
+            'real_path'  => '.+',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_paywall_showcase',
     new Route(
         '/paywall',
@@ -195,6 +209,29 @@ $frontendRoutes->add(
         '/user/user_box',
         array(
             '_controller' => 'Frontend:Controllers:UserController:userBox',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_author_frontpage',
+    new Route(
+        '/author/{slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:authorFrontpage',
+        ),
+        array(
+            'slug' => '[A-Za-z\d-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_frontpage_authors',
+    new Route(
+        '/authors',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:frontpageAuthors',
         )
     )
 );

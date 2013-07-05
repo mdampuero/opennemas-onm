@@ -90,17 +90,15 @@ class OpinionsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        // Fetch vars
-        $category_name = $_GET['category_name'] = 'opinion';
+        // Fetch vars from http
         $dirtyID = $request->query->getDigits('opinion_id');
-
+        // Clean dirty id
         $opinionID = \Content::resolveID($dirtyID);
 
+        // Fetch opinion
         $opinion = new \Opinion($opinionID);
-
-        $aut = new \Author($opinion->fk_author);
-
-        $photo = $aut->get_photo($opinion->fk_author_img);
+        // Get author photo
+        $photo = new \Photo($opinion->fk_author_img);
 
         // Show in Frontpage
         return $this->render(
@@ -108,7 +106,7 @@ class OpinionsController extends Controller
             array(
                 'opinion'     => $opinion,
                 'author_name' => $opinion->name,
-                'condition'   => $opinion->condition,
+                'condition'   => $opinion->bio,
                 'section'     => 'opinion',
                 'photo'       => $photo
             )

@@ -190,8 +190,11 @@ class NewsMLG1 implements FormatInterface
             "//nitf/body/body.head/abstract"
         );
         $summary   = "";
-        foreach ($summaries[0]->children() as $child) {
-            $summary .= "<p>".sprintf("%s", $child)."</p>";
+
+        if (!empty($summaries)) {
+            foreach ($summaries[0]->children() as $child) {
+                $summary .= "<p>".sprintf("%s", $child)."</p>";
+            }
         }
 
         return $summary;
@@ -284,7 +287,8 @@ class NewsMLG1 implements FormatInterface
 
         return \DateTime::createFromFormat(
             'Ymd\THis',
-            $originalDate
+            $originalDate,
+            new \DateTimeZone('UTC')
         );
     }
 

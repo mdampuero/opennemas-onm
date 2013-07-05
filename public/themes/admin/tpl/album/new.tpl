@@ -243,7 +243,7 @@
             <div class="control-group">
                 <label for="description" class="control-label">{t}Description{/t}</label>
                 <div class="controls">
-                    <textarea name="description" id="description" >{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
+                    <textarea name="description" id="description"  rows="8" class="input-xxlarge">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
                 </div>
             </div>
 

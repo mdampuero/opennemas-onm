@@ -121,19 +121,19 @@ class OpinionsController extends Controller
 
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
-                $opinion->author = new \Author($opinion->fk_author);
+                $opinion->author = new \User($opinion->fk_author);
             }
         } else {
             $opinions = array();
         }
 
-        $aut     = new \Author();
-        $authors = $aut->all_authors(null, 'ORDER BY name');
+        // Fetch all authors
+        $allAuthors = \User::getAllUsersAuthors();
 
         return $this->render(
             'opinion/list.tpl',
             array(
-                'autores'    => $authors,
+                'autores'    => $allAuthors,
                 'opinions'   => $opinions,
                 'page'       => $page,
                 'status'     => $status,
@@ -163,7 +163,7 @@ class OpinionsController extends Controller
 
         $cm = new \ContentManager();
         $rating = new \Rating();
-        $commentManager = new \Repository\CommentsManager();
+        $commentManager = new \Repository\CommentManager();
 
         $opinions = $cm->find(
             'Opinion',
@@ -171,6 +171,7 @@ class OpinionsController extends Controller
             'ORDER BY position ASC , created DESC'
         );
 
+        $editorial = array();
         if ($numEditorial > 0) {
             $editorial = $cm->find(
                 'Opinion',
@@ -178,6 +179,7 @@ class OpinionsController extends Controller
                 'ORDER BY position ASC, created DESC LIMIT '.$numEditorial
             );
         }
+        $director = array();
         if ($numDirector >0) {
             $director = $cm->find(
                 'Opinion',
@@ -195,19 +197,19 @@ class OpinionsController extends Controller
 
         if (isset($opinions) && is_array($opinions)) {
             foreach ($opinions as &$opinion) {
-                $opinion->author = new \Author($opinion->fk_author);
+                $opinion->author = new \User($opinion->fk_author);
             }
         } else {
             $opinions = array();
         }
 
-        $aut     = new \Author();
-        $authors = $aut->all_authors(null, 'ORDER BY name');
+        // Fetch all authors
+        $allAuthors = \User::getAllUsersAuthors();
 
         return $this->render(
             'opinion/list.tpl',
             array(
-                'autores'    => $authors,
+                'autores'    => $allAuthors,
                 'opinions'   => $opinions,
                 'director'   => $director,
                 'editorial'  => $editorial,
@@ -233,26 +235,33 @@ class OpinionsController extends Controller
 
         $opinion = new \Opinion($id);
 
+        // Check if opinion id exists
         if (is_null($opinion->id)) {
             m::add(sprintf(_('Unable to find the opinion with the id "%d"'), $id));
 
             return $this->redirect($this->generateUrl('admin_opinions'));
         }
 
+        // Check if you can see others opinions
+        if (!\Acl::isAdmin()
+            && !\Acl::check('CONTENT_OTHER_UPDATE')
+            && $opinion->fk_author != $_SESSION['userid']
+        ) {
+            m::add(_("You can't modify this opinion because you don't have enought privileges."));
+
+            return $this->redirect($this->generateUrl('admin_opinions'));
+        }
+
+        // Fetch author data and allAuthors
+        $author = new \User($opinion->fk_author);
+        $allAuthors = \User::getAllUsersAuthors();
+
+        // Fetch associated photos with opinion
         if (!empty($opinion->image)) {
             $image = new \Photo($opinion->image);
             $this->view->assign('image', $image);
         }
 
-        $author      = new \Author();
-        $allAuthors  = $author->all_authors(null, 'ORDER BY name');
-        $author      = new \Author($opinion->fk_author);
-
-        $photo       = $author->get_photo($opinion->fk_author_img);
-        $photoWidget = $author->get_photo($opinion->fk_author_img_widget);
-        $photos      = $author->get_author_photos($opinion->fk_author);
-
-        // Photos de noticia
         if (!empty($opinion->img1)) {
             $photo1 = new \Photo($opinion->img1);
             $this->view->assign('photo1', $photo1);
@@ -268,10 +277,7 @@ class OpinionsController extends Controller
             array(
                 'opinion'      => $opinion,
                 'all_authors'  => $allAuthors,
-                'author'       => $author->name,
-                'photo'        => $photo,
-                'photo_widget' => $photoWidget,
-                'photos'       => $photos,
+                'author'       => $author,
             )
         );
     }
@@ -311,7 +317,6 @@ class OpinionsController extends Controller
                 'metadata'             => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'body'                 => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
                 'fk_author_img'        => $request->request->getDigits('fk_author_img'),
-                'fk_author_img_widget' => $request->request->getDigits('fk_author_img_widget'),
                 'publisher'            => $_SESSION['userid'],
                 'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
@@ -334,13 +339,10 @@ class OpinionsController extends Controller
                 );
             }
         } else {
-            $author   = new \Author();
-            $authors = $author->all_authors(null, 'ORDER BY name');
+            // Fetch all authors
+            $allAuthors = \User::getAllUsersAuthors();
 
-            return $this->render(
-                'opinion/new.tpl',
-                array('all_authors' => $authors,)
-            );
+            return $this->render('opinion/new.tpl', array('all_authors' => $allAuthors));
         }
     }
 
@@ -362,7 +364,7 @@ class OpinionsController extends Controller
         if ($opinion->id != null) {
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $opinionCheck->fk_user != $_SESSION['userid']
+                && $opinion->fk_author != $_SESSION['userid']
             ) {
                 m::add(_("You can't modify this opinion because you don't have enought privileges."));
 
@@ -398,7 +400,6 @@ class OpinionsController extends Controller
                 'metadata'             => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'body'                 => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
                 'fk_author_img'        => $request->request->getDigits('fk_author_img'),
-                'fk_author_img_widget' => $request->request->getDigits('fk_author_img_widget'),
                 'publisher'            => $_SESSION['userid'],
                 'starttime'            => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
                 'endtime'              => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
@@ -857,7 +858,7 @@ class OpinionsController extends Controller
         );
 
         foreach ($opinions as &$opinion) {
-            $opinion->author = new \Author($opinion->fk_author);
+            $opinion->author = new \User($opinion->fk_author);
         }
 
         $pagination = \Pager::factory(
@@ -872,7 +873,7 @@ class OpinionsController extends Controller
                 'totalItems'  => $countOpinions,
                 'fileName'    => $this->generateUrl(
                     'admin_opinions_content_provider',
-                    array('category' => $category,)
+                    array('category' => $category)
                 ).'&page=%d',
             )
         );
@@ -965,12 +966,249 @@ class OpinionsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_opinions_config'));
         } else {
-            $configurations = s::get(array('opinion_settings',));
+            $configurations = s::get(array('opinion_settings'));
 
             return $this->render(
                 'opinion/config.tpl',
-                array('configs'   => $configurations,)
+                array('configs'   => $configurations)
             );
         }
+    }
+
+    /**
+     * Show a non paginated list of backend users
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function listAuthorAction(Request $request)
+    {
+        $page   = $this->request->query->getDigits('page', 1);
+
+        $users = \User::getAllUsersAuthors();
+
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
+
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => count($users),
+                'fileName'    => $this->generateUrl('admin_opinion_authors').'?page=%d',
+            )
+        );
+
+        return $this->render(
+            'opinion/author_list.tpl',
+            array(
+                'users' => $usersPage,
+                'pagination' => $pagination,
+            )
+        );
+    }
+
+    /**
+     * Shows the author information given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function showAuthorAction(Request $request)
+    {
+        $id = $request->query->getDigits('id');
+
+        $user = new \User($id);
+        if (is_null($user->id)) {
+            m::add(sprintf(_("Unable to find the author with the id '%d'"), $id), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_opinion_authors'));
+        }
+
+        // Fetch user photo if exists
+        if (!empty($user->avatar_img_id)) {
+            $user->photo = new \Photo($user->avatar_img_id);
+        }
+
+        $user->meta = $user->getMeta();
+
+        return $this->render('opinion/author_new.tpl', array('user' => $user));
+    }
+
+    /**
+     * Creates an author give some information
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function createAuthorAction(Request $request)
+    {
+        $user = new \User();
+
+        if ($request->getMethod() == 'POST') {
+            $data = array(
+                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+                'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+                'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+                'sessionexpire'   => 60,
+                'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+                'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+                'id_user_group'   => array(3),
+                'ids_category'    => array(),
+                'activated'       => 0,
+                'type'            => 0,
+                'deposit'         => 0,
+                'token'           => null,
+            );
+
+            $file = $request->files->get('avatar');
+
+            try {
+                // Upload user avatar if exists
+                if (!is_null($file)) {
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $data['avatar_img_id'] = $photoId;
+                } else {
+                    $data['avatar_img_id'] = 0;
+                }
+
+                if ($user->create($data)) {
+                    // Set all usermeta information (twitter, rss, language)
+                    $meta = $request->request->get('meta');
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
+
+                    m::add(_('Author created successfully.'), m::SUCCESS);
+
+                    return $this->redirect(
+                        $this->generateUrl(
+                            'admin_opinion_author_show',
+                            array('id' => $user->id)
+                        )
+                    );
+                } else {
+                    m::add(_('Unable to create the author with that information'), m::ERROR);
+                }
+            } catch (\Exception $e) {
+                m::add($e->getMessage(), m::ERROR);
+            }
+        }
+
+        return $this->render('opinion/author_new.tpl', array('user' => $user));
+    }
+
+    /**
+     * Handles the update action for an author given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function updateAuthorAction(Request $request)
+    {
+        $userId = $request->query->getDigits('id');
+        $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
+
+        $data = array(
+            'id'              => $userId,
+            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
+            'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'sessionexpire'   => 60,
+            'id_user_group'   => array(3),
+            'ids_category'    => array(),
+            'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
+        );
+
+        $file = $request->files->get('avatar');
+        $user = new \User($userId);
+
+        try {
+            // Upload user avatar if exists
+            if (!is_null($file)) {
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $data['avatar_img_id'] = $photoId;
+            } elseif (($data['avatar_img_id']) == 1) {
+                $data['avatar_img_id'] = $user->avatar_img_id;
+            }
+
+            // Process data
+            if ($user->update($data)) {
+                // Set all usermeta information (twitter, rss, language)
+                $meta = $request->request->get('meta');
+                foreach ($meta as $key => $value) {
+                    $user->setMeta(array($key => $value));
+                }
+
+                m::add(_('Author data updated successfully.'), m::SUCCESS);
+            } else {
+                m::add(_('Unable to update the author with that information'), m::ERROR);
+            }
+        } catch (FileException $e) {
+            m::add($e->getMessage(), m::ERROR);
+        }
+
+        return $this->redirect(
+            $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
+        );
+    }
+
+    /**
+     * Deletes an author given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function deleteAuthorAction(Request $request)
+    {
+        $userId = $request->query->getDigits('id');
+
+        if (!is_null($userId)) {
+            $user = new \User();
+            $user->delete($userId);
+            if (!$request->isXmlHttpRequest()) {
+                return $this->redirect($this->generateUrl('admin_opinion_authors'));
+            } else {
+                return new Response('ok');
+            }
+        }
+    }
+
+    /**
+     * Deletes multiple authors at once given their ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAuthorAction(Request $request)
+    {
+        $selected = $request->query->get('selected');
+
+        if (count($selected) > 0) {
+            $user = new \User();
+            foreach ($selected as $userId) {
+                $user->delete((int) $userId);
+            }
+            m::add(sprintf(_('You have deleted %d authors.'), count($selected)), m::SUCCESS);
+        } else {
+            m::add(_('You haven\'t selected any author to delete.'), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl('admin_opinion_authors'));
     }
 }

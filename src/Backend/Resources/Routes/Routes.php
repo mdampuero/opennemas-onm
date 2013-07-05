@@ -2075,7 +2075,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/authors',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:list',
+            '_controller' => 'Backend:Controllers:OpinionsController:listAuthor',
         )
     )
 );
@@ -2085,7 +2085,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/author/{id}/show',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:show',
+            '_controller' => 'Backend:Controllers:OpinionsController:showAuthor',
         )
     )
 );
@@ -2095,17 +2095,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/authors/create',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:create',
-        )
-    )
-);
-
-$adminRoutes->add(
-    'admin_opinion_author_delete',
-    new Route(
-        '/opinion/author/{id}/delete',
-        array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:delete',
+            '_controller' => 'Backend:Controllers:OpinionsController:createAuthor',
         )
     )
 );
@@ -2115,7 +2105,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/author/{id}/update',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:update',
+            '_controller' => 'Backend:Controllers:OpinionsController:updateAuthor',
         )
     )
 );
@@ -2125,7 +2115,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/author/{id}/delete',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:delete',
+            '_controller' => 'Backend:Controllers:OpinionsController:deleteAuthor',
         )
     )
 );
@@ -2135,7 +2125,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/authors/batch-delete',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:batchDelete',
+            '_controller' => 'Backend:Controllers:OpinionsController:batchDeleteAuthor',
         )
     )
 );
@@ -2719,13 +2709,6 @@ $adminRoutes->add(
         array('_controller' => 'Backend:Controllers:AuthenticationController:logout')
     )
 );
-$routes->add(
-    'admin_welcome',
-    new Route(
-        '/admin',
-        array('_controller' => 'Backend:Controllers:WelcomeController:default')
-    )
-);
 
 $adminRoutes->add(
     'admin_acl_user_recover_pass',
@@ -2751,4 +2734,14 @@ $adminRoutes->add(
     )
 );
 
-$routes->addCollection($adminRoutes, '/admin');
+$adminRoutes->addPrefix('/admin');
+
+$routes->add(
+    'admin_welcome',
+    new Route(
+        '/admin',
+        array('_controller' => 'Backend:Controllers:WelcomeController:default')
+    )
+);
+
+$routes->addCollection($adminRoutes);

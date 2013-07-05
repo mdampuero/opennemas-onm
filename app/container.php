@@ -20,7 +20,6 @@ $loader = new YamlFileLoader($sc, new FileLocator(__DIR__.'/config/'));
 
 $sc->setParameter('routes', $routes);
 $sc->setParameter('request', $request);
-$sc->setParameter('instance', $instance);
 $sc->set('event_dispatcher', new ContainerAwareEventDispatcher($sc));
 
 $loader->load('app.yml');

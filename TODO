@@ -19,25 +19,16 @@ Images:
  ☐ Delete button in upload manager
  ☐ Go back to upload images when select category
 
-Articles:
-
- ☐ In the listing mark those that are in frontpage with a mark.
 
 LOW PRIORITY TASKS OR IDEAS:
 
 General:
 
- ☐ Include the logger initialization into the container and make use of it
- ☐ Include the mailer initialization into the container and make use of it(maybe using the Swift Mailer library)
  ☐ Drop category and menu logic from init method in Backend Controllers
 
 Article:
 
  ☐ Check/Delete content relations when delete an article
-
-Opinion:
-
- ☐ Review redirections after update an opinion (search, ...)
 
 Opinion authors:
 
@@ -57,14 +48,6 @@ XML file importer:
 Search advanced:
 
  ☐ ENHANCEMENT: Improve advanced search capabilities (filter by category, date range, ...)
-
-Tpl cache manager:
-
- ☐ When selecting a new "items per page" option and push enter, the deleting tpl shows an alert dialog
-
-Manager:
-
- ☐ Add authentication layer
 
 Users:
 

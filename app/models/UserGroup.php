@@ -294,7 +294,7 @@ class UserGroup
      *
      * @return UserGroup the user group object instance with the new information
      **/
-    private function load($data)
+    public function load($data)
     {
         $this->id   = $data['pk_user_group'];
         $this->name = $data['name'];

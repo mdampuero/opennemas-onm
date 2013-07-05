@@ -57,12 +57,9 @@ class Video extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-        $this->content_type = 'Video';
         $this->content_type_l10n_name = _('Video');
+
+        parent::__construct($id);
     }
 
     /**

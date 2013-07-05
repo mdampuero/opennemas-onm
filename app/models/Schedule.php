@@ -20,26 +20,6 @@
 class Schedule extends Content
 {
     /**
-     * Loads the event instance given an event id
-     *
-     * @param int $id the id of the event to read
-     *
-     * @return Schedule the object initialized
-     **/
-    public function __construct($id = null)
-    {
-        //  parent::__construct($id);
-
-        // Si existe idcontenido, entonces cargamos los datos correspondientes
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'Schedule';
-    }
-
-
-    /**
      * Returns a list of events
      *
      * @param int $limit max number of elements to get

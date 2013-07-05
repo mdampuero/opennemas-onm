@@ -55,7 +55,7 @@ class ContentSubscriber implements EventSubscriberInterface
         $content = $event->getArgument('content');
 
         $id = $content->id;
-        $contentType = get_class($content);
+        $contentType = \underscore(get_class($content));
 
         $cacheHandler->delete(INSTANCE_UNIQUE_NAME . "_" . $contentType . "_" . $id);
 

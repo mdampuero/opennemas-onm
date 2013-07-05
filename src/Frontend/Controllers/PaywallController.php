@@ -250,9 +250,12 @@ class PaywallController extends Controller
         // if (isset($getECResponse)) {
         //     echo "<table>";
         //     echo "<tr><td>Ack :</td><td><div id='Ack'>".$getECResponse->Ack."</div> </td></tr>";
-        //     echo "<tr><td>Token :</td><td><div id='Token'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->Token."</div></td></tr>";
-        //     echo "<tr><td>PayerID :</td><td><div id='PayerID'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID."</div></td></tr>";
-        //     echo "<tr><td>PayerStatus :</td><td><div id='PayerStatus'>".$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerStatus."</div></td></tr>";
+        //     echo "<tr><td>Token :</td><td><div id='Token'>"
+        //     .$getECResponse->GetExpressCheckoutDetailsResponseDetails->Token."</div></td></tr>";
+        //     echo "<tr><td>PayerID :</td><td><div id='PayerID'>"
+        //     .$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID."</div></td></tr>";
+        //     echo "<tr><td>PayerStatus :</td><td><div id='PayerStatus'>"
+        //     .$getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerStatus."</div></td></tr>";
         //     echo "</table>";
         //     echo '<pre>';
         //     print_r($getECResponse);

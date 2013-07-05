@@ -894,7 +894,15 @@ class VideosController extends Controller
 
         $szWhere = '';
         if (!empty($metadata)) {
-            $szWhere = "AND (`metadata` LIKE '%$metadata%')";
+            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = explode(', ', $tokens);
+
+            if (count($tokens) > 0) {
+                foreach ($tokens as &$meta) {
+                    $szWhere []= "`metadata` LIKE '%".trim($meta)."%'";
+                }
+                $szWhere = "AND  (".implode(' OR ', $szWhere).") ";
+            }
         }
 
         if ($category == 0) {

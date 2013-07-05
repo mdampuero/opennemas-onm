@@ -63,19 +63,10 @@ class Attachment extends Content
      **/
     public function __construct($id = null)
     {
-        $this->content_type = 'attachment';
-        parent::__construct($id);
-
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'attachment';
-        $this->content_type_name = 'Attachment';
         $this->content_type_l10n_name = _('File');
         $this->file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR;
+
+        parent::__construct($id);
     }
 
     /**
@@ -103,6 +94,19 @@ class Attachment extends Content
                 return StringUtils::get_title($this->title);
 
                 break;
+            case 'content_type_name':
+                $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
+
+                if (isset($contentTypeName)) {
+                    $returnValue = $contentTypeName;
+                } else {
+                    $returnValue = $this->content_type;
+                }
+                $this->content_type_name = $returnValue;
+
+                return $returnValue;
+
+                break;
             default:
 
                 break;
@@ -121,6 +125,9 @@ class Attachment extends Content
      */
     public function create($data)
     {
+        //Si es portada renovar cache
+        $GLOBALS['application']->dispatch('onBeforeCreateAttach', $this);
+
         $dir_date = date("/Y/m/d/");
         //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
 
@@ -304,7 +311,8 @@ class Attachment extends Content
             $rs->MoveNext();
         }
 
-        $sql = 'DELETE FROM attachments WHERE `pk_attachment` IN ('.$contents.')';
+        $sql = 'DELETE FROM attachments '
+                .'WHERE `pk_attachment` IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {

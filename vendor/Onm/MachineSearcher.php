@@ -62,16 +62,19 @@ class MachineSearcher
 
             // Transform the input string to search like: 'La via del tren' => '+via +tren'
             $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
-            $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
+            $szSourceTags = implode(' ', $szSourceTags);
+
+            $contentTable = tableize($szContentsTypeTitle);
 
             $matchSQL =  " MATCH (contents.metadata) AGAINST ( '{$szSourceTags}' IN BOOLEAN MODE)";
             $selectedContentTypesSQL = $this->parseTypes($szContentsTypeTitle);
 
-            $szSqlSentence = "SELECT {$matchSQL} AS rel, `contents`.*, `contents_categories`.`catName`"
-                        ."  FROM contents, contents_categories "
+            $szSqlSentence = "SELECT {$matchSQL} AS rel, `contents`.*, `contents_categories`.`catName`, $contentTable.*"
+                        ."  FROM contents, $contentTable, contents_categories "
                         ." WHERE " . $matchSQL
                         .$selectedContentTypesSQL
                         .$filter
+                        ." AND contents.pk_content=$contentTable.pk_$szContentsTypeTitle"
                         ." AND `contents`.`available` = 1 "
                         ." AND `contents`.`in_litter` = 0 "
                         ." AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`"
@@ -83,8 +86,17 @@ class MachineSearcher
                 $result= $resultSet->GetArray();
             }
 
+
+
             $cm = new \ContentManager();
             $result = $cm->getInTime($result);
+
+            foreach ($result as &$content) {
+
+                if (array_key_exists('img2', $content)) {
+                    $content['image'] = new \Photo($content['img2']);
+                }
+            }
 
             $this->cache->save($cacheKey, $result, 300);
         }

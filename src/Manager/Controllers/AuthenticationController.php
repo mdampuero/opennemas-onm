@@ -83,7 +83,7 @@ class AuthenticationController extends Controller
 
         $user = new \User();
 
-        if ($_SESSION['csrf'] !== $token) {
+        if (array_key_exists('csrf', $_SESSION) && $_SESSION['csrf'] !== $token) {
             $this->view->assign('message', _('Login token is not valid. Try to autenticate again.'));
         } else {
 
@@ -91,7 +91,7 @@ class AuthenticationController extends Controller
             if ($user->login($login, $password, $token, $captcha, $time)) {
 
                 // Check if user account is activated
-                if ($user->authorize != 1) {
+                if ($user->activated != 1) {
                     $this->view->assign(
                         'message',
                         _('This user was deactivated. Please ask your administrator.')
@@ -106,7 +106,7 @@ class AuthenticationController extends Controller
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
-                        'username'         => $user->login,
+                        'username'         => $user->username,
                         'email'            => $user->email,
                         'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
                         'default_expire'   => $user->sessionexpire,

@@ -1011,7 +1011,7 @@ class ContentManager
         if (!$all) {
             $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
         }
-        $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_order_by = 'ORDER BY `contents`.`views` DESC LIMIT 0 , '.$num;
 
         if (intval($category) > 0) {
@@ -1029,7 +1029,7 @@ class ContentManager
 
         if ($rs->_numOfRows<$num && $notEmpty) {
             while ($rs->_numOfRows<$num && $days<30) {
-                $_days = 'AND  `contents`.`changed`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+                $_days = 'AND  `contents`.`starttime`>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
 
                 $sql = 'SELECT * FROM '.$_tables .
                         'WHERE '.$_where.$_category. $_days.
@@ -1079,7 +1079,7 @@ class ContentManager
         if (!$all) {
             $_where .= 'AND `contents`.`content_status`=1 AND `contents`.`available`=1 ';
         }
-        $_days = 'AND  `contents`.changed>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
+        $_days = 'AND  `contents`.starttime>=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY) ';
         $_tables_relations = ' AND `ratings`.pk_rating=`contents`.pk_content ';
         $_order_by = 'ORDER BY `ratings`.total_votes DESC ';
         $_limit = 'LIMIT 0 , '.$num;
@@ -1137,15 +1137,15 @@ class ContentManager
         $items = array();
 
         $_where_slave = '';
-        $_days = 'changed>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
+        $_days = 'starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         if (!$all) {
             $_where_slave = ' content_status=1 AND available=1 ';
-            $_days = 'AND changed>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
+            $_days = 'AND starttime>=DATE_SUB(CURDATE(), INTERVAL '.$days.' DAY) ';
         }
 
         $_comented = 'AND pk_content IN (SELECT DISTINCT(fk_content) FROM comments) ';
         $_limit    = 'LIMIT 0 , '.$num;
-        $_order_by = 'ORDER BY changed DESC';
+        $_order_by = 'ORDER BY starttime DESC';
 
         $_where= $_where_slave.$_days.$_comented;
         if (intval($category)>0) {
@@ -1761,26 +1761,26 @@ class ContentManager
         //necesita el as id para paginacion
 
         $sql =
-            'SELECT contents.pk_content, contents.position,
-                opinions.pk_opinion as id, authors.name, authors.pk_author,
-                authors.condition, contents.title, author_imgs.path_img,
+            'SELECT contents.pk_content, contents.position, users.avatar_img_id,
+                opinions.pk_opinion as id, users.name, users.bio, contents.title,
                 contents.slug, opinions.type_opinion, opinions.body,
-                contents.changed, contents.created, contents.starttime,
-                contents.endtime
+                contents.changed, contents.created,
+                contents.starttime, contents.endtime
             FROM contents, opinions
-            LEFT JOIN authors ON (authors.pk_author=opinions.fk_author)
-            LEFT JOIN author_imgs ON (opinions.fk_author_img=author_imgs.pk_img)
+            LEFT JOIN users ON (users.id=opinions.fk_author)
             WHERE `contents`.`fk_content_type`=4
             AND contents.pk_content=opinions.pk_opinion
-            AND '.$where.' '
-            .$orderBy;
+            AND '.$where.' '.$orderBy;
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs    = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $items = null;
         if (!empty($rs)) {
             $items = $rs->GetArray();
+            foreach ($items as &$item) {
+                $item['path_img'] = \Photo::getPhotoPath($item['avatar_img_id']);
+            }
         }
 
         return $items ;
@@ -2034,14 +2034,12 @@ class ContentManager
         // METER TB LEFT JOIN
         //necesita el as id para paginacion
 
-         $sql= 'SELECT contents.pk_content as id, contents.title, authors.name,
+         $sql= 'SELECT contents.pk_content as id, contents.title, users.name,
                        contents.metadata, contents.slug, contents.changed,
                        contents.starttime, contents.endtime
                 FROM contents, opinions
-                LEFT JOIN authors
-                    ON (authors.pk_author=opinions.fk_author)
-                LEFT JOIN author_imgs
-                    ON (opinions.fk_author_img=author_imgs.pk_img)
+                LEFT JOIN users
+                    ON (users.id=opinions.fk_author)
                 WHERE `contents`.`fk_content_type`=4
                 AND contents.pk_content=opinions.pk_opinion
                 AND '.$_where.' '
@@ -2049,6 +2047,7 @@ class ContentManager
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs    = $GLOBALS['application']->conn->Execute($sql);
+
         $items = $rs->GetArray();
 
         return $items;
