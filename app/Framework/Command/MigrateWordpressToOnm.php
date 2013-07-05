@@ -472,7 +472,8 @@ EOF
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
-        $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
+        $oldID = $this->elementIsImported('fotos', 'category');
+        $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
 
         if (!$rs) {
             $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
@@ -491,6 +492,8 @@ EOF
                         $originalImageID = $rs->fields['ID'];
 
                         ///http://mundiario.com/wp-content/uploads/2013/06/Brasil-360x225.png
+                        //http://mundiario.com/galicia/files/2013/07/6696140347_824d45603a_z-360x225.jpg
+                        //http://mundiario.com/emprendedores/files/2013/07/6696140347_824d45603a_z-360x225.jpg
                         $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $rs->fields['guid']);
 
                         $imageData = array(
