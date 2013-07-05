@@ -721,7 +721,20 @@ EOF
         $rs      = $GLOBALS['application']->conn->Execute($request);
 
         $imageID='';
-        if (!$rs) {
+        if (!$rs || empty($rs->fields['ID'])) {
+            $sql = "SELECT ID FROM `wp_posts` WHERE ".
+            "`post_type` = 'attachment'  AND post_status !='trash' ".
+            " AND guid= '".$guid."'";
+            $request = $GLOBALS['application']->conn->Prepare($sql);
+            $rs      = $GLOBALS['application']->conn->Execute($request);
+            if (!$rs->fields['ID']) {
+                 $this->output->writeln('- Image '. $guid. ' fault');
+            } else {
+                $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
+            }
+        // Fetch the list of Opinions available for one author in EditMaker
+        $request = $GLOBALS['application']->conn->Prepare($sql);
+        $rs      = $GLOBALS['application']->conn->Execute($request);
             $this->output->writeln('- Image '. $guid. ' fault');
         } else {
             $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
