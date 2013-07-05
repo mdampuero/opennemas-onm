@@ -217,7 +217,7 @@ EOF
                     if (!empty($data[$originalID]['userphoto_image_file'])
                          && !is_null($data[$originalID]['userphoto_image_file'])) {
 
-                        $file    = ORIGINAL_MEDIA.'userphoto/'.$data[$originalID]['userphoto_image_file'];
+                        $file    = '/opt/backup_opennemas/mundiario/wp-content/uploads/userphoto/'.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
                     }
 
@@ -473,6 +473,9 @@ EOF
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
         $oldID = $this->elementIsImported('fotos', 'category');
+        if(empty($oldID)) {
+            $oldID ='1';
+        }
         $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
 
         if (!$rs) {
@@ -548,7 +551,11 @@ EOF
 
         $request    = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs         = $GLOBALS['application']->connOrigin->Execute($request);
-        $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
+        $oldID = $this->elementIsImported('fotos', 'category');
+        if(empty($oldID)) {
+            $oldID ='3';
+        }
+        $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
 
 
         if (!$rs) {
@@ -749,7 +756,12 @@ EOF
                 $date = new \DateTime();
                 $date = $date->format('Y-m-d H:i:s');
                 $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
-                $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
+                $oldID = $this->elementIsImported('fotos', 'category');
+                if(empty($oldID)) {
+                    $oldID ='1';
+                }
+                $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
+
                 $imageData = array(
                         'title' => $this->convertoUTF8(strip_tags($guid)),
                         'category' => $IDCategory,
