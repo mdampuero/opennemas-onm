@@ -75,29 +75,29 @@ EOF
             false
         );
 
-        $dbPrefix = $password = $dialog->ask(
+        $dbPrefix = $dialog->ask(
             $output,
             'What is the prefix in database tables (Ex: wp_2_)?',
             'wp_'
         );
-        $output->writeln("Default: ".$dbPrefix);
+        $output->writeln("-: ".$dbPrefix);
 
-        $originalUrl = $password = $dialog->ask(
+        $originalUrl = $dialog->ask(
             $output,
             'What is the wordpress site URL?',
             'http://www.mundiario.com'
         );
-        $output->writeln("Default: ".$originalUrl);
+        $output->writeln("-: ".$originalUrl);
 
-        $originalDirectory = $password = $dialog->ask(
+        $originalDirectory = $dialog->ask(
             $output,
             'Where is the wordpress media directory?',
-            '/opt/backup_opennemas/mundiario/'
+            '/opt/backup_opennemas/mundiario/wp-content/uploads/'
         );
-        $output->writeln("Default: ".$originalDirectory);
+        $output->writeln("-: ".$originalDirectory);
 
         define('ORIGINAL_URL', $originalUrl);
-        define('ORIGINAL_MEDIA', $originalDirectory.'/wp-content/uploads/');
+        define('ORIGINAL_MEDIA', $originalDirectory);
 
         define('CACHE_PREFIX', 'wordpress');
         define('BD_HOST', $dataBaseHost);
@@ -746,7 +746,7 @@ EOF
             $newBody = $body;
             if (empty($img)) {
                 $this->output->writeln('- Image from Body '. $guid. ' fault');
-                $date = new DateTime();
+                $date = new \DateTime();
                 $date = $date->format('Y-m-d H:i:s');
                 $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
                 $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
