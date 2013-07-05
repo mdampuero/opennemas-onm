@@ -217,8 +217,12 @@ EOF
                     if (!empty($data[$originalID]['userphoto_image_file'])
                          && !is_null($data[$originalID]['userphoto_image_file'])) {
 
-                        $file    = '/opt/backup_opennemas/mundiario/wp-content/uploads/userphoto/'.$data[$originalID]['userphoto_image_file'];
+                        $file    = ORIGINAL_MEDIA.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
+                        if (empty($photoId)) {
+                            $file    = '/opt/backup_opennemas/mundiario/wp-content/uploads/userphoto/'.$data[$originalID]['userphoto_image_file'];
+                            $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
+                        }
                     }
 
                     $values = array(
