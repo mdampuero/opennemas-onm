@@ -120,10 +120,7 @@ class SubscriptionsController extends Controller
 
                     $user = new \Subscriptor();
                     // Check for repeated e-mail
-                    if ($user->exists_email($data['email'])) {
-                        $message = _("Sorry, that email is already subscribed to our newsletter");
-                        $class = 'error';
-                    } else {
+
                         switch ($action) {
                             // Logic for subscription sending a mail to s::get('newsletter_maillist')
                             case 'submit':
@@ -189,44 +186,49 @@ class SubscriptionsController extends Controller
                                 break;
                             case 'create_subscriptor':
 
-                                if ($data['subscription'] == 'alta') {
-                                    $data['subscription'] = 1;
-                                    $data['status'] = 2;
-
-                                    $user = new \Subscriptor();
-
-                                    if ($user->create($data)) {
-                                        $message = _("You have been subscribed to our newsletter.");
-                                        $class = 'success';
-                                    } else {
-                                        $message = _(
-                                            "Sorry, we were unable to complete your request.\n"
-                                            ."Check the form and try again"
-                                        );
-                                        $class = 'error';
-                                    }
+                                if ($user->exists_email($data['email'])) {
+                                    $message = _("Sorry, that email is already subscribed to our newsletter");
+                                    $class = 'error';
                                 } else {
-                                    $data['subscription'] = 0;
-                                    $data['status'] = 3;
+                                    if ($data['subscription'] == 'alta') {
+                                        $data['subscription'] = 1;
+                                        $data['status'] = 2;
 
-                                    $user = new \Subscriptor();
-                                    $user = $user->getUserByEmail($data['email']);
-                                    $data['id'] = $user->id;
+                                        $user = new \Subscriptor();
 
-                                    if ($user->update($data)) {
-                                        $message = _("You have been unsubscribed from our newsletter");
-                                        $class = 'success';
+                                        if ($user->create($data)) {
+                                            $message = _("You have been subscribed to our newsletter.");
+                                            $class = 'success';
+                                        } else {
+                                            $message = _(
+                                                "Sorry, we were unable to complete your request.\n"
+                                                ."Check the form and try again"
+                                            );
+                                            $class = 'error';
+                                        }
                                     } else {
-                                        $message = _(
-                                            "Sorry, we were unable to complete your request.\n"
-                                            ."Check the form and try again"
-                                        );
-                                        $class = 'error';
+                                        $data['subscription'] = 0;
+                                        $data['status'] = 3;
+
+                                        $user = new \Subscriptor();
+                                        $user = $user->getUserByEmail($data['email']);
+                                        $data['id'] = $user->id;
+
+                                        if ($user->update($data)) {
+                                            $message = _("You have been unsubscribed from our newsletter");
+                                            $class = 'success';
+                                        } else {
+                                            $message = _(
+                                                "Sorry, we were unable to complete your request.\n"
+                                                ."Check the form and try again"
+                                            );
+                                            $class = 'error';
+                                        }
                                     }
                                 }
                                 break;
                         }
-                    }
+
                 }
             }
         }
