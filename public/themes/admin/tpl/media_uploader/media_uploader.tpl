@@ -2,64 +2,168 @@
 
 
 {block name="content"}
-<div class="modal hide" id="media-uploader">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 class="modal-title">{t}Media gallery{/t}</h3>
-    </div>
-    <div class="modal-body">
-        <div class="modal-body-wrapper">
-            <div class="modal-body-sidebar full-height">
-                <ul>
-                    <li><a href="#">{t}Upload{/t}</a></li>
-                    <li><a href="#">{t}Browse elements{/t}</a></li>
-                </ul>
+<div class="modal hide tabbable tabs-left" id="media-uploader">
+
+    <ul class=" nav nav-tabs modal-sidebar full-height">
+        <li><a href="#upload"  data-toggle="tab">{t}Upload{/t}</a></li>
+        <li class="active"><a href="#gallery"  data-toggle="tab">{t}Browse elements{/t}</a></li>
+        <li><a href="#media-element-show" class="hidden" data-toggle="tab">{t}Show element info{/t}</a></li>
+    </ul>
+    <div class="tab-content modal-content full-height">
+
+        <div id="gallery" class="tab-pane full-height active">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 class="modal-title">{t}Media gallery{/t}</h3>
             </div>
-            <div class="modal-body-content full-height">
-                <div class="modal-body-content-wrapper">
-                    <p><a href="http://www.nuevatribuna.es/articulo/economia/las-deudas-del-futbol-con-hacienda/20121110182935083864.html" target="_blank"><u>La deuda global con la Agencia Tributaria</u></a> de las Sociedades Anónimas Deportivas (SAD), a 30 de abril de 2013, asciende a <strong>663.876.441 euros</strong>, de los que 506.504.230 euros corresponden a las SAD de primera división, según la respuesta del Gobierno a una pregunta escrita formulada por <strong>el portavoz socialista de Deportes, Manuel Pezzi.</strong></p>
-                    <p><strong>El Gobierno no ha facilitado, sin embargo, la cifra de la deuda que mantienen con la Agencia Tributaria los clubes de fútbol de primera división</strong> que no son Sociedades Anónimas Deportivas –<strong>Real Madrid, F.C. Barcelona, Athletic Club de Bilbao y Osasuna</strong>-, ni en el resto de categorías, argumentando que “habida cuenta del reducido número de clubes que no tienen la consideración de Sociedad Anónima Deportiva, se podría vulnerar la confidencialidad que impone el ordenamiento jurídico, al permitir la identificación indirecta de la deuda de algún club en concreto”.</p>
-                    <p>Estas cifras se añaden a la <a href="http://www.nuevatribuna.es/articulo/economia/los-clubes-de-futbol-deben-a-la-seguridad-social-16-6-millones/20130607124403093151.html" target="_blank"><u>deuda de los clubes de fútbol con la Seguridad Social, que asciende a 16,6 millones</u></a>, según los datos del Fichero General de Recaudación de la Seguridad Social a fecha 13 de mayo de 2013.</p>
-                    <p>Por otro lado, se indica que la <strong>deuda con la Agencia Tributaria de las SAD que está aplazada</strong> por acuerdo o convenio, a 30 de abril de 2013, asciende a <strong>347.346.010 euros</strong>, y que la deuda de las SAD que están <strong>en concurso es de 380.439.071</strong>.</p>
-                    <p>Por último, se informa de que la deuda global con la Agencia Tributaria de todos los clubes y SAD de todos los deportes federados con excepción del fútbol –es decir, la deuda de los clubes de baloncesto, balonmano, clubes federados de tenis y de voleibol- a 30 de abril de 2013, asciende a 30.559.659 euros.</p>
-                    <p><u>En respuesta a otra pregunta del portavoz socialista, el Gobierno confirma que la deuda de los clubes de fútbol y SAD a finales de 2012 estaba “en torno a los 700 millones de euros”.</u></p>
-                    <p>El Gobierno revela también que <u>en 2011, obtuvieron aplazamiento de sus deudas con la Agencia Tributaria 17 clubes de fútbol de primera y segunda división,&nbsp; mientras que en 2012 fueron 15.</u></p>
-                    <p>Asimismo, ofrecen la relación de los clubes y SAD que han presentado las cuentas anuales cerradas a 30 de junio de 2012,&nbsp; y la de aquellos que no han presentado los estados financieros intermedios cerrados a 31 de diciembre de 2012, correspondientes a la temporada 12/13, cuyo plazo finalizó el 31 de marzo.</p>
-                    <p>Por otro lado, el Ejecutivo señala que, según lo acordado por la Liga de Fútbol Profesional y el Consejo Superior de Deportes, en la elaboración del presupuestos de los clubes, “se aplicará un límite de coste de plantilla, que variará en función de la diferencia entre los ingresos totales y los gastos no deportivos”, con el objetivo de conseguir “el equilibrio en los presupuestos de los clubes y SAD” y “que dichos presupuestos sean realistas”.</p>
-                    <p><u><strong>El PSOE denuncia la “falta de transparencia” del Gobierno</strong></u></p>
-                    <p><strong>El portavoz de deportes del PSOE, Manuel Pezzi</strong>, ha denunciado la “falta de transparencia” del Gobierno respecto a las deudas de los clubes de fútbol, después de que, en la comparecencia en el Congreso del secretario de Estado de Deporte el pasado 27 de junio, presentara un documento sobre la situación económica y financiera del fútbol español que se circunscribía a la época de gobierno socialista y eludía dar los datos de 2012 y 2013, que –como se puede ver- estaban disponibles.</p>
-                    <p>Ante la “opacidad del Gobierno”, <strong>el Grupo Socialista ha solicitado la comparecencia del presidente de la Liga de Fútbol Profesional, Javier Tebas</strong>, para que informe sobre los presupuestos desagregados de la LFP en 2012 y 2013 y de todos los clubes y SAD que la forman, así como las deudas con Hacienda y la Seguridad Social en esos años.</p>
-                    <p>Pezzi denuncia “el grave problema de endeudamiento que afecta al futbol en nuestro país” y ha reclamado al Gobierno que aplique “un control riguroso” y que se “exija a los clubes el pago de las deudas” del mismo modo que al resto de las empresas y de los ciudadanos. Ha insistido en la necesidad de garantizar el “juego limpio financiero, con clubes que cumplan las leyes y que paguen sus deudas con Hacienda y con la Seguridad Social”.</p>
-                    <div class="browse-files hidden">Content for file browsing</div>
-                    <div class="file-details hidden">Content for file details</div>
+            <div class="modal-body full-height">
+                <div class="modal-body-content">
+                    <ul class="attachments modal-body-content-wrapper ui-sortable ui-sortable-disabled"></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="image-info pull-left"></div>
+                <div class="buttons pull-right">
+                    <a class="btn btn-primary yes" href="#">{t}Insert into article{/t}</a>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <div class="buttons pull-right">
-            <a class="btn btn-primary yes" href="#">{t}Exit{/t}</a>
+
+        <div id="media-element-show" class="tab-pane full-height">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="modal-title">{t}Show element{/t}</h3>
+            </div>
+            <div class="modal-body full-height">
+                <div class="toolbar">
+                    asdf
+                </div>
+                <div class="body">
+                    Showing element
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="buttons pull-right">
+                    <a href="#" class="back-to-browse btn">{t}Back to list{/t}</a>
+                </div>
+            </div>
         </div>
+
+        <div id="upload" class="tab-pane full-height">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3 class="modal-title">{t}Upload new media{/t}</h3>
+            </div>
+            <div class="modal-body full-height">
+                <div class="upload-content">
+                    <h3 class="upload-instructions drop-instructions">{t}Drop files anywhere to upload{/t}</h3>
+                    <a href="#" class="btn btn-large">{t}Select Files{/t}</a>
+                </div>
+            </div>
+        </div>
+
     </div>
+
 </div>
 {/block}
 
 
 {block name="footer-js" append}
+{script_tag src="/libs/handlebars.js" common=1}
 <script>
+var contents = [];
+function load_browser (search, month, page) {
+    $.ajax(
+        '{url name="admin_media_uploader_browser"}',
+        {
+            'search' : search,
+            'month' : month,
+            'page' : page,
+        }
+    ).success(function(data) {
+        var template = Handlebars.compile($('#tmpl-attachment').html());
+
+        $.each(data, function(index, element) {
+            contents[element.id] = element
+            content = template({
+                "thumbnail_url" : element.thumbnail_url,
+                "id" : element.id,
+            });
+            $('.attachments').append(content);
+        });
+    });
+}
 jQuery(document).ready(function($) {
     jQuery("#media-uploader").modal({
         backdrop: 'static', //Show a grey back drop
         keyboard: true, //Can close on escape
         show: true,
     });
+    load_browser ('', '', 1);
+
+    $('#gallery').on('mouseenter', '.attachment img', function(e, ui) {
+        var element = $(this).closest('.attachment');
+
+        var template = Handlebars.compile($('#tmpl-attachment-short-info').html());
+
+        content = contents[element.data('id')];
+
+        html_content = template({
+            "content" : content,
+        });
+        $('.image-info').append(html_content);
+
+    }).on('mouseout', '.attachment img', function(e, ui){
+        $('.image-info').html('');
+    }).on('click', '.attachment img', function(e, ui){
+        $('#media-uploader a[href="#media-element-show"]').tab('show');
+    });
+
+    $('.back-to-browse').on('click', function(e, ui){
+        $('#media-uploader a[href="#gallery"]').tab('show');
+    });
+
+
+    // $('.modal-sidebar').on('click', 'a', function(e, ui) {
+    //     var pointer = $(this);
+    //     var target = $(this).attr('href');
+
+    //     $(target).show().siblings('.tab-content').hide();
+
+    //     pointer.closest('li').find('a').addClass('active');
+    //     pointer.closest('li').siblings('li').find('a').removeClass('active');
+    // })
 });
+</script>
+
+<script type="text/html" id="tmpl-attachment">
+{literal}
+    <li class="attachment save-ready" data-id="{{id}}">
+        <div class="attachment-preview type-image subtype-png landscape">
+            <div class="thumbnail">
+                <div class="centered">
+                    <img src="{{thumbnail_url}}" draggable="false">
+                </div>
+            </div>
+            <a class="check" href="#" title="Deselect"><div class="media-modal-icon"></div></a>
+        </div>
+    </li>
+{/literal}
+</script>
+
+<script type="text/html" id="tmpl-attachment-short-info">
+{literal}
+    {{#with content}}
+    <strong>{{description}}</strong> <br>
+    {{width}} x {{height}} , {{size}} kb
+    {{/with}}
+{/literal}
 </script>
 {/block}
 
 {block name="header-css" append}
 <style>
-    .full-height {
+    #media-uploader .full-height {
         min-height:100%;height:100%;
     }
     #media-uploader {
@@ -70,27 +174,35 @@ jQuery(document).ready(function($) {
         right:2%;
         margin-left:0;
     }
+    #media-uploader .modal-content {
+        margin-left:200px;
+        position:relative;
+        overflow: hidden;
+    }
     #media-uploader .modal-footer {
         position: absolute;
         bottom: 0;
         width: 100%;
         padding: 13px 0;
-        /*z-index: 150;*/
+        height: 30px;
     }
     #media-uploader .modal-footer .buttons {
         margin-right:10px;
     }
     #media-uploader .modal-body {
-        min-height:80%;height:80%;
-        padding:0;
-        overflow:hidden;
+        padding: 0;
+        position: absolute;
+        right: 0px;
+        left: 0px;
+        max-height: 69%;
+        min-height: 83%;
     }
     #media-uploader .modal-body > div{
         position:relative;
         height:100%;
         max-height:100%;
     }
-    #media-uploader .modal-body-sidebar {
+    #media-uploader .modal-sidebar {
         position: absolute;
         top: 0;
         left: 0;
@@ -99,39 +211,97 @@ jQuery(document).ready(function($) {
         border-right: 1px solid #eee;
     }
     #media-uploader .modal-body-content {
-        margin-left:200px;
-        overflow:hidden;
         max-height:100%;
         height:100%;
         position:relative;
+        margin:10px;
     }
     #media-uploader .modal-body-content-wrapper {
-        overflow-x:hidden;
         overflow-y:visible;
         position:absolute;
-        top:10px;
-        bottom:10px;
-        left:10px;
         right:0px;
     }
     #media-uploader .hidden {
         display:none;
     }
-    #media-uploader .modal-body-sidebar ul {
+    #media-uploader .modal-sidebar ul {
         margin:20px 0 10px 20px;
+        list-style:none;
     }
-    #media-uploader .modal-body-sidebar li {
+    #media-uploader .modal-sidebar li {
         list-style:none;
         margin-bottom:10px;
     }
-    #media-uploader .modal-body-sidebar a {
-        padding: 4px 10px;
+
+    #media-uploader .modal-sidebar li.active a {
+        color:Black;
+    }
+
+    #media-uploader #gallery .attachments {
+        margin:20px 0 10px 20px;
+        list-style:none;
+        margin:0;
+    }
+    #media-uploader #gallery .attachments .attachment {
+        display:inline-block;
+        list-style:none;
+    }
+    #media-uploader #gallery .attachments .attachment-preview {
+        display:inline-block;
+        list-style:none;
+        margin-bottom:10px;
+    }
+    #media-uploader .modal-sidebar li:first-child {
+        margin-top:30px;
+    }
+    #media-uploader .modal-sidebar a {
+        padding: 4px 0 4px 25px;
         margin: 0;
         line-height: 18px;
         font-size: 14px;
         color: #21759b;
         text-shadow: 0 1px 0 #fff;
         text-decoration: none;
+        background:none;
+        border:none;
+    }
+    #media-uploader .modal-footer .image-info {
+        margin-left: 10px;
+        text-align: left;
+        font-size:10px;
+        line-height:12px;
+    }
+    #media-uploader .thumbnail {
+        display:inline-block;
+        width:120px;
+        height:120px;
+        margin: 0 7px 2px 0;
+        padding:0;
+        border-radius:0;
+    }
+
+
+    #media-uploader .thumbnail {
+        -moz-transition: none;
+        -webkit-transition: none;
+        -o-transition: color 0 ease-in;
+        transition: none;
+    }
+    #media-uploader .thumbnail:active {
+        box-shadow: 0 0 0 0px #fff,0 0 0 5px #1e8cbe;
+        /*margin:-5px;*/
+    }
+
+    #media-uploader .upload-content {
+        text-align: center;
+        margin-top: 10%;
+    }
+    #media-uploader .upload-content h3 {
+        font-size:1.1em;
+    }
+    #media-uploader .upload-content a {
+        padding: 13px 26px;
+        font-size: 1.1em;
     }
 </style>
 {/block}
