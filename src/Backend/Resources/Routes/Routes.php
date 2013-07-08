@@ -2775,6 +2775,14 @@ $adminRoutes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_media_uploader_browser',
+    new Route(
+        '/media-uploader/browser',
+        array('_controller' => 'Backend:Controllers:MediaUploaderController:browser')
+    )
+);
+
 $adminRoutes->addPrefix('/admin');
 
 $routes->add(

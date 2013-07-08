@@ -10,6 +10,7 @@
 namespace Backend\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -41,5 +42,52 @@ class MediaUploaderController extends Controller
         return $this->render('media_uploader/media_uploader.tpl', array('template_var', ));
     }
 
+    /**
+     *
+     *
+     * @return void
+     * @author
+     **/
+    public function browserAction(Request $request)
+    {
+        $metadata = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+        $category = $request->query->getDigits('category', 0);
+        $page     = $request->query->getDigits('page', 1);
 
+        $itemsPerPage = 16;
+
+        if ($page == 1) {
+            $limit    = "LIMIT {$itemsPerPage}";
+        } else {
+            $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
+        }
+
+        $cm = new \ContentManager();
+        $er = $this->get('entity_repository');
+
+        $photos = $cm->find(
+            'Photo',
+            'contents.fk_content_type = 8 AND photos.media_type="image" '
+            .'AND contents.content_status=1',
+            'ORDER BY created DESC '.$limit
+        );
+
+        foreach ($photos as &$photo) {
+            $photo->image_path = INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name;
+            $photo->thumbnail_url = $this->generateUrl(
+                'asset_image',
+                array(
+                    'parameters' => 'zoomcrop,120,120,center,center',
+                    'real_path' => INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name
+                )
+            );
+        }
+
+        // var_dump($photos);die();
+        $response = new Response();
+        $response->setContent(json_encode($photos));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
+    }
 }
