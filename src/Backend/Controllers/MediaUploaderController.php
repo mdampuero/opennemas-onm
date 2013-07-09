@@ -39,7 +39,20 @@ class MediaUploaderController extends Controller
      **/
     public function showAction(Request $request)
     {
-        return $this->render('media_uploader/media_uploader.tpl', array('template_var', ));
+        $months = array();
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute(
+            "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%c')) as date_month
+            FROM contents WHERE fk_content_type = 8 ORDER BY date_month"
+        );
+
+        $rawMonths = $rs->GetArray();
+        foreach ($rawMonths as $value) {
+            $months [$value['date_month']]= $value['date_month'];
+        }
+
+        return $this->render('media_uploader/media_uploader.tpl', array('months' => $months));
     }
 
     /**
@@ -50,8 +63,8 @@ class MediaUploaderController extends Controller
      **/
     public function browserAction(Request $request)
     {
-        $metadata = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
-        $category = $request->query->getDigits('category', 0);
+        $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
+        $month = $request->query->filter('month', '');
         $page     = $request->query->getDigits('page', 1);
 
         $itemsPerPage = 16;
@@ -62,13 +75,18 @@ class MediaUploaderController extends Controller
             $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
         }
 
+        $sqlString = '';
+        if (!empty($searchString)) {
+            $sqlString = " AND description LIKE '%$searchString%' ";
+        }
+
         $cm = new \ContentManager();
         $er = $this->get('entity_repository');
 
         $photos = $cm->find(
             'Photo',
             'contents.fk_content_type = 8 AND photos.media_type="image" '
-            .'AND contents.content_status=1',
+            .'AND contents.content_status=1 '.$sqlString,
             'ORDER BY created DESC '.$limit
         );
 
