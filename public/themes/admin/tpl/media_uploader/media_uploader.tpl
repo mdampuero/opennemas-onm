@@ -17,34 +17,58 @@
               <h3 class="modal-title">{t}Media gallery{/t}</h3>
             </div>
             <div class="modal-body full-height">
-                <div class="modal-body-content">
-                    <ul class="attachments modal-body-content-wrapper ui-sortable ui-sortable-disabled"></ul>
+                <form action="#" class="gallery-search">
+                <div class="toolbar clearfix">
+                    <div class="pull-left">
+                        <select name="month" id="">
+                            <option value="">{t}Month{/t}</option>
+                            {html_options options=$months}
+                        </select>
+                    </div>
+                    <div class="pull-right">
+                        <input type="search" name="search_string" placeholder="{t}Search{/t}">
+                    </div>
                 </div>
+                <div class="modal-body-content">
+                    <ul class="attachments ui-sortable ui-sortable-disabled"></ul>
+                </div>
+                </form>
             </div>
             <div class="modal-footer">
                 <div class="image-info pull-left"></div>
-                <div class="buttons pull-right">
-                    <a class="btn btn-primary yes" href="#">{t}Insert into article{/t}</a>
-                </div>
+                <!-- <div class="buttons pull-right"></div> -->
             </div>
         </div>
 
         <div id="media-element-show" class="tab-pane full-height">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{t}Show element{/t}</h3>
+                <h3 class="modal-title">{t}Insert image{/t}</h3>
             </div>
             <div class="modal-body full-height">
-                <div class="toolbar">
-                    asdf
+                <div class="toolbar clearfix">
+                    <div class="pull-left btn-toolbar">
+                        <div class="btn-group">
+                            <a href="#" class="btn"><i class="icon icon-magic"></i> {t}Enhance{/t}</a>
+                        </div>
+                        <div class="btn-group">
+                            <a href="#" class="btn"><i class="icon icon-trash"></i></a>
+                            <a href="#" class="btn"><i class="icon icon-pencil"></i> {t}Edit{/t}</a>
+                        </div>
+                        <div class="btn-group">
+                            <a href="#" class="btn"><i class="icon icon-share"></i></a>
+                            <a href="#" class="btn"><i class="icon icon-wrench"></i></a>
+                        </div>
+                    </div>
+                    <div class="buttons pull-right">
+                        <a href="#" class="back-to-browse btn">{t}Back to list{/t}</a>
+                    </div>
                 </div>
-                <div class="body">
-                    Showing element
-                </div>
+                <div class="body"></div>
             </div>
             <div class="modal-footer">
-                <div class="buttons pull-right">
-                    <a href="#" class="back-to-browse btn">{t}Back to list{/t}</a>
+                <div class="pull-right buttons">
+                    <a class="btn btn-primary yes" href="#">{t}Insert into article{/t}</a>
                 </div>
             </div>
         </div>
@@ -57,7 +81,8 @@
             <div class="modal-body full-height">
                 <div class="upload-content">
                     <h3 class="upload-instructions drop-instructions">{t}Drop files anywhere to upload{/t}</h3>
-                    <a href="#" class="btn btn-large">{t}Select Files{/t}</a>
+                    <a href="#" class="btn btn-large load-files-button">{t}Select Files{/t}</a>
+                    <input type="file" name="files" multiple id="files" class="hidden">
                 </div>
             </div>
         </div>
@@ -72,25 +97,25 @@
 {script_tag src="/libs/handlebars.js" common=1}
 <script>
 var contents = [];
-function load_browser (search, month, page) {
-    $.ajax(
-        '{url name="admin_media_uploader_browser"}',
-        {
-            'search' : search,
-            'month' : month,
-            'page' : page,
-        }
+function load_browser (data, page, replace) {
+    $.get(
+        '{url name="admin_media_uploader_browser"}?'+data
     ).success(function(data) {
         var template = Handlebars.compile($('#tmpl-attachment').html());
-
+        var final_content = '';
         $.each(data, function(index, element) {
             contents[element.id] = element
             content = template({
                 "thumbnail_url" : element.thumbnail_url,
                 "id" : element.id,
             });
-            $('.attachments').append(content);
+            final_content += content;
         });
+        if (replace) {
+            $('.attachments').html(final_content);
+        } else {
+            $('.attachments').append(final_content);
+        }
     });
 }
 jQuery(document).ready(function($) {
@@ -99,7 +124,7 @@ jQuery(document).ready(function($) {
         keyboard: true, //Can close on escape
         show: true,
     });
-    load_browser ('', '', 1);
+    load_browser ('', 1, 1, true);
 
     $('#gallery').on('mouseenter', '.attachment img', function(e, ui) {
         var element = $(this).closest('.attachment');
@@ -116,23 +141,32 @@ jQuery(document).ready(function($) {
     }).on('mouseout', '.attachment img', function(e, ui){
         $('.image-info').html('');
     }).on('click', '.attachment img', function(e, ui){
+        var element = $(this).closest('.attachment');
+
+        var template = Handlebars.compile($('#tmpl-show-element').html());
+
+        content = contents[element.data('id')];
+
+        html_content = template({
+            "content" : content,
+        });
+        $('#media-element-show .body').html(html_content);
+
         $('#media-uploader a[href="#media-element-show"]').tab('show');
     });
 
     $('.back-to-browse').on('click', function(e, ui){
         $('#media-uploader a[href="#gallery"]').tab('show');
     });
+    $('.gallery-search').on('submit', function(e, ui) {
+        e.preventDefault();
+        var data = $(this).serialize();
+        load_browser(data, 1, true);
+    });
+    $('#media-uploader #upload .load-files-button').on('click', function(e, ui){
+        $('#media-uploader #upload input#files').trigger('click');
+    });
 
-
-    // $('.modal-sidebar').on('click', 'a', function(e, ui) {
-    //     var pointer = $(this);
-    //     var target = $(this).attr('href');
-
-    //     $(target).show().siblings('.tab-content').hide();
-
-    //     pointer.closest('li').find('a').addClass('active');
-    //     pointer.closest('li').siblings('li').find('a').removeClass('active');
-    // })
 });
 </script>
 
@@ -154,9 +188,58 @@ jQuery(document).ready(function($) {
 <script type="text/html" id="tmpl-attachment-short-info">
 {literal}
     {{#with content}}
-    <strong>{{description}}</strong> <br>
-    {{width}} x {{height}} , {{size}} kb
+        {{#if description}}
+        <strong>{{description}}</strong>
+        {{else}}
+        <strong>{/literal}{t}No description{/t}{literal}</strong>
+        {{/if}} <br>
+        {{width}} x {{height}}, {{size}} kb
     {{/with}}
+{/literal}
+</script>
+
+<script type="text/html" id="tmpl-show-element">
+{literal}
+{{#with content}}
+<div class="attachment-details form-horizontal">
+
+    <img src="{{image_path}}" draggable="false" style="max-width:200px; margin:0 auto">
+
+    <div class="control-group">
+        <label for="" class="control-label">Title</label>
+        <div class="controls title">{{title}}</div>
+    </div>
+    <div class="control-group">
+        <label for="" class="control-label">Created time</label>
+        <div class="controls">{{created_time}}</div>
+    </div>
+    <div class="control-group">
+        <label for="" class="control-label">Dimensions</label>
+        <div class="controls">{{width}} × {{height}}</div>
+    </div>
+
+    <div class="control-group">
+        <label for="" class="control-label">Title</label>
+        <div class="controls">
+            <textarea name="description">{{description}}</textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <label for="" class="control-label">Caption</label>
+        <div class="controls"></div>
+    </div>
+    <div class="control-group">
+        <label for="" class="control-label">Alt Text</label>
+        <div class="controls"></div>
+    </div>
+    <div class="control-group">
+        <label for="" class="control-label">Description</label>
+        <div class="controls">
+            <textarea name="description">{{description}}</textarea>
+        </div>
+    </div>
+</div>
+{{/with}}
 {/literal}
 </script>
 {/block}
@@ -197,11 +280,6 @@ jQuery(document).ready(function($) {
         max-height: 69%;
         min-height: 83%;
     }
-    #media-uploader .modal-body > div{
-        position:relative;
-        height:100%;
-        max-height:100%;
-    }
     #media-uploader .modal-sidebar {
         position: absolute;
         top: 0;
@@ -220,6 +298,13 @@ jQuery(document).ready(function($) {
         overflow-y:visible;
         position:absolute;
         right:0px;
+    }
+    #media-uploader .toolbar {
+        border-bottom:1px solid #eee;
+        padding:10px;
+    }
+    #media-uploader .toolbar .btn-toolbar {
+        margin:0;
     }
     #media-uploader .hidden {
         display:none;
@@ -243,13 +328,16 @@ jQuery(document).ready(function($) {
         margin:0;
     }
     #media-uploader #gallery .attachments .attachment {
-        display:inline-block;
+        float: left;
         list-style:none;
     }
     #media-uploader #gallery .attachments .attachment-preview {
         display:inline-block;
         list-style:none;
         margin-bottom:10px;
+    }
+    #media-uploader #media-element-show .body {
+        margin:10px;
     }
     #media-uploader .modal-sidebar li:first-child {
         margin-top:30px;
@@ -271,6 +359,10 @@ jQuery(document).ready(function($) {
         font-size:10px;
         line-height:12px;
     }
+    #media-uploader .modal-footer .image-info strong {
+        font-size:12px;
+    }
+
     #media-uploader .thumbnail {
         display:inline-block;
         width:120px;
