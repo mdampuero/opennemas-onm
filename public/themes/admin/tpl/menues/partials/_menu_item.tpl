@@ -6,8 +6,28 @@
     data-type="{$menuItem->type}"
     data-title="{t 1=$menuItem->title}Synchronized from %1{/t}">
     <div>
-        {if $menuItem->type == 'external'}<strong>{t}External link:{/t}</strong>{/if}
-        <span class="menu-title">{$menuItem->title}</span>
+        <span class="type">
+            {if $menuItem->type == 'external'}
+                {t}External link{/t}:
+            {elseif $menuItem->type == 'internal'}
+                {t}Module{/t}:
+            {elseif $menuItem->type == 'blog-category'}
+                {t}Category listing{/t}:
+            {elseif $menuItem->type == 'category'}
+                {t}Frontpage{/t}:
+            {elseif $menuItem->type == 'albumCategory'}
+                {t}Album category{/t}:
+            {elseif $menuItem->type == 'pollCategory'}
+                {t}Poll category{/t}:
+            {elseif $menuItem->type == 'videoCategory'}
+                {t}Video Category{/t}:
+            {elseif $menuItem->type == 'static'}
+                {t}Static Page{/t}:
+            {/if}
+        </span>
+        <span class="menu-title">
+            {$menuItem->title}
+        </span>
         {if $menuItem->type == 'syncCategory'}
             <img src="{$params.IMAGE_DIR}sync-icon.png"
                  alt="{t}Sync{/t}">
@@ -19,25 +39,24 @@
         </div>
 
         <div class="form-horizontal edit-menu-form">
-
             <fieldset>
             <div class="control-group">
-                    <label for="title{$menuItem->pk_item}" class="control-label">{t}Title{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="title{$menuItem->pk_item}" class="title" value="{$menuItem->title}" placeholder="{t}Menu title...{/t}">
-                    </div>
+                <label for="title{$menuItem->pk_item}" class="control-label">{t}Title{/t}</label>
+                <div class="controls">
+                    <input type="text" id="title{$menuItem->pk_item}" class="title" value="{$menuItem->title}" placeholder="{t}Menu title...{/t}">
                 </div>
-                {if $menuItem->type == "external"}
-                <div class="control-group">
-                    <label for="link{$menuItem->pk_item}" class="control-label">{t}Link{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="link{$menuItem->pk_item}" class="link" value="{$menuItem->link}" placeholder="{t}Menu link...{/t}">
-                    </div>
+            </div>
+            {if $menuItem->type == "external"}
+            <div class="control-group">
+                <label for="link{$menuItem->pk_item}" class="control-label">{t}Link{/t}</label>
+                <div class="controls">
+                    <input type="text" id="link{$menuItem->pk_item}" class="link" value="{$menuItem->link}" placeholder="{t}Menu link...{/t}">
                 </div>
-                {/if}
-                <div class="send-button-wrapper">
-                    <button type="submit" class="btn save-menuitem-button">{t}Update{/t}</button>
-                </div>
+            </div>
+            {/if}
+            <div class="send-button-wrapper">
+                <button type="submit" class="btn save-menuitem-button">{t}Update{/t}</button>
+            </div>
             </fieldset>
         </div>
     </div>

@@ -103,19 +103,19 @@
 
 
                     {if count($categories) > 0}
-                    <h3 href="#listado">{t}Global Categories{/t}</h3>
+                    <h3 href="#listado">{t}Frontpages{/t}</h3>
                     <div id="listado">
                         <ul id='availableCategories' class="elementsContainer">
-                            {section name=as loop=$categories}
-                                <li id="cat_{$categories[as]->pk_content_category}"
-                                    data-title="{$categories[as]->title}"
+                            {foreach $categories as $category}
+                                <li id="cat_{$category->pk_content_category}"
+                                    data-title="{$category->title}"
                                     data-type="category"
-                                    data-link="{$categories[as]->name}"
-                                    data-item-id="{$categories[as]->pk_content_category}"
+                                    data-link="{$category->name}"
+                                    data-item-id="{$category->pk_content_category}"
                                     class="drag-category"
                                     pk_menu="">
                                     <div>
-                                        {$categories[as]->title}
+                                        <span class="type">{t}Frontpage{/t}:</span> {$category->title}
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -123,39 +123,8 @@
                                         </div>
                                     </div>
                                 </li>
-                            {/section}
+                            {/foreach}
                         </ul>
-                    </div>
-                    {/if}
-
-                    {if count($categories) > 0}
-                    <h3 href="#subcategories">{t}Subcategories{/t}</h3>
-                    <div id="subcategories" style="border:1px solid #CCCCCC;padding: 4px;">
-                        {section name=as loop=$categories}
-                            {if !empty($subcat[as])}
-                                <strong>{$categories[as]->title}</strong>
-                                <ul  class="elementsContainer" id="subCategories{$categories[as]->pk_content_category}">
-                                {section name=su loop=$subcat[as]}
-                                     <li id="subcat_{$subcat[as][su]->pk_content_category}"
-                                        data-title="{$subcat[as][su]->title}"
-                                        data-type="category"
-                                        data-link="{$subcat[as][su]->name}"
-                                        data-item-id="{$subcat[as][su]->pk_content_category}"
-                                        class="drag-category"
-                                        pk_menu="">
-                                        <div>
-                                            {$subcat[as][su]->title}
-                                            <div class="btn-group actions" style="float:right;">
-                                                <a href="#" class="add-item"><i class="icon-plus"></i></a>
-                                                <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
-                                                <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                {/section}
-                                </ul>
-                            {/if}
-                        {/section}
                     </div>
                     {/if}
 
@@ -173,7 +142,7 @@
                                 class="drag-category"
                                 pk_menu="">
                                 <div>
-                                    {$albumCategories[as]->title}
+                                    <span class="type">{t}Album category{/t}:</span> {$albumCategories[as]->title}
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -201,7 +170,7 @@
                                 class="drag-category"
                                 pk_menu="">
                                 <div>
-                                    {$videoCategories[as]->title}
+                                    <span class="type">{t}Video category{/t}:</span>  {$videoCategories[as]->title}
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -228,7 +197,7 @@
                                 data-item-id="{$pollCategories[as]->pk_content_category}"
                                 class="drag-category" pk_menu="">
                                 <div>
-                                    {$pollCategories[as]->title}
+                                    <span class="type">{t}Poll category{/t}:</span> {$pollCategories[as]->title}
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -261,12 +230,20 @@
                                     class="drag-category"
                                     pk_menu="">
                                     <div>
-                                        {if $page eq 'frontpage'}home
-                                            {elseif $page eq 'poll'}Encuesta
-                                            {elseif $page eq 'letter'}Cartas Al Director
-                                             {elseif $page eq 'kiosko'}Portadas Papel
-                                             {elseif $page eq 'boletin'}Bolet&iacute;n
-                                            {else}{$page}{/if}
+                                        <span class="type">{t}Module{/t}:</span>
+                                        {if $page eq 'frontpage'}
+                                            home
+                                        {elseif $page eq 'poll'}
+                                            Encuesta
+                                        {elseif $page eq 'letter'}
+                                            Cartas Al Director
+                                        {elseif $page eq 'kiosko'}
+                                            Portadas Papel
+                                        {elseif $page eq 'boletin'}
+                                            Bolet&iacute;n
+                                        {else}
+                                            {$page}
+                                        {/if}
                                         <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -292,7 +269,7 @@
                                     pk_menu="{$staticPages[k]->id}"
                                     class="drag-category">
                                     <div>
-                                        {$staticPages[k]->title}
+                                        <span class="type">{t}Static page{/t}:</span>  {$staticPages[k]->title}
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -321,7 +298,7 @@
                                     pk_menu=""
                                     style="background-color: #{$colors[$site]}">
                                     <div>
-                                        {$category|capitalize}
+                                        <span class="type">{t}Sync category{/t}:</span> {$category|capitalize}
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync{/t}" >
                                         <div class="btn-group actions" style="float:right;">
@@ -335,6 +312,32 @@
                             </ul>
                             {/foreach}
                         {/foreach}
+                    </div>
+                    {/if}
+
+                    {if count($categories) > 0}
+                    <h3 href="#listado">{t}Category listing{/t}</h3>
+                    <div id="listado">
+                        <ul id='availableCategories' class="elementsContainer">
+                            {section name=as loop=$categories}
+                                <li id="cat_{$categories[as]->pk_content_category}"
+                                    data-title="{$categories[as]->title}"
+                                    data-type="blog-category"
+                                    data-link="{$categories[as]->name}"
+                                    data-item-id="{$categories[as]->pk_content_category}"
+                                    class="drag-category"
+                                    pk_menu="">
+                                    <div>
+                                        <span class="type">{t}Category listing{/t}:</span> {$categories[as]->title}
+                                        <div class="btn-group actions" style="float:right;">
+                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
+                                            <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
+                                            <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                </li>
+                            {/section}
+                        </ul>
                     </div>
                     {/if}
 

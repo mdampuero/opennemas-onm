@@ -93,6 +93,10 @@ class MenusController extends Controller
         $cm = new \ContentManager();
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+        foreach ($subcat as $subcategory) {
+            $parentCategories = array_merge($parentCategories, $subcategory);
+        }
+
         $albumCategories = $videoCategories = $pollCategories = array();
         foreach ($ccm->categories as $category) {
             if ($category->internal_category == $this->pages['album']) {
@@ -139,7 +143,6 @@ class MenusController extends Controller
             'menues/new.tpl',
             array(
                 'categories'      => $parentCategories,
-                'subcat'          => $subcat,
                 'albumCategories' => $albumCategories,
                 'videoCategories' => $videoCategories,
                 'pollCategories'  => $pollCategories,
