@@ -96,6 +96,13 @@ EOF
         );
         $output->writeln("-: ".$originalDirectory);
 
+        $instanceName = $dialog->ask(
+            $output,
+            'Where is the instance name?',
+            'mundiario'
+        );
+        $output->writeln("-: ".$instanceName);
+
         define('ORIGINAL_URL', $originalUrl);
         define('ORIGINAL_MEDIA', $originalDirectory);
 
@@ -109,9 +116,9 @@ EOF
         define('PREFIX', $dbPrefix);
 
         // Initialize internal constants for logger
-        // Logger in content class when creating widgets
+        // Logger
         define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
-        define('INSTANCE_UNIQUE_NAME', 'mundiario');
+        define('INSTANCE_UNIQUE_NAME', $instanceName);
 
         define('IMG_DIR', "images");
         define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
