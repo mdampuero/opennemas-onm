@@ -1062,6 +1062,10 @@ class InstanceManager
      **/
     public function deleteInstanceUserFromDatabaseManager($user)
     {
+        if ($user == 'root') {
+            return true;
+        }
+
         $sql = "DROP USER `{$user}`@'localhost'";
 
         if (!$this->connection->Execute($sql)) {
