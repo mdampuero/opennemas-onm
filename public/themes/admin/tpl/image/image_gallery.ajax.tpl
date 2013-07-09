@@ -6,7 +6,7 @@
                 <a href="#">
                     {if $photos[n]->type_img=='swf' || $photos[n]->type_img=='SWF'}
                         <object width="68" height="40" style="z-index:-3; cursor:default;">
-                            <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}{$photos[n]->name}">
+                            <param name="movie" value="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}/{$photos[n]->name}">
                             <param name="autoplay" value="false">
                             <param name="autoStart" value="0">
                             <embed  width="68" height="40"
@@ -37,7 +37,7 @@
                     {else}
                         {dynamic_image
                             transform="zoomcrop,80,80,center,center"
-                            src="{$photos[n]->path_file}{$photos[n]->name}"
+                            src="{$photos[n]->path_file}/{$photos[n]->name}"
                             id="draggable_img{$num}"
                             class="draggable-handler"
                             data-id="{$photos[n]->pk_photo}"
