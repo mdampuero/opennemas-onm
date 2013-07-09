@@ -41,7 +41,7 @@
                             id="draggable_img{$num}"
                             class="draggable-handler"
                             data-id="{$photos[n]->pk_photo}"
-                            data-url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}{$photos[n]->name}"
+                            data-url="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photos[n]->path_file}/{$photos[n]->name}"
                             data-filename="{$photos[n]->name}"
                             data-filepath="{$photos[n]->path_file}"
                             data-width="{$photos[n]->width}"
