@@ -45,7 +45,7 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'asset_image',
+    'blog_tag',
     new Route(
         '/blog/tag/{category_name}',
         array(
