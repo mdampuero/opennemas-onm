@@ -86,6 +86,7 @@ class ContentSubscriber implements EventSubscriberInterface
             // }
             $tplManager->delete('home|RSS');
             $tplManager->delete('last|RSS');
+            $tplManager->delete('blog|'.$content->category_name);
 
             if (isset($content->frontpage)
                 && $content->frontpage
@@ -93,7 +94,6 @@ class ContentSubscriber implements EventSubscriberInterface
                 $tplManager->delete(
                     preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|0'
                 );
-                $tplManager->fetch(SITE_URL . 'seccion/' .$content->category_name);
                 $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|RSS');
             }
         }

@@ -32,6 +32,33 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'blog_category',
+    new Route(
+        '/blog/section/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:category',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'asset_image',
+    new Route(
+        '/blog/tag/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:tag',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
     'frontend_paywall_showcase',
     new Route(
         '/paywall',
