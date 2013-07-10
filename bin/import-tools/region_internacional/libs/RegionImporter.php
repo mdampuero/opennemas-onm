@@ -112,7 +112,7 @@ class RegionImporter
                     'title'             => $category['Nombre'],
                     'inmenu'            => 1,
                     'subcategory'       => 0,
-                    'internal_category' => 0,
+                    'internal_category' => 1,
                     'color'             => '',
                     'params'            => array(
                         'title'         => $elem[0],
