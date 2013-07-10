@@ -47,12 +47,8 @@
             </div>
             <div class="modal-body full-height">
                 <div class="toolbar clearfix">
-                    <div class="pull-left btn-toolbar">
+                    <div class="pull-right btn-toolbar">
                         <div class="btn-group">
-                            <a href="#" class="btn"><i class="icon icon-magic"></i> {t}Enhance{/t}</a>
-                        </div>
-                        <div class="btn-group">
-                            <a href="#" class="btn"><i class="icon icon-trash"></i></a>
                             <a href="#" class="btn"><i class="icon icon-pencil"></i> {t}Edit{/t}</a>
                         </div>
                         <div class="btn-group">
@@ -60,7 +56,7 @@
                             <a href="#" class="btn"><i class="icon icon-wrench"></i></a>
                         </div>
                     </div>
-                    <div class="buttons pull-right">
+                    <div class="buttons pull-left">
                         <a href="#" class="back-to-browse btn">{t}Back to list{/t}</a>
                     </div>
                 </div>
@@ -201,44 +197,43 @@ jQuery(document).ready(function($) {
 <script type="text/html" id="tmpl-show-element">
 {literal}
 {{#with content}}
-<div class="attachment-details form-horizontal">
-
-    <img src="{{image_path}}" draggable="false" style="max-width:200px; margin:0 auto">
-
-    <div class="control-group">
-        <label for="" class="control-label">Title</label>
-        <div class="controls title">{{title}}</div>
-    </div>
-    <div class="control-group">
-        <label for="" class="control-label">Created time</label>
-        <div class="controls">{{created_time}}</div>
-    </div>
-    <div class="control-group">
-        <label for="" class="control-label">Dimensions</label>
-        <div class="controls">{{width}} × {{height}}</div>
+<div class="photo-image-information pull-left clearfix">
+    <div class="thumbnail">
+        <img src="{{image_path}}" />
     </div>
 
-    <div class="control-group">
-        <label for="" class="control-label">Title</label>
-        <div class="controls">
-            <textarea name="description">{{description}}</textarea>
-        </div>
-    </div>
-    <div class="control-group">
-        <label for="" class="control-label">Caption</label>
-        <div class="controls"></div>
-    </div>
-    <div class="control-group">
-        <label for="" class="control-label">Alt Text</label>
-        <div class="controls"></div>
-    </div>
-    <div class="control-group">
-        <label for="" class="control-label">Description</label>
-        <div class="controls">
-            <textarea name="description">{{description}}</textarea>
-        </div>
+    <br>
+
+    <div class="well well-small">
+        <div><strong>{/literal}{t}Original filename:{/t}{literal}</strong> {{title}}</div>
+        <div><strong>{/literal}{t}Resolution:{/t}{literal}</strong> {{width}} × {{height}}</div>
+        <div><strong>{/literal}{t}Size:{/t}{literal}</strong> {{size}} Kb</div>
     </div>
 </div>
+
+<div class="photo-insert-form pull-left">
+    <h5>Attachment details</h5>
+    <div class="control-group">
+        <label for="caption" class="control-label">{/literal}{t}Caption{/t}{literal}</label>
+        <div class="controls">
+            <textarea required="required" id="caption" name="caption"  class="input-xlarge"
+                rows="2">{{description}}</textarea>
+        </div>
+    </div>
+    <hr>
+    <h5>Attachment display settings</h5>
+    <div class="control-group">
+        <label for="alignment" class="control-label">{/literal}{t}Alignment{/t}{literal}</label>
+        <div class="controls">
+            <select class="alignment" data-setting="align" data-user-setting="align">
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+                <option value="none" selected="">None</option>
+            </select>
+        </div>
+    </div>
+</div><!-- /basic -->
 {{/with}}
 {/literal}
 </script>
@@ -363,7 +358,7 @@ jQuery(document).ready(function($) {
         font-size:12px;
     }
 
-    #media-uploader .thumbnail {
+    #media-uploader #gallery .thumbnail {
         display:inline-block;
         width:120px;
         height:120px;
@@ -373,13 +368,13 @@ jQuery(document).ready(function($) {
     }
 
 
-    #media-uploader .thumbnail {
+    #media-uploader #gallery .thumbnail {
         -moz-transition: none;
         -webkit-transition: none;
         -o-transition: color 0 ease-in;
         transition: none;
     }
-    #media-uploader .thumbnail:active {
+    #media-uploader #gallery .thumbnail:active {
         box-shadow: 0 0 0 0px #fff,0 0 0 5px #1e8cbe;
         /*margin:-5px;*/
     }
@@ -394,6 +389,17 @@ jQuery(document).ready(function($) {
     #media-uploader .upload-content a {
         padding: 13px 26px;
         font-size: 1.1em;
+    }
+    #media-uploader .photo-insert-form {
+    }
+    #media-uploader .photo-image-information {
+        border-right:1px solid #eee;
+        max-width:300px;
+        margin-right: 10px;
+        padding-right:10px;
+    }
+    #media-uploader #media-element-show h5 {
+        margin-top:0;
     }
 </style>
 {/block}
