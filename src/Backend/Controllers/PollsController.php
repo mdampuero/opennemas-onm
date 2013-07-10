@@ -258,13 +258,12 @@ class PollsController extends Controller
             return $this->redirect($this->generateUrl('admin_polls'));
         }
 
-        $items = $poll->get_items($id);
 
         return $this->render(
             'polls/new.tpl',
             array(
                 'poll'  => $poll,
-                'items' => $items,
+                'items' => $poll->items,
             )
         );
     }

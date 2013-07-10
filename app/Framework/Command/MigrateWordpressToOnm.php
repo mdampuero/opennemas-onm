@@ -918,7 +918,7 @@ EOF
             $photoId = $photo->create($data);
 
         } else {
-             $this->output->writeln('- No photo move -',"{$file}, '-> '.{$uploadDirectory}."/".{$newFileName}");
+            // $this->output->writeln('- No photo move -',"{$file}, '-> '.{$uploadDirectory}."/".{$newFileName}");
         }
         return $photoId;
     }

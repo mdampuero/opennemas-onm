@@ -262,10 +262,7 @@ class Poll extends Content
      *
      * @return array the list of poll answers
      **/
-    public function get_items($pkPoll)
-    {
-        $this->getItems($pkPoll);
-    }
+
     public function getItems($pkPoll)
     {
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, '
