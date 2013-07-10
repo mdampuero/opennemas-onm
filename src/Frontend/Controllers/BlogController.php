@@ -193,8 +193,6 @@ class BlogController extends Controller
                     )
                 )
             );
-            var_dump($pagination);die();
-
 
             $this->view->assign(
                 array(
