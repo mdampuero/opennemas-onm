@@ -222,6 +222,7 @@ class VideosController extends Controller
                     'metadata'       => $request->filter('metadata', null, FILTER_SANITIZE_STRING),
                     'description'    => $request->filter('description', null, FILTER_SANITIZE_STRING),
                     'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
+                    'fk_author'      => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
                 );
 
                 try {
@@ -272,9 +273,15 @@ class VideosController extends Controller
             if (empty($type)) {
                 return $this->render('video/selecttype.tpl');
             } else {
+                $authorsComplete = \User::getAllUsersAuthors();
+                $authors = array( '0' => _(' - Select one author - '));
+                foreach ($authorsComplete as $author) {
+                    $authors[$author->id] = $author->name;
+                }
+
                 return $this->render(
                     'video/new.tpl',
-                    array('type' => $type)
+                    array('type' => $type, 'authors' => $authors)
                 );
             }
         }
@@ -393,11 +400,18 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
+        $authorsComplete = \User::getAllUsersAuthors();
+        $authors = array( '0' => _(' - Select one author - '));
+        foreach ($authorsComplete as $author) {
+            $authors[$author->id] = $author->name;
+        }
+
         return $this->render(
             'video/new.tpl',
             array(
                 'information' => $video->information,
                 'video'       => $video,
+                'authors'     => $authors,
             )
         );
 
