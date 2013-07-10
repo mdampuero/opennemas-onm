@@ -39,6 +39,9 @@ class MediaUploaderController extends Controller
      **/
     public function showAction(Request $request)
     {
+        if ($request->getMethod() == 'POST') {
+            return new Response(var_export($request->files));
+        }
         $months = array();
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -63,9 +66,10 @@ class MediaUploaderController extends Controller
      **/
     public function browserAction(Request $request)
     {
+        $id           = $request->query->getDigits('id', null);
         $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
-        $month = $request->query->filter('month', '');
-        $page     = $request->query->getDigits('page', 1);
+        $month        = $request->query->filter('month', '');
+        $page         = $request->query->getDigits('page', 1);
 
         $itemsPerPage = 16;
 
@@ -73,6 +77,11 @@ class MediaUploaderController extends Controller
             $limit    = "LIMIT {$itemsPerPage}";
         } else {
             $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
+        }
+
+        $idSearch = '';
+        if (!empty($id)) {
+            $idSearch = 'AND pk_content = '.$id;
         }
 
         $sqlString = '';
@@ -86,7 +95,7 @@ class MediaUploaderController extends Controller
         $photos = $cm->find(
             'Photo',
             'contents.fk_content_type = 8 AND photos.media_type="image" '
-            .'AND contents.content_status=1 '.$sqlString,
+            .'AND contents.content_status=1 '.$sqlString.$idSearch,
             'ORDER BY created DESC '.$limit
         );
 
@@ -101,7 +110,6 @@ class MediaUploaderController extends Controller
             );
         }
 
-        // var_dump($photos);die();
         $response = new Response();
         $response->setContent(json_encode($photos));
         $response->headers->set('Content-Type', 'application/json');
