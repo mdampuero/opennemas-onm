@@ -316,7 +316,7 @@
                     {/if}
 
                     {if count($categories) > 0}
-                    <h3 href="#listado">{t}Category listing{/t}</h3>
+                    <h3 href="#listado">{t}Category blog{/t}</h3>
                     <div id="listado">
                         <ul id='availableCategories' class="elementsContainer">
                             {section name=as loop=$categories}
@@ -328,7 +328,7 @@
                                     class="drag-category"
                                     pk_menu="">
                                     <div>
-                                        <span class="type">{t}Category listing{/t}:</span> {$categories[as]->title}
+                                        <span class="type">{t}Category blog{/t}:</span> {$categories[as]->title}
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>

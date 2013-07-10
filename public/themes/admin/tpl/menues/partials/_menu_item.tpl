@@ -12,7 +12,7 @@
             {elseif $menuItem->type == 'internal'}
                 {t}Module{/t}:
             {elseif $menuItem->type == 'blog-category'}
-                {t}Category listing{/t}:
+                {t}Category blog{/t}:
             {elseif $menuItem->type == 'category'}
                 {t}Frontpage{/t}:
             {elseif $menuItem->type == 'albumCategory'}
