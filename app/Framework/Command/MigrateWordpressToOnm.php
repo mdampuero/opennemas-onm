@@ -105,6 +105,7 @@ EOF
 
         define('ORIGINAL_URL', $originalUrl);
         define('ORIGINAL_MEDIA', $originalDirectory);
+        define('ORIGINAL_MEDIA_COMMON', '/opt/backup_opennemas/mundiario/wp-content/uploads/');
 
         define('CACHE_PREFIX', 'wordpress');
         define('BD_HOST', $dataBaseHost);
@@ -227,7 +228,7 @@ EOF
                         $file    = ORIGINAL_MEDIA.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
                         if (empty($photoId)) {
-                            $file    = '/opt/backup_opennemas/mundiario/wp-content/uploads/userphoto/'.$data[$originalID]['userphoto_image_file'];
+                            $file    = ORIGINAL_MEDIA_COMMON.'userphoto/'.$data[$originalID]['userphoto_image_file'];
                             $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
                         }
                     }
@@ -540,8 +541,17 @@ EOF
                             // $this->output->writeln('- Image '. $imageID. ' ok');
                             $this->output->write('.');
                         } else {
-                            $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
-                                "-". $rs->fields['guid'] .' -> '.$local_file."\n");
+                            $imageData['local_file'] = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA_COMMON, $rs->fields['guid']);
+
+                            $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
+                            if (!empty($imageID)) {
+                                $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
+                                // $this->output->writeln('- Image '. $imageID. ' ok');
+                            } else {
+                                $this->output->write('.');
+                                $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
+                                    "-". $rs->fields['guid'] .' -> '.$local_file."\n");
+                            }
                         }
                     }
                 }
