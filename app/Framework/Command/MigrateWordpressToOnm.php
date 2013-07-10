@@ -147,6 +147,9 @@ EOF
         $this->importCategories();
         $this->loadCategories();
 
+        if ($dbPrefix != 'wp_') {
+            $this->importImages('wp_');
+        }
         $this->importImages();
 
         $this->importArticles();
@@ -225,7 +228,7 @@ EOF
                     if (!empty($data[$originalID]['userphoto_image_file'])
                          && !is_null($data[$originalID]['userphoto_image_file'])) {
 
-                        $file    = ORIGINAL_MEDIA.$data[$originalID]['userphoto_image_file'];
+                        $file    = ORIGINAL_MEDIA.'files/'.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
                         if (empty($photoId)) {
                             $file    = ORIGINAL_MEDIA_COMMON.'userphoto/'.$data[$originalID]['userphoto_image_file'];
@@ -369,7 +372,11 @@ EOF
 
     protected function matchCategory($categoryId)
     {
-        return $this->categories[$categoryId];
+        if (array_key_exists($categoryId, $this->categories)) {
+            return $this->categories[$categoryId];
+        } else {
+            return 20;
+        }
     }
 
     /**
@@ -469,27 +476,29 @@ EOF
      *
      * @return void
      **/
-    protected function importImages()
+    protected function importImages($prefix=null)
     {
-
+        if (empty($prefix)) {
+           $prefix = PREFIX;
+        }
         $settings = array( 'image_thumb_size'=>'140',
                             'image_inner_thumb_size'=>'470',
                             'image_front_thumb_size'=>'350');
         foreach ($settings as $key => $value) {
             s::set($key, $value);
         }
-        $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
+        $sql = "SELECT * FROM `".$prefix."posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
         $oldID = $this->elementIsImported('fotos', 'category');
-        if(empty($oldID)) {
-            $oldID ='1';
+        if (empty($oldID)) {
+            $IDCategory ='1'; //fotografias
+        } else {
+           $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
         }
-        $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
-
         if (!$rs) {
             $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
         } else {
@@ -534,7 +543,7 @@ EOF
                         );
 
                         $date = new \DateTime($rs->fields['post_date_gmt']);
-                        $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
+                        $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
 
                         if (!empty($imageID)) {
                             $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
@@ -543,14 +552,14 @@ EOF
                         } else {
                             $imageData['local_file'] = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA_COMMON, $rs->fields['guid']);
 
-                            $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
+                            $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
                             if (!empty($imageID)) {
                                 $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                                 // $this->output->writeln('- Image '. $imageID. ' ok');
                             } else {
                                 $this->output->write('.');
-                                $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
-                                    "-". $rs->fields['guid'] .' -> '.$local_file."\n");
+                                $this->output->writeln('Problem image '.$originalImageID.
+                                    "-". $rs->fields['guid'] .' -> '.$imageData['local_file'] ."\n");
                             }
                         }
                     }
@@ -573,10 +582,12 @@ EOF
         $request    = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs         = $GLOBALS['application']->connOrigin->Execute($request);
         $oldID = $this->elementIsImported('fotos', 'category');
-        if(empty($oldID)) {
-            $oldID ='3';
+
+        if (empty($oldID)) {
+            $IDCategory ='3'; //galleries
+        } else {
+           $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
         }
-        $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
 
 
         if (!$rs) {
@@ -877,7 +888,7 @@ EOF
         }
 
         // Upload file
-        $fileCopied = copy($file, $uploadDirectory."/".$newFileName);
+        $fileCopied = @copy($file, $uploadDirectory."/".$newFileName);
         $photoId = 0;
         if ($fileCopied) {
             // Get all necessary data for the photo
