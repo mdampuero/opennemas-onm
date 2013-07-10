@@ -129,6 +129,8 @@ class Poll extends Content
         $this->visualization = $rs->fields['visualization'];
         $this->used_ips      = unserialize($rs->fields['used_ips']);
 
+        $this->items         = $this->getItems($this->id);
+
         return $this;
     }
 
@@ -260,7 +262,8 @@ class Poll extends Content
      *
      * @return array the list of poll answers
      **/
-    public function get_items($pkPoll)
+
+    public function getItems($pkPoll)
     {
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, '
              . 'poll_items.metadata '
@@ -372,4 +375,31 @@ class Poll extends Content
 
         return $ips_count;
     }
+
+    /**
+     * Renders the poll
+     *
+     * @param arrray $params parameters for rendering the content
+     * @param Template $smarty the Template object instance
+     *
+     * @return string the generated HTML
+     **/
+    public function render($params, $smarty)
+    {
+        //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
+
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch('frontpage/contents/_poll.tpl');
+        } catch (\Exception $e) {
+            $html = 'Poll not available';
+        }
+
+        return $html;
+    }
+
 }

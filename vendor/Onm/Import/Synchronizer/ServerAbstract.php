@@ -195,25 +195,24 @@ abstract class ServerAbstract
      *
      * @return int, number of total downloaded files
     */
-    public static function cleanFiles($cacheDir, $serverFiles, $localFileList)
+    public static function cleanFiles($cacheDir, $serverFiles, $localFileList, $syncFrom)
     {
         $deletedFiles = 0;
 
         if (count($localFileList) > 0) {
             $serverFileList = array();
-            foreach ($serverFiles as $key) {
-                $serverFileList []= strtolower(basename($key['filename']));
-            }
 
             foreach ($localFileList as $file) {
                 $file = basename($file);
-                $filePath = $cacheDir.'/'.$file;
-                if (!in_array($file, $serverFileList)) {
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
+                $filePath = $cacheDir.DIRECTORY_SEPARATOR.$file;
 
-                        $deletedFiles++;
-                    }
+                $fileModTime = filemtime($filePath);
+                $timeLimit = time() - $syncFrom;
+
+                if ($fileModTime < $timeLimit) {
+                    unlink($filePath);
+
+                    $deletedFiles++;
                 }
             }
         }

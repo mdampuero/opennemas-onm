@@ -159,13 +159,13 @@ class CategoriesController extends Controller
 
             $params = $request->request->get('params');
             $data = array(
-                'title' => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'inmenu' => $request->request->getDigits('inmenu', 0),
-                'subcategory' => $request->request->getDigits('subcategory'),
+                'title'             => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'inmenu'            => $request->request->getDigits('inmenu', 0),
+                'subcategory'       => $request->request->getDigits('subcategory'),
                 'internal_category' => $request->request->getDigits('internal_category'),
-                'logo_path' => $logoPath,
-                'color' => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
-                'params' => array(
+                'logo_path'         => $logoPath,
+                'color'             => $request->request->filter('color', '', FILTER_SANITIZE_STRING),
+                'params'            => array(
                     'inrss' => $params['inrss'],
                 ),
             );

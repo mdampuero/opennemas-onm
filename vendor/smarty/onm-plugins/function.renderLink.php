@@ -45,6 +45,8 @@ function smarty_function_renderLink($params,&$smarty) {
         break;
         case 'syncCategory':
              $link = "/ext$nameUrl/$item->link/";
+        case 'blog-category':
+             $link = "/blog/section/$item->link";
         break;
         default:
              $link = "/$item->link/";

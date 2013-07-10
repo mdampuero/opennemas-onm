@@ -75,29 +75,37 @@ EOF
             false
         );
 
-        $dbPrefix = $password = $dialog->ask(
+        $dbPrefix = $dialog->ask(
             $output,
             'What is the prefix in database tables (Ex: wp_2_)?',
             'wp_'
         );
-        $output->writeln("Default: ".$dbPrefix);
+        $output->writeln("-: ".$dbPrefix);
 
-        $originalUrl = $password = $dialog->ask(
+        $originalUrl = $dialog->ask(
             $output,
             'What is the wordpress site URL?',
             'http://www.mundiario.com'
         );
-        $output->writeln("Default: ".$originalUrl);
+        $output->writeln("-: ".$originalUrl);
 
-        $originalDirectory = $password = $dialog->ask(
+        $originalDirectory = $dialog->ask(
             $output,
             'Where is the wordpress media directory?',
-            '/opt/backup_opennemas/mundiario/'
+            '/opt/backup_opennemas/mundiario/wp-content/uploads/'
         );
-        $output->writeln("Default: ".$originalDirectory);
+        $output->writeln("-: ".$originalDirectory);
+
+        $instanceName = $dialog->ask(
+            $output,
+            'Where is the instance name?',
+            'mundiario'
+        );
+        $output->writeln("-: ".$instanceName);
 
         define('ORIGINAL_URL', $originalUrl);
-        define('ORIGINAL_MEDIA', $originalDirectory.'/wp-content/uploads/');
+        define('ORIGINAL_MEDIA', $originalDirectory);
+        define('ORIGINAL_MEDIA_COMMON', '/opt/backup_opennemas/mundiario/wp-content/uploads/');
 
         define('CACHE_PREFIX', 'wordpress');
         define('BD_HOST', $dataBaseHost);
@@ -109,9 +117,9 @@ EOF
         define('PREFIX', $dbPrefix);
 
         // Initialize internal constants for logger
-        // Logger in content class when creating widgets
+        // Logger
         define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
-        define('INSTANCE_UNIQUE_NAME', 'mundiario');
+        define('INSTANCE_UNIQUE_NAME', $instanceName);
 
         define('IMG_DIR', "images");
         define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
@@ -139,6 +147,9 @@ EOF
         $this->importCategories();
         $this->loadCategories();
 
+        if ($dbPrefix != 'wp_') {
+            $this->importImages('wp_');
+        }
         $this->importImages();
 
         $this->importArticles();
@@ -217,8 +228,12 @@ EOF
                     if (!empty($data[$originalID]['userphoto_image_file'])
                          && !is_null($data[$originalID]['userphoto_image_file'])) {
 
-                        $file    = ORIGINAL_MEDIA.'userphoto/'.$data[$originalID]['userphoto_image_file'];
+                        $file    = ORIGINAL_MEDIA.'files/'.$data[$originalID]['userphoto_image_file'];
                         $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
+                        if (empty($photoId)) {
+                            $file    = ORIGINAL_MEDIA_COMMON.'userphoto/'.$data[$originalID]['userphoto_image_file'];
+                            $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
+                        }
                     }
 
                     $values = array(
@@ -357,7 +372,11 @@ EOF
 
     protected function matchCategory($categoryId)
     {
-        return $this->categories[$categoryId];
+        if (array_key_exists($categoryId, $this->categories)) {
+            return $this->categories[$categoryId];
+        } else {
+            return 20;
+        }
     }
 
     /**
@@ -457,23 +476,29 @@ EOF
      *
      * @return void
      **/
-    protected function importImages()
+    protected function importImages($prefix=null)
     {
-
+        if (empty($prefix)) {
+           $prefix = PREFIX;
+        }
         $settings = array( 'image_thumb_size'=>'140',
                             'image_inner_thumb_size'=>'470',
                             'image_front_thumb_size'=>'350');
         foreach ($settings as $key => $value) {
             s::set($key, $value);
         }
-        $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
+        $sql = "SELECT * FROM `".$prefix."posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
-        $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
-
+        $oldID = $this->elementIsImported('fotos', 'category');
+        if (empty($oldID)) {
+            $IDCategory ='1'; //fotografias
+        } else {
+           $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
+        }
         if (!$rs) {
             $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
         } else {
@@ -491,6 +516,8 @@ EOF
                         $originalImageID = $rs->fields['ID'];
 
                         ///http://mundiario.com/wp-content/uploads/2013/06/Brasil-360x225.png
+                        //http://mundiario.com/galicia/files/2013/07/6696140347_824d45603a_z-360x225.jpg
+                        //http://mundiario.com/emprendedores/files/2013/07/6696140347_824d45603a_z-360x225.jpg
                         $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $rs->fields['guid']);
 
                         $imageData = array(
@@ -516,15 +543,24 @@ EOF
                         );
 
                         $date = new \DateTime($rs->fields['post_date_gmt']);
-                        $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
+                        $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
 
                         if (!empty($imageID)) {
                             $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                             // $this->output->writeln('- Image '. $imageID. ' ok');
                             $this->output->write('.');
                         } else {
-                            $this->output->writeln('Problem image '.$originalImageID.'-'.$rs->fields['post_name'].
-                                "-". $rs->fields['guid'] .' -> '.$local_file."\n");
+                            $imageData['local_file'] = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA_COMMON, $rs->fields['guid']);
+
+                            $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
+                            if (!empty($imageID)) {
+                                $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
+                                // $this->output->writeln('- Image '. $imageID. ' ok');
+                            } else {
+                                $this->output->write('.');
+                                $this->output->writeln('Problem image '.$originalImageID.
+                                    "-". $rs->fields['guid'] .' -> '.$imageData['local_file'] ."\n");
+                            }
                         }
                     }
                 }
@@ -545,7 +581,13 @@ EOF
 
         $request    = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs         = $GLOBALS['application']->connOrigin->Execute($request);
-        $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
+        $oldID = $this->elementIsImported('fotos', 'category');
+
+        if (empty($oldID)) {
+            $IDCategory ='3'; //galleries
+        } else {
+           $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
+        }
 
 
         if (!$rs) {
@@ -711,7 +753,20 @@ EOF
         $rs      = $GLOBALS['application']->conn->Execute($request);
 
         $imageID='';
-        if (!$rs) {
+        if (!$rs || empty($rs->fields['ID'])) {
+            $sql = "SELECT ID FROM `wp_posts` WHERE ".
+            "`post_type` = 'attachment'  AND post_status !='trash' ".
+            " AND guid= '".$guid."'";
+            $request = $GLOBALS['application']->conn->Prepare($sql);
+            $rs      = $GLOBALS['application']->conn->Execute($request);
+            if (!$rs->fields['ID']) {
+                 $this->output->writeln('- Image '. $guid. ' fault');
+            } else {
+                $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
+            }
+        // Fetch the list of Opinions available for one author in EditMaker
+        $request = $GLOBALS['application']->conn->Prepare($sql);
+        $rs      = $GLOBALS['application']->conn->Execute($request);
             $this->output->writeln('- Image '. $guid. ' fault');
         } else {
             $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
@@ -734,6 +789,7 @@ EOF
         $newBody = '';
         $img     = '';
         $gallery = '';
+        $photo     = new \Photo();
         $allowed = '<i><b><p><a><br><ol><ul><li>';
         $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?><\/a>@';
         preg_match_all($patern, $body, $result);
@@ -743,10 +799,15 @@ EOF
             $newBody = $body;
             if (empty($img)) {
                 $this->output->writeln('- Image from Body '. $guid. ' fault');
-                $date = new DateTime();
+                $date = new \DateTime();
                 $date = $date->format('Y-m-d H:i:s');
                 $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
-                $IDCategory = $this->matchCategory('62'); //assign category 'Fotos' for media elements
+                $oldID = $this->elementIsImported('fotos', 'category');
+                if(empty($oldID)) {
+                    $oldID ='1';
+                }
+                $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
+
                 $imageData = array(
                         'title' => $this->convertoUTF8(strip_tags($guid)),
                         'category' => $IDCategory,
@@ -827,7 +888,7 @@ EOF
         }
 
         // Upload file
-        $fileCopied = copy($file, $uploadDirectory."/".$newFileName);
+        $fileCopied = @copy($file, $uploadDirectory."/".$newFileName);
         $photoId = 0;
         if ($fileCopied) {
             // Get all necessary data for the photo
@@ -857,7 +918,7 @@ EOF
             $photoId = $photo->create($data);
 
         } else {
-             $this->output->writeln('- No photo move -',"{$file}, '-> '.{$uploadDirectory}."/".{$newFileName}");
+            // $this->output->writeln('- No photo move -',"{$file}, '-> '.{$uploadDirectory}."/".{$newFileName}");
         }
         return $photoId;
     }

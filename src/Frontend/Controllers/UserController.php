@@ -692,7 +692,7 @@ class UserController extends Controller
            || (!$this->view->isCached('user/frontpage_author.tpl', $cacheID))
         ) {
             $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "
-                ."WHERE contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
+                ."WHERE users.activated = 1 AND contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
                 ."AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
 
             $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);

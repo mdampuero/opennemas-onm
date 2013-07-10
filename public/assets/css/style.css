@@ -480,6 +480,7 @@ a.unpublishing:hover {
   width: 100%;
   margin-bottom: 10px;
   position:relative;
+  min-height: 200px;
 }
 .panel > * {
   margin: 1em;

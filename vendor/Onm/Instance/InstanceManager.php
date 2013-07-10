@@ -70,12 +70,10 @@ class InstanceManager
      */
     public function load($serverName)
     {
-        // global $sc;
-        // $cache = $sc->get('cache');
+        $cache = getService('cache');
 
         $instance = false;
         if (preg_match("@\/manager@", $_SERVER["REQUEST_URI"])) {
-            // $instance = $cache->fetch('manager_instance_'.$serverName);
             if (!$instance) {
                 global $onmInstancesConnection;
 
@@ -93,8 +91,6 @@ class InstanceManager
                     'BD_DATABASE'          => $onmInstancesConnection['BD_DATABASE'],
                     'BD_TYPE'              => $onmInstancesConnection['BD_TYPE'],
                 );
-
-                // $cache->save('manager_instance_'.$serverName, $instance);
             }
 
             $instance->boot();
@@ -102,28 +98,53 @@ class InstanceManager
             return $instance;
         }
 
-        // $instance = $cache->fetch('instance_'.$serverName);
+
         if (!$instance) {
+            $instancesMatched = $cache->fetch('instance_'.$serverName);
+
             //TODO: improve search for allowing subdomains with wildcards
             $sql = "SELECT SQL_CACHE * FROM instances"
-                ." WHERE domains LIKE '%{$serverName}%' LIMIT 1";
+                ." WHERE domains LIKE '%{$serverName}%'";
+            $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
             $rs = $this->connection->Execute($sql);
 
             if (!$rs) {
                 $this->connection->ErrorMsg();
                 return false;
             }
+            $instancesMatched = $rs->GetArray();
+            $cache->save('instance_'.$serverName, $instancesMatched);
+
+
+            $matchedInstance = null;
+            foreach ($instancesMatched as $element) {
+                $domains = explode(',', $element['domains']);
+                $domains = array_map(
+                    function ($instanceDataElem) {
+                        return trim($instanceDataElem);
+                    },
+                    $domains
+                );
+
+                if (in_array($serverName, $domains)) {
+                    $matchedInstance = $element;
+                    break;
+                }
+            }
+
+
+            if (is_null($matchedInstance)) {
+                return false;
+            }
 
             //If found matching instance initialize its contants and return it
-            if ($rs->fields) {
+            if ($matchedInstance) {
 
                 $instance = new Instance();
-                foreach ($rs->fields as $key => $value) {
+                foreach ($matchedInstance as $key => $value) {
                     $instance->{$key} = $value;
                 }
                 define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
-
-                // $cache->save('instance_'.$serverName, $instance);
 
                 $instance->boot();
 
@@ -1041,6 +1062,10 @@ class InstanceManager
      **/
     public function deleteInstanceUserFromDatabaseManager($user)
     {
+        if ($user == 'root') {
+            return true;
+        }
+
         $sql = "DROP USER `{$user}`@'localhost'";
 
         if (!$this->connection->Execute($sql)) {
