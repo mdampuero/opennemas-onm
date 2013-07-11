@@ -269,7 +269,7 @@ label {
                                 </div>
                             </div>
                         </div>
-                    <fieldset>
+                    </fieldset>
                 </div>
             </div><!-- /personal -->
 

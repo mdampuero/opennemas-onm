@@ -242,7 +242,7 @@ EOF
                         'sessionexpire' =>'30',
                         'email'         => $rs->fields['user_email'],
                         'name'          => $data[$originalID]['first_name']." ".$data[$originalID]['last_name'],
-                        'type'          => 1,
+                        'type'          => 0,
                         'deposit'       => '',
                         'token'         => '',
                         'activated'     => 1,
