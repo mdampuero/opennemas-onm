@@ -203,3 +203,21 @@ div#intesticial-ad .wrapper_intersticial {
     margin-top: 5px;
 }
 
+/*polls in Frontpage */
+.poll form{
+    display: inline-block;
+    width: 100%;
+}
+
+.poll .submit-button {
+    text-align: center;
+    font-size: 11px;
+    margin-right: 20px;
+    float: right;
+}
+.poll ul {
+    list-style: none;
+}
+.hidden {
+    display:none;
+}
