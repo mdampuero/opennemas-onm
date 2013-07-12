@@ -47,7 +47,7 @@ class MediaUploaderController extends Controller
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute(
             "SELECT DISTINCT(DATE_FORMAT(created, '%Y-%c')) as date_month
-            FROM contents WHERE fk_content_type = 8 ORDER BY date_month"
+            FROM contents WHERE fk_content_type = 8 ORDER BY date_month DESC"
         );
 
         $rawMonths = $rs->GetArray();
@@ -79,14 +79,17 @@ class MediaUploaderController extends Controller
             $limit    = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
         }
 
-        $idSearch = '';
-        if (!empty($id)) {
-            $idSearch = 'AND pk_content = '.$id;
+        $filter = '';
+        if (!empty($month)) {
+            $filter .= " AND DATE_FORMAT(created, '%Y-%c') = '$month'";
         }
 
-        $sqlString = '';
+        if (!empty($id)) {
+            $filter .= " AND pk_content = ".$id;
+        }
+
         if (!empty($searchString)) {
-            $sqlString = " AND description LIKE '%$searchString%' ";
+            $filter .= " AND description LIKE '%$searchString%' ";
         }
 
         $cm = new \ContentManager();
@@ -95,7 +98,7 @@ class MediaUploaderController extends Controller
         $photos = $cm->find(
             'Photo',
             'contents.fk_content_type = 8 AND photos.media_type="image" '
-            .'AND contents.content_status=1 '.$sqlString.$idSearch,
+            .'AND contents.content_status=1 '.$filter,
             'ORDER BY created DESC '.$limit
         );
 
