@@ -102,26 +102,27 @@ class InstanceManager
         if (!$instance) {
             $instancesMatched = $cache->fetch('instance_'.$serverName);
 
-            //TODO: improve search for allowing subdomains with wildcards
-            $sql = "SELECT SQL_CACHE * FROM instances"
-                ." WHERE domains LIKE '%{$serverName}%'";
-            $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
-            $rs = $this->connection->Execute($sql);
+            if (!is_object($instancesMatched)) {
+                //TODO: improve search for allowing subdomains with wildcards
+                $sql = "SELECT SQL_CACHE * FROM instances"
+                    ." WHERE domains LIKE '%{$serverName}%'";
+                $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
+                $rs = $this->connection->Execute($sql);
 
-            if (!$rs) {
-                $this->connection->ErrorMsg();
-                return false;
+                if (!$rs) {
+                    $this->connection->ErrorMsg();
+                    return false;
+                }
+                $instancesMatched = $rs->GetArray();
+                $cache->save('instance_'.$serverName, $instancesMatched);
             }
-            $instancesMatched = $rs->GetArray();
-            $cache->save('instance_'.$serverName, $instancesMatched);
-
 
             $matchedInstance = null;
             foreach ($instancesMatched as $element) {
                 $domains = explode(',', $element['domains']);
                 $domains = array_map(
                     function ($instanceDataElem) {
-                        return trim($instanceDataElem);
+                        return trim(strtolower($instanceDataElem));
                     },
                     $domains
                 );
@@ -130,11 +131,6 @@ class InstanceManager
                     $matchedInstance = $element;
                     break;
                 }
-            }
-
-
-            if (is_null($matchedInstance)) {
-                return false;
             }
 
             //If found matching instance initialize its contants and return it
