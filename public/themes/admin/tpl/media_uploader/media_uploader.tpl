@@ -2,6 +2,9 @@
 
 
 {block name="content"}
+<div class="wrapper-content" style="margin-top:100px">
+    <a href="#media-uploader" data-keyboard="true" data-toggle="modal" class="btn btn-primary">Show modal</a>
+</div>
 <div class="modal hide tabbable tabs-left" id="media-uploader">
 
     <ul class=" nav nav-tabs modal-sidebar full-height">
@@ -16,18 +19,20 @@
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 class="modal-title">{t}Media gallery{/t}</h3>
             </div>
-            <div class="modal-body full-height">
+            <div class="modal-body">
                 <form action="#" class="gallery-search">
+                <input type="hidden" class="page" name="page" value="1">
                 <div class="toolbar clearfix">
                     <div class="pull-left">
-                        <select name="month" id="">
-                            <option value="">{t}Month{/t}</option>
+                        <select name="month" class="month">
+                            <option value="">{t}All months{/t}</option>
                             {html_options options=$months}
                         </select>
                     </div>
                     <div class="pull-right">
                         <input type="search" name="search_string" placeholder="{t}Search{/t}">
                     </div>
+                    <div class="loading pull-right hidden">{t}Loading...{/t}</div>
                 </div>
                 <div class="modal-body-content">
                     <ul class="attachments ui-sortable ui-sortable-disabled"></ul>
@@ -45,7 +50,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 <h3 class="modal-title">{t}Insert image{/t}</h3>
             </div>
-            <div class="modal-body full-height">
+            <div class="modal-body">
                 <div class="toolbar clearfix">
                     <div class="pull-right btn-toolbar">
                         <div class="btn-group">
@@ -74,7 +79,7 @@
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 class="modal-title">{t}Upload new media{/t}</h3>
             </div>
-            <div class="modal-body full-height">
+            <div class="modal-body">
                 <div class="upload-content">
                     <h3 class="upload-instructions drop-instructions">{t}Drop files anywhere to upload{/t}</h3>
                     <a href="#" class="btn btn-large load-files-button">{t}Select Files{/t}</a>
@@ -90,152 +95,91 @@
 
 
 {block name="footer-js" append}
-{script_tag src="/libs/handlebars.js" common=1}
 <script>
 var contents = [];
-function load_browser (data, page, replace) {
-    $.get(
-        '{url name="admin_media_uploader_browser"}?'+data
-    ).success(function(data) {
-        var template = Handlebars.compile($('#tmpl-attachment').html());
-        var final_content = '';
-        $.each(data, function(index, element) {
-            contents[element.id] = element
-            content = template({
-                "thumbnail_url" : element.thumbnail_url,
-                "id" : element.id,
-            });
-            final_content += content;
+</script>
+{script_tag src="/libs/handlebars.js" common=1}
+{script_tag src="/onm/media-uploader.js"}
+<script>
+    $(function() {
+        $('#media-uploader').mediaPicker({
+            browser_url : "{url name="admin_media_uploader_browser"}",
+            initially_shown:  true,
         });
-        if (replace) {
-            $('.attachments').html(final_content);
-        } else {
-            $('.attachments').append(final_content);
-        }
     });
-}
-jQuery(document).ready(function($) {
-    jQuery("#media-uploader").modal({
-        backdrop: 'static', //Show a grey back drop
-        keyboard: true, //Can close on escape
-        show: true,
-    });
-    load_browser ('', 1, 1, true);
-
-    $('#gallery').on('mouseenter', '.attachment img', function(e, ui) {
-        var element = $(this).closest('.attachment');
-
-        var template = Handlebars.compile($('#tmpl-attachment-short-info').html());
-
-        content = contents[element.data('id')];
-
-        html_content = template({
-            "content" : content,
-        });
-        $('.image-info').append(html_content);
-
-    }).on('mouseout', '.attachment img', function(e, ui){
-        $('.image-info').html('');
-    }).on('click', '.attachment img', function(e, ui){
-        var element = $(this).closest('.attachment');
-
-        var template = Handlebars.compile($('#tmpl-show-element').html());
-
-        content = contents[element.data('id')];
-
-        html_content = template({
-            "content" : content,
-        });
-        $('#media-element-show .body').html(html_content);
-
-        $('#media-uploader a[href="#media-element-show"]').tab('show');
-    });
-
-    $('.back-to-browse').on('click', function(e, ui){
-        $('#media-uploader a[href="#gallery"]').tab('show');
-    });
-    $('.gallery-search').on('submit', function(e, ui) {
-        e.preventDefault();
-        var data = $(this).serialize();
-        load_browser(data, 1, true);
-    });
-    $('#media-uploader #upload .load-files-button').on('click', function(e, ui){
-        $('#media-uploader #upload input#files').trigger('click');
-    });
-
-});
 </script>
 
 <script type="text/html" id="tmpl-attachment">
-{literal}
-    <li class="attachment save-ready" data-id="{{id}}">
-        <div class="attachment-preview type-image subtype-png landscape">
-            <div class="thumbnail">
-                <div class="centered">
-                    <img src="{{thumbnail_url}}" draggable="false">
+    {literal}
+        <li class="attachment save-ready" data-id="{{id}}">
+            <div class="attachment-preview type-image subtype-png landscape">
+                <div class="thumbnail">
+                    <div class="centered">
+                        <img src="{{thumbnail_url}}" draggable="false">
+                    </div>
                 </div>
+                <a class="check" href="#" title="Deselect"><div class="media-modal-icon"></div></a>
             </div>
-            <a class="check" href="#" title="Deselect"><div class="media-modal-icon"></div></a>
-        </div>
-    </li>
-{/literal}
+        </li>
+    {/literal}
 </script>
 
 <script type="text/html" id="tmpl-attachment-short-info">
-{literal}
-    {{#with content}}
-        {{#if description}}
-        <strong>{{description}}</strong>
-        {{else}}
-        <strong>{/literal}{t}No description{/t}{literal}</strong>
-        {{/if}} <br>
-        {{width}} x {{height}}, {{size}} kb
-    {{/with}}
-{/literal}
+    {literal}
+        {{#with content}}
+            {{#if description}}
+            <strong>{{description}}</strong>
+            {{else}}
+            <strong>{/literal}{t}No description{/t}{literal}</strong>
+            {{/if}} <br>
+            {{width}} x {{height}}, {{size}} kb
+        {{/with}}
+    {/literal}
 </script>
 
 <script type="text/html" id="tmpl-show-element">
-{literal}
-{{#with content}}
-<div class="photo-image-information pull-left clearfix">
-    <div class="thumbnail">
-        <img src="{{image_path}}" />
-    </div>
+    {literal}
+    {{#with content}}
+    <div class="photo-image-information pull-left clearfix">
+        <div class="thumbnail">
+            <img src="{{image_path}}" />
+        </div>
 
-    <br>
+        <br>
 
-    <div class="well well-small">
-        <div><strong>{/literal}{t}Original filename:{/t}{literal}</strong> {{title}}</div>
-        <div><strong>{/literal}{t}Resolution:{/t}{literal}</strong> {{width}} × {{height}}</div>
-        <div><strong>{/literal}{t}Size:{/t}{literal}</strong> {{size}} Kb</div>
-    </div>
-</div>
-
-<div class="photo-insert-form pull-left">
-    <h5>Attachment details</h5>
-    <div class="control-group">
-        <label for="caption" class="control-label">{/literal}{t}Caption{/t}{literal}</label>
-        <div class="controls">
-            <textarea required="required" id="caption" name="caption"  class="input-xlarge"
-                rows="2">{{description}}</textarea>
+        <div class="well well-small">
+            <div><strong>{/literal}{t}Original filename:{/t}{literal}</strong> {{title}}</div>
+            <div><strong>{/literal}{t}Resolution:{/t}{literal}</strong> {{width}} × {{height}}</div>
+            <div><strong>{/literal}{t}Size:{/t}{literal}</strong> {{size}} Kb</div>
+            <div><strong>{/literal}{t}Created:{/t}{literal}</strong> {{created}}</div>
         </div>
     </div>
-    <hr>
-    <h5>Attachment display settings</h5>
-    <div class="control-group">
-        <label for="alignment" class="control-label">{/literal}{t}Alignment{/t}{literal}</label>
-        <div class="controls">
-            <select class="alignment" data-setting="align" data-user-setting="align">
-                <option value="left">Left</option>
-                <option value="center">Center</option>
-                <option value="right">Right</option>
-                <option value="none" selected="">None</option>
-            </select>
+
+    <div class="photo-insert-form pull-left">
+        <h5>Attachment details</h5>
+        <div class="control-group">
+            <label for="caption" class="control-label">{/literal}{t}Caption{/t}{literal}</label>
+            <div class="controls">
+                <textarea required="required" id="caption" name="caption"  class="input-xlarge"
+                    rows="2">{{description}}</textarea>
+            </div>
         </div>
-    </div>
-</div><!-- /basic -->
-{{/with}}
-{/literal}
+        <hr>
+        <h5>Attachment display settings</h5>
+        <div class="control-group">
+            <label for="alignment" class="control-label">{/literal}{t}Alignment{/t}{literal}</label>
+            <div class="controls">
+                <select class="alignment" data-setting="align" data-user-setting="align">
+                    <option value="left">Left</option>
+                    <option value="center">Center</option>
+                    <option value="right">Right</option>
+                    <option value="none" selected="">None</option>
+                </select>
+            </div>
+        </div>
+    </div><!-- /basic -->
+    {{/with}}
+    {/literal}
 </script>
 {/block}
 
@@ -272,8 +216,9 @@ jQuery(document).ready(function($) {
         position: absolute;
         right: 0px;
         left: 0px;
-        max-height: 69%;
-        min-height: 83%;
+        top: 48px;
+        bottom: 61px;
+        max-height:100%;
     }
     #media-uploader .modal-sidebar {
         position: absolute;
@@ -288,11 +233,6 @@ jQuery(document).ready(function($) {
         height:100%;
         position:relative;
         margin:10px;
-    }
-    #media-uploader .modal-body-content-wrapper {
-        overflow-y:visible;
-        position:absolute;
-        right:0px;
     }
     #media-uploader .toolbar {
         border-bottom:1px solid #eee;
