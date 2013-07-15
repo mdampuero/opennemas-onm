@@ -119,6 +119,8 @@ class BlogController extends Controller
             );
         }
 
+        $this->getInnerAds();
+
         return $this->render(
             'blog/blog.tpl',
             array(
@@ -201,6 +203,8 @@ class BlogController extends Controller
                     'pagination' => $pagination,
                 )
             );
+
+            $this->getInnerAds();
         }
 
         return $this->render(
@@ -209,5 +213,35 @@ class BlogController extends Controller
                 'cache_id' => $cacheId
             )
         );
+    }
+
+
+    /**
+     * Fetches advertisements for article inner
+     *
+     * @param string category the category identifier
+     *
+     * @return void
+     **/
+    public static function getInnerAds($category = 'home')
+    {
+        $category = (!isset($category) || ($category=='home'))? 0: $category;
+
+        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+
+        $advertisement = \Advertisement::getInstance();
+        $banners = $advertisement->getAdvertisements($positions, $category);
+
+        if (count($banners<=0)) {
+            $cm = new \ContentManager();
+            $banners = $cm->getInTime($banners);
+            //$advertisement->renderMultiple($banners, &$tpl);
+            $advertisement->renderMultiple($banners, $advertisement);
+        }
+        // Get intersticial banner,1,2,9,10
+        $intersticial = $advertisement->getIntersticial(150, $category);
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        }
     }
 }
