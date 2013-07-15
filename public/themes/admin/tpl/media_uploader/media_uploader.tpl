@@ -95,9 +95,6 @@
 
 
 {block name="footer-js" append}
-<script>
-var contents = [];
-</script>
 {script_tag src="/libs/handlebars.js" common=1}
 {script_tag src="/onm/media-uploader.js"}
 <script>
