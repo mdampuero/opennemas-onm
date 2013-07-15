@@ -2783,6 +2783,14 @@ $adminRoutes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_media_uploader_months',
+    new Route(
+        '/media-uploader/months',
+        array('_controller' => 'Backend:Controllers:MediaUploaderController:getMonths')
+    )
+);
+
 $adminRoutes->addPrefix('/admin');
 
 $routes->add(

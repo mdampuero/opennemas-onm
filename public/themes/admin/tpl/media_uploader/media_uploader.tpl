@@ -26,7 +26,7 @@
                     <div class="pull-left">
                         <select name="month" class="month">
                             <option value="">{t}All months{/t}</option>
-                            {html_options options=$months}
+
                         </select>
                     </div>
                     <div class="pull-right">
@@ -100,10 +100,19 @@
 <script>
     $(function() {
         $('#media-uploader').mediaPicker({
-            browser_url : "{url name="admin_media_uploader_browser"}",
+            browser_url : "{url name=admin_media_uploader_browser}",
+            months_url : "{url name=admin_media_uploader_months}",
             initially_shown:  true,
         });
     });
+</script>
+
+<script type="text/html" id="tmpl-browser-months">
+{literal}
+    {{#each months}}
+    <option value="{{value}}">{{name}}</option>
+    {{/each}}
+{/literal}
 </script>
 
 <script type="text/html" id="tmpl-attachment">

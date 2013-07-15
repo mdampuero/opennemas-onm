@@ -33,7 +33,7 @@ class MediaUploaderController extends Controller
     }
 
     /**
-     * Description of the action
+     * Shows the media uploader
      *
      * @return Response the response object
      **/
@@ -42,6 +42,18 @@ class MediaUploaderController extends Controller
         if ($request->getMethod() == 'POST') {
             return new Response(var_export($request->files));
         }
+
+        return $this->render('media_uploader/media_uploader.tpl');
+    }
+
+    /**
+     * Returns the available months registered in images
+     *
+     * @return Response the object response
+     **/
+    public function getMonthsAction(Request $request)
+    {
+
         $months = array();
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -52,17 +64,20 @@ class MediaUploaderController extends Controller
 
         $rawMonths = $rs->GetArray();
         foreach ($rawMonths as $value) {
-            $months [$value['date_month']]= $value['date_month'];
+            $months [] = array('name' => $value['date_month'], 'value' => $value['date_month']);
         }
 
-        return $this->render('media_uploader/media_uploader.tpl', array('months' => $months));
+        $response = new Response();
+        $response->setContent(json_encode($months));
+        $response->headers->set('Content-Type', 'application/json');
+
+        return $response;
     }
 
     /**
+     * Performs searches through images and returns an array of objects
      *
-     *
-     * @return void
-     * @author
+     * @return Response the response object
      **/
     public function browserAction(Request $request)
     {
