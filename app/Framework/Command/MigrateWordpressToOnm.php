@@ -795,7 +795,7 @@ EOF
         $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?alt="?(.*?)".*?><\/a>@';
         preg_match_all($patern, $body, $result);
         if (!empty($result[1])) {
-            var_dump($resutl[1]);
+
             $guid    = $result[1][0];
             $img     = $this->getOnmIdImage($guid);
             $newBody = $body;
@@ -844,8 +844,7 @@ EOF
             $id      = $result[1][0];
             $img     = $this->elementIsImported($id, 'image');
            // $footer  = $result[1][2];
-            var_dump($result[1]);
-            die();
+
             $newBody = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $body);
             $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
