@@ -4,6 +4,10 @@
  */
 ;(function($, window, document, undefined) {
 
+    // Contents array, used from all the module to share contents information
+    var contents = [];
+
+    // The module that allows to browse images and perform searches through them
     var Browser = function(elem, options) {
         this.$browser = $(elem);
         this.config = options;
@@ -13,6 +17,7 @@
         init : function() {
             var self = this;
 
+            // Load contents to fill the browser
             this.load_browser();
 
             $(this.$browser).find('.modal-body').on('scroll', function() {
@@ -21,10 +26,11 @@
                 }
             });
 
+            // When changing the month or perform a search with the search input
+            // load the browser with the searched contents
             $(this.$browser).on('change', '.gallery-search .month', function(e, ui) {
                 $('.gallery-search').trigger('submit');
-            })
-            $(this.$browser).on('submit', '.gallery-search', function(e, ui) {
+            }).on('submit', '.gallery-search', function(e, ui) {
                 e.preventDefault();
 
                 // Reset actual page
@@ -32,6 +38,7 @@
                 self.load_browser(true);
             });
 
+            // Attach events to the images in browser
             $(this.$browser).on('mouseenter', '.attachment img', function(e, ui) {
                 var element = $(this).closest('.attachment');
 
@@ -60,6 +67,8 @@
                 $('#media-uploader a[href="#media-element-show"]').tab('show');
             });
         },
+
+        // Function that fills the browser with images
         load_browser: function (replace) {
             var browser = this.$browser;
             var self = this;
@@ -71,14 +80,12 @@
 
             var data = $('.gallery-search').serialize();
 
-            browser.find('.loading').toggleClass('hidden');
-            browser.data('loading', true);
-
             $.ajax({
                 url: this.config.browser_url,
                 data: data,
-                // async: false,
                 beforeSend: function() {
+                    browser.find('.loading').removeClass('hidden');
+                    browser.data('loading', true);
                 },
                 success: function(contents_json) {
                     var template = Handlebars.compile($('#tmpl-attachment').html());
@@ -101,16 +108,23 @@
                     var page_el = $(browser).find('.gallery-search .page');
                     page_el.val(parseInt(page_el.val()) + 1);
                 },
-                complete: function() {
+                complete: function(xhr, status) {
+                    var contents = $.parseJSON(xhr.responseText);
+
                     browser.find('.loading').toggleClass('hidden');
                     browser.data('loading', false);
 
-                    if (self.browser_needs_load()) {
+                    // Load next page if there are more contents to load and the
+                    // browser windows can fit more contents
+                    if (contents.length > 0 && self.browser_needs_load()) {
                         self.load_browser(false);
                     }
                 }
             });
         },
+
+        // Function to know if the user has scrolled to the botton of the container
+        // and it needs to load more contents
         browser_needs_load: function() {
             var container = $(this.$browser).find('.modal-body');
             var scrollPosition = container.scrollTop() + container.outerHeight();
@@ -120,6 +134,7 @@
         }
     };
 
+    // Module that handles file uploads
     var Uploader = function(elem, options) {
         this.$uploader = $(elem);
         this.config = options;
@@ -130,6 +145,21 @@
             // Add click handler for upload button
             $(this.$uploader).on('click', '.load-files-button', function(e, ui) {
                 $(self.$uploader, '#upload input#files').trigger('click');
+            });
+        }
+    };
+
+    // Module that handles the element showing page
+    var ElementUI = function(elem, options) {
+        this.$element = $(elem);
+        this.config = options;
+    };
+
+    ElementUI.prototype = {
+        init : function() {
+            console.log(this.$element);
+            $(this.$element).on('click', '.back-to-browse', function(e, ui) {
+                $('#media-uploader a[href="#gallery"]').tab('show');
             });
         }
     };
@@ -155,8 +185,10 @@
             this.config = $.extend({}, this.defaults, this.options,
                 this.metadata);
 
+            // Load the UI
             this.initModal();
 
+            // Init components
             this.initUploader();
             this.initBrowser();
             this.initShowElement();
@@ -178,16 +210,13 @@
         },
 
         initBrowser: function() {
-            var self = this;
-
             element = this.$elem.find('#gallery');
             this.browser = new Browser(element, this.config).init();
         },
 
         initShowElement: function() {
-            $(this.$elem).on('click', '.back-to-browse', function(e, ui) {
-                $('#media-uploader a[href="#gallery"]').tab('show');
-            });
+            element = this.$elem.find('#media-element-show');
+            this.elementUI = new ElementUI(element, this.config).init();
         }
     }
 
@@ -199,6 +228,6 @@
         });
     };
 
-    //optional: window.Plugin = Plugin;
+    //optional: window.MediaPicker = MediaPicker;
 
 })(jQuery, window, document);
