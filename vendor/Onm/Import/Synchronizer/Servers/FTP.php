@@ -114,7 +114,8 @@ class FTP extends ServerAbstract implements ServerInterface
         $deletedFiles = self::cleanFiles(
             $params['sync_path'],
             $files,
-            $params['excluded_files']
+            $params['excluded_files'],
+            $params['sync_from']
         );
 
         $downloadedFiles = 0;

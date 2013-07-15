@@ -113,7 +113,7 @@ class SubscriptionsController extends Controller
                     //Filter $_POST vars from request
                     $data['name']                = $name;
                     $data['email']               = $email;
-                    $data['subscription'] = $request->request->filter('subscription', null, FILTER_SANITIZE_STRING);
+                    $data['subscription']        = $request->request->filter('subscription', null, FILTER_SANITIZE_STRING);
                     $data['subscritorEntity']    = $request->request->filter('entity', null, FILTER_SANITIZE_STRING);
                     $data['subscritorCountry']   = $request->request->filter('country', null, FILTER_SANITIZE_STRING);
                     $data['subscritorCommunity'] = $request->request->filter('community', null, FILTER_SANITIZE_STRING);
@@ -121,113 +121,113 @@ class SubscriptionsController extends Controller
                     $user = new \Subscriptor();
                     // Check for repeated e-mail
 
-                        switch ($action) {
-                            // Logic for subscription sending a mail to s::get('newsletter_maillist')
-                            case 'submit':
+                    switch ($action) {
+                        // Logic for subscription sending a mail to s::get('newsletter_maillist')
+                        case 'submit':
 
-                                // Build mail body
-                                $formulario= "Nombre y Apellidos: ". $data['name']." \r\n".
-                                    "Email: ".$data['email']." \r\n";
-                                if (!empty($data['subscritorEntity'])) {
-                                    $formulario.= "Entidad: ".$data['subscritorEntity']." \n";
-                                }
-                                if (!empty($data['subscritorCountry'])) {
-                                    $formulario.= "País: ".$data['subscritorCountry']." \n";
-                                }
-                                if (!empty($data['subscritorCommunity'])) {
-                                    $formulario.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
-                                }
+                            // Build mail body
+                            $formulario= "Nombre y Apellidos: ". $data['name']." \r\n".
+                                "Email: ".$data['email']." \r\n";
+                            if (!empty($data['subscritorEntity'])) {
+                                $formulario.= "Entidad: ".$data['subscritorEntity']." \n";
+                            }
+                            if (!empty($data['subscritorCountry'])) {
+                                $formulario.= "País: ".$data['subscritorCountry']." \n";
+                            }
+                            if (!empty($data['subscritorCommunity'])) {
+                                $formulario.= "Provincia de Origen: ".$data['subscritorCommunity']." \n";
+                            }
 
-                                // Checking the type of action to do (alta/baja)
+                            // Checking the type of action to do (alta/baja)
+                            if ($data['subscription'] == 'alta') {
+                                $subject = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
+                                $body    =  "Solicitud de Alta en el boletín de: \r\n". $formulario;
+
+                                $message = _("You have been subscribed to the newsletter.");
+                                $class = 'success';
+                            } else {
+                                $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
+                                $body    =  "Solicitud de Baja en el boletín de: \r\n". $formulario;
+
+                                $message = _("You have been unsusbscribed from the newsletter.");
+                                $class = 'success';
+                            }
+
+                            //Send mail
+                            $to = $configMailTo['subscription'];
+
+                            $mail = new \PHPMailer();
+                            $mail->SetLanguage('es');
+                            $mail->IsSMTP();
+                            $mail->Host = MAIL_HOST;
+                            $mail->Username = MAIL_USER;
+                            $mail->Password = MAIL_PASS;
+
+                            if (!empty($mail->Username) && !empty($mail->Password)) {
+                                $mail->SMTPAuth = true;
+                            } else {
+                                $mail->SMTPAuth = false;
+                            }
+
+                            $mail->Subject = $subject;
+                            $mail->From = $data['email'];
+                            $mail->FromName = utf8_decode($data['name']);
+                            $mail->Body = utf8_decode($body);
+
+                            $mail->AddAddress($to, $to);
+
+                            if (!$mail->Send()) {
+                                $message = _(
+                                    "Sorry, we were unable to complete your request.\n"
+                                    ."Check the form and try again"
+                                );
+                                $class = 'error';
+                            }
+                            break;
+                        case 'create_subscriptor':
+
+                            if ($user->exists_email($data['email'])) {
+                                $message = _("Sorry, that email is already subscribed to our newsletter");
+                                $class = 'error';
+                            } else {
                                 if ($data['subscription'] == 'alta') {
-                                    $subject = utf8_decode("Solicitud de ALTA - Boletín ".$configSiteName);
-                                    $body    =  "Solicitud de Alta en el boletín de: \r\n". $formulario;
+                                    $data['subscription'] = 1;
+                                    $data['status'] = 2;
 
-                                    $message = _("You have been subscribed to the newsletter.");
-                                    $class = 'success';
-                                } else {
-                                    $subject = utf8_decode("Solicitud de BAJA - Boletín ".$configSiteName);
-                                    $body    =  "Solicitud de Baja en el boletín de: \r\n". $formulario;
+                                    $user = new \Subscriptor();
 
-                                    $message = _("You have been unsusbscribed from the newsletter.");
-                                    $class = 'success';
-                                }
-
-                                //Send mail
-                                $to = $configMailTo['subscription'];
-
-                                $mail = new \PHPMailer();
-                                $mail->SetLanguage('es');
-                                $mail->IsSMTP();
-                                $mail->Host = MAIL_HOST;
-                                $mail->Username = MAIL_USER;
-                                $mail->Password = MAIL_PASS;
-
-                                if (!empty($mail->Username) && !empty($mail->Password)) {
-                                    $mail->SMTPAuth = true;
-                                } else {
-                                    $mail->SMTPAuth = false;
-                                }
-
-                                $mail->Subject = $subject;
-                                $mail->From = $data['email'];
-                                $mail->FromName = utf8_decode($data['name']);
-                                $mail->Body = utf8_decode($body);
-
-                                $mail->AddAddress($to, $to);
-
-                                if (!$mail->Send()) {
-                                    $message = _(
-                                        "Sorry, we were unable to complete your request.\n"
-                                        ."Check the form and try again"
-                                    );
-                                    $class = 'error';
-                                }
-                                break;
-                            case 'create_subscriptor':
-
-                                if ($user->exists_email($data['email'])) {
-                                    $message = _("Sorry, that email is already subscribed to our newsletter");
-                                    $class = 'error';
-                                } else {
-                                    if ($data['subscription'] == 'alta') {
-                                        $data['subscription'] = 1;
-                                        $data['status'] = 2;
-
-                                        $user = new \Subscriptor();
-
-                                        if ($user->create($data)) {
-                                            $message = _("You have been subscribed to our newsletter.");
-                                            $class = 'success';
-                                        } else {
-                                            $message = _(
-                                                "Sorry, we were unable to complete your request.\n"
-                                                ."Check the form and try again"
-                                            );
-                                            $class = 'error';
-                                        }
+                                    if ($user->create($data)) {
+                                        $message = _("You have been subscribed to our newsletter.");
+                                        $class = 'success';
                                     } else {
-                                        $data['subscription'] = 0;
-                                        $data['status'] = 3;
+                                        $message = _(
+                                            "Sorry, we were unable to complete your request.\n"
+                                            ."Check the form and try again"
+                                        );
+                                        $class = 'error';
+                                    }
+                                } else {
+                                    $data['subscription'] = 0;
+                                    $data['status'] = 3;
 
-                                        $user = new \Subscriptor();
-                                        $user = $user->getUserByEmail($data['email']);
-                                        $data['id'] = $user->id;
+                                    $user = new \Subscriptor();
+                                    $user = $user->getUserByEmail($data['email']);
+                                    $data['id'] = $user->id;
 
-                                        if ($user->update($data)) {
-                                            $message = _("You have been unsubscribed from our newsletter");
-                                            $class = 'success';
-                                        } else {
-                                            $message = _(
-                                                "Sorry, we were unable to complete your request.\n"
-                                                ."Check the form and try again"
-                                            );
-                                            $class = 'error';
-                                        }
+                                    if ($user->update($data)) {
+                                        $message = _("You have been unsubscribed from our newsletter");
+                                        $class = 'success';
+                                    } else {
+                                        $message = _(
+                                            "Sorry, we were unable to complete your request.\n"
+                                            ."Check the form and try again"
+                                        );
+                                        $class = 'error';
                                     }
                                 }
-                                break;
-                        }
+                            }
+                            break;
+                    }
 
                 }
             }
