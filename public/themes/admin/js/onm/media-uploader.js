@@ -8,7 +8,8 @@
     var contents = [];
 
     // The module that allows to browse images and perform searches through them
-    var Browser = function(elem, options) {
+    var Browser = function(mediapicker, elem, options) {
+        this.mediapicker = mediapicker;
         this.$browser = $(elem);
         this.config = options;
     };
@@ -17,6 +18,7 @@
         init : function() {
             var self = this;
 
+            this.init_months();
             // Load contents to fill the browser
             this.load_browser();
 
@@ -65,6 +67,22 @@
                 $('#media-element-show .body').html(html_content);
 
                 $('#media-uploader a[href="#media-element-show"]').tab('show');
+            });
+        },
+
+        init_months : function() {
+            var months_input = this.$browser.find('.gallery-search .month');
+            $.ajax({
+                url: this.config.months_url,
+                async: false,
+                success: function(contents_json) {
+                    var template = Handlebars.compile($('#tmpl-browser-months').html());
+                    content = template({
+                        "months": contents_json,
+                    });
+
+                    months_input.append(content);
+                }
             });
         },
 
@@ -135,7 +153,8 @@
     };
 
     // Module that handles file uploads
-    var Uploader = function(elem, options) {
+    var Uploader = function(mediapicker, elem, options) {
+        this.mediapicker = mediapicker;
         this.$uploader = $(elem);
         this.config = options;
     };
@@ -150,14 +169,14 @@
     };
 
     // Module that handles the element showing page
-    var ElementUI = function(elem, options) {
+    var ElementUI = function(mediapicker, elem, options) {
+        this.mediapicker = mediapicker;
         this.$element = $(elem);
         this.config = options;
     };
 
     ElementUI.prototype = {
         init : function() {
-            console.log(this.$element);
             $(this.$element).on('click', '.back-to-browse', function(e, ui) {
                 $('#media-uploader a[href="#gallery"]').tab('show');
             });
@@ -206,17 +225,17 @@
 
         initUploader: function() {
             element = this.$elem.find('#upload');
-            this.uploader = new Uploader(element, this.config).init();
+            this.uploader = new Uploader(this, element, this.config).init();
         },
 
         initBrowser: function() {
             element = this.$elem.find('#gallery');
-            this.browser = new Browser(element, this.config).init();
+            this.browser = new Browser(this, element, this.config).init();
         },
 
         initShowElement: function() {
             element = this.$elem.find('#media-element-show');
-            this.elementUI = new ElementUI(element, this.config).init();
+            this.elementUI = new ElementUI(this, element, this.config).init();
         }
     }
 
