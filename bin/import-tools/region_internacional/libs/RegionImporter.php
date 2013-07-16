@@ -517,20 +517,20 @@ class RegionImporter
                 $summary = substr($summary, 0, strripos($summary, " "));
             }
             $values[] =  array(
-                $rs->fields['pk_article'],
                 strip_tags($summary),
+                $rs->fields['pk_article'],
             );
 
             $rs->MoveNext();
         }
 
-         if (!empty($values)) {
-            $sql    = 'UPDATE `articles` SET summary =?  WHERE pk_content=?';
+        if (!empty($values)) {
+            $sql    = 'UPDATE `articles` SET summary =?  WHERE pk_article=?';
 
             $stmt = $GLOBALS['application']->conn->Prepare($sql);
             $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
             if (!$rss) {
-                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+                 ImportHelper::messageStatus($GLOBALS['application']->conn->ErrorMsg());
             }
 
         } else {
