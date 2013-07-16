@@ -113,13 +113,16 @@ class UserController extends Controller
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
                 'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
-                'login'         => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
+                'username'         => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
                 'name'          => $request->request->filter('full_name', null, FILTER_SANITIZE_STRING),
                 'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
                 'sessionexpire' => 15,
                 'token'         => md5(uniqid(mt_rand(), true)), // Token for activation,
                 'type'          => 1, // It is a frontend user registration.
-                'id_user_group' => 0,
+                'id_user_group' => array(),
+                'bio'           => '',
+                'url'           => '',
+                'avatar_img_id' => 0,
             );
 
             // Before send mail and create user on DB, do some checks
@@ -136,7 +139,7 @@ class UserController extends Controller
             }
 
             // Check existing user name
-            if ($user->checkIfExistsUserName($data['login'])) {
+            if ($user->checkIfExistsUserName($data['username'])) {
                 $errors []= _('The user name is already in use.');
             }
 
@@ -172,7 +175,12 @@ class UserController extends Controller
                         $mailer = $this->get('mailer');
                         $mailer->send($message);
 
-                        $this->view->assign('mailSent', true);
+                        $this->view->assign(
+                            array(
+                                'mailSent' => true,
+                                'email'    => $data['email'],
+                            )
+                        );
                     } catch (\Exception $e) {
                         // Log this error
                         $this->get('logger')->notice(
@@ -184,10 +192,7 @@ class UserController extends Controller
                     }
                     // Set registration date
                     $user->addRegisterDate();
-                    $this->view->assign(
-                        'success',
-                        _('Your account is now set up. Check your email to activate.')
-                    );
+                    $this->view->assign('success', true);
                 }
             }
         }
@@ -213,20 +218,28 @@ class UserController extends Controller
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
 
-        // Get variables from the user FORM
-        $data['login']    = $request->request->filter('username', null, FILTER_SANITIZE_STRING);
-        $data['name']     = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
-        $data['email']    = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
-        $data['password'] = $request->request->filter('pwd', '', FILTER_SANITIZE_STRING);
-        $data['password-verify']     = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
+        // Get variables from the user FORM an set some manually
+        $data['id']              = $_SESSION['userid'];
+        $data['username']        = $request->request->filter('username', null, FILTER_SANITIZE_STRING);
+        $data['name']            = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
+        $data['email']           = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+        $data['password']        = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
+        $data['passwordconfirm'] = $request->request->filter('password-verify', '', FILTER_SANITIZE_STRING);
+        $data['sessionexpire']   = 15;
+        $data['type']            = 1;
+        $data['bio']             = '';
+        $data['url']             = '';
+        $data['avatar_img_id']   = 0;
 
-        if ($data['password'] != $data['password-verify']) {
+        if ($data['password'] != $data['passwordconfirm']) {
             m::add(_('Password and confirmation must be equal.'), m::ERROR);
             return $this->redirect($this->generateUrl('frontend_user_show'));
         }
-        // Get user data, check token and confirm pass
-        $user = new \User($userId);
-        if ($user->id <= 0) {
+
+        // Fetch user data and update
+        $user = new \User($_SESSION['userid']);
+
+        if ($user->id > 0) {
             if ($user->update($data)) {
                 m::add(_('Data updated successfully'), m::SUCCESS);
             } else {
@@ -277,6 +290,9 @@ class UserController extends Controller
 
                 // Set last login date
                 $user->setLastLoginDate();
+
+                // Set token to null
+                $user->updateUserToken($user->id, null);
 
                 $group = \UserGroup::getGroupName($user->fk_user_group);
 
@@ -774,5 +790,4 @@ class UserController extends Controller
             $advertisement->renderMultiple(array($intersticial), $advertisement);
         }
     }
-
 }

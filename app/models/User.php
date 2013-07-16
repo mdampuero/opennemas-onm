@@ -633,6 +633,8 @@ class User
             return true;
         } elseif ($this->password === $password) { // Frontend login from mail activation
             $this->authMethod = 'database';
+
+            return true;
         }
 
         // Reset members properties
@@ -708,7 +710,7 @@ class User
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
         $this->activated        = $rs->fields['activated'];
-        $this->id_user_group    = explode(',', $data['fk_user_group']);
+        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
         $this->accesscategories = $this->readAccessCategories();
 
         return $this;
@@ -851,13 +853,12 @@ class User
         $items = array();
         $_where = $this->buildFilter($filter);
 
-        $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $orderBy;
+        $sql = 'SELECT * FROM `users` WHERE ' . $_where . ' ' . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs !== false) {
             while (!$rs->EOF) {
-                $user = new User();
-                $user->setValues($rs->fields);
+                $user = new User($rs->fields['id']);
                 $user->meta = $user->getMeta();
                 $items[] = $user;
 
@@ -1197,7 +1198,12 @@ class User
             $user = new \User($rs->fields['user_id']);
             $user->meta = $user->getMeta();
 
+            // Set paywall values
+            $user->paywall = 0;
+            $user->last_login = 0;
             if (isset($user->meta['paywall_time_limit'])) {
+                // Overload obj for ordering propouses
+                $user->paywall = $user->meta['paywall_time_limit'];
                 $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $user->meta['paywall_time_limit'],
@@ -1205,6 +1211,8 @@ class User
                 );
             }
             if (isset($user->meta['last_login'])) {
+                // Overload obj for ordering propouses
+                $user->last_login = $user->meta['last_login'];
                 $user->meta['last_login'] = \DateTime::createFromFormat(
                     'Y-m-d H:i:s',
                     $user->meta['last_login'],
@@ -1215,6 +1223,65 @@ class User
 
             $rs->MoveNext();
         }
+
+        return $users;
+    }
+
+
+    /**
+     * Returns a list of User objects where the users are only registered not subscribed
+     *
+     * @return void
+     **/
+    public static function getUsersOnlyRegistered($config = array())
+    {
+        $sql = 'SELECT id FROM `users` WHERE type=1 ORDER BY name';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $users = array();
+        if ($rs !== false) {
+            while (!$rs->EOF) {
+                $user = new User($rs->fields['id']);
+                $user->meta = $user->getMeta();
+
+                // Set paywall values
+                $user->paywall = 0;
+                $user->last_login = 0;
+                if (isset($user->meta['paywall_time_limit'])) {
+                    // Overload obj for ordering propouses
+                    $user->paywall = $user->meta['paywall_time_limit'];
+                    $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $user->meta['paywall_time_limit'],
+                        new \DateTimeZone('UTC')
+                    );
+                }
+                if (isset($user->meta['last_login'])) {
+                    // Overload obj for ordering propouses
+                    $user->last_login = $user->meta['last_login'];
+                    $user->meta['last_login'] = \DateTime::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $user->meta['last_login'],
+                        new \DateTimeZone('UTC')
+                    );
+                }
+                $users[] = $user;
+
+                $rs->MoveNext();
+            }
+        }
+
+        // Exclude users with subscription
+        $users = array_udiff(
+            $users,
+            self::getUsersWithSubscription(),
+            function ($obj_a, $obj_b) {
+                return $obj_a->id - $obj_b->id;
+            }
+        );
+
+        // Reset array indexes to start on 0
+        $users = array_values($users);
 
         return $users;
     }
@@ -1370,7 +1437,6 @@ class User
             }
 
             if (count($parts) > 0) {
-                $newFilter = '';
                 $newFilter .= implode(' AND ', $parts);
             }
         }

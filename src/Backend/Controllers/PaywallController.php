@@ -122,9 +122,29 @@ class PaywallController extends Controller
     public function usersAction(Request $request)
     {
         $page   = $this->request->query->getDigits('page', 1);
+        $type = $this->request->query->filter('type', '', FILTER_SANITIZE_STRING);
+        $order  = $this->request->query->filter('order', 'name', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
-        $users = \User::getUsersWithSubscription();
+
+        $users = array();
+        if ($type === '0') {
+            $users = \User::getUsersWithSubscription();
+        } elseif ($type === '1') {
+            $users = \User::getUsersOnlyRegistered();
+        } else {
+            $usersRegistered = \User::getUsersOnlyRegistered();
+            $usersWithSubscription = \User::getUsersWithSubscription();
+
+            $users = array_merge($usersRegistered, $usersWithSubscription);
+        }
+
+        // Sort array of users by property
+        if (!isset($order) || empty($order)) {
+            $order = 'name';
+        }
+
+        $users = \ContentManager::sortArrayofObjectsByProperty($users, $order);
 
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
@@ -238,10 +258,26 @@ class PaywallController extends Controller
         $settings = array('payment_modes' => array());
 
         // Check values
-        $settings['paypal_username']  = $request->request->filter('settings[paypal_username]', '', FILTER_SANITIZE_STRING);
-        $settings['paypal_password']  = $request->request->filter('settings[paypal_password]', '', FILTER_SANITIZE_STRING);
-        $settings['paypal_signature'] = $request->request->filter('settings[paypal_signature]', '', FILTER_SANITIZE_STRING);
-        $settings['money_unit']       = $request->request->filter('settings[money_unit]', 'dollar', FILTER_SANITIZE_STRING);
+        $settings['paypal_username']  = $request->request->filter(
+            'settings[paypal_username]',
+            '',
+            FILTER_SANITIZE_STRING
+        );
+        $settings['paypal_password']  = $request->request->filter(
+            'settings[paypal_password]',
+            '',
+            FILTER_SANITIZE_STRING
+        );
+        $settings['paypal_signature'] = $request->request->filter(
+            'settings[paypal_signature]',
+            '',
+            FILTER_SANITIZE_STRING
+        );
+        $settings['money_unit']       = $request->request->filter(
+            'settings[money_unit]',
+            'dollar',
+            FILTER_SANITIZE_STRING
+        );
         $settings['developer_mode']   = (boolean) $settingsForm['developer_mode'];
         $settings['vat_percentage']   = (int) $settingsForm['vat_percentage'];
 
