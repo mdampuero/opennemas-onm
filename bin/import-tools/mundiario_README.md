@@ -10,6 +10,7 @@
 - Default db table prefix => wp_
 - Default origin url => http://www.mundiario.com
 - Default origin media dir => /opt/backup_opennemas/mundiario/wp-content/uploads/
+- Instance name => mundiario
 
 
 
@@ -19,7 +20,6 @@
 - Default db table prefix => wp_2_
 - Default origin url => http://www.mundiario.com/galicia
 - Default origin media dir => /opt/backup_opennemas/mundiario/wp-content/blogs.dir/2/
-- Default origin common media  => /opt/backup_opennemas/mundiario/wp-content/uploads/
 - Instance name => galiciamundiario
 
 
@@ -29,5 +29,4 @@
 - Default db table prefix => wp_3_
 - Default origin url => http://www.mundiario.com/emprendedores
 - Default origin media dir => /opt/backup_opennemas/mundiario/wp-content/blogs.dir/3/
-- Default origin common media  => /opt/backup_opennemas/mundiario/wp-content/uploads/
 - Instance name => empremundiario

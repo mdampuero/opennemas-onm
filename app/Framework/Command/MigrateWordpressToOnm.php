@@ -292,7 +292,8 @@ EOF
     {
 
         $sql = "SELECT * FROM ".PREFIX."terms, ".PREFIX."term_taxonomy ".
-               "WHERE ".PREFIX."terms.term_id = ".PREFIX."term_taxonomy.term_id AND taxonomy='category'";
+               "WHERE ".PREFIX."terms.term_id = ".PREFIX."term_taxonomy.term_id AND taxonomy='category' ".
+               " ORDER BY ".PREFIX."terms.term_id DESC";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs = $GLOBALS['application']->connOrigin->Execute($request);
@@ -387,8 +388,8 @@ EOF
     protected function importArticles()
     {
 
-        $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_keys($this->originalCategories)).") ";
-        $limit = '';
+        $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_values($this->originalCategories)).") ";
+        $limit = " ORDER BY `".PREFIX."term_relationships`.`term_taxonomy_id`";
 
         $sql = "SELECT * FROM `".PREFIX."posts`, `".PREFIX."term_relationships` WHERE ".
             "`post_type` = 'post' AND `ID`=`object_id` AND post_status='publish' ".
