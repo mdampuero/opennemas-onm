@@ -142,6 +142,7 @@ class ArticlesController extends Controller
                 $article->category_name = $article->loadCategoryName($article->id);
                 $article->publisher = $user->getUserName($article->fk_publisher);
                 $article->editor    = $user->getUserName($article->fk_user_last_editor);
+                $article->author    = $user->getUserRealName($article->fk_author);
             }
         } else {
             $articles = array();

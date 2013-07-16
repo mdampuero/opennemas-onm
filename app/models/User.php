@@ -870,7 +870,7 @@ class User
     }
 
     /**
-     * Returns the user name for a given user id
+     * Returns the username for a given user id
      *
      * @param int $id the user id
      *
@@ -878,7 +878,7 @@ class User
      **/
     public function getUserName($id)
     {
-        $sql = 'SELECT name, username FROM users WHERE id=?';
+        $sql = 'SELECT username FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             \Application::logDatabaseError();
@@ -887,6 +887,26 @@ class User
         }
 
         return $rs->fields['username'];
+    }
+
+    /**
+     * Returns the user real name for a given user id
+     *
+     * @param int $id the user id
+     *
+     * @return string the user name
+     **/
+    public function getUserRealName($id)
+    {
+        $sql = 'SELECT name FROM users WHERE id=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return $rs->fields['name'];
     }
 
     /**
