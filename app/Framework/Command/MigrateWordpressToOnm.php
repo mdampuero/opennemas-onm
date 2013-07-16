@@ -406,7 +406,7 @@ EOF
             while (!$rs->EOF) {
                 $originalArticleID = $rs->fields['ID'];
                 if ($this->elementIsImported($originalArticleID, 'article') ) {
-                     $this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
+                     //$this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
                 } else {
                    // $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
 
@@ -434,8 +434,9 @@ EOF
                         'body' => $data['body'],
                         'posic' => 0,
                         'id' => 0,
-                        'img1' =>$data['img'],
-                        'img2' =>$data['img'],
+                        'img1' => $data['img'],
+                        'img2' => $data['img'],
+                        'img2_footer' => $data['footer'],
                         'fk_video' => '',
                         'fk_video2' => '',
                         'footer_video2' => '',
@@ -792,10 +793,9 @@ EOF
         $footer  = '';
         $photo     = new \Photo();
         $allowed = '<i><b><p><a><br><ol><ul><li>';
-        $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?alt="?(.*?)".*?><\/a>@';
+        $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?><\/a>@';
         preg_match_all($patern, $body, $result);
         if (!empty($result[1])) {
-
             $guid    = $result[1][0];
             $img     = $this->getOnmIdImage($guid);
             $newBody = $body;
@@ -839,11 +839,11 @@ EOF
             $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
-        preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\](.*)?\[\/caption\]@', $body, $result);
+        preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\].* alt="?(.*?)".*?\[\/caption\]@', $body, $result);
         if (!empty($result[1]) ) {
             $id      = $result[1][0];
             $img     = $this->elementIsImported($id, 'image');
-           // $footer  = $result[1][2];
+            $footer  = $result[2][0];
 
             $newBody = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $body);
             $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
