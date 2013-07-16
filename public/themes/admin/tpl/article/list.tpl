@@ -126,7 +126,15 @@
                         {/if}
                     </td>
                     {/if}
-                    <td class="left">{$article->agency}</td>
+                    <td class="left">
+                        {if $article->fk_author neq 0}
+                            {$article->author}
+                        {elseif $article->agency neq ''}
+                            {$article->agency}
+                        {else}
+                            {$article->editor}
+                        {/if}
+                    </td>
                     <td class="center">{$article->created}</td>
                     <td class="center">{$article->editor}</td>
                     <td class="center">
