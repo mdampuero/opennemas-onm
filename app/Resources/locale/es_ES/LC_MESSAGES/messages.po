@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 15:08+0200\n"
-"PO-Revision-Date: 2013-07-16 15:21+0200\n"
+"POT-Creation-Date: 2013-07-17 10:19+0200\n"
+"PO-Revision-Date: 2013-07-17 10:24+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -297,8 +297,8 @@ msgstr "Álbum creado correctamente"
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AlbumsController.php:256
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AlbumsController.php:334
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:293
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:437
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:294
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:438
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/VideosController.php:277
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/VideosController.php:404
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1556
@@ -383,57 +383,57 @@ msgstr "Se ha producido un error al guardar las nuevas posiciones."
 msgid "You don't have enought privileges to see this category."
 msgstr "No tienes permisos suficientes para ver esta categoría."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:264
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:265
 msgid "Article successfully created."
 msgstr "Actículo creado correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:266
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:267
 msgid "Unable to create the new article."
 msgstr "No se pudo crear el nuevo artículo."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:337
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:338
 #, php-format
 msgid "Unable to find the article with the id \"%d\""
 msgstr "No se pudo encontrar un artículo con el identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:477
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:478
 msgid ""
 "You can't modify this article because you don't have enought privileges."
 msgstr "No tienes suficientes permisos para modificar este artículo."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:483
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:484
 msgid "Article data sent not valid."
 msgstr "Los datos enviados del artículo no son válidos."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:581
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:582
 msgid "Article successfully updated."
 msgstr "Artículo actualizado correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:583
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:584
 msgid "Unable to update the article."
 msgstr "No se pudo actualizar el artículo."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:631
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:632
 msgid "Article deleted successfully."
 msgstr "Artículo eliminado correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:633
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:634
 msgid "You must give an id for delete an article."
 msgstr "Debe proporcionar un identificador para eliminar un artículo."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:672
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:673
 #, php-format
 msgid "Unable to find article with id \"%d\""
 msgstr "No se pudo encontrar el artículo con el identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:678
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:679
 #, php-format
 msgid "Successfully changed availability for article with id \"%d\""
 msgstr ""
 "Estado de disponibilidad cambiado correctamente para el artículo con el "
 "identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:945
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:946
 #, php-format
 msgid "You must assign a section for \"%s\""
 msgstr "Debe asignar una sección para \"%s\""
@@ -1939,7 +1939,7 @@ msgstr "Usted ya tiene una suscripción activa hasta: %s"
 
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/PaywallController.php:344
 msgid "Your payment was already registered"
-msgstr "Su pago xa fue registrado"
+msgstr "Su pago ya fue registrado"
 
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/PollsController.php:216
 msgid "Thanks for participating."
@@ -9132,7 +9132,7 @@ msgstr "El CMS para periodismo"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7781
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7904
 msgid "Check Your E-Mail"
-msgstr "Compruebe su correo electrónico"
+msgstr "Compruebe el correo electrónico"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7784
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7907
@@ -9144,7 +9144,7 @@ msgid ""
 "Please check your e-mail now for a message with the subject line \"Username "
 "reminder\" from"
 msgstr ""
-"Favor consultar su correo electrónico ahora para un mensaje con el asunto "
+"Favor consultar el correo electrónico ahora para un mensaje con el asunto "
 "\"Recordatorio de nombre de usuario\" de"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7790
@@ -9153,7 +9153,7 @@ msgid ""
 "To protect your privacy, we only send this information to the e-mail address "
 "associated with this account."
 msgstr ""
-"Para proteger su privacidad, sólo enviaremos esta información a la dirección "
+"Para proteger la privacidad, sólo enviaremos esta información a la dirección "
 "de correo electrónico asociada a esta cuenta."
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7793
@@ -9172,7 +9172,7 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7799
 msgid "Recover your username"
-msgstr "Complete su nombre"
+msgstr "Recupere su nombre de usuario"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7802
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7928
