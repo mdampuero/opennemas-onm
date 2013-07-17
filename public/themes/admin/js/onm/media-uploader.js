@@ -8,23 +8,22 @@
     var contents = [];
 
     // The module that allows to browse images and perform searches through them
-    var Browser = function(mediapicker, elem, options) {
-        this.mediapicker = mediapicker;
+    var Browser = function(elem, options) {
         this.$browser = $(elem);
         this.config = options;
     };
 
     Browser.prototype = {
         init : function() {
-            var self = this;
+            var _this = this;
 
             this.init_months();
             // Load contents to fill the browser
             this.load_browser();
 
             $(this.$browser).find('.modal-body').on('scroll', function() {
-                if (self.browser_needs_load()) {
-                    self.load_browser(false);
+                if (_this.browser_needs_load()) {
+                    _this.load_browser(false);
                 }
             });
 
@@ -36,8 +35,8 @@
                 e.preventDefault();
 
                 // Reset actual page
-                $(self.$browser).find('.gallery-search .page').val(1);
-                self.load_browser(true);
+                $(_this.$browser).find('.gallery-search .page').val(1);
+                _this.load_browser(true);
             });
 
             // Attach events to the images in browser
@@ -56,25 +55,18 @@
                 $('.image-info').html('');
             }).on('click', '.attachment img', function(e, ui) {
                 var element = $(this).closest('.attachment');
-
-                var template = Handlebars.compile($('#tmpl-show-element').html());
-
                 content = contents[element.data('id')];
 
-                html_content = template({
-                    "content": content,
-                });
-                $('#media-element-show .body').html(html_content);
-
-                $('#media-uploader a[href="#media-element-show"]').tab('show');
+                $(_this.mediapicker.elementUI).trigger('show', content);
             });
+
+            return this;
         },
 
         init_months : function() {
             var months_input = this.$browser.find('.gallery-search .month');
             $.ajax({
                 url: this.config.months_url,
-                async: false,
                 success: function(contents_json) {
                     var template = Handlebars.compile($('#tmpl-browser-months').html());
                     content = template({
@@ -89,7 +81,7 @@
         // Function that fills the browser with images
         load_browser: function (replace) {
             var browser = this.$browser;
-            var self = this;
+            var _this = this;
 
             var is_loading = browser.data('loading');
             if (is_loading) {
@@ -134,8 +126,8 @@
 
                     // Load next page if there are more contents to load and the
                     // browser windows can fit more contents
-                    if (contents.length > 0 && self.browser_needs_load()) {
-                        self.load_browser(false);
+                    if (contents.length > 0 && _this.browser_needs_load()) {
+                        _this.load_browser(false);
                     }
                 }
             });
@@ -147,30 +139,58 @@
             var container = $(this.$browser).find('.modal-body');
             var scrollPosition = container.scrollTop() + container.outerHeight();
             var divTotalHeight = container[0].scrollHeight - 150;
+            var isShown = $(this.$browser).find('.modal-body').is(':visible');
 
-            return scrollPosition >= divTotalHeight;
+            return (scrollPosition >= divTotalHeight) && isShown;
+        },
+
+        setParent: function(parent) {
+            this.mediapicker = parent;
         }
     };
 
     // Module that handles file uploads
-    var Uploader = function(mediapicker, elem, options) {
-        this.mediapicker = mediapicker;
+    var Uploader = function(elem, options) {
         this.$uploader = $(elem);
         this.config = options;
     };
 
     Uploader.prototype = {
         init : function() {
+            var _this = this;
+
             // Add click handler for upload button
-            $(this.$uploader).on('click', '.load-files-button', function(e, ui) {
-                $(self.$uploader, '#upload input#files').trigger('click');
+            $(this.$uploader).find('.load-files-button').on('click', function(e, ui) {
+                $(_this.$uploader).find('input#files').trigger('click');
             });
+
+            $(this.$uploader, '#files').html5Uploader({
+                name: "files",
+                postUrl: this.config.upload_url,
+                onServerError: function(data) {
+                    // Called when error occurs
+                    $(_this.$uploader).find('.success').hide();
+                    $(_this.$uploader).find('.error').show();
+                },
+                onServerProgress: function (data) {
+                    // Called periodically while the data is being posted.
+                },
+                onSuccess: function() {
+                    $(_this.$uploader).find('.error').hide();
+                    $(_this.$uploader).find('.success').show();
+                }
+            });
+
+            return this;
+        },
+
+        setParent: function(parent) {
+            this.mediapicker = parent;
         }
     };
 
     // Module that handles the element showing page
-    var ElementUI = function(mediapicker, elem, options) {
-        this.mediapicker = mediapicker;
+    var ElementUI = function(elem, options) {
         this.$element = $(elem);
         this.config = options;
     };
@@ -180,7 +200,23 @@
             $(this.$element).on('click', '.back-to-browse', function(e, ui) {
                 $('#media-uploader a[href="#gallery"]').tab('show');
             });
-        }
+
+            $(this).on('show', function(event, content) {
+                var template = Handlebars.compile($('#tmpl-show-element').html());
+                html_content = template({
+                    "content": content,
+                });
+                $('#media-element-show .body').html(html_content);
+
+                $('#media-uploader a[href="#media-element-show"]').tab('show');
+            });
+
+            return this;
+        },
+
+        setParent: function(parent) {
+            this.mediapicker = parent;
+        },
     };
 
     // our plugin constructor
@@ -189,7 +225,6 @@
         this.$elem = $(elem);
         this.options = options;
         this.metadata = this.$elem.data('mediapicker');
-        var self = this;
     };
 
     // the plugin prototype
@@ -201,8 +236,7 @@
         init: function() {
             // Introduce defaults that can be extended either
             // globally or using an object literal.
-            this.config = $.extend({}, this.defaults, this.options,
-                this.metadata);
+            this.config = $.extend({}, this.defaults, this.options, this.metadata);
 
             // Load the UI
             this.initModal();
@@ -211,6 +245,10 @@
             this.initUploader();
             this.initBrowser();
             this.initShowElement();
+
+            this.uploader.setParent(this);
+            this.elementUI.setParent(this);
+            this.browser.setParent(this);
 
             return this;
         },
@@ -223,19 +261,23 @@
             })
         },
 
+        get: function(name) {
+            return this;
+        },
+
         initUploader: function() {
-            element = this.$elem.find('#upload');
-            this.uploader = new Uploader(this, element, this.config).init();
+            element       = this.$elem.find('#upload');
+            this.uploader      = new Uploader(element, this.config).init();
         },
 
         initBrowser: function() {
-            element = this.$elem.find('#gallery');
-            this.browser = new Browser(this, element, this.config).init();
+            element      = this.$elem.find('#gallery');
+            this.browser      = new Browser(element, this.config).init();
         },
 
         initShowElement: function() {
-            element = this.$elem.find('#media-element-show');
-            this.elementUI = new ElementUI(this, element, this.config).init();
+            element        = this.$elem.find('#media-element-show');
+            this.elementUI      = new ElementUI(element, this.config).init();
         }
     }
 
