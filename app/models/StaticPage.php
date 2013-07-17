@@ -81,13 +81,10 @@ class StaticPage extends Content
         $this->commonData($data);
 
         parent::create($data);
-        $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`,
-                                            `static_pages`.`body`,
-                                            `static_pages`.`slug`)
-                VALUES (?, ?, ?)";
+        $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`, `static_pages`.`slug`)
+                VALUES (?, ?)";
         $values = array(
             'pk_static_page' => $this->id,
-            'body' => $data['body'],
             'slug' => $data['slug']
         );
 
@@ -114,7 +111,7 @@ class StaticPage extends Content
         $data['pk_author'] = $_SESSION['userid'];
         $data['fk_publisher'] = $_SESSION['userid'];
         $data['fk_user_lastEditor'] = $_SESSION['userid'];
-        $this->permalink = '/' . STATIC_PAGE_PATH . $data['slug'] . '.html';
+        $this->permalink = '/' . STATIC_PAGE_PATH . '/'.$data['slug'] . '.html';
         $data['permalink'] = $this->permalink;
     }
 
@@ -129,8 +126,7 @@ class StaticPage extends Content
     {
         parent::read($id);
 
-        $sql = "SELECT * FROM `static_pages`
-                WHERE `static_pages`.`pk_static_page`=?";
+        $sql    = "SELECT * FROM `static_pages` WHERE `static_pages`.`pk_static_page`=?";
         $values = $id;
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
@@ -139,6 +135,7 @@ class StaticPage extends Content
 
             return null;
         }
+
         $this->load($rs->fields);
 
         return $this;
@@ -187,14 +184,8 @@ class StaticPage extends Content
         $this->commonData($data);
         parent::update($data);
 
-        $sql = 'UPDATE `static_pages`
-                SET `static_pages`.`body`=?, `static_pages`.`slug`=?
-                WHERE `static_pages`.`pk_static_page`=?';
-        $values = array(
-            'body'           => $data['body'],
-            'slug'           => $data['slug'],
-            'pk_static_page' => $data['id']
-        );
+        $sql = 'UPDATE `static_pages` SET `slug`=? WHERE `pk_static_page`=?';
+        $values = array($data['slug'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();

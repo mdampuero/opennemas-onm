@@ -124,9 +124,12 @@ class LettersController extends Controller
             } else {
                 m::add(_('Unable to create the new letter.'), m::ERROR);
             }
-
-            return $this->redirect($this->generateUrl('admin_letters'));
-
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_letter_show',
+                    array('id' => $letter->id)
+                )
+            );
         } else {
             return $this->render('letter/new.tpl');
         }
@@ -200,17 +203,15 @@ class LettersController extends Controller
                 m::add(_('Unable to update the letter.'), m::ERROR);
             }
 
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_letter_show',
-                        array('id' => $letter->id)
-                    )
-                );
-            } else {
-                return $this->redirect($this->generateUrl('admin_letters'));
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_letter_show',
+                    array('id' => $letter->id)
+                )
+            );
         }
+
+        return $this->redirect($this->generateUrl('admin_letters'));
     }
 
     /**

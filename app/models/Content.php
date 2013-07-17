@@ -368,17 +368,8 @@ class Content
         // Fire create event
         $GLOBALS['application']->dispatch('onBeforeCreate', $this);
 
-        $sql = "INSERT INTO contents
-            (`fk_content_type`, `title`, `description`,
-            `metadata`, `starttime`, `endtime`,
-            `created`, `changed`, `content_status`,
-            `views`, `position`,`frontpage`,
-            `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-            `in_home`, `home_pos`,`available`,
-            `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
-
+        $data['body']   = (!array_key_exists('body', $data))? '': $data['body'];
         $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
         $data['available']        = (empty($data['available']))? 0: intval($data['available']);
         if (!isset($data['starttime']) || empty($data['starttime'])) {
@@ -427,8 +418,18 @@ class Content
         $ccm     = ContentCategoryManager::get_instance();
         $catName = $ccm->get_name($data['category']);
 
+        $sql = "INSERT INTO contents
+            (`fk_content_type`, `title`, `description`, `body`,
+            `metadata`, `starttime`, `endtime`,
+            `created`, `changed`, `content_status`,
+            `views`, `position`,`frontpage`,
+            `fk_author`, `fk_publisher`, `fk_user_last_editor`,
+            `in_home`, `home_pos`,`available`,
+            `slug`, `category_name`, `urn_source`, `params`)".
+           " VALUES (?,?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
+
         $values = array(
-            $fk_content_type, $data['title'], $data['description'],
+            $fk_content_type, $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['created'], $data['changed'], $data['content_status'],
             $data['views'], $data['position'],$data['frontpage'],
@@ -438,7 +439,8 @@ class Content
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return false;
@@ -497,6 +499,7 @@ class Content
         if (!empty($this->fk_author)) {
             $this->author = new \User($this->fk_author);
         }
+
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
 
@@ -514,15 +517,6 @@ class Content
     {
         $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
 
-        $sql = "UPDATE contents
-                SET `title`=?, `description`=?,
-                    `metadata`=?, `starttime`=?, `endtime`=?,
-                    `changed`=?, `in_home`=?, `frontpage`=?,
-                    `available`=?, `content_status`=?,
-                    `fk_author`=?, `fk_user_last_editor`=?,
-                    `slug`=?, `category_name`=?, `params`=?
-                WHERE pk_content= ?";
-
         $this->read($data['id']);
 
         if ($data['available'] == 1
@@ -534,6 +528,7 @@ class Content
         }
 
         $values = array(
+            'body'           => (!array_key_exists('body', $data))? '': $data['body'],
             'changed'        => date("Y-m-d H:i:s"),
             'starttime'      =>
                 (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
@@ -552,12 +547,12 @@ class Content
             'description'    =>
                 (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'fk_author' =>
-                (is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
+                (!array_key_exists('fk_author', $data))? $this->fk_author : $data['fk_author']
         );
 
         $data = array_merge($data, $values);
 
-        $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
+        $data['fk_publisher'] =  (empty($data['available']))? '' : $_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])
             && !isset ($data['fk_user_last_editor'])
@@ -599,8 +594,17 @@ class Content
             $catName = $this->category_name;
         }
 
+        $sql = "UPDATE contents
+                SET `title`=?, `description`=?, `body`=?,
+                    `metadata`=?, `starttime`=?, `endtime`=?,
+                    `changed`=?, `in_home`=?, `frontpage`=?,
+                    `available`=?, `content_status`=?,
+                    `fk_author`=?, `fk_user_last_editor`=?,
+                    `slug`=?, `category_name`=?, `params`=?
+                WHERE pk_content= ?";
+
         $values = array(
-            $data['title'], $data['description'],
+            $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
@@ -608,7 +612,9 @@ class Content
             $this->category_name, $data['params'], $data['id']
         );
 
+
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
         if ($rs === false) {
             Application::logDatabaseError();
 

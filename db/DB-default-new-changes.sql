@@ -25,8 +25,26 @@ CHANGE  `title`  `title` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_
 ALTER TABLE  `users` ADD INDEX  `user_username` (  `username` );
 ALTER TABLE  `users` ADD INDEX  `user_email` (  `email` );
 
-ALTER TABLE  `photos` DROP  `date` ,
+ALTER TABLE  `photos`
+DROP  `date` ,
 DROP  `resolution` ,
 DROP  `type_img` ,
 DROP  `media_type` ,
 DROP  `color` ;
+
+ALTER TABLE  `contents`
+ADD  `body` LONGTEXT NOT NULL AFTER  `description`;
+
+ALTER TABLE `articles`
+DROP `columns`,
+DROP `home_columns`;
+
+UPDATE contents INNER JOIN articles ON contents.pk_content = articles.pk_article SET contents.body=articles.body
+ALTER TABLE `articles` DROP `body`;
+UPDATE contents INNER JOIN static_pages ON contents.pk_content = static_pages.pk_static_page SET contents.body=static_pages.body
+ALTER TABLE `static_pages` DROP `body`;
+UPDATE contents INNER JOIN opinions ON contents.pk_content = opinions.pk_opinion SET contents.body=opinions.body
+ALTER TABLE `opinions` DROP `body`;
+UPDATE contents INNER JOIN letters ON contents.pk_content = letters.pk_letter SET contents.body=letters.body
+ALTER TABLE `letters` DROP `body`;
+

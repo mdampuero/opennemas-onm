@@ -160,15 +160,13 @@ class Letter extends Content
         $data['category'] = 0;
 
         parent::update($data);
-        $sql = "UPDATE letters SET `author`=  ?,
-                                   `email`=  ?,
-                                   `body` = ?
-                            WHERE pk_letter = ?";
+        $sql = "UPDATE letters
+                SET `author`=  ?, `email`=  ?
+                WHERE pk_letter = ?";
 
         $values = array(
             $data['author'],
             $data['email'],
-            $data['body'],
             $data['id']
         );
 

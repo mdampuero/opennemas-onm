@@ -175,14 +175,14 @@ class Opinion extends Content
 
         parent::create($data);
 
-        $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `body`,
-            `fk_author_img`,`with_comment`, type_opinion)
-            VALUES (?,?,?,?,?,?)';
+        $sql = 'INSERT INTO opinions
+                    (`pk_opinion`, `fk_author`, `fk_author_img`,`with_comment`, type_opinion)
+                VALUES
+                    (?,?,?,?,?,?)';
 
         $values = array(
             $this->id,
             $data['fk_author'],
-            $data['body'],
             $data['fk_author_img'],
             $data['with_comment'],
             $data['type_opinion']
