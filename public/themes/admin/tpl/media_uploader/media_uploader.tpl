@@ -83,6 +83,9 @@
                 <div class="upload-content">
                     <h3 class="upload-instructions drop-instructions">{t}Drop files anywhere to upload{/t}</h3>
                     <a href="#" class="btn btn-large load-files-button">{t}Select Files{/t}</a>
+                    <div class="loading"></div>
+                    <div class="alert-error">{t}Unable to upload your files.{/t}</div>
+                    <div class="alert-success">{t}Files uploaded successfully.{/t}</div>
                     <input type="file" name="files" multiple id="files" class="hidden">
                 </div>
             </div>
@@ -96,10 +99,12 @@
 
 {block name="footer-js" append}
 {script_tag src="/libs/handlebars.js" common=1}
+{script_tag src="/libs/jquery.html5uploader.min.js" common=1}
 {script_tag src="/onm/media-uploader.js"}
 <script>
     $(function() {
         $('#media-uploader').mediaPicker({
+            upload_url: "{url name=admin_image_create category=0}",
             browser_url : "{url name=admin_media_uploader_browser}",
             months_url : "{url name=admin_media_uploader_months}",
             initially_shown:  true,
@@ -346,6 +351,15 @@
     }
     #media-uploader #media-element-show h5 {
         margin-top:0;
+    }
+    #media-uploader .upload-content .alert-success,
+    #media-uploader .upload-content .alert-error {
+        max-width:300px;
+        margin:10px auto;
+        display:none;
+    }
+    #media-uploader .upload-content .loading {
+
     }
 </style>
 {/block}
