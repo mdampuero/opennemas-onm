@@ -816,31 +816,23 @@ EOF
                     $newBody = $video ."<br>".  $rs2->fields['body'];
 
 
-                    $values[]  =  array(
+                    $values =  array(
                         $newBody,
                         $rs2->fields['pk_article'],
                     );
+                    $sql3    = 'UPDATE `articles` SET body =?  WHERE pk_article=?';
+
+                    $stmt = $GLOBALS['application']->conn->Prepare($sql3);
+                    $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
 
                     $this->insertRefactorID($rs->fields['meta_id'].$rs->fields['post_id'], $rs2->fields['pk_article'], 'video', $rs->fields['meta_key']);
+
                     $rs2->MoveNext();
                 }
             }
             $rs->MoveNext();
         }
 
-
-        if (!empty($values)) {
-             $sql    = 'UPDATE `articles` SET body =?  WHERE pk_article=?';
-
-            $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if (!$rss) {
-                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-            }
-
-        } else {
-            //$this->output->writeln("Please provide a contentID and views to update it.");
-        }
     }
 
 
