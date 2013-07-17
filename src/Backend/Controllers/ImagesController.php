@@ -719,11 +719,12 @@ class ImagesController extends Controller
             case 'POST':
 
                 // check if category, and filesizes are properly setted and category_name is valid
-                $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
+                $category = $request->request->getDigits('category', 0);
                 if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
-                    // Raise an error with json
+                    $category_name = '';
+                } else {
+                    $category_name = $this->ccm->categories[$category]->name;
                 }
-                $category_name = $this->ccm->categories[$category]->name;
 
                 $upload = isset($_FILES['files']) ? $_FILES['files'] : null;
                 $info = array();
@@ -775,18 +776,18 @@ class ImagesController extends Controller
                     }
                 } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
                     $data = array(
-                        'local_file'    => $upload['tmp_name'],
-                        'original_filename' => $upload['name'][$index],
-                        'title'         => '',
-                        'fk_category'   => $category,
-                        'category'      => $category,
-                        'category_name' => $category_name,
-                        'description'   => '',
-                        'metadata'      => '',
+                        'local_file'        => $upload['tmp_name'],
+                        'original_filename' => $upload['name'],
+                        'title'             => '',
+                        'fk_category'       => $category,
+                        'category'          => $category,
+                        'category_name'     => $category_name,
+                        'description'       => '',
+                        'metadata'          => '',
                     );
 
                     try {
-                        $photo = new Photo();
+                        $photo = new \Photo();
                         $photo = $photo->createFromLocalFileAjax($data);
 
                         $thumbnailUrl = $this->generateUrl(
@@ -805,7 +806,7 @@ class ImagesController extends Controller
                             'size'          => $photo->size,
                             'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
                                                 ? $_SERVER['HTTP_X_FILE_TYPE']
-                                                : $upload['type'][$index],
+                                                : $upload['type'],
                             'error'         => '',
                             'delete_url'    => '',
                             "delete_type"   => "DELETE",
