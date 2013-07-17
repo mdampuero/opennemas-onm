@@ -351,7 +351,8 @@ class NewsletterSubscriptorsController extends Controller
         if (isset($filters['text'])
             && !empty($filters['text'])
         ) {
-            $fltr[] = 'MATCH (name, email) AGAINST ("'.addslashes($filters['text']).'" IN BOOLEAN MODE)';
+            $fltr[] = "name LIKE '%".addslashes($filters['text'])."%' OR ".
+                      "email LIKE '%".addslashes($filters['text'])."%'";
         }
 
         if (isset($filters['subscription']) && ($filters['subscription']>=0)) {
