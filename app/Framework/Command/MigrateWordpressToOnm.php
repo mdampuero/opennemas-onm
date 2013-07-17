@@ -142,20 +142,23 @@ EOF
 
         $this->prepareDatabase();
 
+
         $this->importUsers();
 
         $this->importCategories();
         $this->loadCategories();
-/*
+
         if ($dbPrefix != 'wp_') {
             $this->importImages('wp_');
         }
         $this->importImages();
-*/
+
         $this->importArticles();
         $this->updateBody();
 
         $this->importGalleries();
+
+        $this->importVideos();
 
         $output->writeln(
             "\n\t ***Migration finished for Database: ".$dataBaseName."***"
@@ -778,6 +781,69 @@ EOF
         return $imageID;
 
     }
+
+     /**
+     * Clear body for
+     *
+     * @return string
+     **/
+    protected function importVideos() {
+        $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
+            "`meta_key` = 'usn_videolink' ";
+
+        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+        $GLOBALS['application']->connOrigin->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+
+
+
+        while (!$rs->EOF) {
+            $originalID = $rs->fields['post_id'];
+            if ($this->elementIsImported($rs->fields['meta_id'].$rs->fields['post_id'], 'video')) {
+                $this->output->writeln(" video already imported");
+            } else {
+
+                $sql = "SELECT body, pk_article FROM articles, translation_ids WHERE pk_content_old= {$originalID} AND pk_article=pk_content_old";
+                $rs2 = $GLOBALS['application']->conn->Execute($sql);
+
+                $values= array();
+                while (!$rs2->EOF) {
+                    $video = $rs->fields['meta_value'];
+
+                    if (stripos($video, 'http://') === 0) {
+                        $video = '<iframe width="470" height="295" src="'.$video.'" frameborder="0" allowfullscreen></iframe>';
+                    }
+
+                    $newBody = $video ."<br>".  $rs2->fields['body'];
+
+
+                    $values[]  =  array(
+                        $newBody,
+                        $rs2->fields['pk_article'],
+                    );
+
+                    $this->insertRefactorID($rs->fields['meta_id'].$rs->fields['post_id'], $rs2->fields['pk_article'], 'video', $rs->fields['meta_key']);
+                    $rs2->MoveNext();
+                }
+            }
+            $rs->MoveNext();
+        }
+
+
+        if (!empty($values)) {
+             $sql    = 'UPDATE `articles` SET body =?  WHERE pk_article=?';
+
+            $stmt = $GLOBALS['application']->conn->Prepare($sql);
+            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if (!$rss) {
+                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+            }
+
+        } else {
+            //$this->output->writeln("Please provide a contentID and views to update it.");
+        }
+    }
+
 
     protected function clearLabelsInBodyArticle($body) {
 
