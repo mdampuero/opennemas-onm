@@ -142,6 +142,7 @@ EOF
 
         $this->prepareDatabase();
 
+
         $this->importUsers();
 
         $this->importCategories();
@@ -153,8 +154,11 @@ EOF
         $this->importImages();
 
         $this->importArticles();
+        $this->updateBody();
 
         $this->importGalleries();
+
+        $this->importVideos();
 
         $output->writeln(
             "\n\t ***Migration finished for Database: ".$dataBaseName."***"
@@ -292,7 +296,8 @@ EOF
     {
 
         $sql = "SELECT * FROM ".PREFIX."terms, ".PREFIX."term_taxonomy ".
-               "WHERE ".PREFIX."terms.term_id = ".PREFIX."term_taxonomy.term_id AND taxonomy='category'";
+               "WHERE ".PREFIX."terms.term_id = ".PREFIX."term_taxonomy.term_id AND taxonomy='category' ".
+               " ORDER BY ".PREFIX."terms.term_id DESC";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs = $GLOBALS['application']->connOrigin->Execute($request);
@@ -387,8 +392,8 @@ EOF
     protected function importArticles()
     {
 
-        $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_keys($this->originalCategories)).") ";
-        $limit = '';
+        $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_values($this->originalCategories)).") ";
+        $limit = " ORDER BY `".PREFIX."term_relationships`.`term_taxonomy_id`";
 
         $sql = "SELECT * FROM `".PREFIX."posts`, `".PREFIX."term_relationships` WHERE ".
             "`post_type` = 'post' AND `ID`=`object_id` AND post_status='publish' ".
@@ -406,7 +411,7 @@ EOF
             while (!$rs->EOF) {
                 $originalArticleID = $rs->fields['ID'];
                 if ($this->elementIsImported($originalArticleID, 'article') ) {
-                     $this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
+                     //$this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
                 } else {
                    // $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
 
@@ -434,8 +439,9 @@ EOF
                         'body' => $data['body'],
                         'posic' => 0,
                         'id' => 0,
-                        'img1' =>$data['img'],
-                        'img2' =>$data['img'],
+                        'img1' => $data['img'],
+                        'img2' => $data['img'],
+                        'img2_footer' => $data['footer'],
                         'fk_video' => '',
                         'fk_video2' => '',
                         'footer_video2' => '',
@@ -776,6 +782,61 @@ EOF
 
     }
 
+     /**
+     * Clear body for
+     *
+     * @return string
+     **/
+    protected function importVideos() {
+        $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
+            "`meta_key` = 'usn_videolink' ";
+
+        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+        $GLOBALS['application']->connOrigin->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+
+        $values = array();
+        while (!$rs->EOF) {
+            $originalID = $rs->fields['post_id'];
+            if ($this->elementIsImported($rs->fields['meta_id'].$rs->fields['post_id'], 'video')) {
+                $this->output->writeln(" video already imported");
+            } else {
+
+                $sql = "SELECT body, pk_article FROM articles, translation_ids WHERE pk_content_old= {$originalID} AND pk_article=pk_content";
+                $rs2 = $GLOBALS['application']->conn->Execute($sql);
+
+
+                while (!$rs2->EOF) {
+                    $video = $rs->fields['meta_value'];
+
+                    if (stripos($video, 'http://') === 0) {
+
+                        $id = str_replace('http://www.youtube.com/watch?v=', '', $video);
+                        $video = '<iframe width="470" height="295" src="//www.youtube.com/embed/'.$video.'" frameborder="0" allowfullscreen></iframe>';
+                    }
+
+                    $newBody = $video ."<br>".  $rs2->fields['body'];
+
+                    $values =  array(
+                        $newBody,
+                        $rs2->fields['pk_article'],
+                    );
+                    $sql3    = 'UPDATE `articles` SET body =?  WHERE pk_article=?';
+
+                    $stmt = $GLOBALS['application']->conn->Prepare($sql3);
+                    $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+
+                    $this->insertRefactorID($rs->fields['meta_id'].$rs->fields['post_id'], $rs2->fields['pk_article'], 'video', $rs->fields['meta_key']);
+
+                    $rs2->MoveNext();
+                }
+            }
+            $rs->MoveNext();
+        }
+
+    }
+
+
     protected function clearLabelsInBodyArticle($body) {
 
         /*[gallery link="file" ids="8727,8728,8729,8730,8731,8732"]
@@ -786,16 +847,16 @@ EOF
         #Deleted [caption id="attachment_2302" align="aligncenter" width="300" caption="El partido ultra Jobbik siembra el terror entre las minorías y los extranjeros en Hungría."][/caption]
         //Allow!!<a title="Kobe Bryant" href="http://www.flickr.com/photos/42161969@N03/4067656449/" target="_blank"><img title="Kobe Bryant" alt="Kobe Bryant" src="http://farm3.staticflickr.com/2493/4067656449_a576ba8a59.jpg" /></a>
 
+
         $newBody = '';
         $img     = '';
         $gallery = '';
         $footer  = '';
         $photo     = new \Photo();
-        $allowed = '<i><b><p><a><br><ol><ul><li>';
-        $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?alt="?(.*?)".*?><\/a>@';
+        $allowed = '<i><b><p><a><br><ol><ul><li><strong><em>';
+        $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?><\/a>@';
         preg_match_all($patern, $body, $result);
         if (!empty($result[1])) {
-
             $guid    = $result[1][0];
             $img     = $this->getOnmIdImage($guid);
             $newBody = $body;
@@ -836,17 +897,17 @@ EOF
                 $this->output->writeln('- Image from Body inserted'. $img. ' ');
             }
             $newBody = preg_replace($patern, '', $body);
-            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+        //    $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
-        preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\](.*)?\[\/caption\]@', $body, $result);
+        preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\].* alt="?(.*?)".*?\[\/caption\]@', $body, $result);
         if (!empty($result[1]) ) {
             $id      = $result[1][0];
             $img     = $this->elementIsImported($id, 'image');
-           // $footer  = $result[1][2];
+            $footer  = $result[2][0];
 
             $newBody = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $body);
-            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+          //  $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
         preg_match_all('@\[gallery.*?ids="(.*)".*?\]@', $body, $result);
@@ -854,8 +915,11 @@ EOF
             $id      = $result[1][0];
             $gallery = $this->elementIsImported($id, 'gallery');
             $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $body);
-            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+       //     $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
+
+        $str = preg_replace(array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"), array('</p><p>', '</p><p>', '<br>', '<br>'), $newBody);
+        $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
 
@@ -936,6 +1000,53 @@ EOF
     {
        // return mb_convert_encoding($string, 'UTF-8');
        return $string;
+    }
+
+
+     /**
+     * update some fields in content table
+     *
+     * @param int $contentId the content id
+     * @param string $params new values for the content table
+     *
+     * @return void
+     **/
+    public  function updateBody()
+    {
+        $sql = "SELECT body, pk_article FROM articles WHERE body != ''";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $values= array();
+        while (!$rs->EOF) {
+
+            $newBody = preg_replace(
+                array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
+                array('</p><p>', '</p><p>', '<br>', '<br>'),
+                $rs->fields['body']
+            );
+            $newBody = '<p>'.($newBody).'</p>';
+
+            $values[] =  array(
+                $newBody,
+                $rs->fields['pk_article'],
+            );
+
+            $rs->MoveNext();
+        }
+
+        if (!empty($values)) {
+            $sql    = 'UPDATE `articles` SET body =?  WHERE pk_article=?';
+
+            $stmt = $GLOBALS['application']->conn->Prepare($sql);
+            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if (!$rss) {
+                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+            }
+
+        } else {
+            //$this->output->writeln("Please provide a contentID and views to update it.");
+        }
+
     }
 
 

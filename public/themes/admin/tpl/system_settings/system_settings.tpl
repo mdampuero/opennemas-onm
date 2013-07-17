@@ -386,6 +386,7 @@
                 </div>
 
             </fieldset>
+            {is_module_activated name="NEWS_AGENCY_IMPORTER"}
             <hr>
             <fieldset>
                 <h3 class="settings-header">{t}Opennemas News Agency{/t}</h3>
@@ -406,6 +407,7 @@
                 </div>
 
             </fieldset>
+            {/is_module_activated}
             {acl isAllowed="ONLY_MASTERS"}
             <hr>
             <fieldset>
@@ -475,12 +477,10 @@
                         <input type="text" id="recaptcha_private_key" name="recaptcha[private_key]" value="{$configs['recaptcha']['private_key']|default:""}" class="input-xlarge">
                     </div>
                 </div>
-
             </fieldset>
-
+            {is_module_activated name="PAYWALL"}
             <hr>
             <fieldset>
-
                 <h3 class="settings-header">{t}Paypal Settings{/t}</h3>
 
                 <div class="control-group">
@@ -490,8 +490,8 @@
                         <div class="help-block">{t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}</div>
                     </div>
                 </div>
-
             </fieldset>
+            {/is_module_activated}
         </div>
     </div>
 </div>
