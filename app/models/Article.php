@@ -110,21 +110,6 @@ class Article extends Content
     public $with_comment  = null;
 
     /**
-     * The column where is placed this article
-     *
-     * @deprecated  deprecated from version 0.8
-     * @var string
-     **/
-    public $columns       = null;
-
-    /**
-     * The column where is placed this article in home
-     *
-     * @var string
-     **/
-    public $home_columns  = null;
-
-    /**
      * The inner title of this article
      *
      * @var string
@@ -214,8 +199,6 @@ class Article extends Content
         }
 
         $data['subtitle']= $data['subtitle'];
-        $data['columns'] = 1;
-        $data['home_columns'] = 1;
         $data['available'] = $data['content_status'];
         $data['img1_footer']
             = (!isset($data['img1_footer']) || empty($data['img1_footer']))
@@ -235,18 +218,21 @@ class Article extends Content
         $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`,
                             `summary`,`body`, `img1`, `img1_footer`,
                             `img2`, `img2_footer`, `fk_video`, `fk_video2`,
-                            `footer_video2`, `columns`, `home_columns`,
+                            `footer_video2`,
                             `with_comment`, `title_int`) " .
-                        "VALUES (?,?,?,?,?, ?,?,?,?, ?,?,?, ?,?,?,?)";
+                        "VALUES (?,?,?,?,?, ?,?,?,?, ?,?,?, ?,?)";
 
         $values = array(
-            $this->id, $data['subtitle'], $data['agency'],  $data['summary'],
+            $this->id,
+            $data['subtitle'], $data['agency'],  $data['summary'],
             $data['body'], $data['img1'], $data['img1_footer'],
             $data['img2'], $data['img2_footer'], $data['fk_video'],
-            $data['fk_video2'], $data['footer_video2'], $data['columns'],
-            $data['home_columns'], $data['with_comment'], $data['title_int']);
+            $data['fk_video2'], $data['footer_video2'],
+            $data['with_comment'], $data['title_int']
+        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             \Application::logDatabaseError();
 
             return false;
