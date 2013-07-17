@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-16 15:21+0200\n"
+"POT-Creation-Date: 2013-07-17 10:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -286,8 +286,8 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AlbumsController.php:256
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AlbumsController.php:334
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:293
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:437
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:294
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:438
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/VideosController.php:277
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/VideosController.php:404
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1556
@@ -368,55 +368,55 @@ msgstr ""
 msgid "You don't have enought privileges to see this category."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:264
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:265
 msgid "Article successfully created."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:266
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:267
 msgid "Unable to create the new article."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:337
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:338
 #, php-format
 msgid "Unable to find the article with the id \"%d\""
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:477
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:478
 msgid ""
 "You can't modify this article because you don't have enought privileges."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:483
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:484
 msgid "Article data sent not valid."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:581
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:582
 msgid "Article successfully updated."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:583
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:584
 msgid "Unable to update the article."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:631
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:632
 msgid "Article deleted successfully."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:633
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:634
 msgid "You must give an id for delete an article."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:672
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:673
 #, php-format
 msgid "Unable to find article with id \"%d\""
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:678
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:679
 #, php-format
 msgid "Successfully changed availability for article with id \"%d\""
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:945
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/ArticlesController.php:946
 #, php-format
 msgid "You must assign a section for \"%s\""
 msgstr ""
