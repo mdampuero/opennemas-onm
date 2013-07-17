@@ -146,13 +146,14 @@ EOF
 
         $this->importCategories();
         $this->loadCategories();
-
+/*
         if ($dbPrefix != 'wp_') {
             $this->importImages('wp_');
         }
         $this->importImages();
-
+*/
         $this->importArticles();
+        $this->updateBody();
 
         $this->importGalleries();
 
@@ -788,12 +789,13 @@ EOF
         #Deleted [caption id="attachment_2302" align="aligncenter" width="300" caption="El partido ultra Jobbik siembra el terror entre las minorías y los extranjeros en Hungría."][/caption]
         //Allow!!<a title="Kobe Bryant" href="http://www.flickr.com/photos/42161969@N03/4067656449/" target="_blank"><img title="Kobe Bryant" alt="Kobe Bryant" src="http://farm3.staticflickr.com/2493/4067656449_a576ba8a59.jpg" /></a>
 
+
         $newBody = '';
         $img     = '';
         $gallery = '';
         $footer  = '';
         $photo     = new \Photo();
-        $allowed = '<i><b><p><a><br><ol><ul><li>';
+        $allowed = '<i><b><p><a><br><ol><ul><li><strong><em>';
         $patern  = '@<a .*?href=".+?".*?><img .*?src="?('.preg_quote(ORIGINAL_URL).'.+?)".*?><\/a>@';
         preg_match_all($patern, $body, $result);
         if (!empty($result[1])) {
@@ -837,7 +839,7 @@ EOF
                 $this->output->writeln('- Image from Body inserted'. $img. ' ');
             }
             $newBody = preg_replace($patern, '', $body);
-            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+        //    $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
         preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\].* alt="?(.*?)".*?\[\/caption\]@', $body, $result);
@@ -847,7 +849,7 @@ EOF
             $footer  = $result[2][0];
 
             $newBody = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $body);
-            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+          //  $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
         preg_match_all('@\[gallery.*?ids="(.*)".*?\]@', $body, $result);
@@ -855,8 +857,11 @@ EOF
             $id      = $result[1][0];
             $gallery = $this->elementIsImported($id, 'gallery');
             $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $body);
-            $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+       //     $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
+
+        $str = preg_replace(array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"), array('</p><p>', '</p><p>', '<br>', '<br>'), $newBody);
+        $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
 
@@ -937,6 +942,53 @@ EOF
     {
        // return mb_convert_encoding($string, 'UTF-8');
        return $string;
+    }
+
+
+     /**
+     * update some fields in content table
+     *
+     * @param int $contentId the content id
+     * @param string $params new values for the content table
+     *
+     * @return void
+     **/
+    public  function updateBody()
+    {
+        $sql = "SELECT body, pk_article FROM articles WHERE body != ''";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $values= array();
+        while (!$rs->EOF) {
+
+            $newBody = preg_replace(
+                array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
+                array('</p><p>', '</p><p>', '<br>', '<br>'),
+                $rs->fields['body']
+            );
+            $newBody = '<p>'.($newBody).'</p>';
+
+            $values[] =  array(
+                $newBody,
+                $rs->fields['pk_article'],
+            );
+
+            $rs->MoveNext();
+        }
+
+        if (!empty($values)) {
+            $sql    = 'UPDATE `articles` SET body =?  WHERE pk_article=?';
+
+            $stmt = $GLOBALS['application']->conn->Prepare($sql);
+            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if (!$rss) {
+                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+            }
+
+        } else {
+            //$this->output->writeln("Please provide a contentID and views to update it.");
+        }
+
     }
 
 
