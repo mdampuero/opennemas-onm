@@ -802,7 +802,7 @@ EOF
                 $this->output->writeln(" video already imported");
             } else {
 
-                $sql = "SELECT body, pk_article FROM articles, translation_ids WHERE pk_content_old= {$originalID} AND pk_article=pk_content_old";
+                $sql = "SELECT body, pk_article FROM articles, translation_ids WHERE pk_content_old= {$originalID} AND pk_article=pk_content";
                 $rs2 = $GLOBALS['application']->conn->Execute($sql);
 
 
@@ -810,11 +810,12 @@ EOF
                     $video = $rs->fields['meta_value'];
 
                     if (stripos($video, 'http://') === 0) {
-                        $video = '<iframe width="470" height="295" src="'.$video.'" frameborder="0" allowfullscreen></iframe>';
+
+                        $id = str_replace('http://www.youtube.com/watch?v=', '', $video);
+                        $video = '<iframe width="470" height="295" src="//www.youtube.com/embed/'.$video.'" frameborder="0" allowfullscreen></iframe>';
                     }
 
                     $newBody = $video ."<br>".  $rs2->fields['body'];
-
 
                     $values =  array(
                         $newBody,
