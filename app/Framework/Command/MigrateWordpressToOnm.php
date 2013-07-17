@@ -795,8 +795,7 @@ EOF
         $GLOBALS['application']->connOrigin->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
-
-
+        $values = array();
         while (!$rs->EOF) {
             $originalID = $rs->fields['post_id'];
             if ($this->elementIsImported($rs->fields['meta_id'].$rs->fields['post_id'], 'video')) {
@@ -806,7 +805,7 @@ EOF
                 $sql = "SELECT body, pk_article FROM articles, translation_ids WHERE pk_content_old= {$originalID} AND pk_article=pk_content_old";
                 $rs2 = $GLOBALS['application']->conn->Execute($sql);
 
-                $values= array();
+
                 while (!$rs2->EOF) {
                     $video = $rs->fields['meta_value'];
 
