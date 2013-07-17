@@ -907,14 +907,11 @@ EOF
                 'category'    => '',
                 'created'     => $infor->atime,
                 'changed'     => $infor->mtime,
-                'date'        => $infor->mtime,
                 'size'        => round($infor->size/1024, 2),
                 'width'       => $infor->width,
                 'height'      => $infor->height,
                 'type'        => $infor->type,
-                'type_img'    => $fileExtension,
                 'fk_author'   => $this->elementIsImported(7, 'user'),
-                'media_type'  => 'image',
                 'author_name' => '',
             );
 

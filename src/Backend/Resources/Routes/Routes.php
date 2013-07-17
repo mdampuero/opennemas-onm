@@ -834,15 +834,6 @@ $adminRoutes->add(
 
 // Image manager routes
 $adminRoutes->add(
-    'admin_images_statistics',
-    new Route(
-        '/images/statistics',
-        array(
-            '_controller' => 'Backend:Controllers:ImagesController:statistics',
-        )
-    )
-);
-$adminRoutes->add(
     'admin_images_search',
     new Route(
         '/images/search',

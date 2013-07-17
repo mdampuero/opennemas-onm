@@ -139,177 +139,6 @@ class ImagesController extends Controller
     }
 
     /**
-     * Show statitics of disk usage in images
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function statisticsAction(Request $request)
-    {
-        unset($_SESSION['where']);
-
-        $ccm = \ContentCategoryManager::get_instance();
-        $fullcat     = $ccm->order_by_posmenu($ccm->categories);
-        $photoSet    = $ccm->dataMediaByTypeGroup('media_type="image"');
-        $photoSetJPG = $ccm->countMediaByTypeGroup('media_type="image" and type_img="jpg"');
-        $photoSetGIF = $ccm->countMediaByTypeGroup('media_type="image" and type_img="gif"');
-        $photoSetPNG = $ccm->countMediaByTypeGroup('media_type="image" and type_img="png"');
-        $photoSetBN  = $ccm->countMediaByTypeGroup('media_type="image" and color="BN"');
-
-        $statistics = array(
-            'num_photos' => array(
-                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
-                'bn' => 0, 'color' => 0, 'size' => 0
-            ),
-            'num_sub_photos' => array(
-                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
-                'bn' => 0, 'color' => 0, 'size' => 0
-            ),
-            'num_especials' => array(
-                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
-                'bn' => 0, 'color' => 0, 'size' => 0
-            ),
-            'totals' =>  array(
-                'jpg' => 0, 'gif' => 0, 'png' => 0, 'other' => 0,
-                'bn' => 0, 'color' => 0, 'size' => 0
-            ),
-        );
-
-        $num_sub_photos = array();
-        foreach ($this->parentCategories as $k => $v) {
-            if (isset($photoSet[$v->pk_content_category])) {
-                $num_photos[$k]      = $photoSet[$v->pk_content_category];
-                $num_photos[$k]->jpg = (isset($photoSetJPG[$v->pk_content_category]))
-                                        ? $photoSetJPG[$v->pk_content_category]
-                                        : 0;
-                $num_photos[$k]->gif = (isset($photoSetGIF[$v->pk_content_category]))
-                                        ? $photoSetGIF[$v->pk_content_category]
-                                        : 0;
-                $num_photos[$k]->png = (isset($photoSetPNG[$v->pk_content_category]))
-                                        ? $photoSetPNG[$v->pk_content_category]
-                                        : 0;
-                $num_photos[$k]->other = $photoSet[$v->pk_content_category]->total
-                                        - $num_photos[$k]->jpg
-                                        - $num_photos[$k]->gif
-                                        - $num_photos[$k]->png;
-                $num_photos[$k]->BN    = (isset($photoSetBN[$v->pk_content_category]))
-                                        ? $photoSetBN[$v->pk_content_category]
-                                        : 0;
-                $num_photos[$k]->color = $photoSet[$v->pk_content_category]->total
-                                        - $num_photos[$k]->BN;
-                // TOTALES
-                $statistics['num_photos']['jpg']   += $num_photos[$k]->jpg;
-                $statistics['num_photos']['gif']   += $num_photos[$k]->gif;
-                $statistics['num_photos']['png']   += $num_photos[$k]->png;
-                $statistics['num_photos']['other'] += $num_photos[$k]->other;
-                $statistics['num_photos']['bn']    += $num_photos[$k]->BN;
-                $statistics['num_photos']['color'] += $num_photos[$k]->color;
-                $statistics['num_photos']['size']  += $num_photos[$k]->size;
-            }
-
-            $j=0;
-            foreach ($fullcat as $child) {
-                if ($v->pk_content_category == $child->fk_content_category
-                    && isset($photoSet[$child->pk_content_category])
-                ) {
-                    $num_sub_photos[$k][$j] = $photoSet[$child->pk_content_category];
-                    $num_sub_photos[$k][$j]->jpg = (isset($photoSetJPG[$child->pk_content_category]))
-                                                    ? $photoSetJPG[$child->pk_content_category]
-                                                    : 0;
-
-                    $num_sub_photos[$k][$j]->gif = (isset($photoSetGIF[$child->pk_content_category]))
-                                                    ? $photoSetGIF[$child->pk_content_category]
-                                                    : 0;
-                    $num_sub_photos[$k][$j]->png = (isset($photoSetPNG[$child->pk_content_category]))
-                                                    ? $photoSetPNG[$child->pk_content_category]
-                                                    : 0;
-                    $num_sub_photos[$k][$j]->other = $photoSet[$child->pk_content_category]->total
-                                                     - $num_sub_photos[$k][$j]->jpg
-                                                     - $num_sub_photos[$k][$j]->gif
-                                                     - $num_sub_photos[$k][$j]->png ;
-                    $num_sub_photos[$k][$j]->BN    = (isset($photoSetBN[$child->pk_content_category]))
-                                                    ? $photoSetBN[$child->pk_content_category]
-                                                    : 0;
-                    $num_sub_photos[$k][$j]->color = $photoSet[$child->pk_content_category]->total
-                                                     - $num_sub_photos[$k][$j]->BN ;
-
-                    // TOTALES
-                    $statistics['num_sub_photos']['jpg']   += $num_sub_photos[$k][$j]->jpg;
-                    $statistics['num_sub_photos']['gif']   += $num_sub_photos[$k][$j]->gif;
-                    $statistics['num_sub_photos']['png']   += $num_sub_photos[$k][$j]->png;
-                    $statistics['num_sub_photos']['other'] += $num_sub_photos[$k][$j]->other;
-                    $statistics['num_sub_photos']['bn']    += $num_sub_photos[$k][$j]->BN;
-                    $statistics['num_sub_photos']['color'] += $num_sub_photos[$k][$j]->color;
-                    $statistics['num_sub_photos']['size']  += $num_sub_photos[$k][$j]->size;
-
-                    $j++;
-                }
-            }
-        }
-
-        //Categorias especiales
-        $j = 0;
-
-        // FIXME: eliminar as dependencias xeradas por un mal
-        // Eliminada categoria album del array $especials:  3 => 'album'
-        $especials = null;
-        $num_especials = null;
-        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
-            $especials = array(2 => _('Advertisement'));
-            foreach ($especials as $key => $cat) {
-                $num_especials[$j] =  new \stdClass;
-                $num_especials[$j]->id    = $key;
-                $num_especials[$j]->title = $cat;
-                $num_especials[$j]->total = (isset($photoSet[$key]->total))? $photoSet[$key]->total : 0;
-                $num_especials[$j]->size  = (isset($photoSet[$key]->size))? $photoSet[$key]->size : 0;
-                $num_especials[$j]->jpg   = (isset($photoSetJPG[$key]))? $photoSetJPG[$key] : 0;
-                $num_especials[$j]->gif   = (isset($photoSetGIF[$key]))? $photoSetGIF[$key] : 0;
-                $num_especials[$j]->png   = (isset($photoSetPNG[$key]))? $photoSetPNG[$key] : 0;
-                $num_especials[$j]->other = $photoSet[$key]->total
-                                            - $num_especials[$j]->jpg
-                                            - $num_especials[$j]->gif
-                                            - $num_especials[$j]->png;
-                $num_especials[$j]->BN    = (isset($photoSetBN[$key]))? $photoSetBN[$key] : 0;
-                $num_especials[$j]->color = $photoSet[$key]->total - $num_especials[$j]->BN ;
-
-                // TOTALES
-                $statistics['num_especials']['jpg']   += $num_especials[$j]->jpg;
-                $statistics['num_especials']['gif']   += $num_especials[$j]->gif;
-                $statistics['num_especials']['png']   += $num_especials[$j]->png;
-                $statistics['num_especials']['other'] += $num_especials[$j]->other;
-                $statistics['num_especials']['bn']    += $num_especials[$j]->BN;
-                $statistics['num_especials']['color'] += $num_especials[$j]->color;
-                $statistics['num_especials']['size']  += $num_especials[$j]->size;
-
-                $j++;
-            }
-        }
-        $photoFileTypes = array('jpg', 'gif', 'png', 'other', 'bn', 'color', 'size');
-        foreach ($photoFileTypes as $type) {
-            $statistics['totals'][$type] = $statistics['num_photos'][$type]  + $statistics['num_sub_photos'][$type]
-                + $statistics['num_especials'][$type];
-        }
-        $statistics['totals']['total'] = $statistics['totals']['jpg']
-            + $statistics['totals']['gif'] + $statistics['totals']['png']
-            + $statistics['totals']['other'];
-
-        return $this->render(
-            'image/statistics.tpl',
-            array(
-                'totals'         => $statistics['totals'],
-                'categorys'      => $this->parentCategories,
-                'subcategorys'   => $this->subcat,
-                'num_photos'     => $num_photos,
-                'num_sub_photos' => $num_sub_photos,
-                'especials'      => $especials,
-                'num_especials'  => $num_especials,
-                'category'       => 'statistics',
-            )
-        );
-    }
-
-    /**
      * Handles the form for configure the images module
      *
      * @param Request $request the request object
@@ -924,15 +753,14 @@ class ImagesController extends Controller
         if (empty($category)) {
             $photos = $cm->find(
                 'Photo',
-                'contents.fk_content_type = 8 AND photos.media_type="image" '
-                .'AND contents.content_status=1 ' . $szWhere,
+                'contents.fk_content_type = 8 AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         } else {
             $photos = $cm->find_by_category(
                 'Photo',
                 $category,
-                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 ' . $szWhere,
+                'fk_content_type = 8 AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         }

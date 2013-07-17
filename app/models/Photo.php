@@ -44,13 +44,6 @@ class Photo extends Content
     public $path_file   = null;
 
     /**
-     * Date when the photo was taken
-     *
-     * @var string
-     **/
-    public $date        = null;
-
-    /**
      * The size of the image
      *
      * @var int
@@ -70,27 +63,6 @@ class Photo extends Content
      * @var int
      **/
     public $height      = null;
-
-    /**
-     * the resolution of the image
-     *
-     * @var string
-     **/
-    public $resolution  = null;
-
-    /**
-     * The kind of image (jpg, gif, ...)
-     *
-     * @var string
-     **/
-    public $type_img    = null;
-
-    /**
-     * The kind of resource (image or grafico)
-     *
-     * @var
-     **/
-    public $media_type  = null;
 
     /**
      * The copyright of the image
@@ -114,6 +86,24 @@ class Photo extends Content
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function __get($propertyName)
+    {
+        switch ($propertyName) {
+            case 'type_img':
+                $this->type_img = pathinfo($this->name, PATHINFO_EXTENSION);
+
+                return $this->type_img;
+                break;
+        }
+        parent::__get($propertyName);
+    }
+
+    /**
      * Creates a new photo given an array of information
      *
      * @param array $data the photo information
@@ -124,22 +114,19 @@ class Photo extends Content
     public function create($data)
     {
         $data['content_status'] = 1;
-        /*$cat = $GLOBALS['application']->conn->
-            GetOne('SELECT * FROM `content_categories` WHERE name = "'.
-                    $this->content_type.'"');*/
 
         parent::create($data);
-        //Categoria a la que pertenece.
-        $sql = "INSERT INTO photos (`pk_photo`,`name`, `path_file`,
-                                    `date`, `size`,`width`,
-                                    `height`,`nameCat`, `type_img`,
-                                    `author_name`,`media_type`) " .
-                "VALUES (?,?,?, ?,?,?, ?,?,?, ?,?)";
 
-        $values = array($this->id, $data["name"], $data["path_file"],
-                        $data['date'], $data['size'], $data['width'],
-                        $data['height'], $data['nameCat'], $data['type_img'],
-                        $data['author_name'], $data['media_type']);
+        $sql = "INSERT INTO photos
+                    (`pk_photo`, `name`, `path_file`, `size`,`width`, `height`, `nameCat`, `author_name`)
+                VALUES
+                    (?,?,?, ?,?,?, ?,?)";
+
+        $values = array(
+            $this->id, $data["name"], $data["path_file"],
+            $data['size'], $data['width'], $data['height'],
+            $data['nameCat'], $data['author_name']
+        );
 
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
 
@@ -202,17 +189,12 @@ class Photo extends Content
             'fk_category'  => $dataSource["fk_category"],
             'category'     => $dataSource["fk_category"],
             'nameCat'      => $dataSource["category_name"],
-
-           // 'created'      => $fileInformation->atime,
-           // 'changed'      => $fileInformation->mtime,
             'created'      => $dataSource["created"],
             'changed'      => $dataSource["changed"],
             'date'         => $fileInformation->mtime,
             'size'         => round($fileInformation->size/1024, 2),
             'width'        => $fileInformation->width,
             'height'       => $fileInformation->height,
-            'type_img'     => strtolower($filePathInfo['extension']),
-            'media_type'   => 'image',
 
             'author_name'  => $dataSource['author_name'],
             'pk_author'    => $_SESSION['userid'],
@@ -279,16 +261,14 @@ class Photo extends Content
 
             Application::getLogger()->notice(
                 sprintf(
-                    'EFE Importer: Unable to create the '
-                    .'photo file %s (destination: %s).',
+                    'Unable to create the photo file %s (destination: %s).',
                     $dataSource['local_file'],
                     $uploadDir.$finalPhotoFileName
                 )
             );
             m::add(
                 sprintf(
-                    'Unable to copy the file of the photo '
-                    .'related in EFE importer to the article.',
+                    'Unable to copy the file of the photo related to the article. ',
                     $uploadDir.$finalPhotoFileName
                 ),
                 m::ERROR
@@ -348,16 +328,12 @@ class Photo extends Content
                 'fk_category'  => $dataSource["fk_category"],
                 'category'     => $dataSource["fk_category"],
                 'nameCat'      => $dataSource["category_name"],
-
                 'created'      => $fileInformation->atime,
                 'changed'      => $fileInformation->mtime,
                 'date'         => $fileInformation->mtime,
                 'size'         => round($fileInformation->size/1024, 2),
                 'width'        => $fileInformation->width,
                 'height'       => $fileInformation->height,
-                'type_img'     => strtolower($filePathInfo['extension']),
-                'media_type'   => 'image',
-
                 'author_name'  => !isset($dataSource['author_name']) ?'':$dataSource['author_name'],
                 'pk_author'    => $_SESSION['userid'],
                 'fk_publisher' => $_SESSION['userid'],
@@ -456,17 +432,12 @@ class Photo extends Content
             $this->path_img = $rs->fields['path_file'].DS.$rs->fields['name'];
         }
         $this->size        = $rs->fields['size'];
-        $this->resolution  = $rs->fields['resolution'];
         $this->width       = $rs->fields['width'];
         $this->height      = $rs->fields['height'];
         $this->nameCat     = $rs->fields['nameCat'];
-        $this->type_img    = $rs->fields['type_img'];
         $this->author_name = $rs->fields['author_name'];
-        $this->media_type  = $rs->fields['media_type'];
         $this->description = ($this->description);
         $this->metadata    = ($this->metadata);
-        $this->date        = $rs->fields['date'];
-        $this->color       = $rs->fields['color'];
         $this->address     = $rs->fields['address'];
 
         return $this;
@@ -499,16 +470,11 @@ class Photo extends Content
             $photo->path_img    = $this->path_file.DS.$this->name;
         }
         $photo->size        = $this->size;
-        $photo->resolution  = $this->resolution;
         $photo->width       = $this->width;
         $photo->height      = $this->height;
         $photo->nameCat     = $this->nameCat;
-        $photo->type_img    = $this->type_img;
         $photo->category    = $this->category;
         $photo->author_name = $this->author_name;
-        $photo->media_type  = $this->media_type;
-        $photo->color       = $this->color;
-        $photo->date        = $this->date;
         $photo->address     = $this->address;
         $photo->latlong     = '';
         $photo->infor       = '';
@@ -560,29 +526,6 @@ class Photo extends Content
 
                     if (empty($exif)) {
                         $photo->infor .= _("No availabel EXIF data</br>");
-
-                    } else {
-
-                        if (empty($photo->color)) {
-                            if ($exifData['COMPUTED']['IsColor']==0) {
-                                $photo->color= 'BN';
-                            } else {
-                                $photo->color= 'color';
-                            }
-                        }
-                        if (isset($exifData['IFD0'])) {
-                            if (empty($photo->resolution)
-                                && !is_null($exifData['IFD0']['XResolution'])
-                            ) {
-                                $photo->resolution =
-                                    $exifData['IFD0']['XResolution'];
-                            }
-                            if (empty($photo->date)
-                                && !is_null($exifData['FILE']['FileDateTime'])
-                            ) {
-                                $photo->date= $exifData['FILE']['FileDateTime'];
-                            }
-                        }
                     }
 
                     if (isset($info['APP13'])) {
@@ -671,22 +614,17 @@ class Photo extends Content
     public function update($data)
     {
         parent::update($data);
-        $sql = "UPDATE photos SET `pk_photo`=?, `name`=?, `path_file`=?, "
-             . "`size`=?, `width`=?,`height`=?,`type_img`=?, `author_name`=?, "
-             . "`date`=?, `color`=? "
-             . "WHERE pk_photo=?";
+        $sql = "UPDATE photos
+                SET `name`=?, `path_file`=?, `size`=?, `width`=?, `height`=?,`author_name`=?
+                WHERE pk_photo=?";
 
         $values = array(
-            $data['pk_photo'],
             $data['name'],
             $data['path_file'],
             $data['size'],
             $data['width'],
             $data['height'],
-            $data['type_img'],
             $data['author_name'],
-            $data['date'],
-            $data['color'],
             $data['id']
         );
 
@@ -710,20 +648,16 @@ class Photo extends Content
     {
         $data['pk_author'] = $_SESSION['userid'];
         $data['fk_user_last_editor'] = $_SESSION['userid'];
-        if (!isset($data['resolution'])) {
-            $data['resolution'] = '';
-        }
+
         parent::update($data);
 
         $sql = "UPDATE `photos`
-                SET `author_name`=?, `address`=?, `date`=?, `resolution`=?
+                SET `author_name`=?, `address`=?,
                 WHERE `pk_photo`=?";
 
         $values = array(
             $data['author_name'],
             $data['address'],
-            $data['date'],
-            $data['resolution'],
             $data['id']
         );
 
@@ -764,29 +698,6 @@ class Photo extends Content
 
         return true;
 
-    }
-
-    /**
-     * Updates the file path of a photo
-     *
-     * @param string $path the new file path
-     * @param int $id the photo id
-     *
-     * @return boolean true if the file path was changed
-     **/
-    public function updatePath($path, $id)
-    {
-        $sql = "UPDATE `photos` SET `path_file`=? WHERE `pk_photo`=?";
-
-        $values = array($path, $id);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-
-        return true;
     }
 
     /**
