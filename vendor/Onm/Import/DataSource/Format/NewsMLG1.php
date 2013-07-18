@@ -280,15 +280,11 @@ class NewsMLG1 implements FormatInterface
     {
         $originalDate = (string) $this->getData()
                                     ->NewsItem->NewsManagement
-                                    ->ThisRevisionCreated;
-
-        // ISO 8601 doesn't match this date 20111211T103900+0000
-        $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
+                                    ->FirstCreated;
 
         return \DateTime::createFromFormat(
-            'Ymd\THis',
-            $originalDate,
-            new \DateTimeZone('UTC')
+            'Ymd\THisP',
+            $originalDate
         );
     }
 

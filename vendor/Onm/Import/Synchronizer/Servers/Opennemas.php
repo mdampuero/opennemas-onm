@@ -36,7 +36,7 @@ class Opennemas extends ServerAbstract implements ServerInterface
         $contentListString = $this->getContentFromUrlWithDigestAuth($this->serverUrl);
 
         // test if the connection was successful
-        if (!$contentListString) {
+        if (empty($contentListString)) {
             throw new \Exception(
                 sprintf(
                     _(
