@@ -625,7 +625,7 @@ class UserController extends Controller
             $ur = $this->get('user_repository');
             $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
             $user->photo = new \Photo($user->avatar_img_id);
-
+            $user->getMeta();
 
             $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
                 ."AND available=1 AND in_litter=0";
@@ -721,10 +721,10 @@ class UserController extends Controller
 
             $totalUsers = count($authorsContents);
 
-            if ($page <= 1) {
-                $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
+            if (empty($page)) {
+                $authorsContents = array_slice($authorsContents, ($page)*$itemsPerPage, $itemsPerPage);
             } else {
-                $authorsContents = array_slice($authorsContents, $page*$itemsPerPage, $itemsPerPage);
+                $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
             }
 
             // Build the pager
