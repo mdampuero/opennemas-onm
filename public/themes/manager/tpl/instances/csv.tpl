@@ -1,4 +1,4 @@
-id,name,activated,domains,site_title,site_description, site_language, activated_modules
+id,name,contact_mail,articles,images,ads,activated,domains,site_title,site_description, site_language, activated_modules
 {foreach from=$instances item=instance}
-"{$instance->id}","{$instance->name}","{$instance->activated}","{implode(":", $instance->domains)}","{$instance->configs['site_title']}","{$instance->configs['site_description']}","{$instance->configs['site_language']}","{implode(", ", $instance->configs['activated_modules'])}"
+"{$instance->id}","{$instance->name}","{$instance->configs['contact_mail']}","{$instance->totals[1]}","{$instance->totals[8]}","{$instance->totals[2]}","{$instance->activated}","{implode(":", $instance->domains)}","{$instance->configs['site_title']}","{$instance->configs['site_description']}","{$instance->configs['site_language']}","{implode(", ", $instance->configs['activated_modules'])}"
 {/foreach}

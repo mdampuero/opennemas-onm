@@ -183,6 +183,7 @@ class Message
     {
         if (isset($_SESSION)) {
             unset($_SESSION['messages']);
+            unset($_SESSION['_sf2_flashes']);
         }
     }
 }

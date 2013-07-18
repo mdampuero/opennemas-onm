@@ -34,6 +34,10 @@ class MenusController extends Controller
      **/
     public function init()
     {
+        \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
+
+        $this->checkAclOrForward('MENU_ADMIN');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->pages = array(
@@ -67,9 +71,7 @@ class MenusController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_ADMIN');
-
-        $menues    = \Menu::find();
+        $menues = \Menu::find();
 
         return $this->render('menues/list.tpl', array('menues' => $menues,));
     }
@@ -83,7 +85,7 @@ class MenusController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_AVAILABLE');
+        $this->checkAclOrForward('MENU_UPDATE');
 
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
@@ -91,6 +93,10 @@ class MenusController extends Controller
         $cm = new \ContentManager();
 
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu(0);
+        foreach ($subcat as $subcategory) {
+            $parentCategories = array_merge($parentCategories, $subcategory);
+        }
+
         $albumCategories = $videoCategories = $pollCategories = array();
         foreach ($ccm->categories as $category) {
             if ($category->internal_category == $this->pages['album']) {
@@ -137,7 +143,6 @@ class MenusController extends Controller
             'menues/new.tpl',
             array(
                 'categories'      => $parentCategories,
-                'subcat'          => $subcat,
                 'albumCategories' => $albumCategories,
                 'videoCategories' => $videoCategories,
                 'pollCategories'  => $pollCategories,

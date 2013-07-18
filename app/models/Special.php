@@ -55,13 +55,9 @@ class Special extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-        $this->content_type = __CLASS__;
         $this->content_type_l10n_name = _('Special');
+
+        parent::__construct($id);
     }
 
     /**
@@ -97,13 +93,9 @@ class Special extends Content
 
                 break;
             case 'content_type_name':
-                $contentTypeName = $GLOBALS['application']->conn->Execute(
-                    'SELECT * FROM `content_types` '
-                    .'WHERE pk_content_type = "'. $this->content_type
-                    .'" LIMIT 1'
-                );
+                $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
 
-                if (isset($contentTypeName->fields['name'])) {
+                if (isset($contentTypeName)) {
                     $returnValue = $contentTypeName;
                 } else {
                     $returnValue = $this->content_type;

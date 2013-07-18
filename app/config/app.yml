@@ -36,7 +36,7 @@ parameters:
         level: %logger_level%
 
     # Session Configuration
-    session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage"
+    session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\\NativeSessionStorage"
     session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
     session:
         handler: %session_handler%

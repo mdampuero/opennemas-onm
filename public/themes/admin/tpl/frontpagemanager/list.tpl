@@ -174,6 +174,11 @@
                         <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
                     </li>
                     {/is_module_activated}
+                    {is_module_activated name="POLL_MANAGER"}
+                    <li>
+                        <a href="{url name=admin_polls_content_provider category=$category}">{t}Polls{/t}</a>
+                    </li>
+                    {/is_module_activated}
                     {is_module_activated name="ADS_MANAGER"}
                     <li>
                         <a href="{url name=admin_ads_content_provider category=$category}">{t}Advertisement{/t}</a>

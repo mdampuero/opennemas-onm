@@ -122,7 +122,7 @@ class PollsController extends Controller
 
             if (!empty($polls)) {
                 foreach ($polls as &$poll) {
-                    $poll->items   = $poll->get_items($poll->id);
+                    $poll->items   = $poll->getItems($poll->id);
                     $poll->dirtyId = date('YmdHis', strtotime($poll->created)).sprintf('%06d', $poll->id);
                 }
             }
@@ -180,7 +180,6 @@ class PollsController extends Controller
             if ($poll->available == 1
                 && $poll->in_litter == 0
             ) {
-                $poll->items   = $poll->get_items($pollId);
                 $items         = $poll->items;
                 $poll->dirtyId = $dirtyID;
 
@@ -270,7 +269,7 @@ class PollsController extends Controller
         $voted = 0;
 
         if (!empty($answer) && !isset($cookie)) {
-            $ip = $request->server->get('REMOTE_ADDR');
+            $ip = getRealIp();
             $voted = $poll->vote($answer, $ip);
 
             $valid = 1;

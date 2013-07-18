@@ -76,6 +76,20 @@
                     </div>
                 </div>
                 <div class="control-group">
+                <label for="author" class="control-label">{t}Author{/t}</label>
+                <div class="controls">
+                    {acl isAllowed="CONTENT_OTHER_UPDATE"}
+                        <select name="fk_author" id="fk_author">
+                            {html_options options=$authors selected=$video->fk_author}
+                        </select>
+                    {aclelse}
+                        {if !isset($album->author->name)}{t}No author assigned{/t}{else}{$video->author->name}{/if}
+                        <input type="hidden" name="fk_author" value="{$video->fk_author}">
+                    {/acl}
+
+                </div>
+            </div>
+                <div class="control-group">
                     <label for="available" class="control-label">{t}Available{/t}</label>
                     <div class="controls">
                         <select name="available" id="available"

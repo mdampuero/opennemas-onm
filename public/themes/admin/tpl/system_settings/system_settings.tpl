@@ -12,11 +12,6 @@
         margin-top:0px !important;
         margin-bottom:10px !important;
     }
-    .settings-header {
-        font-weight: bold;
-        color: #333;
-        font-size:14px;
-    }
     .colorpicker_input, colorpicker_viewer {
         display:inline-block;
         float:none;
@@ -26,6 +21,7 @@
 
 {block name="footer-js" append}
     {script_tag src="/jquery/jquery_colorpicker/js/colorpicker.js"}
+    {script_tag src="/onm/md5.min.js" common=1}
 
     <script type="text/javascript">
 
@@ -58,6 +54,19 @@
 
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+        });
+
+        $('.check-pass').on('click', function(e, ui){
+            e.preventDefault();
+            var passInput = $('#onm_digest_pass');
+            var btn = $(this);
+            if (passInput.attr('type') == 'password') {
+                passInput.prop('type','text');
+                btn.html('{t}Hide password{/t}');
+            } else {
+                passInput.prop('type','password');
+                btn.html('{t}Show password{/t}');
+            }
         });
     });
     </script>
@@ -141,7 +150,7 @@
                     {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
                         <label for="site_logo"></label>
                         <div class="controls" >
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:100px;">
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:100px;">
                         </div>
                     {/if}
                 </div>
@@ -151,7 +160,7 @@
                     <div class="controls">
                         <input type="file" id="favico" name="favico">
                         {if isset($configs['favico']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['favico']}" style="max-height:20px;">
                         {/if}
                     </div>
                 </div>
@@ -161,7 +170,7 @@
                     <div class="controls">
                         <input type="file" id="mobile_logo" name="mobile_logo">
                         {if isset($configs['mobile_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                            <img src="{$smarty.const.MEDIA_URL}/{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['mobile_logo']}" style="max-height:30px;">
                         {/if}
                     </div>
                 </div>
@@ -377,6 +386,28 @@
                 </div>
 
             </fieldset>
+            {is_module_activated name="NEWS_AGENCY_IMPORTER"}
+            <hr>
+            <fieldset>
+                <h3 class="settings-header">{t}Opennemas News Agency{/t}</h3>
+
+                <div class="control-group">
+                    <label for="onm_digest_user" class="control-label">{t}User{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="onm_digest_user" name="onm_digest_user" value="{$configs['onm_digest_user']|default:""}" class="input-xlarge">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="onm_digest_pass" class="control-label">{t}Password{/t}</label>
+                    <div class="controls">
+                        <input type="password" id="onm_digest_pass" name="onm_digest_pass" value="{$configs['onm_digest_pass']|default:""}" class="input-large">
+                        <button class="check-pass">{t}Show password{/t}</button>
+                    </div>
+                </div>
+
+            </fieldset>
+            {/is_module_activated}
             {acl isAllowed="ONLY_MASTERS"}
             <hr>
             <fieldset>
@@ -416,7 +447,18 @@
                     </div>
                 </div>
             </fieldset>
+            <hr>
+            <fieldset>
+                <h3 class="settings-header">{t}ComScore Statistics{/t}</h3>
 
+                <div class="control-group">
+                    <label for="comscore_page_id" class="control-label">{t}comScore Page ID{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="comscore_page_id" name="comscore[page_id]" value="{$configs['comscore']['page_id']|default:""}" class="input-xlarge">
+                        <div class="help-block">{t escape=off}If you also have a <b>comScore statistics service</b>, add your page id{/t}</div>
+                    </div>
+                </div>
+            </fieldset>
             <hr>
             <fieldset>
                 <h3 class="settings-header">{t}Recaptcha{/t}</h3>
@@ -435,12 +477,10 @@
                         <input type="text" id="recaptcha_private_key" name="recaptcha[private_key]" value="{$configs['recaptcha']['private_key']|default:""}" class="input-xlarge">
                     </div>
                 </div>
-
             </fieldset>
-
+            {is_module_activated name="PAYWALL"}
             <hr>
             <fieldset>
-
                 <h3 class="settings-header">{t}Paypal Settings{/t}</h3>
 
                 <div class="control-group">
@@ -450,8 +490,8 @@
                         <div class="help-block">{t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}</div>
                     </div>
                 </div>
-
             </fieldset>
+            {/is_module_activated}
         </div>
     </div>
 </div>

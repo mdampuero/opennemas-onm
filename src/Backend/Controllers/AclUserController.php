@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -36,9 +37,8 @@ class AclUserController extends Controller
     public function init()
     {
     }
-
     /**
-     * Show a paginated list of users
+     * Show a paginated list of backend users
      *
      * @param Request $request the request object
      *
@@ -48,17 +48,38 @@ class AclUserController extends Controller
     {
         $this->checkAclOrForward('USER_ADMIN');
 
-        $filter    = $request->query->get('filter', array());
+        $page   =  $request->query->getDigits('page', 1);
+        $filter = array(
+            'name'  => $request->query->filter('name', ''),
+            'group' => $request->query->getDigits('group', ''),
+            'type'  => $request->query->getDigits('type', ''),
+        );
 
         if (!$_SESSION['isMaster']) {
             $filter ['base'] = 'fk_user_group != 4';
         }
 
-        $user      = new \User();
-        $users     = $user->getUsers($filter, ' ORDER BY login ');
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+
+        // Fetch users paginated and filtered
+        $user           = new \User();
+        $searchCriteria = $user->buildFilter($filter);
+        $userManager    = $this->get('user_repository');
+        $usersCount     = $userManager->count($searchCriteria);
+        $users          = $userManager->findBy(
+            $searchCriteria,
+            'name',
+            $itemsPerPage,
+            $page
+        );
+
+        $er = $this->get('entity_repository');
+        foreach ($users as &$user) {
+            $user->photo = $er->find('Photo', $user->avatar_img_id);
+        }
 
         $userGroup = new \UserGroup();
-        $groups     = $userGroup->find();
+        $groups    = $userGroup->find();
 
         $groupsOptions = array();
         $groupsOptions[] = _('--All--');
@@ -66,12 +87,34 @@ class AclUserController extends Controller
             $groupsOptions[$cat->id] = $cat->name;
         }
 
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $usersCount,
+                'fileName'    => $this->generateUrl(
+                    'admin_acl_user',
+                    array(
+                        'name'  => $filter['name'],
+                        'group' => $filter['group'],
+                        'type'  => $filter['type'],
+                    )
+                ).'&page=%d',
+            )
+        );
+
         return $this->render(
             'acl/user/list.tpl',
             array(
                 'users'         => $users,
                 'user_groups'   => $groups,
                 'groupsOptions' => $groupsOptions,
+                'pagination'    => $pagination,
             )
         );
     }
@@ -108,14 +151,24 @@ class AclUserController extends Controller
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
-        $user->meta = array();
-        $user->meta['user_language'] = $user->getMeta('user_language') ?: 'default';
+        // Fetch user photo if exists
+        if (!empty($user->avatar_img_id)) {
+            $user->photo = new \Photo($user->avatar_img_id);
+        }
+
+        $user->meta = $user->getMeta();
+
+        if ($user->meta && array_key_exists('paywall_time_limit', $user->meta)) {
+            $user->meta['paywall_time_limit'] = new \DateTime(
+                $user->meta['paywall_time_limit'],
+                new \DateTimeZone('UTC')
+            );
+        }
 
         $userGroup = new \UserGroup();
         $tree = $ccm->getCategoriesTree();
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
-
 
         return $this->render(
             'acl/user/new.tpl',
@@ -147,33 +200,65 @@ class AclUserController extends Controller
 
         $data = array(
             'id'              => $userId,
-            'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
             'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
             'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-            'id_user_group'   => $request->request->getDigits('id_user_group'),
-            'ids_category'    => $request->request->get('ids_category'),
+            'id_user_group'   => $request->request->get('id_user_group', array()),
+            'ids_category'    => $request->request->get('ids_category', array()),
+            'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
 
-        // TODO: validar datos
+        $file = $request->files->get('avatar');
         $user = new \User($userId);
-        $user->update($data);
 
-        $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
-        $user->setMeta(array('user_language' => $userLanguage));
+        try {
+            // Upload user avatar if exists
+            if (!is_null($file)) {
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $data['avatar_img_id'] = $photoId;
+            } elseif (($data['avatar_img_id']) == 1) {
+                $data['avatar_img_id'] = $user->avatar_img_id;
+            }
 
-        if ($user->id == $_SESSION['userid']) {
-            $_SESSION['user_language'] = $userLanguage;
+            // Process data
+            if ($user->update($data)) {
+                // Set all usermeta information (twitter, rss, language)
+                $meta = $request->request->get('meta');
+                foreach ($meta as $key => $value) {
+                    $user->setMeta(array($key => $value));
+                }
+
+                // Set usermeta paywall time limit
+                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                if (!empty($paywallTimeLimit)) {
+                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                    $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                }
+
+                if ($user->id == $_SESSION['userid']) {
+                    $_SESSION['user_language'] = $meta['user_language'];
+                }
+
+                m::add(_('User data updated successfully.'), m::SUCCESS);
+            } else {
+                m::add(_('Unable to update the user with that information'), m::ERROR);
+            }
+        } catch (FileException $e) {
+            m::add($e->getMessage(), m::ERROR);
         }
 
-        m::add(_('User data updated successfully.'), m::SUCCESS);
         if ($action == 'validate') {
             $redirectUrl = $this->generateUrl('admin_acl_user_show', array('id' => $userId));
         } else {
-            // If a regular user is upating him/her information
-            // redirect to welcome page
+            // If a regular user is upating him/her information redirect to welcome page
             if (($userId == $_SESSION['userid'])
                 && !\Acl::check('USER_UPDATE')
             ) {
@@ -203,24 +288,48 @@ class AclUserController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $data = array(
-                'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
                 'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
                 'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
                 'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
                 'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-                'id_user_group'   => $request->request->getDigits('id_user_group'),
-                'ids_category'    => $request->request->get('ids_category'),
-                'authorize'       => 1,
-                'type'            => 0,
+                'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+                'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+                'id_user_group'   => $request->request->get('id_user_group', array()),
+                'ids_category'    => $request->request->get('ids_category', array()),
+                'activated'       => 1,
+                'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
                 'deposit'         => 0,
                 'token'           => null,
             );
 
+            $file = $request->files->get('avatar');
+
             try {
+                // Upload user avatar if exists
+                if (!is_null($file)) {
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $data['avatar_img_id'] = $photoId;
+                } else {
+                    $data['avatar_img_id'] = 0;
+                }
+
                 if ($user->create($data)) {
-                    $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
-                    $user->setMeta(array('user_language' => $userLanguage));
+                    // Set all usermeta information (twitter, rss, language)
+                    $meta = $request->request->get('meta');
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
+
+                    // Set usermeta paywall time limit
+                    $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                    if (!empty($paywallTimeLimit)) {
+                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                        $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                    }
 
                     m::add(_('User created successfully.'), m::SUCCESS);
 
@@ -304,7 +413,11 @@ class AclUserController extends Controller
             m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl('admin_acl_user'));
+        if (strpos($request->server->get('HTTP_REFERER'), 'users/frontend') !== false) {
+            return $this->redirect($this->generateUrl('admin_acl_user_front'));
+        } else {
+            return $this->redirect($this->generateUrl('admin_acl_user'));
+        }
     }
 
     /**
@@ -368,15 +481,241 @@ class AclUserController extends Controller
         if (!is_null($userId)) {
             $user = new \User($userId);
 
-            if ($user->authorize == 1) {
-                $user->unauthorizeUser($userId);
+            if ($user->activated == 1) {
+                $user->deactivateUser($userId);
             } else {
-                $user->authorizeUser($userId);
+                $user->activateUser($userId);
             }
 
             if (!$request->isXmlHttpRequest()) {
                 return $this->redirect($this->generateUrl('admin_acl_user'));
             }
         }
+    }
+
+
+    /**
+     * Shows the form for recovering the pass of a user and
+     * sends the mail to the user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function recoverPasswordAction(Request $request)
+    {
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('current_language', \Application::$language);
+
+        if ('POST' != $request->getMethod()) {
+            return $this->render('login/recover_pass.tpl');
+        } else {
+            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+
+            // Get user by email
+            $user = new \User();
+            $user->findByEmail($email);
+
+            // If e-mail exists in DB
+            if (!is_null($user->id)) {
+                // Generate and update user with new token
+                $token = md5(uniqid(mt_rand(), true));
+                $user->updateUserToken($user->id, $token);
+
+                $url = $this->generateUrl('admin_acl_user_reset_pass', array('token' => $token), true);
+
+                $tplMail = new \TemplateAdmin(TEMPLATE_ADMIN);
+                $tplMail->caching = 0;
+
+                $mailSubject = sprintf(_('Password reminder for %s'), s::get('site_title'));
+                $mailBody = $tplMail->fetch(
+                    'login/emails/recoverpassword.tpl',
+                    array(
+                        'user' => $user,
+                        'url'  => $url,
+                    )
+                );
+
+                //  Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/plain')
+                    ->setTo($user->email)
+                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $this->view->assign(
+                        array(
+                            'mailSent' => true,
+                            'user' => $user
+                        )
+                    );
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('logger')->notice(
+                        "Unable to send the recover password email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                }
+
+            } else {
+                m::add(_('Unable to find an user with that email.'), m::ERROR);
+            }
+
+            // Display form
+            return $this->render('login/recover_pass.tpl');
+        }
+    }
+
+    /**
+     * Shows the form for recovering the username of a user and
+     * sends the mail to the user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function recoverUsernameAction(Request $request)
+    {
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('current_language', \Application::$language);
+
+        if ('POST' != $request->getMethod()) {
+            return $this->render('login/recover_username.tpl');
+        } else {
+            $email = $request->request->filter('email', null, FILTER_SANITIZE_EMAIL);
+
+            // Get user by email
+            $user = new \User();
+            $user->findByEmail($email);
+
+            // If e-mail exists in DB
+            if (!is_null($user->id)) {
+                // Generate and update user with new token
+                $token = md5(uniqid(mt_rand(), true));
+                $user->updateUserToken($user->id, $token);
+
+                $tplMail = new \TemplateAdmin(TEMPLATE_ADMIN);
+                $tplMail->caching = 0;
+
+                $mailSubject = sprintf(_('Username reminder for %s'), s::get('site_title'));
+                $mailBody = $tplMail->fetch(
+                    'login/emails/recoverusername.tpl',
+                    array(
+                        'user' => $user,
+                    )
+                );
+
+                //  Build the message
+                $message = \Swift_Message::newInstance();
+                $message
+                    ->setSubject($mailSubject)
+                    ->setBody($mailBody, 'text/plain')
+                    ->setTo($user->email)
+                    ->setFrom(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+
+                try {
+                    $mailer = $this->get('mailer');
+                    $mailer->send($message);
+
+                    $url = $this->generateUrl('admin_login_form', array(), true);
+
+                    $this->view->assign(
+                        array(
+                            'mailSent' => true,
+                            'user' => $user,
+                            'url' => $url
+                        )
+                    );
+                } catch (\Exception $e) {
+                    // Log this error
+                    $this->get('logger')->notice(
+                        "Unable to send the recover password email for the "
+                        ."user {$user->id}: ".$e->getMessage()
+                    );
+
+                    m::add(_('Unable to send your recover username email. Please try it later.'), m::ERROR);
+                }
+
+            } else {
+                m::add(_('Unable to find an user with that email.'), m::ERROR);
+            }
+
+            // Display form
+            return $this->render('login/recover_username.tpl');
+        }
+    }
+
+    /**
+     * Regenerates the pass for a user
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function regeneratePasswordAction(Request $request)
+    {
+        // Setup view
+        $this->view->assign('version', \Onm\Common\Version::VERSION);
+        $this->view->assign('languages', $this->container->getParameter('available_languages'));
+        $this->view->assign('current_language', \Application::$language);
+
+        $token = $request->query->filter('token', null, FILTER_SANITIZE_STRING);
+
+        $user = new \User();
+        $user = $user->findByToken($token);
+
+        if ('POST' !== $request->getMethod()) {
+            if (empty($user->id)) {
+                m::add(
+                    _(
+                        'Unable to find the password reset request. '
+                        .'Please check the url we sent you in the email.'
+                    ),
+                    m::ERROR
+                );
+                $this->view->assign('userNotValid', true);
+            } else {
+                $this->view->assign(
+                    array(
+                        'user' => $user
+                    )
+                );
+            }
+        } else {
+            $password       = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
+            $passwordVerify = $request->request->filter('password-verify', null, FILTER_SANITIZE_STRING);
+
+            if ($password == $passwordVerify && !empty($password) && !is_null($user)) {
+                $user->updateUserPassword($user->id, $password);
+                $user->updateUserToken($user->id, null);
+
+                $this->view->assign('updated', true);
+            } elseif ($password != $passwordVerify) {
+                m::add(_('Password and confirmation must be equal.'), m::ERROR);
+            } else {
+                m::add(
+                    _(
+                        'Unable to find the password reset request. '
+                        .'Please check the url we sent you in the email.'
+                    ),
+                    m::ERROR
+                );
+            }
+
+        }
+
+        return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
+
     }
 }

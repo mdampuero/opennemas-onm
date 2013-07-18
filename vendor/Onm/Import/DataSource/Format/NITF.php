@@ -283,7 +283,7 @@ class NITF extends NewsMLG1
     {
         $node = $data->xpath("//nitf");
 
-        if (!is_array($node)) {
+        if (!is_array($node) || empty($node)) {
             throw new \Exception(sprintf(_('Not a valid NITF file')));
         }
         return true;

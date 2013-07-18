@@ -28,6 +28,9 @@ class WebServiceController extends Controller
      **/
     public function init()
     {
+        require_once SITE_VENDOR_PATH.'/Restler/restler.php';
+        require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
+        require_once SITE_VENDOR_PATH.'/Restler/OnmAuth.php';
     }
 
     /**
@@ -37,9 +40,6 @@ class WebServiceController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        require_once SITE_VENDOR_PATH.'/Restler/restler.php';
-        require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
-
         // Change the request uri to trick Restler
         $_SERVER['REQUEST_URI'] = str_replace('/ws', '', $_SERVER['REQUEST_URI']);
 
@@ -48,18 +48,22 @@ class WebServiceController extends Controller
         }
 
         $r = new \Restler();
+        $r->container = $this->container;
         $r->setSupportedFormats('JsonFormat', 'XmlFormat');
-        $r->addAPIClass('Instances');
         $r->addAPIClass('Ads');
-        $r->addAPIClass('Contents');
+        $r->addAPIClass('Agency');
         $r->addAPIClass('Articles');
-        $r->addAPIClass('Opinions');
-        $r->addAPIClass('Comments');
-        $r->addAPIClass('Images');
-        $r->addAPIClass('Videos');
-        $r->addAPIClass('Categories');
         $r->addAPIClass('Authors');
+        $r->addAPIClass('Categories');
+        $r->addAPIClass('Comments');
+        $r->addAPIClass('Contents');
         $r->addAPIClass('Frontpages');
+        $r->addAPIClass('Images');
+        $r->addAPIClass('Instances');
+        $r->addAPIClass('Opinions');
+        $r->addAPIClass('Videos');
+
+        $r->addAuthenticationClass('OnmAuth');
 
         $r->handle();
         die();

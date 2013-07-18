@@ -34,6 +34,11 @@ class WidgetsController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('WIDGET_MANAGER');
+
+        $this->checkAclOrForward('WIDGET_ADMIN');
+
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
@@ -95,6 +100,8 @@ class WidgetsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->checkAclOrForward('WIDGET_UPDATE');
+
         $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
         // Need category to redirect to frontpage manager
@@ -133,6 +140,8 @@ class WidgetsController extends Controller
      **/
     public function deleteAction(Request $request)
     {
+        $this->checkAclOrForward('WIDGET_DELETE');
+
         $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -151,6 +160,8 @@ class WidgetsController extends Controller
      **/
     public function createAction(Request $request)
     {
+        $this->checkAclOrForward('WIDGET_CREATE');
+
         if ('POST' == $request->getMethod()) {
             $post = $request->request;
 
@@ -204,6 +215,8 @@ class WidgetsController extends Controller
      **/
     public function updateAction(Request $request)
     {
+        $this->checkAclOrForward('WIDGET_UPDATE');
+
         $id = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -255,6 +268,8 @@ class WidgetsController extends Controller
      **/
     public function toogleAvailableAction(Request $request)
     {
+        $this->checkAclOrForward('WIDGET_AVAILABLE');
+
         $id = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -305,7 +320,7 @@ class WidgetsController extends Controller
         list($countWidgets, $widgets) = $cm->getCountAndSlice(
             'Widget',
             null,
-            'contents.available=1 '.$sqlExcludedOpinions,
+            'contents.available=1 AND contents.in_litter != 1 '.$sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             8

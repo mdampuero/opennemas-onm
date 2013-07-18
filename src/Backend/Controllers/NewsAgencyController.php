@@ -34,6 +34,9 @@ class NewsAgencyController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('NEWS_AGENCY_IMPORTER');
+
         // Check ACL
         $this->checkAclOrForward('IMPORT_ADMIN');
 
@@ -76,12 +79,24 @@ class NewsAgencyController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $queryParams  = $this->request->query;
+        $page         = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
+        $filterTitle  = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
+        $itemsPage    = s::get('items_per_page') ?: 20;
 
-        $repository = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+        // Get the amount of minutes from last sync
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
+        // Get LocalRepository instance
+        $repository = new \Onm\Import\Repository\LocalRepository();
+
+        // Fetch all servers and activated sources
         $servers = s::get('news_agency_config');
-
+        if (!is_array($servers)) {
+            $servers = array();
+        }
         $sources = array_map(
             function ($server) {
                 return $server['name'];
@@ -89,15 +104,7 @@ class NewsAgencyController extends Controller
             $servers
         );
 
-        // Get the amount of minutes from last sync
-        $minutesFromLastSync = $repository->minutesFromLastSync();
-
-        $queryParams  = $this->request->query;
-        $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
-        $filterTitle  = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
-        $page         = $queryParams->filter('page', 1, FILTER_VALIDATE_INT);
-        $itemsPage    = s::get('items_per_page') ?: 20;
-
+        // Fetch filter params
         $findParams = array(
             'source'     => $filterSource,
             'title'      => $filterTitle,
@@ -186,8 +193,8 @@ class NewsAgencyController extends Controller
         $sourceId = $this->request->query->getDigits('source_id');
 
         try {
-            $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $element = $ep->findByFileName($sourceId, $id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $element = $repository->findByFileName($sourceId, $id);
             $element->source_id = $sourceId;
 
             $alreadyImported = false;
@@ -264,8 +271,8 @@ class NewsAgencyController extends Controller
 
         // Get EFE new from a filename
         try {
-            $efe = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $element = $efe->findByFileName($sourceId, $id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $element = $repository->findByFileName($sourceId, $id);
         } catch (\Exception $e) {
             m::add(_('Please specify the article to import.'), m::ERROR);
 
@@ -275,15 +282,25 @@ class NewsAgencyController extends Controller
         // If the new has photos import them
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
+            $i = 0;
             foreach ($photos as $photo) {
+                // Get image from FTP
                 $filePath = realpath(
-                    $efe->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$photo->file_path
+                    $repository->syncPath.DS.$sourceId.DS.$photo->file_path
                 );
+                $fileName = $photo->file_path;
 
-                // Check if the file apc_exists(keys)
-                if ($filePath) {
+                // If no image from FTP check HTTP
+                if (!$filePath) {
+                    $filePath = $repository->syncPath.DS.
+                        $sourceId.DS.$photo->name[$i];
+                    $fileName = $photo->name[$i];
+                }
+
+                // Check if the file cache exists(keys)
+                if (file_exists($filePath)) {
                     $data = array(
-                        'title'         => $photo->file_path,
+                        'title'         => $fileName,
                         'description'   => $photo->title,
                         'local_file'    => $filePath,
                         'fk_category'   => $category,
@@ -291,18 +308,26 @@ class NewsAgencyController extends Controller
                         'category'      => $categoryInstance->name,
                         'metadata'      => \StringUtils::get_tags($photo->title),
                         'author_name'   => '&copy; EFE '.date('Y'),
-                        'original_filename' => $photo->file_path
+                        'original_filename' => $fileName,
                     );
 
                     $photo = new \Photo();
                     $photoObject = $photo->createFromLocalFileAjax($data);
 
-                    // If this article has more than one photo take the first one
-                    if (!isset($innerPhoto)) {
+                    // Check if sync is from Opennemas instances
+                    if ($element->getServicePartyName() == 'Opennemas') {
+                        // If this article has more than one photo take the first one to front
+                        if (!isset($frontPhoto)) {
+                            $frontPhoto = new \Photo($photoObject->id);
+                        } elseif (!isset($innerPhoto)) {
+                            $innerPhoto = new \Photo($photoObject->id);
+                        }
+                    } elseif (!isset($innerPhoto)) {
                         $innerPhoto = new \Photo($photoObject->id);
                     }
-                }
 
+                }
+                $i++;
             }
         }
 
@@ -310,15 +335,23 @@ class NewsAgencyController extends Controller
         if ($element->hasVideos()) {
             $videos = $element->getVideos();
             foreach ($videos as $video) {
-                $filepath = realpath(
-                    $efe->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$video->file_path
+                $filePath = realpath(
+                    $repository->syncPath.DS.$sourceId.DS.$video->file_path
                 );
+
+                // If no video from FTP check HTTP
+                if (!$filePath) {
+                    $filePath = $repository->syncPath.DS.
+                        $sourceId.DS.$video->name[$i];
+                    $fileName = $video->name[$i];
+                }
+
 
                 // Check if the file exists
                 if ($filePath) {
                     $videoFileData = array(
                         'file_type'      => $video->file_type,
-                        'file_path'      => $filepath,
+                        'file_path'      => $filePath,
                         'category'       => $category,
                         'available'      => 1,
                         'content_status' => 0,
@@ -336,6 +369,7 @@ class NewsAgencyController extends Controller
                         $innerVideo = new \Video($videoID);
                     }
                 }
+                $i++;
             }
         }
 
@@ -358,8 +392,8 @@ class NewsAgencyController extends Controller
             'posic'          => 0,
             'id'             => 0,
             'fk_publisher'   => $_SESSION['userid'],
-            'img1'           => '',
-            'img1_footer'    => '',
+            'img1'           => (isset($frontPhoto) ? $frontPhoto->id : ''),
+            'img1_footer'    => (isset($frontPhoto) ? $frontPhoto->description : ''),
             'img2'           => (isset($innerPhoto) ? $innerPhoto->id : ''),
             'img2_footer'    => (isset($innerPhoto) ? $innerPhoto->description : ''),
             'fk_video'       => '',
@@ -376,7 +410,12 @@ class NewsAgencyController extends Controller
 
         // TODO: change this redirection when creating the ported article controller
         if (!empty($newArticleID)) {
-            return $this->redirect($this->generateUrl('admin_article_show', array('id' => $newArticleID)));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_article_show',
+                    array('id' => $newArticleID)
+                )
+            );
         } else {
             m::add(sprintf('Unable to import the file "%s"', $id));
 
@@ -410,8 +449,8 @@ class NewsAgencyController extends Controller
             $categories [$category->pk_content_category]= $category->title;
         }
 
-        $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $element = $ep->findByFileName($sourceId, $id);
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        $element = $repository->findByFileName($sourceId, $id);
 
         return $this->render(
             'news_agency/import_select_category.tpl',
@@ -435,20 +474,35 @@ class NewsAgencyController extends Controller
     public function showAttachmentAction(Request $request)
     {
         $id           = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
+        $index        = $this->request->query->getDigits('index');
+        $sourceId     = $this->request->query->getDigits('source_id');
         $attachmentId = $this->request->query->filter('attachment_id', null, FILTER_SANITIZE_STRING);
 
-        $ep = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $element = $ep->findById($sourceId, $id);
+        $repository = new \Onm\Import\Repository\LocalRepository();
+        $element    = $repository->findById($sourceId, $id);
 
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
 
             if (array_key_exists($attachmentId, $photos)) {
                 $photo = $photos[$attachmentId];
-                $filePath = realpath($ep->syncPath.DIRECTORY_SEPARATOR.$sourceId.DIRECTORY_SEPARATOR.$photo->file_path);
-                $content = file_get_contents($filePath);
-                $response = new Response($content, 200, array('content-type' => $photo->file_type));
+                // Get image from FTP
+                $filePath = realpath(
+                    $repository->syncPath.DS.$sourceId.DS.$photo->file_path
+                );
+
+                // If no image from FTP check HTTP
+                if (!$filePath) {
+                    $filePath = $repository->syncPath.DS.
+                        $sourceId.DS.$photo->name[$index];
+                }
+                $content = @file_get_contents($filePath);
+
+                $response = new Response(
+                    $content,
+                    200,
+                    array('content-type' => $photo->file_type)
+                );
             } else {
                 $response = new Response('Image not found', 404);
             }
@@ -469,8 +523,8 @@ class NewsAgencyController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $e = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-        $e->unlockSync();
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $synchronizer->unlockSync();
         unset($_SESSION['error']);
 
         $page = $this->request->query->filter('page', null, FILTER_VALIDATE_INT);
@@ -493,7 +547,7 @@ class NewsAgencyController extends Controller
 
         $servers = s::get('news_agency_config');
 
-        $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
 
         foreach ($servers as $server) {
             try {
@@ -503,7 +557,7 @@ class NewsAgencyController extends Controller
 
                 $server['allowed_file_extesions_pattern'] = '.*';
 
-                $message      = $synchronizer->sync($server);
+                $message = $synchronizer->sync($server);
 
                 m::add(
                     sprintf(
@@ -570,7 +624,7 @@ class NewsAgencyController extends Controller
      **/
     public function configUpdateServerAction(Request $request)
     {
-        $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
 
         $id = $request->query->getDigits('id');
 
@@ -583,6 +637,7 @@ class NewsAgencyController extends Controller
             'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
             'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
             'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+            'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
             'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->getDigits('activated', 0),
         );
@@ -593,7 +648,12 @@ class NewsAgencyController extends Controller
 
         m::add(_('News agency server updated.'), m::SUCCESS);
 
-        return $this->redirect($this->generateUrl('admin_news_agency_server_show', array('id' => $id)));
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_news_agency_server_show',
+                array('id' => $id)
+            )
+        );
     }
 
     /**
@@ -630,9 +690,9 @@ class NewsAgencyController extends Controller
      **/
     public function configCreateServerAction(Request $request)
     {
-        if ('POST' != $request->getMethod()) {
-            $this->checkAclOrForward('IMPORT_EFE_CONFIG');
+        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
 
+        if ('POST' != $request->getMethod()) {
             $this->view->assign(
                 array(
                     'server'        => array(),
@@ -657,6 +717,7 @@ class NewsAgencyController extends Controller
                 'username'      => $request->request->filter('username', '', FILTER_SANITIZE_STRING),
                 'password'      => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
                 'agency_string' => $request->request->filter('agency_string', '', FILTER_SANITIZE_STRING),
+                'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
                 'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
                 'activated'     => $request->request->getDigits('activated', 0),
             );
@@ -667,7 +728,12 @@ class NewsAgencyController extends Controller
 
             m::add(_('News agency server added.'), m::SUCCESS);
 
-            return $this->redirect($this->generateUrl('admin_news_agency_server_show', array('id' => $server['id'])));
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_news_agency_server_show',
+                    array('id' => $server['id'])
+                )
+            );
         }
     }
 
@@ -699,8 +765,8 @@ class NewsAgencyController extends Controller
         }
 
         try {
-            $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $synchronizer->deleteFilesForSource($id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $repository->deleteFilesForSource($id);
 
             unset($servers[$id]);
 
@@ -742,8 +808,8 @@ class NewsAgencyController extends Controller
         }
 
         try {
-            $synchronizer = new \Onm\Import\Repository\FtpBasedAgencyImporter();
-            $synchronizer->deleteFilesForSource($id);
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $repository->deleteFilesForSource($id);
 
             m::add(sprintf(_('Files for "%s" cleaned.'), $servers[$id]['name']), m::SUCCESS);
         } catch (\Exception $e) {

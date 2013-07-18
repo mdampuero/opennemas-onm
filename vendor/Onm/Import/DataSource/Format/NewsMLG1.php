@@ -96,6 +96,14 @@ class NewsMLG1 implements FormatInterface
                 return $this->getBody();
 
                 break;
+            case 'summary':
+                return $this->getSummary();
+
+                break;
+            case 'pretitle':
+                return $this->getPretitle();
+
+                break;
             case 'agency_name':
                 $this->getServiceName();
 
@@ -128,6 +136,19 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        $agencyName = $this->getData()
+            ->NewsEnvelope->SentFrom->Party->attributes()->FormalName;
+
+        return (string) $agencyName;
+    }
+
+    /**
      * Returns the id of the element
      *
      * @return string the title
@@ -155,7 +176,7 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getPretitle()
     {
-        return '';
+        return (string) $this->getData()->NewsItem->NewsComponent->NewsLines->SubHeadLine;
     }
 
     /**
@@ -165,7 +186,18 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getSummary()
     {
-        return '';
+        $summaries = $this->getData()->xpath(
+            "//nitf/body/body.head/abstract"
+        );
+        $summary   = "";
+
+        if (!empty($summaries)) {
+            foreach ($summaries[0]->children() as $child) {
+                $summary .= "<p>".sprintf("%s", $child)."</p>";
+            }
+        }
+
+        return $summary;
     }
 
     /**
@@ -213,6 +245,10 @@ class NewsMLG1 implements FormatInterface
         $rawCategory =
             $this->getData()->NewsItem->NewsComponent->DescriptiveMetadata
             ->xpath("//Property[@FormalName=\"Tesauro\"]");
+
+        if (empty($rawCategory)) {
+            return array();
+        }
         $rawTags = (string) $rawCategory[0]->attributes()->Value;
         $tagGroups = explode(";", $rawTags);
 
@@ -244,13 +280,10 @@ class NewsMLG1 implements FormatInterface
     {
         $originalDate = (string) $this->getData()
                                     ->NewsItem->NewsManagement
-                                    ->ThisRevisionCreated;
-
-        // ISO 8601 doesn't match this date 20111211T103900+0000
-        $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
+                                    ->FirstCreated;
 
         return \DateTime::createFromFormat(
-            'Ymd\THis',
+            'Ymd\THisP',
             $originalDate
         );
     }
@@ -265,17 +298,19 @@ class NewsMLG1 implements FormatInterface
      **/
     public static function checkFormat($data = null, $xmlFile = null)
     {
+        $contents = $data->xpath(
+            "//NewsItem/NewsComponent/NewsComponent[@Duid]"
+        );
 
-        if ($data->NewsItem->count() <= 0) {
+        if (count($contents) == 0 || $data->NewsItem->count() <= 0) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLEuropapres file'), $xmlFile));
         }
         $title = (string) $data->NewsItem->NewsComponent->NewsLines->HeadLine;
 
-        if (!(string) $data->NewsEnvelope
-            || empty($title)
-        ) {
+        if (!(string) $data->NewsEnvelope || empty($title)) {
             throw new \Exception(sprintf(_('File %s is not a valid NewsMLG1 file'), $xmlFile));
         }
+
         return true;
     }
 

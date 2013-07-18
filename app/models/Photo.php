@@ -108,15 +108,9 @@ class Photo extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'Photo';
         $this->content_type_l10n_name = _('Image');
 
-        return $this;
+        parent::__construct($id);
     }
 
     /**
@@ -180,8 +174,7 @@ class Photo extends Content
         if (empty($dateForDirectory)) {
             $dateForDirectory = date("/Y/m/d/");
         }
-        $uploadDir =
-            MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
+        $uploadDir = MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
 
         if (!is_dir($uploadDir)) {
             FilesManager::createDirectory($uploadDir);
@@ -192,8 +185,7 @@ class Photo extends Content
         // Getting information for creating
         $t                  = gettimeofday();
         $micro              = intval(substr($t['usec'], 0, 5));
-        $finalPhotoFileName =
-            date("YmdHis").$micro.".".strtolower($filePathInfo['extension']);
+        $finalPhotoFileName = date("YmdHis").$micro.".".strtolower($filePathInfo['extension']);
         $fileInformation    = new MediaItem($filePath);
 
         if (!array_key_exists('created', $dataSource)) {
@@ -259,25 +251,6 @@ class Photo extends Content
                             'image_front_thumb_size',
                         )
                     );
-
-                    // Thumbnail handler
-                    $thumb = new Imagick(
-                        realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
-                    );
-
-                    // Main thumbnail
-                    $thumb->thumbnailImage(
-                        $imageThumbSize['image_thumb_size']['width'] ?: 140,
-                        $imageThumbSize['image_thumb_size']['height'] ?: 100,
-                        true
-                    );
-                    //Write the new image to a file
-                    $thumb->writeImage(
-                        $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                        .'-'.$imageThumbSize['image_thumb_size']['height']
-                        .'-'.$finalPhotoFileName
-                    );
-
                 }
 
             } else {
@@ -306,7 +279,7 @@ class Photo extends Content
 
             Application::getLogger()->notice(
                 sprintf(
-                    'EFE Importer: Unable to creathe the '
+                    'EFE Importer: Unable to create the '
                     .'photo file %s (destination: %s).',
                     $dataSource['local_file'],
                     $uploadDir.$finalPhotoFileName
@@ -335,7 +308,7 @@ class Photo extends Content
      **/
     public function createFromLocalFileAjax($dataSource)
     {
-
+        $photo = null;
         $filePath = $dataSource["local_file"];
         $originalFileName = $dataSource['original_filename'];
 
@@ -413,40 +386,10 @@ class Photo extends Content
                 $photo = new Photo();
                 $photoID = $photo->create($data);
 
-                if ($photoID) {
-
-                    if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
-
-                        $imageThumbSize = s::get(
-                            array(
-                                'image_thumb_size',
-                                'image_inner_thumb_size',
-                                'image_front_thumb_size',
-                            )
-                        );
-
-                        // Thumbnail handler
-                        $thumb = new Imagick(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
-
-                        // Main thumbnail
-                        $thumb->thumbnailImage(
-                            $imageThumbSize['image_thumb_size']['width'] ?: 140,
-                            $imageThumbSize['image_thumb_size']['height'] ?: 100,
-                            true
-                        );
-                        //Write the new image to a file
-                        $thumb->writeImage(
-                            $uploadDir.$imageThumbSize['image_thumb_size']['width']
-                            .'-'.$imageThumbSize['image_thumb_size']['height']
-                            .'-'.$finalPhotoFileName
-                        );
-                    }
-
-                } else {
+                if (!$photoID) {
                     Application::getLogger()->notice(
                         sprintf(
-                            'EFE Importer: Unable to register '
-                            .'the photo object %s (destination: %s).',
+                            'EFE Importer: Unable to register the photo object %s (destination: %s).',
                             $dataSource['local_file'],
                             $uploadDir.$finalPhotoFileName
                         )
@@ -467,8 +410,7 @@ class Photo extends Content
 
                 Application::getLogger()->notice(
                     sprintf(
-                        'EFE Importer: Unable to creathe the '
-                        .'photo file %s (destination: %s).',
+                        'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
                         $dataSource['local_file'],
                         $uploadDir.$finalPhotoFileName
                     )
@@ -510,6 +452,9 @@ class Photo extends Content
         $this->pk_photo    = $rs->fields['pk_photo'];
         $this->name        = $rs->fields['name'];
         $this->path_file   = $rs->fields['path_file'];
+        if (!empty($rs->fields['path_file'])) {
+            $this->path_img = $rs->fields['path_file'].DS.$rs->fields['name'];
+        }
         $this->size        = $rs->fields['size'];
         $this->resolution  = $rs->fields['resolution'];
         $this->width       = $rs->fields['width'];
@@ -550,6 +495,9 @@ class Photo extends Content
         $photo->description = $this->description ;
         $photo->metadata    = $this->metadata ;
         $photo->path_file   = $this->path_file;
+        if (!empty($this->path_file)) {
+            $photo->path_img    = $this->path_file.DS.$this->name;
+        }
         $photo->size        = $this->size;
         $photo->resolution  = $this->resolution;
         $photo->width       = $this->width;
@@ -768,13 +716,12 @@ class Photo extends Content
         parent::update($data);
 
         $sql = "UPDATE `photos`
-                SET `author_name`=?, `address`=?, `color`=?, `date`=?, `resolution`=?
+                SET `author_name`=?, `address`=?, `date`=?, `resolution`=?
                 WHERE `pk_photo`=?";
 
         $values = array(
             $data['author_name'],
             $data['address'],
-            $data['color'],
             $data['date'],
             $data['resolution'],
             $data['id']
@@ -810,13 +757,9 @@ class Photo extends Content
         }
 
         $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
-        $thumbimage = MEDIA_IMG_PATH . $this->path_file.'140-100-'.$this->name;
 
         if (file_exists($image)) {
             @unlink($image);
-        }
-        if (file_exists($thumbimage)) {
-            @unlink($thumbimage);
         }
 
         return true;
@@ -844,6 +787,27 @@ class Photo extends Content
         }
 
         return true;
+    }
+
+    /**
+     * Returns the photo path associated to an id.
+     *
+     * @param string $id the photo id.
+     *
+     * @return int the photo path
+     */
+    public static function getPhotoPath($id)
+    {
+        $sql = 'SELECT `path_file`, `name` FROM photos WHERE pk_photo = ?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+        return (string) $rs->fields['path_file'].DS.$rs->fields['name'];
     }
 
     /**

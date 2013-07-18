@@ -139,6 +139,14 @@ JSINTERSTICIAL;
         }
     }
 
+    // If the size isset on banner get the banner width and height
+    if (!is_null($banner->params['width']) &&
+        !is_null($banner->params['height'])
+    ) {
+        $width = $banner->params['width'];
+        $height = $banner->params['height'];
+    }
+
     // Overlap flash?
     $overlap  = (isset($params['overlap']))? $params['overlap']: false;
     $isBastardIE = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
@@ -157,19 +165,10 @@ JSINTERSTICIAL;
         if (preg_match('/iframe/', $banner->script)) {
             $output .= $banner->script;
         } else {
-            // Get defined banner width and height for 'robapáxina' only
-            if (!is_null($banner->params['width']) &&
-                !is_null($banner->params['height']) &&
-                $banner->type_advertisement == '104'
-            ) {
-                $width = $banner->params['width'];
-                $height = $banner->params['height'];
-            }
-
             $url = $siteUrl.'ads/get/'
                 .date('YmdHis', strtotime($banner->created))
                 .sprintf('%06d', $banner->pk_content)  . '.html';
-            $output .= '<iframe src="'.$url.'" scrolling="no" style="width:'.$width.
+            $output .= '<iframe src="'.$url.'" scrolling="no" style="border:0;width:'.$width.
                         'px; height:'.$height.'px"></iframe>';
         }
 
@@ -187,13 +186,13 @@ JSINTERSTICIAL;
                     .sprintf('%06d', $banner->pk_advertisement)
                     .'.html" rel="nofollow" style="display:block;cursor:pointer">';
                 $output .= '<object width="'.$width.'" height="'.$height.'" >
-                        <param name="wmode" value="transparent" />
+                        <param name="wmode" value="window" />
                         <param name="movie" value="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '" />
                         <param name="width" value="'.$width.'" />
                         <param name="height" value="'.$height.'" />
                         <embed src="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '"
                             width="'.$width.'" height="'.$height.'" alt="Publicidad '.
-                            $banner->title. '" wmode="transparent"></embed>
+                            $banner->title. '" wmode="window"></embed>
                     </object>';
             } else {
                 if (!$isBastardIE) {
@@ -215,7 +214,7 @@ JSINTERSTICIAL;
                                 .'.html\', \'_blank\');return false;"></div>';
                 }
 
-                $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;">
+                $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px;  height: '.$height.'px;">
                         <object width="'.$width.'" height="'.$height.'">
                             <param name="movie" value="'. $mediaImgPathWeb. $photo->path_file. $photo->name. '" />
                             <param name="wmode" value="opaque" />

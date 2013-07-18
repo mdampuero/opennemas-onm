@@ -50,28 +50,56 @@ abstract class ResourceAbstract
 
                 break;
             case 'title':
+                $contentTitle =
+                    $this->getData()
+                    ->NewsComponent[1]->ContentItem->DataContent
+                    ->nitf->body->{'body.content'}->p;
+
+                return $contentTitle;
+
+                break;
+            case 'name':
                 $content =
                     $this->getData()
-                    ->NewsComponent->ContentItem->DataContent
-                    ->xpath('//body.content');
+                    ->NewsComponent->ContentItem->Characteristics
+                    ->xpath("//Property[contains(@FormalName,'Filename')]");
 
-                return (string) $content[1]->p;
+                if (stripos($content[0]->attributes()->FormalName, 'EFE') !== false) {
+                    foreach ($content as $key => $image) {
+                        if ($key % 4 == 1) {
+                            $imageName[] = (string) $image->attributes()->Value;
+                        }
+                    }
+                } else {
+                    foreach ($content as $image) {
+                        $imageName[] = (string) $image->attributes()->Value;
+                    }
+                }
+
+                return $imageName;
 
                 break;
             case 'file_type':
-                $fileType =
-                    $this->getData()
-                    ->NewsComponent->ContentItem->MimeType
-                    ->attributes()->FormalName;
+                $fileType = $this->getData()->NewsComponent;
 
-                return (string) $fileType;
+                if (count($fileType->ContentItem) > 1) {
+                    $fileType = (string) $fileType->ContentItem[1]->MimeType->attributes()->FormalName;
+                } else {
+                    $fileType = (string) $fileType->ContentItem->MimeType->attributes()->FormalName;
+                }
+
+                return $fileType;
 
                 break;
             case 'file_path':
-                $filePath =
-                    $this->getData()
-                    ->NewsComponent->ContentItem
-                    ->attributes()->Href;
+
+                $imageContentItems = $this->getData()->NewsComponent->ContentItem;
+
+                if (count($imageContentItems) > 1) {
+                    $filePath =  $imageContentItems[1]->attributes()->Href;
+                } else {
+                    $filePath =  $imageContentItems->attributes()->Href;
+                }
 
                 return (string) $filePath;
 

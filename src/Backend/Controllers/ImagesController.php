@@ -34,12 +34,17 @@ class ImagesController extends Controller
      **/
     public function init()
     {
+        //Check if module is activated in this onm instance
+        \Onm\Module\ModuleManager::checkActivatedOrForward('IMAGE_MANAGER');
+
+        $this->checkAclOrForward('IMAGE_ADMIN');
+
         $request = $this->request;
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
-        $this->contentType = \Content::getIDContentType('album');
+        $this->contentType = \ContentManager::getContentTypeIdFromName('album');
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
@@ -94,8 +99,7 @@ class ImagesController extends Controller
         );
 
         foreach ($images as &$image) {
-            $image->description_utf = html_entity_decode($image->description);
-            $image->metadata_utf    = html_entity_decode($image->metadata);
+            $image->category_name   = $image->loadCategoryName($image->id);
         }
 
         // Build the pager
@@ -116,13 +120,20 @@ class ImagesController extends Controller
             )
         );
 
+        $adsModule = 'false';
+        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+            $adsModule = 'true';
+        }
+
+
         return $this->render(
             'image/list.tpl',
             array(
                 'pages'    => $pagination,
                 'photos'   => $images,
                 'category' => $this->category,
-                'page'     => $page
+                'page'     => $page,
+                'adsModule'=> $adsModule,
             )
         );
     }
@@ -242,35 +253,38 @@ class ImagesController extends Controller
 
         // FIXME: eliminar as dependencias xeradas por un mal
         // Eliminada categoria album del array $especials:  3 => 'album'
-        $especials = array(2 => _('Advertisement'));
-        foreach ($especials as $key => $cat) {
-            $num_especials[$j] =  new \stdClass;
-            $num_especials[$j]->id    = $key;
-            $num_especials[$j]->title = $cat;
-            $num_especials[$j]->total = (isset($photoSet[$key]->total))? $photoSet[$key]->total : 0;
-            $num_especials[$j]->size  = (isset($photoSet[$key]->size))? $photoSet[$key]->size : 0;
-            $num_especials[$j]->jpg   = (isset($photoSetJPG[$key]))? $photoSetJPG[$key] : 0;
-            $num_especials[$j]->gif   = (isset($photoSetGIF[$key]))? $photoSetGIF[$key] : 0;
-            $num_especials[$j]->png   = (isset($photoSetPNG[$key]))? $photoSetPNG[$key] : 0;
-            $num_especials[$j]->other = $photoSet[$key]->total
-                                        - $num_especials[$j]->jpg
-                                        - $num_especials[$j]->gif
-                                        - $num_especials[$j]->png;
-            $num_especials[$j]->BN    = (isset($photoSetBN[$key]))? $photoSetBN[$key] : 0;
-            $num_especials[$j]->color = $photoSet[$key]->total - $num_especials[$j]->BN ;
+        $especials = null;
+        $num_especials = null;
+        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+            $especials = array(2 => _('Advertisement'));
+            foreach ($especials as $key => $cat) {
+                $num_especials[$j] =  new \stdClass;
+                $num_especials[$j]->id    = $key;
+                $num_especials[$j]->title = $cat;
+                $num_especials[$j]->total = (isset($photoSet[$key]->total))? $photoSet[$key]->total : 0;
+                $num_especials[$j]->size  = (isset($photoSet[$key]->size))? $photoSet[$key]->size : 0;
+                $num_especials[$j]->jpg   = (isset($photoSetJPG[$key]))? $photoSetJPG[$key] : 0;
+                $num_especials[$j]->gif   = (isset($photoSetGIF[$key]))? $photoSetGIF[$key] : 0;
+                $num_especials[$j]->png   = (isset($photoSetPNG[$key]))? $photoSetPNG[$key] : 0;
+                $num_especials[$j]->other = $photoSet[$key]->total
+                                            - $num_especials[$j]->jpg
+                                            - $num_especials[$j]->gif
+                                            - $num_especials[$j]->png;
+                $num_especials[$j]->BN    = (isset($photoSetBN[$key]))? $photoSetBN[$key] : 0;
+                $num_especials[$j]->color = $photoSet[$key]->total - $num_especials[$j]->BN ;
 
-            // TOTALES
-            $statistics['num_especials']['jpg']   += $num_especials[$j]->jpg;
-            $statistics['num_especials']['gif']   += $num_especials[$j]->gif;
-            $statistics['num_especials']['png']   += $num_especials[$j]->png;
-            $statistics['num_especials']['other'] += $num_especials[$j]->other;
-            $statistics['num_especials']['bn']    += $num_especials[$j]->BN;
-            $statistics['num_especials']['color'] += $num_especials[$j]->color;
-            $statistics['num_especials']['size']  += $num_especials[$j]->size;
+                // TOTALES
+                $statistics['num_especials']['jpg']   += $num_especials[$j]->jpg;
+                $statistics['num_especials']['gif']   += $num_especials[$j]->gif;
+                $statistics['num_especials']['png']   += $num_especials[$j]->png;
+                $statistics['num_especials']['other'] += $num_especials[$j]->other;
+                $statistics['num_especials']['bn']    += $num_especials[$j]->BN;
+                $statistics['num_especials']['color'] += $num_especials[$j]->color;
+                $statistics['num_especials']['size']  += $num_especials[$j]->size;
 
-            $j++;
+                $j++;
+            }
         }
-
         $photoFileTypes = array('jpg', 'gif', 'png', 'other', 'bn', 'color', 'size');
         foreach ($photoFileTypes as $type) {
             $statistics['totals'][$type] = $statistics['num_photos'][$type]  + $statistics['num_sub_photos'][$type]
@@ -440,6 +454,7 @@ class ImagesController extends Controller
                 $photo->extension       = strtolower($photo->type_img);
                 $photo->description_utf = html_entity_decode($photo->description);
                 $photo->metadata_utf    = html_entity_decode($photo->metadata);
+                $photo->category_name   = $photo->loadCategoryName($photo->id);
             }
 
             $pagination = \Pager::factory(
@@ -457,6 +472,11 @@ class ImagesController extends Controller
             );
 
             $_SESSION['desde'] = 'search';
+            $adsModule = 'false';
+            if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
+                $adsModule = 'true';
+            }
+
 
             return $this->render(
                 'image/search.tpl',
@@ -468,6 +488,7 @@ class ImagesController extends Controller
                     'search'          => $search,
                     'pages'           => $pagination,
                     'category'        => $category,
+                    'adsModule'       => $adsModule,
                 )
             );
         }
@@ -482,6 +503,8 @@ class ImagesController extends Controller
      **/
     public function newAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_CREATE');
+
         $request = $this->request;
         $category = $request->query->getDigits('category', '');
 
@@ -519,6 +542,8 @@ class ImagesController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_UPDATE');
+
         $request     = $this->request;
         $ids         = $request->query->get('id');
         $page        = $request->query->getDigits('page', 1);
@@ -575,6 +600,8 @@ class ImagesController extends Controller
      **/
     public function updateAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_UPDATE');
+
         $request   = $this->request;
         $photosRAW = $request->request->get('description');
         $action    = $request->request->filter('action', 'update');
@@ -590,7 +617,6 @@ class ImagesController extends Controller
                 'metadata'    => filter_var($_POST['metadata'][$id], FILTER_SANITIZE_STRING),
                 'author_name' => filter_var($_POST['author_name'][$id], FILTER_SANITIZE_STRING),
                 'date'        => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
-                'color'       => filter_var($_POST['color'][$id], FILTER_SANITIZE_STRING),
                 'address'     => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'    => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
                 'available'   => 1
@@ -633,6 +659,8 @@ class ImagesController extends Controller
      **/
     public function deleteAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_DELETE');
+
         $request = $this->get('request');
         $id   = $request->query->getDigits('id', null);
         $page = $request->query->getDigits('page', 1);
@@ -666,6 +694,8 @@ class ImagesController extends Controller
      **/
     public function createAction(Request $request)
     {
+        $this->checkAclOrForward('IMAGE_CREATE');
+
         $response = new Response();
         $response->headers->add(
             array(
@@ -696,14 +726,6 @@ class ImagesController extends Controller
                 }
                 $category_name = $this->ccm->categories[$category]->name;
 
-                $fileSizesSettings = s::get(
-                    array(
-                        'image_thumb_size',
-                        'image_inner_thumb_size',
-                        'image_front_thumb_size',
-                    )
-                );
-
                 $upload = isset($_FILES['files']) ? $_FILES['files'] : null;
                 $info = array();
 
@@ -724,10 +746,14 @@ class ImagesController extends Controller
                             $photo = new \Photo();
                             $photo = $photo->createFromLocalFileAjax($data);
 
-                            $thumbnailUrl = $this->imgUrl.$photo->path_file."/"
-                                            .$fileSizesSettings['image_thumb_size']['width']."-"
-                                            .$fileSizesSettings['image_thumb_size']['height']
-                                            ."-".$photo->name;
+
+                            $thumbnailUrl = $this->generateUrl(
+                                'asset_image',
+                                array(
+                                    'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
+                                    'parameters' => urlencode('thumbnail,150,150'),
+                                )
+                            );
 
                             $info [] = array(
                                 'id'            => $photo->id,
@@ -764,10 +790,13 @@ class ImagesController extends Controller
                         $photo = new Photo();
                         $photo = $photo->createFromLocalFileAjax($data);
 
-                        $thumbnailUrl = $this->imgUrl.$photo->path_file."/"
-                                        .$fileSizesSettings['image_thumb_size']['width']."-"
-                                        .$fileSizesSettings['image_thumb_size']['height']
-                                        ."-".$photo->name;
+                        $thumbnailUrl = $this->generateUrl(
+                            'asset_image',
+                            array(
+                                'real_path'  => $this->imgUrl.$photo->path_file."/".$photo->name,
+                                'parameters' => urlencode('thumbnail,150,150'),
+                            )
+                        );
 
                         $info [] = array(
                             'id'            => $photo->id,
@@ -825,7 +854,6 @@ class ImagesController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
-
         $this->checkAclOrForward('IMAGE_DELETE');
 
         $request = $this->get('request');
@@ -864,7 +892,7 @@ class ImagesController extends Controller
      **/
     public function contentProviderGalleryAction(Request $request)
     {
-        $metadatas = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
+        $metadata = $request->query->filter('metadatas', '', FILTER_SANITIZE_STRING);
         $category = $request->query->getDigits('category', 0);
         $page     = $request->query->getDigits('page', 1);
 
@@ -879,45 +907,42 @@ class ImagesController extends Controller
 
         $cm = new \ContentManager();
 
-        if (!empty($metadatas)) {
-            $search = \cSearch::getInstance();
-            $arrayIds      = $search->searchContentsSelect('pk_content', $metadatas, 'photo', 100);
-            if (!empty($arrayIds)) {
-                $szWhere   = '( FALSE ';
-                foreach ($arrayIds as $id) {
-                    $szWhere .= ' OR pk_content = ' . $id[0];
+        $szWhere = '';
+        if (!empty($metadata)) {
+            $tokens = \Onm\StringUtils::get_tags($metadata);
+            $tokens = explode(', ', $tokens);
+
+
+            if (count($tokens) > 0) {
+                foreach ($tokens as &$meta) {
+                    $szWhere []= "`metadata` LIKE '%".trim($meta)."%'";
                 }
-                $szWhere .= ')';
-            } else {
-                $szWhere = "TRUE";
-
-                return new Response(
-                    sprintf(
-                        "<div><p>"._("Unable to find any content matching your search criterira.")."</p></div>",
-                        $metadatas
-                    )
-                );
+                $szWhere = "AND  (".implode(' OR ', $szWhere).") ";
             }
-
-        } else {
-            $szWhere = "TRUE";
         }
 
         if (empty($category)) {
             $photos = $cm->find(
                 'Photo',
                 'contents.fk_content_type = 8 AND photos.media_type="image" '
-                .'AND contents.content_status=1 AND ' . $szWhere,
+                .'AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         } else {
             $photos = $cm->find_by_category(
                 'Photo',
                 $category,
-                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 AND ' . $szWhere,
+                'fk_content_type = 8 AND photos.media_type="image" AND contents.content_status=1 ' . $szWhere,
                 'ORDER BY created DESC '.$limit
             );
         }
+
+        if (empty($photos)) {
+            return new Response(
+                _("<div><p>Unable to find any image matching your search criteria.</p></div>")
+            );
+        }
+
         $total = count($photos);
         if ($total > $itemsPerPage) {
             array_pop($photos);
@@ -932,7 +957,7 @@ class ImagesController extends Controller
                     'admin_images_content_provider_gallery',
                     array(
                         'category'  => $category,
-                        'metadatas' => $metadatas,
+                        'metadatas' => $metadata,
                     )
                 )
             )

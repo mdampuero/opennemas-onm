@@ -353,7 +353,7 @@ class FrontpagesController extends Controller
         $this->view          = new \Template(TEMPLATE_USER);
         $this->view->caching = false;
 
-        $this->view->assign(array( 'category_name' => $categoryName,));
+        $this->view->assign(array( 'category_name' => $categoryName, 'actual_category' => $categoryName,));
 
         // Get frontpage ads
         \Frontend\Controllers\FrontpagesController::getAds($categoryName);
@@ -398,12 +398,20 @@ class FrontpagesController extends Controller
         /**
          * Getting categories
         */
-        $categoryID = ($categoryName == 'home') ? 0 : $category;
+        $ccm = \ContentCategoryManager::get_instance();
+        $actualCategoryId = $ccm->get_id($categoryName);
+        $categoryID = ($categoryName == 'home') ? 0 : $actualCategoryId;
 
+        // Fetch category layout
         $layout = s::get('frontpage_layout_'.$categoryID, 'default');
         $layoutFile = 'layouts/'.$layout.'.tpl';
 
-        $this->view->assign('layoutFile', $layoutFile);
+        $this->view->assign(
+            array(
+                'layoutFile' => $layoutFile,
+                'actual_category_id' => $categoryID,
+            )
+        );
 
         $session = $this->get('session');
 

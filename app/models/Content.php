@@ -251,11 +251,11 @@ class Content
      **/
     public function __construct($id = null)
     {
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-
         if (!is_null($id)) {
             return $this->read($id);
         }
+
+        $this->content_type = get_class($this);
     }
 
     /**
@@ -306,9 +306,7 @@ class Content
 
                 break;
             case 'comments':
-                $comment = new Comment();
-
-                return $this->comments = $comment->count_public_comments($this->id);
+                return $this->comments = \Repository\CommentManager::countCommentsForContentId($this->id);
 
                 break;
             case 'content_type_l10n_name':
@@ -331,7 +329,6 @@ class Content
     public static function checkExists($id)
     {
         $exists = false;
-
 
         $sql = 'SELECT pk_content FROM `contents` '
              . 'WHERE pk_content = ? LIMIT 1';
@@ -366,27 +363,6 @@ class Content
         );
 
         return ($uri !== '') ? $uri : $this->permalink;
-    }
-
-    /**
-     * Return the content type name for this content
-     *
-     * @return void
-     **/
-    public function getContentTypeName()
-    {
-        $sql = 'SELECT * FROM `content_types` WHERE pk_content_type = ? LIMIT 1';
-        $values = array($this->content_type);
-        $contentTypeName = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if (isset($contentTypeName->fields['name'])) {
-            $returnValue =
-                mb_strtolower($contentTypeName->fields['name']);
-        } else {
-            $returnValue = $this->content_type;
-        }
-
-        return $returnValue;
     }
 
     /**
@@ -439,6 +415,8 @@ class Content
 
         if (!isset($data['slug']) || empty($data['slug'])) {
             $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
+        } else {
+            $data['slug'] = StringUtils::get_title($data['slug']);
         }
 
         $data['views']   = 1;
@@ -452,14 +430,12 @@ class Content
             $data['metadata']='';
         }
 
-        $data['fk_user'] =
-            (empty($data['fk_user']) && !isset ($data['fk_user']))
-            ? $_SESSION['userid'] :$data['fk_user'] ;
-        $data['fk_user_last_editor'] = $data['fk_user'];
-        $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_user'];
 
-        $fk_content_type = $GLOBALS['application']->conn->
-            GetOne('SELECT * FROM `content_types` WHERE name = "'. $this->content_type.'"');
+        $data['fk_author'] = (!array_key_exists('fk_author', $data)) ? $_SESSION['userid'] : $data['fk_author'];
+        $data['fk_user_last_editor'] = $data['fk_author'];
+        $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_author'];
+
+        $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
         $ccm     = ContentCategoryManager::get_instance();
         $catName = $ccm->get_name($data['category']);
@@ -470,7 +446,7 @@ class Content
             $data['created'], $data['changed'], $data['content_status'],
             $data['views'], $data['position'],$data['frontpage'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user'], $data['fk_publisher'],
+            $data['fk_author'], $data['fk_publisher'],
             $data['fk_user_last_editor'], $data['in_home'],
             $data['home_pos'],$data['available'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
@@ -531,6 +507,10 @@ class Content
         $this->load($rs->fields);
         $this->fk_user = $this->fk_author;
 
+          // Get author data for contents
+        if (!empty($this->fk_author)) {
+            $this->author = new \User($this->fk_author);
+        }
         // Fire event onAfterXxx
         $GLOBALS['application']->dispatch('onAfterRead', $this);
 
@@ -554,7 +534,8 @@ class Content
                     `changed`=?, `in_home`=?, `frontpage`=?,
                     `available`=?, `content_status`=?,
                     `placeholder`=?, `home_placeholder`=?,
-                    `fk_user_last_editor`=?, `slug`=?, `category_name`=?, `params`=?
+                    `fk_author`=?, `fk_user_last_editor`=?,
+                    `slug`=?, `category_name`=?, `params`=?
                 WHERE pk_content= ?";
 
         $this->read($data['id']);
@@ -589,7 +570,10 @@ class Content
                 (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'home_placeholder' =>
                 (empty($this->home_placeholder)) ? 'placeholder_0_1': $this->home_placeholder,
+            'fk_author' =>
+                (is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
         );
+
         $data = array_merge($data, $values);
 
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
@@ -601,19 +585,18 @@ class Content
         }
         if (!isset($data['slug']) || empty($data['slug'])) {
             if (!empty($this->slug)) {
-                $data['slug'] = $this->slug;
+                $data['slug'] = StringUtils::get_title($this->slug);
             } else {
                 $data['slug'] = mb_strtolower(StringUtils::get_title($data['title']));
             }
+        } else {
+            $data['slug'] = StringUtils::get_title($data['slug']);
         }
         if (empty($data['description'] ) && !isset ($data['description'])) {
             $data['description']='';
         }
         if (empty($data['metadata']) && !isset ($data['metadata'])) {
             $data['metadata']='';
-        }
-        if (empty($data['pk_author']) && !isset ($data['pk_author'])) {
-            $data['pk_author']='';
         }
 
         if ($data['category'] != $this->category) {
@@ -641,11 +624,12 @@ class Content
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user_last_editor'], $data['slug'],
+            $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
             $this->category_name, $data['params'], $data['id']
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             Application::logDatabaseError();
 
             return false;
@@ -1102,7 +1086,7 @@ class Content
 
         $GLOBALS['application']->dispatch('onBeforeArchived', $this);
 
-        $sql = 'UPDATE contents SET `content_status`=1, `available`= 1, `frontpage` =0, '
+        $sql = 'UPDATE contents SET `content_status`=1, `frontpage` =0, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
@@ -1587,72 +1571,18 @@ class Content
         Application::logContentEvent(__METHOD__, $this);
     }
 
-    /**
-     * Fetches available content types.
-     *
-     * @return array an array with each content type with id, name and title.
-     */
-    public static function getContentTypes()
-    {
-        $fetchedFromAPC = false;
-        if (extension_loaded('apc')) {
-            $key = APC_PREFIX . "_getContentTypes";
-            $resultArray = apc_fetch($key, $fetchedFromAPC);
-        }
 
-        // If was not fetched from APC now is turn of DB
-        if (!$fetchedFromAPC) {
-
-            $szSqlContentTypes =
-                "SELECT pk_content_type, name, title FROM content_types";
-            $rs = $GLOBALS['application']->conn->Execute($szSqlContentTypes);
-
-            if (!$rs) {
-                $message = "There was an error while fetching available content"
-                         . " types. '$szSqlContentTypes'.";
-                throw new \Exception($message);
-            }
-
-            try {
-                $resultArray = $rs->GetArray();
-                $i = 0;
-                foreach ($resultArray as &$res) {
-                    $resultArray[$i]['title'] = htmlentities($res['title']);
-                    $resultArray[$i]['2'] = htmlentities($res['2']);
-                    $i++;
-                }
-            } catch (exception $e) {
-                printf("Excepcion: " . $e->message);
-
-                return null;
-            }
-
-            if (extension_loaded('apc')) {
-                apc_store(APC_PREFIX . "_getContentTypes", $resultArray);
-            }
-        }
-
-        return $resultArray;
-    }
 
     /**
-     * Returns the id of a content type given its name.
+     * Return the content type name for this content
      *
-     * @param string $name the name of the content type
-     *
-     * @return int the content type id
-     */
-    public static function getIdContentType($name)
+     * @return void
+     **/
+    public function getContentTypeName()
     {
-        $contenTypes = self::getContentTypes();
+        $id = $this->content_type;
 
-        foreach ($contenTypes as $types) {
-            if ($types['name'] == $name) {
-                return $types['pk_content_type'];
-            }
-        }
-
-        return false;
+        return \ContentManager::getContentTypeNameFromId($id);
     }
 
     /**
@@ -1712,7 +1642,7 @@ class Content
         if (is_array($id)) {
             $ads = array();
 
-            if (count($id)>0) {
+            if (count($id) > 0) {
                 foreach ($id as $item) {
                     if (is_object($item)
                        && isset($item->pk_advertisement)
@@ -1754,13 +1684,14 @@ class Content
     */
     public static function get($contentId)
     {
-        $sql  = 'SELECT `content_types`.name '
-              . 'FROM `contents`, `content_types` '
-              . 'WHERE pk_content=? AND fk_content_type=pk_content_type';
-        $type = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
+        $sql  = 'SELECT fk_content_type '
+              . 'FROM `contents` '
+              . 'WHERE pk_content=?';
+        $contentTypeId = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
+
+        $type = \ContentManager::getContentTypeNameFromId($contentTypeId);
 
         if (empty($type)) {
-
             return null;
         }
 
@@ -1777,30 +1708,13 @@ class Content
      **/
     public function onUpdateClearCacheContent()
     {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+        global $sc;
+        $eventDispatcher = $sc->get('event_dispatcher');
 
-        if (property_exists($this, 'pk_article')) {
-            $tplManager->delete(
-                preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|' . $this->pk_article
-            );
+        $event = new \Symfony\Component\EventDispatcher\GenericEvent();
 
-            // Deleting home cache files
-            // if (isset($this->in_home) && $this->in_home) {
-                $tplManager->delete('home|0');
-            // }
-            $tplManager->delete('home|RSS');
-            $tplManager->delete('last|RSS');
-
-            if (isset($this->frontpage)
-                && $this->frontpage
-            ) {
-                $tplManager->delete(
-                    preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|0'
-                );
-                $tplManager->fetch(SITE_URL . 'seccion/' .$this->category_name);
-                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $this->category_name) . '|RSS');
-            }
-        }
+        $event->setArgument('content', $this);
+        $eventDispatcher->dispatch('content.update', $event);
     }
 
     // TODO: move to a Cache handler
@@ -2055,7 +1969,7 @@ class Content
             $content = new Content($refactorID);
             $content = $content->get($refactorID);
 
-            Application::forward301('/'.$content->uri);
+            forward301('/'.$content->uri);
         }
 
         return $oldID;
@@ -2188,7 +2102,7 @@ class Content
         $relationsHandler  = new RelatedContent();
         $ccm = new ContentCategoryManager();
         $this->related_contents = array();
-        if (\Onm\Module\ModuleManager::isActivated('AVANCED_ARTICLE_MANAGER')
+        if (\Onm\Module\ModuleManager::isActivated('CRONICAS_MODULES')
             && ($categoryName == 'home')) {
             $relations = $relationsHandler->getHomeRelations($this->id);
         } else {
@@ -2215,7 +2129,7 @@ class Content
 
 
     /**
-     * Loads all the attached images for this content given an array of images
+     * Loads all Frontpage attached images for this content given an array of images
      *
      * @param array $images list of Image object to hydrate the current content
      *
@@ -2237,6 +2151,45 @@ class Content
         }
 
         return $this;
+    }
+
+    /**
+     * Loads all inner attached images for this content given an array of images
+     *
+     * @param array $images list of Image object to hydrate the current content
+     *
+     * @return Content the object with the images loaded
+     **/
+    public function loadInnerImageFromHydratedArray($images)
+    {
+        if (isset($this->img2)) {
+            // Buscar la imagen
+            if (!empty($images)) {
+                foreach ($images as $image) {
+                    if ($image->pk_content == $this->img2) {
+                        $this->img2_path = $image->path_file.$image->name;
+                        $this->img2 = $image;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns true if this content is only available from paywall
+     *
+     * @return boolean true if only avilable for subscribers
+     **/
+    public function isOnlyAvailableForSubscribers()
+    {
+        $onlySubscribers = false;
+        if (is_array($this->params) && array_key_exists('only_subscribers', $this->params)) {
+            $onlySubscribers = ($this->params['only_subscribers'] == true);
+        }
+        return $onlySubscribers;
     }
 
     /**
@@ -2308,6 +2261,10 @@ class Content
     {
         if ($this->id == null) {
             return false;
+        }
+
+        if (isset($this->$property)) {
+            return $this->$property;
         }
 
         $sql = 'SELECT `meta_value` FROM `contentmeta` WHERE fk_content=? AND `meta_name`=?';
@@ -2436,5 +2393,22 @@ class Content
         }
 
         return true;
+    }
+
+    /**
+     * Deletes all comments related with a given content id
+     * WARNING: this is very dangerous, the action can't be undone
+     *
+     * @param  int $contentID the content id to delete comments that referent to it
+     *
+     * @return boolean true if comments were deleted
+     **/
+    public static function deleteComments($contentID)
+    {
+        if (empty($contentID)) {
+            return false;
+        }
+
+        return Comment::deleteFromFilter("`content_id` = {$contentID}");
     }
 }

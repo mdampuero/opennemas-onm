@@ -20,7 +20,6 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery.cookie.js"}
-{script_tag src="/tiny_mce/opennemas-config.js"}
 {script_tag src="/onm/newsletter.js"}
 <script type="text/javascript">
 $(document).data('saved', true);

@@ -26,7 +26,7 @@ define('DS', '/');
 define('APPLICATION_PATH', realpath(__DIR__.'/../../../'));
 define('SITE_PATH', realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR ."public").DIRECTORY_SEPARATOR);
 
-define('APC_PREFIX', 'canarias-importer');
+define('CACHE_PREFIX', 'canarias-importer');
 
 //require 'libs/lanzaroteImport-config.inc.php';
 //require 'libs/fuerteventuraImport-config.inc.php';

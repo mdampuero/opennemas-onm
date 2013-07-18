@@ -37,7 +37,7 @@ class FrontpagesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
 
         // Redirect Mobile browsers to mobile site unless a cookie exists.
-        // $app->mobileRouter();
+        // mobileRouter();
     }
 
     /**
@@ -222,7 +222,7 @@ class FrontpagesController extends Controller
                 true
             );
 
-            $this->view->assign('column', unserialize($allContentsInHomepage));
+            $this->view->assign('column', unserialize(htmlspecialchars_decode($allContentsInHomepage)));
 
             // Fetch layout for categories
             $layout = $cm->getUrlContent($wsUrl.'/ws/categories/layout/'.$categoryName, true);
@@ -275,7 +275,7 @@ class FrontpagesController extends Controller
         }
     }
 
-     /**
+    /**
      * Retrieves the styleSheet rules for the frontpage
      *
      * @param Request $request the request object
@@ -302,6 +302,10 @@ class FrontpagesController extends Controller
                 if (!empty($bgcolor)) {
                     $rules .="#content-{$item->pk_content}.onm-new {\n";
                     $rules .= "\tbackground-color:{$bgcolor} !important; \n";
+                    $rules .= "}\n";
+                    $rules .="#content-{$item->pk_content}.colorize {\n";
+                    $rules .= "\tpadding:10px !important; \n";
+                    $rules .= "\border-radius:5px !important; \n";
                     $rules .= "}\n";
                 }
 
@@ -353,6 +357,26 @@ class FrontpagesController extends Controller
                 $output.= "\tarticle.onm-new div.". $theCategory->name .
                           " { color:" . $theCategory->color . "; }\n\t\t";
 
+                $output.= "\tarticle.onm-new hr.category-line.". $theCategory->name .
+                          " { border-color:" . $theCategory->color . "; }\n".
+                          "\tarticle.onm-new .content-category.". $theCategory->name ." a:hover
+                           { color:" . $theCategory->color . " !important; }\n
+                          \t\t";
+                $output.= "\t nav#menu.menu div.mainmenu ul li.cat.". $theCategory->name .":hover a,
+                            nav#menu.menu div.submenu ul li.subcat.". $theCategory->name .":hover a
+                           { color:" . $theCategory->color . ";
+                            text-decoration: underline; }\n
+                          \t\t";
+
+                $output.= "\t.widget a.category-color.". $theCategory->name .", ".
+                          "\t.widget .category-color.". $theCategory->name .
+                          " { color:" . $theCategory->color . " !important; }\n".
+                          ".widget div.tab-lastest.". $theCategory->name .":hover".
+                          " { background-color:" . $theCategory->color . "; }\n".
+                          ".widget div.tab-lastest.". $theCategory->name .":hover .category-color".
+                          " { color:#FFF !important;}\n
+                          \t\t";
+
                 if ($current == $theCategory->name) {
                     $actual = $theCategory->color;
                 }
@@ -374,20 +398,32 @@ class FrontpagesController extends Controller
             $output.= "\tdiv.more-news h4 { color:" . $actual . " !important;}\n";
 
             $output.= "\th1#title a.big-text-logo  { color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header, ".
+            $output.= "\tdiv.widget .widget-header.colorize, ".
                 ".frontpage article .article-info span { color:" . $actual . " !important;}\n";
 
-
-            $output.= "\tdiv.widget-last-articles .header-title { background-color:" . $actual . " !important;}\n";
+            $output.= "\tdiv.widget .category-header, "
+                    ."\tdiv.widget-last-articles .header-title { background-color:" . $actual . " !important;}\n";
             $output.= "\tarticle.onm-new.highlighted-2-cols div.nw-subtitle div, ".
                 "article.onm-new.highlighted-3-cols div.nw-subtitle div { background-color:" . $actual . " !important;}\n";
 
             $output.= "\t.frontpage article.album .nw-subtitle, .frontpage article.video .nw-subtitle, ".
+                "\t div.opinion-list article.opinion-element h1.title a, ".
                 ".frontpage article.opinion .nw-subtitle a { color:" . $actual . " !important;}\n";
 
-
-            $output.= "\tdiv.widget .title h5, div.widget .title h5 {color: ". $actual. " !important; }\n";
+            $output.= "\tdiv.widget .title h5, div.widget .title h5, ".
+                "div.widget-content time ".
+                "\t{color: ". $actual. " !important; }\n";
             $output.= "\tdiv.widget-today-news .number {background-color: ". $actual. " !important; }\n";
+
+            $output.="\tnav .submenu.colorized {
+                background-color:". $actual. ";}\n";
+
+            $output.="\t div.mainmenu ul li.active, .article-inner h1.title,
+                .article-inner div.content-category a:hover, .article-inner blockquote {
+                    color:". $actual. ";}\n";
+
+             $output.="\t.bgcolorize {
+                background-color:". $actual. "!important;}\n";
 
         } elseif ($current == "mobile") {
             $output.= "\t#footerwrap { background-color: ".$siteColor." !important;}";
@@ -407,7 +443,7 @@ class FrontpagesController extends Controller
                 .main-menu-border ul.nav li:hover a  { color:" . $siteColor . " !important;}\n";
 
             $output.= "\th1#title a.big-text-logo  { color:" . $siteColor . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header, ".
+            $output.= "\tdiv.widget .widget-header.colorize, ".
                 ".frontpage article .article-info span { color:" . $siteColor . " !important;}\n";
 
             $output.= "\tdiv.widget-last-articles .header-title { background-color:" . $siteColor . " !important;}\n";
@@ -430,6 +466,11 @@ class FrontpagesController extends Controller
 
             $output.= "\tdiv.list-of-videos article.interested-video div.info-interested-video ".
                 "div.category a{ color:" . $siteColor . " !important;}\n";
+
+            $output.= "\t.category-color:" . $siteColor . " !important;}\n";
+
+            $output.="\t.bgcolorize {
+                background-color:". $siteColor. "!important;}\n";
         }
 
         return new Response(

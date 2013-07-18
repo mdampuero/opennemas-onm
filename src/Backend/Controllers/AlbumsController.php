@@ -44,7 +44,7 @@ class AlbumsController extends Controller
 
         $request = $this->get('request');
 
-        $contentType = \Content::getIDContentType('album');
+        $contentType = \ContentManager::getContentTypeIdFromName('album');
 
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
@@ -71,8 +71,6 @@ class AlbumsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_ADMIN');
-
         $itemsPerPage = s::get('items_per_page');
 
         $page           = $this->get('request')->query->getDigits('page', 1);
@@ -140,8 +138,6 @@ class AlbumsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_ADMIN');
-
         $page           = $this->get('request')->query->getDigits('page', 1);
         $category       = $this->get('request')->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
 
@@ -247,7 +243,7 @@ class AlbumsController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_videos',
+                    'admin_albums',
                     array(
                         'category' => $category,
                         'page'     => $page
@@ -255,7 +251,15 @@ class AlbumsController extends Controller
                 )
             );
         } else {
-            return $this->render('album/new.tpl');
+
+            $authorsComplete = \User::getAllUsersAuthors();
+            $authors = array( '0' => _(' - Select one author - '));
+            foreach ($authorsComplete as $author) {
+                $authors[$author->id] = $author->name;
+            }
+
+            return $this->render('album/new.tpl',
+                array ( 'authors'      => $authors, ));
         }
     }
 
@@ -326,12 +330,20 @@ class AlbumsController extends Controller
         $photos = array();
         $photos = $album->_getAttachedPhotos($id);
 
+        $authorsComplete = \User::getAllUsersAuthors();
+        $authors = array( '0' => _(' - Select one author - '));
+        foreach ($authorsComplete as $author) {
+            $authors[$author->id] = $author->name;
+        }
+
+
         return $this->render(
             'album/new.tpl',
             array(
                 'category' => $album->category,
                 'photos'   => $photos,
                 'album'    => $album,
+                'authors'  => $authors,
             )
         );
     }
@@ -391,6 +403,7 @@ class AlbumsController extends Controller
                     $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
                 'album_photos_id'       => $request->request->get('album_photos_id'),
                 'album_photos_footer'   => $request->request->get('album_photos_footer'),
+                'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
             );
 
             $album->update($data);

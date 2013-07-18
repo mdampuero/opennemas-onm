@@ -103,7 +103,7 @@
                 <li>
                     <a href="#edicion-extra">{t}Parameters{/t}</a>
                 </li>
-                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                {is_module_activated name="CRONICAS_MODULES"}
                 <li>
                     <a id="avanced-custom-button" href="#avanced-custom">{t}Customize{/t}</a>
                 </li>
@@ -190,6 +190,17 @@
                                     {/section}
                                     <option value="20" data-name="{t}Unknown{/t}" class="unavailable" {if ($category eq '20')}selected{/if}>{t}Unknown{/t}</option>
                                 </select>
+                                <br>
+                                <hr class="divisor" style="margin-top:8px;">
+                                <h4>{t}Author{/t}</h4>
+                                {acl isAllowed="CONTENT_OTHER_UPDATE"}
+                                    <select name="fk_author" id="fk_author">
+                                        {html_options options=$authors selected=$article->fk_author}
+                                    </select>
+                                {aclelse}
+                                    {if !isset($article->author->name)}{t}No author assigned{/t}{else}{$article->author->name}{/if}
+                                    <input type="hidden" name="fk_author" value="{$article->fk_author}">
+                                {/acl}
                             </div>
                         </div>
 
@@ -204,15 +215,38 @@
                             </div>
                         </div>
 
+                        <div class="contentbox">
+                            <h3 class="title"><i class="icon-time"></i> {t}Schedule{/t}</h3>
+                            <div class="content">
+                                <div class="form-inline-block">
+                                    <div class="control-group">
+                                        <label for="starttime" class="control-label">{t}Publication start date{/t}</label>
+                                        <div class="controls">
+                                            <input type="datetime" id="starttime" name="starttime" value="{$article->starttime}">
+                                            <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label for="endtime" class="control-label">{t}Publication end date{/t}</label>
+                                        <div class="controls">
+                                            <input type="datetime" id="endtime" name="endtime" value="{$article->endtime}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {is_module_activated name="PAYWALL"}
                         <div class="contentbox">
                             <h3 class="title">{t}Paywall{/t}</h3>
                             <div class="content">
-                                <input type="checkbox" id="for_sale" name="for_sale" {if $article->for_sale}checked=checked{/if}>
-                                <label for="for_sale">{t}Only available for subscribers{/t}</label>
+                                <input type="checkbox" id="only_subscribers" name="params[only_subscribers]" {if $article->params["only_subscribers"] == "1"}checked=checked{/if} value="1">
+                                <label for="only_subscribers">{t}Only available for subscribers{/t}</label>
+
                             </div>
                         </div>
                         {/is_module_activated}
+
                     </div>
 
                     <div class="form-inline-block contentform-main">
@@ -228,9 +262,9 @@
                             </div>
                         </div>
 
-                        {is_module_activated name="CRONICAS_MODULES"}
+                        {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
                         <div class="control-group">
-                            <label for="agency_bulletin" class="control-label">{t}Newsletter signature{/t}</label>
+                            <label for="agency_bulletin" class="control-label">{t}Signature{/t} #2</label>
                             <div class="">
                                 <input  type="text" id="agency_bulletin" name="params[agencyBulletin]"
                                     {if is_object($article)}
@@ -263,55 +297,40 @@
                                 <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$article->summary|clearslash|escape:"html"}</textarea>
                             </div>
                         </div>
-                    </div>
-                </div><!-- /contentform-main -->
 
-                <div class="contentform-inner wide">
-                    <div class="form-vertical">
-                        <div class="control-group">
-                            <label for="metadata" class="control-label">
-                                {t}Body{/t}
-                            </label>
-                            <div class="controls">
-                                <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
+                        <div class="form-vertical">
+                            <div class="control-group">
+                                <label for="metadata" class="control-label">
+                                    {t}Body{/t}
+                                </label>
+                                <div class="controls">
+                                    <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div><!-- /contentform-inner -->
+                </div><!-- /contentform-main -->
 
                 <div id="article_images" class="clearfix">
                     {include  file="article/partials/_images.tpl"}
                 </div>
             </div><!-- /edicion-contenido -->
 
-            {* Pestaña de parámetros de noticia *}
+            <!-- Parameters -->
             <div id="edicion-extra">
                 <div class="form-vertical">
                     <div class="control-group">
                         <label for="slug" class="control-label">{t}Slug{/t}</label>
                         <div class="controls">
                             <input type="text" id="slug" name="slug" class="input-xxlarge" value="{$article->slug|clearslash}">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-inline-block">
-                    <div class="control-group">
-                        <label for="starttime" class="control-label">{t}Publication start date{/t}</label>
-                        <div class="controls">
-                            <input type="datetime" id="starttime" name="starttime" value="{$article->starttime}">
-                            <div class="help-block">{t}Server hour:{/t} {$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"}</div>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label for="endtime" class="control-label">{t}Publication end date{/t}</label>
-                        <div class="controls">
-                            <input type="datetime" id="endtime" name="endtime" value="{$article->endtime}">
+                            {if $article}
+                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$article->uri|clearslash}</span>
+                            {/if}
                         </div>
                     </div>
                 </div>
             </div>
-            {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+            {is_module_activated name="CRONICAS_MODULES"}
             <div id="avanced-custom">
                 {include file ="article/partials/_article_avanced_customize.tpl"}
             </div>

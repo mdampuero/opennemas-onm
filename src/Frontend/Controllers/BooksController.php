@@ -63,7 +63,7 @@ class BooksController extends Controller
         $this->view->setConfig('book-frontpage');
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $this->page);
 
-        $contentType = \Content::getIDContentType('book');
+        $contentType = \ContentManager::getContentTypeIdFromName('book');
 
         // Setting up available categories for menu.
         $this->cm  = new \ContentManager();

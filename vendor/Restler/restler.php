@@ -451,7 +451,7 @@ class Restler {
 	* @return string api path
 	*/
 	protected function getPath () {
-		$path = urldecode($this->removeCommonPath($_SERVER['REQUEST_URI'], 
+		$path = urldecode($this->removeCommonPath($_SERVER['REQUEST_URI'],
 		$_SERVER['SCRIPT_NAME']));
 		$path = preg_replace('/(\/*\?.*$)|(\/$)/', '', $path);
 		$path = str_replace($this->format_map['extensions'], '', $path);
@@ -548,7 +548,7 @@ class Restler {
 	protected function getRequestData()
 	{
 		try{
-			$r = file_get_contents('php://input');			
+			$r = file_get_contents('php://input');
 			if(is_null($r))return $_GET;
 			$r =$this->request_format->decode($r);
 			return is_null($r) ? array(): $r;
@@ -572,7 +572,7 @@ class Restler {
 			//echo PHP_EOL.$url.' = '.$this->url.PHP_EOL;
 			$call = (object)$call;
 			if(strstr($url, ':')){
-				$regex = preg_replace('/\\\:([^\/]+)/', '(?P<$1>[^/]+)', 
+				$regex = preg_replace('/\\\:([^\/]+)/', '(?P<$1>[^/]+)',
 				preg_quote($url));
 				if (preg_match(":^$regex$:", $this->url, $matches)) {
 					foreach ($matches as $arg => $match) {
@@ -610,12 +610,12 @@ class Restler {
 	 * @param Object $method_info method information and metadata
 	 */
 	protected function applyClassMetadata($class_name, $instance, $method_info){
-		if(isset($method_info->metadata[$class_name]) && 
+		if(isset($method_info->metadata[$class_name]) &&
 		is_array($method_info->metadata[$class_name])){
-			foreach ($method_info->metadata[$class_name] 
+			foreach ($method_info->metadata[$class_name]
 			as $property => $value){
 				if(property_exists($class_name, $property)){
-					$reflection_property = 
+					$reflection_property =
 					new ReflectionProperty($class_name, $property);
 					$reflection_property->setValue($instance, $value);
 				}
@@ -683,7 +683,7 @@ class Restler {
 			);
 			$method_url = strtolower($method->getName());
 			if (preg_match_all(
-			'/@url\s+(GET|POST|PUT|DELETE|HEAD|OPTIONS)[ \t]*\/?(\S*)/s', 
+			'/@url\s+(GET|POST|PUT|DELETE|HEAD|OPTIONS)[ \t]*\/?(\S*)/s',
 			$doc, $matches, PREG_SET_ORDER)) {
 				foreach ($matches as $match) {
 					$http_method = $match[1];
@@ -692,14 +692,14 @@ class Restler {
 				}
 			}elseif($method_url[0] != '_'){ //not prefixed with underscore
 				// no configuration found so use convention
-				if (preg_match_all('/^(GET|POST|PUT|DELETE|HEAD|OPTIONS)/i', 
+				if (preg_match_all('/^(GET|POST|PUT|DELETE|HEAD|OPTIONS)/i',
 				$method_url, $matches)) {
 					$http_method = strtoupper($matches[0][0]);
 					$method_url = substr($method_url, strlen($http_method));
 				}else{
 					$http_method = 'GET';
 				}
-				$url = $base_path. ($method_url=='index' || 
+				$url = $base_path. ($method_url=='index' ||
 				$method_url=='default' ? '' : $method_url);
 				$url = rtrim($url,'/');
 				$this->routes[$http_method][$url] = $call;
@@ -782,7 +782,7 @@ class DefaultResponse implements iRespond {
 		return $result;
 	}
 	function __formatError($statusCode, $message) {
-		return array('error' => array('code' => $statusCode, 
+		return array('error' => array('code' => $statusCode,
 		'message' => $message));
 	}
 }
@@ -941,8 +941,8 @@ class JsonFormat implements iFormat
 		//do nothing
 	}
 	public function encode($data, $human_readable=FALSE){
-		return $human_readable ? 
-		$this->json_format(json_encode(object_to_array($data))) : 
+		return $human_readable ?
+		$this->json_format(@json_encode(object_to_array($data))) :
 		json_encode(object_to_array($data));
 	}
 	public function decode($data) {
@@ -999,7 +999,7 @@ class JsonFormat implements iFormat
 				case '{':
 				case '[':
 					if(!$in_string) {
-						$new_json .= $char . "\n" . 
+						$new_json .= $char . "\n" .
 						str_repeat($tab, $indent_level+1);
 						$indent_level++;
 					} else {
@@ -1085,7 +1085,7 @@ class DocParser {
 			if($parsedLine === false && !isset($this->params['description'])) {
 				if(isset($desc)){
 					//Store the first line in the short description
-					$this->params['description'] = implode(PHP_EOL, $desc); 
+					$this->params['description'] = implode(PHP_EOL, $desc);
 				}
 				$desc = array();
 			} elseif($parsedLine !== false) {
@@ -1105,22 +1105,22 @@ class DocParser {
 		if(strpos($line, '@') === 0) {
 			if(strpos($line, ' ')>0){
 				//Get the parameter name
-				$param = substr($line, 1, strpos($line, ' ') - 1); 
+				$param = substr($line, 1, strpos($line, ' ') - 1);
 				$value = substr($line, strlen($param) + 2); //Get the value
 			}else{
 				$param = substr($line, 1);
 				$value = '';
 			}
 			//Parse the line and return false if the parameter is valid
-			if($this->setParam($param, $value)) return false; 
+			if($this->setParam($param, $value)) return false;
 		}
 
 		return $line;
 	}
 	private function setParam($param, $value) {
-		if($param == 'param' || $param == 'return') 
+		if($param == 'param' || $param == 'return')
 		$value = $this->formatParamOrReturn($value);
-		if($param == 'class') 
+		if($param == 'class')
 		list($param, $value) = $this->formatClass($value);
 
 		if(empty($this->params[$param])) {
@@ -1175,7 +1175,7 @@ function parse_doc($php_doc_comment){
 	$php_doc_comment =  trim(preg_replace('/\r?\n *\* */', ' ',
 	 $php_doc_comment));
 	return $php_doc_comment;
-	preg_match_all('/@([a-z]+)\s+(.*?)\s*(?=$|@[a-z]+\s)/s', 
+	preg_match_all('/@([a-z]+)\s+(.*?)\s*(?=$|@[a-z]+\s)/s',
 	$php_doc_comment, $matches);
 	return array_combine($matches[1], $matches[2]);
 }

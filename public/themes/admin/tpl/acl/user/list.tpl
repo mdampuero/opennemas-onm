@@ -3,25 +3,26 @@
 {block name="footer-js" append}
 <script>
 jQuery(function($){
-	$('#batch-delete').on('click', function(){
+	$('#batch-delete').on('click', function(e ,ui) {
+		e.preventDefault();
 		var form = $('#userform');
 		form.attr('action', '{url name="admin_acl_user_batchdelete"}');
+		form.submit();
 	});
 });
 </script>
 {/block}
 
-
 {block name="content"}
-<form action="{url name=admin_user_list}" method="get" id="userform">
+<form action="{url name=admin_acl_user}" method="get" id="userform">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Users{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
+					<a id="batch-delete" title="{t}Delete selected users{/t}">
 						<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-					</button>
+					</a>
 				</li>
 				<li class="separator"></li>
 				<li>
@@ -38,19 +39,22 @@ jQuery(function($){
 
 		<div class="table-info clearfix">
 			<div class="pull-right form-inline">
-				<input type="text" id="username" name="filter[name]" value="{$smarty.request.filter.name|default:""}" placeholder="{t}Filter by name{/t}"  />
+				<input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" />
 
-				<label for="userlogin">{t}or{/t}</label>
-				<input type="text" id="userlogin" name="filter[login]" value="{$smarty.request.filter.login|default:""}" placeholder="{t}username{/t}" />
-
-
-				<label for="usergroup">{t}and group:{/t}</label>
+				<label for="usergroup">{t}type{/t}</label>
 				<div class="input-append">
-					<select id="usergroup" name="filter[group]" class="span2">
-						{if isset($smarty.request.filter) && isset($smarty.request.filter.group)}
-							{assign var=filter_selected value=$smarty.request.filter.group}
-						{/if}
-						{html_options options=$groupsOptions selected=$filter_selected|default:""}
+					<select id="usertype" name="type" class="span2">
+						{assign var=type value=$smarty.request.type}
+						<option value="" {if ($type eq "")}selected{/if}>{t}--All--{/t}</option>
+                        <option value="0" {if ($type eq "0")}selected{/if}>{t}Backend{/t}</option>
+                        <option value="1" {if ($type eq "1")}selected{/if}>{t}Frontend{/t}</option>
+					</select>
+				</div>
+
+				<label for="usergroup">{t}and group{/t}</label>
+				<div class="input-append">
+					<select id="usergroup" name="group" class="span2">
+						{html_options options=$groupsOptions selected=$smarty.request.group|default:""}
 					</select>
 					<button type="submit" class="btn"><i class="icon-search"></i></button>
 				</div>
@@ -63,39 +67,56 @@ jQuery(function($){
 					<th style="width:15px;">
                         <input type="checkbox" class="toggleallcheckbox">
                     </th>
+                    <th></th>
 					<th class="left">{t}Full name{/t}</th>
-					<th class="left" style="width:110px">{t}Username{/t}</th>
-					<th class="left" >{t}Group{/t}</th>
+					<th class="center" style="width:110px">{t}Username{/t}</th>
+
+					<th class="center" >{t}E-mail{/t}</th>
+
+					<th class="center" >{t}Group{/t}</th>
+
 					<th class="center" >{t}Activated{/t}</th>
 					<th class="center" style="width:10px">{t}Actions{/t}</th>
 				</tr>
 			</thead>
 			{/if}
 			<tbody>
-				{foreach from=$users item=user name=user_listing}
+				{foreach $users as $user}
 				<tr>
 					<td>
 						<input type="checkbox" name="selected[]" value="{$user->id}">
+					</td>
+					<td>
+                        {if is_object($user->photo) && !is_null($user->photo->name)}
+                        {dynamic_image src="{$user->photo->path_file}/{$user->photo->name}" transform="thumbnail,40,40"}
+                        {else}
+                        {gravatar email="{$user->email}" image_dir=$params.IMAGE_DIR image=true size="40"}
+                        {/if}
 					</td>
 					<td class="left">
 						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
 							{$user->name}
 						</a>
 					</td>
-					<td class="left">
-						{$user->login}
+					<td class="center">
+						{$user->username}
 					</td>
-					<td class="left">
-						{section name=u loop=$user_groups}
-							{if $user_groups[u]->id == $user->fk_user_group}
-								{$user_groups[u]->name}
+
+					<td class="center">
+						{$user->email}
+					</td>
+					<td class="center">
+						{foreach $user_groups as $group}
+							{if in_array($group->id, $user->fk_user_group)}
+								{$group->name}<br>
 							{/if}
-						{/section}
+						{/foreach}
 					</td>
+
 					<td class="center">
 						<div class="btn-group">
 							<a class="btn" href="{url name=admin_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">
-								{if $user->authorize eq 1}
+								{if $user->activated eq 1}
 									<i class="icon16 icon-ok"></i>
 								{else}
 									<i class="icon16 icon-remove"></i>
@@ -122,16 +143,18 @@ jQuery(function($){
 
 				{foreachelse}
 				<tr>
-					<td colspan="5" class="empty">
+					<td colspan="8" class="empty">
 						{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
 					</td>
 				</tr>
 				{/foreach}
 			</tbody>
 			<tfoot>
-				<tr>
-					<td colspan="6">
-						&nbsp;
+				<tr >
+					<td colspan="8" class="center">
+		                <div class="pagination">
+		    				{$pagination->links|default:""}&nbsp;
+		                </div>
 					</td>
 				</tr>
 			</tfoot>

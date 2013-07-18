@@ -75,7 +75,11 @@ function toggleAdvanced() {
                     <label for="category">{t}Category{/t}</label>
                     <select name="category">
                         <option value="all" {if $photo1->color eq "all"}selected{/if}>{t}All{/t}</option>
+                        {is_module_activated name="ADS_MANAGER"}
+                        {acl isAllowed="ADVERTISEMENT_CREATE"}
                         <option value="2" {if $category eq "2"} selected {/if}>{t}Advertisement{/t}</option>
+                        {/acl}
+                        {/is_module_activated}
                         {section name=as loop=$allcategorys}
                             <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
                             {section name=su loop=$subcat[as]}

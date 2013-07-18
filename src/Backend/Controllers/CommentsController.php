@@ -42,33 +42,13 @@ class CommentsController extends Controller
 
         $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
-        $this->category = $this->get('request')
-            ->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $this->ccm = \ContentCategoryManager::get_instance();
-        list($this->parentCategories, $this->subcat, $this->categoryData) =
-            $this->ccm->getArraysMenu($this->category);
-        if (empty($this->category)) {
-            $this->category ='widget';
-        }
-
-        $content_types = array(
-            1  => _('Article'),
-            4  => _('Opinion'),
-            7  => _('Album'),
-            9  => _('Video'),
-            11 => _('Poll')
+        $this->statuses = array(
+            \Comment::STATUS_ACCEPTED => _('Accepted'),
+            \Comment::STATUS_REJECTED => _('Rejected'),
+            \Comment::STATUS_PENDING  => _('Pending'),
         );
 
-        $this->view->assign(
-            array(
-                'category'      => $this->category,
-                'subcat'        => $this->subcat,
-                'allcategorys'  => $this->parentCategories,
-                'datos_cat'     => $this->categoryData,
-                'content_types' => $content_types,
-            )
-        );
+        $this->view->assign('statuses', $this->statuses);
     }
 
     /**
@@ -80,94 +60,34 @@ class CommentsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $request = $this->get('request');
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page') ?: 20;
+        $filterSearch = $request->query->filter('filter_search', '', FILTER_SANITIZE_STRING);
+        $filterStatus = $request->query->filter('filter_status', \Comment::STATUS_PENDING, FILTER_SANITIZE_STRING);
 
-        $page          = $request->query->getDigits('page', 1);
-        $itemsPerPage  = s::get('items_per_page') ?: 20;
-        $requestFilter = $request->query->get('filter', null);
-        $status          = $request->query->getDigits('status', 0);
 
-        if (is_array($requestFilter)
-            && array_key_exists('status', $requestFilter)
-        ) {
-            $status = $requestFilter['status'];
+        $searchCriteria =  "`status`='$filterStatus'";
+        if (!empty($filterSearch)) {
+            $searchCriteria .= " AND `body` LIKE '%$filterSearch%'";
         }
-        $filter = ' contents.in_litter != 1 AND contents.content_status = '. $status;
-
-        $module = 0;
-        if (is_array($requestFilter)
-            && array_key_exists('module', $requestFilter)
-        ) {
-            $module = $requestFilter['module'];
-        }
-
-        if ($this->category == 'all') {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $this->category;
-        }
-
-        $cm           = new \ContentManager();
-        $itemsPerPage = s::get('items_per_page');
-
-        if ($module != 0) {
-            $allComments   = $cm->find_all('Comment', $filter, ' ORDER BY  created DESC');
-            $comments      = array();
-            $commentsCount = 0;
-            foreach ($allComments as $comm) {
-                $comm->content_type =
-                    \ContentType::getContentTypeByContentId($comm->fk_content);
-
-                if ($comm->content_type == $module) {
-                    $commentsCount++;
-                    $comments[] = $comm;
-                }
-            }
-        } else {
-            list($commentsCount, $comments) = $cm->getCountAndSlice(
-                'comment',
-                $categoryForLimit,
-                $filter,
-                'ORDER BY created DESC',
-                $page,
-                $itemsPerPage
-            );
-        }
+        $commentManager = $this->get('comment_repository');
+        $commentsCount  = $commentManager->count($searchCriteria);
+        $comments       = $commentManager->findBy($searchCriteria, 'date DESC', $itemsPerPage, $page);
 
         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $commentsCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_comments',
-                    array('category' => $this->category)
-                ).'&page=%d',
+        $pagination = \Onm\Pager\Slider::create(
+            $commentsCount,
+            $itemsPerPage,
+            $this->generateUrl(
+                'admin_comments',
+                array('filter_status' => $filterStatus, 'filter_search' => $filterSearch,)
             )
         );
 
-        $contents = array();
-        $votes = array();
         if (!empty($comments)) {
-            // Get titles
-            $i = 0;
-
-            foreach ($comments as $comment) {
-                $contents[$i] = new \Content($comment->fk_content);
-
-                $contents[$i]->category_name  =
-                    $contents[$i]->loadCategoryName($comment->fk_content);
-                $contents[$i]->category_title =
-                    $this->ccm->get_title($comment->category_name);
-
-                $votes[$i] = new \Vote($comment->pk_comment);
-                $i++;
+            foreach ($comments as &$comment) {
+                $comment->content = new \Content($comment->content_id);
+                $comment->votes   = new \Vote($comment->id);
             }
         }
 
@@ -176,10 +96,9 @@ class CommentsController extends Controller
             array(
                 'comments'   => $comments,
                 'pagination' => $pagination,
-                'contents'   => $contents,
-                'votes'      => $votes,
-                'module'     => $module,
-                'status'     => $status,
+                'filter_status'     => $filterStatus,
+                'filter_search'     => $filterSearch,
+                'statuses'   => $this->statuses,
             )
         );
     }
@@ -195,21 +114,15 @@ class CommentsController extends Controller
     {
         $this->checkAclOrForward('COMMENT_UPDATE');
 
-        $request = $this->get('request');
         $id      = $request->query->getDigits('id');
 
         if (!is_null($id)) {
-            $comment = new \Comment();
-            $comment->read($id);
-            $content = new \Content($comment->fk_content);
+            $comment = new \Comment($id);
+            $comment->content = new \Content($comment->content_id);
 
             return $this->render(
                 'comment/read.tpl',
-                array(
-                    'id'      => $id,
-                    'comment' => $comment,
-                    'content' => $content,
-                )
+                array('comment' => $comment)
             );
         } else {
             m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
@@ -240,25 +153,16 @@ class CommentsController extends Controller
         }
 
         $data = array(
-            'id'             => $id,
-            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-            'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-            'date'           => $request->request->filter('date', '', FILTER_SANITIZE_STRING),
-            'ip'             => $request->request->filter('ip', '', FILTER_SANITIZE_STRING),
-            'content_status' => $request->request->getDigits('content_status', '', FILTER_SANITIZE_STRING),
-            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-            'fk_content'     => $request->request->getDigits('fk_content'),
-            'category'       => $request->request->getDigits('category'),
+            'status' => $request->request->filter('status'),
+            'body'   => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
         );
-        if ($data['content_status'] == 2) {
-            $data['available'] = 0;
-        } else {
-            $data['available'] = $data['content_status'];
-        }
-        if (!is_null($comment->pk_comment)) {
+
+        try {
             $comment->update($data);
+
             m::add(_('Comment saved successfully.'), m::SUCCESS);
+        } catch (\Exception $e) {
+            m::add($e->getMessage(), m::ERROR);
         }
 
         return $this->redirect($this->generateUrl('admin_comments_show', array('id' => $id)));
@@ -275,17 +179,16 @@ class CommentsController extends Controller
     {
         $this->checkAclOrForward('COMMENT_DELETE');
 
-        $request = $this->get('request');
-        $id      = $request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
-        $comment = new \Comment();
-        $comment->delete($id, $_SESSION['userid']);
-        $params = array(
-            'page'     => $request->query->getDigits('page', 1),
-            'category' => $comment->category,
-            'status'   => $comment->content_status
-        );
-        m::add(_('Comment deleted successfully.'), m::SUCCESS);
+        try {
+            $comment = new \Comment();
+            $comment->delete($id);
+
+            m::add(_('Comment deleted successfully.'), m::SUCCESS);
+        } catch (\Exception $e) {
+            m::add($e->getMessage(), m::ERROR);
+        }
 
         return $this->redirect($this->generateUrl('admin_comments'));
     }
@@ -301,24 +204,22 @@ class CommentsController extends Controller
     {
         $this->checkAclOrForward('COMMENT_AVAILABLE');
 
-        $status       = $request->query->getDigits('status');
-        $returnStatus = $request->query->getDigits('return_status', 0);
         $id           = $request->query->getDigits('id');
+        $status       = $request->query->filter('status');
 
-        $comment = new \Comment($id);
+        try {
+            $comment = new \Comment($id);
+            $comment->setStatus($status);
 
-        if ($status == 2) {
-            $comment->set_status($status, $_SESSION['userid']);
-            m::add(_('Comment was rejected successfully.'), m::SUCCESS);
-        } else {
-            $comment->set_available($status, $_SESSION['userid']);
-            m::add(_('Comment was published successfully.'), m::SUCCESS);
+            m::add(sprintf(_("Comment status changed to '%s'."), $this->statuses[$status]));
+        } catch (\Exception $e) {
+            m::add($e->getMessage(), m::ERROR);
         }
 
         $params = array(
-            'page'     => $request->query->getDigits('page', 1),
-            'category' => $request->query->filter('category'),
-            'status'   => $returnStatus
+            'page'   => $request->query->getDigits('page', 1),
+            'filter_search' => $request->query->filter('search', '', FILTER_SANITIZE_STRING),
+            'filter_status' => $request->query->filter('return_status', 'accepted', FILTER_SANITIZE_STRING)
         );
 
         return $this->redirect($this->generateUrl('admin_comments', $params));
@@ -335,32 +236,44 @@ class CommentsController extends Controller
     {
         $this->checkAclOrForward('COMMENT_AVAILABLE');
 
-        $request  = $this->request;
+        // Get request data
         $selected = $request->query->get('selected_fld');
-        $status   = $request->query->getDigits('status');
+        $status   = $request->query->filter('status', 'accepted');
 
         if (count($selected) > 0) {
-            foreach ($selected as $id) {
-                $comment = new \Comment($id);
 
-                if (!is_null($comment->pk_comment)) {
-                    $oldstatus = $comment->content_status;
-                    $comment->set_available($status, $_SESSION['userid']);
+            // Iterate over each comment and update its status
+            $success = 0;
+            foreach ($selected as $id) {
+                try {
+
+                    $comment = new \Comment($id);
+                    $comment->setStatus($status);
+                    $success++;
+                } catch (\Exception $e) {
+                    m::add(
+                        sprintf(_('Comment id %s: ').$e->getMessage(), $id),
+                        m::ERROR
+                    );
                 }
             }
-        }
-        if ($status == 1) {
-            m::add(_('Comment was published successfully.'), m::SUCCESS);
 
-        } else {
-            m::add(_('Comment was unpublished successfully.'), m::SUCCESS);
+            if ($success > 0) {
+                m::add(
+                    sprintf(
+                        _("Successfully changed the status to '%s' to %d comments."),
+                        $this->statuses[$status],
+                        $success
+                    ),
+                    m::SUCCESS
+                );
+            }
         }
 
         $params = array(
-                'page'     => $request->query->getDigits('page', 1),
-                'category' => $this->category,
-                'status'   => $oldstatus,
-            );
+            'page'     => $request->query->getDigits('page', 1),
+            'filter_status'   => $status,
+        );
 
         return $this->redirect($this->generateUrl('admin_comments', $params));
 
@@ -377,26 +290,35 @@ class CommentsController extends Controller
     {
         $this->checkAclOrForward('COMMENT_DELETE');
 
-        $request  = $this->request;
         $selected = $request->query->get('selected_fld');
 
         if (count($selected) > 0) {
+            $success = 0;
             foreach ($selected as $id) {
-                $comment = new \Comment($id);
-                if (!is_null($comment->pk_comment)) {
-                    $comment->delete($id, $_SESSION['userid']);
+                try {
+                    $comment = new \Comment($id);
+                    $comment->delete($id);
+                    $success++;
+                } catch (\Exception $e) {
+                    m::add(
+                        sprintf(_('Comment id %s: ').$e->getMessage(), $id),
+                        m::ERROR
+                    );
                 }
             }
-            m::add(_('Comments deleted successfully.'), m::SUCCESS);
+
+            if ($success > 0) {
+                m::add(sprintf(_("%d comments deleted successfully."), $success), m::SUCCESS);
+            }
         } else {
             m::add(_('You haven\'t selected any comment to delete.'), m::ERROR);
         }
 
         $params = array(
-                'page'     => $request->query->getDigits('page', 1),
-                'category' => $this->category,
-                'status'   => $request->query->getDigits('status', 0),
-            );
+            'page'          => $request->query->getDigits('page', 1),
+            'filter_status' => $request->query->filter('filter_status', \Comment::STATUS_PENDING),
+            'filter_search' => $request->query->filter('filter_search', null, FILTER_SANITIZE_STRING),
+        );
 
         return $this->redirect($this->generateUrl('admin_comments', $params));
     }

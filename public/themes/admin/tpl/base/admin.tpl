@@ -34,7 +34,6 @@
         {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js" common=1}
-        {script_tag src="/tiny_mce/tiny_mce_gzip.js"}
      {/block}
 
 </head>
@@ -72,7 +71,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="http://opennemas.uservoice.com/knowledgebase">{t}FAQ{/t}</a>
+                                    <a href="http://help.opennemas.com">{t}FAQ{/t}</a>
                                 </li>
                                 <li>
                                     <a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a>

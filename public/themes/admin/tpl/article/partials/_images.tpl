@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 </div><!-- /inner-image -->
-                {is_module_activated name="AVANCED_ARTICLE_MANAGER"}
+                {is_module_activated name="CRONICAS_MODULES"}
                 <div id="home-image" class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button">
@@ -115,7 +115,7 @@
             <div id="photos_container" class="photos content">
                 <div class="input-append">
                     <input id="stringImageSearch" name="stringImageSearch" type="text"
-                       placeholder="{t}Search images by title...{/t}" style="width: 150px !important;" class="noentersubmit"/>
+                       placeholder="{t}Search images by title...{/t}" style="width: 150px !important;"/>
                     <select style="width:140px" id="category_imag" name="category_imag">
                         <option value="0">GLOBAL</option>
                             {section name=as loop=$allcategorys}
@@ -270,14 +270,24 @@ jQuery(document).ready(function($){
 
     load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
 
-    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+    function load_image_results () {
         var category = $('#category_imag option:selected').val();
-        var text = $('#stringImageSearch').val();
-        var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+        var text     = $('#stringImageSearch').val();
+        var url      = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
         load_ajax_in_container(
             url,
             $('#photos')
         );
+    }
+
+    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+        return load_image_results();
+    });
+    $('#stringImageSearch').keydown(function(event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return load_image_results();
+        }
     });
 
     $('#photos').on('click', '.pager a', function(e, ui) {
@@ -288,7 +298,7 @@ jQuery(document).ready(function($){
 
     load_ajax_in_container('{url name=admin_videos_content_provider_gallery category=$category}', $('#videos'));
 
-    $('#stringVideoSearch, #category_video').on('change', function(e, ui) {
+    function load_video_results () {
         var category = $('#category_video option:selected').val();
         var text = $('#stringVideoSearch').val();
         var url = '{url name=admin_videos_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
@@ -296,6 +306,15 @@ jQuery(document).ready(function($){
             url,
             $('#videos')
         );
+    }
+    $('#stringVideoSearch, #category_video').on('change', function(e, ui) {
+        return load_video_results();
+    });
+    $('#stringVideoSearch').keydown(function(event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return load_video_results();
+        }
     });
 
     $('#videos').on('click', '.pager a', function(e, ui) {

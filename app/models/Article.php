@@ -147,15 +147,9 @@ class Article extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
-        // Si existe idcontenido, entonces cargamos los datos correspondientes
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'Article';
         $this->content_type_l10n_name = _('Article');
+
+        parent::__construct($id);
     }
 
     /**
@@ -428,8 +422,7 @@ class Article extends Content
         $rel = new RelatedContent();
         $rel->delete($id); //Eliminamos con los que esta relacionados.
 
-        $rel = new Comment();
-        $rel->deleteComments($id); //Eliminamos  los comentarios.
+        self::deleteComments($id); //Eliminamos  los comentarios.
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             \Application::logDatabaseError();
@@ -438,89 +431,6 @@ class Article extends Content
         }
     }
 
-    /**
-     * Rebuilds the article permalink given its id and catName
-     *
-     * @param string $articlePK the id of the article
-     * @param string $catName   the name of the article category
-     *
-     * @return string The new permalink
-     */
-    public function rebuildPermalink($articlePK, $catName = null)
-    {
-        $article = new Article($articlePK);
-        $slug = StringUtils::get_title($article->title, false);
-
-        // prevent overflow field permalink
-        $slug = StringUtils::str_stop($slug, 180);
-
-        if (is_null($catName)) {
-            $cm = ContentCategoryManager::get_instance();
-            $catName = $cm->get_name($article->category);
-        }
-
-        $permalink = '/artigo/' . date('Y/m/d') . '/' . $catName .
-                     '/' . $slug . '/' . $articlePK . '.html';
-
-        return $permalink;
-    }
-
-    /**
-     * Returns the original id of this article (only if it is a clone)
-     *
-     * @param int $clonePK the content id to get its parent
-     *
-     * @return int the id of the original content
-     **/
-    public function getOriginalPk($clonePK = null)
-    {
-        if (is_null($clonePK)) {
-            $clonePK = $this->id;
-        }
-
-        $values = array();
-        foreach (Article::$clonesHash as $clone => $original) {
-            if (!strcmp($clone, $clonePK)) {
-                return $original;
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * Checks if a content is a clone given its id
-     *
-     * @param int $contentPK the content id
-     *
-     * @return boolean true if is a clone
-     */
-    public function isClone($contentPK = null)
-    {
-        if (is_null(self::$clonesHash)) {
-            $sql = 'SELECT `pk_original`, `pk_clone` FROM `articles_clone`';
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            self::$clonesHash = array();
-
-            if ($rs !== false) {
-                while (!$rs->EOF) {
-                    self::$clonesHash[$rs->fields['pk_clone']] =
-                        $rs->fields['pk_original'];
-
-                    $rs->MoveNext();
-                }
-            }
-        }
-
-        if (is_null($contentPK)) {
-            $contentPK = $this->id;
-        }
-
-        return in_array($contentPK, array_keys(Article::$clonesHash));
-    }
-
-    /* }}} methods clone */
 
     /**
      * Renders the article given a set of parameters
@@ -539,6 +449,7 @@ class Article extends Content
         $params['item'] = $this;
         // $params'cssclass', $params['cssclass']);
         // $tpl->assign('categoryId', $params['categoryId']);
+
 
         try {
             $html = $tpl->fetch($params['tpl'], $params);

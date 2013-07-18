@@ -161,7 +161,7 @@ class PlaygroundController extends Controller
     {
         $session = $this->get('session');
         $session->start();
-        $this->get('session')->setFlash(
+        $this->get('session')->getFlashBag()->add(
             'notice',
             'Your changes were saved!'
         );

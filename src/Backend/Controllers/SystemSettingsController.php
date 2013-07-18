@@ -56,10 +56,10 @@ class SystemSettingsController extends Controller
             'site_color', 'site_name', 'time_zone','site_language','site_footer',
             'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
             'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
-            'google_analytics','piwik', 'ojd', 'section_settings', 'paypal_mail',
+            'google_analytics','piwik', 'ojd', 'comscore', 'section_settings', 'paypal_mail',
             'items_per_page','refresh_interval', 'google_news_name', 'google_page',
             'webmastertools_google', 'webmastertools_bing',
-            'max_session_lifetime',
+            'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
         );
 
         $configurations = s::get($configurationsKeys);
@@ -74,7 +74,6 @@ class SystemSettingsController extends Controller
         );
     }
 
-    // TODO: use symfony request instead of $_POST and $_FILES variables
     /**
      * Performs the action of saving the configuration settings
      *
@@ -84,39 +83,60 @@ class SystemSettingsController extends Controller
      **/
     public function saveAction(Request $request)
     {
-        unset($_POST['action']);
-        unset($_POST['submit']);
+        // Get files from symfony request
+        $siteLogo   = $request->files->get('site_logo');
+        $favico     = $request->files->get('favico');
+        $mobileLogo = $request->files->get('mobile_logo');
 
-        if (!empty($_FILES) && isset($_FILES['site_logo'])) {
-            $nameFile = $_FILES['site_logo']['name'];
-            $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
+        // Get settings from section (array)
+        $sectionSettings = $request->request->filter('section_settings');
 
-            if (move_uploaded_file($_FILES["site_logo"]["tmp_name"], $uploaddir)) {
-                $_POST['site_logo'] = $nameFile;
+        // Generate upload path
+        $uploadDirectory = MEDIA_PATH.'/sections/';
+
+        // Check if upload directory is already created
+        if ($sectionSettings['allowLogo'] == 1 && !is_dir($uploadDirectory)) {
+            \FilesManager::createDirectory($uploadDirectory);
+        }
+
+        if (!is_null($siteLogo)) {
+            // Get file original name
+            $siteLogoName = $siteLogo->getClientOriginalName();
+            // Move uploaded file
+            $siteLogo->move($uploadDirectory, $siteLogoName);
+            // Save name on settings
+            s::set('site_logo', $siteLogoName);
+        }
+
+
+        if (!is_null($favico)) {
+            // Get file original name
+            $favicoName = $favico->getClientOriginalName();
+            // Move uploaded file
+            $favico->move($uploadDirectory, $favicoName);
+            // Save name on settings
+            s::set('favico', $favicoName);
+        }
+
+        if (!is_null($mobileLogo)) {
+            // Get file original name
+            $mobileLogoName = $mobileLogo->getClientOriginalName();
+            // Move uploaded file
+            $mobileLogo->move($uploadDirectory, $mobileLogoName);
+            // Save name on settings
+            s::set('mobile_logo', $mobileLogoName);
+        }
+
+        foreach ($request->request as $key => $value) {
+            // Strip html tags for SEO settings
+            if ($key == 'site_title' ||
+                $key == 'site_description' ||
+                $key == 'site_keywords'
+            ) {
+                $value = trim(strip_tags($value));
             }
-        }
-        if (!empty($_FILES) && isset($_FILES['favico'])) {
-            $nameFile = $_FILES['favico']['name'];
-            $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
 
-            if (move_uploaded_file($_FILES["favico"]["tmp_name"], $uploaddir)) {
-                $_POST['favico'] = $nameFile;
-            }
-        }
-        if (!empty($_FILES) && isset($_FILES['mobile_logo'])) {
-            $nameFile = $_FILES['mobile_logo']['name'];
-            $uploaddir= MEDIA_PATH.'/sections/'.$nameFile;
-
-            if (move_uploaded_file($_FILES["mobile_logo"]["tmp_name"], $uploaddir)) {
-                $_POST['mobile_logo'] = $nameFile;
-            }
-        }
-        if ($_POST['section_settings']['allowLogo'] == 1) {
-            $path = MEDIA_PATH.'/sections';
-            \FilesManager::createDirectory($path);
-        }
-
-        foreach ($_POST as $key => $value) {
+            // Save settings
             s::set($key, $value);
         }
 

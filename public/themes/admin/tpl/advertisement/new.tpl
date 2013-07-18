@@ -202,7 +202,7 @@
                     <div class="control-group">
                         <label for="params_width" class="control-label">{t}Width{/t}</label>
                         <div class="controls">
-                            <input type="number" id="params_width" name="params_width" value="{$advertisement->params['width']}" placeholder="" required="required">
+                            <input type="number" id="params_width" name="params_width" value="{$advertisement->params['width']}" required="required">
                         </div>
                     </div>
                     <div class="control-group">

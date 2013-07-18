@@ -42,10 +42,7 @@ class Instance
         }
 
         if (empty($this->settings['MEDIA_URL'])) {
-            $this->settings['MEDIA_URL'] = implode(
-                '',
-                array('http://' , $_SERVER['HTTP_HOST'], '/media'.'/')
-            );
+            $this->settings['MEDIA_URL'] = '/media/';
 
         }
 
@@ -90,7 +87,7 @@ class Instance
 
         define('SS', "/");
 
-        define('APC_PREFIX', INSTANCE_UNIQUE_NAME);
+        define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
 
         define('SITE', $_SERVER['SERVER_NAME']);
 

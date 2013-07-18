@@ -78,6 +78,7 @@ class AuthenticationController extends Controller
         $login    = $this->request->request->filter('login', null, FILTER_SANITIZE_STRING);
         $password = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING);
         $token    = $this->request->request->filter('token', null, FILTER_SANITIZE_STRING);
+        $time     = $this->request->request->filter('time', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
 
         $user = new \User();
@@ -89,13 +90,16 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_login_form'));
         } else {
             // Try to autenticate the user
-            if ($user->login($login, $password, $token, $captcha)
+            if ($user->login($login, $password, $token, $captcha, $time)
                 && $user->type == 0
             ) {
 
                 // Check if user account is activated
-                if ($user->authorize != 1) {
+                if ($user->activated != 1) {
                     m::add(_('This user was deactivated. Please ask your administrator.'), m::ERROR);
+                    return $this->redirect($this->generateUrl('admin_login_form'));
+                } elseif ($user->type != 0) {
+                    m::add(_('This user has no access to the control panel.'), m::ERROR);
                     return $this->redirect($this->generateUrl('admin_login_form'));
                 } else {
                     // Increase security by regenerating the id
@@ -103,23 +107,35 @@ class AuthenticationController extends Controller
 
                     $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
-                    $group = \UserGroup::getGroupName($user->fk_user_group);
+                    // Get group(s) of the user
+                    $group = array();
+                    $privileges = array();
+                    $userGroups = $user->fk_user_group;
+                    foreach ($userGroups as $group) {
+                        $groups[] = \UserGroup::getGroupName($group);
+                        // Get privileges from user groups
+                        $privileges = array_merge(
+                            $privileges,
+                            \Privilege::getPrivilegesForUserGroup($group)
+                        );
+                    }
 
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
-                        'username'         => $user->login,
+                        'username'         => $user->username,
                         'email'            => $user->email,
                         'deposit'          => $user->deposit,
                         'type'             => $user->type,
-                        'isAdmin'          => ($group == 'Administrador'),
-                        'isMaster'         => ($group == 'Masters'),
-                        'privileges'       => \Privilege::getPrivilegesForUserGroup($user->fk_user_group),
+                        'isAdmin'          => (in_array('Administrador', $groups)),
+                        'isMaster'         => (in_array('Masters', $groups)),
+                        'privileges'       => $privileges,
                         'accesscategories' => $user->getAccessCategoryIds(),
                         'updated'          => time(),
                         'session_lifetime' => $maxSessionLifeTime * 60,
                         'user_language'    => $user->getMeta('user_language'),
-                        'csrf'             => md5(uniqid(mt_rand(), true))
+                        'csrf'             => md5(uniqid(mt_rand(), true)),
+                        'meta'             => $user->getMeta(),
                     );
 
                     $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
@@ -155,8 +171,7 @@ class AuthenticationController extends Controller
             if (isset($_COOKIE[session_name()])) {
                 setcookie(session_name(), '', time()-42000, '/');
             }
-            // Delete the cache that handles the number of active sessions
-            apc_delete(APC_PREFIX . "_"."num_sessions");
+
             session_destroy();
 
             return $this->redirect($this->generateUrl('admin_login_form'));

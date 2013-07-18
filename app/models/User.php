@@ -23,77 +23,105 @@ class User
      *
      * @var int
      **/
-    public $id               = null;
+    public $id = null;
 
     /**
-     * The login name aka username
+     * The username
      *
      * @var string
      **/
-    public $login            = null;
+    public $username = null;
 
     /**
      * Encrypted password
      *
      * @var string
      **/
-    public $password         = null;
-
-    /**
-     * Seconds the session will be valid
-     *
-     * @var int
-     **/
-    public $sessionexpire    = null;
+    public $password = null;
 
     /**
      * The user email
      *
      * @var
      **/
-    public $email            = null;
+    public $email = null;
 
     /**
-     * The user name
+     * The user real name
      *
      * @var string
      **/
-    public $name             = null;
+    public $name = null;
+
+    /**
+     * Seconds the session will be valid
+     *
+     * @var int
+     **/
+    public $sessionexpire = null;
+
+    /**
+     * The user blog/page url
+     *
+     * @var int
+     **/
+    public $url = null;
+
+    /**
+     * The user biography
+     *
+     * @var int
+     **/
+    public $bio = null;
+
+    /**
+     * The user avatar image id
+     *
+     * @var string
+     **/
+    public $avatar_img_id = null;
+
+    /**
+     * The user avatar image id
+     *
+     * @var string
+     **/
+    public $photo = null;
 
     /**
      * The type of user
      *
      * @var string
      **/
-    public $type             = null;
+    public $type = null;
 
     /**
      * The amount of money in the user wallet
      *
      * @var int
      **/
-    public $deposit          = null;
+    public $deposit = null;
 
     /**
      * The login token, used for restore passwords and more
      *
      * @var string
      **/
-    public $token            = null;
+    public $token = null;
 
     /**
      * Whether the user can login or not
      *
      * @var string
      **/
-    public $authorize        = null;
+    public $activated = null;
 
     /**
      * The user group id
      *
      * @var id
      **/
-    public $id_user_group    = null;
+    public $id_user_group = null;
 
     /**
      * The list of categories this user has access
@@ -107,7 +135,7 @@ class User
      *
      * @var int
      **/
-    public $fk_user_group    = null;
+    public $fk_user_group = null;
 
     /**
      * User login token
@@ -115,6 +143,13 @@ class User
      * @var string
      **/
     public $clientLoginToken = null;
+
+    /**
+     * Meta information for the user
+     *
+     * @var string
+     **/
+    public $meta = array();
 
     /**
      * Initializes the object instance
@@ -154,20 +189,26 @@ class User
             throw new \Exception(_('Already exists one user with that information'));
         }
 
+        // Transform groups array to a string separated by comma
+        $data['id_user_group'] = implode(',', $data['id_user_group']);
+
         $sql =
             "INSERT INTO users "
-            ."(`login`, `password`, `sessionexpire`, `email`, `name`, "
-            ."`type`, `token`, `authorize`, `fk_user_group`) "
-            ."VALUES (?,?,?,?,?,?,?,?,?)";
+            ."(`username`, `password`, `sessionexpire`, `url`, `bio`, `avatar_img_id`, "
+            ."`email`, `name`, `type`, `token`, `activated`, `fk_user_group`) "
+            ."VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
         $values = array(
-            $data['login'],
+            $data['username'],
             md5($data['password']),
             $data['sessionexpire'],
+            $data['url'],
+            $data['bio'],
+            $data['avatar_img_id'],
             $data['email'],
             $data['name'],
             $data['type'],
             $data['token'],
-            $data['authorize'],
+            $data['activated'],
             $data['id_user_group']
         );
 
@@ -195,8 +236,8 @@ class User
      **/
     public function read($id)
     {
-        $sql = 'SELECT * FROM users WHERE pk_user = '.intval($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM users WHERE id = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -204,18 +245,27 @@ class User
             return;
         }
 
-        $this->id               = $rs->fields['pk_user'];
-        $this->login            = $rs->fields['login'];
+        $this->id               = $rs->fields['id'];
+        $this->username         = $rs->fields['username'];
         $this->password         = $rs->fields['password'];
         $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->url              = $rs->fields['url'];
+        $this->bio              = $rs->fields['bio'];
+        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
         $this->email            = $rs->fields['email'];
         $this->name             = $rs->fields['name'];
         $this->deposit          = $rs->fields['deposit'];
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
-        $this->authorize        = $rs->fields['authorize'];
-        $this->id_user_group    = $rs->fields['fk_user_group'];
+        $this->activated        = $rs->fields['activated'];
+        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
         $this->accesscategories = $this->readAccessCategories();
+
+        // Get user meta information
+        $this->meta = $this->getMeta();
+
+        // Get photo object from avatar_img_id
+        $this->photo = new \Photo($rs->fields['avatar_img_id']);
 
         return $this;
     }
@@ -238,34 +288,48 @@ class User
         // Init transaction
         $GLOBALS['application']->conn->BeginTrans();
 
-        if (isset($data['password']) && (strlen($data['password']) > 0)) {
+        // Transform groups array to a string separated by comma
+        $data['id_user_group'] = implode(',', $data['id_user_group']);
+
+        if (isset($data['password'])
+            && (strlen($data['password']) > 0)
+            && $data['password'] === $data['passwordconfirm']
+        ) {
             $sql = "UPDATE users
-                    SET `login`=?, `password`= ?, `sessionexpire`=?,
-                        `email`=?, `name`=?, `fk_user_group`=?
-                    WHERE pk_user=?";
+                    SET `username`=?, `password`= ?, `sessionexpire`=?, `url`=?, `bio`=?,
+                        `avatar_img_id`=?, `email`=?, `name`=?, `fk_user_group`=?, type=?
+                    WHERE id=?";
 
             $values = array(
-                $data['login'],
+                $data['username'],
                 md5($data['password']),
                 $data['sessionexpire'],
+                $data['url'],
+                $data['bio'],
+                $data['avatar_img_id'],
                 $data['email'],
                 $data['name'],
                 $data['id_user_group'],
+                $data['type'],
                 intval($data['id'])
             );
 
         } else {
             $sql = "UPDATE users
-                    SET `login`=?, `sessionexpire`=?, `email`=?,
-                        `name`=?, `fk_user_group`=?
-                    WHERE pk_user=?";
+                    SET `username`=?, `sessionexpire`=?, `email`=?, `url`=?, `bio`=?,
+                        `avatar_img_id`=?, `name`=?, `fk_user_group`=?, type=?
+                    WHERE id=?";
 
             $values = array(
-                $data['login'],
+                $data['username'],
                 $data['sessionexpire'],
                 $data['email'],
+                $data['url'],
+                $data['bio'],
+                $data['avatar_img_id'],
                 $data['name'],
                 $data['id_user_group'],
+                $data['type'],
                 intval($data['id'])
             );
         }
@@ -278,6 +342,7 @@ class User
 
             return false;
         }
+
 
         $this->id = $data['id'];
         if (isset($data['ids_category'])) {
@@ -299,11 +364,15 @@ class User
      **/
     public function delete($id)
     {
-        $sql = 'DELETE FROM users WHERE pk_user=?';
+        $sql = 'DELETE FROM users WHERE id=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
             \Application::logDatabaseError();
 
+            return false;
+        }
+
+        if (!$this->deleteMeta($id)) {
             return false;
         }
 
@@ -313,15 +382,15 @@ class User
     /**
      * Checks if a user exists given some information.
      *
-     * @param array $data tuple with the login and email params
+     * @param array $data tuple with the username and email params
      *
      * @return boolean true if user exists
      **/
     public function checkIfUserExists($data)
     {
-        $sql = "SELECT login FROM users WHERE login=? OR email=?";
+        $sql = "SELECT username FROM users WHERE username=? OR email=?";
 
-        $values = array($data['login'], $data['email']);
+        $values = array($data['username'], $data['email']);
         $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
 
         return ($rs != false);
@@ -372,9 +441,11 @@ class User
      *
      * @return boolean true if the action was done
      **/
-    public function addCategoryToUser ($idUser, $idCategory)
+    public function addCategoryToUser($idUser, $idCategory)
     {
-        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        global $sc;
+        $cache = $sc->get('cache');
+        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
         $sql = "INSERT INTO users_content_categories "
              . "(`pk_fk_user`, `pk_fk_content_category`) "
@@ -403,7 +474,9 @@ class User
      **/
     public function delCategoryToUser($idUser, $idCategory)
     {
-        apc_delete(APC_PREFIX . "_readAccessCategories".$idUser);
+        global $sc;
+        $cache = $sc->get('cache');
+        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
         $sql = 'DELETE FROM users_content_categories '
              . 'WHERE pk_fk_content_category=?';
@@ -428,14 +501,14 @@ class User
      **/
     private function readAccessCategories($id = null)
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         $id = (!is_null($id))? $id: $this->id;
-        $fetchedFromAPC = false;
-        if (extension_loaded('apc')) {
-            $key = APC_PREFIX . "_readAccessCategories".$id;
-            $contentCategories = apc_fetch($key, $fetchedFromAPC);
-        }
+
+        $contentCategories = $cache->fetch(CACHE_PREFIX . "categories_for_user_".$id);
          // If was not fetched from APC now is turn of DB
-        if (!$fetchedFromAPC) {
+        if (!$contentCategories) {
 
             $sql = 'SELECT pk_fk_content_category '
                  . 'FROM users_content_categories '
@@ -456,10 +529,8 @@ class User
                  $contentCategories[] = $contentCategory;
                  $rs->MoveNext();
             }
-            if (extension_loaded('apc')) {
-                $key = APC_PREFIX . "_readAccessCategories".$id;
-                apc_store($key, $contentCategories);
-            }
+
+            $cache->save(CACHE_PREFIX . "categories_for_user_".$id, $contentCategories);
         }
 
         return $contentCategories;
@@ -472,6 +543,9 @@ class User
      **/
     private function deleteAccessCategoriesDb()
     {
+        global $sc;
+        $cache = $sc->get('cache');
+
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
         $values = array(intval($this->id));
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -482,33 +556,36 @@ class User
 
             return false;
         }
-         apc_delete(APC_PREFIX . "_readAccessCategories".$this->id);
+
+        $cache->delete(CACHE_PREFIX . "categories_for_user_".$this->id);
 
         return true;
     }
 
 
     /**
-     * Tries to login a user given a login information
+     * Tries to login a user given a username information
      *
-     * @param string $login the username
+     * @param string $username the username
      * @param string $password the password
      * @param string $loginToken the login token provided
      * @param string $loginCaptcha
+     * @param int    $time
      *
      * @return boolean true if the user has access
      **/
     public function login(
-        $login,
+        $username,
         $password,
         $loginToken = null,
-        $loginCaptcha = null
+        $loginCaptcha = null,
+        $time = null
     ) {
         $result = false;
 
-        $result = $this->authDatabase($login, $password);
+        $result = $this->authDatabase($username, $password, false, $time);
         if (!$result) {
-            $result = $this->authDatabase($login, $password, true);
+            $result = $this->authDatabase($username, $password, true, $time);
         }
 
         return $result;
@@ -517,15 +594,16 @@ class User
     /**
      * Aauthenticate by using the database
      *
-     * @param  string  $login
+     * @param  string  $username
      * @param  string  $password
-     * @param  loolean $managerDb
+     * @param  boolean $managerDb
+     * @param  int     $time
      *
-     * @return boolean Return true if login exists and password match
+     * @return boolean Return true if username exists and password match
      */
-    public function authDatabase($login, $password, $managerDb = false)
+    public function authDatabase($username, $password, $managerDb = false, $time = null)
     {
-        $sql = 'SELECT * FROM users WHERE login=\''.strval($login).'\'';
+        $sql = 'SELECT * FROM users WHERE username=\''.strval($username).'\' OR email=\''.strval($username).'\'';
         if (!$managerDb) {
             $rs = $GLOBALS['application']->conn->Execute($sql);
         } else {
@@ -539,14 +617,21 @@ class User
         }
 
         $this->setValues($rs->fields);
-        if ($this->password === md5($password)) {
+
+        // Check if password came with md5 tag otherwise js is disabled
+        if (strstr($password, 'md5:') && 'md5:'.md5($this->password.$time) === $password) {
             // Set access categories
             $this->accesscategories = $this->readAccessCategories();
             $this->authMethod = 'database';
 
             return true;
-        } elseif ($this->password === $password) {
-            // Frontend login from mail activation
+        } elseif ($this->password === md5($password)) { // Pass not md5 ecrypted, js disabled
+            // Set access categories
+            $this->accesscategories = $this->readAccessCategories();
+            $this->authMethod = 'database';
+
+            return true;
+        } elseif ($this->password === $password) { // Frontend login from mail activation
             $this->authMethod = 'database';
 
             return true;
@@ -564,18 +649,34 @@ class User
      * @param  string     $email
      * @return array|null
      */
-    public function getUserDataByEmail($email)
+    public function findByEmail($email)
     {
         $sql = 'SELECT * FROM users WHERE email=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
-        if (!$rs) {
+        if (!$rs->fields) {
             \Application::logDatabaseError();
 
             return null;
         }
 
-        return $rs->fields;
+        $this->id               = $rs->fields['id'];
+        $this->username         = $rs->fields['username'];
+        $this->password         = $rs->fields['password'];
+        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->url              = $rs->fields['url'];
+        $this->bio              = $rs->fields['bio'];
+        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
+        $this->email            = $rs->fields['email'];
+        $this->name             = $rs->fields['name'];
+        $this->deposit          = $rs->fields['deposit'];
+        $this->type             = $rs->fields['type'];
+        $this->token            = $rs->fields['token'];
+        $this->activated        = $rs->fields['activated'];
+        $this->id_user_group    = explode(',', $data['fk_user_group']);
+        $this->accesscategories = $this->readAccessCategories();
+
+        return $this;
     }
 
     /**
@@ -585,21 +686,34 @@ class User
      *
      * @return user if exists false otherwise
      **/
-    public function getUserByToken($token)
+    public function findByToken($token)
     {
-        $sql   = 'SELECT count(*) FROM users WHERE token=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $token);
+        $sql   = 'SELECT * FROM users WHERE token=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, $token);
 
-        if ($rs === false) {
-            return 0;
-        } elseif ($rs != 1) {
-            return 0;
+        if (!$rs->fields) {
+            \Application::logDatabaseError();
+
+            return null;
         }
 
-        $sql2   = 'SELECT * FROM users WHERE token=?';
-        $rs2 = $GLOBALS['application']->conn->Execute($sql2, $token);
+        $this->id               = $rs->fields['id'];
+        $this->username         = $rs->fields['username'];
+        $this->password         = $rs->fields['password'];
+        $this->sessionexpire    = $rs->fields['sessionexpire'];
+        $this->url              = $rs->fields['url'];
+        $this->bio              = $rs->fields['bio'];
+        $this->avatar_img_id    = $rs->fields['avatar_img_id'];
+        $this->email            = $rs->fields['email'];
+        $this->name             = $rs->fields['name'];
+        $this->deposit          = $rs->fields['deposit'];
+        $this->type             = $rs->fields['type'];
+        $this->token            = $rs->fields['token'];
+        $this->activated        = $rs->fields['activated'];
+        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
+        $this->accesscategories = $this->readAccessCategories();
 
-        return $rs2->fields;
+        return $this;
     }
 
     /**
@@ -611,17 +725,20 @@ class User
     public function setValues($data)
     {
         if (!empty($data)) {
-            $this->id            = $data['pk_user'];
-            $this->login         = $data['login'];
+            $this->id            = $data['id'];
+            $this->username      = $data['username'];
             $this->password      = $data['password'];
             $this->sessionexpire = $data['sessionexpire'];
+            $this->url           = $data['url'];
+            $this->bio           = $data['bio'];
+            $this->avatar_img_id = $data['avatar_img_id'];
             $this->email         = $data['email'];
             $this->name          = $data['name'];
             $this->deposit       = array_key_exists('deposit', $data) ? $data['deposit'] : '';
             $this->type          = $data['type'];
             $this->token         = $data['token'];
-            $this->authorize     = $data['authorize'];
-            $this->fk_user_group = $data['fk_user_group'];
+            $this->activated     = $data['activated'];
+            $this->fk_user_group = explode(',', $data['fk_user_group']);
 
             if (isset($data['ids_category'])) {
                 $this->accesscategories = $this->setAccessCategories($data['ids_category']);
@@ -636,14 +753,20 @@ class User
      */
     public function resetValues()
     {
-        $this->id           = null;
-        $this->login        = null;
-        $this->password     = null;
-        $this->sessionexpire= null;
-        $this->email        = null;
-        $this->name         = null;
-        $this->authorize    = null;
-        $this->fk_user_group= null;
+        $this->id               = null;
+        $this->username         = null;
+        $this->password         = null;
+        $this->sessionexpire    = null;
+        $this->url              = null;
+        $this->bio              = null;
+        $this->avatar_img_id    = null;
+        $this->email            = null;
+        $this->name             = null;
+        $this->deposit          = null;
+        $this->type             = null;
+        $this->token            = null;
+        $this->activated        = null;
+        $this->fk_user_group    = null;
         $this->accesscategories = null;
     }
 
@@ -730,14 +853,13 @@ class User
         $items = array();
         $_where = $this->buildFilter($filter);
 
-        $sql = 'SELECT * FROM `users` ' . $_where . ' ' . $orderBy;
+        $sql = 'SELECT * FROM `users` WHERE ' . $_where . ' ' . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs !== false) {
             while (!$rs->EOF) {
-                $user = new User();
-
-                $user->setValues($rs->fields);
+                $user = new User($rs->fields['id']);
+                $user->meta = $user->getMeta();
                 $items[] = $user;
 
                 $rs->MoveNext();
@@ -748,7 +870,7 @@ class User
     }
 
     /**
-     * Returns the user name for a given user id
+     * Returns the username for a given user id
      *
      * @param int $id the user id
      *
@@ -756,7 +878,7 @@ class User
      **/
     public function getUserName($id)
     {
-        $sql = 'SELECT name, login FROM users WHERE pk_user=?';
+        $sql = 'SELECT username FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             \Application::logDatabaseError();
@@ -764,9 +886,80 @@ class User
             return false;
         }
 
-        return $rs->fields['login'];
+        return $rs->fields['username'];
     }
 
+    /**
+     * Returns the user real name for a given user id
+     *
+     * @param int $id the user id
+     *
+     * @return string the user name
+     **/
+    public function getUserRealName($id)
+    {
+        $sql = 'SELECT name FROM users WHERE id=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        return $rs->fields['name'];
+    }
+
+    /**
+     * Returns the photo id associated to an user.
+     *
+     * @param string $id the user id.
+     *
+     * @return int the photo id
+     */
+    public function getUserPhotoId($id)
+    {
+        $sql = 'SELECT `avatar_img_id` FROM users WHERE id = ?';
+        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            Application::logDatabaseError();
+
+            return false;
+        }
+
+        return $rs->fields['avatar_img_id'];
+    }
+
+    /**
+     * Returns all the authors ORDER BY name.
+     *
+     * @return array multidimensional array with information about authors
+     */
+    public static function getAllUsersAuthors()
+    {
+        $sql = 'SELECT `id` FROM users WHERE fk_user_group  LIKE "%3%" ORDER BY `name`';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (!$rs) {
+            Application::logDatabaseError();
+
+            return array();
+        }
+
+        $i = 0;
+        $authors = array();
+        while (!$rs->EOF) {
+            $authors[$i]         = new \User($rs->fields['id']);
+            $authors[$i]->params = $authors[$i]->getMeta();
+
+            $rs->MoveNext();
+            $i++;
+        }
+
+        return $authors;
+
+    }
     /**
      * Sets user configurations given a named array
      *
@@ -784,6 +977,7 @@ class User
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
         if (!$rs) {
             return false;
         }
@@ -798,39 +992,35 @@ class User
      *
      * @return array/string an 2-dimensional array or an string with the user option values
      **/
-    public function getMeta($meta = array())
+    public function getMeta($meta = null)
     {
-        if (is_string($meta)) {
-            $cleanMeta = array($meta);
-        } else {
-            $cleanMeta = $meta;
-        }
+        if (count($this->meta) <= 0) {
+            $sql = 'SELECT * FROM usermeta WHERE `user_id` = ?';
 
-        $metaNameSQL = array();
-        foreach ($cleanMeta as $key) {
-            $metaNameSQL []= $GLOBALS['application']->conn->qstr($key);
-        }
-        $metaNameSQL = implode(', ', $metaNameSQL);
+            $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
-        $sql = 'SELECT * FROM usermeta WHERE `user_id` = ? AND `meta_key` IN ('.$metaNameSQL.')';
-
-        $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-
-        if (!$rs) {
-            return false;
-        }
-
-        if (is_array($meta)) {
-            $returnValues = array();
-            foreach ($rs as $value) {
-                $returnValues [$rs->fields['meta_key']] = $rs->fields['meta_value'];
+            if (!$rs->fields) {
+                return false;
             }
-        } else {
-            $returnValues = $rs->fields['meta_value'];
+
+            foreach ($rs as $value) {
+                $this->meta[$rs->fields['meta_key']] = $rs->fields['meta_value'];
+            }
         }
 
-        return $returnValues;
+        if (is_string($meta)) {
+            $value = null;
+            if (array_key_exists($meta, $this->meta)) {
+                $value = $this->meta[$meta];
+            }
+        } elseif (is_array($meta)) {
+            $value = array_intersect_key($this->meta, array_flip($meta));
+        } else {
+            $value = $this->meta;
+        }
+
+        return $value;
     }
 
      /**
@@ -855,15 +1045,15 @@ class User
     }
 
     /**
-     * Sets an user state to disabled/not authorized
+     * Sets an user state to disabled/not activated
      *
      * @param  int $id the use id
      *
      * @return boolean true if the action was done
      */
-    public function unauthorizeUser($id)
+    public function deactivateUser($id)
     {
-        $sql = "UPDATE users SET `authorize`=0 WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `activated`=0 WHERE id=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
@@ -881,9 +1071,9 @@ class User
      *
      * @return boolean true if the action was done
      */
-    public function authorizeUser($id)
+    public function activateUser($id)
     {
-        $sql = "UPDATE users SET `authorize`=1 WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `activated`=1 WHERE id=".intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
             \Application::logDatabaseError();
@@ -916,15 +1106,15 @@ class User
     }
 
     /**
-     * Checks if an user name (login) is already in use by frontend users
+     * Checks if an username is already in use by frontend users
      *
      * @param  $userName The user name to log in
-     * @return bool if is in use this user name (login)
+     * @return bool if is in use this username
      */
     public function checkIfExistsUserName($userName)
     {
         $sql = 'SELECT count(*) AS num '
-            . 'FROM `users` WHERE login = "'.$userName.'"';
+            . 'FROM `users` WHERE username = "'.$userName.'"';
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
@@ -946,7 +1136,7 @@ class User
      **/
     public function updateUserToken($id, $token)
     {
-        $sql = "UPDATE users SET `token`= '".$token."' WHERE pk_user=".intval($id);
+        $sql = "UPDATE users SET `token`= '".$token."' WHERE id=".intval($id);
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
@@ -967,7 +1157,7 @@ class User
      **/
     public function updateUserPassword($id, $pass)
     {
-        $sql = "UPDATE users SET `password`= '".$pass."' WHERE pk_user=?";
+        $sql = "UPDATE users SET `password`= '".$pass."' WHERE id=?";
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if ($rs === false) {
@@ -978,6 +1168,257 @@ class User
         return true;
     }
 
+    /**
+     * Increases the paywall subscription time given the subscription name
+     *
+     * @param string $planTime the name of the plan
+     *
+     * @return void
+     **/
+    public function addSubscriptionLimit($planTime = 0)
+    {
+        $newTime = $planTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('paywall_time_limit' => $newTime));
+    }
+
+    /**
+     * Returns a list of User objects where the users has paywall subscription
+     *
+     * @return void
+     **/
+    public static function getUsersWithSubscription($config = array())
+    {
+        $defaultConfig = array(
+            'limit' => null,
+        );
+
+        $config = array_merge($defaultConfig, $config);
+
+        $limit = '';
+        if ($config['limit'] > 0) {
+            $limit = 'LIMIT '.$config['limit'];
+        }
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $sql = "SELECT user_id FROM usermeta WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ? $limit";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return array();
+        }
+        $users = array();
+        while (!$rs->EOF) {
+
+            $user = new \User($rs->fields['user_id']);
+            $user->meta = $user->getMeta();
+
+            // Set paywall values
+            $user->paywall = 0;
+            $user->last_login = 0;
+            if (isset($user->meta['paywall_time_limit'])) {
+                // Overload obj for ordering propouses
+                $user->paywall = $user->meta['paywall_time_limit'];
+                $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $user->meta['paywall_time_limit'],
+                    new \DateTimeZone('UTC')
+                );
+            }
+            if (isset($user->meta['last_login'])) {
+                // Overload obj for ordering propouses
+                $user->last_login = $user->meta['last_login'];
+                $user->meta['last_login'] = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $user->meta['last_login'],
+                    new \DateTimeZone('UTC')
+                );
+            }
+            $users []= $user;
+
+            $rs->MoveNext();
+        }
+
+        return $users;
+    }
+
+
+    /**
+     * Returns a list of User objects where the users are only registered not subscribed
+     *
+     * @return void
+     **/
+    public static function getUsersOnlyRegistered($config = array())
+    {
+        $sql = 'SELECT id FROM `users` WHERE type=1 ORDER BY name';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $users = array();
+        if ($rs !== false) {
+            while (!$rs->EOF) {
+                $user = new User($rs->fields['id']);
+                $user->meta = $user->getMeta();
+
+                // Set paywall values
+                $user->paywall = 0;
+                $user->last_login = 0;
+                if (isset($user->meta['paywall_time_limit'])) {
+                    // Overload obj for ordering propouses
+                    $user->paywall = $user->meta['paywall_time_limit'];
+                    $user->meta['paywall_time_limit'] = \DateTime::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $user->meta['paywall_time_limit'],
+                        new \DateTimeZone('UTC')
+                    );
+                }
+                if (isset($user->meta['last_login'])) {
+                    // Overload obj for ordering propouses
+                    $user->last_login = $user->meta['last_login'];
+                    $user->meta['last_login'] = \DateTime::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $user->meta['last_login'],
+                        new \DateTimeZone('UTC')
+                    );
+                }
+                $users[] = $user;
+
+                $rs->MoveNext();
+            }
+        }
+
+        // Exclude users with subscription
+        $users = array_udiff(
+            $users,
+            self::getUsersWithSubscription(),
+            function ($obj_a, $obj_b) {
+                return $obj_a->id - $obj_b->id;
+            }
+        );
+
+        // Reset array indexes to start on 0
+        $users = array_values($users);
+
+        return $users;
+    }
+
+    /**
+     * Returns a list of User objects where the users has paywall subscription
+     *
+     * @return void
+     **/
+    public static function countUsersWithSubscription($limit = array())
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $sql = "SELECT count(user_id) as count FROM usermeta ".
+               "WHERE `meta_key`= 'paywall_time_limit' && `meta_value` > ?";
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
+
+        if ($rs === false) {
+            \Application::logDatabaseError();
+            return 0;
+        }
+
+        return $rs->fields['count'];
+    }
+
+    /**
+     * Stores the register date for a frontend user
+     *
+     * @return void
+     **/
+    public function addRegisterDate()
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('register_date' => $currentTime));
+    }
+
+    /**
+     * Set the last login date for a frontend user
+     *
+     * @return void
+     **/
+    public function setLastLoginDate()
+    {
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $this->setMeta(array('last_login' => $currentTime));
+    }
+
+    /**
+     * Process an uploaded photo for user
+     *
+     * @param Symfony\Component\HttpFoundation\File\UploadedFile $file the uploaded file
+     * @param string $userName the user real name
+     *
+     * @return Response the response object
+     **/
+    public function uploadUserAvatar($file, $userName)
+    {
+        // Generate image path and upload directory
+        $userNameNormalized = \Onm\StringUtils::normalize_name($userName);
+        $relativeAuthorImagePath ="/authors/".$userName;
+        $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
+
+        // Get original information of the uploaded image
+        $originalFileName = $file->getClientOriginalName();
+        $originalFileData = pathinfo($originalFileName);
+        $fileExtension    = strtolower($originalFileData['extension']);
+
+        // Generate new file name
+        $currentTime = gettimeofday();
+        $microTime   = intval(substr($currentTime['usec'], 0, 5));
+        $newFileName = date("YmdHis").$microTime.".".$fileExtension;
+
+        // Check upload directory
+        if (!is_dir($uploadDirectory)) {
+            \FilesManager::createDirectory($uploadDirectory);
+        }
+
+        // Upload file
+        $file->move($uploadDirectory, $newFileName);
+
+        // Get all necessary data for the photo
+        $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
+        $data = array(
+            'title'       => $originalFileName,
+            'name'        => $newFileName,
+            'user_name'   => $newFileName,
+            'path_file'   => $relativeAuthorImagePath,
+            'nameCat'     => $userName,
+            'category'    => '',
+            'created'     => $infor->atime,
+            'changed'     => $infor->mtime,
+            'date'        => $infor->mtime,
+            'size'        => round($infor->size/1024, 2),
+            'width'       => $infor->width,
+            'height'      => $infor->height,
+            'type'        => $infor->type,
+            'type_img'    => $fileExtension,
+            'media_type'  => 'image',
+            'author_name' => '',
+        );
+
+        // Create new photo
+        $photo = new \Photo();
+        $photoId = $photo->create($data);
+
+        return $photoId;
+    }
 
     /**
      * Returns a valid SQL WHERE clause for the given filter
@@ -986,9 +1427,9 @@ class User
      *
      * @return string the WHERE clause
      **/
-    private function buildFilter($filter)
+    public function buildFilter($filter)
     {
-        $newFilter = ' WHERE 1=1 ';
+        $newFilter = '';
 
         if (!is_null($filter) && is_string($filter)) {
             if (preg_match('/^[ ]*where/i', $filter)) {
@@ -1001,20 +1442,22 @@ class User
                 $parts[] = $filter['base'];
             }
 
-            if (isset($filter['login']) && !empty($filter['login'])) {
-                $parts[] = '`login` LIKE "' . $filter['login'] . '%"';
+            if (isset($filter['type']) && $filter['type'] != '') {
+                $parts[] = '`type` = '.$filter['type'].'';
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {
-                $parts[] = 'MATCH(`name`) AGAINST ("' . $filter['name'] . '" IN BOOLEAN MODE)';
+                $parts[] = '`name` LIKE "%' . $filter['name'] . '%" OR '.
+                           '`username` LIKE "%' . $filter['name'] . '%" OR '.
+                           '`email` LIKE "%' . $filter['name'] . '%"';
             }
 
             if (isset($filter['group']) && intval($filter['group'])>0) {
-                $parts[] = '`fk_user_group` = ' . $filter['group'] . '';
+                $parts[] = '`fk_user_group` LIKE "%' . $filter['group'] . '%"';
             }
 
             if (count($parts) > 0) {
-                $newFilter .= ' AND ' . implode(' OR ', $parts);
+                $newFilter .= implode(' AND ', $parts);
             }
         }
 

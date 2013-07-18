@@ -36,3 +36,22 @@ var BackendAuthentication = {
         }
     }
 };
+
+
+// Auxiliar functions for login backend actions
+$(document).ready(function () {
+
+    // Encode password in md5 on backend login
+    $('#submit-button').on('click', function(e, ui){
+        e.preventDefault();
+
+        var form = $('#loginform');
+        var time = form.find('input[name="time"]').val();
+        var password = form.find('input[name="password"]');
+
+        password.val('md5:' + hex_md5(hex_md5(password.val()) + time));
+
+        form.submit();
+    });
+
+});

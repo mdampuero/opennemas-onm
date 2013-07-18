@@ -78,19 +78,20 @@ class AuthenticationController extends Controller
         $login    = $this->request->request->filter('login', null, FILTER_SANITIZE_STRING);
         $password = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING);
         $token    = $this->request->request->filter('token', null, FILTER_SANITIZE_STRING);
+        $time     = $this->request->request->filter('time', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
 
         $user = new \User();
 
-        if ($_SESSION['csrf'] !== $token) {
+        if (array_key_exists('csrf', $_SESSION) && $_SESSION['csrf'] !== $token) {
             $this->view->assign('message', _('Login token is not valid. Try to autenticate again.'));
         } else {
 
             // Try to autenticate the user
-            if ($user->login($login, $password, $token, $captcha)) {
+            if ($user->login($login, $password, $token, $captcha, $time)) {
 
                 // Check if user account is activated
-                if ($user->authorize != 1) {
+                if ($user->activated != 1) {
                     $this->view->assign(
                         'message',
                         _('This user was deactivated. Please ask your administrator.')
@@ -105,7 +106,7 @@ class AuthenticationController extends Controller
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
-                        'username'         => $user->login,
+                        'username'         => $user->username,
                         'email'            => $user->email,
                         'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
                         'default_expire'   => $user->sessionexpire,

@@ -55,7 +55,8 @@ class NewsMLEuropapress extends NewsMLG1
 
         return \DateTime::createFromFormat(
             'Y-m-d\TH:i:s',
-            $originalDate
+            $originalDate,
+            new \DateTimeZone('UTC')
         );
     }
 

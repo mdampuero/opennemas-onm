@@ -16,11 +16,11 @@ $menuXml = '<?xml version="1.0"?>
             link="'.url('admin_frontpage_list').'"
         />
         <node
-            module_name="STATIC_PAGES_MANAGER"
-            privilege="STATIC_ADMIN"
-            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
-            id="static_pages_manager"
-            link="'.url('admin_staticpages').'"
+            module_name="ADS_MANAGER"
+            privilege="ADVERTISEMENT_ADMIN"
+            title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'"
+            id="ads_manager"
+            link="'.url('admin_ads').'"
         />
         <node
             module_name="WIDGET_MANAGER"
@@ -35,13 +35,6 @@ $menuXml = '<?xml version="1.0"?>
             title="'.htmlspecialchars(_("Menus"), ENT_QUOTES).'"
             id="menu_manager"
             link="'.url('admin_menus').'"
-        />
-        <node
-            module_name="SYNC_MANAGER"
-            title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
-            privilege="SYNC_ADMIN"
-            id="sync_manager"
-            link="'.url('admin_instance_sync').'"
         />
     </submenu>
 
@@ -65,14 +58,14 @@ $menuXml = '<?xml version="1.0"?>
                 module_name="OPINION_MANAGER"
                 privilege="OPINION_ADMIN"
                 title="'.htmlspecialchars(_("Article opinions"), ENT_QUOTES).'"
-                id="mailman"
+                id="opinion_manager"
                 link="'.url('admin_opinions').'"
             />
             <node
                 module_name="OPINION_MANAGER"
                 privilege="OPINION_ADMIN"
                 title="'.htmlspecialchars(_("Authors"), ENT_QUOTES).'"
-                id="mailman"
+                id="authors"
                 link="'.url('admin_opinion_authors').'"
             />
         </submenu>
@@ -98,21 +91,20 @@ $menuXml = '<?xml version="1.0"?>
             link="'.url('admin_polls').'"
         />
         <node
-            module_name="ADS_MANAGER"
-            privilege="ADVERTISEMENT_ADMIN"
-            title="'.htmlspecialchars(_("Advertisements"), ENT_QUOTES).'"
-            id="ads_manager"
-            link="'.url('admin_ads').'"
+            module_name="STATIC_PAGES_MANAGER"
+            privilege="STATIC_ADMIN"
+            title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
+            id="static_pages_manager"
+            link="'.url('admin_staticpages').'"
         />
-
-         <node
+        <node
             module_name="SPECIAL_MANAGER"
             privilege="SPECIAL_ADMIN"
             title="'.htmlspecialchars(_("Specials"), ENT_QUOTES).'"
             id="specials_manager"
             link="'.url('admin_specials').'"
         />
-         <node
+        <node
             module_name="LETTER_MANAGER"
             privilege="LETTER_ADMIN"
             title="'.htmlspecialchars(_("Letter to the editor"), ENT_QUOTES).'"
@@ -204,13 +196,35 @@ $menuXml = '<?xml version="1.0"?>
             id="keyword_manager"
             link="'.url('admin_keywords', array()).'"
             privilege="PCLAVE_ADMIN" />
+        <submenu title="'.htmlspecialchars(_("Paywall"), ENT_QUOTES).'" id="paywall" link="#"
+            privilege="PAYWALL">
+            <node
+            module_name="PAYWALL"
+            title="'.htmlspecialchars(_("Statistics"), ENT_QUOTES).'"
+            id="keyword_manager"
+            link="'.url('admin_paywall', array()).'"
+            privilege="PAYWALL" />
+            <node
+            module_name="PAYWALL"
+            title="'.htmlspecialchars(_("Paywall users"), ENT_QUOTES).'"
+            id="keyword_manager"
+            link="'.url('admin_paywall_users', array()).'"
+            privilege="PAYWALL" />
+            <node
+            module_name="PAYWALL"
+            title="'.htmlspecialchars(_("Paywall purchases"), ENT_QUOTES).'"
+            id="keyword_manager"
+            link="'.url('admin_paywall_purchases', array()).'"
+            privilege="PAYWALL" />
+        </submenu>
         <node class="divider" />
-         <node
-            module_name="SCHEDULE_MANAGER"
-            title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
-            id="cronicas_schedule_manager"
-            link="http://www.cronicasdelaemigracion.com//agenda/"
-            privilege="SCHEDULE_ADMIN" />
+        <node
+            module_name="SYNC_MANAGER"
+            title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
+            privilege="SYNC_ADMIN"
+            id="sync_manager"
+            link="'.url('admin_instance_sync').'"
+        />
         <node
             module_name="NEWS_AGENCY_IMPORTER"
             privilege="IMPORT_ADMIN"
@@ -225,15 +239,13 @@ $menuXml = '<?xml version="1.0"?>
             id="xml_importer"
             link="'.url('admin_importer_xmlfile').'"
         />
-        <node class="divider" />
         <node
-            module_name="CRONICAS_MODULES"
-            title="'.htmlspecialchars(_("Statistics Piwik"), ENT_QUOTES).'"
-            id="piwik_manager"
-            target="external"
-            link="https://piwik.openhost.es/admin/index.php?module=Login&amp;action=logme&amp;'
-                .'login=cronicas&amp;password=44bdf5f29c992928c5233b0ec1b87bc2"
-            privilege="STATS_ADMIN" />
+            module_name="SCHEDULE_MANAGER"
+            title="'.htmlspecialchars(_("Agenda"), ENT_QUOTES).'"
+            id="cronicas_schedule_manager"
+            link="http://www.cronicasdelaemigracion.com//agenda/"
+            privilege="SCHEDULE_ADMIN"
+        />
         <node
             module_name="CRONICAS_MODULES"
             title="'.htmlspecialchars(_("Statistics Google Analytics"), ENT_QUOTES).'"

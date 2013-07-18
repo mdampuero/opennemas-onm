@@ -63,18 +63,10 @@ class Attachment extends Content
      **/
     public function __construct($id = null)
     {
-        $this->content_type = 'attachment';
-        parent::__construct($id);
-
-        $this->cache = new MethodCacheManager($this, array('ttl' => 30));
-
-        if (!is_null($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'attachment';
         $this->content_type_l10n_name = _('File');
         $this->file_path = MEDIA_PATH.DIRECTORY_SEPARATOR.FILE_DIR;
+
+        parent::__construct($id);
     }
 
     /**
@@ -103,14 +95,10 @@ class Attachment extends Content
 
                 break;
             case 'content_type_name':
-                $contentTypeName = $GLOBALS['application']->conn->Execute(
-                    'SELECT * FROM `content_types` '
-                    .'WHERE pk_content_type = "'. $this->content_type
-                    .'" LIMIT 1'
-                );
+                $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
 
-                if (isset($contentTypeName->fields['name'])) {
-                    $returnValue = $contentTypeName->fields['name'];
+                if (isset($contentTypeName)) {
+                    $returnValue = $contentTypeName;
                 } else {
                     $returnValue = $this->content_type;
                 }
@@ -213,12 +201,12 @@ class Attachment extends Content
     }
 
     /**
-    * Fetches information from one attachment given an id
-    *
-    * @param integer $id the id of the attachment we want to get information
-    *
-    * @return void
-    */
+     * Fetches information from one attachment given an id
+     *
+     * @param integer $id the id of the attachment we want to get information
+     *
+     * @return void
+     */
     public function read($id)
     {
         parent::read($id);
@@ -335,197 +323,6 @@ class Attachment extends Content
 
         return true;
 
-    }
-
-    /**
-     * Fetches one Attachement by its id
-     *
-     * @param int $id the attachemnt id
-     *
-     * @return Attachment the attachment object
-     **/
-    public function readone($id)
-    {
-        $sql = 'SELECT * FROM attachments WHERE pk_attachment=?';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
-        }
-        $attachemnt = new Attachment();
-        $attachement->pk_attachment = $rs->fields['pk_attachment'];
-        $attachement->title         = $rs->fields['title'];
-        $attachement->path          = $rs->fields['path'];
-        $attachement->category      = $rs->fields['category'];
-
-        return $attachemnt;
-    }
-
-    /**
-     * Gets all the attachemnts  for a category
-     *
-     * @param int $cat the category id
-     *
-     * @return array a list of Attachemnt information
-     **/
-    public function allread($cat)
-    {
-        $sql = 'SELECT * FROM attachments WHERE category=? '
-             . 'ORDER BY pk_attachment DESC';
-        $rs  = $GLOBALS['application']->conn->Execute($sql, array($cat));
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
-        }
-
-        while (!$rs->EOF) {
-            $att[] = array(
-                'id'    => $rs->fields['pk_attachment'],
-                'title' => $rs->fields['title'],
-                'path'  => $rs->fields['path'],
-            );
-
-            $rs->MoveNext();
-        }
-
-        return $att;
-    }
-
-    /**
-     * Gets the latest attachemnts for a category
-     *
-     * @param int $cat the category id
-     *
-     * @return array a list of Attachemnt information
-     **/
-    public function find_lastest($cat)
-    {
-        $sql = 'SELECT * FROM `contents`, `attachments` '
-             . 'WHERE `pk_content`=`pk_attachment` AND `category`=?'
-             . ' AND `in_litter`=0 ORDER BY pk_attachment DESC';
-        $rs = $GLOBALS['application']->conn->GetRow($sql, array($cat));
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return null;
-        }
-
-        $obj = new stdClass();
-        $obj->pk_attachment = $rs['pk_attachment'];
-        $obj->title         = $rs['title'];
-        $obj->path          = $rs['path'];
-        $obj->category      = $rs['category'];
-
-        $img_name = null;
-
-        if (preg_match('/\.pdf$/', $obj->path)) {
-            $dirDateComponent = date("/Y/m/d/");
-            $mediaPath        = MEDIA_IMG_PATH.'/'.$dirDateComponent;
-
-            $img_name   = basename($obj->path, ".pdf") . '.jpg';
-            $tempName   = '/tmp/' . basename($obj->path, ".pdf") . '.png';
-
-            if (!file_exists($mediaPath . '/' . $img_name)) {
-                // Check if exists mediaPath
-                if (!file_exists($mediaPath)) {
-                    FilesManager::createDirectory($mediaPath);
-                }
-
-                $filePath = MEDIA_PATH.'/'.MEDIA_FILE_DIR.$dirDateComponent;
-                // Thumbnail first page (see [0])
-                if (file_exists($filePath. $obj->path)) {
-                    try {
-                        $imagick = new Imagick($filePath.$obj->path . '[0]');
-                        $imagick->thumbnailImage(180, 0)
-                                ->writeImage($tempName);
-
-                        $imagick = new Imagick($tempName);
-                        $imagick->writeImage($mediaPath . '/' . $img_name);
-                    } catch (Exception $e) {
-                        // Nothing
-                    }
-                }
-            }
-        }
-
-        return array($obj, $img_name);
-    }
-
-    /**
-     * Fetches one attachemnts by its path and cat
-     *
-     * @param string $ruta the attachemnt path
-     * @param int    $cat  the category id
-     *
-     * @return array a list of Attachemnt information
-     **/
-    public function readid($ruta, $cat)
-    {
-        $sql = 'SELECT * FROM attachments WHERE path=? AND category=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($ruta, $cat));
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
-        }
-
-        $att = array();
-        $att['id'] = $rs->fields['pk_attachment'];
-        $att['titulo'] = $rs->fields['title'];
-
-        return $att;
-    }
-
-    /**
-     * Fetches one attachment by its path
-     *
-     * @param string $ruta the attachment path
-     *
-     * @return array a list of Attachemnt information
-     **/
-    public function readids($ruta)
-    {
-        $sql = 'SELECT * FROM attachments WHERE path=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, $ruta);
-
-        if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
-        }
-
-        $att = array();
-        $att['id'] = $rs->fields['pk_attachment'];
-        $att['titulo'] = $rs->fields['title'];
-
-        return $att;
-    }
-
-    /**
-     * Updates the title for an attachement given its id
-     *
-     * @param int $id the attachemnt id
-     * @param string $title the new title
-     *
-     * @return array a list of Attachemnt information
-     **/
-    public function updatetitle($id, $title)
-    {
-        $sql = "UPDATE attachments SET `title`=? WHERE pk_attachment=?";
-        $values = array($title, $id);
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if ($rs === false) {
-            \Application::logDatabaseError();
-
-            return;
-        }
     }
 
     /**

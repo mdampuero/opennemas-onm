@@ -1,13 +1,8 @@
 <?php
 function smarty_function_count_pending_comments($params, &$smarty)
 {
+    $commentManager = new \Repository\CommentManager();
+    $pendingCommentsCount = $commentManager->countPendingComments();
 
-    /**
-     * Setup number of pending comments
-    */
-    $numComment = new Comment();
-    $pending_comments = $numComment->countPendingComments();
-    return($pending_comments);
-
+    return $pendingCommentsCount;
 }
-

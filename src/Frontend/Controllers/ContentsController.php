@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Cookie;
 use Onm\Framework\Controller\Controller;
+use Onm\Module\ModuleManager;
 use Onm\Message as m;
 use Onm\Settings as s;
 
@@ -57,6 +58,12 @@ class ContentsController extends Controller
 
         $content = new \Content($contentID);
         $content = $content->get($contentID);
+
+        // Check for paywall
+        if (!is_null($content)) {
+            $this->paywallHook($content);
+        }
+
 
         if (isset($content->img2) && ($content->img2 != 0)) {
             $photoInt = new \Photo($content->img2);
@@ -155,7 +162,7 @@ class ContentsController extends Controller
             $senderEmail  = $request->request->filter('sender_email', null, FILTER_VALIDATE_EMAIL);
             $senderName   = $request->request->filter('sender_name', null, FILTER_SANITIZE_STRING);
             $mailSubject  = sprintf(
-                _('%s ha compartido contigo un contenido de %s.'),
+                _('%s has shared with you a content from %s.'),
                 $senderName,
                 s::get('site_name')
             );
@@ -261,7 +268,7 @@ class ContentsController extends Controller
         // If is POST request perform the vote action
         // if not render the vote
         if ('POST' == $request->getMethod()) {
-            $ip        = $_SERVER['REMOTE_ADDR'];
+            $ip        = getRealIp();
             $contentId = $request->request->getDigits('content_id', null);
             $voteValue = $request->request->getDigits('vote_value', null);
 
@@ -328,5 +335,55 @@ class ContentsController extends Controller
         }
 
         return new Response($content, $httpCode);
+    }
+
+    /**
+     * Alteres the article given the paywall module status
+     *
+     * @return Article the article
+     **/
+    public function paywallHook(&$content)
+    {
+        $paywallActivated = ModuleManager::isActivated('PAYWALL');
+        $onlyAvailableSubscribers = $content->isOnlyAvailableForSubscribers();
+
+        if ($paywallActivated && $onlyAvailableSubscribers) {
+            $newContent = $this->renderView(
+                'paywall/partials/content_only_for_subscribers.tpl',
+                array('id' => $content->id)
+            );
+
+            $isLogged = array_key_exists('userid', $_SESSION);
+            if ($isLogged) {
+                if (array_key_exists('meta', $_SESSION)
+                    && array_key_exists('paywall_time_limit', $_SESSION['meta'])) {
+                    $userSubscriptionDateString = $_SESSION['meta']['paywall_time_limit'];
+                } else {
+                    $userSubscriptionDateString = '';
+                }
+                $userSubscriptionDate = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $userSubscriptionDateString,
+                    new \DateTimeZone('UTC')
+                );
+
+                $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+                $hasSubscription = $userSubscriptionDate > $now;
+
+                if (!$hasSubscription) {
+                    $newContent = $this->renderView(
+                        'paywall/partials/content_only_for_subscribers.tpl',
+                        array(
+                            'logged' => $isLogged,
+                            'id'     => $content->id
+                        )
+                    );
+                    $content->body = $newContent;
+                }
+            } else {
+                $content->body = $newContent;
+            }
+        }
     }
 }

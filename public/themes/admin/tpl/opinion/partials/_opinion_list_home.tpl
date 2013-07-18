@@ -4,10 +4,8 @@
             <th style="width:30px;"><input type="checkbox" class="toggleallcheckbox"></th>
             <th style="width:200px;">{t}Author{/t} - {t}Title{/t}</th>
             <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
-            <th class="center"><img src="{$params.IMAGE_DIR}votes.png" alt="{t}Votes{/t}" width="22"></th>
-            <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}comments.png" alt="{t}Comments{/t}"></th>
-            <th class="center" style="width:130px;">Fecha</th>
-            <th class="center" style="width:10px;">Home</th>
+            <th class="center" style="width:130px;">{t}Date{/t}</th>
+            <th class="center" style="width:10px;">{t}Home{/t}</th>
             <th class="center" style="width:10px;">{t}Available{/t}</th>
             <th class="center" style="width:20px;">{t}Favorite{/t}</th>
             <th class="center" style="width:90px;">{t}Actions{/t}</th>
@@ -33,12 +31,6 @@
             </td>
             <td class="center">
                 {$opinion->views}
-            </td>
-            <td class="center">
-                {$opinion->ratings}
-            </td>
-            <td class="center">
-                {$opinion->comments}
             </td>
             <td class="center">
                 {$opinion->created}
@@ -188,7 +180,7 @@
                 {t}Director{/t}
             {else}
                 {acl isAllowed="AUTHOR_UPDATE"}
-                <a href="author.php?action=read&id={$opinion->fk_author}">
+                <a href="{url name=admin_acl_user_show id=$opinion->author->id}">
                     {$opinion->author->name}
                 </a>
                 {/acl}

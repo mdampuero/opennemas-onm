@@ -48,23 +48,17 @@ span.highlighted {
                 <div class="search-form">
                     <div>
 
-                        <label for="string_search">{t}Content name{/t}</label>
+                        <label for="string_search">{t}Text to search{/t}</label>
                         <input type="search" id="search_string" name="search_string" title="stringSearch" value="{$search_string}"
                                 style="width:95%"/>
-                        <button type="submit" class="onm-button red submit" style="width:100%"><i class="icon-search icon-white"></i></button>
+                        <button type="submit" class="onm-button red submit" style="width:100%"><i class="icon-search icon-white"></i> {t}Search{/t}</button>
 
                         <br>
 
                         <div class="search-bar-title">{t}Content type{/t}</div>
                         <select name="content_types[]" id="content_types" multiple>
-                        {foreach name=contentTypes item=type from=$arrayTypes}
-                            {if (!empty($string_search) && ($type['pk_content_type'] == 1 || $type['pk_content_type'] == 4))
-                                || (is_array($content_types_selected) && in_array($type['name'], $content_types_selected))}
-                            <option value="{$type['name']}" selected="selected"/>{$type['name']|ucfirst}</option>
-                            {else}
-                            <option value="{$type['name']}" />{$type['name']|ucfirst}</option>
-                            {/if}
-                        {/foreach}
+                            {html_options options=$content_types selected=$content_types_selected}
+
                         </select>
                     </div><!-- /search-form -->
                 </div>

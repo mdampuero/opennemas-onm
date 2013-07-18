@@ -13,11 +13,13 @@ tmp/*
 vendor/autoload.php
 vendor/composer
 vendor/.composer
+vendor/imagine
 vendor/frandieguez
 vendor/symfony
 vendor/monolog
 vendor/swiftmailer
 vendor/psr
+vendor/paypal
 app/config/parameters.yml
 /bin/import-tools/joomla/importer.log
 /bin/import-tools/joomla/configuration.ini

@@ -1,7 +1,55 @@
 
 /***********************************************************
+    Frontpage content disposition
+************************************************************/
+.image-top-wide div.article-media,
+.image-middle-wide div.article-media{
+    width: 100%;
+}
+
+.image-top-right div.article-media{
+    max-width: 60%;
+    float: right !important;
+    margin-left: 10px;
+}
+
+.image-top-left div.article-media{
+    max-width: 60%;
+    float: left !important;
+    margin-right: 10px;
+}
+
+.image-middle-right div.article-media{
+    max-width: 60%;
+    float: right !important;
+    margin-left: 10px;
+}
+
+.image-middle-left div.article-media{
+    max-width: 60%;
+    float: left !important;
+    margin-right: 10px;
+}
+
+/***********************************************************
   Definitions for ads
 ************************************************************/
+
+/***********************************************************
+  Definitions for ads inside HEADER
+************************************************************/
+div.ads_footer, div.ads_header { width: 100%; }
+.ad_728 { width:728px; display:inline; float:left; }
+.ad_728 a, .ad_244 a, .ad_in_column a{  min-height:90px; }
+.ad_in_column div { margin:0 auto; }
+div.ads_footer div.ad_728, div.ads_header div.ad_728 {  margin-right:0px; }
+.ad_244{ width:244px; display:inline; float:right; max-height:90px; text-align: right; }
+div.ads_footer div.ad_244, div.ads_header div.ad_244 { float:right; }
+div.ad_in_column > div { text-align:center; border:1px solid #E9E9E9; padding:5px; }
+
+.ads_break_frontpage { clear:both; margin:10px 0; }
+.ads_break_frontpage > div { background-color:White; }
+
 div.ads-skyscraper-container{
     position: fixed;
     top: 0;
@@ -46,6 +94,78 @@ div.ad-skyscraper-body {
     border: 0 none !important;
 }
 
+div#intesticial-ad {
+    position: fixed;
+    display: inline;
+    top: 0;
+    left: 0;
+    background-color: #FFF;
+    width: 100%;
+    height: 100%;
+    z-index: 33333;
+    padding-top:1em
+}
+
+body > div#intesticial-ad {
+    position: fixed;
+    display: block;
+    top: 0;
+    left: 0;
+}
+
+div#intesticial-ad div.wrapper {
+    position:relative;
+    display:block;
+    width:800px;
+    margin:0 auto;
+    margin-top:20px;
+}
+
+div#intesticial-ad div.header {
+    position:relative;
+    height:25px;
+    font-size:.9em;
+    color:#999;
+    height:30px;
+    border-bottom:1px solid #ccc;
+
+}
+    div#intesticial-ad div.logo-and-phrase {
+        text-align:left;
+        width:400px;
+        padding-top:10px;
+    }
+
+
+
+    div#intesticial-ad div.closeButton {
+        position:absolute;
+        top:1px;
+        right:0;
+    }
+        div#intesticial-ad div.closeButton a {
+            font-size: 1em;
+            color:White;
+            background:url(../../images/close.png) top right no-repeat;
+            width:128px;
+            height:28px;
+            font-weight:bold;
+            display:block;
+            text-align:left;
+            padding:6px 0 0 6px;
+        }
+
+div#intesticial-ad div.content {
+    margin: 0 auto;
+    padding: 1em;
+    height: 100%;
+    cursor: pointer;
+}
+
+div#intesticial-ad .wrapper_intersticial {
+    padding-top: 1em;
+}
+
 /* -------------------------------------------------------------
   Widget rss
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -83,3 +203,72 @@ div.ad-skyscraper-body {
     margin-top: 5px;
 }
 
+/*polls in Frontpage */
+.poll form{
+    display: inline-block;
+    width: 100%;
+}
+
+.poll .submit-button {
+    text-align: center;
+    font-size: 11px;
+    margin-right: 20px;
+    float: right;
+}
+.poll ul {
+    list-style: none;
+}
+.hidden {
+    display:none;
+}
+
+/**Pager in blog format - copied fron bootstrap*/
+.pager {
+  margin: 20px 0;
+  list-style: none;
+  text-align: center;
+  *zoom: 1;
+}
+.pager:before,
+.pager:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.pager:after {
+  clear: both;
+}
+.pager li {
+  display: inline;
+}
+.pager li > a,
+.pager li > span {
+  display: inline-block;
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  border-radius: 15px;
+}
+.pager li > a:hover,
+.pager li > a:focus {
+  text-decoration: none;
+  background-color: #f5f5f5;
+}
+.pager .next > a,
+.pager .next > span {
+  float: right;
+}
+.pager .previous > a,
+.pager .previous > span {
+  float: left;
+}
+.pager .disabled > a,
+.pager .disabled > a:hover,
+.pager .disabled > a:focus,
+.pager .disabled > span {
+  color: #999999;
+  background-color: #fff;
+  cursor: default;
+}

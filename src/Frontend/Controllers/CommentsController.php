@@ -57,12 +57,19 @@ class CommentsController extends Controller
         if (!empty($contentID)
             && \Content::checkExists($contentID)
         ) {
-            // Getting comments for current article
-            list($total, $comments) = \Comment::getPublicCommentsAndTotalCount(
+            // Getting comments and total count comments for current article
+            $commentManager = $this->get('comment_repository');
+            $total    = $commentManager->countCommentsForContentId($contentID);
+            $comments = $commentManager->getCommentsforContentId(
                 $contentID,
                 $elemsByPage,
                 $offset
             );
+
+            foreach ($comments as &$comment) {
+                $vote = new \Vote($comment->id);
+                $comment->votes = $vote;
+            }
 
             $output = $this->renderView(
                 'comments/loader.tpl',
@@ -101,11 +108,18 @@ class CommentsController extends Controller
             && \Content::checkExists($contentID)
         ) {
             // Getting comments for current article
-            list($total, $comments) = \Comment::getPublicCommentsAndTotalCount(
+            $commentManager = $this->get('comment_repository');
+            $total    = $commentManager->countCommentsForContentId($contentID);
+            $comments = $commentManager->getCommentsforContentId(
                 $contentID,
                 $elemsByPage,
                 $offset
             );
+
+            foreach ($comments as &$comment) {
+                $vote = new \Vote($comment->id);
+                $comment->votes = $vote;
+            }
 
             $contents = $this->renderView(
                 'comments/partials/comment_element.tpl',
@@ -148,8 +162,8 @@ class CommentsController extends Controller
         // Retrieve request data
         $voteValue = $request->request->filter('vote', null, FILTER_SANITIZE_STRING);
         $commentId = $request->request->getDigits('comment_id', 0);
-        $ip        = $request->getClientIp();
         $cookie    = $request->cookies->get('comment-vote-'.$commentId);
+        $ip        = $request->getClientip();
 
         // User already voted this comment
         if (!is_null($cookie)) {
@@ -205,50 +219,41 @@ class CommentsController extends Controller
         $authorName  = $request->request->filter('author-name', '', FILTER_SANITIZE_STRING);
         $authorEmail = $request->request->filter('author-email', '', FILTER_SANITIZE_STRING);
         $contentId   = $request->request->getDigits('content-id');
-        $ip          = $request->getClientIp();
+        $ip          = $request->getClientip();
 
-        $session = $this->get('session')->start();
+        $httpCode = 400;
 
-        $httpCode = 200;
-
-        $sessionBeforeComment = $_SESSION;
-        if (!empty($body) && !empty($authorName) && !empty($authorEmail) && !empty($contentId)) {
-            $data = array(
-                'body'     => $body,
-                'author'   => $authorName,
-                'email'    => $authorEmail,
-            );
-
-
-            // Get $_SESSION values for userComment
-            $_SESSION['username'] = $data['author'];
-            $_SESSION['userid'] = 'on-content#'.$contentId;
-
+        if (!empty($body)
+            && !empty($authorName)
+            && !empty($authorEmail)
+            && !empty($contentId)
+        ) {
             // Prevent XSS attack
-            $data = array_map('strip_tags', $data);
 
             $comment = new \Comment();
-            if ($comment->hasBadWordsComment($data)) {
+            if (\Repository\CommentManager::hasBadWordsComment($authorName.' '.$body)) {
                 $message = _('Your comment was rejected due insults usage.');
-                $httpCode = 400;
             } else {
-                $created = $comment->create(
-                    array(
-                        'id'   => $contentId,
-                        'data' => $data,
-                        'ip'   => $ip
-                    )
-                );
-                if ($created) {
+                try {
+                    $data          = array(
+                        'content_id'   => $contentId,
+                        'body'         => $body,
+                        'author'       => $authorName,
+                        'author_email' => $authorEmail,
+                        'author_ip'    => $ip,
+                    );
+                    $data = array_map('strip_tags', $data);
+
+                    $comment->create($data);
+                    $httpCode = 200;
                     $message = _('Your comment was accepted and now we have to moderate it.');
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
                 }
             }
-
         } else {
             $message = _('Ensure you have completed all the form fields.');
-            $httpCode = 400;
         }
-        $_SESSION = $sessionBeforeComment;
 
         return  new Response($message, $httpCode);
     }

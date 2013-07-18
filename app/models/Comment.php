@@ -16,70 +16,103 @@
  *
  * @package    Model
  **/
-class Comment extends \Content
+class Comment
 {
     /**
      * The id of the comment
      *
      * @var int
      **/
-    public $pk_comment   = null;
-
-    /**
-     * The author id that sent this comment
-     *
-     * @var int
-     **/
-    public $author       = null;
-
-    /**
-     * The city of the comment
-     *
-     * @var string
-     **/
-    public $ciudad       = null;
-
-    /**
-     * The sex of the comment author
-     *
-     * @var string
-     **/
-    public $sexo         = null;
-
-    /**
-     * The email of the comment author
-     *
-     * @var string
-     **/
-    public $email        = null;
-
-    /**
-     * The content body
-     *
-     * @var string
-     **/
-    public $body         = null;
-
-    /**
-     * The IP of the comment author
-     *
-     * @var string
-     **/
-    public $ip           = null;
-
-    /**
-     * Whether this comment is published or not
-     *
-     * @var int
-     **/
-    public $published    = null;
+    public $id           = null;
 
     /**
      * Content id that is referencing this comment
      *
      * @var int
      **/
-    public $fk_content   = null;
+    public $content_id   = 0;
+
+    /**
+     * The name of the author that sent this comment
+     *
+     * @var int
+     **/
+    public $author       = '';
+
+     /**
+     * The email of the author that sent the comment
+     *
+     * @var string
+     **/
+    public $author_email = '';
+
+    /**
+     * The url of the author that sent the comment
+     *
+     * @var string
+     **/
+    public $author_url   = null;
+
+    /**
+     * The IP of the author that sent the comment
+     *
+     * @var string
+     **/
+    public $author_ip    = '';
+
+    /**
+     * The date when was created this content
+     *
+     * @var string
+     **/
+    public $date         = null;
+
+    /**
+     * The content body
+     *
+     * @var string
+     **/
+     public $body         = '';
+
+    /**
+     * Whether this comment is published or not
+     *
+     * @var string
+     **/
+    public $status       = '';
+
+     /**
+     * The type of comment
+     *
+     * @var string
+     **/
+    public $type       = '';
+
+    /**
+     * The agent that sent this comment
+     *
+     * @var string
+     **/
+    public $agent       = '';
+
+    /**
+     * The id of the comment that references this element
+     *
+     * @var int
+     **/
+    public $parent_id       = 0;
+
+    /**
+     * The user id that sent this comment
+     *
+     * @var int
+     **/
+    public $user_id       = 0;
+
+
+    const STATUS_ACCEPTED = 'accepted';
+    const STATUS_REJECTED = 'rejected';
+    const STATUS_PENDING  = 'pending';
 
     /**
      * Initializes the comment object from a given id
@@ -90,13 +123,38 @@ class Comment extends \Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
         if (!is_null($id)) {
             $this->read($id);
         }
-        $this->content_type = __CLASS__;
-        $this->content_type_l10n_name = _('Comment');
+
+        return $this;
+    }
+
+    /**
+     * Loads comment information from array into the object instance
+     *
+     * @param array $data list of properties and values to get info from
+     *
+     * @return Comment the object with data filled
+     **/
+    public function load($data)
+    {
+        $allowedProperties = $this->getValidProperties();
+
+        foreach ($allowedProperties as $name) {
+            if (array_key_exists($name, $data)) {
+                if ($name == 'date') {
+
+                    $this->date = \DateTime::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $data[$name],
+                        new \DateTimeZone('UTC')
+                    );
+                } else {
+                    $this->{$name} = $data[$name];
+                }
+            }
+        }
 
         return $this;
     }
@@ -110,44 +168,49 @@ class Comment extends \Content
      **/
     public function create($params)
     {
-        $fkContent = $params['id'];
-        $data      = $params['data'];
-        $ip        = $params['ip'];
+        $currentDate = new \DateTime('', new \DateTimeZone('UTC'));
+        $defaultData = array(
+            'content_id'   => null,
+            'author'       => '',
+            'author_email' => '',
+            'author_url'   => '',
+            'author_ip'    => '',
+            'date'         => $currentDate->format('Y-m-d H:i:s'),
+            'body'         => '',
+            'status'       => \Comment::STATUS_PENDING,
+            'agent'        => '',
+            'type'         => '',
+            'parent_id'    => 0,
+            'user_id'      => 0,
+        );
 
-        if (!isset($data['content_status'])) {
-            $data['content_status'] = 0;
-        }
+        $data = array_merge($defaultData, $params);
 
-        if (!isset($data['available'])) {
-            $data['available'] = 0;
-        }
-        $data['title'] = '';
-        $data['category'] = '';
-        parent::create($data);
-
-        if (empty($data['ciudad']) && !isset($data['ciudad'])) {
-            $data['ciudad'] = '';
-        }
-        $sql = 'INSERT INTO comments (`pk_comment`, `author`, `body`, `ciudad`,
-                                      `ip`,`email`,`fk_content`)
-                VALUES (?,?,?,?,?,?,?)';
+        $sql = 'INSERT INTO comments
+                    (`content_id`, `author`, `author_email`, `author_url`, `author_ip`,
+                     `date`, `body`, `status`, `agent`,`type`,`parent_id`,`user_id`)
+                VALUES
+                    (?,?,?,?,?,?,?,?,?,?,?,?)';
         $values = array(
-            $this->id,
+            $data['content_id'],
             $data['author'],
+            $data['author_email'],
+            $data['author_url'],
+            $data['author_ip'],
+            $data['date'],
             $data['body'],
-            $data['ciudad'],
-            $ip,
-            $data['email'],
-            $fkContent
+            $data['status'],
+            $data['agent'],
+            $data['type'],
+            $data['parent_id'],
+            $data['user_id'],
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
 
-            return (false);
+            throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
         }
-
-        return $this->id;
     }
 
     /**
@@ -159,8 +222,7 @@ class Comment extends \Content
      **/
     public function read($id)
     {
-        parent::read($id);
-        $sql = 'SELECT * FROM comments WHERE pk_comment=?';
+        $sql = 'SELECT * FROM comments WHERE id=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
@@ -168,14 +230,7 @@ class Comment extends \Content
 
             return;
         }
-        $this->pk_comment = $rs->fields['pk_comment'];
-        $this->author     = $rs->fields['author'];
-        $this->body       = $rs->fields['body'];
-        $this->ciudad     = $rs->fields['ciudad'];
-        $this->ip         = $rs->fields['ip'];
-        $this->email      = $rs->fields['email'];
-        $this->published  = $rs->fields['published'];
-        $this->fk_content = $rs->fields['fk_content'];
+        $this->load($rs->fields);
 
         return $this;
     }
@@ -186,22 +241,46 @@ class Comment extends \Content
      * @param array $data the information of the comment to update
      *
      * @return boolean true if the comment was updated
+     * @throws Exception If id not valid, status not valid, passed field not valid
      **/
     public function update($data)
     {
-        parent::update($data);
-        $sql = "UPDATE comments SET `author`=?, `body`=?"
-             . "WHERE pk_comment=" . ($data['id']);
-        $values = array($data['author'], $data['body']);
+        // Check id
+        if (empty($this->id)) {
+            throw new \Exception(_('Not valid comment id.'));
+        }
 
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        // Check if the value provided is valid
+        if (array_key_exists('status', $data)
+            && !$this->isValidStatus($data['status'])
+        ) {
+            throw new \Exception(_("Status not valid."));
+        }
+
+        // Build SQL field assignments
+        $newValues = '';
+        foreach ($data as $field => $value) {
+            if (in_array($field, $this->getValidProperties())) {
+                $newValues []= "`$field`='$value'";
+            } else {
+                throw new \Exception(sprintf(_("Field '%s' not valid"), $field));
+            }
+        }
+        $newValues = implode(', ', $newValues);
+
+        // Execute DB query and return
+        $sql = "UPDATE comments SET $newValues WHERE id=?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, $this->id);
         if ($rs === false) {
             \Application::logDatabaseError();
 
-            return false;
+            throw new \Exception('Unknown error.');
         }
 
-        return true;
+        // Load new data
+        $this->load($data);
+
+        return $this;
     }
 
     /**
@@ -210,13 +289,36 @@ class Comment extends \Content
      * @param integer $id the comment id
      *
      * @return boolean true if the comment was deleted
+     * @throws Exception If id not valid or Db error
      */
-    public function remove($id)
+    public function delete($id)
     {
-        parent::remove($id);
-        $sql = 'DELETE FROM comments WHERE pk_comment=?';
+        // Check id
+        if (empty($id)) {
+            throw new \Exception(_('Not valid comment id.'));
+        }
 
+        // Execute DB query
+        $sql = 'DELETE FROM comments WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
+            \Application::logDatabaseError();
+
+            throw new \Exception(_('DB error.'));
+        }
+
+        return true;
+    }
+
+    /**
+     * Deletes comments given a SQL filter
+     *
+     * @return void
+     **/
+    public function deleteFromFilter($filter)
+    {
+        $sql = 'DELETE FROM `comments` WHERE '. $filter;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
             \Application::logDatabaseError();
 
@@ -227,199 +329,50 @@ class Comment extends \Content
     }
 
     /**
-     * Deletes all comments related with a given content id
-     * WARNING: this is very dangerous, the action can't be undone
+     * Updates the status
      *
-     * @param  int $contentID the content id to delete comments that referent to it
-     *
-     * @return boolean true if comments were deleted
+     * @return Comment the comment object instance
+     * @throws Exception If status name not valid
      **/
-    public function deleteComments($contentID)
+    public function setStatus($statusName)
     {
-        if ($contentID) {
-            $sql = 'DELETE FROM `comments`, `contents`
-                    WHERE `fk_content`=? AND `pk_content`=`pk_comment` ';
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
-                \Application::logDatabaseError();
+        $data = array(
+            'status' => $statusName
+        );
+        $this->update($data);
 
-                return false;
-            }
-
-            return true;
-        }
+        return $this;
     }
 
     /**
-     * Returns all the comments from a given content's id
+     * Returns a list of valid properties of this object
      *
-     * @param  integer $contentID the content id to fetch comments with it
-     *
-     * @return array the list of comment's objects
+     * @return array the list of properties
      **/
-    public function get_comments($contentID)
+    protected function getValidProperties()
     {
-        $related = array();
-
-        if ($contentID) {
-            $sql = 'SELECT * FROM `comments`, `contents`
-                    WHERE `fk_content`=?
-                      AND `in_litter`=0
-                      AND `pk_content`=`pk_comment`
-                    ORDER BY `pk_comment` DESC';
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-            if ($rs !== false) {
-                \Application::logDatabaseError();
-
-                return false;
-            }
-
-            while (!$rs->EOF) {
-                $related[] = $rs->fields['pk_comment'];
-                $rs->MoveNext();
-            }
-        }
-
-        return $related;
+        return array_keys(get_class_vars(__CLASS__));
     }
 
     /**
-     * Checks if the content of a comment has bad words
+     * Returns a list of valid statuses
      *
-     * @param  array $data the data of the comment
-     *
-     * @return integer higher values means more bad words
+     * @return array the list of valid statuses
      **/
-    public function hasBadWordsComment($data)
+    protected function getValidStatuses()
     {
-        $text = $data['author'].' '.$data['body'];
-
-        $weight = StringUtils::getWeightBadWords($text);
-
-        return $weight > 100;
+        return array(self::STATUS_ACCEPTED, self::STATUS_REJECTED, self::STATUS_PENDING,);
     }
 
     /**
-     * Gets the public comments from a given content's id.
+     * Whether a status name is valid or not
      *
-     * @param int $contentID the content id for fetching its comments
-     * @param int $elemsByPage the number of elements to return
-     * @param int $page the initial offset
+     * @param string $statusName the name of the status to check
      *
-     * @return array  array of comment's objects
+     * @return boolean true if the status name provided is valid
      **/
-    public static function get_public_comments($contentID, $elemsByPage = null, $page = null)
+    protected function isValidStatus($statusName)
     {
-        $related = array();
-
-        $limitSQL = '';
-        if (!empty($elemsByPage) && !empty($page)) {
-            if ($page == 1) {
-                $limitSQL = ' LIMIT '. $elemsByPage;
-            } else {
-                $limitSQL = ' LIMIT '.($page-1)*$elemsByPage.', '.$elemsByPage;
-            }
-        }
-
-        if ($contentID) {
-            $sql = 'SELECT * FROM comments, contents
-                    WHERE fk_content =?
-                      AND content_status=1
-                      AND in_litter=0
-                      AND pk_content=pk_comment
-                    ORDER BY pk_comment DESC '.$limitSQL;
-            $values = array($contentID);
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            while (!$rs->EOF) {
-                $obj       = new Comment();
-                $obj->load($rs->fields);
-                $related[] = $obj;
-                $rs->MoveNext();
-            }
-        }
-
-        return $related;
-    }
-
-    /**
-     * Gets the number of public comments
-     *
-     * @param  integer  $contentID the id of the content to get comments from
-     *
-     * @return integer the number of public comments
-     **/
-    public function count_public_comments($contentID)
-    {
-        if (empty($contentID)) {
-            return false;
-        }
-        $sql = 'SELECT count(pk_comment)
-                FROM comments, contents
-                WHERE comments.fk_content = ?
-                  AND content_status=1
-                  AND in_litter=0
-                  AND pk_content=pk_comment';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentID));
-
-        return intval($rs);
-    }
-
-    /**
-     * Returns the total amount of comments for a contentId and a slice from the list
-     * of all those comments, starting from the offset and displaying only some elements
-     * for this slice
-     *
-     * @param int $contentId the content id where fetch comments from
-     * @param int $elemsByPage the amount of comments to get
-     * @param int $offset the starting page to start to display elements
-     *
-     * @return array the total amount of comments, and a list of comments
-     **/
-    public static function getPublicCommentsAndTotalCount($contentId, $elemsByPage, $offset)
-    {
-        // Get the total number of comments
-        $sql = 'SELECT count(pk_comment)
-                FROM comments, contents
-                WHERE comments.fk_content = ?
-                  AND content_status=1
-                  AND in_litter=0
-                  AND pk_content=pk_comment';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
-
-        // If there is no comments do a early return
-        if ($rs === false) {
-            return array(0, array());
-        }
-        $countComments = intval($rs);
-
-        // Retrieve the comments and their votes
-        $comments = self::get_public_comments($contentId, $elemsByPage, $offset);
-
-        foreach ($comments as &$comment) {
-            $vote = new \Vote($comment->id);
-            $comment->votes = $vote;
-        }
-
-        return array($countComments, $comments);
-    }
-
-    /**
-     * Gets the number of pending comments
-     **/
-    public function countPendingComments()
-    {
-        $sql = 'SELECT count(pk_content)
-                FROM `contents`
-                WHERE `fk_content_type` =6
-                AND `content_status` =0
-                AND `available` =0
-                AND `in_litter` =0
-                ORDER BY `created` ASC';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        return intval($rs->fields['count(pk_content)']);
+        return in_array($statusName, $this->getValidStatuses());
     }
 }

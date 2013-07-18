@@ -32,7 +32,7 @@ class Opinion extends Content
     public $fk_content_categories = null;
 
     /**
-     * The author of this opinion
+     * The author id of this opinion
      *
      * @var int
      **/
@@ -44,13 +44,6 @@ class Opinion extends Content
      * @var string
      **/
     public $body                  = null;
-
-    /**
-     * The opinion author id
-     *
-     * @var int
-     **/
-    public $author                = null;
 
     /**
      * The author img id
@@ -67,18 +60,11 @@ class Opinion extends Content
     public $with_comment          = null;
 
     /**
-     * The image id for the opinion widget
+     * The type of the opinion (0,1,2)
      *
      * @var int
      **/
-    public $fk_author_img_widget  = null;
-
-    /**
-     * Array of authors names
-     *
-     * @var array
-     */
-    private $authorNames         = null;
+    public $type_opinion          = null;
 
     /**
      * Initializes the opinion object given an id
@@ -89,14 +75,9 @@ class Opinion extends Content
      **/
     public function __construct($id = null)
     {
-        parent::__construct($id);
-
-        if (is_numeric($id)) {
-            $this->read($id);
-        }
-
-        $this->content_type = 'Opinion';
         $this->content_type_l10n_name = _('Opinion');
+
+        parent::__construct($id);
     }
 
     /**
@@ -121,7 +102,7 @@ class Opinion extends Content
                     }
 
                 } else {
-                    $author     = new Author($this->fk_author);
+                    $author     = new \User($this->fk_author);
                     $authorName = $author->name;
                     if (empty($authorName)) {
                         $authorName = 'author';
@@ -137,7 +118,7 @@ class Opinion extends Content
                         'category' => StringUtils::get_title($authorName),
                     )
                 );
-                //'opinion/_AUTHOR_/_DATE_/_SLUG_/_ID_.html'
+
                 return $uri;
 
                 break;
@@ -157,8 +138,7 @@ class Opinion extends Content
                     $authorObj = new Stdclass();
                     $authorObj->name = 'Director';
                 } else {
-                    $authorObj = new Author($this->fk_author);
-                    $authorObj->get_author_photos();
+                    $authorObj = new \User($this->fk_author);
                 }
 
                 return $authorObj;
@@ -183,20 +163,21 @@ class Opinion extends Content
     {
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
-         // Editorial o director
+
+        // Editorial or director
         if (!isset($data['fk_author'])) {
             $data['fk_author'] = $data['type_opinion'];
         }
+
+        // Set author img to null if not exist
         (isset($data['fk_author_img']))
             ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
-        (isset($data['fk_author_img_widget']))
-            ? $data['fk_author_img_widget'] : $data['fk_author_img_widget']=null;
 
         parent::create($data);
 
         $sql = 'INSERT INTO opinions (`pk_opinion`, `fk_author`, `body`,
-            `fk_author_img`,`with_comment`, type_opinion,fk_author_img_widget)
-            VALUES (?,?,?,?,?,?,?)';
+            `fk_author_img`,`with_comment`, type_opinion)
+            VALUES (?,?,?,?,?,?)';
 
         $values = array(
             $this->id,
@@ -204,8 +185,7 @@ class Opinion extends Content
             $data['body'],
             $data['fk_author_img'],
             $data['with_comment'],
-            $data['type_opinion'],
-            $data['fk_author_img_widget']
+            $data['type_opinion']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -244,14 +224,12 @@ class Opinion extends Content
     public function read($id)
     {
         parent::read($id);
-        $sql = 'SELECT opinions.*, authors.name, authors.condition, '
-            .'authors.blog, authors.politics, author_imgs.path_img  '
-            .'FROM opinions '
-            .'LEFT JOIN authors ON (opinions.fk_author=authors.pk_author)'
-            .'LEFT JOIN author_imgs ON (opinions.fk_author_img=author_imgs.pk_img)'
-            .' WHERE pk_opinion = '.($id).' ';
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT opinions.*, users.name, users.bio, users.url, users.avatar_img_id  '
+            .'FROM opinions LEFT JOIN users ON (opinions.fk_author=users.id) '
+            .'WHERE pk_opinion = ?';
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             \Application::logDatabaseError();
@@ -277,34 +255,6 @@ class Opinion extends Content
     }
 
     /**
-     * Returns the author name for a given author id
-     *
-     * @param int $fkAuthor the author id
-     *
-     * @return string the author name
-     */
-    public function get_author_name($fkAuthor)
-    {
-        if (is_null($this->authorNames)) {
-            $sql = 'SELECT pk_author, name FROM `authors`';
-            $rs = $GLOBALS['application']->conn->Execute($sql);
-
-            while (!$rs->EOF) {
-                $this->authorNames[ $rs->fields['pk_author'] ]
-                    = $rs->fields['name'];
-
-                $rs->MoveNext();
-            }
-        }
-
-        if (!isset($this->authorNames[$fkAuthor])) {
-            return '';
-        }
-
-        return $this->authorNames[$fkAuthor];
-    }
-
-    /**
      * Updates the opinion information given a data array
      *
      * @param array $data the new opinion data
@@ -319,14 +269,12 @@ class Opinion extends Content
         } // Editorial o director
         (isset($data['fk_author_img']))
             ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
-        (isset($data['fk_author_img_widget']))
-            ? $data['fk_author_img_widget'] : $data['fk_author_img_widget']=null;
 
         parent::update($data);
 
         $sql = "UPDATE opinions "
              . "SET `fk_author`=?, `body`=?,`fk_author_img`=?, "
-             . "`with_comment`=?, `type_opinion`=?, `fk_author_img_widget`=? "
+             . "`with_comment`=?, `type_opinion`=?"
              . "WHERE pk_opinion=?";
 
         $values = array(
@@ -335,7 +283,6 @@ class Opinion extends Content
             $data['fk_author_img'],
             $data['with_comment'],
             $data['type_opinion'],
-            $data['fk_author_img_widget'],
             $data['id']
         );
 
@@ -371,8 +318,6 @@ class Opinion extends Content
         } else {
             parent::clearProperty('img2_footer');
         }
-
-
 
         $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
 
@@ -424,7 +369,7 @@ class Opinion extends Content
      *
      * @return string the generated HTML for the opinion
      **/
-    public function render()
+    public function render($params)
     {
         $tpl = new Template(TEMPLATE_USER);
 
@@ -434,12 +379,14 @@ class Opinion extends Content
             $this->author_name_slug = 'director';
         } else {
 
-            $aut = new Author($this->fk_author);
+            $aut = new \User($this->fk_author);
             $this->name = StringUtils::get_title($aut->name);
             $this->author_name_slug = $this->name;
         }
 
         $tpl->assign('item', $this);
+        $tpl->assign('actual_category', $params['actual_category']);
+        $tpl->assign('actual_category_id', $params['actual_category_id']);
         $tpl->assign('cssclass', 'opinion');
 
         return $tpl->fetch('frontpage/contents/_opinion.tpl');
@@ -466,22 +413,8 @@ class Opinion extends Content
 
         $cm = new ContentManager();
 
-        // TODO: Review this function called in a opinion widget in tribuna theme
-        // getInstance function was deleted - print fatal error in widget
-
-        /*
-        $ccm = ContentCategoryManager::getInstance();
-
-        // Excluding opinions already present in this frontpage
-        $category = (isset($_REQUEST['category']))
-            ? $ccm->get_id($_REQUEST['category']) :  0;
-
-        */
-
         $category = 0;
-
-        $contentsSuggestedInFrontpage =
-            $cm->getContentsForHomepageOfCategory($category);
+        $contentsSuggestedInFrontpage = $cm->getContentsForHomepageOfCategory($category);
         foreach ($contentsSuggestedInFrontpage as $content) {
             if ($content->content_type == 4) {
                 $excludedContents []= $content->id;
@@ -503,9 +436,7 @@ class Opinion extends Content
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
-            $content->author = new Author($content->fk_author);
-            $content->author->photo =
-                $content->author->get_photo($content->fk_author_img);
+            $content->author = new \User($content->fk_author);
             if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
@@ -544,9 +475,7 @@ class Opinion extends Content
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
-            $content->author = new Author($content->fk_author);
-            $content->author->photo =
-                $content->author->get_photo($content->fk_author_img);
+            $content->author = new \User($content->fk_author);
             if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
@@ -590,13 +519,11 @@ class Opinion extends Content
             'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit
         );
 
-        $author = new Author($authorID);
+        $author = new \User($authorID);
 
         // For each opinion get its author and photo
         foreach ($contents as $content) {
             $content->author = $author;
-            $content->author->photo =
-                $content->author->get_photo($content->fk_author_img);
             if (isset($content->author->photo->path_img)) {
                 $content->photo = $content->author->photo->path_img;
             }
