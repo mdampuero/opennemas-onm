@@ -114,7 +114,7 @@
             <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
               <Role FormalName="Main" />
               <!-- The link to download image -->
-              <ContentItem Href="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
+              <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
                 <MediaType FormalName="Photo" />
                 <MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />
                 <Characteristics>
@@ -181,7 +181,7 @@
             <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.file">
               <Role FormalName="Main" />
               <!-- The link to download image -->
-              <ContentItem Href="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
+              <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
                 <MediaType FormalName="Photo" />
                 <MimeType FormalName="{$photoInner->media_type}/{$photoInner->type_img}" />
                 <Characteristics>
