@@ -6,14 +6,14 @@
         <Property FormalName="Organization" Value="{setting name=site_name}" />
       </Party>
     </SentFrom>
-    <DateAndTime>{$article->created_datetime->format('Ymd\THis')}</DateAndTime>
+    <DateAndTime>{$article->created_datetime->format('Ymd\THisP')}</DateAndTime>
   </NewsEnvelope>
   <NewsItem Duid="multimedia_{$article->id}">
     <Comment FormalName="OnmNewsMLVersion"><text>1.0.1</text></Comment>
     <Identification>
       <NewsIdentifier>
         <ProviderId>{setting name=site_name}</ProviderId>
-        <DateId>{$article->created_datetime->format('Ymd\THis')}</DateId>
+        <DateId>{$article->created_datetime->format('Ymd\THisP')}</DateId>
         <NewsItemId>{$article->id}</NewsItemId>
         <RevisionId PreviousRevision="1" Update="U"><text>2</text></RevisionId>
         <PublicIdentifier>{$article->urn_source}</PublicIdentifier>
@@ -22,9 +22,9 @@
     <NewsManagement>
       <NewsItemType FormalName="News" />
       <!--Creation date.-->
-      <FirstCreated>{$article->created_datetime->format('Ymd\THis')}</FirstCreated>
+      <FirstCreated>{$article->created_datetime->format('Ymd\THisP')}</FirstCreated>
       <!--Last modification date.-->
-      <ThisRevisionCreated>{$article->updated_datetime->format('Ymd\THis')}</ThisRevisionCreated>
+      <ThisRevisionCreated>{$article->updated_datetime->format('Ymd\THisP')}</ThisRevisionCreated>
       <Status FormalName="Usable" />
       <Urgency FormalName="5" />
     </NewsManagement>
@@ -52,7 +52,7 @@
           </NewsLines>
           <DescriptiveMetadata>
             <Language FormalName="es" />
-            <DateLineDate>{$article->created_datetime->format('Ymd\THis')}</DateLineDate>
+            <DateLineDate>{$article->created_datetime->format('Ymd\THisP')}</DateLineDate>
             <Property FormalName="Tesauro" Value="CAT:{$article->category_name|upper}"/>
             <Property FormalName="Onm_IdRefObject" Value="{$article->id}" />
           </DescriptiveMetadata>
@@ -76,7 +76,7 @@
                     </hedline>
                     <dateline>
                       <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
-                        <text>{$article->created_datetime->format('Ymd\THis')}</text>
+                        <text>{$article->created_datetime->format('Ymd\THisP')}</text>
                       </story.date>
                     </dateline>
                     <abstract>
@@ -108,7 +108,7 @@
             </AdministrativeMetadata>
             <DescriptiveMetadata>
               <Language FormalName="es" />
-              <DateLineDate>{$photo->created_datetime->format('Ymd\THis')}</DateLineDate>
+              <DateLineDate>{$photo->created_datetime->format('Ymd\THisP')}</DateLineDate>
               <Property FormalName="Onm_IdRefObject" Value="{$photo->id}" />
             </DescriptiveMetadata>
             <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photo->id}.file">
@@ -146,8 +146,8 @@
                           <hl1>{$article->title|htmlspecialchars_decode}</hl1>
                         </hedline>
                         <dateline>
-                          <story.date norm="{$photo->created_datetime->format('Ymd\THis')}">
-                            {$photo->created_datetime->format('Ymd\THis')}
+                          <story.date norm="{$photo->created_datetime->format('Ymd\THisP')}">
+                            {$photo->created_datetime->format('Ymd\THisP')}
                           </story.date>
                         </dateline>
                       </body.head>
@@ -175,7 +175,7 @@
             </AdministrativeMetadata>
             <DescriptiveMetadata>
               <Language FormalName="es" />
-              <DateLineDate>{$photoInner->created_datetime->format('Ymd\THis')}</DateLineDate>
+              <DateLineDate>{$photoInner->created_datetime->format('Ymd\THisP')}</DateLineDate>
               <Property FormalName="Onm_IdRefObject" Value="{$photoInner->id}" />
             </DescriptiveMetadata>
             <NewsComponent Duid="multimedia_{$article->id}.multimedia.photos.{$photoInner->id}.file">
@@ -213,8 +213,8 @@
                           <hl1>{$article->title|htmlspecialchars_decode}</hl1>
                         </hedline>
                         <dateline>
-                          <story.date norm="{$photoInner->created_datetime->format('Ymd\THis')}">
-                            {$photoInner->created_datetime->format('Ymd\THis')}
+                          <story.date norm="{$photoInner->created_datetime->format('Ymd\THisP')}">
+                            {$photoInner->created_datetime->format('Ymd\THisP')}
                           </story.date>
                         </dateline>
                       </body.head>
