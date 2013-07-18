@@ -308,7 +308,7 @@ class Photo extends Content
      **/
     public function createFromLocalFileAjax($dataSource)
     {
-
+        $photo = null;
         $filePath = $dataSource["local_file"];
         $originalFileName = $dataSource['original_filename'];
 
