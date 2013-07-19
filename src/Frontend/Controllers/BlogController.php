@@ -58,7 +58,7 @@ class BlogController extends Controller
             }
             $category = $category[0];
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = 10;//s::get('items_per_page');
 
             $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(
