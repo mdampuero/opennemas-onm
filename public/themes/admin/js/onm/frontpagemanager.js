@@ -31,7 +31,7 @@ function makeContentProviderAndPlaceholdersSortable() {
 function check_available_new_version() {
     var $version = frontpage_info.last_saved;
     var category = $('#frontpagemanager').data('category');
-    var exists_version = true;
+    var exists_version = false;
     $.ajax({
         url: frontpage_urls.check_version + '?date=' + encodeURIComponent($version) + '&category=' + category,
         method: 'get',
