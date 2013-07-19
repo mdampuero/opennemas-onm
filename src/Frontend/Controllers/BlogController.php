@@ -46,6 +46,8 @@ class BlogController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
+        $this->view->setconfig('frontpages');
+
         $cacheId = "blog|$categoryName|$page";
         if (!$this->view->isCached('blog/index.tpl', $cacheId)) {
 
