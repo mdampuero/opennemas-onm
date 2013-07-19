@@ -31,16 +31,15 @@ function makeContentProviderAndPlaceholdersSortable() {
 function check_available_new_version() {
     var $version = frontpage_info.last_saved;
     var category = $('#frontpagemanager').data('category');
-    var exists_version = false;
     $.ajax({
         url: frontpage_urls.check_version + '?date=' + encodeURIComponent($version) + '&category=' + category,
         method: 'get',
-        async: false,
         type: 'json'
     }).done(function(data) {
-        exists_version = (data == 'true');
+        if (data == 'true') {
+            $('#modal-new-version').modal('show');
+        };
     });
-    return exists_version;
 }
 
 
@@ -155,9 +154,7 @@ jQuery(function($) {
 
     window.setInterval(function(){
         // Frontpage has changed and needs to be reloaded
-        if (check_available_new_version()) {
-            $('#modal-new-version').modal('show');
-        }
+        check_available_new_version();
     }, 10000);
     /***************************************************************************
     * Sortable handlers
