@@ -35,8 +35,10 @@ class Opennemas extends ServerAbstract implements ServerInterface
 
         $contentListString = $this->getContentFromUrlWithDigestAuth($this->serverUrl);
 
+        $this->contentList = simplexml_load_string($contentListString);
+
         // test if the connection was successful
-        if (empty($contentListString)) {
+        if (empty($contentListString) || isset($this->contentList->error)) {
             throw new \Exception(
                 sprintf(
                     _(
@@ -47,8 +49,6 @@ class Opennemas extends ServerAbstract implements ServerInterface
                 )
             );
         }
-
-        $this->contentList = simplexml_load_string($contentListString);
 
         return $this;
     }
@@ -66,18 +66,20 @@ class Opennemas extends ServerAbstract implements ServerInterface
     {
         // Check url
         $res = preg_match('@http://(.*)/ws/agency@', $params['url'], $matches);
-        if ($res) {
-            return true;
+
+        if ($res == 0) {
+            throw new \Exception(
+                sprintf(
+                    _(
+                        'Can\'t connect to server %s. Please check your'
+                        .' connection details.'
+                    ),
+                    $params['name']
+                )
+            );
         }
 
-        throw new \Exception(
-            sprintf(
-                _(
-                    'Can\'t connect to server %s. Please check your'
-                    .' connection details.'
-                ),
-                $params['name']
-            )
-        );
+
+        return true;
     }
 }

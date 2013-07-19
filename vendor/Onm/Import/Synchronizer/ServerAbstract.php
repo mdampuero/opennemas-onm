@@ -260,6 +260,7 @@ abstract class ServerAbstract
         $httpCode = '';
         $maxRedirects = 0;
         $maxRedirectsAllowed = 3;
+
         do {
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -280,7 +281,8 @@ abstract class ServerAbstract
             }
 
             $maxRedirects++;
-        } while ($httpCode != 200 || $maxRedirects > $maxRedirectsAllowed);
+
+        } while ($httpCode == 302 || $httpCode == 301 || $maxRedirects > $maxRedirectsAllowed);
 
         curl_close($ch);
 
