@@ -160,7 +160,13 @@ class PaywallController extends Controller
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => count($users),
-                'fileName'    => $this->generateUrl('admin_paywall_users').'?page=%d',
+                'fileName'    => $this->generateUrl(
+                    'admin_paywall_users',
+                    array(
+                        'order' => $order,
+                        'type'  => $type,
+                    )
+                ).'&page=%d',
             )
         );
 

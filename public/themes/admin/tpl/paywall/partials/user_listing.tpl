@@ -6,8 +6,8 @@
             <th class="left">{t}E-mail{/t}</th>
             <th class="center">{t}Last login{/t}</th>
             <th class="center">{t}End of subscription{/t}</th>
-            <th class="center">{t}Status{/t}</th>
             {if $show_edit_button}
+            <th class="center">{t}Status{/t}</th>
             <th style="width:10px">{t}Edit{/t}</th>
             {/if}
 
@@ -27,7 +27,7 @@
     {foreach from=$users item=user}
     <tr data-id="{$user->id}">
         <td class="left">
-            <a href="{url name=admin_acl_user_show id=$user->id}#paywall">{$user->name|clearslash}</a>
+            <a href="{url name=admin_acl_user_show id=$user->id}#paywall">{$user->username|clearslash}</a>
         </td>
         <td class="left">
             <a href="mailto:{$user->email|clearslash}" >
@@ -48,6 +48,7 @@
                 <span class="icon-remove"></span>
             {/if}
         </td>
+        {if $show_edit_button}
         <td class="center">
             {if isset($user->meta['paywall_time_limit'])}
                 {capture name=time}{datetime date=$user->meta['paywall_time_limit']}{/capture}
@@ -60,7 +61,6 @@
                 <span style="color:#0000A0">{t}Registered{/t}</span>
             {/if}
         </td>
-        {if $show_edit_button}
         <td class="center">
             <a href="{url name=admin_acl_user_show id=$user->id}#paywall" class="btn" title="{t}Edit{/t}"><i class="icon-pencil"></i></a>
         </td>
