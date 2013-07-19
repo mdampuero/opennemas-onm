@@ -285,6 +285,40 @@ class Synchronizer
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function syncMultiple($servers)
+    {
+        foreach ($servers as $server) {
+            try {
+                if ($server['activated'] != '1') {
+                    continue;
+                }
+
+                $server['allowed_file_extesions_pattern'] = '.*';
+
+                $message = $this->sync($server);
+
+                return sprintf(
+                    _('Downloaded %d new articles and deleted %d old ones from "%s".'),
+                    $message['downloaded'],
+                    $message['deleted'],
+                    $server['name']
+                );
+
+            } catch (\Exception $e) {
+                $synchronizer->unlockSync();
+
+                throw $e;
+            }
+        }
+        $synchronizer->updateSyncFile();
+    }
+
+    /**
      * Removes the local files for a given source id
      *
      * @return boolean true if the files were deleted
