@@ -269,8 +269,10 @@ class Comment
         $newValues = implode(', ', $newValues);
 
         // Execute DB query and return
-        $sql = "UPDATE comments SET $newValues WHERE id=?";
-        $rs = $GLOBALS['application']->conn->Execute($sql, $this->id);
+        $id = $GLOBALS['application']->conn->qstr($this->id);
+        $sql = "UPDATE comments SET $newValues WHERE id=".$id;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
         if ($rs === false) {
             \Application::logDatabaseError();
 
