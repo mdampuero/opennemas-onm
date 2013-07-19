@@ -51,40 +51,24 @@ class NewsletterController extends Controller
      **/
     public function listAction(Request $request)
     {
-        // Check if the module is activated, if not redirect to the config form
+        $newsletterManager = $this->get('newsletter_manager');
+
+        // Check if the module is configured, if not redirect to the config form
         $configuredRedirection = $this->checkModuleActivated();
+
         if ($configuredRedirection != false) {
             return $configuredRedirection;
         }
-        $itemsPerPage = 20;
-        $page = $request->query->getDigits('page', 1);
-        $nm = new \NewsletterManager();
-        list($nmCount, $newsletters) = $nm->find('1 = 1', 'created DESC', $page, $itemsPerPage);
 
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $nmCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_newsletters'
-                ).'?page=%d',
-            )
-        );
+        $nm = $this->get('newsletter_manager');
+        list($count, $newsletters) = $nm->find();
 
         return $this->render(
             'newsletter/list.tpl',
             array(
-                'newsletters'     => $newsletters,
-                'pagination' => $pagination,
-                'page'       => $page,
-                )
+                'newsletters' => $newsletters,
+                'count'       => $count,
+            )
         );
     }
 
@@ -97,7 +81,7 @@ class NewsletterController extends Controller
      **/
     public function createAction(Request $request)
     {
-        $configurations = \Onm\Settings::get('newsletter_maillist');
+        $configurations = s::get('newsletter_maillist');
 
         $newsletterContent = array();
         $menu = new \Menu();
@@ -136,7 +120,7 @@ class NewsletterController extends Controller
     public function showContentsAction(Request $request)
     {
         $id = $request->query->getDigits('id');
-        $newsletter = new \NewNewsletter($id);
+        $newsletter = new \Newsletter($id);
 
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
@@ -166,16 +150,15 @@ class NewsletterController extends Controller
             FILTER_SANITIZE_STRING
         );
 
-        $nm = new \NewsletterManager();
+        $nm = $this->get('newsletter_manager');
 
         if ($id > 0) {
-            $newsletter = new \NewNewsletter($id);
-            $nm = new \NewsletterManager();
+            $newsletter = new \Newsletter($id);
 
             $newValues = array(
                 'title' => $title,
                 'data'  => $contentsRAW,
-                'html'    => $nm->render($contents),
+                'html'  => $nm->render($contents),
             );
 
             if (is_null($newsletter->html)) {
@@ -184,7 +167,7 @@ class NewsletterController extends Controller
 
             $newsletter->update($newValues);
         } else {
-            $newsletter = new \NewNewsletter();
+            $newsletter = new \Newsletter();
             $newsletter->create(
                 array(
                     'title'   => $title,
@@ -213,7 +196,7 @@ class NewsletterController extends Controller
     {
         $id = (int) $request->query->getDigits('id');
 
-        $newsletter = new \NewNewsletter($id);
+        $newsletter = new \Newsletter($id);
 
         return $this->render(
             'newsletter/steps/2-preview.tpl',
@@ -232,7 +215,7 @@ class NewsletterController extends Controller
     {
         $id = (int) $request->query->getDigits('id');
 
-        $newsletter = new \NewNewsletter($id);
+        $newsletter = new \Newsletter($id);
 
         $values = array(
             'title' => $request->request->filter('title', FILTER_SANITIZE_STRING),
@@ -256,10 +239,10 @@ class NewsletterController extends Controller
     {
         $id = $request->query->getDigits('id');
 
-        $newsletter = new \NewNewsletter($id);
-        $newsletterOld = new \Newsletter(array('namespace' => 'PConecta_'));
-        $account    = $newsletterOld->getAccountsProvider();
-        $accounts   = $account->getAccounts();
+        $newsletter = new \Newsletter($id);
+        $sbManager = new \Subscriptor();
+        $accounts = $sbManager->getUsers('status > 0 AND subscription = 1', '', 'pk_pc_user ASC');
+
         $mailList   = array();
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
@@ -267,10 +250,12 @@ class NewsletterController extends Controller
             && array_key_exists('email', $configurations)
             && !empty($configurations['email'])
         ) {
-            $mailList[] = new \Newsletter_Account(
-                $configurations['email'],
-                $configurations['name']
-            );
+            $subscriptor = new \Subscriptor();
+
+            $subscriptor->email = $configurations['email'];
+            $subscriptor->name  = $configurations['name'];
+
+            $mailList[] = $subscriptor;
         }
 
         // Ajax request
@@ -310,68 +295,47 @@ class NewsletterController extends Controller
         $id = $request->query->getDigits('id');
 
         $recipients = $request->request->get('recipients');
-
         $recipients = json_decode($recipients);
 
-        $newsletter = new \NewNewsletter($id);
+        $newsletter = new \Newsletter($id);
 
         $_SESSION['data-recipients-'.$newsletter->id] = array();
 
-        $nManager = new \NewsletterManager();
-        $nManager->setConfigMailing();
+        $nManager = $this->get('newsletter_manager');
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
-        $htmlContent = \Onm\StringUtils::clearQuotes($htmlContent);
 
         $configurations = \Onm\Settings::get('newsletter_maillist');
         if (array_key_exists('sender', $configurations)
             && !empty($configurations['sender'])
         ) {
-            $mail_from = $configurations['sender'];
+            $mailFrom = $configurations['sender'];
         } else {
-            m::add(_('You must give an sender for send a newsletter.'), m::ERROR);
-            return $this->redirect($this->generateUrl('admin_newsletter_config'));
+            $mailFrom = MAIL_FROM;
         }
-
-        $mail_sender = \Onm\Settings::get('newsletter_sender');
-        if (empty($mail_sender)) {
-            m::add(_('Newsletter hasnt been sent. Contact with Opennemas administrator to check sender service configuration.'), m::ERROR);
-            return $this->redirect($this->generateUrl('admin_newsletters'));
-        }
-
-        global $sc;
 
         $params = array(
             'subject'        => $newsletter->title,
-            'mail_from'      => $mail_from,
-            'mail_sender'    => $mail_sender,
+            'mail_from'      => $mailFrom,
             'mail_from_name' => s::get('site_name'),
-            'mailer'         => $sc->get('mailer'),
         );
 
         $sentResult = array();
-        $countMailing = 0;
         foreach ($recipients as $mailbox) {
             // Replace name destination
             $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
 
-            // Send the mail
-            $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
-            if ($properlySent) {
-                $countMailing++;
+            try {
+                // Send the mail
+                $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
+                $sentResult []= array($mailbox, $properlySent);
+            } catch (\Exception $e) {
+                $sentResult []= array($mailbox, false);
             }
-            // Register the
-            $sentResult[]= array(
-                $mailbox,
-                $properlySent
-            );
+
         }
 
-        $newsletter->update(array('sent' => $countMailing));
-        $this->updateMailing(array('counter' => $countMailing));
-      //  $dateMailing = \Onm\Settings::get['newsletter_date_mailing'];
-      // $dateMailing = new \DateTime();
-      //  $this->checkMailing($dateMailing->date);
+        $newsletter->update(array('sent' => 1));
 
         return $this->render(
             'newsletter/steps/4-send.tpl',
@@ -394,7 +358,7 @@ class NewsletterController extends Controller
         $id = $request->query->getDigits('id');
 
         if (!empty($id)) {
-            $newsletter = new \NewNewsletter($id);
+            $newsletter = new \Newsletter($id);
             $newsletter->delete();
 
             m::add(_("Newsletter deleted successfully."), m::SUCCESS);
@@ -422,6 +386,8 @@ class NewsletterController extends Controller
             $configurations = array(
                 'newsletter_maillist'         => $request->request->get('newsletter_maillist'),
                 'newsletter_subscriptionType' => $request->request->get('newsletter_subscriptionType'),
+                'newsletter_enable'           => $request->request->get('newsletter_enable'),
+                'newsletter_subscription'     => 1,
             );
 
             foreach ($configurations as $key => $value) {
@@ -436,9 +402,8 @@ class NewsletterController extends Controller
                 array(
                     'newsletter_maillist',
                     'newsletter_subscriptionType',
+                    'newsletter_enable',
                     'recaptcha',
-                    'newsletter_mailling_counter',
-                    'max_mailing'
                 )
             );
 
@@ -450,18 +415,6 @@ class NewsletterController extends Controller
                 $missingRecaptcha = true;
             }
 
-            $date = new \DateTime();
-
-            $keyMonth ='counter_'.$date->format("m");
-            if (array_key_exists($keyMonth, $configurations['newsletter_mailling_counter'])
-                && !is_null($configurations['newsletter_mailling_counter'][$keyMonth])) {
-
-                $counterValue = $configurations['newsletter_mailling_counter'][$keyMonth];
-                if ($counterValue >= $configurations['max_mailing']) {
-                    m::add(_('You have send max mailing allowed').$counterValue);
-                }
-            }
-
             return $this->render(
                 'newsletter/config.tpl',
                 array(
@@ -471,75 +424,6 @@ class NewsletterController extends Controller
             );
         }
     }
-
-    /**
-     * Check if mailing is over the counter by month
-     *
-     * @param array $newdata array with data for update
-     *
-     * @return NewNewsletter the object instance
-     **/
-    public function checkMailing($endDate = null)
-    {
-        $endDate = new \DateTime($endDate);
-
-        $initDate = clone $endDate;
-
-        $initDate->modify('-1 month');
-
-        $where =  " updated >= '".$initDate->format('Y-m-d 00:00:00').
-            "' AND updated <= '".$endDate->format('Y-m-d 00:00:00')."' ";
-
-        $nm = new \NewsletterManager();
-        list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
-        $total = 0;
-        if ($nmCount > 0) {
-            foreach ($newsletters as $newsletter) {
-                $total += $newsletter->sent;
-            }
-
-            if ($total >= s::get('max_mailing')) {
-                m::add(_('You have send max mailing allowed'));
-            }
-        }
-    }
-
-    /**
-     * Updates the counter by month with given an array of data
-     *
-     * @param array $newdata array with data for update
-     *
-     * @return NewNewsletter the object instance
-     **/
-    public function updateMailing($newdata)
-    {
-        $configurations = s::get('newsletter_mailling_counter');
-        if (array_key_exists('counter', $newdata) && !is_null($newdata['counter'])) {
-            $counter = $newdata['counter'];
-            $date = new \DateTime();
-            $keyMonth ='counter_'.$date->format("m");
-            if (!empty($configurations)
-                && array_key_exists($keyMonth, $configurations)
-                && !is_null($configurations[$keyMonth])) {
-
-                foreach ($configurations as $key => $value) {
-                    if ($key == $keyMonth) {
-                        $value = (int)$value + $counter;
-                        $configurations[$keyMonth] = $value;
-                        if ($value >= s::get('max_mailing')) {
-                            m::add(_('You have send max mailing allowed'));
-                        }
-                    }
-                }
-            } else {
-                $configurations[$keyMonth] = $counter;
-            }
-
-            s::set('newsletter_mailling_counter', $configurations);
-
-        }
-    }
-
 
     /**
      * Checks if the module is activated, if not redirect to the configuration form
@@ -558,19 +442,20 @@ class NewsletterController extends Controller
             return $this->redirect($this->generateUrl('admin_newsletter_config'));
         } else {
             $configurations = s::get('newsletter_maillist');
-            foreach ($configurations as $key => $value) {
-                if ($key != 'receiver' && empty($value)) {
-                    m::add(
-                        _(
-                            'Your newsletter configuration is not complete. Please'.
-                            ' go to settings and complete the form.'
-                        ),
-                        m::ERROR
-                    );
 
-                    return $this->redirect($this->generateUrl('admin_newsletter_config'));
-                }
-            }
+        //     foreach ($configurations as $key => $value) {
+        //         if ($key != 'receiver' && empty($value)) {
+        //             m::add(
+        //                 _(
+        //                     'Your newsletter configuration is not complete. Please'.
+        //                     ' go to settings and complete the form.'
+        //                 ),
+        //                 m::ERROR
+        //             );
+
+        //             return $this->redirect($this->generateUrl('admin_newsletter_config'));
+        //         }
+        //     }
         }
 
         return false;

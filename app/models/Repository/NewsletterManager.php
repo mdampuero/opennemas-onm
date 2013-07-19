@@ -10,6 +10,8 @@
  *
  * @package  Core
  */
+namespace Repository;
+
 use Onm\Settings as s;
 use Onm\Message  as m;
 
@@ -20,6 +22,18 @@ use Onm\Message  as m;
  */
 class NewsletterManager
 {
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function __construct($mailer, $logger)
+    {
+        $this->mailer = $mailer;
+        $this->logger = $logger;
+    }
+
     /**
      * Performs searches in newsletters
      *
@@ -46,9 +60,12 @@ class NewsletterManager
             $limit = '';
         }
 
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+
         $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
-        $sql2 = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $sql2 = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
         $countNm = $GLOBALS['application']->conn->GetOne($sql2);
 
         if (!$rs) {
@@ -59,7 +76,7 @@ class NewsletterManager
 
         $newsletters = array();
         while (!$rs->EOF) {
-            $obj = new \NewNewsletter();
+            $obj = new \Newsletter();
             $obj->loadData($rs->fields);
 
             $newsletters[] = $obj;
@@ -80,6 +97,9 @@ class NewsletterManager
      */
     public function send($mailboxes, $htmlContent, $params)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         $this->saveNewsletter($htmlContent);
 
         foreach ($mailboxes as $mailbox) {
@@ -98,7 +118,6 @@ class NewsletterManager
      */
     public function sendToUser($mailbox, $htmlcontent, $params)
     {
-
         $this->HTML = $htmlcontent;
 
         $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
@@ -111,39 +130,19 @@ class NewsletterManager
             ->setBody(strip_tags($this->HTML), 'text/plain')
             ->setTo(array($mailbox->email => $mailbox->name))
             ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-            ->setSender(array($params['mail_sender'] => $params['mail_from_name']));
+            ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')));
 
         try {
-            $params['mailer']->send($message);
+            $this->mailer->send($message);
 
-        } catch (\Exception $e) {
-            // Log this error
-            $logger = $this->get('logger');
-            $logger->notice("Unable to send newsletter: ".$e->getMessage());
+        } catch (\Swift_SwiftException $e) {
+            $this->logger->notice(_("Unable to send newsletter: ").$e->getMessage());
+            $this->errors[] = _("Unable to send newsletter: ").$e->getMessage();
 
-            $this->errors[] = "Error en el envío del mensaje " . $mail->ErrorInfo;
             return false;
-
         }
 
         return true;
-    }
-
-    /**
-     * Set config values to send mails
-     *
-     * To establish life time to infinite and ignore button stop of the browser
-     * <code>
-     * set_time_limit(0);
-     * ignore_user_abort(true);
-     * </code>
-     *
-     * @return void
-    */
-    public function setConfigMailing()
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
     }
 
     /**
@@ -155,8 +154,8 @@ class NewsletterManager
      **/
     public function render($contents)
     {
-        $tpl = new Template(TEMPLATE_USER);
-        $cm  = new ContentManager();
+        $tpl = new \Template(TEMPLATE_USER);
+        $cm  = new \ContentManager();
 
         $newsletterContent = $contents;
 
@@ -219,7 +218,7 @@ class NewsletterManager
         $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         //render ads
-        $advertisement = Advertisement::getInstance();
+        $advertisement = \Advertisement::getInstance();
         $banners       = $advertisement->getAdvertisements(array(1001, 1009), 0);
         $banners       = $cm->getInTime($banners);
 
@@ -255,17 +254,5 @@ class NewsletterManager
         $htmlContent = $tpl->fetch('newsletter/newNewsletter.tpl');
 
         return $htmlContent;
-    }
-
-    /**
-     * Converts to a json enconded string a HTML
-     *
-     * @param string $htmlContent the html content of a newsletter
-     *
-     * @return string the json-encoded HTML
-     **/
-    public function saveNewsletter($htmlContent)
-    {
-        json_encode($htmlContent);
     }
 }

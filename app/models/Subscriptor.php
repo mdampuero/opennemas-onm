@@ -82,13 +82,6 @@ class Subscriptor
     private $tableName = '`pc_users`';
 
     /**
-     * Subscriptor instance. Singleton pattern
-     *
-     * @var Subscriptor
-     **/
-    private static $instance = null;
-
-    /**
      * Constructor
      *
      * @param int $id the subscriptor id
@@ -99,23 +92,6 @@ class Subscriptor
     {
         if (!is_null($id)) {
             $this->read($id);
-        }
-    }
-
-    /**
-     * Singleton pattern
-     *
-     * @return Subscriptor the object instance
-     **/
-    public function get_instance()
-    {
-        if (is_null(self::$instance)) {
-            self::$instance = new Subscriptor();
-
-            return self::$instance;
-
-        } else {
-            return self::$instance;
         }
     }
 
@@ -302,11 +278,13 @@ class Subscriptor
         $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE ' . $_where;
         $sql .= ' ORDER BY ' . $_order_by;
 
-        if (!is_null($limit)) {
+        if (!empty($limit)) {
             $sql .= ' LIMIT ' . $limit;
         }
 
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
         if ($rs !== false) {
             while (!$rs->EOF) {
                 $user = new Subscriptor();

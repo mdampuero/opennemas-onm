@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the NewNewsletter class
+ * Defines the Newsletter class
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -16,7 +16,7 @@
  *
  * @package    Model
  */
-class NewNewsletter
+class Newsletter
 {
     /**
      * The title of the newsletter
@@ -58,7 +58,7 @@ class NewNewsletter
      *
      * @param string $id the content id to initilize.
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function __construct($id = null)
     {
@@ -72,7 +72,7 @@ class NewNewsletter
      *
      * @param array $data array with data for saved
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function create($data)
     {
@@ -100,7 +100,7 @@ class NewNewsletter
      *
      * @param array $newdata array with data for update
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function update($newdata)
     {
@@ -163,7 +163,7 @@ class NewNewsletter
      *
      * @param int $id the object id to load
      *
-     * @return NewNewsletter the object instance loaded
+     * @return Newsletter the object instance loaded
      **/
 
     public function read($id)
@@ -206,7 +206,7 @@ class NewNewsletter
      *
      * @param Array $fields the database fields to load into the object
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function loadData($fields)
     {

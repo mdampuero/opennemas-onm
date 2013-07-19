@@ -63,19 +63,11 @@ class NewsletterSubscriptorsController extends Controller
         $total = $user->countUsers($where);
 
         // Pager
-        $pager = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'append'      => false,
-                'path'        => '',
-                'urlVar'      => 'page',
-                'totalItems'  => $total,
-                'fileName'    => $this->generateUrl(
-                    'admin_newsletter_subscriptors'
-                ).'?page=%d',
+        $pager = \Onm\Pager\Slider::create(
+            $total,
+            $itemsPerPage,
+            $this->generateUrl(
+                'admin_newsletter_subscriptors'
             )
         );
 
