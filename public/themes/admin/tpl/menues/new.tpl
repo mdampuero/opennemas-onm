@@ -319,16 +319,16 @@
                     <h3 href="#listado">{t}Category blog{/t}</h3>
                     <div id="listado">
                         <ul id='availableCategories' class="elementsContainer">
-                            {section name=as loop=$categories}
-                                <li id="cat_{$categories[as]->pk_content_category}"
-                                    data-title="{$categories[as]->title}"
+                            {foreach $categories as $blog}
+                                <li id="cat_{$blog->pk_content_category}"
+                                    data-title="{$blog->title}"
                                     data-type="blog-category"
-                                    data-link="{$categories[as]->name}"
-                                    data-item-id="{$categories[as]->pk_content_category}"
+                                    data-link="{$blog->name}"
+                                    data-item-id="{$blog->pk_content_category}"
                                     class="drag-category"
                                     pk_menu="">
                                     <div>
-                                        <span class="type">{t}Category blog{/t}:</span> {$categories[as]->title}
+                                        <span class="type">{t}Category blog{/t}:</span> {$blog->title}
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -336,12 +336,10 @@
                                         </div>
                                     </div>
                                 </li>
-                            {/section}
+                            {/foreach}
                         </ul>
                     </div>
                     {/if}
-
-
 
             </div>
         </div><!-- fin -->
