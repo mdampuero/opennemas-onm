@@ -161,9 +161,9 @@ class ArchiveController extends Controller
 
         $path = "{$this->year}/{$this->month}/{$this->day}";
         $html = '';
-        $file =MEDIA_PATH."/library/{$path}/{$this->categoryName}.html";
+        $file = MEDIA_PATH."/library/{$path}/{$this->categoryName}.html";
         if (file_exists($file) && is_readable($file)) {
-            $html = file_get_contents(INSTANCE_MEDIA."library/{$path}/{$this->categoryName}.html");
+            $html = file_get_contents(SITE_URL.INSTANCE_MEDIA."library/{$path}/{$this->categoryName}.html");
         } else {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
