@@ -286,10 +286,10 @@
                     <h3 href="#syncCategories">{t}Sync Categories{/t}</h3>
                     <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
                         {foreach $elements as $config name=colors}
-                            {foreach from=$config key=site item=categories}
+                            {foreach from=$config key=site item=syncCategories}
                             <strong>{$site}                    </strong>
                             <ul id='availableSync' class="elementsContainer">
-                                {foreach $categories as $category}
+                                {foreach $syncCategories as $category}
                                 <li id="sync_category"
                                     data-title="{$category|capitalize}"
                                     data-type="syncCategory"
