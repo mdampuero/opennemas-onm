@@ -33,6 +33,13 @@ class Content
     public $content_type = null;
 
     /**
+     * The content type name of the content
+     *
+     * @var string
+     **/
+    public $content_type_name = '';
+
+    /**
      * The title of the content
      *
      * @var string
@@ -419,17 +426,17 @@ class Content
         $catName = $ccm->get_name($data['category']);
 
         $sql = "INSERT INTO contents
-            (`fk_content_type`, `title`, `description`, `body`,
+            (`fk_content_type`, `content_type_name`, `title`, `description`, `body`,
             `metadata`, `starttime`, `endtime`,
             `created`, `changed`, `content_status`,
             `views`, `position`,`frontpage`,
             `fk_author`, `fk_publisher`, `fk_user_last_editor`,
             `in_home`, `home_pos`,`available`,
             `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
+           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
         $values = array(
-            $fk_content_type, $data['title'], $data['description'], $data['body'],
+            $fk_content_type, strtolower($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['created'], $data['changed'], $data['content_status'],
             $data['views'], $data['position'],$data['frontpage'],

@@ -109,6 +109,13 @@ class Comment
      **/
     public $user_id       = 0;
 
+    /**
+     * The content type name that is referenced by the comment
+     *
+     * @var int
+     **/
+    public $content_type_referenced = '';
+
 
     const STATUS_ACCEPTED = 'accepted';
     const STATUS_REJECTED = 'rejected';
@@ -188,9 +195,21 @@ class Comment
 
         $sql = 'INSERT INTO comments
                     (`content_id`, `author`, `author_email`, `author_url`, `author_ip`,
-                     `date`, `body`, `status`, `agent`,`type`,`parent_id`,`user_id`)
+                     `date`, `body`, `status`, `agent`,`type`,`parent_id`,`user_id`,content_type_referenced)
                 VALUES
-                    (?,?,?,?,?,?,?,?,?,?,?,?)';
+                    (?,?,?,?,?,?,?,?,?,?,?,?,?)';
+
+        // Get fk_content_type from content id
+        $sql2 = "SELECT fk_content_type FROM contents WHERE pk_content=".$data['content_id'];
+        $rs2  = $GLOBALS['application']->conn->Execute($sql2);
+        if (!$rs2) {
+            \Application::logDatabaseError();
+
+            throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
+        }
+
+        $contentTypeName = \ContentManager::getContentTypeNameFromId($rs2->fields['fk_content_type']);
+
         $values = array(
             $data['content_id'],
             $data['author'],
@@ -204,6 +223,7 @@ class Comment
             $data['type'],
             $data['parent_id'],
             $data['user_id'],
+            $contentTypeName,
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
