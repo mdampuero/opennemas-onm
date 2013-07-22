@@ -409,6 +409,10 @@ class AlbumsController extends Controller
             $album->update($data);
             m::add(_("Album updated successfully."), m::SUCCESS);
 
+            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
+            $tplManager->delete('home|1');
+
             if ($continue) {
                 return $this->redirect(
                     $this->generateUrl('admin_album_show', array('id' => $album->id))
