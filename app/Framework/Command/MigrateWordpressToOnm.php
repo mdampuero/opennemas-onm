@@ -760,7 +760,7 @@ EOF
     protected function getOnmIdImage($guid) {
         $sql = "SELECT ID FROM `".PREFIX."posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ".
-            " AND guid LIKE '%".$guid."%'";
+            " AND guid = '".$guid."'";
 
 
         // Fetch the list of Opinions available for one author in EditMaker
@@ -821,7 +821,8 @@ EOF
                 preg_match_all ( "@(.*)-[0-9]{3,4}x[0-9]{3,4}.(.*)@", $guid, $result);
                 if (!empty($result[1]) ) {
 
-                    $newGuid = $result[1][0];
+                    $newGuid = $result[1][0].".".$result[2][0];
+                    var_dump($newGuid);
                     $img     = $this->getOnmIdImage($newGuid);
 
                     if (empty($img)) {
@@ -1233,39 +1234,6 @@ EOF
 
                 if(!empty($data['img'])) {
              //       $this->output->writeln(" - img- ".$data['img']." - ".$pks[$id]." -".substr($newBody, 0, 50));
-                } else {
-
-                    $sql3 = "SELECT * FROM `".PREFIX."posts` WHERE ".
-                        "post_parent = ".$rs->fields['ID']." ";
-
-                    // Fetch the list of Opinions available for one author in EditMaker
-                    $request3 = $GLOBALS['application']->connOrigin->Prepare($sql3);
-                    $rs3      = $GLOBALS['application']->connOrigin->Execute($request3);
-
-
-                    if (!$rs3) {
-                        $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
-                    } else {
-                        $img='';
-                        while (!$rs3->EOF) {
-                            if(!empty($rs3->fields['guid']) && !empty($img)) {
-                                $img = $this->getOnmIdImage($rs3->fields['guid']);
-                            }
-
-                            $rs3->MoveNext();
-                        }
-                        $rs3->Close(); # optional
-                        if(!empty($img)) {
-                            $this->output->writeln("first - width parent {$img} - ".$rs3->fields['guid']);
-                            $values[] = array(
-                                $img,
-                                $newBody,
-                                $pks[$id]
-                            );
-                        }
-
-                    }
-
                 }
                 $rs->MoveNext();
             }
@@ -1309,38 +1277,32 @@ EOF
             $pk_content_old       = $item['pk_content_old'];
             $pks[$pk_content_old] = $item['pk_content'];
         }
-        $values = array();
 
-        $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
-            "post_parent IN (".implode(', ', array_keys($pks)).")";
+
+        $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
+            "post_id IN (".implode(', ', array_keys($pks)).") AND `meta_key` = '_thumbnail_id'";
 
         // Fetch the list of Opinions available for one author in EditMaker
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
+        $items    = $rs->getArray();
+        $values   = array();
+        foreach ($items as $item) {
 
-        if (!$rs) {
-            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
-        } else {
-            while (!$rs->EOF) {
-                if(!empty($rs->fields['guid'])) {
-                    $img = $this->getOnmIdImage($rs->fields['guid']);
-                    $id = $rs->fields['post_parent'];
-                    $values[] = array(
-                        $img,
-                        $pks[$id]
-                    );
-                    $this->output->writeln("width parent {$img} - ".$rs->fields['guid']);
-                }
-
-                $rs->MoveNext();
+            $id  = $item['post_id'];
+            $img = $this->elementIsImported($item['meta_value'], 'image');
+            if (!empty($img)) {
+                $values[] = array(
+                    $img,
+                    $pks[$id]
+                );
+                $this->output->writeln($id. "->".$pks[$id]."  thumbnail - width {$img} - " );
             }
-            $rs->Close(); # optional
-
         }
 
         if (!empty($values)) {
-            $sql    = 'UPDATE `articles` SET img1=?  WHERE pk_article=?';
+            $sql    = 'UPDATE `articles` SET img1=?  WHERE pk_article = ?';
 
             $stmt = $GLOBALS['application']->conn->Prepare($sql);
             $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
