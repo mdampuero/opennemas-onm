@@ -16,6 +16,7 @@ namespace Framework\EventListeners;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\Event;
+use Onm\Settings as s;
 
 /**
  * Handles all the events after content updates
@@ -35,7 +36,6 @@ class NewsAgency implements EventSubscriberInterface
             'cron.actions' => array(
                 array('updateNewsAgency', 5),
             ),
-            // 'store.order'     => array('onStoreOrder', 0),
         );
     }
 
@@ -53,16 +53,73 @@ class NewsAgency implements EventSubscriberInterface
 
         $output->writeln(' - Executing news agency actions');
 
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        global $sc;
 
-        try {
-            $message = $synchronizer->syncMultiple($servers);
-            $event->output->writeln(' - '.$message);
-        } catch (\Exception $e) {
-            $output->writeln("\t<fg=White;bg=red>Migrating: ".$e->getMessage()."</fg=white;bg=red>");
+        $_SERVER['SERVER_NAME'] = 'cron';
+        define('CACHE_PREFIX', 'cron');
+
+        require APPLICATION_PATH.'/config/config.inc.php';
+
+        $instancesConnection = \ADONewConnection('mysql');
+        $instancesConnection->Connect(
+            $onmInstancesConnection['BD_HOST'],
+            $onmInstancesConnection['BD_USER'],
+            $onmInstancesConnection['BD_PASS'],
+            $onmInstancesConnection['BD_DATABASE']
+        );
+
+        $instancesConnection->bulkBind = true;
+        $instancesConnection->SetFetchMode(ADODB_FETCH_ASSOC);
+
+        $rs = $instancesConnection->Execute('SELECT * FROM instances');
+        $instances = $rs->GetArray();
+
+        foreach ($instances as $instanceData) {
+
+            $instance = new \Onm\Instance\Instance();
+            foreach ($instanceData as $key => $value) {
+                $instance->{$key} = $value;
+            }
+            $instance->settings = unserialize($instance->settings);
+
+            $sc->setParameter('instance', $instance);
+            $sc->setParameter('cache_prefix', $instance->internal_name);
+
+            $GLOBALS['application'] = new \stdClass();
+            $GLOBALS['application']->conn = \ADONewConnection('mysql');
+            $GLOBALS['application']->conn->Connect(
+                $onmInstancesConnection['BD_HOST'],
+                $onmInstancesConnection['BD_USER'],
+                $onmInstancesConnection['BD_PASS'],
+                $instance->settings['BD_DATABASE']
+            );
+            $GLOBALS['application']->conn->bulkBind = true;
+            $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+
+            $settings = $GLOBALS['application']->conn->GetOne(
+                'SELECT value FROM settings WHERE `name`="news_agency_config"'
+            );
+            $servers = @unserialize($settings);
+
+            if (is_array($servers)) {
+                $output->writeln("  . Synchying news for instance ".$instance->name);
+
+                $syncparams = array(
+                    'cache_path' => APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.$instance->internal_name
+                );
+
+                $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncparams);
+
+                try {
+                    $messages = $synchronizer->syncMultiple($servers);
+                    foreach ($messages as $message) {
+                        $output->writeln("\t ".$message);
+                    }
+                } catch (\Exception $e) {
+                    $output->writeln("\t<fg=White;bg=red>Error synchying: ".$e->getMessage()."</fg=white;bg=red>");
+                }
+            }
         }
-
-        $event->output->writeln(' - [DONE] news agency actions');
 
         return false;
     }

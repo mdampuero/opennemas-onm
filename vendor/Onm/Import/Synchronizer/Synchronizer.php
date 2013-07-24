@@ -42,7 +42,7 @@ class Synchronizer
     {
         $this->syncPath = implode(
             DIRECTORY_SEPARATOR,
-            array(CACHE_PATH, 'importers')
+            array($config['cache_path'], 'importers')
         );
         $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
@@ -292,6 +292,7 @@ class Synchronizer
      **/
     public function syncMultiple($servers)
     {
+        $messages = array();
         foreach ($servers as $server) {
             try {
                 if ($server['activated'] != '1') {
@@ -302,7 +303,7 @@ class Synchronizer
 
                 $message = $this->sync($server);
 
-                return sprintf(
+                $messages []= sprintf(
                     _('Downloaded %d new articles and deleted %d old ones from "%s".'),
                     $message['downloaded'],
                     $message['deleted'],
@@ -310,12 +311,15 @@ class Synchronizer
                 );
 
             } catch (\Exception $e) {
-                $synchronizer->unlockSync();
+                $messages []= $e->getMessage();
+                $this->unlockSync();
 
                 throw $e;
             }
         }
-        $synchronizer->updateSyncFile();
+        $this->updateSyncFile();
+
+        return $messages;
     }
 
     /**

@@ -177,6 +177,9 @@ class FTP extends ServerAbstract implements ServerInterface
      **/
     protected function formatRawFtpFileList($rawFiles = '')
     {
+        if (!is_array($rawFiles) || count($rawFiles) <= 0) {
+            return array();
+        }
         // here the magic begins!
         $structure = array();
         $arraypointer = &$structure;

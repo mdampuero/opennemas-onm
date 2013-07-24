@@ -86,7 +86,8 @@ class NewsAgencyController extends Controller
         $itemsPage    = s::get('items_per_page') ?: 20;
 
         // Get the amount of minutes from last sync
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         // Get LocalRepository instance
@@ -523,7 +524,8 @@ class NewsAgencyController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
         $synchronizer->unlockSync();
         unset($_SESSION['error']);
 
@@ -547,7 +549,8 @@ class NewsAgencyController extends Controller
 
         $servers = s::get('news_agency_config');
 
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
 
         try {
             $message = $synchronizer->syncMultiple($servers);
