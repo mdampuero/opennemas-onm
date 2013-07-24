@@ -2305,6 +2305,22 @@ $adminRoutes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_paywall_users_list_export',
+    new Route(
+        '/paywall/users/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:userListExport')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_purchases_list_export',
+    new Route(
+        '/paywall/purchases/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:purchasesListExport')
+    )
+);
+
 // Importer Efe controller routes
 $adminRoutes->add(
     'admin_news_agency',
