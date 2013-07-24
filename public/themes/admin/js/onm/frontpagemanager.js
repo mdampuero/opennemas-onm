@@ -414,13 +414,14 @@ jQuery(function($) {
         }
 
         if (element.data('class') == 'Article' || element.data('class') == 'Opinion') {
-            modal.find('.image-disposition').css('display', 'inline-block');
+           /* modal.find('.image-disposition').css('display', 'inline-block');
             if(element.data('format') !== undefined && element.data('format').length>0) {
                 var format = element.data('format');
                 modal.find('.modal-body .radio input[value='+format+']').prop('checked', true);
             } else {
                 modal.find('.modal-body .radio input[value=image-top-wide]').prop('checked', true);
-            }
+            }*/
+            modal.find('.image-disposition').css('display', 'none');
         } else {
             modal.find('.image-disposition').css('display', 'none');
         }
