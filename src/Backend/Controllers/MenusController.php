@@ -174,8 +174,6 @@ class MenusController extends Controller
                         'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
                     )
                 ),
-                'site'      => SITE,
-                'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode($request->request->get('items')),
                 'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
             );
