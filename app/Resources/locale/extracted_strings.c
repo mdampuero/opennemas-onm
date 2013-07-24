@@ -2200,6 +2200,9 @@ gettext("Body");
 /* public/themes/admin/tpl//article/new.tpl */
 gettext("Slug");
 
+/* public/themes/admin/tpl//article/new.tpl */
+gettext("External link");
+
 /* public/themes/admin/tpl//widget/modals/_modalDelete.tpl */
 gettext("Delete widget");
 
