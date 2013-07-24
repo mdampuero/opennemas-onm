@@ -678,7 +678,7 @@ class UserController extends Controller
     {
 
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 15;
+        $itemsPerPage = 14;
 
         $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
 
