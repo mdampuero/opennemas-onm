@@ -45,6 +45,19 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'blog_sync_category',
+    new Route(
+        '/extseccion/blog/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:extCategory',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'blog_tag',
     new Route(
         '/blog/tag/{category_name}',

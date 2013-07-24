@@ -23,12 +23,16 @@
                 {t}Video Category{/t}:
             {elseif $menuItem->type == 'static'}
                 {t}Static Page{/t}:
+            {elseif $menuItem->type == 'syncCategory'}
+                {t}Sync category{/t}:
+            {elseif $menuItem->type == 'syncBlogCategory'}
+                {t}Sync blog category{/t}:
             {/if}
         </span>
         <span class="menu-title">
             {$menuItem->title}
         </span>
-        {if $menuItem->type == 'syncCategory'}
+        {if $menuItem->type == 'syncCategory' || $menuItem->type == 'syncBlogCategory'}
             <img src="{$params.IMAGE_DIR}sync-icon.png"
                  alt="{t}Sync{/t}">
         {/if}
