@@ -34,6 +34,33 @@ gettext("Config");
 /* public/themes/admin/tpl//disqus/list.tpl */
 gettext("Disqus not configured");
 
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("E-mail");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Last login");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("End of subscription");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Status");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Paid");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Expired");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Registered");
+
 /* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
 gettext("User name");
 
@@ -67,14 +94,32 @@ gettext("Edit");
 /* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
 gettext("No users with paywall");
 
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Order id");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Payment date");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Amount");
+
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
-gettext("User");
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("Full name");
 
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
 gettext("Order id");
 
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
-gettext("Created");
+gettext("Payment date");
 
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
 gettext("Amount");
@@ -224,6 +269,15 @@ gettext("Go back to list");
 gettext("Go back");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
+gettext("users");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Export list");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Filter by name");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
 gettext("Order by");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
@@ -239,16 +293,19 @@ gettext("Last login");
 gettext("End of subscription");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
-gettext("type");
+gettext("Status");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
 gettext("--All--");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
-gettext("Premium");
+gettext("Paid");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
 gettext("Registered");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Expired");
 
 /* public/themes/admin/tpl//paywall/purchases.tpl */
 gettext("Paywall");
@@ -270,6 +327,27 @@ gettext("Go back to list");
 
 /* public/themes/admin/tpl//paywall/purchases.tpl */
 gettext("Go back");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("purchases");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Export list");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Filter by name or email");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Order by");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Payment date");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Full name");
 
 /* public/themes/admin/tpl//newsletter/modals/_add_container_label.tpl */
 gettext("Add Container label");
@@ -3143,6 +3221,12 @@ gettext("Video Category");
 gettext("Static Page");
 
 /* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
+gettext("Sync category");
+
+/* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
+gettext("Sync blog category");
+
+/* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
 gettext("Sync");
 
 /* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
@@ -3293,10 +3377,22 @@ gettext("Sync");
 gettext("Add to menu");
 
 /* public/themes/admin/tpl//menues/new.tpl */
-gettext("Category blog");
+gettext("Blog Categories");
 
 /* public/themes/admin/tpl//menues/new.tpl */
-gettext("Category blog");
+gettext("Blog Category");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync Blog Categories");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync blog category");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync category blog");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Add to menu");
 
 /* public/themes/admin/tpl//search_advanced/content-provider.tpl */
 gettext("Write here the text for search...");
