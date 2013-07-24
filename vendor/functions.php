@@ -475,3 +475,52 @@ function generateRandomString($length = 10)
     }
     return $randomString;
 }
+
+// added Claudio Bustos  clbustos#entelchile.net
+if (!defined('ADODB_ERROR_HANDLER_TYPE')) {
+    define('ADODB_ERROR_HANDLER_TYPE', E_USER_ERROR);
+}
+if (!defined('ADODB_ERROR_HANDLER')) {
+    define('ADODB_ERROR_HANDLER', 'adoDBErrorHandler');
+}
+
+/**
+* Default Error Handler. This will be called with the following params
+*
+* @param $dbms      the RDBMS you are connecting to
+* @param $fn        the name of the calling function (in uppercase)
+* @param $errno     the native error number from the database
+* @param $errmsg    the native error msg from the database
+* @param $p1        $fn specific parameter - see below
+* @param $p2        $fn specific parameter - see below
+* @param $thisConn  $current connection object - can be false if no connection object created
+*/
+function adoDBErrorHandler($dbms, $fn, $errno, $errmsg, $p1, $p2, &$thisConnection)
+{
+    if (error_reporting() == 0) {
+        return; // obey @ protocol
+    }
+
+    switch ($fn) {
+        case 'EXECUTE':
+            $sql = $p1;
+            $inputparams = $p2;
+
+            $s = "$dbms error: [$errno: $errmsg] in $fn(\"$sql\")\n";
+            break;
+
+        case 'PCONNECT':
+        case 'CONNECT':
+            $host = $p1;
+            $database = $p2;
+
+            $s = "$dbms error: [$errno: $errmsg] in $fn($host, '****', '****', $database)\n";
+            break;
+        default:
+            $s = "$dbms error: [$errno: $errmsg] in $fn($p1, $p2)\n";
+            break;
+    }
+
+    $logger = getService('logger');
+    $logger->error('[Database Error] '.$s);
+}
