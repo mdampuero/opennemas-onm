@@ -59,9 +59,8 @@ class BlogController extends Controller
             }
             $category = $category[0];
 
-            $itemsPerPage = 10;//s::get('items_per_page');
+            $itemsPerPage = 10;
 
-            $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(
                 'Article',
                 (int) $category->pk_content_category,
@@ -70,6 +69,7 @@ class BlogController extends Controller
                 $page,
                 $itemsPerPage
             );
+
             $imageIdsList = array();
             foreach ($articles as $content) {
                 if (isset($content->img1)) {
@@ -121,7 +121,7 @@ class BlogController extends Controller
             );
         }
 
-        $this->getInnerAds();
+        $this->getInnerAds($category->id);
 
         return $this->render(
             'blog/blog.tpl',
@@ -131,6 +131,72 @@ class BlogController extends Controller
         );
     }
 
+
+    /**
+     * Action for synchronized blog frontpage
+     *
+     * @return Response the response object
+     **/
+    public function extCategoryAction(Request $request)
+    {
+        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+
+        $this->view->setConfig('frontpages');
+
+        // Get sync params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$categoryName.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        if (empty($wsUrl)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        $cacheId = "sync|blog|$categoryName|$page";
+        if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
+            $cm = new \ContentManager();
+
+            // Get category object
+            $category = unserialize(
+                $cm->getUrlContent(
+                    $wsUrl.'/ws/categories/object/'.$categoryName,
+                    true
+                )
+            );
+
+            // Get all contents for this frontpage
+            list($pagination, $articles) = unserialize(
+                $cm->getUrlContent(
+                    $wsUrl.'/ws/frontpages/allcontentblog/'.$categoryName.'/'.$page,
+                    true
+                )
+            );
+
+            $this->view->assign(
+                array(
+                    'articles'   => $articles,
+                    'category'   => $category,
+                    'pagination' => $pagination,
+                )
+            );
+        }
+
+        $this->getInnerAds($category->id);
+
+        return $this->render(
+            'blog/blog.tpl',
+            array(
+                'cache_id' => $cacheId
+            )
+        );
+    }
     /**
      * Description of the action
      *
