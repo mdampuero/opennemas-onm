@@ -329,6 +329,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-vertical">
+                    <div class="control-group">
+                        <label for="bodyLink" class="control-label">{t}External link{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="bodyLink" name="params[bodyLink]" class="input-xxlarge" value="{$article->params['bodyLink']}">
+                        </div>
+                    </div>
+                </div>
             </div>
             {is_module_activated name="CRONICAS_MODULES"}
             <div id="avanced-custom">

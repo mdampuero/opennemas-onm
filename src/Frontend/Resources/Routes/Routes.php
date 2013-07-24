@@ -960,6 +960,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_article_external_link',
+    new Route(
+        '/redirect',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:externalLink'
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_external_article_show',
     new Route(
         '/extarticulo/{category_name}/{slug}/{article_id}.{_format}',
