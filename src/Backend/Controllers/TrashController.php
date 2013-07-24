@@ -87,12 +87,11 @@ class TrashController extends Controller
                 'urlVar'      => 'page',
                 'totalItems'  => $countElements,
                 'fileName'    => $this->generateUrl(
-                    'admin_staticpages',
+                    'admin_trash',
                     array(
-                        'mytype' => $this->filterContentType,
-                        'page' => $this->page
+                        'mytype' => $this->filterContentType
                     )
-                ).'?page=%d',
+                ).'&page=%d',
             )
         );
 
