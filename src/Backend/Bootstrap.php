@@ -43,11 +43,6 @@ class Bootstrap extends ModuleBootstrap
     {
         $request = $this->container->get('request');
 
-        $sessionLifeTime = (int) s::get('max_session_lifetime', 60);
-        if ((int) $sessionLifeTime <= 0) {
-            s::set('max_session_lifetime', 60*30);
-        }
-
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset) {
             // Log this error event to the webserver logging sysmte
@@ -80,22 +75,19 @@ class Bootstrap extends ModuleBootstrap
             $response->send();
             exit(0);
         } else {
+            $maxIdleTime = ((int) s::get('max_session_lifetime', 60) * 60);
+            $lastUsedSession = $session->getMetadataBag()->getLastUsed();
 
-            if (array_key_exists('updated', $_SESSION)
-                && (time() > ($_SESSION['updated'] + ($sessionLifeTime * 60)))
+            // If the max idle time is set and the session was used in a time before the max idle time
+            // invalidate session and redirect to
+            if ($maxIdleTime > 0
+                && time() - $lastUsedSession > $maxIdleTime
             ) {
-                foreach ($_COOKIE as $name => $value) {
-                    if (preg_match('@^_onm_session_.*@', $name)) {
-                        setcookie($name, '', time() - 60000);
-                    }
-                }
-
                 $session->invalidate();
+
                 $response = new RedirectResponse(SITE_URL_ADMIN);
                 $response->send();
             }
-
-            $_SESSION['updated'] = time();
         }
     }
 
