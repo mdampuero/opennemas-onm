@@ -47,9 +47,6 @@ class SimplePager
                     .($page-1).")' title='"
                     ._("Get previous page")."'>"._("« Previous")."</a>\n";
 
-        // Get updated total
-        $total = $total - ($items * ($page -1));
-
         if ($page == 1 || empty($page)) {
             if ($total <= $items) {
                 $html = '';
@@ -90,9 +87,6 @@ class SimplePager
 
         $next = sprintf("<a href='%s%s%d' title='Next'>%s</a>", $url, $pageComponent, $page+1, _('Next »'));
         $previous = sprintf("<a href='%s%s%d' title='Next'>%s</a>", $url, $pageComponent, $page-1, _('« Previous'));
-
-        // Get updated total
-        $total = $total - ($items * ($page -1));
 
         if (empty($page) || $page == 1) {
             if ($total <= $items) {
