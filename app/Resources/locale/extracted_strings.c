@@ -28,8 +28,40 @@ gettext("Delete");
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Unpublish");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("E-mail");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Last login");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("End of subscription");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Status");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Paid");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Expired");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Registered");
+
+/* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
+gettext("User name");
+=======
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Unpublish");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Unpublish");
@@ -61,14 +93,42 @@ gettext("Settings");
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Thumbnail");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Order id");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Payment date");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Amount");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("Full name");
+=======
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Title");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Section");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("Payment date");
+=======
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Date");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/list.tpl */
 gettext("Price");
@@ -214,8 +274,22 @@ gettext("Category");
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Available");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("users");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Export list");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Filter by name");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Order by");
+=======
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("No");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Yes");
@@ -229,20 +303,38 @@ gettext("No");
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Yes");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Status");
+=======
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Keywords");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Separated by commas");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Paid");
+=======
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Price");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Date");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Expired");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Paywall");
+=======
 /* public/themes/admin/tpl//covers/new.tpl */
 gettext("Upload PDF");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/config.tpl */
 gettext("ePaper");
@@ -262,8 +354,34 @@ gettext("Go back to list");
 /* public/themes/admin/tpl//covers/config.tpl */
 gettext("Go back to list");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("purchases");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Export list");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Filter by name or email");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Order by");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Payment date");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//newsletter/modals/_add_container_label.tpl */
+gettext("Add Container label");
+=======
 /* public/themes/admin/tpl//covers/config.tpl */
 gettext("Order newsstand frontpage by");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//covers/config.tpl */
 gettext("Sections");
@@ -2272,8 +2390,16 @@ gettext("Sync list  with server");
 /* public/themes/admin/tpl//opinion/config.tpl */
 gettext("Go back to list");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//article/new.tpl */
+gettext("External link");
+
+/* public/themes/admin/tpl//widget/modals/_modalDelete.tpl */
+gettext("Delete widget");
+=======
 /* public/themes/admin/tpl//opinion/config.tpl */
 gettext("Go back to list");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//opinion/config.tpl */
 gettext("Director opinions in Opinion frontpage");
@@ -3301,8 +3427,19 @@ gettext("Drop");
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Editing album");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
+gettext("Sync category");
+
+/* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
+gettext("Sync blog category");
+
+/* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
+gettext("Sync");
+=======
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Creating Album");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Save");
@@ -3451,11 +3588,31 @@ gettext("No");
 /* public/themes/admin/tpl//album/modals/_modalBatchDelete.tpl */
 gettext("You must select some elements.");
 
+<<<<<<< HEAD
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Blog Categories");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Blog Category");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync Blog Categories");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync blog category");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync category blog");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Add to menu");
+=======
 /* public/themes/admin/tpl//album/modals/_modalDelete.tpl */
 gettext("Delete album");
 
 /* public/themes/admin/tpl//album/modals/_modalDelete.tpl */
 gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
+>>>>>>> develop
 
 /* public/themes/admin/tpl//album/modals/_modalDelete.tpl */
 gettext("Yes, delete");

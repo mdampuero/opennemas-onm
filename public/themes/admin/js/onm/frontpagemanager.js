@@ -549,7 +549,7 @@ jQuery(function($) {
     * Content provider code
     ***************************************************************************/
 
-    $('#content-provider').dialog({ minWidth: 700, autoOpen: false, maxHeight: 500 });
+    $('#content-provider').dialog({ minWidth: 720, autoOpen: false, maxHeight: 500 });
 
     $('#content-provider .content-provider-block-wrapper').tabs({
         ajaxOptions: {

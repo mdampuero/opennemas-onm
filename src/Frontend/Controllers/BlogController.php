@@ -61,6 +61,7 @@ class BlogController extends Controller
 
             $itemsPerPage = 8;
 
+            $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(
                 'Article',
                 (int) $category->pk_content_category,
@@ -162,7 +163,6 @@ class BlogController extends Controller
         $cm = new \ContentManager();
         $cacheId = "sync|blog|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-
 
             // Get category object
             $category = unserialize(
