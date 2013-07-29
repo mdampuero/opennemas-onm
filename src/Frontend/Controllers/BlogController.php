@@ -159,9 +159,10 @@ class BlogController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
+        $cm = new \ContentManager();
         $cacheId = "sync|blog|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $cm = new \ContentManager();
+
 
             // Get category object
             $category = unserialize(
@@ -188,7 +189,20 @@ class BlogController extends Controller
             );
         }
 
-        $this->getInnerAds($category->id);
+        //$this->getInnerAds();
+        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
+        $advertisement = \Advertisement::getInstance();
+        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
+        $intersticial = $ads[0];
+        $banners      = $ads[1];
+
+        // Render advertisements
+        if (!empty($banners)) {
+            $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
+        }
+        if (!empty($intersticial)) {
+            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
+        }
 
         return $this->render(
             'blog/blog.tpl',
