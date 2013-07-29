@@ -141,8 +141,6 @@ class Frontpage extends Content
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -165,8 +163,6 @@ class Frontpage extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -299,8 +295,6 @@ class Frontpage extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -331,8 +325,6 @@ class Frontpage extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $items = array();

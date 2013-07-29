@@ -453,7 +453,6 @@ class Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
 
             return false;
         }
@@ -465,13 +464,12 @@ class Content
         $values = array($this->id, $data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
 
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Fire event
         $GLOBALS['application']->dispatch('onAfterCreate', $this);
@@ -498,8 +496,6 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -610,8 +606,6 @@ class Content
 
             $rs = $GLOBALS['application']->conn->Execute($sql2, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         } else {
@@ -630,13 +624,12 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
 
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         $GLOBALS['application']->dispatch('onAfterUpdate', $this);
     }
@@ -653,26 +646,22 @@ class Content
         $sql = 'DELETE FROM contents WHERE pk_content=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         $sql = 'DELETE FROM contents_categories WHERE pk_fk_content=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            Application::logDatabaseError();
+            return false;
         }
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
     }
 
     /**
@@ -698,13 +687,11 @@ class Content
         $values = array(1, $changed, $lastEditor, $id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
     }
 
     /**
@@ -725,14 +712,12 @@ class Content
         $values = array(0, $changed, $this->id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            Application::logDatabaseError();
-
             return false;
         }
         $this->in_litter = 0;
 
         /* Notice log of this action */
-        Application::logContentEvent('recover from trash', $this);
+        logContentEvent('recover from trash', $this);
 
         return $this;
     }
@@ -765,13 +750,11 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         return true;
     }
@@ -783,19 +766,15 @@ class Content
      **/
     public function toggleSuggested()
     {
+        logContentEvent(__METHOD__, $this);
+
         $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 '
              . 'WHERE `pk_content`=?';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
         if ($rs === false) {
-            $errorMsg = Application::logDatabaseError();
-            throw new \Exception($errorMsg);
-
-            return false;
+            throw new \Exception($GLOBALS['application']->conn->ErrorMsg());
         }
-
-        /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
 
         return true;
     }
@@ -840,14 +819,12 @@ class Content
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
 
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         if (!empty($this)) {
@@ -944,13 +921,11 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->available      = 1;
@@ -988,13 +963,11 @@ class Content
         );
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated state to next event
         $this->available = 0;
@@ -1032,13 +1005,11 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->in_litter = 2;
@@ -1064,15 +1035,13 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         $this->favorite = 1;
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         return true;
     }
@@ -1101,13 +1070,11 @@ class Content
         );
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->in_litter = 2;
@@ -1138,17 +1105,11 @@ class Content
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        $logger = Application::getLogger();
-        $logger->notice(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
-            .'action suggestToHomepage at '.$this->content_type.' Id '.$this->id
-        );
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->in_home = 2;
@@ -1479,14 +1440,12 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
     }
 
     /**
@@ -1525,14 +1484,12 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
     }
 
     /**
@@ -1563,8 +1520,6 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
@@ -1572,7 +1527,7 @@ class Content
         $GLOBALS['application']->dispatch('onAfterSetInhome', $this);
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
     }
 
 
@@ -1671,8 +1626,6 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $sqlValues);
 
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -1712,12 +1665,11 @@ class Content
      **/
     public function onUpdateClearCacheContent()
     {
-        global $sc;
-        $eventDispatcher = $sc->get('event_dispatcher');
+        $eventDispatcher = getService('event_dispatcher');
 
         $event = new \Symfony\Component\EventDispatcher\GenericEvent();
-
         $event->setArgument('content', $this);
+
         $eventDispatcher->dispatch('content.update', $event);
     }
 
@@ -1811,20 +1763,19 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($category, $pkContent));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
-        } else {
-            $type = $cm->getContentTypeNameFromId($this->content_type, true);
-            /* Notice log of this action */
-            $logger = Application::getLogger();
-            $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
-                .' action Drop from frontpage at category '.$categoryName.' an '.$type.' Id '.$pkContent
-            );
-
-            return true;
         }
+
+        /* Notice log of this action */
+        $logger = getService('logger');
+        $type = $cm->getContentTypeNameFromId($this->content_type, true);
+
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            .' action Drop from frontpage at category '.$categoryName.' an '.$type.' Id '.$pkContent
+        );
+
+        return true;
     }
 
     /**
@@ -1834,27 +1785,25 @@ class Content
      **/
     public function dropFromAllHomePages()
     {
-
         $cm = new ContentManager();
         $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
-        } else {
-            $type = $cm->getContentTypeNameFromId($this->content_type, true);
-            /* Notice log of this action */
-            $logger = Application::getLogger();
-            $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
-                .'action Drop from frontpage '.$type.' with id '.$this->id
-            );
-
-            return true;
         }
+
+        /* Notice log of this action */
+        $logger = getService('logger');
+        $type = $cm->getContentTypeNameFromId($this->content_type, true);
+
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+            .'action Drop from frontpage '.$type.' with id '.$this->id
+        );
+
+        return true;
     }
 
     /**
@@ -1886,14 +1835,12 @@ class Content
         if (count($values) > 0) {
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         $GLOBALS['application']->dispatch('onAfterPosition', $this);
 
@@ -1918,8 +1865,6 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -1945,8 +1890,7 @@ class Content
     */
     public static function searchContentID($oldID)
     {
-        $sql       = "SELECT pk_content FROM `contents` "
-                   . "WHERE pk_content = ? LIMIT 1";
+        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1";
         $value     = array($oldID);
         $contentID = $GLOBALS['application']->conn->GetOne($sql, $value);
 
@@ -2043,9 +1987,7 @@ class Content
         $contents = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$contents) {
-            Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         $contentsUrns = array();
@@ -2072,7 +2014,6 @@ class Content
             $sql  = "SELECT pk_content FROM `contents` WHERE urn_source LIKE {$name}";
 
             $content = $GLOBALS['application']->conn->GetOne($sql);
-
         } else {
             $message = sprintf('The param name is not valid "%s".', $originalName);
             throw new \InvalidArgumentException($message);
@@ -2290,22 +2231,18 @@ class Content
      **/
     public function setProperty($property, $value)
     {
-        if ($this->id == null) {
+        if ($this->id == null || empty($property)) {
             return false;
         }
 
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-                        ." VALUES ('{$this->id}', '{$property}', '{$value}')"
-                        ." ON DUPLICATE KEY UPDATE `meta_value`='{$value}'";
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($this->id, $property, $value, $value);
 
-        if (!empty($property)) {
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-            if ($rs === false) {
-                Application::logDatabaseError();
-
-                return false;
-            }
+        if ($rs === false) {
+            return false;
         }
 
         return true;
@@ -2324,13 +2261,11 @@ class Content
             return false;
         }
 
-        $sql = "DELETE FROM contentmeta WHERE `fk_content` = '{$this->id}' "
-            ."AND `meta_name` = '{$property}'";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "DELETE FROM contentmeta WHERE `fk_content`='?' AND `meta_name`=?";
+        $values = array($this->id, $property);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -2358,16 +2293,17 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         $items = array();
 
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $name = $rs->fields['meta_name'];
-                $this->{$name} = $rs->fields['meta_value'];
+        if ($rs == false) {
+            return false;
+        }
+        while (!$rs->EOF) {
+            $name = $rs->fields['meta_name'];
+            $this->{$name} = $rs->fields['meta_value'];
 
-                $rs->MoveNext();
-            }
+            $rs->MoveNext();
         }
 
-        return true;
+        return $this;
     }
 
 
@@ -2381,19 +2317,15 @@ class Content
 
     public function updateAllContentProperties($values)
     {
-        if ($this->id == null) {
+        if ($this->id == null || count($values) < 0) {
             return false;
         }
 
-        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content)
-                            VALUES (?, ?, ?)";
-        if (count($values) > 0) {
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
-                Application::logDatabaseError();
+        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content) VALUES (?, ?, ?)";
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-                return false;
-            }
+        if ($rs === false) {
+            return false;
         }
 
         return true;

@@ -67,8 +67,6 @@ class PClave
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -96,8 +94,6 @@ class PClave
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -128,8 +124,6 @@ class PClave
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -148,8 +142,6 @@ class PClave
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

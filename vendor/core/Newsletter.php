@@ -261,8 +261,6 @@ class Newsletter
         $values = array($data['data'], $data['created']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -279,8 +277,6 @@ class Newsletter
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
         $this->loadData($rs->fields);
@@ -308,8 +304,6 @@ class Newsletter
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return $newsletters;
         }
 
@@ -335,9 +329,7 @@ class Newsletter
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
-            return;
+            return false;
         }
     }
 }

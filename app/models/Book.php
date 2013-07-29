@@ -129,9 +129,8 @@ class Book extends Content
             $data['editorial']
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
+        $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             return false;
         }
 
@@ -153,9 +152,7 @@ class Book extends Content
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         $this->pk_book   = $rs->fields['pk_book'];
@@ -191,10 +188,7 @@ class Book extends Content
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -221,8 +215,6 @@ class Book extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

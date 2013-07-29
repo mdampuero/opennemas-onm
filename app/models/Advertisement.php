@@ -402,8 +402,6 @@ class Advertisement extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -443,8 +441,6 @@ class Advertisement extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -511,8 +507,6 @@ class Advertisement extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -553,8 +547,6 @@ class Advertisement extends Content
         $sql = 'DELETE FROM advertisements WHERE pk_advertisement ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return;
         }
     }
@@ -580,8 +572,6 @@ class Advertisement extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -637,8 +627,6 @@ class Advertisement extends Content
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -1158,8 +1146,6 @@ class Advertisement extends Content
             );
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
-                \Application::logDatabaseError();
-
                 return;
             }
         }

@@ -154,8 +154,6 @@ class Attachment extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -214,8 +212,6 @@ class Attachment extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -240,8 +236,6 @@ class Attachment extends Content
         $values = array($data['title'], $data['category'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -272,8 +266,6 @@ class Attachment extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -296,8 +288,6 @@ class Attachment extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -316,8 +306,6 @@ class Attachment extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

@@ -252,8 +252,6 @@ class Article extends Content
             $data['home_columns'], $data['with_comment'], $data['title_int']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         if (!empty($data['relatedFront'])) {
@@ -295,10 +293,7 @@ class Article extends Content
 
         $sql = 'SELECT * FROM articles WHERE pk_article = '.($id);
         $rs = $GLOBALS['application']->conn->Execute($sql);
-
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -372,8 +367,6 @@ class Article extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -430,9 +423,7 @@ class Article extends Content
         self::deleteComments($id); //Eliminamos  los comentarios.
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            \Application::logDatabaseError();
-
-            return;
+            return false;
         }
     }
 

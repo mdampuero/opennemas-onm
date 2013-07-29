@@ -197,7 +197,7 @@ class FrontpagesController extends Controller
                 }
             }
 
-            $logger = \Application::getLogger();
+            $logger = $this->get('logger');
 
             if ($validReceivedData) {
                 $contents = array();

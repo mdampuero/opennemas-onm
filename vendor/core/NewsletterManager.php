@@ -51,8 +51,6 @@ class NewsletterManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 

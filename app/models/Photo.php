@@ -144,8 +144,6 @@ class Photo extends Content
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($execution === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -254,7 +252,8 @@ class Photo extends Content
                 }
 
             } else {
-                Application::getLogger()->notice(
+                $logger = getService('logger');
+                $logger->notice(
                     sprintf(
                         'EFE Importer: Unable to register the '
                         .'photo object %s (destination: %s).',
@@ -274,10 +273,10 @@ class Photo extends Content
             $importedID = $photoID;
 
         } else {
-
             $importedID = null;
 
-            Application::getLogger()->notice(
+            $logger = getService('logger');
+            $logger->notice(
                 sprintf(
                     'EFE Importer: Unable to create the '
                     .'photo file %s (destination: %s).',
@@ -387,7 +386,8 @@ class Photo extends Content
                 $photoID = $photo->create($data);
 
                 if (!$photoID) {
-                    Application::getLogger()->notice(
+                    $logger = getService('logger');
+                    $logger->notice(
                         sprintf(
                             'EFE Importer: Unable to register the photo object %s (destination: %s).',
                             $dataSource['local_file'],
@@ -405,10 +405,10 @@ class Photo extends Content
                 $photo = new Photo($photoID);
 
             } else {
-
                 $importedID = null;
 
-                Application::getLogger()->notice(
+                $logger = getService('logger');
+                $logger->notice(
                     sprintf(
                         'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
                         $dataSource['local_file'],
@@ -444,9 +444,7 @@ class Photo extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         $this->pk_photo    = $rs->fields['pk_photo'];
@@ -691,8 +689,6 @@ class Photo extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -728,8 +724,6 @@ class Photo extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -751,12 +745,10 @@ class Photo extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
-        $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
         if (file_exists($image)) {
             @unlink($image);
@@ -781,8 +773,6 @@ class Photo extends Content
         $values = array($path, $id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -802,8 +792,6 @@ class Photo extends Content
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -863,39 +851,29 @@ class Photo extends Content
      **/
     public static function batchDelete($arrayIds)
     {
-
         $contents = implode(', ', $arrayIds);
 
         $sql = 'SELECT  path_file, name  FROM photos WHERE pk_photo IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
         while (!$rs->EOF) {
             $image      = MEDIA_IMG_PATH . $rs->fields['path_file'].$rs->fields['name'];
-            $thumbimage = MEDIA_IMG_PATH . $rs->fields['path_file'].'140-100-'.$rs->fields['name'];
 
             if (file_exists($image)) {
                 @unlink($image);
-            }
-            if (file_exists($thumbimage)) {
-                @unlink($thumbimage);
             }
 
             $rs->MoveNext();
         }
 
-        $sql = 'DELETE FROM photos '
-                .'WHERE `pk_photo` IN ('.$contents.')';
+        $sql = 'DELETE FROM photos WHERE `pk_photo` IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

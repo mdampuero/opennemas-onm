@@ -196,20 +196,4 @@ class Application
 
         $logger->notice($msg);
     }
-
-    // TODO: move to a separated file called functions.php
-    /**
-     * Registers in the Database error handler one error message
-     *
-     * @return boolean true if all was sucessfully performed
-     **/
-    public static function logDatabaseError()
-    {
-        $errorMsg = $GLOBALS['application']->conn->ErrorMsg();
-
-        $logger = Application::getLogger();
-        $logger->notice('[Database Error] '.$errorMsg);
-
-        return $errorMsg;
-    }
 }

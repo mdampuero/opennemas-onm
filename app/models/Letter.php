@@ -113,8 +113,6 @@ class Letter extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -136,8 +134,6 @@ class Letter extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $this->load($rs->fields);
@@ -173,8 +169,6 @@ class Letter extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -197,8 +191,6 @@ class Letter extends Content
         $sql = 'DELETE FROM letters WHERE pk_letter ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return;
         }
     }

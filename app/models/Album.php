@@ -138,7 +138,7 @@ class Album extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return Application::logDatabaseError();
+
         }
 
         $data['id'] = $this->id;
@@ -162,7 +162,7 @@ class Album extends Content
         $sql = 'SELECT * FROM albums WHERE pk_album = ?';
         $rs = $GLOBALS['application']->conn->Execute($sql, $id);
         if (!$rs) {
-            return Application::logDatabaseError();
+            return null;
         }
 
         $this->pk_album    = $rs->fields['pk_album'];
@@ -203,7 +203,7 @@ class Album extends Content
         );
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
-            return Application::logDatabaseError();
+            return null;
         }
 
         $this->removeAttachedImages($data['id']);
@@ -224,8 +224,9 @@ class Album extends Content
         parent::remove($id);
 
         $sql = 'DELETE FROM albums WHERE pk_album=?';
-        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-            return Application::logDatabaseError();
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        if ($rs === false) {
+            return null;
         }
 
         return $this->removeAttachedImages($id);
@@ -328,7 +329,7 @@ class Album extends Content
                 $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
                 if ($rs === false) {
-                    return Application::logDatabaseError();
+                    return false;
                 }
             }
 
@@ -350,8 +351,6 @@ class Album extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($albumID));
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 

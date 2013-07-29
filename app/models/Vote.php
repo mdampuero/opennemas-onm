@@ -105,8 +105,6 @@ class Vote
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -136,9 +134,7 @@ class Vote
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if (!$rs) {
-                \Application::logDatabaseError();
-
-                return (false);
+                return false;
             }
             $this->pk_vote = $votePK;
             $this->value_pos = 0;
@@ -185,8 +181,6 @@ class Vote
         $values = array($value, serialize($this->ips_count_vote));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -251,7 +245,6 @@ class Vote
      **/
     public function add_count($countIPs, $ip)
     {
-
         $ips = array();
         foreach ($countIPs as $ip_array) {
             $ips[] = $ip_array['ip'];
@@ -286,8 +279,6 @@ class Vote
         $rs = $GLOBALS['application']->conn->Execute($sql, array($votePk));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 

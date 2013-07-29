@@ -11,24 +11,30 @@
  * This file stores shared function that could be used by the framework
  */
 
-function underscore($name) {
+function underscore($name)
+{
     $withUnderscore = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $name));
 
     return $withUnderscore;
 }
 
-function classify($name) {
+function classify($name)
+{
     $parts = explode('_', $name);
 
-    $parts = array_map(function ($token){
-        return ucfirst($token);
-    }, $parts);
+    $parts = array_map(
+        function ($token) {
+            return ucfirst($token);
+        },
+        $parts
+    );
     $className = implode('', $parts);
 
     return $className;
 }
 
-function tableize($name) {
+function tableize($name)
+{
     return pluralize(underscore($name));
 }
 
@@ -88,8 +94,7 @@ function getUserRealIP()
     // IP que partiendo del REMOTE_ADDR original irá indicando los proxys
     // por los que ha pasado.
 
-    if (
-        isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])
         && $_SERVER['HTTP_X_FORWARDED_FOR'] != ''
     ) {
         $clientIp = ( !empty($_SERVER['REMOTE_ADDR']) ) ?
@@ -111,7 +116,7 @@ function getUserRealIP()
         reset($entries);
         while (list(, $entry) = each($entries)) {
             $entry = trim($entry);
-            if ( preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList) ) {
+            if (preg_match("/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)/", $entry, $ipList)) {
                 // http://www.faqs.org/rfcs/rfc1918.html
                 $privateIp = array(
                       '/^0\./',
@@ -146,9 +151,10 @@ function getUserRealIP()
  *
  * @return void
  **/
-function logContentEvent($action=NULL, $content=NULL)
+function logContentEvent($action = null, $content = null)
 {
-    $logger = Application::getLogger();
+    global $sc;
+    $logger = $sc->get('logger');
 
     $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid'].') has executed '
     .'the action '.$action;
