@@ -86,7 +86,8 @@ class NewsAgencyController extends Controller
         $itemsPage    = s::get('items_per_page') ?: 20;
 
         // Get the amount of minutes from last sync
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         // Get LocalRepository instance
@@ -523,7 +524,8 @@ class NewsAgencyController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
         $synchronizer->unlockSync();
         unset($_SESSION['error']);
 
@@ -547,47 +549,22 @@ class NewsAgencyController extends Controller
 
         $servers = s::get('news_agency_config');
 
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
 
-        foreach ($servers as $server) {
-            try {
-                if ($server['activated'] != '1') {
-                    continue;
-                }
-
-                $server['allowed_file_extesions_pattern'] = '.*';
-
-                $message = $synchronizer->sync($server);
-
-                m::add(
-                    sprintf(
-                        _('Downloaded %d new articles and deleted %d old ones from "%s".'),
-                        $message['downloaded'],
-                        $message['deleted'],
-                        $server['name']
-                    )
+        try {
+            $message = $synchronizer->syncMultiple($servers);
+            m::add($message, m::SUCCESS);
+        } catch (\Onm\Import\Synchronizer\LockException $e) {
+            $errorMessage = $e->getMessage()
+                .sprintf(
+                    _('If you are sure <a href="%s">try to unlock it</a>'),
+                    $this->generateUrl('admin_news_agency_unlock')
                 );
-
-            } catch (\Onm\Import\SynchronizationException $e) {
-                m::add($e->getMessage(), m::ERROR);
-            } catch (\Onm\Import\Synchronizer\LockException $e) {
-                if (!isset($lockErrors)) {
-                    $errorMessage = $e->getMessage()
-                    .sprintf(
-                        _('If you are sure <a href="%s">try to unlock it</a>'),
-                        $this->generateUrl('admin_news_agency_unlock')
-                    );
-                    m::add($errorMessage, m::ERROR);
-
-                    $lockErrors = true;
-                }
-            } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
-
-                $synchronizer->unlockSync();
-            }
+            m::add($errorMessage, m::ERROR);
+        } catch (\Exception $e) {
+            m::add($e->getMessage(), m::ERROR);
         }
-        $synchronizer->updateSyncFile();
 
 
         return $this->redirect(

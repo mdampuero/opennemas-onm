@@ -159,6 +159,10 @@ class Order
             $order->params         = @unserialize($element['params']);
             $order->getUser();
 
+            // Overload user info to order obj for ordering propouses
+            $order->username = $order->user->username;
+            $order->name     = $order->user->name;
+
             $orders []= $order;
 
             $rs->MoveNext();

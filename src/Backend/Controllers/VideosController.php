@@ -241,6 +241,9 @@ class VideosController extends Controller
                     $_POST['information'] = json_decode($_POST['information'], true);
                     try {
                         $video->create($_POST);
+                        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                        $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+                        $tplManager->delete('home|1');
                     } catch (\Exception $e) {
                         m::add($e->getMessage());
 
@@ -314,6 +317,10 @@ class VideosController extends Controller
                 $video->update($_POST);
                 m::add(_("Video updated successfully."), m::SUCCESS);
             }
+            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+            $tplManager->delete('home|1');
+
             if ($continue) {
                 return $this->redirect(
                     $this->generateUrl(

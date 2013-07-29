@@ -227,6 +227,10 @@ class ArticlesController extends Controller
                             array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
                         'withGalleryHome'   =>
                             array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
+                        'only_subscribers'          =>
+                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                        'bodyLink'   =>
+                            array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -532,7 +536,9 @@ class ArticlesController extends Controller
                         'withGalleryHome'   =>
                             array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
                         'only_subscribers'          =>
-                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : ''
+                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                        'bodyLink'   =>
+                            array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),

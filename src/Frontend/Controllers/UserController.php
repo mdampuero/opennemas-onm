@@ -79,41 +79,18 @@ class UserController extends Controller
     public function registerAction(Request $request)
     {
         //Get config vars
-        $configRecaptcha = s::get('recaptcha');
         $configSiteName = s::get('site_name');
-
-        $recaptcha_challenge_field = $request->request->filter(
-            'recaptcha_challenge_field',
-            null,
-            FILTER_SANITIZE_STRING
-        );
-        $recaptcha_response_field = $request->request->filter(
-            'recaptcha_response_field',
-            null,
-            FILTER_SANITIZE_STRING
-        );
-
-        // Get reCaptcha validate response
-        $resp = \recaptcha_check_answer(
-            $configRecaptcha['private_key'],
-            $_SERVER["REMOTE_ADDR"],
-            $recaptcha_challenge_field,
-            $recaptcha_response_field
-        );
 
         $errors = array();
         // What happens when the CAPTCHA was entered incorrectly
         if ('POST' != $request->getMethod()) {
             // Do nothing
-        } elseif (!$resp->is_valid) {
-            $errors []= _('Verification image not valid. Try to fill it again.');
         } else {
-            // Correct CAPTCHA - Filter $_POST vars from FORM
             $data = array(
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
                 'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
-                'username'         => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
+                'username'      => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
                 'name'          => $request->request->filter('full_name', null, FILTER_SANITIZE_STRING),
                 'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
                 'sessionexpire' => 15,
@@ -613,7 +590,7 @@ class UserController extends Controller
 
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 15;
+        $itemsPerPage = 12;
 
         $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
 
@@ -701,7 +678,7 @@ class UserController extends Controller
     {
 
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 15;
+        $itemsPerPage = 16;
 
         $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
 

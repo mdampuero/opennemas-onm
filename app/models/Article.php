@@ -167,15 +167,20 @@ class Article extends Content
                 if (empty($this->category_name)) {
                     $this->category_name = $this->loadCategoryName($this->pk_content);
                 }
-                $uri =  Uri::generate(
-                    'article',
-                    array(
-                        'id'       => sprintf('%06d', $this->id),
-                        'date'     => date('YmdHis', strtotime($this->created)),
-                        'category' => $this->category_name,
-                        'slug'     => $this->slug,
-                    )
-                );
+
+                if (isset($this->params['bodyLink']) && !empty($this->params['bodyLink'])) {
+                    $uri = 'redirect?to='.urlencode($this->params['bodyLink']).'" target="_blank';
+                } else {
+                    $uri =  Uri::generate(
+                        'article',
+                        array(
+                            'id'       => sprintf('%06d', $this->id),
+                            'date'     => date('YmdHis', strtotime($this->created)),
+                            'category' => $this->category_name,
+                            'slug'     => $this->slug,
+                        )
+                    );
+                }
 
                 return $uri;
 

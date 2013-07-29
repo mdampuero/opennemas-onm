@@ -51,6 +51,23 @@ class Categories
     }
 
     /*
+    * @url GET /categories/object/:category_name
+    */
+    public function object($categoryName)
+    {
+        // Get category object
+        $categoryManager = $this->restler->container->get('category_repository');
+        $category = $categoryManager->findBy(array('name' => $categoryName));
+
+        if (empty($category)) {
+            throw new RestException(404, 'category not found');
+        }
+        $category = $category[0];
+
+        return serialize($category);
+    }
+
+    /*
     * @url GET /categories/layout/:category_id
     */
     public function layout($actualCategory)
@@ -85,4 +102,3 @@ class Categories
         }
     }
 }
-

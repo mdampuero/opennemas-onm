@@ -1685,7 +1685,7 @@ class ContentManager
      *
      * @return array a list of content information (not the object itself)
      **/
-    public function findHeadlinesWithImage()
+    public function findHeadlinesWithImage($frontIncluded = false)
     {
         $sql =
         'SELECT `contents`.`title`, `contents`.`pk_content` ,
@@ -1707,10 +1707,11 @@ class ContentManager
         $items = array();
         while (!$rs->EOF) {
 
-            $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
-            $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
-
-            if ($rsAux->fields['num'] <= 0) {
+            if (!$frontIncluded) {
+                $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
+                $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
+            }
+            if ($rsAux->fields['num'] <= 0 || $frontIncluded) {
                 $items[] = array(
                     'title'          => $rs->fields['title'],
                     'catName'        => $ccm->get_name($rs->fields['category_id']),

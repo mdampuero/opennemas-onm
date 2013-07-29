@@ -75,20 +75,6 @@ class Menu
     public $type      = null;
 
     /**
-     * The site of the menu
-     *
-     * @var string
-     **/
-    public $site      = null;
-
-    /**
-     * The id of the parent menu
-     *
-     * @var int
-     **/
-    public $pk_father = null;
-
-    /**
      * Misc params for this menu
      *
      * @var string
@@ -125,28 +111,25 @@ class Menu
     public function create($data)
     {
         $sql = "INSERT INTO menues ".
-               " (`name`, `params`, `site`, `pk_father`, `type`, `position`) " .
-               " VALUES (?,?,?,?,?,?)";
+               " (`name`, `params`, `type`, `position`) " .
+               " VALUES (?,?,?,?,?)";
 
         $values = array(
             $data["name"],
             $data["params"],
-            $data["site"],
-            $data['pk_father'],
             'user',
             $data['position']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
         $id = $GLOBALS['application']->conn->Insert_ID();
+
         $this->read($id);
 
-        MenuItems::setMenuElements($id, $data['items']);
+        $this->setMenuElements($id, $data['items']);
 
         return true;
     }
@@ -160,7 +143,6 @@ class Menu
      */
     public function read($id)
     {
-
         $sql = 'SELECT * FROM menues WHERE pk_menu=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
@@ -170,13 +152,10 @@ class Menu
             return false;
         }
 
-        $this->name      = $rs->fields['name'];
         $this->pk_menu   = $rs->fields['pk_menu'];
-        $this->params    = unserialize($rs->fields['params']);
-        $this->site      = $rs->fields['site'];
-        $this->site      = $rs->fields['site'];
+        $this->name      = $rs->fields['name'];
         $this->position  = $rs->fields['position'];
-        $this->pk_father = $rs->fields['pk_father'];
+        $this->params    = unserialize($rs->fields['params']);
 
         return $this;
     }
@@ -190,18 +169,13 @@ class Menu
      **/
     public function update($data)
     {
-        if (!isset($data['pk_father']) && empty($data['pk_father'])) {
-            $data['pk_father'] = $this->pk_father;
-        }
-        $sql = "UPDATE menues"
-                ." SET  `name`=?, `params`=?, `site`=?, `pk_father`=?, `position`=? "
-                ." WHERE pk_menu= ?" ;
+
+        $sql = "UPDATE menues SET `name`=?, `params`=?, `position`=? "
+              ."WHERE pk_menu= ?" ;
 
         $values = array(
             $data['name'],
             $data['params'],
-            $data['site'],
-            null,
             $data['position'],
             $this->pk_menu
         );
@@ -212,7 +186,7 @@ class Menu
             return false;
         }
 
-        return \MenuItems::setMenuElements($this->pk_menu, $data['items']);
+        return $this->setMenuElements($this->pk_menu, $data['items']);
     }
 
     /**
@@ -224,18 +198,19 @@ class Menu
      */
     public function delete($id)
     {
+        $GLOBALS['application']->conn->StartTrans();
+
+        // Delete menu elements
+
+        $this->emptyMenu($id);
 
         $sql = 'DELETE FROM menues WHERE pk_menu=?';
-
-        if ($GLOBALS['application']->conn->Execute($sql, array($this->pk_menu)) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->pk_menu));
+        if ($rs === false) {
             \Application::logDatabaseError();
-
-            return false;
         }
 
-        \MenuItems::emptyMenu($id);
-
-        return true;
+        $result = $GLOBALS['application']->conn->CompleteTrans();
 
         /* Notice log of this action */
         $logger = Application::getLogger();
@@ -243,6 +218,8 @@ class Menu
             "User {$_SESSION['username']} ({$_SESSION['userid']})".
             "has executed action Remove at menu Id {$this->id}"
         );
+
+        return true;
     }
 
     /**
@@ -252,7 +229,7 @@ class Menu
      */
     public function loadItems()
     {
-        $this->items = \MenuItems::getMenuItems($this->pk_menu);
+        $this->items = $this->getMenuItems($this->pk_menu);
 
         return $this;
     }
@@ -281,10 +258,9 @@ class Menu
         $this->pk_menu   = $rs->fields['pk_menu'];
         $this->params    = $rs->fields['params'];
         $this->position  = $rs->fields['position'];
-        $this->site      = $rs->fields['site'];
         $this->pk_father = $rs->fields['pk_father'];
         $this->type      = $rs->fields['type'];
-        $this->items     = \MenuItems::getMenuItems($this->pk_menu);
+        $this->items     = $this->getMenuItems($this->pk_menu);
 
         return $this;
 
@@ -314,10 +290,8 @@ class Menu
         $this->pk_menu   = $rs->fields['pk_menu'];
         $this->params    = $rs->fields['params'];
         $this->position  = $rs->fields['position'];
-        $this->site      = $rs->fields['site'];
-        $this->pk_father = $rs->fields['pk_father'];
         $this->type      = $rs->fields['type'];
-        $this->items     = \MenuItems::getMenuItems($this->pk_menu);
+        $this->items     = $this->getMenuItems($this->pk_menu);
 
         return $this;
 
@@ -348,10 +322,7 @@ class Menu
             $menu->pk_menu   = $rs->fields['pk_menu'];
             $menu->params    = $rs->fields['params'];
             $menu->position  = $rs->fields['position'];
-            $menu->site      = $rs->fields['site'];
             $menu->type      = $rs->fields['type'];
-            $menu->pk_father = $rs->fields['pk_father'];
-            // $menu->items = \MenuItems::getMenuItems($menu->pk_menu);
 
             $menues []= $menu;
 
@@ -373,5 +344,126 @@ class Menu
         $menu = self::getMenu($name);
 
         return $menu;
+    }
+
+    /**
+     * Returns the elements of a menu given its id
+     *
+     * @param int $id the id of the menu
+     *
+     * @return array with categories order by positions
+     */
+    public function getMenuItems($id)
+    {
+        $sql = "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+
+        $menuItems = array();
+        $i         =0;
+        while (!$rs->EOF) {
+            $menuItems[$rs->fields['pk_item']] = new stdClass();
+            $menuItems[$rs->fields['pk_item']]->pk_item   = $rs->fields['pk_item'];
+            $menuItems[$rs->fields['pk_item']]->title     = $rs->fields['title'];
+            $menuItems[$rs->fields['pk_item']]->link      = $rs->fields['link_name'];
+            $menuItems[$rs->fields['pk_item']]->position  = $rs->fields['position'];
+            $menuItems[$rs->fields['pk_item']]->type      = $rs->fields['type'];
+            $menuItems[$rs->fields['pk_item']]->pk_father = $rs->fields['pk_father'];
+            $menuItems[$rs->fields['pk_item']]->submenu = array();
+            $rs->MoveNext();
+            $i++;
+        }
+
+        foreach ($menuItems as $id => $element) {
+            if (((int) $element->pk_father > 0)
+                && isset($menuItems[$element->pk_father])
+                && isset($menuItems[$element->pk_father]->submenu)
+            ) {
+                array_push($menuItems[$element->pk_father]->submenu, $element);
+                unset($menuItems[$id]);
+            }
+        }
+
+        return $menuItems;
+    }
+
+    /**
+     * Sets the menu elements to one menu given its id and the list of items
+     *
+     * @param int $id the menu id to set the elements in
+     * @param array $items the list of elements to set
+     *
+     * @return bool if update went ok => true
+     */
+    public function setMenuElements($id, $items = array())
+    {
+        // Check if id and $items are not empty
+        if (empty($id) || empty($items)) {
+            return false;
+        }
+
+        // Delete previous menu elements
+        $this->emptyMenu($id);
+
+        $stmt = "INSERT INTO menu_items ".
+                " (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `position`, `pk_father`) ".
+                " VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        $values = array();
+        $i      = 1;
+        $saved  = true;
+
+        foreach ($items as $item) {
+            // Get an null Id for synchronized categorys
+            if ($item->type == 'syncCategory' || $item->type == 'syncBlogCategory') {
+                $item->id = null;
+            } else {
+                $item->id = filter_var($item->id, FILTER_VALIDATE_INT);
+            }
+            $values = array(
+                $item->id,
+                (int) $id,
+                filter_var($item->title, FILTER_SANITIZE_STRING),
+                filter_var($item->link, FILTER_SANITIZE_STRING),
+                filter_var($item->type, FILTER_SANITIZE_STRING),
+                $i,
+                filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0,
+            );
+            $i++;
+
+            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if ($rs === false) {
+                $saved = $saved && false;
+                \Application::logDatabaseError();
+            } else {
+                $saved = $saved && true;
+            }
+        }
+
+        return $saved;
+    }
+
+    /**
+     * Deletes all items in a menu
+     *
+     * @param  integer $id
+     *
+     * @return boolean true if all went well
+     */
+    public function emptyMenu($id)
+    {
+        $sql = 'DELETE FROM menu_items WHERE pk_menu =?';
+
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+            \Application::logDatabaseError();
+
+            return false;
+        }
+        return true;
     }
 }
