@@ -39,8 +39,6 @@ class AclUserGroupsController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('USER_GROUP_MANAGER');
 
         $this->checkAclOrForward('GROUP_ADMIN');
-
-        $this->privilege = new \Privilege();
     }
 
     /**

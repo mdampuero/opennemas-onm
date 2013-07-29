@@ -40,8 +40,6 @@ class NewsAgencyController extends Controller
         // Check ACL
         $this->checkAclOrForward('IMPORT_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->syncFrom = array(
             '3600'         => sprintf(_('%d hour'), '1'),
             '10800'         => sprintf(_('%d hours'), '3'),

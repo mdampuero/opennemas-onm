@@ -98,7 +98,6 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initI18nSystem()
     {
-
         $timezone = s::get('time_zone');
         if (isset($timezone)) {
             $availableTimezones = \DateTimeZone::listIdentifiers();

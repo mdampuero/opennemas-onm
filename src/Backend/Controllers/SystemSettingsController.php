@@ -37,8 +37,6 @@ class SystemSettingsController extends Controller
     {
         // Check ACL
         $this->checkAclOrForward('ONM_SETTINGS');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

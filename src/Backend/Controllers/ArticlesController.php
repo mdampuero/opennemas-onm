@@ -37,10 +37,7 @@ class ArticlesController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
 
-        // Check if the user can admin video
         $this->checkAclOrForward('ARTICLE_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);

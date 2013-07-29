@@ -38,8 +38,6 @@ class MenusController extends Controller
 
         $this->checkAclOrForward('MENU_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->pages = array(
             'frontpage' => 1,
             'opinion'   => 4,

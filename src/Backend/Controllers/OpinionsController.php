@@ -40,8 +40,6 @@ class OpinionsController extends Controller
 
         $this->checkAclOrForward('OPINION_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData)

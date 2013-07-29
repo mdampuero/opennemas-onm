@@ -27,7 +27,6 @@ class DatabaseErrorsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     // TODO: refactorize this method to make it simpler
