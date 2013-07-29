@@ -302,7 +302,7 @@
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync{/t}" >
                                         <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item" rel="tooltip" data-original-title="{t}Add to menu{/t}"><i class="icon-plus"></i></a>
+                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
@@ -343,10 +343,10 @@
 
                     {if count($elements) > 0}
                     <h3 href="#syncBlogCategories">{t}Sync Blog Categories{/t}</h3>
-                    <div id="syncBlogCategories" style="border:1px solid #CCCCCC;padding: 4px;">
+                    <div id="syncBlogCategories"  class="elementsContainer">
                         {foreach $elements as $config name=colors}
                             {foreach from=$config key=site item=syncBlogCategories}
-                            <strong>{$site}                    </strong>
+                            <strong>{$site}     </strong>
                             <ul id='availableSync' class="elementsContainer">
                                 {foreach $syncBlogCategories as $category}
                                 <li id="sync_category"
@@ -361,7 +361,7 @@
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync category blog{/t}" >
                                         <div class="btn-group actions" style="float:right;">
-                                            <a href="#" class="add-item" rel="tooltip" data-original-title="{t}Add to menu{/t}"><i class="icon-plus"></i></a>
+                                            <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
                                             <a href="#" class="delete-menu-item"><i class="icon-trash"></i></a>
                                         </div>
