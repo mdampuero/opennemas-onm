@@ -141,11 +141,11 @@
                     {is_module_activated name="ARTICLE_MANAGER"}
                     {if empty($category) || $category eq 'home' || $category eq 0}
                     <li>
-                        <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested articles{/t}</a>
+                        <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested{/t}</a>
                     </li>
                     {else}
                     <li>
-                         <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Other articles in this category{/t}</a>
+                         <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Others in category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
