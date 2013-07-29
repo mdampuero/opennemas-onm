@@ -590,7 +590,7 @@ class UserController extends Controller
 
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 15;
+        $itemsPerPage = 12;
 
         $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
 
@@ -678,7 +678,7 @@ class UserController extends Controller
     {
 
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 14;
+        $itemsPerPage = 16;
 
         $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
 
