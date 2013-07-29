@@ -40,8 +40,6 @@ class TrashController extends Controller
 
         $this->checkAclOrForward('TRASH_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->filterContentType = $this->request->query->get('mytype', 'article');
         $this->page              = $this->request->query->getDigits('page', 1);
     }

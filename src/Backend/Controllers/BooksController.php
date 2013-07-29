@@ -39,8 +39,6 @@ class BooksController extends Controller
 
         $this->checkAclOrForward('BOOK_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 

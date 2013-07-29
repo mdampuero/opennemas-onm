@@ -40,8 +40,6 @@ class AlbumsController extends Controller
          // Check if the user can admin album
         $this->checkAclOrForward('ALBUM_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $request = $this->get('request');
 
         $contentType = \ContentManager::getContentTypeIdFromName('album');

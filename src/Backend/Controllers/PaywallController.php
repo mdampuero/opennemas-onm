@@ -35,8 +35,6 @@ class PaywallController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('PAYWALL');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->times = array(
             '24'    => _('1 day'),
             '48'    => sprintf(_('%d days'), '2'),
