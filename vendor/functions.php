@@ -530,3 +530,25 @@ function adoDBErrorHandler($dbms, $fn, $errno, $errmsg, $p1, $p2, &$thisConnecti
     $logger = getService('logger');
     $logger->error('[Database Error] '.$s);
 }
+
+/**
+ * Sets the PHP environment given an environmen
+ * name 'production', 'development'
+ *
+ * @param string $environment The current environment
+ *
+ * @return void
+ **/
+function initEnvironment($environment = 'production')
+{
+    if (ENVIRONMENT == 'development') {
+        ini_set('expose_php', 'On');
+        ini_set('error_reporting', E_ALL | E_STRICT);
+        ini_set('display_errors', 'On');
+        ini_set('display_startup_errors', 'On');
+        ini_set('html_errors', 'On');
+    } else {
+        ini_set('expose_php', 'off');
+    }
+    ini_set('apc.slam_defense', '0');
+}
