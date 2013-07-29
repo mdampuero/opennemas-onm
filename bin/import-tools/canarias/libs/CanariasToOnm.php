@@ -19,9 +19,6 @@ class CanariasToOnm
 
     public function __construct($configOldDB = array(), $configNewDB = array())
     {
-
-        // Application::initInternalConstants();
-
         self::initDatabaseConnections($configOldDB, $configNewDB);
         $this->helper = new CanariasHelper();
 
@@ -29,10 +26,8 @@ class CanariasToOnm
 
     public static function initDatabaseConnections($configOriginDB = array(), $configNewDB = array())
     {
-
         echo "Initialicing source database connection...".PHP_EOL;
-        if (
-            isset($configOriginDB['host'])
+        if (isset($configOriginDB['host'])
             && isset($configOriginDB['database'])
             && isset($configOriginDB['user'])
             && isset($configOriginDB['password'])
@@ -58,7 +53,6 @@ class CanariasToOnm
         $GLOBALS['application'] = new Application();
 
         Application::initDatabase();
-        Application::initLogger();
     }
 
     /**

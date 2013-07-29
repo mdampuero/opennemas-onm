@@ -24,13 +24,6 @@ class Application
     public $conn                = null;
 
     /**
-     * Static access to the logger instance
-     *
-     * @var Monolog
-     **/
-    public static $loggerStatic = null;
-
-    /**
      * Registered events
      *
      * @var array
@@ -54,15 +47,10 @@ class Application
         self::initEnvironment(ENVIRONMENT);
 
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==null) {
-            // Setting up static Constants
-
             $GLOBALS['application'] = new Application();
 
             // Setting up DataBase connection
             self::initDatabase();
-
-            // Setting up Logger
-            self::initLogger();
         }
 
         return $GLOBALS['application'];
@@ -78,22 +66,8 @@ class Application
         // Database
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
-
         $GLOBALS['application']->conn->bulkBind = true;
-        // $GLOBALS['application']->conn->LogSQL();
     }
-
-    /**
-     * Initializes the logger instance
-     *
-     * @return
-     **/
-    public static function initLogger()
-    {
-        self::$loggerStatic = new \Onm\Log('normal');
-        $GLOBALS['application']->logger = self::$loggerStatic;
-    }
-
 
     /**
      * Sets the PHP environment given an environmen
@@ -115,16 +89,6 @@ class Application
             ini_set('expose_php', 'off');
         }
         ini_set('apc.slam_defense', '0');
-    }
-
-    /**
-    * This function retrieves the logger instance that is in the Zend registry
-    *
-    * @return An instance of Onm logger
-    */
-    public static function getLogger()
-    {
-        return self::$loggerStatic;
     }
 
 
@@ -173,27 +137,5 @@ class Application
                 }
             }
         }
-    }
-
-    // TODO: move to a separated file called functions.php
-    /**
-     * Registers in the log one event in the content
-     *
-     * @param string $action the action to log
-     * @param string $content the content of the action to log
-     *
-     * @return void
-     **/
-    public static function logContentEvent($action = null, $content = null)
-    {
-        $logger = Application::getLogger();
-
-        $msg = 'User '.$_SESSION['username'].'(ID:'.$_SESSION['userid']
-            .') has executed the action '.$action;
-        if (!empty($content)) {
-            $msg.=' at '.get_class($content).' (ID:'.$content->id.')';
-        }
-
-        $logger->notice($msg);
     }
 }
