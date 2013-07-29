@@ -587,7 +587,8 @@ class User
         if (!$managerDb) {
             $rs = $GLOBALS['application']->conn->Execute($sql, array(strval($username), strval($username)));
         } else {
-            $rs =  \Onm\Instance\InstanceManager::getInstance()->getConnection()->Execute($sql);
+            $conn = \Onm\Instance\InstanceManager::getInstance()->getConnection();
+            $rs =  $conn->Execute($sql, array(strval($username), strval($username)));
         }
 
         if (!$rs) {
