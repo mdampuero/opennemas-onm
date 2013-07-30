@@ -165,8 +165,11 @@ class SubscriptionsController extends Controller
                             try {
                                 $mailer = $this->get('mailer');
                                 $mailer->send($text);
-
-                                $message = _("You have been subscribed to our newsletter.");
+                                if ($data['subscription'] == 'alta') {
+                                    $message = _("You have been subscribed to our newsletter.");
+                                } else {
+                                    $message = _("You have been unsubscribed from our newsletter.");
+                                }
                                 $class   = 'success';
 
                             } catch (\Swift_SwiftException $e) {
