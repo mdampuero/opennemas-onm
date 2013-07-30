@@ -32,8 +32,7 @@ class NewsletterController extends Controller
      *
      * @return void
      **/
-    public function init()
-    {
+    public function init() {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
 
@@ -60,14 +59,32 @@ class NewsletterController extends Controller
             return $configuredRedirection;
         }
 
+        $itemsPerPage = s::get('items_per_page');
+        $page         = $request->query->getDigits('page', 1);
+
         $nm = $this->get('newsletter_manager');
-        list($count, $newsletters) = $nm->find();
+        list($count, $newsletters) = $nm->find('1 = 1', 'created DESC', $page, $itemsPerPage);
+
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+            array(
+                'page'  => $page,
+                'items' => $itemsPerPage,
+                'total' => $count,
+                'url'   => $this->generateUrl(
+                    'admin_newsletters',
+                    array(
+                        'page' => $page,
+                    )
+                )
+            )
+        );
 
         return $this->render(
             'newsletter/list.tpl',
             array(
                 'newsletters' => $newsletters,
                 'count'       => $count,
+                'pagination'  => $pagination,
             )
         );
     }
@@ -279,6 +296,7 @@ class NewsletterController extends Controller
                 'accounts'   => $accounts,
                 'mailList'   => $mailList,
                 'recipients' => $recipients,
+                'subscriptionType' => \Onm\Settings::get('newsletter_subscriptionType'),
             )
         );
     }
@@ -305,13 +323,21 @@ class NewsletterController extends Controller
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $configurations = \Onm\Settings::get('newsletter_maillist');
-        if (array_key_exists('sender', $configurations)
-            && !empty($configurations['sender'])
-        ) {
-            $mailFrom = $configurations['sender'];
+        $newsletter_sender = \Onm\Settings::get('newsletter_sender');
+
+        if (!empty($newsletter_sender)) {
+            $mailFrom = $newsletter_sender;
         } else {
-            $mailFrom = MAIL_FROM;
+
+            m::add(
+                _(
+                    'Your newsletter configuration is not complete. Please'.
+                    ' contact with Opennemas administrator. newsletter_sender fault'
+                ),
+                m::ERROR
+            );
+
+            return $this->redirect($this->generateUrl('admin_newsletters'));
         }
 
         $params = array(
@@ -321,21 +347,36 @@ class NewsletterController extends Controller
         );
 
         $sentResult = array();
+        $totalSends = 0;
         foreach ($recipients as $mailbox) {
             // Replace name destination
             $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
-
+       //     $this->checkMailing($totalSends);
             try {
                 // Send the mail
                 $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
                 $sentResult []= array($mailbox, $properlySent);
+                $totalSends++;
             } catch (\Exception $e) {
                 $sentResult []= array($mailbox, false);
             }
 
         }
 
-        $newsletter->update(array('sent' => 1));
+        if (empty($newsletter->sent)) {
+            $newsletter->update(array('sent' => $totalSends));
+        } else {
+            //duplicated newsletter for count month mail send
+
+            $newsletter->create(
+                array(
+                    'title'   => $newsletter->title,
+                    'data'    => $newsletter->data,
+                    'html'    => $newsletter->html,
+                    'sent'    => $totalSends,
+                )
+            );
+        }
 
         return $this->render(
             'newsletter/steps/4-send.tpl',
@@ -386,8 +427,6 @@ class NewsletterController extends Controller
             $configurations = array(
                 'newsletter_maillist'         => $request->request->get('newsletter_maillist'),
                 'newsletter_subscriptionType' => $request->request->get('newsletter_subscriptionType'),
-                'newsletter_enable'           => $request->request->get('newsletter_enable'),
-                'newsletter_subscription'     => 1,
             );
 
             foreach ($configurations as $key => $value) {
@@ -402,8 +441,9 @@ class NewsletterController extends Controller
                 array(
                     'newsletter_maillist',
                     'newsletter_subscriptionType',
-                    'newsletter_enable',
+                    'newsletter_sender',
                     'recaptcha',
+                    'max_mailing'
                 )
             );
 
@@ -432,6 +472,13 @@ class NewsletterController extends Controller
      **/
     public function checkModuleActivated()
     {
+        if (is_null(s::get('newsletter_sender'))
+            || !(s::get('newsletter_sender') )
+        ) {
+            m::add(
+                _('Please contact with Opennemas administrator to start to use your Newsletter module')
+            );
+        }
         if (is_null(s::get('newsletter_maillist'))
             || !(s::get('newsletter_subscriptionType') )
         ) {
@@ -443,21 +490,45 @@ class NewsletterController extends Controller
         } else {
             $configurations = s::get('newsletter_maillist');
 
-        //     foreach ($configurations as $key => $value) {
-        //         if ($key != 'receiver' && empty($value)) {
-        //             m::add(
-        //                 _(
-        //                     'Your newsletter configuration is not complete. Please'.
-        //                     ' go to settings and complete the form.'
-        //                 ),
-        //                 m::ERROR
-        //             );
+            foreach ($configurations as $key => $value) {
+                if (empty($value)) {
+                    m::add(
+                        _(
+                            'Your newsletter configuration is not complete. Please'.
+                            ' go to settings and complete the form.'
+                        ),
+                        m::ERROR
+                    );
 
-        //             return $this->redirect($this->generateUrl('admin_newsletter_config'));
-        //         }
-        //     }
+                    return $this->redirect($this->generateUrl('admin_newsletter_config'));
+                }
+            }
         }
 
         return false;
+    }
+
+
+    public function checkMailing($totalSends=0)
+    {
+        $today = new \DateTime();
+        $createdInstance = s::get('site_created');
+        $initDate = $createdInstance->format("d-m-Y") - $today->format("d-m-Y");
+        $where =  " updated >= $initDate AND updated <= $today and send > 0";
+        list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
+        $total = $totalSends;
+        if ($nmCount > 0) {
+            foreach ($newsletters as $newsletter) {
+                $total += $newsletter->sent;
+            }
+
+            if ($total >= s::get('max_mailing')) {
+                m::add(_('You have send max mailing allowed'));
+
+                return false;
+            }
+        }
+
+        return true;
     }
 }
