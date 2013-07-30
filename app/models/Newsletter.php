@@ -78,10 +78,14 @@ class Newsletter
     {
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`, `updated`)'
-             . ' VALUES (?,?,?,?,?)';
+        if (!array_key_exists('sent', $data)) {
+            $data['sent'] = 0;
+        }
 
-        $values = array($data['title'], $data['data'], $data['html'], $data['created'], $data['created']);
+        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`, `updated`, `sent`)'
+             . ' VALUES (?,?,?,?,?,?)';
+
+        $values = array($data['title'], $data['data'], $data['html'], $data['created'], $data['created'], $data['sent']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             \Application::logDatabaseError();
