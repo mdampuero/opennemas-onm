@@ -36,7 +36,10 @@ class ContentSubscriber implements EventSubscriberInterface
                 array('deleteEntityRepositoryCache', 10),
                 array('deleteSmartyCache', 5),
             ),
-            // 'store.order'     => array('onStoreOrder', 0),
+            // 'content.create' => array(),
+            'content.set_positions' => array(
+                array('refreshFrontpage', 10),
+            ),
         );
     }
 
@@ -99,5 +102,20 @@ class ContentSubscriber implements EventSubscriberInterface
         }
 
         return false;
+    }
+
+    public function refreshFrontpage(Event $event)
+    {
+        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+
+        $content = $event->getArgument('content');
+
+        if (isset($_REQUEST['category'])) {
+            $ccm = \ContentCategoryManager::get_instance();
+            $categoryName = $ccm->get_name($_REQUEST['category']);
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS');
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
+
+        }
     }
 }

@@ -125,9 +125,6 @@ class Attachment extends Content
      */
     public function create($data)
     {
-        //Si es portada renovar cache
-        $GLOBALS['application']->dispatch('onBeforeCreateAttach', $this);
-
         $dir_date = date("/Y/m/d/");
         //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
 
@@ -169,14 +166,6 @@ class Attachment extends Content
                 // Remove existent thumbnail for PDF
                 unlink($media_path . '/' . $imageName);
             }
-        }
-
-        if ($data['category']==8) {
-            $GLOBALS['application']->dispatch(
-                'onAfterCreateAttach',
-                $this,
-                array('category' => $data['category'])
-            );
         }
 
         return true;
@@ -311,20 +300,6 @@ class Attachment extends Content
 
         return true;
 
-    }
-
-    /**
-     * Cleans the frontpage only if the category is equals to 8
-     *
-     * @param int $category the category id
-     *
-     * @return array a list of Attachemnt information
-     **/
-    public function refreshHome($category = '')
-    {
-        if ($category == 8) {
-            parent::refreshHome();
-        }
     }
 
     /**

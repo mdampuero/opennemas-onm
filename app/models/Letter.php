@@ -172,8 +172,6 @@ class Letter extends Content
             return false;
         }
 
-        $GLOBALS['application']->dispatch('onAfterUpdateLetter', $this);
-
         return true;
     }
 

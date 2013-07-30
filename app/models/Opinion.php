@@ -313,8 +313,6 @@ class Opinion extends Content
             parent::clearProperty('img2_footer');
         }
 
-        $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
-
         return true;
     }
 
@@ -329,9 +327,9 @@ class Opinion extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM opinions WHERE pk_opinion ='.($id);
+        $sql = 'DELETE FROM opinions WHERE pk_opinion =?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             return false;
         }
 

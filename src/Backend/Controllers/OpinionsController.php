@@ -640,11 +640,6 @@ class OpinionsController extends Controller
 
             $opinion = new \Opinion();
             $msg = $opinion->set_position($positionValues, $_SESSION['userid']);
-
-            // FIXME: buscar otra forma de hacerlo
-            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('home|0');
         }
 
         if (!empty($msg) && $msg == true) {

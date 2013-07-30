@@ -374,9 +374,6 @@ class Content
      **/
     public function create($data)
     {
-        // Fire create event
-        $GLOBALS['application']->dispatch('onBeforeCreate', $this);
-
         $sql = "INSERT INTO contents
             (`fk_content_type`, `title`, `description`,
             `metadata`, `starttime`, `endtime`,
@@ -471,8 +468,7 @@ class Content
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
 
-        // Fire event
-        $GLOBALS['application']->dispatch('onAfterCreate', $this);
+        dispatchEventWithParams('content.create', array('content' => $this));
 
         return true;
     }
@@ -486,8 +482,6 @@ class Content
      **/
     public function read($id)
     {
-        // Fire event onBeforeXxx
-        $GLOBALS['application']->dispatch('onBeforeRead', $this);
         if (empty($id)) {
             return false;
         }
@@ -507,8 +501,6 @@ class Content
         if (!empty($this->fk_author)) {
             $this->author = new \User($this->fk_author);
         }
-        // Fire event onAfterXxx
-        $GLOBALS['application']->dispatch('onAfterRead', $this);
 
         return $this;
     }
@@ -522,8 +514,6 @@ class Content
      **/
     public function update($data)
     {
-        $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
-
         $sql = "UPDATE contents
                 SET `title`=?, `description`=?,
                     `metadata`=?, `starttime`=?, `endtime`=?,
@@ -631,7 +621,7 @@ class Content
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
 
-        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -789,8 +779,6 @@ class Content
      **/
     public function set_available($status, $lastEditor)
     {
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
@@ -826,12 +814,12 @@ class Content
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
 
+        dispatchEventWithParams('content.update', array('content' => $this));
+
         // Set status for it's updated to next event
         if (!empty($this)) {
             $this->available = $status;
         }
-
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
 
         return true;
     }
@@ -905,8 +893,6 @@ class Content
             $this->starttime = date("Y-m-d H:i:s");
         }
 
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-
         $sql = 'UPDATE contents SET `available`=1, `content_status`=1, '
                 .'`fk_user_last_editor`=?, `starttime`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
@@ -931,7 +917,7 @@ class Content
         $this->available      = 1;
         $this->content_status = 1;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -949,8 +935,6 @@ class Content
         if ($this->id == null) {
             return false;
         }
-
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
         $sql = 'UPDATE contents SET `available`=0, `content_status` = 0, `fk_user_last_editor`=?, '
              . '`changed`=? WHERE `pk_content`=?';
@@ -972,7 +956,7 @@ class Content
         // Set status for it's updated state to next event
         $this->available = 0;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -995,7 +979,6 @@ class Content
 
         $sql = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         $values = array(
             $_SESSION['userid'],
@@ -1014,7 +997,7 @@ class Content
         // Set status for it's updated to next event
         $this->in_litter = 2;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1042,6 +1025,7 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1056,8 +1040,6 @@ class Content
         if ($this->id == null) {
             return false;
         }
-
-        $GLOBALS['application']->dispatch('onBeforeArchived', $this);
 
         $sql = 'UPDATE contents SET `content_status`=1, `frontpage` =0, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
@@ -1079,7 +1061,7 @@ class Content
         // Set status for it's updated to next event
         $this->in_litter = 2;
 
-        $GLOBALS['application']->dispatch('onAfterArhived', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1095,8 +1077,6 @@ class Content
         if (($this->id == null)) {
             return false;
         }
-
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
         $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?';
@@ -1114,7 +1094,7 @@ class Content
         // Set status for it's updated to next event
         $this->in_home = 2;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1490,6 +1470,7 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -1502,8 +1483,6 @@ class Content
      **/
     public function set_inhome($status, $lastEditor = null)
     {
-        $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
-
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
@@ -1524,10 +1503,10 @@ class Content
             }
         }
 
-        $GLOBALS['application']->dispatch('onAfterSetInhome', $this);
-
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
 
@@ -1660,37 +1639,6 @@ class Content
         }
     }
 
-    /**
-     * Event handler on update a content
-     **/
-    public function onUpdateClearCacheContent()
-    {
-        $eventDispatcher = getService('event_dispatcher');
-
-        $event = new \Symfony\Component\EventDispatcher\GenericEvent();
-        $event->setArgument('content', $this);
-
-        $eventDispatcher->dispatch('content.update', $event);
-    }
-
-    // TODO: move to a Cache handler
-    /**
-     * Regenerates the homepage cache.
-     **/
-    public function refreshFrontpage()
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        if (isset($_REQUEST['category'])) {
-            $ccm = ContentCategoryManager::get_instance();
-            $categoryName = $ccm->get_name($_REQUEST['category']);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
-
-            $tplManager->fetch(SITE_URL . '/seccion/' . $categoryName);
-        }
-    }
-
     // TODO: move to a Cache handler
     /**
      * Regenerate cache files for all categories homepages.
@@ -1715,27 +1663,6 @@ class Content
 
         return $output;
 
-    }
-
-    // TODO: move to a Cache handler
-    /**
-     * Deletes the homepage cache.
-     *
-     * @param array $params list of parameters
-     *
-     * @param array $params parameters for changing the behaviour of the func.
-     **/
-    public function refreshHome($params = '')
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        // Delete all the available Homepage cache files
-        $tplManager->delete('home|RSS');
-        $tplManager->delete('last|RSS');
-        $tplManager->delete('home|0');
-
-        // Generate the cache file again
-        $tplManager->fetch(SITE_URL);
     }
 
     /**
@@ -1816,8 +1743,6 @@ class Content
      */
     public function set_position($position, $lastEditor)
     {
-        $GLOBALS['application']->dispatch('onBeforePosition', $this);
-
         if ($this->id == null
             && !is_array($position)
         ) {
@@ -1842,7 +1767,7 @@ class Content
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
 
-        $GLOBALS['application']->dispatch('onAfterPosition', $this);
+        dispatchEventWithParams('content.set_positions', array('content' => $this));
 
         return true;
     }
@@ -1867,6 +1792,8 @@ class Content
         if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }

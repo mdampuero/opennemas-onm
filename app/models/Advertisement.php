@@ -414,14 +414,10 @@ class Advertisement extends Content
             }
         }
 
-        // Needed for onAfterCreateAdvertisement callback
         $this->pk_advertisement      = $this->id;
         $this->available             = $data['available'];
         $this->type_advertisement    = $data['type_advertisement'];
         $this->fk_content_categories = $data['category'];
-
-        // Fire event
-        $GLOBALS['application']->dispatch('onAfterCreateAdvertisement', $this);
 
         return $this;
     }
@@ -525,9 +521,6 @@ class Advertisement extends Content
         $this->content_status        = $data['content_status'];
         $this->type_advertisement    = $data['type_advertisement'];
         $this->fk_content_categories = $data['category'];
-
-        // Fire event
-        $GLOBALS['application']->dispatch('onAfterUpdateAdvertisement', $this);
 
         return $this;
     }

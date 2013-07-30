@@ -188,12 +188,9 @@ class Kiosko extends Content
             $data['content_status'] = $data['available'];
         }
 
-        $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
-
         parent::update($data);
 
-        $sql  = "UPDATE kioskos SET `date`=?, `price`=?"
-                ." WHERE pk_kiosko=?";
+        $sql  = "UPDATE kioskos SET `date`=?, `price`=? WHERE pk_kiosko=?";
 
         $values = array($data['date'], $data['price'], $data['id']);
 
@@ -202,7 +199,6 @@ class Kiosko extends Content
         }
 
         $this->category_name = $this->loadCategoryName($this->id);
-        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
 
         return true;
     }

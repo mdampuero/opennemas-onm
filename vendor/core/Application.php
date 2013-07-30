@@ -24,13 +24,6 @@ class Application
     public $conn                = null;
 
     /**
-     * Registered events
-     *
-     * @var array
-     **/
-    public $events              = array();
-
-    /**
      * Current application language
      *
      * @var string
@@ -64,53 +57,5 @@ class Application
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
         $GLOBALS['application']->conn->bulkBind = true;
-    }
-
-
-    /**
-     * Registers a new event handler for a given event name
-     *
-     * @param string $event the event name
-     * @param string $callback the function to call when firing this event
-     * @param string $args the params to pass to the function
-     *
-     * @return void
-     **/
-    public function register($event, $callback, $args = array())
-    {
-        $this->events[$event][] = array($callback, $args);
-    }
-
-    /**
-     * Fires an event given the event name
-     *
-     * @param string $eventName the event to fire
-     * @param object|string $instance the class to call
-     * @param array $args the list of arguments to pass to the callback
-     *
-     * @return
-     **/
-    public function dispatch($eventName, $instance, $args = array())
-    {
-        if (isset($this->events[$eventName])) {
-            $events = $this->events[$eventName];
-
-            if (is_array($events)) {
-                foreach ($events as $event) {
-                    $callback = $event[0];
-                    $args     = array_merge($args, $event[1]);
-
-                    if (is_object($instance)) {
-                        if (method_exists($instance, $callback)) {
-                            // Call to the instance
-                            call_user_func_array(array(&$instance, $callback), $args);
-                        }
-                    } else {
-                        // Static call
-                        call_user_func_array(array($instance, $callback), $args);
-                    }
-                }
-            }
-        }
     }
 }

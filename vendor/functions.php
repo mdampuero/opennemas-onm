@@ -552,3 +552,21 @@ function initEnvironment($environment = 'production')
     }
     ini_set('apc.slam_defense', '0');
 }
+
+/**
+ * undocumented function
+ *
+ * @return void
+ * @author
+ **/
+function dispatchEventWithParams($eventName, $params = array())
+{
+    $eventDispatcher = getService('event_dispatcher');
+
+    $event = new \Symfony\Component\EventDispatcher\GenericEvent();
+    foreach ($params as $paramName => $paramValue) {
+        $event->setArgument($paramName, $paramValue);
+    }
+
+    $eventDispatcher->dispatch('content.update', $event);
+}

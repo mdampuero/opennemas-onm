@@ -158,25 +158,6 @@ class Bootstrap extends ModuleBootstrap
     }
 
     /**
-     * Init event system hooks
-     *
-     * @return void
-     **/
-    public function initEventSystem()
-    {
-        $GLOBALS['application']->register('onAfterUpdate', 'onUpdateClearCacheContent');
-        $GLOBALS['application']->register('onAfterSetFrontpage', 'refreshFrontpage');
-        $GLOBALS['application']->register('onAfterPosition', 'refreshFrontpage');
-        $GLOBALS['application']->register('onAfterSetInhome', 'refreshHome');
-        $GLOBALS['application']->register('onAfterHomePosition', 'refreshHome');
-        $GLOBALS['application']->register('onAfterAvailable', 'onUpdateClearCacheContent');
-        $GLOBALS['application']->register('onAfterSetFrontpage', 'onAfterSetFrontpage');
-        $GLOBALS['application']->register('onAfterSetInhome', 'refreshHome');
-        $GLOBALS['application']->register('onAfterPosition', 'refreshFrontpage');
-        $GLOBALS['application']->register('onAfterCreateAttach', 'refreshHome');
-    }
-
-    /**
      * Initializes the templating system
      *
      * @return void

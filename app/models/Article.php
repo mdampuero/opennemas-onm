@@ -346,7 +346,6 @@ class Article extends Content
             ? ''
             : intval($data['with_comment']);
 
-        $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
         parent::update($data);
 
         $sql = "UPDATE articles "
