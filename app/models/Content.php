@@ -247,7 +247,7 @@ class Content
     /**
      * Initializes the content for a given id.
      *
-     * @param string $id the content id to initilize.
+     * @param string $id the content id to initialize.
      **/
     public function __construct($id = null)
     {
@@ -259,7 +259,7 @@ class Content
     }
 
     /**
-     * Magic function to get uninitilized object properties.
+     * Magic function to get uninitialized object properties.
      *
      * @param string $name the name of the property to get.
      *
@@ -1269,7 +1269,6 @@ class Content
      **/
     public function isInTime($now = null)
     {
-
         if ($this->isScheduled($now)) {
             if ($this->isDued($now) || $this->isPostponed($now)) {
                 return false;
@@ -1290,7 +1289,6 @@ class Content
      **/
     public static function isInTime2($starttime = null, $endtime = null, $time = null)
     {
-
         $start = strtotime($starttime);
         $end   = strtotime($endtime);
 
@@ -1426,6 +1424,7 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -1505,7 +1504,6 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
-
         dispatchEventWithParams('content.update', array('content' => $this));
     }
 
@@ -1657,7 +1655,7 @@ class Content
         foreach ($availableCategories as $category) {
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $message = _("Homepage for category %s cleaned sucessfully.");
+            $message = _("Homepage for category %s cleaned successfully.");
             $output .= sprintf($message, $category->name);
         }
 

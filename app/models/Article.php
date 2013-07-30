@@ -426,7 +426,6 @@ class Article extends Content
         }
     }
 
-
     /**
      * Renders the article given a set of parameters
      *
