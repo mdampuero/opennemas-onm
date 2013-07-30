@@ -92,12 +92,13 @@
                             <a href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Preview{/t}" class="btn">
                                 <i class="icon-eye-open"></i>
                             </a>
-
+                            {if $newsletter->sent lt 1}
                             <a class="del btn btn-danger"
                                data-id="{$newsletter->id}"
                                href="{url name=admin_newsletter_delete id=$newsletter->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
+                            {/if}
                         </div>
                     </td>
                 </tr>
@@ -113,7 +114,7 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pagination">
-                            {$pagination->links|default:""}
+                            {$pagination|default:""}
                         </div>
                     </td>
                 </tr>

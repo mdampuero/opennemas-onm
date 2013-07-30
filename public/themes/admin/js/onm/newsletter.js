@@ -11,9 +11,10 @@ $('#newsletter-pick-elements-form').on('submit', function(e, ui) {
 });
 
 $("#newsletter-pick-elements-form").on('click', '#next-button', function(e, ui) {
-    if (has_contents) {
+    total = $('#items-recipients li').length;
+    if (total<0) {
         e.preventDefault();
-        $("#modal-newsletter-accept").modal('show');
+        $(".message").show();
     } else {
         $("#modal-newsletter-accept").modal('hide');
         $('#newsletter-pick-elements-form').submit();
@@ -330,14 +331,23 @@ $('#parse-and-add').on('click', function (e, ui) {
                 final_list.push(item);
             }
         });
+        total = $('#items-recipients li').length;
         $.each(final_list, function(index, item) {
-            item = $('<li></li>', {
-                'data-email' : item,
-                'data-name' : item,
-                'class' : 'account'
-            }).html(item).append('<i class="icon icon-trash"></i>');
-            $('#items-recipients').append(item);
+            total = total +1;
+            if (total <= 10) {
+                item = $('<li></li>', {
+                    'data-email' : item,
+                    'data-name' : item,
+                    'class' : 'account'
+                }).html(item).append('<i class="icon icon-trash"></i>');
+                $('#items-recipients').append(item);
+            }
         });
+        if(total >= 10) {
+           $('.message').html("Only can send 10 custom mails");
+           $('.message').show();
+
+        }
     }
 });
 
