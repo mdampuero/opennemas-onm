@@ -137,6 +137,10 @@ class Frontpages
             $imageList = array();
         }
 
+        foreach ($imageList as &$img) {
+            $img->media_url = MEDIA_IMG_PATH_WEB;
+        }
+
         // Overloading information for contents
         foreach ($articles as &$content) {
 
