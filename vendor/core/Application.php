@@ -54,6 +54,8 @@ class Application
      **/
     public static function initDatabase()
     {
+        // $dbConn = getService('db_conn');
+
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
         $GLOBALS['application']->conn->bulkBind = true;

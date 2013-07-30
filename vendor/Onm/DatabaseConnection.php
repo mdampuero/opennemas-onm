@@ -25,14 +25,14 @@ class DatabaseConnection
      *
      * @var AdodbConnection
      **/
-    public $connection = null;
+    public $masterConnection = null;
 
     /**
      * The read-only database connection
      *
      * @var AdodbConnection
      **/
-    public $readOnlyConnection = null;
+    public $readOnlyConnections = null;
 
     /**
      * Whether to use replication
@@ -48,7 +48,14 @@ class DatabaseConnection
      *
      * @var array
      **/
-    private $connnectionParams = null;
+    private $connectionParams = null;
+
+    /**
+     * Stores the query error
+     *
+     * @var string
+     **/
+    public  $error = null;
 
     /**
      * Starts the database connection
@@ -59,39 +66,89 @@ class DatabaseConnection
      **/
     public function connect($params)
     {
-        $this->connnectionParams = $params;
-        $this->useReplication = false;
+        $this->connectionParams = $params;
 
-        if (array_key_exists('database_replication', $params)
-            && $params['database_replication'] == true
-        ) {
-            $this->useReplication = true;
-        };
+        $this->defaultConnection = $params['dbal']['default_connection'];
+        $this->connectionParams  = $params['dbal']['connections'][$this->defaultConnection];
+        $this->useReplication    = array_key_exists('slaves', $this->connectionParams);
 
-        $this->connnectionParams = $params['connections'];
+        list($this->masterConnection, $this->readOnlyConnections) =
+            $this->prepareMasterSlaveConnection($this->connectionParams);
 
-        foreach ($this->connnectionParams as $connParams) {
+        return $this;
+    }
 
-            $connection = \ADONewConnection($connParams['database_driver']);
-            $connection->Connect(
-                $connParams['database_host'],
-                $connParams['database_user'],
-                $connParams['database_password'],
-                $connParams['database_name'],
-                $connParams['database_driver']
-            );
-            $connection->bulkBind = true;
+    /**
+     * Builds a AdoDBConnection given a set of params
+     *
+     * @return void
+     **/
+    public function prepareMasterSlaveConnection($params)
+    {
+        if (!array_key_exists('charset', $params)) {
+            $params['charset'] = 'UTF8';
+        }
 
-            if ($this->useReplication
-                && array_key_exists('slave', $connParams)
-                && $connParams['slave'] == true) {
-                $this->readOnlyConnection []= $connection;
-            } else {
-                $this->connection []= $connection;
+        $connection = $this->initConnection($params);
+        $readOnlyConnections = array();
+
+        if (array_key_exists('slaves', $params)) {
+            $slaves = $params['slaves'];
+            unset($params['slaves']);
+
+            foreach ($slaves as $slave) {
+                $slaveParams = array_filter($slave, function($item) {
+                    return !is_null($item);
+                });
+                $slaveParams = array_merge($params, $slaveParams);
+
+                $slaveConnection = $this->initConnection($slaveParams);
+                if (is_object($slaveConnection)) {
+                    $readOnlyConnections []= $slaveConnection;
+                }
             }
         }
 
-        return $this;
+
+        return array($connection, $readOnlyConnections);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function initConnection($params)
+    {
+        if ($params['charset'] == 'UTF-8') {
+            $params['charset'] = 'UTF8';
+        }
+
+        $connection = \ADONewConnection($params['driver']);
+
+        // Not valid/supported driver
+        if (!is_object($connection)) {
+            return null;
+        }
+        $connection->Connect(
+            $params['host'],
+            $params['user'],
+            $params['password'],
+            $params['dbname']
+        );
+
+        // Failed connection
+        if (!$connection->_connectionID) {
+            return null;
+        }
+
+        $connection->SetFetchMode(ADODB_FETCH_ASSOC);
+        $connection->bulkBind = true;
+
+        $connection->Execute("SET names '{$params['charset']}'");
+
+        return $connection;
     }
 
     /**
@@ -107,10 +164,15 @@ class DatabaseConnection
     {
         $isReadOnlyQuery = stripos($params[0], 'SELECT') !== false;
 
-        if ($this->useReplication && $isReadOnlyQuery) {
-            return $this->readOnlyConnection[0];
+        if ($this->useReplication
+            && count($this->readOnlyConnections) > 0
+            && $isReadOnlyQuery
+        ) {
+            $index = rand(0, count($this->readOnlyConnections) -1);
+
+            return $this->readOnlyConnections[$index];
         } else {
-            return $this->connection[0];
+            return $this->masterConnection;
         }
     }
 
@@ -125,10 +187,12 @@ class DatabaseConnection
     public function __call($method, $params)
     {
         $connection = $this->getConnection($method, $params);
-        // $rs = $connection->Execute('SELECT * FROM articles');
+
         $rs = call_user_func_array(array($connection, $method), $params);
 
-        $this->error = $connection->ErrorMsg();
+        if ($rs === false) {
+            $this->error = $connection->ErrorMsg();
+        }
 
         return $rs;
     }
