@@ -231,6 +231,9 @@
     MediaPicker.prototype = {
         defaults: {
             initially_shown: false,
+            uploader_el: '#upload',
+            browser_el: '#gallery',
+            media_element_el: '#media-element-show',
         },
 
         init: function() {
@@ -266,17 +269,17 @@
         },
 
         initUploader: function() {
-            element       = this.$elem.find('#upload');
+            element       = this.$elem.find(this.config.uploader_el);
             this.uploader      = new Uploader(element, this.config).init();
         },
 
         initBrowser: function() {
-            element      = this.$elem.find('#gallery');
+            element      = this.$elem.find(this.config.browser_el);
             this.browser      = new Browser(element, this.config).init();
         },
 
         initShowElement: function() {
-            element        = this.$elem.find('#media-element-show');
+            element        = this.$elem.find(this.config.media_element_el);
             this.elementUI      = new ElementUI(element, this.config).init();
         }
     }

@@ -98,6 +98,16 @@
 
 
 {block name="footer-js" append}
+<!-- The Templates and Load Image plugins are included for the FileUpload user interface -->
+<script src="{$params.JS_DIR}/jquery/tmpl.min.js"></script>
+<!-- The Templates and Load Image plugins are included for the FileUpload user interface -->
+<script src="{$params.JS_DIR}/jquery/load-image.min.js"></script>
+<script src="{$params.JS_DIR}/jquery/bootstrap-image-gallery.min.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="{$params.JS_DIR}/jquery/jquery.iframe-transport.js" defer=defer></script>
+{script_tag src="/jquery/jquery.fileupload.js" common=1 defer=defer}
+{script_tag src="/jquery/jquery.fileupload-ui.js" common=1 defer=defer}
+
 {script_tag src="/libs/handlebars.js" common=1}
 {script_tag src="/libs/jquery.html5uploader.min.js" common=1}
 {script_tag src="/onm/media-uploader.js"}
