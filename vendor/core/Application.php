@@ -55,6 +55,12 @@ class Application
     public static function initDatabase()
     {
         // $dbConn = getService('db_conn');
+        // $GLOBALS['application']->conn = $dbConn;
+
+        // $rs = $dbConn->Execute('SELECT * FROM instances LIMIT 1');
+        // // $rs = $dbConn->qstr('test;\'');
+        // var_dump($rs);die();
+
 
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);

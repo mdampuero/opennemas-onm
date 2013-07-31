@@ -14,13 +14,11 @@ services:
 
     db_conn:
         class: Onm\DatabaseConnection
-        calls:
-            - [ connect, [ "%database%"] ]
+        arguments: [ %database% ]
 
     db_conn_manager:
         class: Onm\DatabaseConnection
-        calls:
-            - [ connect, [ %database%] ]
+        arguments: [  %database% ]
 
     session_storage:
         class: %session_storage_class%
