@@ -13,8 +13,8 @@ $('#newsletter-pick-elements-form').on('submit', function(e, ui) {
 $("#newsletter-pick-elements-form").on('click', '#next-button', function(e, ui) {
     total = $('#items-recipients li').length;
     if (total<0) {
+        $(".messages").html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>Choose email recipients</div>');
         e.preventDefault();
-        $(".message").show();
     } else {
         $("#modal-newsletter-accept").modal('hide');
         $('#newsletter-pick-elements-form').submit();
@@ -344,8 +344,7 @@ $('#parse-and-add').on('click', function (e, ui) {
             }
         });
         if(total >= 10) {
-           $('.message').html("Only can send 10 custom mails");
-           $('.message').show();
+            $(".messages").html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>You can send 10 custom email</div>');
 
         }
     }

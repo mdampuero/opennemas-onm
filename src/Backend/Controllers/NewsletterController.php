@@ -347,20 +347,22 @@ class NewsletterController extends Controller
         );
 
         $sentResult = array();
-        $totalSends = 0;
-        foreach ($recipients as $mailbox) {
-            // Replace name destination
-            $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
-       //     $this->checkMailing($totalSends);
-            try {
-                // Send the mail
-                $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
-                $sentResult []= array($mailbox, $properlySent);
-                $totalSends++;
-            } catch (\Exception $e) {
-                $sentResult []= array($mailbox, false);
+        $totalSends = $this->checkMailing();
+        if (!empty($recipients) && !empty($totalSends)) {
+            foreach ($recipients as $mailbox) {
+                // Replace name destination
+                $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
+                if (!empty($totalSends)) {
+                    try {
+                        // Send the mail
+                        $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
+                        $sentResult []= array($mailbox, $properlySent);
+                        $totalSends--;
+                    } catch (\Exception $e) {
+                        $sentResult []= array($mailbox, false);
+                    }
+                }
             }
-
         }
 
         if (empty($newsletter->sent)) {
@@ -509,26 +511,37 @@ class NewsletterController extends Controller
     }
 
 
-    public function checkMailing($totalSends=0)
+    public function checkMailing()
     {
+
+         //change to last_invoice s::get('site_created')
+        $initDate = \DateTime::createFromFormat('Y-m-d H:i:s', s::get('site_created'));
+
+        if (!$initDate) {
+            $initDate = \DateTime::createFromFormat('d-m-Y - H:i', s::get('site_created'));
+        }
         $today = new \DateTime();
-        $createdInstance = s::get('site_created');
-        $initDate = $createdInstance->format("d-m-Y") - $today->format("d-m-Y");
-        $where =  " updated >= $initDate AND updated <= $today and send > 0";
+
+        $nm = $this->get('newsletter_manager');
+        $where =  " updated >= '".$initDate->format('Y-m-d H:i:s')."'
+            AND updated <= '".$today->format('Y-m-d H:i:s')."' and sent > 0";
+
         list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
-        $total = $totalSends;
+
+        $total = 0;
         if ($nmCount > 0) {
             foreach ($newsletters as $newsletter) {
                 $total += $newsletter->sent;
             }
 
-            if ($total >= s::get('max_mailing')) {
+            $result = s::get('max_mailing') - $total;
+            if ($result <= 0) {
                 m::add(_('You have send max mailing allowed'));
 
-                return false;
+                return 0;
             }
         }
 
-        return true;
+        return $result;
     }
 }
