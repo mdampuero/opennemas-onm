@@ -66,9 +66,14 @@ class DatabaseConnection
      *
      * @return DatabaseConnection the object
      **/
-    public function __construct($params)
+    public function __construct($params, $databaseName = null)
     {
         $this->connectionParams = $params;
+
+        if (!is_null($databaseName)) {
+            $this->replaceDatabaseName($databaseName);
+        }
+
 
         $this->defaultConnection = $params['dbal']['default_connection'];
         $this->connectionParams  = $params['dbal']['connections'][$this->defaultConnection];
@@ -80,11 +85,54 @@ class DatabaseConnection
     }
 
     /**
-     * undocumented function
+     * Redirects all the calls to the AdodbConnection instance
      *
-     * @return void
-     * @author
+     * @param string $method the method to call
+     * @param array $params the list of parameters to pass to the method
+     *
+     * @return mixed the result of the method call
      **/
+    public function __call($method, $params)
+    {
+        $connection = $this->getConnection($method, $params);
+
+        $rs = call_user_func_array(array($connection, $method), $params);
+
+        if ($rs === false) {
+            $this->error = $connection->ErrorMsg();
+        }
+
+        return $rs;
+    }
+
+    public function selectDatabase($databaseName)
+    {
+        $this->connectionParams = $this->replaceKeyInArray(
+            function ($key, $value, $databaseName) {
+                if ($key == 'dbname' && !is_null($value)) {
+                    $value = $databaseName;
+                }
+                return $value;
+            },
+            $this->connectionParams,
+            $databaseName
+        );
+
+        return $this;
+    }
+
+    private function replaceKeyInArray($callback, $array, $databaseName) {
+        foreach ($array as $key => $value) {
+            if (is_array($array[$key])) {
+                $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $databaseName);
+            }
+            else {
+                $array[$key] = call_user_func($callback, $key, $array[$key], $databaseName);
+            }
+        }
+        return $array;
+    }
+
     public function initConnection($params)
     {
         if ($params['charset'] == 'UTF-8') {
@@ -164,6 +212,7 @@ class DatabaseConnection
                 // from the list of slaves connection parameters
                 $slaveConnection = null;
                 do {
+
                     $randomSlaveIndex = array_rand($slavesList);
                     $slaveParams = $slavesList[$randomSlaveIndex];
 
@@ -173,9 +222,13 @@ class DatabaseConnection
                     $slaveParams = array_merge($this->connectionParams, $slaveParams);
 
                     $slaveConnection = $this->initConnection($slaveParams);
-                } while (!is_object($slaveConnection));
 
-                $this->slaveConnections []= $slaveConnection;
+                    unset($slavesList[$randomSlaveIndex]);
+                } while (!is_object($slaveConnection) && !empty($slavesList));
+
+                if (!is_null($slaveConnection)) {
+                    $this->slaveConnections []= $slaveConnection;
+                }
             }
         }
 
@@ -202,26 +255,5 @@ class DatabaseConnection
         }
 
         return $this->masterConnection;
-    }
-
-    /**
-     * Redirects all the calls to the AdodbConnection instance
-     *
-     * @param string $method the method to call
-     * @param array $params the list of parameters to pass to the method
-     *
-     * @return mixed the result of the method call
-     **/
-    public function __call($method, $params)
-    {
-        $connection = $this->getConnection($method, $params);
-
-        $rs = call_user_func_array(array($connection, $method), $params);
-
-        if ($rs === false) {
-            $this->error = $connection->ErrorMsg();
-        }
-
-        return $rs;
     }
 }
