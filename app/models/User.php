@@ -235,7 +235,7 @@ class User
     {
         switch ($property) {
             case 'photo':
-                $this->photo = new \Photo($rs->fields['avatar_img_id']);
+                $this->photo = new \Photo($this->avatar_img_id);
 
                 return $this->photo;
                 break;
