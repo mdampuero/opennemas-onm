@@ -283,15 +283,6 @@ class User
         // Get user meta information
         $this->meta = $this->getMeta();
 
-<<<<<<< HEAD
-        // Get photo object from avatar_img_id
-        $this->photo = null;
-        if (!empty($rs->fields['avatar_img_id'])) {
-            $this->photo = new \Photo($rs->fields['avatar_img_id']);
-        }
-
-=======
->>>>>>> Apply lazy loading to user avatar object
         return $this;
     }
 

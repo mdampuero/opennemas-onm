@@ -562,6 +562,8 @@ class ImagesController extends Controller
             if (!empty($id)) {
                 $photo = new \Photo($id);
                 $photo->readAllData();
+
+                $photos []= $photo;
             }
         }
         // Check if passed ids fits photos in database, if not redirect to listing
