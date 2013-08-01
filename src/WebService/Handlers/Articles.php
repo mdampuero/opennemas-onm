@@ -58,6 +58,13 @@ class Articles
             $article->photoInt = $photoInt;
         }
 
+        if (!empty($article->author)) {
+            $article->author->uri = 'ext'.$article->author->uri;
+            if (!empty($article->author->avatar_img_id)) {
+                $article->author->getPhoto();
+                $article->author->photo->media_url = MEDIA_IMG_PATH_WEB;
+            }
+        }
         // Get inner video for this article
         if (isset($article->fk_video2)) {
             $videoInt = new Video($article->fk_video2);
