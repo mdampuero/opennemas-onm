@@ -82,13 +82,6 @@ class User
     public $avatar_img_id = null;
 
     /**
-     * The user avatar image id
-     *
-     * @var string
-     **/
-    public $photo = null;
-
-    /**
      * The type of user
      *
      * @var string
@@ -237,9 +230,8 @@ class User
     {
         switch ($property) {
             case 'photo':
-                $this->photo = new \Photo($this->avatar_img_id);
 
-                return $this->photo;
+                return $this->getPhoto();
                 break;
 
             default:
@@ -397,6 +389,16 @@ class User
         }
 
         return true;
+    }
+
+    /**
+     * Returns the Photo object that represents the user avatar
+     *
+     * @return Photo the photo object
+     **/
+    public function getPhoto()
+    {
+        return new \Photo($this->avatar_img_id);
     }
 
     /**

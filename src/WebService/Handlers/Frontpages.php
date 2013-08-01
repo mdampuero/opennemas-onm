@@ -64,7 +64,7 @@ class Frontpages
 
                 $content->author         = new \User($content->fk_author);
                 if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
-                    $content->author->photo = new \Photo($content->author->avatar_img_id);
+                    $content->author->getPhoto();
                 }
 
                 // Load attached and related contents from array
@@ -154,7 +154,7 @@ class Frontpages
             $content->category_title = $content->loadCategoryTitle($content->id);
             $content->author         = new \User($content->fk_author);
             if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
-                $content->author->photo = new \Photo($content->author->avatar_img_id);
+                $content->author->getPhoto();
             }
 
              //Change uri for href links except widgets
