@@ -650,7 +650,7 @@ class User
         $this->type             = $rs->fields['type'];
         $this->token            = $rs->fields['token'];
         $this->activated        = $rs->fields['activated'];
-        $this->id_user_group    = explode(',', $data['fk_user_group']);
+        $this->id_user_group    = explode(',', $rs->fields['fk_user_group']);
         $this->accesscategories = $this->readAccessCategories();
 
         return $this;
