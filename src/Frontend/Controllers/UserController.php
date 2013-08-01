@@ -601,59 +601,61 @@ class UserController extends Controller
             // Get user by slug
             $ur = $this->get('user_repository');
             $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
-            $user->photo = new \Photo($user->avatar_img_id);
-            $user->getMeta();
+            if (!empty($user)) {
+                $user->photo = new \Photo($user->avatar_img_id);
+                $user->getMeta();
 
-            $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
-                ."AND available=1 AND in_litter=0";
+                $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
+                    ."AND available=1 AND in_litter=0";
 
-            $er = $this->get('entity_repository');
-            $contentsCount  = $er->count($searchCriteria);
-            $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
+                $er = $this->get('entity_repository');
+                $contentsCount  = $er->count($searchCriteria);
+                $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
 
-            foreach ($contents as &$item) {
-                $item = $item->get($item->id);
-                $item->author = $user;
-                if (isset($item->img1) && ($item->img1 > 0)) {
-                    $image = new \Photo($item->img1);
-                    $item->img1_path = $image->path_file.$image->name;
-                    $item->img1 = $image;
+                foreach ($contents as &$item) {
+                    $item = $item->get($item->id);
+                    $item->author = $user;
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $image = new \Photo($item->img1);
+                        $item->img1_path = $image->path_file.$image->name;
+                        $item->img1 = $image;
+                    }
+
+                    if ($item->fk_content_type == 7) {
+                        $image = new \Photo($item->cover_id);
+                        $item->img1_path = $image->path_file.$image->name;
+                        $item->img1 = $image;
+                        $item->summary = $item->subtitle;
+                        $item->subtitle= '';
+                    }
+
+                    if ($item->fk_content_type == 9) {
+                        $item->obj_video = $item;
+                        $item->summary = $item->description;
+                    }
+
+                    if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                        $item->video = new \Video($item->fk_video2);
+                    }
                 }
+                // Build the pager
+                $pagination = \Onm\Pager\Slider::create(
+                    $contentsCount,
+                    $itemsPerPage,
+                    $this->generateUrl(
+                        'frontend_author_frontpage',
+                        array('slug' => $slug,)
+                    )
+                );
 
-                if ($item->fk_content_type == 7) {
-                    $image = new \Photo($item->cover_id);
-                    $item->img1_path = $image->path_file.$image->name;
-                    $item->img1 = $image;
-                    $item->summary = $item->subtitle;
-                    $item->subtitle= '';
-                }
-
-                if ($item->fk_content_type == 9) {
-                    $item->obj_video = $item;
-                    $item->summary = $item->description;
-                }
-
-                if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                    $item->video = new \Video($item->fk_video2);
-                }
+                $this->view->assign(
+                    array(
+                        'contents'   => $contents,
+                        'author'     => $user,
+                        'pagination' => $pagination,
+                    )
+                );
             }
-            // Build the pager
-            $pagination = \Onm\Pager\Slider::create(
-                $contentsCount,
-                $itemsPerPage,
-                $this->generateUrl(
-                    'frontend_author_frontpage',
-                    array('slug' => $slug,)
-                )
-            );
-
-            $this->view->assign(
-                array(
-                    'contents'   => $contents,
-                    'author'     => $user,
-                    'pagination' => $pagination,
-                )
-            );
         }
 
         $this->getInnerAds();
