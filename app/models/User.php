@@ -265,7 +265,10 @@ class User
         $this->meta = $this->getMeta();
 
         // Get photo object from avatar_img_id
-        $this->photo = new \Photo($rs->fields['avatar_img_id']);
+        $this->photo = null;
+        if (!empty($rs->fields['avatar_img_id'])) {
+            $this->photo = new \Photo($rs->fields['avatar_img_id']);
+        }
 
         return $this;
     }
