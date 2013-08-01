@@ -226,6 +226,29 @@ class User
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function __get($property)
+    {
+        switch ($property) {
+            case 'photo':
+                $this->photo = new \Photo($rs->fields['avatar_img_id']);
+
+                return $this->photo;
+                break;
+
+            default:
+                break;
+        }
+
+        // Get photo object from avatar_img_id
+
+    }
+
+    /**
      * Loads the user information given its id
      *
      * @param int $id the user id
