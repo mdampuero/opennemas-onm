@@ -157,10 +157,13 @@ class Album extends Content
      **/
     public function read($id)
     {
+        if (is_null($id) || empty($id)) {
+            return null ;
+        }
         parent::read($id);
 
         $sql = 'SELECT * FROM albums WHERE pk_album = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, $id);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             return Application::logDatabaseError();
         }
