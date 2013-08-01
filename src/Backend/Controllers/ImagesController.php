@@ -562,9 +562,7 @@ class ImagesController extends Controller
             $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
             if (!empty($id)) {
                 $photo = new \Photo($id);
-                if (!empty($photo->id)) {
-                    $photos []= $photo->readAllData($id);
-                }
+                $photo->readAllData();
             }
         }
         // Check if passed ids fits photos in database, if not redirect to listing
