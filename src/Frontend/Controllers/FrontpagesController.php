@@ -119,14 +119,9 @@ class FrontpagesController extends Controller
 
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-
                 // Load category related information
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
-
-                if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
-                    $content->author->photo = new \Photo($content->author->avatar_img_id);
-                }
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)

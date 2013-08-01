@@ -118,9 +118,6 @@ class ArticlesController extends Controller
                     $videoInt = new \Video($article->fk_video2);
                     $this->view->assign('videoInt', $videoInt);
                 }
-                if (!empty($article->author) && !empty($article->author->avatar_img_id)) {
-                    $article->author->photo = new \Photo($article->author->avatar_img_id);
-                }
 
                 // Related contents code ---------------------------------------
                 $relContent      = new \RelatedContent();
