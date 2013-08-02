@@ -166,7 +166,7 @@
                         </div>
                         <div class="control-group">
                             <div class="controls">
-                                <textarea id="othersMails" name="othersMails" placeholder="{t}Write a list of email address by writing one per line (max 10).{/t}"></textarea>
+                                <textarea id="othersMails" name="othersMails" placeholder="{t}Write a list of email address writing one per line (max 10).{/t}"></textarea>
                             </div>
                         </div>
                     </div>

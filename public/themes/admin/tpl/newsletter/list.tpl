@@ -48,7 +48,7 @@
                     <th>{t}Title{/t}</th>
                     <th class="left"  style="width:150px;">{t}Created{/t}</th>
                     <th class="left"  style="width:150px;">{t}Updated{/t}</th>
-                    <th class="left">{t}Sent{/t}/{t}Mailings{/t}</th>
+                    <th class="left">{t}Sendings{/t}</th>
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">

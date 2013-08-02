@@ -13,7 +13,7 @@ $('#newsletter-pick-elements-form').on('submit', function(e, ui) {
 $("#newsletter-pick-elements-form").on('click', '#next-button', function(e, ui) {
     total = $('#items-recipients li').length;
     if (total<0) {
-        $(".messages").html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>Choose email recipients</div>');
+        $(".messages").html('<div class="warning alert-message"><button class="close" data-dismiss="alert">×</button>Choose email recipients</div>');
         e.preventDefault();
     } else {
         $("#modal-newsletter-accept").modal('hide');
@@ -344,7 +344,7 @@ $('#parse-and-add').on('click', function (e, ui) {
             }
         });
         if(total >= 10) {
-            $(".messages").html('<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>You can send 10 custom email</div>');
+            $(".messages").html('<div class="alert alert-warning"><button class="close" data-dismiss="alert">×</button>Remember, only 10 recipients are allowed manually</div>');
 
         }
     }
