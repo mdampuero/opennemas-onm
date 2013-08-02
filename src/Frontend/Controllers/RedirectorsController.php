@@ -48,10 +48,14 @@ class RedirectorsController extends Controller
         $contentId  = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
         $slug       = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
         $oldVersion = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
-
+        $type       = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
 
         if ($slug === 'none') {
-            list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+            if (!empty($type)) {
+                $newContentID  = getOriginalIDForContentTypeAndID($type, $contentId);
+            } else {
+                list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+            }
         } else {
             list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
         }
