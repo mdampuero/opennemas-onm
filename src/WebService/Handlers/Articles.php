@@ -58,8 +58,8 @@ class Articles
             $article->photoInt = $photoInt;
         }
 
-        if (!empty($article->author)) {
-            $article->author->uri = 'ext'.$article->author->uri;
+        if (is_object($article->author) && !empty($article->author)) {
+            //$article->author->uri = 'ext'.$article->author->uri;
             if (!empty($article->author->avatar_img_id)) {
                 $article->author->getPhoto();
                 $article->author->photo->media_url = MEDIA_IMG_PATH_WEB;
