@@ -115,9 +115,10 @@ class BlogController extends Controller
 
             $this->view->assign(
                 array(
-                    'articles'   => $articles,
-                    'category'   => $category,
-                    'pagination' => $pagination,
+                    'articles'              => $articles,
+                    'category'              => $category,
+                    'pagination'            => $pagination,
+                    'actual_category_title' => $category->title,
                 )
             );
         }
@@ -163,7 +164,7 @@ class BlogController extends Controller
         $cm = new \ContentManager();
         $cacheId = "sync|blog|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-
+            $ccm = \ContentCategoryManager::get_instance();
             // Get category object
             $category = unserialize(
                 $cm->getUrlContent(
@@ -182,9 +183,10 @@ class BlogController extends Controller
 
             $this->view->assign(
                 array(
-                    'articles'   => $articles,
-                    'category'   => $category,
-                    'pagination' => $pagination,
+                    'articles'              => $articles,
+                    'category'              => $category,
+                    'pagination'            => $pagination,
+                    'actual_category_title' => $ccm->get_title($categoryName),
                 )
             );
         }
