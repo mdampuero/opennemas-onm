@@ -46,18 +46,19 @@ class BlogController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
+        $categoryManager = $this->get('category_repository');
+        $category = $categoryManager->findBy(array('name' => $categoryName));
+
+        if (empty($category)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+        $category = $category[0];
+
         $this->view->setConfig('frontpages');
 
         $cacheId = "blog|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $cm = new \ContentManager();
-            $categoryManager = $this->get('category_repository');
-            $category = $categoryManager->findBy(array('name' => $categoryName));
 
-            if (empty($category)) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-            $category = $category[0];
 
             $itemsPerPage = 8;
 
