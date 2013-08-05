@@ -52,6 +52,9 @@ class NewsletterController extends Controller
     {
         $newsletterManager = $this->get('newsletter_manager');
 
+        $maxAllowed = s::get('max_mailing');
+        $totalSendings = s::get('max_mailing') - $this->checkMailing();
+
         // Check if the module is configured, if not redirect to the config form
         $configuredRedirection = $this->checkModuleActivated();
 
@@ -82,9 +85,11 @@ class NewsletterController extends Controller
         return $this->render(
             'newsletter/list.tpl',
             array(
-                'newsletters' => $newsletters,
-                'count'       => $count,
-                'pagination'  => $pagination,
+                'newsletters'   => $newsletters,
+                'count'         => $count,
+                'pagination'    => $pagination,
+                'totalSendings' => $totalSendings,
+                'maxAllowed'    => $maxAllowed,
             )
         );
     }
@@ -348,7 +353,8 @@ class NewsletterController extends Controller
 
         $sentResult = array();
         $totalSends = $this->checkMailing();
-        if (!empty($recipients) && !empty($totalSends)) {
+        $sent = 0;
+        if (!empty($recipients)) {
             foreach ($recipients as $mailbox) {
                 // Replace name destination
                 $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
@@ -358,15 +364,18 @@ class NewsletterController extends Controller
                         $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
                         $sentResult []= array($mailbox, $properlySent);
                         $totalSends--;
+                        $sent++;
                     } catch (\Exception $e) {
                         $sentResult []= array($mailbox, false);
                     }
+                } else{
+                     $sentResult []= array($mailbox, false);
                 }
             }
         }
 
         if (empty($newsletter->sent)) {
-            $newsletter->update(array('sent' => $totalSends));
+            $newsletter->update(array('sent' => $sent));
         } else {
             //duplicated newsletter for count month mail send
 
@@ -375,7 +384,7 @@ class NewsletterController extends Controller
                     'title'   => $newsletter->title,
                     'data'    => $newsletter->data,
                     'html'    => $newsletter->html,
-                    'sent'    => $totalSends,
+                    'sent'    => $sends,
                 )
             );
         }
@@ -510,38 +519,82 @@ class NewsletterController extends Controller
         return false;
     }
 
+    /**
+     * Count sendings. Return remaining in the month
+     *
+     * @return boolean
+     **/
 
     public function checkMailing()
     {
 
-         //change to last_invoice s::get('site_created')
-        $initDate = \DateTime::createFromFormat('Y-m-d H:i:s', s::get('site_created'));
+        $maxAllowed = s::get('max_mailing');
 
-        if (!$initDate) {
-            $initDate = \DateTime::createFromFormat('d-m-Y - H:i', s::get('site_created'));
+         //change to last_invoice s::get('site_created')
+        $initDate = $this->updateLastInvoice();
+
+        if (empty($initDate)) {
+            return false;
         }
+
         $today = new \DateTime();
 
         $nm = $this->get('newsletter_manager');
         $where =  " updated >= '".$initDate->format('Y-m-d H:i:s')."'
             AND updated <= '".$today->format('Y-m-d H:i:s')."' and sent > 0";
-
         list($nmCount, $newsletters) = $nm->find($where, 'created DESC');
 
         $total = 0;
+        $result = 0;
         if ($nmCount > 0) {
             foreach ($newsletters as $newsletter) {
                 $total += $newsletter->sent;
             }
 
-            $result = s::get('max_mailing') - $total;
-            if ($result <= 0) {
-                m::add(_('You have send max mailing allowed'));
+            if($maxAllowed > 0) {
+                $result = $maxAllowed - $total;
+                if ($result <= 0) {
+                    m::add(_('You have send max mailing allowed'), m::ERROR);
 
-                return 0;
+                    return 0;
+                }
             }
         }
 
         return $result;
+    }
+
+
+    public function updateLastInvoice($date = null) {
+
+        if ($date === null) {
+           $date = s::get('last_invoice');
+        }
+
+        if (empty($date)) {
+            $lastInvoice = new \DateTime();
+        } else {
+            $lastInvoice = new \DateTime($date);
+        }
+        if ($lastInvoice->format('d') > 28 ) {
+            $lastInvoice = $lastInvoice->setDate($lastInvoice->format('Y'), $lastInvoice->format('m'), 28);
+        }
+
+        $today     = new \DateTime();
+        $checkDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
+        $checkDate->modify( '+1 month' );
+
+        if ($today > $checkDate ) {
+            while ($today > $checkDate ) {
+               $checkDate->modify( '+1 month' );
+            }
+
+            $lastInvoice = $checkDate->modify( '-1 month' );
+        }
+
+        s::set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));
+
+        return $lastInvoice;
+
     }
 }
