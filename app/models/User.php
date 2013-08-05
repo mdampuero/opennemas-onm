@@ -1179,7 +1179,7 @@ class User
      **/
     public function updateUserPassword($id, $pass)
     {
-        $sql = "UPDATE users SET `password`= '".$pass."' WHERE id=?";
+        $sql = "UPDATE users SET `password`= '".md5($pass)."' WHERE id=?";
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if ($rs === false) {
