@@ -475,10 +475,22 @@ jQuery(document).ready(function($) {
                         </tr>
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="max_mailing" class="control-label">{t}Num Max Mailing by month{/t}</label>
+                                <label for="max_mailing" class="control-label">{t}Num Max emails sent by month{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="text" id="max_mailing" name="max_mailing" value="{$configs['max_mailing']|default:'12000'}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="site_title" class="control-label">{t}Last  invoice date:{/t}</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="last_invoice" name="last_invoice" value="{if $configs['last_invoice']}{$configs['last_invoice']}{else} {/if}">
                             </td>
                             <td>
 
