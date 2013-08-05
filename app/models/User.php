@@ -1134,8 +1134,13 @@ class User
      **/
     public function updateUserPassword($id, $pass)
     {
+<<<<<<< HEAD
         $sql = "UPDATE users SET `password`= ? WHERE id=?";
         $rs = $GLOBALS['application']->conn->Execute($sql, array($pass, intval($id)));
+=======
+        $sql = "UPDATE users SET `password`= '".md5($pass)."' WHERE id=?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+>>>>>>> hotfix/fix_recover_pass_process
 
         if ($rs === false) {
             return false;
