@@ -571,7 +571,7 @@ class AclUserController extends Controller
             }
 
             // Display form
-            return $this->render('login/recover_pass.tpl');
+            return $this->render('login/recover_pass.tpl', array('token' => $token));
         }
     }
 
@@ -700,7 +700,10 @@ class AclUserController extends Controller
                 $user->updateUserPassword($user->id, $password);
                 $user->updateUserToken($user->id, null);
 
-                $this->view->assign('updated', true);
+                m::add(_('Password successfully updated'), m::SUCCESS);
+
+                return $this->redirect($this->generateUrl('admin_login_form'));
+
             } elseif ($password != $passwordVerify) {
                 m::add(_('Password and confirmation must be equal.'), m::ERROR);
             } else {
