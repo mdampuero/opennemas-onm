@@ -119,6 +119,7 @@ class ArticlesController extends Controller
                     $this->view->assign('videoInt', $videoInt);
                 }
 
+                $article->media_url = 'external/media/mundiario';
                 if (is_object($article->author)) {
                     $article->author->getPhoto();
                 }
