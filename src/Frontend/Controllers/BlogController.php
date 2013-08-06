@@ -100,11 +100,13 @@ class BlogController extends Controller
                         ->loadRelatedContents($categoryName);
             }
 
+            $total = count($articles)+1;
+
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $countArticles,
+                    'total' => $total,
                     'url'   => $this->generateUrl(
                         'blog_category',
                         array(
