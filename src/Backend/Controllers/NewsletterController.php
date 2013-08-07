@@ -53,7 +53,7 @@ class NewsletterController extends Controller
         $newsletterManager = $this->get('newsletter_manager');
 
         $maxAllowed = s::get('max_mailing');
-        $totalSendings = s::get('max_mailing') - $this->checkMailing();
+        $totalSendings =  $this->checkMailing();
 
         // Check if the module is configured, if not redirect to the config form
         $configuredRedirection = $this->checkModuleActivated();
@@ -352,18 +352,20 @@ class NewsletterController extends Controller
         );
 
         $sentResult = array();
-        $totalSends = $this->checkMailing();
+        $maxAllowed = s::get('max_mailing');
+        $remaining = $maxAllowed - $this->checkMailing();
+
         $sent = 0;
         if (!empty($recipients)) {
             foreach ($recipients as $mailbox) {
                 // Replace name destination
                 $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
-                if (!empty($totalSends)) {
+                if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining)) ) {
                     try {
                         // Send the mail
                         $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
                         $sentResult []= array($mailbox, $properlySent);
-                        $totalSends--;
+                        $remaining--;
                         $sent++;
                     } catch (\Exception $e) {
                         $sentResult []= array($mailbox, false);
@@ -384,7 +386,7 @@ class NewsletterController extends Controller
                     'title'   => $newsletter->title,
                     'data'    => $newsletter->data,
                     'html'    => $newsletter->html,
-                    'sent'    => $sends,
+                    'sent'    => $sent,
                 )
             );
         }
@@ -520,7 +522,7 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Count sendings. Return remaining in the month
+     * Count sendings. Return total sendings in the month
      *
      * @return boolean
      **/
@@ -556,12 +558,14 @@ class NewsletterController extends Controller
                 if ($result <= 0) {
                     m::add(_('You have send max mailing allowed'), m::ERROR);
 
-                    return 0;
+                    return $maxAllowed;
                 }
+            } else {
+                return $total;
             }
         }
 
-        return $result;
+        return $total;
     }
 
 

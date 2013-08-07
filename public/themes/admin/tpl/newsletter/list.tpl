@@ -41,7 +41,8 @@
         <div class="table-info clearfix">
             {if $maxAllowed gt 0}
             {t 1={{setting name=last_invoice}|truncate:10:false:false:''} 2=$totalSendings 3=$maxAllowed} Since %1 you have sent %2 of %3 newsletters{/t}
-            {/if}
+            {else}
+            {/if}{t 1={{setting name=last_invoice}|truncate:10:false:false:''} 2=$totalSendings} Since %1 you have sent %2 newsletters{/t}
         </div>
         <table class="table table-hover table-condensed">
             <thead>
