@@ -196,18 +196,8 @@ class BlogController extends Controller
 
         //$this->getInnerAds();
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        $advertisement = \Advertisement::getInstance();
-        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
-        $intersticial = $ads[0];
-        $banners      = $ads[1];
-
-        // Render advertisements
-        if (!empty($banners)) {
-            $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
-        }
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
-        }
+        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'blog/blog.tpl',
@@ -293,7 +283,8 @@ class BlogController extends Controller
                 )
             );
 
-            $this->getInnerAds();
+            $ads = $this->getInnerAds();
+            $this->view->assign('advertisements', $ads);
         }
 
         return $this->render(
@@ -318,19 +309,6 @@ class BlogController extends Controller
 
         $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        $advertisement = \Advertisement::getInstance();
-        $banners = $advertisement->getAdvertisements($positions, $category);
-
-        if (count($banners<=0)) {
-            $cm = new \ContentManager();
-            $banners = $cm->getInTime($banners);
-            //$advertisement->renderMultiple($banners, &$tpl);
-            $advertisement->renderMultiple($banners, $advertisement);
-        }
-        // Get intersticial banner,1,2,9,10
-        $intersticial = $advertisement->getIntersticial(150, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

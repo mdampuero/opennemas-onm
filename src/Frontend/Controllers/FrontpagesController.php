@@ -176,7 +176,6 @@ class FrontpagesController extends Controller
         // Get category id correspondence
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
         // Fetch advertisement information from external
-        $advertisement = \Advertisement::getInstance();
         $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
         $this->view->assign('advertisements', $ads);
 
