@@ -676,10 +676,11 @@ class Advertisement extends Content
         } else {
             $wrapperClass = 'ad_in_column ad_horizontal_marker clearfix';
         }
-        if ($params['interstitial'] != true) {
-            $params['beforeHTML'] = "<div class=\"$wrapperClass\">";
-            $params['afterHTML']  = "</div>";
-        }
+        // if ($params['interstitial'] != true) {
+        //     $params['beforeHTML'] = "<div class=\"$wrapperClass\">";
+        //     $params['afterHTML']  = "</div>";
+        // }
+
         $cssclass             = $params['cssclass'];
         $width                = $this->params['width'];
         $height               = $this->params['height'];
