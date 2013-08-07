@@ -1988,7 +1988,7 @@ class ContentManager
 
         $sql =  'SELECT contents.pk_content, contents.title, contents.slug, '
             .'      contents_categories.catName, contents.created,'
-            .'      contents.changed, '
+            .'      contents.changed, contents.params, '
             .'      contents.metadata, contents.starttime, contents.endtime '
             .'FROM  contents, contents_categories '
             .'WHERE contents.pk_content = contents_categories.pk_fk_content '
