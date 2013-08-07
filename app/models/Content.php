@@ -428,9 +428,9 @@ class Content
         }
 
 
-        $data['fk_author'] = (!array_key_exists('fk_author', $data)) ? $_SESSION['userid'] : $data['fk_author'];
-        $data['fk_user_last_editor'] = $data['fk_author'];
-        $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_author'];
+        $data['fk_author']           = (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'];
+        $data['fk_user_last_editor'] = $_SESSION['userid'];
+        $data['fk_publisher']        = (empty($data['available']))? '': $_SESSION['userid'];
 
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
@@ -461,8 +461,6 @@ class Content
         $values = array($this->id, $data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 

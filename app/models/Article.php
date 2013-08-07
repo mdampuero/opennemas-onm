@@ -422,7 +422,9 @@ class Article extends Content
         self::deleteComments($id); //Eliminamos  los comentarios.
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
+            return false;
         }
+        return true;
     }
 
     /**

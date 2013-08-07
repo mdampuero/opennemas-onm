@@ -88,7 +88,7 @@ class AlbumsController extends Controller
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
         $ads = $this->getAds();
-        $this->view->assign('advertisments', $ads);
+        $this->view->assign('advertisements', $ads);
 
         // Don't execute the action logic if was cached before
         if (($this->view->caching == 0)
@@ -167,7 +167,7 @@ class AlbumsController extends Controller
 
         // Load advertisement for this action
         $ads = $this->getAds('innner');
-        $this->view->assign('advertisments', $ads);
+        $this->view->assign('advertisements', $ads);
 
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
