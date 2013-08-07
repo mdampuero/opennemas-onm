@@ -703,9 +703,7 @@ class Advertisement extends Content
             if (preg_match('/<iframe/', $this->script)) {
                 $content = $this->script;
             } else {
-                $url = SITE_URL.'ads/get/'
-                    .date('YmdHis', strtotime($this->created))
-                    .sprintf('%06d', $this->pk_content)  . '.html' ;
+                $url = url('frontend_ad_get', array('id' => $this->pk_content));
                 $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
             }
 
