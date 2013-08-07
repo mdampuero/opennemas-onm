@@ -657,7 +657,8 @@ class UserController extends Controller
             }
         }
 
-        $this->getInnerAds();
+        $ads = $this->getInnerAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'user/author_frontpage.tpl',
@@ -750,13 +751,8 @@ class UserController extends Controller
      **/
     public static function getInnerAds($category = 'home')
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-
         $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        $category = $ccm->get_id($this->category_name);
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
     }
 }
