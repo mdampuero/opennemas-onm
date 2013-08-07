@@ -76,8 +76,6 @@ class UserGroupManager extends BaseManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -104,8 +102,6 @@ class UserGroupManager extends BaseManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
         $privileges = $rs->getArray();
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 

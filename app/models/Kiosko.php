@@ -147,7 +147,6 @@ class Kiosko extends Content
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             throw new \Exception(_("Unable to save the cover data into the database."));
-            Application::logDatabaseError();
         }
 
         return $this->id;
@@ -168,9 +167,7 @@ class Kiosko extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         $this->load($rs->fields);
@@ -191,23 +188,17 @@ class Kiosko extends Content
             $data['content_status'] = $data['available'];
         }
 
-        $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
-
         parent::update($data);
 
-        $sql  = "UPDATE kioskos SET `date`=?, `price`=?"
-                ." WHERE pk_kiosko=?";
+        $sql  = "UPDATE kioskos SET `date`=?, `price`=? WHERE pk_kiosko=?";
 
         $values = array($data['date'], $data['price'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         $this->category_name = $this->loadCategoryName($this->id);
-        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
 
         return true;
     }
@@ -234,8 +225,6 @@ class Kiosko extends Content
         unlink($bigPaperImage);
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -281,8 +270,6 @@ class Kiosko extends Content
         $values = array($status, $this->id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -362,7 +349,6 @@ class Kiosko extends Content
         $rs = $GLOBALS['application']->conn->GetArray($sql);
 
         if (!$rs) {
-            Application::logDatabaseError();
             return false;
         }
 

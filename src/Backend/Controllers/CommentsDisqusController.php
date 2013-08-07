@@ -35,8 +35,6 @@ class CommentsDisqusController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         // Check MODULE
         \Onm\Module\ModuleManager::checkActivatedOrForward('COMMENT_DISQUS_MANAGER');
         // Check ACL

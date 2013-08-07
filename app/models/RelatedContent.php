@@ -128,8 +128,6 @@ class RelatedContent
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -178,8 +176,6 @@ class RelatedContent
         $rs = $GLOBALS['application']->conn->Execute($sql, array($contentID));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -213,8 +209,6 @@ class RelatedContent
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -233,8 +227,6 @@ class RelatedContent
         $sql = 'DELETE FROM related_contents WHERE pk_content1=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($contentID)) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -257,8 +249,6 @@ class RelatedContent
         $values = array($contentID, $contentID);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -413,8 +403,6 @@ class RelatedContent
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -451,8 +439,6 @@ class RelatedContent
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -490,8 +476,6 @@ class RelatedContent
         }
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -514,8 +498,6 @@ class RelatedContent
         );
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

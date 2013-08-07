@@ -147,8 +147,6 @@ class Menu
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -181,8 +179,6 @@ class Menu
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -206,18 +202,11 @@ class Menu
 
         $sql = 'DELETE FROM menues WHERE pk_menu=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->pk_menu));
-        if ($rs === false) {
-            \Application::logDatabaseError();
-        }
 
         $result = $GLOBALS['application']->conn->CompleteTrans();
 
         /* Notice log of this action */
-        $logger = Application::getLogger();
-        $logger->notice(
-            "User {$_SESSION['username']} ({$_SESSION['userid']})".
-            "has executed action Remove at menu Id {$this->id}"
-        );
+        logContentEvent(__METHOD__, $this);
 
         return true;
     }
@@ -249,8 +238,6 @@ class Menu
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -281,9 +268,7 @@ class Menu
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return false;
+            return null;
         }
 
         $this->name      = $name;
@@ -311,9 +296,7 @@ class Menu
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return false;
+            return null;
         }
         $menues = array();
         while (!$rs->EOF) {
@@ -355,16 +338,15 @@ class Menu
      */
     public function getMenuItems($id)
     {
+        $menuItems = array();
+
         $sql = "SELECT * FROM menu_items WHERE pk_menu=? ORDER BY position ASC";
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return false;
+            return $menuItems;
         }
 
-        $menuItems = array();
         $i         =0;
         while (!$rs->EOF) {
             $menuItems[$rs->fields['pk_item']] = new stdClass();
@@ -439,7 +421,6 @@ class Menu
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
                 $saved = $saved && false;
-                \Application::logDatabaseError();
             } else {
                 $saved = $saved && true;
             }
@@ -459,11 +440,6 @@ class Menu
     {
         $sql = 'DELETE FROM menu_items WHERE pk_menu =?';
 
-        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            \Application::logDatabaseError();
-
-            return false;
-        }
-        return true;
+        return $GLOBALS['application']->conn->Execute($sql, array($id)) !== false;
     }
 }

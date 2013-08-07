@@ -142,7 +142,7 @@ class Contents
         }
 
         // Multiple exec SQL
-        if (is_array($id) ) {
+        if (is_array($id)) {
             $ads = array();
 
             if (count($id)>0) {
@@ -168,8 +168,6 @@ class Contents
         }
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
     }

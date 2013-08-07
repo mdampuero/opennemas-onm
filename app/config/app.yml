@@ -6,17 +6,6 @@ parameters:
         csrf_protection: true
         default_locale:  %locale%
 
-    # Database Configuration
-    database:
-        connection:
-            driver:   %database_driver%
-            host:     %database_host%
-            port:     %database_port%
-            dbname:   %database_name%
-            user:     %database_user%
-            password: %database_password%
-            charset:  UTF8
-
     # Swiftmailer Configuration
     swiftmailer:
         transport: %mailer_transport%

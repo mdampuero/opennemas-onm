@@ -206,8 +206,6 @@ class User
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $this->id = $GLOBALS['application']->conn->Insert_ID();
@@ -255,9 +253,7 @@ class User
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         $this->id               = $rs->fields['id'];
@@ -350,8 +346,6 @@ class User
             // Rollback
             $GLOBALS['application']->conn->RollbackTrans();
 
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -379,8 +373,6 @@ class User
         $sql = 'DELETE FROM users WHERE id=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($id)))===false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -428,8 +420,7 @@ class User
     private function createAccessCategoriesDb($IdsCategory)
     {
         if ($this->deleteAccessCategoriesDb()) {
-            $sql = "INSERT INTO users_content_categories
-                                (`pk_fk_user`, `pk_fk_content_category`)
+            $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
                     VALUES (?,?)";
 
             $values = array();
@@ -441,8 +432,6 @@ class User
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
                 $GLOBALS['application']->conn->RollbackTrans();
-
-                \Application::logDatabaseError();
 
                 return false;
             }
@@ -476,8 +465,6 @@ class User
         $values = array($idUser, $idCategory);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -505,8 +492,6 @@ class User
         $values = array(intval($idCategory));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $this->accesscategories = self::readAccessCategories($idUser);
@@ -539,15 +524,12 @@ class User
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return null;
             }
 
             $contentCategories = array();
             while (!$rs->EOF) {
-                 $contentCategory =
-                    new ContentCategory($rs->fields['pk_fk_content_category']);
+                 $contentCategory = new ContentCategory($rs->fields['pk_fk_content_category']);
                  $contentCategories[] = $contentCategory;
                  $rs->MoveNext();
             }
@@ -573,8 +555,6 @@ class User
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             $GLOBALS['application']->conn->RollbackTrans();
-
-            \Application::logDatabaseError();
 
             return false;
         }
@@ -625,16 +605,15 @@ class User
      */
     public function authDatabase($username, $password, $managerDb = false, $time = null)
     {
-        $sql = 'SELECT * FROM users WHERE username=\''.strval($username).'\' OR email=\''.strval($username).'\'';
+        $sql = 'SELECT * FROM users WHERE username=? OR email=?';
         if (!$managerDb) {
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+            $rs = $GLOBALS['application']->conn->Execute($sql, array(strval($username), strval($username)));
         } else {
-            $rs =  \Onm\Instance\InstanceManager::getInstance()->getConnection()->Execute($sql);
+            $conn = \Onm\Instance\InstanceManager::getInstance()->getConnection();
+            $rs =  $conn->Execute($sql, array(strval($username), strval($username)));
         }
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -677,8 +656,6 @@ class User
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
         if (!$rs->fields) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -714,8 +691,6 @@ class User
         $rs = $GLOBALS['application']->conn->Execute($sql, $token);
 
         if (!$rs->fields) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -903,8 +878,6 @@ class User
         $sql = 'SELECT username FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -923,8 +896,6 @@ class User
         $sql = 'SELECT name FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -944,8 +915,6 @@ class User
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -964,8 +933,6 @@ class User
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return array();
         }
 
@@ -1058,8 +1025,6 @@ class User
         $sql = 'DELETE FROM usermeta WHERE `user_id`=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId)))===false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -1075,11 +1040,9 @@ class User
      */
     public function deactivateUser($id)
     {
-        $sql = "UPDATE users SET `activated`=0 WHERE id=".intval($id);
+        $sql = "UPDATE users SET `activated`=0 WHERE id=?";
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            \Application::logDatabaseError();
-
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id))) === false) {
             return false;
         }
 
@@ -1095,11 +1058,9 @@ class User
      */
     public function activateUser($id)
     {
-        $sql = "UPDATE users SET `activated`=1 WHERE id=".intval($id);
+        $sql = "UPDATE users SET `activated`=1 WHERE id=?";
 
-        if ($GLOBALS['application']->conn->Execute($sql) === false) {
-            \Application::logDatabaseError();
-
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($id))) === false) {
             return false;
         }
 
@@ -1119,8 +1080,6 @@ class User
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($email));
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -1135,14 +1094,11 @@ class User
      */
     public function checkIfExistsUserName($userName)
     {
-        $sql = 'SELECT count(*) AS num '
-            . 'FROM `users` WHERE username = "'.$userName.'"';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT count(*) AS num FROM `users` WHERE username = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($userName));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         return ($rs->fields['num'] > 0);
@@ -1158,11 +1114,10 @@ class User
      **/
     public function updateUserToken($id, $token)
     {
-        $sql = "UPDATE users SET `token`= '".$token."' WHERE id=".intval($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "UPDATE users SET `token`= ? WHERE id=?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($token, intval($id)));
 
         if ($rs === false) {
-            \Application::logDatabaseError();
             return false;
         }
 
@@ -1179,11 +1134,10 @@ class User
      **/
     public function updateUserPassword($id, $pass)
     {
-        $sql = "UPDATE users SET `password`= '".md5($pass)."' WHERE id=?";
-        $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
+        $sql = "UPDATE users SET `password`= ? WHERE id=?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array(md5($pass), intval($id)));
 
         if ($rs === false) {
-            \Application::logDatabaseError();
             return false;
         }
 
@@ -1231,7 +1185,6 @@ class User
         $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
 
         if ($rs === false) {
-            \Application::logDatabaseError();
             return array();
         }
         $users = array();
@@ -1346,7 +1299,6 @@ class User
         $rs = $GLOBALS['application']->conn->Execute($sql, array($currentTime));
 
         if ($rs === false) {
-            \Application::logDatabaseError();
             return 0;
         }
 

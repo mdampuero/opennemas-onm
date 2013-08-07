@@ -83,8 +83,6 @@ class EntityManager extends BaseManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -117,8 +115,6 @@ class EntityManager extends BaseManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

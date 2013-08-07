@@ -40,8 +40,6 @@ class CacheManagerController extends Controller
 
         $this->checkAclOrForward('CACHE_TPL_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         // Initialization of the frontend template object
         $this->frontpageTemplate = new \Template(TEMPLATE_USER);
 

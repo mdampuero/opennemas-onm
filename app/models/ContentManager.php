@@ -558,7 +558,6 @@ class ContentManager
 
             // Handling if there were some errors into the execution
             if (!$rs) {
-                Application::logDatabaseError();
                 $returnValue = false;
             } else {
                 // Unset suggested flag if saving content positions in frontpage
@@ -594,13 +593,11 @@ class ContentManager
             $stmt = $GLOBALS['application']->conn->Prepare($sql, $values);
 
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
 
             /* Notice log of this action */
-            $logger = Application::getLogger();
+            $logger = getService('logger');
             $logger->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid']
                 .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
@@ -630,7 +627,6 @@ class ContentManager
 
         // return the value and log if there were errors
         if (!$rs) {
-            Application::logDatabaseError();
             $returnValue = false;
         } else {
             $returnValue = true;
@@ -734,7 +730,6 @@ class ContentManager
             $returnValue = ($ucfirst === true)
                 ? ucfirst($contentID) : strtolower($contentID);
         } else {
-
             // retrieve the name for this id
             $sql = "SELECT path FROM attachments "
                  . "WHERE `pk_attachment`=$contentID";
@@ -2068,8 +2063,6 @@ class ContentManager
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -2284,23 +2277,19 @@ class ContentManager
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql, array(\Comment::STATUS_ACCEPTED, $count));
 
-        if (!$rs) {
-            \Application::logDatabaseError();
-        } else {
-            while (!$rs->EOF) {
-                $content = new \Article();
-                $pk_content = $rs->fields['pk_content'];
-                $content->load($rs->fields);
-                $content->comment        =  $rs->fields['comment_body'];
-                $content->pk_comment     =  $rs->fields['comment_id'];
-                $content->comment_author =  $rs->fields['comment_author'];
+        while (!$rs->EOF) {
+            $content = new \Article();
+            $pk_content = $rs->fields['pk_content'];
+            $content->load($rs->fields);
+            $content->comment        =  $rs->fields['comment_body'];
+            $content->pk_comment     =  $rs->fields['comment_id'];
+            $content->comment_author =  $rs->fields['comment_author'];
 
-                $contents[$content->pk_comment] = $content;
-                $rs->MoveNext();
-            }
-
-            $rs->Close(); # optional
+            $contents[$content->pk_comment] = $content;
+            $rs->MoveNext();
         }
+
+        $rs->Close(); # optional
 
         return $contents;
     }

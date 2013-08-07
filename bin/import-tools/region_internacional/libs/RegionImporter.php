@@ -85,7 +85,6 @@ class RegionImporter
 
         $GLOBALS['application'] = new Application();
         Application::initDatabase();
-        Application::initLogger();
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $GLOBALS['application']->conn->Execute('SET NAMES UTF8');
