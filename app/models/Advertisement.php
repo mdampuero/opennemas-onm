@@ -613,6 +613,7 @@ class Advertisement extends Content
 
         $sql = "SELECT * FROM contents, advertisements "
               ."WHERE contents.pk_content = advertisements.pk_advertisement "
+              ."AND contents.in_litter!=1 "
               .'AND contents.available=1 AND advertisements.type_advertisement IN ('.$types.') '
               .$catsSQL
               ."ORDER BY contents.created";
