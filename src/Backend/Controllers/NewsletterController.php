@@ -50,8 +50,11 @@ class NewsletterController extends Controller
     {
         $newsletterManager = $this->get('newsletter_manager');
 
-        $maxAllowed = s::get('max_mailing');
-        $totalSendings =  $this->checkMailing();
+        $maxAllowed     = s::get('max_mailing');
+        $totalSendings  = $this->checkMailing();
+        $date           = s::get('last_invoice');
+        $lastInvoice    = new \DateTime($date);
+
 
         // Check if the module is configured, if not redirect to the config form
         $configuredRedirection = $this->checkModuleActivated();
@@ -88,6 +91,7 @@ class NewsletterController extends Controller
                 'pagination'    => $pagination,
                 'totalSendings' => $totalSendings,
                 'maxAllowed'    => $maxAllowed,
+                'lastInvoice'   => $lastInvoice->format('Y-m-d'),
             )
         );
     }
