@@ -312,25 +312,6 @@ class Advertisement extends Content
      **/
     public $timeout     = null;
 
-    /**
-     * Instance of MethodCacheManager
-     *
-     * @var MethodCacheManager
-     **/
-    public $cache = null;
-
-    /**
-     * Advertisement instance, singleton pattern
-     *
-     * @var Advertisement
-     **/
-    private static $singleton = null;
-
-    /**
-     * The registry for banners
-     * @var array
-     **/
-    protected $_registry = array();
 
     /**
      * Initializes the Advertisement class
@@ -344,21 +325,6 @@ class Advertisement extends Content
         $this->content_type = get_class();
 
         parent::__construct($id);
-    }
-
-    /**
-     * Method to fetch or create the object by the singleton pattern
-     *
-     * @see Advertisement::__construct()
-     **/
-    public static function getInstance()
-    {
-        // Create a unique instance if not available
-        if (is_null(self::$singleton)) {
-            self::$singleton = new Advertisement();
-        }
-
-        return self::$singleton;
     }
 
     /**
@@ -392,32 +358,26 @@ class Advertisement extends Content
                      `script`, `overlap`, `timeout`)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        // $this->id was setted in parent::create($data)
         $values = array(
-            $this->id, $data['type_advertisement'], $data['category'],
-            $data['img'], $data['url'], $data['type_medida'], $data['num_clic'],
-            0, $data['num_view'], $data['with_script'],
-            $data['script'], $data['overlap'], $data['timeout']
+            $this->id,
+            $data['type_advertisement'],
+            $data['category'],
+            $data['img'],
+            $data['url'],
+            $data['type_medida'],
+            $data['num_clic'],
+            0, // num_clic_count
+            $data['num_view'],
+            $data['with_script'],
+            $data['script'],
+            $data['overlap'],
+            $data['timeout']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             return null;
         }
-
-        $rel = new RelatedContent();
-        if (isset($data['selectos'])) {
-            $pos = 1;
-            foreach ($data['selectos'] as $relac) {
-                $rel->setRelationPosition($this->id, $pos, $relac);
-                $pos++;
-            }
-        }
-
-        $this->pk_advertisement      = $this->id;
-        $this->available             = $data['available'];
-        $this->type_advertisement    = $data['type_advertisement'];
-        $this->fk_content_categories = $data['category'];
 
         return $this;
     }
@@ -433,8 +393,8 @@ class Advertisement extends Content
     {
         parent::read($id); // Read content of Content
 
-        $sql = 'SELECT * FROM advertisements WHERE pk_advertisement = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM advertisements WHERE pk_advertisement = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
             return;
@@ -476,16 +436,13 @@ class Advertisement extends Content
         parent::update($data);
 
         if (!empty($data['script'])) {
-            //$data['script'] = StringUtils::fixScriptDeclaration($data['script']);
             $data['script'] = base64_encode($data['script']);
         }
 
-        $data['overlap'] = (isset($data['overlap']))? $data['overlap']: 0;
-        $data['timeout'] = (isset($data['timeout']))? $data['timeout']: 0;
-        $data['with_script'] =
-            (isset($data['with_script']))? $data['with_script']: 0;
-        $data['type_medida'] =
-            (isset($data['type_medida']))? $data['type_medida']: 'NULL';
+        $data['overlap']     = (isset($data['overlap']))? $data['overlap']: 0;
+        $data['timeout']     = (isset($data['timeout']))? $data['timeout']: 0;
+        $data['with_script'] = (isset($data['with_script']))? $data['with_script']: 0;
+        $data['type_medida'] = (isset($data['type_medida']))? $data['type_medida']: 'NULL';
 
         $sql = "UPDATE advertisements
                 SET `type_advertisement`=?, `fk_content_categories`=?,
@@ -495,32 +452,22 @@ class Advertisement extends Content
                 WHERE pk_advertisement=".($data['id']);
 
         $values = array(
-            $data['type_advertisement'], $data['categories'],
-            $data['img'], $data['url'], $data['type_medida'],
+            $data['type_advertisement'],
+            $data['categories'],
+            $data['img'],
+            $data['url'],
+            $data['type_medida'],
             $data['num_clic'],
-            $data['num_view'], $data['with_script'], $data['script'],
-            $data['overlap'], $data['timeout']
+            $data['num_view'],
+            $data['with_script'],
+            $data['script'],
+            $data['overlap'],
+            $data['timeout']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return null;
         }
-
-        $rel = new RelatedContent();
-        $rel->delete($data['id']);
-        if (isset($data['selectos'])) {
-            $pos=1;
-            foreach ($data['selectos'] as $relac) {
-                $rel->setRelationPosition($data['id'], $pos, $relac);
-                $pos++;
-            }
-        }
-
-        // Necesarios para evento
-        $this->pk_advertisement      = $this->id;
-        $this->content_status        = $data['content_status'];
-        $this->type_advertisement    = $data['type_advertisement'];
-        $this->fk_content_categories = $data['category'];
 
         return $this;
     }
@@ -537,9 +484,9 @@ class Advertisement extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM advertisements WHERE pk_advertisement ='.($id);
+        $sql = 'DELETE FROM advertisements WHERE pk_advertisement = ?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             return;
         }
     }
@@ -615,69 +562,13 @@ class Advertisement extends Content
      **/
     public static function setNumClics($id)
     {
-        $sql = "UPDATE advertisements SET `num_clic_count`=`num_clic_count`+1 "
+        $sql =  "UPDATE advertisements "
+                ." SET `num_clic_count`=`num_clic_count`+1 "
                 ." WHERE `pk_advertisement`=?";
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return;
-        }
-
-        $ad = new Advertisement($id);
-
-        //No publicado
-        if ($ad->type_medida == 'CLIC'
-            && ($ad->num_clic <= $ad->num_clic_count)
-        ) {
-            $status = 0;
-            parent::set_status($status, 'NULL');
-        }
-    }
-
-    /**
-     * Set num views
-     *
-     * @param int $id The id of the advertisement to increase num_views
-     *
-     * @return void
-     **/
-    public static function setNumViews($id = null)
-    {
-        // if $id was not given return null and do nothing
-        if (is_null($id)) {
-            return null;
-        }
-
-        parent::setNumViews($id);
-
-        // if this ad has views limit and it has reached unpublish it
-        if (is_array($id)) {
-            foreach ($id as $banner) {
-                // if this ad has views limit and it has reached unpublish it
-                if (isset($banner)
-                    && is_object($banner)
-                    && property_exists($banner, 'type_medida')
-                ) {
-                    $banner->unpublishIfMaxViewsReached();
-                }
-            }
-        } else {
-            $ad = new Advertisement($id);
-            $ad->unpublishIfMaxViewsReached();
-        }
-    }
-
-    /**
-     * Marks an ad as unpublished if has reached its max allowed views
-     *
-     * @return void
-     **/
-    public function unpublishIfMaxViewsReached()
-    {
-        if (($this->type_medida == 'VIEW')
-            && ($this->num_view <= $this->views)
-        ) {
-            parent::set_status(0, 'NULL');
+            return false;
         }
     }
 
@@ -689,157 +580,78 @@ class Advertisement extends Content
      *
      * @return array $finalBanners of Advertisement objects
      **/
-    public function getAdvertisements($types = array(), $category = 'home')
+    public static function findForPositionIdsAndCategory($types = array(), $category = 'home', $wsUrl = null)
     {
         $banners = array();
         $finalBanners = array();
 
-        // See if advertisements are enabled
-        // $types must be an array and not empty
-        if (is_array($types) && count($types)>0 && ADVERTISEMENT_ENABLE) {
-            // Check category
-            $category = (empty($category) || ($category=='home'))? 0: $category;
+        if (!is_array($types) || count($types) <= 0 && !ADVERTISEMENT_ENABLE) {
+            return $banners;
+        }
 
-            // Get string of types separeted by coma
-            $types = implode(',', $types);
+        // Check category
+        $category = (empty($category) || ($category=='home')) ? 0 : $category;
+
+        // Get string of types separated by commas
+        $types = implode(',', $types);
+
+        // Generate sql with or without category
+        $cm = new \ContentManager();
+        if ($category !== 0) {
             $config = s::get(array('ads_settings'));
             if (isset($config['ads_settings']['no_generics'])
-                && ($config['ads_settings']['no_generics'] == '1')) {
+                && ($config['ads_settings']['no_generics'] == '1')
+            ) {
                 $generics = '';
             } else {
                 $generics = ' OR fk_content_categories=0';
             }
-
-            // Generate sql with or without category
-            $cm = new \ContentManager();
-            if ($category !== 0) {
-                $rsBanner = $cm->find(
-                    'Advertisement',
-                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
-                    (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.')',
-                    'ORDER BY contents.created'
-                );
-            } else {
-                $rsBanner = $cm->find(
-                    'Advertisement',
-                    ' contents.available=1 AND advertisements.type_advertisement IN ('.$types.') AND
-                    advertisements.fk_content_categories=0',
-                    'ORDER BY contents.created'
-                );
-            }
-
-            // If this banner is not in time don't add it to the final results
-            $rsBanner = $cm->getInTime($rsBanner);
-
-            // $advertisements is an array of all banners, grouped by ad type
-            $advertisements = array();
-            foreach ($rsBanner as $adv) {
-                // Get array of types for this advertisement
-                $adv->fk_content_categories = explode(',', $adv->fk_content_categories);
-
-                // If the ad don't belongs to category and home, skip it
-                if (!in_array($category, $adv->fk_content_categories)
-                    && $adv->fk_content_categories != array(0)
-                ) {
-                    continue;
-                }
-
-                // Initialize array of advertisements with type as array key
-                if (!isset($advertisements[$adv->type_advertisement])) {
-                    $advertisements[$adv->type_advertisement] = array();
-                }
-
-                // Check if this advertisement belongs to this category
-                $hasCategoryAdvertisement = in_array($category, $adv->fk_content_categories);
-
-                // Check if this advertisement belongs to home
-                $hasHomeAdvertisement = in_array(0, $adv->fk_content_categories);
-
-                // If ad belongs to (category) or (category + home)
-                if ($hasCategoryAdvertisement || ($hasHomeAdvertisement && $hasCategoryAdvertisement)) {
-                    array_push($advertisements[$adv->type_advertisement], $adv);
-                } else {
-                    // If ad belongs to home but not to category
-                    if ($hasHomeAdvertisement) {
-                        array_push($advertisements[$adv->type_advertisement], $adv);
-                    }
-                }
-            }
-
-            // Perform operations for each advertisement type
-            foreach ($advertisements as $adType => $advs) {
-                // Initialize banners arrays
-                $banners[$adType] = array();
-                $homeBanners[$adType] = array();
-                if (count($advs) > 1) {
-                    foreach ($advs as $ad) {
-                        if (in_array(0, $ad->fk_content_categories)) {
-                            array_push($homeBanners[$adType], $ad); // Home banners
-                            if (in_array($category, $ad->fk_content_categories)) {
-                                array_push($banners[$adType], $ad); // Category+Home banners
-                            }
-                        } else {
-                            array_push($banners[$adType], $ad); // Category banners
-                        }
-                    }
-                    // If this ad-type don't has any banner, get all from home
-                    if (empty($banners[$adType])) {
-                        $banners[$adType] = $homeBanners[$adType];
-                    }
-                } else {
-                    // If this ad-type only has one ad, add it to array
-                    $banners[$adType] = $advs;
-                }
-            }
-
-            // Generate final banners array with random selection by ad-type
-            foreach ($banners as $adv) {
-                $finalBanners[] = $adv[array_rand($adv)];
-            }
+            $catsSQL = 'AND (advertisements.fk_content_categories LIKE \'%'.$category.'%\' '.$generics.') ';
+        } else {
+            $catsSQL = 'AND advertisements.fk_content_categories=0 ';
         }
 
-        return $finalBanners;
-    }
+        $sql = "SELECT * FROM contents, advertisements "
+              ."WHERE contents.pk_content = advertisements.pk_advertisement "
+              .'AND contents.available=1 AND advertisements.type_advertisement IN ('.$types.') '
+              .$catsSQL
+              ."ORDER BY contents.created";
 
-    /**
-     * Return banners for the interstitial position.
-     *
-     * @param array  $type     the list of positions to get banners from.
-     * @param string $category the category to get banners from.
-     *
-     * @return array
-     **/
-    public function getIntersticial($type, $category = 'home')
-    {
-        $interstitial = null;
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        if (((($type + 50) % 100) == 0)
-            && ADVERTISEMENT_ENABLE
-        ) {
-            $category = (empty($category) || ($category=='home'))? 0: $category;
+        if (!$rs) {
+            \Application::logDatabaseError();
 
-            $cm = new ContentManager();
-            $rsBanner = $cm->find(
-                'Advertisement',
-                ' `contents`.`available`=1'
-                .' AND `advertisements`.`type_advertisement`=' . $type
-                .' AND `advertisements`.`fk_content_categories` LIKE "%'.$category.'%"',
-                ' ORDER BY `contents`.created'
-            );
-
-            $rsBanner = $cm->getInTime($rsBanner);
-
-            $numBanner = array_rand($rsBanner);
-            if (!is_null($numBanner)) {
-                $interstitial = $rsBanner[$numBanner];
-            } else {
-                $interstitial = null;
-            }
+            return $banners;
         }
 
-        return $interstitial;
-    }
+        $adsData = $rs->GetArray();
+        foreach ($adsData as $data) {
+            $advertisement = new \Advertisement();
+            $advertisement->load($data);
 
+            // Dont use this ad if is not in time
+            if (!$advertisement->isInTime()) {
+                continue;
+            }
+
+            // Initialize the categories array of this advertisement
+            $advertisement->fk_content_categories = explode(',', $advertisement->fk_content_categories);
+
+            // If the ad doesn't belong to the given category or home, skip it
+            if (!in_array($category, $advertisement->fk_content_categories)
+                && !in_array(0, $advertisement->fk_content_categories)
+            ) {
+                continue;
+            }
+
+
+            $banners []= $advertisement;
+        }
+
+        return $banners;
+    }
 
     /**
      * Renders the advertisment given a set of parameters
@@ -853,262 +665,106 @@ class Advertisement extends Content
     {
         $output = '';
 
-        $params['beforeHTML'] = "<div class=\"ad_in_column ad_horizontal_marker clearfix\"><div>";
-        $params['afterHTML'] = "</div></div>";
-
         if (defined('ADVERTISEMENT_ENABLE')  && !ADVERTISEMENT_ENABLE) {
             return $output;
         }
 
-        $banner = $this;
-
-        $width  = $this->params['width'];
-        $height = $this->params['height'];
-
-        if ($this->with_script == 1) {
-            $photo = new \Photo($this->img);
+        if (array_key_exists('cssclass', $params)
+            && isset($params['cssclass'])
+        ) {
+            $wrapperClass = $params['cssclass'];
+        } else {
+            $wrapperClass = 'ad_in_column ad_horizontal_marker clearfix';
+        }
+        if ($this->type_advertisement == 37) {
+            //floating ads
+            $params['beforeHTML'] = "<div class=\"$wrapperClass\">";
+            $params['afterHTML']  = "</div>";
         }
 
-        $photo = new \Photo($this->img);
+        $cssclass             = $params['cssclass'];
+        $width                = $this->params['width'];
+        $height               = $this->params['height'];
+        $overlap              = (isset($this->params['overlap']))? $this->params['overlap']: false;
+        $isBastardIE          = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
 
-        // Overlap flash?
-        $overlap  = (isset($this->params['overlap']))? $this->params['overlap']: false;
-        $isBastardIE = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
+        // Extract width and height properties from CSS
+        $width  = $params['width'];
+        $height = $params['height'];
 
-        if (isset($params['beforeHTML'])) {
-            $output .= $params['beforeHTML'];
+        if (!is_null($this->params['width'])
+            && !is_null($this->params['height'])
+        ) {
+            $width = $this->params['width'];
+            $height = $this->params['height'];
         }
 
-        // Initial container
-        $output .= '<div class="'.$cssclass.'">';
-
         if ($this->with_script == 1) {
-            // Original method
-            // $output .= $banner->script;
-            // Parallelized method using iframes
             if (preg_match('/<iframe/', $this->script)) {
-                $output .= $this->script;
+                $content = $this->script;
             } else {
                 $url = SITE_URL.'ads/get/'
-                    . date('YmdHis', strtotime($this->created))
+                    .date('YmdHis', strtotime($this->created))
                     .sprintf('%06d', $this->pk_content)  . '.html' ;
-                $output .=
-                    '<iframe src="'.$url.'" '
-                    .'style="width:'.$this->params['width'].'px; '
-                    .'height:'.$this->params['height'].'px"></iframe>';
+                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
             }
 
-        } elseif (!empty($banner->pk_advertisement)) {
+        } else {
+            global $sc;
+            $photo = $sc->get('entity_repository')->find('Photo', $this->img);
+
+            // If the Ad is Flash/Image based try to get the width and height fixed
+            if (isset($photo)) {
+                if (($photo->width <= $width)
+                    && ($photo->height <= $height)
+                ) {
+                    $width  = $photo->width;
+                    $height = $photo->height;
+                }
+            }
+
+            $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
+                  .sprintf('%06d', $this->pk_advertisement).'.html';
+            $mediaUrl = MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name;
 
             // TODO: controlar los banners swf especiales con div por encima
-            if (strtolower($photo->type_img)=='swf') {
+            if (strtolower($photo->type_img) == 'swf') {
 
-                if (!$overlap && !$banner->overlap) {
-                    // Flash object
-                    // FIXME: build flash object with all tags and params
+                $flashObject =
+                    '<object width="'.$width.'" height="'.$height.'" >
+                        <param name="wmode" value="window" />
+                        <param name="movie" value="'.$mediaUrl. '" />
+                        <param name="width" value="'.$width.'" />
+                        <param name="height" value="'.$height.'" />
+                        <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
+                            .'SCALE="exactfit" wmode="window"></embed>
+                    </object>';
 
-                    $output .= '<a target="_blank" href="'
-                                .SITE_URL.'ads/'. date('YmdHis', strtotime($banner->created))
-                                .sprintf('%06d', $banner->pk_advertisement)
-                                .'.html" rel="nofollow" style="display:block;cursor:pointer">';
-                    $output .= '<object width="'.$width.'" height="'.$height.'" >
-                            <param name="wmode" value="window" />
-                            <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
-                            <param name="width" value="'.$width.'" />
-                            <param name="height" value="'.$height.'" />
-                            <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '"
-                                width="'.$width.'" height="'.$height.'" SCALE="exactfit" alt="Publicidad '
-                                .$banner->title
-                                .'" wmode="window"></embed>
-                        </object>';
+                if (!$overlap && !$this->overlap) {
+                    $content =
+                        '<a target="_blank" href="'.$url.'" rel="nofollow" '
+                        .'style="display:block;cursor:pointer">'.$flashObject.'</a>';
                 } else {
-                    if (!$isBastardIE) {
-                        $output .= '<div style="position: relative; width: 100%; height: '.$height.'px;">
-                            <div style="left:0px;top:0px;cursor:pointer;background-color:transparent;'
-                                .'position:absolute;z-index:100;width:'.
-                                $width.'px;height:'.$height.'px;"
-                                onclick="javascript:window.open(\''.SITE_URL.'ads/'
-                                .date('YmdHis', strtotime($banner->created)).sprintf('%06d', $banner->pk_advertisement)
-                                .'.html\', \'_blank\');return false;"></div>';
-                    } else {
-                        $output .= '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
-                            <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
-                                .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
-                                $width.'px;height:'.$height.'px;"
-                                onclick="javascript:window.open(\''.SITE_URL.'ads/'
-                                .date('YmdHis', strtotime($banner->created))
-                                .sprintf('%06d', $banner->pk_advertisement)
-                                .'.html\', \'_blank\');return false;"></div>';
-                    }
-
-                    $output .= '<div style="position: absolute; z-index: 0; width: '.$width.'px; left: 0px; height: '.$height.'px;">
-                            <object width="'.$width.'" height="'.$height.'">
-                                <param name="movie" value="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" />
-                                <param name="wmode" value="opaque" />
-                                <param name="width" value="'.$width.'" />
-                                <param name="height" value="'.$height.'" />
-                                <embed src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name. '" wmode="opaque"
-                                    width="100%" height="100%" alt="Publicidad '. $banner->title. '"></embed>
-                            </object>
-                        </div>
-                      </div>';
-
-                    $output .= '</div>';
-
-                    if (isset($params['afterHTML'])) {
-                        $output .= $params['afterHTML'];
-                    }
-
-
-                    return render_output($output, $banner);
+                    // CHECK: dropped checking of IE
+                    $content = '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
+                        <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
+                            .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
+                            $width.'px;height:'.$height.'px;"
+                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;"></div>';
                 }
+
+                $content = '<div style="width:'.$width.'px; height:'.$height.'px;">'.$content.'</div>';
             } else {
                 // Image
-                $output .= '<a target="_blank" href="'.SITE_URL.'ads/'
-                        .date('YmdHis', strtotime($banner->created))
-                        .sprintf('%06d', $banner->pk_advertisement) .'.html" rel="nofollow">';
-                $output .= '<img src="'. MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name.'"
-                        alt="Publicidad '.$banner->title.'" width="'.$width.'" height="'.$height.'" />';
+                $imageObject = '<img src="'. $mediaUrl.'" width="'.$width.'" height="'.$height.'" />';
+
+                $content = '<a target="_blank" href="'.$url.'" rel="nofollow">'.$imageObject.'</a>';
             }
-
-            $output .= '</a>';
-        } else {
-            // Empty banner, don't return anything
-            $output = '';
-            return render_output($output, $banner);
         }
 
-        $output .= '</div>';
-
-        // Post content of banner
-        if (isset($params['afterHTML'])) {
-            $output .= $params['afterHTML'];
-        }
+        $output = $params['beforeHTML'].$content.$params['afterHTML'];
 
         return $output;
-    }
-
-    /**
-     * Inject banners into template
-     *
-     * @param array  $banners Array of Advertisement objects
-     * @param Smarty $tpl     Template
-     * @param string $wsUrl   The external web service url
-     **/
-    public function renderMultiple($banners, $tpl, $wsUrl = false)
-    {
-        // Extract pk_photos to perform one query
-        $pk_photos = array();
-        foreach ($banners as $banner) {
-            if (!empty($banner->path)) {
-                $pk_photos[] = $banner->path;
-            }
-        }
-        $banners_selected =array();
-
-        //Get photos
-        $cm = new ContentManager();
-        if (!$wsUrl) {
-            $objs = $cm->cache->find(
-                'Photo',
-                "pk_content IN ('" . implode("','", $pk_photos) . "')"
-            );
-        } else {
-            $objsArray = array();
-            foreach ($pk_photos as $photo) {
-                $objsArray[] = json_decode(file_get_contents($wsUrl.'/ws/images/id/'.(int) $photo));
-            }
-            foreach ($objsArray as $item) {
-                $content = new Advertisement();
-                $content->load($item);
-                $objs[] = $content;
-            }
-        }
-
-        // Array of photos objects,  key is pk_content array('pk_content' => object)
-        $photos = array();
-        if (!empty($objs)) {
-            foreach ($objs as $obj) {
-                $photos[ $obj->pk_content ] = $obj;
-            }
-        }
-
-        foreach ($banners as $banner) {
-            // Save selected banners to process after
-            $banners_selected[] = $banner;
-
-            if (isset($banner->type_advertisement)
-                && property_exists($banner, 'type_advertisement')
-            ) {
-                $tpl->assign('banner'.$banner->type_advertisement, $banner);
-            }
-
-            // FIXME: This is a workarround until decide what to do into
-            // the Content class
-            // This will avoid the the notice messages but doesn't keep
-            // the code clean.
-            // We should change de content class to return values
-            // always initialized.
-            if (isset($banner->with_script)) {
-                $with_script = $banner->with_script;
-            } else {
-                $with_script = null;
-            }
-
-            if ($with_script) {
-                $tpl->assign(
-                    'script_b'.$banner->type_advertisement,
-                    $banner->script
-                );
-            } else {
-
-                if (isset($banner->path) && property_exists($banner, 'path')) {
-                    // "path" is Photo ID, $banner->img
-                    // is similar but deprecated
-                    $adv = $banner->path;
-                }
-                //Evitar undefined index
-                if (isset($photos[$adv])) {
-                    $tpl->assign(
-                        'photo'.$banner->type_advertisement,
-                        $photos[$adv]
-                    );
-                }
-            }
-        }
-
-        // Update numviews
-        Advertisement::setNumViews($banners_selected);
-    }
-
-    /**
-     * Emulate smarty method,
-     * workaround for Advertisement::render
-     *
-     * @param string $entry
-     * @param mixed  $value
-     **/
-    public function assign($entry, $value)
-    {
-        $this->_registry[$entry] = $value;
-    }
-
-    /**
-     * Fetch a entry from set of banners,
-     * workaround for Advertisement::render
-     *
-     * @param  string $entry
-     * @return mixed
-     **/
-    public function fetch($entry)
-    {
-        if (isset($this->_registry[$entry])) {
-            $value = $this->_registry[$entry];
-        } else {
-            $value = null;
-        }
-
-        return $value;
     }
 
     /**

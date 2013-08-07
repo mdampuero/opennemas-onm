@@ -424,6 +424,7 @@ class Article extends Content
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             return false;
         }
+        return true;
     }
 
     /**

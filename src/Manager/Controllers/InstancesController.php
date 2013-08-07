@@ -359,7 +359,8 @@ class InstancesController extends Controller
             'site_title', 'site_description','site_keywords',
             'site_agency','site_name','site_created',
             'contact_mail','contact_name','contact_IP',
-            'time_zone','site_language','mail_server',
+            'time_zone','site_language',
+            'newsletter_sender',  'max_mailing', 'mail_server', 'last_invoice',
             'mail_username','mail_password','google_maps_api_key',
             'google_custom_search_api_key','facebook',
             'google_analytics','piwik',
@@ -375,6 +376,7 @@ class InstancesController extends Controller
         s::invalidate('activated_modules', $data['internal_name']);
         // Delete the 'site_name' from cache service for this instance
         s::invalidate('site_name', $data['internal_name']);
+        s::invalidate('last_invoice', $data['internal_name']);
 
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
         $GLOBALS['application']->conn = $this->instanceManager->getConnection($settings);

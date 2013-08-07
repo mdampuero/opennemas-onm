@@ -64,7 +64,6 @@ class MethodCacheManager
      **/
     public function __construct($object, $options = array())
     {
-
         global $sc;
         $this->cache = $sc->get('cache');
 

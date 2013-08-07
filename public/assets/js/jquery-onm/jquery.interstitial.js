@@ -38,7 +38,7 @@ function IntersticialBanner(options) {
 
     this.iframeHTML = '<ifr' + 'ame width="100%" height="100%" frameborder="0" src="#{src}" marginheight="0" marginwidth="0" scrolling="no"></iframe>';
     this.template = '<div id="intesticial-ad">'+
-                        '<div class="wrapper"><div class="header"><div class="logo-and-phrase"><div class="logo"></div> | Entrando en la página solicitada</div>'+
+                        '<div class="wrapper"><div class="header"><div class="logo-and-phrase"><div class="logo"></div>Entrando en la página solicitada</div>'+
                             '<div class="closeButton"><a href="/" title="Saltar publicidad"><span>Saltar publicidad</span></a></div>'+
                         '</div>'+
                         '<div class="content">#{content}</div></div>'+
@@ -77,7 +77,7 @@ IntersticialBanner.prototype = {
         this.element.html($content);
 
         $('div.closeButton a', this.element).click( $.proxy(this, 'onClose') );
-        if(this.publiId!=null) {
+        if (this.publiId != null) {
             $('div.content', this.element).click( $.proxy(this, 'gotoPubli') );
         }
     },
@@ -126,8 +126,9 @@ IntersticialBanner.prototype = {
         event.stopPropagation(); // stop event
         event.preventDefault();
 
-        //location.href = '/advertisement.php?action=show&publi_id=' + this.publiId;
-        window.open('/ads/'+ this.publiId+'.html', '_blank');
+
+        window.open('/ads/' + this.publiId + '.html', '_blank');
+
         this.close();
     },
 

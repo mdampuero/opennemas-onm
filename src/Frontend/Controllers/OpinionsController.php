@@ -216,7 +216,8 @@ class OpinionsController extends Controller
             );
         }
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'opinion/opinion_frontpage.tpl',
@@ -377,7 +378,6 @@ class OpinionsController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached('opinion/frontpage_author.tpl', $cacheID)
         ) {
-
             // Get author info
             $author = new \User($authorID);
             $author->params = $author->getMeta();
@@ -781,7 +781,8 @@ class OpinionsController extends Controller
             $opinion->category_name = $this->category_name;
 
             //Fetch information for Advertisements
-            $this->getAds('inner');
+            $ads = $this->getAds('inner');
+            $this->view->assign('advertisements', $ads);
 
             if (($opinion->available==1) && ($opinion->in_litter == 0)) {
 
@@ -820,31 +821,18 @@ class OpinionsController extends Controller
      *
      * @param string $context the context to fetch ads from
      */
-    private function getAds($context = 'frontpage')
+    private function getAds($context = '')
     {
         if ($context == 'inner') {
-            $positions = array(701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
-            $intersticialId = 750;
+            $positions = array(750, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
         } else {
-            $positions = array(601, 602, 603, 605, 609, 610, 691, 692);
-            $intersticialId = 650;
+            $positions = array(650, 601, 602, 603, 605, 609, 610, 691, 692);
         }
 
         $ccm = \ContentCategoryManager::get_instance();
         $category = $ccm->get_id($this->category_name);
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $advertisement = \Advertisement::getInstance();
-
-        $banners = $advertisement->getAdvertisements($positions, $category);
-        $banners = $this->cm->getInTime($banners);
-
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        // Get intersticial banner
-        $intersticial = $advertisement->getIntersticial($intersticialId, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

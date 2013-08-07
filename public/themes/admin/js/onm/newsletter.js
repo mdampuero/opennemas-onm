@@ -11,9 +11,10 @@ $('#newsletter-pick-elements-form').on('submit', function(e, ui) {
 });
 
 $("#newsletter-pick-elements-form").on('click', '#next-button', function(e, ui) {
-    if (has_contents) {
+    total = $('#items-recipients li').length;
+    if (total<0) {
+        $(".messages").html('<div class="warning alert-message"><button class="close" data-dismiss="alert">×</button>Choose email recipients</div>');
         e.preventDefault();
-        $("#modal-newsletter-accept").modal('show');
     } else {
         $("#modal-newsletter-accept").modal('hide');
         $('#newsletter-pick-elements-form').submit();
@@ -330,14 +331,22 @@ $('#parse-and-add').on('click', function (e, ui) {
                 final_list.push(item);
             }
         });
+        total = $('#items-recipients li').length;
         $.each(final_list, function(index, item) {
-            item = $('<li></li>', {
-                'data-email' : item,
-                'data-name' : item,
-                'class' : 'account'
-            }).html(item).append('<i class="icon icon-trash"></i>');
-            $('#items-recipients').append(item);
+            total = total +1;
+            if (total <= 10) {
+                item = $('<li></li>', {
+                    'data-email' : item,
+                    'data-name' : item,
+                    'class' : 'account'
+                }).html(item).append('<i class="icon icon-trash"></i>');
+                $('#items-recipients').append(item);
+            }
         });
+        if(total >= 10) {
+            $(".messages").html('<div class="alert alert-warning"><button class="close" data-dismiss="alert">×</button>Remember, only 10 recipients are allowed manually</div>');
+
+        }
     }
 });
 

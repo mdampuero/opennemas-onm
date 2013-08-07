@@ -135,7 +135,8 @@ class PollsController extends Controller
             );
         }
 
-        $this->getAds('frontpage');
+        $ads = $this->getAds('frontpage');
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'poll/poll_frontpage.tpl',
@@ -225,7 +226,8 @@ class PollsController extends Controller
             $message = _('You have voted this poll previously.');
         }
 
-        $this->getAds('inner');
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'poll/poll.tpl',
@@ -299,26 +301,20 @@ class PollsController extends Controller
      **/
     protected function getAds($context = 'frontpage')
     {
-        $advertisement = \Advertisement::getInstance();
-
         // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
         if ($context == 'inner') {
-            $positions = array(901, 902, 903, 905, 909, 910, 991, 992);
-            $intersticialId = 950;
+            $positions = array(
+                950,
+                901, 902, 903, 905, 909, 910, 991, 992
+            );
         } else {
-            $positions = array(801, 802, 803, 805, 809, 810, 891, 892);
-            $intersticialId = 850;
+            $positions = array(
+                850,
+                801, 802, 803, 805, 809, 810, 891, 892
+            );
         }
-        $banners = $advertisement->getAdvertisements($positions, $this->category);
 
-        $banners = $this->cm->getInTime($banners);
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial($intersticialId, $this->category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
     }
 
     /**

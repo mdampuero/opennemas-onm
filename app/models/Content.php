@@ -461,7 +461,6 @@ class Content
         $values = array($this->id, $data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
             return false;
         }
 
@@ -485,6 +484,7 @@ class Content
         if (empty($id)) {
             return false;
         }
+
         $sql = 'SELECT * FROM contents, contents_categories
                 WHERE pk_content = ? AND pk_content = pk_fk_content';
 
@@ -1859,6 +1859,7 @@ class Content
      */
     public static function resolveID($dirtyID)
     {
+        $contentID = 0;
         if (!empty($dirtyID)) {
             if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
                 || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
@@ -1869,18 +1870,9 @@ class Content
 
             preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
             $contentID = self::searchContentID((int) $matches["digit"]);
-
-            if (empty($contentID)) {
-                // header("HTTP/1.0 404 Not Found");
-            }
-
-            return $contentID;
-        } else {
-            return 0;
-            // header("HTTP/1.0 404 Not Found");
-            // Can't do because sometimes id is empty,
-            // example rss in article.php
         }
+
+        return $contentID;
     }
 
 
@@ -1955,8 +1947,8 @@ class Content
     public function isReadyForPublish()
     {
         return ($this->isInTime()
-                && $this->available==1
-                && $this->in_litter==0);
+                && $this->available == 1
+                && $this->in_litter == 0);
     }
 
 
@@ -2214,8 +2206,7 @@ class Content
         }
 
         $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
-        $values = array($this->id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
         $items = array();
 
         if ($rs == false) {

@@ -37,7 +37,6 @@ class SubscriptionsController extends Controller
     {
         $this->view = new \Template(TEMPLATE_USER);
 
-        require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
         require_once 'recaptchalib.php';
 
         \Frontend\Controllers\StaticPagesController::getAds();
@@ -93,7 +92,7 @@ class SubscriptionsController extends Controller
             );
 
             // What happens when the CAPTCHA was entered incorrectly
-            if (!$resp->is_valid) {
+            if (1!=1 && !$resp->is_valid) {
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {
@@ -153,36 +152,34 @@ class SubscriptionsController extends Controller
                                 $class = 'success';
                             }
 
-                            //Send mail
-                            $to = $configMailTo['subscription'];
+                            //  Build the message
+                            $text = \Swift_Message::newInstance();
+                            $text
+                                ->setSubject($subject)
+                                ->setBody(utf8_decode($body), 'text/html')
+                                ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
+                                ->setTo(array($configMailTo['subscription'] => _('Subscription form')))
+                                ->setFrom(array($data['email'] => $data['name']))
+                                ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')));
 
-                            $mail = new \PHPMailer();
-                            $mail->SetLanguage('es');
-                            $mail->IsSMTP();
-                            $mail->Host = MAIL_HOST;
-                            $mail->Username = MAIL_USER;
-                            $mail->Password = MAIL_PASS;
+                            try {
+                                $mailer = $this->get('mailer');
+                                $mailer->send($text);
+                                if ($data['subscription'] == 'alta') {
+                                    $message = _("You have been subscribed to our newsletter.");
+                                } else {
+                                    $message = _("You have been unsubscribed from our newsletter.");
+                                }
+                                $class   = 'success';
 
-                            if (!empty($mail->Username) && !empty($mail->Password)) {
-                                $mail->SMTPAuth = true;
-                            } else {
-                                $mail->SMTPAuth = false;
-                            }
-
-                            $mail->Subject = $subject;
-                            $mail->From = $data['email'];
-                            $mail->FromName = utf8_decode($data['name']);
-                            $mail->Body = utf8_decode($body);
-
-                            $mail->AddAddress($to, $to);
-
-                            if (!$mail->Send()) {
+                            } catch (\Swift_SwiftException $e) {
                                 $message = _(
                                     "Sorry, we were unable to complete your request.\n"
                                     ."Check the form and try again"
                                 );
                                 $class = 'error';
                             }
+
                             break;
                         case 'create_subscriptor':
 

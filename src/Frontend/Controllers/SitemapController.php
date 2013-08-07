@@ -94,6 +94,16 @@ class SitemapController extends Controller
                         $articlesByCategory[$category->name]
                     );
 
+                    // Exclude articles with external link from RSS
+                    foreach ($articlesByCategory[$category->name] as $key => $article) {
+                        if (!is_null($article['params'])) {
+                            $article['params'] = unserialize($article['params']);
+                            if (isset($article['params']['bodyLink']) && !empty($article['params']['bodyLink'])) {
+                                unset($articlesByCategory[$category->name][$key]);
+                            }
+                        }
+                    }
+
                 }
             }
 
