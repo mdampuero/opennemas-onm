@@ -39,7 +39,6 @@ class UserController extends Controller
         $this->session = $this->get('session');
         $this->session->start();
 
-        require_once SITE_VENDOR_PATH.'/phpmailer/class.phpmailer.php';
         require_once 'recaptchalib.php';
     }
 

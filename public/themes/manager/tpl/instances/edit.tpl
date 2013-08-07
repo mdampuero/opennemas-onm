@@ -418,7 +418,9 @@ jQuery(document).ready(function($) {
             </div>
 
              <div id="mail">
-               <table>
+                <fieldset>
+                    <legend>{t}Mail{/t}</legend>
+                    <table>
                     <tbody>
                         <tr valign="top" class="control-group">
                             <th scope="row">
@@ -454,7 +456,49 @@ jQuery(document).ready(function($) {
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <legend>{t}Newsletter{/t}</legend>
+                    <table>
+                    <tbody>
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="newsletter_sender" class="control-label">{t}Newsletter sender{/t}</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="newsletter_sender" name="newsletter_sender" value="{$configs['newsletter_sender']|default:'no-reply@postman.opennemas.com'}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="max_mailing" class="control-label">{t}Num Max emails sent by month{/t}</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="max_mailing" name="max_mailing" value="{$configs['max_mailing']|default:'12000'}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="site_title" class="control-label">{t}Last  invoice date:{/t}</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="last_invoice" name="last_invoice" value="{if $configs['last_invoice']}{$configs['last_invoice']}{else} {/if}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </fieldset>
             </div>
 
             <div id="log">

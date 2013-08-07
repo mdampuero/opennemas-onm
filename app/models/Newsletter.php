@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the NewNewsletter class
+ * Defines the Newsletter class
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -16,7 +16,7 @@
  *
  * @package    Model
  */
-class NewNewsletter
+class Newsletter
 {
     /**
      * The title of the newsletter
@@ -58,7 +58,7 @@ class NewNewsletter
      *
      * @param string $id the content id to initilize.
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function __construct($id = null)
     {
@@ -72,16 +72,20 @@ class NewNewsletter
      *
      * @param array $data array with data for saved
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function create($data)
     {
         $data['created'] = date("Y-m-d H:i:s");
 
-        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`)'
-             . ' VALUES (?,?,?,?)';
+        if (!array_key_exists('sent', $data)) {
+            $data['sent'] = 0;
+        }
 
-        $values = array($data['title'], $data['data'], $data['html'], $data['created']);
+        $sql = 'INSERT INTO `newsletter_archive` (`title`, `data`, `html`, `created`, `updated`, `sent`)'
+             . ' VALUES (?,?,?,?,?,?)';
+
+        $values = array($data['title'], $data['data'], $data['html'], $data['created'], $data['created'], $data['sent']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
@@ -98,7 +102,7 @@ class NewNewsletter
      *
      * @param array $newdata array with data for update
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function update($newdata)
     {
@@ -124,7 +128,11 @@ class NewNewsletter
             $data = $this->data;
         }
         if (array_key_exists('sent', $newdata) && !is_null($newdata['sent'])) {
-            $sent = $newdata['sent'];
+            if (!empty($this->sent)) {
+                $sent = (int)$this->sent + (int)$newdata['sent'];
+            } else {
+                $sent = $newdata['sent'];
+            }
         } else {
             $sent = $this->sent;
         }
@@ -152,7 +160,7 @@ class NewNewsletter
      *
      * @param int $id the object id to load
      *
-     * @return NewNewsletter the object instance loaded
+     * @return Newsletter the object instance loaded
      **/
 
     public function read($id)
@@ -191,7 +199,7 @@ class NewNewsletter
      *
      * @param Array $fields the database fields to load into the object
      *
-     * @return NewNewsletter the object instance
+     * @return Newsletter the object instance
      **/
     public function loadData($fields)
     {
@@ -200,6 +208,7 @@ class NewNewsletter
         $this->title         = $fields['title'];
         $this->data          = $fields['data'];
         $this->created       = $fields['created'];
+        $this->updated       = $fields['updated'];
         $this->html          = $fields['html'];
         $this->sent          = $fields['sent'];
 

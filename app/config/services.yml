@@ -68,6 +68,10 @@ services:
         class: Repository\SettingManager
         arguments: [ @cache, %cache_prefix% ]
 
+    newsletter_manager:
+        class: Repository\NewsletterManager
+        arguments: [ @mailer, @logger ]
+
     automatic_contents:
         class: Onm\MachineSearcher
         arguments: [ @cache ]

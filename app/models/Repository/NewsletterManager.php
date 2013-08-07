@@ -10,6 +10,8 @@
  *
  * @package  Core
  */
+namespace Repository;
+
 use Onm\Settings as s;
 use Onm\Message  as m;
 
@@ -20,6 +22,18 @@ use Onm\Message  as m;
  */
 class NewsletterManager
 {
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function __construct($mailer, $logger)
+    {
+        $this->mailer = $mailer;
+        $this->logger = $logger;
+    }
+
     /**
      * Performs searches in newsletters
      *
@@ -46,9 +60,13 @@ class NewsletterManager
             $limit = '';
         }
 
-        $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
 
+        $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
         $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $sql2 = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
+        $countNm = $GLOBALS['application']->conn->GetOne($sql2);
 
         if (!$rs) {
             return;
@@ -56,15 +74,14 @@ class NewsletterManager
 
         $newsletters = array();
         while (!$rs->EOF) {
-            $obj = new \NewNewsletter();
+            $obj = new \Newsletter();
             $obj->loadData($rs->fields);
 
             $newsletters[] = $obj;
 
             $rs->MoveNext();
         }
-
-        return $newsletters;
+        return array($countNm, $newsletters);
     }
 
     /**
@@ -78,6 +95,9 @@ class NewsletterManager
      */
     public function send($mailboxes, $htmlContent, $params)
     {
+        set_time_limit(0);
+        ignore_user_abort(true);
+
         $this->saveNewsletter($htmlContent);
 
         foreach ($mailboxes as $mailbox) {
@@ -96,73 +116,31 @@ class NewsletterManager
      */
     public function sendToUser($mailbox, $htmlcontent, $params)
     {
-        require_once SITE_VENDOR_PATH."/phpmailer/class.phpmailer.php";
-
-        $mail = new PHPMailer();
-        $mail->SetLanguage('es');
-        $mail->IsSMTP();
-        $mail->Host = $params['mail_host'];
-        if (!empty($params['mail_user'])
-            && !empty($params['mail_password'])
-        ) {
-            $mail->SMTPAuth = true;
-        } else {
-            $mail->SMTPAuth = false;
-        }
-
-        $mail->CharSet = 'utf-8';
-
-        $mail->Username = $params['mail_user'];
-        $mail->Password = $params['mail_pass'];
-
-        // Inject values by $params array
-        $mail->From     = $params['mail_from'];
-        $mail->FromName = $params['mail_from_name'];
-        $mail->IsHTML(true);
         $this->HTML = $htmlcontent;
 
-        $mail->AddAddress($mailbox->email, $mailbox->name);
+        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
-        // embed image logo
-        $mail->AddEmbeddedImage(SITE_PATH . 'themes/xornal/images/xornal-boletin.jpg', 'logo-cid', 'Logotipo');
+        //  Build the message
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($subject)
+            ->setBody($this->HTML, 'text/html')
+            ->setBody(strip_tags($this->HTML), 'text/plain')
+            ->setTo(array($mailbox->email => $mailbox->name))
+            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+            ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')));
 
-        $subject = (!isset($params['subject']))? '[Xornal]': $params['subject'];
-        $mail->Subject  = $subject;
+        try {
+            $this->mailer->send($message);
 
-        // TODO: crear un filtro
-        $this->HTML = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $this->HTML);
-        $this->HTML = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $this->HTML);
-        $this->HTML = str_replace('“', '&#8220;', $this->HTML);
-        $this->HTML = str_replace('”', '&#8221;', $this->HTML);
-        $this->HTML = str_replace('‘', '&#8216;', $this->HTML);
-        $this->HTML = str_replace('’', '&#8217;', $this->HTML);
-
-        $mail->Body = $this->HTML;
-
-        if (!$mail->Send()) {
-            $this->errors[] = "Error en el envío del mensaje " . $mail->ErrorInfo;
+        } catch (\Swift_SwiftException $e) {
+            $this->logger->notice(_("Unable to send newsletter: ").$e->getMessage());
+            $this->errors[] = _("Unable to send newsletter: ").$e->getMessage();
 
             return false;
         }
 
         return true;
-    }
-
-    /**
-     * Set config values to send mails
-     *
-     * To establish life time to infinite and ignore button stop of the browser
-     * <code>
-     * set_time_limit(0);
-     * ignore_user_abort(true);
-     * </code>
-     *
-     * @return void
-    */
-    public function setConfigMailing()
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
     }
 
     /**
@@ -174,8 +152,8 @@ class NewsletterManager
      **/
     public function render($contents)
     {
-        $tpl = new Template(TEMPLATE_USER);
-        $cm  = new ContentManager();
+        $tpl = new \Template(TEMPLATE_USER);
+        $cm  = new \ContentManager();
 
         $newsletterContent = $contents;
 
@@ -238,7 +216,7 @@ class NewsletterManager
         $tpl->assign('menuFrontpage', $menuFrontpage->items);
 
         //render ads
-        $advertisement = Advertisement::getInstance();
+        $advertisement = \Advertisement::getInstance();
         $banners       = $advertisement->getAdvertisements(array(1001, 1009), 0);
         $banners       = $cm->getInTime($banners);
 
@@ -274,17 +252,5 @@ class NewsletterManager
         $htmlContent = $tpl->fetch('newsletter/newNewsletter.tpl');
 
         return $htmlContent;
-    }
-
-    /**
-     * Converts to a json enconded string a HTML
-     *
-     * @param string $htmlContent the html content of a newsletter
-     *
-     * @return string the json-encoded HTML
-     **/
-    public function saveNewsletter($htmlContent)
-    {
-        json_encode($htmlContent);
     }
 }
