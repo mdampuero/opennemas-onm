@@ -729,7 +729,8 @@ class UserController extends Controller
             );
         }
 
-        $this->getInnerAds();
+        $ads = $this->getInnerAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'user/frontpage_authors.tpl',
@@ -753,19 +754,9 @@ class UserController extends Controller
 
         $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        $advertisement = \Advertisement::getInstance();
-        $banners = $advertisement->getAdvertisements($positions, $category);
+        $category = $ccm->get_id($this->category_name);
+        $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        if (count($banners<=0)) {
-            $cm = new \ContentManager();
-            $banners = $cm->getInTime($banners);
-            //$advertisement->renderMultiple($banners, &$tpl);
-            $advertisement->renderMultiple($banners, $advertisement);
-        }
-        // Get intersticial banner,1,2,9,10
-        $intersticial = $advertisement->getIntersticial(150, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }
