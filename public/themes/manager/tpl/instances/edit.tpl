@@ -487,7 +487,7 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title" class="control-label">{t}Last  invoice date:{/t}</label>
+                                <label for="site_title" class="control-label">{t}Last invoice date:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="text" id="last_invoice" name="last_invoice" value="{if $configs['last_invoice']}{$configs['last_invoice']}{else} {/if}">

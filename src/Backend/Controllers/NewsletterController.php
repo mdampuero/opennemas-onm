@@ -576,8 +576,13 @@ class NewsletterController extends Controller
         if (empty($date)) {
             $lastInvoice = new \DateTime();
         } else {
-            $lastInvoice = new \DateTime($date);
+            try {
+                $lastInvoice = new \DateTime($date);
+            } catch (\Exception $e) {
+                $lastInvoice = new \DateTime();
+            }
         }
+
         if ($lastInvoice->format('d') > 28 ) {
             $lastInvoice = $lastInvoice->setDate($lastInvoice->format('Y'), $lastInvoice->format('m'), 28);
         }
