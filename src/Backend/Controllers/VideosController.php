@@ -39,7 +39,6 @@ class VideosController extends Controller
 
         // Check if the user can admin video
         $this->checkAclOrForward('VIDEO_ADMIN');
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         /******************* GESTION CATEGORIAS  *****************************/
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');

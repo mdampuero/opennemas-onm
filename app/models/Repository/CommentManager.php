@@ -65,8 +65,6 @@ class CommentManager extends BaseManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -99,8 +97,6 @@ class CommentManager extends BaseManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -128,15 +124,13 @@ class CommentManager extends BaseManager
         $limitSQL = $this->getLimitSQL($elemsByPage, $page);
 
         $sql = "SELECT * FROM `comments`
-                WHERE `content_id`=? AND `status`='".\Comment::STATUS_ACCEPTED."'
+                WHERE `content_id`=? AND `status`=?
                 ORDER BY `date` DESC $limitSQL";
-        $values = array($contentID);
+        $values = array($contentID, \Comment::STATUS_ACCEPTED);
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs == false) {
-            \Application::logDatabaseError();
-
             return array();
         }
 
@@ -167,8 +161,8 @@ class CommentManager extends BaseManager
         }
 
         $sql = "SELECT count(id) FROM comments
-                WHERE content_id = ? AND `status` ='".\Comment::STATUS_ACCEPTED."'";
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentID));
+                WHERE content_id = ? AND `status` =?";
+        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentID, \Comment::STATUS_ACCEPTED));
 
         return intval($rs);
     }
@@ -187,10 +181,9 @@ class CommentManager extends BaseManager
     public static function getPublicCommentsAndTotalCount($contentId, $elemsByPage, $offset)
     {
         // Get the total number of comments
-        $sql = 'SELECT count(pk_comment)
-                FROM comments
-                WHERE content_id = ? AND content_status=='.\Comment::STATUS_ACCEPTED;
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
+        $sql = 'SELECT count(pk_comment) FROM comments
+                WHERE content_id = ? AND content_status=?';
+        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentId, \Comment::STATUS_ACCEPTED));
 
         // If there is no comments do a early return
         if ($rs === false) {
@@ -215,8 +208,8 @@ class CommentManager extends BaseManager
      **/
     public function countPendingComments()
     {
-        $sql = "SELECT count(id) FROM `comments` WHERE `status` ='".\Comment::STATUS_PENDING."'";
-        $rs = $GLOBALS['application']->conn->GetOne($sql);
+        $sql = "SELECT count(id) FROM `comments` WHERE `status`=?";
+        $rs = $GLOBALS['application']->conn->GetOne($sql, array(\Comment::STATUS_PENDING));
 
         return intval($rs);
     }

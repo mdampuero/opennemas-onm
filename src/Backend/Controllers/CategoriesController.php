@@ -38,8 +38,6 @@ class CategoriesController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('CATEGORY_MANAGER');
 
         $this->checkAclOrForward('CATEGORY_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

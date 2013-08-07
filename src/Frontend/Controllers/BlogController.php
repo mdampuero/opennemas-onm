@@ -46,21 +46,23 @@ class BlogController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
+        $categoryManager = $this->get('category_repository');
+        $category = $categoryManager->findBy(array('name' => $categoryName));
+
+        if (empty($category)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+        $category = $category[0];
+
         $this->view->setConfig('frontpages');
 
         $cacheId = "blog|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-            $cm = new \ContentManager();
-            $categoryManager = $this->get('category_repository');
-            $category = $categoryManager->findBy(array('name' => $categoryName));
 
-            if (empty($category)) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-            $category = $category[0];
 
             $itemsPerPage = 8;
 
+            $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(
                 'Article',
                 (int) $category->pk_content_category,
@@ -98,11 +100,13 @@ class BlogController extends Controller
                         ->loadRelatedContents($categoryName);
             }
 
+            $total = count($articles)+1;
+
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $countArticles,
+                    'total' => $total,
                     'url'   => $this->generateUrl(
                         'blog_category',
                         array(
@@ -114,9 +118,10 @@ class BlogController extends Controller
 
             $this->view->assign(
                 array(
-                    'articles'   => $articles,
-                    'category'   => $category,
-                    'pagination' => $pagination,
+                    'articles'              => $articles,
+                    'category'              => $category,
+                    'pagination'            => $pagination,
+                    'actual_category_title' => $category->title,
                 )
             );
         }
@@ -162,8 +167,7 @@ class BlogController extends Controller
         $cm = new \ContentManager();
         $cacheId = "sync|blog|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
-
-
+            $ccm = \ContentCategoryManager::get_instance();
             // Get category object
             $category = unserialize(
                 $cm->getUrlContent(
@@ -182,9 +186,10 @@ class BlogController extends Controller
 
             $this->view->assign(
                 array(
-                    'articles'   => $articles,
-                    'category'   => $category,
-                    'pagination' => $pagination,
+                    'articles'              => $articles,
+                    'category'              => $category,
+                    'pagination'            => $pagination,
+                    'actual_category_title' => $ccm->get_title($categoryName),
                 )
             );
         }
@@ -264,11 +269,13 @@ class BlogController extends Controller
                         ->loadRelatedContents($categoryName);
             }
 
+            $total = count($articles)+1;
+
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $countArticles,
+                    'total' => $total,
                     'url'   => $this->generateUrl(
                         'blog_category',
                         array(

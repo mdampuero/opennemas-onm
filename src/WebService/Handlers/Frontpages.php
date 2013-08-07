@@ -62,6 +62,11 @@ class Frontpages
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
+                $content->author         = new \User($content->fk_author);
+                if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
+                    $content->author->getPhoto();
+                }
+
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
                         ->loadAttachedVideo()
@@ -137,6 +142,10 @@ class Frontpages
             $imageList = array();
         }
 
+        foreach ($imageList as &$img) {
+            $img->media_url = MEDIA_IMG_PATH_WEB;
+        }
+
         // Overloading information for contents
         foreach ($articles as &$content) {
 
@@ -144,6 +153,16 @@ class Frontpages
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
             $content->author         = new \User($content->fk_author);
+            $content->author->uri    = 'ext'.$content->author->uri;
+            if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
+                $content->author->getPhoto();
+                $content->author->photo->media_url = MEDIA_IMG_PATH_WEB;
+            }
+
+             //Change uri for href links except widgets
+            if ($content->content_type != 'Widget') {
+                $content->uri = "ext".$content->uri;
+            }
 
             // Load attached and related contents from array
             $content->loadFrontpageImageFromHydratedArray($imageList)

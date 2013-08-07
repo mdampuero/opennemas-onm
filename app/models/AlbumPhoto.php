@@ -70,7 +70,7 @@ class AlbumPhoto
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            return Application::logDatabaseError();
+            return null;
         }
 
         $this->pk_album    = $rs->fields['pk_album'];

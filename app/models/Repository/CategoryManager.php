@@ -78,8 +78,6 @@ class CategoryManager extends BaseManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

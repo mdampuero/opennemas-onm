@@ -116,8 +116,6 @@ class Video extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -139,8 +137,6 @@ class Video extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -171,8 +167,6 @@ class Video extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -193,8 +187,6 @@ class Video extends Content
         $sql = 'DELETE FROM videos WHERE pk_video='.$id;
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -219,8 +211,6 @@ class Video extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -252,8 +242,6 @@ class Video extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

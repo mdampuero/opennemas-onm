@@ -50,6 +50,8 @@ class Articles
         // Get category title used on tpl's
         $article->category_title   = $ccm->get_title($article->category_name);
         $article->actualCategoryId = $ccm->get_id($article->category_name);
+        //assigned media_url used with author photo & related or machine articles with photo
+        $article->media_url        = MEDIA_IMG_PATH_WEB;
 
         // Get inner image for this article
         if (isset($article->img2) && ($article->img2 != 0)) {
@@ -58,6 +60,12 @@ class Articles
             $article->photoInt = $photoInt;
         }
 
+        if (is_object($article->author) && !empty($article->author)) {
+            //$article->author->uri = 'ext'.$article->author->uri;
+            if (!empty($article->author->avatar_img_id)) {
+                $article->author->getPhoto();
+            }
+        }
         // Get inner video for this article
         if (isset($article->fk_video2)) {
             $videoInt = new Video($article->fk_video2);

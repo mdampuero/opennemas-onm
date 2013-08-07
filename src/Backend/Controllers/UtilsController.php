@@ -34,7 +34,6 @@ class UtilsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

@@ -37,8 +37,6 @@ class NewsletterController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
 
         $this->checkAclOrForward('NEWSLETTER_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

@@ -125,9 +125,6 @@ class Attachment extends Content
      */
     public function create($data)
     {
-        //Si es portada renovar cache
-        $GLOBALS['application']->dispatch('onBeforeCreateAttach', $this);
-
         $dir_date = date("/Y/m/d/");
         //  $data['path'] = MEDIA_PATH.MEDIA_FILE_DIR.$dir_date ;
 
@@ -154,8 +151,6 @@ class Attachment extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -171,14 +166,6 @@ class Attachment extends Content
                 // Remove existent thumbnail for PDF
                 unlink($media_path . '/' . $imageName);
             }
-        }
-
-        if ($data['category']==8) {
-            $GLOBALS['application']->dispatch(
-                'onAfterCreateAttach',
-                $this,
-                array('category' => $data['category'])
-            );
         }
 
         return true;
@@ -214,8 +201,6 @@ class Attachment extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -240,8 +225,6 @@ class Attachment extends Content
         $values = array($data['title'], $data['category'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -272,8 +255,6 @@ class Attachment extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -296,8 +277,6 @@ class Attachment extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -316,27 +295,11 @@ class Attachment extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
         return true;
 
-    }
-
-    /**
-     * Cleans the frontpage only if the category is equals to 8
-     *
-     * @param int $category the category id
-     *
-     * @return array a list of Attachemnt information
-     **/
-    public function refreshHome($category = '')
-    {
-        if ($category == 8) {
-            parent::refreshHome();
-        }
     }
 
     /**

@@ -69,8 +69,6 @@ class NewsletterManager
         $countNm = $GLOBALS['application']->conn->GetOne($sql2);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 

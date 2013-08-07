@@ -39,8 +39,6 @@ class LettersController extends Controller
 
         // Check ACL
         $this->checkAclOrForward('LETTER_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

@@ -83,8 +83,6 @@ class Rating
         $values = array($contentId, 0, 0, serialize(array()));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -118,8 +116,6 @@ class Rating
         }
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $this->pk_rating = $contentId;
@@ -144,8 +140,6 @@ class Rating
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
         $value = 0;
@@ -189,8 +183,6 @@ class Rating
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

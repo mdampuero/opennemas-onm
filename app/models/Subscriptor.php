@@ -123,8 +123,6 @@ class Subscriptor
                          $data['status'], $data['subscription'] );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -146,9 +144,7 @@ class Subscriptor
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         $this->load($rs->fields);
@@ -203,18 +199,15 @@ class Subscriptor
                  . ' SET `subscription`=?, `status`=?,'
                  . ' `email`=?, `name`=?, `firstname`=?, `lastname`=?  ';
         } else {
-            $sql = 'UPDATE ' . $this->tableName
-                 . ' SET `subscription`= ?, `status`=?';
+            $sql = 'UPDATE '.$this->tableName. ' SET `subscription`= ?, `status`=?';
         }
 
         $sql .= ' WHERE pk_pc_user=' . intval($data['id']);
 
-        $data['subscription'] =
-            (isset($data['subscription']))? $data['subscription']: 1;
+        $data['subscription'] = (isset($data['subscription']))? $data['subscription']: 1;
         if (!$isBackend) {
             $values = array($data['subscription'],$data['status']);
         } else {
-
             $values =   array(
                 $data['subscription'],
                 $data['status'],
@@ -227,8 +220,6 @@ class Subscriptor
         $this->id = $data['id'];
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -247,9 +238,7 @@ class Subscriptor
         $sql = 'SELECT * FROM ' . $this->tableName . ' WHERE `email`=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($email));
 
-        if ($rs===false) {
-            \Application::logDatabaseError();
-
+        if ($rs === false) {
             return null;
         }
 
@@ -313,8 +302,6 @@ class Subscriptor
         $values = array(intval($id));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -335,8 +322,6 @@ class Subscriptor
              . ' SET `status`='.$status.' WHERE pk_pc_user='.intval($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -352,13 +337,10 @@ class Subscriptor
      **/
     public function exists_email($email)
     {
-        $sql = 'SELECT count(*) AS num '
-            . 'FROM `pc_users` WHERE email = "'.$email.'"';
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT count(*) AS num FROM `pc_users` WHERE email = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($email));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -376,8 +358,7 @@ class Subscriptor
     */
     public function mUpdateProperty($id, $property, $value = null)
     {
-        $sql = 'UPDATE ' . $this->tableName
-             . ' SET `' . $property . '`=? WHERE pk_pc_user=?';
+        $sql = 'UPDATE '.$this->tableName.' SET `'.$property.'`=? WHERE pk_pc_user=?';
         if (!is_array($id)) {
             $values = array($value, $id);
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -391,8 +372,6 @@ class Subscriptor
         }
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

@@ -1,8 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="prototype"}
-{/block}
-
 {block name="header-js" append}
 <script>
 var image_uploader ={
@@ -84,21 +81,6 @@ var image_uploader ={
                 <li>{t escape=off}Only image files (<strong>JPG, GIF, PNG</strong>) are allowed.{/t}</li>
             </ul>
         </div>
-        <!-- gallery-loader is the loading container animation -->
-        <div id="gallery-loader"></div>
-        <!-- gallery-modal is the modal dialog used for the image gallery -->
-<!--         <div id="gallery-modal" class="modal hide fade">
-            <div class="modal-header">
-                <a href="#" class="close">&times;</a>
-                <h3 class="title"></h3>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <a class="btn btn-primary next">Next</a>
-                <a class="btn info prev">Previous</a>
-                <a class="btn success download" target="_blank">Download</a>
-            </div>
-        </div> -->
         <input type="hidden" name="category" value="{$category}" />
     </form>
     <div id="upload-helper" data-filecount=0></div>

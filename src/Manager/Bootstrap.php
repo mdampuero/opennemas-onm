@@ -44,42 +44,10 @@ class Bootstrap extends ModuleBootstrap
      **/
     public function initAuthenticationSystem()
     {
-
         $request = $this->container->get('request');
 
-        $sessionLifeTime = (int) s::get('max_session_lifetime', 60);
-        if ((int) $sessionLifeTime > 0) {
-            ini_set('session.cookie_lifetime', $sessionLifeTime*60);
-        } else {
-            s::set('max_session_lifetime', 60*30);
-        }
-
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
-        if ($isAsset != 1) {
-
-            session_name('_onm_manager_sess');
-            $session = $this->container->get('session');
-            $session->start();
-
-            if (!isset($_SESSION['userid'])
-                && !preg_match('@^/manager/login@', $request->getPathInfo())
-            ) {
-                $url = $request->getPathInfo();
-
-                if (!empty($url)) {
-                    $redirectTo = urlencode($request->getRequestUri());
-                }
-                $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
-
-                $response = new RedirectResponse($location, 301);
-                $response->send();
-                exit(0);
-            } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
-                $response = new RedirectResponse('/', 301);
-                $response->send();
-                exit(0);
-            }
-        } else {
+        if ($isAsset) {
             // Log this error event to the webserver logging sysmte
             error_log("File does not exist: ".$request->getPathInfo(), 0);
 
@@ -88,6 +56,27 @@ class Bootstrap extends ModuleBootstrap
             exit();
         }
 
+        $session = $this->container->get('session');
+        $session->start();
+
+        if (!isset($_SESSION['userid'])
+            && !preg_match('@^/manager/login@', $request->getPathInfo())
+        ) {
+            $url = $request->getPathInfo();
+
+            if (!empty($url)) {
+                $redirectTo = urlencode($request->getRequestUri());
+            }
+            $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
+
+            $response = new RedirectResponse($location, 301);
+            $response->send();
+            exit(0);
+        } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
+            $response = new RedirectResponse('/', 301);
+            $response->send();
+            exit(0);
+        }
     }
 
     /**

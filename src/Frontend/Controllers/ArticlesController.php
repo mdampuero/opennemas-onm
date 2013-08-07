@@ -119,6 +119,11 @@ class ArticlesController extends Controller
                     $this->view->assign('videoInt', $videoInt);
                 }
 
+                $article->media_url = '';
+                if (is_object($article->author)) {
+                    $article->author->getPhoto();
+                }
+
                 // Related contents code ---------------------------------------
                 $relContent      = new \RelatedContent();
                 $relatedContents = array();
