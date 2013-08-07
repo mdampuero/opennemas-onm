@@ -70,7 +70,8 @@ class LetterController extends Controller
             );
         }
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'letter/letter_frontpage.tpl',
@@ -128,7 +129,8 @@ class LetterController extends Controller
             );
         }
 
-        $this->getAdsInner();
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'letter/letter.tpl',
@@ -200,50 +202,17 @@ class LetterController extends Controller
      *
      * @return void
      **/
-    public function getAds()
+    public function getAds($position = '')
     {
-        $ccm = \ContentCategoryManager::get_instance();
+        $category = 0;
 
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
-        $banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 5, 6), $category);
-         $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial(50, '$category');
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        // I have added the element 150 in order to integrate all the code in the same query
+        if ($position == 'inner') {
+            $positions = array(101, 102, 103, 105, 109, 110);
+        } else {
+            $positions = array(50, 1, 2, 103, 105, 5, 6);
         }
-    }
 
-    /**
-     * Gets the advertisement
-     *
-     * @return Response void
-     **/
-    public function getAdsInner()
-    {
-        $this->ccm = \ContentCategoryManager::get_instance();
-
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
-        $banners = $advertisement->getAdvertisements(array(101, 102, 103, 105, 109, 110), $category);
-        $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial(150, "$category");
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

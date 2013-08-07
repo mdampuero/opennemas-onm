@@ -87,7 +87,8 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-frontpage');
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisments', $ads);
 
         // Don't execute the action logic if was cached before
         if (($this->view->caching == 0)
@@ -165,7 +166,9 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-inner');
 
         // Load advertisement for this action
-        $this->getAdsInner();
+        $ads = $this->getAds('innner');
+        $this->view->assign('advertisments', $ads);
+
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
@@ -272,61 +275,29 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Returns the advertisements for the albums frontpage
+     * Retrieves the advertisement for the frontpage
+     *
+     * @param string $categoryName the category name where fetch ads from
      *
      * @return void
      **/
-    public function getAds()
+    public static function getAds($position = '')
     {
         $ccm = \ContentCategoryManager::get_instance();
-        $category_name='album';
-        $category = $ccm->get_id($category_name);
-
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        $banners = $advertisement->getAdvertisements(array(401, 402, 403, 405, 409, 410, 491, 492), $category);
-
-        $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial(450, '$category');
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
-    }
-
-    /**
-     * Fetches the advertisement
-     *
-     * @return
-     **/
-    private function getAdsInner()
-    {
-        $ccm = \ContentCategoryManager::get_instance();
-        $categoryName ='album';
+        $categoryName = 'album';
         $category = $ccm->get_id($categoryName);
 
-        $category = (!isset($category) || ($category=='home')) ? 0 : $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        $banners = $advertisement->getAdvertisements(
-            array(501, 502, 503, 509, 510, 591, 592),
-            $category
-        );
-
-        $this->cm = new \ContentManager();
-        $banners = $this->cm->getInTime($banners);
-
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial(550, '$category');
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        // I have added the element 450 in order to integrate interstitial position
+        if ($position == 'inner') {
+            $positions = array(
+                501, 502, 503, 509, 510, 591, 592
+            );
+        } else {
+            $positions = array(
+                450, 401, 402, 403, 405, 409, 410, 491, 492
+            );
         }
+
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }
