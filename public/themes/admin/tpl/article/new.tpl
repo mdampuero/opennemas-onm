@@ -324,7 +324,8 @@
                         <div class="controls">
                             <input type="text" id="slug" name="slug" class="input-xxlarge" value="{$article->slug|clearslash}">
                             {if $article}
-                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$article->uri|clearslash}</span>
+                            {assign var=uri value="\" "|explode:$article->uri}
+                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$uri.0|clearslash}</span>
                             {/if}
                         </div>
                     </div>

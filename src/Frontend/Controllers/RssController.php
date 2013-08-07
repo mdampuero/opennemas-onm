@@ -194,7 +194,10 @@ class RssController extends Controller
                     $photos[$article->id] = new \Photo($article->img1);
                 }
 
-                // $article->category_name = $article->loadCategoryName($article->id);
+                // Exclude articles with external link from RSS
+                if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
+                    unset($articles_home[$i]);
+                }
             }
 
             $this->view->assign(
