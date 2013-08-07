@@ -40,8 +40,6 @@ class AlbumsController extends Controller
          // Check if the user can admin album
         $this->checkAclOrForward('ALBUM_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $request = $this->get('request');
 
         $contentType = \ContentManager::getContentTypeIdFromName('album');
@@ -243,7 +241,7 @@ class AlbumsController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_videos',
+                    'admin_albums',
                     array(
                         'category' => $category,
                         'page'     => $page
@@ -251,7 +249,15 @@ class AlbumsController extends Controller
                 )
             );
         } else {
-            return $this->render('album/new.tpl');
+
+            $authorsComplete = \User::getAllUsersAuthors();
+            $authors = array( '0' => _(' - Select one author - '));
+            foreach ($authorsComplete as $author) {
+                $authors[$author->id] = $author->name;
+            }
+
+            return $this->render('album/new.tpl',
+                array ( 'authors'      => $authors, ));
         }
     }
 
@@ -322,12 +328,20 @@ class AlbumsController extends Controller
         $photos = array();
         $photos = $album->_getAttachedPhotos($id);
 
+        $authorsComplete = \User::getAllUsersAuthors();
+        $authors = array( '0' => _(' - Select one author - '));
+        foreach ($authorsComplete as $author) {
+            $authors[$author->id] = $author->name;
+        }
+
+
         return $this->render(
             'album/new.tpl',
             array(
                 'category' => $album->category,
                 'photos'   => $photos,
                 'album'    => $album,
+                'authors'  => $authors,
             )
         );
     }
@@ -387,10 +401,15 @@ class AlbumsController extends Controller
                     $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
                 'album_photos_id'       => $request->request->get('album_photos_id'),
                 'album_photos_footer'   => $request->request->get('album_photos_footer'),
+                'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
             );
 
             $album->update($data);
             m::add(_("Album updated successfully."), m::SUCCESS);
+
+            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
+            $tplManager->delete('home|1');
 
             if ($continue) {
                 return $this->redirect(

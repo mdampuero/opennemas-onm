@@ -46,7 +46,7 @@
     {render_messages}
     <div class="hero-unit">
         <h1>{t}Welcome to your OpenNemas site!{/t}</h1>
-        <p class="lead">{t escape=off 1="http://help.opennemas.com/knowledgebase/articles/220778-primeros-pasos-en-opennemas"}If you need help getting started, check out our documentation on <a href="%1">First Steps with OpenNemas</a>.
+        <p class="lead">{t escape=off 1="http://help.opennemas.com/knowledgebase/articles/221740-primeros-pasos-en-opennemas"}If you need help getting started, check out our documentation on <a href="%1">First Steps with OpenNemas</a>.
            If you’d rather dive right in, here are a few things most people do first when they set up
            a new OpenNemas site.{/t}
         </p>

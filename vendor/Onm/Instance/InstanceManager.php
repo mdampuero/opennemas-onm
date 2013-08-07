@@ -102,26 +102,27 @@ class InstanceManager
         if (!$instance) {
             $instancesMatched = $cache->fetch('instance_'.$serverName);
 
-            //TODO: improve search for allowing subdomains with wildcards
-            $sql = "SELECT SQL_CACHE * FROM instances"
-                ." WHERE domains LIKE '%{$serverName}%'";
-            $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
-            $rs = $this->connection->Execute($sql);
+            if (!is_object($instancesMatched)) {
+                //TODO: improve search for allowing subdomains with wildcards
+                $sql = "SELECT SQL_CACHE * FROM instances"
+                    ." WHERE domains LIKE '%{$serverName}%'";
+                $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
+                $rs = $this->connection->Execute($sql);
 
-            if (!$rs) {
-                $this->connection->ErrorMsg();
-                return false;
+                if (!$rs) {
+                    $this->connection->ErrorMsg();
+                    return false;
+                }
+                $instancesMatched = $rs->GetArray();
+                $cache->save('instance_'.$serverName, $instancesMatched);
             }
-            $instancesMatched = $rs->GetArray();
-            $cache->save('instance_'.$serverName, $instancesMatched);
-
 
             $matchedInstance = null;
             foreach ($instancesMatched as $element) {
                 $domains = explode(',', $element['domains']);
                 $domains = array_map(
                     function ($instanceDataElem) {
-                        return trim($instanceDataElem);
+                        return trim(strtolower($instanceDataElem));
                     },
                     $domains
                 );
@@ -130,11 +131,6 @@ class InstanceManager
                     $matchedInstance = $element;
                     break;
                 }
-            }
-
-
-            if (is_null($matchedInstance)) {
-                return false;
             }
 
             //If found matching instance initialize its contants and return it
@@ -266,9 +262,6 @@ class InstanceManager
         // Fetch caches if exist
         $key = CACHE_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
         $totals = $cache->fetch($key);
-        $key = CACHE_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
-        $information = $cache->fetch($key);
-
 
         // If was not fetched from APC now is turn of DB
         if (!$totals) {
@@ -294,28 +287,21 @@ class InstanceManager
             );
         }
 
-        if (!$information) {
-            if (!isset($dbConection) || empty($dbConection)) {
-                $dbConection = self::getConnection($settings);
+        if (!isset($dbConection) || empty($dbConection)) {
+            $dbConection = self::getConnection($settings);
+        }
+
+        $sql = 'SELECT * FROM settings';
+
+        $rs = $dbConection->Execute($sql);
+
+        $information = array();
+        if ($rs !== false) {
+            while (!$rs->EOF) {
+                $information[ $rs->fields['name'] ] =
+                    @unserialize($rs->fields['value']);
+                $rs->MoveNext();
             }
-
-            $sql = 'SELECT * FROM settings';
-
-            $rs = $dbConection->Execute($sql);
-
-            if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $information[ $rs->fields['name'] ] =
-                        @unserialize($rs->fields['value']);
-                    $rs->MoveNext();
-                }
-            }
-
-            $cache->save(
-                CACHE_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'],
-                $information,
-                300
-            );
         }
 
         return array($totals, $information);
@@ -1062,6 +1048,10 @@ class InstanceManager
      **/
     public function deleteInstanceUserFromDatabaseManager($user)
     {
+        if ($user == 'root') {
+            return true;
+        }
+
         $sql = "DROP USER `{$user}`@'localhost'";
 
         if (!$this->connection->Execute($sql)) {

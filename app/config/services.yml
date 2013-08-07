@@ -14,8 +14,11 @@ services:
 
     db_conn:
         class: Onm\DatabaseConnection
-        calls:
-            - [ connect, [ %database_params%] ]
+        arguments: [ %database% ]
+
+    db_conn_manager:
+        class: Onm\DatabaseConnection
+        arguments: [  %database% ]
 
     session_storage:
         class: %session_storage_class%
@@ -64,6 +67,10 @@ services:
     setting_repository:
         class: Repository\SettingManager
         arguments: [ @cache, %cache_prefix% ]
+
+    newsletter_manager:
+        class: Repository\NewsletterManager
+        arguments: [ @mailer, @logger ]
 
     automatic_contents:
         class: Onm\MachineSearcher

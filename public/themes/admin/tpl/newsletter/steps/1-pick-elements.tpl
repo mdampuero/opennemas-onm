@@ -118,7 +118,7 @@
                             <span class="icon-plus"></span> {t}Add Container{/t}
                         </button>
                         <button class="btn" title="{t}Clean containers{/t}" id="clean-button">
-                            <i class="icon-trash"></i> {t}Clean contents{/t}
+                            <i class="icon-remove"></i> {t}Clean contents{/t}
                         </button>
                     </div>
                     <div id="newsletter-container" class="column-receiver">
@@ -144,13 +144,18 @@
                                     data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
                                     <div class="container-label"><span>{$newsletterContent[c]->title}</span>
                                         <div class="container-buttons btn-group">
-                                            <i class="icon-chevron-up"></i>
+                                            {if $smarty.section.c.first || count($contents) > 0}
+                                                <i class="icon-chevron-up"></i>
+                                            {else}
+                                                <i class="icon-chevron-down"></i>
+                                            {/if}
                                             <i class="icon-pencil"></i>
                                             <i class="icon-remove"></i>
                                             <i class="icon-trash"></i>
                                         </div>
                                     </div>
-                                    <ul class="content-receiver">
+                                    <ul class="content-receiver"
+                                    {if $smarty.section.c.first || count($contents) > 0}style="display:block;"{/if}>
                                         {section name=d loop=$contents}
                                             {if !empty($contents[d]->title)}
                                             <li  data-id="{$contents[d]->id}"

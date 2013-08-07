@@ -27,8 +27,6 @@ class Authors
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 

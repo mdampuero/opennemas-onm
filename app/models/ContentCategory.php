@@ -150,8 +150,6 @@ class ContentCategory
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
         $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
@@ -171,9 +169,7 @@ class ContentCategory
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if (!$rs) {
-            Application::logDatabaseError();
-
-            return;
+            return false;
         }
         $this->pk_content_category = ($id);
         $this->load($rs->fields);
@@ -213,8 +209,6 @@ class ContentCategory
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
-
             return;
         }
 
@@ -227,9 +221,7 @@ class ContentCategory
 
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
-                return;
+                return false;
             }
         }
 
@@ -250,8 +242,6 @@ class ContentCategory
 
             $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
 
@@ -274,7 +264,6 @@ class ContentCategory
             }
 
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
@@ -287,7 +276,6 @@ class ContentCategory
             }
 
             foreach ($properties as $k => $v) {
-
                 if (!is_numeric($k)) {
                     $this->{$k} = $v;
                 }
@@ -302,15 +290,13 @@ class ContentCategory
      **/
     public function deleteContents()
     {
-        $sql = 'SELECT pk_fk_content FROM contents_categories '
-             . 'WHERE pk_fk_content_category=?';
+        $sql = 'SELECT pk_fk_content FROM contents_categories WHERE pk_fk_content_category=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->pk_content_category));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
+
         $contentsArray = array();
         while (!$rs->EOF) {
             $contentsArray[] = $rs->fields['pk_fk_content'];
@@ -319,47 +305,29 @@ class ContentCategory
 
         if (!empty($contentsArray)) {
             $contents = implode(', ', $contentsArray);
-            $sqls []= 'DELETE FROM contents  '
-                .'WHERE `pk_content` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM articles '
-                .' WHERE `pk_article` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM advertisements  '
-                .'WHERE `pk_advertisement` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM albums  '
-                .'WHERE `pk_album` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM albums_photos '
-                .'WHERE `pk_album` IN (' . $contents . ')  '
+            $sqls []= 'DELETE FROM contents  WHERE `pk_content` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM articles WHERE `pk_article` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM advertisements WHERE `pk_advertisement` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM albums WHERE `pk_album` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM albums_photos WHERE `pk_album` IN (' . $contents . ')  '
                 .'OR `pk_photo` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM comments '
-                .'WHERE `content_id` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM votes '
-                .'WHERE `pk_vote` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM ratings '
-                .'WHERE `pk_rating` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM polls '
-                .'WHERE `pk_poll` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM poll_items '
-                .'WHERE `fk_pk_poll` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM comments WHERE `content_id` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM votes WHERE `pk_vote` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM ratings WHERE `pk_rating` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM polls WHERE `pk_poll` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM poll_items WHERE `fk_pk_poll` IN ('.$contents.')';
             $sqls []= 'DELETE FROM related_contents '
-                .'WHERE `pk_content1` IN (' . $contents . ')  '
-                .'OR `pk_content2` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM kioskos '
-                .'WHERE `pk_kiosko` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM static_pages '
-                .'WHERE `pk_static_page` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM content_positions '
-                .'WHERE `pk_fk_content` IN ('.$contents.')';
-            $sqls []= 'DELETE FROM contentmeta '
-                .'WHERE `fk_content` IN ('.$contents.')';
+                .'WHERE `pk_content1` IN (' . $contents . ') OR `pk_content2` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM kioskos WHERE `pk_kiosko` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM static_pages WHERE `pk_static_page` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM content_positions WHERE `pk_fk_content` IN ('.$contents.')';
+            $sqls []= 'DELETE FROM contentmeta WHERE `fk_content` IN ('.$contents.')';
 
             foreach ($sqls as $sql) {
                 if ($GLOBALS['application']->conn->Execute($sql) === false) {
-                    \Application::logDatabaseError();
-
                     return false;
                 }
             }
-
 
             \Photo::batchDelete($contentsArray);
             \Video::batchDelete($contentsArray);
@@ -370,6 +338,7 @@ class ContentCategory
     }
 
     /**
+     * TODO: I think that this is
      * Changes the menu status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category.
@@ -383,14 +352,9 @@ class ContentCategory
             $this->posmenu = 30;
         }
 
-        $sql = "UPDATE content_categories "
-                ." SET `inmenu`=?, `posmenu`=?"
-                . " WHERE pk_content_category=?";
+        $sql = "UPDATE content_categories SET `inmenu`=?, `posmenu`=? WHERE pk_content_category=?";
         $values = array($status, $this->posmenu, $this->pk_content_category);
-
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
     }
@@ -415,8 +379,6 @@ class ContentCategory
         $values = array($this->params, $this->pk_content_category);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

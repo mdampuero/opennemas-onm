@@ -35,8 +35,6 @@ class PaywallController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('PAYWALL');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->times = array(
             '24'    => _('1 day'),
             '48'    => sprintf(_('%d days'), '2'),
@@ -121,10 +119,51 @@ class PaywallController extends Controller
      **/
     public function usersAction(Request $request)
     {
-        $page   = $this->request->query->getDigits('page', 1);
+        $page  = $this->request->query->getDigits('page', 1);
+        $type  = $this->request->query->filter('type', '', FILTER_SANITIZE_STRING);
+        $order = $this->request->query->filter('order', 'username', FILTER_SANITIZE_STRING);
+        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
-        $users = \User::getUsersWithSubscription();
+
+        $users = array();
+        if ($type === '0') {
+            $users = \User::getUsersWithSubscription();
+        } elseif ($type === '1') {
+            $users = \User::getUsersOnlyRegistered();
+        } elseif ($type === '2') {
+            $usersRegistered = \User::getUsersOnlyRegistered();
+            foreach ($usersRegistered as $user) {
+                if (isset($user->meta['paywall_time_limit'])) {
+                    $users[] = $user;
+                }
+            }
+        } else {
+            $usersRegistered = \User::getUsersOnlyRegistered();
+            $usersWithSubscription = \User::getUsersWithSubscription();
+
+            $users = array_merge($usersRegistered, $usersWithSubscription);
+        }
+
+        // Sort array of users by property
+        if (!isset($order) || empty($order)) {
+            $order = 'username';
+        }
+
+        $users = \ContentManager::sortArrayofObjectsByProperty($users, $order);
+
+        // Filter array by name
+        if (!empty($name)) {
+            $users = array_filter(
+                $users,
+                function ($obj) use ($name) {
+                    if (strpos($obj->username, $name) !== false) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+        }
 
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
@@ -140,7 +179,14 @@ class PaywallController extends Controller
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => count($users),
-                'fileName'    => $this->generateUrl('admin_paywall_users').'?page=%d',
+                'fileName'    => $this->generateUrl(
+                    'admin_paywall_users',
+                    array(
+                        'order'      => $order,
+                        'type'       => $type,
+                        'searchname' => $name,
+                    )
+                ).'&page=%d',
             )
         );
 
@@ -156,15 +202,86 @@ class PaywallController extends Controller
     }
 
     /**
-     * Description of this action
+     * Returns a CSV file with all the users information
      *
      * @param Request $request the request object
      *
      * @return Response the response object
      **/
-    public function purchasesAction(Request $request)
+    public function userListExportAction(Request $request)
     {
-        $page = $this->request->query->getDigits('page', 1);
+        $type = $this->request->query->filter('type', '', FILTER_SANITIZE_STRING);
+        $order  = $this->request->query->filter('order', 'name', FILTER_SANITIZE_STRING);
+        $name = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+
+        $users = array();
+        if ($type === '0') {
+            $users = \User::getUsersWithSubscription();
+        } elseif ($type === '1') {
+            $users = \User::getUsersOnlyRegistered();
+        } elseif ($type === '2') {
+            $usersRegistered = \User::getUsersOnlyRegistered();
+            foreach ($usersRegistered as $user) {
+                if (isset($user->meta['paywall_time_limit'])) {
+                    $users[] = $user;
+                }
+            }
+        } else {
+            $usersRegistered = \User::getUsersOnlyRegistered();
+            $usersWithSubscription = \User::getUsersWithSubscription();
+
+            $users = array_merge($usersRegistered, $usersWithSubscription);
+        }
+
+        // Sort array of users by property
+        if (isset($order) && !empty($order)) {
+            $users = \ContentManager::sortArrayofObjectsByProperty($users, $order);
+        }
+
+        // Filter array by search name
+        if (isset($name) && !empty($name)) {
+            $users = array_filter(
+                $users,
+                function ($obj) use ($name) {
+                    if (strpos($obj->username, $name) !== false) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+        }
+
+        $response = $this->render(
+            'paywall/partials/users_csv.tpl',
+            array(
+                'users'   => $users,
+            )
+        );
+
+        $fileName = 'paywall_users.csv';
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+    }
+
+    /**
+     * Returns a CSV file with all the purchases information
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function purchasesListExportAction(Request $request)
+    {
+        $order = $this->request->query->filter('order', '', FILTER_SANITIZE_STRING);
+        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
 
         $settings = s::get('paywall_settings');
         $purchases = \Order::find(
@@ -173,6 +290,89 @@ class PaywallController extends Controller
                 'limit' => 0
             )
         );
+
+        // Sort array of users by property
+        if (isset($order) && !empty($order)) {
+            $purchases = \ContentManager::sortArrayofObjectsByProperty($purchases, $order);
+        }
+
+        // Filter array by name
+        if (isset($name) && !empty($name)) {
+            $purchases = array_filter(
+                $purchases,
+                function ($obj) use ($name) {
+                    if (strpos($obj->username, $name) !== false ||
+                        strpos($obj->name, $name) !== false
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+        }
+
+        $response = $this->render(
+            'paywall/partials/purchases_csv.tpl',
+            array(
+                'purchases'   => $purchases,
+                'settings'    => $settings,
+                'money_units' => $this->moneyUnits,
+            )
+        );
+
+        $fileName = 'paywall_purchases.csv';
+
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Description', 'Submissions Export');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$fileName);
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Pragma', 'no-cache');
+        $response->headers->set('Expires', '0');
+
+        return $response;
+    }
+
+    /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function purchasesAction(Request $request)
+    {
+        $page  = $this->request->query->getDigits('page', 1);
+        $order = $this->request->query->filter('order', '', FILTER_SANITIZE_STRING);
+        $name  = $this->request->query->filter('searchname', '', FILTER_SANITIZE_STRING);
+
+        $settings = s::get('paywall_settings');
+        $purchases = \Order::find(
+            "type='paywall'",
+            array(
+                'limit' => 0
+            )
+        );
+
+        // Sort array of users by property
+        if (isset($order) && !empty($order)) {
+            $purchases = \ContentManager::sortArrayofObjectsByProperty($purchases, $order);
+        }
+
+        // Filter array by name
+        if (isset($name) && !empty($name)) {
+            $purchases = array_filter(
+                $purchases,
+                function ($obj) use ($name) {
+                    if (strpos($obj->username, $name) !== false ||
+                        strpos($obj->name, $name) !== false
+                    ) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+        }
 
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
@@ -188,7 +388,14 @@ class PaywallController extends Controller
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
                 'totalItems'  => count($purchases),
-                'fileName'    => $this->generateUrl('admin_paywall_purchases').'?page=%d',
+                'fileName'    => $this->generateUrl(
+                    'admin_paywall_purchases',
+                    array(
+                        'order'      => $order,
+                        'searchname' => $name,
+                    )
+
+                ).'&page=%d',
             )
         );
 
@@ -238,10 +445,26 @@ class PaywallController extends Controller
         $settings = array('payment_modes' => array());
 
         // Check values
-        $settings['paypal_username']  = $request->request->filter('settings[paypal_username]', '', FILTER_SANITIZE_STRING);
-        $settings['paypal_password']  = $request->request->filter('settings[paypal_password]', '', FILTER_SANITIZE_STRING);
-        $settings['paypal_signature'] = $request->request->filter('settings[paypal_signature]', '', FILTER_SANITIZE_STRING);
-        $settings['money_unit']       = $request->request->filter('settings[money_unit]', 'dollar', FILTER_SANITIZE_STRING);
+        $settings['paypal_username']  = $request->request->filter(
+            'settings[paypal_username]',
+            '',
+            FILTER_SANITIZE_STRING
+        );
+        $settings['paypal_password']  = $request->request->filter(
+            'settings[paypal_password]',
+            '',
+            FILTER_SANITIZE_STRING
+        );
+        $settings['paypal_signature'] = $request->request->filter(
+            'settings[paypal_signature]',
+            '',
+            FILTER_SANITIZE_STRING
+        );
+        $settings['money_unit']       = $request->request->filter(
+            'settings[money_unit]',
+            'USD',
+            FILTER_SANITIZE_STRING
+        );
         $settings['developer_mode']   = (boolean) $settingsForm['developer_mode'];
         $settings['vat_percentage']   = (int) $settingsForm['vat_percentage'];
 

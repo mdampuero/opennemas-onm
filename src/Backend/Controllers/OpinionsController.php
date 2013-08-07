@@ -40,8 +40,6 @@ class OpinionsController extends Controller
 
         $this->checkAclOrForward('OPINION_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData)
@@ -642,11 +640,6 @@ class OpinionsController extends Controller
 
             $opinion = new \Opinion();
             $msg = $opinion->set_position($positionValues, $_SESSION['userid']);
-
-            // FIXME: buscar otra forma de hacerlo
-            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('home|0');
         }
 
         if (!empty($msg) && $msg == true) {

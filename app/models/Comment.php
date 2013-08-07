@@ -207,8 +207,6 @@ class Comment
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
         }
     }
@@ -226,9 +224,7 @@ class Comment
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return false;
         }
         $this->load($rs->fields);
 
@@ -269,11 +265,11 @@ class Comment
         $newValues = implode(', ', $newValues);
 
         // Execute DB query and return
-        $sql = "UPDATE comments SET $newValues WHERE id=?";
-        $rs = $GLOBALS['application']->conn->Execute($sql, $this->id);
-        if ($rs === false) {
-            \Application::logDatabaseError();
+        $id = $GLOBALS['application']->conn->qstr($this->id);
+        $sql = "UPDATE comments SET $newValues WHERE id=".$id;
+        $rs = $GLOBALS['application']->conn->Execute($sql);
 
+        if ($rs === false) {
             throw new \Exception('Unknown error.');
         }
 
@@ -302,8 +298,6 @@ class Comment
         $sql = 'DELETE FROM comments WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             throw new \Exception(_('DB error.'));
         }
 
@@ -320,8 +314,6 @@ class Comment
         $sql = 'DELETE FROM `comments` WHERE '. $filter;
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

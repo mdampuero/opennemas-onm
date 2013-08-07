@@ -236,7 +236,7 @@ label {
                         <div class="control-group">
                             <label for="bio" class="control-label">{t}Short Biography{/t}</label>
                             <div class="controls">
-                                <input type="text" id="bio" name="bio" class="input-xxlarge">{$user->bio|default:""}</textarea>
+                                <input type="text" id="bio" name="bio" class="input-xxlarge" value="{$user->bio|default:""}">
                             </div>
                         </div>
 
@@ -269,7 +269,7 @@ label {
                                 </div>
                             </div>
                         </div>
-                    <fieldset>
+                    </fieldset>
                 </div>
             </div><!-- /personal -->
 

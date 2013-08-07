@@ -67,8 +67,6 @@ class UserGroup
         $values = array($data['name']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $this->id = $GLOBALS['application']->conn->Insert_ID();
@@ -97,8 +95,6 @@ class UserGroup
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
         $this->load($rs->fields);
@@ -110,8 +106,6 @@ class UserGroup
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
         while (!$rs->EOF) {
@@ -145,8 +139,6 @@ class UserGroup
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return false;
             }
 
@@ -178,8 +170,6 @@ class UserGroup
         $values = array($id);
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -257,8 +247,6 @@ class UserGroup
                 array($this->id, $privilegeId)
             );
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return false;
             }
         }
@@ -279,8 +267,6 @@ class UserGroup
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

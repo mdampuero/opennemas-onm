@@ -107,7 +107,15 @@ class AssetController extends Controller
                     $topX = 0;
                     $topY = $heightResize/2 - $height/2;
                 }
+                if ($topX < 0) {
+                    $topX = 0;
+                }
+                if ($topY < 0) {
+                    $topY = 0;
+                }
                 $newSize = $image->getSize();
+
+                // var_dump($width, $height, $widthResize, $heightResize, $topX, $topY);die();
 
                 $image = $image->resize(
                     new \Imagine\Image\Box($widthResize, $heightResize, $mode)

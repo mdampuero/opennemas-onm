@@ -426,14 +426,6 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_poll_delete',
-    new Route(
-        '/poll/{id}/delete',
-        array('_controller' => 'Backend:Controllers:PollsController:delete')
-    )
-);
-
-$adminRoutes->add(
     'admin_polls_config',
     new Route(
         '/polls/config',
@@ -478,6 +470,15 @@ $adminRoutes->add(
     new Route(
         '/poll/{id}/toggle-inhome',
         array('_controller' => 'Backend:Controllers:PollsController:toggleInHome')
+    )
+);
+
+
+$adminRoutes->add(
+    'admin_polls_content_provider',
+    new Route(
+        '/polls/content-provider',
+        array('_controller' => 'Backend:Controllers:PollsController:contentProvider')
     )
 );
 
@@ -2301,6 +2302,22 @@ $adminRoutes->add(
     new Route(
         '/paywall/settings/save',
         array('_controller' => 'Backend:Controllers:PaywallController:settingsSave')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_users_list_export',
+    new Route(
+        '/paywall/users/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:userListExport')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_purchases_list_export',
+    new Route(
+        '/paywall/purchases/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:purchasesListExport')
     )
 );
 

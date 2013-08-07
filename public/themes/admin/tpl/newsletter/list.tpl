@@ -38,6 +38,12 @@
 
         <div id="warnings-validation"></div>
 
+        <div class="table-info clearfix">
+            {if $maxAllowed gt 0}
+            {t 1={{setting name=last_invoice}|truncate:10:false:false:''} 2=$totalSendings 3=$maxAllowed} Since %1 you have sent %2 of %3 newsletters{/t}
+            {else}
+            {/if}{t 1={{setting name=last_invoice}|truncate:10:false:false:''} 2=$totalSendings} Since %1 you have sent %2 newsletters{/t}
+        </div>
         <table class="table table-hover table-condensed">
             <thead>
                 <tr>
@@ -47,7 +53,8 @@
                     </th>
                     <th>{t}Title{/t}</th>
                     <th class="left"  style="width:150px;">{t}Created{/t}</th>
-                    <th class="left">{t}Sent{/t}</th>
+                    <th class="left"  style="width:150px;">{t}Updated{/t}</th>
+                    <th class="left">{t}Sendings{/t}</th>
                     <th class="right" style="width:100px;">{t}Actions{/t}</th>
                     {else}
                     <th class="center">
@@ -73,8 +80,11 @@
                         {$newsletter->created}
                     </td>
                     <td class="left">
-                    {if $newsletter->sent}
-                        {t}Yes{/t}
+                        {$newsletter->updated}
+                    </td>
+                    <td class="left">
+                    {if $newsletter->sent gt 0}
+                        {$newsletter->sent}
                     {else}
                         {t}No{/t}
                     {/if}
@@ -88,12 +98,13 @@
                             <a href="{url name=admin_newsletter_preview id=$newsletter->id}" title="{t}Preview{/t}" class="btn">
                                 <i class="icon-eye-open"></i>
                             </a>
-
+                            {if $newsletter->sent lt 1}
                             <a class="del btn btn-danger"
                                data-id="{$newsletter->id}"
                                href="{url name=admin_newsletter_delete id=$newsletter->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
+                            {/if}
                         </div>
                     </td>
                 </tr>
@@ -109,7 +120,7 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pagination">
-                            {$pagination->links}
+                            {$pagination|default:""}
                         </div>
                     </td>
                 </tr>

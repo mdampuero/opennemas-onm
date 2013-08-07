@@ -32,6 +32,46 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'blog_category',
+    new Route(
+        '/blog/section/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:category',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'blog_sync_category',
+    new Route(
+        '/extseccion/blog/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:extCategory',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'blog_tag',
+    new Route(
+        '/blog/tag/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:tag',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
     'frontend_paywall_showcase',
     new Route(
         '/paywall',
@@ -915,6 +955,16 @@ $frontendRoutes->add(
             'slug'          => '[a-z0-9\-]+',
             'article_id'    => '([0-9]+)',
             '_format'       => 'html|htm'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_article_external_link',
+    new Route(
+        '/redirect',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:externalLink'
         )
     )
 );

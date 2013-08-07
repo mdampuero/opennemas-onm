@@ -39,7 +39,6 @@ class VideosController extends Controller
 
         // Check if the user can admin video
         $this->checkAclOrForward('VIDEO_ADMIN');
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         /******************* GESTION CATEGORIAS  *****************************/
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');
@@ -222,6 +221,7 @@ class VideosController extends Controller
                     'metadata'       => $request->filter('metadata', null, FILTER_SANITIZE_STRING),
                     'description'    => $request->filter('description', null, FILTER_SANITIZE_STRING),
                     'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
+                    'fk_author'      => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
                 );
 
                 try {
@@ -240,6 +240,9 @@ class VideosController extends Controller
                     $_POST['information'] = json_decode($_POST['information'], true);
                     try {
                         $video->create($_POST);
+                        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                        $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+                        $tplManager->delete('home|1');
                     } catch (\Exception $e) {
                         m::add($e->getMessage());
 
@@ -272,9 +275,15 @@ class VideosController extends Controller
             if (empty($type)) {
                 return $this->render('video/selecttype.tpl');
             } else {
+                $authorsComplete = \User::getAllUsersAuthors();
+                $authors = array( '0' => _(' - Select one author - '));
+                foreach ($authorsComplete as $author) {
+                    $authors[$author->id] = $author->name;
+                }
+
                 return $this->render(
                     'video/new.tpl',
-                    array('type' => $type)
+                    array('type' => $type, 'authors' => $authors)
                 );
             }
         }
@@ -307,6 +316,10 @@ class VideosController extends Controller
                 $video->update($_POST);
                 m::add(_("Video updated successfully."), m::SUCCESS);
             }
+            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+            $tplManager->delete('home|1');
+
             if ($continue) {
                 return $this->redirect(
                     $this->generateUrl(
@@ -393,11 +406,18 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
+        $authorsComplete = \User::getAllUsersAuthors();
+        $authors = array( '0' => _(' - Select one author - '));
+        foreach ($authorsComplete as $author) {
+            $authors[$author->id] = $author->name;
+        }
+
         return $this->render(
             'video/new.tpl',
             array(
                 'information' => $video->information,
                 'video'       => $video,
+                'authors'     => $authors,
             )
         );
 

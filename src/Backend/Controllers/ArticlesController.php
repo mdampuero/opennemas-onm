@@ -37,10 +37,7 @@ class ArticlesController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
 
-        // Check if the user can admin video
         $this->checkAclOrForward('ARTICLE_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -142,6 +139,7 @@ class ArticlesController extends Controller
                 $article->category_name = $article->loadCategoryName($article->id);
                 $article->publisher = $user->getUserName($article->fk_publisher);
                 $article->editor    = $user->getUserName($article->fk_user_last_editor);
+                $article->author    = $user->getUserRealName($article->fk_author);
             }
         } else {
             $articles = array();
@@ -226,6 +224,10 @@ class ArticlesController extends Controller
                             array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
                         'withGalleryHome'   =>
                             array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
+                        'only_subscribers'          =>
+                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                        'bodyLink'   =>
+                            array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -531,7 +533,9 @@ class ArticlesController extends Controller
                         'withGalleryHome'   =>
                             array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
                         'only_subscribers'          =>
-                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : ''
+                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                        'bodyLink'   =>
+                            array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),

@@ -40,8 +40,6 @@ class SpecialsController extends Controller
          // Check if the user can admin specials
         $this->checkAclOrForward('SPECIAL_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->contentType = \ContentManager::getContentTypeIdFromName('special');
 
         $this->category = $this->get('request')->query->getDigits('category', null);

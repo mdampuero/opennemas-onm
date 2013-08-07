@@ -34,7 +34,6 @@ class migrationNewslibrary {
         $GLOBALS['application'] = new Application();
 
         Application::initDatabase();
-        Application::initLogger();
     }
 
 

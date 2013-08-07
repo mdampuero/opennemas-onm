@@ -62,6 +62,11 @@ class Frontpages
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
+                $content->author         = new \User($content->fk_author);
+                if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
+                    $content->author->getPhoto();
+                }
+
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
                         ->loadAttachedVideo()
@@ -94,5 +99,95 @@ class Frontpages
             // Use htmlspecialchars to avoid utf-8 erros with json_encode
             return htmlspecialchars(serialize($contentsInHomepage));
         }
+    }
+
+    /*
+    * @url GET /frontpages/allcontentblog/:category_name/:page
+    */
+    public function allContentBlog($categoryName, $page = 1)
+    {
+        // Get category object
+        $categoryManager = $this->restler->container->get('category_repository');
+        $category = $categoryManager->findBy(array('name' => $categoryName));
+
+        if (empty($category)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+        $category = $category[0];
+
+        $itemsPerPage = 10;
+
+        // Get all articles for this page
+        $cm = new \ContentManager();
+        list($countArticles, $articles) = $cm->getCountAndSlice(
+            'Article',
+            (int) $category->pk_content_category,
+            'in_litter != 1 AND contents.available=1',
+            'ORDER BY created DESC, available ASC',
+            $page,
+            $itemsPerPage
+        );
+
+        $imageIdsList = array();
+        foreach ($articles as $content) {
+            if (isset($content->img1)) {
+                $imageIdsList []= $content->img1;
+            }
+        }
+        $imageIdsList = array_unique($imageIdsList);
+
+        if (count($imageIdsList) > 0) {
+            $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
+        } else {
+            $imageList = array();
+        }
+
+        foreach ($imageList as &$img) {
+            $img->media_url = MEDIA_IMG_PATH_WEB;
+        }
+
+        // Overloading information for contents
+        foreach ($articles as &$content) {
+
+            // Load category related information
+            $content->category_name  = $content->loadCategoryName($content->id);
+            $content->category_title = $content->loadCategoryTitle($content->id);
+            $content->author         = new \User($content->fk_author);
+            $content->author->uri    = 'ext'.$content->author->uri;
+            if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
+                $content->author->getPhoto();
+                $content->author->photo->media_url = MEDIA_IMG_PATH_WEB;
+            }
+
+             //Change uri for href links except widgets
+            if ($content->content_type != 'Widget') {
+                $content->uri = "ext".$content->uri;
+            }
+
+            // Load attached and related contents from array
+            $content->loadFrontpageImageFromHydratedArray($imageList)
+                    ->loadAttachedVideo()
+                    ->loadRelatedContents($categoryName);
+        }
+
+        // Get url generator
+        $generator = $this->restler->container->get('url_generator');
+
+        // Set pagination
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+            array(
+                'page'  => $page,
+                'items' => $itemsPerPage,
+                'total' => $countArticles,
+                'url'   => $generator->generate(
+                    'blog_sync_category',
+                    array(
+                        'category_name' => $categoryName,
+                    )
+                )
+            )
+        );
+
+        return serialize(array($pagination, $articles));
     }
 }

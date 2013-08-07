@@ -31,9 +31,7 @@ class Order
         $rs = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         $this->id             = $rs->fields['id'];
@@ -83,8 +81,6 @@ class Order
         $rs = $GLOBALS['application']->conn->Execute($sql, $queryData);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -133,8 +129,6 @@ class Order
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return array();
         }
 
@@ -158,6 +152,10 @@ class Order
             $order->type           = $rs->fields['type'];
             $order->params         = @unserialize($element['params']);
             $order->getUser();
+
+            // Overload user info to order obj for ordering propouses
+            $order->username = $order->user->username;
+            $order->name     = $order->user->name;
 
             $orders []= $order;
 
@@ -185,8 +183,6 @@ class Order
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return 0;
         }
 

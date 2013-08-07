@@ -31,13 +31,14 @@ require __DIR__.'/../wordpress/libs/ImportHelper.php';
 $migrationHandler = new RegionImporter();
 
 $migrationHandler
-    ->importCategories()
-    ->loadCategories()
-    ->importArticles()
-    ->importPhotos()
-    ->assignMediaToArticles()
+   // ->importCategories()
+   // ->loadCategories()
+   // ->importArticles()
+   // ->importPhotos()
+   // ->assignMediaToArticles()
     // ->importAuthors()
     // ->importOpinions()
 
     // ->importVideos()
+    ->updateSummary()
     ->printResults();

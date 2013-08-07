@@ -144,8 +144,6 @@ class Photo extends Content
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($execution === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -254,7 +252,8 @@ class Photo extends Content
                 }
 
             } else {
-                Application::getLogger()->notice(
+                $logger = getService('logger');
+                $logger->notice(
                     sprintf(
                         'EFE Importer: Unable to register the '
                         .'photo object %s (destination: %s).',
@@ -274,10 +273,10 @@ class Photo extends Content
             $importedID = $photoID;
 
         } else {
-
             $importedID = null;
 
-            Application::getLogger()->notice(
+            $logger = getService('logger');
+            $logger->notice(
                 sprintf(
                     'EFE Importer: Unable to create the '
                     .'photo file %s (destination: %s).',
@@ -308,7 +307,7 @@ class Photo extends Content
      **/
     public function createFromLocalFileAjax($dataSource)
     {
-
+        $photo = null;
         $filePath = $dataSource["local_file"];
         $originalFileName = $dataSource['original_filename'];
 
@@ -387,7 +386,8 @@ class Photo extends Content
                 $photoID = $photo->create($data);
 
                 if (!$photoID) {
-                    Application::getLogger()->notice(
+                    $logger = getService('logger');
+                    $logger->notice(
                         sprintf(
                             'EFE Importer: Unable to register the photo object %s (destination: %s).',
                             $dataSource['local_file'],
@@ -405,10 +405,10 @@ class Photo extends Content
                 $photo = new Photo($photoID);
 
             } else {
-
                 $importedID = null;
 
-                Application::getLogger()->notice(
+                $logger = getService('logger');
+                $logger->notice(
                     sprintf(
                         'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
                         $dataSource['local_file'],
@@ -444,9 +444,7 @@ class Photo extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         $this->pk_photo    = $rs->fields['pk_photo'];
@@ -469,50 +467,6 @@ class Photo extends Content
         $this->color       = $rs->fields['color'];
         $this->address     = $rs->fields['address'];
 
-        return $this;
-    }
-
-    /**
-     * Returns an object with all information of a photo given a photo id
-     *
-     * @param int $id the photo id to load
-     *
-     * @return stdClass a dummy object with the photo information
-     **/
-    public function readAllData($id)
-    {
-        $photo = new stdClass();
-        $this->read($id);
-
-        if (empty($this)) {
-            return $photo;
-        }
-
-        $photo->pk_photo    = $this->pk_photo;
-        $photo->id          = $this->pk_photo ;
-        $photo->name        = $this->name ;
-        $photo->title       = $this->title ;
-        $photo->description = $this->description ;
-        $photo->metadata    = $this->metadata ;
-        $photo->path_file   = $this->path_file;
-        if (!empty($this->path_file)) {
-            $photo->path_img    = $this->path_file.DS.$this->name;
-        }
-        $photo->size        = $this->size;
-        $photo->resolution  = $this->resolution;
-        $photo->width       = $this->width;
-        $photo->height      = $this->height;
-        $photo->nameCat     = $this->nameCat;
-        $photo->type_img    = $this->type_img;
-        $photo->category    = $this->category;
-        $photo->author_name = $this->author_name;
-        $photo->media_type  = $this->media_type;
-        $photo->color       = $this->color;
-        $photo->date        = $this->date;
-        $photo->address     = $this->address;
-        $photo->latlong     = '';
-        $photo->infor       = '';
-
         if (!empty($photo->address)) {
             $positions = explode(',', $photo->address);
             if (is_array($positions)) {
@@ -523,6 +477,18 @@ class Photo extends Content
             }
         }
 
+        return $this;
+    }
+
+    /**
+     * Returns an object with all information of a photo given a photo id
+     *
+     * @param int $id the photo id to load
+     *
+     * @return stdClass a dummy object with the photo information
+     **/
+    public function readAllData()
+    {
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
         if (is_file($image)) {
@@ -530,15 +496,15 @@ class Photo extends Content
 
             switch ($size['mime']) {
                 case "image/gif":
-                    $photo->infor = _("The image type is GIF </br>");
+                    $this->infor = _("The image type is GIF </br>");
 
                     break;
                 case "image/png":
-                    $photo->infor = _("The image type is PNG </br>");
+                    $this->infor = _("The image type is PNG </br>");
 
                     break;
                 case "image/bmp":
-                    $photo->infor = _("The image type is BMP </br>");
+                    $this->infor = _("The image type is BMP </br>");
 
                     break;
                 case 'image/jpeg':
@@ -553,34 +519,34 @@ class Photo extends Content
                         }
                     }
                     if (!empty($exifData)) {
-                        $photo->exif = $exifData;
+                        $this->exif = $exifData;
                     } else {
-                        $photo->exif = null;
+                        $this->exif = null;
                     }
 
                     if (empty($exif)) {
-                        $photo->infor .= _("No availabel EXIF data</br>");
+                        $this->infor .= _("No availabel EXIF data</br>");
 
                     } else {
 
-                        if (empty($photo->color)) {
+                        if (empty($this->color)) {
                             if ($exifData['COMPUTED']['IsColor']==0) {
-                                $photo->color= 'BN';
+                                $this->color= 'BN';
                             } else {
-                                $photo->color= 'color';
+                                $this->color= 'color';
                             }
                         }
                         if (isset($exifData['IFD0'])) {
-                            if (empty($photo->resolution)
+                            if (empty($this->resolution)
                                 && !is_null($exifData['IFD0']['XResolution'])
                             ) {
-                                $photo->resolution =
+                                $this->resolution =
                                     $exifData['IFD0']['XResolution'];
                             }
-                            if (empty($photo->date)
+                            if (empty($this->date)
                                 && !is_null($exifData['FILE']['FileDateTime'])
                             ) {
-                                $photo->date= $exifData['FILE']['FileDateTime'];
+                                $this->date= $exifData['FILE']['FileDateTime'];
                             }
                         }
                     }
@@ -627,24 +593,24 @@ class Photo extends Content
                             $myiptc['Photo_source']        = $iptc["2#183"][0];
 
                             $myiptc = array_map('map_entities', $myiptc);
-                            $photo->myiptc = $myiptc;
+                            $this->myiptc = $myiptc;
 
-                            if (empty($photo->description)) {
-                                $photo->description= $myiptc['Caption'];
+                            if (empty($this->description)) {
+                                $this->description= $myiptc['Caption'];
                             }
 
-                            if (empty($photo->metadata)) {
-                                $photo->metadata = map_entities($keywords);
+                            if (empty($this->metadata)) {
+                                $this->metadata = map_entities($keywords);
                             }
 
-                            if (empty($photo->author_name)) {
-                                $photo->author_name = $myiptc['Photographer'];
+                            if (empty($this->author_name)) {
+                                $this->author_name = $myiptc['Photographer'];
                             }
 
                             ini_set($errorReporting);
 
                         } else {
-                            $photo->infor .=  _("No availabel IPTC data</br>");
+                            $this->infor .=  _("No availabel IPTC data</br>");
                         }
                     }
                     break;
@@ -653,10 +619,10 @@ class Photo extends Content
             } // endswitch;
 
         } else {
-            $photo->infor .=  _("Invalid image file");
+            $this->infor .=  _("Invalid image file");
         }
 
-        return $photo;
+        return $this;
     }
 
     /**
@@ -691,8 +657,6 @@ class Photo extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -728,8 +692,6 @@ class Photo extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -751,12 +713,10 @@ class Photo extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
-        $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
         if (file_exists($image)) {
             @unlink($image);
@@ -781,8 +741,6 @@ class Photo extends Content
         $values = array($path, $id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -802,8 +760,6 @@ class Photo extends Content
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -863,39 +819,29 @@ class Photo extends Content
      **/
     public static function batchDelete($arrayIds)
     {
-
         $contents = implode(', ', $arrayIds);
 
         $sql = 'SELECT  path_file, name  FROM photos WHERE pk_photo IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
         while (!$rs->EOF) {
             $image      = MEDIA_IMG_PATH . $rs->fields['path_file'].$rs->fields['name'];
-            $thumbimage = MEDIA_IMG_PATH . $rs->fields['path_file'].'140-100-'.$rs->fields['name'];
 
             if (file_exists($image)) {
                 @unlink($image);
-            }
-            if (file_exists($thumbimage)) {
-                @unlink($thumbimage);
             }
 
             $rs->MoveNext();
         }
 
-        $sql = 'DELETE FROM photos '
-                .'WHERE `pk_photo` IN ('.$contents.')';
+        $sql = 'DELETE FROM photos WHERE `pk_photo` IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

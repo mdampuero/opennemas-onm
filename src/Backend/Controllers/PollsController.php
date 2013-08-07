@@ -38,8 +38,6 @@ class PollsController extends Controller
 
         $this->checkAclOrForward('POLL_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
 
         $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
@@ -258,13 +256,12 @@ class PollsController extends Controller
             return $this->redirect($this->generateUrl('admin_polls'));
         }
 
-        $items = $poll->get_items($id);
 
         return $this->render(
             'polls/new.tpl',
             array(
                 'poll'  => $poll,
-                'items' => $items,
+                'items' => $poll->items,
             )
         );
     }
@@ -572,6 +569,72 @@ class PollsController extends Controller
                     'category' => $category,
                     'page'     => $page,
                 )
+            )
+        );
+    }
+
+    /**
+     * Render the content provider for polls
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderAction(Request $request)
+    {
+        $request      = $this->get('request');
+        $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page');
+
+        if ($category == 'home') {
+            $category = 0;
+        }
+
+        $cm = new  \ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching opinions
+        $sqlExcludedOpinions = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $contentsExcluded    = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedOpinions = ' AND `pk_poll` NOT IN ('.$contentsExcluded.') ';
+        }
+
+        list($countPolls, $polls) = $cm->getCountAndSlice(
+            'Poll',
+            null,
+            'contents.available=1 '.$sqlExcludedOpinions,
+            'ORDER BY created DESC ',
+            $page,
+            8
+        );
+
+        // Build the pager
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countPolls,
+                'fileName'    => $this->generateUrl(
+                    'admin_polls_content_provider',
+                    array('category' => $category)
+                ).'&page=%d',
+            )
+        );
+
+        return $this->render(
+            'polls/content-provider.tpl',
+            array(
+                'polls' => $polls,
+                'pager'  => $pagination,
             )
         );
     }

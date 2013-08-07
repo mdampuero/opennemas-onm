@@ -376,19 +376,8 @@ class Advertisement extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
-
-        // Needed for onAfterCreateAdvertisement callback
-        $this->pk_advertisement      = $this->id;
-        $this->available             = $data['available'];
-        $this->type_advertisement    = $data['type_advertisement'];
-        $this->fk_content_categories = $data['category'];
-
-        // Fire event
-        $GLOBALS['application']->dispatch('onAfterCreateAdvertisement', $this);
 
         return $this;
     }
@@ -408,8 +397,6 @@ class Advertisement extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -479,19 +466,8 @@ class Advertisement extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
-
-        // Necesarios para evento
-        $this->pk_advertisement      = $this->id;
-        $this->content_status        = $data['content_status'];
-        $this->type_advertisement    = $data['type_advertisement'];
-        $this->fk_content_categories = $data['category'];
-
-        // Fire event
-        $GLOBALS['application']->dispatch('onAfterUpdateAdvertisement', $this);
 
         return $this;
     }
@@ -511,10 +487,35 @@ class Advertisement extends Content
         $sql = 'DELETE FROM advertisements WHERE pk_advertisement = ?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            \Application::logDatabaseError();
-
             return;
         }
+    }
+
+    /**
+     * Get url of advertisement
+     *
+     * @param int $id Advertisement Id
+     *
+     * @return string
+     **/
+    public function getUrl($id)
+    {
+        // Try to minimize the database overload if this object was preloaded
+        // or doesn't fit the rules
+        if (isset($this) && isset($this->url) && ($this->id == $id)) {
+            return $this->url;
+        }
+
+        // Fetch data for the ad from the database
+        $sql = 'SELECT url FROM `advertisements` '
+                .'WHERE `advertisements`.`pk_advertisement`=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            return null;
+        }
+
+        return $rs->fields['url'];
     }
 
     /**
@@ -567,8 +568,6 @@ class Advertisement extends Content
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
     }
@@ -794,8 +793,6 @@ class Advertisement extends Content
             );
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
-                \Application::logDatabaseError();
-
                 return;
             }
         }

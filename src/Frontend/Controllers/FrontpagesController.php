@@ -120,7 +120,6 @@ class FrontpagesController extends Controller
 
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-
                 // Load category related information
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
@@ -254,7 +253,7 @@ class FrontpagesController extends Controller
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 
-     /**
+    /**
      * Retrieves the styleSheet rules for the frontpage
      *
      * @param Request $request the request object
@@ -356,7 +355,6 @@ class FrontpagesController extends Controller
                           " { color:#FFF !important;}\n
                           \t\t";
 
-
                 if ($current == $theCategory->name) {
                     $actual = $theCategory->color;
                 }
@@ -378,7 +376,7 @@ class FrontpagesController extends Controller
             $output.= "\tdiv.more-news h4 { color:" . $actual . " !important;}\n";
 
             $output.= "\th1#title a.big-text-logo  { color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header, ".
+            $output.= "\tdiv.widget .widget-header.colorize, ".
                 ".frontpage article .article-info span { color:" . $actual . " !important;}\n";
 
             $output.= "\tdiv.widget .category-header, "
@@ -402,6 +400,9 @@ class FrontpagesController extends Controller
                 .article-inner div.content-category a:hover, .article-inner blockquote {
                     color:". $actual. ";}\n";
 
+             $output.="\t.bgcolorize {
+                background-color:". $actual. "!important;}\n";
+
         } elseif ($current == "mobile") {
             $output.= "\t#footerwrap { background-color: ".$siteColor." !important;}";
             $output.= "\t#navtabs li a { background-color: ".$siteColor." !important;}";
@@ -420,7 +421,7 @@ class FrontpagesController extends Controller
                 .main-menu-border ul.nav li:hover a  { color:" . $siteColor . " !important;}\n";
 
             $output.= "\th1#title a.big-text-logo  { color:" . $siteColor . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header, ".
+            $output.= "\tdiv.widget .widget-header.colorize, ".
                 ".frontpage article .article-info span { color:" . $siteColor . " !important;}\n";
 
             $output.= "\tdiv.widget-last-articles .header-title { background-color:" . $siteColor . " !important;}\n";
@@ -445,6 +446,9 @@ class FrontpagesController extends Controller
                 "div.category a{ color:" . $siteColor . " !important;}\n";
 
             $output.= "\t.category-color:" . $siteColor . " !important;}\n";
+
+            $output.="\t.bgcolorize {
+                background-color:". $siteColor. "!important;}\n";
         }
 
         return new Response(

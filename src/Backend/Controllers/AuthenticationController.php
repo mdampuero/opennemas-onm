@@ -35,8 +35,6 @@ class AuthenticationController extends Controller
      **/
     public function init()
     {
-        // Setup view
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         $this->view->assign('version', \Onm\Common\Version::VERSION);
         $this->view->assign('languages', $this->container->getParameter('available_languages'));
     }

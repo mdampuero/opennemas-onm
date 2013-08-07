@@ -121,6 +121,11 @@ class ArticlesController extends Controller
                     $this->view->assign('videoInt', $videoInt);
                 }
 
+                $article->media_url = '';
+                if (is_object($article->author)) {
+                    $article->author->getPhoto();
+                }
+
                 // Related contents code ---------------------------------------
                 $relContent      = new \RelatedContent();
                 $relatedContents = array();
@@ -259,6 +264,25 @@ class ArticlesController extends Controller
                 'category_name' => $categoryName,
             )
         );
+    }
+
+    /**
+     * Redirects the article given its external link url
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function externalLinkAction(Request $request)
+    {
+        $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
+
+        if (empty($url)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        return $this->redirect($url);
+
     }
 
     /**

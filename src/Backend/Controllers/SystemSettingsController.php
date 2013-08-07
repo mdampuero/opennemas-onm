@@ -37,8 +37,6 @@ class SystemSettingsController extends Controller
     {
         // Check ACL
         $this->checkAclOrForward('ONM_SETTINGS');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**
@@ -128,6 +126,15 @@ class SystemSettingsController extends Controller
         }
 
         foreach ($request->request as $key => $value) {
+            // Strip html tags for SEO settings
+            if ($key == 'site_title' ||
+                $key == 'site_description' ||
+                $key == 'site_keywords'
+            ) {
+                $value = trim(strip_tags($value));
+            }
+
+            // Save settings
             s::set($key, $value);
         }
 

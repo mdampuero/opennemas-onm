@@ -127,6 +127,7 @@ abstract class ServerAbstract
                 }
 
                 $date = $element->getCreatedTime();
+
                 touch($localFilePath, $date->getTimestamp());
             }
 
@@ -195,25 +196,24 @@ abstract class ServerAbstract
      *
      * @return int, number of total downloaded files
     */
-    public static function cleanFiles($cacheDir, $serverFiles, $localFileList)
+    public static function cleanFiles($cacheDir, $serverFiles, $localFileList, $syncFrom)
     {
         $deletedFiles = 0;
 
         if (count($localFileList) > 0) {
             $serverFileList = array();
-            foreach ($serverFiles as $key) {
-                $serverFileList []= strtolower(basename($key['filename']));
-            }
 
             foreach ($localFileList as $file) {
                 $file = basename($file);
-                $filePath = $cacheDir.'/'.$file;
-                if (!in_array($file, $serverFileList)) {
-                    if (file_exists($filePath)) {
-                        unlink($filePath);
+                $filePath = $cacheDir.DIRECTORY_SEPARATOR.$file;
 
-                        $deletedFiles++;
-                    }
+                $fileModTime = filemtime($filePath);
+                $timeLimit = time() - $syncFrom;
+
+                if ($fileModTime < $timeLimit) {
+                    unlink($filePath);
+
+                    $deletedFiles++;
                 }
             }
         }
@@ -256,12 +256,34 @@ abstract class ServerAbstract
     public function getContentFromUrlWithDigestAuth($url)
     {
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-        curl_setopt($ch, CURLOPT_USERPWD, "{$this->params['username']}:{$this->params['password']}");
 
-        $content = curl_exec($ch);
+        $httpCode = '';
+        $maxRedirects = 0;
+        $maxRedirectsAllowed = 3;
+
+        do {
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+            curl_setopt($ch, CURLOPT_USERPWD, "{$this->params['username']}:{$this->params['password']}");
+            curl_setopt($ch, CURLOPT_HEADER, 1);
+            $content = curl_exec($ch);
+
+            $response = explode("\r\n\r\n", $content);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+            $content = $response[count($response) -1];
+
+            if ($httpCode == 301 || $httpCode == 302) {
+                $matches = array();
+                preg_match('/(Location:|URI:)(.*?)\n/', $response[0], $matches);
+                $url = trim(array_pop($matches));
+            }
+
+            $maxRedirects++;
+
+        } while ($httpCode == 302 || $httpCode == 301 || $maxRedirects > $maxRedirectsAllowed);
+
         curl_close($ch);
 
         return $content;

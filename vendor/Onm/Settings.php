@@ -50,8 +50,7 @@ class Settings
             return false;
         };
 
-        global $sc;
-        $cache = $sc->get('cache');
+        $cache = getService('cache');
 
         if (!is_array($settingName)) {
             // Try to fetch the setting from cache first
@@ -63,8 +62,6 @@ class Settings
                 $rs = $GLOBALS['application']->conn->GetOne($sql, array($settingName));
 
                 if ($rs === false) {
-                    \Application::logDatabaseError();
-
                     return false;
                 }
 
@@ -97,16 +94,12 @@ class Settings
             }
 
             // If all the keys were not fetched from cache now is turn of DB
-            if (!is_null($settingValue)
-            ) {
+            if (!is_null($settingValue)) {
                 $settings = implode("', '", $settingName);
-                $sql         = "SELECT name, value FROM `settings` "
-                               ."WHERE name IN ('{$settings}') ";
+                $sql         = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
                 $rs          = $GLOBALS['application']->conn->Execute($sql);
 
                 if (!$rs) {
-                    \Application::logDatabaseError();
-
                     return false;
                 }
 
@@ -142,8 +135,7 @@ class Settings
      */
     public static function set($settingName, $settingValue)
     {
-        global $sc;
-        $cache = $sc->get('cache');
+        $cache = getService('cache');
         // the setting name must be setted
         if (!isset($settingName) || empty($settingName)) {
             return false;
@@ -158,7 +150,6 @@ class Settings
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
             return false;
         }
         $cache->save(CACHE_PREFIX . $settingName, $settingValue);
@@ -181,8 +172,7 @@ class Settings
      */
     public static function invalidate($settingName, $instanceName = null)
     {
-        global $sc;
-        $cache = $sc->get('cache');
+        $cache = getService('cache');
 
         if (is_null($instanceName)) {
             $instanceName = CACHE_PREFIX;

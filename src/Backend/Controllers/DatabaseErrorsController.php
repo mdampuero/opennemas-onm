@@ -27,7 +27,6 @@ class DatabaseErrorsController extends Controller
      **/
     public function init()
     {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     // TODO: refactorize this method to make it simpler
@@ -55,9 +54,6 @@ class DatabaseErrorsController extends Controller
 
         $sql = "SELECT count(*) FROM adodb_logsql";
         $rsTotalErrors = $GLOBALS['application']->conn->getOne($sql);
-        if (is_null($rsTotalErrors)) {
-            \Application::logDatabaseError();
-        }
 
         $where = "";
         $values = array();
@@ -72,13 +68,7 @@ class DatabaseErrorsController extends Controller
         $orderBy = " ORDER BY created DESC";
 
         $sql = "SELECT * FROM adodb_logsql ".$where.$orderBy.$limit;
-
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-        if (!$rs) {
-            \Application::logDatabaseError();
-        }
-
-        $errors = $rs;
+        $errors = $GLOBALS['application']->conn->Execute($sql, $values);
 
         $pagerOptions = array(
             'mode'        => 'Sliding',
@@ -93,12 +83,12 @@ class DatabaseErrorsController extends Controller
         return $this->render(
             'system_information/sql_error_log.tpl',
             array(
-                'errors' => $errors,
-                'pagination' => $pager,
-                'total_errors' => $rsTotalErrors,
-                'sql' => $sql,
+                'errors'        => $errors,
+                'pagination'    => $pager,
+                'total_errors'  => $rsTotalErrors,
+                'sql'           => $sql,
                 'elements_page' => ($itemsPerPage*($page-1)),
-                'search' => $search,
+                'search'        => $search,
             )
         );
     }
@@ -119,11 +109,7 @@ class DatabaseErrorsController extends Controller
         }
 
         $sql = "TRUNCATE TABLE `adodb_logsql`";
-
         $rs = $GLOBALS['application']->conn->Execute($sql);
-        if (!$rs) {
-            \Application::logDatabaseError();
-        }
 
         m::add(_('SQL errors registered in database cleaned sucessfully.'). m::SUCCESS);
 

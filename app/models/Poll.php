@@ -117,8 +117,6 @@ class Poll extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -128,6 +126,8 @@ class Poll extends Content
         $this->with_comment  = $rs->fields['with_comment'];
         $this->visualization = $rs->fields['visualization'];
         $this->used_ips      = unserialize($rs->fields['used_ips']);
+
+        $this->items         = $this->getItems($this->id);
 
         return $this;
     }
@@ -149,9 +149,7 @@ class Poll extends Content
                 $tags   = StringUtils::get_tags($item);
                 $values = array($this->id,$item, $tags);
 
-                if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                    \Application::logDatabaseError();
-                }
+                $GLOBALS['application']->conn->Execute($sql, $values);
             }
         }
         $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
@@ -165,8 +163,6 @@ class Poll extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -191,17 +187,13 @@ class Poll extends Content
                 $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
                 $values = array((int) $k, (int) $this->id, $item, $data['votes'][$k]);
 
-                if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                    \Application::logDatabaseError();
-                }
+                $GLOBALS['application']->conn->Execute($sql, $values);
                 $keys .= $k.', ';
             }
 
             $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
             $values = array((int)$this->id);
-            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                \Application::logDatabaseError();
-            }
+            $GLOBALS['application']->conn->Execute($sql, $values);
 
         }
 
@@ -215,9 +207,7 @@ class Poll extends Content
             $data['id']
         );
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return(false);
+            return false;
         }
 
         $this->pk_poll = $data['id'];
@@ -239,14 +229,11 @@ class Poll extends Content
         $sql = 'DELETE FROM polls WHERE pk_poll ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return false;
         }
-        $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
 
+        $sql = 'DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
 
@@ -260,7 +247,8 @@ class Poll extends Content
      *
      * @return array the list of poll answers
      **/
-    public function get_items($pkPoll)
+
+    public function getItems($pkPoll)
     {
         $sql = 'SELECT poll_items.pk_item, poll_items.item, poll_items.votes, '
              . 'poll_items.metadata '
@@ -319,8 +307,6 @@ class Poll extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -334,8 +320,6 @@ class Poll extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         return true;
@@ -371,5 +355,31 @@ class Poll extends Content
         }
 
         return $ips_count;
+    }
+
+    /**
+     * Renders the poll
+     *
+     * @param arrray $params parameters for rendering the content
+     * @param Template $smarty the Template object instance
+     *
+     * @return string the generated HTML
+     **/
+    public function render($params, $smarty)
+    {
+        //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
+
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch('frontpage/contents/_poll.tpl');
+        } catch (\Exception $e) {
+            $html = 'Poll not available';
+        }
+
+        return $html;
     }
 }

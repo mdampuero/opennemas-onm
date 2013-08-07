@@ -40,7 +40,6 @@ class ImagesController extends Controller
         $this->checkAclOrForward('IMAGE_ADMIN');
 
         $request = $this->request;
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
@@ -562,9 +561,9 @@ class ImagesController extends Controller
             $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
             if (!empty($id)) {
                 $photo = new \Photo($id);
-                if (!empty($photo->id)) {
-                    $photos []= $photo->readAllData($id);
-                }
+                $photo->readAllData();
+
+                $photos []= $photo;
             }
         }
         // Check if passed ids fits photos in database, if not redirect to listing

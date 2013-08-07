@@ -29,7 +29,12 @@ function smarty_function_dynamic_image($params, &$smarty)
             'real_path'  => $baseUrl.$src,
             'parameters' => urlencode($params['transform']),
         );
-        $resource = $generator->generate('asset_image', $urlParams);
+        try {
+            $resource = $generator->generate('asset_image', $urlParams);
+        } catch (\Exception $e) {
+            $resource = '#failed';
+            trigger_error($e->getMessage());
+        }
     } else {
         $resource = $baseUrl.$src;
     }

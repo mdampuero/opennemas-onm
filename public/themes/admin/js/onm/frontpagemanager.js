@@ -31,16 +31,15 @@ function makeContentProviderAndPlaceholdersSortable() {
 function check_available_new_version() {
     var $version = frontpage_info.last_saved;
     var category = $('#frontpagemanager').data('category');
-    var exists_version = true;
     $.ajax({
         url: frontpage_urls.check_version + '?date=' + encodeURIComponent($version) + '&category=' + category,
         method: 'get',
-        async: false,
         type: 'json'
     }).done(function(data) {
-        exists_version = (data == 'true');
+        if (data == 'true') {
+            $('#modal-new-version').modal('show');
+        };
     });
-    return exists_version;
 }
 
 
@@ -155,9 +154,7 @@ jQuery(function($) {
 
     window.setInterval(function(){
         // Frontpage has changed and needs to be reloaded
-        if (check_available_new_version()) {
-            $('#modal-new-version').modal('show');
-        }
+        check_available_new_version();
     }, 10000);
     /***************************************************************************
     * Sortable handlers
@@ -417,13 +414,14 @@ jQuery(function($) {
         }
 
         if (element.data('class') == 'Article' || element.data('class') == 'Opinion') {
-            modal.find('.image-disposition').css('display', 'inline-block');
+           /* modal.find('.image-disposition').css('display', 'inline-block');
             if(element.data('format') !== undefined && element.data('format').length>0) {
                 var format = element.data('format');
                 modal.find('.modal-body .radio input[value='+format+']').prop('checked', true);
             } else {
                 modal.find('.modal-body .radio input[value=image-top-wide]').prop('checked', true);
-            }
+            }*/
+            modal.find('.image-disposition').css('display', 'none');
         } else {
             modal.find('.image-disposition').css('display', 'none');
         }
@@ -551,7 +549,7 @@ jQuery(function($) {
     * Content provider code
     ***************************************************************************/
 
-    $('#content-provider').dialog({ minWidth: 700, autoOpen: false, maxHeight: 500 });
+    $('#content-provider').dialog({ minWidth: 720, autoOpen: false, maxHeight: 500 });
 
     $('#content-provider .content-provider-block-wrapper').tabs({
         ajaxOptions: {

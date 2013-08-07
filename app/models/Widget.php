@@ -107,7 +107,6 @@ class Widget extends Content
         $values = array($this->id, $data['content'], $data['renderlet']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
             $GLOBALS['application']->conn->RollbackTrans();
 
             return false;
@@ -136,8 +135,6 @@ class Widget extends Content
         $rs       = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -160,8 +157,6 @@ class Widget extends Content
         );
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
         $id = $rs->fields['pk_widget'];
@@ -172,8 +167,6 @@ class Widget extends Content
 
         $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
         $this->load($rs->fields);
@@ -228,7 +221,6 @@ class Widget extends Content
         $values = array($data['content'], $data['renderlet'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
             $GLOBALS['application']->conn->RollbackTrans();
 
             return false;
@@ -292,8 +284,6 @@ class Widget extends Content
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

@@ -85,7 +85,6 @@ class RegionImporter
 
         $GLOBALS['application'] = new Application();
         Application::initDatabase();
-        Application::initLogger();
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $GLOBALS['application']->conn->Execute('SET NAMES UTF8');
@@ -112,7 +111,7 @@ class RegionImporter
                     'title'             => $category['Nombre'],
                     'inmenu'            => 1,
                     'subcategory'       => 0,
-                    'internal_category' => 0,
+                    'internal_category' => 1,
                     'color'             => '',
                     'params'            => array(
                         'title'         => $elem[0],
@@ -491,8 +490,60 @@ class RegionImporter
         return array('img'=>$img, 'body'=>$newBody);
     }
 
+
+     /**
+     * update some fields in content table
+     *
+     * @param int $contentId the content id
+     * @param string $params new values for the content table
+     *
+     * @return void
+     **/
+    public  function updateSummary()
+    {
+        $sql = "SELECT body, pk_article FROM articles WHERE summary = ''";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+
+
+        $values= array();
+        while (!$rs->EOF) {
+            $summary = substr($rs->fields['body'], 0, 200);
+            $pos = strripos($summary, ".");
+            if ($pos > 100) {
+                $summary = substr($summary, 0, $pos).".";
+            } else {
+                $summary = substr($summary, 0, strripos($summary, " "));
+            }
+            $values[] =  array(
+                strip_tags($summary),
+                $rs->fields['pk_article'],
+            );
+
+            $rs->MoveNext();
+        }
+
+        if (!empty($values)) {
+            $sql    = 'UPDATE `articles` SET summary =?  WHERE pk_article=?';
+
+            $stmt = $GLOBALS['application']->conn->Prepare($sql);
+            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if (!$rss) {
+                 ImportHelper::messageStatus($GLOBALS['application']->conn->ErrorMsg());
+            }
+
+        } else {
+            //$this->output->writeln("Please provide a contentID and views to update it.");
+        }
+
+    }
+
+
     public function printResults()
     {
         ImportHelper::printResults();
     }
+
+
+
 }
