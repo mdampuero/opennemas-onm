@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-07 23:19+0200\n"
+"POT-Creation-Date: 2013-08-08 00:19+0200\n"
 "PO-Revision-Date: 2012-03-09 11:34+0100\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
@@ -1213,43 +1213,43 @@ msgstr ""
 msgid "Files for \"%s\" cleaned."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:337
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:341
 msgid ""
 "Your newsletter configuration is not complete. Please contact with Opennemas "
 "administrator. newsletter_sender fault"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:416
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:420
 msgid "Newsletter deleted successfully."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:418
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:422
 msgid "You must give an id for delete a newsletter."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:447
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:451
 msgid "Newsletter module settings saved successfully."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:490
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:494
 msgid ""
 "Please contact with Opennemas administrator to start to use your Newsletter "
 "module"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:497
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:501
 msgid ""
 "Please provide your Newsletter configuration to start to use your Newsletter "
 "module"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:508
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:512
 msgid ""
 "Your newsletter configuration is not complete. Please go to settings and "
 "complete the form."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:557
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:561
 msgid "You have send max mailing allowed"
 msgstr ""
 
@@ -8141,15 +8141,11 @@ msgid "Subscriptors"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5966
-msgid ""
-"|truncate:10:false:false:''} 2=$totalSendings 3=$maxAllowed} Since %1 you "
-"have sent %2 of %3 newsletters"
+msgid " Since %1 you have sent %2 of %3 newsletters"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5969
-msgid ""
-"|truncate:10:false:false:''} 2=$totalSendings} Since %1 you have sent %2 "
-"newsletters"
+msgid " Since %1 you have sent %2 newsletters"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5978

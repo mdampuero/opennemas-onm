@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-07 23:19+0200\n"
-"PO-Revision-Date: 2013-08-07 23:33+0200\n"
+"POT-Creation-Date: 2013-08-08 00:19+0200\n"
+"PO-Revision-Date: 2013-08-08 00:21+0200\n"
 "Last-Translator: sandra <sandra@openhost.es>\n"
 "Language-Team: spanish <desarrollo@openhost.es>\n"
 "Language: gl\n"
@@ -1261,7 +1261,7 @@ msgstr "Servidor de axencia de novas eliminado."
 msgid "Files for \"%s\" cleaned."
 msgstr "Os ficheiros de «%s» foron limpiados."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:337
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:341
 msgid ""
 "Your newsletter configuration is not complete. Please contact with Opennemas "
 "administrator. newsletter_sender fault"
@@ -1269,19 +1269,19 @@ msgstr ""
 "A configuración do boletín de novas non está completa. Contacte co "
 "administrador de Opennems. Falta o remitente."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:416
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:420
 msgid "Newsletter deleted successfully."
 msgstr "Boletín de novas eliminado correctamente."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:418
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:422
 msgid "You must give an id for delete a newsletter."
 msgstr "Debe fornecer un identificador para eliminar un boletín de novas."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:447
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:451
 msgid "Newsletter module settings saved successfully."
 msgstr "Configuración do módulo de boletín de novas gardada correctamente."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:490
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:494
 msgid ""
 "Please contact with Opennemas administrator to start to use your Newsletter "
 "module"
@@ -1289,14 +1289,14 @@ msgstr ""
 "Contacto con administrador de Opennemas para comezar a usar o módulo de "
 "Boletín de novas"
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:497
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:501
 msgid ""
 "Please provide your Newsletter configuration to start to use your Newsletter "
 "module"
 msgstr ""
 "Complete a configuración para comenzar a usar o módulo de Boletín de novas"
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:508
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:512
 msgid ""
 "Your newsletter configuration is not complete. Please go to settings and "
 "complete the form."
@@ -1304,7 +1304,7 @@ msgstr ""
 "A configuración do boletín de novas non está completa. Vai ao panel de "
 "configuración e completa o formulario"
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:557
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:561
 msgid "You have send max mailing allowed"
 msgstr "Enviouse o numero máximo de envios permitidos"
 
@@ -8349,16 +8349,12 @@ msgid "Subscriptors"
 msgstr "Suscritores"
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5966
-msgid ""
-"|truncate:10:false:false:''} 2=$totalSendings 3=$maxAllowed} Since %1 you "
-"have sent %2 of %3 newsletters"
-msgstr "Desde %1 enviaronse %2 de %3 boletíns permitidos"
+msgid " Since %1 you have sent %2 of %3 newsletters"
+msgstr "Dende %1 enviaronse %2 de %3 boletíns"
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5969
-msgid ""
-"|truncate:10:false:false:''} 2=$totalSendings} Since %1 you have sent %2 "
-"newsletters"
-msgstr "Dende %1 enviaronse %2 boletíns permitidos"
+msgid " Since %1 you have sent %2 newsletters"
+msgstr "Dende %1 enviaronse %2 boletíns"
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5978
 msgid "Updated"
@@ -10438,6 +10434,11 @@ msgstr "Ten certeza que quere saír do xestor?"
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:9509
 msgid "Logout from manager"
 msgstr "Saír do xestor"
+
+#~ msgid ""
+#~ "|truncate:10:false:false:''} 2=$totalSendings 3=$maxAllowed} Since %1 you "
+#~ "have sent %2 of %3 newsletters"
+#~ msgstr "Desde %1 enviaronse %2 de %3 boletíns permitidos"
 
 #~ msgid "The reCAPTCHA wasn't entered correctly. Try to autenticate again."
 #~ msgstr "O reCAPTCHA non foi completado correctamente. Téntao de novo."
