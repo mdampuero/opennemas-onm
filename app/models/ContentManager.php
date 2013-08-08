@@ -480,6 +480,9 @@ class ContentManager
 
         // Initialization of variables
         $contents = array();
+        if (empty($categoryID)) {
+            $categoryID = 0;
+        }
 
         $sql = 'SELECT * FROM content_positions '
               .'WHERE `fk_category`='.$categoryID.' '
@@ -1502,7 +1505,7 @@ class ContentManager
             $limit = ' LIMIT '.($page-1)*$numElements.', '.$numElements;
         }
 
-        if (!is_null($categoryId)) {
+        if (intval($categoryId)>0) {
             $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.' '
                  . ' WHERE `contents_categories`.`pk_fk_content_category`='.$categoryId
                  . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'`'
@@ -1605,6 +1608,9 @@ class ContentManager
         $items  = array();
         $_where = 'in_litter=0';
 
+        if (intval($pk_fk_content_category)<=0) {
+            return $items;
+        }
         if (!is_null($filter)) {
             // se busca desde la litter.php
             if (preg_match('/in_litter=1/i', $filter)) {
