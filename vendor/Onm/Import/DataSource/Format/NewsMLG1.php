@@ -136,6 +136,20 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * Returns the name of the rights.owner
+     *
+     * @return string the owner id
+     **/
+    public function getRightsOwner()
+    {
+        $owner = $this->getData()->xpath(
+            "//nitf/body/body.head/rights/rights.owner"
+        );
+
+        return $owner[0];
+    }
+
+    /**
      * Returns the name of the service that authored this element
      *
      * @return string the service name

@@ -549,3 +549,12 @@ function dispatchEventWithParams($eventName, $params = array())
 
     $eventDispatcher->dispatch('content.update', $event);
 }
+
+function debug()
+{
+    if (array_key_exists('debug', $_REQUEST) && $_REQUEST['debug'] == 1) {
+        $functionArgs = func_get_args();
+
+        call_user_func_array('var_dump', $functionArgs);
+    }
+}
