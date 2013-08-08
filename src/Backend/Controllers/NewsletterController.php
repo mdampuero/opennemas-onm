@@ -91,7 +91,7 @@ class NewsletterController extends Controller
                 'pagination'    => $pagination,
                 'totalSendings' => $totalSendings,
                 'maxAllowed'    => $maxAllowed,
-                'lastInvoice'   => $lastInvoice->format('Y-m-d'),
+                'lastInvoice'   => $lastInvoice->format(_('d-m-Y')),
             )
         );
     }
