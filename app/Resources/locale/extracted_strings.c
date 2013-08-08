@@ -5963,10 +5963,10 @@ gettext("Subscriptors");
 gettext("Subscriptors");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
-gettext(" Since %1 you have sent %2 of %3 newsletters");
+gettext(" Since %1 you have sent %2 of %3 allowed");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
-gettext(" Since %1 you have sent %2 newsletters");
+gettext(" Since %1 you have sent %2 emails");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
 gettext("Title");
