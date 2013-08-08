@@ -321,6 +321,8 @@ class NewsAgencyController extends Controller
                         } elseif (!isset($innerPhoto)) {
                             $innerPhoto = new \Photo($photoObject->id);
                         }
+                        // Get author id only for Onm news
+                        $authorId = $element->getRightsOwner();
                     } elseif (!isset($innerPhoto)) {
                         $innerPhoto = new \Photo($photoObject->id);
                     }
@@ -386,6 +388,7 @@ class NewsAgencyController extends Controller
             'metadata'       => \StringUtils::get_tags($element->title),
             'subtitle'       => $element->pretitle,
             'agency'         => $server['agency_string'],
+            'fk_author'      => (isset($authorId) ? $authorId : 0),
             'summary'        => $element->summary,
             'body'           => $element->body,
             'posic'          => 0,

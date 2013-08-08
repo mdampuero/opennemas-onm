@@ -74,6 +74,9 @@
                       <hl1>{$article->title|htmlspecialchars_decode}</hl1>
                       <hl2>{$article->subtitle|htmlspecialchars_decode}</hl2>
                     </hedline>
+                    <rights>
+                      <rights.owner>{$article->author->id}</rights.owner>
+                    </rights>
                     <dateline>
                       <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
                         <text>{$article->created_datetime->format('Ymd\THisP')}</text>
