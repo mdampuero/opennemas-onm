@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-08 11:51+0200\n"
+"POT-Creation-Date: 2013-08-08 19:22+0200\n"
 "PO-Revision-Date: 2012-03-09 11:34+0100\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
@@ -1181,36 +1181,40 @@ msgstr ""
 msgid "The category you have chosen doesn't exists."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:439
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:442
 msgid "The article you want to import doesn't exists."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:559
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:562
 #, php-format
 msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:624
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:627
 msgid "News agency server updated."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:704
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:707
 msgid "News agency server added."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:731
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:774
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:734
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:777
 #, php-format
 msgid "Source identifier \"%d\" not valid"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:750
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:753
 msgid "News agency server deleted."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:789
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:792
 #, php-format
 msgid "Files for \"%s\" cleaned."
+msgstr ""
+
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:94
+msgid "d-m-Y"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:341
@@ -8141,11 +8145,11 @@ msgid "Subscriptors"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5966
-msgid " Since %1 you have sent %2 of %3 newsletters"
+msgid " Since %1 you have sent %2 of %3 allowed"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5969
-msgid " Since %1 you have sent %2 newsletters"
+msgid " Since %1 you have sent %2 emails"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5978

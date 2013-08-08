@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-08 11:51+0200\n"
-"PO-Revision-Date: 2013-08-08 00:21+0200\n"
+"POT-Creation-Date: 2013-08-08 19:22+0200\n"
+"PO-Revision-Date: 2013-08-08 19:24+0200\n"
 "Last-Translator: sandra <sandra@openhost.es>\n"
 "Language-Team: spanish <desarrollo@openhost.es>\n"
 "Language: gl\n"
@@ -1229,37 +1229,41 @@ msgstr "Asigne a categoría onde quere importar este artigo"
 msgid "The category you have chosen doesn't exists."
 msgstr "A categoría que seleccionou non existe."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:439
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:442
 msgid "The article you want to import doesn't exists."
 msgstr "O artigo que quere importar non existe."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:559
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:562
 #, php-format
 msgid "If you are sure <a href=\"%s\">try to unlock it</a>"
 msgstr "Está seguro que quere <a href=\"%s?action=unlock\">desbloquealo</a>."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:624
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:627
 msgid "News agency server updated."
 msgstr "Servidor de axencia de novas actualizado."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:704
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:707
 msgid "News agency server added."
 msgstr "Servidor de axencia de novas engadido."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:731
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:774
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:734
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:777
 #, php-format
 msgid "Source identifier \"%d\" not valid"
 msgstr "Identificador de orixe «%s» non válido"
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:750
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:753
 msgid "News agency server deleted."
 msgstr "Servidor de axencia de novas eliminado."
 
-#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:789
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsAgencyController.php:792
 #, php-format
 msgid "Files for \"%s\" cleaned."
 msgstr "Os ficheiros de «%s» foron limpiados."
+
+#: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:94
+msgid "d-m-Y"
+msgstr ""
 
 #: /home/sandra/Projects/opennemas/src/Backend/Controllers/NewsletterController.php:341
 msgid ""
@@ -8349,12 +8353,12 @@ msgid "Subscriptors"
 msgstr "Suscritores"
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5966
-msgid " Since %1 you have sent %2 of %3 newsletters"
-msgstr "Dende %1 enviaronse %2 de %3 boletíns"
+msgid " Since %1 you have sent %2 of %3 allowed"
+msgstr "Dende %1 enviaronse %2 de %3 permitidos"
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5969
-msgid " Since %1 you have sent %2 newsletters"
-msgstr "Dende %1 enviaronse %2 boletíns"
+msgid " Since %1 you have sent %2 emails"
+msgstr "Dende %1 enviaronse %2 emails"
 
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5978
 msgid "Updated"
