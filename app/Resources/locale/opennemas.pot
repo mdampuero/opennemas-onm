@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-08 00:21+0200\n"
+"POT-Creation-Date: 2013-08-08 11:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -508,7 +508,7 @@ msgid "Cache configuration saved successfully."
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/src/Backend/Controllers/CacheManagerController.php:276
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1881
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1887
 #: /home/sandra/Projects/opennemas/app/models/Frontpage.php:86
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:3728
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:3734
@@ -901,7 +901,7 @@ msgid "Layout or category not valid."
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/src/Backend/Controllers/ImagesController.php:258
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1801
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1807
 #: /home/sandra/Projects/opennemas/vendor/Onm/Module/ModuleManager.php:85
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:3683
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:5405
@@ -2318,7 +2318,7 @@ msgid "XML Importer"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/src/Backend/Resources/Menu.php:244
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1871
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1877
 msgid "Agenda"
 msgstr ""
 
@@ -2520,24 +2520,24 @@ msgid "A new opennemas instance has been created"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app/models/Album.php:57
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1826
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1832
 msgid "Album"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app/models/Article.php:150
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1796
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1802
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:908
 msgid "Article"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app/models/Attachment.php:66
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1806
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1812
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:191
 msgid "File"
 msgstr ""
 
 #: /home/sandra/Projects/opennemas/app/models/Book.php:65
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1866
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1872
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:4469
 msgid "Book"
 msgstr ""
@@ -2565,7 +2565,7 @@ msgstr ""
 msgid "Homepage for category %s cleaned successfully."
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1811
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1817
 #: /home/sandra/Projects/opennemas/app/models/Opinion.php:78
 #: /home/sandra/Projects/opennemas/vendor/Onm/Module/ModuleManager.php:109
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:2015
@@ -2576,34 +2576,34 @@ msgstr ""
 msgid "Opinion"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1816
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1822
 msgid "Event"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1821
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1827
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:587
 msgid "Comment"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1831
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1837
 #: /home/sandra/Projects/opennemas/app/models/Photo.php:111
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:7487
 msgid "Image"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1836
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1842
 #: /home/sandra/Projects/opennemas/app/models/Video.php:60
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:4457
 msgid "Video"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1841
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1847
 #: /home/sandra/Projects/opennemas/app/models/Special.php:58
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:4466
 msgid "Special"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1846
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1852
 #: /home/sandra/Projects/opennemas/app/models/Poll.php:65
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:3821
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:4460
@@ -2611,23 +2611,23 @@ msgstr ""
 msgid "Poll"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1851
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1857
 #: /home/sandra/Projects/opennemas/app/models/Widget.php:58
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:6572
 msgid "Widget"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1856
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1862
 #: /home/sandra/Projects/opennemas/app//Resources/locale/extracted_strings.c:6494
 msgid "Static page"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1861
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1867
 #: /home/sandra/Projects/opennemas/vendor/Onm/Module/ModuleManager.php:102
 msgid "Kiosko"
 msgstr ""
 
-#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1876
+#: /home/sandra/Projects/opennemas/app/models/ContentManager.php:1882
 msgid "Letter to editor"
 msgstr ""
 
