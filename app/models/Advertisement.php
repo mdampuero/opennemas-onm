@@ -647,11 +647,39 @@ class Advertisement extends Content
                 continue;
             }
 
-
-            $banners []= $advertisement;
+            $banners [$advertisement->type_advertisement]= $advertisement;
         }
 
-        return $banners;
+        if (!empty($banners)) {
+            $homeBanners = array();
+         // Perform operations for each advertisement type
+            foreach ($banners as $adType => $advs) {
+                // Initialize banners arrays
+                $banners[$adType] = array();
+                $homeBanners[$adType] = array();
+                if (count($advs) > 1) {
+                    foreach ($advs as $ad) {
+                        if (in_array(0, $ad->fk_content_categories)) {
+                            array_push($homeBanners[$adType], $ad); // Home banners
+                            if (in_array($category, $ad->fk_content_categories)) {
+                                array_push($finalBanners[$adType], $ad); // Category+Home banners
+                            }
+                        } else {
+                            array_push($finalBanners[$adType], $ad); // Category banners
+                        }
+                    }
+                    // If this ad-type don't has any banner, get all from home
+                    if (empty($banners[$adType])) {
+                        $finalBanners[$adType] = $homeBanners[$adType];
+                    }
+                } else {
+                    // If this ad-type only has one ad, add it to array
+                    $finalBanners[$adType] = $advs;
+                }
+            }
+        }
+
+        return $finalBanners;
     }
 
     /**
