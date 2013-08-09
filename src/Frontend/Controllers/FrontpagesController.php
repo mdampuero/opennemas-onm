@@ -238,8 +238,9 @@ class FrontpagesController extends Controller
      *
      * @return void
      **/
-    public static function getAds($categoryName = 'home')
+    public static function getAds($category = 'home')
     {
+
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // I have added the element 50 in order to integrate interstitial position
