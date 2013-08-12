@@ -733,7 +733,7 @@ class Advertisement extends Content
                 $content = $this->script;
             } else {
                 $url = url('frontend_ad_get', array('id' => $this->pk_content));
-                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
+                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px; overflow: hidden;"></iframe>';
             }
 
         } else {
