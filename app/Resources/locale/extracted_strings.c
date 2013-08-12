@@ -3392,13 +3392,16 @@ gettext("Go back to list");
 gettext("Total in widget home");
 
 /* public/themes/admin/tpl//album/config.tpl */
-gettext("Use  total in widget album for define how many videos can see in widgets in newspaper frontpage");
+gettext("Use  total in widget album for define how many albums can see in widgets in frontpage");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Cover size in widget album (width x height)");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Order album's frontpage by");
+
+/* public/themes/admin/tpl//album/config.tpl */
+gettext("Created Date");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Most views");
@@ -3416,7 +3419,7 @@ gettext("Time of the last album most viewed (days)");
 gettext("Total in album frontpage");
 
 /* public/themes/admin/tpl//album/config.tpl */
-gettext("If previus select most views for order the album's frontpage. Use this to define the frontpage albums, the time range of the latest albums are the most viewed");
+gettext(" Use this to define how many albums can see in the album frontpage. ");
 
 /* public/themes/admin/tpl//album/modals/_modalBatchDelete.tpl */
 gettext("Delete albums");
