@@ -2178,7 +2178,7 @@ class Content
             return false;
         }
 
-        $sql = "DELETE FROM contentmeta WHERE `fk_content`='?' AND `meta_name`=?";
+        $sql = "DELETE FROM contentmeta WHERE `fk_content`=? AND `meta_name`=?";
         $values = array($this->id, $property);
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
