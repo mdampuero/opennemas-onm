@@ -166,6 +166,10 @@ div#intesticial-ad .wrapper_intersticial {
     padding-top: 1em;
 }
 
+.ads iframe,
+div#intesticial-ad iframe {
+    overflow: hidden;
+}
 /* -------------------------------------------------------------
   Widget rss
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
