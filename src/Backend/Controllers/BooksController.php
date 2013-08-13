@@ -220,10 +220,14 @@ class BooksController extends Controller
             return $this->render('book/new.tpl');
 
         } else {
+            $bookSavePath       = INSTANCE_MEDIA_PATH.'/books/';
+            $imageName          = StringUtils::cleanFileName($_FILES['file_img']['name']);
+            $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+                'file_img'    => $imageName,
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -314,12 +318,21 @@ class BooksController extends Controller
                 return $this->redirect($this->generateUrl('admin_books_show', array('id' => $id)));
             }
 
+            $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
+
+            if (!empty($_FILES['file_img']['name'])) {
+                $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
+                $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+            } else {
+                $imageName = $book->file_img;
+            }
 
             $data = array(
                 'id'          => $id,
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+                'file_img'    => $imageName,
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
