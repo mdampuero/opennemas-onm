@@ -38,6 +38,29 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Onm\Theme::__construct
+     */
+    public function testConstruct()
+    {
+        $this->theme = new \Onm\Theme(
+            array(
+                'name'        => 'Dummy theme',
+                'version'     => '1.1',
+                'description' => 'Dummy theme description',
+                'author'      => 'OpenHost S.L.',
+                'author_uri'  => 'http://www.openhost.es',
+            )
+        );
+
+        $this->assertEquals($this->theme->name, 'Dummy theme');
+        $this->assertEquals($this->theme->version, '1.1');
+        $this->assertEquals($this->theme->description, 'Dummy theme description');
+        $this->assertEquals($this->theme->author, 'OpenHost S.L.');
+        $this->assertEquals($this->theme->author_uri, 'http://www.openhost.es');
+    }
+
+
+    /**
      * @covers Onm\Theme::registerLayout
      */
     public function testRegisterLayout()
@@ -76,7 +99,6 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers Onm\Theme::getLayout
-     * @todo   Implement testGetLayout().
      */
     public function testGetLayout()
     {
@@ -100,8 +122,17 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Onm\Theme::getLayout
+     */
+    public function testGetLayoutWithoutLayoutRegistered()
+    {
+        $layout = $this->theme->getLayout('base');
+
+        $this->assertEquals($layout, false);
+    }
+
+    /**
      * @covers Onm\Theme::registerMenu
-     * @todo   Implement testRegisterMenu().
      */
     public function testRegisterMenu()
     {
@@ -121,9 +152,37 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\Theme::getMenu
+     * @covers Onm\Theme::registerMenu
+     * @expectedException Exception
      */
-    public function testGetMenu()
+    public function testRegisterMenuNotArray()
+    {
+        $this->theme->registerMenu(
+            false
+        );
+    }
+
+    /**
+     * @covers Onm\Theme::registerMenu
+     * @expectedException Exception
+     */
+    public function testRegisterMenuWithoutName()
+    {
+        $this->theme->registerMenu(
+            array(
+                'description' => 'Frontpage',
+                'class'       => 'menu',
+                'before_menu' => '<div id="%1$s" class="menu %2$s">',
+                'after_menu'  => '</div>',
+            )
+        );
+    }
+
+    /**
+     * @covers Onm\Theme::registerMenu
+     * @expectedException Exception
+     */
+    public function testRegisterMenuWithAlreadyExistingMenu()
     {
         $this->theme->registerMenu(
             array(
@@ -135,8 +194,24 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->theme->registerMenu(
+            array(
+                'name'        => 'frontpage',
+                'description' => 'Frontpage',
+                'class'       => 'menu',
+                'before_menu' => '<div id="%1$s" class="menu %2$s">',
+                'after_menu'  => '</div>',
+            )
+        );
+    }
+
+    /**
+     * @covers Onm\Theme::getMenu
+     */
+    public function testGetMenuWithoutMenuRegistered()
+    {
         $menu = $this->theme->getMenu('frontpage');
-        $this->assertEquals($menu['name'], 'frontpage');
+        $this->assertEquals($menu, false);
     }
 
     /**
@@ -184,9 +259,39 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $menus = $this->theme->getMenuDefinitions();
+        $menus = $this->theme->getMenus();
 
         $this->assertTrue(is_array($menus));
+    }
+
+    /**
+     * @covers Onm\Theme::getMenu
+     */
+    public function testGetMenu()
+    {
+        $this->theme->registerMenu(
+            array(
+                'name'        => 'frontpage2',
+                'description' => 'Frontpage2',
+                'class'       => 'menu',
+                'before_menu' => '<div id="%1$s" class="menu %2$s">',
+                'after_menu'  => '</div>',
+            )
+        );
+
+        $menus = $this->theme->getMenu('frontpage2');
+
+        $this->assertTrue(is_array($menus));
+    }
+
+        /**
+     * @covers Onm\Theme::getMenu
+     */
+    public function testGetMenuWithoutRegisteredMenus()
+    {
+        $menus = $this->theme->getMenu('frontpage2');
+
+        $this->assertFalse(is_array($menus));
     }
 
     /**
@@ -211,6 +316,14 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers Onm\Theme::getTranslationDomain
+     */
+    public function testGetTranslationDomainWithoutRegisteredDomain()
+    {
+        $this->assertEquals($this->theme->getTranslationDomain(), false);
+    }
+
+    /**
      * @covers Onm\Theme::getTranslationsDir
      */
     public function testGetTranslationsDir()
@@ -218,6 +331,14 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         $this->theme->registerTranslationsDomain('test', './test');
 
         $this->assertEquals($this->theme->getTranslationsDir(), './test');
+    }
+
+    /**
+     * @covers Onm\Theme::getTranslationsDir
+     */
+    public function testGetTranslationsDirWithoutRegisteredDomain()
+    {
+        $this->assertEquals($this->theme->getTranslationsDir(), false);
     }
 
     /**
