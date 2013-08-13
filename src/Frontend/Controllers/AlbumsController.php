@@ -152,8 +152,7 @@ class AlbumsController extends Controller
                     'url'   => $this->generateUrl(
                         'frontend_album_frontpage_category',
                         array(
-                            'category_name' => $this->categoryName,
-                            'page'          => $this->page,
+                            'category_name' => $this->categoryName
                         )
                     )
                 )

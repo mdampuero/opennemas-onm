@@ -603,14 +603,12 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_album_frontpage_category',
     new Route(
-        '/album/{category_name}/{page}',
+        '/album/{category_name}',
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
-            'page'        => 1
         ),
         array(
-            'category_name' => '[a-z0-9\-]+',
-            'page'          => '([0-9]+)?'
+            'category_name' => '[a-z0-9\-]+'
         )
     )
 );
