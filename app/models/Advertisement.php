@@ -652,7 +652,7 @@ class Advertisement extends Content
 
         if (!empty($banners)) {
             $homeBanners = array();
-            // Perform operations for each advertisement type
+         // Perform operations for each advertisement type
             foreach ($banners as $adType => $advs) {
                 // Initialize banners arrays
                 $banners[$adType] = array();
@@ -733,7 +733,7 @@ class Advertisement extends Content
                 $content = $this->script;
             } else {
                 $url = url('frontend_ad_get', array('id' => $this->pk_content));
-                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px; overflow: hidden;"></iframe>';
+                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px"></iframe>';
             }
 
         } else {
@@ -777,7 +777,7 @@ class Advertisement extends Content
                         <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
                             .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;"></div></div>';
+                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;"></div>';
                 }
 
                 $content = '<div style="width:'.$width.'px; height:'.$height.'px;">'.$content.'</div>';
