@@ -127,7 +127,7 @@ class NewsletterManager
             ->setBody($this->HTML, 'text/html')
             ->setTo(array($mailbox->email => $mailbox->name))
             ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-            ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+            ->setSender($params['newsletter_sender']);
 
         try {
             $this->mailer->send($message);
