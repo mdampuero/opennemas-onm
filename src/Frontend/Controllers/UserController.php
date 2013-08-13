@@ -670,6 +670,37 @@ class UserController extends Controller
     }
 
     /**
+     * Shows the author frontpage from external source
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function extAuthorFrontpageAction(Request $request)
+    {
+        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
+
+        // Get sync params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$categoryName.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        if (empty($wsUrl)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        return $this->redirect($wsUrl.'/author/'.$slug);
+    }
+
+    /**
      * Shows the author frontpage
      *
      * @param Request $request the request object

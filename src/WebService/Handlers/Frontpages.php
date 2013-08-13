@@ -62,10 +62,9 @@ class Frontpages
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
-                $content->author         = new \User($content->fk_author);
-                if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
-                    $content->author->getPhoto();
-                }
+                $content->author = new \User($content->fk_author);
+                $content->author->external = 1;
+
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
@@ -153,11 +152,9 @@ class Frontpages
             $content->category_name  = $content->loadCategoryName($content->id);
             $content->category_title = $content->loadCategoryTitle($content->id);
             $content->author         = new \User($content->fk_author);
-            $content->author->uri    = 'ext'.$content->author->uri;
-            if (!empty($content->author) && !empty($content->author->avatar_img_id)) {
-                $content->author->getPhoto();
-                $content->author->photo->media_url = MEDIA_IMG_PATH_WEB;
-            }
+            $content->author->photo  = $content->author->getPhoto();
+            $content->author->photo->media_url  = MEDIA_IMG_PATH_WEB;
+            $content->author->external = 1;
 
              //Change uri for href links except widgets
             if ($content->content_type != 'Widget') {
