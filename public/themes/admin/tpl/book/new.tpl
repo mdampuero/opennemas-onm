@@ -72,9 +72,7 @@ input[type="text"].required {
                     {if (!empty($book->id))}
                     <div class="book-preview">
                         <label for="title">{t}Preview:{/t}</label><br>
-                        <a href="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_name}" target="_blank">
                             <img src="{$smarty.const.INSTANCE_MEDIA}/books/{$book->file_img}" style=" width:164px;" alt="{$book->file_img}" />
-                        </a>
                     </div>
                     {/if}
                 </td>
@@ -87,17 +85,6 @@ input[type="text"].required {
                 <td>
                     <input type="text" id="title" name="title" title={t}"Album"{/t}
                         value="{$book->title|clearslash|escape:"html"}" />
-                </td>
-            </tr>
-            <tr>
-                <td style="padding:4px;">
-                    <label for="title">Archivo:(pdf)</label>
-                </td>
-                <td>
-                    {if (isset($book->file_name) && !empty($book->file_name) )}
-                         <input name="file_name" type="text" readonly="readonly" value="{$book->file_name}"/>
-                    {/if}
-                    <input name="file" type="file"/>
                 </td>
             </tr>
             <tr>
@@ -143,7 +130,7 @@ input[type="text"].required {
                         <label for="title">Descripci&oacute;n:</label>
                     </td>
                     <td>
-                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$book->description|clearslash|escape:"html"}%1{/t}</textarea>
+                        <textarea name="description" id="description"  title="description" style="width:90%; height:10em;">{t 1=$book->description|clearslash}%1{/t}</textarea>
                     </td>
                 </tr>
                 <tr>

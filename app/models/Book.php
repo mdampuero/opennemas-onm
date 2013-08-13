@@ -118,16 +118,17 @@ class Book extends Content
         parent::create($data);
 
         $sql = "INSERT INTO books "
-             . "(`pk_book`, `author`, `file`, `file_img`, `editorial`) "
-             . "VALUES (?,?,?,?,?)";
+             . "(`pk_book`, `author`, `file_img`, `editorial`) "
+             . "VALUES (?,?,?,?)";
 
         $values = array(
             $this->id,
             $data['author'],
+            $data['file_img'],
             $data['editorial']
         );
 
-        $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs  = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             return false;
         }
@@ -174,11 +175,12 @@ class Book extends Content
         parent::update($data);
 
         $sql = "UPDATE books "
-             . "SET  `author`=?,`file`=?,`file_img`=?, `editorial`=? "
+             . "SET  `author`=?, `file_img`=?, `editorial`=? "
              . "WHERE pk_book=?";
 
         $values = array(
             $data['author'],
+            $data['file_img'],
             $data['editorial'],
             intval($data['id']),
         );
