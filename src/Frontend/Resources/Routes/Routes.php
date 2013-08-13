@@ -892,6 +892,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_video_ajax_paginated',
+    new Route(
+        '/video/more',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:ajaxPaginated',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_video_frontpage_category',
     new Route(
         '/video/{category_name}/{page}',
