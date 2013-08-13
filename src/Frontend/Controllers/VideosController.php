@@ -134,12 +134,29 @@ class VideosController extends Controller
                     'ORDER BY created DESC LIMIT 3'
                 );
 
-                $othersVideos = $this->cm->find_all(
+
+                $itemsPerPage = 12;//$totalVideosFrontpage;
+                list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
                     'Video',
-                    ' available=1 ',
-                    'ORDER BY starttime DESC LIMIT 3,12'
+                    (int) $this->category,
+                    'in_litter != 1 AND contents.available=1',
+                    'ORDER BY created DESC',
+                    $this->page,
+                    $itemsPerPage
                 );
 
+                $total = count($othersVideos)+1;
+
+                $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+                    array(
+                        'page'  => $this->page,
+                        'items' => $itemsPerPage,
+                        'total' => $total,
+                        'url'   => $this->generateUrl(
+                            'frontend_video_ajax_paginated'
+                        )
+                    )
+                );
             }
 
             if (count($videos) > 0) {
@@ -160,6 +177,7 @@ class VideosController extends Controller
                 array(
                     'videos'        => $videos,
                     'others_videos' => $othersVideos,
+                    'pagination'    => $pagination,
                     'page'          => '1'
                 )
             );
@@ -361,37 +379,52 @@ class VideosController extends Controller
     public function ajaxPaginatedAction(Request $request)
     {
         // Items_page refers to the widget
-        $albumID   = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $page      = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
-        $itemsPage = 8;
+        $itemsPerPage = 12;//$totalVideosFrontpage;
+        list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
+            'Video',
+            (int) $this->category,
+            'in_litter != 1 AND contents.available=1',
+            'ORDER BY created DESC',
+            $this->page,
+            $itemsPerPage
+        );
 
-        // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($albumID)) {
-            return new RedirectResponse($this->generateUrl('frontend_album_frontpage'));
+        $total = count($othersVideos)+1;
+
+        if($countVideos > 0) {
+            foreach ($othersVideos as &$video) {
+                $video->category_name  = $video->loadCategoryName($video->id);
+                $video->category_title = $video->loadCategoryTitle($video->id);
+            }
+
+        } else{
+
+            return new RedirectResponse(
+                $this->generateUrl('frontend_video_ajax_paginated')
+            );
         }
 
-        // Get the album from the id and increment the numviews for it
-        $album = new \Album($albumID);
-        $this->view->assign('album', $album);
 
-        $album->category_name  = $album->loadCategoryName($album->id);
-        $album->category_title = $album->loadCategoryTitle($album->id);
-        $_albumArray           = $album->_getAttachedPhotos($album->id);
-        $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
-
-        if (count($_albumArrayPaged) > $itemsPage) {
-            array_pop($_albumArrayPaged);
-        }
-
-        return $this->render(
-            'widgets/widget_gallery_thumbs.tpl',
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
-                'album_photos'       => $_albumArray,
-                'album_photos_paged' => $_albumArrayPaged,
-                'page'               => $page,
-                'items_page'         => $itemsPage,
+                'page'  => $this->page,
+                'items' => $itemsPerPage,
+                'total' => $total,
+                'url'   => $this->generateUrl(
+                    'frontend_video_ajax_paginated'
+                )
             )
         );
+
+        return $this->render(
+            'video/partials/_widget_more_videos.tpl',
+            array(
+                'others_videos'      => $othersVideos,
+                'page'               => $this->page,
+                'pagination'         => $pagination,
+            )
+        );
+
     }
 
     /**
