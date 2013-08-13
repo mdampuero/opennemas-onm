@@ -256,8 +256,10 @@ class AlbumsController extends Controller
                 $authors[$author->id] = $author->name;
             }
 
-            return $this->render('album/new.tpl',
-                array ( 'authors'      => $authors, ));
+            return $this->render(
+                'album/new.tpl',
+                array ( 'authors' => $authors, )
+            );
         }
     }
 

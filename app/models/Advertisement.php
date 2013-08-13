@@ -652,7 +652,7 @@ class Advertisement extends Content
 
         if (!empty($banners)) {
             $homeBanners = array();
-         // Perform operations for each advertisement type
+            // Perform operations for each advertisement type
             foreach ($banners as $adType => $advs) {
                 // Initialize banners arrays
                 $banners[$adType] = array();

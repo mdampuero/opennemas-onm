@@ -391,14 +391,12 @@ class VideosController extends Controller
 
         $total = count($othersVideos)+1;
 
-        if($countVideos > 0) {
+        if ($countVideos > 0) {
             foreach ($othersVideos as &$video) {
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
-
-        } else{
-
+        } else {
             return new RedirectResponse(
                 $this->generateUrl('frontend_video_ajax_paginated')
             );
