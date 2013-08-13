@@ -124,8 +124,6 @@ class Book extends Content
         $values = array(
             $this->id,
             $data['author'],
-            $data['file_name'],
-            $data['file_img'],
             $data['editorial']
         );
 
@@ -181,8 +179,6 @@ class Book extends Content
 
         $values = array(
             $data['author'],
-            $data['file_name'],
-            $data['file_img'],
             $data['editorial'],
             intval($data['id']),
         );
