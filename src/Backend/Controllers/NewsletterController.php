@@ -330,12 +330,10 @@ class NewsletterController extends Controller
 
         $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $newsletter_sender = \Onm\Settings::get('newsletter_sender');
+        $newsletterSender = s::get('newsletter_sender');
+        $configurations   = s::get('newsletter_maillist');
 
-        if (!empty($newsletter_sender)) {
-            $mailFrom = $newsletter_sender;
-        } else {
-
+        if (empty($newsletterSender)) {
             m::add(
                 _(
                     'Your newsletter configuration is not complete. Please'.
@@ -348,9 +346,10 @@ class NewsletterController extends Controller
         }
 
         $params = array(
-            'subject'        => $newsletter->title,
-            'mail_from'      => $mailFrom,
-            'mail_from_name' => s::get('site_name'),
+            'subject'            => $newsletter->title,
+            'newsletter_sender'  => $newsletterSender,
+            'mail_from'          => $configurations['sender'],
+            'mail_from_name'     => s::get('site_name'),
         );
 
         $sentResult = array();
