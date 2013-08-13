@@ -220,19 +220,10 @@ class BooksController extends Controller
             return $this->render('book/new.tpl');
 
         } else {
-            $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-            $fileName     = StringUtils::cleanFileName($_FILES['file']['name']);
-            $imageName    = StringUtils::cleanFileName($_FILES['file_img']['name']);
-
-            // Move uploaded pdf
-            $uploadStatusPdf    = @move_uploaded_file($_FILES['file']['tmp_name'], $bookSavePath.$fileName);
-            $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'file_name'   => $fileName,
-                'file_img'    => $imageName,
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -244,30 +235,15 @@ class BooksController extends Controller
             $book = new \Book();
             $id   =$book->create($data);
 
-            $sizeFile = ini_get('upload_max_filesize');
-            if (($uploadStatusPdf !== false) && !empty($id)) {
-                $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-                if ($continue) {
-                    $book = $book->read($id);
 
-                    return $this->render('book/new.tpl', array( 'book' => $book, ));
-                }
+            if (!empty($id)) {
 
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_books',
-                        array(
-                            'category' => $this->category,
-                            'page' => $page
-                        )
-                    )
-                );
+                $book = $book->read($id);
 
-            } elseif ($_FILES['file']['size'] > $sizeFile) {
-                 m::add(sprintf(_("Sorry, file can't upload. You must check file size.(< %sB)"), $sizeFile));
+                return $this->render('book/new.tpl', array( 'book' => $book, ));
 
             } else {
-                 m::add(sprintf(_("Sorry, file can't upload.")));
+                m::add(sprintf(_("Sorry, file can't created book.")));
             }
 
             return $this->render('book/new.tpl');
@@ -338,30 +314,11 @@ class BooksController extends Controller
                 return $this->redirect($this->generateUrl('admin_books_show', array('id' => $id)));
             }
 
-            $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-            if (!empty($_FILES['file']['name'])) {
-                $fileName  = StringUtils::cleanFileName($_FILES['file']['name']);
-
-                $uploadStatusPdf = @move_uploaded_file($_FILES['file']['tmp_name'], $bookSavePath.$fileName);
-            } else {
-                $fileName = $book->file_name;
-            }
-
-            if (!empty($_FILES['file_img']['name'])) {
-                $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-                $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
-            } else {
-                $imageName = $book->file_img;
-            }
-
 
             $data = array(
                 'id'          => $id,
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'file_name'   => $fileName,
-                'file_img'    => $imageName,
                 'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
