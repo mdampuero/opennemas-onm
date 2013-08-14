@@ -11,15 +11,16 @@
  * @author sandra
  */
 
-class importContents {
+class ImportContents
+{
 
     public $internalCategories = array();
     public $logFile            = "log.txt";
 
-    public function __construct ($config_newDB = array(),$config_oldDB = array())
+    public function __construct ($config_newDB = array(), $config_oldDB = array())
     {
 
-        $handle = fopen( $this->logFile , "wb");
+        $handle = fopen($this->logFile, "wb");
         fclose($handle);
 
 
@@ -27,18 +28,18 @@ class importContents {
             && isset($config_newDB['bd_database'])
             && isset($config_newDB['bd_user'])
             && isset($config_newDB['bd_pass'])
-            && isset($config_newDB['bd_type']))
-        {
+            && isset($config_newDB['bd_type'])) {
 
-        $this->new->conn = ADONewConnection($config_newDB['bd_type']);
-        $this->new->conn->PConnect(
-                                $config_newDB['bd_host'], $config_newDB['bd_user'],
-                                $config_newDB['bd_pass'], $config_newDB['bd_database']
-                              );
-         } else {
-
+            $this->new->conn = ADONewConnection($config_newDB['bd_type']);
+            $this->new->conn->PConnect(
+                $config_newDB['bd_host'],
+                $config_newDB['bd_user'],
+                $config_newDB['bd_pass'],
+                $config_newDB['bd_database']
+            );
+        } else {
             printf("ERROR: You must provide the connection configuration to the new database");
-            $this->log("ERROR: You must provide the connection configuration to the new database" );
+            $this->log("ERROR: You must provide the connection configuration to the new database");
             die();
         }
 
@@ -46,18 +47,19 @@ class importContents {
             && isset($config_oldDB['bd_database'])
             && isset($config_oldDB['bd_user'])
             && isset($config_oldDB['bd_pass'])
-            && isset($config_oldDB['bd_type']))
-        {
-        $this->old->conn = ADONewConnection($config_oldDB['bd_type']);
-        $this->old->conn->PConnect(
-                                    $config_oldDB['bd_host'], $config_oldDB['bd_user'],
-                                    $config_oldDB['bd_pass'], $config_oldDB['bd_database']
-                                  );
+            && isset($config_oldDB['bd_type'])) {
+              $this->old->conn = ADONewConnection($config_oldDB['bd_type']);
+              $this->old->conn->PConnect(
+                  $config_oldDB['bd_host'],
+                  $config_oldDB['bd_user'],
+                  $config_oldDB['bd_pass'],
+                  $config_oldDB['bd_database']
+              );
 
         } else {
 
-            printf(    "ERROR: You must provide the connection configuration to the old database");
-            $this->log("ERROR: You must provide the connection configuration to the old database" );
+            printf("ERROR: You must provide the connection configuration to the old database");
+            $this->log("ERROR: You must provide the connection configuration to the old database");
             die();
         }
 
@@ -83,7 +85,7 @@ class importContents {
     public function matchInternalCategory($category)
     {
 
-     /*   $this->internalCategories =  array(
+        /*   $this->internalCategories =  array(
                 3 => 7,     // ALBUM
                 4=> 14, //KIOSKO
             );
@@ -119,10 +121,10 @@ class importContents {
         $values = array();
         if (!$rss) {
             $errorMsg = $this->old->conn->ErrorMsg();
-            printf( 'read categories: '.$errorMsg);
-            $this->log( 'read categories:'. $errorMsg );
+            printf('read categories: '.$errorMsg);
+            $this->log('read categories:'. $errorMsg);
         } else {
-             while (!$rs->EOF) {
+            while (!$rs->EOF) {
                   $values[] = array(
                         'pk_content_category' => $rs->fields['pk_content_category'],
                         'title' => $rs->fields['title'],
@@ -151,8 +153,7 @@ class importContents {
                     return false;
                 }
             } else {
-
-               return true;
+                return true;
             }
         }
         return false;
@@ -174,7 +175,7 @@ class importContents {
            ' `authors`.`politics` ,   `authors`.`fk_user` ,'.
            ' `authors`.`condition` '.
            ' FROM authors WHERE `authors`.`pk_author` = '.($oldid);
-        $rs  = $this->old->conn->Execute( $sql );
+        $rs  = $this->old->conn->Execute($sql);
 
         if (!$rs) {
             $error_msg = $this->old->conn->ErrorMsg();
@@ -185,7 +186,7 @@ class importContents {
         }
 
         $author = array();
-        $author = $this->load( $rs->fields );
+        $author = $this->load($rs->fields);
 
         //photos process
         $sql = 'SELECT author_imgs.pk_img, author_imgs.path_img, author_imgs.description
@@ -199,7 +200,7 @@ class importContents {
 
         $photos = array();
         $i=0;
-        while(!$rs->EOF) {
+        while (!$rs->EOF) {
             $photos[$i] = new stdClass();
             $photos[$i]->pk_img         = $rs->fields['pk_img'];
             $photos[$i]->path_img     = $rs->fields['path_img'];
@@ -213,7 +214,7 @@ class importContents {
 
         return $author;
 
-     }
+    }
 
 
     /**
@@ -241,11 +242,11 @@ class importContents {
         $pk_author = $author->create($values);
 
 
-        printf( "Se ha insertado en $pk_author");
+        printf("Se ha insertado en $pk_author");
 
 
-    /*
-         if(!empty($data->photos)) {
+        /*
+        if(!empty($data->photos)) {
             $values= array();
             foreach($data->photos as $photo) {
 
@@ -263,7 +264,7 @@ class importContents {
 
             }
         }
-    */
+        */
         return $pk_author;
     }
 
@@ -279,7 +280,7 @@ class importContents {
         $items =  $rs->GetArray();
 
         return( $items );
-     }
+    }
 
     public function importOpinions($authorID)
     {
@@ -294,7 +295,7 @@ class importContents {
 
         $opinion = new Opinion();
 
-        if(!empty($opinions)){
+        if (!empty($opinions)) {
             foreach ($opinions as $data) {
 
                 $data['fk_author'] = $newAuthorId;
@@ -308,10 +309,10 @@ class importContents {
 
                 $id = $opinion->create($data);
 
-                if(!empty($id) ) {
+                if (!empty($id)) {
                     $this->insertRefactorID($data['pk_content'], $id, 'opinion');
                     printf("\n Inserting: ".$data['pk_content'].", ".$id.", opinion");
-                }else{
+                } else {
                     $errorMsg = 'Problem '.$data['pk_content'].' - '.$data['title']. " /n";
                     $this->log('insert opinion : '.$errorMsg);
                     printf('insert opinion : '.$errorMsg);
@@ -346,16 +347,15 @@ class importContents {
         $rss = $this->old->conn->Execute($sql);
 
         if (!$rss) {
-            printf( 'getArticlesData function: '. $this->old->conn->ErrorMsg() );
-            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg() );
-
+            printf('getArticlesData function: '. $this->old->conn->ErrorMsg());
+            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg());
 
         } else {
 
             $articles = $this->load($rs->fields);
 
             return $articles;
-       }
+        }
 
     }
 
@@ -378,17 +378,17 @@ class importContents {
         $rss = $this->old->conn->Execute($sql);
 
         if (!$rss) {
-            printf( 'getArticlesData function: '. $this->old->conn->ErrorMsg() );
-            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg() );
+            printf('getArticlesData function: '. $this->old->conn->ErrorMsg());
+            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg());
 
 
         } else {
 
-         //   $articles = $this->load($rs->fields);
-             $articles =  $rs->GetArray();
+            //   $articles = $this->load($rs->fields);
+            $articles =  $rs->GetArray();
 
             return $articles;
-       }
+        }
 
     }
 
@@ -407,74 +407,74 @@ class importContents {
         $uploads = array();
 
 
-            $nameFile = $photo->path_file.$photo->name;
+        $nameFile = $photo->path_file.$photo->name;
 
-            if(!empty($nameFile)) {
-                $uploaddir =$path_upload.$path_file;
+        if (!empty($nameFile)) {
+            $uploaddir =$path_upload.$path_file;
 
-                if(!is_dir($uploaddir)) {
-                    FilesManager::createDirectory($uploaddir);
-                }
+            if (!is_dir($uploaddir)) {
+                FilesManager::createDirectory($uploaddir);
+            }
 
-                $old_dir = 'media/images'.$nameFile;
+            $old_dir = 'media/images'.$nameFile;
 
-                if (move_file($old_dir, $path_upload.$nameFile) ) {
-                    $data['title'] = $photo->name;
-                    $data['name'] = $photo->name;
-                    $data['path_file'] =  $photo->path_file;;
-                    $data['category'] = $photo->category;
+            if (move_file($old_dir, $path_upload.$nameFile)) {
+                $data['title'] = $photo->name;
+                $data['name'] = $photo->name;
+                $data['path_file'] =  $photo->path_file;
+                $data['category'] = $photo->category;
 
-                    $data['nameCat'] = $photo->category_name; //nombre de la category
+                $data['nameCat'] = $photo->category_name; //nombre de la category
 
-                    $infor  = new MediaItem( $uploaddir.$name );     //Para sacar todos los datos de la imag
+                $infor  = new MediaItem($uploaddir.$name);     //Para sacar todos los datos de la imag
 
-                    $data['created'] = $infor->atime;
-                    $data['changed'] = $infor->mtime;
-                    $data['date'] = $infor->mtime;
-                    $data['size'] = round($infor->size/1024, 2);
-                    $data['width'] = $infor->width;
-                    $data['height'] = $infor->height;
-                    $data['type_img'] = $extension;
-                    $data['media_type'] = $_REQUEST['media_type'];
+                $data['created'] = $infor->atime;
+                $data['changed'] = $infor->mtime;
+                $data['date'] = $infor->mtime;
+                $data['size'] = round($infor->size/1024, 2);
+                $data['width'] = $infor->width;
+                $data['height'] = $infor->height;
+                $data['type_img'] = $extension;
+                $data['media_type'] = $_REQUEST['media_type'];
 
-                    // Default values
-                    $data['author_name']  = '';
-                    $data['pk_author']    = $_SESSION['userid'];
-                    $data['fk_publisher'] = $_SESSION['userid'];
-                    $data['description']  = '';
-                    $data['metadata']     = '';
+                // Default values
+                $data['author_name']  = '';
+                $data['pk_author']    = $_SESSION['userid'];
+                $data['fk_publisher'] = $_SESSION['userid'];
+                $data['description']  = '';
+                $data['metadata']     = '';
 
-                    $foto = new Photo();
-                    $elid = $foto->create($data);
+                $foto = new Photo();
+                $elid = $foto->create($data);
 
-                    if($elid) {
-                        if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
-                            // miniatura
-                            $thumb = new Imagick($uploaddir.$name);
+                if ($elid) {
+                    if (preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
+                        // miniatura
+                        $thumb = new Imagick($uploaddir.$name);
 
-                            //ARTICLE INNER
-                            $thumb->thumbnailImage(self::INNER_WIDTH, self::INNER_HEIGHT, true);
-                            //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::INNER_WIDTH . '-' . self::INNER_HEIGHT . '-' . $name);
+                        //ARTICLE INNER
+                        $thumb->thumbnailImage(self::INNER_WIDTH, self::INNER_HEIGHT, true);
+                        //Write the new image to a file
+                        $thumb->writeImage($uploaddir . self::INNER_WIDTH . '-' . self::INNER_HEIGHT . '-' . $name);
 
-                            //FRONTPAGE
-                            $thumb->thumbnailImage(self::FRONT_WIDTH, self::FRONT_HEIGHT, true);
-                            //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::FRONT_WIDTH . '-' . self::FRONT_HEIGHT . '-' . $name);
+                        //FRONTPAGE
+                        $thumb->thumbnailImage(self::FRONT_WIDTH, self::FRONT_HEIGHT, true);
+                        //Write the new image to a file
+                        $thumb->writeImage($uploaddir . self::FRONT_WIDTH . '-' . self::FRONT_HEIGHT . '-' . $name);
 
-                            //THUMBNAIL
-                            $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
-                            //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);
-                        }
+                        //THUMBNAIL
+                        $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
+                        //Write the new image to a file
+                        $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);
                     }
-
-                    $uploads[] = $elid;
-                } else {
-
-                    $fallos .= " '" . $nameFile . "' ";
                 }
-            } //if empty
+
+                $uploads[] = $elid;
+            } else {
+
+                $fallos .= " '" . $nameFile . "' ";
+            }
+        } //if empty
 
         return $elid;
     }
@@ -488,8 +488,8 @@ class importContents {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-
-    public function insertImage($pk_photo) {
+    public function insertImage($pk_photo)
+    {
 
         $sql = 'SELECT * FROM photos WHERE pk_photo = '.$pk_photo;
 
@@ -512,12 +512,13 @@ class importContents {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function importArticles($authorID, $newAuthorId, $topic = '', $byAuthor=false) {
+    public function importArticles($authorID, $newAuthorId, $topic = '', $byAuthor = false)
+    {
 
         $articles = array();
 
-        if(!empty($topic) && ($byAuthor==true) ) {
-           $articles =  $this->getArticlesbyAuthor($topic);
+        if (!empty($topic) && ($byAuthor==true)) {
+            $articles =  $this->getArticlesbyAuthor($topic);
         } else {
             //$articles = $this->getArticlesData($topic);
             $articles = $this->getOpinionsData($authorID);
@@ -551,19 +552,19 @@ class importContents {
                     $data['starttime']      = $data['created'];
                     $data['endtime']        = '0000-00-00 00:00:00';
                     $data['available']      = 1;
-                    $data['slug']           = mb_convert_encoding(\StringUtils::get_title($article['title']) , 'UTF-8');
+                    $data['slug']           = mb_convert_encoding(\StringUtils::get_title($article['title']), 'UTF-8');
                     $data['summary']        = $article['summary'];
                     $data['description']    = mb_convert_encoding($article['description'], 'UTF-8');
                     if (empty($article['summary'])) {
-                        $data['summary'] = substr($data['body'], 0, 120);
+                        $data['summary'] = substr(strip_tags($data['body']), 0, 120);
                     }
                     if (empty($data['description'])) {
-                        $data['description'] = substr($data['body'], 0, 120);
+                        $data['description'] = substr(strip_tags($data['body']), 0, 120);
                     }
 
                     $id = $content->create($data);
 
-                    if(!empty($id) ) {
+                    if (!empty($id)) {
 
                         $this->insertRefactorID($article['pk_content'], $id, 'article');
                          var_dump('Inserting '.$article['pk_content'], $id, 'article');
@@ -594,12 +595,13 @@ class importContents {
      * @throws <b>Exception</b> Explanation of exception.
      */
 
-    public function load($properties) {
+    public function load($properties)
+    {
         $item = new stdClass();
 
         if (is_array($properties)) {
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
                     $item->{$k} = $v;
                 }
             }
@@ -626,7 +628,8 @@ class importContents {
      * @throws <b>Exception</b> Explanation of exception.
      */
 
-    public function insertRefactorID($contentID, $newID, $type) {
+    public function insertRefactorID($contentID, $newID, $type)
+    {
         $sql_translation_request =
                 'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`)
                                        VALUES (?, ?, ?)';
@@ -634,12 +637,11 @@ class importContents {
 
         $translation_ids_request = $GLOBALS['application']->conn->Prepare($sql_translation_request);
 
-        $rss = $GLOBALS['application']->conn->Execute($translation_ids_request,
-                                                      $translation_values);
+        $rss = $GLOBALS['application']->conn->Execute($translation_ids_request, $translation_values);
 
         if (!$rss) {
-            printf( 'insertRefactorID function: '. $GLOBALS['application']->conn->ErrorMsg() );
-            $this->log('insertRefactorID function: '.$GLOBALS['application']->conn->ErrorMsg() );
+            printf('insertRefactorID function: '. $GLOBALS['application']->conn->ErrorMsg());
+            $this->log('insertRefactorID function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
 
     }
@@ -664,9 +666,10 @@ class importContents {
         }
     }
 
-    public function log($text = null) {
-        if(isset($text) && !is_null($text) ) {
-            $handle = fopen( $this->logFile , "a");
+    public function log($text = null)
+    {
+        if (isset($text) && !is_null($text)) {
+            $handle = fopen($this->logFile, "a");
 
             if ($handle) {
                 $datawritten = fwrite($handle, $text);
@@ -676,9 +679,6 @@ class importContents {
             }
         }
     }
-
-
-
 }
 
 /****

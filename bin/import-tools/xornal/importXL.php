@@ -37,7 +37,7 @@ require 'import-contents.php';
 
 print_r(" \n You will import opinions {$topic} \n");
 
-$refactor = new importContents($config_newDB, $config_oldDB);
+$refactor = new ImportContents($config_newDB, $config_oldDB);
 // $refactor->importOpinions($oldId);
 
 /* print_r(" \n  You will import articles by id {$oldId} \n");
