@@ -62,6 +62,12 @@ class importContents {
         }
 
 
+        $GLOBALS['application'] = new Application();
+        Application::initDatabase();
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $GLOBALS['application']->conn->Execute('SET NAMES UTF8');
+
     }
 
     /**
@@ -83,7 +89,7 @@ class importContents {
             );
         return $this->categoriesMatches[$category];*/
 
-        return 15;
+        return 51;
 
     }
 
@@ -269,12 +275,8 @@ class importContents {
         $rs = $this->old->conn->Execute($sql);
 
         $items = array();
-        /*while (!$rs->EOF) {
 
-            $items[] =  $rs->GetArray();
-            $rs->MoveNext();
-        }*/
-         $items =  $rs->GetArray();
+        $items =  $rs->GetArray();
 
         return( $items );
      }
@@ -518,33 +520,58 @@ class importContents {
            $articles =  $this->getArticlesbyAuthor($topic);
         } else {
             //$articles = $this->getArticlesData($topic);
-            $opinions = $this->getOpinionsData($authorID);
-
-            $articles = $this->load($opinions);
+            $articles = $this->getOpinionsData($authorID);
 
         }
 
         if (!empty($articles)) {
 
-            $article = new Article();
-            foreach ($articles as $data) {
-                $data->img1 = null;// $this->insertImage($data->img1);
-                $data->img2 = null;//$this->insertImage($data->img2);
-                $data->fk_author = $newAuthorId;
-                $data->fk_user = $newAuthorId;
-                $data->fk_publisher = $newAuthorId;
-                $data->fk_user_last_editor  = $newAuthorId;
-
-
-                $id = $article->create($data);
-
-                if(!empty($id) ) {
-                    $this->insertRefactorID($data->pk_article, $id, 'article');
-                     var_dump('Inserting '.$data->pk_content, $id, 'article');
+            $content = new \Article();
+            $data = null;
+            foreach ($articles as $article) {
+                if ($this->elementIsImported($article['pk_content'], 'article')) {
+                    echo " image with id {$article['pk_content']} already imported\n";
                 } else {
-                    $errorMsg = 'Problem '.$data->pk_article.' - '.$data->title;
-                    $this->log('insert article : '.$errorMsg);
-                    printf('insert article : '.$errorMsg);
+                    $data = $article;
+                    $data['id'] = null;
+                    $data['fk_content_type'] = 1;
+                    $data['title']          = mb_convert_encoding($article['title'], 'UTF-8');
+                    $data['title_int']      = mb_convert_encoding($article['title'], 'UTF-8');
+                    $data['body']           = $article['body'];
+                    $data['img1']           = null;// $this->insertImage($data->img1);
+                    $data['img2']          = null;//$this->insertImage($data->img2);
+                    $data['category_name']  = 'opinion';
+                    $data['category']       = 51;
+                    $data['available']      = 1;
+                    $data['content_status'] = 1;
+                    $data['fk_author']      = $newAuthorId;
+                    $data['fk_user']        = $newAuthorId;
+                    $data['fk_publisher']   = $newAuthorId;
+                    $data['fk_user_last_editor']  = $newAuthorId;
+                    $data['starttime']      = $data['created'];
+                    $data['endtime']        = '0000-00-00 00:00:00';
+                    $data['available']      = 1;
+                    $data['slug']           = mb_convert_encoding(\StringUtils::get_title($article['title']) , 'UTF-8');
+                    $data['summary']        = $article['summary'];
+                    $data['description']    = mb_convert_encoding($article['description'], 'UTF-8');
+                    if (empty($article['summary'])) {
+                        $data['summary'] = substr($data['body'], 0, 120);
+                    }
+                    if (empty($data['description'])) {
+                        $data['description'] = substr($data['body'], 0, 120);
+                    }
+
+                    $id = $content->create($data);
+
+                    if(!empty($id) ) {
+
+                        $this->insertRefactorID($article['pk_content'], $id, 'article');
+                         var_dump('Inserting '.$article['pk_content'], $id, 'article');
+                    } else {
+                        $errorMsg = 'Problem '.$article['pk_content'].' - '.$data['title'];
+                        $this->log('insert article : '.$errorMsg);
+                        printf('insert article : '.$errorMsg);
+                    }
                 }
             }
 
@@ -568,21 +595,23 @@ class importContents {
      */
 
     public function load($properties) {
-         $item = new stdClass();
-        if(is_array($properties)) {
+        $item = new stdClass();
+
+        if (is_array($properties)) {
             foreach($properties as $k => $v) {
                 if(!is_numeric($k)) {
                     $item->{$k} = $v;
                 }
             }
-        } elseif(is_object($properties)) {
+        } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
-            foreach($properties as $k => $v) {
-                if( !is_numeric($k) ) {
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
                     $item->{$k} = $v;
                 }
             }
         }
+
         return $item;
 
     }
@@ -599,7 +628,7 @@ class importContents {
 
     public function insertRefactorID($contentID, $newID, $type) {
         $sql_translation_request =
-                'INSERT INTO refactor_ids (`pk_content_old`, `pk_content`, `type`)
+                'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`)
                                        VALUES (?, ?, ?)';
         $translation_values = array($contentID, $newID, $type);
 
@@ -615,6 +644,25 @@ class importContents {
 
     }
 
+    public function elementIsImported($contentID, $contentType)
+    {
+        if (isset($contentID) && isset($contentType)) {
+            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=?';
+
+            $values = array($contentID, $contentType);
+            $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($views_update_sql, $values);
+
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            } else {
+                return ($rss->fields['pk_content']);
+            }
+
+        } else {
+            echo "There is imported {$contentID} - {$contentType}\n.";
+        }
+    }
 
     public function log($text = null) {
         if(isset($text) && !is_null($text) ) {

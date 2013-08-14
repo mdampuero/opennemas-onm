@@ -42,7 +42,9 @@ $refactor = new importContents($config_newDB, $config_oldDB);
 
 /* print_r(" \n  You will import articles by id {$oldId} \n");
 */
-$refactor->importArticles($oldId, $newID, $topic);
+var_dump($oldId, $newId, $topic);
+
+$refactor->importArticles($oldId, $newId, $topic);
 /*
 print_r(" \n You will import articles by topic {$topic} \n");
 //$refactor->importArticles($topic);
