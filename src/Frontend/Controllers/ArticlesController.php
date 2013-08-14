@@ -204,7 +204,6 @@ class ArticlesController extends Controller
 
         // Setup view
         $this->view->setConfig('articles');
-        $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
 
         // Get sync params
         $wsUrl = '';
@@ -225,42 +224,35 @@ class ArticlesController extends Controller
         $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
         $this->view->assign('advertisements', $ads);
 
-        // Cached article logic
-        if ($this->view->caching == 0
-            || !$this->view->isCached('article/article.tpl', $cacheID)
+        // Get full article
+        $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
+        $article = unserialize($article);
+
+        if (($article->available==1) && ($article->in_litter==0)
+            && ($article->isStarted())
         ) {
-            // Get full article
-            $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
-            $article = unserialize($article);
+            // Template vars
+            $this->view->assign(
+                array(
+                    'article'               => $article,
+                    'content'               => $article,
+                    'photoInt'              => $article->photoInt,
+                    'videoInt'              => $article->videoInt,
+                    'relationed'            => $article->relatedContents,
+                    'contentId'             => $article->id,// Used on module_comments.tpl
+                    'actual_category_title' => $article->category_title,
+                    'suggested'             => $article->suggested,
+                    'ext'                   => 1,
+                )
+            );
 
-            if (($article->available==1) && ($article->in_litter==0)
-                && ($article->isStarted())
-            ) {
-                // Template vars
-                $this->view->assign(
-                    array(
-                        'article'               => $article,
-                        'content'               => $article,
-                        'photoInt'              => $article->photoInt,
-                        'videoInt'              => $article->videoInt,
-                        'relationed'            => $article->relatedContents,
-                        'contentId'             => $article->id,// Used on module_comments.tpl
-                        'actual_category_title' => $article->category_title,
-                        'suggested'             => $article->suggested,
-                        'ext'                   => 1,
-                    )
-                );
-
-            } else {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-
-        } // end if $this->view->is_cached
+        } else {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
 
         return $this->render(
             'article/article.tpl',
             array(
-                'cache_id' => $cacheID,
                 'category_name' => $categoryName,
             )
         );
