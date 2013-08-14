@@ -61,11 +61,11 @@ class Articles
         }
 
         if (is_object($article->author) && !empty($article->author)) {
-            //$article->author->uri = 'ext'.$article->author->uri;
             if (!empty($article->author->avatar_img_id)) {
-                $article->author->getPhoto();
+                $article->author->photo = $article->author->getPhoto();
             }
         }
+
         // Get inner video for this article
         if (isset($article->fk_video2)) {
             $videoInt = new Video($article->fk_video2);
