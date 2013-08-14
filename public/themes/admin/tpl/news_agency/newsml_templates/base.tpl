@@ -87,7 +87,7 @@
                     </abstract>
                   </body.head>
                   <body.content>
-                    {$article->body|replace:'<br />':"</p><p>"|unescape:"htmlall"}
+                    {$article->body|replace:'<br />':"</p><p>"|htmlspecialchars}
                   </body.content>
                 </body>
               </nitf>

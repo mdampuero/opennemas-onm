@@ -221,8 +221,14 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getBody()
     {
-        if (count($this->texts) > 0) {
+        if (count($this->texts) > 0 && ($this->texts[0]->body != '')) {
             return $this->texts[0]->body;
+        } else {
+            $bodies = $this->getData()->xpath(
+                "//nitf/body/body.content"
+            );
+
+            return $bodies[0];
         }
     }
 
