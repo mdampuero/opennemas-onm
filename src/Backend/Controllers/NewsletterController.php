@@ -32,7 +32,8 @@ class NewsletterController extends Controller
      *
      * @return void
      **/
-    public function init() {
+    public function init()
+    {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
 
@@ -361,7 +362,7 @@ class NewsletterController extends Controller
             foreach ($recipients as $mailbox) {
                 // Replace name destination
                 $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
-                if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining)) ) {
+                if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
                     try {
                         // Send the mail
                         $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
@@ -371,7 +372,7 @@ class NewsletterController extends Controller
                     } catch (\Exception $e) {
                         $sentResult []= array($mailbox, false);
                     }
-                } else{
+                } else {
                      $sentResult []= array($mailbox, false);
                 }
             }
@@ -554,7 +555,7 @@ class NewsletterController extends Controller
                 $total += $newsletter->sent;
             }
 
-            if($maxAllowed > 0) {
+            if ($maxAllowed > 0) {
                 $result = $maxAllowed - $total;
                 if ($result <= 0) {
                     m::add(_('You have send max mailing allowed'), m::ERROR);
@@ -570,10 +571,11 @@ class NewsletterController extends Controller
     }
 
 
-    public function updateLastInvoice($date = null) {
+    public function updateLastInvoice($date = null)
+    {
 
         if ($date === null) {
-           $date = s::get('last_invoice');
+            $date = s::get('last_invoice');
         }
 
         if (empty($date)) {
@@ -586,20 +588,20 @@ class NewsletterController extends Controller
             }
         }
 
-        if ($lastInvoice->format('d') > 28 ) {
+        if ($lastInvoice->format('d') > 28) {
             $lastInvoice = $lastInvoice->setDate($lastInvoice->format('Y'), $lastInvoice->format('m'), 28);
         }
 
         $today     = new \DateTime();
         $checkDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
-        $checkDate->modify( '+1 month' );
+        $checkDate->modify('+1 month');
 
-        if ($today > $checkDate ) {
-            while ($today > $checkDate ) {
-               $checkDate->modify( '+1 month' );
+        if ($today > $checkDate) {
+            while ($today > $checkDate) {
+                $checkDate->modify('+1 month');
             }
 
-            $lastInvoice = $checkDate->modify( '-1 month' );
+            $lastInvoice = $checkDate->modify('-1 month');
         }
 
         s::set('last_invoice', $lastInvoice->format('Y-m-d H:i:s'));

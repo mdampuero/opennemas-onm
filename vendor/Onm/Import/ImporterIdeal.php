@@ -15,7 +15,7 @@ namespace Onm\Import;
  * @package    Onm
  * @subpackage Import
  */
-class importerIdeal
+class ImporterIdeal
 {
     //TODO:mixer functions - separate in classes
     public static function importXML($xmlFile)

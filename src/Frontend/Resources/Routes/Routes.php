@@ -276,6 +276,19 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_external_author_frontpage',
+    new Route(
+        '/extauthor/{slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:extAuthorFrontpage',
+        ),
+        array(
+            'slug' => '[A-Za-z\d-]+',
+        )
+    )
+);
+
 // Common content management routes
 $frontendRoutes->add(
     'frontend_ad_get',

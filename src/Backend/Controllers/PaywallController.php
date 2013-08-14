@@ -394,7 +394,6 @@ class PaywallController extends Controller
                         'order'      => $order,
                         'searchname' => $name,
                     )
-
                 ).'&page=%d',
             )
         );

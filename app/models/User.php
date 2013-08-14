@@ -228,10 +228,8 @@ class User
     {
         switch ($property) {
             case 'photo':
-
                 return $this->getPhoto();
                 break;
-
             default:
                 break;
         }

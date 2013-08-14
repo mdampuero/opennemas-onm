@@ -55,7 +55,7 @@ class DatabaseConnection
      *
      * @var string
      **/
-    public  $error = null;
+    public $error = null;
 
 
 
@@ -121,12 +121,12 @@ class DatabaseConnection
         return $this;
     }
 
-    private function replaceKeyInArray($callback, $array, $databaseName) {
+    private function replaceKeyInArray($callback, $array, $databaseName)
+    {
         foreach ($array as $key => $value) {
             if (is_array($array[$key])) {
                 $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $databaseName);
-            }
-            else {
+            } else {
                 $array[$key] = call_user_func($callback, $key, $array[$key], $databaseName);
             }
         }
@@ -216,9 +216,12 @@ class DatabaseConnection
                     $randomSlaveIndex = array_rand($slavesList);
                     $slaveParams = $slavesList[$randomSlaveIndex];
 
-                    $slaveParams = array_filter($slaveParams, function($item) {
-                        return !is_null($item);
-                    });
+                    $slaveParams = array_filter(
+                        $slaveParams,
+                        function ($item) {
+                            return !is_null($item);
+                        }
+                    );
                     $slaveParams = array_merge($this->connectionParams, $slaveParams);
 
                     $slaveConnection = $this->initConnection($slaveParams);
