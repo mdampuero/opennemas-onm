@@ -205,6 +205,8 @@ class ArticlesController extends Controller
         // Setup view
         $this->view->setConfig('articles');
 
+        $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
+
         // Get sync params
         $wsUrl = '';
         $syncParams = s::get('sync_params');
@@ -253,6 +255,7 @@ class ArticlesController extends Controller
         return $this->render(
             'article/article.tpl',
             array(
+                'cache_id' => $cacheID,
                 'category_name' => $categoryName,
             )
         );
