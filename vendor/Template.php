@@ -114,17 +114,6 @@ class Template extends Smarty
 
     }
 
-
-    public function setFilters($filters = array())
-    {
-        if (count($filters) > 0) {
-            $this->filters = $filters;
-            $this->autoload_filters = $filters;
-        }
-        return $this;
-    }
-
-
     public function generateCacheId($seccion, $subseccion = null, $resource = null)
     {
         $cacheId = '';
@@ -223,8 +212,6 @@ class Template extends Smarty
             }
 
             $this->setCacheLifetime($config['cache_lifetime']);
-        } else {
-            //$this->setCaching(0);
         }
     }
 }
