@@ -2,7 +2,6 @@
     <ul>
         <li><a href="#basic-{$photo->id}" title="">{t}Basic information{/t}</a></li>
         <li><a href="#geolocation-{$photo->id}" title="" class="has-map">{t}Geolocation{/t}</a></li>
-        <li><a href="#additional-info-{$photo->id}" title="">{t escape=off}EXIF &amp; IPTC{/t}</a></li>
     </ul><!-- / -->
     <div id="basic-{$photo->id}" class="clearfix">
         <div style="width:330px; display:inline-block;" class="pull-left clearfix">
@@ -16,7 +15,7 @@
                     </object>
                     <!-- <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" /> -->
                 {else}
-                    <img src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" onunload="GUnload()" />
+                    {dynamic_image src="{$photo->path_file}/{$photo->name}" transform="thumbnail,330,330" onunload="GUnload()"}
                 {/if}
             </div>
 
@@ -24,17 +23,21 @@
 
             <div class="well well-small">
                 <div><strong>{t}Original filename:{/t}</strong> {$photo->title}</div>
-                <div><strong>{t}File:{/t}</strong> <a href="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                       title="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                       target="_blank">{$photo->name}</a></div>
-                <div><strong>{t}Resolution:{/t}</strong> {$photo->width} x {$photo->height} (px)</div>
+                <div><strong>{t}Resolution:{/t}</strong> {$photo->width}px x {$photo->height}px</div>
                 <div><strong>{t}Size:{/t}</strong> {$photo->size} Kb</div>
             </div>
+
         </div>
 
         <div class="photo-basic-information">
 
             <div>
+                <div class="control-group">
+                    <label class="control-label">{t}Link{/t}</label>
+                    <div class="controls">
+                        <a href="{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}" target="_blank">{$smarty.const.SITE_URL}{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}</a>
+                    </div>
+                </div>
                 <div class="control-group">
                     <label for="description-{$photo->id}" class="control-label">{t}Description{/t}</label>
                     <div class="controls">
@@ -72,16 +75,45 @@
                             value='{$photo->date|date_format:"%Y-%m-%d %H:%M:%S"}'/>
                     </div>
                 </div>
-
-                <div class="control-group">
-                    <label for="color[{$photo->id}]" class="control-label">{t}Color{/t}</label>
-                    <div class="controls">
-                        <select name="color[{$photo->id}]" id="color[{$photo->id}]"/>
-                            <option value="color" {if $photo->color eq 'color'}selected="selected"{/if}>{t}Color{/t}</option>
-                            <option value="bw" {if $photo->color eq 'bw'}selected="selected"{/if}>{t}B/W{/t}</option>
-                        </select>
+            </div>
+            <div class="iptc-exif">
+                <h5 class="toggler" title=""><i class="icon-plus"></i> {t escape=off}View advanced data{/t}</h5>
+                <div class="info">
+                    {if is_null($photo->exif) neq true}
+                    <h6>{t}EXIF Data{/t}</h6>
+                    <div id="exif" class="photo-static-info">
+                        {foreach $photo->exif as $name => $value}
+                            {foreach $value as $d => $dato}
+                                <p>
+                                    <strong>{$d}</strong> : {$dato}
+                                </p>
+                            {/foreach}
+                        {/foreach}
                     </div>
-                </div>
+                    {else}
+                    <div id="exif" class="photo-static-info">
+                        {t}No available EXIF data.{/t}
+                    </div>
+                    {/if}
+
+                    {if isset($photo->myiptc)}
+                    <h6>{t}IPTC Data{/t}</h6>
+                    <div id="iptc" class="photo-static-info">
+                        {foreach $photo->myiptc as $name => $value}
+                        {if $name}
+                            <p>
+                                <strong>{$name}</strong> : {$value}
+                            </p>
+                        {/if}
+                        {/foreach}
+                      <br />
+                    </div>
+                    {else}
+                    <div id="iptc" class="photo-static-info">
+                        {t}No available IPTC data.{/t}
+                    </div>
+                    {/if}
+                </div><!-- /additional-info -->
             </div>
         </div><!-- /basic -->
     </div>
@@ -99,57 +131,6 @@
                 <div id="map_canvas_{$photo->id}"></div>
             </div>
     </div><!-- /geolocation -->
-
-    <div id="additional-info-{$photo->id}">
-        <div style="display:inline-block; width:49%; margin-right:10px">
-            <h5>{t}EXIF Data:{/t}</h5>
-            {if is_null($photo->exif) neq true}
-            <div id="exif" class="photo-static-info" style="max-height:400px; overflow-y:scroll">
-                <table>
-                    <tbody>
-                    {foreach item="value" key="name" from=$photo->exif}
-                        {foreach item="dato" key="d" from=$value}
-                        <tr>
-                            <td><strong>{$d}</strong></td>
-                            <td>{$dato}</td>
-                        </tr>
-                        {/foreach}
-                    {/foreach}
-                    </tbody>
-                </table>
-            </div>
-            {else}
-            <div id="exif" class="photo-static-info">
-                <strong>{t}No available EXIF data.{/t}</strong>
-            </div>
-            {/if}
-        </div>
-
-        <div style="display:inline-block; width:49%;">
-            <h5>{t}IPTC Data:{/t}</h5>
-            {if isset($photo->myiptc)}
-            <div id="iptc" class="photo-static-info"  style="max-height:400px; overflow-y:scroll">
-                <table>
-                    <tbody>
-                    {foreach item="val" key="caption" from=$photo->myiptc}
-                        {if $val}
-                        <tr>
-                            <td><strong>{$caption}</strong> </td>
-                            <td style="padding: 2px;">{$val}</td>
-                        </tr>
-                        {/if}
-                    {/foreach}
-                    </tbody>
-                </table>
-              <br />
-            </div>
-            {else}
-            <div id="iptc" class="photo-static-info">
-                <strong>{t}No available IPTC data.{/t}</strong>
-            </div>
-            {/if}
-        </div><!-- / -->
-    </div><!-- /additional-info -->
 
     <input type="hidden" name="resolution[{$photo->id}]" value="{$photo->resolution}" />
     <input type="hidden" name="title[{$photo->id}]" value="{$photo->name}" />
@@ -255,5 +236,24 @@
                 }
             });
         }
+
+        $('.iptc-exif .toggler').on('click', function(e, ui) {
+            $(this).parent().find('.info').toggle();
+        })
     });
 </script>
+<style>
+.iptc-exif .info {
+    display:none;
+}
+.iptc-exif .toggler {
+    cursor:pointer;
+}
+.iptc-exif .icon-plus {
+    font-size:.8em;
+    vertical-align:middle;
+}
+.iptc-exif .photo-static-info p {
+    margin-bottom:0;
+}
+</style>

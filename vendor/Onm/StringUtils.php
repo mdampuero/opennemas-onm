@@ -42,7 +42,7 @@ class StringUtils
      **/
     public static function normalize($name)
     {
-        $name = mb_strtolower($name, 'UTF-8');
+        $newname = mb_strtolower($name, 'UTF-8');
         $trade = array(
             'á'=>'a', 'à'=>'a', 'ã'=>'a', 'ä'=>'a', 'â'=>'a', 'Á'=>'A',
             'À'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Â'=>'A', 'é'=>'e', 'è'=>'e',
@@ -51,17 +51,17 @@ class StringUtils
             'Ï'=>'I', 'Î'=>'I', 'ó'=>'o', 'ò'=>'o', 'õ'=>'o', 'ö'=>'o',
             'ô'=>'o', 'Ó'=>'O', 'Ò'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ô'=>'O',
             'ú'=>'u', 'ù'=>'u', 'ü'=>'u', 'û'=>'u', 'Ú'=>'U', 'Ù'=>'U',
-            'Ü'=>'U', 'Û'=>'U', '$'=>'', '@'=>'', '!'=>'', '#'=>'_',
-            '%'=>'', '^'=>'', '&'=>'', '*'=>'', '('=>'-', ')'=>'-',
-            '-'=>'-', '+'=>'', '='=>'', '\\'=>'-', '|'=>'-','`'=>'',
-            '~'=>'', '/'=>'-', '\"'=>'-','\''=>'', '<'=>'', '>'=>'',
-            '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C', '·'=>'',
-            ';'=>'-', '['=>'-', ']'=>'-','ñ'=>'n','Ñ'=>'n'
+            'Ü'=>'U', 'Û'=>'U', '$'=>'',  '@'=>'',  '!'=>'',  '#'=>'',
+            '%'=>'',  '^'=>'',  '&'=>'',  '*'=>'',  '('=>'',  ')'=>'',
+            '-'=>'-', '+'=>'',  '='=>'',  '\\'=>'-', '|'=>'-', '`'=>'',
+            '~'=>'',  '/'=>'-', '\"'=>'', '\''=>'', '<'=>'',  '>'=>'',
+            '?'=>'-', ','=>'-', 'ç'=>'c', 'Ç'=>'C',  '·'=>'',
+            ';'=>'-', '['=>'-', ']'=>'-', 'ñ'=>'nh', 'Ñ'=>'nh'
         );
-        $name = strtr($name, $trade);
-        $name = rtrim($name);
+        $newname = strtr($newname, $trade);
+        $newname = rtrim($newname);
 
-        return $name;
+        return $newname;
     }
 
     /**
@@ -100,6 +100,18 @@ class StringUtils
     }
 
     /**
+     * Converts an string to ascii code
+     *
+     * @return string the ascii encoded string
+     **/
+    public static function toAscii($string)
+    {
+        $string = iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+
+        return $string;
+    }
+
+    /**
      * Generates a valid permalink
      *
      * @param  string  $title
@@ -107,24 +119,33 @@ class StringUtils
      *
      * @return string
      **/
-    public static function get_title($title, $useStopList = true)
+    public static function get_title($title, $useStopList = true, $delimiter = '-')
     {
+        $title = self::toAscii($title);
 
+        // $title = self::normalize_name($title);
         $title = self::clearSpecialChars($title);
-        $title = self::normalize_name($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
 
         if ($useStopList) {
             // Remove stop list
-            $titule = self::remove_shorts($title);
+            $titule = self::removeShorts($title);
         }
 
         if (empty($titule) || $titule == " ") {
             $titule = $title;
         }
 
-        $titule = self::setSeparator($titule, '-');
-        $titule = preg_replace('/[\-]+/', '-', $titule);
+        $titule = self::setSeparator($titule, $delimiter);
+
+        # Drop some hyphen transliterations
+        $titule = preg_replace("/[-‐‒–—―⁃−­]/", $delimiter, $titule);
+
+        # convert double dash to single
+        $titule = preg_replace('/[\-]+/', $delimiter, $titule);
+
+        #strip off leading/trailing dashes
+        $titule = trim($titule, $delimiter);
 
         return $titule;
     }
@@ -166,7 +187,7 @@ class StringUtils
         $tags = self::clearSpecialChars($text);
 
         // Remove stop list
-        $tags = self::remove_shorts($tags);
+        $tags = self::removeShorts($tags);
         $tags = self::setSeparator($tags, ',');
         $tags = preg_replace('|-|', ',', $tags);
         $tags = preg_replace('/[\,]+/', ',', $tags);
@@ -188,14 +209,11 @@ class StringUtils
      *
      * @return string the cleaned string
      **/
-    public static function remove_shorts($string)
+    public static function removeShorts($string)
     {
         $shorts = <<<EOF
-[0-9]+
-[a-zA-Z]
 a
 as
-ahi
 al
 ante
 ante
@@ -622,11 +640,31 @@ EOF;
         $text = html_entity_decode($text, ENT_COMPAT, 'UTF-8');
 
         $text = self::normalize($text);
-        $text = self::remove_shorts($text);
+        $text = self::removeShorts($text);
 
         $text = preg_replace('/[ ]+/', '-', $text);
         $text = preg_replace('/[\-]+/', '-', $text);
         $text = mb_ereg_replace('[^a-z0-9\-]', '', $text);
+
+        return $text;
+    }
+
+    /**
+     * Clear the special quotes
+     *
+     * @param  string  $text the string to transform
+     *
+     * @return string the string cleaned
+     **/
+    public static function clearQuotes($text)
+    {
+
+        $text = preg_replace('/(>[^<"]*)["]+([^<"]*<)/', "$1&#34;$2", $text);
+        $text = preg_replace("/(>[^<']*)[']+([^<']*<)/", "$1&#39;$2", $text);
+        $text = str_replace('“', '&#8220;', $text);
+        $text = str_replace('”', '&#8221;', $text);
+        $text = str_replace('‘', '&#8216;', $text);
+        $text = str_replace('’', '&#8217;', $text);
 
         return $text;
     }

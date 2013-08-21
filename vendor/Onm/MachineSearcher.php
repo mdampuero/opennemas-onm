@@ -60,22 +60,29 @@ class MachineSearcher
 
             $filter = (empty($filter) ? "" : " AND ".$filter);
 
-            // Transform the input string to search like: 'La via del tren' => '+via +tren'
+            // Transform the input string to an array
             $szSourceTags = explode(', ', StringUtils::get_tags($szSourceTags));
-            $szSourceTags = implode(' ', $szSourceTags);// Sin+ no obligatorio
 
-            $matchSQL =  " MATCH (contents.metadata) AGAINST ( '{$szSourceTags}' IN BOOLEAN MODE)";
+            // Generate content type table name
+            $contentTable = tableize($szContentsTypeTitle);
+
+            // Generate where clause for filtering fk_content_type
             $selectedContentTypesSQL = $this->parseTypes($szContentsTypeTitle);
 
-            $szSqlSentence = "SELECT {$matchSQL} AS rel, `contents`.*, `contents_categories`.`catName`"
-                        ."  FROM contents, contents_categories "
-                        ." WHERE " . $matchSQL
-                        .$selectedContentTypesSQL
-                        .$filter
+            // Generate WHERE with REGEXP using the provided tags
+            $szSourceTags = rtrim(implode('|', $szSourceTags), '|');
+            $whereSQL = "contents.metadata REGEXP '".$szSourceTags."'";
+
+            $szSqlSentence = "SELECT `contents`.*, `contents_categories`.`catName`, $contentTable.*"
+                        ."  FROM contents, $contentTable, contents_categories "
+                        ." WHERE contents.pk_content=$contentTable.pk_$szContentsTypeTitle"
+                        ." AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`"
                         ." AND `contents`.`available` = 1 "
                         ." AND `contents`.`in_litter` = 0 "
-                        ." AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`"
-                        ." GROUP BY `contents`.`title` ORDER BY created DESC, rel DESC LIMIT ". $iLimit;
+                        .$selectedContentTypesSQL
+                        .$filter
+                        ." AND ". $whereSQL
+                        ." GROUP BY `contents`.`title` ORDER BY created DESC LIMIT ". $iLimit;
 
             $resultSet = $GLOBALS['application']->conn->Execute($szSqlSentence);
             $result = null;
@@ -85,6 +92,13 @@ class MachineSearcher
 
             $cm = new \ContentManager();
             $result = $cm->getInTime($result);
+
+            foreach ($result as &$content) {
+
+                if (array_key_exists('img2', $content)) {
+                    $content['image'] = new \Photo($content['img2']);
+                }
+            }
 
             $this->cache->save($cacheKey, $result, 300);
         }

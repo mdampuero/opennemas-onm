@@ -113,8 +113,6 @@ class Letter extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -136,8 +134,6 @@ class Letter extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $this->load($rs->fields);
@@ -173,12 +169,8 @@ class Letter extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
-
-        $GLOBALS['application']->dispatch('onAfterUpdateLetter', $this);
 
         return true;
     }
@@ -197,8 +189,6 @@ class Letter extends Content
         $sql = 'DELETE FROM letters WHERE pk_letter ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return;
         }
     }
@@ -244,7 +234,7 @@ class Letter extends Content
                 ."de palabras malsonantes.";
         }
 
-        $ip = Application::getRealIp();
+        $ip = getRealIp();
         $data["params"] = array('ip'=> $ip);
         if ($letter->create($data)) {
             return "Su carta ha sido guardada y está pendiente de publicación.";

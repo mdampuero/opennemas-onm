@@ -158,6 +158,13 @@ class AutoLoader
                     } else
                         $paths[] = $path;
 
+            // Minor fix to allow path in array format
+            foreach ($paths as $key => $value) {
+                if (is_array($value)) {
+                    $paths[$key] = $value[0];
+                }
+            }
+
             $paths = array_filter(array_map(
                 function ($path) {
                     if (false == $realPath = realpath($path))

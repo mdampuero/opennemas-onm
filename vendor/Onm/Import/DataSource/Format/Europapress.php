@@ -361,7 +361,7 @@ class Europapress implements FormatInterface
         $date = \DateTime::createFromFormat(
             $dateFormat,
             $originalDate,
-            new \DateTimeZone('Europe/Madrid')
+            new \DateTimeZone('UTC')
         );
 
         return $date;

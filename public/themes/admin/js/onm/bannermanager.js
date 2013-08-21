@@ -21,18 +21,10 @@ jQuery(document).ready(function($) {
 
     $('#type_medida').on('change', function(e, ui){
         var selected_option = $("#type_medida option:selected").attr('value');
-        if (selected_option=='CLIC') {
-            $('#porclic').show();
-            $('#porview, #porfecha').hide();
-            $('').hide();
-        } else if (selected_option == 'VIEW') {
-            $('#porview').show();
-            $('#porclic, #porfecha').hide();
-        } else if (selected_option=='DATE') {
+        if (selected_option == 'DATE') {
             $('#porfecha').show();
-            $('#porclic, #porview').hide();
         } else {
-            $('#porclic, #porview, #porfecha').hide();
+            $('#porfecha').hide();
         }
     });
 

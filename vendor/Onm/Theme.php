@@ -295,7 +295,7 @@ class Theme
         return ($this->l10ndomain !== null);
     }
 
-      /**
+  /**
      * Registers a defautl disposition for image in the theme
      *
      * @param array $menuDefinition the menu definition
@@ -304,7 +304,6 @@ class Theme
      **/
     public function registerDisposition($disposition)
     {
-
         $this->disposition = $disposition;
 
         return $this;
@@ -318,7 +317,7 @@ class Theme
      **/
     public function getDisposition()
     {
-        if ($this->disposition()) {
+        if ($this->disposition) {
             return $this->disposition;
         }
         return false;

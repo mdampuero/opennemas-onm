@@ -7,7 +7,8 @@
     }
     #accounts-provider > div,
     #items-recipients {
-        min-height:400px;
+        height:500px;
+        overflow-y: scroll;
     }
 
 
@@ -116,11 +117,14 @@
             <div class="pull-left" style="width:49%">
                 <div id="accounts-provider" class="tabs">
                     <ul>
+                        {if $subscriptionType eq 'submit'}
                         <li><a href="#maillist-account">{t}MailList{/t}</a></li>
+                        {elseif $subscriptionType eq 'create_subscriptor'}
                         <li><a href="#database-accounts">{t}Database accounts{/t}</a></li>
+                        {/if}
                         <li><a href="#custom-accounts">{t}Custom{/t}</a></li>
                     </ul>
-
+                    {if $subscriptionType eq 'submit'}
                     <div id="maillist-account">
                         <ul id="maillist-account-list">
                             {foreach name=d from=$mailList item=mail}
@@ -131,7 +135,7 @@
                             {/foreach}
                         </ul>
                     </div>
-
+                    {elseif $subscriptionType eq 'create_subscriptor'}
                     <div id="database-accounts">
                         <div class="btn-group pull-right">
                             <a id="button-check-all" href="#" class="btn">
@@ -153,7 +157,7 @@
                             {/foreach}
                         </ul>
                     </div>
-
+                    {/if}
                     <div id="custom-accounts" class="form-vertical">
                         <div class="btn-group">
                             <a id="parse-and-add" href="#" class="btn">
@@ -162,7 +166,7 @@
                         </div>
                         <div class="control-group">
                             <div class="controls">
-                                <textarea id="othersMails" name="othersMails" placeholder="{t}Write a list of email address by writing one per line.{/t}"></textarea>
+                                <textarea id="othersMails" name="othersMails" placeholder="{t}Write a list of email address writing one per line (max 10).{/t}"></textarea>
                             </div>
                         </div>
                     </div>

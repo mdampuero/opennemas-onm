@@ -2,24 +2,25 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+{script_tag src="/jquery/jquery.multiselect.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
+{script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
     jQuery(document).ready(function($){
         $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
-        $("#user-editing-form").tabs();
+        $('#user-editing-form').tabs();
 
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
 
-        if($('select#usertype').val() == '1'){
-                $('#id_user_group').removeAttr('required');
-                $('#privileges').hide();
-                $('.privileges-tab').hide();
-            }
-
-
-        $('select#usertype').change(function(){
+        // Show/hide privilege tab depending on userType backend/frontend
+        if($('select#usertype').val() == '1') {
+            $('#id_user_group').removeAttr('required');
+            $('#privileges').hide();
+            $('.privileges-tab').hide();
+        }
+        $('select#usertype').change(function() {
             if($(this).val() == '1'){
                 $('#id_user_group').removeAttr('required');
                 $('#privileges').hide();
@@ -27,16 +28,32 @@
             } else {
                 $('#privileges').show();
                 $('.privileges-tab').show();
-                $("#id_user_group").attr("required", "required");
+                $('#id_user_group').attr('required', 'required');
             }
         });
 
-        var strength = $("#password").passStrength({
-            userid: "#login"
+        // PAssword strength checker
+        var strength = $('#password').passStrength({
+            userid: '#login'
         });
 
-        {acl isAllowed="USER_ADMIN"}
-            {is_module_activated name="PAYWALL"}
+        // Avatar image uploader
+        $('.fileupload').fileupload({
+            name: 'avatar',
+            uploadtype:'image'
+        });
+
+        $('.delete').on('click', function(){
+            $('.file-input').val('0');
+        })
+
+        // Use multiselect on user groups and categories
+        $('select#id_user_group').twosidedmultiselect();
+        $('select#ids_category').twosidedmultiselect();
+
+        // Paywall datepicker only if available
+        {acl isAllowed='USER_ADMIN'}
+            {is_module_activated name='PAYWALL'}
             jQuery('#paywall_time_limit').datetimepicker({
                 hourGrid: 4,
                 showAnim: 'fadeIn',
@@ -51,6 +68,7 @@
 {/block}
 
 {block name="header-css" append}
+{css_tag href="/bootstrap/bootstrap-fileupload.min.css" common=1}
 <style type="text/css">
 label {
     font-weight:normal;
@@ -70,6 +88,7 @@ label {
 .tooltip {
     max-width:160px;
 }
+/* Styles for password strenght */
 .alert-pass {
     background: #F8D47A url("/assets/images/alert-ok-small.png") no-repeat 16px;
     display: inline-block;
@@ -82,11 +101,39 @@ label {
 }
 .alert-pass.alert-success { background: #468847 url("/assets/images/alert-ok-small.png") no-repeat 16px; }
 .alert-pass.alert-error { background: #B22222 url("/assets/images/alert-error-small.png") no-repeat 16px; }
+/* Recommended styles tsms */
+.tsmsselect {
+        float: left;
+}
+
+.tsmsselect select {
+}
+
+.tsmsoptions {
+        width: 10%;
+        float: left;
+}
+
+.tsmsoptions p {
+        margin: 2px;
+        text-align: center;
+        font-size: larger;
+        cursor: pointer;
+}
+
+.tsmsoptions p:hover {
+        color: White;
+        background-color: Silver;
+}
+.groups, .categorys {
+    display: inline-block;
+    width: 100%;
+}
 </style>
 {/block}
 
 {block name="content"}
-<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" id="formulario">
+<form action="{if isset($user->id)}{url name=admin_acl_user_update id=$user->id}{else}{url name=admin_acl_user_create}{/if}" method="POST" enctype="multipart/form-data" id="formulario" autocomplete="off">
 
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
@@ -122,17 +169,29 @@ label {
             </ul><!-- / -->
             <div id="basic">
                 <div class="avatar">
-                    <div class="avatar-image thumbnail"  rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
-                        {if $user}
-                            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
+                    <div class="fileupload {if $user->photo}fileupload-exists{else}fileupload-new{/if}" data-provides="fileupload">
+                        {if $user->photo->name}
+                        <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;">
+                            <img src="{$smarty.const.MEDIA_IMG_PATH_URL}{$user->photo->path_file}/{$user->photo->name}" alt="{t}Photo{/t}"/>
+                        </div>
                         {else}
-                            <img src="{$params.IMAGE_DIR}default_avatar.png" alt="Default avatar" width=150>
-                            {gravatar email="fake@mail.com" image_dir=$params.IMAGE_DIR image=true size=150}
+                        <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
+                            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
+                        </div>
                         {/if}
+                        <div>
+                            <span class="btn btn-file">
+                                <span class="fileupload-new">{t}Add new photo{/t}</span>
+                                <span class="fileupload-exists">{t}Change{/t}</span>
+                                <input type="file"/>
+                                <input type="hidden" name="avatar" class="file-input" value="1">
+                            </span>
+                            <a href="#" class="btn fileupload-exists delete" data-dismiss="fileupload" title="{t}Remove image{/t}"><i class="icon-trash"></i></a>
+                        </div>
                     </div>
                 </div>
-                <div class="user-info form-vertical">
 
+                <div class="user-info form-vertical">
                     <fieldset>
                         <div class="control-group">
                             <label for="name" class="control-label">{t}Display name{/t}</label>
@@ -146,18 +205,48 @@ label {
                         <div class="control-group">
                             <label for="login" class="control-label">{t}User name{/t}</label>
                             <div class="controls">
-                                <input type="text" id="login" name="login" value="{$user->login|default:""}" class="input-xlarge" required="required" maxlength="20"/>
+                                <input type="text" id="login" name="login" value="{$user->username|default:""}" class="input-xlarge" required="required" maxlength="20"/>
                             </div>
                         </div>
 
                         <div class="control-group">
-                            <label for="login" class="control-label">{t}Email{/t}</label>
+                            <label for="email" class="control-label">{t}Email{/t}</label>
+                            <div class="controls">
+                                <input class="input-xlarge" id="email" type="email" name="email" placeholder="test@example.com"  value="{$user->email|default:""}" required="required">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="meta[twitter]" class="control-label">{t}Twitter user{/t}</label>
                             <div class="controls">
                                 <div class="input-prepend">
-                                    <span class="add-on">@</span><input class=" input-large" id="email" type="email" name="email" value="{$user->email}" required="required">
+                                    <span class="add-on">@</span>
+                                    <input class="span2" id="prependedInput" type="text" placeholder="{t}Username{/t}" id="meta[twitter]" name="meta[twitter]" value="{$user->meta['twitter']|default:""}">
                                 </div>
                             </div>
                         </div>
+
+                        <div class="control-group">
+                            <label for="url" class="control-label">{t}Blog Url{/t}</label>
+                            <div class="controls">
+                                <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="input-xxlarge" >
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="bio" class="control-label">{t}Short Biography{/t}</label>
+                            <div class="controls">
+                                <input type="text" id="bio" name="bio" class="input-xxlarge" value="{$user->bio|default:""}">
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="meta[bio_description]" class="control-label">{t}Biography{/t}</label>
+                            <div class="controls">
+                                <textarea id="meta[bio_description]" name="meta[bio_description]" rows="3" class="input-xxlarge">{$user->meta['bio_description']|default:""}</textarea>
+                            </div>
+                        </div>
+
                     </fieldset>
 
                     <fieldset>
@@ -176,14 +265,14 @@ label {
                             <div class="controls">
                                 <div class="input-prepend">
                                     <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium {if $smarty.request.action eq "new"}required{/if} validate-password-confirm" maxlength="20"/>
+                                    <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium validate-password-confirm" maxlength="20"/>
                                 </div>
                             </div>
                         </div>
-                    <fieldset>
+                    </fieldset>
                 </div>
-
             </div><!-- /personal -->
+
             <div id="settings">
                 <div class="form-horizontal">
                         <div class="control-group">
@@ -207,9 +296,9 @@ label {
                     {/is_module_activated}
 
                     <div class="control-group">
-                        <label for="user_language" class="control-label">{t}User language{/t}</label>
+                        <label for="meta[user_language]" class="control-label">{t}User language{/t}</label>
                         <div class="controls">
-                            {html_options name="user_language" options=$languages selected=$user->meta['user_language']}
+                            {html_options name="meta[user_language]" options=$languages selected=$user->meta['user_language']}
                             <div class="help-block">{t}Used for displayed messages, interface and measures in your page.{/t}</div>
                         </div>
                     </div>
@@ -217,70 +306,44 @@ label {
             </div>
 
             <div id="privileges">
-                <table style="margin:1em;">
-                    <tbody>
-                       {acl isAllowed="GROUP_CHANGE"}
-                        <tr>
-                            <th scope="row">
-                                <label for="id_user_group">{t}User group:{/t}</label>
-                            </th>
-                            <td>
-                                <select id="id_user_group" name="id_user_group" title="{t}User group:{/t}"  required="required" class="validate-selection" onchange="onChangeGroup(this, new Array('comboAccessCategory','labelAccessCategory'));">
-                                    <option  value ="">{t}--Select one--{/t}</option>
-                                    {if $smarty.session.isMaster}
-                                        <option value="4" {if $user->id_user_group == 4}selected="selected"{/if}>{t}Master{/t}</option>
-                                    {/if}
-                                    {section name=user_group loop=$user_groups}
-                                        {if $user_groups[user_group]->id == $user->id_user_group}
-                                            <option  value="{$user_groups[user_group]->id}" selected="selected">{$user_groups[user_group]->name}</option>
-                                        {else}
-                                            <option  value="{$user_groups[user_group]->id}">{$user_groups[user_group]->name}</option>
-                                        {/if}
-                                    {/section}
-                                </select>
-                            </td>
-                        </tr>
-                        {/acl}
-                        {acl isAllowed="USER_CATEGORY"}
-                        <tr {if !is_null($user) && $user->id_user_group == 5}style="display:none"{/if}</tr>
-                            <th scope="row">
-                                <label for="id_user_group">{t}Categories{/t}</label>
-                            </th>
-                            <td>
-                                <div id="comboAccessCategory">
-                                    <select id="ids_category" name="ids_category[]" size="12" title="Categorias" class="validate-selection" multiple="multiple">
-                                        {if isset($content_categories_select) && count($content_categories_select)<=0}
-                                            <option value ="" selected="selected"></option>
-                                        {else}
-                                            <option value =""></option>
-                                        {/if}
-                                        <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
-                                        {foreach item="c_it" from=$content_categories}
-
-                                            <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
-
-                                            {if count($c_it->childNodes)>0}
-                                                {foreach item="sc_it" from=$c_it->childNodes}
-                                                    <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
-                                                            &nbsp; &rArr; {$sc_it->title}
-                                                    </option>
-                                                {/foreach}
-                                            {/if}
-                                        {/foreach}
-
-                                    </select>
-
-                                    <!--<select id="ids_category" name="ids_category[]" size="12" title="Categorias" class="validate-selection" multiple="multiple">
-                                        <option value=""></option>
-                                        {html_options options=$categories_options selected=$categories_selected}
-                                    </select>-->
-
-                                </div>
-                            </td>
-                        </tr>
-                       {/acl}
-                    </tbody>
-                </table>
+            {acl isAllowed="GROUP_CHANGE"}
+                <div class="groups">
+                    <label for="id_user_group">{t}User group:{/t}</label>
+                    <select id="id_user_group" name="id_user_group[]" size="8" multiple="multiple" title="{t}User group:{/t}" class="validate-selection">
+                        {if $smarty.session.isMaster}
+                            <option value="4" {if !is_null($user->id) && in_array(4, $user->id_user_group)}selected="selected"{/if}>{t}Master{/t}</option>
+                        {/if}
+                        {foreach $user_groups as $group}
+                            {if $user->id_user_group neq null && in_array($group->id, $user->id_user_group)}
+                                <option  value="{$group->id}" selected="selected">{$group->name}</option>
+                            {else}
+                                <option  value="{$group->id}">{$group->name}</option>
+                            {/if}
+                        {/foreach}
+                    </select>
+                </div>
+            {/acl}
+            <label>&nbsp;</label>
+            {acl isAllowed="USER_CATEGORY"}
+                <div class="categorys">
+                    <label>&nbsp;</label>
+                    <label for="id_user_group">{t}Categories{/t}:</label>
+                    <select id="ids_category" name="ids_category[]" size="12" title="{t}Categories{/t}" class="validate-selection" multiple="multiple">
+                        <option value="0" {if isset($content_categories_select) && is_array($content_categories_select) && in_array(0, $content_categories_select)} selected="selected" {/if}>{t}HOME{/t}</option>
+                        {foreach item="c_it" from=$content_categories}
+                            <option value="{$c_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($c_it->pk_content_category, $content_categories_select)}selected="selected"{/if}>{$c_it->title}</option>
+                            {if count($c_it->childNodes)>0}
+                                {foreach item="sc_it" from=$c_it->childNodes}
+                                    <option value="{$sc_it->pk_content_category}" {if isset($content_categories_select) && is_array($content_categories_select) && in_array($sc_it->pk_content_category, $content_categories_select)} selected="selected" {/if}>
+                                            &nbsp; &rArr; {$sc_it->title}
+                                    </option>
+                                {/foreach}
+                            {/if}
+                        {/foreach}
+                    </select>
+                </div>
+                <label>&nbsp;</label>
+            {/acl}
             </div><!-- /privileges -->
 
             {acl isAllowed="USER_ADMIN"}
@@ -288,9 +351,9 @@ label {
             <div id="paywall">
                 <div class="form-horizontal">
                         <div class="control-group">
-                        <label for="sessionexpire" class="control-label">{t}Paywall time limit:{/t}</label>
+                        <label for="paywall_time_limit" class="control-label">{t}Paywall time limit:{/t}</label>
                         <div class="controls">
-                            <input type="datetime" id="paywall_time_limit" name="meta[paywall_time_limit]" value="{datetime date=$user->meta['paywall_time_limit']}" />
+                            <input type="datetime" id="paywall_time_limit" name="paywall_time_limit" value="{datetime date=$user->meta['paywall_time_limit']}" />
                         </div>
                     </div>
                 </div>

@@ -23,22 +23,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `adodb_logsql`
---
-
-DROP TABLE IF EXISTS `adodb_logsql`;
-CREATE TABLE IF NOT EXISTS `adodb_logsql` (
-  `created` datetime NOT NULL,
-  `sql0` varchar(250) NOT NULL,
-  `sql1` text NOT NULL,
-  `params` text NOT NULL,
-  `tracer` text NOT NULL,
-  `timer` decimal(16,6) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `advertisements`
 --
 
@@ -299,51 +283,6 @@ INSERT INTO `attachments` (`pk_attachment`, `title`, `path`, `category`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `authors`
---
-
-DROP TABLE IF EXISTS `authors`;
-CREATE TABLE IF NOT EXISTS `authors` (
-  `pk_author` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL,
-  `politics` varchar(50) DEFAULT NULL,
-  `date_nac` datetime DEFAULT NULL,
-  `fk_user` int(10) DEFAULT '0',
-  `condition` varchar(255) DEFAULT NULL,
-  `blog` varchar(255) DEFAULT NULL,
-  `params` text,
-  PRIMARY KEY (`pk_author`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Opinion Authors' AUTO_INCREMENT=4 ;
-
---
--- Dumping data for table `authors`
---
-
-INSERT INTO `authors` (`pk_author`, `name`, `politics`, `date_nac`, `fk_user`, `condition`, `blog`, `params`) VALUES
-(3, 'Convallis vitae', '', '0000-00-00 00:00:00', 0, '', '', NULL),
-(2, 'Director', NULL, NULL, 0, NULL, NULL, NULL),
-(1, 'Editorial', '', NULL, 0, '', '', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `author_imgs`
---
-
-DROP TABLE IF EXISTS `author_imgs`;
-CREATE TABLE IF NOT EXISTS `author_imgs` (
-  `pk_img` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `fk_author` int(10) NOT NULL,
-  `fk_photo` bigint(20) unsigned NOT NULL,
-  `path_img` varchar(250) NOT NULL,
-  `description` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`pk_img`,`fk_author`),
-  KEY `pk_img` (`pk_img`,`fk_author`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `books`
 --
 
@@ -355,23 +294,6 @@ CREATE TABLE IF NOT EXISTS `books` (
   `file_img` varchar(255) DEFAULT NULL,
   `editorial` varchar(250) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bulletins_archive`
---
-
-DROP TABLE IF EXISTS `bulletins_archive`;
-CREATE TABLE IF NOT EXISTS `bulletins_archive` (
-  `pk_bulletin` int(11) NOT NULL AUTO_INCREMENT,
-  `data` longtext CHARACTER SET latin1,
-  `contact_list` longtext CHARACTER SET latin1,
-  `attach_pdf` tinyint(4) DEFAULT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `cron_timestamp` datetime DEFAULT NULL,
-  PRIMARY KEY (`pk_bulletin`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -589,7 +511,7 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (103, 9, 'How to Get Fit - P90X Video with Tony Horton!', 'p90x', 'how, to, get, fit, p90x, video, with, tony, horton', '2011-09-28 12:58:48', '0000-00-00 00:00:00', '2011-09-28 12:58:48', '2011-09-28 12:58:48', 1, 7, 7, 7, 13, 2, 0, 0, 0, 100, 'how-to-get-fit-p90x-video-with-tony-horton', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', 1, NULL),
 (104, 9, 'Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA', 'Larry Johnson, la ''abuela'' mÃ¡s famosa de la NBA', 'larry, johnson, abuela, mÃ¡s, famosa, nba', '2011-09-28 13:04:58', '0000-00-00 00:00:00', '2011-09-28 13:04:58', '2011-09-28 13:04:58', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'larry-johnson-la-abuela-mas-famosa-de-la-nba', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (105, 9, 'Video de la cabaÃ±a argentina', 'Video de la cabaÃ±a argentina', 'video, cabaÃ±a, argentina, deo, caba', '2011-09-28 13:10:34', '0000-00-00 00:00:00', '2011-09-28 13:10:34', '2011-09-28 13:10:34', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'video-de-la-cabana-argentina', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'curiosidades', NULL, NULL),
-(106, 9, 'Ð¤ÐµÐ¹ÐµÑ€Ð²ÐµÑ€Ðº Ñ€Ð°Ð·Ð±ÑƒÑˆÐµÐ²Ð°Ð»ÑÑ', 'video con servicio de Rutube', 'rutube', '2011-09-28 13:11:10', '0000-00-00 00:00:00', '2011-09-28 13:11:10', '2011-09-28 13:11:10', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, '', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
+(106, 9, 'video con servicio de Rutube', 'video con servicio de Rutube', 'rutube', '2011-09-28 13:11:10', '0000-00-00 00:00:00', '2011-09-28 13:11:10', '2011-09-28 13:11:10', 1, 7, 7, 7, 1, 2, 0, 0, 0, 100, '', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
 (107, 9, 'Pau entra por la puerta grande en el club de los 10.000', 'Pau entra por la puerta grande en el club de los 10.000', 'pau, entra, puerta, grande, club, 000', '2011-09-28 13:14:00', '0000-00-00 00:00:00', '2011-09-28 13:14:00', '2012-07-27 11:18:30', 1, 7, 7, 7, 7, 2, 0, 0, 1, 100, 'pau-entra-por-la-puerta-grande-en-el-club-de-los-10-000', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, 'deportes', NULL, NULL),
 (108, 9, 'Camelos.Semos. Jonathan. TÃº si que vales.', 'Camelos.Semos. Jonathan. TÃº si que vales.', 'camelos, semos, jonathan, tÃº, vales', '2012-07-30 10:17:50', '0000-00-00 00:00:00', '2011-09-28 13:14:30', '2011-09-28 13:14:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'camelos-semos-jonathan-tu-si-que-vales', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'curiosidades', 0, NULL),
 (109, 9, 'X men first class reviewed by rotten tomatoes on infomania', 'X men first class reviewed by rotten tomatoes on infomania', 'men, first, class, reviewed, by, rotten, tomatoes, on, infomania, neither, user, id, nor, item, is, specified, for, rss, feed', '2011-09-28 13:16:05', '0000-00-00 00:00:00', '2011-09-28 13:16:05', '2013-06-17 16:03:30', 0, 7, 7, 5, 5, 2, 0, 1, 0, 100, 'x-men-first-class-reviewed-by-rotten-tomatoes-on-infomania', 0, 'placeholder_0_1', 'placeholder_0_1', NULL, 'sociedad', NULL, NULL),
@@ -670,7 +592,6 @@ INSERT INTO `contents` (`pk_content`, `fk_content_type`, `title`, `description`,
 (231, 12, 'Hemeroteca Calendario', '', '', '2012-10-01 13:06:06', '0000-00-00 00:00:00', '2012-10-01 13:06:06', '2012-10-01 13:06:06', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'hemeroteca-calendario', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (232, 12, 'Facebook - botÃ³n like', '', '', '2012-10-01 13:06:30', '0000-00-00 00:00:00', '2012-10-01 13:06:30', '2012-10-01 13:06:30', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-boton-like', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (233, 12, 'Facebook like with faces', '', '', '2012-10-01 13:06:42', '0000-00-00 00:00:00', '2012-10-01 13:06:42', '2012-10-01 13:06:42', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'facebook-like-with-faces', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
-(234, 12, 'Twitter', '', '', '2012-10-01 13:06:56', '0000-00-00 00:00:00', '2012-10-01 13:06:56', '2012-10-01 13:06:56', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'twitter', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (235, 12, 'Opinion- otras del autor **', 'Solo se visualiza en opinion del autor', '', '2012-10-01 13:09:22', '0000-00-00 00:00:00', '2012-10-01 13:09:22', '2012-10-01 13:09:22', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'opinion-otras-del-autor', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (236, 12, 'Opinion - Lista de opiniones favoritas', '', '', '2012-10-01 13:09:37', '0000-00-00 00:00:00', '2012-10-01 13:09:37', '2012-10-01 13:09:37', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'opinion-lista-de-opiniones-favoritas', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
 (237, 12, 'Noticias de Hoy', '', '', '2012-10-01 13:09:57', '0000-00-00 00:00:00', '2012-10-01 13:09:57', '2012-10-01 13:09:57', 0, 7, 7, 7, 1, 2, 0, 0, 0, 100, 'noticias-de-hoy', 1, 'placeholder_0_1', 'placeholder_0_1', NULL, '0', NULL, NULL),
@@ -883,7 +804,6 @@ INSERT INTO `contents_categories` (`pk_fk_content`, `pk_fk_content_category`, `c
 (231, 0, '0'),
 (232, 0, '0'),
 (233, 0, '0'),
-(234, 0, '0'),
 (235, 0, '0'),
 (236, 0, '0'),
 (237, 0, '0'),
@@ -992,7 +912,6 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 (76, 26, 0, 'placeholder_1_1', NULL, 'Article'),
 (210, 26, 2, 'placeholder_1_0', NULL, 'Article'),
 (72, 24, 0, 'placeholder_0_0', NULL, 'Article'),
-(11, 0, 0, 'placeholder_1_3', NULL, 'Article'),
 (206, 0, 0, 'placeholder_2_2', NULL, 'Widget'),
 (193, 0, 0, 'placeholder_2_1', NULL, 'Widget'),
 (200, 0, 1, 'placeholder_2_0', NULL, 'Widget'),
@@ -1001,8 +920,6 @@ INSERT INTO `content_positions` (`pk_fk_content`, `fk_category`, `position`, `pl
 (84, 0, 3, 'placeholder_1_0', NULL, 'Article'),
 (60, 0, 2, 'placeholder_1_0', NULL, 'Opinion'),
 (56, 0, 1, 'placeholder_1_0', NULL, 'Opinion'),
-(184, 0, 0, 'placeholder_1_0', NULL, 'Opinion'),
-(215, 0, 0, 'placeholder_0_1', NULL, 'Article'),
 (62, 22, 0, 'placeholder_2_2', NULL, 'Article'),
 (71, 25, 0, 'placeholder_1_3', NULL, 'Article'),
 (51, 25, 0, 'placeholder_2_0', NULL, 'Article'),
@@ -1068,7 +985,6 @@ CREATE TABLE IF NOT EXISTS `kioskos` (
   `name` varchar(100) NOT NULL,
   `path` varchar(200) NOT NULL,
   `date` date NOT NULL,
-  `favorite` tinyint(1) NOT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-item, 1-subscription',
   `price` decimal(10,0) NOT NULL DEFAULT '0',
   PRIMARY KEY (`pk_kiosko`)
@@ -1217,7 +1133,6 @@ CREATE TABLE IF NOT EXISTS `opinions` (
   `fk_author_img` int(10) DEFAULT NULL,
   `with_comment` smallint(1) DEFAULT '1',
   `type_opinion` varchar(150) DEFAULT NULL,
-  `fk_author_img_widget` int(10) DEFAULT NULL,
   PRIMARY KEY (`pk_opinion`),
   KEY `type_opinion` (`type_opinion`),
   KEY `fk_author` (`fk_author`)
@@ -1227,16 +1142,16 @@ CREATE TABLE IF NOT EXISTS `opinions` (
 -- Dumping data for table `opinions`
 --
 
-INSERT INTO `opinions` (`pk_opinion`, `fk_content_categories`, `fk_author`, `body`, `fk_author_img`, `with_comment`, `type_opinion`, `fk_author_img_widget`) VALUES
-(54, 7, 0, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. &nbsp;Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<h4>&quot;Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</h4>\r\n', 0, 1, '1', 0),
-(55, 7, 0, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<h4>&quot;Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</h4>\r\n', 0, 1, '1', 0),
-(56, 7, 0, '<div id="lipsum">\r\n<p>Curabitur sit amet nisi vehicula enim faucibus porttitor a a turpis. Aliquam aliquet, tortor vel tempus blandit, metus lorem sodales lorem, a vehicula metus eros quis massa. Sed dolor justo, aliquet vel fringilla ut, ullamcorper ut justo. Cras pulvinar tempor erat et pharetra. Etiam vitae mauris sed nibh tincidunt volutpat vitae ac lorem. Nunc ac ante at nisi sagittis posuere. In ac viverra lorem. Nullam eu quam odio. Etiam blandit elit vitae sem tincidunt sodales. Proin consectetur tempus sem et gravida. Aliquam non velit a arcu ornare lobortis vitae quis libero. In posuere dui vitae erat posuere at commodo erat egestas. Sed tempus egestas nisl, eget dictum felis rhoncus sed. Phasellus blandit, eros vitae dictum fringilla, augue augue cursus metus, id auctor nisi ligula id tellus. Phasellus nunc mauris, molestie vel gravida nec, condimentum quis turpis.</p>\r\n\r\n<p>Vivamus at arcu nibh. Suspendisse sit amet ipsum ligula, nec cursus dolor. Nunc sit amet libero ante, tempor egestas lorem. Nullam dictum tincidunt risus id aliquet. Quisque feugiat gravida purus ut sodales. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam porta lobortis tempus. Aliquam imperdiet scelerisque odio non gravida. Integer eleifend lacus nec purus interdum ultricies. Donec egestas porttitor sem non feugiat. Aenean posuere venenatis nunc non tincidunt.</p>\r\n\r\n<p>Pellentesque eu lectus dui, quis pulvinar tellus. Phasellus id orci quam, fermentum facilisis dui. Vivamus a augue sit amet est bibendum aliquam ac ac nunc. Sed elementum gravida nisl, eget iaculis tellus eleifend et. Fusce sed mi orci, non porttitor diam. Phasellus vitae laoreet lectus. Aliquam pellentesque mattis nunc, at condimentum metus dignissim et. Praesent pulvinar, urna vel accumsan placerat, dui nunc pretium velit, sit amet scelerisque augue sapien in purus. Sed fermentum, dui eu ornare tincidunt, erat purus pretium elit, sed cursus dui enim in quam. Donec a arcu augue. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla rutrum quam sed nisi consequat venenatis.</p>\r\n\r\n<p>Aliquam purus quam, semper vel molestie eu, convallis vitae urna. Aliquam ante massa, dignissim sed tempor imperdiet, elementum nec mauris. Donec ultrices, nunc ac semper adipiscing, mi tortor interdum felis, eu porta sapien est et massa. Vivamus consequat est vel sapien pellentesque non ornare ipsum imperdiet. Fusce pulvinar nunc non quam adipiscing lacinia. In eget massa nunc. Nullam felis nibh, placerat a imperdiet sed, faucibus eu velit. Sed in tincidunt elit.</p>\r\n</div>\r\n', 0, 1, '1', 0),
-(57, 7, 3, '<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n', 0, 1, '0', 0),
-(58, 7, 3, '<div id="lipsum">\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n\r\n<p>Cras neque nulla, dapibus id tempor et, scelerisque ut arcu. Cras convallis justo vitae quam tempor euismod. In blandit placerat congue. Suspendisse tempor mi et nisi faucibus congue. Curabitur in lobortis quam. Nam blandit arcu vel metus sollicitudin adipiscing. Donec nisl quam, tristique sit amet pharetra vitae, congue eu magna. Nulla a lacinia turpis. Quisque viverra, purus sit amet auctor convallis, velit ligula tempus augue, ac porta nisi risus non urna. Nulla vestibulum quam sit amet lorem auctor ac gravida quam placerat. Morbi nec libero tortor. Vivamus vel erat a erat ultricies pharetra.</p>\r\n</div>\r\n', 0, 1, '0', 0),
-(59, 7, 3, '<div id="lipsum">\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n\r\n<p>Cras neque nulla, dapibus id tempor et, scelerisque ut arcu. Cras convallis justo vitae quam tempor euismod. In blandit placerat congue. Suspendisse tempor mi et nisi faucibus congue. Curabitur in lobortis quam. Nam blandit arcu vel metus sollicitudin adipiscing. Donec nisl quam, tristique sit amet pharetra vitae, congue eu magna. Nulla a lacinia turpis. Quisque viverra, purus sit amet auctor convallis, velit ligula tempus augue, ac porta nisi risus non urna. Nulla vestibulum quam sit amet lorem auctor ac gravida quam placerat. Morbi nec libero tortor. Vivamus vel erat a erat ultricies pharetra.</p>\r\n</div>\r\n', 0, 1, '0', 0),
-(60, 7, 3, '<div id="lipsum">\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n\r\n<p>Cras neque nulla, dapibus id tempor et, scelerisque ut arcu. Cras convallis justo vitae quam tempor euismod. In blandit placerat congue. Suspendisse tempor mi et nisi faucibus congue. Curabitur in lobortis quam. Nam blandit arcu vel metus sollicitudin adipiscing. Donec nisl quam, tristique sit amet pharetra vitae, congue eu magna. Nulla a lacinia turpis. Quisque viverra, purus sit amet auctor convallis, velit ligula tempus augue, ac porta nisi risus non urna. Nulla vestibulum quam sit amet lorem auctor ac gravida quam placerat. Morbi nec libero tortor. Vivamus vel erat a erat ultricies pharetra.</p>\r\n</div>\r\n', 0, 1, '0', 0),
-(183, 7, 2, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue</p>\r\n', 0, 1, '2', 0),
-(184, 7, 2, '<p>Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti.</p>\r\n\r\n<p>Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti.</p>\r\n', 0, 1, '2', 0);
+INSERT INTO `opinions` (`pk_opinion`, `fk_content_categories`, `fk_author`, `body`, `fk_author_img`, `with_comment`, `type_opinion`) VALUES
+(54, 7, 0, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. &nbsp;Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<h4>&quot;Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</h4>\r\n', 0, 1, '1'),
+(55, 7, 0, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<h4>&quot;Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</h4>\r\n', 0, 1, '1'),
+(56, 7, 0, '<div id="lipsum">\r\n<p>Curabitur sit amet nisi vehicula enim faucibus porttitor a a turpis. Aliquam aliquet, tortor vel tempus blandit, metus lorem sodales lorem, a vehicula metus eros quis massa. Sed dolor justo, aliquet vel fringilla ut, ullamcorper ut justo. Cras pulvinar tempor erat et pharetra. Etiam vitae mauris sed nibh tincidunt volutpat vitae ac lorem. Nunc ac ante at nisi sagittis posuere. In ac viverra lorem. Nullam eu quam odio. Etiam blandit elit vitae sem tincidunt sodales. Proin consectetur tempus sem et gravida. Aliquam non velit a arcu ornare lobortis vitae quis libero. In posuere dui vitae erat posuere at commodo erat egestas. Sed tempus egestas nisl, eget dictum felis rhoncus sed. Phasellus blandit, eros vitae dictum fringilla, augue augue cursus metus, id auctor nisi ligula id tellus. Phasellus nunc mauris, molestie vel gravida nec, condimentum quis turpis.</p>\r\n\r\n<p>Vivamus at arcu nibh. Suspendisse sit amet ipsum ligula, nec cursus dolor. Nunc sit amet libero ante, tempor egestas lorem. Nullam dictum tincidunt risus id aliquet. Quisque feugiat gravida purus ut sodales. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam porta lobortis tempus. Aliquam imperdiet scelerisque odio non gravida. Integer eleifend lacus nec purus interdum ultricies. Donec egestas porttitor sem non feugiat. Aenean posuere venenatis nunc non tincidunt.</p>\r\n\r\n<p>Pellentesque eu lectus dui, quis pulvinar tellus. Phasellus id orci quam, fermentum facilisis dui. Vivamus a augue sit amet est bibendum aliquam ac ac nunc. Sed elementum gravida nisl, eget iaculis tellus eleifend et. Fusce sed mi orci, non porttitor diam. Phasellus vitae laoreet lectus. Aliquam pellentesque mattis nunc, at condimentum metus dignissim et. Praesent pulvinar, urna vel accumsan placerat, dui nunc pretium velit, sit amet scelerisque augue sapien in purus. Sed fermentum, dui eu ornare tincidunt, erat purus pretium elit, sed cursus dui enim in quam. Donec a arcu augue. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nulla rutrum quam sed nisi consequat venenatis.</p>\r\n\r\n<p>Aliquam purus quam, semper vel molestie eu, convallis vitae urna. Aliquam ante massa, dignissim sed tempor imperdiet, elementum nec mauris. Donec ultrices, nunc ac semper adipiscing, mi tortor interdum felis, eu porta sapien est et massa. Vivamus consequat est vel sapien pellentesque non ornare ipsum imperdiet. Fusce pulvinar nunc non quam adipiscing lacinia. In eget massa nunc. Nullam felis nibh, placerat a imperdiet sed, faucibus eu velit. Sed in tincidunt elit.</p>\r\n</div>\r\n', 0, 1, '1'),
+(57, 7, 3, '<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n', 0, 1, '0'),
+(58, 7, 3, '<div id="lipsum">\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n\r\n<p>Cras neque nulla, dapibus id tempor et, scelerisque ut arcu. Cras convallis justo vitae quam tempor euismod. In blandit placerat congue. Suspendisse tempor mi et nisi faucibus congue. Curabitur in lobortis quam. Nam blandit arcu vel metus sollicitudin adipiscing. Donec nisl quam, tristique sit amet pharetra vitae, congue eu magna. Nulla a lacinia turpis. Quisque viverra, purus sit amet auctor convallis, velit ligula tempus augue, ac porta nisi risus non urna. Nulla vestibulum quam sit amet lorem auctor ac gravida quam placerat. Morbi nec libero tortor. Vivamus vel erat a erat ultricies pharetra.</p>\r\n</div>\r\n', 0, 1, '0'),
+(59, 7, 3, '<div id="lipsum">\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n\r\n<p>Cras neque nulla, dapibus id tempor et, scelerisque ut arcu. Cras convallis justo vitae quam tempor euismod. In blandit placerat congue. Suspendisse tempor mi et nisi faucibus congue. Curabitur in lobortis quam. Nam blandit arcu vel metus sollicitudin adipiscing. Donec nisl quam, tristique sit amet pharetra vitae, congue eu magna. Nulla a lacinia turpis. Quisque viverra, purus sit amet auctor convallis, velit ligula tempus augue, ac porta nisi risus non urna. Nulla vestibulum quam sit amet lorem auctor ac gravida quam placerat. Morbi nec libero tortor. Vivamus vel erat a erat ultricies pharetra.</p>\r\n</div>\r\n', 0, 1, '0'),
+(60, 7, 3, '<div id="lipsum">\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Curabitur viverra, neque ac dapibus iaculis, dui tortor dapibus urna, vel ullamcorper dui lacus ut urna. Nulla sapien lorem, gravida eleifend bibendum a, tempor et mi. Nullam ante justo, interdum at interdum vel, congue id ante. Donec non sapien purus. Pellentesque dignissim elementum arcu ut porta. Duis et enim felis. Maecenas risus arcu, fermentum pellentesque dapibus sed, sollicitudin pretium dolor. Praesent placerat, elit ut fringilla venenatis, sem turpis porttitor orci, sed convallis sapien tortor in libero. Aenean vehicula condimentum dui, at vehicula risus porttitor quis.</p>\r\n\r\n<p>Donec neque metus, scelerisque sit amet porttitor vel, adipiscing pellentesque felis. Nunc orci metus, dictum id viverra a, ultricies a dui. Vestibulum faucibus luctus turpis, ac lacinia magna semper a. Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.</p>\r\n\r\n<p>Nam viverra auctor orci id accumsan. Praesent libero tortor, condimentum et tristique ut, luctus ut enim. Praesent non neque eget est convallis vehicula. Integer turpis nisl, bibendum non rutrum ornare, faucibus at sapien. Curabitur eu magna eget nisi tincidunt lobortis non vitae purus. In semper, tellus et pellentesque viverra, ligula erat pellentesque ligula, quis porta tortor elit vel tortor. Pellentesque vel tincidunt lorem. Integer in erat lectus. In accumsan dictum ipsum, id molestie felis rhoncus et. Fusce elementum odio et felis aliquam tincidunt porta ac massa. Suspendisse at magna justo, a tempor lorem. Morbi ligula eros, blandit nec placerat et, luctus et purus. Praesent quis elit turpis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>\r\n\r\n<p>Cras neque nulla, dapibus id tempor et, scelerisque ut arcu. Cras convallis justo vitae quam tempor euismod. In blandit placerat congue. Suspendisse tempor mi et nisi faucibus congue. Curabitur in lobortis quam. Nam blandit arcu vel metus sollicitudin adipiscing. Donec nisl quam, tristique sit amet pharetra vitae, congue eu magna. Nulla a lacinia turpis. Quisque viverra, purus sit amet auctor convallis, velit ligula tempus augue, ac porta nisi risus non urna. Nulla vestibulum quam sit amet lorem auctor ac gravida quam placerat. Morbi nec libero tortor. Vivamus vel erat a erat ultricies pharetra.</p>\r\n</div>\r\n', 0, 1, '0'),
+(183, 7, 2, '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue.</p>\r\n\r\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce aliquam magna a augue mollis id suscipit quam tincidunt. Etiam sed venenatis libero. Nunc pretium justo nec tortor consequat bibendum. Maecenas vitae nisi dui, nec commodo magna. Proin sit amet ipsum felis. Aliquam ultrices fermentum massa. Donec ultricies erat sit amet purus adipiscing lacinia fringilla urna elementum. Cras metus dui, elementum id convallis vitae, feugiat nec nulla. Vivamus id nibh orci. Curabitur tristique augue non diam tincidunt ut aliquet nulla adipiscing. Nam convallis ipsum id diam sodales vulputate. Vestibulum venenatis elementum nulla. Duis a mauris nec sem aliquam placerat ut at augue</p>\r\n', 0, 1, '2'),
+(184, 7, 2, '<p>Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti.</p>\r\n\r\n<p>Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti. Donec augue mauris, mattis quis aliquam sit amet, pharetra eget libero. Donec ultricies tincidunt ultrices. Fusce rutrum porttitor urna, aliquet imperdiet dolor fringilla eu. Fusce ac sem velit, ut sollicitudin mauris. Morbi molestie semper diam. Vivamus accumsan sem ipsum.Nam lobortis nibh eu ante molestie nec condimentum justo semper. Suspendisse potenti.</p>\r\n', 0, 1, '2');
 
 -- --------------------------------------------------------
 
@@ -1453,193 +1368,6 @@ INSERT INTO `poll_items` (`pk_item`, `fk_pk_poll`, `item`, `metadata`, `votes`) 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `privileges`
---
-
-DROP TABLE IF EXISTS `privileges`;
-CREATE TABLE IF NOT EXISTS `privileges` (
-  `pk_privilege` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(20) NOT NULL,
-  `description` varchar(100) DEFAULT NULL,
-  `module` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`pk_privilege`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=176 ;
-
---
--- Dumping data for table `privileges`
---
-
-INSERT INTO `privileges` (`pk_privilege`, `name`, `description`, `module`) VALUES
-(1, 'CATEGORY_ADMIN', 'Listado de secciones', 'CATEGORY'),
-(2, 'CATEGORY_AVAILABLE', 'Aprobar SecciÃ³n', 'CATEGORY'),
-(3, 'CATEGORY_UPDATE', 'Modificar SecciÃ³n', 'CATEGORY'),
-(4, 'CATEGORY_DELETE', 'Eliminar SecciÃ³n', 'CATEGORY'),
-(5, 'CATEGORY_CREATE', 'Crear SecciÃ³n', 'CATEGORY'),
-(6, 'ARTICLE_ADMIN', 'Listados de ArtÃ­culos', 'ARTICLE'),
-(7, 'ARTICLE_FRONTPAGE', 'AdministraciÃ³n de portadas', 'ARTICLE'),
-(8, 'ARTICLE_PENDINGS', 'Listar noticias pendientes', 'ARTICLE'),
-(9, 'ARTICLE_AVAILABLE', 'Aprobar Noticia', 'ARTICLE'),
-(10, 'ARTICLE_UPDATE', 'Modificar ArtÃ­culo', 'ARTICLE'),
-(11, 'ARTICLE_DELETE', 'Eliminar ArtÃ­culo', 'ARTICLE'),
-(12, 'ARTICLE_CREATE', 'Crear ArtÃ­culo', 'ARTICLE'),
-(13, 'ARTICLE_ARCHIVE', 'Recuperar/Archivar ArtÃ­culos de/a hemeroteca', 'ARTICLE'),
-(14, 'ARTICLE_CLONE', 'Clonar ArtÃ­culo', 'ARTICLE'),
-(15, 'ARTICLE_HOME', 'GestiÃ³n portada Home de artÃ­culos', 'ARTICLE'),
-(16, 'ARTICLE_TRASH', 'gestiÃ³n papelera ArtÃ­culo', 'ARTICLE'),
-(17, 'ARTICLE_ARCHIVE_ADMI', 'Listado de hemeroteca', 'ARTICLE'),
-(18, 'ADVERTISEMENT_ADMIN', 'Listado de  publicidad', 'ADVERTISEMENT'),
-(19, 'ADVERTISEMENT_AVAILA', 'Aprobar publicidad', 'ADVERTISEMENT'),
-(20, 'ADVERTISEMENT_UPDATE', 'Modificar publicidad', 'ADVERTISEMENT'),
-(21, 'ADVERTISEMENT_DELETE', 'Eliminar publicidad', 'ADVERTISEMENT'),
-(22, 'ADVERTISEMENT_CREATE', 'Crear publicidad', 'ADVERTISEMENT'),
-(23, 'ADVERTISEMENT_TRASH', 'gestiÃ³n papelera publicidad', 'ADVERTISEMENT'),
-(24, 'ADVERTISEMENT_HOME', 'gestiÃ³n de publicidad en Home', 'ADVERTISEMENT'),
-(26, 'OPINION_ADMIN', 'Listado de  opiniÃ³n', 'OPINION'),
-(27, 'OPINION_FRONTPAGE', 'Portada Opinion', 'OPINION'),
-(28, 'OPINION_AVAILABLE', 'Aprobar OpiniÃ³n', 'OPINION'),
-(29, 'OPINION_UPDATE', 'Modificar OpiniÃ³n', 'OPINION'),
-(30, 'OPINION_HOME', 'Publicar widgets home OpiniÃ³n', 'OPINION'),
-(31, 'OPINION_DELETE', 'Eliminar OpiniÃ³n', 'OPINION'),
-(32, 'OPINION_CREATE', 'Crear OpiniÃ³n', 'OPINION'),
-(33, 'OPINION_TRASH', 'gestion papelera OpiniÃ³n', 'OPINION'),
-(34, 'COMMENT_ADMIN', 'Listado de comentarios', 'COMMENT'),
-(35, 'COMMENT_POLL', 'Gestionar Comentarios de encuestas', 'COMMENT'),
-(36, 'COMMENT_HOME', 'Gestionar Comentarios de Home', 'COMMENT'),
-(37, 'COMMENT_AVAILABLE', 'Aprobar/Rechazar Comentario', 'COMMENT'),
-(38, 'COMMENT_UPDATE', 'Modificar Comentario', 'COMMENT'),
-(39, 'COMMENT_DELETE', 'Eliminar Comentario', 'COMMENT'),
-(40, 'COMMENT_CREATE', 'Crear Comentario', 'COMMENT'),
-(41, 'COMMENT_TRASH', 'gestiÃ³n papelera Comentarios', 'COMMENT'),
-(42, 'ALBUM_ADMIN', 'Listado de Ã¡lbumes', 'ALBUM'),
-(43, 'ALBUM_AVAILABLE', 'Aprobar Album', 'ALBUM'),
-(44, 'ALBUM_UPDATE', 'Modificar Album', 'ALBUM'),
-(45, 'ALBUM_DELETE', 'Eliminar Album', 'ALBUM'),
-(46, 'ALBUM_CREATE', 'Crear Album', 'ALBUM'),
-(47, 'ALBUM_TRASH', 'gestion papelera Album', 'ALBUM'),
-(48, 'VIDEO_ADMIN', 'Listado de videos', 'VIDEO'),
-(49, 'VIDEO_AVAILABLE', 'Aprobar video', 'VIDEO'),
-(50, 'VIDEO_UPDATE', 'Modificar video', 'VIDEO'),
-(51, 'VIDEO_DELETE', 'Eliminar video', 'VIDEO'),
-(52, 'VIDEO_CREATE', 'Crear video', 'VIDEO'),
-(53, 'VIDEO_TRASH', 'gestiÃ³n papelera video', 'VIDEO'),
-(133, 'CONTENT_OTHER_DELETE', 'Poder eliminar contenido de otros usuarios', 'CONTENT'),
-(130, 'ONM_CONFIG', 'Configurar Onm', 'ONM'),
-(131, 'ONM_MANAGER', 'Gestionar Onm', 'ONM'),
-(132, 'CONTENT_OTHER_UPDATE', 'Poder modificar contenido de otros usuarios', 'CONTENT'),
-(129, 'CACHE_APC_ADMIN', 'Gestion cache de APC', 'CACHE'),
-(60, 'IMAGE_ADMIN', 'Listado de imÃ¡genes', 'IMAGE'),
-(61, 'IMAGE_AVAILABLE', 'Aprobar Imagen', 'IMAGE'),
-(62, 'IMAGE_UPDATE', 'Modificar Imagen', 'IMAGE'),
-(63, 'IMAGE_DELETE', 'Eliminar Imagen', 'IMAGE'),
-(64, 'IMAGE_CREATE', 'Subir Imagen', 'IMAGE'),
-(65, 'IMAGE_TRASH', 'gestiÃ³n papelera Imagen', 'IMAGE'),
-(66, 'STATIC_ADMIN', 'Listado pÃ¡ginas estÃ¡ticas', 'STATIC'),
-(67, 'STATIC_AVAILABLE', 'Aprobar PÃ¡gina EstÃ¡tica', 'STATIC'),
-(68, 'STATIC_UPDATE', 'Modificar PÃ¡gina EstÃ¡tica', 'STATIC'),
-(69, 'STATIC_DELETE', 'Eliminar PÃ¡gina EstÃ¡tica', 'STATIC'),
-(70, 'STATIC_CREATE', 'Crear PÃ¡gina EstÃ¡tica', 'STATIC'),
-(71, 'KIOSKO_ADMIN', 'Listar PÃ¡gina Papel', 'KIOSKO'),
-(72, 'KIOSKO_AVAILABLE', 'Aprobar PÃ¡gina Papel', 'KIOSKO'),
-(73, 'KIOSKO_UPDATE', 'Modificar PÃ¡gina Papel', 'KIOSKO'),
-(74, 'KIOSKO_DELETE', 'Eliminar PÃ¡gina Papel', 'KIOSKO'),
-(75, 'KIOSKO_CREATE', 'Crear PÃ¡gina Papel', 'KIOSKO'),
-(76, 'KIOSKO_HOME', 'Incluir en portada como favorito', 'KIOSKO'),
-(77, 'POLL_ADMIN', 'Listado encuestas', 'POLL'),
-(78, 'POLL_AVAILABLE', 'Aprobar Encuesta', 'POLL'),
-(79, 'POLL_UPDATE', 'Modificar Encuesta', 'POLL'),
-(80, 'POLL_DELETE', 'Eliminar Encuesta', 'POLL'),
-(81, 'POLL_CREATE', 'Crear Encuesta', 'POLL'),
-(82, 'AUTHOR_ADMIN', 'Listado autores OpiniÃ³n', 'AUTHOR'),
-(83, 'AUTHOR_UPDATE', 'Modificar Autor', 'AUTHOR'),
-(84, 'AUTHOR_DELETE', 'Eliminar Autor', 'AUTHOR'),
-(85, 'AUTHOR_CREATE', 'Crear Autor', 'AUTHOR'),
-(86, 'USER_ADMIN', 'Listado de usuarios', 'USER'),
-(87, 'USER_UPDATE', 'Modificar Usuario', 'USER'),
-(88, 'USER_DELETE', 'Eliminar Usuario', 'USER'),
-(89, 'USER_CREATE', 'Crear Usuario', 'USER'),
-(90, 'PCLAVE_ADMIN', 'Listado de palabras clave', 'PCLAVE'),
-(91, 'PCLAVE_UPDATE', 'Modificar Palabra Clave', 'PCLAVE'),
-(92, 'PCLAVE_DELETE', 'Eliminar Palabra Clave', 'PCLAVE'),
-(93, 'PCLAVE_CREATE', 'Crear Palabra Clave', 'PCLAVE'),
-(95, 'GROUP_ADMIN', 'Grupo usuarios Admin', 'GROUP'),
-(96, 'GROUP_UPDATE', 'Modificar Grupo Usuarios', 'GROUP'),
-(97, 'GROUP_DELETE', 'Eliminar Grupo Usuarios', 'GROUP'),
-(98, 'GROUP_ADMIN', 'Listado de Grupo Usuarios', 'GROUP'),
-(99, 'GROUP_CREATE', 'Crear Grupo Usuarios', 'GROUP'),
-(100, 'PRIVILEGE_UPDATE', 'Modificar Privilegio', 'PRIVILEGE'),
-(101, 'PRIVILEGE_DELETE', 'Eliminar Privilegio', 'PRIVILEGE'),
-(102, 'PRIVILEGE_ADMIN', 'Listado de Privilegios', 'PRIVILEGE'),
-(103, 'PRIVILEGE_CREATE', 'Crear Privilegio', 'PRIVILEGE'),
-(104, 'FILE_ADMIN', 'Listado de ficheros y portadas', 'FILE'),
-(105, 'FILE_FRONTS', 'GestiÃ³n de portadas', 'FILE'),
-(106, 'FILE_UPDATE', 'Modificar Fichero', 'FILE'),
-(107, 'FILE_DELETE', 'Eliminar Fichero', 'FILE'),
-(108, 'FILE_CREATE', 'Crear Fichero', 'FILE'),
-(109, 'MENU_CREATE', 'Crear menu', 'MENU'),
-(117, 'WIDGET_ADMIN', 'Listado de widgets', 'WIDGET'),
-(110, 'BADLINK_ADMIN', 'Control Link Admin', 'BADLINK'),
-(111, 'STATS_ADMIN', 'Admin EstadÃ­sticas', 'STATS'),
-(112, 'NEWSLETTER_ADMIN', 'AdministraciÃ³n del boletÃ­n', 'NEWSLETTER'),
-(113, 'BACKEND_ADMIN', 'ConfiguraciÃ³n de backend', 'BACKEND'),
-(114, 'CACHE_TPL_ADMIN', 'GestiÃ³n de CachÃ©s Portadas', 'CACHE'),
-(115, 'SEARCH_ADMIN', 'Utilidades: bÃºsqueda avanzada', 'SEARCH'),
-(116, 'TRASH_ADMIN', 'GestiÃ³n papelera', 'TRASH'),
-(118, 'WIDGET_AVAILABLE', 'Aprobar Widget', 'WIDGET'),
-(119, 'WIDGET_UPDATE', 'Modificar Widget', 'WIDGET'),
-(120, 'WIDGET_DELETE', 'Eliminar Widget', 'WIDGET'),
-(121, 'WIDGET_CREATE', 'Crear Widget', 'WIDGET'),
-(122, 'MENU_ADMIN', 'Listado de menus', 'MENU'),
-(123, 'MENU_AVAILABLE', 'Leer menu', 'MENU'),
-(124, 'MENU_UPDATE', 'Modificar menu', 'MENU'),
-(125, 'IMPORT_ADMIN', 'Importar', 'IMPORT'),
-(126, 'IMPORT_EPRESS', 'Importar EuropaPress', 'IMPORT'),
-(127, 'IMPORT_XML', 'Importar XML', 'IMPORT'),
-(128, 'IMPORT_EFE', 'Importar EFE', 'IMPORT'),
-(134, 'ONM_SETTINGS', 'Allow to configure system wide settings', 'ONM'),
-(135, 'GROUP_CHANGE', ' Cambiar de grupo al usuario ', 'GROUP'),
-(165, 'IMPORT_EFE_FILE', 'Importar ficheros EFE', 'IMPORT'),
-(164, 'MENU_DELETE', 'Eliminar menu', 'MENU'),
-(163, 'VIDEO_SETTINGS', 'Configurar módulo de video', 'VIDEO'),
-(162, 'CATEGORY_SETTINGS', 'Configurar módulo de categorias', 'CATEGORY'),
-(161, 'OPINION_SETTINGS', 'Configurar módulo de opinion', 'OPINION'),
-(160, 'POLL_SETTINGS', 'Configurar módulos de encuestas', 'POLL'),
-(159, 'ALBUM_SETTINGS', 'Configurar módulo de álbumes', 'ALBUM'),
-(158, 'ALBUM_FAVORITE', 'Gestionar álbumes favoritos', 'ALBUM'),
-(157, 'ALBUM_HOME', 'Publicar album para home', 'ALBUM'),
-(156, 'VIDEO_FAVORITE', 'Gestionar Videos favoritos', 'VIDEO'),
-(155, 'VIDEO_HOME', 'Publicar video en home', 'VIDEO'),
-(154, 'SCHEDULE_ADMIN', 'Gestionar la agenda ', 'SCHEDULE'),
-(153, 'SCHEDULE_SETTINGS', 'Gestionar la agenda ', 'SCHEDULE'),
-(152, 'SPECIAL_TRASH', 'Gestionar papelera especiales', 'SPECIAL'),
-(151, 'SPECIAL_DELETE', 'Eliminar especiales', 'SPECIAL'),
-(150, 'SPECIAL_UPDATE', 'Modificar especiales', 'SPECIAL'),
-(149, 'SPECIAL_SETTINGS', 'Configurar modulo de especiales', 'SPECIAL'),
-(148, 'SPECIAL_AVAILABLE', 'Aprobar especiales', 'SPECIAL'),
-(147, 'SPECIAL_FAVORITE', 'Gestionar widget especiales', 'SPECIAL'),
-(146, 'SPECIAL_CREATE', 'Crear especiales', 'SPECIAL'),
-(145, 'SPECIAL_ADMIN', 'Administrar modulo de especiales ', 'SPECIAL'),
-(144, 'BOOK_TRASH', 'Vaciar papelera de libros', 'BOOK'),
-(143, 'BOOK_DELETE', 'Eliminar libros', 'BOOK'),
-(142, 'BOOK_UPDATE', 'Modificar libros', 'BOOK'),
-(141, 'BOOK_SETTINGS', 'Configurar modulo de libros', 'BOOK'),
-(140, 'BOOK_AVAILABLE', 'Aprobar libros', 'BOOK'),
-(139, 'BOOK_FAVORITE', 'Gestionar Widget de libros', 'BOOK'),
-(138, 'BOOK_CREATE', 'Subir libros', 'BOOK'),
-(137, 'BOOK_ADMIN', 'Administrar modulo de libros', 'BOOK'),
-(166, 'LETTER_TRASH', 'Vaciar papelera de cartas', 'LETTER'),
-(167, 'LETTER_DELETE', 'Eliminar cartas', 'LETTER'),
-(168, 'LETTER_UPDATE', 'Modificar cartas', 'LETTER'),
-(169, 'LETTER_SETTINGS', 'Configurar modulo de cartas', 'LETTER'),
-(170, 'LETTER_AVAILABLE', 'Aprobar cartas', 'LETTER'),
-(171, 'LETTER_FAVORITE', 'Gestionar Widget de cartas', 'LETTER'),
-(172, 'LETTER_CREATE', 'Subir cartas', 'LETTER'),
-(173, 'LETTER_ADMIN', 'Admon. cartas', 'LETTER'),
-(174, 'POLL_FAVORITE', 'Añadir a widgets', 'POLL'),
-(175, 'POLL_HOME', 'Añadir al widget de portada', 'POLL');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `ratings`
 --
 
@@ -1651,64 +1379,6 @@ CREATE TABLE IF NOT EXISTS `ratings` (
   `ips_count_rating` longtext,
   PRIMARY KEY (`pk_rating`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=218 ;
-
---
--- Dumping data for table `ratings`
---
-
-INSERT INTO `ratings` (`pk_rating`, `total_votes`, `total_value`, `ips_count_rating`) VALUES
-(82, 0, 0, 'a:0:{}'),
-(80, 0, 0, 'a:0:{}'),
-(10, 0, 0, 'a:0:{}'),
-(87, 0, 0, 'a:0:{}'),
-(63, 0, 0, 'a:0:{}'),
-(62, 0, 0, 'a:0:{}'),
-(14, 0, 0, 'a:0:{}'),
-(52, 0, 0, 'a:0:{}'),
-(86, 0, 0, 'a:0:{}'),
-(54, 0, 0, 'a:0:{}'),
-(58, 0, 0, 'a:0:{}'),
-(103, 0, 0, 'a:0:{}'),
-(56, 0, 0, 'a:0:{}'),
-(60, 0, 0, 'a:0:{}'),
-(64, 1, 5, 'a:1:{i:0;a:2:{s:2:"ip";s:14:"79.147.235.170";s:5:"count";i:1;}}'),
-(49, 0, 0, 'a:0:{}'),
-(53, 0, 0, 'a:0:{}'),
-(96, 0, 0, 'a:0:{}'),
-(55, 0, 0, 'a:0:{}'),
-(12, 0, 0, 'a:0:{}'),
-(73, 0, 0, 'a:0:{}'),
-(46, 0, 0, 'a:0:{}'),
-(68, 0, 0, 'a:0:{}'),
-(81, 0, 0, 'a:0:{}'),
-(148, 0, 0, 'a:0:{}'),
-(116, 0, 0, 'a:0:{}'),
-(164, 0, 0, 'a:0:{}'),
-(171, 0, 0, 'a:0:{}'),
-(178, 0, 0, 'a:0:{}'),
-(105, 0, 0, 'a:0:{}'),
-(111, 0, 0, 'a:0:{}'),
-(119, 0, 0, 'a:0:{}'),
-(177, 0, 0, 'a:0:{}'),
-(180, 0, 0, 'a:0:{}'),
-(126, 0, 0, 'a:0:{}'),
-(144, 0, 0, 'a:0:{}'),
-(170, 0, 0, 'a:0:{}'),
-(107, 0, 0, 'a:0:{}'),
-(125, 0, 0, 'a:0:{}'),
-(114, 0, 0, 'a:0:{}'),
-(117, 0, 0, 'a:0:{}'),
-(142, 0, 0, 'a:0:{}'),
-(168, 0, 0, 'a:0:{}'),
-(104, 0, 0, 'a:0:{}'),
-(112, 0, 0, 'a:0:{}'),
-(147, 0, 0, 'a:0:{}'),
-(146, 0, 0, 'a:0:{}'),
-(176, 0, 0, 'a:0:{}'),
-(149, 0, 0, 'a:0:{}'),
-(118, 0, 0, 'a:0:{}'),
-(11, 0, 0, 'a:0:{}'),
-(216, 0, 0, 'a:0:{}');
 
 -- --------------------------------------------------------
 
@@ -1753,11 +1423,6 @@ INSERT INTO `related_contents` (`pk_content1`, `pk_content2`, `relationship`, `t
 (216, 52, NULL, NULL, 3, 0, 1, 0),
 (216, 46, NULL, NULL, 2, 3, 1, 1),
 (216, 61, NULL, NULL, 1, 0, 1, 0),
-(216, 46, NULL, NULL, 2, 0, 1, 0),
-(216, 52, NULL, NULL, 3, 0, 1, 0),
-(216, 210, NULL, NULL, 0, 1, 0, 1),
-(216, 82, NULL, NULL, 0, 2, 0, 1),
-(216, 46, NULL, NULL, 0, 3, 0, 1),
 (217, 46, NULL, NULL, 1, 0, 1, 0),
 (217, 52, NULL, NULL, 2, 0, 1, 0),
 (217, 46, NULL, NULL, 0, 1, 0, 1),
@@ -1843,6 +1508,9 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('mail_server', 's:9:"localhost";'),
 ('mail_username', 's:9:"webmaster";'),
 ('mail_password', 's:0:"";'),
+('newsletter_sender', 's:30:"no-reply@postman.opennemas.com"'),
+('max_mailing', 's:1:"0"'),
+('last_invoice', 's:19:"2013-07-28 10:00:00"'),
 ('google_maps_api_key', 's:86:"ABQIAAAA_RE85FLaf_hXdhkxaS463hQC49KlvU2s_1jV47V5-i8q6UJ2IBQiAxw97Jt7tEWzuIY513Qutp-Cqg";'),
 ('google_custom_search_api_key', 's:0:"";'),
 ('facebook', 'a:2:{s:7:"api_key";s:1:" ";s:10:"secret_key";s:1:" ";}'),
@@ -1858,7 +1526,6 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('newsletter_maillist', 'a:2:{s:4:"name";s:8:"Openhost";s:5:"email";s:30:"newsletter@lists.opennemas.com";}'),
 ('site_agency', 's:13:"opennemas.com";'),
 ('activated_modules', 'a:17:{i:0;s:15:"ADVANCED_SEARCH";i:1;s:15:"ARTICLE_MANAGER";i:2;s:13:"CACHE_MANAGER";i:3;s:16:"CATEGORY_MANAGER";i:4;s:15:"COMMENT_MANAGER";i:5;s:12:"FILE_MANAGER";i:6;s:17:"FRONTPAGE_MANAGER";i:7;s:13:"IMAGE_MANAGER";i:8;s:15:"KEYWORD_MANAGER";i:9;s:15:"LIBRARY_MANAGER";i:10;s:12:"MENU_MANAGER";i:11;s:15:"OPINION_MANAGER";i:12;s:16:"SETTINGS_MANAGER";i:13;s:20:"STATIC_PAGES_MANAGER";i:14;s:13:"TRASH_MANAGER";i:15;s:17:"USERVOICE_SUPPORT";i:16;s:14:"WIDGET_MANAGER";}'),
-('europapress_sync_from_limit', 's:6:"604800";'),
 ('album_settings', 'a:6:{s:12:"total_widget";s:1:"4";s:10:"crop_width";s:3:"300";s:11:"crop_height";s:3:"240";s:14:"orderFrontpage";s:8:"favorite";s:9:"time_last";s:3:"100";s:11:"total_front";s:1:"6";}'),
 ('video_settings', 'a:3:{s:12:"total_widget";s:1:"4";s:11:"total_front";s:1:"2";s:13:"total_gallery";s:2:"20";}'),
 ('poll_settings', 'a:3:{s:9:"typeValue";s:7:"percent";s:9:"widthPoll";s:3:"600";s:10:"heightPoll";s:3:"500";}'),
@@ -1985,32 +1652,37 @@ INSERT INTO `usermeta` (`user_id`, `meta_key`, `meta_value`) VALUES
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
-  `pk_user` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `login` varchar(100) DEFAULT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
   `password` varchar(50) DEFAULT NULL,
   `sessionexpire` tinyint(2) unsigned NOT NULL DEFAULT '15',
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `bio` text NOT NULL,
+  `avatar_img_id` bigint(20) unsigned NOT NULL DEFAULT '0',
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
   `deposit` decimal(10,0) NOT NULL DEFAULT '0',
   `token` varchar(50) DEFAULT NULL,
-  `authorize` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 authorized - 0 unauthorized',
-  `fk_user_group` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`pk_user`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=138 ;
+  `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
+  `fk_user_group` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `name`, `type`, `deposit`, `token`, `authorize`, `fk_user_group`) VALUES
-(3, 'macada', '2f575705daf41049194613e47027200b', 30, 'david.martinez@openhost.es', 'David Martinez', 0, 0, NULL, 1, 4),
-(5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco Dieguez', 0, 0, NULL, 1, 4),
-(4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre Rico', 0, 0, NULL, 1, 4),
-(7, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra Pereira', 0, 0, NULL, 1, 4),
-(9, 'toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 66, 'toni@openhost.es', 'Toni Martinez Carballo', 0, 0, NULL, 1, 4);
+INSERT INTO `users` (`id`, `username`, `password`, `sessionexpire`, `url`, `bio`, `avatar_img_id`, `email`, `name`, `type`, `deposit`, `token`, `activated`, `fk_user_group`) VALUES
+(3, 'convallis-vitae', '4ee78fcf5fa4d511213d004f69453d80', 15, '', '', 0, 'convallis@opennemas.com', 'Convallis Vitae', 0, 0, NULL, 0, '3'),
+(2, 'director', '4ee78fcf5fa47511213d004f69453d80', 15, '', '', 0, 'director@opennemas.com', 'Director', 0, 0, NULL, 0, '3'),
+(1, 'editorial', '0dc4de960c0e39e92e8d7136239e77ed', 15, '', '', 0, 'editorial@opennemas.com', 'Editorial', 0, 0, NULL, 0, '3'),
+(4, 'macada', '2f575705daf41049194613e47027200b', 30, '', '', 0, 'david.martinez@openhost.es', 'David Martinez', 0, 0, NULL, 1, '4'),
+(5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, '', '', 0, 'fran@openhost.es', 'Francisco Dieguez', 0, 0, NULL, 1, '4'),
+(6, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, '', '', 0, 'alex@openhost.es', 'Alexandre Rico', 0, 0, NULL, 1, '4'),
+(7, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, '', '', 0, 'sandra@openhost.es', 'Sandra Pereira', 0, 0, NULL, 1, '4');
+
 
 -- --------------------------------------------------------
 
@@ -2097,6 +1769,7 @@ CREATE TABLE IF NOT EXISTS `user_groups` (
 --
 
 INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
+(3, 'Autores'),
 (4, 'Masters'),
 (5, 'Administrador'),
 (6, 'Usuarios');
@@ -2240,17 +1913,6 @@ CREATE TABLE IF NOT EXISTS `votes` (
   PRIMARY KEY (`pk_vote`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=224 ;
 
---
--- Dumping data for table `votes`
---
-
-INSERT INTO `votes` (`pk_vote`, `value_pos`, `value_neg`, `ips_count_vote`, `karma`) VALUES
-(223, 0, 0, 'a:0:{}', 100),
-(222, 0, 0, 'a:0:{}', 100),
-(221, 0, 0, 'a:0:{}', 100),
-(220, 0, 0, 'a:0:{}', 100),
-(219, 0, 0, 'a:0:{}', 100),
-(218, 0, 0, 'a:0:{}', 100);
 
 -- --------------------------------------------------------
 
@@ -2284,12 +1946,10 @@ INSERT INTO `widgets` (`pk_widget`, `content`, `renderlet`) VALUES
 (231, 'CalendarNewslibrary', 'intelligentwidget'),
 (232, 'FacebookButton', 'intelligentwidget'),
 (233, 'Facebook', 'intelligentwidget'),
-(234, 'OnmTwitter', 'intelligentwidget'),
 (235, 'OpinionByauthor', 'intelligentwidget'),
 (236, 'OpinionFavorite', 'intelligentwidget'),
 (237, 'TodayNews', 'intelligentwidget'),
 (240, '<div class="social-follow"><a class="twitter-follow-button" data-lang="pt" data-show-count="true" data-size="small" href="https://twitter.com/Opennemas">Follow @Opennemas</a> <script type="text/javascript">// <![CDATA[\r\n!function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){ js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs); } }(document,"script","twitter-wjs");\r\n// ]]></script></div>\r\n\r\n<a class="twitter-timeline" href="https://twitter.com/search?q=opennemas+OR+%40opennemas+OR+%23opennemas" data-widget-id="346651300093640705">Opennemas Newspapers Tweets</a>\r\n<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?''http'':''https'';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>\r\n', 'html');
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

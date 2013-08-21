@@ -95,12 +95,37 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
-            'porttitor-non-aliquam-ac-sagittis-a-urna',
+            'porttitor-non-aliquam-ac-sagittis-urna',
             $this->object->get_title(
                 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras elit sapien,'.
                 ' porttitor non aliquam ac, sagittis a urna.'
             )
         );
+
+        # Test with double slashes
+        $this->assertEquals(
+            'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
+            'porttitor-non-aliquam-ac-sagittis-urna',
+            $this->object->get_title(
+                'Lorem ipsum dolor sit amet,  -- consectetur adipiscing elit. Cras elit sapien,'.
+                ' porttitor non aliquam ac, sagittis a urna.'
+            )
+        );
+
+        $this->assertEquals(
+            'cambio-look-mariana-antoniale',
+            $this->object->get_title(
+                '¡El cambio de look de Mariana Antoniale!'
+            )
+        );
+
+        $this->assertEquals(
+            '0001-cambio-look-mariana-antoniale',
+            $this->object->get_title(
+                '0001 ¡El cambio de look de Mariana Antoniale!'
+            )
+        );
+
     }
 
     /**
@@ -123,8 +148,7 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
             'a,list,of,comma,separated,tags',
-            $this->object->normalize_metadata(
-                'a , list, of,comma, separated, tags')
+            $this->object->normalize_metadata('a , list, of,comma, separated, tags')
         );
     }
 
@@ -172,13 +196,13 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Onm\StringUtils::remove_shorts
+     * @covers Onm\StringUtils::removeShorts
      */
     public function testRemoveShorts()
     {
         $this->assertEquals(
             ' cousa non lembraba ven vagar.',
-            $this->object->remove_shorts('unha cousa que non me lembraba e ven de vagar.')
+            $this->object->removeShorts('unha cousa que non me lembraba e ven de vagar.')
         );
     }
 

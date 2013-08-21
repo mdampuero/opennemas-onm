@@ -30,7 +30,6 @@ class MediaImporter
         $GLOBALS['application'] = new Application();
 
         Application::initDatabase();
-        Application::initLogger();
     }
 
 

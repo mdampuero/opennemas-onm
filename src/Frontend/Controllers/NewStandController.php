@@ -164,7 +164,8 @@ class NewStandController extends Controller
         }
 
         $this->widgetNewsstandDates();
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         // Show in Frontpage
         return $this->render(
@@ -267,35 +268,20 @@ class NewStandController extends Controller
     /**
      * Fetches the advertisement
      *
-     * @return
+     * @return array of advertisements
      **/
     private function getAds()
     {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
+        // I have added the element 150 in order to integrate all the code in the same query
         $positions = array(
+            50,
             1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15,
             16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
             36, 103, 105, 9, 91, 92
         );
-        $intersticialId = 50;
 
-        // Asignacion de valores y comprobaciones realizadas en init
-        // $ccm = ContentCategoryManager::get_instance();
-        // $category = $ccm->get_id($category_name);
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load 1-16 banners and use cache to performance
-        //$banners = $advertisement->getAdvertisements(range(1, 16), $category); // 4,9 unused
-        $banners = $advertisement->getAdvertisements($positions, $category);
-
-        $banners = $this->cm->getInTime($banners);
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        // Get intersticial banner
-        $intersticial = $advertisement->getIntersticial($intersticialId, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

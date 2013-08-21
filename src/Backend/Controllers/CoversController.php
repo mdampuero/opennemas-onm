@@ -40,8 +40,6 @@ class CoversController extends Controller
         // Check if the user can admin kiosko
         $this->checkAclOrForward('KIOSKO_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         if (!defined('KIOSKO_DIR')) {
             define('KIOSKO_DIR', "kiosko".SS);
         }

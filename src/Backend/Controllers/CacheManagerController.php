@@ -40,8 +40,6 @@ class CacheManagerController extends Controller
 
         $this->checkAclOrForward('CACHE_TPL_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         // Initialization of the frontend template object
         $this->frontpageTemplate = new \Template(TEMPLATE_USER);
 
@@ -103,13 +101,14 @@ class CacheManagerController extends Controller
 
         list($pkContents, $pkAuthors) = $this->templateManager->getResources($caches);
 
-        $allAuthors  = array();
-        $author      = new \Author();
-        $all_authors = $author->cache->all_authors(null, 'ORDER BY name');
-        foreach ($all_authors as $author) {
-            $allAuthors[$author->pk_author] = $author->name;
+        // Fetch all authors and generate associated array
+        $allAuthors = \User::getAllUsersAuthors();
+        $allAuthorsArray = array();
+        foreach ($allAuthors as $author) {
+            $allAuthorsArray[$author->id] = $author->name;
         }
 
+        // Initialize vars
         $cm            = new \ContentManager();
         $articles      = $cm->getContents($pkContents);
         $articleTitles = array();
@@ -121,8 +120,8 @@ class CacheManagerController extends Controller
 
                 $articleTitles[$article->pk_content] = $article->title;
                 if ($article->fk_content_type == '4') {
-                    $authorName = !empty($allAuthors[$article->fk_author])
-                        ? $allAuthors[$article->fk_author]:'opinion';
+                    $authorName = !empty($allAuthorsArray[$article->fk_author])
+                        ? $allAuthorsArray[$article->fk_author]:'opinion';
                     $articleUris[$article->pk_content] = \Uri::generate(
                         'opinion',
                         array(
@@ -141,9 +140,11 @@ class CacheManagerController extends Controller
         // Build information for author front pages
         $authors = array();
         if (count($pkAuthors) > 0) {
-            $authorsForContents = $author->find('pk_author IN ('.implode(',', $pkAuthors).')');
+            $authorsForContents = $author->find('id IN ('.implode(',', $pkAuthors).')');
+            var_dump($authorsForContents);
+
             foreach ($authorsForContents as $author) {
-                $authors['RSS'.$author->pk_author] = $author->name;
+                $authors['RSS'.$author->id] = $author->name;
             }
         }
 
@@ -176,7 +177,7 @@ class CacheManagerController extends Controller
                 'titles'       => $articleTitles,
                 'contentUris'  => $articleUris,
                 'caches'       => $caches,
-                'allAuthors'   => $allAuthors,
+                'allAuthors'   => $allAuthorsArray,
                 'page'         => $this->page,
                 'itemsperpage' => $this->itemsPerPage,
             )

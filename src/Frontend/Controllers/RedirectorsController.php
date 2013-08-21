@@ -45,16 +45,28 @@ class RedirectorsController extends Controller
      **/
     public function contentAction(Request $request)
     {
-        $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
-        $oldVersion   = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
+        $contentId  = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
+        $slug       = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
+        $oldVersion = $request->query->filter('version', null, FILTER_SANITIZE_STRING);
+        $type       = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
 
-        list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
-
-        if ($oldVersion == 'editmaker') {
-             $newContentID = \Content::resolveID($newContentID);
+        if ($slug === 'none') {
+            if (!empty($type)) {
+                $newContentID  = getOriginalIDForContentTypeAndID($type, $contentId);
+            } else {
+                list($type, $newContentID) = getOriginalIdAndContentTypeFromID($contentId);
+            }
+        } else {
+            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
         }
 
-        if ($type == 'article') {
+        if ($oldVersion == 'editmaker') {
+            $newContentID = \Content::resolveID($newContentID);
+        }
+
+        $er = $this->get('entity_repository');
+
+        if (($type == 'article') || ($type == 'TopSecret') || ($type == 'Fauna')) {
             $content = new \Article($newContentID);
             $content->category_name = $content->catName;
         } elseif ($type == 'opinion') {
@@ -65,7 +77,7 @@ class RedirectorsController extends Controller
         }
         $url =  SITE_URL . $content->uri;
 
-        return new RedirectResponse($url);
+        return new RedirectResponse($url, 301);
     }
 
     /**
@@ -77,15 +89,24 @@ class RedirectorsController extends Controller
      **/
     public function categoryAction(Request $request)
     {
-        $contentType   = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
-        $contentId     = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
+        $contentType = $request->query->filter('content_type', null, FILTER_SANITIZE_STRING);
+        $slug        = $request->query->filter('slug', 'none', FILTER_SANITIZE_STRING);
+        $contentId   = $request->query->filter('content_id', null, FILTER_SANITIZE_STRING);
 
-        $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
+        if ($slug == 'none') {
+            $newContentID  = getOriginalIDForContentTypeAndID($contentType, $contentId);
+        } else {
+            list($type, $newContentID) = getOriginalIdAndContentTypeFromSlug($slug);
+        }
 
-        $cc = new \ContentCategory($newContentID);
+        $category = new \ContentCategory($newContentID);
 
-        $url = SITE_URL . \Uri::generate('section', array('id' => $cc->name));
+        if (!isset($category) || is_null($category->pk_content_category)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
 
-        return new RedirectResponse($url);
+        $url = SITE_URL . \Uri::generate('section', array('id' => $category->name));
+
+        return new RedirectResponse($url, 301);
     }
 }

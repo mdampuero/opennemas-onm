@@ -79,6 +79,7 @@ EOF
             SITE_VENDOR_PATH.'core/*.php',
             SITE_VENDOR_PATH.'Onm/**/**/*.php',
             APP_PATH.'models/*.php',
+            SITE_VENDOR_PATH.'Onm/*/*.php',
             SITE_VENDOR_PATH.'smarty/onm-plugins/*.php',
             APP_PATH.$this->localeFolder.'/extracted_strings.c'
         );

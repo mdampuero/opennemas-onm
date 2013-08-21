@@ -37,7 +37,6 @@ class ImporterXmlfileController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('PAPER_IMPORT');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         if (is_null(s::get('xml_file_schema'))
             && $action != 'config'
         ) {

@@ -1,18 +1,44 @@
 #!/usr/bin/env php
 <?php
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Console\Application;
+
 require __DIR__.'/../app/autoload.php';
 
-use Symfony\Component\Console\Application;
+// Load the available route collection
+$routes = new \Symfony\Component\Routing\RouteCollection();
+
+// Create the request object
+$request = Request::createFromGlobals();
+$request->setTrustedProxies(array('127.0.0.1'));
+
+require __DIR__.'/../app/container.php';
+
+// Init event dispatchers
+$dispatcher = $sc->get('event_dispatcher');
+$eventListenersPath = APP_PATH.'Framework/EventListeners';
+if (is_dir($eventListenersPath)) {
+    $listenerClasses = glob($eventListenersPath.'/*.php');
+    foreach ($listenerClasses as $className) {
+        require $className;
+        $eventListenerClassName = 'Framework\\EventListeners\\'.basename($className, '.php');
+
+        $listenerInstance = new $eventListenerClassName;
+
+        $dispatcher->addSubscriber($listenerInstance);
+    }
+}
 
 $application = new Application();
 
 // Iterate over all the available command classes and register them into the
 // console application
-$basePath = APPLICATION_PATH.'/app/';
-$availableCommandClases = glob($basePath.'*/Command/*');
+// $basePath = APPLICATION_PATH.'/app/';
+$availableCommandClases = glob(APP_PATH.'*/Command/*');
 foreach ($availableCommandClases as $file) {
     $commandClass = str_replace(
-        array($basePath, '.php', '/'),
+        array(APP_PATH, '.php', '/'),
         array('', '', '\\'),
         $file
     );

@@ -35,8 +35,6 @@ class AuthenticationController extends Controller
      **/
     public function init()
     {
-        // Setup view
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         $this->view->assign('version', \Onm\Common\Version::VERSION);
         $this->view->assign('languages', $this->container->getParameter('available_languages'));
     }
@@ -95,7 +93,7 @@ class AuthenticationController extends Controller
             ) {
 
                 // Check if user account is activated
-                if ($user->authorize != 1) {
+                if ($user->activated != 1) {
                     m::add(_('This user was deactivated. Please ask your administrator.'), m::ERROR);
                     return $this->redirect($this->generateUrl('admin_login_form'));
                 } elseif ($user->type != 0) {
@@ -107,18 +105,29 @@ class AuthenticationController extends Controller
 
                     $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
-                    $group = \UserGroup::getGroupName($user->fk_user_group);
+                    // Get group(s) of the user
+                    $group = array();
+                    $privileges = array();
+                    $userGroups = $user->fk_user_group;
+                    foreach ($userGroups as $group) {
+                        $groups[] = \UserGroup::getGroupName($group);
+                        // Get privileges from user groups
+                        $privileges = array_merge(
+                            $privileges,
+                            \Privilege::getPrivilegesForUserGroup($group)
+                        );
+                    }
 
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
-                        'username'         => $user->login,
+                        'username'         => $user->username,
                         'email'            => $user->email,
                         'deposit'          => $user->deposit,
                         'type'             => $user->type,
-                        'isAdmin'          => ($group == 'Administrador'),
-                        'isMaster'         => ($group == 'Masters'),
-                        'privileges'       => \Privilege::getPrivilegesForUserGroup($user->fk_user_group),
+                        'isAdmin'          => (in_array('Administrador', $groups)),
+                        'isMaster'         => (in_array('Masters', $groups)),
+                        'privileges'       => $privileges,
                         'accesscategories' => $user->getAccessCategoryIds(),
                         'updated'          => time(),
                         'session_lifetime' => $maxSessionLifeTime * 60,

@@ -11,8 +11,7 @@ class Authors
     {
         $this->validateInt($id);
 
-        $author = new Author($id);
-        $author->get_author_photos();
+        $author = new User($id);
 
         return $author;
     }
@@ -24,36 +23,17 @@ class Authors
     {
         $this->validateInt($id);
 
-        // Fetch photo images for this author
-        $sql = 'SELECT * FROM author_imgs WHERE fk_author = ? ORDER BY pk_img ASC';
+        $sql = 'SELECT `avatar_img_id` FROM users WHERE id = ?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-            return;
+            return false;
         }
 
-        $i = 0;
-        $photos = array();
-        while (!$rs->EOF) {
-            $photos[$i] = new stdClass();
+        // Get photo object from avatar_img_id
+        $photo = new Photo($rs->fields['avatar_img_id']);
 
-            $photos[$i]->pk_img      = $rs->fields['pk_img'];
-            $photos[$i]->fk_author   = $rs->fields['fk_author'];
-            $photos[$i]->fk_photo    = $rs->fields['fk_photo'];
-            $photos[$i]->path_img    = $rs->fields['path_img'];
-            $photos[$i]->path_file   = $rs->fields['path_img'];
-            $photos[$i]->description = $rs->fields['description'];
-
-            $i++;
-            $rs->MoveNext();
-        }
-
-        if (!empty($photos)) {
-            return $photos;
-        }
-
-        return null;
+        return $photo;
     }
 
     private function validateInt($number)
@@ -66,4 +46,3 @@ class Authors
         }
     }
 }
-

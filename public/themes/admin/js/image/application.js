@@ -52,10 +52,6 @@ jQuery(function ($) {
         }
     );
 
-    // Initialize the Bootstrap Image Gallery plugin:
-    $('#fileupload .files').imagegallery();
-
-
     // Initialize the Drag zone handler
     $('#fileupload').fileupload({ dropZone: $('#dropzone') });
     $(document).bind('dragover', function (e) {

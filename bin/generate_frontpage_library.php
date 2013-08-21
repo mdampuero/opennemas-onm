@@ -3,16 +3,29 @@
 /**
  * Start up and setup the app
 */
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Console\Application;
 
 require __DIR__.'/../app/autoload.php';
 
 
 $_SERVER['SERVER_NAME']   = 'www.cronicasdelaemigracion.com';
-//$_SERVER['SERVER_NAME'] = 'onm-cronicas.local';
+//$_SERVER['SERVER_NAME'] = 'onm-cronicas.local:8080';
 $_SERVER['REQUEST_URI']   = '/';
-$_SERVER['REQUEST_PORT']  = '80';
-$_SERVER['SERVER_PORT']   = '80';
+$_SERVER['REQUEST_PORT']  = '8080';
+$_SERVER['SERVER_PORT']   = '8080';
 $_SERVER['HTTP_HOST']     ='www.cronicasdelaemigracion.com';
+
+// Load the available route collection
+$routes = new \Symfony\Component\Routing\RouteCollection();
+
+// Create the request object
+$request = Request::createFromGlobals();
+$request->setTrustedProxies(array('127.0.0.1'));
+
+require __DIR__.'/../app/container.php';
+
 
 require __DIR__.'/../app/bootstrap.php';
 

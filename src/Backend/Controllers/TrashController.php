@@ -40,8 +40,6 @@ class TrashController extends Controller
 
         $this->checkAclOrForward('TRASH_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->filterContentType = $this->request->query->get('mytype', 'article');
         $this->page              = $this->request->query->getDigits('page', 1);
     }
@@ -87,12 +85,11 @@ class TrashController extends Controller
                 'urlVar'      => 'page',
                 'totalItems'  => $countElements,
                 'fileName'    => $this->generateUrl(
-                    'admin_staticpages',
+                    'admin_trash',
                     array(
-                        'mytype' => $this->filterContentType,
-                        'page' => $this->page
+                        'mytype' => $this->filterContentType
                     )
-                ).'?page=%d',
+                ).'&page=%d',
             )
         );
 
@@ -199,7 +196,7 @@ class TrashController extends Controller
                 $content = new \Content((int) $contentId);
 
                 if (!empty($content->id)) {
-                    $name = \ContentManager::getContentTypeNameFromId($contentTypeId);
+                    $name = \ContentManager::getContentTypeNameFromId($content->fk_content_type);
 
                     $contentClassName = ucwords($name);
                     $content = new $contentClassName($contentId);

@@ -37,8 +37,6 @@ class NewsletterSubscriptorsController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
 
         $this->checkAclOrForward('NEWSLETTER_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**
@@ -63,19 +61,11 @@ class NewsletterSubscriptorsController extends Controller
         $total = $user->countUsers($where);
 
         // Pager
-        $pager = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'append'      => false,
-                'path'        => '',
-                'urlVar'      => 'page',
-                'totalItems'  => $total,
-                'fileName'    => $this->generateUrl(
-                    'admin_newsletter_subscriptors'
-                ).'?page=%d',
+        $pager = \Onm\Pager\Slider::create(
+            $total,
+            $itemsPerPage,
+            $this->generateUrl(
+                'admin_newsletter_subscriptors'
             )
         );
 
@@ -351,7 +341,8 @@ class NewsletterSubscriptorsController extends Controller
         if (isset($filters['text'])
             && !empty($filters['text'])
         ) {
-            $fltr[] = 'MATCH (name, email) AGAINST ("'.addslashes($filters['text']).'" IN BOOLEAN MODE)';
+            $fltr[] = "name LIKE '%".addslashes($filters['text'])."%' OR ".
+                      "email LIKE '%".addslashes($filters['text'])."%'";
         }
 
         if (isset($filters['subscription']) && ($filters['subscription']>=0)) {

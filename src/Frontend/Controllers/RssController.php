@@ -49,7 +49,7 @@ class RssController extends Controller
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 
         // Fetch information for Advertisements
-        \Frontend\Controllers\ArticlesController::getInnerAds();
+        \Frontend\Controllers\ArticlesController::getAds();
 
         if (($this->view->caching == 0)
             || !$this->view->isCached('rss/index.tpl', $cacheID)
@@ -57,7 +57,7 @@ class RssController extends Controller
             $ccm = \ContentCategoryManager::get_instance();
 
             $categoriesTree = $ccm->getCategoriesTreeMenu();
-            $opinionAuthors = \Author::list_authors();
+            $opinionAuthors = \User::getAllUsersAuthors();
 
             $this->view->assign('categoriesTree', $categoriesTree);
             $this->view->assign('opinionAuthors', $opinionAuthors);
@@ -194,7 +194,10 @@ class RssController extends Controller
                     $photos[$article->id] = new \Photo($article->img1);
                 }
 
-                // $article->category_name = $article->loadCategoryName($article->id);
+                // Exclude articles with external link from RSS
+                if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
+                    unset($articles_home[$i]);
+                }
             }
 
             $this->view->assign(

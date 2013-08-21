@@ -71,9 +71,11 @@ class ArticlesController extends Controller
         $this->paywallHook($article);
 
         $cm = new \ContentManager();
+
         // Advertisements for single article NO CACHE
         $actualCategoryId    = $this->ccm->get_id($categoryName);
-        $this->getInnerAds($actualCategoryId);
+        $ads = $this->getAds($actualCategoryId);
+        $this->view->assign('advertisements', $ads);
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
@@ -117,6 +119,11 @@ class ArticlesController extends Controller
                 if (isset($article->fk_video2) && ($article->fk_video2 > 0)) {
                     $videoInt = new \Video($article->fk_video2);
                     $this->view->assign('videoInt', $videoInt);
+                }
+
+                $article->media_url = '';
+                if (is_object($article->author)) {
+                    $article->author->getPhoto();
                 }
 
                 // Related contents code ---------------------------------------
@@ -197,6 +204,7 @@ class ArticlesController extends Controller
 
         // Setup view
         $this->view->setConfig('articles');
+
         $cacheID = $this->view->generateCacheId('sync'.$categoryName, null, $dirtyID);
 
         // Get sync params
@@ -215,50 +223,34 @@ class ArticlesController extends Controller
         // Get category id correspondence
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
         // Fetch advertisement information from external
-        $advertisement = \Advertisement::getInstance();
-        $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
-        $intersticial = $ads[0];
-        $banners      = $ads[1];
+        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
+        $this->view->assign('advertisements', $ads);
 
-        // Render advertisements
-        if (!empty($banners)) {
-            $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
-        }
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
-        }
+        // Get full article
+        $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
+        $article = unserialize($article);
 
-        // Cached article logic
-        if ($this->view->caching == 0
-            || !$this->view->isCached('article/article.tpl', $cacheID)
+        if (($article->available==1) && ($article->in_litter==0)
+            && ($article->isStarted())
         ) {
-            // Get full article
-            $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
-            $article = unserialize($article);
+            // Template vars
+            $this->view->assign(
+                array(
+                    'article'               => $article,
+                    'content'               => $article,
+                    'photoInt'              => $article->photoInt,
+                    'videoInt'              => $article->videoInt,
+                    'relationed'            => $article->relatedContents,
+                    'contentId'             => $article->id,// Used on module_comments.tpl
+                    'actual_category_title' => $article->category_title,
+                    'suggested'             => $article->suggested,
+                    'ext'                   => 1,
+                )
+            );
 
-            if (($article->available==1) && ($article->in_litter==0)
-                && ($article->isStarted())
-            ) {
-                // Template vars
-                $this->view->assign(
-                    array(
-                        'article'               => $article,
-                        'content'               => $article,
-                        'photoInt'              => $article->photoInt,
-                        'videoInt'              => $article->videoInt,
-                        'relationed'            => $article->relatedContents,
-                        'contentId'             => $article->id,// Used on module_comments.tpl
-                        'actual_category_title' => $article->category_title,
-                        'suggested'             => $article->suggested,
-                        'ext'                   => 1,
-                    )
-                );
-
-            } else {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-            }
-
-        } // end if $this->view->is_cached
+        } else {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
 
         return $this->render(
             'article/article.tpl',
@@ -270,32 +262,39 @@ class ArticlesController extends Controller
     }
 
     /**
+     * Redirects the article given its external link url
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function externalLinkAction(Request $request)
+    {
+        $url = $request->query->filter('to', '', FILTER_VALIDATE_URL);
+
+        if (empty($url)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        return $this->redirect($url);
+
+    }
+
+    /**
      * Fetches advertisements for article inner
      *
      * @param string category the category identifier
      *
-     * @return void
+     * @return array the list of advertisements for this page
      **/
-    public static function getInnerAds($category = 'home')
+    public static function getAds($category = 'home')
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        // I have added the element 150 in order to integrate all the code in the same query
+        $positions = array(150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        $advertisement = \Advertisement::getInstance();
-        $banners = $advertisement->getAdvertisements($positions, $category);
-
-        if (count($banners<=0)) {
-            $cm = new \ContentManager();
-            $banners = $cm->getInTime($banners);
-            //$advertisement->renderMultiple($banners, &$tpl);
-            $advertisement->renderMultiple($banners, $advertisement);
-        }
-        // Get intersticial banner,1,2,9,10
-        $intersticial = $advertisement->getIntersticial(150, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 
     /**

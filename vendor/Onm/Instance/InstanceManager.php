@@ -70,12 +70,10 @@ class InstanceManager
      */
     public function load($serverName)
     {
-        // global $sc;
-        // $cache = $sc->get('cache');
+        $cache = getService('cache');
 
         $instance = false;
         if (preg_match("@\/manager@", $_SERVER["REQUEST_URI"])) {
-            // $instance = $cache->fetch('manager_instance_'.$serverName);
             if (!$instance) {
                 global $onmInstancesConnection;
 
@@ -93,8 +91,6 @@ class InstanceManager
                     'BD_DATABASE'          => $onmInstancesConnection['BD_DATABASE'],
                     'BD_TYPE'              => $onmInstancesConnection['BD_TYPE'],
                 );
-
-                // $cache->save('manager_instance_'.$serverName, $instance);
             }
 
             $instance->boot();
@@ -102,28 +98,49 @@ class InstanceManager
             return $instance;
         }
 
-        // $instance = $cache->fetch('instance_'.$serverName);
-        if (!$instance) {
-            //TODO: improve search for allowing subdomains with wildcards
-            $sql = "SELECT SQL_CACHE * FROM instances"
-                ." WHERE domains LIKE '%{$serverName}%' LIMIT 1";
-            $rs = $this->connection->Execute($sql);
 
-            if (!$rs) {
-                $this->connection->ErrorMsg();
-                return false;
+        if (!$instance) {
+            $instancesMatched = $cache->fetch('instance_'.$serverName);
+
+            if (!is_object($instancesMatched)) {
+                //TODO: improve search for allowing subdomains with wildcards
+                $sql = "SELECT SQL_CACHE * FROM instances"
+                    ." WHERE domains LIKE '%{$serverName}%'";
+                $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
+                $rs = $this->connection->Execute($sql);
+
+                if (!$rs) {
+                    $this->connection->ErrorMsg();
+                    return false;
+                }
+                $instancesMatched = $rs->GetArray();
+                $cache->save('instance_'.$serverName, $instancesMatched);
+            }
+
+            $matchedInstance = null;
+            foreach ($instancesMatched as $element) {
+                $domains = explode(',', $element['domains']);
+                $domains = array_map(
+                    function ($instanceDataElem) {
+                        return trim(strtolower($instanceDataElem));
+                    },
+                    $domains
+                );
+
+                if (in_array($serverName, $domains)) {
+                    $matchedInstance = $element;
+                    break;
+                }
             }
 
             //If found matching instance initialize its contants and return it
-            if ($rs->fields) {
+            if ($matchedInstance) {
 
                 $instance = new Instance();
-                foreach ($rs->fields as $key => $value) {
+                foreach ($matchedInstance as $key => $value) {
                     $instance->{$key} = $value;
                 }
                 define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
-
-                // $cache->save('instance_'.$serverName, $instance);
 
                 $instance->boot();
 
@@ -245,9 +262,6 @@ class InstanceManager
         // Fetch caches if exist
         $key = CACHE_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
         $totals = $cache->fetch($key);
-        $key = CACHE_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
-        $information = $cache->fetch($key);
-
 
         // If was not fetched from APC now is turn of DB
         if (!$totals) {
@@ -273,28 +287,21 @@ class InstanceManager
             );
         }
 
-        if (!$information) {
-            if (!isset($dbConection) || empty($dbConection)) {
-                $dbConection = self::getConnection($settings);
+        if (!isset($dbConection) || empty($dbConection)) {
+            $dbConection = self::getConnection($settings);
+        }
+
+        $sql = 'SELECT * FROM settings';
+
+        $rs = $dbConection->Execute($sql);
+
+        $information = array();
+        if ($rs !== false) {
+            while (!$rs->EOF) {
+                $information[ $rs->fields['name'] ] =
+                    @unserialize($rs->fields['value']);
+                $rs->MoveNext();
             }
-
-            $sql = 'SELECT * FROM settings';
-
-            $rs = $dbConection->Execute($sql);
-
-            if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $information[ $rs->fields['name'] ] =
-                        unserialize($rs->fields['value']);
-                    $rs->MoveNext();
-                }
-            }
-
-            $cache->save(
-                CACHE_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'],
-                $information,
-                300
-            );
         }
 
         return array($totals, $information);
@@ -817,8 +824,10 @@ class InstanceManager
         $rs4 = $conn->Execute($sql4);
 
         if (!$rs) {
+
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance '.
+                $conn->ErrorMsg()
             );
         }
         if (!$rs2) {
@@ -862,7 +871,7 @@ class InstanceManager
             && isset ($data['user_pass'])
             && isset ($data['user_mail'])
         ) {
-            $sql = "INSERT INTO users (`login`, `password`, `sessionexpire`,
+            $sql = "INSERT INTO users (`username`, `password`, `sessionexpire`,
                                        `email`, `name`, `fk_user_group`)
                     VALUES (?,?,?,?,?,?)";
 
@@ -870,8 +879,9 @@ class InstanceManager
                             $data['user_mail'], $data['user_name'],5);
 
             if (!$GLOBALS['application']->conn->Execute($sql, $values)) {
+
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance -creating user'
                 );
             }
 
@@ -884,22 +894,22 @@ class InstanceManager
 
             if (!$GLOBALS['application']->conn->Execute($userPrivSql)) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - privileges'
                 );
             }
             if (!s::set('contact_mail', $data['user_mail'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - user_mail'
                 );
             }
             if (!s::set('contact_name', $data['user_name'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - user_name'
                 );
             }
             if (!s::set('contact_IP', $data['contact_IP'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - content_IP'
                 );
             }
         }
@@ -907,12 +917,12 @@ class InstanceManager
         //Change and insert some data with instance information
         if (!s::set('site_name', $data['name'])) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_name'
             );
         }
         if (!s::set('site_created', $data['site_created'])) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance site_created'
             );
         }
         if (!s::set(
@@ -920,7 +930,7 @@ class InstanceManager
             $data['name'].' - '.s::get('site_title')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_title'
             );
         }
         if (!s::set(
@@ -928,7 +938,7 @@ class InstanceManager
             $data['name'].' - '.s::get('site_description')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_description'
             );
         }
         if (!s::set(
@@ -936,18 +946,18 @@ class InstanceManager
             $data['name'].' - '.s::get('site_keywords')
         )) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance site_keywords'
             );
         }
         if (!s::set('site_agency', $data['internal_name'].'.opennemas.com')) {
             throw new DatabaseForInstanceNotCreatedException(
-                'Could not create the default database for the instance'
+                'Could not create the default database for the instance - site_keywords'
             );
         }
         if (isset ($data['timezone'])) {
             if (!s::set('time_zone', $data['timezone'])) {
                 throw new DatabaseForInstanceNotCreatedException(
-                    'Could not create the default database for the instance'
+                    'Could not create the default database for the instance - timezone'
                 );
             }
         }
@@ -1038,6 +1048,10 @@ class InstanceManager
      **/
     public function deleteInstanceUserFromDatabaseManager($user)
     {
+        if ($user == 'root') {
+            return true;
+        }
+
         $sql = "DROP USER `{$user}`@'localhost'";
 
         if (!$this->connection->Execute($sql)) {

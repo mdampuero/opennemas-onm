@@ -18,8 +18,7 @@ class Opinions
         $opinion = new Opinion($opinionId);
 
         // Get author information
-        $author = new \Author($opinion->fk_author);
-        $author->get_author_photos();
+        $author = new User($opinion->fk_author);
         $opinion->author = $author;
 
         // Get author name slug
@@ -67,7 +66,7 @@ class Opinions
 
         foreach ($editorial as &$opinion) {
             $opinion->uri = 'ext'.$opinion->uri;
-            $opinion->author = new Author(1);
+            $opinion->author = new User(1);
             $opinion->author->uri = 'ext'.Uri::generate(
                 'opinion_author_frontpage',
                 array(
@@ -98,7 +97,7 @@ class Opinions
 
         foreach ($director as &$opinion) {
             $opinion->uri = 'ext'.$opinion->uri;
-            $opinion->author = new Author(2);
+            $opinion->author = new User(2);
             $opinion->author->uri = 'ext'.Uri::generate(
                 'opinion_author_frontpage',
                 array(
@@ -357,7 +356,7 @@ class Opinions
 
         foreach ($suggestedContents as &$element) {
             $origElem = $element;
-            $element = new \Opinion($origElem['pk_content']);
+            $element = new Opinion($origElem['pk_content']);
             if (!empty($element->author)) {
                 $origElem['author_name'] = $element->author;
                 $origElem['author_name_slug'] = StringUtils::get_title($element->author);

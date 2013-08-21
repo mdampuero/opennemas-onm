@@ -38,8 +38,6 @@ class KeywordsController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('KEYWORD_MANAGER');
 
         $this->checkAclOrForward('PCLAVE_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
     /**
      * Lists all the keywords

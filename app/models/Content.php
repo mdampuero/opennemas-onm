@@ -247,7 +247,7 @@ class Content
     /**
      * Initializes the content for a given id.
      *
-     * @param string $id the content id to initilize.
+     * @param string $id the content id to initialize.
      **/
     public function __construct($id = null)
     {
@@ -259,7 +259,7 @@ class Content
     }
 
     /**
-     * Magic function to get uninitilized object properties.
+     * Magic function to get uninitialized object properties.
      *
      * @param string $name the name of the property to get.
      *
@@ -374,9 +374,6 @@ class Content
      **/
     public function create($data)
     {
-        // Fire create event
-        $GLOBALS['application']->dispatch('onBeforeCreate', $this);
-
         $sql = "INSERT INTO contents
             (`fk_content_type`, `title`, `description`,
             `metadata`, `starttime`, `endtime`,
@@ -430,11 +427,10 @@ class Content
             $data['metadata']='';
         }
 
-        $data['fk_user'] =
-            (empty($data['fk_user']) && !isset ($data['fk_user']))
-            ? $_SESSION['userid'] :$data['fk_user'] ;
-        $data['fk_user_last_editor'] = $data['fk_user'];
-        $data['fk_publisher']        = (empty($data['available']))? '': $data['fk_user'];
+
+        $data['fk_author']           = (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'];
+        $data['fk_user_last_editor'] = $_SESSION['userid'];
+        $data['fk_publisher']        = (empty($data['available']))? '': $_SESSION['userid'];
 
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
@@ -447,14 +443,13 @@ class Content
             $data['created'], $data['changed'], $data['content_status'],
             $data['views'], $data['position'],$data['frontpage'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user'], $data['fk_publisher'],
+            $data['fk_author'], $data['fk_publisher'],
             $data['fk_user_last_editor'], $data['in_home'],
             $data['home_pos'],$data['available'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
 
             return false;
         }
@@ -466,16 +461,13 @@ class Content
         $values = array($this->id, $data['category'],$catName);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
-        // Fire event
-        $GLOBALS['application']->dispatch('onAfterCreate', $this);
+        dispatchEventWithParams('content.create', array('content' => $this));
 
         return true;
     }
@@ -489,18 +481,15 @@ class Content
      **/
     public function read($id)
     {
-        // Fire event onBeforeXxx
-        $GLOBALS['application']->dispatch('onBeforeRead', $this);
         if (empty($id)) {
             return false;
         }
+
         $sql = 'SELECT * FROM contents, contents_categories
                 WHERE pk_content = ? AND pk_content = pk_fk_content';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -508,8 +497,10 @@ class Content
         $this->load($rs->fields);
         $this->fk_user = $this->fk_author;
 
-        // Fire event onAfterXxx
-        $GLOBALS['application']->dispatch('onAfterRead', $this);
+          // Get author data for contents
+        if (!empty($this->fk_author)) {
+            $this->author = new \User($this->fk_author);
+        }
 
         return $this;
     }
@@ -523,15 +514,14 @@ class Content
      **/
     public function update($data)
     {
-        $GLOBALS['application']->dispatch('onBeforeUpdate', $this);
-
         $sql = "UPDATE contents
                 SET `title`=?, `description`=?,
                     `metadata`=?, `starttime`=?, `endtime`=?,
                     `changed`=?, `in_home`=?, `frontpage`=?,
                     `available`=?, `content_status`=?,
                     `placeholder`=?, `home_placeholder`=?,
-                    `fk_user_last_editor`=?, `slug`=?, `category_name`=?, `params`=?
+                    `fk_author`=?, `fk_user_last_editor`=?,
+                    `slug`=?, `category_name`=?, `params`=?
                 WHERE pk_content= ?";
 
         $this->read($data['id']);
@@ -566,7 +556,10 @@ class Content
                 (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'home_placeholder' =>
                 (empty($this->home_placeholder)) ? 'placeholder_0_1': $this->home_placeholder,
+            'fk_author' =>
+                (is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
         );
+
         $data = array_merge($data, $values);
 
         $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
@@ -591,9 +584,6 @@ class Content
         if (empty($data['metadata']) && !isset ($data['metadata'])) {
             $data['metadata']='';
         }
-        if (empty($data['pk_author']) && !isset ($data['pk_author'])) {
-            $data['pk_author']='';
-        }
 
         if ($data['category'] != $this->category) {
             $ccm     = ContentCategoryManager::get_instance();
@@ -606,8 +596,6 @@ class Content
 
             $rs = $GLOBALS['application']->conn->Execute($sql2, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         } else {
@@ -620,20 +608,20 @@ class Content
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
             $data['placeholder'],$data['home_placeholder'],
-            $data['fk_user_last_editor'], $data['slug'],
+            $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
             $this->category_name, $data['params'], $data['id']
         );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            Application::logDatabaseError();
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
 
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
-        $GLOBALS['application']->dispatch('onAfterUpdate', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -648,26 +636,22 @@ class Content
         $sql = 'DELETE FROM contents WHERE pk_content=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         $sql = 'DELETE FROM contents_categories WHERE pk_fk_content=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
-            Application::logDatabaseError();
+            return false;
         }
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
     }
 
     /**
@@ -693,13 +677,11 @@ class Content
         $values = array(1, $changed, $lastEditor, $id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
     }
 
     /**
@@ -720,14 +702,12 @@ class Content
         $values = array(0, $changed, $this->id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values)===false) {
-            Application::logDatabaseError();
-
             return false;
         }
         $this->in_litter = 0;
 
         /* Notice log of this action */
-        Application::logContentEvent('recover from trash', $this);
+        logContentEvent('recover from trash', $this);
 
         return $this;
     }
@@ -760,13 +740,11 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         return true;
     }
@@ -778,19 +756,15 @@ class Content
      **/
     public function toggleSuggested()
     {
+        logContentEvent(__METHOD__, $this);
+
         $sql = 'UPDATE `contents` SET `frontpage` = (`frontpage` + 1) % 2 '
              . 'WHERE `pk_content`=?';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
         if ($rs === false) {
-            $errorMsg = Application::logDatabaseError();
-            throw new \Exception($errorMsg);
-
-            return false;
+            throw new \Exception($GLOBALS['application']->conn->ErrorMsg());
         }
-
-        /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
 
         return true;
     }
@@ -805,8 +779,6 @@ class Content
      **/
     public function set_available($status, $lastEditor)
     {
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
@@ -835,21 +807,19 @@ class Content
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
 
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         // Set status for it's updated to next event
         if (!empty($this)) {
             $this->available = $status;
         }
-
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
 
         return true;
     }
@@ -882,7 +852,11 @@ class Content
     public function getQuickInfo()
     {
         $ccm     = ContentCategoryManager::get_instance();
-        $author  = new User($this->fk_author);
+        if (!empty($this->fk_user_last_editor)) {
+            $author  = new User($this->fk_user_last_editor);
+        } else {
+            $author  = new User($this->fk_author);
+        }
 
         if ($this->id !== null) {
             return array(
@@ -919,8 +893,6 @@ class Content
             $this->starttime = date("Y-m-d H:i:s");
         }
 
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-
         $sql = 'UPDATE contents SET `available`=1, `content_status`=1, '
                 .'`fk_user_last_editor`=?, `starttime`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
@@ -935,19 +907,17 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->available      = 1;
         $this->content_status = 1;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -966,8 +936,6 @@ class Content
             return false;
         }
 
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-
         $sql = 'UPDATE contents SET `available`=0, `content_status` = 0, `fk_user_last_editor`=?, '
              . '`changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
@@ -979,18 +947,16 @@ class Content
         );
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated state to next event
         $this->available = 0;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1013,7 +979,6 @@ class Content
 
         $sql = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         $values = array(
             $_SESSION['userid'],
@@ -1023,18 +988,16 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->in_litter = 2;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1055,15 +1018,14 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         $this->favorite = 1;
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1079,9 +1041,7 @@ class Content
             return false;
         }
 
-        $GLOBALS['application']->dispatch('onBeforeArchived', $this);
-
-        $sql = 'UPDATE contents SET `content_status`=1, `available`= 1, `frontpage` =0, '
+        $sql = 'UPDATE contents SET `content_status`=1, `frontpage` =0, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
@@ -1092,18 +1052,16 @@ class Content
         );
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->in_litter = 2;
 
-        $GLOBALS['application']->dispatch('onAfterArhived', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1120,8 +1078,6 @@ class Content
             return false;
         }
 
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
-
         $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
@@ -1129,22 +1085,16 @@ class Content
         $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
         /* Notice log of this action */
-        $logger = Application::getLogger();
-        $logger->notice(
-            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
-            .'action suggestToHomepage at '.$this->content_type.' Id '.$this->id
-        );
+        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->in_home = 2;
 
-        $GLOBALS['application']->dispatch('onAfterAvailable', $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1319,7 +1269,6 @@ class Content
      **/
     public function isInTime($now = null)
     {
-
         if ($this->isScheduled($now)) {
             if ($this->isDued($now) || $this->isPostponed($now)) {
                 return false;
@@ -1340,7 +1289,6 @@ class Content
      **/
     public static function isInTime2($starttime = null, $endtime = null, $time = null)
     {
-
         $start = strtotime($starttime);
         $end   = strtotime($endtime);
 
@@ -1470,14 +1418,13 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -1516,14 +1463,13 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -1536,8 +1482,6 @@ class Content
      **/
     public function set_inhome($status, $lastEditor = null)
     {
-        $GLOBALS['application']->dispatch('onBeforeSetInhome', $this);
-
         if (($this->id == null) && !is_array($status)) {
             return false;
         }
@@ -1554,16 +1498,13 @@ class Content
         if (count($values)>0) {
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
-        $GLOBALS['application']->dispatch('onAfterSetInhome', $this);
-
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
 
@@ -1662,8 +1603,6 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $sqlValues);
 
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -1698,38 +1637,6 @@ class Content
         }
     }
 
-    /**
-     * Event handler on update a content
-     **/
-    public function onUpdateClearCacheContent()
-    {
-        global $sc;
-        $eventDispatcher = $sc->get('event_dispatcher');
-
-        $event = new \Symfony\Component\EventDispatcher\GenericEvent();
-
-        $event->setArgument('content', $this);
-        $eventDispatcher->dispatch('content.update', $event);
-    }
-
-    // TODO: move to a Cache handler
-    /**
-     * Regenerates the homepage cache.
-     **/
-    public function refreshFrontpage()
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        if (isset($_REQUEST['category'])) {
-            $ccm = ContentCategoryManager::get_instance();
-            $categoryName = $ccm->get_name($_REQUEST['category']);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
-
-            $tplManager->fetch(SITE_URL . '/seccion/' . $categoryName);
-        }
-    }
-
     // TODO: move to a Cache handler
     /**
      * Regenerate cache files for all categories homepages.
@@ -1748,33 +1655,12 @@ class Content
         foreach ($availableCategories as $category) {
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|RSS');
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $category->name) . '|0');
-            $message = _("Homepage for category %s cleaned sucessfully.");
+            $message = _("Homepage for category %s cleaned successfully.");
             $output .= sprintf($message, $category->name);
         }
 
         return $output;
 
-    }
-
-    // TODO: move to a Cache handler
-    /**
-     * Deletes the homepage cache.
-     *
-     * @param array $params list of parameters
-     *
-     * @param array $params parameters for changing the behaviour of the func.
-     **/
-    public function refreshHome($params = '')
-    {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
-
-        // Delete all the available Homepage cache files
-        $tplManager->delete('home|RSS');
-        $tplManager->delete('last|RSS');
-        $tplManager->delete('home|0');
-
-        // Generate the cache file again
-        $tplManager->fetch(SITE_URL);
     }
 
     /**
@@ -1802,20 +1688,19 @@ class Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($category, $pkContent));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
-        } else {
-            $type = $cm->getContentTypeNameFromId($this->content_type, true);
-            /* Notice log of this action */
-            $logger = Application::getLogger();
-            $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
-                .' action Drop from frontpage at category '.$categoryName.' an '.$type.' Id '.$pkContent
-            );
-
-            return true;
         }
+
+        /* Notice log of this action */
+        $logger = getService('logger');
+        $type = $cm->getContentTypeNameFromId($this->content_type, true);
+
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed'
+            .' action Drop from frontpage at category '.$categoryName.' an '.$type.' Id '.$pkContent
+        );
+
+        return true;
     }
 
     /**
@@ -1825,27 +1710,25 @@ class Content
      **/
     public function dropFromAllHomePages()
     {
-
         $cm = new ContentManager();
         $sql = 'DELETE FROM content_positions WHERE pk_fk_content = ?';
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
-        } else {
-            $type = $cm->getContentTypeNameFromId($this->content_type, true);
-            /* Notice log of this action */
-            $logger = Application::getLogger();
-            $logger->notice(
-                'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
-                .'action Drop from frontpage '.$type.' with id '.$this->id
-            );
-
-            return true;
         }
+
+        /* Notice log of this action */
+        $logger = getService('logger');
+        $type = $cm->getContentTypeNameFromId($this->content_type, true);
+
+        $logger->notice(
+            'User '.$_SESSION['username'].' ('.$_SESSION['userid'].') has executed '
+            .'action Drop from frontpage '.$type.' with id '.$this->id
+        );
+
+        return true;
     }
 
     /**
@@ -1858,8 +1741,6 @@ class Content
      */
     public function set_position($position, $lastEditor)
     {
-        $GLOBALS['application']->dispatch('onBeforePosition', $this);
-
         if ($this->id == null
             && !is_array($position)
         ) {
@@ -1877,16 +1758,14 @@ class Content
         if (count($values) > 0) {
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
             if ($rs === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
         }
 
         /* Notice log of this action */
-        Application::logContentEvent(__METHOD__, $this);
+        logContentEvent(__METHOD__, $this);
 
-        $GLOBALS['application']->dispatch('onAfterPosition', $this);
+        dispatchEventWithParams('content.set_positions', array('content' => $this));
 
         return true;
     }
@@ -1909,10 +1788,10 @@ class Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -1936,8 +1815,7 @@ class Content
     */
     public static function searchContentID($oldID)
     {
-        $sql       = "SELECT pk_content FROM `contents` "
-                   . "WHERE pk_content = ? LIMIT 1";
+        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1";
         $value     = array($oldID);
         $contentID = $GLOBALS['application']->conn->GetOne($sql, $value);
 
@@ -1964,7 +1842,7 @@ class Content
             $content = new Content($refactorID);
             $content = $content->get($refactorID);
 
-            Application::forward301('/'.$content->uri);
+            forward301('/'.$content->uri);
         }
 
         return $oldID;
@@ -1981,6 +1859,7 @@ class Content
      */
     public static function resolveID($dirtyID)
     {
+        $contentID = 0;
         if (!empty($dirtyID)) {
             if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
                 || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
@@ -1991,18 +1870,9 @@ class Content
 
             preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $dirtyID, $matches);
             $contentID = self::searchContentID((int) $matches["digit"]);
-
-            if (empty($contentID)) {
-                // header("HTTP/1.0 404 Not Found");
-            }
-
-            return $contentID;
-        } else {
-            return 0;
-            // header("HTTP/1.0 404 Not Found");
-            // Can't do because sometimes id is empty,
-            // example rss in article.php
         }
+
+        return $contentID;
     }
 
 
@@ -2034,9 +1904,7 @@ class Content
         $contents = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$contents) {
-            Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         $contentsUrns = array();
@@ -2063,7 +1931,6 @@ class Content
             $sql  = "SELECT pk_content FROM `contents` WHERE urn_source LIKE {$name}";
 
             $content = $GLOBALS['application']->conn->GetOne($sql);
-
         } else {
             $message = sprintf('The param name is not valid "%s".', $originalName);
             throw new \InvalidArgumentException($message);
@@ -2080,8 +1947,8 @@ class Content
     public function isReadyForPublish()
     {
         return ($this->isInTime()
-                && $this->available==1
-                && $this->in_litter==0);
+                && $this->available == 1
+                && $this->in_litter == 0);
     }
 
 
@@ -2281,22 +2148,18 @@ class Content
      **/
     public function setProperty($property, $value)
     {
-        if ($this->id == null) {
+        if ($this->id == null || empty($property)) {
             return false;
         }
 
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
-                        ." VALUES ('{$this->id}', '{$property}', '{$value}')"
-                        ." ON DUPLICATE KEY UPDATE `meta_value`='{$value}'";
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($this->id, $property, $value, $value);
 
-        if (!empty($property)) {
-            $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-            if ($rs === false) {
-                Application::logDatabaseError();
-
-                return false;
-            }
+        if ($rs === false) {
+            return false;
         }
 
         return true;
@@ -2315,13 +2178,11 @@ class Content
             return false;
         }
 
-        $sql = "DELETE FROM contentmeta WHERE `fk_content` = '{$this->id}' "
-            ."AND `meta_name` = '{$property}'";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = "DELETE FROM contentmeta WHERE `fk_content`=? AND `meta_name`=?";
+        $values = array($this->id, $property);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -2345,20 +2206,20 @@ class Content
         }
 
         $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
-        $values = array($this->id);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
         $items = array();
 
-        if ($rs !== false) {
-            while (!$rs->EOF) {
-                $name = $rs->fields['meta_name'];
-                $this->{$name} = $rs->fields['meta_value'];
+        if ($rs == false) {
+            return false;
+        }
+        while (!$rs->EOF) {
+            $name = $rs->fields['meta_name'];
+            $this->{$name} = $rs->fields['meta_value'];
 
-                $rs->MoveNext();
-            }
+            $rs->MoveNext();
         }
 
-        return true;
+        return $this;
     }
 
 
@@ -2372,19 +2233,15 @@ class Content
 
     public function updateAllContentProperties($values)
     {
-        if ($this->id == null) {
+        if ($this->id == null || count($values) < 0) {
             return false;
         }
 
-        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content)
-                            VALUES (?, ?, ?)";
-        if (count($values) > 0) {
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
-                Application::logDatabaseError();
+        $sql = "INSERT INTO contentmeta (name_meta, meta_value, fk_content) VALUES (?, ?, ?)";
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-                return false;
-            }
+        if ($rs === false) {
+            return false;
         }
 
         return true;

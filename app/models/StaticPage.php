@@ -92,8 +92,6 @@ class StaticPage extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -135,8 +133,6 @@ class StaticPage extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return null;
         }
         $this->load($rs->fields);
@@ -197,8 +193,6 @@ class StaticPage extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -221,8 +215,6 @@ class StaticPage extends Content
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -291,7 +283,6 @@ class StaticPage extends Content
      **/
     public function getSlugs($filter = null)
     {
-
         $titles = array();
         $cm = new ContentManager();
         $pages = $cm->find(

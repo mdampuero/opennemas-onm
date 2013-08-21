@@ -37,7 +37,7 @@ class FrontpagesController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
 
         // Redirect Mobile browsers to mobile site unless a cookie exists.
-        // $app->mobileRouter();
+        // mobileRouter();
     }
 
     /**
@@ -63,24 +63,25 @@ class FrontpagesController extends Controller
             )
         );
 
-        $this->getAds($categoryName);
+        // Fetch ads
+        $ccm = \ContentCategoryManager::get_instance();
+        $actualCategoryId    = $ccm->get_id($categoryName);
+        $ads = $this->getAds($actualCategoryId);
+        $this->view->assign('advertisements', $ads);
+
 
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
             // Init the Content and Database object
-            $ccm = \ContentCategoryManager::get_instance();
 
             // If no home category name
-            if ($categoryName != 'home') {
-                // Redirect to home page if the desired category doesn't exist
-                if (empty($categoryName) || !$ccm->exists($categoryName)) {
-                    throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
-                }
+            if (($categoryName != 'home')
+                && (empty($categoryName) || !$ccm->exists($categoryName))
+            ) {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
 
-
-            $actualCategoryId = $ccm->get_id($actualCategory);
             $categoryData = null;
             if ($actualCategoryId != 0 && array_key_exists($actualCategoryId, $ccm->categories)) {
                 $categoryData = $ccm->categories[$actualCategoryId];
@@ -119,7 +120,6 @@ class FrontpagesController extends Controller
 
             // Overloading information for contents
             foreach ($contentsInHomepage as &$content) {
-
                 // Load category related information
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
@@ -176,18 +176,8 @@ class FrontpagesController extends Controller
         // Get category id correspondence
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
         // Fetch advertisement information from external
-        $advertisement = \Advertisement::getInstance();
         $ads  = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
-        $intersticial = $ads[0];
-        $banners      = $ads[1];
-
-        // Render advertisements
-        if (!empty($banners)) {
-            $advertisement->renderMultiple($banners, $advertisement, $wsUrl);
-        }
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement, $wsUrl);
-        }
+        $this->view->assign('advertisements', $ads);
 
         // Avoid to run the entire app logic if is available a cache for this page
         if ($this->view->caching == 0
@@ -248,34 +238,22 @@ class FrontpagesController extends Controller
      *
      * @return void
      **/
-    public static function getAds($categoryName = 'home')
+    public static function getAds($category = 'home')
     {
-        $ccm = \ContentCategoryManager::get_instance();
-        $category = $ccm->get_id($categoryName);
 
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-        $advertisement = \Advertisement::getInstance();
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // Load 1-16 banners and use cache to performance
-        //$banners = $advertisement->getAdvertisements(range(1, 16), $category); // 4,9 unused
-        $banners = $advertisement->getAdvertisements(
-            array(1,2, 3,4, 5,6, 11,12,13,14,15,16, 21,22,24,25, 31,32,33,34,35,36,103,105, 9, 91, 92),
-            $category
+        // I have added the element 50 in order to integrate interstitial position
+        $positions = array(
+            50, 1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15,
+            16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
+            36, 103, 105, 9, 91, 92
         );
 
-        $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        // Get intersticial banner
-        $intersticial = $advertisement->getIntersticial(50, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 
-     /**
+    /**
      * Retrieves the styleSheet rules for the frontpage
      *
      * @param Request $request the request object
@@ -377,7 +355,6 @@ class FrontpagesController extends Controller
                           " { color:#FFF !important;}\n
                           \t\t";
 
-
                 if ($current == $theCategory->name) {
                     $actual = $theCategory->color;
                 }
@@ -399,7 +376,7 @@ class FrontpagesController extends Controller
             $output.= "\tdiv.more-news h4 { color:" . $actual . " !important;}\n";
 
             $output.= "\th1#title a.big-text-logo  { color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header, ".
+            $output.= "\tdiv.widget .widget-header.colorize, ".
                 ".frontpage article .article-info span { color:" . $actual . " !important;}\n";
 
             $output.= "\tdiv.widget .category-header, "
@@ -423,6 +400,9 @@ class FrontpagesController extends Controller
                 .article-inner div.content-category a:hover, .article-inner blockquote {
                     color:". $actual. ";}\n";
 
+             $output.="\t.bgcolorize {
+                background-color:". $actual. "!important;}\n";
+
         } elseif ($current == "mobile") {
             $output.= "\t#footerwrap { background-color: ".$siteColor." !important;}";
             $output.= "\t#navtabs li a { background-color: ".$siteColor." !important;}";
@@ -441,7 +421,7 @@ class FrontpagesController extends Controller
                 .main-menu-border ul.nav li:hover a  { color:" . $siteColor . " !important;}\n";
 
             $output.= "\th1#title a.big-text-logo  { color:" . $siteColor . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header, ".
+            $output.= "\tdiv.widget .widget-header.colorize, ".
                 ".frontpage article .article-info span { color:" . $siteColor . " !important;}\n";
 
             $output.= "\tdiv.widget-last-articles .header-title { background-color:" . $siteColor . " !important;}\n";
@@ -466,6 +446,9 @@ class FrontpagesController extends Controller
                 "div.category a{ color:" . $siteColor . " !important;}\n";
 
             $output.= "\t.category-color:" . $siteColor . " !important;}\n";
+
+            $output.="\t.bgcolorize {
+                background-color:". $siteColor. "!important;}\n";
         }
 
         return new Response(

@@ -83,10 +83,10 @@ class SimplePager
 
         $url = $params['url'];
 
-        $next     = "<a href='".$url."&page=".($page+1)."' title='Next'>"
-                  . _('Next »') ."</a>";
-        $previous = "<a href='".$url."&page=".($page-1)."' title='Previous'>"
-                  . _('« Previous') ."</a>";
+        $pageComponent = (strpos($url, '?')) ? '&page=' : '?page=';
+
+        $next = sprintf("<a href='%s%s%d' title='Next'>%s</a>", $url, $pageComponent, $page+1, _('Next »'));
+        $previous = sprintf("<a href='%s%s%d' title='Next'>%s</a>", $url, $pageComponent, $page-1, _('« Previous'));
 
         if (empty($page) || $page == 1) {
             if ($total <= $items) {

@@ -268,7 +268,7 @@ class ContentsController extends Controller
         // If is POST request perform the vote action
         // if not render the vote
         if ('POST' == $request->getMethod()) {
-            $ip        = \Application::getRealIp();
+            $ip        = getRealIp();
             $contentId = $request->request->getDigits('content_id', null);
             $voteValue = $request->request->getDigits('vote_value', null);
 

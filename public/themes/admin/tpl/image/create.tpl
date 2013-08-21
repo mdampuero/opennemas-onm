@@ -1,8 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="prototype"}
-{/block}
-
 {block name="header-js" append}
 <script>
 var image_uploader ={
@@ -54,8 +51,8 @@ var image_uploader ={
                 </div>
             </div>
             <div class="pull-left">
-                <div class="progressbar fileupload-progressbar fade">
-                    <div style="width:0%;"></div>
+                <div class="progress progress-striped active fileupload-progressbar fade">
+                    <div class="bar" style="width:0%;"></div>
                 </div>
             </div>
             <div class="fileupload-buttonbar pull-right">
@@ -84,21 +81,6 @@ var image_uploader ={
                 <li>{t escape=off}Only image files (<strong>JPG, GIF, PNG</strong>) are allowed.{/t}</li>
             </ul>
         </div>
-        <!-- gallery-loader is the loading container animation -->
-        <div id="gallery-loader"></div>
-        <!-- gallery-modal is the modal dialog used for the image gallery -->
-<!--         <div id="gallery-modal" class="modal hide fade">
-            <div class="modal-header">
-                <a href="#" class="close">&times;</a>
-                <h3 class="title"></h3>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <a class="btn btn-primary next">Next</a>
-                <a class="btn info prev">Previous</a>
-                <a class="btn success download" target="_blank">Download</a>
-            </div>
-        </div> -->
         <input type="hidden" name="category" value="{$category}" />
     </form>
     <div id="upload-helper" data-filecount=0></div>
@@ -119,6 +101,7 @@ var image_uploader ={
         emptyResult: '{t}Empty file upload result{/t}'
     };
     </script>
+
     <script id="template-upload" type="text/html">
     {% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
         <tr class="template-upload fade">
@@ -128,7 +111,7 @@ var image_uploader ={
             {% if (file.error) { %}
                 <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
             {% } else if (o.files.valid && !i) { %}
-                <td class="progress"><div class="progressbar"><div style="width:0%;"></div></div></td>
+                <td class="progress progress-striped active"><div class="bar" style="width:0%;"></div></td>
                 <td colspan=2>
                     <span class="start">{% if (!o.options.autoUpload) { %}<button class="btn btn-success">{/literal}{t}Iniciar{/t}{literal}</button>{% } %}</span>
                     <span class="cancel">{% if (!i) { %}<button class="btn btn-danger">{/literal}{t}Cancel{/t}{literal}</button>{% } %}</span>
@@ -168,17 +151,6 @@ var image_uploader ={
     </script>
     {/literal}
 
-    <script>
-    var fileUploadErrors = {
-        maxFileSize: '{t}File is too big{/t}',
-        minFileSize: '{t}File is too small{/t}',
-        acceptFileTypes: '{t}Filetype not allowed{/t}',
-        maxNumberOfFiles: '{t}Max number of files exceeded{/t}',
-        uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
-        emptyResult: '{t}Empty file upload result{/t}'
-    };
-    </script>
-
     <!-- The Templates and Load Image plugins are included for the FileUpload user interface -->
     <script src="{$params.JS_DIR}/jquery/tmpl.min.js"></script>
     <!-- The Templates and Load Image plugins are included for the FileUpload user interface -->
@@ -186,14 +158,11 @@ var image_uploader ={
     <script src="{$params.JS_DIR}/jquery/bootstrap-image-gallery.min.js"></script>
     <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
     <script src="{$params.JS_DIR}/jquery/jquery.iframe-transport.js" defer=defer></script>
-    <script src="{$params.JS_DIR}/jquery/jquery.fileupload.js" defer=defer></script>
-    <script src="{$params.JS_DIR}/jquery/jquery.fileupload-ui.js" defer=defer></script>
-    <script src="{$params.JS_DIR}/image/application.js"></script>
+    {script_tag src="/jquery/jquery.fileupload.js" common=1 defer=defer}
+    {script_tag src="/jquery/jquery.fileupload-ui.js" common=1 defer=defer}
+    {script_tag src="/image/application.js"}
     <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE8+ -->
     <!--[if gte IE 8]><script src="cors/jquery.xdr-transport.js"></script><![endif]-->
-    <!--<script id="template-upload" type="text/html" src="{$params.JS_DIR}/image/template_upload.js"></script>-->
-    <!--<script id="template-download" type="text/html" src="{$params.JS_DIR}/image/template_download.js"></script>-->
     {include file="image/modals/_edit_uploaded_files.tpl"}
-
 {/block}
 

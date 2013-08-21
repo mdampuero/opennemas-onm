@@ -142,9 +142,7 @@ class Special extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return(false);
+            return false;
         }
         $this->saveItems($data);
 
@@ -168,8 +166,6 @@ class Special extends Content
         $rs  = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -208,8 +204,6 @@ class Special extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -233,17 +227,13 @@ class Special extends Content
         $values = array(intval($id));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return;
+            return false;
         }
 
         $sql    = 'DELETE FROM special_contents WHERE fk_special=?';
         $values = array(intval($id));
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -302,16 +292,14 @@ class Special extends Content
      */
     public function getContents($id)
     {
+        $items = array();
+
         if ($id == null) {
-            return(false);
+            return $items;
         }
 
-        $sql = 'SELECT * FROM `special_contents`'
-             . ' WHERE fk_special=? ORDER BY position ASC';
+        $sql = 'SELECT * FROM `special_contents` WHERE fk_special=? ORDER BY position ASC';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
-
-        $i     = 0;
-        $items = array();
 
         while (!$rs->EOF) {
             $items[] = array(
@@ -328,7 +316,7 @@ class Special extends Content
     }
 
     /**
-     * Sets a cotnent into a special column
+     * Sets a content into a special column
      *
      * @param int $id the special id
      * @param int $pkContent the content id to put into the special column
@@ -340,28 +328,24 @@ class Special extends Content
      **/
     public function setContents($id, $pkContent, $position, $name, $typeContent)
     {
-        if ($id == null) {
+        if (empty($id)) {
             return false;
         }
 
-        $visible = 1;
         $sql = "INSERT INTO special_contents "
-            . "(`fk_special`, `fk_content`,`position`,"
-            . "`name`,`visible`,`type_content`)"
+            . "(`fk_special`, `fk_content`,`position`,`name`,`visible`,`type_content`)"
             . " VALUES (?,?,?,?,?,?)";
         $values  = array(
             $id,
             $pkContent,
             $position,
             $name,
-            $visible,
+            1,
             $typeContent
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -381,14 +365,11 @@ class Special extends Content
         if (is_null($id)) {
             return false;
         }
-        $sql    = 'DELETE FROM special_contents '
-                . 'WHERE fk_content=? AND fk_special=?';
+        $sql    = 'DELETE FROM special_contents WHERE fk_content=? AND fk_special=?';
         $values = array(intval($contentId), intval($id));
         $rs     = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -407,13 +388,10 @@ class Special extends Content
         if (is_null($id)) {
             return false;
         }
-        $sql = 'DELETE FROM special_contents '
-               . 'WHERE fk_special=?';
+        $sql = 'DELETE FROM special_contents WHERE fk_special=?';
         $rs  = $GLOBALS['application']->conn->Execute($sql, array(intval($id)));
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

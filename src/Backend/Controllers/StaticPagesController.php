@@ -40,8 +40,6 @@ class StaticPagesController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('STATIC_PAGES_MANAGER');
 
         $this->checkAclOrForward('STATIC_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

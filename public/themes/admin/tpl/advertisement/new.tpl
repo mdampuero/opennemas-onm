@@ -36,7 +36,7 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
             <div class="title">
-                <h2>{if $advertisement}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
+                <h2>{t}Advertisement{/t} :: {if empty($advertisement->id)}{t}Creating banner{/t}{else}{t}Editing banner{/t}{/if}</h2>
             </div>
             <ul class="old-button">
                 <li>
@@ -138,28 +138,9 @@
             <div class="controls">
                 <select name="type_medida" id="type_medida">
                     <option value="NULL" {if !isset($advertisement) || is_null($advertisement->type_medida)}selected="selected"{/if}>{t}Without limits{/t}</option>
-                    <option value="CLIC" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'CLIC'}selected="selected"{/if}>{t}Click count{/t}</option>
-                    <option value="VIEW" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'VIEW'}selected="selected"{/if}>{t}Views count{/t}</option>
                     <option value="DATE" {if isset($advertisement) && isset($advertisement->type_medida) && $advertisement->type_medida == 'DATE'}selected="selected"{/if}>{t}Date range{/t}</option>
                 </select>
                 <div class="help-block">{t}Show this ad if satisfy one condition{/t}.</div>
-            </div>
-        </div>
-        <div class="control-group" id="porclic" style="{if $advertisement->type_medida!='CLIC'}display:none{/if};">
-            <label for="num_clic" class="control-label">{t}# of clics{/t}</label>
-            <div class="controls">
-                <input type="number" id="num_clic" name="num_clic" value="{$advertisement->num_clic|default:""}" />
-                <input type="hidden" id="num_clic_count" name="num_clic_count" title="Numero de clic" value="{$advertisement->num_clic_count|default:""}" />
-                {if isset($advertisement) && $advertisement->type_medida == 'CLIC'}<div class="help-inline">{t}Actual click count:{/t} {$advertisement->num_clic_count}</div>{/if}
-                <div class="help-block">{t}Show this ad only if users had clicked in it less than a number of times.{/t}.</div>
-            </div>
-        </div>
-        <div class="control-group" id="porview" style="{if $advertisement->type_medida!='VIEW'}display:none{/if};">
-            <label for="num_view" class="control-label">{t}Max views{/t}</label>
-            <div class="controls">
-                <input type="number" id="num_view" name="num_view" value="{$advertisement->num_view}" />
-                {if isset($advertisement) && $advertisement->type_medida == 'VIEW' && $advertisement->views > 0}<div class="help-inline">{t}Actual views count:{/t} {$advertisement->views}</div>{/if}
-                <div class="help-block">{t}Show this ad only if this add had been printed less than a number of times.{/t}.</div>
             </div>
         </div>
         <div class="control-group" id="porfecha" style="{if $advertisement->type_medida neq 'DATE'}display:none{/if};">

@@ -18,6 +18,60 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'asset_image',
+    new Route(
+        '/asset/{parameters}/{real_path}',
+        array(
+            '_controller' => 'Frontend:Controllers:AssetController:image',
+        ),
+        array(
+            'parameters'  => '[^/]+',
+            'real_path'  => '.+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'blog_category',
+    new Route(
+        '/blog/section/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:category',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'blog_sync_category',
+    new Route(
+        '/extseccion/blog/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:extCategory',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'blog_tag',
+    new Route(
+        '/blog/tag/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:tag',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+
+$frontendRoutes->add(
     'frontend_paywall_showcase',
     new Route(
         '/paywall',
@@ -195,6 +249,42 @@ $frontendRoutes->add(
         '/user/user_box',
         array(
             '_controller' => 'Frontend:Controllers:UserController:userBox',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_author_frontpage',
+    new Route(
+        '/author/{slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:authorFrontpage',
+        ),
+        array(
+            'slug' => '[A-Za-z\d-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_frontpage_authors',
+    new Route(
+        '/authors',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:frontpageAuthors',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_external_author_frontpage',
+    new Route(
+        '/extauthor/{slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:extAuthorFrontpage',
+        ),
+        array(
+            'slug' => '[A-Za-z\d-]+',
         )
     )
 );
@@ -526,14 +616,12 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_album_frontpage_category',
     new Route(
-        '/album/{category_name}/{page}',
+        '/album/{category_name}',
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
-            'page'        => 1
         ),
         array(
-            'category_name' => '[a-z0-9\-]+',
-            'page'          => '([0-9]+)?'
+            'category_name' => '[a-z0-9\-]+'
         )
     )
 );
@@ -817,6 +905,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_video_ajax_paginated',
+    new Route(
+        '/video/more',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:ajaxPaginated',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_video_frontpage_category',
     new Route(
         '/video/{category_name}/{page}',
@@ -878,6 +976,16 @@ $frontendRoutes->add(
             'slug'          => '[a-z0-9\-]+',
             'article_id'    => '([0-9]+)',
             '_format'       => 'html|htm'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_article_external_link',
+    new Route(
+        '/redirect',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:externalLink'
         )
     )
 );

@@ -1,27 +1,43 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+    {css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}
+{/block}
+
 {block name="footer-js" append}
+    {script_tag src="/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
 <script type="text/javascript">
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
 
-    $('.check-pass').on('click', function(){
+    $('.check-pass').on('click', function(e, ui){
+        e.preventDefault();
         var passInput = $('#password');
-        if ($(this).is(':checked')) {
+        var btn = $(this);
+        if (passInput.attr('type') == 'password') {
             passInput.prop('type','text');
+            btn.html('{t}Hide password{/t}');
         } else {
             passInput.prop('type','password');
+            btn.html('{t}Show password{/t}');
         }
     });
+
+    $('select[name="colorpicker"]').simplecolorpicker(
+        'selectColor', $('#color').val()
+    ).on('change', function() {
+        $('#color').val($('select[name="colorpicker"]').val());
+    });
+
 });
 </script>
 {/block}
 
 {block name="content"}
 <form action="{if array_key_exists('id', $server)}{url name=admin_news_agency_server_update id=$server['id']}{else}{url name=admin_news_agency_server_create}{/if}"
-    method="POST" class="form-horizontal">
+    method="POST" class="form-horizontal" autocomplete="off">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}News agency{/t} :: {if array_key_exists('id', $server)}{t}Update source{/t}{else}{t}Add source{/t}{/if}</h2></div>
@@ -78,7 +94,7 @@ jQuery(document).ready(function($) {
             <label for="password" class="control-label">{t}Password{/t}</label>
             <div class="controls">
                 <input type="password" id="password" name="password" value="{$server['password']}" class="input-xlarge" required="required"/>
-                <input type="checkbox" class="check-pass" value="">&nbsp;{t}Show password{/t}
+                <button class="check-pass">{t}Show password{/t}</button>
             </div>
         </div>
 
@@ -87,6 +103,28 @@ jQuery(document).ready(function($) {
             <div class="controls">
                 <input type="text" id="agency_string" name="agency_string" value="{$server['agency_string']}" class="input-xlarge" required="required"/>
                 <div class="help-block">{t}When importing elements this will be the signature{/t}</div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label for="color" class="control-label">{t}Color{/t}</label>
+            <div class="controls">
+                <input type="hidden" id="color" name="color" value="{$server['color']|default:'#424E51'}" class="input-xlarge"/>
+                <select name="colorpicker">
+                    <option value="#424E51">{t}Dark Gray{/t}</option>
+                    <option value="#000000">{t}Black{/t}</option>
+                    <option value="#980101">{t}Bold red{/t}</option>
+                    <option value="#7bd148">{t}Green{/t}</option>
+                    <option value="#0000FF">{t}Blue{/t}</option>
+                    <option value="#46d6db">{t}Turquoise{/t}</option>
+                    <option value="#7ae7bf">{t}Light green{/t}</option>
+                    <option value="#51b749">{t}Bold green{/t}</option>
+                    <option value="#fbd75b">{t}Yellow{/t}</option>
+                    <option value="#FF8C00">{t}Orange{/t}</option>
+                    <option value="#dc2127">{t}Red{/t}</option>
+                    <option value="#dbadff">{t}Purple{/t}</option>
+                </select>
+                <div class="help-block">{t}Color to distinguish between other agencies{/t}</div>
             </div>
         </div>
 

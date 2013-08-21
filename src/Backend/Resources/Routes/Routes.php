@@ -426,14 +426,6 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
-    'admin_poll_delete',
-    new Route(
-        '/poll/{id}/delete',
-        array('_controller' => 'Backend:Controllers:PollsController:delete')
-    )
-);
-
-$adminRoutes->add(
     'admin_polls_config',
     new Route(
         '/polls/config',
@@ -478,6 +470,15 @@ $adminRoutes->add(
     new Route(
         '/poll/{id}/toggle-inhome',
         array('_controller' => 'Backend:Controllers:PollsController:toggleInHome')
+    )
+);
+
+
+$adminRoutes->add(
+    'admin_polls_content_provider',
+    new Route(
+        '/polls/content-provider',
+        array('_controller' => 'Backend:Controllers:PollsController:contentProvider')
     )
 );
 
@@ -2075,7 +2076,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/authors',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:list',
+            '_controller' => 'Backend:Controllers:OpinionsController:listAuthor',
         )
     )
 );
@@ -2085,7 +2086,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/author/{id}/show',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:show',
+            '_controller' => 'Backend:Controllers:OpinionsController:showAuthor',
         )
     )
 );
@@ -2095,17 +2096,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/authors/create',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:create',
-        )
-    )
-);
-
-$adminRoutes->add(
-    'admin_opinion_author_delete',
-    new Route(
-        '/opinion/author/{id}/delete',
-        array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:delete',
+            '_controller' => 'Backend:Controllers:OpinionsController:createAuthor',
         )
     )
 );
@@ -2115,7 +2106,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/author/{id}/update',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:update',
+            '_controller' => 'Backend:Controllers:OpinionsController:updateAuthor',
         )
     )
 );
@@ -2125,7 +2116,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/author/{id}/delete',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:delete',
+            '_controller' => 'Backend:Controllers:OpinionsController:deleteAuthor',
         )
     )
 );
@@ -2135,7 +2126,7 @@ $adminRoutes->add(
     new Route(
         '/opinion/authors/batch-delete',
         array(
-            '_controller' => 'Backend:Controllers:OpinionAuthorsController:batchDelete',
+            '_controller' => 'Backend:Controllers:OpinionsController:batchDeleteAuthor',
         )
     )
 );
@@ -2311,6 +2302,22 @@ $adminRoutes->add(
     new Route(
         '/paywall/settings/save',
         array('_controller' => 'Backend:Controllers:PaywallController:settingsSave')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_users_list_export',
+    new Route(
+        '/paywall/users/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:userListExport')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_purchases_list_export',
+    new Route(
+        '/paywall/purchases/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:purchasesListExport')
     )
 );
 
@@ -2707,7 +2714,7 @@ $adminRoutes->add(
 $adminRoutes->add(
     'admin_login_processform',
     new Route(
-        '/ogin/process',
+        '/login/process',
         array('_controller' => 'Backend:Controllers:AuthenticationController:processform'),
         array('_method' => 'POST')
     )

@@ -3,9 +3,10 @@
     {if count($purchases) > 0}
     <thead>
         <tr>
-            <th class="left">{t}User{/t}</th>
+            <th class="left">{t}User name{/t}</th>
+            <th class="left">{t}Full name{/t}</th>
             <th class="left">{t}Order id{/t}</th>
-            <th class="left">{t}Created{/t}</th>
+            <th class="left">{t}Payment date{/t}</th>
             <th class="right">{t}Amount{/t}</th>
         </tr>
     </thead>
@@ -23,7 +24,10 @@
     {foreach from=$purchases item=purchase}
     <tr data-id="{$order->id}">
         <td class="left">
-            <a href="{url name=admin_acl_user_show id=$purchase->user_id}#paywall">{$purchase->user->name}</a>
+            <a href="{url name=admin_acl_user_show id=$purchase->user_id}#paywall">{$purchase->user->username}</a>
+        </td>
+        <td class="left">
+            {$purchase->user->name}
         </td>
         <td class="left">
             {$purchase->payment_id|clearslash}
@@ -34,7 +38,6 @@
         <td class="right">
             {$purchase->payment_amount|clearslash} {$money_units[$settings['money_unit']]}
         </td>
-
     </tr>
     {foreachelse}
     <tr>

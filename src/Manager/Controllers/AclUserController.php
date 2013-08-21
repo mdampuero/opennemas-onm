@@ -51,7 +51,7 @@ class AclUserController extends Controller
         }
 
         $user      = new \User();
-        $users     = $user->getUsers($filter, ' ORDER BY login ');
+        $users     = $user->getUsers($filter, ' ORDER BY username ');
 
         $userGroup = new \UserGroup();
         $groups     = $userGroup->find();
@@ -137,27 +137,61 @@ class AclUserController extends Controller
 
         $data = array(
             'id'              => $userId,
-            'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
             'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
             'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
+            'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+            'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
             'id_user_group'   => $request->request->getDigits('id_user_group'),
+            'ids_category'    => $request->request->get('ids_category'),
+            'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
 
-        // TODO: validar datos
+        $file = $request->files->get('avatar');
         $user = new \User($userId);
-        $user->update($data);
 
-        $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
-        $user->setMeta(array('user_language' => $userLanguage));
+        try {
+            // Upload user avatar if exists
+            if (!is_null($file)) {
+                $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                $data['avatar_img_id'] = $photoId;
+            } elseif (($data['avatar_img_id']) == 1) {
+                $data['avatar_img_id'] = $user->avatar_img_id;
+            }
 
-        if ($user->id == $_SESSION['userid']) {
-            $_SESSION['user_language'] = $userLanguage;
+            // Process data
+            if ($user->update($data)) {
+                // Set all usermeta information (twitter, rss, language)
+                $meta = $request->request->get('meta');
+                foreach ($meta as $key => $value) {
+                    $user->setMeta(array($key => $value));
+                }
+
+                // Set usermeta paywall time limit
+                $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                if (!empty($paywallTimeLimit)) {
+                    $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                    $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                    $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                }
+
+                if ($user->id == $_SESSION['userid']) {
+                    $_SESSION['user_language'] = $meta['user_language'];
+                }
+
+                m::add(_('User data updated successfully.'), m::SUCCESS);
+            } else {
+                m::add(_('Unable to update the user with that information'), m::ERROR);
+            }
+        } catch (FileException $e) {
+            m::add($e->getMessage(), m::ERROR);
         }
 
-        m::add(_('User data updated successfully.'), m::SUCCESS);
         if ($action == 'validate') {
             $redirectUrl = $this->generateUrl('manager_acl_user_show', array('id' => $userId));
         } else {
@@ -192,28 +226,56 @@ class AclUserController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $data = array(
-                'login'           => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
+                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
                 'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
                 'password'        => $request->request->filter('password', null, FILTER_SANITIZE_STRING),
                 'passwordconfirm' => $request->request->filter('passwordconfirm', null, FILTER_SANITIZE_STRING),
                 'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'sessionexpire'   => $request->request->getDigits('sessionexpire'),
+                'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
+                'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => $request->request->getDigits('id_user_group'),
-                'authorize'       => 1,
-                'type'            => 0,
+                'ids_category'    => $request->request->get('ids_category'),
+                'activated'       => 1,
+                'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
                 'deposit'         => 0,
                 'token'           => null,
             );
 
+            $file = $request->files->get('avatar');
+
             try {
+                // Upload user avatar if exists
+                if (!is_null($file)) {
+                    $photoId = $user->uploadUserAvatar($file, \Onm\StringUtils::get_title($data['name']));
+                    $data['avatar_img_id'] = $photoId;
+                } else {
+                    $data['avatar_img_id'] = 0;
+                }
+
                 if ($user->create($data)) {
-                    $userLanguage = $request->request->filter('user_language', 'default', FILTER_SANITIZE_STRING);
-                    $user->setMeta(array('user_language' => $userLanguage));
+                    // Set all usermeta information (twitter, rss, language)
+                    $meta = $request->request->get('meta');
+                    foreach ($meta as $key => $value) {
+                        $user->setMeta(array($key => $value));
+                    }
+
+                    // Set usermeta paywall time limit
+                    $paywallTimeLimit = $request->request->filter('paywall_time_limit', '', FILTER_SANITIZE_STRING);
+                    if (!empty($paywallTimeLimit)) {
+                        $time = \DateTime::createFromFormat('Y-m-d H:i:s', $paywallTimeLimit);
+                        $time->setTimeZone(new \DateTimeZone('UTC'));
+
+                        $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
+                    }
 
                     m::add(_('User created successfully.'), m::SUCCESS);
 
                     return $this->redirect(
-                        $this->generateUrl('manager_acl_user')
+                        $this->generateUrl(
+                            'admin_acl_user_show',
+                            array('id' => $user->id)
+                        )
                     );
                 } else {
                     m::add(_('Unable to create the user with that information'), m::ERROR);
@@ -350,10 +412,10 @@ class AclUserController extends Controller
         if (!is_null($userId)) {
             $user = new \User($userId);
 
-            if ($user->authorize == 1) {
-                $user->unauthorizeUser($userId);
+            if ($user->activated == 1) {
+                $user->deactivateUser($userId);
             } else {
-                $user->authorizeUser($userId);
+                $user->activateUser($userId);
             }
 
             if (!$request->isXmlHttpRequest()) {

@@ -11,6 +11,12 @@
     margin:2px 0;
     min-height:20px;
 }
+.elementsContainer .type {
+    display:none;
+}
+.type {
+    font-weight: bold;
+}
 .nested-sortable li:hover, .elementsContainer li:hover { background:#FFF; }
 
 

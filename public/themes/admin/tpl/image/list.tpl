@@ -6,7 +6,7 @@
         batchDelete: '{url name=admin_images_batchdelete}'
     }
     jQuery(document).ready(function($) {
-        $("img[rel]").overlay();
+        // $("img[rel]").overlay();
     });
 </script>
 {/block}
@@ -75,4 +75,19 @@
 {include file="image/modals/_modalDelete.tpl"}
 {include file="image/modals/_modalBatchDelete.tpl"}
 {include file="image/modals/_modalAccept.tpl"}
+
+<script>
+jQuery(".simple_overlay").modal({
+    backdrop: true, //Show a grey back drop
+    keyboard: true, //Can close on escape
+    show: false,
+});
+jQuery('.table').on('click', '.image-preview', function(e){
+    var image = $(this);
+    var rel_target = image.attr('rel');
+
+    $(rel_target).modal('show');
+    e.preventDefault();
+});
+</script>
 {/block}
