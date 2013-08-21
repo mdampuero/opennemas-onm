@@ -67,13 +67,23 @@
         <div class="wrapper-content">
             <div class="title"><h2>{if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
             <ul class="old-button">
-                {acl isAllowed="ARTICLE_UPDATE"}
-                <li>
-                    <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{if isset($article->id)}{t}Update{/t}{else}{t}Save{/t}{/if}
-                    </button>
-                </li>
-                {/acl}
+                {if isset($article->id)}
+                    {acl isAllowed="ARTICLE_UPDATE"}
+                    <li>
+                        <button type="submit" name="continue" value="1">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Update{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                {else}
+                    {acl isAllowed="ARTICLE_CREATE"}
+                    <li>
+                        <button type="submit" name="continue" value="1">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                {/if}
 
                 <li>
                     <a href="#" accesskey="P" id="button_preview">
