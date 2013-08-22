@@ -80,14 +80,25 @@
               <h3 class="modal-title">{t}Upload new media{/t}</h3>
             </div>
             <div class="modal-body">
-                <div class="upload-content">
-                    <h3 class="upload-instructions drop-instructions">{t}Drop files anywhere to upload{/t}</h3>
-                    <a href="#" class="btn btn-large load-files-button">{t}Select Files{/t}</a>
-                    <div class="loading"></div>
-                    <div class="alert-error">{t}Unable to upload your files.{/t}</div>
-                    <div class="alert-success">{t}Files uploaded successfully.{/t}</div>
-                    <input type="file" name="files" multiple id="files" class="hidden">
-                </div>
+                <div id="dropzone">
+                    <form id="fileupload" action="{url name=admin_image_create}" method="POST" enctype="multipart/form-data">
+                        <div class="toolbar clearfix">
+                            <div class="fileupload-buttonbar pull-left">
+                                <div class="btn-group">
+                                    <div class="btn fileinput-button input-hidden">
+                                        {t}Select Files{/t}
+                                        <input type="file" name="files[]" multiple>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table condensed">
+                            <tbody class="files">
+                                <div class="explanation">{t}Drop files anywhere here to upload or click on the "Select Files" button above.{/t}</div>
+                            </tbody>
+                        </table>
+                    </form>
+                </div><!-- end #dropzone -->
             </div>
         </div>
 
@@ -109,9 +120,16 @@
 {script_tag src="/jquery/jquery.fileupload-ui.js" common=1 defer=defer}
 
 {script_tag src="/libs/handlebars.js" common=1}
-{script_tag src="/libs/jquery.html5uploader.min.js" common=1}
 {script_tag src="/onm/media-uploader.js"}
 <script>
+    var fileUploadErrors = {
+        maxFileSize: '{t}File is too big{/t}',
+        minFileSize: '{t}File is too small{/t}',
+        acceptFileTypes: '{t}Filetype not allowed{/t}',
+        maxNumberOfFiles: '{t}Max number of files exceeded{/t}',
+        uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
+        emptyResult: '{t}Empty file upload result{/t}'
+    };
     $(function() {
         $('#media-uploader').mediaPicker({
             upload_url: "{url name=admin_image_create category=0}",
@@ -202,6 +220,53 @@
     {{/with}}
     {/literal}
 </script>
+
+{literal}
+<script id="template-upload" type="text/html">
+{% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+    <tr class="template-upload fade">
+        <td class="preview"><span class="fade"></span></td>
+        <td class="name">{%=file.name%}</td>
+        <td class="size">{%=o.formatFileSize(file.size)%}</td>
+        {% if (file.error) { %}
+            <td class="error" colspan="2"><span class="label important">Error</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+        {% } else if (o.files.valid && !i) { %}
+            <td class="progress progress-striped active"><div class="bar" style="width:0%;"></div></td>
+            <td colspan=2>
+                <span class="start">{% if (!o.options.autoUpload) { %}<button class="btn btn-success">{/literal}{t}Start{/t}{literal}</button>{% } %}</span>
+                <span class="cancel">{% if (!i) { %}<button class="btn btn-danger">{/literal}{t}Cancel{/t}{literal}</button>{% } %}</span>
+            </td>
+        {% } else { %}
+            <td colspan="3">
+                <span class="cancel">{% if (!i) { %}<button class="btn">{/literal}{t}Cancel{/t}{literal}</button>{% } %}</span>
+            </td>
+        {% } %}
+    </tr>
+{% } %}
+</script>
+<script id="template-download" type="text/html">
+{% for (var i=0, files=o.files, l=files.length, file=files[0]; i<l; file=files[++i]) { %}
+    <tr class="template-download fade">
+        {% if (file.error) { %}
+            <td class="name">{%=file.name%}</td>
+            <td class="size">{%=o.formatFileSize(file.size)%}</td>
+            <td class="error" colspan="2"><span class="label important">{/literal}{t}Error{/t}{literal}</span> {%=fileUploadErrors[file.error] || file.error%}</td>
+        {% } else { %}
+            <td class="preview">{% if (file.thumbnail_url) { %}
+                <a href="{%=file.url%}" title="{%=file.name%}" rel="gallery"><img src="{%=file.thumbnail_url%}"></a>
+            {% } %}</td>
+            <td class="name">
+                <a href="{%=file.url%}" title="{%=file.name%}" rel="{%=file.thumbnail_url&&'gallery'%}">{%=file.name%}</a>
+                <input type="hidden" name="id[]" value="{%=file.id%}" class="file-id">
+            </td>
+            <td class="size">{%=o.formatFileSize(file.size)%}</td>
+            <td>{/literal}{t}Uploaded{/t}{literal}</td>
+        {% } %}
+    </tr>
+{% } %}
+</script>
+{/literal}
+
 {/block}
 
 {block name="header-css" append}
@@ -370,6 +435,20 @@
     }
     #media-uploader .upload-content .loading {
 
+    }
+
+    #media-uploader #dropzone {
+        background:none;
+        font-weight:normal;
+    }
+    #media-uploader #dropzone .explanation {
+        width: 25%;
+        margin: 0 auto;
+        top: 50%;
+        position: absolute;
+        right: 50%;
+        margin-right: -10%;
+        font-weight: bold;
     }
 </style>
 {/block}

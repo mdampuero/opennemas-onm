@@ -159,26 +159,34 @@
         init : function() {
             var _this = this;
 
-            // Add click handler for upload button
-            $(this.$uploader).find('.load-files-button').on('click', function(e, ui) {
-                $(_this.$uploader).find('input#files').trigger('click');
-            });
+            // Enable iframe cross-domain access via redirect page:
+            var redirectPage = window.location.href.replace(
+                /\/[^\/]*$/,
+                '/cors/result.html?%s'
+            );
 
-            $(this.$uploader, '#files').html5Uploader({
-                name: "files",
-                postUrl: this.config.upload_url,
-                onServerError: function(data) {
-                    // Called when error occurs
-                    $(_this.$uploader).find('.success').hide();
-                    $(_this.$uploader).find('.error').show();
-                },
-                onServerProgress: function (data) {
-                    // Called periodically while the data is being posted.
-                },
-                onSuccess: function() {
-                    $(_this.$uploader).find('.error').hide();
-                    $(_this.$uploader).find('.success').show();
+            // Initialize the jQuery File Upload widget:
+            $('#fileupload').fileupload();
+            $('#fileupload').fileupload('option', {
+                maxFileSize: 5000000,
+                acceptFileTypes: /(\.|\/)(gif|jpe?g|png|swf)$/i,
+                autoUpload : true,
+            }).bind('fileuploadadd', function(e, data) {
+                console.log('fileadded');
+                $('.explanation').hide();
+            }).bind('fileuploadsend', function (e, data) {
+                if (data.dataType.substr(0, 6) === 'iframe') {
+                    var target = $('<a/>').prop('href', data.url)[0];
+                    if (window.location.host !== target.host) {
+                        data.formData.push({
+                            name: 'redirect',
+                            value: redirectPage
+                        });
+                    }
                 }
+            }).bind('fileuploaddone', function (e, data){
+                // Things to do after all files were uploaded.
+                _this.mediapicker.browser.load_browser();
             });
 
             return this;
