@@ -85,64 +85,6 @@ class NewsletterManager
     }
 
     /**
-     * Send mail to all users
-     *
-     * @param array  $mailboxes   the list of the email addresses to send the mail to
-     * @param string $htmlContent the html content for the mail
-     * @param array  $params      an array of configurations
-     *
-     * @return void
-     */
-    public function send($mailboxes, $htmlContent, $params)
-    {
-        set_time_limit(0);
-        ignore_user_abort(true);
-
-        $this->saveNewsletter($htmlContent);
-
-        foreach ($mailboxes as $mailbox) {
-            $this->sendToUser($mailbox, $htmlContent, $params);
-        }
-    }
-
-    /**
-     * Send mail to a given mailbox
-     *
-     * @param string $mailbox     the email addresses to send the mail to
-     * @param string $htmlcontent the html content for the mail
-     * @param array  $params      an array of configurations
-     *
-     * @return void
-     */
-    public function sendToUser($mailbox, $htmlcontent, $params)
-    {
-        $this->HTML = $htmlcontent;
-
-        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
-
-        //  Build the message
-        $message = \Swift_Message::newInstance();
-        $message
-            ->setSubject($subject)
-            ->setBody($this->HTML, 'text/html')
-            ->setTo(array($mailbox->email => $mailbox->name))
-            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-            ->setSender($params['newsletter_sender']);
-
-        try {
-            $this->mailer->send($message);
-
-        } catch (\Swift_SwiftException $e) {
-            $this->logger->notice(_("Unable to send newsletter: ").$e->getMessage());
-            $this->errors[] = _("Unable to send newsletter: ").$e->getMessage();
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Renders the newsletter from a list of contents
      *
      * @param array $contents the list of the contents
