@@ -75,7 +75,8 @@
                       <hl2>{$article->subtitle|htmlspecialchars_decode}</hl2>
                     </hedline>
                     <rights>
-                      <rights.owner>{$article->author->id}</rights.owner>
+                      <rights.owner>{json_encode value=$article->author}</rights.owner>
+                      <rights.owner.photo>http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$article->author->photo->path_img}</rights.owner.photo>
                     </rights>
                     <dateline>
                       <story.date norm="{$article->created_datetime->format('Ymd\THis')}">

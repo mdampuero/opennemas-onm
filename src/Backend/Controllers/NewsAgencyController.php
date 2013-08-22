@@ -278,6 +278,10 @@ class NewsAgencyController extends Controller
             return $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
+        // Get server config
+        $servers = s::get('news_agency_config');
+        $server = $servers[$sourceId];
+
         // If the new has photos import them
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
@@ -321,8 +325,72 @@ class NewsAgencyController extends Controller
                         } elseif (!isset($innerPhoto)) {
                             $innerPhoto = new \Photo($photoObject->id);
                         }
-                        // Get author id only for Onm news
-                        $authorId = $element->getRightsOwner();
+
+                        // Check if allow to import authors
+                        if (isset($server['author']) && $server['author'] == '1') {
+
+                            // Get author object,decode it and create new author
+                            $authorObj = json_decode($element->getRightsOwner());
+                            $authorArray = get_object_vars($authorObj);
+                            $user = new \User();
+
+                            // Create author
+                            if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
+                                // Create new user
+                                $user->create($authorArray);
+
+                                // Set user meta if exists
+                                if ($authorObj->meta) {
+                                    $userMeta = get_object_vars($authorObj->meta);
+                                    $user->setMeta($userMeta);
+                                }
+
+                                // Fetch and save author image if exists
+                                $authorImgUrl = $element->getRightsOwnerPhoto();
+                                $cm = new \ContentManager();
+                                $authorPhotoRaw = $cm->getUrlContent($authorImgUrl);
+                                if ($authorPhotoRaw) {
+                                    $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
+
+                                    if (file_exists($localImagePath)) {
+                                        unlink($localImagePath);
+                                    }
+                                    @file_put_contents($localImagePath, $authorPhotoRaw);
+
+                                    // Get all necessary data for the photo
+                                    $infor = new \MediaItem($localImagePath);
+                                    $data = array(
+                                        'title'       => $authorObj->photo->name,
+                                        'name'        => $authorObj->photo->name,
+                                        'user_name'   => $authorObj->photo->name,
+                                        'path_file'   => $authorObj->photo->path_file,
+                                        'nameCat'     => $authorObj->username,
+                                        'category'    => '',
+                                        'created'     => $infor->atime,
+                                        'changed'     => $infor->mtime,
+                                        'date'        => $infor->mtime,
+                                        'size'        => round($infor->size/1024, 2),
+                                        'width'       => $infor->width,
+                                        'height'      => $infor->height,
+                                        'type'        => $infor->type,
+                                        'type_img'    => substr($authorObj->photo->name, -3),
+                                        'media_type'  => 'image',
+                                        'author_name' => $authorObj->username,
+                                    );
+
+                                    $photoId = $photo->create($data);
+
+                                    // Get new author id and update avatar_img_id
+                                    $newAuthor = get_object_vars($user->findByEmail($authorObj->email));
+                                    $authorId = $newAuthor['id'];
+                                    $newAuthor['avatar_img_id'] = $photoId;
+                                    unset($newAuthor['password']);
+                                    $user->update($newAuthor);
+                                }
+                            } else {
+                                $authorId = $authorObj->id;
+                            }
+                        }
                     } elseif (!isset($innerPhoto)) {
                         $innerPhoto = new \Photo($photoObject->id);
                     }
@@ -373,9 +441,6 @@ class NewsAgencyController extends Controller
                 $i++;
             }
         }
-
-        $servers = s::get('news_agency_config');
-        $server = $servers[$sourceId];
 
         $values = array(
             'title'          => $element->title,
@@ -618,6 +683,7 @@ class NewsAgencyController extends Controller
             'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
             'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->getDigits('activated', 0),
+            'author'        => $request->request->getDigits('author', 0),
         );
 
         $servers[$id] = $server;

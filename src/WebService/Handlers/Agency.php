@@ -107,6 +107,9 @@ class Agency
             $article->img2->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->changed);
         }
 
+        // Get author photo
+        $article->author->photo = new Photo($article->author->avatar_img_id);
+
         $output = $tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
             array(
