@@ -111,14 +111,17 @@ class Agency
         $article->author = new \User($article->fk_author);
 
         // Get author photo
-        $article->author->photo = new \Photo($article->author->avatar_img_id);
+        $authorPhoto = new \Photo($article->author->avatar_img_id);
+        $article->author->photo = $authorPhoto;
+        $article->author = json_encode($article->author);
 
         $output = $tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
             array(
-                'article'    => $article,
-                'photo'      => $article->img1,
-                'photoInner' => $article->img2,
+                'article'     => $article,
+                'authorPhoto' => $authorPhoto,
+                'photo'       => $article->img1,
+                'photoInner'  => $article->img2,
             )
         );
 
