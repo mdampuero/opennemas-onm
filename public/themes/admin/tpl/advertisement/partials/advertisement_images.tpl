@@ -5,7 +5,7 @@
                 <div class="droppable-image-position droppable-position">
                     <div>
                         <a class="delete-button">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
+                            <img src="/themes/admin/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
                         </a>
                         <div class="clearfix">
                             <div class="thumbnail article-resource-image">
