@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -11,14 +11,16 @@
  * @author sandra
  */
 
-class importContents {
-    public $internalCategories = array();
-    public $logFile = "log.txt";
+class ImportContents
+{
 
-    public function __construct ($config_newDB = array(),$config_oldDB = array())
+    public $internalCategories = array();
+    public $logFile            = "log.txt";
+
+    public function __construct ($config_newDB = array(), $config_oldDB = array())
     {
 
-        $handle = fopen( $this->logFile , "wb");
+        $handle = fopen($this->logFile, "wb");
         fclose($handle);
 
 
@@ -26,56 +28,48 @@ class importContents {
             && isset($config_newDB['bd_database'])
             && isset($config_newDB['bd_user'])
             && isset($config_newDB['bd_pass'])
-            && isset($config_newDB['bd_type']))
-        {
+            && isset($config_newDB['bd_type'])) {
 
-        $this->new->conn = ADONewConnection($config_newDB['bd_type']);
-        $this->new->conn->PConnect(
-                                $config_newDB['bd_host'], $config_newDB['bd_user'],
-                                $config_newDB['bd_pass'], $config_newDB['bd_database']
-                              );
-         } else {
-
+            $this->new->conn = ADONewConnection($config_newDB['bd_type']);
+            $this->new->conn->PConnect(
+                $config_newDB['bd_host'],
+                $config_newDB['bd_user'],
+                $config_newDB['bd_pass'],
+                $config_newDB['bd_database']
+            );
+        } else {
             printf("ERROR: You must provide the connection configuration to the new database");
-            $this->log("ERROR: You must provide the connection configuration to the new database" );
+            $this->log("ERROR: You must provide the connection configuration to the new database");
             die();
         }
-
-        $sql="CREATE TABLE IF NOT EXISTS `refactor_ids` (
-          `pk_content_old` bigint(10) NOT NULL,
-          `pk_content` bigint(10) NOT NULL,
-          `type` varchar(20)  NULL,
-          PRIMARY KEY (`pk_content_old`,`pk_content`)
-        ) ENGINE=MyISAM DEFAULT CHARSET=latin1";
-
-        $rss = $this->new->conn->Execute($sql);
-        
-        if (!$rss) {
-            printf(    "ERROR: Can't modify database");
-            die();
-        }
-
 
         if (isset($config_oldDB['bd_host'])
             && isset($config_oldDB['bd_database'])
             && isset($config_oldDB['bd_user'])
             && isset($config_oldDB['bd_pass'])
-            && isset($config_oldDB['bd_type']))
-        {
-        $this->old->conn = ADONewConnection($config_oldDB['bd_type']);
-        $this->old->conn->PConnect(
-                                    $config_oldDB['bd_host'], $config_oldDB['bd_user'],
-                                    $config_oldDB['bd_pass'], $config_oldDB['bd_database']
-                                  );
+            && isset($config_oldDB['bd_type'])) {
+              $this->old->conn = ADONewConnection($config_oldDB['bd_type']);
+              $this->old->conn->PConnect(
+                  $config_oldDB['bd_host'],
+                  $config_oldDB['bd_user'],
+                  $config_oldDB['bd_pass'],
+                  $config_oldDB['bd_database']
+              );
 
         } else {
 
-            printf(    "ERROR: You must provide the connection configuration to the old database");
-            $this->log("ERROR: You must provide the connection configuration to the old database" );
+            printf("ERROR: You must provide the connection configuration to the old database");
+            $this->log("ERROR: You must provide the connection configuration to the old database");
             die();
         }
 
-      
+
+        $GLOBALS['application'] = new Application();
+        Application::initDatabase();
+
+        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $GLOBALS['application']->conn->Execute('SET NAMES UTF8');
+
     }
 
     /**
@@ -91,11 +85,13 @@ class importContents {
     public function matchInternalCategory($category)
     {
 
-        $this->internalCategories =  array(
+        /*   $this->internalCategories =  array(
                 3 => 7,     // ALBUM
                 4=> 14, //KIOSKO
             );
-        return $this->categoriesMatches[$category];
+        return $this->categoriesMatches[$category];*/
+
+        return 51;
 
     }
 
@@ -115,28 +111,28 @@ class importContents {
         $sql ="DELETE FROM content_categories where pk_conten_category >= 10";
         $rss = $this->new->conn->Execute($sql);
 
-        if(empty($categories)) {
+        if (empty($categories)) {
             $sql = "SELECT * FROM content_categories";
         } else {
             $sql = "SELECT * FROM content_categories WHERE pk_conten_category IN ".  explode(',', $categories);
         }
-        $rss = $this->old->conn->Execute($sql);
-        $values = array();
 
+        $rss    = $this->old->conn->Execute($sql);
+        $values = array();
         if (!$rss) {
             $errorMsg = $this->old->conn->ErrorMsg();
-            printf( 'read categories: '.$errorMsg);
-            $this->log( 'read categories:'. $errorMsg );
+            printf('read categories: '.$errorMsg);
+            $this->log('read categories:'. $errorMsg);
         } else {
-             while (!$rs->EOF) {
+            while (!$rs->EOF) {
                   $values[] = array(
-                            'pk_content_category' => $rs->fields['pk_content_category'],
-                            'title' => $rs->fields['title'],
-                            'name' => $rs->fields['name'],
-                            'inmenu' => $rs->fields['inmenu'],
-                            'posmenu' => $rs->fields['posmenu'],
-                            'internal_category' => self::matchInternalCategory($rs->fields['internal_category']),
-                            'fk_content_category' => $rs->fields['fk_content_category'],
+                        'pk_content_category' => $rs->fields['pk_content_category'],
+                        'title' => $rs->fields['title'],
+                        'name' => $rs->fields['name'],
+                        'inmenu' => $rs->fields['inmenu'],
+                        'posmenu' => $rs->fields['posmenu'],
+                        'internal_category' => self::matchInternalCategory($rs->fields['internal_category']),
+                        'fk_content_category' => $rs->fields['fk_content_category'],
 
                         );
                        $rs->MoveNext();
@@ -151,12 +147,13 @@ class importContents {
             if (count($values)>0) {
                 if ($this->new->conn->Execute($stmt, $values) === false) {
                     $errorMsg = $this->new->conn->ErrorMsg();
-                     $this->log('importCategories: '.$errorMsg);
-                     printf('importCategories: '.$errorMsg);
+                    $this->log('importCategories: '.$errorMsg);
+                    printf('importCategories: '.$errorMsg);
+
                     return false;
                 }
             } else {
-               return true;
+                return true;
             }
         }
         return false;
@@ -169,7 +166,7 @@ class importContents {
      * @param int $oldid with author id
      *
      * @return array with author information.
-     *     
+     *
      */
 
     public function getAuthorData($oldid)
@@ -178,7 +175,7 @@ class importContents {
            ' `authors`.`politics` ,   `authors`.`fk_user` ,'.
            ' `authors`.`condition` '.
            ' FROM authors WHERE `authors`.`pk_author` = '.($oldid);
-        $rs  = $this->old->conn->Execute( $sql );
+        $rs  = $this->old->conn->Execute($sql);
 
         if (!$rs) {
             $error_msg = $this->old->conn->ErrorMsg();
@@ -189,7 +186,7 @@ class importContents {
         }
 
         $author = array();
-        $author = $this->load( $rs->fields );
+        $author = $this->load($rs->fields);
 
         //photos process
         $sql = 'SELECT author_imgs.pk_img, author_imgs.path_img, author_imgs.description
@@ -203,22 +200,21 @@ class importContents {
 
         $photos = array();
         $i=0;
-        while(!$rs->EOF) {
-                $photos[$i] = new stdClass();
-                $photos[$i]->pk_img		 = $rs->fields['pk_img'];
-                $photos[$i]->path_img	 = $rs->fields['path_img'];
-                $photos[$i]->description = $rs->fields['description'];
+        while (!$rs->EOF) {
+            $photos[$i] = new stdClass();
+            $photos[$i]->pk_img         = $rs->fields['pk_img'];
+            $photos[$i]->path_img     = $rs->fields['path_img'];
+            $photos[$i]->description = $rs->fields['description'];
 
-                $i++;
-                $rs->MoveNext();
+            $i++;
+            $rs->MoveNext();
         }
 
         $author->photos = $photos;
 
-
         return $author;
 
-     }
+    }
 
 
     /**
@@ -233,24 +229,27 @@ class importContents {
     {
 
         $values = array(
-            'name'=>$data->name, 'fk_user'=>'0', 'blog'=>'',
-            'politics'=>$data->politics, 'condition'=>$data->condition,
+            'name'=>$data->name,
+            'fk_user'=>'0',
+            'blog'=>'',
+            'politics'=>$data->politics,
+            'condition'=>$data->condition,
             'date_nac'=>$data->date_nac
         );
 
         $author = new Author();
 
         $pk_author = $author->create($values);
- 
 
-        printf( "Se ha insertado en $pk_author");
 
-  
-/*
-     	if(!empty($data->photos)) {
+        printf("Se ha insertado en $pk_author");
+
+
+        /*
+        if(!empty($data->photos)) {
             $values= array();
             foreach($data->photos as $photo) {
-                
+
                 $values[] = array( $pk_author, $photo->pk_img, $photo->path_img );
 
             }
@@ -265,7 +264,7 @@ class importContents {
 
             }
         }
-*/
+        */
         return $pk_author;
     }
 
@@ -274,61 +273,58 @@ class importContents {
         $sql = 'SELECT * FROM opinions, contents
             WHERE contents.in_litter=0 AND opinions.fk_author='.$authorID.' AND  pk_opinion = pk_content';
 
-	    $rs = $this->old->conn->Execute($sql);
+        $rs = $this->old->conn->Execute($sql);
 
         $items = array();
-        /*while (!$rs->EOF) {
 
-            $items[] =  $rs->GetArray();
-            $rs->MoveNext();
-        }*/
-         $items =  $rs->GetArray();
- 
-		return( $items );
-     }
+        $items =  $rs->GetArray();
+
+        return( $items );
+    }
 
     public function importOpinions($authorID)
     {
 
-         $author = $this->getAuthorData($authorID);
-         
-         printf('Getting author data -'.$authorID. ' /n');
- 
-         $newAuthorId = $this->insertAuthor($author);
+        $author = $this->getAuthorData($authorID);
 
-         $opinions = $this->getOpinionsData($authorID);
+        printf('Getting author data -'.$authorID. ' /n');
 
-         $opinion = new Opinion();
+        $newAuthorId = $this->insertAuthor($author);
 
-         if(!empty($opinions)){
-             foreach ($opinions as $data) {
- 
+        $opinions = $this->getOpinionsData($authorID);
+
+        $opinion = new Opinion();
+
+        if (!empty($opinions)) {
+            foreach ($opinions as $data) {
+
                 $data['fk_author'] = $newAuthorId;
                 $data['fk_user'] = $newAuthorId;
                 $data['fk_publisher'] = $newAuthorId;
-                $data['fk_user_last_editor '] = $newAuthorId;
+                $data['fk_user_last_editor '] = $newAutasshorId;
                 $data['category_name'] = 'opinion';
-                $data['category'] = 4; 
+                $data['category'] = 4;
                 $data['type_opinion'] = 0;  //force author opinion
-                
-            
+
+
                 $id = $opinion->create($data);
 
-                if(!empty($id) ) {
+                if (!empty($id)) {
                     $this->insertRefactorID($data['pk_content'], $id, 'opinion');
                     printf("\n Inserting: ".$data['pk_content'].", ".$id.", opinion");
-                }else{
+                } else {
                     $errorMsg = 'Problem '.$data['pk_content'].' - '.$data['title']. " /n";
                     $this->log('insert opinion : '.$errorMsg);
                     printf('insert opinion : '.$errorMsg);
                 }
 
 
-             }
+            }
 
-             return true;
-         }
-         return false;
+            return true;
+        }
+
+        return false;
     }
 
     public function getArticlesbyAuthor($topic)
@@ -337,37 +333,36 @@ class importContents {
         $_where = " (fk_author = '".$topic.
                                             "' OR fk_publisher = '".$topic.
                                             "' OR fk_user_last_editor = '".$topic."' ) ";
-         
+
 
         $sql = " SELECT * FROM articles, contents, contents_categories ".
                 " WHERE fk_content_type=1  AND in_litter=0  ".
                 " AND pk_content = pk_article AND ".
                 " pk_content = pk_fk_content AND ".  $_where ;
 
-         
-                
+
+
         echo "\n". $sql. "\n";
-        
+
         $rss = $this->old->conn->Execute($sql);
 
         if (!$rss) {
-            printf( 'getArticlesData function: '. $this->old->conn->ErrorMsg() );
-            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg() );
-            
-            
+            printf('getArticlesData function: '. $this->old->conn->ErrorMsg());
+            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg());
+
         } else {
- 
-              $articles = $this->load($rs->fields);
+
+            $articles = $this->load($rs->fields);
 
             return $articles;
-       }
+        }
 
     }
-    
+
     public function getArticlesData($topic)
     {
 
-      
+
         $_where = " WHERE fk_content_type=1  AND in_litter=0 AND (".
                   " title LIKE '".$topic."' OR metadata LIKE '".$topic."' ".
                   " OR description LIKE '".$topic."' OR summary LIKE '".$topic."' ".
@@ -383,17 +378,17 @@ class importContents {
         $rss = $this->old->conn->Execute($sql);
 
         if (!$rss) {
-            printf( 'getArticlesData function: '. $this->old->conn->ErrorMsg() );
-            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg() );
-            
-            
+            printf('getArticlesData function: '. $this->old->conn->ErrorMsg());
+            $this->log('getArticlesData function: '. $this->old->conn->ErrorMsg());
+
+
         } else {
 
-         //   $articles = $this->load($rs->fields);
-             $articles =  $rs->GetArray();
+            //   $articles = $this->load($rs->fields);
+            $articles =  $rs->GetArray();
 
             return $articles;
-       }
+        }
 
     }
 
@@ -412,75 +407,75 @@ class importContents {
         $uploads = array();
 
 
-            $nameFile = $photo->path_file.$photo->name;
+        $nameFile = $photo->path_file.$photo->name;
 
-            if(!empty($nameFile)) {
-                $uploaddir =$path_upload.$path_file;
+        if (!empty($nameFile)) {
+            $uploaddir =$path_upload.$path_file;
 
-                if(!is_dir($uploaddir)) {                    
-                    FilesManager::createDirectory($uploaddir);
-                }
+            if (!is_dir($uploaddir)) {
+                FilesManager::createDirectory($uploaddir);
+            }
 
-                $old_dir = 'media/images'.$nameFile;
+            $old_dir = 'media/images'.$nameFile;
 
-                if (move_file($old_dir, $path_upload.$nameFile) ) {
-                    $data['title'] = $photo->name;
-                    $data['name'] = $photo->name;
-                    $data['path_file'] =  $photo->path_file;;
-                    $data['category'] = $photo->category;
+            if (move_file($old_dir, $path_upload.$nameFile)) {
+                $data['title'] = $photo->name;
+                $data['name'] = $photo->name;
+                $data['path_file'] =  $photo->path_file;
+                $data['category'] = $photo->category;
 
-                    $data['nameCat'] = $photo->category_name; //nombre de la category
+                $data['nameCat'] = $photo->category_name; //nombre de la category
 
-                    $infor  = new MediaItem( $uploaddir.$name ); 	//Para sacar todos los datos de la imag
+                $infor  = new MediaItem($uploaddir.$name);     //Para sacar todos los datos de la imag
 
-                    $data['created'] = $infor->atime;
-                    $data['changed'] = $infor->mtime;
-                    $data['date'] = $infor->mtime;
-                    $data['size'] = round($infor->size/1024, 2);
-                    $data['width'] = $infor->width;
-                    $data['height'] = $infor->height;
-                    $data['type_img'] = $extension;
-                    $data['media_type'] = $_REQUEST['media_type'];
+                $data['created'] = $infor->atime;
+                $data['changed'] = $infor->mtime;
+                $data['date'] = $infor->mtime;
+                $data['size'] = round($infor->size/1024, 2);
+                $data['width'] = $infor->width;
+                $data['height'] = $infor->height;
+                $data['type_img'] = $extension;
+                $data['media_type'] = $_REQUEST['media_type'];
 
-                    // Default values
-                    $data['author_name']  = '';
-                    $data['pk_author']    = $_SESSION['userid'];
-                    $data['fk_publisher'] = $_SESSION['userid'];
-                    $data['description']  = '';
-                    $data['metadata']     = '';
+                // Default values
+                $data['author_name']  = '';
+                $data['pk_author']    = $_SESSION['userid'];
+                $data['fk_publisher'] = $_SESSION['userid'];
+                $data['description']  = '';
+                $data['metadata']     = '';
 
-                    $foto = new Photo();
-                    $elid = $foto->create($data);
+                $foto = new Photo();
+                $elid = $foto->create($data);
 
-                    if($elid) {
-                        if(preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
-                            // miniatura
-                            $thumb = new Imagick($uploaddir.$name);
+                if ($elid) {
+                    if (preg_match('/^(jpeg|jpg|gif|png)$/', $extension)) {
+                        // miniatura
+                        $thumb = new Imagick($uploaddir.$name);
 
-                            //ARTICLE INNER
-                            $thumb->thumbnailImage(self::INNER_WIDTH, self::INNER_HEIGHT, true);
-                            //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::INNER_WIDTH . '-' . self::INNER_HEIGHT . '-' . $name);
+                        //ARTICLE INNER
+                        $thumb->thumbnailImage(self::INNER_WIDTH, self::INNER_HEIGHT, true);
+                        //Write the new image to a file
+                        $thumb->writeImage($uploaddir . self::INNER_WIDTH . '-' . self::INNER_HEIGHT . '-' . $name);
 
-                            //FRONTPAGE
-                            $thumb->thumbnailImage(self::FRONT_WIDTH, self::FRONT_HEIGHT, true);
-                            //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::FRONT_WIDTH . '-' . self::FRONT_HEIGHT . '-' . $name);
+                        //FRONTPAGE
+                        $thumb->thumbnailImage(self::FRONT_WIDTH, self::FRONT_HEIGHT, true);
+                        //Write the new image to a file
+                        $thumb->writeImage($uploaddir . self::FRONT_WIDTH . '-' . self::FRONT_HEIGHT . '-' . $name);
 
-                            //THUMBNAIL
-                            $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
-                            //Write the new image to a file
-                            $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);
-                        }
+                        //THUMBNAIL
+                        $thumb->thumbnailImage(self::THUMB_WIDTH, self::THUMB_HEIGHT, true);
+                        //Write the new image to a file
+                        $thumb->writeImage($uploaddir . self::THUMB_WIDTH . '-' . self::THUMB_HEIGHT . '-' . $name);
                     }
-
-                    $uploads[] = $elid;
-                } else {
-
-                    $fallos .= " '" . $nameFile . "' ";
                 }
-            } //if empty
- 
+
+                $uploads[] = $elid;
+            } else {
+
+                $fallos .= " '" . $nameFile . "' ";
+            }
+        } //if empty
+
         return $elid;
     }
 
@@ -493,12 +488,12 @@ class importContents {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    
-    public function insertImage($pk_photo) {
+    public function insertImage($pk_photo)
+    {
 
         $sql = 'SELECT * FROM photos WHERE pk_photo = '.$pk_photo;
 
-	    $rs = $this->old->conn->Execute($sql);
+        $rs = $this->old->conn->Execute($sql);
 
         $image = $this->load($rs->fields);
 
@@ -517,44 +512,78 @@ class importContents {
      *
      * @throws <b>Exception</b> Explanation of exception.
      */
-    public function importArticles($topic, $byAuthor=false) {
+    public function importArticles($authorID, $newAuthorId, $topic = '', $byAuthor = false)
+    {
 
-        if(!empty($byAuthor) && ($byAuthor==true) ) {
-           $articles =  $this->getArticlesbyAuthor($topic);
+        $articles = array();
+
+        if (!empty($topic) && ($byAuthor==true)) {
+            $articles =  $this->getArticlesbyAuthor($topic);
         } else {
-            
-          $articles = $this->getArticlesData($topic);
-         
-       
+            //$articles = $this->getArticlesData($topic);
+            $articles = $this->getOpinionsData($authorID);
+
         }
-         $categories = array();
 
-         if(!empty($articles)) {
-             
-             $article = new Article();
-             foreach ($articles as $data) {
-                $data->img1 = $this->insertImage($data->img1);
-                $data->img2 = $this->insertImage($data->img2);
-                $id = $article->create($data);
-                var_dump($article);
+        if (!empty($articles)) {
 
-                if(!empty($id) ) {
-                    $this->insertRefactorID($data->pk_article, $id, 'article');
-                     var_dump('Inserting '.$data->pk_content, $id, 'article');
+            $content = new \Article();
+            $data = null;
+            foreach ($articles as $article) {
+                if ($this->elementIsImported($article['pk_content'], 'article')) {
+                    echo " image with id {$article['pk_content']} already imported\n";
                 } else {
-                    $errorMsg = 'Problem '.$data->pk_article.' - '.$data->title;
-                    $this->log('insert article : '.$errorMsg);
-                    printf('insert article : '.$errorMsg);
-                }
-             }
-             
-         }
+                    $data = $article;
+                    $data['id'] = null;
+                    $data['fk_content_type'] = 1;
+                    $data['title']          = mb_convert_encoding($article['title'], 'UTF-8');
+                    $data['title_int']      = mb_convert_encoding($article['title'], 'UTF-8');
+                    $data['body']           = $article['body'];
+                    $data['img1']           = null;// $this->insertImage($data->img1);
+                    $data['img2']          = null;//$this->insertImage($data->img2);
+                    $data['category_name']  = 'opinion';
+                    $data['category']       = 51;
+                    $data['available']      = 1;
+                    $data['content_status'] = 1;
+                    $data['fk_author']      = $newAuthorId;
+                    $data['fk_user']        = $newAuthorId;
+                    $data['fk_publisher']   = $newAuthorId;
+                    $data['fk_user_last_editor']  = $newAuthorId;
+                    $data['starttime']      = $data['created'];
+                    $data['endtime']        = '0000-00-00 00:00:00';
+                    $data['available']      = 1;
+                    $data['slug']           = mb_convert_encoding(\StringUtils::get_title($article['title']), 'UTF-8');
+                    $data['summary']        = $article['summary'];
+                    $data['description']    = mb_convert_encoding($article['description'], 'UTF-8');
+                    if (empty($article['summary'])) {
+                        $data['summary'] = substr(strip_tags($data['body']), 0, 120);
+                    }
+                    if (empty($data['description'])) {
+                        $data['description'] = substr(strip_tags($data['body']), 0, 120);
+                    }
 
-         $this->importCategories($categories);
-         
-         return true;
+                    $id = $content->create($data);
+
+                    if (!empty($id)) {
+
+                        $this->insertRefactorID($article['pk_content'], $id, 'article');
+                         var_dump('Inserting '.$article['pk_content'], $id, 'article');
+                    } else {
+                        $errorMsg = 'Problem '.$article['pk_content'].' - '.$data['title'];
+                        $this->log('insert article : '.$errorMsg);
+                        printf('insert article : '.$errorMsg);
+                    }
+                }
+            }
+
+        }
+
+
+
+        return true;
 
     }
+
 
     /**
      * Load properties in a object.
@@ -566,24 +595,27 @@ class importContents {
      * @throws <b>Exception</b> Explanation of exception.
      */
 
-    public function load($properties) {
-         $item = new stdClass();
-        if(is_array($properties)) {
-            foreach($properties as $k => $v) {
-                if(!is_numeric($k)) {
+    public function load($properties)
+    {
+        $item = new stdClass();
+
+        if (is_array($properties)) {
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
                     $item->{$k} = $v;
                 }
             }
-        } elseif(is_object($properties)) {
+        } elseif (is_object($properties)) {
             $properties = get_object_vars($properties);
-            foreach($properties as $k => $v) {
-                if( !is_numeric($k) ) {
+            foreach ($properties as $k => $v) {
+                if (!is_numeric($k)) {
                     $item->{$k} = $v;
                 }
             }
         }
+
         return $item;
-         
+
     }
 
     /**
@@ -596,29 +628,49 @@ class importContents {
      * @throws <b>Exception</b> Explanation of exception.
      */
 
-    public function insertRefactorID($contentID, $newID, $type) {
+    public function insertRefactorID($contentID, $newID, $type)
+    {
         $sql_translation_request =
-                'INSERT INTO refactor_ids (`pk_content_old`, `pk_content`, `type`)
+                'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`)
                                        VALUES (?, ?, ?)';
         $translation_values = array($contentID, $newID, $type);
 
         $translation_ids_request = $GLOBALS['application']->conn->Prepare($sql_translation_request);
 
-        $rss = $GLOBALS['application']->conn->Execute($translation_ids_request,
-                                                      $translation_values);
+        $rss = $GLOBALS['application']->conn->Execute($translation_ids_request, $translation_values);
 
         if (!$rss) {
-            printf( 'insertRefactorID function: '. $GLOBALS['application']->conn->ErrorMsg() );
-            $this->log('insertRefactorID function: '.$GLOBALS['application']->conn->ErrorMsg() );
+            printf('insertRefactorID function: '. $GLOBALS['application']->conn->ErrorMsg());
+            $this->log('insertRefactorID function: '.$GLOBALS['application']->conn->ErrorMsg());
         }
 
     }
 
-    
-    public function log($text = null) {
-        if(isset($text) && !is_null($text) ) {
-            $handle = fopen( $this->logFile , "a");
-            
+    public function elementIsImported($contentID, $contentType)
+    {
+        if (isset($contentID) && isset($contentType)) {
+            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=?';
+
+            $values = array($contentID, $contentType);
+            $views_update_sql = $GLOBALS['application']->conn->Prepare($sql);
+            $rss = $GLOBALS['application']->conn->Execute($views_update_sql, $values);
+
+            if (!$rss) {
+                echo $GLOBALS['application']->conn->ErrorMsg();
+            } else {
+                return ($rss->fields['pk_content']);
+            }
+
+        } else {
+            echo "There is imported {$contentID} - {$contentType}\n.";
+        }
+    }
+
+    public function log($text = null)
+    {
+        if (isset($text) && !is_null($text)) {
+            $handle = fopen($this->logFile, "a");
+
             if ($handle) {
                 $datawritten = fwrite($handle, $text);
                 fclose($handle);
@@ -627,8 +679,11 @@ class importContents {
             }
         }
     }
-
-    
-
 }
- 
+
+/****
+
+SELECT * FROM `contents`, articles WHERE pk_article=pk_content and    fk_content_type=1  AND in_litter=0 AND (  title LIKE '%_os_%_uis%_mez%' OR metadata LIKE '%_os_%_uis%_mez%'   OR description LIKE '%_os_%_uis%_mez%' OR summary LIKE '%_os_%_uis%_mez%'  OR body LIKE '%_os_%_uis%_mez%' OR subtitle LIKE '%_os_%_uis%_mez%' OR agency LIKE '%_os_%_uis%_mez%')
+
+
+*********/

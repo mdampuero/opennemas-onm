@@ -357,16 +357,25 @@ class NewsletterController extends Controller
         $maxAllowed = s::get('max_mailing');
         $remaining = $maxAllowed - $this->checkMailing();
 
+        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
+
+        //  Build the message
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($subject)
+            ->setBody($htmlContent, 'text/html')
+            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+            ->setSender($params['newsletter_sender']);
+
         $sent = 0;
         if (!empty($recipients)) {
             foreach ($recipients as $mailbox) {
-                // Replace name destination
-                $emailHtmlContent = str_replace('###DESTINATARIO###', $mailbox->name, $htmlContent);
                 if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
                     try {
                         // Send the mail
-                        $properlySent = $nManager->sendToUser($mailbox, $emailHtmlContent, $params);
-                        $sentResult []= array($mailbox, $properlySent);
+                        $message->setTo(array($mailbox->email => $mailbox->name));
+                        $properlySent = $nManager->mailer->send($message);
+                        $sentResult []= array($mailbox, (bool)$properlySent);
                         $remaining--;
                         $sent++;
                     } catch (\Exception $e) {

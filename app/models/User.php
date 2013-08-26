@@ -405,7 +405,7 @@ class User
         $values = array($data['username'], $data['email']);
         $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
 
-        return ($rs != false);
+        return ($rs != null && $rs != false);
     }
 
     /**

@@ -1,77 +1,53 @@
-#!/usr/bin/php5
+#!/usr/bin/env php
 <?php
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of refactorize
+ * This file is part of the Onm package.
  *
- * @author sandra
+ * (c)  Sandra Pereira <sandra@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 
-printf("Welcome to OpenNemas database Refactorize \n");
+printf("Welcome to OpenNemas data importer from WordPress\n");
 
 /**
  * Setting up the import application
 */
 error_reporting(E_ALL ^ E_NOTICE);
-set_include_path(
-                    realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../vendor/').PATH_SEPARATOR.
-                    realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../public/libs/').PATH_SEPARATOR.
-                    realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../public/core/').PATH_SEPARATOR.
-                    realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../../public/models/').PATH_SEPARATOR.
-                    get_include_path()
-                );
-require 'db-config.inc.php';
-require '../../../config/config.inc.php';
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../../'));
+define('SYS_LOG_PATH', realpath(__DIR__.'/../../../tmp/logs/'));
 
- //require realpath(dirname(__FILE__).DIRECTORY_SEPARATOR.'../../vendor/').'/adodb5/adodb.inc.php';
-
-
-// Paths settings
-define('SITE_PATH',        realpath(APPLICATION_PATH. DIRECTORY_SEPARATOR . "public" ).DIRECTORY_SEPARATOR);
-define('SITE_LIBS_PATH',   realpath(SITE_PATH . "libs") . DIRECTORY_SEPARATOR);
-define('SITE_CORE_PATH',   realpath(SITE_PATH.DIRECTORY_SEPARATOR."core").DIRECTORY_SEPARATOR);
-define('SITE_VENDOR_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."vendor").DIRECTORY_SEPARATOR);
-define('SITE_MODELS_PATH', realpath(SITE_PATH.DIRECTORY_SEPARATOR."models").DIRECTORY_SEPARATOR);
-
-// Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array(
-    SITE_CORE_PATH, SITE_LIBS_PATH, SITE_VENDOR_PATH, SITE_MODELS_PATH, get_include_path(),
-)));
-
-require SITE_PATH.'/autoload.php';
-\Application::initAutoloader();
-
-$app = \Application::load();
-
-
-if(!defined(INSTANCE_MEDIA) )
-    define('INSTANCE_MEDIA', SITE_PATH.'media/images');
 
 /**
  * General configurations
 */
+require 'db-config.inc.php';
+
+require_once __DIR__.'/../../../app/autoload.php';
+require_once __DIR__.'/../../../app/container.php';
+
+define('INSTANCE_UNIQUE_NAME', 'mundiario');
+define('IMG_DIR', 'images');
+define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
+
 
 require 'import-contents.php';
 
 
 print_r(" \n You will import opinions {$topic} \n");
 
-$refactor = new importContents($config_newDB, $config_oldDB);
- $refactor->importOpinions($oldId);
+$refactor = new ImportContents($config_newDB, $config_oldDB);
+// $refactor->importOpinions($oldId);
 
 /* print_r(" \n  You will import articles by id {$oldId} \n");
-$refactor->importArticles($oldId, true);
+*/
+var_dump($oldId, $newId, $topic);
 
+$refactor->importArticles($oldId, $newId, $topic);
+/*
 print_r(" \n You will import articles by topic {$topic} \n");
-//$refactor->importArticles($t/opic);
+//$refactor->importArticles($topic);
 */
 
 

@@ -112,7 +112,7 @@ class Menu
     {
         $sql = "INSERT INTO menues ".
                " (`name`, `params`, `type`, `position`) " .
-               " VALUES (?,?,?,?,?)";
+               " VALUES (?,?,?,?)";
 
         $values = array(
             $data["name"],
