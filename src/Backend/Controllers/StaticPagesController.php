@@ -254,7 +254,7 @@ class StaticPagesController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_staticpages', array('page' => $staticPage))
+            $this->generateUrl('admin_staticpages', array('page' => $page))
         );
     }
 

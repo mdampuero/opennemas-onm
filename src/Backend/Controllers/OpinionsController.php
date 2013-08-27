@@ -1063,7 +1063,7 @@ class OpinionsController extends Controller
             );
 
             // Generate username and password from real name
-            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name']));
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
             $data['password'] = md5($data['name']);
 
             $file = $request->files->get('avatar');
