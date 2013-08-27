@@ -126,13 +126,6 @@ label {
 
                     <fieldset>
                         <div class="control-group">
-                            <label for="login" class="control-label">{t}User name{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="login" name="login" value="{$user->username|default:""}" class="input-xlarge" required="required" maxlength="20"/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
                             <label for="email" class="control-label">{t}Email{/t}</label>
                             <div class="controls">
                                 <input class="input-xlarge" id="email" type="email" name="email" placeholder="test@example.com"  value="{$user->email|default:""}" required="required">
