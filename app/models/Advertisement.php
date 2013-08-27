@@ -756,28 +756,40 @@ class Advertisement extends Content
 
             // TODO: controlar los banners swf especiales con div por encima
             if (strtolower($photo->type_img) == 'swf') {
-
-                $flashObject =
-                    '<object width="'.$width.'" height="'.$height.'" >
-                        <param name="wmode" value="window" />
-                        <param name="movie" value="'.$mediaUrl. '" />
-                        <param name="width" value="'.$width.'" />
-                        <param name="height" value="'.$height.'" />
-                        <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
-                            .'SCALE="exactfit" wmode="window"></embed>
-                    </object>';
-
                 if (!$overlap && !$this->overlap) {
+                    // Generate flash object with wmode window
+                    $flashObject =
+                        '<object width="'.$width.'" height="'.$height.'" >
+                            <param name="wmode" value="window" />
+                            <param name="movie" value="'.$mediaUrl. '" />
+                            <param name="width" value="'.$width.'" />
+                            <param name="height" value="'.$height.'" />
+                            <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
+                                .'SCALE="exactfit" wmode="window"></embed>
+                        </object>';
+
                     $content =
                         '<a target="_blank" href="'.$url.'" rel="nofollow" '
                         .'style="display:block;cursor:pointer">'.$flashObject.'</a>';
                 } else {
+                    // Generate flash object with wmode transparent
+                    $flashObject =
+                        '<object width="'.$width.'" height="'.$height.'" >
+                            <param name="wmode" value="transparent" />
+                            <param name="movie" value="'.$mediaUrl. '" />
+                            <param name="width" value="'.$width.'" />
+                            <param name="height" value="'.$height.'" />
+                            <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
+                                .'SCALE="exactfit" wmode="transparent"></embed>
+                        </object>';
+
                     // CHECK: dropped checking of IE
                     $content = '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
                             .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;"></div></div>';
+                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;">
+                            </div>'.$flashObject.'</div>';
                 }
 
                 $content = '<div style="width:'.$width.'px; height:'.$height.'px;">'.$content.'</div>';
