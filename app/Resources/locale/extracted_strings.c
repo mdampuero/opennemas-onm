@@ -14,7 +14,7 @@ gettext("Go back to list");
 gettext("Go back to list");
 
 /* public/themes/admin/tpl//disqus/config.tpl */
-gettext("Short name:");
+gettext("Short name");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
 gettext("Comments");
@@ -1533,9 +1533,6 @@ gettext("Remove");
 
 /* public/themes/admin/tpl//opinion/author_new.tpl */
 gettext("Display name");
-
-/* public/themes/admin/tpl//opinion/author_new.tpl */
-gettext("User name");
 
 /* public/themes/admin/tpl//opinion/author_new.tpl */
 gettext("Email");
@@ -7457,6 +7454,9 @@ gettext("Create new user");
 gettext("New user");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("users");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("Filter by name or email");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
@@ -8825,13 +8825,7 @@ gettext("Domains");
 gettext("Contact");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Articles");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Images");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Ads");
+gettext("Last access");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Created");
@@ -8858,6 +8852,15 @@ gettext("Unpublished");
 gettext("Unpublished");
 
 /* public/themes/manager/tpl/instances/list.tpl */
+gettext("Articles");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Images");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Ads");
+
+/* public/themes/manager/tpl/instances/list.tpl */
 gettext("Edit");
 
 /* public/themes/manager/tpl/instances/list.tpl */
@@ -8865,6 +8868,9 @@ gettext("Delete");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("There is no available instances yet");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Number of contents");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Creating new intance");
