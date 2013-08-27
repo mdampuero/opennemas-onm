@@ -1049,7 +1049,6 @@ class OpinionsController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $data = array(
-                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
                 'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
                 'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'sessionexpire'   => 60,
@@ -1062,6 +1061,10 @@ class OpinionsController extends Controller
                 'deposit'         => 0,
                 'token'           => null,
             );
+
+            // Generate username and password from real name
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name']));
+            $data['password'] = md5($data['name']);
 
             $file = $request->files->get('avatar');
 

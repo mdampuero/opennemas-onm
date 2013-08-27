@@ -285,6 +285,10 @@ class User
      **/
     public function update($data)
     {
+        if ($this->checkIfUserExists($data)) {
+            throw new \Exception(_('Already exists one user with that information'));
+        }
+
         if (!isset($data['id_user_group'])
             || empty($data['id_user_group'])
         ) {
@@ -1415,7 +1419,7 @@ class User
             }
 
             if (isset($filter['type']) && $filter['type'] != '') {
-                $parts[] = '`type` = '.$filter['type'].'';
+                $parts[] = '`type` = '.$filter['type'].' AND activated=1';
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {
