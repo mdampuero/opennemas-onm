@@ -169,8 +169,11 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getServicePartyName()
     {
-        $agencyName = $this->getData()
-            ->NewsEnvelope->SentFrom->Party->attributes()->FormalName;
+        $agencyName = $this->getData()->NewsEnvelope->SentFrom->Party;
+
+        if (!is_null($agencyName)) {
+            $agencyName = $agencyName->attributes()->FormalName;
+        }
 
         return (string) $agencyName;
     }
