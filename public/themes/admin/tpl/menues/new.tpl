@@ -115,7 +115,8 @@
                                     class="drag-category"
                                     pk_menu="">
                                     <div>
-                                        <span class="type">{t}Frontpage{/t}:</span> {$category->title}
+                                        <span class="type">{t}Frontpage{/t}:</span>
+                                        <span class="menu-title">{$category->title}</span>
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -142,7 +143,8 @@
                                 class="drag-category"
                                 pk_menu="">
                                 <div>
-                                    <span class="type">{t}Album category{/t}:</span> {$albumCategories[as]->title}
+                                    <span class="type">{t}Album category{/t}:</span>
+                                    <span class="menu-title">{$albumCategories[as]->title}</span>
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -170,7 +172,8 @@
                                 class="drag-category"
                                 pk_menu="">
                                 <div>
-                                    <span class="type">{t}Video category{/t}:</span>  {$videoCategories[as]->title}
+                                    <span class="type">{t}Video category{/t}:</span>
+                                    <span class="menu-title">{$videoCategories[as]->title}</span>
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -197,7 +200,8 @@
                                 data-item-id="{$pollCategories[as]->pk_content_category}"
                                 class="drag-category" pk_menu="">
                                 <div>
-                                    <span class="type">{t}Poll category{/t}:</span> {$pollCategories[as]->title}
+                                    <span class="type">{t}Poll category{/t}:</span>
+                                    <span class="menu-title">{$pollCategories[as]->title}</span>
                                     <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                         <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -231,19 +235,21 @@
                                     pk_menu="">
                                     <div>
                                         <span class="type">{t}Module{/t}:</span>
-                                        {if $page eq 'frontpage'}
-                                            home
-                                        {elseif $page eq 'poll'}
-                                            Encuesta
-                                        {elseif $page eq 'letter'}
-                                            Cartas Al Director
-                                        {elseif $page eq 'kiosko'}
-                                            Portadas Papel
-                                        {elseif $page eq 'boletin'}
-                                            Bolet&iacute;n
-                                        {else}
-                                            {$page}
-                                        {/if}
+                                        <span class="menu-title">
+                                            {if $page eq 'frontpage'}
+                                                home
+                                            {elseif $page eq 'poll'}
+                                                Encuesta
+                                            {elseif $page eq 'letter'}
+                                                Cartas Al Director
+                                            {elseif $page eq 'kiosko'}
+                                                Portadas Papel
+                                            {elseif $page eq 'boletin'}
+                                                Bolet&iacute;n
+                                            {else}
+                                                {$page}
+                                            {/if}
+                                        </span>
                                         <div class="btn-group actions" style="float:right;">
                                         <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -269,7 +275,8 @@
                                     pk_menu="{$staticPages[k]->id}"
                                     class="drag-category">
                                     <div>
-                                        <span class="type">{t}Static page{/t}:</span>  {$staticPages[k]->title}
+                                        <span class="type">{t}Static page{/t}:</span>
+                                        <span class="menu-title">{$staticPages[k]->title}</span>
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -282,6 +289,7 @@
                     </div>
                     {/if}
 
+                    {is_module_activated name="SYNC_MANAGER"}
                     {if count($elements) > 0}
                     <h3 href="#syncCategories">{t}Sync Categories{/t}</h3>
                     <div id="syncCategories" style="border:1px solid #CCCCCC;padding: 4px;">
@@ -298,7 +306,8 @@
                                     pk_menu=""
                                     style="background-color: #{$colors[$site]}">
                                     <div>
-                                        <span class="type">{t}Sync category{/t}:</span> {$category|capitalize}
+                                        <span class="type">{t}Sync category{/t}:</span>
+                                        <span class="menu-title">{$category|capitalize}</span>
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync{/t}" >
                                         <div class="btn-group actions" style="float:right;">
@@ -314,7 +323,9 @@
                         {/foreach}
                     </div>
                     {/if}
+                    {/is_module_activated}
 
+                    {is_module_activated name="FRONTPAGES_LAYOUT"}
                     {if count($categories) > 0}
                     <h3 href="#listado">{t}Category blog{/t}</h3>
                     <div id="listado">
@@ -328,7 +339,8 @@
                                     class="drag-category"
                                     pk_menu="">
                                     <div>
-                                        <span class="type">{t}Category blog{/t}:</span> {$blog->title}
+                                        <span class="type">{t}Category blog{/t}:</span>
+                                        <span class="menu-title">{$blog->title}</span>
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
                                             <a href="#" class="edit-menu-item"><i class="icon-pencil"></i></a>
@@ -340,7 +352,10 @@
                         </ul>
                     </div>
                     {/if}
+                    {/is_module_activated}
 
+                    {is_module_activated name="FRONTPAGES_LAYOUT"}
+                    {is_module_activated name="SYNC_MANAGER"}
                     {if count($elements) > 0}
                     <h3 href="#syncBlogCategories">{t}Sync Blog Categories{/t}</h3>
                     <div id="syncBlogCategories"  class="elementsContainer">
@@ -357,7 +372,8 @@
                                     pk_menu=""
                                     style="background-color: #{$colors[$site]}">
                                     <div>
-                                        <span class="type">{t}Sync blog category{/t}:</span> {$category|capitalize}
+                                        <span class="type">{t}Sync blog category{/t}:</span>
+                                        <span class="menu-title">{$category|capitalize}</span>
                                         <img src="{$params.IMAGE_DIR}sync-icon.png"
                                              alt="{t}Sync category blog{/t}" >
                                         <div class="btn-group actions" style="float:right;">
@@ -373,6 +389,8 @@
                         {/foreach}
                     </div>
                     {/if}
+                    {/is_module_activated}
+                    {/is_module_activated}
             </div>
         </div><!-- fin -->
 

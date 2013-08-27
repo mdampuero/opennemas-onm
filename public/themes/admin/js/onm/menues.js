@@ -43,7 +43,27 @@ jQuery(document).ready(function($) {
     jQuery('#elements-provider').on('click', '.add-item', function(e, ui) {
         e.preventDefault();
         var element = $(this).closest('li');
+        var name = element.attr('data-title');
         var clone = element.clone(true);
+
+        jQuery(
+            '<div class="form-horizontal edit-menu-form">' +
+                '<fieldset>' +
+                    '<div class="control-group">' +
+                        '<label class="control-label">Title</label>' +
+                        '<div class="controls">' +
+                            '<input type="text" class="title" value="' + name + '">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="send-button-wrapper">' +
+                        '<button type="submit" class="btn save-menuitem-button">Update</button>' +
+                    '</div>' +
+                '</fieldset>' +
+            '</div>'
+        ).insertAfter(clone.find('.btn-group'));
+
+        clone.closest('li').addClass("menuItem");
+
         jQuery('#menuelements').append(clone);
 
         jQuery('#warnings-validation').html(
