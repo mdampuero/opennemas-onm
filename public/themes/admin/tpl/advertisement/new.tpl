@@ -85,8 +85,8 @@
         <div class="control-group" id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
             <label for="url" class="control-label">{t}Url{/t}</label>
             <div class="controls">
-                <input type="text" id="url" name="url" class="input-xxlarge" required="required"
-                    value="{$advertisement->url}" placeholder="http://" />
+                <input type="text" id="url" name="url" class="input-xxlarge" value="{$advertisement->url}" placeholder="http://"
+                    {if $advertisement->with_script neq 1}required="required"{/if} />
             </div>
         </div>
 
