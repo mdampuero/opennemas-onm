@@ -21,7 +21,14 @@ jQuery(document).ready(function($) {
         revert: 250,
         tabSize: 25,
         tolerance: 'pointer',
-        toleranceElement: '> div'
+        toleranceElement: '> div',
+        stop: function(e, ui) {
+            jQuery('#warnings-validation').html(
+                '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'
+                    + menu_messages.remember_save +
+                '</div>'
+            );
+        }
     });
 
     jQuery('#menuelements').on('click', '.delete-menu-item', function(e, ui) {
