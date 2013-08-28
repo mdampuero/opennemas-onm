@@ -48,9 +48,9 @@
             <thead>
                 {if count($instances) > 0}
                 <th width="15px">{t}#{/t}</th>
-                <th>{t}Name{/t}</th>
-                <th>{t}Domains{/t}</th>
-                <th>{t}Contact{/t}</th>
+                <th width="200px">{t}Name{/t}</th>
+                <th width="200px">{t}Domains{/t}</th>
+                <th width="200px">{t}Contact{/t}</th>
                 <th class="center">{t}Last access{/t}</th>
                 <th width="100px" class="center">{t}Created{/t}</th>
                 <th class="center" width="10px">{t}Activated{/t}</th>
@@ -81,7 +81,7 @@
                         <a href="mailto:{$instance->configs['contact_mail']}" title="Send an email to the instance manager">{$instance->configs['contact_mail']}</a>
                         {/if}
                     </td>
-                    <td>
+                    <td class="center">
                         {datetime date=$instance->configs['last_login']}
                     </td>
                      <td class="nowrap center">
