@@ -1044,7 +1044,8 @@ INSERT INTO `menues` (`pk_menu`, `name`, `type`, `position`, `site`, `params`, `
 (4, 'album', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', 0),
 (5, 'video', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', 0),
 (7, 'encuesta', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', 0),
-(8, 'subHome', '', NULL, 'base-onm.local', 'a:1:{s:11:"description";s:0:"";}', 21);
+(8, 'subHome', '', NULL, 'base-onm.local', 'a:1:{s:11:"description";s:0:"";}', 21),
+(9, 'statics', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', NULL);
 
 -- --------------------------------------------------------
 
