@@ -51,10 +51,8 @@
                 <th>{t}Name{/t}</th>
                 <th>{t}Domains{/t}</th>
                 <th>{t}Contact{/t}</th>
-                <th>{t}Articles{/t}</th>
-                <th>{t}Images{/t}</th>
-                <th>{t}Ads{/t}</th>
-                <th width="100px">{t}Created{/t}</th>
+                <th class="center">{t}Last access{/t}</th>
+                <th width="100px" class="center">{t}Created{/t}</th>
                 <th class="center" width="10px">{t}Activated{/t}</th>
                 <th class="center" width="10px">{t}Actions{/t}</th>
                 {else}
@@ -84,15 +82,9 @@
                         {/if}
                     </td>
                     <td>
-                        {$instance->totals[1]}
+                        {datetime date=$instance->configs['last_login']}
                     </td>
-                    <td>
-                        {$instance->totals[8]}
-                    </td>
-                    <td>
-                        {$instance->totals[2]}
-                    </td>
-                     <td class="nowrap">
+                     <td class="nowrap center">
                         {$instance->configs['site_created']}
                     </td>
                     <td class="center">
@@ -107,6 +99,11 @@
 
                     <td class="right nowrap">
                         <div class="btn-group">
+                            <a href="#" class="btn info" rel="popover" data-content="{t}Articles{/t}: {$instance->totals[1]}<br>
+                                                                                     {t}Images{/t}: {$instance->totals[8]}<br>
+                                                                                     {t}Ads{/t}: {$instance->totals[2]}<br>">
+                                <i class="icon-info-sign"></i>
+                            </a>
                             <a class="btn" href="{url name=manager_instance_show id=$instance->id}" title="{t}Edit{/t}">
                                 <i class="icon-pencil"></i>
                             </a>
@@ -121,14 +118,14 @@
                 </tr>
                 {foreachelse}
                 <tr>
-                    <td class="empty" colspan="11">{t}There is no available instances yet{/t}</td>
+                    <td class="empty" colspan="8">{t}There is no available instances yet{/t}</td>
                 </tr>
                 {/foreach}
             </tbody>
 
             <tfoot>
                 <tr>
-                    <td colspan="11" class="center">
+                    <td colspan="8" class="center">
                         <div class="pagination">
                             {$pagination->links}
                         </div>
@@ -139,4 +136,15 @@
     </form>
 </div>
 {include file="instances/modals/_modalDelete.tpl"}
+{/block}
+
+{block name="footer-js"}
+<script type="text/javascript">
+$('.info').popover({
+    title: "{t}Number of contents{/t}",
+    html: true,
+    placement: "top",
+    trigger: 'hover',
+});
+</script>
 {/block}
