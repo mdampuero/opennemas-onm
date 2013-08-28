@@ -118,6 +118,13 @@ class AuthenticationController extends Controller
                         );
                     }
 
+                    // Set last login time
+                    $currentTime = new \DateTime();
+                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
+                    $currentTime = $currentTime->format('Y-m-d H:i:s');
+                    s::set('last_login', $currentTime);
+
+                    // Set session array
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
