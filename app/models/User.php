@@ -351,14 +351,13 @@ class User
             return false;
         }
 
+        // Finish transaction
+        $GLOBALS['application']->conn->CommitTrans();
 
         $this->id = $data['id'];
         if (isset($data['ids_category'])) {
             $this->createAccessCategoriesDb($data['ids_category']);
         }
-
-        // Finish transaction
-        $GLOBALS['application']->conn->CommitTrans();
 
         return true;
     }
@@ -404,10 +403,14 @@ class User
      **/
     public function checkIfUserExists($data)
     {
-        $sql = "SELECT username FROM users WHERE username=? OR email=?";
+        $sql = "SELECT id FROM users WHERE username=? OR email=?";
 
         $values = array($data['username'], $data['email']);
         $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
+
+        if (isset($data['id']) && $rs == $data['id']) {
+            return false;
+        }
 
         return ($rs != null && $rs != false);
     }
