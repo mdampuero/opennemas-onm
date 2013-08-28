@@ -251,7 +251,7 @@ class AclUserController extends Controller
             } else {
                 m::add(_('Unable to update the user with that information'), m::ERROR);
             }
-        } catch (FileException $e) {
+        } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
         }
 
