@@ -33,3 +33,5 @@
 }
 .manager .global-user-tools .usermenu .login-name { color:White; }
 .manager .global-user-tools .usermenu a { color:White; }
+
+.manager .wrapper-content {max-width: 1200px;}
