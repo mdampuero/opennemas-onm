@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-28 11:40+0200\n"
+"POT-Creation-Date: 2013-08-29 12:06+0200\n"
 "PO-Revision-Date: 2012-03-09 11:34+0100\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
@@ -493,15 +493,15 @@ msgstr ""
 msgid "Successfully changed suggested flag for book with id \"%d\""
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:155
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:153
 msgid "FRONTPAGE"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:265
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:263
 msgid "Cache configuration saved successfully."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:276
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:274
 #: /home/others/www/idealgallego/onm-instance/app/models/ContentManager.php:1887
 #: /home/others/www/idealgallego/onm-instance/app/models/Frontpage.php:86
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3206
@@ -512,67 +512,71 @@ msgstr ""
 msgid "Frontpage"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:277
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:275
 msgid "Frontpage mobile version"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:278
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:276
 msgid "Inner Article"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:279
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:277
 msgid "Inner Article mobile version"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:280
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:278
 msgid "Inner Opinion"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:281
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:279
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1028
 msgid "RSS"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:282
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:280
 msgid "Frontpage videos"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:283
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:281
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5150
 msgid "Inner video"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:284
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:282
 msgid "Gallery frontpage"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:285
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:283
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5162
 msgid "Gallery Inner"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:286
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:284
 msgid "Polls frontpage"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:287
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:285
 msgid "Poll inner"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:288
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:286
 msgid "Sitemap"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:327
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:325
 #, php-format
 msgid "Frontpage for category %s"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:334
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:332
 msgid "General frontpage"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:348
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:341
+msgid "cache deleted succesfully."
+msgstr ""
+
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:346
 msgid "There was an error trying to delete the requested cache page."
 msgstr ""
 
