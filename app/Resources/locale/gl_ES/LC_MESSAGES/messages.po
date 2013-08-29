@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-28 11:40+0200\n"
-"PO-Revision-Date: 2013-08-28 11:42+0200\n"
+"POT-Creation-Date: 2013-08-29 12:06+0200\n"
+"PO-Revision-Date: 2013-08-29 12:07+0200\n"
 "Last-Translator: sandra <sandra@openhost.es>\n"
 "Language-Team: spanish <desarrollo@openhost.es>\n"
 "Language: gl\n"
@@ -514,15 +514,15 @@ msgid "Successfully changed suggested flag for book with id \"%d\""
 msgstr ""
 "Estado de suxerido cambiado correctamente para o libro co identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:155
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:153
 msgid "FRONTPAGE"
 msgstr "PORTADA"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:265
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:263
 msgid "Cache configuration saved successfully."
 msgstr "Configuración de caché gardada correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:276
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:274
 #: /home/others/www/idealgallego/onm-instance/app/models/ContentManager.php:1887
 #: /home/others/www/idealgallego/onm-instance/app/models/Frontpage.php:86
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3206
@@ -533,67 +533,71 @@ msgstr "Configuración de caché gardada correctamente."
 msgid "Frontpage"
 msgstr "Portada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:277
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:275
 msgid "Frontpage mobile version"
 msgstr "Móbil: portada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:278
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:276
 msgid "Inner Article"
 msgstr "Artigo: interior"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:279
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:277
 msgid "Inner Article mobile version"
 msgstr "Móbil: artigo interior"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:280
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:278
 msgid "Inner Opinion"
 msgstr "Opinión: interior"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:281
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:279
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1028
 msgid "RSS"
 msgstr "RSS"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:282
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:280
 msgid "Frontpage videos"
 msgstr "Vídeo: portada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:283
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:281
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5150
 msgid "Inner video"
 msgstr "Vídeo: interior"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:284
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:282
 msgid "Gallery frontpage"
 msgstr "Albúm: portada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:285
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:283
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5162
 msgid "Gallery Inner"
 msgstr "Album: interior"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:286
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:284
 msgid "Polls frontpage"
 msgstr "Enquéritos: portada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:287
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:285
 msgid "Poll inner"
 msgstr "Enquérito:interior"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:288
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:286
 msgid "Sitemap"
 msgstr "Mapa do sitio"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:327
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:325
 #, php-format
 msgid "Frontpage for category %s"
 msgstr "Portada para a categoría %s"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:334
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:332
 msgid "General frontpage"
-msgstr "Portada: principal"
+msgstr "Portada principal"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:348
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:341
+msgid "cache deleted succesfully."
+msgstr "caché eliminada correctamente."
+
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CacheManagerController.php:346
 msgid "There was an error trying to delete the requested cache page."
 msgstr "Produciuse un erro ao tentar eliminar a caché da páxina solicitada."
 
