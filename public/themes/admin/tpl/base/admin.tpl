@@ -117,10 +117,12 @@
             </nav>
             <nav class="right">
                 <ul>
-                    <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
-                    <!-- <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li> -->
-                    <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                    <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
+                    <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
+                    <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
+                           target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
+                    <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
+                           target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
                 </ul>
             </nav>
         </div><!-- / -->
