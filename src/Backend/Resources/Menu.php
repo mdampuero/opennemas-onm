@@ -391,7 +391,7 @@ $menuXml = '<?xml version="1.0"?>
         <node
             title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
             id="support_help"
-            link="http://www.openhost.es/"
+            link="http://help.opennemas.com/"
             target="external"/>
     </submenu>
 </menu>';
