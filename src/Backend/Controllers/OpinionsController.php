@@ -1117,7 +1117,6 @@ class OpinionsController extends Controller
 
         $data = array(
             'id'              => $userId,
-            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
@@ -1131,6 +1130,9 @@ class OpinionsController extends Controller
 
         $file = $request->files->get('avatar');
         $user = new \User($userId);
+
+        // Generate username and password from real name
+        $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
 
         try {
             // Upload user avatar if exists
@@ -1153,7 +1155,7 @@ class OpinionsController extends Controller
             } else {
                 m::add(_('Unable to update the author with that information'), m::ERROR);
             }
-        } catch (FileException $e) {
+        } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
         }
 
