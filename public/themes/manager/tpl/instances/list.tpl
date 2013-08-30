@@ -22,42 +22,51 @@
     <form action="{url name=manager_instances}" method="get" name="formulario" id="formulario">
         <div class="table-info clearfix">
             <div class="pull-left">
-                {$pagination->_totalItems} instances
+                {count($instances)} instances
                 <a href="{url name=manager_instances_list_export filter_name=$filter_name}">{image_tag src="{$params.COMMON_ASSET_DIR}images/csv.png" base_url=""} Export list</a>
             </div>
             <div class="pull-right form-inline">
-                <input type="text" id="username" placeholder="{t}Filter by name{/t}" name="filter_name" onchange="this.form.submit();" value="{$filter_title}" />
-                <label for="usergroup">
-                    {t}Per page{/t}
-                    <select id="usergroup" name="filter_per_page" onchange="this.form.submit();">
-                         <option value="10" {if $per_page eq 10}selected{/if}>10</option>
-                         <option value="20" {if $per_page eq 20}selected{/if}>20</option>
-                         <option value="50" {if $per_page eq 50}selected{/if}>50</option>
-                         <option value="100" {if $per_page eq 100}selected{/if}>100</option>
-                    </select>
-                </label>
-                <input type="hidden" name="page" value="1" />
-                <button type="submit" class="btn">{t}Search{/t}</button>
+                <div class="pager">
+                    <input type="text" id="username" placeholder="{t}Filter by name{/t}" name="filter_name" onchange="this.form.submit();" value="{$filter_title}"/>
+                    <form>
+                        <label for="usergroup">
+                            {t}Per page{/t}
+                            <select class="pagesize">
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option selected="selected" value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="500">500</option>
+                                <option value="1000">1000</option>
+                            </select>
+                        </label>
+                    </form>
+                    <input type="hidden" name="page" value="1" />
+                    <button type="submit" class="btn">{t}Search{/t}</button>
+                </div>
             </th>
 
             </div>
         </div>
 
-        <table class="table table-hover table-condensed" >
+        <table id="manager" class="table table-hover table-condensed tablesorter">
 
             <thead>
-                {if count($instances) > 0}
-                <th width="15px">{t}#{/t}</th>
-                <th width="200px">{t}Name{/t}</th>
-                <th width="200px">{t}Domains{/t}</th>
-                <th width="200px">{t}Contact{/t}</th>
-                <th class="center">{t}Last access{/t}</th>
-                <th width="100px" class="center">{t}Created{/t}</th>
-                <th class="center" width="10px">{t}Activated{/t}</th>
-                <th class="center" width="10px">{t}Actions{/t}</th>
-                {else}
-                <th scope="col" colspan=4>&nbsp;</th>
-                {/if}
+                <tr>
+                    {if count($instances) > 0}
+                    <th width="25px">{t}#{/t}</th>
+                    <th width="200px">{t}Name{/t}</th>
+                    <th width="200px">{t}Domains{/t}</th>
+                    <th width="200px">{t}Contact{/t}</th>
+                    <th class="center">{t}Last access{/t}</th>
+                    <th width="100px" class="center">{t}Created{/t}</th>
+                    <th class="center" width="70px">{t}Activated{/t}</th>
+                    <th class="center" width="10px">{t}Actions{/t}</th>
+                    {else}
+                    <th scope="col" colspan=4>&nbsp;</th>
+                    {/if}
+                </tr>
             </thead>
 
             <tbody>
@@ -82,7 +91,8 @@
                         {/if}
                     </td>
                     <td class="center">
-                        {datetime date=$instance->configs['last_login']}
+                        {datetime date=$instance->configs['last_login']}<br>
+                        ({$timeZones[$instance->configs['time_zone']]})
                     </td>
                      <td class="nowrap center">
                         {$instance->configs['site_created']}
@@ -126,8 +136,14 @@
             <tfoot>
                 <tr>
                     <td colspan="8" class="center">
-                        <div class="pagination">
-                            {$pagination->links}
+                        <div class="pager">
+                            <form>
+                                <img src="{$params.COMMON_ASSET_DIR}images/first.png" class="first"/>
+                                <img src="{$params.COMMON_ASSET_DIR}images/prev.png" class="prev"/>
+                                <input type="text" class="pagedisplay input-mini search-query"/>
+                                <img src="{$params.COMMON_ASSET_DIR}images/next_pager.png" class="next"/>
+                                <img src="{$params.COMMON_ASSET_DIR}images/last.png" class="last"/>
+                            </form>
                         </div>
                     </td>
                 </tr>
@@ -138,13 +154,27 @@
 {include file="instances/modals/_modalDelete.tpl"}
 {/block}
 
-{block name="footer-js"}
-<script type="text/javascript">
-$('.info').popover({
-    title: "{t}Number of contents{/t}",
-    html: true,
-    placement: "top",
-    trigger: 'hover',
-});
-</script>
+{block name="header-css" append}
+    {css_tag href="/jquery_tablesorter/style.css" media="all" type="text/css" common=1}
+    {css_tag href="/jquery_tablesorter/jquery.tablesorter.pager.css" common=1}
+{/block}
+
+{block name="header-js" append}
+    {script_tag src="/jquery/jquery_tablesorter/jquery.tablesorter.js" common=1}
+    {script_tag src="/jquery/jquery_tablesorter/jquery.tablesorter.pager.js" common=1}
+    {script_tag src="/jquery/jquery_tablesorter/jquery.metadata.js" common=1}
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#manager").tablesorter({ widgets: ['zebra'] })
+                         .tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
+
+            $('.info').popover({
+                title: "{t}Number of contents{/t}",
+                html: true,
+                placement: "top",
+                trigger: 'hover',
+            });
+        });
+    </script>
 {/block}
