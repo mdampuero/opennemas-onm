@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-29 12:11+0200\n"
+"POT-Creation-Date: 2013-08-30 12:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1418,20 +1418,20 @@ msgstr ""
 msgid "Unable to create the author with that information"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1152
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1154
 msgid "Author data updated successfully."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1154
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1156
 msgid "Unable to update the author with that information"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1203
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1205
 #, php-format
 msgid "You have deleted %d authors."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1205
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1207
 msgid "You haven't selected any author to delete."
 msgstr ""
 
@@ -1668,20 +1668,20 @@ msgid "Can't get static page metadata."
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/SystemSettingsController.php:70
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:196
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:295
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:180
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:279
 msgid "English"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/SystemSettingsController.php:70
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:197
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:296
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:181
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:280
 msgid "Spanish"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/SystemSettingsController.php:70
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:198
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:297
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:182
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:281
 msgid "Galician"
 msgstr ""
 
@@ -2005,44 +2005,44 @@ msgstr ""
 msgid "You have deleted selected user."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:181
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:165
 #, php-format
 msgid "Unable to find an instance with the id \"%d\""
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:201
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:300
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:185
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:284
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8270
 msgid "Normal"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:202
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:301
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:186
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:285
 msgid "Verbose"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:203
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:302
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:187
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:286
 msgid "All (Paranoic mode)"
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:335
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:319
 msgid "Instance data sent not valid."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:449
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:433
 msgid "Unable to delete the instance."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:454
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:438
 msgid "Instance deleted successfully."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:457
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:441
 msgid "You must provide an id for delete an instance."
 msgstr ""
 
-#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:478
+#: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:462
 #, php-format
 msgid "Unable to find the instance with the id %d"
 msgstr ""
@@ -5540,7 +5540,6 @@ msgid "Are you sure you want to delete <span>%num%</span> articles?"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1709
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8735
 msgid "Delete article"
 msgstr ""
 
@@ -9766,6 +9765,10 @@ msgid ""
 "You can get your PayPal account email from <a href=\"https://www.paypal.com/"
 "us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. "
 "This must be a business account for receiving payments"
+msgstr ""
+
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8735
+msgid "Delete instance"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8747
