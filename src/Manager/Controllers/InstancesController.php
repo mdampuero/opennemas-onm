@@ -76,23 +76,7 @@ class InstancesController extends Controller
 
         $itemsPerPage =  $findParams['per_page'];
 
-        // Pager
-        $pager_options = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => count($instances),
-            'fileName'    => $this->generateUrl(
-                'manager_instances'
-            ).'?filter_name='.$findParams['name'].'&filter_per_page='.$itemsPerPage.'&page=%d',
-        );
-        $pager = \Pager::factory($pager_options);
-
-        $instances = array_slice($instances, ($page-1) * $itemsPerPage, $itemsPerPage);
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
 
         return $this->render(
             'instances/list.tpl',
@@ -100,7 +84,7 @@ class InstancesController extends Controller
                 'instances'     => $instances,
                 'per_page'      => $itemsPerPage,
                 'filter_name'   => $findParams['name'],
-                'pagination'    => $pager,
+                'timeZones'     => $availableTimeZones,
             )
         );
     }
