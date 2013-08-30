@@ -93,7 +93,6 @@ jQuery(document).ready(function($) {
         <div id="instance-edit" class="tabs">
             <ul>
                 <li><a href="#general">{t}General{/t}</a> </li>
-                {if $smarty.get.action neq "new"}
                 <li><a href="#general-information">{t}Information{/t}</a> </li>
                 <li><a href="#internals">{t}Internals{/t}</a> </li>
                 <li><a href="#database">{t}Database{/t}</a></li>
@@ -101,7 +100,6 @@ jQuery(document).ready(function($) {
                 <li><a href="#log">{t}Log{/t}</a></li>
                 <li><a href="#external">{t}External Services{/t}</a></li>
                 <li><a href="#modules">{t}Modules{/t}</a></li>
-                {/if}
             </ul>
             <div id="general">
                 <table>
@@ -207,7 +205,6 @@ jQuery(document).ready(function($) {
                     </tbody>
                 </table>
             </div>
-            {if $smarty.get.action neq "new"}
             <div id="general-information">
                 <table>
                     <tbody>
@@ -338,10 +335,9 @@ jQuery(document).ready(function($) {
                             </th>
                             <td class="controls">
                                 <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                                <span class="default-value">{t}Default: 20 elements{/t}</span>
                             </td>
                             <td valign="top">
-
+                                <span class="default-value">{t}Default: 20 elements{/t}</span>
                             </td>
                         </tr>
                         <tr valign="top" class="control-group">
@@ -350,11 +346,24 @@ jQuery(document).ready(function($) {
                             </th>
                             <td class="controls">
                                 <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                                <span class="default-value">{t}Default: 900 secs{/t}</span>
                             </td>
                             <td valign="top">
-
+                                <span class="default-value">{t}Default: 900 secs{/t}</span>
                             </td>
+                        </tr>
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="pass_level" class="control-label">{t}Minimum password level{/t}:</label>
+                            </th>
+                            <td class="controls">
+                                <select name="pass_level" id="pass_level">
+                                    <option value="-1" {if !isset($configs['pass_level']) || $configs['pass_level'] eq -1}selected="selected"{/if}>{t}Default{/t}</option>
+                                    <option value="0" {if $configs['pass_level'] eq "0"}selected="selected"{/if}>{t}Weak{/t}</option>
+                                    <option value="1" {if $configs['pass_level'] eq "1"}selected="selected"{/if}>{t}Good{/t}</option>
+                                    <option value="2" {if $configs['pass_level'] eq "2"}selected="selected"{/if}>{t}Strong{/t}</option>
+                                </select>
+                            </td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -728,7 +737,6 @@ jQuery(document).ready(function($) {
                     </tbody>
                 </table>
             </div>
-            {/if}
         </div>
     </div>
 </form>

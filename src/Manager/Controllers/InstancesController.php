@@ -369,7 +369,7 @@ class InstancesController extends Controller
             'site_title', 'site_description','site_keywords',
             'site_agency','site_name','site_created',
             'contact_mail','contact_name','contact_IP',
-            'time_zone','site_language',
+            'time_zone','site_language', 'pass_level',
             'newsletter_sender',  'max_mailing', 'mail_server', 'last_invoice',
             'mail_username','mail_password','google_maps_api_key',
             'google_custom_search_api_key','facebook',
