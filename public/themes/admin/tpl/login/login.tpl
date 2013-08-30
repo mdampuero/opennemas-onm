@@ -21,6 +21,16 @@
         {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}
         {css_tag href="/style.css" media="screen" common=1}
         {css_tag href="/loginadmin.css" media="screen" common=1}
+        <style type="text/css">
+            #recaptcha_area {
+                float: left;
+            }
+        </style>
+    {/block}
+    {block name="header-js"}
+    <script type="text/javascript">
+        var RecaptchaOptions = { theme : 'blackglass' };
+    </script>
     {/block}
 
 </head>
@@ -33,11 +43,21 @@
 
     <div class="form-wrapper">
         {render_messages}
-
+        {capture name=reCaptcha}{setting name="failed_login_attempts"}{/capture}
     	<form method="post" autocomplete="off" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
 			<div class="input-wrapper">
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
                 <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
+                {if $smarty.capture.reCaptcha >= 3}
+                <div class="control-group">
+                    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                    <noscript>
+                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
+                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+                    </noscript>
+                </div>
+                {/if}
                 <button id="submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
                 <br><br><br>
                 <p class="right">

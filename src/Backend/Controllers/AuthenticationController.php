@@ -37,6 +37,9 @@ class AuthenticationController extends Controller
     {
         $this->view->assign('version', \Onm\Common\Version::VERSION);
         $this->view->assign('languages', $this->container->getParameter('available_languages'));
+
+        // Load reCaptcha lib
+        require_once 'recaptchalib.php';
     }
 
     /**
@@ -79,6 +82,14 @@ class AuthenticationController extends Controller
         $time     = $this->request->request->filter('time', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
 
+        // reCaptcha vars if setted
+        $rcChallengeField = $this->request->request->filter('recaptcha_challenge_field', '');
+        $rcResponseField  = $this->request->request->filter('recaptcha_response_field', '');
+
+        // Configs for bad login
+        $badLoginLimit = 3; // 3 failed attempts
+        $lockoutTime = 600; // 10 minutes
+
         $user = new \User();
 
         if (array_key_exists('csrf', $_SESSION)
@@ -87,6 +98,22 @@ class AuthenticationController extends Controller
             m::add(_('Login token is not valid. Try to autenticate again.'), m::ERROR);
             return $this->redirect($this->generateUrl('admin_login_form'));
         } else {
+            if (s::get('failed_login_attempts') >= $badLoginLimit) {
+                // Get reCaptcha validate response
+                $resp = recaptcha_check_answer(
+                    '6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs',
+                    $this->request->getClientIp(),
+                    $rcChallengeField,
+                    $rcResponseField
+                );
+
+                // What happens when the CAPTCHA was entered incorrectly
+                if (!$resp->is_valid) {
+                    m::add(_("The reCAPTCHA wasn't entered correctly. Try to autenticate again."), m::ERROR);
+                    return $this->redirect($this->generateUrl('admin_login_form'));
+                }
+            }
+
             // Try to autenticate the user
             if ($user->login($login, $password, $token, $captcha, $time)
                 && $user->type == 0
@@ -104,6 +131,9 @@ class AuthenticationController extends Controller
                     $request->getSession()->migrate();
 
                     $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
+
+                    // Set bad login counter to 0
+                    s::set('failed_login_attempts', 0);
 
                     // Get group(s) of the user
                     $group = array();
@@ -150,6 +180,28 @@ class AuthenticationController extends Controller
 
             } else {
                 m::add(_('Username or password incorrect.'), m::ERROR);
+
+                // Get setting var for count failed login attempts
+                $failedLogin   = (s::get('failed_login_attempts')) ? s::get('failed_login_attempts') : 0;
+                if (!s::get('failed_login_time')) {
+                    $firstBadLogin = time();
+                    s::set('failed_login_time', $firstBadLogin);
+                } else {
+                    $firstBadLogin = s::get('failed_login_time');
+                }
+
+                // First unsuccessful login
+                if ((time() - $firstBadLogin) > $lockoutTime || $failedLogin == 0) {
+                    s::set('failed_login_attempts', 1);
+                    $failedLogin = 1;
+                    // Set first failed login time
+                    s::set('failed_login_time', time());
+                } else {
+                    // Count another bad login
+                    $failedLogin = $failedLogin + 1;
+                    s::set('failed_login_attempts', $failedLogin);
+                }
+
                 return $this->redirect($this->generateUrl('admin_login_form'));
             }
         }
