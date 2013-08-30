@@ -61,3 +61,5 @@ parameters:
         end_point:   https://manager.onm.local/managerws/
         base_domain: opennemas.com
         template:    retrincos
+
+    password_min_level: 1 # Weak(0) | Good(1) | Strong(2)
