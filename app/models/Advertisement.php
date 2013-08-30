@@ -752,7 +752,7 @@ class Advertisement extends Content
 
             $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
                   .sprintf('%06d', $this->pk_advertisement).'.html';
-            $mediaUrl = MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name;
+            $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;
 
             // TODO: controlar los banners swf especiales con div por encima
             if (strtolower($photo->type_img) == 'swf') {
