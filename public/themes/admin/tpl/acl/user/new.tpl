@@ -3,10 +3,54 @@
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
 {script_tag src="/jquery/jquery.multiselect.js" common=1}
+{script_tag src="/jquery/jquery.validate.min.js" common=1}
+{script_tag src="/jquery/localization/messages_es.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
     jQuery(document).ready(function($){
+        // PAssword strength checker
+        var strength = $('#password').passStrength({
+            userid: '#login'
+        });
+
+        $('#formulario').validate({
+            rules: {
+                password: {
+                    minlength : 6
+                },
+                passwordconfirm: {
+                    minlength : 6,
+                    equalTo : "#password"
+                }
+            },
+            highlight: function(element) {
+                $(element).closest('.control-group').removeClass('success').addClass('error');
+            },
+            errorPlacement: function(error, element) {
+                 $(element).closest('.control-group').append(error);
+            },
+            success: function(element) {
+                element
+                    .addClass('valid')
+                    .closest('.control-group').removeClass('error').addClass('success');
+            },
+            submitHandler: function(form) {
+                var levels = ['Weak', 'Good', 'Strong'];
+                var currentLevel = levels.indexOf($('.alert-pass').text());
+                var minLevel = '{$min_pass_level}';
+
+                if(currentLevel >= minLevel) {
+                    form.submit();
+                } else {
+                    $('#password').closest('.control-group').removeClass('success').addClass('error');
+                    $('#password').closest('.control-group').append(
+                        '<label for="password" class="error">Por favor, la contraseña debe ser más compleja.</label>'
+                    );
+                }
+            }
+        });
+
         $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
         $('#user-editing-form').tabs();
 
@@ -30,11 +74,6 @@
                 $('.privileges-tab').show();
                 $('#id_user_group').attr('required', 'required');
             }
-        });
-
-        // PAssword strength checker
-        var strength = $('#password').passStrength({
-            userid: '#login'
         });
 
         // Avatar image uploader
