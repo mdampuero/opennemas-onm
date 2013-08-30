@@ -114,7 +114,7 @@ class Instance
         define('COMMON_CACHE_PATH', realpath($commonCachepath));
 
         // Backup paths
-        define('BACKUP_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/backups"));
+        define('BACKUP_PATH', SITE_PATH.DS.'..'.DS."tmp/backups");
 
         /**
          * Logging settings
