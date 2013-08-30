@@ -1,7 +1,7 @@
 <div class="modal hide fade" id="modal-instance-delete">
     <div class="modal-header">
-      <a class="close" href="#">×</a>
-      <h3>{t}Delete article{/t}</h3>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3>{t}Delete instance{/t}</h3>
     </div>
     <div class="modal-body">
         <p>{t escape=off}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
     $('.del').click(function(e, ui) {
         e.preventDefault();
         $('#modal-instance-delete .modal-body span').html( $(this).data('title') );
-        $("#modal-instance-delete ").modal('show');
+        $("#modal-instance-delete").modal('show');
         $("body").data("selected-for-del", $(this).data("url"));
     });
 
