@@ -8732,7 +8732,7 @@ gettext("Account email:");
 gettext("You can get your PayPal account email from <a href=\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. This must be a business account for receiving payments");
 
 /* public/themes/manager/tpl/instances/modals/_modalDelete.tpl */
-gettext("Delete article");
+gettext("Delete instance");
 
 /* public/themes/manager/tpl/instances/modals/_modalDelete.tpl */
 gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
