@@ -45,26 +45,14 @@ var image_uploader ={
                         <input type="file" name="files[]" multiple>
                     </div>
                 </div>
-                <div class="btn-group">
-                    <button type="submit" class="btn btn-success start">{t}Start upload{/t}</button>
-                    <button type="reset" class="btn btn-danger cancel">{t}Cancel upload{/t}</button>
-                </div>
             </div>
-            <div class="pull-left">
+            <div class="pull-right">
                 <div class="progress progress-striped active fileupload-progressbar fade">
                     <div class="bar" style="width:0%;"></div>
                 </div>
             </div>
-            <div class="fileupload-buttonbar pull-right">
-                <div class="btn-group">
-                    <a href="#" class="btn">
-                        <input type="checkbox" class="toggle">
-                    </a>
-                    <button type="button" class="btn btn-danger delete">{t}Delete selected{/t}</button>
-                </div>
-            </div>
         </div>
-        <div id="dropzone" class="fade well">{t}Drop files here{/t}</div>
+        <div id="dropzone" class="fade well">{t}Drop files anywhere here to upload or click on the "Select Files" button above.{/t}</div>
         <table class="table zebra-striped condensed"><tbody class="files"></tbody></table>
 
         <div class="well">
