@@ -86,15 +86,21 @@
                             <div class="fileupload-buttonbar pull-left">
                                 <div class="btn-group">
                                     <div class="btn fileinput-button input-hidden">
-                                        {t}Select Files{/t}
+                                        <i class="icon-plus-sign"></i>
+                                        {t}Add files...{/t}
                                         <input type="file" name="files[]" multiple>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="pull-right">
+                                <div class="progress progress-striped active fileupload-progressbar fade">
+                                    <div class="bar" style="width:0%;"></div>
                                 </div>
                             </div>
                         </div>
                         <table class="table condensed">
                             <tbody class="files">
-                                <div class="explanation">{t}Drop files anywhere here to upload or click on the "Select Files" button above.{/t}</div>
+                                <div class="explanation">{t}Drop files anywhere here to upload or click on the "Add Files..." button above.{/t}</div>
                             </tbody>
                         </table>
                     </form>
@@ -109,16 +115,13 @@
 
 
 {block name="footer-js" append}
-<!-- The Templates and Load Image plugins are included for the FileUpload user interface -->
-<script src="{$params.JS_DIR}/jquery/tmpl.min.js"></script>
-<!-- The Templates and Load Image plugins are included for the FileUpload user interface -->
-<script src="{$params.JS_DIR}/jquery/load-image.min.js"></script>
-<script src="{$params.JS_DIR}/jquery/bootstrap-image-gallery.min.js"></script>
-<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="{$params.JS_DIR}/jquery/jquery.iframe-transport.js" defer=defer></script>
+{script_tag src="/jquery/tmpl.min.js"}
+{script_tag src="/jquery/load-image.min.js"}
+{script_tag src="/jquery/bootstrap-image-gallery.min.js"}
+{script_tag src="/jquery/jquery.iframe-transport.js"}
+{script_tag src="/jquery/tmpl.min.js" defer=defer}
 {script_tag src="/jquery/jquery.fileupload.js" common=1 defer=defer}
 {script_tag src="/jquery/jquery.fileupload-ui.js" common=1 defer=defer}
-
 {script_tag src="/libs/handlebars.js" common=1}
 {script_tag src="/onm/media-uploader.js"}
 <script>
@@ -128,7 +131,8 @@
         acceptFileTypes: '{t}Filetype not allowed{/t}',
         maxNumberOfFiles: '{t}Max number of files exceeded{/t}',
         uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
-        emptyResult: '{t}Empty file upload result{/t}'
+        emptyResult: '{t}Empty file upload result{/t}',
+        uploadingMessage: '{t}Uploading files{/t}'
     };
     $(function() {
         $('#media-uploader').mediaPicker({
@@ -149,76 +153,76 @@
 </script>
 
 <script type="text/html" id="tmpl-attachment">
-    {literal}
-        <li class="attachment save-ready" data-id="{{id}}">
-            <div class="attachment-preview type-image subtype-png landscape">
-                <div class="thumbnail">
-                    <div class="centered">
-                        <img src="{{thumbnail_url}}" draggable="false">
-                    </div>
+{literal}
+    <li class="attachment save-ready" data-id="{{id}}">
+        <div class="attachment-preview type-image subtype-png landscape">
+            <div class="thumbnail">
+                <div class="centered">
+                    <img src="{{thumbnail_url}}" draggable="false">
                 </div>
-                <a class="check" href="#" title="Deselect"><div class="media-modal-icon"></div></a>
             </div>
-        </li>
-    {/literal}
+            <a class="check" href="#" title="Deselect"><div class="media-modal-icon"></div></a>
+        </div>
+    </li>
+{/literal}
 </script>
 
 <script type="text/html" id="tmpl-attachment-short-info">
-    {literal}
-        {{#with content}}
-            {{#if description}}
-            <strong>{{description}}</strong>
-            {{else}}
-            <strong>{/literal}{t}No description{/t}{literal}</strong>
-            {{/if}} <br>
-            {{width}} x {{height}}, {{size}} kb
-        {{/with}}
-    {/literal}
+{literal}
+    {{#with content}}
+        {{#if description}}
+        <strong>{{description}}</strong>
+        {{else}}
+        <strong>{/literal}{t}No description{/t}{literal}</strong>
+        {{/if}} <br>
+        {{width}} x {{height}}, {{size}} kb
+    {{/with}}
+{/literal}
 </script>
 
 <script type="text/html" id="tmpl-show-element">
-    {literal}
-    {{#with content}}
-    <div class="photo-image-information pull-left clearfix">
-        <div class="thumbnail">
-            <img src="{{image_path}}" />
-        </div>
-
-        <br>
-
-        <div class="well well-small">
-            <div><strong>{/literal}{t}Original filename:{/t}{literal}</strong> {{title}}</div>
-            <div><strong>{/literal}{t}Resolution:{/t}{literal}</strong> {{width}} × {{height}}</div>
-            <div><strong>{/literal}{t}Size:{/t}{literal}</strong> {{size}} Kb</div>
-            <div><strong>{/literal}{t}Created:{/t}{literal}</strong> {{created}}</div>
-        </div>
+{literal}
+{{#with content}}
+<div class="photo-image-information pull-left clearfix">
+    <div class="thumbnail">
+        <img src="{{image_path}}" />
     </div>
 
-    <div class="photo-insert-form pull-left">
-        <h5>Attachment details</h5>
-        <div class="control-group">
-            <label for="caption" class="control-label">{/literal}{t}Caption{/t}{literal}</label>
-            <div class="controls">
-                <textarea required="required" id="caption" name="caption"  class="input-xlarge"
-                    rows="2">{{description}}</textarea>
-            </div>
+    <br>
+
+    <div class="well well-small">
+        <div><strong>{/literal}{t}Original filename:{/t}{literal}</strong> {{title}}</div>
+        <div><strong>{/literal}{t}Resolution:{/t}{literal}</strong> {{width}} × {{height}}</div>
+        <div><strong>{/literal}{t}Size:{/t}{literal}</strong> {{size}} Kb</div>
+        <div><strong>{/literal}{t}Created:{/t}{literal}</strong> {{created}}</div>
+    </div>
+</div>
+
+<div class="photo-insert-form pull-left">
+    <h5>Attachment details</h5>
+    <div class="control-group">
+        <label for="caption" class="control-label">{/literal}{t}Caption{/t}{literal}</label>
+        <div class="controls">
+            <textarea required="required" id="caption" name="caption"  class="input-xlarge"
+                rows="2">{{description}}</textarea>
         </div>
-        <hr>
-        <h5>Attachment display settings</h5>
-        <div class="control-group">
-            <label for="alignment" class="control-label">{/literal}{t}Alignment{/t}{literal}</label>
-            <div class="controls">
-                <select class="alignment" data-setting="align" data-user-setting="align">
-                    <option value="left">Left</option>
-                    <option value="center">Center</option>
-                    <option value="right">Right</option>
-                    <option value="none" selected="">None</option>
-                </select>
-            </div>
+    </div>
+    <hr>
+    <h5>Attachment display settings</h5>
+    <div class="control-group">
+        <label for="alignment" class="control-label">{/literal}{t}Alignment{/t}{literal}</label>
+        <div class="controls">
+            <select class="alignment" data-setting="align" data-user-setting="align">
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+                <option value="none" selected="">None</option>
+            </select>
         </div>
-    </div><!-- /basic -->
-    {{/with}}
-    {/literal}
+    </div>
+</div><!-- /basic -->
+{{/with}}
+{/literal}
 </script>
 
 {literal}
@@ -266,189 +270,4 @@
 {% } %}
 </script>
 {/literal}
-
-{/block}
-
-{block name="header-css" append}
-<style>
-    #media-uploader .full-height {
-        min-height:100%;height:100%;
-    }
-    #media-uploader {
-        width:96% !important;
-        height:90% !important;
-        top:5%;
-        left:2%;
-        right:2%;
-        margin-left:0;
-    }
-    #media-uploader .modal-content {
-        margin-left:200px;
-        position:relative;
-        overflow: hidden;
-    }
-    #media-uploader .modal-footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        padding: 13px 0;
-        height: 30px;
-    }
-    #media-uploader .modal-footer .buttons {
-        margin-right:10px;
-    }
-    #media-uploader .modal-body {
-        padding: 0;
-        position: absolute;
-        right: 0px;
-        left: 0px;
-        top: 48px;
-        bottom: 61px;
-        max-height:100%;
-    }
-    #media-uploader .modal-sidebar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        width: 199px;
-        border-right: 1px solid #eee;
-    }
-    #media-uploader .modal-body-content {
-        max-height:100%;
-        height:100%;
-        position:relative;
-        margin:10px;
-    }
-    #media-uploader .toolbar {
-        border-bottom:1px solid #eee;
-        padding:10px;
-    }
-    #media-uploader .toolbar .btn-toolbar {
-        margin:0;
-    }
-    #media-uploader .hidden {
-        display:none;
-    }
-    #media-uploader .modal-sidebar ul {
-        margin:20px 0 10px 20px;
-        list-style:none;
-    }
-    #media-uploader .modal-sidebar li {
-        list-style:none;
-        margin-bottom:10px;
-    }
-
-    #media-uploader .modal-sidebar li.active a {
-        color:Black;
-    }
-
-    #media-uploader #gallery .attachments {
-        margin:20px 0 10px 20px;
-        list-style:none;
-        margin:0;
-    }
-    #media-uploader #gallery .attachments .attachment {
-        float: left;
-        list-style:none;
-    }
-    #media-uploader #gallery .attachments .attachment-preview {
-        display:inline-block;
-        list-style:none;
-        margin-bottom:10px;
-    }
-    #media-uploader #media-element-show .body {
-        margin:10px;
-    }
-    #media-uploader .modal-sidebar li:first-child {
-        margin-top:30px;
-    }
-    #media-uploader .modal-sidebar a {
-        padding: 4px 0 4px 25px;
-        margin: 0;
-        line-height: 18px;
-        font-size: 14px;
-        color: #21759b;
-        text-shadow: 0 1px 0 #fff;
-        text-decoration: none;
-        background:none;
-        border:none;
-    }
-    #media-uploader .modal-footer .image-info {
-        margin-left: 10px;
-        text-align: left;
-        font-size:10px;
-        line-height:12px;
-    }
-    #media-uploader .modal-footer .image-info strong {
-        font-size:12px;
-    }
-
-    #media-uploader #gallery .thumbnail {
-        display:inline-block;
-        width:120px;
-        height:120px;
-        margin: 0 7px 2px 0;
-        padding:0;
-        border-radius:0;
-    }
-
-
-    #media-uploader #gallery .thumbnail {
-        -moz-transition: none;
-        -webkit-transition: none;
-        -o-transition: color 0 ease-in;
-        transition: none;
-    }
-    #media-uploader #gallery .thumbnail:active {
-        box-shadow: 0 0 0 0px #fff,0 0 0 5px #1e8cbe;
-        /*margin:-5px;*/
-    }
-
-    #media-uploader .upload-content {
-        text-align: center;
-        margin-top: 10%;
-    }
-    #media-uploader .upload-content h3 {
-        font-size:1.1em;
-    }
-    #media-uploader .upload-content a {
-        padding: 13px 26px;
-        font-size: 1.1em;
-    }
-    #media-uploader .photo-insert-form {
-    }
-    #media-uploader .photo-image-information {
-        border-right:1px solid #eee;
-        max-width:300px;
-        margin-right: 10px;
-        padding-right:10px;
-    }
-    #media-uploader #media-element-show h5 {
-        margin-top:0;
-    }
-    #media-uploader .upload-content .alert-success,
-    #media-uploader .upload-content .alert-error {
-        max-width:300px;
-        margin:10px auto;
-        display:none;
-    }
-    #media-uploader .upload-content .loading {
-
-    }
-
-    #media-uploader #dropzone {
-        background:none;
-        font-weight:normal;
-    }
-    #media-uploader #dropzone .explanation {
-        width: 25%;
-        margin: 0 auto;
-        top: 50%;
-        position: absolute;
-        right: 50%;
-        margin-right: -10%;
-        font-weight: bold;
-    }
-</style>
 {/block}
