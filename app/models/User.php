@@ -403,9 +403,9 @@ class User
      **/
     public function checkIfUserExists($data)
     {
-        $sql = "SELECT id FROM users WHERE username=? OR email=?";
+        $sql = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
 
-        $values = array($data['username'], $data['email']);
+        $values = array($data['username'], $data['email'], $data['username'], $data['email']);
         $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
 
         if (isset($data['id']) && $rs == $data['id']) {
