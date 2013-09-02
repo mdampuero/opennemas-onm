@@ -172,8 +172,8 @@
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png|swf)$/i,
                 autoUpload : true,
             }).bind('fileuploadadd', function(e, data) {
-                console.log('fileadded');
                 $('.explanation').hide();
+                $('#fileupload .messages').show();
             }).bind('fileuploadsend', function (e, data) {
                 if (data.dataType.substr(0, 6) === 'iframe') {
                     var target = $('<a/>').prop('href', data.url)[0];
@@ -186,7 +186,8 @@
                 }
             }).bind('fileuploaddone', function (e, data){
                 // Things to do after all files were uploaded.
-                _this.mediapicker.browser.load_browser();
+                $('#fileupload .messages').hide();
+                _this.mediapicker.browser.load_browser(true);
             });
 
             return this;
