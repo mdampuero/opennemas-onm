@@ -327,7 +327,7 @@ class Theme
     /**
      * Registers a parent theme to inherance tpl files
      *
-     * @param string $baseTheme name theme
+     * @param string $parentTheme name theme
      *
      * @return Theme the object
      **/
@@ -346,8 +346,10 @@ class Theme
     public function getParentTheme()
     {
         if (isset($this->parentTheme) && !empty($this->parentTheme)) {
+
             return $this->parentTheme;
         }
+
         return false;
     }
 }
