@@ -34,6 +34,7 @@ class Template extends Smarty
         if (!file_exists(CACHE_PATH.DS.'smarty')) {
             mkdir(CACHE_PATH.DS.'smarty', 0775);
         }
+
         global $sc;
         $baseTheme = '';
         if (isset($sc->getParameter('instance')->theme)) {
