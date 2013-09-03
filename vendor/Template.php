@@ -141,7 +141,7 @@ class Template extends Smarty
     public function saveConfig($data, $configFile)
     {
         $filename = $this->config_dir . $configFile;
-        if ( file_exists($filename) ) {
+        if (file_exists($filename)) {
             $fp = fopen($filename, 'w');
             foreach ($data as $sectionName => $vars) {
                 fwrite($fp, '[' . $sectionName . ']' . "\n");
