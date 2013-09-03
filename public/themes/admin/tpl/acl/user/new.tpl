@@ -39,13 +39,14 @@
                 var levels = ['Weak', 'Good', 'Strong'];
                 var currentLevel = levels.indexOf($('.alert-pass').text());
                 var minLevel = '{$min_pass_level}';
+                var pass = $('#password').val();
 
-                if(currentLevel >= minLevel) {
+                if(currentLevel >= minLevel || pass == '') {
                     form.submit();
                 } else {
                     $('#password').closest('.control-group').removeClass('success').addClass('error');
                     $('#password').closest('.control-group').append(
-                        '<label for="password" class="error">Por favor, la contraseña debe ser más compleja.</label>'
+                        '<label for="password" class="error">{t}Please, the password must be more complex{/t}.</label>'
                     );
                 }
             }
