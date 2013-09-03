@@ -59,6 +59,23 @@
             });
         });
     </script>
+    {include file="media_uploader/media_uploader.tpl"}
+    <script>
+    $(function() {
+        $('#media-uploader').mediaPicker({
+            upload_url: "{url name=admin_image_create category=0}",
+            browser_url : "{url name=admin_media_uploader_browser}",
+            months_url : "{url name=admin_media_uploader_months}",
+            initially_shown:  false,
+            handlers: {
+                'assign_content' : function( event, params ) {
+                    console.log(params);
+                    alert('test');
+                }
+            }
+        });
+    });
+    </script>
 {/block}
 
 {block name="content"}
@@ -256,6 +273,14 @@
                             </div>
                         </div>
                         {/is_module_activated}
+
+                        <div class="contentbox">
+                            <h3 class="title">{t}Media{/t}</h3>
+                            <div class="content">
+                                <div class="image-assigned"></div>
+                                <a href="#media-uploader" data-keyboard="true" data-toggle="modal" class="btn btn-primary">{t}Pick image{/t}</a>
+                            </div>
+                        </div>
 
                     </div>
 

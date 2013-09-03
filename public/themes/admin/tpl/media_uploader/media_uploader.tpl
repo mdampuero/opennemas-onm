@@ -1,10 +1,3 @@
-{extends file="base/admin.tpl"}
-
-
-{block name="content"}
-<div class="wrapper-content" style="margin-top:100px">
-    <a href="#media-uploader" data-keyboard="true" data-toggle="modal" class="btn btn-primary">Show modal</a>
-</div>
 <div class="modal hide tabbable tabs-left" id="media-uploader">
 
     <ul class=" nav nav-tabs modal-sidebar full-height">
@@ -54,11 +47,7 @@
                 <div class="toolbar clearfix">
                     <div class="pull-right btn-toolbar">
                         <div class="btn-group">
-                            <a href="#" class="btn"><i class="icon icon-pencil"></i> {t}Edit{/t}</a>
-                        </div>
-                        <div class="btn-group">
-                            <a href="#" class="btn"><i class="icon icon-share"></i></a>
-                            <a href="#" class="btn"><i class="icon icon-wrench"></i></a>
+                            <a href="#" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {t}Edit{/t}</a>
                         </div>
                     </div>
                     <div class="buttons pull-left">
@@ -69,7 +58,7 @@
             </div>
             <div class="modal-footer">
                 <div class="pull-right buttons">
-                    <a class="btn btn-primary yes" href="#">{t}Insert into article{/t}</a>
+                    <a class="btn btn-primary yes assign_content" href="#">{t}Insert into article{/t}</a>
                 </div>
             </div>
         </div>
@@ -111,10 +100,7 @@
     </div>
 
 </div>
-{/block}
 
-
-{block name="footer-js" append}
 {script_tag src="/jquery/tmpl.min.js"}
 {script_tag src="/jquery/load-image.min.js"}
 {script_tag src="/jquery/bootstrap-image-gallery.min.js"}
@@ -125,23 +111,15 @@
 {script_tag src="/libs/handlebars.js" common=1}
 {script_tag src="/onm/media-uploader.js"}
 <script>
-    var fileUploadErrors = {
-        maxFileSize: '{t}File is too big{/t}',
-        minFileSize: '{t}File is too small{/t}',
-        acceptFileTypes: '{t}Filetype not allowed{/t}',
-        maxNumberOfFiles: '{t}Max number of files exceeded{/t}',
-        uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
-        emptyResult: '{t}Empty file upload result{/t}',
-        uploadingMessage: '{t}Uploading files{/t}'
-    };
-    $(function() {
-        $('#media-uploader').mediaPicker({
-            upload_url: "{url name=admin_image_create category=0}",
-            browser_url : "{url name=admin_media_uploader_browser}",
-            months_url : "{url name=admin_media_uploader_months}",
-            initially_shown:  true,
-        });
-    });
+var fileUploadErrors = {
+    maxFileSize: '{t}File is too big{/t}',
+    minFileSize: '{t}File is too small{/t}',
+    acceptFileTypes: '{t}Filetype not allowed{/t}',
+    maxNumberOfFiles: '{t}Max number of files exceeded{/t}',
+    uploadedBytes: '{t}Uploaded bytes exceed file size{/t}',
+    emptyResult: '{t}Empty file upload result{/t}',
+    uploadingMessage: '{t}Uploading files{/t}'
+};
 </script>
 
 <script type="text/html" id="tmpl-browser-months">
@@ -270,4 +248,3 @@
 {% } %}
 </script>
 {/literal}
-{/block}

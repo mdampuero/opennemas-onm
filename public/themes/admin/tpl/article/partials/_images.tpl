@@ -21,21 +21,13 @@
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" id="frontpage_image" name="{$article->img1}" />
                                 {else}
                                     <div class="drop-here">
-                                        {t}Drop an image to here{/t}
+                                        {t}Image not setted{/t}
                                     </div>
                                 {/if}
                             </div>
-                            <div class="article-resource-image-info">
-                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo1->name|default:'default_img.jpg'}</span></div>
-                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</span> (px)</div>
-                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo1->size|default:0}</span> Kb</div>
-                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo1->created|default:""}</span></div>
-                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo1->description}</span></div>
-                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo1->metadata|default:""}</span></div>
-                            </div>
                         </div><!-- / -->
                         <div id="footer_img_portada" class="article-resource-footer">
-                            <label for="title">{t}Footer text for frontpage image:{/t}</label>
+                            <label for="title">{t}Image footer text{/t}</label>
                             <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
                             <input type="hidden" name="img1" value="{$article->img1|default:""}" class="related-element-id" />
                         </div>
@@ -52,21 +44,13 @@
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}" id="inner_image" name="{$article->img2}" />
                                 {else}
                                     <div class="drop-here">
-                                        {t}Drop an image to here{/t}
+                                        {t}Image not setted{/t}
                                     </div>
                                 {/if}
                             </div>
-                            <div class="article-resource-image-info">
-                                <div><strong>{t}File name{/t}</strong>     <span class="filename">{$photo2->name|default:'default_img.jpg'}</span></div>
-                                <div><strong>{t}Image size{/t}</strong>    <span class="image_size">{$photo2->width|default:0} x {$photo1->height|default:0} (px)</span></div>
-                                <div><strong>{t}File size{/t}</strong>     <span class="file_size">{$photo2->size|default:0} Kb</span></div>
-                                <div><strong>{t}Creation date{/t}</strong> <span class="created_time">{$photo2->created|default:""}</span></div>
-                                <div><strong>{t}Description{/t}</strong>   <span class="description">{$photo2->description|escape:'html'}</span></div>
-                                <div><strong>{t}Tags{/t}</strong>          <span class="tags">{$photo2->metadata|default:""}</span></div>
-                            </div>
                         </div>
                         <div id="footer_img_interior" class="article-resource-footer">
-                            <label for="title">{t}Footer text for inner image:{/t}</label>
+                            <label for="title">{t}Image footer text{/t}</label>
                             <textarea name="img2_footer" title="Imagen" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
                             <input type="hidden" name="img2" value="{$article->img2|default:""}" class="related-element-id"/>
                         </div>
@@ -84,21 +68,13 @@
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}" id="home_image" name="{$photo3->name}" />
                                 {else}
                                     <div class="drop-here">
-                                        {t}Drop an image to here{/t}
+                                        {t}Image not setted{/t}
                                     </div>
                                 {/if}
                             </div>
-                            <div class="article-resource-image-info">
-                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo3->name|default:'default_img.jpg'}</span></div>
-                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo3->width|default:0} x {$photo3->height|default:0}</span> (px)</div>
-                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo3->size|default:0}</span> Kb</div>
-                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo3->created|default:""}</span></div>
-                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo3->description|escape:'html'}</span></div>
-                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo3->metadata|default:""}</span></div>
-                            </div>
                         </div><!-- / -->
                         <div id="footer_img_portada" class="article-resource-footer">
-                            <label for="title">{t}Footer text for Home image:{/t}</label>
+                            <label for="title">{t}Image footer text{/t}</label>
                             <textarea name="params[imageHomeFooter]" style="width:95%" class="related-element-footer">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
                             <input type="hidden" name="params[imageHome]" value="{$article->params['imageHome']|default:""}" class="related-element-id" />
                         </div>
@@ -107,30 +83,6 @@
 
                 {/is_module_activated}
             </div><!-- /related-images -->
-    </div>
-
-    <div class="contentbox-container">
-        <div class="contentbox">
-            <h3 class="title">{t}Available images{/t}</h3>
-            <div id="photos_container" class="photos content">
-                <div class="input-append">
-                    <input id="stringImageSearch" name="stringImageSearch" type="text"
-                       placeholder="{t}Search images by title...{/t}" style="width: 150px !important;"/>
-                    <select style="width:140px" id="category_imag" name="category_imag">
-                        <option value="0">GLOBAL</option>
-                            {section name=as loop=$allcategorys}
-                                <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                {section name=su loop=$subcat[as]}
-                                        <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                {/section}
-                            {/section}
-                    </select>
-                </div>
-                <div id="photos">
-                    {*AJAX imageGallery *}
-                </div>
-            </div>
-        </div>
     </div>
     {/is_module_activated}
 </div>
@@ -268,34 +220,6 @@ jQuery(document).ready(function($){
         };
     });
 
-    load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
-
-    function load_image_results () {
-        var category = $('#category_imag option:selected').val();
-        var text     = $('#stringImageSearch').val();
-        var url      = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
-        load_ajax_in_container(
-            url,
-            $('#photos')
-        );
-    }
-
-    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
-        return load_image_results();
-    });
-    $('#stringImageSearch').keydown(function(event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return load_image_results();
-        }
-    });
-
-    $('#photos').on('click', '.pager a', function(e, ui) {
-        e.preventDefault();
-        var link = $(this);
-        load_ajax_in_container(link.attr('href'), $('#photos'));
-    });
-
     load_ajax_in_container('{url name=admin_videos_content_provider_gallery category=$category}', $('#videos'));
 
     function load_video_results () {
@@ -377,7 +301,7 @@ jQuery(document).ready(function($){
             // Change the form values
             var article_inputs = parent.find(".article-resource-footer");
             article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
-            article_inputs.find("textarea").attr('value',  article_info.find(".description").html());
+            article_inputs.find("textarea").attr('value', image.data("description"));
         }
     });
 });
