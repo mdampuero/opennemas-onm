@@ -295,7 +295,7 @@ class Theme
         return ($this->l10ndomain !== null);
     }
 
-  /**
+    /**
      * Registers a defautl disposition for image in the theme
      *
      * @param array $menuDefinition the menu definition
@@ -319,6 +319,35 @@ class Theme
     {
         if ($this->disposition) {
             return $this->disposition;
+        }
+        return false;
+    }
+
+
+    /**
+     * Registers a defautl disposition for image in the theme
+     *
+     * @param array $menuDefinition the menu definition
+     *
+     * @return Theme the object
+     **/
+    public function registerBaseTheme($baseTheme)
+    {
+        $this->baseTheme = $baseTheme;
+
+        return $this;
+    }
+
+    /**
+     * Returns the default disposition for images in this theme or false if it doesn't have
+     * support for translations
+     *
+     * @return string|false the default disposition defined
+     **/
+    public function getBaseTheme()
+    {
+        if (isset($this->baseTheme) && !empty($this->baseTheme)) {
+            return $this->baseTheme;
         }
         return false;
     }

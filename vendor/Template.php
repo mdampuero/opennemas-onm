@@ -34,10 +34,14 @@ class Template extends Smarty
         if (!file_exists(CACHE_PATH.DS.'smarty')) {
             mkdir(CACHE_PATH.DS.'smarty', 0775);
         }
-
+        global $sc;
+        $baseTheme = $sc->getParameter('instance')->theme->getBaseTheme();
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
         $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);
+        if (!empty($baseTheme)) {
+            $this->addTemplateDir(SITE_PATH.DS.'themes'.DS.$baseTheme.DS.'tpl');
+        }
         $this->addTemplateDir(SITE_PATH.DS.'themes'.DS.'base'.DS.'tpl');
 
         $cachePath = CACHE_PATH.DS.'smarty'.DS.'config'.DS;
@@ -134,7 +138,7 @@ class Template extends Smarty
     public function saveConfig($data, $configFile)
     {
         $filename = $this->config_dir . $configFile;
-        if ( file_exists($filename) ) {
+        if (file_exists($filename)) {
             $fp = fopen($filename, 'w');
             foreach ($data as $sectionName => $vars) {
                 fwrite($fp, '[' . $sectionName . ']' . "\n");
@@ -176,7 +180,7 @@ class Template extends Smarty
     public function loadConfigOrDefault($configFile, $section, $defaultSection = 'default')
     {
         $configFile = $this->config_dir . $configFile;
-        if ( $this->existsConfigSection($configFile, $section) ) {
+        if ($this->existsConfigSection($configFile, $section)) {
             $this->configLoad($configFile, $section);
         } else {
             $this->configLoad($configFile, $defaultSection);
