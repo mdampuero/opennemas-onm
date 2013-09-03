@@ -159,22 +159,22 @@
     {css_tag href="/jquery_tablesorter/jquery.tablesorter.pager.css" common=1}
 {/block}
 
-{block name="header-js" append}
+{block name="footer-js" append}
     {script_tag src="/jquery/jquery_tablesorter/jquery.tablesorter.js" common=1}
     {script_tag src="/jquery/jquery_tablesorter/jquery.tablesorter.pager.js" common=1}
     {script_tag src="/jquery/jquery_tablesorter/jquery.metadata.js" common=1}
 
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#manager").tablesorter({ widgets: ['zebra'] })
-                         .tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
-
             $('.info').popover({
                 title: "{t}Number of contents{/t}",
                 html: true,
                 placement: "top",
                 trigger: 'hover',
             });
+
+            $("#manager").tablesorter()
+                         .tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
         });
     </script>
 {/block}
