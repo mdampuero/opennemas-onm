@@ -53,11 +53,14 @@
                 $('.image-info').append(html_content);
             }).on('mouseout', '.attachment img', function(e, ui) {
                 $('.image-info').html('');
-            }).on('click', '.attachment img', function(e, ui) {
+            }).on('click', '.attachment', function(e, ui) {
+                e.preventDefault();
                 var element = $(this).closest('.attachment');
                 content = contents[element.data('id')];
 
                 $(_this.mediapicker.elementUI).trigger('show', content);
+
+                return false;
             });
 
             return this;
@@ -226,14 +229,18 @@
             });
 
 
-            $(this.$element).find('.assign_content').on('click', function() {
+            $(this.$element).find('.assign_content').on('click', function(e, ui) {
+                e.preventDefault();
+
                 var params = {};
                 params['description'] = _this.$element.find('#caption').val();
                 params['alignment'] = _this.$element.find('.alignment').val();
 
                 _this.assignImage(content, params);
-            })
 
+                return false;
+            }
+)
             return this;
         },
 
@@ -247,7 +254,7 @@
 
         setParent: function(parent) {
             this.mediapicker = parent;
-        },
+        }
     };
 
     // our plugin constructor
@@ -268,41 +275,54 @@
         },
 
         init: function() {
+            var _this = this;
+
             // Introduce defaults that can be extended either
             // globally or using an object literal.
             this.config = $.extend({}, this.defaults, this.options, this.metadata);
-
-            // Load the UI
-            this.initModal();
-
-            this.initHandlers();
 
             // Init components
             this.initUploader();
             this.initBrowser();
             this.initShowElement();
 
-            this.uploader.setParent(this);
-            this.elementUI.setParent(this);
-            this.browser.setParent(this);
+            // Load the UI
+            this.initModal();
+
+            this.$elem.data('mediapicker', this);
+
+            this.initHandlers();
 
             return this;
         },
 
         initModal: function() {
-            this.modal = jQuery(this.$elem).modal({
+            var _this = this;
+
+            var gallery = $('#media-uploader a[href="#gallery"]');
+            this.modal = this.$elem.modal({
                 backdrop: 'static', //Show a grey back drop
                 keyboard: true, //Can close on escape
                 show: this.config.initially_shown,
             })
+            // .on('shown', function() {
+            //     $('#media-uploader a[href="#gallery"]').tab('show');
+            // })
         },
 
         initHandlers: function() {
             var _this = this;
+
+            $('[data-toggle="modal"]').on('click', function() {
+                _this.position = $(this).data('position');
+            })
+
+            // If it was passed handlers for actions register them
             $.each(this.config.handlers, function(key, handler) {
                 _this.$elem.on(key, handler);
             })
 
+            // Register the default assign_content handler, hides the modal
             this.$elem.on('assign_content', function(event, params) {
                 _this.modal.modal('hide');
             });
@@ -314,17 +334,40 @@
 
         initUploader: function() {
             element       = this.$elem.find(this.config.uploader_el);
-            this.uploader      = new Uploader(element, this.config).init();
+            this.uploader = new Uploader(element, this.config).init();
+            this.uploader.setParent(this);
         },
 
         initBrowser: function() {
             element      = this.$elem.find(this.config.browser_el);
-            this.browser      = new Browser(element, this.config).init();
+            this.browser = new Browser(element, this.config).init();
+            this.browser.setParent(this);
         },
 
         initShowElement: function() {
             element        = this.$elem.find(this.config.media_element_el);
-            this.elementUI      = new ElementUI(element, this.config).init();
+            this.elementUI = new ElementUI(element, this.config).init();
+            this.elementUI.setParent(this);
+        },
+
+        buildHTMLElement: function(params) {
+            var html = '';
+
+            var align = '';
+            if (params.hasOwnProperty('position') && params['position'] !== undefined) {
+                align = 'align="'+params['position']+'"'
+            };
+
+            var description = '';
+            if (params.hasOwnProperty('description') && params['description'] !== undefined) {
+                description = 'alt="'+params['description']+'"'
+            };
+
+            var src = 'src="'+params.content.image_path+'"';
+
+            html = '<img '+src+' '+align+' '+description+' class="image" />';
+
+            return html;
         }
     }
 

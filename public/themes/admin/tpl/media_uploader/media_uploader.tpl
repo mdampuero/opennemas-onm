@@ -2,7 +2,7 @@
 
     <ul class=" nav nav-tabs modal-sidebar full-height">
         <li><a href="#upload"  data-toggle="tab">{t}Upload{/t}</a></li>
-        <li class="active"><a href="#gallery"  data-toggle="tab">{t}Browse elements{/t}</a></li>
+        <li class="active"><a href="#gallery"  data-toggle="tab">{t}Browse{/t}</a></li>
         <li><a href="#media-element-show" class="hidden" data-toggle="tab">{t}Show element info{/t}</a></li>
     </ul>
     <div class="tab-content modal-content full-height">
@@ -10,7 +10,7 @@
         <div id="gallery" class="tab-pane full-height active">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-              <h3 class="modal-title">{t}Media gallery{/t}</h3>
+              <h3 class="modal-title">{t}Pick the item to insert{/t}</h3>
             </div>
             <div class="modal-body">
                 <form action="#" class="gallery-search">

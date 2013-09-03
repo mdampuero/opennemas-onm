@@ -2164,7 +2164,7 @@ select#category option.unavailable {
         margin-right: -300px;
         width: 280px;
       }
-        .contentbox-container .contentbox {
+        .contentbox {
           margin-bottom: 15px;
           padding: 0;
           width:100%;
@@ -2180,7 +2180,7 @@ select#category option.unavailable {
           -webkit-box-shadow: inset 0 1px 0 #fff;
           box-shadow: inset 0 1px 0 #fff;
         }
-          .contentbox-container .contentbox .title {
+          .contentbox .title {
             margin: 0;
             padding: 7px 10px;
             border-bottom:1px solid #dfdfdf;
@@ -2201,17 +2201,17 @@ select#category option.unavailable {
             font-size: 13px;
             line-height: 1;
           }
-          .contentbox-container .contentbox .content {
+          .contentbox .content {
             padding:10px;
           }
-          .contentbox-container .contentbox label { display:inline-block;}
+          .contentbox label { display:inline-block;}
 
-          .contentbox-container .contentbox hr.divisor {
+          .contentbox hr.divisor {
             margin:3px 0;
             width:100%;
             border-top:1px solid #ddd;
           }
-          .contentbox-container .contentbox h4 {
+          .contentbox h4 {
             margin: 6px 0;
             font-size: 13px;
             line-height: 1em;
@@ -2224,6 +2224,14 @@ select#category option.unavailable {
 
           #article_images .contentform-inner {
             margin-right: 350px;
+          }
+          #article_images li {
+            list-style:none;
+          }
+          #article_images ul { margin:0; }
+          #article_images .contentbox {
+            display:inline-block;
+            /*width:33%;*/
           }
 
 @media only screen and (max-width:979px) {
@@ -2257,7 +2265,9 @@ select#category option.unavailable {
   }
 }
 
-
+#related_images {
+  margin:0;
+}
 /* =============================================================================
    Tags input
    ========================================================================== */
@@ -2564,11 +2574,11 @@ div#modal-element-customize-content div.select-disposition{
       margin-top: 12px;
     }
     #media-uploader #dropzone .explanation {
-        width: 25%;
+        width: 40%;
         margin: 0 auto;
         top: 50%;
         position: absolute;
-        right: 50%;
+        right: 40%;
         margin-right: -10%;
         font-weight: bold;
     }
