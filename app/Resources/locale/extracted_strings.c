@@ -7526,6 +7526,9 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
+gettext("Please, the password must be more complex");
+
+/* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Editing user");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
@@ -9006,6 +9009,21 @@ gettext("Refresh page every (secs):");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Default: 900 secs");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Minimum password level");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Default");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Weak");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Good");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Strong");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Database Type:");
