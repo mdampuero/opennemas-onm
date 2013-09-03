@@ -296,7 +296,7 @@ class Theme
     }
 
     /**
-     * Registers a defautl disposition for image in the theme
+     * Registers a default disposition for image in the theme
      *
      * @param array $menuDefinition the menu definition
      *
@@ -325,29 +325,28 @@ class Theme
 
 
     /**
-     * Registers a defautl disposition for image in the theme
+     * Registers a parent theme to inherance tpl files
      *
-     * @param array $menuDefinition the menu definition
+     * @param string $baseTheme name theme
      *
      * @return Theme the object
      **/
-    public function registerBaseTheme($baseTheme)
+    public function registerParentTheme($parentTheme)
     {
-        $this->baseTheme = $baseTheme;
+        $this->parentTheme = $parentTheme;
 
         return $this;
     }
 
     /**
-     * Returns the default disposition for images in this theme or false if it doesn't have
-     * support for translations
+     * Returns the parent theme to inherance
      *
-     * @return string|false the default disposition defined
+     * @return string|false the default theme defined
      **/
-    public function getBaseTheme()
+    public function getParentTheme()
     {
-        if (isset($this->baseTheme) && !empty($this->baseTheme)) {
-            return $this->baseTheme;
+        if (isset($this->parentTheme) && !empty($this->parentTheme)) {
+            return $this->parentTheme;
         }
         return false;
     }
