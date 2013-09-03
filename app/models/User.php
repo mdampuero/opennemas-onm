@@ -951,6 +951,21 @@ class User
             $i++;
         }
 
+        // Order names with accents
+        uasort($authors, function($a, $b)
+        {
+            $patterns = array(
+                'a' => '(á|à|â|ä|Á|À|Â|Ä)',
+                'e' => '(é|è|ê|ë|É|È|Ê|Ë)',
+                'i' => '(í|ì|î|ï|Í|Ì|Î|Ï)',
+                'o' => '(ó|ò|ô|ö|Ó|Ò|Ô|Ö)',
+                'u' => '(ú|ù|û|ü|Ú|Ù|Û|Ü)'
+            );
+            $name1 = preg_replace(array_values($patterns), array_keys($patterns), $a->name);
+            $name2 = preg_replace(array_values($patterns), array_keys($patterns), $b->name);
+            return strcasecmp($name1, $name2);
+        });
+
         return $authors;
 
     }
