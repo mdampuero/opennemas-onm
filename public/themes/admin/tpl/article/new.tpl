@@ -69,8 +69,15 @@
             initially_shown:  false,
             handlers: {
                 'assign_content' : function( event, params ) {
-                    console.log(params);
-                    alert('test');
+                    var mediapicker = $(this).data('mediapicker');
+
+                    if (params['position'] == 'body') {
+                        var element = mediapicker.buildHTMLElement(params);
+                        CKEDITOR.instances.body.insertHtml(element);
+                    } else {
+                        //
+                    };
+
                 }
             }
         });
@@ -274,14 +281,6 @@
                         </div>
                         {/is_module_activated}
 
-                        <div class="contentbox">
-                            <h3 class="title">{t}Media{/t}</h3>
-                            <div class="content">
-                                <div class="image-assigned"></div>
-                                <a href="#media-uploader" data-keyboard="true" data-toggle="modal" class="btn btn-primary">{t}Pick image{/t}</a>
-                            </div>
-                        </div>
-
                     </div>
 
                     <div class="form-inline-block contentform-main">
@@ -335,8 +334,11 @@
 
                         <div class="form-vertical">
                             <div class="control-group">
-                                <label for="metadata" class="control-label">
-                                    {t}Body{/t}
+                                <label for="metadata" class="control-label clearfix">
+                                    <div class="pull-left">{t}Body{/t}</div>
+                                    <div class="pull-right">
+                                        <a href="#media-uploader" data-toggle="modal" data-position="body"> + {t}Insert image{/t}</a>
+                                    </div>
                                 </label>
                                 <div class="controls">
                                     <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
