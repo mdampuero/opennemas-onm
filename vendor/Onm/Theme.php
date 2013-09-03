@@ -327,7 +327,7 @@ class Theme
     /**
      * Registers a parent theme to inherance tpl files
      *
-     * @param string $parentTheme name theme
+     * @param string $baseTheme name theme
      *
      * @return Theme the object
      **/
