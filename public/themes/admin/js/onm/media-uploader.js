@@ -206,21 +206,43 @@
 
     ElementUI.prototype = {
         init : function() {
+            var _this = this;
+
             $(this.$element).on('click', '.back-to-browse', function(e, ui) {
                 $('#media-uploader a[href="#gallery"]').tab('show');
             });
 
             $(this).on('show', function(event, content) {
+                $(this.$element).find('.edit-image-button').attr('href', '/admin/images/show?id[]='+content.id);
+
                 var template = Handlebars.compile($('#tmpl-show-element').html());
                 html_content = template({
                     "content": content,
                 });
+
                 $('#media-element-show .body').html(html_content);
 
                 $('#media-uploader a[href="#media-element-show"]').tab('show');
             });
 
+
+            $(this.$element).find('.assign_content').on('click', function() {
+                var params = {};
+                params['description'] = _this.$element.find('#caption').val();
+                params['alignment'] = _this.$element.find('.alignment').val();
+
+                _this.assignImage(content, params);
+            })
+
             return this;
+        },
+
+        assignImage: function(content, params) {
+            var position = this.mediapicker.get('position');
+
+            var params = $.extend({}, params, { 'position': position, 'content' : content});
+
+            this.mediapicker.$elem.trigger('assign_content', params);
         },
 
         setParent: function(parent) {
@@ -253,6 +275,8 @@
             // Load the UI
             this.initModal();
 
+            this.initHandlers();
+
             // Init components
             this.initUploader();
             this.initBrowser();
@@ -266,15 +290,26 @@
         },
 
         initModal: function() {
-            jQuery(this.$elem).modal({
+            this.modal = jQuery(this.$elem).modal({
                 backdrop: 'static', //Show a grey back drop
                 keyboard: true, //Can close on escape
                 show: this.config.initially_shown,
             })
         },
 
+        initHandlers: function() {
+            var _this = this;
+            $.each(this.config.handlers, function(key, handler) {
+                _this.$elem.on(key, handler);
+            })
+
+            this.$elem.on('assign_content', function(event, params) {
+                _this.modal.modal('hide');
+            });
+        },
+
         get: function(name) {
-            return this;
+            return this[name];
         },
 
         initUploader: function() {

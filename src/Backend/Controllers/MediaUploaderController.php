@@ -104,7 +104,7 @@ class MediaUploaderController extends Controller
         }
 
         if (!empty($searchString)) {
-            $filter .= " AND description LIKE '%$searchString%' ";
+            $filter .= " AND description LIKE '%$searchString%' OR title LIKE '%$searchString%";
         }
 
         $cm = new \ContentManager();
