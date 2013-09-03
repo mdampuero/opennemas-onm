@@ -221,6 +221,15 @@ class AlbumsController extends Controller
             $album->create($_POST);
             m::add(_('Album created successfully'), m::SUCCESS);
 
+            // Get category name
+            $ccm = \ContentCategoryManager::get_instance();
+            $categoryName = $ccm->get_name($category);
+
+            // Clean cache album home and frontpage for category
+            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName).'|1');
+            $tplManager->delete('home|1');
+
             if ($continue) {
                 return $this->redirect(
                     $this->generateUrl('admin_album_show', array('id' => $album->id))
