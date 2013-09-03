@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-30 12:41+0200\n"
-"PO-Revision-Date: 2013-08-30 12:41+0200\n"
+"POT-Creation-Date: 2013-09-02 16:43+0200\n"
+"PO-Revision-Date: 2013-09-02 16:45+0200\n"
 "Last-Translator: sandra <sandra@openhost.es>\n"
 "Language-Team: spanish <desarrollo@openhost.es>\n"
 "Language: gl\n"
@@ -35,50 +35,50 @@ msgid "Unable to find the user with the id '%d'"
 msgstr "No se pudo encontrar el usuario con el identificador «%d»"
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:171
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:355
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:361
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:109
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:291
 msgid "Default system language"
 msgstr "Idioma predeterminado del sistema"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:250
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:256
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:187
 msgid "User data updated successfully."
 msgstr "Datos del usuario actualizados correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:252
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:258
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:189
 msgid "Unable to update the user with that information"
 msgstr "No se pudo actualizar el usuario con la información proporcionada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:334
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:340
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:272
 msgid "User created successfully."
 msgstr "Usuario creado correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:343
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:349
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:281
 msgid "Unable to create the user with that information"
 msgstr "No se pudo crear el usuario con la información proporcionada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:411
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:417
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:346
 #, php-format
 msgid "You have deleted %d users."
 msgstr "Se han eliminado %d usuarios."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:413
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:419
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AclUserController.php:348
 msgid "You haven't selected any user to delete."
 msgstr "No ha seleccionado ningún usuario para eliminar."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:532
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:538
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:370
 #, php-format
 msgid "Password reminder for %s"
 msgstr "Recordatorio de contraseña para %s"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:566
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:572
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:404
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:480
 msgid "Unable to send your recover password email. Please try it later."
@@ -86,27 +86,27 @@ msgstr ""
 "No fue posible enviar el correo electrónico de recuperación de contraseña. "
 "Por favor inténtelo más tarde"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:570
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:651
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:576
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:657
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:408
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:484
 msgid "Unable to find an user with that email."
 msgstr "No se pudo encontrar un usuario con ese e-mail."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:611
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:617
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:444
 #, php-format
 msgid "Username reminder for %s"
 msgstr "Recordatorio de nombre de usuario para %s"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:647
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:653
 msgid "Unable to send your recover username email. Please try it later."
 msgstr ""
 "No fue posible enviar el correo electrónico de recuperación de contraseña. "
 "Por favor inténtelo más tarde."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:682
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:712
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:688
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:718
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:509
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:532
 msgid ""
@@ -116,11 +116,11 @@ msgstr ""
 "No se puede encontrar la solicitud de restablecimiento de contraseña. Por "
 "favor compruebe la URL que le enviamos por correo electrónico."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:703
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:709
 msgid "Password successfully updated"
 msgstr "Contraseña actualizada correctamente"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:708
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AclUserController.php:714
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:109
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:211
 msgid "Password and confirmation must be equal."
@@ -205,8 +205,8 @@ msgstr "No publicado"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6791
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6980
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7199
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8843
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8846
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8849
 msgid "Published"
 msgstr "Publicado"
 
@@ -442,22 +442,28 @@ msgstr ""
 msgid "You must assign a section for \"%s\""
 msgstr "Debe asignar una sección para \"%s\""
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:87
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:98
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/AuthenticationController.php:71
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AuthenticationController.php:87
 msgid "Login token is not valid. Try to autenticate again."
 msgstr "Su token de inicio de sesión no es válido. Intente acceder de nuevo."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:97
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:112
+msgid "The reCAPTCHA wasn't entered correctly. Try to autenticate again."
+msgstr ""
+"El código de reCAPTCHA no fue escrito correctamente. Intente acceder de "
+"nuevo."
+
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:124
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AuthenticationController.php:97
 msgid "This user was deactivated. Please ask your administrator."
 msgstr "Este usuario se ha desactivado. Consulte a su administrador."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:100
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:127
 msgid "This user has no access to the control panel."
 msgstr "Este usuario no tiene acceso al panel de control."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:152
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AuthenticationController.php:182
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/AuthenticationController.php:120
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/AuthenticationController.php:127
 msgid "Username or password incorrect."
@@ -2110,7 +2116,7 @@ msgstr "No es posible encontrar la instancia con el identificador «%d»"
 
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:185
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:284
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8270
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8273
 msgid "Normal"
 msgstr "Normal"
 
@@ -2198,7 +2204,7 @@ msgstr "Contenidos"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5999
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6023
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6047
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8855
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8858
 msgid "Articles"
 msgstr "Artículos"
 
@@ -2284,7 +2290,7 @@ msgstr "Multimedia"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4247
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4280
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5225
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8858
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8861
 msgid "Images"
 msgstr "Imágenes"
 
@@ -2309,7 +2315,7 @@ msgstr "Ficheros"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4466
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4580
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5228
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8168
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8171
 msgid "Videos"
 msgstr "Vídeos"
 
@@ -2360,7 +2366,7 @@ msgstr "Papelera"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:830
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:881
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5171
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9053
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9071
 msgid "Newsletter"
 msgstr "Boletín de noticias"
 
@@ -2384,10 +2390,10 @@ msgstr "Palabras clave"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:245
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:311
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2174
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7571
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7574
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9434
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9437
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7577
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9452
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9455
 msgid "Paywall"
 msgstr "Paywall"
 
@@ -2412,9 +2418,9 @@ msgid "Sync Instances"
 msgstr "Sincronizar Instancias"
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Resources/Menu.php:231
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8084
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8138
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8195
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8087
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8141
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8198
 msgid "News Agency"
 msgstr "Agencias de noticias"
 
@@ -2505,16 +2511,16 @@ msgstr "Mailman de Andalucía"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6908
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6965
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7178
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7559
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7562
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9422
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9425
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7565
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9440
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9443
 msgid "Settings"
 msgstr "Opciones"
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Resources/Menu.php:355
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8492
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8900
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8495
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8903
 msgid "General"
 msgstr "General"
 
@@ -2527,7 +2533,7 @@ msgstr "Usuarios y grupos"
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Resources/Menu.php:31
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/Module/ModuleManager.php:120
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7439
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9314
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9332
 msgid "Users"
 msgstr "Usuarios"
 
@@ -2538,8 +2544,8 @@ msgstr "Grupos de usuarios"
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Resources/Menu.php:380
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/Module/ModuleManager.php:92
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9548
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9551
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9566
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9569
 msgid "Cache manager"
 msgstr "Gestor de caché"
 
@@ -2557,7 +2563,7 @@ msgid "Instances"
 msgstr "Instancias"
 
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Resources/Menu.php:11
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8798
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8801
 msgid "Instance Manager"
 msgstr "Gestor de instancias"
 
@@ -2774,9 +2780,9 @@ msgstr "Búsqueda interna"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1538
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6656
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7034
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7598
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8789
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9461
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7601
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8792
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9479
 msgid "Email"
 msgstr "Email"
 
@@ -2894,17 +2900,17 @@ msgstr "Activar/desactivar"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7220
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7391
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7505
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8840
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8864
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9266
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9368
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8843
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8867
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9284
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9386
 msgid "Edit"
 msgstr "Editar"
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Privilege.php:231
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1532
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8132
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9452
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8135
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9470
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -3047,9 +3053,9 @@ msgstr "Publicar/despublicar"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7145
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7445
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7448
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8867
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9320
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9323
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8870
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9338
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9341
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -3289,7 +3295,7 @@ msgstr "Gestor de portadas avanzado"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6866
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7280
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7331
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8111
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8114
 msgid "Category"
 msgstr "Categoría"
 
@@ -3355,7 +3361,7 @@ msgstr "Sincronización de instancias"
 
 #: /home/others/www/idealgallego/onm-instance/vendor/Onm/Module/ModuleManager.php:119
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7367
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9242
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9260
 msgid "User groups"
 msgstr "Grupos de usuario"
 
@@ -3516,15 +3522,15 @@ msgstr "hace %d meses"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7322
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7418
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7421
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7541
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7745
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8378
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8486
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7544
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7748
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8381
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8489
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8882
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9293
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9296
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9404
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8492
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8885
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9311
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9314
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9422
 msgid "Save"
 msgstr "Guardar"
 
@@ -3576,28 +3582,28 @@ msgstr "Guardar"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7094
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7097
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7100
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7685
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7688
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7694
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7691
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7697
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7748
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7700
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7751
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7757
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7754
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7760
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8093
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7763
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8096
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8099
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8150
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8102
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8153
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8156
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8324
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8159
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8327
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8333
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8330
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8336
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8381
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8339
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8384
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8390
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8387
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8393
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8396
 msgid "Go back to list"
 msgstr "Volver a la lista"
 
@@ -3614,14 +3620,14 @@ msgid "Config disqus module"
 msgstr "Configuración del módulo de Disqus"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:29
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8225
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8228
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8231
 msgid "Config Europapress module"
 msgstr "Configurar módulo Europapress"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:32
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7844
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8231
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7847
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8234
 msgid "Config"
 msgstr "Configuración"
 
@@ -3635,11 +3641,11 @@ msgstr "Disqus no está configurado"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:113
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:185
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:347
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7595
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7910
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8051
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9458
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9518
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7598
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7913
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8054
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9476
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9536
 msgid "User name"
 msgstr "Nombre de usuario"
 
@@ -3649,7 +3655,7 @@ msgstr "Nombre de usuario"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:350
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1670
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7478
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9344
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9362
 msgid "Full name"
 msgstr "Nombre completo"
 
@@ -3657,8 +3663,8 @@ msgstr "Nombre completo"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:68
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:287
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7484
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7880
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7988
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7883
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7991
 msgid "E-mail"
 msgstr "Correo electrónico"
 
@@ -3802,16 +3808,16 @@ msgstr "Últimas compras"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7424
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7427
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7430
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7544
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7547
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7550
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8897
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9299
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9302
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9305
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9407
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9410
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9413
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7553
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8900
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9317
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9320
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9323
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9425
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9428
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9431
 msgid "Go back"
 msgstr "Atrás"
 
@@ -3828,16 +3834,16 @@ msgstr ""
 "sus credenciales del API de PayPal a continuación:"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:188
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7616
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7913
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7925
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8054
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8411
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8675
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8759
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9050
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9476
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9521
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7619
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7916
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7928
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8057
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8414
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8678
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8762
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9068
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9494
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9539
 msgid "Password"
 msgstr "Contraseña"
 
@@ -3922,7 +3928,7 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2222
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2981
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3302
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8819
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8822
 msgid "Name"
 msgstr "Nombre"
 
@@ -3941,13 +3947,13 @@ msgstr "Añadir un nuevo modo de pago"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:251
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7451
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9326
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9344
 msgid "Create new user"
 msgstr "Crear nuevo usuario"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:254
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7454
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9329
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9347
 msgid "New user"
 msgstr "Nuevo usuario"
 
@@ -3962,8 +3968,8 @@ msgid "Export list"
 msgstr "Exortar listado"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:278
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8807
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9332
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8810
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9350
 msgid "Filter by name"
 msgstr "Filtrar por nombre"
 
@@ -4072,13 +4078,13 @@ msgstr "Sobreescribir HTML actual"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4235
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4238
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7325
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8135
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8885
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8138
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8888
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8891
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8894
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9233
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9236
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8897
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9251
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9254
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -4092,7 +4098,7 @@ msgstr "Boletín de noticias"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3998
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6230
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7088
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8315
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8318
 msgid "Configuration"
 msgstr "Configuración"
 
@@ -4102,12 +4108,12 @@ msgstr "Configuración"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4481
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5837
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6242
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7691
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7754
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8201
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8213
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8330
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8387
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7694
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7757
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8204
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8216
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8333
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8390
 msgid "Sync list  with server"
 msgstr "Sincronizar lista con servidor"
 
@@ -4304,11 +4310,11 @@ msgstr "Si, eliminarlos todos"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7346
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7409
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7526
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8525
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8744
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8936
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9284
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9389
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8528
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8747
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8939
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9302
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9407
 msgid "No"
 msgstr "No"
 
@@ -4351,9 +4357,9 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7079
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7406
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7523
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8741
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9281
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9386
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8744
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9299
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9404
 msgid "Yes, delete"
 msgstr "Si, eliminar"
 
@@ -4366,7 +4372,7 @@ msgstr "Subscripciones"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2930
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4916
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4919
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8804
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8807
 msgid "New"
 msgstr "Nuevo"
 
@@ -4418,11 +4424,11 @@ msgstr "Filtrar"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:593
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:680
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7490
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8345
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8399
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8834
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8930
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9353
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8348
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8402
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8837
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8933
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9371
 msgid "Activated"
 msgstr "Activado"
 
@@ -4460,11 +4466,11 @@ msgstr "Activado"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7208
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7382
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7493
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8261
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8348
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8837
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9257
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9356
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8264
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8351
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8840
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9275
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9374
 msgid "Actions"
 msgstr "Acciones"
 
@@ -4489,16 +4495,16 @@ msgstr "Desactivado por el administrador"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1682
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7496
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7502
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9359
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9365
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9377
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9383
 msgid "Edit user"
 msgstr "Editar usuario"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:617
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7400
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7517
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9275
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9380
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9293
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9398
 msgid "Delete user"
 msgstr "Eliminar usuario"
 
@@ -4543,8 +4549,8 @@ msgstr "Apellido"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7304
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7340
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7349
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8528
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8933
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8531
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8936
 msgid "Yes"
 msgstr "Sí"
 
@@ -4617,8 +4623,8 @@ msgstr "Desde  %1 ha enviado %2 emails "
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7184
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7256
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7328
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8105
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8249
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8108
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8252
 msgid "Title"
 msgstr "Título"
 
@@ -4627,7 +4633,7 @@ msgstr "Título"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3407
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4103
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4124
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8831
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8834
 msgid "Created"
 msgstr "Creado"
 
@@ -5078,7 +5084,7 @@ msgstr "Eliminar opinión"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6557
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6695
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6896
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8738
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8741
 msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
 msgstr "¿Está seguro de que quiere eliminar \"<span>%title%</span>\"?"
 
@@ -5223,7 +5229,7 @@ msgstr "Autor"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7190
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7307
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7361
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8258
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8261
 msgid "Date"
 msgstr "Fecha"
 
@@ -5447,24 +5453,24 @@ msgstr "Creando autor"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5036
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7001
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7319
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7535
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7538
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8318
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8375
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9398
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9401
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7541
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8321
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8378
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9416
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9419
 msgid "Save and exit"
 msgstr "Guardar y salir"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1520
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7577
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9440
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7580
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9458
 msgid "Photo"
 msgstr "Foto"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1523
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7580
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9443
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7583
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9461
 msgid ""
 "If you want a custom avatar sign up in <a href='http://www.gravatar."
 "com'>gravatar.com</a> with the same email address as you have here in "
@@ -5475,54 +5481,54 @@ msgstr ""
 "electrónico que tienes aquí en OpenNemas"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1526
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7583
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9446
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7586
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9464
 msgid "Add new photo"
 msgstr "Añadir nueva foto"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1529
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7586
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9449
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7589
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9467
 msgid "Change"
 msgstr "Cambiar"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1535
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7592
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9455
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7595
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9473
 msgid "Display name"
 msgstr "Nombre en pantalla"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1541
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7601
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9464
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7604
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9482
 msgid "Twitter user"
 msgstr "Usuario en twitter"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1544
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7481
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7604
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8408
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9047
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9347
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9467
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7607
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8411
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9065
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9365
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9485
 msgid "Username"
 msgstr "Nombre de usuario"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1547
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7607
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9470
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7610
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9488
 msgid "Blog Url"
 msgstr "Url del blog"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1550
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7610
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7613
 msgid "Short Biography"
 msgstr "Biografía corta"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1553
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1673
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7613
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9473
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7616
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9491
 msgid "Biography"
 msgstr "Biografía"
 
@@ -5673,13 +5679,13 @@ msgstr "Avatar"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1688
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7508
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9371
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9389
 msgid "Delete this user"
 msgstr "Eliminar este usuario"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1691
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7511
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9374
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9392
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
@@ -5799,8 +5805,8 @@ msgstr "Fecha de creación"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6482
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6512
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6860
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8186
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9218
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8189
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9236
 msgid "Description"
 msgstr "Descripción"
 
@@ -5912,7 +5918,7 @@ msgid "New article"
 msgstr "Nuevo artículo"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1931
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8234
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8237
 msgid "%1 articles"
 msgstr "%1 artículos"
 
@@ -6005,7 +6011,7 @@ msgstr "Editando artículo"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2111
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2339
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5108
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8108
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8111
 msgid "Content"
 msgstr "Contenido"
 
@@ -6022,7 +6028,7 @@ msgid "Related contents"
 msgstr "Contenidos relacionados"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2126
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7766
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7769
 msgid "Inner title"
 msgstr "Título interior"
 
@@ -6076,7 +6082,7 @@ msgid "Delete widget"
 msgstr "Eliminar widget"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2216
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8801
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8804
 msgid "New widget"
 msgstr "Nuevo widget"
 
@@ -6085,8 +6091,8 @@ msgstr "Nuevo widget"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3074
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5381
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6764
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8849
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8852
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8855
 msgid "Unpublished"
 msgstr "Sin publicar"
 
@@ -6129,8 +6135,8 @@ msgstr "Smarty"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2345
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5825
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5861
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7652
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7655
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7658
 msgid "Categories"
 msgstr "Categorías"
 
@@ -6178,7 +6184,7 @@ msgstr "Categorías a Sincronizar"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2465
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3932
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6122
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8429
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8432
 msgid "Color"
 msgstr "Color"
 
@@ -6208,7 +6214,7 @@ msgid "Connect"
 msgstr "Conectar"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2510
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8516
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8519
 msgid "Site color"
 msgstr "Color del sitio"
 
@@ -6374,7 +6380,7 @@ msgstr "Violeta claro"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2648
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2705
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2744
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8450
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8453
 msgid "Light green"
 msgstr "Verde claro"
 
@@ -6385,7 +6391,7 @@ msgstr "Amarillo claro"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2636
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2693
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2732
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8441
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8444
 msgid "Green"
 msgstr "Verde"
 
@@ -6398,21 +6404,21 @@ msgstr "Azul oscuro"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2642
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2699
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2738
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8444
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8447
 msgid "Blue"
 msgstr "Azul"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2645
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2702
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2741
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8447
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8450
 msgid "Turquoise"
 msgstr "Turquesa"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2651
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2708
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2747
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8453
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8456
 msgid "Bold green"
 msgstr "Verde oscuro"
 
@@ -6420,7 +6426,7 @@ msgstr "Verde oscuro"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2675
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2711
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2750
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8456
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8459
 msgid "Yellow"
 msgstr "Amarillo"
 
@@ -6428,7 +6434,7 @@ msgstr "Amarillo"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2678
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2714
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2753
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8459
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8462
 msgid "Orange"
 msgstr "Naranja"
 
@@ -6436,7 +6442,7 @@ msgstr "Naranja"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2681
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2717
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2756
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8462
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8465
 msgid "Red"
 msgstr "Rojo"
 
@@ -6444,13 +6450,13 @@ msgstr "Rojo"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2684
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2720
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2759
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8438
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8441
 msgid "Bold red"
 msgstr "Rojo oscuro"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2666
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2723
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8465
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8468
 msgid "Purple"
 msgstr "Violeta"
 
@@ -6461,7 +6467,7 @@ msgstr "Gris"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2672
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2690
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8435
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8438
 msgid "Black"
 msgstr "Negro"
 
@@ -6715,7 +6721,7 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3158
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3320
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5465
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7763
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7766
 msgid "Title:"
 msgstr "Título:"
 
@@ -6861,7 +6867,7 @@ msgid "Poll Categories"
 msgstr "Categorías de encuestas"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:3353
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8921
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8924
 msgid "Modules"
 msgstr "Módulos"
 
@@ -6953,7 +6959,7 @@ msgstr "Texto a buscar"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4268
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4286
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6968
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8813
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8816
 msgid "Search"
 msgstr "Buscar"
 
@@ -7429,9 +7435,9 @@ msgid "Inner article image thumbnails"
 msgstr "Miniatura de artículo interior de las imagenes"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4046
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7553
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8162
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9416
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7556
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8165
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9434
 msgid "Basic information"
 msgstr "Información básica"
 
@@ -7486,7 +7492,7 @@ msgid "Geolocate photo with my position"
 msgstr "Geolocalizar foto con mi posición"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4100
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8903
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8906
 msgid "Information"
 msgstr "Información"
 
@@ -7678,7 +7684,7 @@ msgid "OpenNeMaS administration"
 msgstr "Administración de OpenNemas"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4355
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9170
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9188
 msgid "Go to admin main page"
 msgstr "Ir a la página de administración"
 
@@ -7694,18 +7700,18 @@ msgstr "Comentarios pendientes"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4367
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4400
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4403
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7889
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7892
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7937
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7895
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7940
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7997
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7943
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8000
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8066
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8003
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8069
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9191
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9194
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9530
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9533
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8072
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9209
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9212
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9548
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9551
 msgid "Help"
 msgstr "Ayuda"
 
@@ -7719,8 +7725,8 @@ msgstr "Contactar con soporte"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4376
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4379
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9173
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9176
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9191
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9194
 msgid "Edit my profile"
 msgstr "Editar mi perfíl"
 
@@ -7741,51 +7747,51 @@ msgid "Logout from control panel"
 msgstr "Salir del panel de administración"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4394
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9185
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9203
 msgid "Log out"
 msgstr "Salir"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4397
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7886
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7934
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7994
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8063
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9188
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9527
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7889
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7937
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7997
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8066
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9206
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9545
 msgid "About"
 msgstr "Sobre"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4406
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4409
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7895
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7898
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7943
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7901
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7946
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8003
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7949
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8006
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8072
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8009
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8075
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9197
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9200
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9536
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9539
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8078
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9215
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9218
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9554
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9557
 msgid "Privacy Policy"
 msgstr "Política de privacidad"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4412
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4415
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7901
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7904
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7949
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7907
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7952
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8009
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7955
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8012
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8078
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8015
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8081
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9203
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9206
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9542
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9545
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8084
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9221
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9224
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9560
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9563
 msgid "Legal"
 msgstr "Legal"
 
@@ -7953,7 +7959,7 @@ msgid "Go Back"
 msgstr "Atrás"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4751
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7787
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7790
 msgid "Section:"
 msgstr "Sección:"
 
@@ -8052,8 +8058,8 @@ msgid "Viewed:"
 msgstr "Visualizaciones:"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:4979
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7703
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8180
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7706
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8183
 msgid "Date:"
 msgstr "Fecha:"
 
@@ -8086,7 +8092,7 @@ msgid "Actived"
 msgstr "Activado"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5066
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8402
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8405
 msgid "Url"
 msgstr "Url"
 
@@ -8194,7 +8200,7 @@ msgid "Are you sure you want to delete the selected contents?"
 msgstr "¿Está seguro de que quiere eliminar los contenidos seleccionados?"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5213
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8861
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8864
 msgid "Ads"
 msgstr "Publicidades"
 
@@ -8347,13 +8353,13 @@ msgid "Weight:"
 msgstr "Peso:"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5591
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7778
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8948
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7781
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8951
 msgid "Created:"
 msgstr "Creado:"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5594
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7784
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7787
 msgid "Description:"
 msgstr "Descripción"
 
@@ -8494,7 +8500,7 @@ msgstr "Nombre interno"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6002
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6026
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6050
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8165
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8168
 msgid "Photos"
 msgstr "Fotos"
 
@@ -8558,7 +8564,7 @@ msgid "In menu"
 msgstr "En menú"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6158
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9239
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9257
 msgid "We already have being informed of this error: %1"
 msgstr "Ya hemos sido informados de este error: %1"
 
@@ -8664,7 +8670,7 @@ msgid "Creating Album"
 msgstr "Creando álbum"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:6473
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8417
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8420
 msgid "Agency"
 msgstr "Agencia"
 
@@ -8955,72 +8961,72 @@ msgid "Upload PDF"
 msgstr "Subir PDF"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7370
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9245
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9263
 msgid "New Privilege"
 msgstr "Nuevo privilegio"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7373
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9248
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9266
 msgid "New User Group"
 msgstr "Nuevo grupo de usuarios"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7376
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9251
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9269
 msgid "New User group"
 msgstr "Nuevo grupo de usuarios"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7379
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7433
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9254
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9308
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9272
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9326
 msgid "Group name"
 msgstr "Nombre del grupo"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7385
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7388
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9260
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9263
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9278
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9281
 msgid "Edit group"
 msgstr "Editar grupo"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7394
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9269
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9287
 msgid "Delete group"
 msgstr "Eliminar grupo"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7397
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9272
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9290
 msgid "There is no groups created yet."
 msgstr "No hay ningún grupo creado todavía."
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7403
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7520
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9278
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9383
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9296
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9401
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "¿Está seguro de que quiere eliminar \"<span>%title%</span>\"?"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7412
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9287
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9305
 msgid "Editing group"
 msgstr "Editando grupo"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7415
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9290
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9308
 msgid "Creating user group"
 msgstr "Creando grupo de usuarios"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7436
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7565
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7568
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9311
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9428
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9431
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7571
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9329
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9446
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9449
 msgid "Privileges"
 msgstr "Privilegios"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7442
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9317
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9335
 msgid "Delete selected users"
 msgstr "Eliminar usuarios seleccionados"
 
@@ -9029,14 +9035,14 @@ msgid "type"
 msgstr "Todos los tipos"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7469
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7631
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9491
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7634
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9509
 msgid "Backend"
 msgstr "Panel de control"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7472
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7634
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9494
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7637
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9512
 msgid "Frontend"
 msgstr "Público"
 
@@ -9045,204 +9051,208 @@ msgid "and group"
 msgstr "y grupo:"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7487
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9350
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9368
 msgid "Group"
 msgstr "Grupo"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7499
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9362
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9380
 msgid "Activate user"
 msgstr "Usuario activado"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7514
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9377
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9395
 msgid "Editing user group"
 msgstr "Editando grupo de usuario"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7529
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9392
+msgid "Please, the password must be more complex"
+msgstr "Por favor, la contraseña debe ser más compleja"
+
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7532
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9410
 msgid "Editing user"
 msgstr "Editando usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7532
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9395
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7535
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9413
 msgid "Creating user"
 msgstr "Creando usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7556
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9419
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7559
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9437
 msgid "User info"
 msgstr "Información de usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7589
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7592
 msgid "Remove image"
 msgstr "Eliminar imagen"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7619
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9479
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7622
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9497
 msgid "Confirm password"
 msgstr "Confirmar contraseña"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7622
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9482
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7625
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9500
 msgid "Session expire time:"
 msgstr "Tiempo de expiración de sesión:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7625
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9485
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7628
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9503
 msgid "minutes"
 msgstr "minutos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7628
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9488
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7631
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9506
 msgid "User type"
 msgstr "Tipo de usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7637
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9497
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7640
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9515
 msgid "User language"
 msgstr "Idioma del usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7640
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8573
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9500
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7643
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8576
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9518
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para los mensajes, interfaz y medidas en su página web."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7643
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7646
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9503
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9506
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7649
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9521
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9524
 msgid "User group:"
 msgstr "Grupos de usuario:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7649
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9509
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7652
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9527
 msgid "Master"
 msgstr "Maestro"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7658
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7661
 msgid "HOME"
 msgstr "PORTADA"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7661
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9512
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7664
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9530
 msgid "Paywall time limit:"
 msgstr "Tiempo límite de Paywall:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7664
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7667
 msgid "EuropaPress importer"
 msgstr "Importador de EuropaPress"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7667
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7670
 msgid "Article information"
 msgstr "Información de artículo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7670
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7673
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7676
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7679
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7682
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7829
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8087
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7685
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7832
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8090
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8141
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8093
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8144
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8147
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8300
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8150
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8303
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8306
 msgid "Import"
 msgstr "Importar"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7700
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8177
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7703
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8180
 msgid "Priority:"
 msgstr "Prioridad:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7706
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7769
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8174
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7709
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7772
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8177
 msgid "Pretitle:"
 msgstr "Antetítulo:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7709
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7772
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8183
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7712
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7775
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8186
 msgid "Summary:"
 msgstr "Resumen:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7712
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7796
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7715
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7799
 msgid "Body:"
 msgstr "Cuerpo:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7715
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7847
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7718
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7850
 msgid "Photos:"
 msgstr "Fotos:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7718
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7721
 msgid "People:"
 msgstr "Personas:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7721
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7724
 msgid "Place:"
 msgstr "Lugar:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7724
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7727
 msgid "Associated Docs:"
 msgstr "Documentos asociados:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7727
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7730
 msgid "Categories:"
 msgstr "Categorías:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7730
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7733
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7736
 msgid "Level:"
 msgstr "Nivel:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7736
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7739
 msgid "Redactors:"
 msgstr "Redactores:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7739
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7742
 msgid "EFE importer"
 msgstr "Importador de EFE"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7742
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7745
 msgid "Module configuration"
 msgstr "Configuración de módulo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7775
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7778
 msgid "Agency:"
 msgstr "Agencia:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7781
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7784
 msgid "Metadata:"
 msgstr "Metadatos:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7790
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7793
 msgid "Image:"
 msgstr "Foto:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7793
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7796
 msgid "Image Footer:"
 msgstr "Píe de foto:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7799
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7802
 msgid "Ignored labels:"
 msgstr "Etiquetas ignoradas:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7802
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7805
 msgid "Important labels:"
 msgstr "Etiquetas importantes:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7805
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7808
 msgid "Definition values"
 msgstr "Definición de los valores"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7808
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7811
 msgid ""
 "Define the names of labels in the xml files that you want to fill in article "
 "fields"
@@ -9250,62 +9260,62 @@ msgstr ""
 "Defina los nombres de las etiquetas en los archivos XML que quiera completar "
 "en os campos de un artículo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7811
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7814
 msgid "The name can be one attribute or one label in XML file"
 msgstr "El nombre puede ser tanto un atributo como una etiqueta de archivo XML"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7814
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7817
 msgid "Use ignored labels separated with commas"
 msgstr "Use las etiquetas a ignorar separadas por comas"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7817
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7820
 msgid "Check important labels for write with bolder font"
 msgstr "Marque las etiquetas que quiere resaltar"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7820
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7823
 msgid "XML importer"
 msgstr "Importador de XML"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7823
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7826
 msgid "Select files"
 msgstr "Seleccionar archivos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7826
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7829
 msgid "Check"
 msgstr "Comprobar"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7832
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7835
 msgid "Remove File"
 msgstr "Eliminar archivo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7835
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7838
 msgid "Add File"
 msgstr "Añadir archivo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7838
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7841
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7844
 msgid "Config XML Schema"
 msgstr "Configuración de esquema XML"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7850
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7907
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7955
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8048
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9515
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7853
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7910
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7958
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8051
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9533
 msgid "The journalism CMS"
 msgstr "El CMS para periodismo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7853
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7958
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7856
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7961
 msgid "Check Your E-Mail"
 msgstr "Compruebe el correo electrónico"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7856
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7961
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7859
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7964
 msgid "We've sent an e-mail to"
 msgstr "Te hemos enviado un e-mail a"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7859
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7862
 msgid ""
 "Please check your e-mail now for a message with the subject line \"Username "
 "reminder\" from"
@@ -9313,8 +9323,8 @@ msgstr ""
 "Favor consultar el correo electrónico ahora para un mensaje con el asunto "
 "\"Recordatorio de nombre de usuario\" de"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7862
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7970
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7865
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7973
 msgid ""
 "To protect your privacy, we only send this information to the e-mail address "
 "associated with this account."
@@ -9322,12 +9332,12 @@ msgstr ""
 "Para proteger la privacidad, sólo enviaremos esta información a la dirección "
 "de correo electrónico asociada a esta cuenta."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7865
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7973
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7868
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7976
 msgid "PLEASE NOTE"
 msgstr "NOTA"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7868
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7871
 msgid ""
 "If this is not the e-mail address associated with your account, click the "
 "link to resubmit request with the correct e-mail address"
@@ -9336,12 +9346,12 @@ msgstr ""
 "haga clic en el vínculo para volver a presentar solicitud ante la dirección "
 "de correo electrónico correcta"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7871
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7874
 msgid "Recover your username"
 msgstr "Recupere su nombre de usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7874
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7982
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7877
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7985
 msgid ""
 "If you use e-mail filtering or anti-spam software,please make sure our e-"
 "mail is not filtered or blocked."
@@ -9349,41 +9359,41 @@ msgstr ""
 "Si utiliza el filtrado de correo electrónico o software anti-spam, por favor "
 "asegúrese de nuestro e-mail no se filtra o se bloquea."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7877
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7880
 msgid "Enter your e-mail address and click Submit to recover your username."
 msgstr ""
 "Introduzca su dirección de correo electrónico y haga clic en Enviar para "
 "recuperar su nombre de usuario."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7883
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7931
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7991
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7886
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7934
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7994
 msgid "Submit"
 msgstr "Enviar"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7916
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8057
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9524
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7919
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8060
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9542
 msgid "Enter"
 msgstr "Entrar"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7919
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8060
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7922
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8063
 msgid "Forgot Password?"
 msgstr "Contraseña"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7922
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7925
 msgid ""
 "Please enter your new password in both fields below, and then click Submit."
 msgstr ""
 "Introduzca su nueva contraseña en las dos casillas y, a continuación, haga "
 "clic en Enviar."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7928
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7931
 msgid "Re-Enter Password"
 msgstr "Contraseña:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7964
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7967
 msgid ""
 "Please check your e-mail now for a message with the subject line \"Password "
 "reminder\" from"
@@ -9391,13 +9401,13 @@ msgstr ""
 "Favor consultar su correo electrónico ahora para un mensaje con el asunto "
 "\"Recuperación de contraseña\" de"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7967
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7970
 msgid "Click the link in the e-mail to set a password for your account."
 msgstr ""
 "Haga clic en el enlace del correo electrónico para establecer una contraseña "
 "para su cuenta."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7976
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7979
 msgid ""
 "If this is not the e-mail address associated with your account, click the "
 "link to resubmit the \"Reset Your Password\" request with the correct e-mail "
@@ -9407,30 +9417,30 @@ msgstr ""
 "haga clic en el vínculo para volver a presentar la petición de \"Restablecer "
 "la contraseña\" con la dirección de correo electrónico correcta"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7979
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7982
 msgid "Recover password"
 msgstr "Contraseña:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7985
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7988
 msgid "Enter your e-mail address and click Submit to recover your password."
 msgstr ""
 "Introduzca su dirección de correo electrónico y haga clic en Enviar para "
 "recuperar su contraseña."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8015
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8018
 msgid "Dear member"
 msgstr "Estimado usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8018
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8021
 msgid "Per your request, please follow these steps to regain access to"
 msgstr ""
 "Por su petición, por favor, siga estos pasos para recuperar el acceso a"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8021
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8024
 msgid "Click the link below to choose a new password"
 msgstr "Haga clic en el enlace de abajo para seleccionar una nueva contraseña"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8024
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8027
 msgid ""
 "If the link is not clickable, you can copy and paste the address into your "
 "Web browser's address window"
@@ -9438,7 +9448,7 @@ msgstr ""
 "Si en el enlace no se puede hacer clic, puede copiar y pegar la dirección en "
 "la ventana de dirección del navegador Web"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8027
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8030
 msgid ""
 "Follow the instructions on the screen to choose a new password.  After you "
 "have chosen a password you will automatically enter"
@@ -9446,19 +9456,19 @@ msgstr ""
 "Siga las instrucciones de la pantalla para elegir una nueva contraseña. "
 "Después de haber seleccionado una contraseña se entra automáticamente"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8030
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8033
 msgid "In the future you can login to"
 msgstr "En el futuro se puede acceder a"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8033
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8036
 msgid "by entering your e-mail address and this password"
 msgstr "introduciendo su dirección de correo electrónico y la contraseña"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8036
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8039
 msgid "If you did not request your ID and password for"
 msgstr "Si usted no solicitó su ID y contraseña para"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8039
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8042
 msgid ""
 "someone has mistakenly entered your e-mail address when requesting their "
 "password"
@@ -9466,7 +9476,7 @@ msgstr ""
 "alguien ha entrado por error su dirección de correo electrónico, al "
 "solicitar la contraseña"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8042
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8045
 msgid ""
 "Please ignore this message, or, if you wish, you may go to the address above "
 "to select a new password for your account"
@@ -9474,7 +9484,7 @@ msgstr ""
 "Por favor ignore este mensaje, o, si lo deseas, puedes ir a la dirección "
 "anterior para seleccionar una nueva contraseña para su cuenta"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8045
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8048
 msgid ""
 "To protect your privacy, we will only send this information to the e-mail "
 "address on file for this account"
@@ -9482,7 +9492,7 @@ msgstr ""
 "Para proteger su privacidad, sólo se enviará esta información a la dirección "
 "de correo electrónico registrada para esta cuenta"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8102
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8105
 msgid ""
 "You are about to import one article, please select a category where to "
 "import the article"
@@ -9490,218 +9500,218 @@ msgstr ""
 "Está a punto de importar un artículo, seleccione la categoría en donde "
 "importarlo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8114
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8117
 msgid "In which category you want to import this element?"
 msgstr "En que categoría quiere importar este elemento?"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8117
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8120
 msgid "Syncing from sources"
 msgstr "Sincronizando desde los orígenes"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8120
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8123
 msgid "Downloading articles from news agencies, please wait..."
 msgstr ""
 "Descargando artículos desde las agencias de noticias, por favor espere..."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8123
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8126
 msgid "Stop sync"
 msgstr "Parar sincronización"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8126
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8129
 msgid "Remove the server configuration"
 msgstr "Eliminar la configuración del servidor"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8129
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8132
 msgid "Are you sure that you want to delete the selected server configuration?"
 msgstr ""
 "¿Está seguro de que desea eliminar la configuración del servidor "
 "seleccionado?"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8159
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8162
 msgid "This article was imported before. Take care of it."
 msgstr "Este artículo fue importado con anterioridad."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8171
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8174
 msgid "Other attachments"
 msgstr "Otros anexos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8189
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8192
 msgid "Files:"
 msgstr "Archivos:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8192
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8195
 msgid "Documentary modules:"
 msgstr "Módulos documentales:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8198
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8204
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8201
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8207
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8210
 msgid "Sync with server"
 msgstr "Sincronizar con servidor"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8210
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8216
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8213
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8219
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8222
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8225
 msgid "Reload list"
 msgstr "Recargar listado"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8237
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8240
 msgid "Filter by title or content"
 msgstr "Filtrar por título o contenido"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8240
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8243
 msgid "and in"
 msgstr "y en"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8243
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8246
 msgid "All sources"
 msgstr "Todos los orígenes"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8246
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8249
 msgid "Priority"
 msgstr "Prioridad"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8252
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8255
 msgid "Attachments"
 msgstr "Adjuntos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8255
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8258
 msgid "Origin"
 msgstr "Origen"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8264
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8267
 msgid "Urgent"
 msgstr "Urgente"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8267
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8270
 msgid "Important"
 msgstr "Importante"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8273
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8276
 msgid "Basic"
 msgstr "Básica"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8276
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8279
 msgid "With image"
 msgstr "Con imagen"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8279
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8282
 msgid "This new has attached images"
 msgstr "Esta noticia tiene imagenes asociadas"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8282
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8285
 msgid "With video"
 msgstr "Con vídeo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8285
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8291
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8297
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8288
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8294
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8300
 msgid "This new has attached videos"
 msgstr "Esta noticia tiene vídeos asociados"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8288
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8291
 msgid "With files"
 msgstr "Con archivos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8294
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8297
 msgid "With documentary modules"
 msgstr "Con modulos documentales"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8306
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8309
 msgid "There is no elements to import"
 msgstr "No hay ningún elemento para poder importarlo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8309
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8312
 msgid ""
 "Try syncing from server by click over the \"Sync with server\" button above."
 msgstr ""
 "Intente actualizar esta lista desde el servidor pulsando el botón "
 "«Sincronizar con servidor» desde la barra de herramientas superior."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8312
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8366
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8315
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8369
 msgid "News agency"
 msgstr "Agencias de noticias"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8321
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8324
 msgid "Add server"
 msgstr "Añadir servidor"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8339
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8396
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8342
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8399
 msgid "Source name"
 msgstr "Nome del origen"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8342
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8345
 msgid "Sync from"
 msgstr "Sincronizar desde"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8351
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8354
 msgid "Enabled"
 msgstr "Activado"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8354
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8357
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8357
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8360
 msgid "Removes the synchronized files for this source"
 msgstr "Elimina los archivos sincronizados para este origen"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8360
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8477
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8363
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8480
 msgid "Hide password"
 msgstr "Ocultar contraseña"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8363
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8414
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8480
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8678
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8366
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8417
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8483
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8681
 msgid "Show password"
 msgstr "Mostrar contraseña"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8369
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8372
 msgid "Update source"
 msgstr "Actualizar origen"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8372
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8375
 msgid "Add source"
 msgstr "Añadir origen"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8405
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8408
 msgid "The server url for this source. Example: ftp://server.com/path"
 msgstr ""
 "La url del servidor para esta origen. Por ejemplo. ftp://server.com/path"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8420
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8423
 msgid "When importing elements this will be the signature"
 msgstr "Al importar elementos esta será la firma"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8423
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8426
 msgid "Import authors"
 msgstr "Importar autores"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8426
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8429
 msgid ""
 "Activate this if you want to import the author of the elements if available"
 msgstr ""
 "Active esta opción si desea importar el autor de los elementos, si está "
 "disponible"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8432
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8435
 msgid "Dark Gray"
 msgstr "Gris oscuro"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8468
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8471
 msgid "Color to distinguish between other agencies"
 msgstr "Color para distinguir entre otras agencias"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8471
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8474
 msgid "Sync elements newer than"
 msgstr "Sincronizar elementos más actuales que"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8474
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8477
 msgid ""
 "Set this to you preferences to fetch elements since a fixed date.<br>Less "
 "time means faster synchronizations."
@@ -9709,123 +9719,123 @@ msgstr ""
 "Establezca esta preferenca para obtener los elementos desde una fecha fija."
 "<br>Menos tiempo implica sincronizaciones más rápidas."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8483
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8486
 msgid "System settings"
 msgstr "Opciones del sistema"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8495
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8498
 msgid "SEO"
 msgstr "SEO"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8498
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8501
 msgid "Internal"
 msgstr "Interno"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8501
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8918
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8504
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8921
 msgid "External Services"
 msgstr "Servicios externos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8504
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8507
 msgid "Site name"
 msgstr "Nombre del sitio"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8507
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8510
 msgid "This will be displayed as your site name."
 msgstr "Usado como el nombre de su sitio."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8510
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8513
 msgid "Site agency"
 msgstr "Agencia del sitio"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8513
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8516
 msgid "This will be displayed as the default article signature."
 msgstr "Usado como firma en los artículos por omisión."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8519
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8522
 msgid "Color used for links, menus and some widgets."
 msgstr "Color usado para enlaces, menús y algunos widgets."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8522
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8525
 msgid "Use custom logo"
 msgstr "Usar logotipo personalizado"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8531
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8534
 msgid "Site logo"
 msgstr "Logo del sitio"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8534
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8537
 msgid "Favico"
 msgstr "Favico"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8537
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8540
 msgid "Site Mobile logo"
 msgstr "Logotipo del sitio para móvil"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8540
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8543
 msgid "Footer text"
 msgstr "Texto del pie de página"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8543
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8546
 msgid ""
 "Text showed at the bottom of your page. Usually used for copyright notice."
 msgstr ""
 "Texto que se muestra en la parte inferior de su página. Normalmente usado "
 "para el copyright."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8546
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8549
 msgid "SEO options"
 msgstr "Opciones de SEO"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8549
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8552
 msgid "Site title"
 msgstr "Título del sitio"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8552
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8555
 msgid "Site description"
 msgstr "Descripción del sitio"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8555
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8558
 msgid "Site keywords"
 msgstr "Palabras clave del sitio"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8558
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8561
 msgid "Web Master Tools"
 msgstr "Web Master Tools"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8561
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8564
 msgid "Google Web Master Tools"
 msgstr "Google Web Master Tools"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8564
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8567
 msgid "Bing Web Master Tools"
 msgstr "Bing Web Master Tools"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8567
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8570
 msgid "Language & Time"
 msgstr "Idioma y hora"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8570
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8573
 msgid "Default language"
 msgstr "Idioma por omisión"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8576
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8579
 msgid "Time Zone"
 msgstr "Zona horaria"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8579
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8582
 msgid "Used for all the dates used in your webpage."
 msgstr "Usado en todas las fechas usadas en su página web."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8582
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8585
 msgid "Listing & sorting"
 msgstr "Listados y ordenación"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8585
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8588
 msgid "Refresh page interval"
 msgstr "Intervalo de actualización de la página"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8588
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8591
 msgid ""
 "When a user visits pages and stay on it for a while, this setting allows to "
 "refresh the loaded page for updated it."
@@ -9833,42 +9843,42 @@ msgstr ""
 "Cuando un usuario visita una página y se queda en ella por un rato, esta "
 "configuración le permite recargar la página para actualizarla."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8591
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8594
 msgid "Items per page"
 msgstr "Elementos por página"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8594
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8597
 msgid "Sessions"
 msgstr "Sesiones"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8597
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8600
 msgid "Max session lifetime"
 msgstr "Tiempo de expiración máximo para las sesiones"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8600
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8603
 msgid "Minutes after a user session is considered as invalid."
 msgstr ""
 "Minutos despues de los cuales una sesión de usuario se considera como no "
 "válida."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8603
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9089
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8606
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9107
 msgid "Google Services"
 msgstr "Servicios de Google"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8606
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8609
 msgid "Google+ Page Url"
 msgstr "Url de la página de Google+"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8609
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8612
 msgid "If you have a <b>Google+ page</b>, please complete this input."
 msgstr "Si tiene una <b>página en Google+</b>, complete este campo."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8612
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8615
 msgid "Google Maps API key"
 msgstr "Llave de la API de Google Maps"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8615
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8618
 msgid ""
 "You can get your Google <strong>Maps</strong> API Key from <a href=\"http://"
 "code.google.com/apis/maps/signup.html\" target=\"_blank\">Google maps sign "
@@ -9878,12 +9888,12 @@ msgstr ""
 "\"http://code.google.com/apis/maps/signup.html\" target=\"_blank\">el sitio "
 "web Google Maps sign up</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8618
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9101
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8621
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9119
 msgid "Google Search API key:"
 msgstr "Llave de la API de Google Search:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8621
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8624
 msgid ""
 "You can get your Google <strong>Search</strong> API Key from <a href="
 "\"http://www.google.com/cse/manage/create\" target=\"_blank\">Google Search "
@@ -9893,11 +9903,11 @@ msgstr ""
 "\"http://www.google.com/cse/manage/create\" target=\"_blank\">el sitio web "
 "Google Search sign up</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8624
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8627
 msgid "Google Analytics API key"
 msgstr "Llave de la API de Google Analytics"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8627
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8630
 msgid ""
 "You can get your Google Analytics Site ID from <a href=\"https://www.google."
 "com/analytics/\" target=\"_blank\">GAnalytics site</a> under the General "
@@ -9907,15 +9917,15 @@ msgstr ""
 "www.google.com/analytics/\" target=\"_blank\">el sitio web de GAnalytics</a> "
 "bajo la lista de la Vista previa (debería ser algo semejante a UA-546457-3)."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8630
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8633
 msgid "Publication name in Google News"
 msgstr "Nombre de la publicación en Google News"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8633
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8636
 msgid "YouTube Page Url"
 msgstr "Url de la página de Youtube"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8636
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8639
 msgid ""
 "If you have a <b>Youtube page</b>, please complete the form with your "
 "youtube page url."
@@ -9923,16 +9933,16 @@ msgstr ""
 "Si tiene un a <b>página en Youtube</b>, complete el formulario con la URL de "
 "la página de Youtube."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8639
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9104
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8642
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9122
 msgid "Facebook"
 msgstr "Facebook"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8642
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8645
 msgid "Facebook Page Url"
 msgstr "Url de la página de Facebook"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8645
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8648
 msgid ""
 "If you have a <b>facebook page</b>, please complete the form with your "
 "facebook page url and Id."
@@ -9940,15 +9950,15 @@ msgstr ""
 "Si tiene un a <b>página en Facebook</b>, complete el formulario con la URL "
 "de la página de Facebook y el Id."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8648
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8651
 msgid "Facebook Id"
 msgstr "Id de Facebook"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8651
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8654
 msgid "APP key"
 msgstr "Llave de la aplicación"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8654
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8657
 msgid ""
 "You can get your Facebook App Keys from <a href=\"https://developers."
 "facebook.com/apps\" target=\"_blank\">Facebook Developers website</a>."
@@ -9957,19 +9967,19 @@ msgstr ""
 "developers.facebook.com/apps\" target=\"_blank\">el sitio web Facebook "
 "Developers</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8657
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8660
 msgid "Secret key"
 msgstr "Llave secreta"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8660
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8663
 msgid "Twitter"
 msgstr "Twitter"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8663
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8666
 msgid "Twitter Page"
 msgstr "Página en Twitter"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8666
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8669
 msgid ""
 "If you also have a <b>twitter page</b>, add your profile name on the form. "
 "<br/>Default will be set with Opennemas."
@@ -9977,71 +9987,71 @@ msgstr ""
 "Si tiene una <b>página en Twitter</b>, a;ada su nombre de perfíl en el form."
 "<br/>Por omisión se usará el de OpenNemas"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8669
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8672
 msgid "Opennemas News Agency"
 msgstr "Agencia de noticias Opennemas"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8672
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8756
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8786
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8675
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8759
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8789
 msgid "User"
 msgstr "Usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8681
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9134
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8684
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9152
 msgid "Piwik Statistics"
 msgstr "Estadísticas de Piwik"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8684
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8687
 msgid "Page ID"
 msgstr "Identificador del sitio"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8687
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8690
 msgid "Server URL"
 msgstr "Server URL"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8690
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8693
 msgid "User token auth"
 msgstr "Token-auth del usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8693
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8696
 msgid "OJD Statistics"
 msgstr "Estadísticas de OJD"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8696
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8699
 msgid "OJD Page ID"
 msgstr "Identificador del sitio en OJD"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8699
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8702
 msgid "If you also have a <b>OJD statistics service</b>, add your page id"
 msgstr ""
 "Si ya tiene el <b>servicio de estadísticas de OJD</b>, añada su "
 "identificador de página"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8702
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8705
 msgid "ComScore Statistics"
 msgstr "Estadísticas de comScore"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8705
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8708
 msgid "comScore Page ID"
 msgstr "Identificador de página comScore"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8708
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8711
 msgid "If you also have a <b>comScore statistics service</b>, add your page id"
 msgstr ""
 "Si ya tiene el <b>servicio de estadísticas de comScore</b>, añada su "
 "identificador de página"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8711
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9149
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8714
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9167
 msgid "Recaptcha"
 msgstr "Recaptcha"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8714
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8717
 msgid "Public key"
 msgstr "Llave pública"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8717
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8720
 msgid ""
 "Get your reCaptcha key from <a href=\"http://www.google.com/recaptcha/"
 "whyrecaptcha\" target=\"_blank\">this page</a>."
@@ -10049,24 +10059,24 @@ msgstr ""
 "Puede obtener sus llaves de reCAPTCHA desde <a href=\"http://www.google.com/"
 "recaptcha/whyrecaptcha\" target=\"_blank\">esta página</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8720
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8723
 msgid "Used when we want to test if the user is an human and not a robot."
 msgstr ""
 "Usado cuando quiere comprobar si un usuario es un humano y no un robot."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8723
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8726
 msgid "Private key"
 msgstr "Llave privada"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8726
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8729
 msgid "Paypal Settings"
 msgstr "Opciones de Paypal"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8729
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8732
 msgid "Account email:"
 msgstr "Correo del usuario de la cuenta"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8732
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8735
 msgid ""
 "You can get your PayPal account email from <a href=\"https://www.paypal.com/"
 "us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. "
@@ -10076,131 +10086,131 @@ msgstr ""
 "cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal</a>. Esta "
 "debe ser tu cuenta de empresa para recibir las notificaciones de pagos."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8735
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8738
 msgid "Delete instance"
 msgstr "Eliminar instancia"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8747
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8750
 msgid "Welcome to OpenNemas"
 msgstr "Bienvenido a OpenNeMas"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8750
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8753
 msgid "Your Opennemas' Newspaper is now available"
 msgstr "Su periódico OpenNemas está disponible"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8753
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8756
 msgid "Your data are"
 msgstr "Sus datos son"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8762
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8765
 msgid "You can access to newspaper with this link"
 msgstr "Puede acceder al diario con este enlace"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8765
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8768
 msgid "You can also access the administrative area through this link"
 msgstr "También puede acceder a la zona administrativa a través de este enlace"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8768
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8771
 msgid "using the username and password provided in the email"
 msgstr ""
 "usando el nombre de usuario y contraseña que te proporcionamos en el correo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8771
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8774
 msgid ""
 "Please change your password on your first access to the administrative area"
 msgstr ""
 "Por favor, cambie su contraseña al acceder por primera vez al área de "
 "administración"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8774
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8777
 msgid "In case you have any problems, please contact via e-mail"
 msgstr ""
 "En caso de encontrar cualquier problema, contáctenos mediante correo "
 "electrónico"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8777
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8795
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8780
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8798
 msgid "Sincerely"
 msgstr "Sinceramente"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8780
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8783
 msgid "A new instance has been created"
 msgstr "Se ha creado una nueva instancia"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8783
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8786
 msgid "You can access your newspaper with the information bellow"
 msgstr "Puede acceder al diario con la información abajo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8792
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8795
 msgid "Newspaper URL"
 msgstr "URL del periódico"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8810
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8813
 msgid "Per page"
 msgstr "Por página"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8816
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8819
 msgid "#"
 msgstr "#"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8822
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8825
 msgid "Domains"
 msgstr "Dominios"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8825
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8828
 msgid "Contact"
 msgstr "Contacto"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8828
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8831
 msgid "Last access"
 msgstr "Último accesso"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8870
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8873
 msgid "There is no available instances yet"
 msgstr "No hay ninguna instancia todavía"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8873
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8876
 msgid "Number of contents"
 msgstr "Número de contenidos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8876
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8879
 msgid "Creating new intance"
 msgstr "Crear nueva instancia"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8879
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8882
 msgid "Editing instance \"%1\""
 msgstr "Editando instancia «%1»"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8906
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8909
 msgid "Internals"
 msgstr "Internas"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8909
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8912
 msgid "Database"
 msgstr "Base de datos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8912
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9041
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8915
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9059
 msgid "Mail"
 msgstr "Correo electrónico"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8915
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8918
 msgid "Log"
 msgstr "Registro"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8924
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8927
 msgid "Instance name"
 msgstr "Nombre de la instancia"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8927
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8930
 msgid "(Human readable name)"
 msgstr "(Adaptado a personas)"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8939
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8942
 msgid "Domains:"
 msgstr "Dominios:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8942
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8945
 msgid ""
 "List of domains separated by commas. You can use wildcards, i.e. *.example."
 "com"
@@ -10208,113 +10218,133 @@ msgstr ""
 "Lista de dominios separados por comas. Puede usar comodines, p.ej. *.ejemplo."
 "com"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8945
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8948
 msgid "User contact IP:"
 msgstr "IP del usuario de contacto:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8951
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8954
 msgid "User name:"
 msgstr "Nombre de usuario:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8954
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8957
 msgid "User password:"
 msgstr "Contraseña:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8957
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8960
 msgid "(The password must have between 8 and 16 characters)"
 msgstr "Su clave debe tener entre 8 y 16 caracteres"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8960
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8963
 msgid "User contact mail:"
 msgstr "Correo del usuario de contacto:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8963
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8966
 msgid "Site title:"
 msgstr "Título del sitio:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8966
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8969
 msgid "Site description:"
 msgstr "Descripción del sitio:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8969
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8972
 msgid "Site keywords:"
 msgstr "Palabras clave del sitio:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8972
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8975
 msgid "Site agency:"
 msgstr "Agencia del sitio:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8975
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8978
 msgid "Time Zone:"
 msgstr "Zona horaria:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8978
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8981
 msgid "Language"
 msgstr "Idioma:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8981
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8984
 msgid "Internal name:"
 msgstr "Nombre interno:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8984
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8987
 msgid "Used for cache prefixes and internal ONM operations"
 msgstr "Usado para los prefijos de caché y operaciones internas de ONM"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8987
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8990
 msgid "Template:"
 msgstr "Tema:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8990
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8993
 msgid "External media url:"
 msgstr "URL del servidor multimedia:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8993
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8996
 msgid "Enable advertisements:"
 msgstr "Publicidad habilitada:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8996
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9071
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9077
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8999
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9089
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9095
 msgid "Default: true"
 msgstr "Por omisión: verdadero"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8999
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9002
 msgid "Items per page:"
 msgstr "Elementos por página:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9002
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9005
 msgid "Default: 20 elements"
 msgstr "Por omisión: 20 elementos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9005
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9008
 msgid "Refresh page every (secs):"
 msgstr "Actualizar página cada (seg):"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9008
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9011
 msgid "Default: 900 secs"
 msgstr "Por omisión se refrescarán las páginas a los 900 segundos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9011
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9014
+msgid "Minimum password level"
+msgstr "Nivel mínimo de contraseña"
+
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9017
+msgid "Default"
+msgstr "Por omisión"
+
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9020
+msgid "Weak"
+msgstr "Débil"
+
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9023
+msgid "Good"
+msgstr "Buena"
+
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9026
+msgid "Strong"
+msgstr "Fuerte"
+
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9029
 msgid "Database Type:"
 msgstr "Tipo de base de datos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9014
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9032
 msgid "Mysql/Percona"
 msgstr "Mysql/Percona"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9017
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9035
 msgid "Mysql/Percona old driver"
 msgstr "Mysql/Percona (driver antiguo)"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9020
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9038
 msgid "Postgres"
 msgstr "Postgres"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9023
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9041
 msgid "Oracle"
 msgstr "Oracle"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9026
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9044
 msgid ""
 "Please doble check your database settings, those will be used as the default "
 "Database data access for this instance."
@@ -10323,72 +10353,72 @@ msgstr ""
 "datos, dichos datos se usaran como datos de acceso a la base de datos para "
 "esta instancia."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9029
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9047
 msgid "Database server:"
 msgstr "Servidor de la base de datos:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9032
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9050
 msgid "Database name:"
 msgstr "Nombre de la base de datos:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9035
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9053
 msgid "Database user:"
 msgstr "Usuario de la base de datos:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9038
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9056
 msgid "Database password:"
 msgstr "Contraseña de la base de datos:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9044
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9062
 msgid "Mail server"
 msgstr "Servidor de correo"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9056
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9074
 msgid "Newsletter sender"
 msgstr "Remitente del Boletín "
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9059
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9077
 msgid "Num Max emails sent by month"
 msgstr "Número máximo de emails enviados al mes"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9062
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9080
 msgid "Last invoice date:"
 msgstr "Fecha de la última factura"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9065
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9083
 msgid "System log"
 msgstr "Registro del sistema"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9068
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9083
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9086
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9101
 msgid "Enable Log:"
 msgstr "Activar registro:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9074
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9092
 msgid "Log level:"
 msgstr "Nivel del registro:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9080
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9098
 msgid "Database log"
 msgstr "Registro de la base de datos"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9086
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9104
 msgid "Default: false"
 msgstr "Por omisión: falso"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9092
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9110
 msgid "Google Maps API key:"
 msgstr "Llave de la API de Google Maps:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9095
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9110
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9125
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9140
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9155
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9113
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9128
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9143
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9158
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9173
 msgid "Get API keys"
 msgstr "Obtener llaves de la API"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9098
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9116
 msgid ""
 "You can get your Google Maps API Key from <a href=\"http://code.google.com/"
 "intl/gl-GL/apis/maps/signup.html\">Google maps sign up website</a>."
@@ -10396,11 +10426,11 @@ msgstr ""
 "Puede obtener sus llaves de Google Maps desde <a href=\"http://code.google."
 "com/intl/gl-GL/apis/maps/signup.html\">el sitio web Google Maps sign up</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9107
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9125
 msgid "APP key:"
 msgstr "Llave de la aplicación:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9113
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9131
 msgid ""
 "You can get your Facebook App Keys from <a href=\"https://developers."
 "facebook.com/apps\">Facebook Developers website</a>."
@@ -10408,19 +10438,19 @@ msgstr ""
 "Puede obtener sus llames de aplicación de Facebook desde <a href=\"https://"
 "developers.facebook.com/apps\">el sitio web Facebook Developers</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9116
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9134
 msgid "Secret key:"
 msgstr "Llave secreta:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9119
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9137
 msgid "Google Analytics Statistics"
 msgstr "Estadísticas de Google Analítics"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9122
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9140
 msgid "API key:"
 msgstr "Llave de la API:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9128
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9146
 msgid ""
 "You can get your Google Analytics Site ID from <a href=\"https://www.google."
 "com/analytics/\">GAnalytics site</a> under the General Overview list (should "
@@ -10431,15 +10461,15 @@ msgstr ""
 "la Vista previa (debería ser algo semejante a UA-546457-3). Puede dejar el "
 "campo Dominio base en blanco si lo desea."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9131
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9149
 msgid "Base domain:"
 msgstr "Dominio base:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9137
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9155
 msgid "Page ID:"
 msgstr "Identificador del sitio:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9143
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9161
 msgid ""
 "You can get your Piwik Site information from <a href=\"https://piwik."
 "openhost.es/admin\">our Piwik server</a>."
@@ -10447,16 +10477,16 @@ msgstr ""
 "Puede obtener información del sitio de Piwik desde <a href=\"https://piwik."
 "openhost.es/admin\">nuestro servidor de Piwik</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9146
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9161
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9164
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9179
 msgid "Private key:"
 msgstr "Llave privada:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9152
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9170
 msgid "Public Key:"
 msgstr "Llave pública:"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9158
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9176
 msgid ""
 "You can get your recaptcha API Keys from <a href=\"https://www.google.com/"
 "recaptcha/admin/create\">reCATPCHA website</a>."
@@ -10464,56 +10494,56 @@ msgstr ""
 "Puede obtener sus llaves de reCAPTCHA desde <a href=\"https://www.google.com/"
 "recaptcha/admin/create\">el sitio web de reCAPTCHA</a>."
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9164
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9182
 msgid "Activated modules"
 msgstr "Módulos activados"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9167
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9185
 msgid "Welcome to OpenNeMas instance manager"
 msgstr "Bienvenido al Gestor de instancias de OpenNeMas"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9179
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9197
 msgid "Do you really want to exit from manager?"
 msgstr "¿Está seguro de que quiere salir del gestor?"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9182
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9200
 msgid "Logout from manager"
 msgstr "Salir del gestor"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9209
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9227
 msgid "Framework status"
 msgstr "Estado del framework"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9212
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9230
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9248
 msgid "Application commands"
 msgstr "Ordenes de la aplicación"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9215
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9233
 msgid "Command name"
 msgstr "Nombre de la orden"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9221
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9239
 msgid "Params"
 msgstr "Parámetros"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9224
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9242
 msgid "Deploy"
 msgstr "Desplegar"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9227
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9245
 msgid "Execute"
 msgstr "Ejecutar"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9335
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9353
 msgid "or"
 msgstr "o"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9338
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9356
 msgid "username"
 msgstr "nombre de usuario"
 
-#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9341
+#: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9359
 msgid "and group:"
 msgstr "y grupo:"
 
@@ -10534,11 +10564,6 @@ msgstr "y grupo:"
 #~ "|truncate:10:false:false:''} 2=$totalSendings 3=$maxAllowed} Since %1 you "
 #~ "have sent %2 of %3 newsletters"
 #~ msgstr "Desde %1 ha enviado %2 de %3 boletínes permitidos"
-
-#~ msgid "The reCAPTCHA wasn't entered correctly. Try to autenticate again."
-#~ msgstr ""
-#~ "El código de reCAPTCHA no fue escrito correctamente. Intente acceder de "
-#~ "nuevo."
 
 #~ msgid "Newsletter subscription type"
 #~ msgstr "Tipo de subscripción a boletín"
