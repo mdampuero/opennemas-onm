@@ -927,6 +927,7 @@ class InstanceManager
         }
 
         s::invalidate('site_title');
+
         if (!s::set(
             'site_title',
             $data['name'].' - '.s::get('site_title')
@@ -937,6 +938,7 @@ class InstanceManager
         }
 
         s::invalidate('site_description');
+
         if (!s::set(
             'site_description',
             $data['name'].' - '.s::get('site_description')
