@@ -43,7 +43,7 @@ class MediaUploaderController extends Controller
             return new Response(var_export($request->files));
         }
 
-        return $this->render('media_uploader/media_uploader.tpl');
+        return $this->render('media_uploader/index.tpl');
     }
 
     /**
@@ -53,7 +53,6 @@ class MediaUploaderController extends Controller
      **/
     public function getMonthsAction(Request $request)
     {
-
         $months = array();
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
