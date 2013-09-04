@@ -925,6 +925,9 @@ class InstanceManager
                 'Could not create the default database for the instance site_created'
             );
         }
+
+        s::invalidate('site_title');
+
         if (!s::set(
             'site_title',
             $data['name'].' - '.s::get('site_title')
@@ -933,6 +936,8 @@ class InstanceManager
                 'Could not create the default database for the instance - site_title'
             );
         }
+
+
         if (!s::set(
             'site_description',
             $data['name'].' - '.s::get('site_description')
