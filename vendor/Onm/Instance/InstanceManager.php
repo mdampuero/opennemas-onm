@@ -949,6 +949,7 @@ class InstanceManager
         }
 
         s::invalidate('site_keywords');
+
         if (!s::set(
             'site_keywords',
             $data['name'].' - '.s::get('site_keywords')
