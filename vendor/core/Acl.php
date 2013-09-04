@@ -43,8 +43,9 @@ class Acl
      *
      * @return boolean
     */
-    public static function checkCategoryAccess($category)
+    public static function checkCategoryAccess($categoryID)
     {
+
         try {
             if (!isset($categoryID)
                 || is_null($categoryID)
