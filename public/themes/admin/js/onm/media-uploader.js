@@ -8,9 +8,10 @@
     var contents = [];
 
     // The module that allows to browse images and perform searches through them
-    var Browser = function(elem, options) {
+    var Browser = function(elem, options, parent) {
         this.$browser = $(elem);
         this.config = options;
+        this.parent = parent;
     };
 
     Browser.prototype = {
@@ -58,7 +59,7 @@
                 var element = $(this).closest('.attachment');
                 content = contents[element.data('id')];
 
-                $(_this.mediapicker.elementUI).trigger('show', content);
+                $(_this.parent.elementUI).trigger('show', content);
 
                 return false;
             });
@@ -145,17 +146,14 @@
             var isShown = $(this.$browser).find('.modal-body').is(':visible');
 
             return (scrollPosition >= divTotalHeight) && isShown;
-        },
-
-        setParent: function(parent) {
-            this.mediapicker = parent;
         }
     };
 
     // Module that handles file uploads
-    var Uploader = function(elem, options) {
+    var Uploader = function(elem, options, parent) {
         this.$uploader = $(elem);
         this.config = options;
+        this.parent = parent;
     };
 
     Uploader.prototype = {
@@ -190,21 +188,18 @@
             }).bind('fileuploaddone', function (e, data){
                 // Things to do after all files were uploaded.
                 $('#fileupload .messages').hide();
-                _this.mediapicker.browser.load_browser(true);
+                _this.parent.browser.load_browser(true);
             });
 
             return this;
-        },
-
-        setParent: function(parent) {
-            this.mediapicker = parent;
         }
     };
 
     // Module that handles the element showing page
-    var ElementUI = function(elem, options) {
+    var ElementUI = function(elem, options, parent) {
         this.$element = $(elem);
         this.config = options;
+        this.parent = parent;
     };
 
     ElementUI.prototype = {
@@ -216,20 +211,17 @@
             });
 
             $(this).on('show', function(event, content) {
-                $(this.$element).find('.edit-image-button').attr('href', '/admin/images/show?id[]='+content.id);
+                content.edit_url = '/admin/images/show?id[]='+content.id;
 
                 var template = Handlebars.compile($('#tmpl-show-element').html());
                 html_content = template({
-                    "content": content,
+                    "content": content
                 });
 
                 $('#media-element-show .body').html(html_content);
-
-                $('#media-uploader a[href="#media-element-show"]').tab('show');
             });
 
-
-            $(this.$element).find('.assign_content').on('click', function(e, ui) {
+            _this.parent.$elem.find('.assign_content').on('click', function(e, ui) {
                 e.preventDefault();
 
                 var params = {};
@@ -245,15 +237,11 @@
         },
 
         assignImage: function(content, params) {
-            var position = this.mediapicker.get('position');
+            var position = this.parent.get('position');
 
             var params = $.extend({}, params, { 'position': position, 'content' : content});
 
-            this.mediapicker.$elem.trigger('assign_content', params);
-        },
-
-        setParent: function(parent) {
-            this.mediapicker = parent;
+            this.parent.$elem.trigger('assign_content', params);
         }
     };
 
@@ -334,20 +322,17 @@
 
         initUploader: function() {
             element       = this.$elem.find(this.config.uploader_el);
-            this.uploader = new Uploader(element, this.config).init();
-            this.uploader.setParent(this);
+            this.uploader = new Uploader(element, this.config, this).init();
         },
 
         initBrowser: function() {
             element      = this.$elem.find(this.config.browser_el);
-            this.browser = new Browser(element, this.config).init();
-            this.browser.setParent(this);
+            this.browser = new Browser(element, this.config, this).init();
         },
 
         initShowElement: function() {
             element        = this.$elem.find(this.config.media_element_el);
-            this.elementUI = new ElementUI(element, this.config).init();
-            this.elementUI.setParent(this);
+            this.elementUI = new ElementUI(element, this.config, this).init();
         },
 
         buildHTMLElement: function(params) {
@@ -355,7 +340,7 @@
 
             var align = '';
             if (params.hasOwnProperty('position') && params['position'] !== undefined) {
-                align = 'align="'+params['position']+'"'
+                align = 'align="'+params['alignment']+'"'
             };
 
             var description = '';

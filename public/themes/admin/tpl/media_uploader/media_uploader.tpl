@@ -3,7 +3,6 @@
     <ul class=" nav nav-tabs modal-sidebar full-height">
         <li><a href="#upload"  data-toggle="tab">{t}Upload{/t}</a></li>
         <li class="active"><a href="#gallery"  data-toggle="tab">{t}Browse{/t}</a></li>
-        <li><a href="#media-element-show" class="hidden" data-toggle="tab">{t}Show element info{/t}</a></li>
     </ul>
     <div class="tab-content modal-content full-height">
 
@@ -32,31 +31,12 @@
                 </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <div class="image-info pull-left"></div>
-                <!-- <div class="buttons pull-right"></div> -->
-            </div>
-        </div>
 
-        <div id="media-element-show" class="tab-pane full-height">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">{t}Insert image{/t}</h3>
-            </div>
-            <div class="modal-body">
-                <div class="toolbar clearfix">
-                    <div class="pull-right btn-toolbar">
-                        <div class="btn-group">
-                            <a href="#" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {t}Edit{/t}</a>
-                        </div>
-                    </div>
-                    <div class="buttons pull-left">
-                        <a href="#" class="back-to-browse btn">{t}Back to list{/t}</a>
-                    </div>
-                </div>
+            <div id="media-element-show" class="side-body">
                 <div class="body"></div>
             </div>
             <div class="modal-footer">
+                <div class="image-info pull-left"></div>
                 <div class="pull-right buttons">
                     <a class="btn btn-primary yes assign_content" href="#">{t}Insert into article{/t}</a>
                 </div>
@@ -159,34 +139,34 @@ var fileUploadErrors = {
 </script>
 
 <script type="text/html" id="tmpl-show-element">
+<h5 class="modal-title">{t}Thumbnail details{/t}</h5>
 {literal}
 {{#with content}}
-<div class="photo-image-information pull-left clearfix">
-    <div class="thumbnail">
+<div class="photo-image-information">
+    <div class="preview">
         <img src="{{image_path}}" />
     </div>
-
-    <br>
-
-    <div class="well well-small">
-        <div><strong>{/literal}{t}Original filename:{/t}{literal}</strong> {{title}}</div>
-        <div><strong>{/literal}{t}Resolution:{/t}{literal}</strong> {{width}} × {{height}}</div>
-        <div><strong>{/literal}{t}Size:{/t}{literal}</strong> {{size}} Kb</div>
-        <div><strong>{/literal}{t}Created:{/t}{literal}</strong> {{created}}</div>
+    <div class="buttons btn-group">
+        <a href="{{edit_url}}" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {/literal}{t}Edit{/t}{literal}</a>
+        <a href="#" class="delete-image-button btn"><i class="icon icon-trash"></i> {/literal}{t}Delete image{/t}{literal}</a>
+    </div>
+    <div class="image-title">{{title}}</div>
+    <div class="info">
+        <div>{{width}} × {{height}}</div>
+        <div>{{size}} Kb</div>
+        <div>{{created}}</div>
     </div>
 </div>
 
-<div class="photo-insert-form pull-left">
-    <h5>Attachment details</h5>
+<hr>
+
+<div class="photo-insert-form">
     <div class="control-group">
         <label for="caption" class="control-label">{/literal}{t}Caption{/t}{literal}</label>
         <div class="controls">
-            <textarea required="required" id="caption" name="caption"  class="input-xlarge"
-                rows="2">{{description}}</textarea>
+            <textarea required="required" id="caption" name="caption" rows="2">{{description}}</textarea>
         </div>
     </div>
-    <hr>
-    <h5>Attachment display settings</h5>
     <div class="control-group">
         <label for="alignment" class="control-label">{/literal}{t}Alignment{/t}{literal}</label>
         <div class="controls">
