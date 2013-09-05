@@ -1,4 +1,4 @@
-<div class="modal hide tabbable tabs-left" id="media-uploader">
+<div class="modal hide tabbable tabs-left" id="media-uploader" role="dialog" aria-labelledby="media-uploader" aria-hidden="true">
 
     <ul class=" nav nav-tabs modal-sidebar full-height">
         <li><a href="#uploader"  data-toggle="tab">{t}Upload{/t}</a></li>
