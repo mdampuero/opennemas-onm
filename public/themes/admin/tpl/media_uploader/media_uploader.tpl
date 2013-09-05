@@ -1,12 +1,12 @@
 <div class="modal hide tabbable tabs-left" id="media-uploader">
 
     <ul class=" nav nav-tabs modal-sidebar full-height">
-        <li><a href="#upload"  data-toggle="tab">{t}Upload{/t}</a></li>
-        <li class="active"><a href="#gallery"  data-toggle="tab">{t}Browse{/t}</a></li>
+        <li><a href="#uploader"  data-toggle="tab">{t}Upload{/t}</a></li>
+        <li class="active"><a href="#browser"  data-toggle="tab">{t}Browse{/t}</a></li>
     </ul>
     <div class="tab-content modal-content full-height">
 
-        <div id="gallery" class="tab-pane full-height active">
+        <div id="browser" class="tab-pane full-height active">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 class="modal-title">{t}Pick the item to insert{/t}</h3>
@@ -39,12 +39,12 @@
             <div class="modal-footer">
                 <div class="image-info pull-left"></div>
                 <div class="pull-right buttons">
-                    <a class="btn btn-primary yes assign_content" href="#">{t}Insert into article{/t}</a>
+                    <a class="btn btn-primary assign_content disabled" href="#">{t}Insert into article{/t}</a>
                 </div>
             </div>
         </div>
 
-        <div id="upload" class="tab-pane full-height">
+        <div id="uploader" class="tab-pane full-height">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
               <h3 class="modal-title">{t}Upload new media{/t}</h3>
@@ -68,9 +68,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="explanation">{t}Drop files anywhere here to upload or click on the "Add Files..." button above.{/t}</div>
                         <table class="table condensed">
                             <tbody class="files">
-                                <div class="explanation">{t}Drop files anywhere here to upload or click on the "Add Files..." button above.{/t}</div>
                             </tbody>
                         </table>
                     </form>
@@ -149,7 +149,7 @@ var fileUploadErrors = {
     </div>
     <div class="buttons btn-group">
         <a href="{{edit_url}}" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {/literal}{t}Edit{/t}{literal}</a>
-        <a href="#" class="delete-image-button btn"><i class="icon icon-trash"></i> {/literal}{t}Delete image{/t}{literal}</a>
+        <!-- <a href="#" class="delete-image-button btn"><i class="icon icon-trash"></i> {/literal}{t}Delete image{/t}{literal}</a> -->
     </div>
     <div class="image-title">{{title}}</div>
     <div class="info">
