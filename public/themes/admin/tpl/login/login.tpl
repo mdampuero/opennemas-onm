@@ -43,7 +43,6 @@
 
     <div class="form-wrapper">
         {render_messages}
-        {$smarty.session.failed_login|var_dump}
     	<form method="post" autocomplete="off" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
 			<div class="input-wrapper">
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
