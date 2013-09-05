@@ -32,7 +32,7 @@
             // load the browser with the searched contents
             $(this.$browser).on('change', '.gallery-search .month', function(e, ui) {
                 $('.gallery-search').trigger('submit');
-            }).on('submit blur', '.gallery-search', function(e, ui) {
+            }).on('submit', '.gallery-search', function(e, ui) {
                 e.preventDefault();
 
                 // Reset actual page
