@@ -1,67 +1,82 @@
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
-<div class="contentform-inner clearfix">
+<div class="contentform-wide clearfix">
     {is_module_activated name="IMAGE_MANAGER"}
-    <div class="contentform-main">
-        <ul id="related-images thumbnails">
-            <li class="contentbox frontpage-image">
-                <h3 class="title">{t}Frontpage image{/t}</h3>
-                <div class="content">
-                    {if isset($photo1) && $photo1->name}
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" id="frontpage_image" name="{$article->img1}" />
-                    {else}
-                        <div class="drop-here">
-                            {t}Image not setted{/t}
-                        </div>
-                    {/if}
-
-                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
+    <ul class="related-images thumbnails">
+        <li class="contentbox frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
+            <h3 class="title">{t}Frontpage image{/t}</h3>
+            <div class="content">
+                <div class="image-data">
+                    <div class="image thumbnail">
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
+                    </div>
                     <div class="article-resource-footer">
-                        <label for="title">{t}Image footer text{/t}</label>
+                        <label for="title">{t}Footer text{/t}</label>
                         <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
                         <input type="hidden" name="img1" value="{$article->img1|default:""}" class="related-element-id" />
                     </div>
                 </div>
-            </li>
-            <li class="contentbox inner-image">
-                <h3 class="title">{t}Inner image{/t}</h3>
-                <div class="content">
-                    {if isset($photo2) && $photo2->name}
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}" id="inner_image" name="{$article->img2}" />
-                    {else}
-                        <div class="drop-here">
-                            {t}Image not setted{/t}
-                        </div>
-                    {/if}
-                    <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="btn btn-small">{t}Set image{/t}</a>
+
+                <div class="not-set">
+                    {t}Image not set{/t}
+                </div>
+
+                <div class="btn-group">
+                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
+                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                </div>
+            </div>
+        </li>
+        <li class="contentbox inner-image {if isset($photo2) && $photo2->name}assigned{/if}">
+            <h3 class="title">{t}Inner image{/t}</h3>
+            <div class="content">
+                <div class="image-data">
+                    <div class="image thumbnail">
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}"/>
+                    </div>
                     <div class="article-resource-footer">
-                        <label for="title">{t}Image footer text{/t}</label>
-                        <textarea name="img2_footer" title="Imagen" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                        <label for="title">{t}Footer text{/t}</label>
+                        <textarea name="img2_footer" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
                         <input type="hidden" name="img2" value="{$article->img2|default:""}" class="related-element-id"/>
                     </div>
                 </div>
-            </li>
-            {is_module_activated name="CRONICAS_MODULES"}
-            <li class="contentbox inner-image">
-                <h3 class="title">{t}Home image{/t}</h3>
-                <div class="content">
-                    {if isset($article->params['imageHome']) && $photo3->name}
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}" id="home_image" name="{$photo3->name}" />
-                    {else}
-                        <div class="drop-here">
-                            {t}Image not setted{/t}
-                        </div>
-                    {/if}
-                    <a href="#media-uploader" data-toggle="modal" data-position="home-image" class="btn btn-small">{t}Set image{/t}</a>
+
+                <div class="not-set">
+                    {t}Image not set{/t}
+                </div>
+
+                <div class="btn-group">
+                    <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="btn btn-small">{t}Set image{/t}</a>
+                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                </div>
+            </div>
+        </li>
+        {is_module_activated name="CRONICAS_MODULES"}
+        <li class="contentbox home-image {if isset($photo3) && $photo3->name}assigned{/if}">
+            <h3 class="title">{t}Home image{/t}</h3>
+            <div class="content">
+                <div class="image-data">
+                    <div class="image thumbnail">
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}"/>
+                    </div>
                     <div class="article-resource-footer">
                         <label for="title">{t}Image footer text{/t}</label>
-                            <textarea name="params[imageHomeFooter]" style="width:95%" class="related-element-footer">{$article->params['imageHomeFooter']|clearslash|escape:'html'}</textarea>
-                            <input type="hidden" name="params[imageHome]" value="{$article->params['imageHome']|default:""}" class="related-element-id" />
+                        <textarea name="params[imageHomeFooter]" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
+                        <input type="hidden" name="params[imageHome]" value="{$article->params['imageHome']|default:""}" class="related-element-id"/>
                     </div>
                 </div>
-            </li>
-            {/is_module_activated}
-        </ul>
-    </div>
+
+                <div class="not-set">
+                    {t}Image not set{/t}
+                </div>
+
+                <div class="btn-group">
+                    <a href="#media-uploader" data-toggle="modal" data-position="home-image" class="btn btn-small">{t}Set image{/t}</a>
+                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                </div>
+            </div>
+        </li>
+        {/is_module_activated}
+    </ul>
     {/is_module_activated}
 </div>
 
@@ -183,8 +198,26 @@
 {is_module_activated name="IMAGE_MANAGER"}
 <script>
 jQuery(document).ready(function($){
-    $('#related-images').tabs();
-    $('#related-images .delete-button').on('click', function () {
+    $('#article_images .unset').on('click', function (e, ui) {
+        e.preventDefault();
+
+        var parent = jQuery(this).closest('.contentbox');
+
+        parent.find('.related-element-id').val('');
+        parent.find('.related-element-footer').val('');
+        parent.find('.image').html('');
+
+        parent.removeClass('assigned');
+    });
+});
+</script>
+{/is_module_activated}
+
+{is_module_activated name="VIDEO_MANAGER"}
+<script>
+jQuery(document).ready(function($){
+    $('#related-videos').tabs();
+    jQuery('#related-videos .delete-button').on('click', function () {
         var parent = jQuery(this).parent();
         var elementID = parent.find('.related-element-id');
 
@@ -223,28 +256,6 @@ jQuery(document).ready(function($){
         e.preventDefault();
         var link = $(this);
         load_ajax_in_container(link.attr('href'), $('#videos'));
-    });
-
-});
-</script>
-{/is_module_activated}
-
-{is_module_activated name="VIDEO_MANAGER"}
-<script>
-jQuery(document).ready(function($){
-    $('#related-videos').tabs();
-    jQuery('#related-videos .delete-button').on('click', function () {
-        var parent = jQuery(this).parent();
-        var elementID = parent.find('.related-element-id');
-
-        if (elementID.val() > 0) {
-            elementID.data('id', elementID.val());
-            elementID.val(null);
-            parent.fadeTo('slow', 0.5);
-        } else {
-            elementID.val(elementID.data('id'));
-            parent.fadeTo('slow', 1);
-        };
     });
 });
 </script>
