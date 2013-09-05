@@ -2507,6 +2507,10 @@ div#modal-element-customize-content div.select-disposition{
         font-size:12px;
     }
 
+    #media-uploader #gallery .spinner {
+      display:inline-block;
+    }
+
     #media-uploader #gallery .thumbnail {
         display:inline-block;
         width:120px;
@@ -2607,6 +2611,11 @@ div#modal-element-customize-content div.select-disposition{
       margin-bottom: 5px;
       padding:1px;
       border:1px solid #ccc;
+    }
+
+    #media-uploader #media-element-show .photo-image-information .info {
+      font-weight: bold;
+      margin: 10px 0;
     }
     #media-uploader #media-element-show .photo-image-information .info {
       font-size: .9em;

@@ -32,7 +32,7 @@
             // load the browser with the searched contents
             $(this.$browser).on('change', '.gallery-search .month', function(e, ui) {
                 $('.gallery-search').trigger('submit');
-            }).on('submit', '.gallery-search', function(e, ui) {
+            }).on('submit blur', '.gallery-search', function(e, ui) {
                 e.preventDefault();
 
                 // Reset actual page
@@ -83,7 +83,14 @@
         },
 
         // Function that fills the browser with images
-        load_browser: function (replace) {
+        load_browser: function (replace, enable_cache) {
+            if (typeof replace == "undefined"){
+               replace = false;
+            }
+            if (typeof enable_cache == "undefined"){
+               enable_cache = true;
+            }
+
             var browser = this.$browser;
             var _this = this;
 
@@ -92,11 +99,16 @@
                 return;
             };
 
-            var data = $('.gallery-search').serialize();
+            if (!enable_cache) {
+                browser.find('.gallery-search').find('.page').val(0);
+            };
+
+            var data = browser.find('.gallery-search').serialize();
 
             $.ajax({
                 url: this.config.browser_url,
                 data: data,
+                // cache : enable_cache,
                 beforeSend: function() {
                     browser.find('.loading').removeClass('hidden');
                     browser.data('loading', true);
@@ -123,7 +135,7 @@
                     page_el.val(parseInt(page_el.val()) + 1);
                 },
                 complete: function(xhr, status) {
-                    var contents = $.parseJSON(xhr.responseText);
+                    // contents = $.parseJSON(xhr.responseText);
 
                     browser.find('.loading').toggleClass('hidden');
                     browser.data('loading', false);
@@ -131,7 +143,7 @@
                     // Load next page if there are more contents to load and the
                     // browser windows can fit more contents
                     if (contents.length > 0 && _this.browser_needs_load()) {
-                        _this.load_browser(false);
+                        _this.load_browser();
                     }
                 }
             });
@@ -167,14 +179,14 @@
             );
 
             // Initialize the jQuery File Upload widget:
-            $('#fileupload').fileupload();
-            $('#fileupload').fileupload('option', {
+            var uploader = $('#fileupload').fileupload()
+            .fileupload('option', {
                 maxFileSize: 5000000,
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png|swf)$/i,
                 autoUpload : true,
             }).bind('fileuploadadd', function(e, data) {
-                $('.explanation').hide();
-                $('#fileupload .messages').show();
+                _this.$uploader.find('.explanation').hide();
+                _this.$uploader.find('#fileupload .messages').show();
             }).bind('fileuploadsend', function (e, data) {
                 if (data.dataType.substr(0, 6) === 'iframe') {
                     var target = $('<a/>').prop('href', data.url)[0];
@@ -187,11 +199,15 @@
                 }
             }).bind('fileuploaddone', function (e, data){
                 // Things to do after all files were uploaded.
-                $('#fileupload .messages').hide();
-                _this.parent.browser.load_browser(true);
+                _this.$uploader.find('#fileupload .messages').hide();
+                _this.parent.browser.load_browser(true, false);
+                _this.parent.elementUI.reset();
             });
 
             return this;
+        },
+        reset : function () {
+            this.$uploader.find('.dropzone table').delete();
         }
     };
 
@@ -211,6 +227,7 @@
             });
 
             $(this).on('show', function(event, content) {
+                _this.content = content;
                 content.edit_url = '/admin/images/show?id[]='+content.id;
 
                 var template = Handlebars.compile($('#tmpl-show-element').html());
@@ -224,6 +241,7 @@
             _this.parent.$elem.find('.assign_content').on('click', function(e, ui) {
                 e.preventDefault();
 
+                var content = _this.content;
                 var params = {};
                 params['description'] = _this.$element.find('#caption').val();
                 params['alignment'] = _this.$element.find('.alignment').val();
@@ -231,9 +249,13 @@
                 _this.assignImage(content, params);
 
                 return false;
-            }
-)
+            });
+
             return this;
+        },
+
+        reset: function() {
+            this.$element.find('.body').html('');
         },
 
         assignImage: function(content, params) {
