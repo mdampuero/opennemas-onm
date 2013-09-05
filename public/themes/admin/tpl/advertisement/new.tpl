@@ -173,7 +173,9 @@
                     {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
                 <div id="script_content" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
-                    <textarea name="script" id="script" class="input-xxlarge" rows="10">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
+                    <textarea name="script" id="script" class="input-xxlarge" rows="10">
+                        {$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}
+                    </textarea>
                 </div>
             </div>
         </div>
