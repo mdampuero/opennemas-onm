@@ -61,12 +61,10 @@
     </script>
     {include file="media_uploader/media_uploader.tpl"}
     <script>
-    $(function() {
-        $('#media-uploader').mediaPicker({
+        var mediapicker = $('#media-uploader').mediaPicker({
             upload_url: "{url name=admin_image_create category=0}",
             browser_url : "{url name=admin_media_uploader_browser}",
             months_url : "{url name=admin_media_uploader_months}",
-            initially_shown:  false,
             handlers: {
                 'assign_content' : function( event, params ) {
                     var mediapicker = $(this).data('mediapicker');
@@ -75,13 +73,12 @@
                         var element = mediapicker.buildHTMLElement(params);
                         CKEDITOR.instances.body.insertHtml(element);
                     } else {
-                        //
+                        console.log(params);
                     };
 
                 }
             }
         });
-    });
     </script>
 {/block}
 

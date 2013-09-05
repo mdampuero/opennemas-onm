@@ -22,9 +22,10 @@
                         </select>
                     </div>
                     <div class="pull-right">
+
                         <input type="search" name="search_string" placeholder="{t}Search{/t}">
                     </div>
-                    <div class="loading pull-right hidden">{t}Loading...{/t}</div>
+                    <div class="loading pull-right hidden"><div class="spinner"></div></div>
                 </div>
                 <div class="modal-body-content">
                     <ul class="attachments ui-sortable ui-sortable-disabled"></ul>
@@ -85,9 +86,9 @@
 {script_tag src="/jquery/load-image.min.js"}
 {script_tag src="/jquery/bootstrap-image-gallery.min.js"}
 {script_tag src="/jquery/jquery.iframe-transport.js"}
-{script_tag src="/jquery/tmpl.min.js" defer=defer}
-{script_tag src="/jquery/jquery.fileupload.js" common=1 defer=defer}
-{script_tag src="/jquery/jquery.fileupload-ui.js" common=1 defer=defer}
+{script_tag src="/jquery/tmpl.min.js"}
+{script_tag src="/jquery/jquery.fileupload.js" common=1}
+{script_tag src="/jquery/jquery.fileupload-ui.js" common=1}
 {script_tag src="/libs/handlebars.js" common=1}
 {script_tag src="/onm/media-uploader.js"}
 <script>
@@ -171,10 +172,10 @@ var fileUploadErrors = {
         <label for="alignment" class="control-label">{/literal}{t}Alignment{/t}{literal}</label>
         <div class="controls">
             <select class="alignment" data-setting="align" data-user-setting="align">
-                <option value="left">Left</option>
-                <option value="center">Center</option>
-                <option value="right">Right</option>
-                <option value="none" selected="">None</option>
+                <option value="left">{/literal}{t}Left{/t}{literal}</option>
+                <option value="center">{/literal}{t}Center{/t}{literal}</option>
+                <option value="right">{/literal}{t}Right{/t}{literal}</option>
+                <option value="none" selected="">{/literal}{t}None{/t}{literal}</option>
             </select>
         </div>
     </div>
