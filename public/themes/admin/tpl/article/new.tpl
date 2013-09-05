@@ -65,15 +65,25 @@
             upload_url: "{url name=admin_image_create category=0}",
             browser_url : "{url name=admin_media_uploader_browser}",
             months_url : "{url name=admin_media_uploader_months}",
+            maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+            // initially_shown: true,
             handlers: {
                 'assign_content' : function( event, params ) {
                     var mediapicker = $(this).data('mediapicker');
+                    var image_element = mediapicker.buildHTMLElement(params);
 
                     if (params['position'] == 'body') {
-                        var element = mediapicker.buildHTMLElement(params);
-                        CKEDITOR.instances.body.insertHtml(element);
+                        CKEDITOR.instances.body.insertHtml(image_element);
                     } else {
                         console.log(params);
+                        var container = $('#article_images').find('.'+params['position']);
+
+                        var image_data_el = container.find('.image-data');
+                        console.log(image_data_el)
+                        image_data_el.find('.related-element-id').val(params.content.pk_photo);
+                        image_data_el.find('.related-element-footer').val(params.description);
+                        image_data_el.find('.image').html(image_element);
+                        container.addClass('assigned');
                     };
 
                 }

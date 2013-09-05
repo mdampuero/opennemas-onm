@@ -181,7 +181,7 @@
             // Initialize the jQuery File Upload widget:
             var uploader = $('#fileupload').fileupload()
             .fileupload('option', {
-                maxFileSize: 5000000,
+                maxFileSize: _this.parent.maxFileSize,
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png|swf)$/i,
                 autoUpload : true,
             }).bind('fileuploadadd', function(e, data) {
@@ -199,15 +199,17 @@
                 }
             }).bind('fileuploaddone', function (e, data){
                 // Things to do after all files were uploaded.
-                _this.$uploader.find('#fileupload .messages').hide();
-                _this.parent.browser.load_browser(true, false);
+                _this.reset();
                 _this.parent.elementUI.reset();
+                _this.parent.show('browser');
+                _this.parent.browser.load_browser(true, false);
             });
 
             return this;
         },
         reset : function () {
-            this.$uploader.find('.dropzone table').delete();
+            this.$uploader.find('#fileupload .explanation').show();
+            this.$uploader.find('.dropzone .files').html('');
         }
     };
 
@@ -222,10 +224,6 @@
         init : function() {
             var _this = this;
 
-            $(this.$element).on('click', '.back-to-browse', function(e, ui) {
-                $('#media-uploader a[href="#gallery"]').tab('show');
-            });
-
             $(this).on('show', function(event, content) {
                 _this.content = content;
                 content.edit_url = '/admin/images/show?id[]='+content.id;
@@ -236,6 +234,7 @@
                 });
 
                 $('#media-element-show .body').html(html_content);
+                _this.parent.$elem.find('.assign_content').removeClass('disabled');
             });
 
             _this.parent.$elem.find('.assign_content').on('click', function(e, ui) {
@@ -256,12 +255,15 @@
 
         reset: function() {
             this.$element.find('.body').html('');
+            this.parent.$elem.find('.assign_content').addClass('disabled');
         },
 
         assignImage: function(content, params) {
             var position = this.parent.get('position');
 
             var params = $.extend({}, params, { 'position': position, 'content' : content});
+
+            console.log(params);
 
             this.parent.$elem.trigger('assign_content', params);
         }
@@ -279,9 +281,10 @@
     MediaPicker.prototype = {
         defaults: {
             initially_shown: false,
-            uploader_el: '#upload',
-            browser_el: '#gallery',
+            uploader_el: '#uploader',
+            browser_el: '#browser',
             media_element_el: '#media-element-show',
+            maxFileSize: 5000000,
         },
 
         init: function() {
@@ -315,9 +318,6 @@
                 keyboard: true, //Can close on escape
                 show: this.config.initially_shown,
             })
-            // .on('shown', function() {
-            //     $('#media-uploader a[href="#gallery"]').tab('show');
-            // })
         },
 
         initHandlers: function() {
@@ -340,6 +340,10 @@
 
         get: function(name) {
             return this[name];
+        },
+
+        show:  function(component) {
+            this.$elem.find('a[href="#'+component+'"]').tab('show');
         },
 
         initUploader: function() {
