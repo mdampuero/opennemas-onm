@@ -45,6 +45,7 @@ class Advertisement extends Content
 
         5 => "Bottom Left LeaderBoard",
         6 => "Bottom Right LeaderBoard",
+        7 => "Banner Right Logo",
 
         11 => "Button Colunm 1 Position 1",
         12 => "Button Colunm 1 Position 2",
@@ -650,7 +651,7 @@ class Advertisement extends Content
 
         if (!empty($banners)) {
             $homeBanners = array();
-         // Perform operations for each advertisement type
+            // Perform operations for each advertisement type
             foreach ($banners as $adType => $advs) {
                 // Initialize banners arrays
                 $banners[$adType] = array();

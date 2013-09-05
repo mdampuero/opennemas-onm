@@ -208,9 +208,9 @@ class LetterController extends Controller
 
         // I have added the element 150 in order to integrate all the code in the same query
         if ($position == 'inner') {
-            $positions = array(101, 102, 103, 105, 109, 110);
+            $positions = array(7, 9, 150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
         } else {
-            $positions = array(50, 1, 2, 103, 105, 5, 6);
+            $positions = array(50, 1, 2, 103, 105, 5, 6, 7, 9, 91, 92);
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

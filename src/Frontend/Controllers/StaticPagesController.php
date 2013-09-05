@@ -79,7 +79,7 @@ class StaticPagesController extends Controller
     {
         $category = 0;
 
-        $positions = array(1, 2, 103, 105, 9, 10);
+        $positions = array(1, 2, 103, 105, 7, 9, 10);
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

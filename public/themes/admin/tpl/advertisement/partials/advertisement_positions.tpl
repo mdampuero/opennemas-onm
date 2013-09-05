@@ -29,6 +29,20 @@
         <td colspan="2"><hr /></td>
     </tr>
     <tr>
+        <td colspan="2">
+            <label>
+                Top Mega-LeaderBoard  (972X90)
+                <input type="radio" name="type_advertisement" value="9" {if isset($advertisement) && $advertisement->type_advertisement == 9}checked="checked" {/if}/>
+            </label>
+        </td>
+        <td rowspan="11">
+            <div id="advertisement-mosaic">
+                <div id="advertisement-mosaic-frame"></div>
+                <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
+            </div>
+        </td>
+    </tr>
+    <tr>
         <td>
             <label>
                 Top Left LeaderBoard (728X90)
@@ -44,16 +58,10 @@
     </tr>
     <tr>
         <td colspan="2">
-             <label>
-                Top Mega-LeaderBoard  (972X90)
-                <input type="radio" name="type_advertisement" value="9" {if isset($advertisement) && $advertisement->type_advertisement == 9}checked="checked" {/if}/>
+            <label>
+                Right Logo Banner (max-468x60)
+                <input type="radio" name="type_advertisement" value="7" {if isset($advertisement) && $advertisement->type_advertisement == 7}checked="checked" {/if}/>
             </label>
-        </td>
-        <td rowspan="11">
-            <div id="advertisement-mosaic">
-                <div id="advertisement-mosaic-frame"></div>
-                <img src="{$params.IMAGE_DIR}advertisement/front_advertisement.png" style="width:240px;height:628px;" usemap="#mapPortada" />
-            </div>
         </td>
     </tr>
     <tr>

@@ -305,12 +305,12 @@ class PollsController extends Controller
         if ($context == 'inner') {
             $positions = array(
                 950,
-                901, 902, 903, 905, 909, 910, 991, 992
+                901, 902, 903, 905, 909, 910, 991, 992, 7, 9
             );
         } else {
             $positions = array(
                 850,
-                801, 802, 803, 805, 809, 810, 891, 892
+                801, 802, 803, 805, 809, 810, 891, 892, 7, 9
             );
         }
 

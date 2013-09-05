@@ -323,11 +323,11 @@ class AlbumsController extends Controller
         // I have added the element 450 in order to integrate interstitial position
         if ($position == 'inner') {
             $positions = array(
-                501, 502, 503, 509, 510, 591, 592
+                7, 9, 501, 502, 503, 509, 510, 591, 592
             );
         } else {
             $positions = array(
-                450, 401, 402, 403, 405, 409, 410, 491, 492
+                7, 9, 450, 401, 402, 403, 405, 409, 410, 491, 492
             );
         }
 

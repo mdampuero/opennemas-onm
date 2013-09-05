@@ -308,7 +308,7 @@ class BlogController extends Controller
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $positions = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
