@@ -391,13 +391,13 @@ class VideosController extends Controller
 
         $total = count($othersVideos)+1;
 
-        if($countVideos > 0) {
+        if ($countVideos > 0) {
             foreach ($othersVideos as &$video) {
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
 
-        } else{
+        } else {
 
             return new RedirectResponse(
                 $this->generateUrl('frontend_video_ajax_paginated')
@@ -438,9 +438,9 @@ class VideosController extends Controller
 
         // I have added the element 150 in order to integrate all the code in the same query
         if ($context == 'inner') {
-            $positions = array(350, 301, 302, 303, 305, 309, 310, 391, 392);
+            $positions = array(350, 301, 302, 303, 305, 309, 310, 391, 392, 7, 9);
         } else {
-            $positions = array(250, 201, 202, 203, 205, 209, 210, 291, 292);
+            $positions = array(250, 201, 202, 203, 205, 209, 210, 291, 292, 7, 9);
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
