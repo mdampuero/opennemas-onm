@@ -116,6 +116,12 @@ class Instance
         // Backup paths
         define('BACKUP_PATH', SITE_PATH.DS.'..'.DS."tmp/backups");
 
+        $maxUpload          = (int) (ini_get('upload_max_filesize'));
+        $maxPost            = (int) (ini_get('post_max_size'));
+        $memoryLimit        = (int) (ini_get('memory_limit'));
+        $maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
+        define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
+
         /**
          * Logging settings
          **/
