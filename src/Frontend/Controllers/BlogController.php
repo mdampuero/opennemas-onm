@@ -126,7 +126,8 @@ class BlogController extends Controller
             );
         }
 
-        $this->getInnerAds($category->id);
+        $ads = $this->getInnerAds($category->id);
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'blog/blog.tpl',
