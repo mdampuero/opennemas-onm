@@ -732,16 +732,19 @@ class ImagesController extends Controller
                 $photo = new \Photo();
                 if ($upload && is_array($upload['tmp_name'])) {
                     foreach ($upload['tmp_name'] as $index => $value) {
+                        $tempName = pathinfo($upload['name'][$index], PATHINFO_FILENAME);
+
                         $data = array(
                             'local_file'        => $upload['tmp_name'][$index],
                             'original_filename' => $upload['name'][$index],
-                            'title'             => '',
+                            'title'             => $tempName,
+                            'description'       => $tempName,
                             'fk_category'       => $category,
                             'category'          => $category,
                             'category_name'     => $category_name,
-                            'description'       => '',
                             'metadata'          => '',
                         );
+
                         try {
                             $photo = new \Photo();
                             $photo = $photo->createFromLocalFileAjax($data);
@@ -775,14 +778,15 @@ class ImagesController extends Controller
                         }
                     }
                 } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
+                    $tempName = pathinfo($upload['name'], PATHINFO_FILENAME);
                     $data = array(
                         'local_file'        => $upload['tmp_name'],
                         'original_filename' => $upload['name'],
-                        'title'             => '',
+                        'title'             => $tempName,
+                        'description'       => $tempName,
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'description'       => '',
                         'metadata'          => '',
                     );
 
