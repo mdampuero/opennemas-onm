@@ -622,8 +622,6 @@ class Advertisement extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return $banners;
         }
 
