@@ -43,12 +43,12 @@
 
     <div class="form-wrapper">
         {render_messages}
-        {capture name=reCaptcha}{setting name="failed_login_attempts"}{/capture}
+        {$smarty.session.failed_login|var_dump}
     	<form method="post" autocomplete="off" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
 			<div class="input-wrapper">
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
                 <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
-                {if $smarty.capture.reCaptcha >= 3}
+                {if $smarty.session.failed_login >= 3}
                 <div class="control-group">
                     <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
                     <noscript>
