@@ -2522,6 +2522,8 @@ div#modal-element-customize-content div.select-disposition{
 
     #media-uploader #browser .spinner {
       display:inline-block;
+      margin-top:5px;
+      margin-right:10px;
     }
 
     #media-uploader #browser .thumbnail {
