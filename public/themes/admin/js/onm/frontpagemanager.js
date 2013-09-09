@@ -452,7 +452,7 @@ jQuery(function($) {
         var fontFamilyValue = $('#font-family').val();
         var fontSizeValue   = $('#font-size').val();
         var fontStyleValue  = $('#font-style').val();
-        var fontWeightValue  = $('#font-weight').val();
+        var fontWeightValue = $('#font-weight').val();
         var fontColorValue  = $('#font-color').val();
         if(fontFamilyValue.length>0 && fontFamilyValue!='Auto') {
             titleValues["font-family"] = fontFamilyValue;
@@ -470,7 +470,7 @@ jQuery(function($) {
             titleValues["color"] = fontColorValue;
             keys[3] = "color";
         }
-        if(fontWeightValue.length>0 && fontStyleValue!='Auto') {
+        if(fontWeightValue.length>0 && fontWeightValue!='Auto') {
             titleValues["font-weight"] = fontWeightValue;
             keys[4] = "font-weight";
         }
