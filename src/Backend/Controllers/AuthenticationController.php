@@ -92,10 +92,11 @@ class AuthenticationController extends Controller
 
         $user = new \User();
 
+        $cache = $this->get('cache');
         // Set failed logins number for this user on session var
         $_SESSION['failed_login'] = 0;
-        if (s::get('failed_login_attempts_'.$login)) {
-            $_SESSION['failed_login'] = s::get('failed_login_attempts_'.$login);
+        if ($cache->fetch('failed_login_attempts_'.$login)) {
+            $_SESSION['failed_login'] = $cache->fetch('failed_login_attempts_'.$login);
         }
 
         if (array_key_exists('csrf', $_SESSION)
@@ -104,7 +105,7 @@ class AuthenticationController extends Controller
             m::add(_('Login token is not valid. Try to autenticate again.'), m::ERROR);
             return $this->redirect($this->generateUrl('admin_login_form'));
         } else {
-            if (s::get('failed_login_attempts_'.$login) >= $badLoginLimit) {
+            if ($_SESSION['failed_login'] >= $badLoginLimit) {
                 // Get reCaptcha validate response
                 $resp = recaptcha_check_answer(
                     '6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs',
@@ -139,7 +140,7 @@ class AuthenticationController extends Controller
                     $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
 
                     // Set bad login counter to 0
-                    s::set('failed_login_attempts_'.$login, 0);
+                    $cache->save('failed_login_attempts_'.$login, 0);
 
                     // Get group(s) of the user
                     $group = array();
@@ -188,24 +189,25 @@ class AuthenticationController extends Controller
                 m::add(_('Username or password incorrect.'), m::ERROR);
 
                 // Get setting var for count failed login attempts
-                $failedLogin   = (s::get('failed_login_attempts_'.$login)) ? s::get('failed_login_attempts_'.$login) : 0;
-                if (!s::get('failed_login_time_'.$login)) {
+                $failedLogin = $cache->fetch('failed_login_attempts_'.$login, 0);
+
+                if (!$cache->fetch('failed_login_time_'.$login)) {
                     $firstBadLogin = time();
-                    s::set('failed_login_time_'.$login, $firstBadLogin);
+                    $cache->save('failed_login_time_'.$login, $firstBadLogin);
                 } else {
                     $firstBadLogin = s::get('failed_login_time_'.$login);
                 }
 
                 // First unsuccessful login
                 if ((time() - $firstBadLogin) > $lockoutTime || $failedLogin == 0) {
-                    s::set('failed_login_attempts_'.$login, 1);
+                    $cache->save('failed_login_attempts_'.$login, 1);
                     $failedLogin = 1;
                     // Set first failed login time
-                    s::set('failed_login_time_'.$login, time());
+                    $cache->save('failed_login_time_'.$login, time());
                 } else {
                     // Count another bad login
                     $failedLogin = $failedLogin + 1;
-                    s::set('failed_login_attempts_'.$login, $failedLogin);
+                    $cache->save('failed_login_attempts_'.$login, $failedLogin);
                 }
 
                 return $this->redirect($this->generateUrl('admin_login_form'));
