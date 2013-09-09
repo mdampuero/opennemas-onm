@@ -94,11 +94,11 @@
                     </th>
                     <th></th>
                     <th>{t}Title{/t}</th>
-                    {if $category=='widget' || $category=='all'}<th class="left">{t}Category{/t}</th>{/if}
+                    {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
                     <th class="left nowrap">Created</th>
                     <th class="center" style="width:35px;">{t}Views{/t}</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                    {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
                     <th class="center" style="width:100px;">{t}Actions{/t}</th>
                     {else}
@@ -122,7 +122,7 @@
                     </td>
                     {if $category=='widget' || $category=='all'}
                     <td >
-                        {$video->category_title}
+                        {$album->category_name}
                     </td>
                     {/if}
                     </td class="center">
@@ -146,7 +146,7 @@
                         {/if}
                         {/acl}
                     </td>
-                     {if $category!='widget' && $category != 'all'}
+                     {if $category!='widget'}
                     <td class="center">
                         {acl isAllowed="VIDEO_FAVORITE"}
                         {if $video->favorite == 1}
