@@ -25,11 +25,14 @@
             #recaptcha_area {
                 float: left;
             }
+            #recaptcha_privacy {
+                display:none;
+            }
         </style>
     {/block}
     {block name="header-js"}
     <script type="text/javascript">
-        var RecaptchaOptions = { theme : 'blackglass' };
+        var RecaptchaOptions = { theme : 'white' };
     </script>
     {/block}
 
