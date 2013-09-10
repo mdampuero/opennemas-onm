@@ -520,14 +520,18 @@ function adoDBErrorHandler($dbms, $fn, $errno, $errmsg, $p1, $p2, &$thisConnecti
  **/
 function initEnvironment($environment = 'production')
 {
-    if (ENVIRONMENT == 'development') {
+    if ($environment == 'development') {
         ini_set('expose_php', 'On');
         ini_set('error_reporting', E_ALL | E_STRICT);
         ini_set('display_errors', 'On');
         ini_set('display_startup_errors', 'On');
         ini_set('html_errors', 'On');
     } else {
-        ini_set('expose_php', 'off');
+        ini_set('expose_php', 'Off');
+        ini_set('error_reporting', E_ALL | E_STRICT);
+        ini_set('display_errors', 'Off');
+        ini_set('display_startup_errors', 'Off');
+        ini_set('html_errors', 'Off');
     }
     ini_set('apc.slam_defense', '0');
 }
