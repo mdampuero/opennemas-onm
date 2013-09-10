@@ -34,11 +34,13 @@ class Template extends Smarty
         if (!file_exists(CACHE_PATH.DS.'smarty')) {
             mkdir(CACHE_PATH.DS.'smarty', 0775);
         }
+
         global $sc;
         $baseTheme = '';
         if (isset($sc->getParameter('instance')->theme)) {
             $baseTheme = $sc->getParameter('instance')->theme->getParentTheme();
         }
+
         // Parent variables
         $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
         $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);

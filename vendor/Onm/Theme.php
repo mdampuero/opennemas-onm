@@ -346,8 +346,10 @@ class Theme
     public function getParentTheme()
     {
         if (isset($this->parentTheme) && !empty($this->parentTheme)) {
+
             return $this->parentTheme;
         }
+
         return false;
     }
 }
