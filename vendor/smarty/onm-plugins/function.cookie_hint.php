@@ -12,11 +12,18 @@ function smarty_function_cookie_hint($params, &$smarty)
         );
 
         $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css"></style>">'
-                .'<script type="text/javascript" src="/assets/js/onm/jquery.cookies_overlay.js"></script>'
-                ."<div id='cookies-overlay'><div class='cookies-overlay'>
+                ."<script type='text/javascript'>$(function() {
+                    $('#cookies_overlay').on('click', '.closeover', function(e, ui) {
+                        $(this).closest('#cookies_overlay').hide();
+                    });
+                    $.cookie('cookieoverlay_accepted', true);
+                });
+                </script>"
+                ."<div id='cookies_overlay'><div class='cookies-overlay'>
       <button data-dismiss='alert' class='closeover' type='button'>×</button>
       <p>$message</p>
-    </div></div>";
+    </div></div>
+    ";
 
     }
     return $html;
