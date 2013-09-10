@@ -12,3 +12,4 @@ function smarty_function_date_format($params, &$smarty)
 
     return $date->format($format);
 }
+
