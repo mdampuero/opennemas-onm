@@ -11,7 +11,7 @@ function smarty_function_cookie_hint($params, &$smarty)
             .' el uso de cookies. <a target="_blank" href="/estaticas/cookies-policies.html"> Más información &gt; </a>'
         );
 
-        $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css"></style>">'
+        $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css"></style>'
                 ."<script type='text/javascript'>$(function() {
                     $('#cookies_overlay').on('click', '.closeover', function(e, ui) {
                         $(this).closest('#cookies_overlay').hide();
@@ -22,8 +22,7 @@ function smarty_function_cookie_hint($params, &$smarty)
                 ."<div id='cookies_overlay'><div class='cookies-overlay'>
       <button data-dismiss='alert' class='closeover' type='button'>×</button>
       <p>$message</p>
-    </div></div>
-    ";
+    </div></div>";
 
     }
     return $html;
