@@ -11,7 +11,7 @@ var image_uploader ={
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t 1=$datos_cat[0]->title}Uploading images to "%1"{/t}</h2></div>
+        <div class="title"><h2>{t}Upload images{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_images category=$category}">
