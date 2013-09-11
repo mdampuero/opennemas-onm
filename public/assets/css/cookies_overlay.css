@@ -12,7 +12,8 @@
 }
 
 .cookies-overlay {
-margin:0 auto;
+  margin:0 auto;
+  max-width: 960px;
 }
 .cookies-overlay p {
   margin: 0;
