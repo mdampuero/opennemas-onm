@@ -227,6 +227,17 @@
 
         <div id="misc" class="form-horizontal">
             <fieldset>
+                <h3 class="settings-header">{t}Cookies hint{/t}</h3>
+
+                <div class="control-group">
+                    <label for="site_language" class="control-label">{t}Enable cookies hint{/t}</label>
+                    <div class="controls">
+                        <input type="checkbox" name="cookies_hint_enabled" value="1" {if $configs['cookies_hint_enabled'] == 1}checked{/if}>
+                        <div class="help-block">{t}Mark this if you want to show a message to your users that your site is using cookies.{/t}</div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
                 <h3 class="settings-header">{t}Language & Time{/t}</h3>
 
                 <div class="control-group">

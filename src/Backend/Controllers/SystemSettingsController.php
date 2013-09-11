@@ -37,6 +37,19 @@ class SystemSettingsController extends Controller
     {
         // Check ACL
         $this->checkAclOrForward('ONM_SETTINGS');
+
+        $this->configurationsKeys = array(
+            'site_title', 'site_logo', 'site_description','site_keywords','site_agency',
+            'site_footer', 'mobile_logo', 'favico', 'youtube_page',
+            'site_color', 'site_name', 'time_zone','site_language','site_footer',
+            'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
+            'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
+            'google_analytics','piwik', 'ojd', 'comscore', 'section_settings', 'paypal_mail',
+            'items_per_page','refresh_interval', 'google_news_name', 'google_page',
+            'webmastertools_google', 'webmastertools_bing',
+            'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
+            'cookies_hint_enabled',
+        );
     }
 
     /**
@@ -48,19 +61,7 @@ class SystemSettingsController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $configurationsKeys = array(
-            'site_title', 'site_logo', 'site_description','site_keywords','site_agency',
-            'site_footer', 'mobile_logo', 'favico', 'youtube_page',
-            'site_color', 'site_name', 'time_zone','site_language','site_footer',
-            'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
-            'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
-            'google_analytics','piwik', 'ojd', 'comscore', 'section_settings', 'paypal_mail',
-            'items_per_page','refresh_interval', 'google_news_name', 'google_page',
-            'webmastertools_google', 'webmastertools_bing',
-            'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
-        );
-
-        $configurations = s::get($configurationsKeys);
+        $configurations = s::get($this->configurationsKeys);
 
         return $this->render(
             'system_settings/system_settings.tpl',
@@ -123,6 +124,11 @@ class SystemSettingsController extends Controller
             $mobileLogo->move($uploadDirectory, $mobileLogoName);
             // Save name on settings
             s::set('mobile_logo', $mobileLogoName);
+        }
+
+
+        if (!$request->request->getDigits('cookies_hint_enabled', 0)) {
+            $request->request->set('cookies_hint_enabled', 0);
         }
 
         foreach ($request->request as $key => $value) {
