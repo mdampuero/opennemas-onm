@@ -48,7 +48,7 @@ class SystemSettingsController extends Controller
             'items_per_page','refresh_interval', 'google_news_name', 'google_page',
             'webmastertools_google', 'webmastertools_bing',
             'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
-            'cookies_hint_enabled',
+            'cookies_hint_enabled', 'cookies_hint_url',
         );
     }
 

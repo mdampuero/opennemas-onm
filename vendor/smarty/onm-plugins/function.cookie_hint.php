@@ -9,8 +9,13 @@ function smarty_function_cookie_hint($params, &$smarty)
     if ($enabled
         && !array_key_exists('cookieoverlay_accepted', $_COOKIE)
     ) {
-        $message = _(
-            'We use cookies to offer you a better experience. By using this site you agree to our use of cookies. <a target="_blank" href="/estaticas/cookies-policy.html"> Learn more &gt; </a>'
+        $url = s::get('cookies_hint_url');
+        $message = sprintf(
+            _(
+                'We use cookies to offer you a better experience. By using this site you '
+                .'agree to our use of cookies. <a target="_blank" href="%s"> Learn more &gt; </a>'
+            ),
+            $url
         );
 
         $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css">'

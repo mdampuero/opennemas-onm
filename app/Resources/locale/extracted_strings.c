@@ -2114,6 +2114,9 @@ gettext("Enable cookies agreement");
 gettext("Mark this if you want to show a message to your users that your site is using cookies.");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Cookie agreement page URL");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Language & Time");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
