@@ -13,7 +13,7 @@ function smarty_function_cookie_hint($params, &$smarty)
             'We use cookies to offer you a better experience. By using this site you agree to our use of cookies. <a target="_blank" href="/estaticas/cookies-policies.html"> Learn more &gt; </a>'
         );
 
-        $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css"></style>'
+        $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css">'
                 ."<script type='text/javascript'>$(function() {
                     $('#cookies_overlay').on('click', '.closeover', function(e, ui) {
                         $(this).closest('#cookies_overlay').hide();
