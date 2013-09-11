@@ -505,18 +505,6 @@ class ImagesController extends Controller
         $this->checkAclOrForward('IMAGE_CREATE');
 
         $request = $this->request;
-        $category = $request->query->getDigits('category', '');
-
-        $ccm = \ContentCategoryManager::get_instance();
-
-        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_NUMBER_INT);
-        if (empty($category) || !array_key_exists($category, $ccm->categories)) {
-            m::add(_('Please provide a valid category for upload images.'), m::ERROR);
-
-            return $this->redirect(
-                $this->generateUrl('admin_images', array('category' => $category,))
-            );
-        }
 
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
         $maxPost        = (int) (ini_get('post_max_size'));
@@ -526,7 +514,6 @@ class ImagesController extends Controller
         return $this->render(
             'image/create.tpl',
             array(
-                'category'         => $category,
                 'max_allowed_size' => $maxAllowedSize,
             )
         );
