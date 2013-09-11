@@ -94,18 +94,23 @@ class AuthenticationController extends Controller
 
         $cache = $this->get('cache');
 
+        if (empty($login)) {
+            m::add(_('Username or password incorrect.'), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_login_form'));
+        }
+
         // Set failed logins number for this user on session var
         $failedLoginAttempts = (int) $cache->fetch('failed_login_attempts_'.$login);
-        $_SESSION['failed_login_attempts'] = $failedLoginAttempts;
 
         if (array_key_exists('csrf', $_SESSION)
             && $_SESSION['csrf'] !== $token
         ) {
             m::add(_('Login token is not valid. Try to authenticate again.'), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_login_form'));
         } else {
             if ($failedLoginAttempts >= $badLoginAttemptsLimit) {
-
                 $this->get('logger')->warn(
                     'User '.$login.' has tried to login more than 3 times without success',
                     array('instance' => INSTANCE_UNIQUE_NAME)
@@ -122,7 +127,8 @@ class AuthenticationController extends Controller
                 // What happens when the CAPTCHA was entered incorrectly
                 if (!$resp->is_valid) {
                     m::add(_("The reCAPTCHA wasn't entered correctly. Try to authenticate again."), m::ERROR);
-                    return $this->redirect($this->generateUrl('admin_login_form'));
+
+                    return $this->redirect($this->generateUrl('admin_login_form', array('failed_login_attempts' => $failedLoginAttempts)));
                 }
             }
 
@@ -195,28 +201,34 @@ class AuthenticationController extends Controller
             } else {
                 m::add(_('Username or password incorrect.'), m::ERROR);
 
-                $firstBadLogin = $cache->fetch('failed_login_time_'.$login);
-                if (!$cache->fetch('failed_login_time_'.$login)) {
-                    $firstBadLogin = time();
-                    $cache->save('failed_login_time_'.$login, $firstBadLogin);
-                }
+                // $firstBadLogin = $cache->fetch('failed_login_time_'.$login);
+                // if (!$cache->fetch('failed_login_time_'.$login)) {
+                //     $firstBadLogin = time();
+                //     $cache->save('failed_login_time_'.$login, $firstBadLogin);
+                // }
+                // var_dump($failedLoginAttempts);die();
 
-                if ((time() - $firstBadLogin) > $lockoutTime || $failedLoginAttempts == 0) {
-                    $failedLoginAttempts = 1;
-                    // Set first failed login time
-                    $cache->save('failed_login_time_'.$login, time());
-                } else {
-                    // Count another bad login
-                    $failedLoginAttempts++;
-                }
+
+                // if ((time() - $firstBadLogin) > $lockoutTime || $failedLoginAttempts == 0) {
+                //     $failedLoginAttempts = 1;
+                //     // Set first failed login time
+                //     $cache->save('failed_login_time_'.$login, time());
+                // } else {
+                //     // Count another bad login
+                //     $failedLoginAttempts++;
+                // }
+                $failedLoginAttempts++;
+                $_SESSION['failed_login_attempts'] = $failedLoginAttempts;
+
+                // var_dump($failedLoginAttempts);die();
+
                 $cache->save('failed_login_attempts_'.$login, $failedLoginAttempts);
 
-                return $this->redirect($this->generateUrl('admin_login_form'));
+                return $this->redirect($this->generateUrl('admin_login_form', array('failed_login_attempts' => $failedLoginAttempts)));
             }
         }
         $token = md5(uniqid(mt_rand(), true));
         $_SESSION['csrf'] = $token;
-        $_SESSION['failed_login_attempts'] = $failedLoginAttempts;
 
         return $this->render(
             'login/login.tpl',

@@ -85,6 +85,14 @@ footer select {
     max-width:100px;
 }
 
+.recover_pass {
+    color: #777 !important;
+}
+
+.recover_pass.toomuchfails {
+    display:block;
+    float:none;
+}
 /* Media Queries for iPhone Portrait and Landscape */
 @media only screen and (max-width: 767px)  {
     #loginpage {

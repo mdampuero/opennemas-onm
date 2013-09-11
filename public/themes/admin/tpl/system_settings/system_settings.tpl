@@ -227,6 +227,24 @@
 
         <div id="misc" class="form-horizontal">
             <fieldset>
+                <h3 class="settings-header">{t}Cookies agreement{/t}</h3>
+
+                <div class="control-group">
+                    <label for="cookies_hint_enabled" class="control-label">{t}Enable cookies agreement{/t}</label>
+                    <div class="controls">
+                        <input type="checkbox" id="cookies_hint_enabled" name="cookies_hint_enabled" value="1" {if $configs['cookies_hint_enabled'] == 1}checked{/if}>
+                        <div class="help-block">{t}Mark this if you want to show a message to your users that your site is using cookies.{/t}</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="webmastertools_bing" class="control-label">{t}Cookie agreement page URL{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="cookies_hint_url" name="cookies_hint_url" class="input-xlarge" value="{$configs['cookies_hint_url']|default:""}">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
                 <h3 class="settings-header">{t}Language & Time{/t}</h3>
 
                 <div class="control-group">
