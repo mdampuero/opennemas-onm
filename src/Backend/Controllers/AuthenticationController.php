@@ -111,7 +111,6 @@ class AuthenticationController extends Controller
             return $this->redirect($this->generateUrl('admin_login_form'));
         } else {
             if ($failedLoginAttempts >= $badLoginAttemptsLimit) {
-
                 $this->get('logger')->warn(
                     'User '.$login.' has tried to login more than 3 times without success',
                     array('instance' => INSTANCE_UNIQUE_NAME)
@@ -129,7 +128,7 @@ class AuthenticationController extends Controller
                 if (!$resp->is_valid) {
                     m::add(_("The reCAPTCHA wasn't entered correctly. Try to authenticate again."), m::ERROR);
 
-                    return $this->redirect($this->generateUrl('admin_login_form'));
+                    return $this->redirect($this->generateUrl('admin_login_form', array('failed_login_attempts' => $failedLoginAttempts)));
                 }
             }
 
@@ -225,7 +224,7 @@ class AuthenticationController extends Controller
 
                 $cache->save('failed_login_attempts_'.$login, $failedLoginAttempts);
 
-                return $this->redirect($this->generateUrl('admin_login_form'));
+                return $this->redirect($this->generateUrl('admin_login_form', array('failed_login_attempts' => $failedLoginAttempts)));
             }
         }
         $token = md5(uniqid(mt_rand(), true));
