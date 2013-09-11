@@ -236,6 +236,13 @@ class Letter extends Content
 
         $ip = getRealIp();
         $data["params"] = array('ip'=> $ip);
+        if (array_key_exists('image', $data) && !empty($data['image'])) {
+            parent::setProperty('image', $data['image']);
+        }
+        if (array_key_exists('url', $data) && !empty($data['url'])) {
+            parent::setProperty('url', $data['url']);
+        }
+
         if ($letter->create($data)) {
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }

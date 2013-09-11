@@ -125,6 +125,21 @@ jQuery(document).ready(function($) {
                     <textarea name="body" id="body" required="required" class="onm-editor">{$letter->body|clearslash}</textarea>
                 </div>
             </div>
+
+            <div class="control-group">
+                <label for="image" class="control-label">{t}image{/t}</label>
+                <div class="controls">
+                    <input type="text" id="image" name="image" value="{$letter->image}"/>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="url" class="control-label">{t}Related url{/t}</label>
+                <div class="controls">
+                    <input type="text" id="url" name="url" value="{$letter->url}"/>
+                </div>
+            </div>
+
         </div>
     </div>
 

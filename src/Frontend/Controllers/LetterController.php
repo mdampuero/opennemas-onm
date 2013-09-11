@@ -179,7 +179,11 @@ class LetterController extends Controller
                 $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
                 $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
                 $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
+                $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
+                $image   = $request->request->filter('image', '', FILTER_SANITIZE_STRING);
 
+                $data['image']     = $image;
+                $data['url']       = $url;
                 $data['body']      = $lettertext;
                 $data['author']    = $name;
                 $data['title']     = $subject;
