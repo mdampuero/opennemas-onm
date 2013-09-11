@@ -6,9 +6,9 @@
             <h3 class="title">{t}Frontpage image{/t}</h3>
             <div class="content">
                 <div class="image-data">
-                    <div class="image thumbnail">
+                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
-                    </div>
+                    </a>
                     <div class="article-resource-footer">
                         <label for="title">{t}Footer text{/t}</label>
                         <textarea name="img1_footer" style="width:95%" class="related-element-footer">{$article->img1_footer|clearslash|escape:'html'}</textarea>
@@ -30,9 +30,9 @@
             <h3 class="title">{t}Inner image{/t}</h3>
             <div class="content">
                 <div class="image-data">
-                    <div class="image thumbnail">
+                    <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="image thumbnail">
                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}"/>
-                    </div>
+                    </a>
                     <div class="article-resource-footer">
                         <label for="title">{t}Footer text{/t}</label>
                         <textarea name="img2_footer" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>
@@ -55,9 +55,9 @@
             <h3 class="title">{t}Home image{/t}</h3>
             <div class="content">
                 <div class="image-data">
-                    <div class="image thumbnail">
+                    <a href="#media-uploader" data-toggle="modal" data-position="home-image" class="image thumbnail">
                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}"/>
-                    </div>
+                    </a>
                     <div class="article-resource-footer">
                         <label for="title">{t}Image footer text{/t}</label>
                         <textarea name="params[imageHomeFooter]" style="width:95%" class="related-element-footer">{$article->img2_footer|clearslash|escape:'html'}</textarea>

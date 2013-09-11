@@ -74,7 +74,7 @@
                             </tbody>
                         </table>
                     </form>
-                </div><!-- end #dropzone -->
+                </div>
             </div>
         </div>
 

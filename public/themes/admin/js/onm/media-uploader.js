@@ -135,14 +135,14 @@
                     page_el.val(parseInt(page_el.val()) + 1);
                 },
                 complete: function(xhr, status) {
-                    // contents = $.parseJSON(xhr.responseText);
+                    response_contents = $.parseJSON(xhr.responseText);
 
                     browser.find('.loading').toggleClass('hidden');
                     browser.data('loading', false);
 
                     // Load next page if there are more contents to load and the
                     // browser windows can fit more contents
-                    if (contents.length > 0 && _this.browser_needs_load()) {
+                    if (response_contents.length > 0 && _this.browser_needs_load()) {
                         _this.load_browser();
                     }
                 }
@@ -317,6 +317,9 @@
                 backdrop: 'static', //Show a grey back drop
                 keyboard: true, //Can close on escape
                 show: this.config.initially_shown,
+            })
+            this.modal.on('show', function(e, ui) {
+                _this.get('browser').load_browser();
             })
         },
 
