@@ -94,7 +94,7 @@ class AuthenticationController extends Controller
 
         $cache = $this->get('cache');
 
-        if (empty($login) || empty($password)) {
+        if (empty($login)) {
             m::add(_('Username or password incorrect.'), m::ERROR);
 
             return $this->redirect($this->generateUrl('admin_login_form'));
