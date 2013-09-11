@@ -10,7 +10,7 @@ function smarty_function_cookie_hint($params, &$smarty)
         && !array_key_exists('cookieoverlay_accepted', $_COOKIE)
     ) {
         $message = _(
-            'We use cookies to offer you a better experience. By using this site you agree to our use of cookies. <a target="_blank" href="/estaticas/cookies-policies.html"> Learn more &gt; </a>'
+            'We use cookies to offer you a better experience. By using this site you agree to our use of cookies. <a target="_blank" href="/estaticas/cookies-policy.html"> Learn more &gt; </a>'
         );
 
         $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css">'
@@ -23,8 +23,8 @@ function smarty_function_cookie_hint($params, &$smarty)
                 });
                 </script>"
                 ."<div id='cookies_overlay'><div class='cookies-overlay'>
-                  <button data-dismiss='alert' class='closeover' type='button'>Aceptar</button>
                   <p>$message</p>
+                  <button data-dismiss='alert' class='closeover' type='button'>Aceptar</button>
                 </div></div>";
     }
     return $html;

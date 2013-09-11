@@ -1,4 +1,4 @@
-.cookies-overlay {
+#cookies_overlay {
   background: rgba(0, 0, 0, 0.85);
   position: fixed;
   left: 0%;
@@ -9,6 +9,10 @@
   font-size: 12px;
   text-align: left;
   padding: 10px 0;
+}
+
+.cookies-overlay {
+margin:0 auto;
 }
 .cookies-overlay p {
   margin: 0;
@@ -23,7 +27,6 @@
   margin: 0 10px;
   padding:3px 5px;
   color: #000;
-  float: right;
   font-size: 12px;
   font-weight: bold;
 }

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-11 11:18+0200\n"
-"PO-Revision-Date: 2013-09-11 11:21+0200\n"
+"POT-Creation-Date: 2013-09-11 11:48+0200\n"
+"PO-Revision-Date: 2013-09-11 11:49+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -3369,14 +3369,15 @@ msgid "%s"
 msgstr "%s"
 
 #: /home/fran/Projects/OpenHost/opennemas/vendor/smarty/onm-plugins/function.cookie_hint.php:13
+#, fuzzy
 msgid ""
 "We use cookies to offer you a better experience. By using this site you "
 "agree to our use of cookies. <a target=\"_blank\" href=\"/estaticas/cookies-"
-"policies.html\"> Learn more &gt; </a>"
+"policy.html\"> Learn more &gt; </a>"
 msgstr ""
 "Usamos cookies para ofrecerlle unha experiencia mellorada. Ao usar este "
 "sitio acepta o uso que facemos das cookies. <a target=\"_blank\" "
-"href=\"/estaticas/cookies-policies.html\"> Máis información &gt; </a>"
+"href=\"/estaticas/cookies-policy.html\"> Máis información &gt; </a>"
 
 #: /home/fran/Projects/OpenHost/opennemas/vendor/smarty/onm-plugins/function.date_format.php:6
 msgid "Y-m-d H:i:s"
