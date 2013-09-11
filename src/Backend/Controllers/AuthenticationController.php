@@ -94,6 +94,12 @@ class AuthenticationController extends Controller
 
         $cache = $this->get('cache');
 
+        if (empty($login) || empty($password)) {
+            m::add(_('Username or password incorrect.'), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_login_form'));
+        }
+
         // Set failed logins number for this user on session var
         $failedLoginAttempts = (int) $cache->fetch('failed_login_attempts_'.$login);
 
