@@ -314,7 +314,7 @@
 
             var gallery = $('#media-uploader a[href="#gallery"]');
             this.modal = this.$elem.modal({
-                backdrop: 'static', //Show a grey back drop
+                backdrop: true, //Show a grey back drop
                 keyboard: true, //Can close on escape
                 show: this.config.initially_shown,
             })
