@@ -72,20 +72,18 @@
                     var mediapicker = $(this).data('mediapicker');
                     var image_element = mediapicker.buildHTMLElement(params);
 
-                    if (params['position'] == 'body') {
-                        CKEDITOR.instances.body.insertHtml(image_element);
+                    if (params['position'] == 'body' || params['position'] == 'summary') {
+                        console.log('test', params)
+                        CKEDITOR.instances[params['position']].insertHtml(image_element);
                     } else {
-                        console.log(params);
                         var container = $('#article_images').find('.'+params['position']);
 
                         var image_data_el = container.find('.image-data');
-                        console.log(image_data_el)
                         image_data_el.find('.related-element-id').val(params.content.pk_photo);
                         image_data_el.find('.related-element-footer').val(params.description);
                         image_data_el.find('.image').html(image_element);
                         container.addClass('assigned');
                     };
-
                 }
             }
         });
@@ -320,7 +318,7 @@
 
                     <div class="form-vertical contentform-main">
                         <div class="control-group">
-                            <label for="subtitle" class="control-label">{t}Pretitle{/t}</label>
+                            <label for="subtitle" class="control-label clearfix">{t}Pretitle{/t}</label>
                             <div class="controls">
                                 <div class="input-append" id="subtitle">
                                     <input  type="text" name="subtitle" value="{$article->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
@@ -331,8 +329,13 @@
 
 
                         <div class="control-group clearfix">
-                            <label for="summary" class="control-label">
-                                {t}Summary{/t}
+                            <label for="summary" class="control-label clearfix">
+                                <div class="pull-left">
+                                    {t}Summary{/t}
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#media-uploader" data-toggle="modal" data-position="summary" class="btn btn-mini"> + {t}Insert image{/t}</a>
+                                </div>
                             </label>
                             <div class="controls">
                                 <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$article->summary|clearslash|escape:"html"}</textarea>
