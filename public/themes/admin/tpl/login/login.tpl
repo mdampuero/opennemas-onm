@@ -62,7 +62,7 @@
                 </div>
                 {/if}
                 <p class="left {if $smarty.session.failed_login_attempts >= 3}toomuchfails{/if}">
-                    <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t}Forgot Password?{/t}</a>
+                    <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
                 </p>
             </div>
             <input type="hidden" name="token" value="{$smarty.session.csrf}">
