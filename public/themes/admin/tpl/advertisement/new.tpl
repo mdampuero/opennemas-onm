@@ -101,15 +101,19 @@
                     <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
 
                     {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}"
                             {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
                             {$allcategorys[as]->title}
                         </option>
+                        {/acl}
                         {section name=su loop=$subcat[as]}
+                            {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
                             <option value="{$subcat[as][su]->pk_content_category}"
                                 {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
                                 &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
                             </option>
+                            {/acl}
                         {/section}
                     {/section}
                 {else}
@@ -118,17 +122,20 @@
                     <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
                     {/is_module_activated}
 
-
                     {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}"
                             {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
                             {$allcategorys[as]->title}
                         </option>
+                        {/acl}
                         {section name=su loop=$subcat[as]}
+                            {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
                             <option value="{$subcat[as][su]->pk_content_category}"
                                 {if $category eq $subcat[as][su]->pk_content_category}selected="selected"{/if}>
                                 &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
                             </option>
+                            {/acl}
                         {/section}
                     {/section}
                 {/if}
