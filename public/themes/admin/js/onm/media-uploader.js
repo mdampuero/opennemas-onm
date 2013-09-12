@@ -95,12 +95,12 @@
             var _this = this;
 
             var is_loading = browser.data('loading');
-            if (is_loading) {
+            if (is_loading && !replace) {
                 return;
             };
 
             if (!enable_cache) {
-                browser.find('.gallery-search').find('.page').val(0);
+                browser.find('.gallery-search').find('.page').val(1);
             };
 
             var data = browser.find('.gallery-search').serialize();
@@ -108,7 +108,7 @@
             $.ajax({
                 url: this.config.browser_url,
                 data: data,
-                // cache : enable_cache,
+                cache : enable_cache,
                 beforeSend: function() {
                     browser.find('.loading').removeClass('hidden');
                     browser.data('loading', true);
