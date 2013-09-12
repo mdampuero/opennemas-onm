@@ -63,7 +63,10 @@ class MediaUploaderController extends Controller
 
         $rawMonths = $rs->GetArray();
         foreach ($rawMonths as $value) {
-            $months [] = array('name' => $value['date_month'], 'value' => $value['date_month']);
+            $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
+            $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM y');
+
+            $months [] = array('name' => $fmt->format($date), 'value' => $value['date_month']);
         }
 
         $response = new Response();
