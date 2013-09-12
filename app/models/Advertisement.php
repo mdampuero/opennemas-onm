@@ -362,7 +362,7 @@ class Advertisement extends Content
         $values = array(
             $this->id,
             $data['type_advertisement'],
-            $data['category'],
+            $data['categories'],
             $data['img'],
             $data['url'],
             $data['type_medida'],
