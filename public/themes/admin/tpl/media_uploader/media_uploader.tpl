@@ -39,7 +39,7 @@
             <div class="modal-footer">
                 <div class="image-info pull-left"></div>
                 <div class="pull-right buttons">
-                    <a class="btn btn-primary assign_content disabled" href="#">{t}Insert into article{/t}</a>
+                    <a class="btn btn-primary assign_content disabled" href="#">{t}Insert{/t}</a>
                 </div>
             </div>
         </div>
