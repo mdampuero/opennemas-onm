@@ -2616,7 +2616,7 @@ div#modal-element-customize-content div.select-disposition{
     }
     #media-uploader #media-element-show .preview > img {
       position: relative;
-      max-width: 225px;
+      max-width: 220px;
       max-height: 120px;
       margin-top: 5px;
       margin-right: 10px;
