@@ -8,10 +8,13 @@
         right:10px;
     }
     .resource-container {
-        width:440px;
+        width:400px;
     }
     .article-resource-image, .article-resource-image-info {
         width:auto !important;
+    }
+    #photos {
+        border:1px solid #ddd;
     }
 </style>
 {/block}

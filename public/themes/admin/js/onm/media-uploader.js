@@ -320,6 +320,7 @@
             })
             this.modal.on('show', function(e, ui) {
                 _this.get('browser').load_browser();
+                _this.get('uploader').reset();
             })
         },
 
