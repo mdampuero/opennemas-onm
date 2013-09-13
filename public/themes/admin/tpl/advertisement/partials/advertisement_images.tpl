@@ -78,7 +78,7 @@
 <script type="text/javascript">
     jQuery(document).ready(function ($){
 
-        load_ajax_in_container('{url name=admin_images_content_provider_gallery category=2}', $('#photos'));
+        load_ajax_in_container('{url name=admin_images_content_provider_gallery}', $('#photos'));
 
         $('#photos').on('click', '.pager a', function(e, ui) {
             e.preventDefault();
