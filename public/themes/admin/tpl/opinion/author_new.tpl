@@ -4,28 +4,28 @@
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
-    jQuery(document).ready(function($){
-        $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
+jQuery(document).ready(function($){
+    $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
 
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
-        // PAssword strength checker
-        var strength = $('#password').passStrength({
-            userid: '#login'
-        });
-
-        // Avatar image uploader
-        $('.fileupload').fileupload({
-            name: 'avatar',
-            uploadtype:'image'
-        });
-
-        $('.delete').on('click', function(){
-            $('.file-input').val('0');
-        })
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
+
+    // PAssword strength checker
+    var strength = $('#password').passStrength({
+        userid: '#login'
+    });
+
+    // Avatar image uploader
+    $('.fileupload').fileupload({
+        name: 'avatar',
+        uploadtype:'image'
+    });
+
+    $('.delete').on('click', function(){
+        $('.file-input').val('0');
+    })
+});
 </script>
 {/block}
 
