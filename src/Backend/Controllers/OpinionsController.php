@@ -1130,13 +1130,16 @@ class OpinionsController extends Controller
             'id_user_group'   => array(3),
             'ids_category'    => array(),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
+            'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
         );
 
         $file = $request->files->get('avatar');
         $user = new \User($userId);
 
         // Generate username and password from real name
-        $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+        if (empty($data['username'])) {
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+        }
 
         try {
             // Upload user avatar if exists
