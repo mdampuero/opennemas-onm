@@ -172,6 +172,7 @@ label {
                                 </label>
                             </div>
                         </div>
+                        <input type="hidden" name="username" value="{$user->username|default:""}">
                     </fieldset>
 
                 </div>
