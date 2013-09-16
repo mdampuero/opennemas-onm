@@ -21,8 +21,8 @@ function smarty_function_cookie_hint($params, &$smarty)
         $html = '<link rel="stylesheet" type="text/css" href="/assets/css/cookies_overlay.css">'
                 ."<script type='text/javascript'>$(function() {
                     $('#cookies_overlay').on('click', '.closeover', function(e, ui) {
+                        $.ajax('/accepted_cookies');
                         $(this).closest('#cookies_overlay').hide();
-                        $.cookie('cookieoverlay_accepted', true);
                     });
 
                 });
