@@ -322,6 +322,10 @@ class OpinionsController extends Controller
 
             if ($opinion->create($data)) {
                 m::add(_('Opinion successfully created.'), m::SUCCESS);
+
+                // TODO: Move this to a post update hook
+                $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                $tplManager->delete(sprintf("%06d", $request->request->getDigits('fk_author')).'|1');
             } else {
                 m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
