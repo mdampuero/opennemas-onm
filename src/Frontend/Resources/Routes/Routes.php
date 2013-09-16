@@ -18,6 +18,16 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'accept_cookies',
+    new Route(
+        '/accepted_cookies',
+        array(
+            '_controller' => 'Frontend:Controllers:UtilitiesController:acceptCookies',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'asset_image',
     new Route(
         '/asset/{parameters}/{real_path}',
