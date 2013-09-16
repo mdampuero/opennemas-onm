@@ -1,7 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+{script_tag src="/jquery/jquery-ui-timepicker-addon.js" common=1}
 {script_tag src="/jquery/jquery.multiselect.js" common=1}
 {script_tag src="/jquery/jquery.validate.min.js" common=1}
 {script_tag src="/jquery/localization/messages_es.js" common=1}
