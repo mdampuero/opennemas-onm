@@ -111,7 +111,6 @@ $menuXml = '<?xml version="1.0"?>
             id="letter_manager"
             link="'.url('admin_letters').'"
         />
-        <node class="divider" />
         <node
             module_name="CATEGORY_MANAGER"
             privilege="CATEGORY_ADMIN"
@@ -176,14 +175,12 @@ $menuXml = '<?xml version="1.0"?>
             id="advanced_search"
             link="'.url('admin_search').'"
         />
-        <node class="divider" />
         <node
             module_name="TRASH_MANAGER"
             title="'.htmlspecialchars(_("Trash"), ENT_QUOTES).'"
             id="trash_manager"
             link="'.url("admin_trash", array()).'"
             privilege="TRASH_ADMIN" />
-        <node class="divider" />
         <node
             module_name="NEWSLETTER_MANAGER"
             title="'.htmlspecialchars(_("Newsletter"), ENT_QUOTES).'"
@@ -217,7 +214,6 @@ $menuXml = '<?xml version="1.0"?>
             link="'.url('admin_paywall_purchases', array()).'"
             privilege="PAYWALL" />
         </submenu>
-        <node class="divider" />
         <node
             module_name="SYNC_MANAGER"
             title="'.htmlspecialchars(_("Sync Instances"), ENT_QUOTES).'"
@@ -374,24 +370,17 @@ $menuXml = '<?xml version="1.0"?>
                     link="'.url("admin_acl_usergroups", array()).'"
                 />
             </submenu>
-        <node class="divider" />
         <node
             module_name="CACHE_MANAGER"
             title="'.htmlspecialchars(_("Cache manager"), ENT_QUOTES).'"
             id="cache_manager"
             link="'.url("admin_tpl_manager", array()).'"
             privilege="CACHE_ADMIN" />
-        <node class="divider" />
         <node
             module_name="LOG_SQL"
             title="'.htmlspecialchars(_("SQL error log"), ENT_QUOTES).'"
             id="log_sql"
             link="'.url("admin_databaseerrors", array()).'"
             privilege="ONLY_MASTERS" />
-        <node
-            title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
-            id="support_help"
-            link="http://help.opennemas.com/"
-            target="external"/>
     </submenu>
 </menu>';

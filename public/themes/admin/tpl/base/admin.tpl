@@ -79,10 +79,20 @@
                             </ul>
                         </li>
                         <li class="dropdown usermenu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="18"} <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            {if $smarty.session.avatar_url}
+                            <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}" width="18" >
+                            {else}
+                                {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="18"}
+                            {/if}
+                            <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
                             <div class="dropdown-menu">
                                 <div class="avatar">
-                                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                {if $smarty.session.avatar_url}
+                                    <img src="{$smarty.session.avatar_url}" alt="{t}Photo{/t}"/>
+                                {else}
+                                    {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                {/if}
                                 </div><!-- /.avatar -->
                                 <div class="user-info">
                                     <div class="complete-name">{$smarty.session.realname|ucfirst}</div>
@@ -102,7 +112,6 @@
             </div>
         </div>
     </header>
-
     <div id="content" role="main">
     {block name="content"}{/block}
     </div>
