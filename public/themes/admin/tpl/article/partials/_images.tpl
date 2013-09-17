@@ -30,7 +30,7 @@
                                 <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</span> (px)</div>
                                 <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo1->size|default:0}</span> Kb</div>
                                 <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo1->created|default:""}</span></div>
-                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo1->description|escape:'html'}</span></div>
+                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo1->description}</span></div>
                                 <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo1->metadata|default:""}</span></div>
                             </div>
                         </div><!-- / -->
@@ -377,7 +377,7 @@ jQuery(document).ready(function($){
             // Change the form values
             var article_inputs = parent.find(".article-resource-footer");
             article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
-            article_inputs.find("textarea").attr('value', image.data("description"));
+            article_inputs.find("textarea").attr('value',  article_info.find(".description").html());
         }
     });
 });
