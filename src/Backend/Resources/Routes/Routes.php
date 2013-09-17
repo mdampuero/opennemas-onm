@@ -2751,6 +2751,14 @@ $adminRoutes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_welcome_accept_terms',
+    new Route(
+        '/accept-terms',
+        array('_controller' => 'Backend:Controllers:WelcomeController:acceptTerms')
+    )
+);
+
 $adminRoutes->addPrefix('/admin');
 
 $routes->add(

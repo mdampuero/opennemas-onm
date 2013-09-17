@@ -1211,7 +1211,7 @@ gettext("New article");
 gettext("Welcome to your OpenNemas site!");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("If you need help getting started, check out our documentation on <a href=\"%1\">First Steps with OpenNemas</a>.\n           If you’d rather dive right in, here are a few things most people do first when they set up\n           a new OpenNemas site.");
+gettext("If you need help getting started, check out our documentation on <a href=\"%1\">First Steps with OpenNemas</a>.\n               If you’d rather dive right in, here are a few things most people do first when they set up\n               a new OpenNemas site.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Learn more");
@@ -1251,6 +1251,18 @@ gettext("Select a new header image");
 
 /* public/themes/admin/tpl//welcome/modals/_modal_users.tpl */
 gettext("Logged in users");
+
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("Terms of Service Agreement");
+
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("In order to use the Opennemas platform you must read and accept our terms of use. You can find these terms in the next link <a href=\"http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms of use in Opennemas\">Terms of use in Opennemas</a>");
+
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("I have read and accept the Opennemas <a href=\"http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms of use in Opennemas\">Terms of use</a> and <a href=\"http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad\">Privacy policy</a>.");
+
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("Yes, accept");
 
 /* public/themes/admin/tpl//instance_sync/list.tpl */
 gettext("Instance synchronization");
