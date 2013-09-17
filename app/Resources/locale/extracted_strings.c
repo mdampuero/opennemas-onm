@@ -1211,7 +1211,7 @@ gettext("New article");
 gettext("Welcome to your OpenNemas site!");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("If you need help getting started, check out our documentation on <a href=\"%1\">First Steps with OpenNemas</a>.\n               If you’d rather dive right in, here are a few things most people do first when they set up\n               a new OpenNemas site.");
+gettext("If you need help getting started, check out our documentation on <a href=\"%1\">First Steps with OpenNemas</a>.\n           If you’d rather dive right in, here are a few things most people do first when they set up\n           a new OpenNemas site.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Learn more");
@@ -6804,9 +6804,6 @@ gettext("Delete this user");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("There is no users created yet or <br/>your search don't match your criteria");
-
-/* public/themes/admin/tpl//acl/user/new.tpl */
-gettext("Please, the password must be more complex");
 
 /* public/themes/admin/tpl//acl/user/new.tpl */
 gettext("Editing user");
