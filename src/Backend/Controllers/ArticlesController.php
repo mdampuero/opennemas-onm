@@ -95,7 +95,11 @@ class ArticlesController extends Controller
             $filterSQL []= ' contents.available='.$status;
         }
         if (!empty($title)) {
-            $filterSQL []= ' title LIKE \'%'.$title.'%\'';
+            $filterSQL []=
+                "(title LIKE '%{$title}%'"
+                ." OR description LIKE '%{$title}%'"
+                ." OR metadata LIKE '%{$title}%')";
+
         }
 
         $filterSQL = implode(' AND ', $filterSQL);
