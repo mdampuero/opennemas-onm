@@ -14,45 +14,6 @@
             userid: '#login'
         });
 
-        // $('#formulario').validate({
-        //     rules: {
-        //         password: {
-        //             minlength : 6
-        //         },
-        //         passwordconfirm: {
-        //             minlength : 6,
-        //             equalTo : "#password"
-        //         }
-        //     },
-        //     highlight: function(element) {
-        //         $(element).closest('.control-group').removeClass('success').addClass('error');
-        //     },
-        //     errorPlacement: function(error, element) {
-        //          $(element).closest('.control-group').append(error);
-        //     },
-        //     success: function(element) {
-        //         element
-        //             .addClass('valid')
-        //             .closest('.control-group').removeClass('error').addClass('success');
-        //     },
-        //     submitHandler: function(form) {
-        //         var levels = ['Weak', 'Good', 'Strong'];
-        //         var currentLevel = levels.indexOf($('.alert-pass').text());
-        //         var minLevel = '{$min_pass_level}';
-        //         var pass = $('#password').val();
-
-        //         if(currentLevel >= minLevel || pass == '') {
-        //             form.submit();
-        //         } else {
-        //             $('#password').closest('.control-group').removeClass('success').addClass('error');
-        //             $('#password').closest('.control-group').append(
-        //                 '<label for="password" class="error">{t}Please, the password must be more complex{/t}.</label>'
-        //             );
-        //         }
-        //     }
-        // });
-
-        $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
         $('#user-editing-form').tabs();
 
         $('#formulario').onmValidate({
@@ -295,7 +256,7 @@ label {
                             <div class="controls">
                                 <div class="input-prepend">
                                     <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="password" name="password" value="" class="input-medium" {if $user->id eq null}required="required"{/if} maxlength="20"/>
+                                    <input type="password" id="password" minlength=6 name="password" data-min-strength="{$min_pass_level}" value="" class="input-medium" {if $user->id eq null}required="required"{/if} maxlength="20"/>
                                 </div>
                             </div>
                         </div>
@@ -305,7 +266,7 @@ label {
                             <div class="controls">
                                 <div class="input-prepend">
                                     <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium validate-password-confirm" maxlength="20"/>
+                                    <input type="password" id="passwordconfirm" minlength=6 name="passwordconfirm" value="" data-password-equals="password" class="input-medium validate-password-confirm" maxlength="20"/>
                                 </div>
                             </div>
                         </div>
