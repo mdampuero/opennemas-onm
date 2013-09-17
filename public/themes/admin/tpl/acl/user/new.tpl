@@ -161,7 +161,9 @@ label {
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
                 <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
+                {acl isAllowed="GROUP_CHANGE|USER_CATEGORY"}
                 <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
+                {/acl}
                 {acl isAllowed="USER_ADMIN"}
                 {is_module_activated name="PAYWALL"}
                 <li><a href="#paywall" title="{t}Paywall{/t}">{t}Paywall{/t}</a></li>
