@@ -1,4 +1,4 @@
-{if $terms_accepted < 1}
+{if $terms_accepted < 1 && ($smarty.session.isAdmin === true || $smarty.session.isMaster === true)}
 <style>
     #modal-terms-accept .modal-footer {
         text-align:left;
