@@ -382,10 +382,5 @@ $menuXml = '<?xml version="1.0"?>
             id="log_sql"
             link="'.url("admin_databaseerrors", array()).'"
             privilege="ONLY_MASTERS" />
-        <node
-            title="'.htmlspecialchars(_("Support and Help"), ENT_QUOTES).'"
-            id="support_help"
-            link="http://help.opennemas.com/"
-            target="external"/>
     </submenu>
 </menu>';
