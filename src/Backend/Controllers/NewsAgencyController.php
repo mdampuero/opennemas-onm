@@ -558,30 +558,33 @@ class NewsAgencyController extends Controller
 
         $repository = new \Onm\Import\Repository\LocalRepository();
         $element    = $repository->findById($sourceId, $id);
-
+        $content = null;
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
+            foreach ($photos as $photo) {
 
-            if (array_key_exists($attachmentId, $photos)) {
-                $photo = $photos[$attachmentId];
-                // Get image from FTP
-                $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$photo->file_path
-                );
+                if ($photo->id == $attachmentId) {
 
-                // If no image from FTP check HTTP
-                if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$photo->name[$index];
+                    // Get image from FTP
+                    $filePath = realpath(
+                        $repository->syncPath.DS.$sourceId.DS.$photo->file_path
+                    );
+
+                    // If no image from FTP check HTTP
+                    if (!$filePath) {
+                        $filePath = $repository->syncPath.DS.
+                            $sourceId.DS.$photo->name[$index];
+                    }
+                    $content = @file_get_contents($filePath);
+
+                    $response = new Response(
+                        $content,
+                        200,
+                        array('content-type' => $photo->file_type)
+                    );
                 }
-                $content = @file_get_contents($filePath);
-
-                $response = new Response(
-                    $content,
-                    200,
-                    array('content-type' => $photo->file_type)
-                );
-            } else {
+            }
+            if (empty($content)) {
                 $response = new Response('Image not found', 404);
             }
 

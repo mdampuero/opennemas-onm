@@ -391,7 +391,7 @@ class NewsMLG1 implements FormatInterface
                 foreach ($contents[0] as $componentName => $component) {
                     if ($componentName == 'NewsComponent') {
                         $photoComponent = new Photo($component);
-                        $this->photos[$photoComponent->id] = $photoComponent;
+                        $this->photos[] = $photoComponent;
                     }
                 }
             } else {
