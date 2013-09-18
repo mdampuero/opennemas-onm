@@ -156,9 +156,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p>
-                          {$photo->description|htmlspecialchars_decode}
-                        </p>
+                        <p>{$photo->description|htmlspecialchars_decode|trim}</p>
                       </body.content>
                     </body>
                   </nitf>
@@ -223,9 +221,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p>
-                          {$photoInner->description|htmlspecialchars_decode}
-                        </p>
+                        <p>{$photoInner->description|htmlspecialchars_decode|trim}</p>
                       </body.content>
                     </body>
                   </nitf>
