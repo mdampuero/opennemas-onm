@@ -13,23 +13,23 @@
             </div>
             <div class="modal-body">
                 <form action="#" class="gallery-search">
-                <input type="hidden" class="page" name="page" value="1">
-                <div class="toolbar clearfix">
-                    <div class="pull-left">
-                        <select name="month" class="month">
-                            <option value="">{t}All months{/t}</option>
+                    <input type="hidden" class="page" name="page" value="1">
+                    <div class="toolbar clearfix">
+                        <div class="pull-left">
+                            <select name="month" class="month">
+                                <option value="">{t}All months{/t}</option>
 
-                        </select>
-                    </div>
-                    <div class="pull-right">
+                            </select>
+                        </div>
+                        <div class="pull-right">
 
-                        <input type="search" name="search_string" placeholder="{t}Search{/t}">
+                            <input type="search" name="search_string" placeholder="{t}Search{/t}">
+                        </div>
+                        <div class="loading pull-right hidden"><div class="spinner"></div></div>
                     </div>
-                    <div class="loading pull-right hidden"><div class="spinner"></div></div>
-                </div>
-                <div class="modal-body-content">
-                    <ul class="attachments ui-sortable ui-sortable-disabled"></ul>
-                </div>
+                    <div class="modal-body-content">
+                        <ul class="attachments ui-sortable ui-sortable-disabled"></ul>
+                    </div>
                 </form>
             </div>
 

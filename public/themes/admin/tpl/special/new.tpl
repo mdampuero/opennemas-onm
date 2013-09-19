@@ -2,6 +2,14 @@
 
 {block name="header-css" append}
     {css_tag href="/parts/specials.css"}
+    <style>
+    .thumbnails>li {
+        margin:0;
+    }
+    .thumbnails {
+        margin:0;
+    }
+    </style>
 {/block}
 
 {block name="footer-js" append}
@@ -37,25 +45,6 @@
 
         $('#title').on('change', function(e, ui) {
             fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
-
-
-        load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
-
-        $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
-            var category = $('#category_imag option:selected').val();
-            var text = $('#stringImageSearch').val();
-            var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
-            load_ajax_in_container(
-                url,
-                $('#photos')
-            );
-        });
-
-        $('#photos').on('click', '.pager a', function(e, ui) {
-            e.preventDefault();
-            var link = $(this);
-            load_ajax_in_container(link.attr('href'), $('#photos'));
         });
     });
     </script>

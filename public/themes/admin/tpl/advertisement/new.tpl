@@ -1,24 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-<style type="text/css">
-    .utilities-conf {
-        position:absolute;
-        top:10px;
-        right:10px;
-    }
-    .resource-container {
-        width:400px;
-    }
-    .article-resource-image, .article-resource-image-info {
-        width:auto !important;
-    }
-    #photos {
-        border:1px solid #ddd;
-    }
-</style>
-{/block}
-
 {block name="header-js" append}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
@@ -30,7 +11,47 @@
         calculate_tags : '{url name=admin_utils_calculate_tags}'
     }
     </script>
-    {script_tag src="/onm/bannermanager.js"}
+    {include file="media_uploader/media_uploader.tpl"}
+    <script>
+        var mediapicker = $('#media-uploader').mediaPicker({
+            upload_url: "{url name=admin_image_create category=0}",
+            browser_url : "{url name=admin_media_uploader_browser}",
+            months_url : "{url name=admin_media_uploader_months}",
+            maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+            // initially_shown: true,
+            handlers: {
+                'assign_content' : function( event, params ) {
+                    var mediapicker = $(this).data('mediapicker');
+                    var image_element = mediapicker.buildHTMLElement(params);
+
+                    var container = $('#related_media').find('.'+params['position']);
+
+                    var image_data_el = container.find('.image-data');
+                    image_data_el.find('.related-element-id').val(params.content.pk_photo);
+                    image_data_el.find('.image').html(image_element);
+                    container.addClass('assigned');
+
+                    // if (image.data('type-img') != 'swf') {
+                    //     // Change the image thumbnail to the new one
+                    //     parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
+                    // } else {
+                    //     parent.find('.article-resource-image').html(
+                    //         "<div id=\"flash-container-replace\"><\/div>"+"<script> var flashvars = {}; var params = { wmode:\"opaque\" }; var attributes = {};" +
+                    //         "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
+                    //     );
+                    // };
+
+                    console.log(params)
+
+                    // // Change the image information to the new one
+                    container.find(".filename").html(params.content.filename);
+                    container.find(".image_size").html(params.content.width + " x "+ params.content.height + " px");
+                    container.find(".file_size").html(params.content.size + " Kb");
+                    container.find(".created_time").html(params.content.created);
+                }
+            }
+        });
+    </script>
 {/block}
 
 {block name="content" append}
@@ -171,8 +192,8 @@
         <div class="control-group">
             <label class="control-label">{t}Content{/t}</label>
             <div class="controls">
-                <label for="with_script_0"><input type="radio" name="with_script" id="with_script_0" value="0" {if !isset($advertisement) || $advertisement->with_script == 0}checked="checked"{/if}> {t}Image or flash from library{/t}</label>
-                <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}Custom HTML or Javascript code{/t}</label>
+                <label for="with_script_0"><input type="radio" name="with_script" id="with_script_0" value="0" {if !isset($advertisement) || $advertisement->with_script == 0}checked="checked"{/if}> {t}Image or Flash object{/t}</label>
+                <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}HTML or Javascript code{/t}</label>
             </div>
         </div>
 
@@ -183,9 +204,7 @@
                     {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
                 <div id="script_content" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
-                    <textarea name="script" id="script" class="input-xxlarge" rows="10">
-                        {$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}
-                    </textarea>
+                    <textarea name="script" id="script" class="input-xxlarge" rows="10">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
             </div>
         </div>
