@@ -31,7 +31,7 @@
                     container.addClass('assigned');
 
                     if (params.content.type_img == 'swf') {
-                        var image_element = mediapicker.get('browser').getHTMLforSWF(params.content);
+                        var image_element = mediapicker.getHTMLforSWF(params.content);
                         container.find('.flash-based-warning').show()
                     } else {
                         var image_element = mediapicker.buildHTMLElement(params);
