@@ -467,6 +467,23 @@ a.unpublishing:hover {
   text-decoration:none;
 }
 
+.flash-based {
+  color: #ffffff;
+  background-color: #d9534f;
+  font-size:.9em;
+  border-radius:2px;
+  display:inline-block;
+  padding:0 7px;
+}
+
+.help-tooltip {
+  color: #ffffff;
+  background-color: #d9534f;
+  font-size:.9em;
+  border-radius:2px;
+  display:inline-block;
+  padding:0 7px;
+}
 
 #warnings-validation {
   margin:5px 0;
@@ -2479,7 +2496,20 @@ div#modal-element-customize-content div.select-disposition{
         float: left;
         list-style:none;
         margin-right: 5px;
+        position:relative;
     }
+    #media-uploader #browser .attachments .attachment .attch-overlay {
+      height:100%;
+      width:100%;
+      background:rgba(255,255,255, 0.3);
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:0;
+      right:0;
+      z-index:100;
+    }
+
     #media-uploader #browser .attachments .attachment-preview {
         display:inline-block;
         list-style:none;
@@ -2557,7 +2587,6 @@ div#modal-element-customize-content div.select-disposition{
     #media-uploader .photo-insert-form {
     }
     #media-uploader .photo-image-information {
-        border-right:1px solid #eee;
         max-width:300px;
         margin-right: 10px;
         padding-right:10px;
@@ -2610,7 +2639,7 @@ div#modal-element-customize-content div.select-disposition{
     }
     #media-uploader #media-element-show .preview > img {
       position: relative;
-      max-width: 220px;
+      max-width: 215px;
       max-height: 120px;
       margin-top: 5px;
       margin-right: 10px;

@@ -117,7 +117,12 @@ var fileUploadErrors = {
         <div class="attachment-preview type-image subtype-png landscape">
             <div class="thumbnail">
                 <div class="centered">
-                    <img src="{{thumbnail_url}}" draggable="false">
+                    {{#if is_swf}}
+                        SWF_CALLER
+                        <div class="attch-overlay"></div>
+                    {{else}}
+                        <img src="{{thumbnail_url}}" draggable="false">
+                    {{/if}}
                 </div>
             </div>
             <a class="check" href="#" title="Deselect"><div class="media-modal-icon"></div></a>
@@ -145,7 +150,12 @@ var fileUploadErrors = {
 {{#with content}}
 <div class="photo-image-information">
     <div class="preview">
-        <img src="{{image_path}}" />
+        {{#if is_swf}}
+            SWF_CALLER
+            <div class="attch-overlay"></div>
+        {{else}}
+            <img src="{{thumbnail_url}}" draggable="false">
+        {{/if}}
     </div>
     <div class="buttons btn-group">
         <a href="{{edit_url}}" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {/literal}{t}Edit{/t}{literal}</a>
