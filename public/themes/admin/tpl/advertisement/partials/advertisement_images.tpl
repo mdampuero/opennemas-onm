@@ -1,7 +1,7 @@
 <div id="related_media">
     <ul class="related_images thumbnails clearfix">
         <li class="contentbox ad-image {if isset($photo1) && $photo1->name}assigned{/if}">
-            <div class="content">
+            <div class="content clearfix">
                 <div class="image-data">
                     <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
                         {if isset($photo1) && strtolower($photo1->type_img)=='swf'}
@@ -65,6 +65,9 @@
 .image-information .info {
     font-size: .9em;
     color: gray;
+}
+#normal_content {
+    margin-bottom:5px;
 }
 
 </style>
