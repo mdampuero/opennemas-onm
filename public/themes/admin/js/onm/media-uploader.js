@@ -56,7 +56,16 @@
                 $('.image-info').html('');
             }).on('click', '.attachment', function(e, ui) {
                 e.preventDefault();
-                var element = $(this).closest('.attachment');
+
+                if (_this.config.multi_select === true) {
+                    var element = $(this).closest('.attachment');
+                    element.toggleClass('selected')
+                } else {
+
+                    var element = $(this).closest('.attachment');
+                    element.addClass('selected').siblings('.attachment').removeClass('selected');
+                };
+
                 content = contents[element.data('id')];
 
                 $(_this.parent.elementUI).trigger('show', content);
@@ -149,7 +158,12 @@
             });
         },
 
-        // Function to know if the user has scrolled to the botton of the container
+        reset: function() {
+            this.$browser.find('.attachment').removeClass('selected');
+            this.load_browser();
+        },
+
+        // Function to know if the user has scrolled to the bottom of the container
         // and it needs to load more contents
         browser_needs_load: function() {
             var container = $(this.$browser).find('.modal-body');
@@ -263,8 +277,6 @@
 
             var params = $.extend({}, params, { 'position': position, 'content' : content});
 
-            console.log(params);
-
             this.parent.$elem.trigger('assign_content', params);
         }
     };
@@ -285,6 +297,7 @@
             browser_el: '#browser',
             media_element_el: '#media-element-show',
             maxFileSize: 5000000,
+            multi_select: false
         },
 
         init: function() {
@@ -319,8 +332,9 @@
                 show: this.config.initially_shown,
             })
             this.modal.on('show', function(e, ui) {
-                _this.get('browser').load_browser();
+                _this.get('browser').reset();
                 _this.get('uploader').reset();
+                _this.get('elementUI').reset();
             })
         },
 

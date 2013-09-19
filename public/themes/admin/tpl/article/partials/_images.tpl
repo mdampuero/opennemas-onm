@@ -198,7 +198,7 @@
 {is_module_activated name="IMAGE_MANAGER"}
 <script>
 jQuery(document).ready(function($){
-    $('#article_images .unset').on('click', function (e, ui) {
+    $('#related_media .unset').on('click', function (e, ui) {
         e.preventDefault();
 
         var parent = jQuery(this).closest('.contentbox');

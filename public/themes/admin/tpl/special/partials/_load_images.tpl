@@ -1,123 +1,65 @@
 {is_module_activated name="IMAGE_MANAGER"}
-<hr>
-<table style="width:100%">
-    <tr>
-        <td>
-            <div id="related-images" class="resource-container tabs">
-                <ul>
-                    <li><a href="#special-image" title="{t}Image for home:{/t}">{t}Image for Special{/t}</a></li>
-                </ul><!-- / -->
-                <div id="frontpage-image" class="droppable-image-position droppable-position">
-                    <div>
-                        <a class="delete-button">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
+<div id="related_media" class="control-group">
+    <label for="special-image" class="control-label">{t}Image for Special{/t}</label>
+    <div class="controls">
+        <ul class="related-images thumbnails">
+            <li class="contentbox frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
+                <h3 class="title">{t}Frontpage image{/t}</h3>
+                <div class="content">
+                    <div class="image-data">
+                        <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
+                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
                         </a>
-                        <div class="clearfix">
-                            <div class="thumbnail article-resource-image">
-                                {if isset($photo1) && $photo1->name}
-                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" id="frontpage_image" name="{$article->img1}" />
-                                {else}
-                                    <img src="http://placehold.it/290x226" id="frontpage_image" />
-                                {/if}
-                            </div>
-                            <div class="article-resource-image-info">
-                                <div><label>{t}File name{/t}</label>     <span class="filename">{$photo1->name|default:'default_img.jpg'}</span></div>
-                                <div><label>{t}Image size{/t}</label>    <span class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</span> (px)</div>
-                                <div><label>{t}File size{/t}</label>     <span class="file_size">{$photo1->size|default:0}</span> Kb</div>
-                                <div><label>{t}Creation date{/t}</label> <span class="created_time">{$photo1->created|default:""}</span></div>
-                                <div><label>{t}Description{/t}</label>   <span class="description">{$photo1->description|escape:'html'}</span></div>
-                                <div><label>{t}Tags{/t}</label>          <span class="tags">{$photo1->metadata|default:""}</span></div>
-                            </div>
-                        </div><!-- / -->
-                        <div id="footer_img_portada" class="article-resource-footer">
-                            <input type="hidden" name="img1" value="{$special->img1|default:""}" class="related-element-id" />
-                        </div>
-                    </div><!-- / -->
-                </div><!-- /frontpage-image -->
-            </div><!-- /related-images -->
-        </td>
-          <td style="width:430px">
-            <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:10px;">
-                <a><strong>{t}Available images{/t}</strong></a>
-            </div>
-            <div id="photos_container" class="photos" style="border:1px solid #ccc;  padding:7px;min-height: 450px;">
-                <table>
-                    <tr>
-                        <td >
-                            <input id="stringImageSearch" name="stringImageSearch" type="text"
-                               placeholder="{t}Search images by title...{/t}" />
-                        </td>
-                        <td>
-                            <select style="width:140px" id="category_imag" name="category_imag">
-                                <option value="0">GLOBAL</option>
-                                    {section name=as loop=$allcategorys}
-                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                        {section name=su loop=$subcat[as]}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/section}
-                                    {/section}
-                            </select>
-                        </td>
-                    </tr>
-                </table>
-                <div id="photos">
-                    {*AJAX imageGallery *}
+                        <input type="hidden" name="img1" value="{$special->img1|default:""}" class="related-element-id" />
+                    </div>
+
+                    <div class="not-set">
+                        {t}Image not set{/t}
+                    </div>
+
+                    <div class="btn-group">
+                        <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
+                        <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                    </div>
                 </div>
-           </div>
-        </td>
-    </tr>
-</table>
+            </li>
+        </ul>
+    </div>
+</div>
 
+{include file="media_uploader/media_uploader.tpl"}
 <script>
 jQuery(document).ready(function($){
-    $('#related-images').tabs();
-    $('#related-images .delete-button').on('click', function () {
-        var parent = jQuery(this).parent();
-        var elementID = parent.find('.related-element-id');
+    var mediapicker = $('#media-uploader').mediaPicker({
+        upload_url: "{url name=admin_image_create category=0}",
+        browser_url : "{url name=admin_media_uploader_browser}",
+        months_url : "{url name=admin_media_uploader_months}",
+        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        // initially_shown: true,
+        handlers: {
+            'assign_content' : function( event, params ) {
+                var mediapicker = $(this).data('mediapicker');
+                var image_element = mediapicker.buildHTMLElement(params);
 
-        if (elementID.val() > 0) {
-            elementID.data('id', elementID.val());
-            elementID.val(null);
-            parent.fadeTo('slow', 0.5);
-        } else {
-            elementID.val(elementID.data('id'));
-            parent.fadeTo('slow', 1);
-        };
-    });
-});
-</script>
+                var container = $('#related_media').find('.'+params['position']);
 
-
-<script>
-jQuery(document).ready(function($){
-    $( ".droppable-image-position" ).droppable({
-        accept: "#photos_container #photos img",
-        drop: function( event, ui ) {
-            var image = ui.draggable;
-            var parent = $(this);
-
-            if (image.data('type-img') != 'swf') {
-                // Change the image thumbnail to the new one
-                parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
-            } else {
-                parent.find('.article-resource-image').html( "<div id=\"flash-container-replace\"><\/div><script> var flashvars = {}; var params = {}; var attributes = {};" +
-                    "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
-                );
-            };
-
-            // Change the image information to the new one
-            var article_info = parent.find(".article-resource-image-info");
-            article_info.find(".filename").html(image.data("filename"));
-            article_info.find(".image_size").html(image.data("width") + " x "+ image.data("height") + " px");
-            article_info.find(".file_size").html(image.data("weight") + " Kb");
-            article_info.find(".created_time").html(image.data("created"));
-            article_info.find(".description").html(image.data("description"));
-            article_info.find(".tags").html(image.data("tags"));
-
-            // Change the form values
-            var article_inputs = parent.find(".article-resource-footer");
-            article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
+                var image_data_el = container.find('.image-data');
+                image_data_el.find('.related-element-id').val(params.content.pk_photo);
+                image_data_el.find('.related-element-footer').val(params.description);
+                image_data_el.find('.image').html(image_element);
+                container.addClass('assigned');
+            }
         }
+    });
+    $('.article_images .unset').on('click', function (e, ui) {
+        e.preventDefault();
+
+        var parent = jQuery(this).closest('.contentbox');
+
+        parent.find('.related-element-id').val('');
+        parent.find('.image').html('');
+
+        parent.removeClass('assigned');
     });
 });
 </script>

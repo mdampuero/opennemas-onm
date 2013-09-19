@@ -76,7 +76,7 @@
                         console.log('test', params)
                         CKEDITOR.instances[params['position']].insertHtml(image_element);
                     } else {
-                        var container = $('#article_images').find('.'+params['position']);
+                        var container = $('#related_media').find('.'+params['position']);
 
                         var image_data_el = container.find('.image-data');
                         image_data_el.find('.related-element-id').val(params.content.pk_photo);
@@ -358,7 +358,7 @@
                     </div>
                 </div><!-- /contentform-main -->
 
-                <div id="article_images" class="clearfix">
+                <div id="related_media" class="clearfix">
                     {include  file="article/partials/_images.tpl"}
                 </div>
             </div><!-- /edicion-contenido -->
