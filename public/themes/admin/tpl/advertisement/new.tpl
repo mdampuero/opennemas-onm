@@ -19,32 +19,29 @@
             months_url : "{url name=admin_media_uploader_months}",
             maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
             // initially_shown: true,
+            tags_attached: 'ads',
             handlers: {
                 'assign_content' : function( event, params ) {
                     var mediapicker = $(this).data('mediapicker');
-                    var image_element = mediapicker.buildHTMLElement(params);
 
                     var container = $('#related_media').find('.'+params['position']);
 
                     var image_data_el = container.find('.image-data');
                     image_data_el.find('.related-element-id').val(params.content.pk_photo);
-                    image_data_el.find('.image').html(image_element);
                     container.addClass('assigned');
 
-                    // if (image.data('type-img') != 'swf') {
-                    //     // Change the image thumbnail to the new one
-                    //     parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
-                    // } else {
-                    //     parent.find('.article-resource-image').html(
-                    //         "<div id=\"flash-container-replace\"><\/div>"+"<script> var flashvars = {}; var params = { wmode:\"opaque\" }; var attributes = {};" +
-                    //         "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
-                    //     );
-                    // };
+                    if (params.content.type_img == 'swf') {
+                        var image_element = mediapicker.get('browser').getHTMLforSWF(params.content);
+                        container.find('.flash-based-warning').show()
+                    } else {
+                        var image_element = mediapicker.buildHTMLElement(params);
+                        container.find(".flash-based").hide();
+                    };
 
-                    console.log(params)
+                    image_data_el.find('.image').html(image_element);
 
-                    // // Change the image information to the new one
-                    container.find(".filename").html(params.content.filename);
+                    // Change the image information to the new one
+                    container.find(".image_title").html(params.content.filename);
                     container.find(".image_size").html(params.content.width + " x "+ params.content.height + " px");
                     container.find(".file_size").html(params.content.size + " Kb");
                     container.find(".created_time").html(params.content.created);
@@ -90,7 +87,7 @@
                     value="{$advertisement->title|clearslash|escape:"html"|default:""}" />
             </div>
         </div>
-        <div class="control-group">
+        <div class="control-group" style="display:none">
             <label for="metadata" class="control-label">{t}Keywords{/t}</label>
             <div class="controls">
                 <input type="text" id="metadata" name="metadata" class="input-xxlarge" required="required"
@@ -191,15 +188,10 @@
 
         <div class="control-group">
             <label class="control-label">{t}Content{/t}</label>
-            <div class="controls">
+            <div class="controls content_part">
                 <label for="with_script_0"><input type="radio" name="with_script" id="with_script_0" value="0" {if !isset($advertisement) || $advertisement->with_script == 0}checked="checked"{/if}> {t}Image or Flash object{/t}</label>
                 <div id="normal_content" style="{if !isset($advertisement) || $advertisement->with_script == 0}display:block{else}display:none{/if};">
                     {include file="advertisement/partials/advertisement_images.tpl"}
-
-                    <label for="overlap">
-                        <input type="checkbox" name="overlap" id="overlap" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
-                        <div class="help-inline">{t}Mark this if you want to overide the default click handler for Flash based ads.{/t}</div>
-                    </label>
                 </div>
 
                 <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}HTML or Javascript code{/t}</label>
@@ -216,13 +208,13 @@
                     <div class="control-group">
                         <label for="params_width" class="control-label">{t}Width{/t}</label>
                         <div class="controls">
-                            <input type="number" id="params_width" name="params_width" value="{$advertisement->params['width']}" required="required">
+                            <input type="number" id="params_width" name="params_width" value="{$advertisement->params['width']}" required="required" min="0">
                         </div>
                     </div>
                     <div class="control-group">
                         <label for="params_height" class="control-label">{t}Height{/t}</label>
                         <div class="controls">
-                            <input type="number" id="params_height" name="params_height" value="{$advertisement->params['height']}" required="required">
+                            <input type="number" id="params_height" name="params_height" value="{$advertisement->params['height']}" required="required" min="0">
                         </div>
                     </div>
                 </div>
@@ -231,7 +223,7 @@
         <div class="control-group" style="{if !isset($advertisement) || (($advertisement->type_advertisement + 50) % 100) != 0}display:none{/if};">
             <label for="timeout" class="control-label">{t}Display banner while{/t}</label>
             <div class="controls">
-                <input type="text" id="timeout" name="timeout" value="{$advertisement->timeout|default:"4"}" />
+                <input type="number" id="timeout" name="timeout" value="{$advertisement->timeout|default:"4"}" min="0" max="100"/>
                 <div class="help-block">{t}Amount of seconds that this banner will block all the page..{/t}</div>
             </div>
         </div>
@@ -313,9 +305,5 @@
         </div>
 
     </div>
-
-    <input type="hidden" name="filter[type_advertisement]" value="{$smarty.request.filter.type_advertisement|default:""}" />
-    <input type="hidden" name="filter[available]" value="{$smarty.request.filter.available|default:""}" />
-    <input type="hidden" name="filter[type]" value="{$smarty.request.filter.type|default:""}" />
 </form>
 {/block}

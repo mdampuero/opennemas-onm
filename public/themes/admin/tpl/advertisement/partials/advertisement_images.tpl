@@ -1,8 +1,8 @@
 <div id="related_media">
     <ul class="related_images thumbnails clearfix">
         <li class="contentbox ad-image {if isset($photo1) && $photo1->name}assigned{/if}">
-            <div class="content clearfix">
-                <div class="image-data">
+            <div class="clearfix">
+                <div class="image-data clearfix">
                     <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
                         {if isset($photo1) && strtolower($photo1->type_img)=='swf'}
                         <div id="flash-container-replace"></div>
@@ -18,12 +18,20 @@
                         {/if}
                     </a>
                     <div class="image-information" class="article-resource-image-info">
-
-                        <div class="image-title">{$photo1->name|default:'default_img.jpg'}</div>
+                        <div class="image_title">{$photo1->name}</div>
                         <div class="info">
                             <div class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</div>
                             <div class="file_size">{$photo1->size|default:0} Kb</div>
                             <div class="created_time">{$photo1->created|default:""}</div>
+                            <div class="flash-based-warning" style="{if strtolower($photo1->type_img) !=='swf'}display:none{/if}">
+                                <div class="flash-based"><i class="icon-warning-sign"></i> {t}Flash based{/t}</div>
+                                <br>
+                                <label for="overlap" class="overlap-message">
+                                    <input type="checkbox" name="overlap" id="overlap" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
+                                    {t}Overide default click handler.{/t} <i class="icon-question-sign" title="{t}When you click in some Flash-based advertisements they redirect you to another web site. If you want to overlap that address with that specified by you above you should mark this.{/t}"> </i>
+                                </label>
+                            </div>
+
                         </div>
                     </div>
                     <div class="article-resource-footer">
@@ -35,8 +43,8 @@
                     {t}Image not set{/t}
                 </div>
 
-                <div class="btn-group pull-right">
-                    <a href="#media-uploader" data-toggle="modal" data-position="ad-image" class="btn btn-small">{t}Set image{/t}</a>
+                <div class="btn-group">
+                    <a href="#media-uploader" data-toggle="modal" data-position="ad-image" class="btn btn-small">{t}Select image{/t}</a>
                     <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
                 </div>
             </div>
@@ -65,11 +73,31 @@
 .image-information .info {
     font-size: .9em;
     color: gray;
+    margin:10px 0;
 }
-#normal_content {
-    margin-bottom:5px;
+.flash-based {
+    margin:10px 0;
 }
 
+.contentbox{
+    border:0 none;
+    margin-bottom:10px;
+}
+
+.overlap-message {
+    display:block;
+    clear:both;
+}
+
+@media (min-width:800px) {
+    .image-data > * {
+        max-width:49%;
+    }
+
+    .content_part > div {
+        margin-left:18px;
+    }
+}
 </style>
 <script type="text/javascript">
 

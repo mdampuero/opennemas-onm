@@ -130,7 +130,9 @@
                         content = template({
                             "thumbnail_url": element.thumbnail_url,
                             "id": element.id,
+                            "is_swf": (element.type_img === 'swf')
                         });
+                        content = content.replace('SWF_CALLER', _this.parent.getHTMLforSWF(element))
                         final_content += content;
                     });
 
@@ -241,13 +243,20 @@
             $(this).on('show', function(event, content) {
                 _this.content = content;
                 content.edit_url = '/admin/images/show?id[]='+content.id;
+                content.is_swf = (content.type_img === 'swf');
 
                 var template = Handlebars.compile($('#tmpl-show-element').html());
                 html_content = template({
                     "content": content
                 });
 
-                $('#media-element-show .body').html(html_content);
+                // If the element is a flash object we have to do this hack
+                // as Handlebars escapes html in variables
+                if (content.is_swf) {
+                    html_content = html_content.replace('SWF_CALLER', _this.parent.getHTMLforSWF(content))
+                };
+
+                _this.$element.find('.body').html(html_content);
                 _this.parent.$elem.find('.assign_content').removeClass('disabled');
             });
 
@@ -397,7 +406,18 @@
             html = '<img '+src+' '+align+' '+description+' class="image" />';
 
             return html;
-        }
+        },
+
+        getHTMLforSWF: function(element) {
+            var string = '<div id="flash-container-replace'+element.id+'"></div>'+
+                '<scr' + 'ipt>'+
+                    'var flashvars = {};'+
+                    'var params = { wmode: "opaque" };'+
+                    'var attributes = { };'+
+                    'swfobject.embedSWF("'+element.image_path+'", "flash-container-replace'+element.id+'", "100%", "100%", "9.0.0", false, flashvars, params, attributes);'+
+                '</sc'+'ript>';
+            return string;
+        },
     }
 
     MediaPicker.defaults = MediaPicker.prototype.defaults;
