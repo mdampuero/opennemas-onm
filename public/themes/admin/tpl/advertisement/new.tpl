@@ -193,16 +193,11 @@
             <label class="control-label">{t}Content{/t}</label>
             <div class="controls">
                 <label for="with_script_0"><input type="radio" name="with_script" id="with_script_0" value="0" {if !isset($advertisement) || $advertisement->with_script == 0}checked="checked"{/if}> {t}Image or Flash object{/t}</label>
-                <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}HTML or Javascript code{/t}</label>
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label">&nbsp;</label>
-            <div class="controls">
                 <div id="normal_content" style="{if !isset($advertisement) || $advertisement->with_script == 0}display:block{else}display:none{/if};">
                     {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
+
+                <label for="with_script_1"><input type="radio" name="with_script" id="with_script_1" value="1" {if isset($advertisement) && $advertisement->with_script == 1}checked="checked"{/if}> {t}HTML or Javascript code{/t}</label>
                 <div id="script_content" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
                     <textarea name="script" id="script" class="input-xxlarge" rows="10">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
