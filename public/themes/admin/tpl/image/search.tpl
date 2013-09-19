@@ -45,7 +45,7 @@ function toggleAdvanced() {
             <div class="title"><h2>{if is_null($smarty.get.string_search)} {t}Search images{/t}{else}{t}Search result{/t}{/if} </h2></div>
             <ul class="old-button">
                 <li>
-                    <a class="admin_add" href="{url name=admin_images category=$category}" name="submit_mult" value="Listado de Categorias">
+                    <a class="admin_add" href="{url name=admin_images}" name="submit_mult">
                         <img border="0" style="width:50px;"  src="{$params.IMAGE_DIR}previous.png" alt="Información"><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -71,22 +71,6 @@ function toggleAdvanced() {
                     <input type="search" name="string_search" value="{$smarty.request.string_search}" style="width:95%;" placeholder="{t}Image name{/t}">
                     &nbsp;
                     <button type="submit" class="onm-button red submit" style="width:100%;"><i class="icon-search icon-white"></i></button>
-
-                    <label for="category">{t}Category{/t}</label>
-                    <select name="category">
-                        <option value="all" {if $photo1->color eq "all"}selected{/if}>{t}All{/t}</option>
-                        {is_module_activated name="ADS_MANAGER"}
-                        {acl isAllowed="ADVERTISEMENT_CREATE"}
-                        <option value="2" {if $category eq "2"} selected {/if}>{t}Advertisement{/t}</option>
-                        {/acl}
-                        {/is_module_activated}
-                        {section name=as loop=$allcategorys}
-                            <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                            {section name=su loop=$subcat[as]}
-                                <option value="{$subcat[as][su]->pk_content_category}" {if $category  eq $subcat[as][su]->pk_content_category} selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                           {/section}
-                        {/section}
-                    </select>
 
                     <label for="starttime">{t}Date period:{/t}</label>
                     <input type="datetime" id="starttime" name="starttime" value="{$search_criteria['starttime']}"   placeholder="{t}From{/t}"  class="inline"/>
