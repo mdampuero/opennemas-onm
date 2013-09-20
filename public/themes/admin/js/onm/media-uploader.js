@@ -132,7 +132,7 @@
                             "id": element.id,
                             "is_swf": (element.type_img === 'swf')
                         });
-                        content = content.replace('SWF_CALLER', _this.parent.getHTMLforSWF(element))
+                        content = content.replace('SWF_CALLER', _this.parent.getHTMLforSWF(element, 120, 120))
                         final_content += content;
                     });
 
@@ -408,13 +408,21 @@
             return html;
         },
 
-        getHTMLforSWF: function(element) {
+        getHTMLforSWF: function(element, width, height) {
+            if (typeof width == 'undefined') {
+                width = '100%';
+            };
+
+            if (typeof height == 'undefined') {
+                height = '100%';
+            };
+
             var string = '<div id="flash-container-replace'+element.id+'"></div>'+
                 '<scr' + 'ipt>'+
                     'var flashvars = {};'+
                     'var params = { wmode: "opaque" };'+
                     'var attributes = { };'+
-                    'swfobject.embedSWF("'+element.image_path+'", "flash-container-replace'+element.id+'", "100%", "100%", "9.0.0", false, flashvars, params, attributes);'+
+                    'swfobject.embedSWF("'+element.image_path+'", "flash-container-replace'+element.id+'", "'+width+'", "'+height+'", "9.0.0", false, flashvars, params, attributes);'+
                 '</sc'+'ript>';
             return string;
         },

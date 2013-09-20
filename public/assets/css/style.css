@@ -2499,8 +2499,6 @@ div#modal-element-customize-content div.select-disposition{
         position:relative;
     }
     #media-uploader #browser .attachments .attachment .attch-overlay {
-      height:100%;
-      width:100%;
       background:rgba(255,255,255, 0.3);
       position:absolute;
       top:0;
@@ -2556,6 +2554,12 @@ div#modal-element-customize-content div.select-disposition{
         padding:0;
         border-radius:0;
         cursor:pointer;
+        box-sizing:border-box;
+        -moz-box-sizing:border-box; /* Firefox */
+    }
+    #media-uploader #browser .thumbnail object {
+      max-height:115px;
+      max-width:115px;
     }
 
 

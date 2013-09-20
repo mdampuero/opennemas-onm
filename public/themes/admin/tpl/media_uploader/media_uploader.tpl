@@ -114,7 +114,7 @@ var fileUploadErrors = {
 <script type="text/html" id="tmpl-attachment">
 {literal}
     <li class="attachment save-ready" data-id="{{id}}">
-        <div class="attachment-preview type-image subtype-png landscape">
+        <div class="attachment-preview type-image subtype-{{content.type_img}} landscape">
             <div class="thumbnail">
                 <div class="centered">
                     {{#if is_swf}}
