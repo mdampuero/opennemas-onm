@@ -22,17 +22,18 @@
                     image_data_el.find('.album-frontpage-image').val(params.content.pk_photo);
                     container.addClass('assigned');
 
-
                     image_data_el.find('.image').html(image_element);
 
                 } else {
-                    // var image_element = mediapicker.buildHTMLElement(params);
-                    // var image_data_el = container.find('.image-data');
-                    // image_data_el.find('.related-element-id').val(params.content.pk_photo);
-                    // container.addClass('assigned');
+                    var container = $('.list-of-images > ul');
+                    var image_element =
+                        '<li class="image thumbnail">'+
+                        mediapicker.buildHTMLElement(params)+
+                        '<textarea name="album_photos_footer[]">'+params.content.description+'</textarea>'+
+                        '<input type="hidden" name="album_photos_id[]" value="'+params.content.id+'">'
+                        '</li>' ;
 
-
-                    // image_data_el.find('.image').html(image_element);
+                    container.find('.add-image').before(image_element);
                 }
             }
         }
@@ -57,6 +58,16 @@
                 return false;
             };
             return true;
+        }).on('click', '.cover-image .unset', function (e, ui) {
+            e.preventDefault();
+
+            var parent = jQuery(this).closest('.contentbox');
+
+            parent.find('.related-element-id').val('');
+            parent.find('.related-element-footer').val('');
+            parent.find('.image').html('');
+
+            parent.removeClass('assigned');
         });
 
         $(".list-of-images ul" ).sortable({
