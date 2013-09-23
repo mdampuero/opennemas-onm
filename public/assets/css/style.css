@@ -1210,8 +1210,17 @@ img[src="non"] { display:none !important; }
   position:relative;
   display: inline-block;
   margin:0px;
-  min-height:300px;
-  width:570px;
+}
+#album-images .add-image .icon {
+  font-size:3em;
+  line-height:2em;
+  color:#aaa;
+  font-weight: normal;
+}
+#album-images .add-image .icon:hover,
+#album-images .add-image .icon:active {
+  outline:none;
+  text-decoration:none;
 }
 #album-images .list-of-images .image,
 #album-images .list-of-images .image-moving {
