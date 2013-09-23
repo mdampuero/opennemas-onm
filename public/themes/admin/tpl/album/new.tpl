@@ -1,13 +1,53 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
+{include file="media_uploader/media_uploader.tpl"}
+<script>
+    var mediapicker = $('#media-uploader').mediaPicker({
+        upload_url: "{url name=admin_image_create category=0}",
+        browser_url : "{url name=admin_media_uploader_browser}",
+        months_url : "{url name=admin_media_uploader_months}",
+        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        // initially_shown: true,
+        multi_select: true,
+        tags_attached: 'ads',
+        handlers: {
+            'assign_content' : function( event, params ) {
+                var mediapicker = $(this).data('mediapicker');
+
+                var container = $('#related_media').find('.'+params['position']);
+
+                var image_data_el = container.find('.image-data');
+                image_data_el.find('.related-element-id').val(params.content.pk_photo);
+                container.addClass('assigned');
+
+                if (params.content.type_img == 'swf') {
+                    var image_element = mediapicker.getHTMLforSWF(params.content);
+                    container.find('.flash-based-warning').show()
+                } else {
+                    var image_element = mediapicker.buildHTMLElement(params);
+                    container.find(".flash-based").hide();
+                };
+
+                image_data_el.find('.image').html(image_element);
+
+                // Change the image information to the new one
+                container.find(".image_title").html(params.content.filename);
+                container.find(".image_size").html(params.content.width + " x "+ params.content.height + " px");
+                container.find(".file_size").html(params.content.size + " Kb");
+                container.find(".created_time").html(params.content.created);
+            }
+        }
+    });
+</script>
+
     <script>
     jQuery(document).ready(function($){
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
 
-        $("#form-validate-button, #form-send-button").on("click", function(event) {
+        $("#formulario").on("submit", function(event) {
 
             var frontpage_image =  $(".album-frontpage-image");
             var album_images =  $("#list-of-images .image");
@@ -24,7 +64,6 @@
             return true;
         });
 
-        $('#album-contents').tabs();
         $( ".list-of-images ul" ).sortable({
             placeholder: "image-moving",
             contaiment:  "parent"
@@ -143,30 +182,6 @@
 
         jQuery('#title').on('change', function(e, ui) {
             fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
-        });
-
-        load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
-
-        $('#photos').on('click', '.pager a', function(e, ui) {
-            e.preventDefault();
-            var link = $(this);
-            load_ajax_in_container(link.attr('href'), $('#photos'));
-        });
-
-        $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
-            var category = $('#category_imag option:selected').val();
-            var text = $('#stringImageSearch').val();
-            var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
-            load_ajax_in_container(
-                url,
-                $('#photos')
-            );
-        });
-
-        $('#photos').on('click', '.pagination a', function(e, ui) {
-            e.preventDefault();
-            var link = $(this);
-            load_ajax_in_container(link.attr('href'), $('#photos'));
         });
 
     });
@@ -341,37 +356,6 @@
                     </div><!-- /inner-video -->
                 </div>
 
-                <div style="width:340px;display:inline-block;">
-                    <div style="cursor:pointer; border:1px double #ccc; background-color:#EEE; padding:6px;">
-                        <strong>{t}Available images{/t}</strong>
-                    </div>
-                    <div id="photos_container" class="photos" style="border:1px solid #ccc; border-top:0 none;  padding:7px;">
-                        <form id="image_search" class="form-inline">
-                        <table>
-                            <tr>
-                                <td>
-                                    <div class="cajaBusqueda">
-                                        <input id="stringImageSearch" name="stringImageSearch" type="text" style="width:90%"
-                                           placeholder="{t}Search images by title...{/t}" form="image_search"/>
-                                    </div>
-                                </td>
-                                <td class="right">
-                                    <select id="category_imag" name="category_imag" class="required"style="width:90%" form="image_search">
-                                        <option value="0">GLOBAL</option>
-                                        {section name=as loop=$allcategorys}
-                                        <option value="{$allcategorys[as]->pk_content_category}" {if $category eq $allcategorys[as]->pk_content_category}selected{/if}>{$allcategorys[as]->title}</option>
-                                        {section name=su loop=$subcat[as]}
-                                                <option value="{$subcat[as][su]->pk_content_category}" {if $category eq $subcat[as][su]->pk_content_category}selected{/if}>&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                        {/section}
-                                        {/section}
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                        </form>
-                        <div id="photos" class="photos"></div>
-                    </div>
-                </div>
             </div><!-- /album-images -->
         </div>
 
