@@ -82,6 +82,7 @@
 
 </div>
 
+{script_tag src="/swfobject.js"}
 {script_tag src="/jquery/tmpl.min.js"}
 {script_tag src="/jquery/load-image.min.js"}
 {script_tag src="/jquery/bootstrap-image-gallery.min.js"}
