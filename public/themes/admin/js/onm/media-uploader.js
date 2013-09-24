@@ -57,7 +57,7 @@
             }).on('click', '.attachment', function(e, ui) {
                 e.preventDefault();
 
-                if (_this.config.multi_select === true) {
+                if (_this.config.multiselect === true) {
                     var element = $(this).closest('.attachment');
                     element.toggleClass('selected')
                 } else {
@@ -306,7 +306,7 @@
             browser_el: '#browser',
             media_element_el: '#media-element-show',
             maxFileSize: 5000000,
-            multi_select: false
+            multiselect: false
         },
 
         init: function() {
@@ -352,6 +352,7 @@
 
             $('[data-toggle="modal"]').on('click', function() {
                 _this.position = $(this).data('position');
+                _this.config.multiselect = !!($(this).data('multiselect'));
             })
 
             // If it was passed handlers for actions register them

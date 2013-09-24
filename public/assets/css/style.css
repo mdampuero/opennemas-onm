@@ -2329,10 +2329,10 @@ select#category option.unavailable {
 #related_media .image-data .thumbnail > img {
   height:150px;
 }
-#related_media .assigned .image-data {
+.assigned .image-data {
   display:block;
 }
-#related_media .assigned .not-set {
+.assigned .not-set {
   display:none;
 }
 #related_media .btn-group {
