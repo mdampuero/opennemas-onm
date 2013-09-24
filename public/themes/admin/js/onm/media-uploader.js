@@ -402,9 +402,13 @@
                 description = 'alt="'+params['description']+'"'
             };
 
-            var src = 'src="'+params.content.image_path+'"';
+            var class_image = ''
+            if (params.hasOwnProperty('class_image') && params.class_image !== false) {
+                class_image = 'class="image"';
+            };
 
-            html = '<img '+src+' '+align+' '+description+' class="image" />';
+            var src = 'src="'+params.content.image_path+'"';
+            html = '<img '+src+' '+align+' '+description+' '+class_image+' />';
 
             return html;
         },
