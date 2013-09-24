@@ -1248,6 +1248,14 @@ img[src="non"] { display:none !important; }
   display:block;
   clear:both;
 }
+.list-of-images {
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+.list-of-images .add-image {
+  display:block;
+  outline:none;
+}
 .list-of-images ul { margin: 0; padding: 0;
   list-style-type: none;
 }
@@ -1279,9 +1287,12 @@ img[src="non"] { display:none !important; }
   display:block;
 }
 .list-of-images .image .image-buttons li {
-  display:block;
+  display:inline-block;
   padding:2px;
   width:16px;
+}
+.list-of-images .image .image-buttons li a {
+  color:black;
 }
 .list-of-images .image .overlay-image .image-buttons img { display:block; width:16px; }
 
@@ -1301,6 +1312,12 @@ img[src="non"] { display:none !important; }
   border: 1px solid #DDD;
   border-radius: 4px 4px 4px 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.cover-image img {
+  max-height:150px;
+}
+.cover-image .btn-group {
+  margin-top:8px;
 }
 /* -------------------------------------------------------------
   Ajax file upload
