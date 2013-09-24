@@ -8,7 +8,6 @@
         browser_url : "{url name=admin_media_uploader_browser}",
         months_url : "{url name=admin_media_uploader_months}",
         maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        multi_select: true,
         handlers: {
             'assign_content' : function( event, params ) {
                 var mediapicker = $(this).data('mediapicker');
@@ -25,9 +24,18 @@
                     image_data_el.find('.image').html(image_element);
 
                 } else {
+                    params.class_image = false;
                     var container = $('.list-of-images > ul');
                     var image_element =
                         '<li class="image thumbnail">'+
+                        '<div class="overlay-image">'+
+                                '<div>'+
+                                    '<ul class="image-buttons clearfix">'+
+                                        '<li><a href="#"  data-id="'+params.content.id+'" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>'+
+                                        '<li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>'+
+                                    '</ul>'+
+                                '</div>'+
+                            '</div>'+
                         mediapicker.buildHTMLElement(params)+
                         '<textarea name="album_photos_footer[]">'+params.content.description+'</textarea>'+
                         '<input type="hidden" name="album_photos_id[]" value="'+params.content.id+'">'
@@ -241,7 +249,7 @@
                         {/foreach}
                         {/if}
                         <li class="image add-image thumbnail">
-                            <a  href="#media-uploader" data-toggle="modal" data-position="list-of-images" title="{t}Add images{/t}"><i class="icon icon-plus"></i></a>
+                            <a  href="#media-uploader" data-toggle="modal" data-multiselect="true" data-position="list-of-images" title="{t}Add images{/t}"><i class="icon icon-plus"></i></a>
                         </li><!-- /image -->
                     </ul>
                 </div>
