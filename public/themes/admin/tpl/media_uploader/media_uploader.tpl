@@ -37,7 +37,7 @@
                 <div class="body"></div>
             </div>
             <div class="modal-footer">
-                <div class="image-info pull-left"></div>
+                <div class="pull-left" id="selections"></div>
                 <div class="pull-right buttons">
                     <a class="btn btn-primary assign_content disabled" href="#">{t}Insert{/t}</a>
                 </div>
@@ -126,7 +126,7 @@ var fileUploadErrors = {
                     {{/if}}
                 </div>
             </div>
-            <a class="check" href="#" title="Deselect"><div class="media-modal-icon"></div></a>
+            <a class="check" href="#" title="Deselect"><div class="icon icon-ok"></div><div class="icon icon-minus"></div></a>
         </div>
     </li>
 {/literal}
@@ -134,14 +134,27 @@ var fileUploadErrors = {
 
 <script type="text/html" id="tmpl-attachment-short-info">
 {literal}
-    {{#with content}}
-        {{#if description}}
-        <strong>{{description}}</strong>
-        {{else}}
-        <strong>{/literal}{t}No description{/t}{literal}</strong>
-        {{/if}} <br>
-        {{width}} x {{height}}, {{size}} kb
-    {{/with}}
+<div class="media-selection">
+    <div class="selection-info">
+        <span class="count">{{count}} selected</span>
+            <a class="clear-selection" href="#">{/literal}{t}Clear{/t}{literal}</a>
+    </div>
+    <div class="selection-view">
+        <ul class="attachments">
+        {{#each contents}}
+            <!-- <li class="attachment selection selected save-ready">
+                <div class="attachment-preview">
+                    <div class="thumbnail">
+                        <div class="centered">
+                            <img src="{{this}}" width="30"  />
+                        </div>
+                    </div>
+                </div>
+            </li> -->
+        {{/each}}
+        </ul>
+    </div>
+</div>
 {/literal}
 </script>
 
@@ -159,7 +172,7 @@ var fileUploadErrors = {
         {{/if}}
     </div>
     <div class="buttons btn-group">
-        <a href="{{edit_url}}" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {/literal}{t}Edit{/t}{literal}</a>
+        <a href="{{edit_url}}" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {/literal}{t}Edit image{/t}{literal}</a>
         <!-- <a href="#" class="delete-image-button btn"><i class="icon icon-trash"></i> {/literal}{t}Delete image{/t}{literal}</a> -->
     </div>
     <div class="image-title">{{title}}</div>

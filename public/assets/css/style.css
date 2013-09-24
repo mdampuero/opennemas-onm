@@ -2340,11 +2340,14 @@ select#category option.unavailable {
 #related_media {
   margin:0;
 }
-#related_media .image-data {
+.image-data {
   display:none;
 }
-#related_media .image-data .thumbnail > img {
+.image-data .thumbnail > img {
   height:150px;
+}
+.image-data .thumbnail {
+  background:url(../images/loading-sprites.gif) center center no-repeat;
 }
 .assigned .image-data {
   display:block;
@@ -2521,7 +2524,8 @@ div#modal-element-customize-content div.select-disposition{
     #media-uploader #browser .attachments .attachment {
         float: left;
         list-style:none;
-        margin-right: 5px;
+        margin-right: 10px;
+        margin-bottom:10px;
         position:relative;
     }
     #media-uploader #browser .attachments .attachment .attch-overlay {
@@ -2532,6 +2536,58 @@ div#modal-element-customize-content div.select-disposition{
       left:0;
       right:0;
       z-index:100;
+    }
+
+    #media-uploader .attachment .check {
+      display: none;
+      height: 24px;
+      width: 24px;
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      outline: 0;
+      border: 1px solid #fff;
+      border-radius: 3px;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+      background: #f1f1f1;
+      background-image: -webkit-gradient(linear,left top,left bottom,from(#f1f1f1),to(#e1e1e1));
+      background-image: -webkit-linear-gradient(top,#f1f1f1,#e1e1e1);
+      background-image: -moz-linear-gradient(top,#f1f1f1,#e1e1e1);
+      background-image: -o-linear-gradient(top,#f1f1f1,#e1e1e1);
+      background-image: linear-gradient(to bottom,#f1f1f1,#e1e1e1);
+      z-index:2;
+      line-height:1.2em;
+      font-size:1.5em;
+      text-align:center;
+      color:gray:;
+    }
+
+    #media-uploader .attachment.selected .check {
+      display:block;
+      box-shadow: 0 0 0 1px #1e8cbe;
+      background: #1e8cbe;
+      background-image: -webkit-gradient(linear,left top,left bottom,from(#1e8cbe),to(#0074a2));
+      background-image: -webkit-linear-gradient(top,#1e8cbe,#0074a2);
+      background-image: -moz-linear-gradient(top,#1e8cbe,#0074a2);
+      background-image: -o-linear-gradient(top,#1e8cbe,#0074a2);
+      background-image: linear-gradient(to bottom,#1e8cbe,#0074a2);
+      color:White;
+    }
+    #media-uplaoder .attachment .check .icon {
+      display:none;
+    }
+    #media-uplaoder .attachment .check .icon:hover {
+      text-decoration:none;
+      outline:none;
+    }
+
+    #media-uploader .attachment.selected .icon-ok,
+    #media-uploader .attachment.selected .check:hover .icon-minus {
+      display:block;
+    }
+    #media-uploader .attachment.selected .icon-minus,
+    #media-uploader .attachment.selected .check:hover .icon-ok {
+      display:none;
     }
 
     #media-uploader #browser .attachments .attachment-preview {

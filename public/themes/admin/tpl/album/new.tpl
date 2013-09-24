@@ -1,6 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
+{script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
 {include file="media_uploader/media_uploader.tpl"}
 <script>
     var mediapicker = $('#media-uploader').mediaPicker({
@@ -8,6 +9,8 @@
         browser_url : "{url name=admin_media_uploader_browser}",
         months_url : "{url name=admin_media_uploader_months}",
         maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        initially_shown: true,
+        multiselect: true,
         handlers: {
             'assign_content' : function( event, params ) {
                 var mediapicker = $(this).data('mediapicker');
@@ -48,6 +51,9 @@
     });
 
     jQuery(document).ready(function($){
+
+        var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
+
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
         });
@@ -148,145 +154,153 @@
             </ul>
         </div>
     </div>
-    <div class="wrapper-content">
+    <div class="wrapper-content contentform">
 
         {render_messages}
 
-        <div class="form-horizontal album-edit-form panel">
+        <div class="form-vertical album-edit-form">
 
-            <div class="control-group">
-                <label for="title" class="control-label">{t}Title{/t}</label>
-                <div class="controls">
-                    <input type="text" id="title" name="title" value="{$album->title|default:""}" class="input-xlarge" required="required"/>
+        <div class="contentform-inner clearfix">
+            <div class="contentform-main">
+
+                <div class="control-group">
+                    <label for="title" class="control-label">{t}Title{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="title" name="title" value="{$album->title|default:""}" class="input-xxlarge" required="required"/>
+                    </div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label for="title" class="control-label">{t}Available{/t}</label>
-                <div class="controls">
-                    <input type="checkbox" value="1" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
+            <div class="contentbox-container">
+
+                <div class="contentbox">
+                    <h3 class="title">{t}Attributes{/t}</h3>
+                    <div class="content">
+                        <label for="title" >{t}Available{/t}</label>
+                        <input type="checkbox" value="1" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
+                        <br/>
+
+                        <h4>{t}Category{/t}</h4>
+                        {include file="common/selector_categories.tpl" name="category" item=$album}
+                        <br/>
+
+                        <hr class="divisor" style="margin-top:8px;">
+                        <h4>{t}Author{/t}</h4>
+                        {acl isAllowed="CONTENT_OTHER_UPDATE"}
+                            <select name="fk_author" id="fk_author">
+                                {html_options options=$authors selected=$album->fk_author}
+                            </select>
+                        {aclelse}
+                            {if !isset($album->author->name)}{t}No author assigned{/t}{else}{$album->author->name}{/if}
+                            <input type="hidden" name="fk_author" value="{$album->fk_author}">
+                        {/acl}
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                <label for="category" class="control-label">{t}Category{/t}</label>
-                <div class="controls">
-                    {include file="common/selector_categories.tpl" name="category" item=$album}
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="agency" class="control-label">{t}Agency{/t}</label>
-                <div class="controls">
-                    <input type="text" id="agency" name="agency"
-                        value="{$album->agency|clearslash|escape:"html"}" class="input-xlarge"/>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="author" class="control-label">{t}Author{/t}</label>
-                <div class="controls">
-                    {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                        <select name="fk_author" id="fk_author">
-                            {html_options options=$authors selected=$album->fk_author}
-                        </select>
-                    {aclelse}
-                        {if !isset($album->author->name)}{t}No author assigned{/t}{else}{$album->author->name}{/if}
-                        <input type="hidden" name="fk_author" value="{$album->fk_author}">
-                    {/acl}
-
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="description" class="control-label">{t}Description{/t}</label>
-                <div class="controls">
-                    <textarea name="description" id="description"  rows="8" class="input-xxlarge">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="metadata" class="control-label">{t}Keywords{/t}</label>
-                <div class="controls">
-                    <input type="text" id="metadata" name="metadata" class="input-xlarge"
-                         value="{$album->metadata}" />
-                    <div class="help-block">{t}List of terms separated by comas{/t}</div>
-                </div>
-            </div>
-
-            <div class="control-group" id="album-images">
-                <label for="album_photos_id[]" class="control-label">{t}Album images{/t}</label>
-                <div id="list-of-images" class="list-of-images clearfix controls resource-container">
-                    <ul>
-                        {if !empty($photos)}
-                        {foreach from=$photos item=photo key=key name=album_photos}
-                        <li class="image thumbnail">
-                            <div class="overlay-image">
-                                <div>
-                                    <ul class="image-buttons clearfix">
-                                        <li><a href="#"  data-id="{$photo['photo']->pk_photo}" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>
-                                        <li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <img
-                                 src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
-                                 id="img{$photo['photo']->pk_photo}"
-                                 data-id="{$photo['photo']->pk_photo}"
-                                 data-title="{$photo['photo']->name}"
-                                 data-description="{$photo['photo']->description|escape:"html"}"
-                                 data-path="{$photo['photo']->path_file}"
-                                 data-width="{$photo['photo']->width}"
-                                 data-height="{$photo['photo']->height}"
-                                 data-filesize="{$photo['photo']->size}"
-                                 data-created="{$photo['photo']->created}"
-                                 data-tags="{$photo['photo']->metadata}"
-                                 data-footer="{$photo['description']|escape:"html"}"
-                                 alt="{$photo->name}"/>
-                            <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
-                            <input type="hidden" name="album_photos_id[]" value="{$photo['id']}">
-                        </li><!-- /image -->
-                        {/foreach}
-                        {/if}
-                        <li class="image add-image thumbnail">
-                            <a  href="#media-uploader" data-toggle="modal" data-multiselect="true" data-position="list-of-images" title="{t}Add images{/t}"><i class="icon icon-plus"></i></a>
-                        </li><!-- /image -->
-                    </ul>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="album_frontpage_image" class="control-label">{t}Cover image{/t}</label>
-                <div class="controls cover-image {if isset($album) && $album->cover_id}assigned{/if}">
-                    <div class="contentbox" style="display:inline-block; width:auto;">
-                        <div class="content">
-                            <div class="image-data">
-                                <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="image thumbnail">
-                                    {if !empty($album->cover_id)}
-                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
-                                    {/if}
-                                </a>
-                                <div class="article-resource-footer">
-                                    <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
-                                </div>
-                            </div>
-
-                            <div class="not-set">
-                                {t}Image not set{/t}
-                            </div>
-
-                            <div class="btn-group">
-                                <a href="#media-uploader" data-toggle="modal" data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
-                                <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                <div class="contentbox">
+                    <h3 class="title">{t}Tags{/t}</h3>
+                    <div class="content">
+                        <div class="control-group">
+                            <div class="controls">
+                                <input  type="text" id="metadata" name="metadata" required="required" value="{$album->metadata}"/>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <input type="hidden" name="id" id="id" value="{$album->pk_album|default:""}" />
 
+            <div class="contentform-main">
+
+                <div class="control-group">
+                    <label for="agency" class="control-label">{t}Agency{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="agency" name="agency"
+                            value="{$album->agency|clearslash|escape:"html"}" class="input-xlarge"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="description" class="control-label">{t}Description{/t}</label>
+                    <div class="controls">
+                        <textarea name="description" id="description" class="onm-editor" data-preset="simple"  rows="8" class="input-xxlarge">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
+                    </div>
+                </div>
+
+
+                <div class="control-group" id="album-images">
+                    <label for="album_photos_id[]" class="control-label"><h5>{t}Album images{/t}</h5></label>
+                    <div id="list-of-images" class="list-of-images clearfix controls">
+                        <ul>
+                            {if !empty($photos)}
+                            {foreach from=$photos item=photo key=key name=album_photos}
+                            <li class="image thumbnail">
+                                <div class="overlay-image">
+                                    <div>
+                                        <ul class="image-buttons clearfix">
+                                            <li><a href="#"  data-id="{$photo['photo']->pk_photo}" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>
+                                            <li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <img
+                                     src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
+                                     id="img{$photo['photo']->pk_photo}"
+                                     data-id="{$photo['photo']->pk_photo}"
+                                     data-title="{$photo['photo']->name}"
+                                     data-description="{$photo['photo']->description|escape:"html"}"
+                                     data-path="{$photo['photo']->path_file}"
+                                     data-width="{$photo['photo']->width}"
+                                     data-height="{$photo['photo']->height}"
+                                     data-filesize="{$photo['photo']->size}"
+                                     data-created="{$photo['photo']->created}"
+                                     data-tags="{$photo['photo']->metadata}"
+                                     data-footer="{$photo['description']|escape:"html"}"
+                                     alt="{$photo->name}"/>
+                                <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
+                                <input type="hidden" name="album_photos_id[]" value="{$photo['id']}">
+                            </li><!-- /image -->
+                            {/foreach}
+                            {/if}
+                            <li class="image add-image thumbnail">
+                                <a  href="#media-uploader" data-toggle="modal" data-multiselect="true" data-position="list-of-images" title="{t}Add images{/t}"><i class="icon icon-plus"></i></a>
+                            </li><!-- /image -->
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="album_frontpage_image" class="control-label">{t}Cover image{/t}</label>
+                    <div class="controls cover-image {if isset($album) && $album->cover_id}assigned{/if}">
+                        <div class="contentbox" style="display:inline-block; width:auto;">
+                            <div class="content">
+                                <div class="image-data">
+                                    <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="image thumbnail">
+                                        {if !empty($album->cover_id)}
+                                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
+                                        {/if}
+                                    </a>
+                                    <div class="article-resource-footer">
+                                        <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
+                                    </div>
+                                </div>
+
+                                <div class="not-set">
+                                    {t}Image not set{/t}
+                                </div>
+
+                                <div class="btn-group">
+                                    <a href="#media-uploader" data-toggle="modal" data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
+                                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="id" id="id" value="{$album->pk_album|default:""}" />
+        </div><!-- contentform-inner -->
     </div>
 </form>
 {include file="album/modals/_edit_album_error.tpl"}

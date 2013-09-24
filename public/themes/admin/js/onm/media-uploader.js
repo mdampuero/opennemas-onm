@@ -7,11 +7,84 @@
     // Contents array, used from all the module to share contents information
     var contents = [];
 
+    var SelectionHandler = function(element, options, parent) {
+        this.$elem      = element;
+        this.options    = options;
+        this.parent     = parent;
+
+        this.selections = {};
+    }
+
+    SelectionHandler.prototype = {
+        init: function() {
+            return this;
+        },
+
+        add: function(content) {
+            this.selections[content.id] = content;
+            this.updateHTML();
+
+            return this;
+        },
+        toggle: function(content) {
+            if (this.selections.hasOwnProperty(content.id)) {
+                this.remove(content);
+            } else {
+                this.selections[content.id] = content;
+            };
+
+            this.updateHTML();
+        },
+
+        remove: function(content) {
+            delete this.selections[content.id];
+            this.updateHTML();
+
+            return this;
+        },
+
+        clear: function() {
+            this.selections = {};
+
+            return this;
+        },
+
+        updateElement: function(content) {
+
+            return this;
+        },
+
+        updateHTML: function() {
+            var _this = this;
+
+            var template = Handlebars.compile($('#tmpl-attachment-short-info').html());
+
+            var count = 0;
+            $.each(this.selections, function(elem) {
+                count++;
+            });
+
+            html_content = template({
+                "count" : count,
+                "contents": this.selections
+            });
+
+
+            this.$elem.html(html_content);
+
+            return this;
+        },
+
+        getSelections: function() {
+            return this.selections;
+        }
+    }
+
     // The module that allows to browse images and perform searches through them
     var Browser = function(elem, options, parent) {
         this.$browser = $(elem);
-        this.config = options;
-        this.parent = parent;
+        this.config   = options;
+        this.parent   = parent;
     };
 
     Browser.prototype = {
@@ -41,30 +114,23 @@
             });
 
             // Attach events to the images in browser
-            $(this.$browser).on('mouseenter', '.attachment img', function(e, ui) {
-                var element = $(this).closest('.attachment');
-
-                var template = Handlebars.compile($('#tmpl-attachment-short-info').html());
-
-                content = contents[element.data('id')];
-
-                html_content = template({
-                    "content": content,
-                });
-                $('.image-info').append(html_content);
-            }).on('mouseout', '.attachment img', function(e, ui) {
-                $('.image-info').html('');
-            }).on('click', '.attachment', function(e, ui) {
+            $(this.$browser).on('click', '.attachment', function(e, ui) {
                 e.preventDefault();
 
-                if (_this.config.multiselect === true) {
+                if (_this.config.multiselect === true && e.ctrlKey) {
                     var element = $(this).closest('.attachment');
-                    element.toggleClass('selected')
+                    element.toggleClass('selected');
+
+                    _this.parent.selection_handler.add(content);
                 } else {
+                    _this.parent.selection_handler.clear();
+                    _this.parent.selection_handler.add(content);
 
                     var element = $(this).closest('.attachment');
                     element.addClass('selected').siblings('.attachment').removeClass('selected');
                 };
+
+                console.log(_this.parent.selection_handler.selections);
 
                 content = contents[element.data('id')];
 
@@ -305,6 +371,7 @@
             uploader_el: '#uploader',
             browser_el: '#browser',
             media_element_el: '#media-element-show',
+            selections_el: '#selections',
             maxFileSize: 5000000,
             multiselect: false
         },
@@ -320,6 +387,7 @@
             this.initUploader();
             this.initBrowser();
             this.initShowElement();
+            this.initSelectionHandler();
 
             // Load the UI
             this.initModal();
@@ -387,6 +455,11 @@
         initShowElement: function() {
             element        = this.$elem.find(this.config.media_element_el);
             this.elementUI = new ElementUI(element, this.config, this).init();
+        },
+
+        initSelectionHandler: function() {
+            element = this.$elem.find(this.config.selections_el);
+            this.selection_handler = new SelectionHandler(element, this.config, this).init();
         },
 
         buildHTMLElement: function(params) {
