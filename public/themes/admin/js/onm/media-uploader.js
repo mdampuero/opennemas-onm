@@ -103,6 +103,10 @@
             }
 
             return selections;
+        },
+
+        reset: function() {
+            this.clear();
         }
     }
 
@@ -425,6 +429,7 @@
                 _this.get('browser').reset();
                 _this.get('uploader').reset();
                 _this.get('elementUI').reset();
+                _this.get('selection_handler').reset();
             })
         },
 
