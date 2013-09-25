@@ -2743,6 +2743,22 @@ div#modal-element-customize-content div.select-disposition{
       color:gray;
     }
 
+    #media-uploader #selections .selection-info,
+    #media-uploader #selections .selection-view {
+      display:inline-block;
+      vertical-align:top;
+    }
+
+    #media-uploader #selections .selection-info {
+      margin-right:10px;
+    }
+
+    #media-uploader #selections .thumbnail {
+      width:30px;
+      height:30px;
+      margin-right:10px;
+    }
+
 /* =============================================================================
    Manager styles
    ========================================================================== */

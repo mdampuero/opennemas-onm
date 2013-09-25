@@ -142,15 +142,15 @@ var fileUploadErrors = {
     <div class="selection-view">
         <ul class="attachments">
         {{#each contents}}
-            <!-- <li class="attachment selection selected save-ready">
+            <li class="attachment selection save-ready" data-id="{{id}}"  style="width:30px; height:30px">
                 <div class="attachment-preview">
-                    <div class="thumbnail">
+                    <div class="thumbnail" >
                         <div class="centered">
-                            <img src="{{this}}" width="30"  />
+                            <img src="{{thumbnail_url}}" width="30"  />
                         </div>
                     </div>
                 </div>
-            </li> -->
+            </li>
         {{/each}}
         </ul>
     </div>

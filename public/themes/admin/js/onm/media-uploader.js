@@ -17,18 +17,27 @@
 
     SelectionHandler.prototype = {
         init: function() {
+            var _this = this;
+            this.$elem.on('click', '.clear-selection', function(e, ui) {
+                _this.clear();
+            });
+
             return this;
         },
 
         add: function(content) {
-            this.selections[content.id] = content;
-            this.updateHTML();
+            if (content.hasOwnProperty('id')) {
+                console.log('adding '+ content.id)
+
+                this.selections[content.id] = content;
+                this.updateHTML();
+            };
 
             return this;
         },
         toggle: function(content) {
             if (this.selections.hasOwnProperty(content.id)) {
-                this.remove(content);
+                this.selections.remove(content);
             } else {
                 this.selections[content.id] = content;
             };
@@ -37,6 +46,8 @@
         },
 
         remove: function(content) {
+            console.log('removing '+ content.id)
+
             delete this.selections[content.id];
             this.updateHTML();
 
@@ -44,7 +55,9 @@
         },
 
         clear: function() {
+            this.parent.get('browser').reset_selection();
             this.selections = {};
+            this.updateHTML();
 
             return this;
         },
@@ -65,18 +78,36 @@
             });
 
             html_content = template({
-                "count" : count,
-                "contents": this.selections
+                "count" : this.getCount(),
+                "contents": this.getSelections()
             });
-
 
             this.$elem.html(html_content);
 
             return this;
         },
 
+        getCount: function() {
+            var count = 0;
+            for (elem in this.selections) {
+                if (this.selections.hasOwnProperty(elem)) {
+                    count++;
+                };
+            }
+
+            return count;
+        },
+
         getSelections: function() {
-            return this.selections;
+            var selections = [];
+            for (elem in this.selections) {
+                if (this.selections.hasOwnProperty(elem)) {
+                    selections.push(this.selections[elem]);
+                };
+            }
+
+            console.log(selections)
+            return selections;
         }
     }
 
@@ -114,20 +145,28 @@
             });
 
             // Attach events to the images in browser
-            $(this.$browser).on('click', '.attachment', function(e, ui) {
+            $(this.$browser).on('click', '.modal-body .attachment', function(e, ui) {
                 e.preventDefault();
 
+                console.log('click', $(this), $(this).data('id'));
                 if (_this.config.multiselect === true && e.ctrlKey) {
                     var element = $(this).closest('.attachment');
-                    element.toggleClass('selected');
 
-                    _this.parent.selection_handler.add(content);
+                    if (element.hasClass('selected')) {
+                        element.removeClass('selected');
+                        _this.parent.selection_handler.remove(content);
+                    } else {
+                        element.addClass('selected');
+                        _this.parent.selection_handler.add(content);
+                    };
+
                 } else {
                     _this.parent.selection_handler.clear();
                     _this.parent.selection_handler.add(content);
 
                     var element = $(this).closest('.attachment');
-                    element.addClass('selected').siblings('.attachment').removeClass('selected');
+                    _this.reset_selection();
+                    element.addClass('selected');
                 };
 
                 console.log(_this.parent.selection_handler.selections);
@@ -227,8 +266,12 @@
         },
 
         reset: function() {
-            this.$browser.find('.attachment').removeClass('selected');
+            this.reset_selection();
             this.load_browser();
+        },
+
+        reset_selection: function() {
+            this.$browser.find('.attachment').removeClass('selected');
         },
 
         // Function to know if the user has scrolled to the bottom of the container
