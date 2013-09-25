@@ -9,15 +9,11 @@
         browser_url : "{url name=admin_media_uploader_browser}",
         months_url : "{url name=admin_media_uploader_months}",
         maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        initially_shown: true,
-        multiselect: true,
         handlers: {
             'assign_content' : function( event, params ) {
                 var mediapicker = $(this).data('mediapicker');
 
-
                 if (params['position'] == 'cover-image') {
-                    console.log(params);
                     var container = $('.cover-image');
                     var image_element = mediapicker.buildHTMLElement(params);
                     var image_data_el = container.find('.image-data');
@@ -29,22 +25,28 @@
                 } else {
                     params.class_image = false;
                     var container = $('.list-of-images > ul');
-                    var image_element =
-                        '<li class="image thumbnail">'+
-                        '<div class="overlay-image">'+
-                                '<div>'+
-                                    '<ul class="image-buttons clearfix">'+
-                                        '<li><a href="#"  data-id="'+params.content.id+'" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>'+
-                                        '<li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>'+
-                                    '</ul>'+
-                                '</div>'+
-                            '</div>'+
-                        mediapicker.buildHTMLElement(params)+
-                        '<textarea name="album_photos_footer[]">'+params.content.description+'</textarea>'+
-                        '<input type="hidden" name="album_photos_id[]" value="'+params.content.id+'">'
-                        '</li>' ;
 
-                    container.find('.add-image').before(image_element);
+                    var elements = '';
+                    $.each(params.content, function(key, elem) {
+                        var temp_params = $.extend(params, { 'content': elem });
+                        var image_element = '<li class="image thumbnail">'+
+                            '<div class="overlay-image">'+
+                                    '<div>'+
+                                        '<ul class="image-buttons clearfix">'+
+                                            '<li><a href="#"  data-id="'+elem.id+'" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>'+
+                                            '<li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>'+
+                                        '</ul>'+
+                                    '</div>'+
+                                '</div>'+
+                            mediapicker.buildHTMLElement(temp_params)+
+                            '<textarea name="album_photos_footer[]">'+elem.description+'</textarea>'+
+                            '<input type="hidden" name="album_photos_id[]" value="'+elem.id+'">'
+                            '</li>' ;
+                        elements = elements + image_element;
+                    })
+
+
+                    container.find('.add-image').before(elements);
                 }
             }
         }

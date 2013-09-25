@@ -27,8 +27,6 @@
 
         add: function(content) {
             if (content.hasOwnProperty('id')) {
-                console.log('adding '+ content.id)
-
                 this.selections[content.id] = content;
                 this.updateHTML();
             };
@@ -46,8 +44,6 @@
         },
 
         remove: function(content) {
-            console.log('removing '+ content.id)
-
             delete this.selections[content.id];
             this.updateHTML();
 
@@ -106,7 +102,6 @@
                 };
             }
 
-            console.log(selections)
             return selections;
         }
     }
@@ -148,9 +143,10 @@
             $(this.$browser).on('click', '.modal-body .attachment', function(e, ui) {
                 e.preventDefault();
 
-                console.log('click', $(this), $(this).data('id'));
+                var element = $(this).closest('.attachment');
+                var content = contents[element.data('id')];
+
                 if (_this.config.multiselect === true && e.ctrlKey) {
-                    var element = $(this).closest('.attachment');
 
                     if (element.hasClass('selected')) {
                         element.removeClass('selected');
@@ -164,14 +160,9 @@
                     _this.parent.selection_handler.clear();
                     _this.parent.selection_handler.add(content);
 
-                    var element = $(this).closest('.attachment');
                     _this.reset_selection();
                     element.addClass('selected');
                 };
-
-                console.log(_this.parent.selection_handler.selections);
-
-                content = contents[element.data('id')];
 
                 $(_this.parent.elementUI).trigger('show', content);
 
@@ -369,33 +360,12 @@
                 _this.parent.$elem.find('.assign_content').removeClass('disabled');
             });
 
-            _this.parent.$elem.find('.assign_content').on('click', function(e, ui) {
-                e.preventDefault();
-
-                var content = _this.content;
-                var params = {};
-                params['description'] = _this.$element.find('#caption').val();
-                params['alignment'] = _this.$element.find('.alignment').val();
-
-                _this.assignImage(content, params);
-
-                return false;
-            });
-
             return this;
         },
 
         reset: function() {
             this.$element.find('.body').html('');
             this.parent.$elem.find('.assign_content').addClass('disabled');
-        },
-
-        assignImage: function(content, params) {
-            var position = this.parent.get('position');
-
-            var params = $.extend({}, params, { 'position': position, 'content' : content});
-
-            this.parent.$elem.trigger('assign_content', params);
         }
     };
 
@@ -475,6 +445,27 @@
             this.$elem.on('assign_content', function(event, params) {
                 _this.modal.modal('hide');
             });
+
+            _this.$elem.find('.assign_content').on('click', function(e, ui) {
+                console.log('clicked');
+                e.preventDefault();
+
+                var params = {};
+
+                var sel_handler = _this.get('selection_handler');
+
+                // If multiselect is activated return an array othewise
+                // return only one element
+                if (_this.config.multiselect) {
+                    var selection = sel_handler.getSelections();
+                } else {
+                    var selection = sel_handler.getSelections()[0];
+                }
+
+                _this.assignImage(selection, params);
+
+                return false;
+            });
         },
 
         get: function(name) {
@@ -503,6 +494,15 @@
         initSelectionHandler: function() {
             element = this.$elem.find(this.config.selections_el);
             this.selection_handler = new SelectionHandler(element, this.config, this).init();
+        },
+
+        assignImage: function(content, params) {
+            var position = this.get('position');
+
+            var params = $.extend({}, params, { 'position': position, 'content' : content});
+
+            console.log(params)
+            this.$elem.trigger('assign_content', params);
         },
 
         buildHTMLElement: function(params) {

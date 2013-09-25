@@ -134,6 +134,7 @@ var fileUploadErrors = {
 
 <script type="text/html" id="tmpl-attachment-short-info">
 {literal}
+{{#if contents}}
 <div class="media-selection">
     <div class="selection-info">
         <span class="count">{/literal}{t}{literal}{{count}} selected{/literal}{/t}{literal}</span>
@@ -155,6 +156,7 @@ var fileUploadErrors = {
         </ul>
     </div>
 </div>
+{{/if}}
 {/literal}
 </script>
 
