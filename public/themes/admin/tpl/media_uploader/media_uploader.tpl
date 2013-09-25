@@ -136,7 +136,7 @@ var fileUploadErrors = {
 {literal}
 <div class="media-selection">
     <div class="selection-info">
-        <span class="count">{{count}} selected</span>
+        <span class="count">{/literal}{t}{literal}{{count}} selected{/literal}{/t}{literal}</span>
             <a class="clear-selection" href="#">{/literal}{t}Clear{/t}{literal}</a>
     </div>
     <div class="selection-view">

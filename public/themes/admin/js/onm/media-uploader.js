@@ -242,9 +242,9 @@
                     });
 
                     if (replace) {
-                        $(browser).find('.attachments').html(final_content);
+                        $(browser).find('.modal-body .attachments').html(final_content);
                     } else {
-                        $(browser).find('.attachments').append(final_content);
+                        $(browser).find('.modal-body .attachments').append(final_content);
                     }
 
                     var page_el = $(browser).find('.gallery-search .page');

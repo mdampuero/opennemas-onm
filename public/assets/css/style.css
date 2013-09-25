@@ -2644,7 +2644,6 @@ div#modal-element-customize-content div.select-disposition{
       max-width:115px;
     }
 
-
     #media-uploader #browser .thumbnail {
         -moz-transition: none;
         -webkit-transition: none;
@@ -2750,13 +2749,20 @@ div#modal-element-customize-content div.select-disposition{
     }
 
     #media-uploader #selections .selection-info {
-      margin-right:10px;
+      margin:0 10px;
+      margin-top: -5px;
     }
 
     #media-uploader #selections .thumbnail {
       width:30px;
       height:30px;
       margin-right:10px;
+    }
+    #media-uploader #selections .clear-selection {
+      color: red;
+      display: block;
+      text-align: left;
+      line-height: 10px;
     }
 
 /* =============================================================================
