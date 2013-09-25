@@ -1228,6 +1228,8 @@ img[src="non"] { display:none !important; }
   width:80px;
   height:80px;
   cursor:pointer;
+  -webkit-transition:none;
+  transition:none;
 }
 #album-images .list-of-images .image > img {
   width:100%;
