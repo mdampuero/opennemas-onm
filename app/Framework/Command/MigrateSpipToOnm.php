@@ -129,19 +129,17 @@ EOF
 
         $this->loadCategories();
 
-        $this->updateSummaries();
-        die();
         $this->importUsers();
 
+        $this->updateMetadatas();
+        die();
         // $this->importImages();
-          $this->importFiles();
+        // $this->importFiles();
 
         $this->importArticles();
-
+        $this->importOpinions();
 
         /*
-        $this->updateSummaries();
-           $this->importbodyArticles();
 
 
         $this->importGalleries();
@@ -310,7 +308,7 @@ EOF
                 1=>24, 2=>24, 3=>24, 4=>26, 10=>4, 11=>40, 22=>23, 23=>22, 34=>24,
                 41=>35, 43=>4, 46=>24, 47=>26, 51=>45, 56=>40, 58=>22, 59=>22,
                 60=>22, 61=>22, 62=>22, 63=>22, 64=>22, 66=>22, 67=>22, 70=>22,
-                81=>42, 82=>42, 83=>43, 99=>37, 100=>37, 101=>37, 106=>44, 113=>39,
+                81=>48, 82=>42, 83=>43, 99=>37, 100=>37, 101=>37, 106=>44, 113=>39,
                 114=> 39, 6=>46, 8=>46, 12=>46, 17=>46, 27=>46, 32=>46, 48=>46,
                 55=>46, 69=>46, 95=>46, 97=>46, 102=>46
             );
@@ -367,14 +365,14 @@ EOF
 
         }
 
-
         $sql = "SELECT `id_article`, `surtitre`, `titre`, `soustitre`, ".
             " `descriptif`, `chapo`, `texte`, `ps`, `date`, `statut`, `id_secteur`,".
             " `maj`, `export`, `date_redac`, `visites`, `referers`, `popularite`,".
             " `accepter_forum`, `date_modif`, `lang`, `langue_choisie`, `id_trad`,".
             " `extra`, `id_version`, `nom_site`, `url_site`, `id_rubrique` ".
             " FROM `spip_articles`".
-            " WHERE `statut` <> 'refuse' AND `statut` <> 'poubelle' AND date > '2013-08-06 15:05:37'";
+            " WHERE `statut` <> 'refuse' AND `statut` <> 'poubelle' ".
+            " AND id_rubrique NOT IN (9, 10, 71) AND date > '2013-08-06 15:05:37'";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
@@ -406,18 +404,24 @@ EOF
                     $image = '';
                     if (array_key_exists($originalArticleID, $imagesFront)) {
                         $image = $this->elementIsImported($imagesFront[$originalArticleID][0], 'image');
+                    } else {
+                        $image = $this->importckeckingImagePath($rs->fields);
+                    }
+                    $withComments = 1;
+                    if ($rs->fields['accepter_forum'] == 'non') {
+                        $withComments = 0;
                     }
                     $slug = \StringUtils::get_title($this->convertoUTF8($rs->fields['titre']));
                     $values = array(
                         'title' => $this->convertoUTF8($rs->fields['titre']),
                         'category' => $this->matchCategory($rs->fields['id_rubrique']),
-                        'with_comment' => $rs->fields['accepter_forum'],
+                        'with_comment' => $withComments,
                         'available' => 1,
                         'content_status' => 1,
                         'frontpage' => 0,
                         'in_home' => 0,
                         'title_int' => $this->convertoUTF8($rs->fields['titre']),
-                        'metadata' => $slug,
+                        'metadata' => StringUtils::get_tags($slug),
                         'subtitle' => $this->convertoUTF8($rs->fields['surtitre']),
                         'slug' => $slug,
                         'agency' => '',
@@ -567,6 +571,68 @@ EOF
     }
 
 
+    /**
+     * check if exist file in folder as rule-> "arton.'articleId'.jpg" Ex:lavozdelanzarote/IMG/arton78150.jpg
+     *
+     * @return void
+     **/
+    protected function importckeckingImagePath($article)
+    {
+
+        $fileName = 'arton'.$article['id_article'].'jpg';
+        $this->output->writeln("Checking image file {$fileName} \n");
+
+        $localFile  = ORIGINAL_MEDIA.$fileName;
+        $IDCategory ='1'; //fotografias
+
+        if (file_exists($localFile)) {
+
+            $authorRedaccion = 2;
+
+            $photo     = new \Photo();
+
+            $originalImageID = $article['id_article'];
+
+            $title = strip_tags($article['titre']);
+
+            $imageData = array(
+                'title' => $this->convertoUTF8($title),
+                'category' => $IDCategory,
+                'fk_category' => $IDCategory,
+                'category_name'=> '',
+                'content_status' => 1,
+                'frontpage' => 0,
+                'in_home' => 0,
+                'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($title." ".$article['surtitre'])),
+                'description' => $this->convertoUTF8(strip_tags(substr($article['texte'], 0, 250))),
+                'id' => 0,
+                'created' => $article['date'],
+                'starttime' => $article['date'],
+                'changed' => $article['date'],
+                'fk_user' =>  $this->elementIsImported($authorRedaccion, 'user'),
+                'fk_author' =>  $this->elementIsImported($authorRedaccion, 'user'),
+                'fk_publisher' => $this->elementIsImported($authorRedaccion, 'user'),
+                'fk_user_last_editor' => $this->elementIsImported($authorRedaccion, 'user'),
+                'local_file' => $localFile,
+                'author_name' => '',
+            );
+
+            $date = new \DateTime($article['date']);
+            $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
+
+            if (!empty($imageID)) {
+                $this->insertRefactorID($originalImageID, $imageID, 'image', $title);
+                // $this->output->writeln('- Image '. $imageID. ' ok');
+                $this->output->write('.');
+            } else {
+                    $this->output->write('.');
+                    $this->output->writeln(
+                        'Problem image '.$originalImageID.
+                        "-". $this->convertoUTF8($title) .' -> '.$fileName."\n"
+                    );
+            }
+        }
+    }
 
     /**
      * Read images data and insert this in new database
@@ -655,6 +721,152 @@ EOF
         }
     }
 
+       /**
+     * Read articles data and insert in new database
+     *
+     * @return void
+     **/
+    protected function importOpinions()
+    {
+        $sql2 = "SELECT `id_document`, `id_objet` FROM `spip_documents_liens`";
+        $request = $GLOBALS['application']->connOrigin->Prepare($sql2);
+        $rs2     = $GLOBALS['application']->connOrigin->Execute($request);
+
+        $data        = $rs2->getArray();
+        $imagesFront = array();
+        foreach ($data as $item) {
+            $key               = $item['id_objet'];
+            $imagesFront[$key][] = $item['id_document'];
+
+        }
+
+        $sql2 = "SELECT `id_auteur`, `id_article` FROM`spip_auteurs_articles`";
+        $request = $GLOBALS['application']->connOrigin->Prepare($sql2);
+        $rs2     = $GLOBALS['application']->connOrigin->Execute($request);
+
+        $data        = $rs2->getArray();
+        $authors = array();
+        foreach ($data as $item) {
+            $key           = $item['id_article'];
+            $authors[$key] = $item['id_auteur'];
+
+        }
+
+
+        $sql = "SELECT `id_article`, `surtitre`, `titre`, `soustitre`, ".
+            " `descriptif`, `chapo`, `texte`, `ps`, `date`, `statut`, `id_secteur`,".
+            " `maj`, `export`, `date_redac`, `visites`, `referers`, `popularite`,".
+            " `accepter_forum`, `date_modif`, `lang`, `langue_choisie`, `id_trad`,".
+            " `extra`, `id_version`, `nom_site`, `url_site`, `id_rubrique` ".
+            " FROM `spip_articles`".
+            " WHERE `statut` <> 'refuse' AND `statut` <> 'poubelle' ".
+            " AND id_rubrique IN (9, 10, 71) AND date > '2013-08-06 15:05:37'";
+
+        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+
+        if (!$rs) {
+            $this->output->writeln('DB problem: '. $GLOBALS['application']->connOrigin->ErrorMsg());
+        } else {
+            $totalRows = $rs->_numOfRows;
+            $current   = 1;
+
+            while (!$rs->EOF) {
+                $originalArticleID = $rs->fields['id_article'];
+                if ($this->elementIsImported($originalArticleID, 'opinion')) {
+                    $this->output->writeln("*");//[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
+                } else {
+                    $this->output->writeln("[{$current}/{$totalRows}] Importing opinion with id {$originalArticleID} - ");
+
+                    $data = $this->clearLabelsInBodyArticle($this->convertoUTF8($rs->fields['texte']));
+                    if (!empty($rs->fields['descriptif'])) {
+                        $summary = $this->convertoUTF8($rs->fields['descriptif']);
+                    } else {
+                        $summary = strip_tags(substr($data['body'], 0, 240));
+                        $summary = substr($summary, 0, strripos($summary, " ")).' ...';
+                    }
+
+                    if ($rs->fields['id_rubrique'] == 10) {
+                        $typeOpinion = 1;
+                    }
+                    if (empty($author)) {
+                        $author = $this->elementIsImported(3, 'user'); // Colaboradores
+                    }
+                    if ($author == 2) {
+                        $typeOpinion = 1;
+                    } else {
+                        $typeOpinion = 0;
+                    }
+                    $image = '';
+                    if (array_key_exists($originalArticleID, $imagesFront)) {
+                        $image = $this->elementIsImported($imagesFront[$originalArticleID][0], 'image');
+                    }
+                    $withComments = 1;
+                    if ($rs->fields['accepter_forum'] == 'non') {
+                        $withComments = 0;
+                    }
+                    $slug = \StringUtils::get_title($this->convertoUTF8($rs->fields['titre']));
+                    $values = array(
+                        'title' => $this->convertoUTF8($rs->fields['titre']),
+                        'category' => 4,
+                        'with_comment' => $withComments,
+                        'available' => 1,
+                        'content_status' => 1,
+                        'frontpage' => 0,
+                        'in_home' => 0,
+                        'title_int' => $this->convertoUTF8($rs->fields['titre']),
+                        'metadata' => StringUtils::get_tags($slug),
+                        'subtitle' => $this->convertoUTF8($rs->fields['surtitre']),
+                        'slug' => $slug,
+                        'agency' => '',
+                        'summary' => $summary,
+                        'description' => strip_tags(substr($summary, 0, 150)),
+                        'body' => $summary." ".$data['body'],
+                        'posic' => 0,
+                        'id' => 0,
+                        'type_opinion' =>$typeOpinion,
+                        'img1' => $image,
+                        'img2' => $data['img'],
+                        'img1_footer' => '', //$data['footer1'],
+                        'img2_footer' => '', //$data['footer2'],
+                        'fk_video' => '',
+                        'fk_video2' => '',
+                        'footer_video2' => '',
+                        'created' => $rs->fields['date'],
+                        'starttime' => $rs->fields['date'],
+                        'changed' => $rs->fields['date'],
+                        'fk_user' => $author,
+                        'fk_author' => $author,
+                        'fk_publisher' => $author,
+                        'fk_author_img' => '',
+                    );
+
+                    // TODO search files as related contents.
+                    // TODO: insert videos.
+                    $article      = new \Opinion();
+                    $newArticleID = $article->create($values);
+
+                    if (!empty($newArticleID)) {
+                        $this->insertRefactorID($originalArticleID, $newArticleID, 'opinion', $slug);
+                        //  $this->output->writeln('-'. $originalArticleID.'->'.
+                        //   $newArticleID. ' article ok');
+                        $this->output->write('.');
+                    } else {
+                        $this->output->writeln(
+                            'Problem inserting article '.$originalArticleID.
+                            ' - '. $slug .'\n'
+                        );
+                    }
+                }
+                $current++;
+                $rs->MoveNext();
+            }
+            $this->output->writeln('Imported  '.$current.' articles \n');
+
+            $rs->Close();
+        }
+        return true;
+    }
 
     /**
      *  insert the correspondence between identifiers
@@ -813,7 +1025,7 @@ EOF
     public function updateMetadatas()
     {
 
-        $sql = "SELECT pk_content, metadata, title FROM contents ";
+        $sql = "SELECT pk_content, metadata, slug, title FROM contents ";
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         $values= array();
@@ -821,7 +1033,7 @@ EOF
 
             $tags = StringUtils::get_tags($rs->fields['metadata']);
             if (empty($tags)) {
-                $tags = StringUtils::get_tags($rs->fields['title']);
+                $tags = StringUtils::get_tags($rs->fields['slug']);
             }
 
             $values[] =  array(
