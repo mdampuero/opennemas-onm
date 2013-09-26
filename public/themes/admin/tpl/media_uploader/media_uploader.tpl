@@ -199,7 +199,6 @@ var fileUploadErrors = {
         <div class="controls">
             <select class="alignment" data-setting="align" data-user-setting="align">
                 <option value="left">{/literal}{t}Left{/t}{literal}</option>
-                <option value="center">{/literal}{t}Center{/t}{literal}</option>
                 <option value="right">{/literal}{t}Right{/t}{literal}</option>
                 <option value="none" selected="">{/literal}{t}None{/t}{literal}</option>
             </select>
