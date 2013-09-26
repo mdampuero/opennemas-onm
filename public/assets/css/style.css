@@ -2557,7 +2557,7 @@ div#modal-element-customize-content div.select-disposition{
       background-image: -moz-linear-gradient(top,#f1f1f1,#e1e1e1);
       background-image: -o-linear-gradient(top,#f1f1f1,#e1e1e1);
       background-image: linear-gradient(to bottom,#f1f1f1,#e1e1e1);
-      z-index:2;
+      z-index:100;
       line-height:1.2em;
       font-size:1.5em;
       text-align:center;
@@ -2597,7 +2597,6 @@ div#modal-element-customize-content div.select-disposition{
     #media-uploader #browser .attachments .attachment-preview {
         display:inline-block;
         list-style:none;
-        margin-bottom:10px;
     }
     #media-uploader #media-element-show .body {
         margin:10px;

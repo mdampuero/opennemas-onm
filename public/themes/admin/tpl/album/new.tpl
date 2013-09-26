@@ -38,7 +38,7 @@
                                         '</ul>'+
                                     '</div>'+
                                 '</div>'+
-                            mediapicker.buildHTMLElement(temp_params)+
+                            mediapicker.buildHTMLElement(temp_params, true)+
                             '<textarea name="album_photos_footer[]">'+elem.description+'</textarea>'+
                             '<input type="hidden" name="album_photos_id[]" value="'+elem.id+'">'
                             '</li>' ;
