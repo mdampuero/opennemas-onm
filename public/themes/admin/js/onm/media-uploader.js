@@ -251,7 +251,7 @@
                     $.each(contents_json, function(index, element) {
                         contents[element.id] = element
                         content = template({
-                            "thumbnail_url": element.thumbnail_url,
+                            "thumbnail_url": element.crop_thumbnail_url,
                             "id": element.id,
                             "is_swf": (element.type_img === 'swf')
                         });
@@ -533,8 +533,12 @@
             this.$elem.trigger('assign_content', params);
         },
 
-        buildHTMLElement: function(params) {
+        buildHTMLElement: function(params, use_thumbnail) {
             var html = '';
+
+            if (typeof(use_thumbnail) == undefined) {
+                use_thumbnail = false;
+            };
 
             var align = '';
             if (params.hasOwnProperty('position') && params['position'] !== undefined) {
@@ -551,7 +555,11 @@
                 class_image = 'class="image"';
             };
 
-            var src = 'src="'+params.content.image_path+'"';
+            if (use_thumbnail) {
+                var src = 'src="'+params.content.thumbnail_url+'"';
+            } else{
+                var src = 'src="'+params.content.image_path+'"';
+            };
             html = '<img '+src+' '+align+' '+description+' '+class_image+' />';
 
             return html;
