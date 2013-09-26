@@ -177,23 +177,28 @@ var fileUploadErrors = {
             <img src="{{thumbnail_url}}" draggable="false">
         {{/if}}
     </div>
-    <div class="buttons btn-group">
-        <a href="{{edit_url}}" target="_blank" class="edit-image-button btn"><i class="icon icon-pencil"></i> {/literal}{t}Edit image{/t}{literal}</a>
-        <!-- <a href="#" class="delete-image-button btn"><i class="icon icon-trash"></i> {/literal}{t}Delete image{/t}{literal}</a> -->
-    </div>
     <div class="image-title">{{title}}</div>
     <div class="info">
         <div>{{width}} × {{height}}</div>
         <div>{{size}} Kb</div>
         <div>{{created}}</div>
     </div>
+    <div class="buttons btn-group">
+        <a href="{{edit_url}}" target="_blank" class="edit-image-button btn btn-mini"><i class="icon icon-pencil"></i> {/literal}{t}Edit image{/t}{literal}</a>
+        <!-- <a href="#" class="delete-image-button btn"><i class="icon icon-trash"></i> {/literal}{t}Delete image{/t}{literal}</a> -->
+    </div>
 </div>
 
 <hr>
-
+<div class="messages">
+    <div class="saving muted">{/literal}{t}Saving...{/t}{literal}</div>
+    <div class="saved text-success">{/literal}{t}Saved{/t}{literal}</div>
+    <div class="error-saving text-error">{/literal}{t}Error saving{/t}{literal}</div>
+</div>
 <div class="photo-insert-form">
+
     <div class="control-group">
-        <label for="caption" class="control-label">{/literal}{t}Caption{/t}{literal}</label>
+        <label for="caption" class="control-label">{/literal}{t}Description{/t}{literal}</label>
         <div class="controls">
             <textarea required="required" id="caption" name="caption" rows="2">{{description}}</textarea>
         </div>
@@ -208,6 +213,7 @@ var fileUploadErrors = {
             </select>
         </div>
     </div>
+    <input type="hidden" class="content_id" name="id" value="{{id}}" placeholder="">
 </div><!-- /basic -->
 {{/with}}
 {/literal}

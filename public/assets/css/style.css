@@ -2737,6 +2737,23 @@ div#modal-element-customize-content div.select-disposition{
       border:1px solid #ccc;
     }
 
+    #media-uploader #media-element-show .photo-insert-form {
+    }
+
+    #media-uploader #media-element-show .messages {
+      position:relative;
+      font-size:.8em;
+    }
+
+    #media-uploader #media-element-show .messages > * {
+      display:none;
+      position:absolute;
+      top:-14px;
+      width:100%;
+      text-align:right;
+      width: 220px;
+    }
+
     #media-uploader #media-element-show .photo-image-information .image-title {
       font-weight: bold;
       margin: 10px 0;

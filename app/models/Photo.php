@@ -856,7 +856,6 @@ class Photo extends Content
         }
 
         return true;
-
     }
 
     /**

@@ -146,4 +146,24 @@ class MediaUploaderController extends Controller
 
         return $response;
     }
+
+    /**
+     * Updates an image description
+     *
+     *
+     * @return Response the response object
+     **/
+    public function updateContentAction(Request $request)
+    {
+        $id = $request->request->getDigits('content_id');
+        $description = $request->request->filter('description', '', FILTER_SANITIZE_STRING);
+
+        $rs = $GLOBALS['application']->conn->Execute("UPDATE contents SET `description`=? WHERE pk_content=?", array($description, $id));
+
+        if ($rs) {
+            return new Response(json_encode(new \Photo($id)));
+        } else {
+            return new Response('error while saving', 500);
+        }
+    }
 }
