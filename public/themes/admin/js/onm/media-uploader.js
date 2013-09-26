@@ -208,7 +208,6 @@
                     content = template({
                         "years": contents_json,
                     });
-                    console.log(contents_json, content);
 
                     months_input.append(content);
                 }

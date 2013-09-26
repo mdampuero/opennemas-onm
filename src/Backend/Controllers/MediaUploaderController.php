@@ -53,7 +53,7 @@ class MediaUploaderController extends Controller
      **/
     public function getMonthsAction(Request $request)
     {
-        $months = array();
+        $years = array();
 
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute(
@@ -64,13 +64,16 @@ class MediaUploaderController extends Controller
         $rawMonths = $rs->GetArray();
         foreach ($rawMonths as $value) {
             $date = \DateTime::createFromFormat('Y-n', $value['date_month']);
-            $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM y');
+            $fmt = new \IntlDateFormatter(CURRENT_LANGUAGE, null, null, null, null, 'MMMM');
 
-            $months [] = array('name' => $fmt->format($date), 'value' => $value['date_month']);
+            $years[$date->format('Y')]['name'] = $date->format('Y');
+            $years[$date->format('Y')]['months'] []= array('name' => $fmt->format($date), 'value' => $value['date_month']);
         }
 
+        $years = array_values($years);
+
         $response = new Response();
-        $response->setContent(json_encode($months));
+        $response->setContent(json_encode($years));
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
