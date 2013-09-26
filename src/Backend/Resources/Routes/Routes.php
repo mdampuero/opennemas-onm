@@ -2776,6 +2776,16 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_media_uploader_update_content',
+    new Route(
+        '/media-uploader/update-content',
+        array('_controller' => 'Backend:Controllers:MediaUploaderController:updateContent')
+    )
+);
+
+
+
+$adminRoutes->add(
     'admin_media_uploader_browser',
     new Route(
         '/media-uploader/browser',

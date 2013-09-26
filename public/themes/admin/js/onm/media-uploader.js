@@ -387,6 +387,29 @@
                 _this.parent.$elem.find('.assign_content').removeClass('disabled');
             });
 
+            _this.$element.on('change', '#caption', function(e, ui) {
+                var caption = $(this).val();
+                var content_id = _this.$element.find('.content_id').val();
+
+                $.ajax({
+                    url: '/admin/media-uploader/update-content',
+                    type: "POST",
+                    data: {
+                        description : caption,
+                        content_id : content_id
+                    },
+                    dataType: 'json',
+                    beforeSend: function() {
+                        _this.$element.find('.messages > *').hide().end().find('.messages .muted').show();
+                    }
+                }).done(function(data) {
+                    contents[content_id] = data;
+                    _this.$element.find('.messages > *').hide().end().find('.messages .text-success').show();
+                }).fail(function() {
+                    _this.$element.find('.messages > *').hide().end().find('.messages .text-error').show();
+                });
+            })
+
             return this;
         },
 
@@ -475,7 +498,6 @@
             });
 
             _this.$elem.find('.assign_content').on('click', function(e, ui) {
-                console.log('clicked');
                 e.preventDefault();
 
                 var params = {};
@@ -529,7 +551,6 @@
 
             var params = $.extend({}, params, { 'position': position, 'content' : content});
 
-            console.log(params)
             this.$elem.trigger('assign_content', params);
         },
 
