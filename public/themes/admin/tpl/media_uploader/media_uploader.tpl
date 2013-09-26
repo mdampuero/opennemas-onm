@@ -141,7 +141,7 @@ var fileUploadErrors = {
 {{#if contents}}
 <div class="media-selection">
     <div class="selection-info">
-        <span class="count">{/literal}{t}{literal}{{count}} selected{/literal}{/t}{literal}</span>
+        <span class="count">{/literal}{t}{ldelim}{ldelim}count{rdelim}{rdelim} selected{/t}{literal}</span>
             <a class="clear-selection" href="#">{/literal}{t}Clear{/t}{literal}</a>
     </div>
     <div class="selection-view">
@@ -151,7 +151,7 @@ var fileUploadErrors = {
                 <div class="attachment-preview">
                     <div class="thumbnail" >
                         <div class="centered">
-                            <img src="{{thumbnail_url}}" width="30"  />
+                            <img src="{{crop_thumbnail_url}}" width="30"  />
                         </div>
                     </div>
                 </div>

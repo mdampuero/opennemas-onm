@@ -124,10 +124,17 @@ class MediaUploaderController extends Controller
 
         foreach ($photos as &$photo) {
             $photo->image_path = INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name;
-            $photo->thumbnail_url = $this->generateUrl(
+            $photo->crop_thumbnail_url = $this->generateUrl(
                 'asset_image',
                 array(
                     'parameters' => 'zoomcrop,120,120,center,center',
+                    'real_path' => INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name
+                )
+            );
+            $photo->thumbnail_url = $this->generateUrl(
+                'asset_image',
+                array(
+                    'parameters' => 'thumbnail,120,120',
                     'real_path' => INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name
                 )
             );
