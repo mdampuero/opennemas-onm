@@ -173,6 +173,29 @@
                 return false;
             });
 
+            $(this.$browser).on('click', '.modal-body .attachment .check', function(e, ui) {
+                e.preventDefault();
+
+                var element = $(this).closest('.attachment');
+                var content = contents[element.data('id')];
+
+                if (_this.config.multiselect === true) {
+
+                    if (element.hasClass('selected')) {
+                        element.removeClass('selected');
+                        _this.parent.selection_handler.remove(content);
+                    } else {
+                        element.addClass('selected');
+                        _this.parent.selection_handler.add(content);
+                    };
+
+                }
+
+                $(_this.parent.elementUI).trigger('show', content);
+
+                return false;
+            });
+
             return this;
         },
 
@@ -183,8 +206,9 @@
                 success: function(contents_json) {
                     var template = Handlebars.compile($('#tmpl-browser-months').html());
                     content = template({
-                        "months": contents_json,
+                        "years": contents_json,
                     });
+                    console.log(contents_json, content);
 
                     months_input.append(content);
                 }

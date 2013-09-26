@@ -2546,7 +2546,7 @@ div#modal-element-customize-content div.select-disposition{
       width: 24px;
       position: absolute;
       top: -7px;
-      right: -7px;
+      right: -2px;
       outline: 0;
       border: 1px solid #fff;
       border-radius: 3px;
@@ -2561,7 +2561,14 @@ div#modal-element-customize-content div.select-disposition{
       line-height:1.2em;
       font-size:1.5em;
       text-align:center;
-      color:gray:;
+      color:gray;
+      text-decoration:none;
+      outline:none;
+
+    }
+    #media-uploader .attachment:hover .check {
+      display:block;
+      box-shadow: 0 0 0 1px #1e8cbe;
     }
 
     #media-uploader .attachment.selected .check {
@@ -2575,14 +2582,9 @@ div#modal-element-customize-content div.select-disposition{
       background-image: linear-gradient(to bottom,#1e8cbe,#0074a2);
       color:White;
     }
-    #media-uplaoder .attachment .check .icon {
+    #media-uploader .attachment .check .icon-minus {
       display:none;
     }
-    #media-uplaoder .attachment .check .icon:hover {
-      text-decoration:none;
-      outline:none;
-    }
-
     #media-uploader .attachment.selected .icon-ok,
     #media-uploader .attachment.selected .check:hover .icon-minus {
       display:block;
