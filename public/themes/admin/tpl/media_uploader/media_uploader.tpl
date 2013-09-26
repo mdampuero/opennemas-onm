@@ -106,8 +106,12 @@ var fileUploadErrors = {
 
 <script type="text/html" id="tmpl-browser-months">
 {literal}
-    {{#each months}}
-    <option value="{{value}}">{{name}}</option>
+    {{#each years}}
+        <optgroup label="{{name}}">
+        {{#each months}}
+            <option value="{{value}}">{{name}}</option>
+        {{/each}}
+        </optgroup>
     {{/each}}
 {/literal}
 </script>
