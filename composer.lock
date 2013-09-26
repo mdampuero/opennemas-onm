@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "57e88487d0ac98fb459e4790c2d96fd3",
+    "hash": "8aabde3ede1af592a52a96791bfdc7ec",
     "packages": [
         {
             "name": "frandieguez/panorama-php",
@@ -169,12 +169,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/adaptivepayments-sdk-php.git",
-                "reference": "v2.4.103"
+                "reference": "d95a7d5814394497647c7435fffc396cf8773357"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/adaptivepayments-sdk-php/zipball/v2.4.103",
-                "reference": "v2.4.103",
+                "url": "https://api.github.com/repos/paypal/adaptivepayments-sdk-php/zipball/d95a7d5814394497647c7435fffc396cf8773357",
+                "reference": "d95a7d5814394497647c7435fffc396cf8773357",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2013-06-11 17:24:15"
+            "time": "2013-09-25 11:09:17"
         },
         {
             "name": "paypal/merchant-sdk-php",
@@ -213,12 +213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/merchant-sdk-php.git",
-                "reference": "v2.4.103"
+                "reference": "bbed43f4c6d3cf584bc6e39e9c1380217fe5ff1c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/v2.4.103",
-                "reference": "v2.4.103",
+                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/bbed43f4c6d3cf584bc6e39e9c1380217fe5ff1c",
+                "reference": "bbed43f4c6d3cf584bc6e39e9c1380217fe5ff1c",
                 "shasum": ""
             },
             "require": {
@@ -249,20 +249,20 @@
                 "php",
                 "sdk"
             ],
-            "time": "2013-06-11 09:36:55"
+            "time": "2013-08-22 17:48:12"
         },
         {
             "name": "paypal/sdk-core-php",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/sdk-core-php.git",
-                "reference": "v1.4.1"
+                "reference": "2ee73c75be510af7c2c153ff2eaba086972c8bf7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/v1.4.1",
-                "reference": "v1.4.1",
+                "url": "https://api.github.com/repos/paypal/sdk-core-php/zipball/2ee73c75be510af7c2c153ff2eaba086972c8bf7",
+                "reference": "2ee73c75be510af7c2c153ff2eaba086972c8bf7",
                 "shasum": ""
             },
             "require": {
@@ -292,7 +292,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2013-06-11 17:45:21"
+            "time": "2013-09-11 14:22:45"
         },
         {
             "name": "psr/log",
@@ -433,22 +433,22 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.3.1",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Config",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "v2.3.1"
+                "reference": "65a927c15ca5a911ba2fa277a5457fa8129505b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/v2.3.1",
-                "reference": "v2.3.1",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/65a927c15ca5a911ba2fa277a5457fa8129505b0",
+                "reference": "65a927c15ca5a911ba2fa277a5457fa8129505b0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
-                "symfony/filesystem": ">=2.3,<3.0"
+                "symfony/filesystem": "~2.3"
             },
             "type": "library",
             "extra": {
@@ -477,7 +477,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-03 00:18:25"
+            "time": "2013-08-06 05:49:23"
         },
         {
             "name": "symfony/console",
@@ -644,17 +644,17 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.3.1",
+            "version": "v2.3.4",
             "target-dir": "Symfony/Component/Filesystem",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem.git",
-                "reference": "v2.3.1"
+                "reference": "87acbbef6d35ba649f96f09cc572c45119b360c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/v2.3.1",
-                "reference": "v2.3.1",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/87acbbef6d35ba649f96f09cc572c45119b360c3",
+                "reference": "87acbbef6d35ba649f96f09cc572c45119b360c3",
                 "shasum": ""
             },
             "require": {
@@ -687,7 +687,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
-            "time": "2013-06-04 15:02:05"
+            "time": "2013-07-21 12:12:18"
         },
         {
             "name": "symfony/http-foundation",
@@ -858,7 +858,29 @@
         "paypal/merchant-sdk-php": 20
     },
     "platform": {
-        "php": ">=5.3.2"
+        "php": ">=5.3.2",
+        "ext-apc": ">=3.1.12",
+        "ext-bz2": "*",
+        "ext-ctype": "*",
+        "ext-curl": "*",
+        "ext-date": "*",
+        "ext-fileinfo": "*",
+        "ext-filter": "*",
+        "ext-intl": ">=1.1.0",
+        "ext-imagick": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "ext-pcre": "*",
+        "ext-pdo": "*",
+        "ext-phar": ">=2.0.1",
+        "ext-posix": "*",
+        "ext-session": "*",
+        "ext-simplexml": "*",
+        "ext-spl": "*",
+        "ext-xml": "*",
+        "ext-xsl": "*",
+        "ext-zip": "*",
+        "ext-zlib": "*"
     },
     "platform-dev": [
 
