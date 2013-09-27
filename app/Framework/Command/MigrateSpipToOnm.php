@@ -80,7 +80,8 @@ EOF
         $originalDirectory = $dialog->ask(
             $output,
             'Where is the Spip media directory?',
-            '/home/opennemas/external/backup/media-import/lavozdelanzarote/IMG/'//'/opt/backup_opennemas/lanzarote/IMG/'
+            //'/home/opennemas/external/backup/media-import/lavozdelanzarote/IMG/'
+            '/opt/backup_opennemas/IMG/'
         );
         $output->writeln("-: ".$originalDirectory);
 
@@ -131,18 +132,18 @@ EOF
 
         $this->importUsers();
 
-        $this->updateMetadatas();
-        die();
-        // $this->importImages();
-        // $this->importFiles();
+
+        $this->importImages();
+        $this->importFiles();
 
         $this->importArticles();
         $this->importOpinions();
 
         /*
 
+        $this->updateMetadatas();
 
-        $this->importGalleries();
+        $this->importVideos();
 
 
         */
@@ -302,6 +303,7 @@ EOF
     {
         /**
          * manually assigned because They have reduced the sections number
+         * Category "Otros contenidos" - 50 "cajon desastre"
         **/
         $this->categories =
             array(
@@ -309,8 +311,8 @@ EOF
                 41=>35, 43=>4, 46=>24, 47=>26, 51=>45, 56=>40, 58=>22, 59=>22,
                 60=>22, 61=>22, 62=>22, 63=>22, 64=>22, 66=>22, 67=>22, 70=>22,
                 81=>48, 82=>42, 83=>43, 99=>37, 100=>37, 101=>37, 106=>44, 113=>39,
-                114=> 39, 6=>46, 8=>46, 12=>46, 17=>46, 27=>46, 32=>46, 48=>46,
-                55=>46, 69=>46, 95=>46, 97=>46, 102=>46
+                114=> 39, 6=>50, 8=>50, 12=>50, 17=>50, 27=>50, 32=>50, 48=>50,
+                55=>50, 69=>50, 95=>46, 97=>50, 102=>50
             );
 
         /*
@@ -330,7 +332,7 @@ EOF
         if (array_key_exists($categoryId, $this->categories)) {
             return $this->categories[$categoryId];
         } else {
-            return 20;
+            return 50;
         }
     }
 
@@ -372,7 +374,7 @@ EOF
             " `extra`, `id_version`, `nom_site`, `url_site`, `id_rubrique` ".
             " FROM `spip_articles`".
             " WHERE `statut` <> 'refuse' AND `statut` <> 'poubelle' ".
-            " AND id_rubrique NOT IN (9, 10, 71) AND date > '2013-08-06 15:05:37'";
+            " AND id_rubrique NOT IN (9, 10, 71) ";//AND date > '2013-08-06 15:05:37'";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
@@ -391,13 +393,20 @@ EOF
                     $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
 
                     $data = $this->clearLabelsInBodyArticle($this->convertoUTF8($rs->fields['texte']));
+                    $summary='';
                     if (!empty($rs->fields['descriptif'])) {
                         $summary = $this->convertoUTF8($rs->fields['descriptif']);
-                    } else {
-                        $summary = strip_tags(substr($data['body'], 0, 240));
-                        $summary = substr($summary, 0, strripos($summary, " ")).' ...';
+                        $patern  = '@\-\*\[(.*)[0-9]+\]@';
+                        $summary = trim(preg_replace($patern, '', $summary));
                     }
-                    $author = $this->elementIsImported($authors[$originalArticleID], 'user');
+                    if (empty($summary) || strlen($summary) < 30) {
+                           $summary = $summary. ' '. strip_tags(substr($data['body'], 0, 240));
+                           $summary = substr($summary, 0, strripos($summary, " ")).' ...';
+                    }
+
+                    if (array_key_exists($originalArticleID, $authors)) {
+                        $author = $this->elementIsImported($authors[$originalArticleID], 'user');
+                    }
                     if (empty($author)) {
                         $author = $this->elementIsImported(2, 'user');
                     }
@@ -492,8 +501,8 @@ EOF
         $sql = "SELECT `id_document`, `id_vignette`, `titre`, `date`, `descriptif`,".
             " `fichier`, `taille`, `largeur`, `hauteur`, `mode`, `distant`, `maj`,".
             " `extension` FROM `spip_documents`".
-            " WHERE (mode ='vignette' OR mode = 'image' OR (mode='document' AND extension='jpg'))".
-            " AND maj > '2013-08-06 15:05:37'";
+            " WHERE (mode ='vignette' OR mode = 'image' OR (mode='document' AND extension='jpg'))";
+            //" AND maj > '2013-08-06 15:05:37'";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
@@ -579,59 +588,68 @@ EOF
     protected function importckeckingImagePath($article)
     {
 
-        $fileName = 'arton'.$article['id_article'].'jpg';
-        $this->output->writeln("Checking image file {$fileName} \n");
-
+        $fileName = 'arton'.$article['id_article'].'.jpg';
         $localFile  = ORIGINAL_MEDIA.$fileName;
-        $IDCategory ='1'; //fotografias
+        $imageID ='';
 
         if (file_exists($localFile)) {
+            $this->output->writeln("Checking image file {$fileName} \n");
+            $IDCategory ='1'; //fotografias
 
-            $authorRedaccion = 2;
+            var_dump($localFile);
 
-            $photo     = new \Photo();
-
-            $originalImageID = $article['id_article'];
-
-            $title = strip_tags($article['titre']);
-
-            $imageData = array(
-                'title' => $this->convertoUTF8($title),
-                'category' => $IDCategory,
-                'fk_category' => $IDCategory,
-                'category_name'=> '',
-                'content_status' => 1,
-                'frontpage' => 0,
-                'in_home' => 0,
-                'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($title." ".$article['surtitre'])),
-                'description' => $this->convertoUTF8(strip_tags(substr($article['texte'], 0, 250))),
-                'id' => 0,
-                'created' => $article['date'],
-                'starttime' => $article['date'],
-                'changed' => $article['date'],
-                'fk_user' =>  $this->elementIsImported($authorRedaccion, 'user'),
-                'fk_author' =>  $this->elementIsImported($authorRedaccion, 'user'),
-                'fk_publisher' => $this->elementIsImported($authorRedaccion, 'user'),
-                'fk_user_last_editor' => $this->elementIsImported($authorRedaccion, 'user'),
-                'local_file' => $localFile,
-                'author_name' => '',
-            );
-
-            $date = new \DateTime($article['date']);
-            $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
-
-            if (!empty($imageID)) {
-                $this->insertRefactorID($originalImageID, $imageID, 'image', $title);
-                // $this->output->writeln('- Image '. $imageID. ' ok');
-                $this->output->write('.');
+            if ($this->elementIsImported($article['id_article'], 'arton')) {
+                $this->output->writeln('*');//"[{$current}/{$totalRows}] Image already imported");
+                return $imageID;
             } else {
+                $authorRedaccion = 2;
+                $photo     = new \Photo();
+
+                $originalImageID = $article['id_article'];
+
+                $title = strip_tags($article['titre']);
+
+                $imageData = array(
+                    'title' => $this->convertoUTF8($title),
+                    'category' => $IDCategory,
+                    'fk_category' => $IDCategory,
+                    'category_name'=> '',
+                    'content_status' => 1,
+                    'frontpage' => 0,
+                    'in_home' => 0,
+                    'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($title." ".$article['surtitre'])),
+                    'description' => $this->convertoUTF8(strip_tags(substr($article['texte'], 0, 120))),
+                    'id' => 0,
+                    'created' => $article['date'],
+                    'starttime' => $article['date'],
+                    'changed' => $article['date'],
+                    'fk_user' =>  $this->elementIsImported($authorRedaccion, 'user'),
+                    'fk_author' =>  $this->elementIsImported($authorRedaccion, 'user'),
+                    'fk_publisher' => $this->elementIsImported($authorRedaccion, 'user'),
+                    'fk_user_last_editor' => $this->elementIsImported($authorRedaccion, 'user'),
+                    'local_file' => $localFile,
+                    'author_name' => '',
+                );
+
+                $date = new \DateTime($article['date']);
+                $imageID = $photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
+
+                if (!empty($imageID)) {
+                    $this->insertRefactorID($article['id_article'], $imageID, 'arton', $title);
+                    $this->output->writeln('- Image '. $fileName.' - '.$imageID. ' ok');
                     $this->output->write('.');
-                    $this->output->writeln(
-                        'Problem image '.$originalImageID.
-                        "-". $this->convertoUTF8($title) .' -> '.$fileName."\n"
-                    );
+                } else {
+                        $this->output->write('.');
+                        $this->output->writeln(
+                            'Problem image '.$originalImageID.
+                            "-". $this->convertoUTF8($title) .' -> '.$fileName."\n"
+                        );
+                }
             }
+
         }
+
+        return $imageID;
     }
 
     /**
@@ -645,7 +663,7 @@ EOF
         $sql = "SELECT `id_document`, `id_vignette`, `titre`, `date`, `descriptif`,".
             " `fichier`, `taille`, `largeur`, `hauteur`, `mode`, `distant`, `maj`,".
             " `extension` FROM `spip_documents`".
-            " WHERE  mode='document' AND extension <>'jpg' AND maj > '2013-08-06 15:05:37'";
+            " WHERE  mode='document' AND extension <>'jpg'";// AND maj > '2013-08-06 15:05:37'";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
@@ -760,7 +778,7 @@ EOF
             " `extra`, `id_version`, `nom_site`, `url_site`, `id_rubrique` ".
             " FROM `spip_articles`".
             " WHERE `statut` <> 'refuse' AND `statut` <> 'poubelle' ".
-            " AND id_rubrique IN (9, 10, 71) AND date > '2013-08-06 15:05:37'";
+            " AND id_rubrique IN (9, 10, 71) ";//AND date > '2013-08-06 15:05:37'";
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
@@ -779,20 +797,27 @@ EOF
                     $this->output->writeln("[{$current}/{$totalRows}] Importing opinion with id {$originalArticleID} - ");
 
                     $data = $this->clearLabelsInBodyArticle($this->convertoUTF8($rs->fields['texte']));
+                    $summary = '';
                     if (!empty($rs->fields['descriptif'])) {
                         $summary = $this->convertoUTF8($rs->fields['descriptif']);
-                    } else {
-                        $summary = strip_tags(substr($data['body'], 0, 240));
-                        $summary = substr($summary, 0, strripos($summary, " ")).' ...';
+                    }
+                    $summary = $summary."<br /> ".strip_tags(substr($data['body'], 0, 240));
+                    $summary = substr($summary, 0, strripos($summary, " ")).' ...';
+
+
+                    if (array_key_exists($originalArticleID, $authors)) {
+                        $author = $this->elementIsImported($authors[$originalArticleID], 'user');
                     }
 
+                    if (empty($author)) {
+                        $author = 26; // Colaboradores
+                    }
                     if ($rs->fields['id_rubrique'] == 10) {
                         $typeOpinion = 1;
+                        $author = 1;
                     }
-                    if (empty($author)) {
-                        $author = $this->elementIsImported(3, 'user'); // Colaboradores
-                    }
-                    if ($author == 2) {
+
+                    if ($author == 1) {
                         $typeOpinion = 1;
                     } else {
                         $typeOpinion = 0;
@@ -809,6 +834,7 @@ EOF
                     $values = array(
                         'title' => $this->convertoUTF8($rs->fields['titre']),
                         'category' => 4,
+                        'fk_category' => 4,
                         'with_comment' => $withComments,
                         'available' => 1,
                         'content_status' => 1,
@@ -841,8 +867,6 @@ EOF
                         'fk_author_img' => '',
                     );
 
-                    // TODO search files as related contents.
-                    // TODO: insert videos.
                     $article      = new \Opinion();
                     $newArticleID = $article->create($values);
 
@@ -853,7 +877,7 @@ EOF
                         $this->output->write('.');
                     } else {
                         $this->output->writeln(
-                            'Problem inserting article '.$originalArticleID.
+                            'Problem inserting opinion '.$originalArticleID.
                             ' - '. $slug .'\n'
                         );
                     }
@@ -929,7 +953,7 @@ EOF
         $newBody = $body;
 
         $paterns = array('/{{/','/}}/', '/{/','/}/', '/{{{/','/}}}/',);
-        $replacements = array('<b>','</b>', '<i>','</i>', '<b>','</b>');
+        $replacements = array('<strong>','</strong>', '<em>','</em>', '<strong>','</strong>');
         $newBody = preg_replace($paterns, $replacements, $body);
 
         $img     = '';
@@ -945,13 +969,13 @@ EOF
             $guid    = $result[1][0];
             //var_dump($guid);
             $img     = $this->elementIsImported($guid, 'image');
-
         }
+
         $newBody = preg_replace($patern, '', $newBody);
         $patern  = '@<doc([0-9]*)\|(center|right|left)>@';
         preg_match_all($patern, $newBody, $result);
         if (!empty($result[1])) {
-            var_dump($result[1]);
+
             $newGuid = $result[1][0];
             $file  = $this->elementIsImported($newGuid, 'file');
 
