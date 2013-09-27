@@ -752,6 +752,14 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_letters_content_provider',
+    new Route(
+        '/letters/content-provider',
+        array('_controller' => 'Backend:Controllers:LettersController:contentProvider')
+    )
+);
+
+$adminRoutes->add(
     'admin_letters_content_list_provider',
     new Route(
         '/letters/content-list-provider',

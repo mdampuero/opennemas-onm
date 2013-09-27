@@ -145,6 +145,11 @@ class LettersController extends Controller
 
         $letter = new \Letter($id);
 
+        if (!empty($letter->image)) {
+            $photo1 = new \Photo($letter->image);
+            $this->view->assign('photo1', $photo1);
+        }
+
         if (is_null($letter->id)) {
             m::add(sprintf(_('Unable to find the letter with the id "%d"'), $id));
 
@@ -364,6 +369,69 @@ class LettersController extends Controller
         );
     }
 
+     /**
+     * Lists the available Letters for the frontpage manager
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function contentProviderAction(Request $request)
+    {
+        $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+
+        $page = $request->query->getDigits('page', 1);
+        if ($category == 'home') {
+            $category = 0;
+        }
+        $itemsPerPage = 8;
+
+        $cm = new \ContentManager();
+
+        // Get contents for this home
+        $contentElementsInFrontpage  = $cm->getContentsIdsForHomepageOfCategory($category);
+
+        // Fetching Letters
+        $sqlExcludedLetters = '';
+        if (count($contentElementsInFrontpage) > 0) {
+            $lettersExcluded    = implode(', ', $contentElementsInFrontpage);
+            $sqlExcludedLetters = ' AND `pk_letter` NOT IN ('.$lettersExcluded.')';
+        }
+
+        list($countLetters, $letters) = $cm->getCountAndSlice(
+            'Letter',
+            null,
+            'contents.available=1 AND in_litter != 1'. $sqlExcludedLetters,
+            'ORDER BY created DESC ',
+            $page,
+            $itemsPerPage
+        );
+
+        $pagination = \Pager::factory(
+            array(
+                'mode'        => 'Sliding',
+                'perPage'     => $itemsPerPage,
+                'append'      => false,
+                'path'        => '',
+                'delta'       => 4,
+                'clearIfVoid' => true,
+                'urlVar'      => 'page',
+                'totalItems'  => $countLetters,
+                'fileName'    => $this->generateUrl(
+                    'admin_letters_content_provider'
+                ).'&page=%d',
+            )
+        );
+
+
+        return $this->render(
+            'letter/content-provider.tpl',
+            array(
+                'letters'  => $letters,
+                'pager'    => $pagination,
+            )
+        );
+    }
     /**
      * Implementes the content list provider for letters
      *
