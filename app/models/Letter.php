@@ -80,6 +80,25 @@ class Letter extends Content
                 return StringUtils::get_title($this->title);
 
                 break;
+            case 'photo':
+                $photo = new \Photo($this->image);
+
+                return $photo;
+
+                break;
+
+            case 'summary':
+                $summary = substr($this->body, 0, 200);
+                $pos = strripos($summary, ".");
+                if ($pos > 100) {
+                    $summary = substr($summary, 0, $pos).".";
+                } else {
+                    $summary = substr($summary, 0, strripos($summary, " "));
+                }
+
+                return $summary;
+
+                break;
             default:
 
                 break;
@@ -140,6 +159,10 @@ class Letter extends Content
         $this->ip = $this->params['ip'];
 
         $this->loadAllContentProperties();
+        if (!empty($this->image)) {
+            $this->photo;
+        }
+        $this->summary;
 
         return $this;
     }
