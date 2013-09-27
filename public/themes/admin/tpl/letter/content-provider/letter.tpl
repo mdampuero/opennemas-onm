@@ -6,7 +6,7 @@
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$content->id}">
         <div class="title">
-            <span class="type">{t}Letter{/t}</span>
+            <span class="type">{t}Texto{/t}</span>
              {$content->title}
         </div>
     </div>
