@@ -1701,7 +1701,7 @@ class ContentManager
             AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0
-        ORDER BY `created` DESC ';
+        ORDER BY `created` DESC LIMIT 400 ';
 
         $rs    = $GLOBALS['application']->conn->Execute($sql);
         $ccm   = ContentCategoryManager::get_instance();
