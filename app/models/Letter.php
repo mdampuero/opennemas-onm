@@ -139,6 +139,8 @@ class Letter extends Content
         $this->load($rs->fields);
         $this->ip = $this->params['ip'];
 
+        $this->loadAllContentProperties();
+
         return $this;
     }
 
@@ -236,18 +238,45 @@ class Letter extends Content
 
         $ip = getRealIp();
         $data["params"] = array('ip'=> $ip);
-        if (array_key_exists('image', $data) && !empty($data['image'])) {
-            parent::setProperty('image', $data['image']);
-        }
-        if (array_key_exists('url', $data) && !empty($data['url'])) {
-            parent::setProperty('url', $data['url']);
-        }
 
         if ($letter->create($data)) {
+            if (array_key_exists('image', $data) && !empty($data['image'])) {
+                $letter->setProperty('image', $data['image']);
+            }
+            if (array_key_exists('url', $data) && !empty($data['url'])) {
+                $letter->setProperty('url', $data['url']);
+            }
+
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }
 
         return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
             ."correctamente todos los campos.";
+    }
+
+    /**
+     * Renders the poll
+     *
+     * @param arrray $params parameters for rendering the content
+     * @param Template $smarty the Template object instance
+     *
+     * @return string the generated HTML
+     **/
+    public function render($params, $smarty)
+    {
+        //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
+
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch('frontpage/contents/_content.tpl');
+        } catch (\Exception $e) {
+            $html = 'Letter not available';
+        }
+
+        return $html;
     }
 }

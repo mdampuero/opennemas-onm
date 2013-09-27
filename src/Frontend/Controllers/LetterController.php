@@ -15,6 +15,7 @@
 namespace Frontend\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -149,6 +150,7 @@ class LetterController extends Controller
      **/
     public function saveAction(Request $request)
     {
+
         require_once 'recaptchalib.php';
 
         $recaptcha_challenge_field =
@@ -168,27 +170,26 @@ class LetterController extends Controller
         );
 
         // What happens when the CAPTCHA was entered incorrectly
-        if (!$resp->is_valid) {
+        if (1!=1 && !$resp->is_valid) {
             $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
         } else {
             $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
-            if (!empty($lettertext) && empty($security_code)) {
+            if (empty($security_code)) {
                 $data = array();
                 $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
                 $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
                 $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
                 $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
-                $image   = $request->request->filter('image', '', FILTER_SANITIZE_STRING);
 
-                $data['image']     = $image;
                 $data['url']       = $url;
                 $data['body']      = $lettertext;
                 $data['author']    = $name;
                 $data['title']     = $subject;
                 $data['email']     = $mail;
                 $data['available'] = 0; //pendding
+                $data['image']     = $this->saveImage($data);
 
                 $letter = new \Letter();
                 $msg = $letter->saveLetter($data);
@@ -198,8 +199,72 @@ class LetterController extends Controller
             }
         }
 
-        return new Response($msg);
+
+        $response = new RedirectResponse($this->generateUrl('frontend_participa_frontpage').'?msg="'.$msg.'"');
+
+        return $response;
     }
+
+
+
+    /**
+     * Uploads and creates
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function saveImage($data)
+    {
+
+        switch ($_SERVER['REQUEST_METHOD']) {
+
+            case 'POST':
+
+                // check if category, and filesizes are properly setted and category_name is valid
+                $category = 1;
+                $category_name = 'fotos';
+
+                $upload = isset($_FILES['image']) ? $_FILES['image'] : null;
+                $info = array();
+
+                $photo = new \Photo();
+                if ($upload) {
+
+                    $data = array(
+                        'local_file'        => $upload['tmp_name'],
+                        'original_filename' => $upload['name'] ,
+                        'title'             => $data['title'],
+                        'fk_category'       => $category,
+                        'category'          => $category,
+                        'category_name'     => $category_name,
+                        'description'       => '',
+                        'metadata'          => '',
+                    );
+
+                    try {
+                        $photo = new \Photo();
+                        $photo = $photo->createWithImageMagick($data);
+
+
+                    } catch (Exception $e) {
+                        $info [] = array(
+                            'error'         => $e->getMessage(),
+                        );
+                    }
+
+                }
+
+                return $photo->id;
+                break;
+
+            default:
+                return 0;
+        }
+
+        return 0;
+    }
+
 
     /**
      * Returns the advertisements for the letters frontpage
@@ -214,7 +279,7 @@ class LetterController extends Controller
         if ($position == 'inner') {
             $positions = array(7, 9, 150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
         } else {
-            $positions = array(50, 1, 2, 103, 105, 5, 6, 7, 9, 91, 92);
+            $positions = array(7, 9, 150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

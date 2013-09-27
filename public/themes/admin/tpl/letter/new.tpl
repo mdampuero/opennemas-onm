@@ -91,13 +91,13 @@ jQuery(document).ready(function($) {
                     <div class="form-inline-block">
                         <div class="control-group">
                             <label for="author" class="control-label">{t}Nickname{/t}</label>
-                            <input type="text" id="author" name="author" value="{$letter->author|clearslash}" class="required input-large" />
+                            <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="input-xlarge" />
                         </div>
 
                         <div class="control-group">
                             <label for="email" class="control-label">{t}Email{/t}</label>
                             <div class="controls">
-                                <input type="email" id="email" name="email" value="{$letter->email|clearslash}" class="required input-large" />
+                                <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="input-xlarge" />
                             </div>
                         </div>
                     </div>
@@ -115,28 +115,30 @@ jQuery(document).ready(function($) {
             <div class="control-group">
                 <label for="created" class="control-label">{t}Created at{/t}</label>
                 <div class="controls">
-                    <input type="text" id="created" name="created" value="{$letter->created}" class="required" />
+                    <input type="text" id="created" name="created" value="{$letter->created}"class="input-xxlarge" />
                 </div>
             </div>
 
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" required="required" class="onm-editor">{$letter->body|clearslash}</textarea>
+                    <textarea name="body" id="body"   class="onm-editor">{$letter->body|clearslash}</textarea>
                 </div>
             </div>
 
             <div class="control-group">
                 <label for="image" class="control-label">{t}image{/t}</label>
                 <div class="controls">
-                    <input type="text" id="image" name="image" value="{$letter->image}"/>
+                    <input type="file" id="imageFile" name="imageFile" value="{$letter->image}" class="input-xxlarge"/>
+                    <input type="hidden"   id="image" name="image" value="{$letter->image}" />
+                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$photo1->path_file}{$photo1->name}" style="width:120px;">
                 </div>
             </div>
 
             <div class="control-group">
                 <label for="url" class="control-label">{t}Related url{/t}</label>
                 <div class="controls">
-                    <input type="text" id="url" name="url" value="{$letter->url}"/>
+                    <input type="text" id="url" name="url" value="{$letter->url}" class="input-xxlarge"/>
                 </div>
             </div>
 
