@@ -84,18 +84,19 @@ class Letter extends Content
                 return 'Letter';
                 break;
             case 'photo':
-                $photo = new \Photo($this->image);
+                return $this->getPhoto();
 
-                return $photo;
 
                 break;
 
             case 'summary':
-                $summary = substr($this->body, 0, 200);
+                $summary = substr(strip_tags($this->body), 0, 200);
                 $pos = strripos($summary, ".");
+
                 if ($pos > 100) {
                     $summary = substr($summary, 0, $pos).".";
                 } else {
+
                     $summary = substr($summary, 0, strripos($summary, " "));
                 }
 
@@ -163,7 +164,7 @@ class Letter extends Content
 
         $this->loadAllContentProperties();
         if (!empty($this->image)) {
-            $this->photo;
+            $this->photo = $this->photo;
         }
         $this->summary;
 
@@ -219,6 +220,16 @@ class Letter extends Content
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
             return;
         }
+    }
+
+    /**
+     * Returns the Photo object that represents the user avatar
+     *
+     * @return Photo the photo object
+     **/
+    public function getPhoto()
+    {
+        return new \Photo($this->image);
     }
 
     /**
