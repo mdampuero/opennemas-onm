@@ -132,12 +132,13 @@ EOF
 
         $this->importUsers();
 
-
         $this->importImages();
         $this->importFiles();
 
         $this->importArticles();
         $this->importOpinions();
+
+        $this->importVideos();
 
         /*
 
@@ -147,6 +148,7 @@ EOF
 
 
         */
+        $this->updateDatabase();
 
         $output->writeln(
             "\n\t ***Migration finished for Database: ".$dataBaseName."***"
@@ -160,6 +162,15 @@ EOF
         /*   $sql = "ALTER TABLE `translation_ids` ".
             "ADD `slug`  VARCHAR( 200 ) NOT NULL DEFAULT  '' ";
         $rss = $GLOBALS['application']->conn->Execute($sql); */
+    }
+
+    protected function updateDatabase()
+    {
+
+        $sql = "UPDATE articles SET img1='', img2=''  WHERE  pk_article IN ".
+        "(SELECT pk_fk_content FROM contents_categories WHERE  ".
+            "contents_categories.pk_fk_content_category = 40)";
+        $rss = $GLOBALS['application']->conn->Execute($sql);
     }
 
 
@@ -595,8 +606,6 @@ EOF
         if (file_exists($localFile)) {
             $this->output->writeln("Checking image file {$fileName} \n");
             $IDCategory ='1'; //fotografias
-
-            var_dump($localFile);
 
             if ($this->elementIsImported($article['id_article'], 'arton')) {
                 $this->output->writeln('*');//"[{$current}/{$totalRows}] Image already imported");
@@ -1085,12 +1094,57 @@ EOF
 
      /* create new video */
 
+    public function importVideos()
+    {
+        $sql = "SELECT pk_article, body FROM articles";
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        $values= array();
+        while (!$rs->EOF) {
+
+            $patern = '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i';
+            preg_match(
+                $patern,
+                $rs->fields['body'],
+                $match
+            );
+
+            $pk_video='';
+            if (!empty($match)) {
+                $pk_video = $this->createVideo($match[0]);
+            }
+            if (!empty($pk_video)) {
+                $values[] =  array(
+                    $pk_video,
+                    $rs->fields['pk_article'],
+                );
+            }
+            $rs->MoveNext();
+        }
+
+        /*
+        if (!empty($values)) {
+            $sql    = 'UPDATE `articles` SET fk_video2=?  WHERE pk_article=?';
+
+            $stmt = $GLOBALS['application']->conn->Prepare($sql);
+            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if (!$rss) {
+                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+            }
+
+        } else {
+            //$this->output->writeln("Please provide a contentID and views to update it.");
+        }
+        */
+    }
+     /* create new video */
+
     public function createVideo($video)
     {
         $newVideoID = null;
 
         preg_match(
-            '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+            '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})"(.*)%i',
             $video,
             $match
         );
@@ -1106,6 +1160,7 @@ EOF
         if (!empty($match[1])) {
 
             $url= "http://www.youtube.com/watch?v=".$match[1] ;
+
 
             if ($url) {
                 try {
