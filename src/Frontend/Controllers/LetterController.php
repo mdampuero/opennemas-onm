@@ -170,7 +170,7 @@ class LetterController extends Controller
         );
 
         // What happens when the CAPTCHA was entered incorrectly
-        if (1!=1 && !$resp->is_valid) {
+        if (!$resp->is_valid) {
             $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
         } else {
             $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
