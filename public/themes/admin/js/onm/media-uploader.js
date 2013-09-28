@@ -121,6 +121,10 @@
         init : function() {
             var _this = this;
 
+            if (this.config.filter_by !== '') {
+                this.$browser.find('.media_type').val(this.config.filter_by);
+            };
+
             this.init_months();
             // Load contents to fill the browser
             this.load_browser();
@@ -321,6 +325,10 @@
                 '/cors/result.html?%s'
             );
 
+            if (this.config.filter_by == 'ads') {
+                this.$uploader.find('.category').val(2);
+            };
+
             // Initialize the jQuery File Upload widget:
             var uploader = $('#fileupload').fileupload()
             .fileupload('option', {
@@ -436,7 +444,8 @@
             media_element_el: '#media-element-show',
             selections_el: '#selections',
             maxFileSize: 5000000,
-            multiselect: false
+            multiselect: false,
+            filter_by: '',
         },
 
         init: function() {
