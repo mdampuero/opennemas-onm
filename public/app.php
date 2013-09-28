@@ -14,6 +14,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 
 require __DIR__.'/../app/autoload.php';
+require_once __DIR__.'/../app/AppKernel.php';
 
 // Load the available route collection
 $routes = new \Symfony\Component\Routing\RouteCollection();
@@ -27,27 +28,12 @@ foreach ($routeFiles as $routeFile) {
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
-
-require_once __DIR__.'/../app/AppKernel.php';
-
-$kernel = new AppKernel('prod', true);
-$kernel->loadClassCache();
-$request = Request::createFromGlobals();
-$response = $kernel->handle($request);
-$response->send();
-$kernel->terminate($request, $response);
-die();
-
-// Create the Request context from the request, useful for the matcher
-$context = new RequestContext();
-$context->fromRequest($request);
-
-// Inialize the url matcher
-$matcher = new UrlMatcher($routes, $context);
+$framework = new Onm\Framework\Framework($routes);
+$context = $framework->context;
 
 //Initialize the url generator
 global $generator;
-$generator = new \Symfony\Component\Routing\Generator\UrlGenerator($routes, $context);
+$generator = $framework->generator;
 
 $sc = include __DIR__.'/../app/container.php';
 
@@ -59,6 +45,9 @@ if (isset($timezone)) {
     date_default_timezone_set($availableTimezones[$timezone]);
 }
 
+$framework->handle($request)->send();
+die();
+
 // if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
 //     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
 // } elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
@@ -67,6 +56,3 @@ if (isset($timezone)) {
 //     $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
 // }
 
-// // Dispatch the response
-// $dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
-// $dispatcher->dispatch();

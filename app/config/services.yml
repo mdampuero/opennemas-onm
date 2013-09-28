@@ -1,8 +1,6 @@
 services:
     context:
         class: Symfony\Component\Routing\RequestContext
-        calls:
-            - [ fromRequest, [ %request% ] ]
 
     matcher:
         class: Symfony\Component\Routing\Matcher\UrlMatcher
