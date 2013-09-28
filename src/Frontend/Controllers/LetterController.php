@@ -172,6 +172,9 @@ class LetterController extends Controller
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
             $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
+            $response = new RedirectResponse($this->generateUrl('frontend_participa_frontpage').'?msg="'.$msg.'"');
+
+            return $response;
         } else {
             $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
@@ -183,13 +186,14 @@ class LetterController extends Controller
                 $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
                 $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
 
-                $data['url']       = $url;
-                $data['body']      = $lettertext;
-                $data['author']    = $name;
-                $data['title']     = $subject;
-                $data['email']     = $mail;
-                $data['available'] = 0; //pendding
-                $data['image']     = $this->saveImage($data);
+                $data['url']        = $url;
+                $data['body']       = $lettertext;
+                $data['author']     = $name;
+                $data['title']      = $subject;
+                $data['email']      = $mail;
+                $_SESSION['userid'] = 0;
+                $data['available']  = 0; //pendding
+                $data['image']      = $this->saveImage($data);
 
                 $letter = new \Letter();
                 $msg = $letter->saveLetter($data);
