@@ -75,7 +75,8 @@
                       <hl2>{$article->subtitle|htmlspecialchars_decode}</hl2>
                     </hedline>
                     <rights>
-                      <rights.owner>{$article->author->id}</rights.owner>
+                      <rights.owner>{$article->author|htmlspecialchars}</rights.owner>
+                      <rights.owner.photo>http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$authorPhoto->path_img}</rights.owner.photo>
                     </rights>
                     <dateline>
                       <story.date norm="{$article->created_datetime->format('Ymd\THis')}">
@@ -155,9 +156,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p>
-                          {$photo->description|htmlspecialchars_decode}
-                        </p>
+                        <p>{$photo->description|htmlspecialchars_decode|trim}</p>
                       </body.content>
                     </body>
                   </nitf>
@@ -222,9 +221,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p>
-                          {$photoInner->description|htmlspecialchars_decode}
-                        </p>
+                        <p>{$photoInner->description|htmlspecialchars_decode|trim}</p>
                       </body.content>
                     </body>
                   </nitf>

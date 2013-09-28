@@ -37,6 +37,9 @@ class AuthenticationController extends Controller
     {
         $this->view->assign('version', \Onm\Common\Version::VERSION);
         $this->view->assign('languages', $this->container->getParameter('available_languages'));
+
+        // Load reCaptcha lib
+        require_once 'recaptchalib.php';
     }
 
     /**
@@ -56,8 +59,8 @@ class AuthenticationController extends Controller
         return $this->render(
             'login/login.tpl',
             array(
-                'current_language' => $currentLanguage,
-                'token'            => $token,
+                'current_language'      => $currentLanguage,
+                'token'                 => $token,
             )
         );
     }
@@ -73,37 +76,83 @@ class AuthenticationController extends Controller
     public function processformAction(Request $request)
     {
         //  Get values from post
-        $login    = $this->request->request->filter('login', null, FILTER_SANITIZE_STRING);
-        $password = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING);
-        $token    = $this->request->request->filter('token', null, FILTER_SANITIZE_STRING);
-        $time     = $this->request->request->filter('time', null, FILTER_SANITIZE_STRING);
+        $login    = $request->request->filter('login', null, FILTER_SANITIZE_STRING);
+        $password = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
+        $token    = $request->request->filter('token', null, FILTER_SANITIZE_STRING);
+        $time     = $request->request->filter('time', null, FILTER_SANITIZE_STRING);
         $captcha  = '';
 
+        // reCaptcha vars if setted
+        $rcChallengeField = $request->request->filter('recaptcha_challenge_field', '');
+        $rcResponseField  = $request->request->filter('recaptcha_response_field', '');
+
+        // Configs for bad login
+        $badLoginAttemptsLimit = 3; // 3 failed attempts
+        $lockoutTime = 600; // 10 minutes
+
         $user = new \User();
+
+        $cache = $this->get('cache');
+
+        if (empty($login)) {
+            m::add(_('Username or password incorrect.'), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_login_form'));
+        }
+
+        // Set failed logins number for this user on session var
+        $failedLoginAttempts = (int) $cache->fetch('failed_login_attempts_'.$login);
 
         if (array_key_exists('csrf', $_SESSION)
             && $_SESSION['csrf'] !== $token
         ) {
-            m::add(_('Login token is not valid. Try to autenticate again.'), m::ERROR);
+            m::add(_('Login token is not valid. Try to authenticate again.'), m::ERROR);
+
             return $this->redirect($this->generateUrl('admin_login_form'));
         } else {
+            if ($failedLoginAttempts >= $badLoginAttemptsLimit) {
+                $this->get('logger')->warn(
+                    'User '.$login.' has tried to login more than 3 times without success',
+                    array('instance' => INSTANCE_UNIQUE_NAME)
+                );
+
+                // Get reCaptcha validate response
+                $resp = recaptcha_check_answer(
+                    '6LfLDtMSAAAAAGTj40fUQCrjeA1XkoVR2gbG9iQs',
+                    $request->getClientIp(),
+                    $rcChallengeField,
+                    $rcResponseField
+                );
+
+                // What happens when the CAPTCHA was entered incorrectly
+                if (!$resp->is_valid) {
+                    m::add(_("The reCAPTCHA wasn't entered correctly. Try to authenticate again."), m::ERROR);
+
+                    return $this->redirect($this->generateUrl('admin_login_form', array('failed_login_attempts' => $failedLoginAttempts)));
+                }
+            }
+
             // Try to autenticate the user
             if ($user->login($login, $password, $token, $captcha, $time)
                 && $user->type == 0
             ) {
-
                 // Check if user account is activated
                 if ($user->activated != 1) {
                     m::add(_('This user was deactivated. Please ask your administrator.'), m::ERROR);
+
                     return $this->redirect($this->generateUrl('admin_login_form'));
                 } elseif ($user->type != 0) {
                     m::add(_('This user has no access to the control panel.'), m::ERROR);
+
                     return $this->redirect($this->generateUrl('admin_login_form'));
                 } else {
                     // Increase security by regenerating the id
                     $request->getSession()->migrate();
 
                     $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
+
+                    // Set bad login counter to 0
+                    $cache->delete('failed_login_attempts_'.$login);
 
                     // Get group(s) of the user
                     $group = array();
@@ -118,6 +167,13 @@ class AuthenticationController extends Controller
                         );
                     }
 
+                    // Set last login time
+                    $currentTime = new \DateTime();
+                    $currentTime->setTimezone(new \DateTimeZone('UTC'));
+                    $currentTime = $currentTime->format('Y-m-d H:i:s');
+                    s::set('last_login', $currentTime);
+
+                    // Set session array
                     $_SESSION = array(
                         'userid'           => $user->id,
                         'realname'         => $user->name,
@@ -134,6 +190,7 @@ class AuthenticationController extends Controller
                         'user_language'    => $user->getMeta('user_language'),
                         'csrf'             => md5(uniqid(mt_rand(), true)),
                         'meta'             => $user->getMeta(),
+                        'failed_login_attempts' => 0,
                     );
 
                     $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
@@ -143,13 +200,43 @@ class AuthenticationController extends Controller
 
             } else {
                 m::add(_('Username or password incorrect.'), m::ERROR);
-                return $this->redirect($this->generateUrl('admin_login_form'));
+
+                // $firstBadLogin = $cache->fetch('failed_login_time_'.$login);
+                // if (!$cache->fetch('failed_login_time_'.$login)) {
+                //     $firstBadLogin = time();
+                //     $cache->save('failed_login_time_'.$login, $firstBadLogin);
+                // }
+                // var_dump($failedLoginAttempts);die();
+
+
+                // if ((time() - $firstBadLogin) > $lockoutTime || $failedLoginAttempts == 0) {
+                //     $failedLoginAttempts = 1;
+                //     // Set first failed login time
+                //     $cache->save('failed_login_time_'.$login, time());
+                // } else {
+                //     // Count another bad login
+                //     $failedLoginAttempts++;
+                // }
+                $failedLoginAttempts++;
+                $_SESSION['failed_login_attempts'] = $failedLoginAttempts;
+
+                // var_dump($failedLoginAttempts);die();
+
+                $cache->save('failed_login_attempts_'.$login, $failedLoginAttempts);
+
+                return $this->redirect($this->generateUrl('admin_login_form', array('failed_login_attempts' => $failedLoginAttempts)));
             }
         }
         $token = md5(uniqid(mt_rand(), true));
         $_SESSION['csrf'] = $token;
 
-        return $this->render('login/login.tpl', array('token', $token));
+        return $this->render(
+            'login/login.tpl',
+            array(
+                'token'                 => $token,
+                'failed_login_attempts' => $failedLoginAttempts,
+            )
+        );
     }
 
     /**

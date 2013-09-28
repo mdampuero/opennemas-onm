@@ -277,9 +277,9 @@ class NewStandController extends Controller
         // I have added the element 150 in order to integrate all the code in the same query
         $positions = array(
             50,
-            1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15,
+            1, 2, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 15,
             16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
-            36, 103, 105, 9, 91, 92
+            36, 103, 105,  91, 92
         );
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

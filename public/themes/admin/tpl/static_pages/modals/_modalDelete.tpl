@@ -20,17 +20,16 @@ jQuery("#modal-statics-delete").modal({
     show: false,
 });
 
-jQuery('.del').click(function(e) {
+jQuery('.del').click(function(e, ui) {
     jQuery('#modal-statics-delete .modal-body span').html( jQuery(this).data('title') );
     //Sets up the modal
     jQuery("#modal-statics-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
+    jQuery("#modal-statics-delete").data("selected-for-del", jQuery(this).data("url"));
     e.preventDefault();
 });
 
-jQuery('#modal-statics-delete a.btn.yes').on('click', function(e){
-    var url = jQuery("body").data("selected-for-del");
-
+jQuery('#modal-statics-delete a.btn.yes').on('click', function(e, ui){
+    var url = jQuery("#modal-statics-delete").data("selected-for-del");
     if (url) {
         jQuery.ajax({
             url:  url,
@@ -43,7 +42,7 @@ jQuery('#modal-statics-delete a.btn.yes').on('click', function(e){
     e.preventDefault();
 });
 
-jQuery('#modal-statics-delete a.btn.no').on('click', function(e){
+jQuery('#modal-statics-delete a.btn.no').on('click', function(e, ui){
     jQuery("#modal-statics-delete").modal('hide');
     e.preventDefault();
 });

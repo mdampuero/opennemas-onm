@@ -21,7 +21,14 @@ jQuery(document).ready(function($) {
         revert: 250,
         tabSize: 25,
         tolerance: 'pointer',
-        toleranceElement: '> div'
+        toleranceElement: '> div',
+        stop: function(e, ui) {
+            jQuery('#warnings-validation').html(
+                '<div class="alert alert-notice"><button class="close" data-dismiss="alert">×</button>'
+                    + menu_messages.remember_save +
+                '</div>'
+            );
+        }
     });
 
     jQuery('#menuelements').on('click', '.delete-menu-item', function(e, ui) {
@@ -43,7 +50,27 @@ jQuery(document).ready(function($) {
     jQuery('#elements-provider').on('click', '.add-item', function(e, ui) {
         e.preventDefault();
         var element = $(this).closest('li');
+        var name = element.attr('data-title');
         var clone = element.clone(true);
+
+        jQuery(
+            '<div class="form-horizontal edit-menu-form">' +
+                '<fieldset>' +
+                    '<div class="control-group">' +
+                        '<label class="control-label">Title</label>' +
+                        '<div class="controls">' +
+                            '<input type="text" class="title" value="' + name + '">' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="send-button-wrapper">' +
+                        '<button type="submit" class="btn save-menuitem-button">Update</button>' +
+                    '</div>' +
+                '</fieldset>' +
+            '</div>'
+        ).insertAfter(clone.find('.btn-group'));
+
+        clone.closest('li').addClass("menuItem");
+
         jQuery('#menuelements').append(clone);
 
         jQuery('#warnings-validation').html(

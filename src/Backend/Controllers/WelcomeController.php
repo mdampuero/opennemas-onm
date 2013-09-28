@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controllers;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -50,6 +51,21 @@ class WelcomeController extends Controller
         //     'notice',
         //     'Your changes were saved!'
         // );
-        return $this->render('welcome/index.tpl');
+
+        $terms = s::get('terms_accepted');
+        return $this->render('welcome/index.tpl', array('terms_accepted' => $terms));
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function acceptTermsAction(Request $request)
+    {
+        s::set('terms_accepted', 1);
+
+        return new Response('ok');
     }
 }

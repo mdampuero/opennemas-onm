@@ -184,7 +184,7 @@
             {/foreach}
             </tbody>
             <tfoot>
-              <td colspan="9" class="center">
+              <td colspan="11" class="center">
                 <div class="pagination">
                     {$pagination->links|default:""}
                 </div>

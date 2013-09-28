@@ -285,6 +285,10 @@ class User
      **/
     public function update($data)
     {
+        if ($this->checkIfUserExists($data)) {
+            throw new \Exception(_('Already exists one user with that information'));
+        }
+
         if (!isset($data['id_user_group'])
             || empty($data['id_user_group'])
         ) {
@@ -347,14 +351,13 @@ class User
             return false;
         }
 
+        // Finish transaction
+        $GLOBALS['application']->conn->CommitTrans();
 
         $this->id = $data['id'];
         if (isset($data['ids_category'])) {
             $this->createAccessCategoriesDb($data['ids_category']);
         }
-
-        // Finish transaction
-        $GLOBALS['application']->conn->CommitTrans();
 
         return true;
     }
@@ -400,12 +403,16 @@ class User
      **/
     public function checkIfUserExists($data)
     {
-        $sql = "SELECT username FROM users WHERE username=? OR email=?";
+        $sql = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
 
-        $values = array($data['username'], $data['email']);
+        $values = array($data['username'], $data['email'], $data['username'], $data['email']);
         $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
 
-        return ($rs != false);
+        if (isset($data['id']) && $rs == $data['id']) {
+            return false;
+        }
+
+        return ($rs != null && $rs != false);
     }
 
     /**
@@ -944,6 +951,21 @@ class User
             $i++;
         }
 
+        // Order names with accents
+        uasort($authors, function($a, $b)
+        {
+            $patterns = array(
+                'a' => '(á|à|â|ä|Á|À|Â|Ä)',
+                'e' => '(é|è|ê|ë|É|È|Ê|Ë)',
+                'i' => '(í|ì|î|ï|Í|Ì|Î|Ï)',
+                'o' => '(ó|ò|ô|ö|Ó|Ò|Ô|Ö)',
+                'u' => '(ú|ù|û|ü|Ú|Ù|Û|Ü)'
+            );
+            $name1 = preg_replace(array_values($patterns), array_keys($patterns), $a->name);
+            $name2 = preg_replace(array_values($patterns), array_keys($patterns), $b->name);
+            return strcasecmp($name1, $name2);
+        });
+
         return $authors;
 
     }
@@ -1415,7 +1437,7 @@ class User
             }
 
             if (isset($filter['type']) && $filter['type'] != '') {
-                $parts[] = '`type` = '.$filter['type'].'';
+                $parts[] = '`type` = '.$filter['type'].' AND activated=1';
             }
 
             if (isset($filter['name']) && !empty($filter['name'])) {

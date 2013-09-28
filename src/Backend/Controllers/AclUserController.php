@@ -170,6 +170,11 @@ class AclUserController extends Controller
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
+        // Get minimum password level
+        $defaultLevel  = $this->container->getParameter('password_min_level');
+        $instanceLevel = s::get('pass_level');
+        $minPassLevel  = ($instanceLevel)? $instanceLevel: $defaultLevel;
+
         return $this->render(
             'acl/user/new.tpl',
             array(
@@ -178,6 +183,7 @@ class AclUserController extends Controller
                 'languages'                 => $languages,
                 'content_categories'        => $tree,
                 'content_categories_select' => $user->getAccessCategoryIds(),
+                'min_pass_level'            => $minPassLevel,
             )
         );
     }
@@ -251,7 +257,7 @@ class AclUserController extends Controller
             } else {
                 m::add(_('Unable to update the user with that information'), m::ERROR);
             }
-        } catch (FileException $e) {
+        } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
         }
 

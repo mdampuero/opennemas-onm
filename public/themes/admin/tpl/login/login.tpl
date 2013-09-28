@@ -21,6 +21,19 @@
         {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}
         {css_tag href="/style.css" media="screen" common=1}
         {css_tag href="/loginadmin.css" media="screen" common=1}
+        <style type="text/css">
+            #recaptcha_area {
+                float: left;
+            }
+            #recaptcha_privacy {
+                display:none;
+            }
+        </style>
+    {/block}
+    {block name="header-js"}
+    <script type="text/javascript">
+        var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
+    </script>
     {/block}
 
 </head>
@@ -33,15 +46,23 @@
 
     <div class="form-wrapper">
         {render_messages}
-
     	<form method="post" autocomplete="off" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
 			<div class="input-wrapper">
                 <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
                 <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
-                <button id="submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
-                <br><br><br>
-                <p class="right">
-                    <a href="{url name=admin_acl_user_recover_pass}">{t domain=base}Forgot Password?{/t}</a>
+                <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
+                {if $smarty.get.failed_login_attempts >= 3}
+                <div class="control-group clearfix">
+                    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                    <noscript>
+                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
+                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+                    </noscript>
+                </div>
+                {/if}
+                <p class="left {if $smarty.session.failed_login_attempts >= 3}toomuchfails{/if}">
+                    <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
                 </p>
             </div>
             <input type="hidden" name="token" value="{$smarty.session.csrf}">
@@ -56,10 +77,12 @@
                 &copy; {strftime("%Y")} OpenHost S.L.
                 <nav>
                     <ul>
-                        <li><a href="http://www.openhost.es/opennemas" title="Go to opennemas website">{t}About{/t}</a></li>
-                        <li><a href="#help" title="{t}Help{/t}">{t}Help{/t}</a></li>
-                        <li><a href="#privacypolicy" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
-                        <li><a href="#legal" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
+                        <li><a href="http://www.opennemas.com" target="_blank" title="Go to opennemas website">{t}About{/t}</a></li>
+                        <li><a href="http://help.opennemas.com" target="_blank" title="{t}Help{/t}">{t}Help{/t}</a></li>
+                        <li><a href="http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad"
+                               target="_blank" title="{t}Privacy Policy{/t}">{t}Privacy Policy{/t}</a></li>
+                        <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
+                               target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
                     </ul>
                 </nav>
                 <select name="language" id="language" class="input-small">

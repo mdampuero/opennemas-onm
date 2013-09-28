@@ -52,8 +52,6 @@ class AdvertisementController extends Controller
 
         $advertisement = $er->find('Advertisement', $id);
 
-        $advertisement->setNumViews($id);
-
         return $this->render(
             'ads/advertisement.tpl',
             array(

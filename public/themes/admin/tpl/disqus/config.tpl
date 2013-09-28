@@ -54,7 +54,7 @@
                 <td>
                     <div class="form-wrapper">
                         <div>
-                            <label for="server">{t}Short name:{/t}</label>
+                            <label for="server">Disqus Id ({t}Short name{/t}):</label>
                             <input type="text" class="required" name="shortname" value="{$shortname|default:""}" />
                         </div>
                     </div>

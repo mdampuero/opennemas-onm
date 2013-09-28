@@ -1,7 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="prototype"}{/block}
-
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -81,4 +79,5 @@
     <hr>
 
 </div>
+{include file="welcome/modals/policies.tpl"}
 {/block}

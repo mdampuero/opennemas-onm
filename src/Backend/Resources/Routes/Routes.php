@@ -752,6 +752,14 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_letters_content_provider',
+    new Route(
+        '/letters/content-provider',
+        array('_controller' => 'Backend:Controllers:LettersController:contentProvider')
+    )
+);
+
+$adminRoutes->add(
     'admin_letters_content_list_provider',
     new Route(
         '/letters/content-list-provider',
@@ -2748,6 +2756,14 @@ $adminRoutes->add(
     new Route(
         '/login/user/reset-pass/{token}',
         array('_controller' => 'Backend:Controllers:AclUserController:regeneratePassword')
+    )
+);
+
+$adminRoutes->add(
+    'admin_welcome_accept_terms',
+    new Route(
+        '/accept-terms',
+        array('_controller' => 'Backend:Controllers:WelcomeController:acceptTerms')
     )
 );
 

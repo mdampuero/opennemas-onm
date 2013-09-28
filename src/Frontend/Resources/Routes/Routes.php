@@ -18,6 +18,16 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'accept_cookies',
+    new Route(
+        '/accepted_cookies',
+        array(
+            '_controller' => 'Frontend:Controllers:UtilitiesController:acceptCookies',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'asset_image',
     new Route(
         '/asset/{parameters}/{real_path}',
@@ -827,6 +837,16 @@ $frontendRoutes->add(
     'frontend_letter_frontpage',
     new Route(
         '/cartas-al-director',
+        array(
+            '_controller' => 'Frontend:Controllers:LetterController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_participa_frontpage',
+    new Route(
+        '/participa',
         array(
             '_controller' => 'Frontend:Controllers:LetterController:frontpage',
         )

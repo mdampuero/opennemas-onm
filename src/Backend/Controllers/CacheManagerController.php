@@ -141,8 +141,6 @@ class CacheManagerController extends Controller
         $authors = array();
         if (count($pkAuthors) > 0) {
             $authorsForContents = $author->find('id IN ('.implode(',', $pkAuthors).')');
-            var_dump($authorsForContents);
-
             foreach ($authorsForContents as $author) {
                 $authors['RSS'.$author->id] = $author->name;
             }
@@ -340,7 +338,7 @@ class CacheManagerController extends Controller
 
             $content = "<div class='alert alert-success'>"
                     ."<button class='close' data-dismiss='alert'>×</button>"
-                    . _("<strong>{$title}</strong> cache deleted succesfully.")
+                    ."<strong>{$title}</strong>: "._("cache deleted succesfully.")
                 ."</div>";
         } else {
             $content = "<div class='alert alert-error'>"

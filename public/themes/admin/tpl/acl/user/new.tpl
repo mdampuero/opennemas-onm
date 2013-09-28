@@ -1,13 +1,19 @@
 {extends file="base/admin.tpl"}
 
 {block name="footer-js" append}
-{script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+{script_tag src="/jquery/jquery-ui-timepicker-addon.js" common=1}
 {script_tag src="/jquery/jquery.multiselect.js" common=1}
+{script_tag src="/jquery/jquery.validate.min.js" common=1}
+{script_tag src="/jquery/localization/messages_es.js" common=1}
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
     jQuery(document).ready(function($){
-        $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
+        // PAssword strength checker
+        var strength = $('#password').passStrength({
+            userid: '#login'
+        });
+
         $('#user-editing-form').tabs();
 
         $('#formulario').onmValidate({
@@ -30,11 +36,6 @@
                 $('.privileges-tab').show();
                 $('#id_user_group').attr('required', 'required');
             }
-        });
-
-        // PAssword strength checker
-        var strength = $('#password').passStrength({
-            userid: '#login'
         });
 
         // Avatar image uploader
@@ -160,7 +161,9 @@ label {
             <ul>
                 <li><a href="#basic" title="{t}Basic information{/t}">{t}User info{/t}</a></li>
                 <li><a href="#settings" title="{t}Settings{/t}">{t}Settings{/t}</a></li>
+                {acl isAllowed="GROUP_CHANGE|USER_CATEGORY"}
                 <li><a class="privileges-tab" href="#privileges" title="{t}Privileges{/t}">{t}Privileges{/t}</a></li>
+                {/acl}
                 {acl isAllowed="USER_ADMIN"}
                 {is_module_activated name="PAYWALL"}
                 <li><a href="#paywall" title="{t}Paywall{/t}">{t}Paywall{/t}</a></li>
@@ -255,7 +258,7 @@ label {
                             <div class="controls">
                                 <div class="input-prepend">
                                     <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="password" name="password" value="" class="input-medium" {if $user->id eq null}required="required"{/if} maxlength="20"/>
+                                    <input type="password" id="password" minlength=6 name="password" data-min-strength="{$min_pass_level}" value="" class="input-medium" {if $user->id eq null}required="required"{/if} maxlength="20"/>
                                 </div>
                             </div>
                         </div>
@@ -265,7 +268,7 @@ label {
                             <div class="controls">
                                 <div class="input-prepend">
                                     <span class="add-on"><i class="icon-key"></i></span>
-                                    <input type="password" id="passwordconfirm" name="passwordconfirm" value="" data-password-equals="password" class="input-medium validate-password-confirm" maxlength="20"/>
+                                    <input type="password" id="passwordconfirm" minlength=6 name="passwordconfirm" value="" data-password-equals="password" class="input-medium validate-password-confirm" maxlength="20"/>
                                 </div>
                             </div>
                         </div>

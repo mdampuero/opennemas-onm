@@ -148,6 +148,19 @@ class NewsMLG1 implements FormatInterface
 
         return $owner[0];
     }
+    /**
+     * Returns the name of the rights.owner.photo
+     *
+     * @return string the owner id
+     **/
+    public function getRightsOwnerPhoto()
+    {
+        $owner = $this->getData()->xpath(
+            "//nitf/body/body.head/rights/rights.owner.photo"
+        );
+
+        return $owner[0];
+    }
 
     /**
      * Returns the name of the service that authored this element
@@ -156,8 +169,11 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getServicePartyName()
     {
-        $agencyName = $this->getData()
-            ->NewsEnvelope->SentFrom->Party->attributes()->FormalName;
+        $agencyName = $this->getData()->NewsEnvelope->SentFrom->Party;
+
+        if (!is_null($agencyName)) {
+            $agencyName = $agencyName->attributes()->FormalName;
+        }
 
         return (string) $agencyName;
     }
@@ -375,7 +391,7 @@ class NewsMLG1 implements FormatInterface
                 foreach ($contents[0] as $componentName => $component) {
                     if ($componentName == 'NewsComponent') {
                         $photoComponent = new Photo($component);
-                        $this->photos[$photoComponent->id] = $photoComponent;
+                        $this->photos[] = $photoComponent;
                     }
                 }
             } else {

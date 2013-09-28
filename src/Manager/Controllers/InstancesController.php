@@ -62,28 +62,21 @@ class InstancesController extends Controller
             list($instance->totals, $instance->configs) =
                 $this->instanceManager->getDBInformation($instance->settings);
 
+            // Get real time for last login
+            if (isset($instance->configs['last_login'])) {
+                $instance->configs['last_login'] = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $instance->configs['last_login'],
+                    new \DateTimeZone('UTC')
+                );
+            }
+
             $instance->domains = preg_split("@, @", $instance->domains);
         }
 
         $itemsPerPage =  $findParams['per_page'];
 
-        // Pager
-        $pager_options = array(
-            'mode'        => 'Sliding',
-            'perPage'     => $itemsPerPage,
-            'append'      => false,
-            'path'        => '',
-            'delta'       => 4,
-            'clearIfVoid' => true,
-            'urlVar'      => 'page',
-            'totalItems'  => count($instances),
-            'fileName'    => $this->generateUrl(
-                'manager_instances'
-            ).'?filter_name='.$findParams['name'].'&filter_per_page='.$itemsPerPage.'&page=%d',
-        );
-        $pager = \Pager::factory($pager_options);
-
-        $instances = array_slice($instances, ($page-1) * $itemsPerPage, $itemsPerPage);
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
 
         return $this->render(
             'instances/list.tpl',
@@ -91,7 +84,7 @@ class InstancesController extends Controller
                 'instances'     => $instances,
                 'per_page'      => $itemsPerPage,
                 'filter_name'   => $findParams['name'],
-                'pagination'    => $pager,
+                'timeZones'     => $availableTimeZones,
             )
         );
     }
@@ -114,6 +107,15 @@ class InstancesController extends Controller
         foreach ($instances as &$instance) {
             list($instance->totals, $instance->configs) =
                 $this->instanceManager->getDBInformation($instance->settings);
+
+            // Get real time for last login
+            if (isset($instance->configs['last_login'])) {
+                $instance->configs['last_login'] = \DateTime::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $instance->configs['last_login'],
+                    new \DateTimeZone('UTC')
+                );
+            }
 
             $instance->domains = preg_split("@, @", $instance->domains);
         }
@@ -313,6 +315,14 @@ class InstancesController extends Controller
         //Force internal_name lowercase
         $internalName = strtolower($internalName);
 
+        if (count($request->request) < 1) {
+            m::add(_("Instance data sent not valid."), m::ERROR);
+
+            return $this->redirect(
+                $this->generateUrl('manager_instance_show', array('id' => $id))
+            );
+        }
+
         //If is creating a new instance, get DB params on the fly
         $internalNameShort = trim(substr($internalName, 0, 11));
 
@@ -359,7 +369,7 @@ class InstancesController extends Controller
             'site_title', 'site_description','site_keywords',
             'site_agency','site_name','site_created',
             'contact_mail','contact_name','contact_IP',
-            'time_zone','site_language',
+            'time_zone','site_language', 'pass_level',
             'newsletter_sender',  'max_mailing', 'mail_server', 'last_invoice',
             'mail_username','mail_password','google_maps_api_key',
             'google_custom_search_api_key','facebook',

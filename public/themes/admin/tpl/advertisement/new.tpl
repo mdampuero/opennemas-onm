@@ -77,7 +77,9 @@
         <div class="control-group">
             <label for="available" class="control-label">{t}Actived{/t}</label>
             <div class="controls">
-                <input type="checkbox" name="content_status" id="available" value="1" {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if} {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
+                <input type="checkbox" name="content_status" id="available" value="1"
+                    {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if}
+                    {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
 
             </div>
         </div>
@@ -85,8 +87,8 @@
         <div class="control-group" id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
             <label for="url" class="control-label">{t}Url{/t}</label>
             <div class="controls">
-                <input type="text" id="url" name="url" class="input-xxlarge" required="required"
-                    value="{$advertisement->url}" placeholder="http://" />
+                <input type="text" id="url" name="url" class="input-xxlarge" value="{$advertisement->url}" placeholder="http://"
+                    {if $advertisement->with_script neq 1}required="required"{/if} />
             </div>
         </div>
 
@@ -99,15 +101,19 @@
                     <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
 
                     {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}"
                             {if isset($advertisement) && in_array($allcategorys[as]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
                             {$allcategorys[as]->title}
                         </option>
+                        {/acl}
                         {section name=su loop=$subcat[as]}
+                            {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
                             <option value="{$subcat[as][su]->pk_content_category}"
                                 {if isset($advertisement) && in_array($subcat[as][su]->pk_content_category,$advertisement->fk_content_categories)}selected="selected"{/if}>
                                 &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
                             </option>
+                            {/acl}
                         {/section}
                     {/section}
                 {else}
@@ -116,17 +122,20 @@
                     <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
                     {/is_module_activated}
 
-
                     {section name=as loop=$allcategorys}
+                        {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
                         <option value="{$allcategorys[as]->pk_content_category}"
                             {if $category eq $allcategorys[as]->pk_content_category}selected="selected"{/if}>
                             {$allcategorys[as]->title}
                         </option>
+                        {/acl}
                         {section name=su loop=$subcat[as]}
+                            {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
                             <option value="{$subcat[as][su]->pk_content_category}"
                                 {if $category eq $subcat[as][su]->pk_content_category}selected="selected"{/if}>
                                 &nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}
                             </option>
+                            {/acl}
                         {/section}
                     {/section}
                 {/if}
@@ -171,7 +180,9 @@
                     {include file="advertisement/partials/advertisement_images.tpl"}
                 </div>
                 <div id="script_content" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
-                    <textarea name="script" id="script" class="input-xxlarge" rows="10">{$advertisement->script|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
+                    <textarea name="script" id="script" class="input-xxlarge" rows="10">
+                        {$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}
+                    </textarea>
                 </div>
             </div>
         </div>

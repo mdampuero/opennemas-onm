@@ -112,7 +112,7 @@ class Menu
     {
         $sql = "INSERT INTO menues ".
                " (`name`, `params`, `type`, `position`) " .
-               " VALUES (?,?,?,?,?)";
+               " VALUES (?,?,?,?)";
 
         $values = array(
             $data["name"],
@@ -385,7 +385,7 @@ class Menu
     public function setMenuElements($id, $items = array())
     {
         // Check if id and $items are not empty
-        if (empty($id) || empty($items)) {
+        if (empty($id)) {
             return false;
         }
 

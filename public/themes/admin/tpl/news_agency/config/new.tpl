@@ -107,6 +107,14 @@ jQuery(document).ready(function($) {
         </div>
 
         <div class="control-group">
+            <label for="author" class="control-label">{t}Import authors{/t}</label>
+            <div class="controls">
+                <input name="author" type="checkbox" {if $server['author'] != 0}checked{/if} value='1' >
+                <div class="help-block">{t}Activate this if you want to import the author of the elements if available{/t}</div>
+            </div>
+        </div>
+
+        <div class="control-group">
             <label for="color" class="control-label">{t}Color{/t}</label>
             <div class="controls">
                 <input type="hidden" id="color" name="color" value="{$server['color']|default:'#424E51'}" class="input-xlarge"/>

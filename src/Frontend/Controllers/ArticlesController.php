@@ -292,7 +292,7 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // I have added the element 150 in order to integrate all the code in the same query
-        $positions = array(150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $positions = array(7, 9, 150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

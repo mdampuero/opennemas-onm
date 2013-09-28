@@ -429,6 +429,139 @@ class Photo extends Content
     }
 
     /**
+     * Creates one photo using imagemagick and register in the database
+     *
+     * @param array $dataSource the data for the photo, must content the photo local_file
+     *
+     * @return int the id of the photo created
+     * @return boolean false if the photo was not created
+     **/
+    public function createWithImageMagick($dataSource, $dateForDirectory = null)
+    {
+
+        $photo = null;
+        $filePath = $dataSource["local_file"];
+        $originalFileName = $dataSource['original_filename'];
+
+        if (!empty($filePath)) {
+             // Check upload directory
+            $date = new DateTime();
+            $urn = "urn:newsml:"
+                .SITE
+                .":"
+                .$date->format("Ymd\THisO")
+                .":"
+                .StringUtils::cleanFileName($originalFileName)
+                .":2";
+
+            $dateForDirectory = $date->format("/Y/m/d/");
+            $mediaDir =
+                MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
+
+            if (!is_dir($mediaDir)) {
+                FilesManager::createDirectory($mediaDir);
+            }
+
+            $filePathInfo = pathinfo($originalFileName);
+
+            // Getting information for creating
+            $t                  = gettimeofday();
+            $micro              = intval(substr($t['usec'], 0, 5));
+            $finalPhotoFileName = $date->format("YmdHis")
+                . $micro . "." . strtolower($filePathInfo['extension']);
+            $fileInformation    = new MediaItem($filePath);
+
+            // Building information for the photo image
+            $data = array(
+                'title'        => $originalFileName,
+                'name'         => $finalPhotoFileName,
+                'path_file'    => $dateForDirectory,
+                'fk_category'  => $dataSource["fk_category"],
+                'category'     => $dataSource["fk_category"],
+                'nameCat'      => $dataSource["category_name"],
+
+                'created'      => $fileInformation->atime,
+                'changed'      => $fileInformation->mtime,
+                'date'         => $fileInformation->mtime,
+                'size'         => round($fileInformation->size/1024, 2),
+                'width'        => $fileInformation->width,
+                'height'       => $fileInformation->height,
+                'type_img'     => strtolower($filePathInfo['extension']),
+                'media_type'   => 'image',
+
+                'author_name'  => !isset($dataSource['author_name']) ?'':$dataSource['author_name'],
+                'pk_author'    => $_SESSION['userid'],
+                'fk_publisher' => $_SESSION['userid'],
+                'description'  => $dataSource['description'],
+                'metadata'     => $dataSource["metadata"],
+                'urn_source'   => $urn,
+            );
+
+            if (is_dir($mediaDir) && !is_writable($mediaDir)) {
+                throw new Exception(
+                    sprintf(
+                        'Upload directory doesn\'t exists or you don\'t '
+                        .'have enought privileges to write files there',
+                        $mediaDir.$finalPhotoFileName
+                    )
+                );
+            }
+
+            $imageCreated =  new Imagick($dataSource['local_file']);
+
+            $imageCreated->writeImage(realpath($mediaDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
+            //$imageCreated->destroy();
+
+            if ($imageCreated) {
+
+                $photo = new Photo();
+                $photoID = $photo->create($data);
+
+                if (!$photoID) {
+                    $logger = getService('logger');
+                    $logger->notice(
+                        sprintf(
+                            'EFE Importer: Unable to register the photo object %s (destination: %s).',
+                            $dataSource['local_file'],
+                            $mediaDir.$finalPhotoFileName
+                        )
+                    );
+                    throw new Exception(
+                        sprintf(
+                            'Unable to register the photo object into OpenNemas.',
+                            $mediaDir.$finalPhotoFileName
+                        )
+                    );
+                }
+
+                $photo = new Photo($photoID);
+
+            } else {
+                $importedID = null;
+
+                $logger = getService('logger');
+                $logger->notice(
+                    sprintf(
+                        'Participa: Unable to creathe the photo file %s (destination: %s).',
+                        $dataSource['local_file'],
+                        $mediaDir.$finalPhotoFileName
+                    )
+                );
+                throw new Exception(
+                    sprintf(
+                        'Unable to create photo.',
+                        $mediaDir.$finalPhotoFileName
+                    )
+                );
+            }
+        }
+
+        return $photo;
+
+
+
+    }
+    /**
      * Returns an instance of the Photo object given a photo id
      *
      * @param int $id the photo id to load

@@ -45,6 +45,7 @@ class Advertisement extends Content
 
         5 => "Bottom Left LeaderBoard",
         6 => "Bottom Right LeaderBoard",
+        7 => "Banner Right Logo",
 
         11 => "Button Colunm 1 Position 1",
         12 => "Button Colunm 1 Position 2",
@@ -361,7 +362,7 @@ class Advertisement extends Content
         $values = array(
             $this->id,
             $data['type_advertisement'],
-            $data['category'],
+            $data['categories'],
             $data['img'],
             $data['url'],
             $data['type_medida'],
@@ -622,8 +623,6 @@ class Advertisement extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return $banners;
         }
 
@@ -652,7 +651,7 @@ class Advertisement extends Content
 
         if (!empty($banners)) {
             $homeBanners = array();
-         // Perform operations for each advertisement type
+            // Perform operations for each advertisement type
             foreach ($banners as $adType => $advs) {
                 // Initialize banners arrays
                 $banners[$adType] = array();
@@ -733,7 +732,8 @@ class Advertisement extends Content
                 $content = $this->script;
             } else {
                 $url = url('frontend_ad_get', array('id' => $this->pk_content));
-                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px; overflow: hidden;"></iframe>';
+                $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px; overflow: hidden;" '.
+                ' scrolling="no"></iframe>';
             }
 
         } else {
@@ -752,32 +752,44 @@ class Advertisement extends Content
 
             $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
                   .sprintf('%06d', $this->pk_advertisement).'.html';
-            $mediaUrl = MEDIA_IMG_PATH_WEB. $photo->path_file. $photo->name;
+            $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;
 
             // TODO: controlar los banners swf especiales con div por encima
             if (strtolower($photo->type_img) == 'swf') {
-
-                $flashObject =
-                    '<object width="'.$width.'" height="'.$height.'" >
-                        <param name="wmode" value="window" />
-                        <param name="movie" value="'.$mediaUrl. '" />
-                        <param name="width" value="'.$width.'" />
-                        <param name="height" value="'.$height.'" />
-                        <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
-                            .'SCALE="exactfit" wmode="window"></embed>
-                    </object>';
-
                 if (!$overlap && !$this->overlap) {
+                    // Generate flash object with wmode window
+                    $flashObject =
+                        '<object width="'.$width.'" height="'.$height.'" >
+                            <param name="wmode" value="window" />
+                            <param name="movie" value="'.$mediaUrl. '" />
+                            <param name="width" value="'.$width.'" />
+                            <param name="height" value="'.$height.'" />
+                            <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
+                                .'SCALE="exactfit" wmode="window"></embed>
+                        </object>';
+
                     $content =
                         '<a target="_blank" href="'.$url.'" rel="nofollow" '
                         .'style="display:block;cursor:pointer">'.$flashObject.'</a>';
                 } else {
+                    // Generate flash object with wmode transparent
+                    $flashObject =
+                        '<object width="'.$width.'" height="'.$height.'" >
+                            <param name="wmode" value="transparent" />
+                            <param name="movie" value="'.$mediaUrl. '" />
+                            <param name="width" value="'.$width.'" />
+                            <param name="height" value="'.$height.'" />
+                            <embed src="'. $mediaUrl. '" width="'.$width.'" height="'.$height.'" '
+                                .'SCALE="exactfit" wmode="transparent"></embed>
+                        </object>';
+
                     // CHECK: dropped checking of IE
                     $content = '<div style="position: relative; width: '.$width.'px; height: '.$height.'px;">
                         <div style="left:0px;top:0px;cursor:pointer;background-color:#FFF;'
                             .'filter:alpha(opacity=0);opacity:0;position:absolute;z-index:100;width:'.
                             $width.'px;height:'.$height.'px;"
-                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;"></div></div>';
+                            onclick="javascript:window.open(\''.$url.'\', \'_blank\');return false;">
+                            </div>'.$flashObject.'</div>';
                 }
 
                 $content = '<div style="width:'.$width.'px; height:'.$height.'px;">'.$content.'</div>';
@@ -790,6 +802,9 @@ class Advertisement extends Content
         }
 
         $output = $params['beforeHTML'].$content.$params['afterHTML'];
+
+        // Increase number of views for this advertisement
+        $this->setNumViews($this->pk_advertisement);
 
         return $output;
     }

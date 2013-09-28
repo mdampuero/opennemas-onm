@@ -1,5 +1,4 @@
 <div class="modal hide fade" id="modal-element-customize-content">
-  <form id="customize-content" class="form-horizontal">
     <div class="modal-header">
       <button type="button" class="close shadow-close" data-dismiss="modal" aria-hidden="true"> </button>
       <h3><span id="content-title"></span> </h3>
@@ -8,7 +7,8 @@
         <li class="active"><a href="#tab1" data-toggle="tab">{t}Customize font and color style{/t}</a></li>
         <li class="image-disposition"><a href="#tab2" data-toggle="tab">{t}Image disposition in frontpage{/t}</a></li>
     </ul>
-    <div class="modal-body tab-content">
+    <div class="modal-body ">
+    <form id="customize-content" class="form-horizontal tab-content">
         <div class="tab-pane active" id="tab1">
             <div class="control-group background">
                 <label for="bg-color" class="control-label">{t}Background Color{/t}</label>
@@ -118,56 +118,54 @@
         </div>
 
         <div class="tab-pane form-inline-block select-disposition" id="tab2">
-
-              <div class="control-group disposition">
-                  <label class="radio">
-                      {t}Top Wide Image{/t}<input name="imageDisposition" value="image-top-wide" type="radio">
-                      <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition1.png"
-                      name="image-top-wide" alt="{t}Image wide{/t}" >
-                  </label>
-              </div>
-              <div class="control-group disposition">
-                  <label class="radio">
-                      {t}Top right Image{/t}<input name="imageDisposition" value="image-top-right" type="radio">
-                      <img  class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition3.png" name="image-top-right" alt="{t}image-top-right{/t}" >
-                  </label>
-              </div>
-              <div class="control-group disposition">
-                  <label class="radio">
-                      {t}Top Left Image{/t}<input name="imageDisposition" value="image-top-left" type="radio">
-                      <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition2.png" name="image-top-left" alt="{t}image-top-left{/t}" >
-                  </label>
-              </div>
-              <div class="control-group disposition">
-                  <label class="radio">
-                      {t}Wide image{/t}<input name="imageDisposition" value="image-middle-wide" type="radio">
-                      <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition4.png" name="image-middle-wide" alt="{t}image-middle-wide{/t}" >
-                  </label>
-              </div>
-              <div class="control-group disposition">
-                  <label class="radio">
-                      {t}Right image{/t}<input name="imageDisposition" value="image-middle-left" type="radio">
-                      <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition6.png" name="image-middle-left" alt="{t}image-middle-left{/t}">
-                  </label>
-              </div>
-              <div class="control-group disposition">
-                  <label class="radio">
-                      {t}Left image{/t}<input name="imageDisposition" value="image-middle-left" type="radio">
-                      <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition5.png" name="image-middle-left" alt="{t}image-middle-left{/t}" >
-                  </label>
-              </div>
-          </div>
+            <div class="control-group disposition">
+                <label class="radio">
+                    {t}Top Wide Image{/t}<input name="imageDisposition" value="image-top-wide" type="radio">
+                    <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition1.png" name="image-top-wide" alt="{t}Image wide{/t}" >
+                </label>
+            </div>
+            <div class="control-group disposition">
+                <label class="radio">
+                    {t}Top right Image{/t}<input name="imageDisposition" value="image-top-right" type="radio">
+                    <img  class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition3.png" name="image-top-right" alt="{t}image-top-right{/t}" >
+                </label>
+            </div>
+            <div class="control-group disposition">
+                <label class="radio">
+                    {t}Top Left Image{/t}<input name="imageDisposition" value="image-top-left" type="radio">
+                    <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition2.png" name="image-top-left" alt="{t}image-top-left{/t}" >
+                </label>
+            </div>
+            <div class="control-group disposition">
+                <label class="radio">
+                    {t}Wide image{/t}<input name="imageDisposition" value="image-middle-wide" type="radio">
+                    <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition4.png" name="image-middle-wide" alt="{t}image-middle-wide{/t}" >
+                </label>
+            </div>
+            <div class="control-group disposition">
+                <label class="radio">
+                    {t}Right image{/t}<input name="imageDisposition" value="image-middle-left" type="radio">
+                    <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition6.png" name="image-middle-left" alt="{t}image-middle-left{/t}">
+                </label>
+            </div>
+            <div class="control-group disposition">
+                <label class="radio">
+                    {t}Left image{/t}<input name="imageDisposition" value="image-middle-left" type="radio">
+                    <img class="image-disposition" src="{$params.IMAGE_DIR}dispositions/disposition5.png" name="image-middle-left" alt="{t}image-middle-left{/t}" >
+                </label>
+            </div>
+        </div>
+        </form>
       </div>
       <div class="modal-footer">
           <a class="btn btn-secondary reset" href="#">{t}Reset{/t}</a>
           <a class="btn btn-primary yes" href="#">{t}Save{/t}</a>
           <a class="btn no" href="#">{t}Cancel{/t}</a>
       </div>
-  </form>
 </div>
 
-    {css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}
-    {script_tag src="/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
+{css_tag href="jquery.simplecolorpicker.css" basepath="js/jquery/jquery_simplecolorpicker/"}
+{script_tag src="/jquery/jquery_simplecolorpicker/jquery.simplecolorpicker.js"}
 
 <script>
 
@@ -186,3 +184,9 @@
     });
 </script>
 
+
+<style>
+  #modal-element-customize-content  {
+    position:absolute;
+  }
+</style>

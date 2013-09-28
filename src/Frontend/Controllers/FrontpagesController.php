@@ -245,7 +245,7 @@ class FrontpagesController extends Controller
 
         // I have added the element 50 in order to integrate interstitial position
         $positions = array(
-            50, 1, 2, 3, 4, 5, 6, 11, 12, 13, 14, 15,
+            50, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15,
             16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
             36, 103, 105, 9, 91, 92
         );

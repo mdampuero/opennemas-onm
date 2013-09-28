@@ -141,8 +141,8 @@
                             {section name=c loop=$newsletterContent}
                                 {assign var='contents' value=$newsletterContent[c]->items}
                                 <div class="container-receiver {if $smarty.section.c.first} active{/if}"
-                                    data-title="{$newsletterContent[c]->title}" data-id="{$newsletterContent[c]->id}">
-                                    <div class="container-label"><span>{$newsletterContent[c]->title}</span>
+                                    data-title="{$newsletterContent[c]->title|clearslash|clean_for_html_attributes}" data-id="{$newsletterContent[c]->id}">
+                                    <div class="container-label"><span>{$newsletterContent[c]->title|clearslash}</span>
                                         <div class="container-buttons btn-group">
                                             {if $smarty.section.c.first || count($contents) > 0}
                                                 <i class="icon-chevron-up"></i>
@@ -161,8 +161,8 @@
                                             <li  data-id="{$contents[d]->id}"
                                                 class="content"
                                                 {if $contents[d]->content_type eq 'label'} class="container-label" {/if}
-                                                data-title="{$contents[d]->title}" data-type="{$contents[d]->content_type}" >
-                                                {$contents[d]->type} {$contents[d]->title}
+                                                data-title="{$contents[d]->title|clearslash|clean_for_html_attributes}" data-type="{$contents[d]->content_type}" >
+                                                {$contents[d]->type} {$contents[d]->title|clean_for_html_attributes}
                                                 <span class="icon"><i class="icon-trash"></i></span>
                                             </li>
                                             {/if}

@@ -481,7 +481,9 @@ class OpinionsController extends Controller
 
         } // End if isCached
 
-        $this->getAds();
+        //Fetch information for Advertisements
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'opinion/opinion_author_index.tpl',
@@ -656,7 +658,9 @@ class OpinionsController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $this->getAds('inner');
+        //Fetch information for Advertisements
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         // Don't execute the app logic if there are caches available
         $cacheID = $this->view->generateCacheId($this->category_name, '', $opinionID);
@@ -824,9 +828,9 @@ class OpinionsController extends Controller
     private function getAds($context = '')
     {
         if ($context == 'inner') {
-            $positions = array(750, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
+            $positions = array(7, 9, 750, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
         } else {
-            $positions = array(650, 601, 602, 603, 605, 609, 610, 691, 692);
+            $positions = array(7, 9, 650, 601, 602, 603, 605, 609, 610, 691, 692);
         }
 
         $ccm = \ContentCategoryManager::get_instance();

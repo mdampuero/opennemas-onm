@@ -78,7 +78,7 @@ LetterFormClass.prototype = {
         this.resetStyles(fields);
 
         if( this.validate(fields) ) {
-            var params = $('#send_letter').serialize();
+          /*  var params = $('#send_letter').serialize();
 
             $.ajax({
                 'url': '/cartas-al-director/save/?cacheburst=' + (new Date()).getTime(),
@@ -92,12 +92,13 @@ LetterFormClass.prototype = {
                                      'Asegúrese de cumplimentar correctamente el formulario.', 'error');
                 }
             });
-
+        */
         } else {
             this.showMessage('Por favor, cumplimente correctamente los campos del formulario.', 'error');
         }
 
-        event.preventDefault();
+      //  event.preventDefault();
+        this.onSuccessSend();
         event.stopPropagation();
     },
 

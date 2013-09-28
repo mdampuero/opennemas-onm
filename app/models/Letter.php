@@ -80,6 +80,29 @@ class Letter extends Content
                 return StringUtils::get_title($this->title);
 
                 break;
+            case 'content_type_name':
+                return 'Letter';
+                break;
+            case 'photo':
+                return $this->getPhoto();
+
+
+                break;
+
+            case 'summary':
+                $summary = substr(strip_tags($this->body), 0, 200);
+                $pos = strripos($summary, ".");
+
+                if ($pos > 100) {
+                    $summary = substr($summary, 0, $pos).".";
+                } else {
+
+                    $summary = substr($summary, 0, strripos($summary, " "));
+                }
+
+                return $summary;
+
+                break;
             default:
 
                 break;
@@ -139,6 +162,12 @@ class Letter extends Content
         $this->load($rs->fields);
         $this->ip = $this->params['ip'];
 
+        $this->loadAllContentProperties();
+        if (!empty($this->image)) {
+            $this->photo = $this->photo;
+        }
+        $this->summary;
+
         return $this;
     }
 
@@ -194,6 +223,16 @@ class Letter extends Content
     }
 
     /**
+     * Returns the Photo object that represents the user avatar
+     *
+     * @return Photo the photo object
+     **/
+    public function getPhoto()
+    {
+        return new \Photo($this->image);
+    }
+
+    /**
      * Determines if the content of a comment has bad words
      *
      * @param  array $data the data from the comment
@@ -236,11 +275,45 @@ class Letter extends Content
 
         $ip = getRealIp();
         $data["params"] = array('ip'=> $ip);
+
         if ($letter->create($data)) {
+            if (array_key_exists('image', $data) && !empty($data['image'])) {
+                $letter->setProperty('image', $data['image']);
+            }
+            if (array_key_exists('url', $data) && !empty($data['url'])) {
+                $letter->setProperty('url', $data['url']);
+            }
+
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }
 
         return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
             ."correctamente todos los campos.";
+    }
+
+    /**
+     * Renders the poll
+     *
+     * @param arrray $params parameters for rendering the content
+     * @param Template $smarty the Template object instance
+     *
+     * @return string the generated HTML
+     **/
+    public function render($params, $smarty)
+    {
+        //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
+
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch('frontpage/contents/_content.tpl');
+        } catch (\Exception $e) {
+            $html = 'Letter not available';
+        }
+
+        return $html;
     }
 }
