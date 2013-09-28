@@ -844,6 +844,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_participa_frontpage',
+    new Route(
+        '/participa',
+        array(
+            '_controller' => 'Frontend:Controllers:LetterController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_letter_show',
     new Route(
         '/cartas-al-director/{author}/{slug}/{id}.{_format}',
