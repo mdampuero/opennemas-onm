@@ -18,8 +18,7 @@
             browser_url : "{url name=admin_media_uploader_browser}",
             months_url : "{url name=admin_media_uploader_months}",
             maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-            // initially_shown: true,
-            tags_attached: 'ads',
+            filter_by: 'ads',
             handlers: {
                 'assign_content' : function( event, params ) {
                     var mediapicker = $(this).data('mediapicker');

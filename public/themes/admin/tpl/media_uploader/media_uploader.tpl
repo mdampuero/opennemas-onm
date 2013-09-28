@@ -14,6 +14,7 @@
             <div class="modal-body">
                 <form action="#" class="gallery-search">
                     <input type="hidden" class="page" name="page" value="1">
+                    <input type="hidden" class="media_type" name="media_type" value="all">
                     <div class="toolbar clearfix">
                         <div class="pull-left">
                             <select name="month" class="month">
@@ -73,6 +74,7 @@
                             <tbody class="files">
                             </tbody>
                         </table>
+                        <input type="hidden" class="category" name="category" value="">
                     </form>
                 </div>
             </div>

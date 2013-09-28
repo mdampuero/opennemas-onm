@@ -88,7 +88,8 @@ class MediaUploaderController extends Controller
     {
         $id           = $request->query->getDigits('id', null);
         $searchString = $request->query->filter('search_string', '', FILTER_SANITIZE_STRING);
-        $month        = $request->query->filter('month', '');
+        $month        = $request->query->filter('month', '', FILTER_SANITIZE_STRING);
+        $filterBy     = $request->query->filter('media_type', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
         $itemsPerPage = 16;
@@ -108,6 +109,11 @@ class MediaUploaderController extends Controller
             $filter .= " AND pk_content = ".$id;
         }
 
+        $category = null;
+        if ($filterBy == 'ads') {
+            $category = 2;
+        }
+
         if (!empty($searchString)) {
             $filter .= " AND (description LIKE '%$searchString%' OR title LIKE '%$searchString%') ";
         }
@@ -115,12 +121,22 @@ class MediaUploaderController extends Controller
         $cm = new \ContentManager();
         $er = $this->get('entity_repository');
 
-        $photos = $cm->find(
-            'Photo',
-            'contents.fk_content_type = 8 AND photos.media_type="image" '
-            .'AND contents.content_status=1 '.$filter,
-            'ORDER BY created DESC '.$limit
-        );
+        $filter = 'contents.fk_content_type = 8 AND photos.media_type="image" '
+            .'AND contents.content_status=1 '.$filter;
+        if (is_null($category)) {
+            $photos = $cm->find(
+                'Photo',
+                $filter,
+                'ORDER BY created DESC '.$limit
+            );
+        } else {
+            $photos = $cm->find_by_category(
+                'Photo',
+                $category,
+                $filter,
+                'ORDER BY created DESC '.$limit
+            );
+        }
 
         foreach ($photos as &$photo) {
             $photo->image_path = INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name;
