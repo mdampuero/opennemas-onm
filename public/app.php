@@ -55,4 +55,3 @@ $framework->handle($request)->send();
 // } else {
 //     $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
 // }
-

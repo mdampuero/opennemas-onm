@@ -59,8 +59,11 @@ class ControllerListener implements EventSubscriberInterface
         $template->container = $sc;
 
         $sc->set('view', $template);
+        $sc->set('request', $request);
 
         $controller[0]->setContainer($sc);
+
+        $controller[0]->init();
     }
 
     public static function getSubscribedEvents()

@@ -49,9 +49,9 @@ class SearchController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $searchString             = $this->request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
-        $contentTypesSelected = $this->request->get('content_types', array('article', 'opinion'));
-        $page                 = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
+        $searchString             = $request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
+        $contentTypesSelected = $request->get('content_types', array('article', 'opinion'));
+        $page                 = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
         $contentTypesAvailable = $this->getContentTypesFiltered();
         $itemsPerPage         = s::get('items_per_page') ?: 20;
