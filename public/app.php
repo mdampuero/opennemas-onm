@@ -14,15 +14,6 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 
 require __DIR__.'/../app/autoload.php';
-require_once __DIR__.'/../app/AppKernel.php';
-
-// Load the available route collection
-$routes = new \Symfony\Component\Routing\RouteCollection();
-
-$routeFiles = glob(SRC_PATH.'/*/Resources/Routes/Routes.php');
-foreach ($routeFiles as $routeFile) {
-    require $routeFile;
-}
 
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
@@ -34,19 +25,15 @@ $configFile = implode(
 require_once $configFile;
 
 // Create the request object
+// TODO: this should be moved to the container
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
-$framework = new Onm\Framework\Framework($routes);
-$context = $framework->context;
-
-//Initialize the url generator
-global $generator;
-$generator = $framework->generator;
-
 $sc = include __DIR__.'/../app/container.php';
 
-$framework->handle($request)->send();
+$response = $sc->get('framework')->handle($request);
+
+$response->send();
 
 // if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
 //     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');

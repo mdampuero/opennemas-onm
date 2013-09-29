@@ -6,6 +6,39 @@ services:
         class: Symfony\Component\Routing\Matcher\UrlMatcher
         arguments: [ %routes%, @context ]
 
+    resolver:
+        class: Onm\Framework\ControllerResolver
+
+    listener.router:
+        class: Symfony\Component\HttpKernel\EventListener\RouterListener
+        arguments: [ @matcher ]
+
+    listener.response:
+        class: Symfony\Component\HttpKernel\EventListener\ResponseListener
+        arguments: [ %charset% ]
+
+    listener.instanceloader:
+        class: Onm\Framework\KernelEvents\InstanceLoaderListener
+
+    listener.admin_auth:
+        class: Onm\Framework\KernelEvents\AdminAuthenticationListener
+
+    listener.controller:
+        class: Onm\Framework\KernelEvents\ControllerListener
+
+    dispatcher:
+        class: Symfony\Component\EventDispatcher\EventDispatcher
+        calls:
+            - ['addSubscriber', [ @listener.router]]
+            - ['addSubscriber', [ @listener.admin_auth]]
+            - ['addSubscriber', [ @listener.instanceloader]]
+            - ['addSubscriber', [ @listener.controller]]
+            - ['addSubscriber', [ @listener.response]]
+
+    framework:
+        class: Onm\Framework\Framework
+        arguments: [ @dispatcher, @resolver ]
+
     url_generator:
         class: Symfony\Component\Routing\Generator\UrlGenerator
         arguments: [ %routes%, @context ]

@@ -18,11 +18,18 @@ $sc = new ContainerBuilder();
 // Load parameters from an configuration file
 $loader = new YamlFileLoader($sc, new FileLocator(__DIR__.'/config/'));
 
+// Load the available route collection
+$routes = new \Symfony\Component\Routing\RouteCollection();
+
+$routeFiles = glob(SRC_PATH.'/*/Resources/Routes/Routes.php');
+foreach ($routeFiles as $routeFile) {
+    require $routeFile;
+}
 $sc->setParameter('routes', $routes);
-$sc->setParameter('request', $request);
 $sc->set('event_dispatcher', new ContainerAwareEventDispatcher($sc));
+$sc->setParameter('charset', 'UTF-8');
+
 
 $loader->load('app.yml');
 
 return $sc;
-

@@ -199,8 +199,8 @@ function logContentEvent($action = null, $content = null)
  **/
 function url($urlName, $params = array(), $absolute = false)
 {
-    global $generator;
-    return $generator->generate($urlName, $params, $absolute);
+    global $sc;
+    return $sc->get('url_generator')->generate($urlName, $params, $absolute);
 }
 
 /**
