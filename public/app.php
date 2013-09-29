@@ -24,6 +24,15 @@ foreach ($routeFiles as $routeFile) {
     require $routeFile;
 }
 
+// Little hack to allow final slashes in the url
+$_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
+
+$configFile = implode(
+    DIRECTORY_SEPARATOR,
+    array(APPLICATION_PATH, 'config', 'config.inc.php')
+);
+require_once $configFile;
+
 // Create the request object
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
@@ -37,16 +46,7 @@ $generator = $framework->generator;
 
 $sc = include __DIR__.'/../app/container.php';
 
-require 'bootstrap.php';
-
-$timezone = \Onm\Settings::get('time_zone');
-if (isset($timezone)) {
-    $availableTimezones = \DateTimeZone::listIdentifiers();
-    date_default_timezone_set($availableTimezones[$timezone]);
-}
-
 $framework->handle($request)->send();
-die();
 
 // if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
 //     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');

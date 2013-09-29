@@ -23,28 +23,39 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ControllerListener implements EventSubscriberInterface
 {
-    private $charset;
-
-    public function __construct()
-    {
-    }
-
     /**
      * Filters the Response.
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
-    public function onKernelResponse(FilterControllerEvent $event)
+    public function onKernelController(FilterControllerEvent $event)
     {
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
             return;
+        }
+
+        // Assign request attributes to query parameters
+        $request = $event->getRequest();
+        foreach ($request->attributes->get('_route_params') as $key => $value) {
+            $request->query->set($key, $value);
         }
 
         $controller = $event->getController();
 
         global $sc;
 
-        $template = new \TemplateAdmin(TEMPLATE_ADMIN);
+        $controller = $event->getController();
+        $controllerName = get_class($controller[0]);
+
+        if (strpos($controllerName, 'Frontend') === 0) {
+            $template = new \Template(TEMPLATE_USER);
+        } elseif (strpos($controllerName, 'Backend') === 0) {
+            $template = new \TemplateAdmin(TEMPLATE_ADMIN);
+
+        } else {
+            $template = new \TemplateManager(TEMPLATE_MANAGER);
+        }
+
         $template->container = $sc;
 
         $sc->set('view', $template);
@@ -55,7 +66,7 @@ class ControllerListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            SymfonyKernelEvents::CONTROLLER => 'onKernelResponse',
+            SymfonyKernelEvents::CONTROLLER => 'onKernelController',
         );
     }
 }

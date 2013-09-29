@@ -31,30 +31,29 @@ class AdminAuthenticationListener implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
-    public function onKernelResponse(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event)
     {
-        $request = $event->getRequest();
-
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()
-            && preg_match('@^/admin@', $request->getPathInfo())
+            || (strpos($_SERVER['REQUEST_URI'], '/admin') !== 0)
         ) {
             return;
         }
+
+        $request = $event->getRequest();
+
+        global $sc;
+        $session = $sc->get('session');
+        $session->start();
+        $request->setSession($session);
+
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
         if ($isAsset) {
             // Log this error event to the webserver logging sysmte
             error_log("File does not exist: ".$request->getPathInfo(), 0);
 
-            $response = new Response('Content not available', 404);
-            $response->send();
-            exit();
+            $event->setResponse(new Response('Content not available', 404));
         }
-
-        global $sc;
-        $session = $sc->get('session');
-        $session->start();
-        $request->setSession($session);
 
         if (!isset($_SESSION['userid'])
             && !preg_match('@^/admin/login@', $request->getPathInfo())
@@ -66,9 +65,9 @@ class AdminAuthenticationListener implements EventSubscriberInterface
             }
             $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
 
-            return new RedirectResponse($location, 301);
+            $event->setResponse(new RedirectResponse($location, 301));
         } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
-            return new RedirectResponse('/', 301);
+            $event->setResponse(new RedirectResponse('/', 301));
         } else {
             $maxIdleTime = ((int) s::get('max_session_lifetime', 60) * 60);
             $lastUsedSession = $session->getMetadataBag()->getLastUsed();
@@ -80,7 +79,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
             ) {
                 $session->invalidate();
 
-                return new RedirectResponse(SITE_URL_ADMIN);
+                $event->setResponse(new RedirectResponse(SITE_URL_ADMIN));
 
             }
         }
@@ -89,7 +88,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            SymfonyKernelEvents::REQUEST => 'onKernelResponse',
+            SymfonyKernelEvents::REQUEST => 'onKernelRequest',
         );
     }
 }
