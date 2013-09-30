@@ -37,6 +37,8 @@ jQuery(document).ready(function($) {
 
     toggleCheckbox();
 
+    FastClick.attach(document.body);
+
     // Hide alerts after 5 seconds
     window.setInterval(function() {
         hide_alerts()
