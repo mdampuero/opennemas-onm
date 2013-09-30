@@ -45,7 +45,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{url name=admin_image_create}" title="{t}Media manager{/t}" class="thumbnail">
+                                    <a href="{url name=admin_image_new}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-picture"></i>{t}Upload images{/t}
                                     </a>
                                 </li>
