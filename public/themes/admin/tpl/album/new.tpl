@@ -15,7 +15,7 @@
 
                 if (params['position'] == 'cover-image') {
                     var container = $('.cover-image');
-                    var image_element = mediapicker.buildHTMLElement(params);
+                    var image_element = mediapicker.buildHTMLElement(params, true);
                     var image_data_el = container.find('.image-data');
                     image_data_el.find('.album-frontpage-image').val(params.content.pk_photo);
                     container.addClass('assigned');
@@ -171,6 +171,21 @@
                         <input type="text" id="title" name="title" value="{$album->title|default:""}" class="input-xxlarge" required="required"/>
                     </div>
                 </div>
+
+                <div class="control-group">
+                    <label for="agency" class="control-label">{t}Agency{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="agency" name="agency"
+                            value="{$album->agency|clearslash|escape:"html"}" class="input-xlarge"/>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="description" class="control-label">{t}Description{/t}</label>
+                    <div class="controls">
+                        <textarea name="description" id="description" class="onm-editor" data-preset="simple"  rows="8" class="input-xxlarge">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
+                    </div>
+                </div>
             </div>
 
             <div class="contentbox-container">
@@ -214,22 +229,6 @@
 
             <div class="contentform-main">
 
-                <div class="control-group">
-                    <label for="agency" class="control-label">{t}Agency{/t}</label>
-                    <div class="controls">
-                        <input type="text" id="agency" name="agency"
-                            value="{$album->agency|clearslash|escape:"html"}" class="input-xlarge"/>
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label for="description" class="control-label">{t}Description{/t}</label>
-                    <div class="controls">
-                        <textarea name="description" id="description" class="onm-editor" data-preset="simple"  rows="8" class="input-xxlarge">{t 1=$album->description|clearslash|escape:"html"}%1{/t}</textarea>
-                    </div>
-                </div>
-
-
                 <div class="control-group" id="album-images">
                     <label for="album_photos_id[]" class="control-label"><h5>{t}Album images{/t}</h5></label>
                     <div id="list-of-images" class="list-of-images clearfix controls">
@@ -271,34 +270,35 @@
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label for="album_frontpage_image" class="control-label">{t}Cover image{/t}</label>
-                    <div class="controls cover-image {if isset($album) && $album->cover_id}assigned{/if}">
-                        <div class="contentbox" style="display:inline-block; width:auto;">
-                            <div class="content">
-                                <div class="image-data">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="image thumbnail">
-                                        {if !empty($album->cover_id)}
-                                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
-                                        {/if}
-                                    </a>
-                                    <div class="article-resource-footer">
-                                        <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
-                                    </div>
-                                </div>
 
-                                <div class="not-set">
-                                    {t}Image not set{/t}
-                                </div>
+            </div>
 
-                                <div class="btn-group">
-                                    <a href="#media-uploader" data-toggle="modal" data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
-                                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
-                                </div>
+            <div class="contentbox-container">
+                <div class="contentbox" >
+                    <h3 class="title">{t}Cover image{/t}</h3>
+                    <div class="content cover-image {if isset($album) && $album->cover_id}assigned{/if}">
+                        <div class="image-data">
+                            <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="image thumbnail">
+                                {if !empty($album->cover_id)}
+                                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
+                                {/if}
+                            </a>
+                            <div class="article-resource-footer">
+                                <input type="hidden" name="album_frontpage_image" value="{$album->cover_id}" class="album-frontpage-image"/>
                             </div>
+                        </div>
+
+                        <div class="not-set">
+                            {t}Image not set{/t}
+                        </div>
+
+                        <div class="btn-group">
+                            <a href="#media-uploader" data-toggle="modal" data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
+                            <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <input type="hidden" name="id" id="id" value="{$album->pk_album|default:""}" />
