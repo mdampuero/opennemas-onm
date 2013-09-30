@@ -90,7 +90,9 @@
                     <label for="description" class="control-label clearfix">
                         <div class="pull-left">{t}Content{/t}</div>
                         <div class="pull-right">
+                            {acl isAllowed='IMAGE_ADMIN'}
                             <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini insert-image" style="{if !isset($widget) || $widget->renderlet != 'html'}display:none{/if}"> + {t}Insert image{/t}</a>
+                            {/acl}
                         </div>
                     </label>
                     <div class="controls">

@@ -1,3 +1,4 @@
+{acl isAllowed='IMAGE_ADMIN'}
 {is_module_activated name="IMAGE_MANAGER,VIDEO_MANAGER"}
 <div class="contentform-wide clearfix">
     {is_module_activated name="IMAGE_MANAGER"}
@@ -6,7 +7,7 @@
             <h3 class="title">{t}Frontpage image{/t}</h3>
             <div class="content">
                 <div class="image-data">
-                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
+                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="frontpage-image" class="image thumbnail">
                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
                     </a>
                     <div class="article-resource-footer">
@@ -261,3 +262,4 @@ jQuery(document).ready(function($){
 </script>
 {/is_module_activated}
 {/is_module_activated}
+{/acl}
