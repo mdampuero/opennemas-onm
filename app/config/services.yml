@@ -18,13 +18,13 @@ services:
         arguments: [ %charset% ]
 
     listener.instanceloader:
-        class: Onm\Framework\KernelEvents\InstanceLoaderListener
+        class: Framework\EventListeners\InstanceLoaderListener
 
     listener.admin_auth:
-        class: Onm\Framework\KernelEvents\AdminAuthenticationListener
+        class: Framework\EventListeners\AdminAuthenticationListener
 
     listener.controller:
-        class: Onm\Framework\KernelEvents\ControllerListener
+        class: Framework\EventListeners\ControllerListener
 
     dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Onm\Framework\KernelEvents;
+namespace Framework\EventListeners;
 
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
