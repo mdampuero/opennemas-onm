@@ -78,7 +78,12 @@
 
             <div class="contentform-main">
                 <div class="control-group">
-                    <label for="body" class="control-label">{t}Body{/t}</label>
+                    <label for="body" class="control-label clearfix">
+                        <div class="pull-left">{t}Body{/t}</div>
+                        <div class="pull-right">
+                            <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini"> + {t}Insert image{/t}</a>
+                        </div>
+                    </label>
                     <div class="controls">
                         <textarea name="body" id="body" required="required" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
                     </div>
@@ -140,5 +145,25 @@ jQuery(document).ready(function($){
     });
 });
 /* ]]> */
+</script>
+{include file="media_uploader/media_uploader.tpl"}
+<script>
+    var mediapicker = $('#media-uploader').mediaPicker({
+        upload_url: "{url name=admin_image_create category=0}",
+        browser_url : "{url name=admin_media_uploader_browser}",
+        months_url : "{url name=admin_media_uploader_months}",
+        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        // initially_shown: true,
+        handlers: {
+            'assign_content' : function( event, params ) {
+                var mediapicker = $(this).data('mediapicker');
+                var image_element = mediapicker.buildHTMLElement(params);
+
+                if (params['position'] == 'body') {
+                    CKEDITOR.instances.body.insertHtml(image_element);
+                }
+            }
+        }
+    });
 </script>
 {/block}
