@@ -24,7 +24,7 @@ use Onm\Settings as s;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class CleanRequest implements EventSubscriberInterface
+class CleanRequestListener implements EventSubscriberInterface
 {
     /**
      * Filters the Response.
@@ -33,6 +33,11 @@ class CleanRequest implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
+        $request = $event->getRequest();
+
+        $requestUri = $request->getRequestUri();
+        // Little hack to allow final slashes in the url
+        $requestUri = normalizeUrl($requestUri);
 
     }
 

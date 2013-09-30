@@ -26,14 +26,17 @@ require_once $configFile;
 
 // Create the request object
 // TODO: this should be moved to the container
+Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
 $sc = include __DIR__.'/../app/container.php';
 
-$response = $sc->get('framework')->handle($request);
-
+$framework = $sc->get('framework');
+$response = $framework->handle($request);
 $response->send();
+$framework->terminate($request, $response);
+
 
 // if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
 //     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
