@@ -51,9 +51,20 @@ class WelcomeController extends Controller
         //     'notice',
         //     'Your changes were saved!'
         // );
+        $modulesActivated = s::get('activated_modules');
+
+        $names = array_values(\Onm\Module\ModuleManager::getAvailableModules());
+        shuffle($names);
+        $availableModules = array_splice($names, 0, 5);
 
         $terms = s::get('terms_accepted');
-        return $this->render('welcome/index.tpl', array('terms_accepted' => $terms));
+        return $this->render(
+            'welcome/index.tpl',
+            array(
+                'terms_accepted' => $terms,
+                'modules'        => $availableModules,
+            )
+        );
     }
 
     /**
