@@ -95,7 +95,7 @@
                     <div class="panel help">
                         <h3 class="title"><i class="icon icon-youtube-play"></i>{t}Need Help?{/t}</h3>
                         <div class="content">
-                            <p>{t}We have created a lot of videos that will teach form easy task to the advanced ones.{/t}</p>
+                            <p>{t}We have created a lot of videos that will teach you to perform from easy tasks to the advanced ones.{/t}</p>
 
                             <div id="myCarousel" class="carousel slide clearfix" data-interval="">
                                 <!-- Carousel items -->
