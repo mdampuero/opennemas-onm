@@ -2047,6 +2047,21 @@ div.newsletter-contents .container-buttons {
         vertical-align: middle
     }
 
+    .welcome-page .merchant {
+        overflow:hidden;
+    }
+    .welcome-page .merchant .background-icon {
+        z-index:0;
+        font-size:10em;
+        color:rgba(0,0,0,0.05);
+        position:absolute;
+        bottom:-10px;
+        right:10px;
+        transform: rotate(-25deg);
+        -ms-transform: rotate(-25deg); /* IE 9 */
+        -webkit-transform: rotate(-25deg); /* Safari and Chrome */
+    }
+
     .video-container {
         position: relative;
         padding-bottom: 56.25%;
@@ -2063,6 +2078,21 @@ div.newsletter-contents .container-buttons {
         height: 100%;
     }
 
+@media (max-width: 767px) {
+  .welcome-page .well h4 {
+    font-size:1.2em;
+    margin-right: 0;
+  }
+  .welcome-page .well .buttons {
+    position:relative;
+    float:none;
+    right:auto;
+    margin:;
+  }
+  .welcome-page .well .buttons .dismiss {
+    display:inline-block;
+  }
+}
 /* =============================================================================
    Error page rules
 ============================================================================= */

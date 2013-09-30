@@ -53,9 +53,12 @@ class WelcomeController extends Controller
         // );
         $modulesActivated = s::get('activated_modules');
 
-        $names = array_values(\Onm\Module\ModuleManager::getAvailableModules());
-        shuffle($names);
-        $availableModules = array_splice($names, 0, 5);
+        $availableModules = \Onm\Module\ModuleManager::getAvailableModules();
+        $availableModules = array_values($availableModules);
+        shuffle($availableModules);
+        $availableModules = array_splice($availableModules, 0, 5);
+
+        $youtubeVideoIds = $this->getYoutubeVideoIds();
 
         $terms = s::get('terms_accepted');
         return $this->render(
@@ -63,8 +66,37 @@ class WelcomeController extends Controller
             array(
                 'terms_accepted' => $terms,
                 'modules'        => $availableModules,
+                'youtube_videos' => $youtubeVideoIds,
             )
         );
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getYoutubeVideoIds()
+    {
+        $cm = new \ContentManager();
+        $youtubeRss = $cm->getUrlContent(
+            'http://gdata.youtube.com/feeds/base/users/OpennemasPublishing/'
+            .'uploads?alt=rss&v=2&orderby=published&client=ytapi-youtube-profile'
+        );
+
+        $xml = simplexml_load_string($youtubeRss);
+
+        $videosYoutube = array();
+        foreach ($xml->channel->item as $item) {
+            preg_match('@v=(.*)&@', $item->link, $matches);
+
+            $videosYoutubeIds []= $matches[1];
+
+        }
+        shuffle($videosYoutubeIds);
+        $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
+        return $videosYoutubeIds;
     }
 
     /**

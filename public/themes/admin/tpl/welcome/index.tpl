@@ -1,23 +1,16 @@
 {extends file="base/admin.tpl"}
 
-{block name="content"}
-<!-- <div class="top-action-bar clearfix">
-    <div class="wrapper-content">
-        <div class="title"><h2>{t 1="OpenNemas"}Welcome to %1{/t}</h2></div>
 
-        <div class="buttons" style="display:none">
-            <a href="{url name=admin_images}" class="button" title="{t}Go to multimedia manager{/t}">
-                {t}Media manager{/t}
-            </a>
-            <a href="{url name=admin_opinion_create}" class="button" title="{t}Create new opinion{/t}">
-                {t}New opinion{/t}
-            </a>
-            <a href="{url name=admin_article_create}" class="button" title="{t}Create new article{/t}">
-                <span class="icon home">{t}New article{/t}</span>
-            </a>
-        </div>
-    </div>
-</div> -->
+{block name="footer-js" append}
+<script>
+    $('body').on('click', '.dismiss', function(e, ui) {
+        e.preventDefault();
+        $(this).closest('.well').slideUp('fast');
+    });
+</script>
+{/block}
+
+{block name="content"}
 <div class="welcome-page">
     <div class="wrapper-content ">
         {render_messages}
@@ -38,7 +31,7 @@
             <div class="row-fluid">
                 <div class="span6">
                     <div class="panel">
-                        <h3 class="title">{t}Add content{/t}</h3>
+                        <h3 class="title">{t}Add content to your site{/t}</h3>
                         <div class="content">
                             <ul class="actions">
                                 <li>
@@ -64,13 +57,13 @@
                                 </li>
 
                                 <li>
-                                    <a href="{url name=admin_video_create}" title="{t}Media manager{/t}" class="thumbnail">
+                                    <a href="{url name=admin_videos_create}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-facetime-video"></i>{t}Upload video{/t}
                                     </a>
                                 </li>
 
                                 <li>
-                                    <a href="{url name=admin_static_page_create}" title="{t}Media manager{/t}" class="thumbnail">
+                                    <a href="{url name=admin_staticpages_create}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-file-text-alt"></i>{t}Static page{/t}
                                     </a>
                                 </li>
@@ -78,9 +71,10 @@
                         </div>
                     </div>
 
-                    <div class="panel">
-                        <h3 class="title">{t}Discover new modules for your site{/t}</h3>
+                    <div class="panel merchant">
+                        <h3 class="title">{t}Do you want to extend your site?{/t}</h3>
                         <div class="content">
+                            <p>{t}We have a lot of modules that add functionality to you site.{/t}</p>
                             <ul>
                                 {foreach $modules as $module}
                                 <li>
@@ -91,43 +85,36 @@
                                 </li>
                                 {/foreach}
                             </ul>
-                            If you are interested in one of this modules. Contact with us by using the Help -> Contact us link in the bar above.
+                            {t}If you are interested in one of this modules. Contact with us by using the Help -> Contact us link in the bar above.{/t}
+                            <i class="icon icon-shopping-cart background-icon"></i>
                         </div>
                     </div>
                 </div>
                 <div class="span6">
 
                     <div class="panel help">
-                        <h3 class="title"><i class="icon icon-youtube-play"></i>{t}Latest videotutorials{/t}</h3>
+                        <h3 class="title"><i class="icon icon-youtube-play"></i>{t}Need Help?{/t}</h3>
                         <div class="content">
-                            <p>Check our latest video tutorials</p>
+                            <p>{t}We have created a lot of videos that will teach form easy task to the advanced ones.{/t}</p>
 
-                            <div id="myCarousel" class="carousel slide" data-interval="">
+                            <div id="myCarousel" class="carousel slide clearfix" data-interval="">
                                 <!-- Carousel items -->
                                 <div class="carousel-inner">
-                                    <div class="active item">
+                                    {foreach $youtube_videos  as $videoId}
+                                    <div class="{if $videoId@iteration == 1}active{/if} item">
                                         <div class="video-container">
-                                            <iframe width="420" height="315" src="//www.youtube.com/embed/39TM-pMZUFw" frameborder="0" allowfullscreen></iframe>
+                                            <iframe width="420" height="315" src="//www.youtube.com/embed/{$videoId}" frameborder="0" allowfullscreen></iframe>
                                         </div>
                                     </div>
-                                    <div class="item">
-                                        <div class="video-container">
-                                            <iframe width="420" height="315" src="//www.youtube.com/embed/39TM-pMZUFw" frameborder="0" allowfullscreen></iframe>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="video-container">
-                                            <iframe width="420" height="315" src="//www.youtube.com/embed/39TM-pMZUFw" frameborder="0" allowfullscreen></iframe>
-                                        </div>
-                                    </div>
+                                    {/foreach}
                                 </div>
                                 <!-- Carousel nav -->
-                                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-                                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                                <a class="carousel-custom-control pull-left btn" href="#myCarousel" data-slide="prev"><i class="icon icon-angle-left"></i></a>
+                                <a class="carousel-custom-control pull-right btn" href="#myCarousel" data-slide="next"><i class="icon icon-angle-right"></i></a>
                             </div>
 
                             <hr>
-                            <p>Or check our available online help:</p>
+                            <p>{t}If you prefer you can read our online documentation or if you have any doubt ask us.{/t}</p>
 
                             <ul>
                                 <li><a href="http://help.opennemas.com/knowledgebase">{t}Knownledge base{/t}</a></li>
