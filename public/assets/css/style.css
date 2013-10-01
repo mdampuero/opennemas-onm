@@ -2023,29 +2023,63 @@ div.newsletter-contents .container-buttons {
         -webkit-transform: scale(0.9) rotate(-5deg); /* Safari and Chrome */
     }
 
-    .welcome-page .panel.help {
+    .welcome-page .help {
         overflow:hidden;
     }
-    .welcome-page .panel.help .title {
+    .welcome-page .help .title {
         background:rgba(204, 24, 30, 0.8);
         margin:0;
         padding:0px 15px;
         color:White;
     }
-    .welcome-page .panel.help {
+    .welcome-page .help {
         box-shadow: none;
         border:1px solid rgba(204, 24, 30, 0.8);
     }
-    .welcome-page .panel.help .title {
+    .welcome-page .help .title {
         position:relative;
         vertical-align: middle;
         padding:4px 15px;
     }
-    .welcome-page .panel.help .title i.icon {
+    .welcome-page .help .title i.icon {
         font-size:1.4em;
         display:inline-block;
         margin-right:10px;
         vertical-align: middle
+    }
+
+    .welcome-page .help .carousel {
+        overflow:hidden;
+    }
+    .welcome-page .help .carousel .carousel-control {
+        display:none;
+    }
+    .welcome-page .help .carousel:hover .carousel-control {
+        transition:all 1;
+        display:block;
+    }
+
+    .welcome-page .help .carousel-control {
+        color:White;
+        background:rgba(0, 0, 0, 0.4);
+        border:2px solid Gray;
+    }
+    .welcome-page .help .carousel-control.left {
+        left:-33px;
+    }
+    .welcome-page .help .carousel-control.right {
+        right:-33px;
+        text-align:left;
+    }
+    .welcome-page .help .carousel-control.left i {
+        text-align:right;
+    }
+    .welcome-page .help .carousel-control.right i {
+        text-align:left;
+    }
+    .welcome-page .help .carousel-control i {
+        display:block;
+        font-size:39px;
     }
 
     .welcome-page .merchant {
@@ -2054,7 +2088,7 @@ div.newsletter-contents .container-buttons {
     .welcome-page .merchant .thumbnail {
         text-align:center;
         color:#333;
-        margin-top:20px;
+        margin-top:10px;
         margin-bottom:20px;
     }
     .welcome-page .merchant .thumbnail:hover {
@@ -2068,7 +2102,7 @@ div.newsletter-contents .container-buttons {
     }
     .welcome-page .merchant .thumbnail .description {
         font-size:.9em;
-        max-width:80%;
+        max-width:90%;
         margin:0 auto;
         color:#999;
     }
