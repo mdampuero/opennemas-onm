@@ -150,7 +150,7 @@ class MediaUploaderController extends Controller
             $photo->thumbnail_url = $this->generateUrl(
                 'asset_image',
                 array(
-                    'parameters' => 'thumbnail,120,120',
+                    'parameters' => 'thumbnail,300,300',
                     'real_path' => INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name
                 )
             );
