@@ -1975,7 +1975,7 @@ div.newsletter-contents .container-buttons {
         border-top:1px solid rgba(0, 0, 0, 0.08);
         box-shadow: inset 0 1px 0 #fff, inset 0 0 20px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.25);
     }
-    .welcome-page .panel .title {
+    .welcome-page .panel > .title {
         line-height: 1.1;
         margin: 0.8em;
         padding: 0;
@@ -2014,9 +2014,8 @@ div.newsletter-contents .container-buttons {
         display: block;
         margin:0 auto;
     }
-    .welcome-page .actions li a:hover i.icon {
+    .welcome-page .actions li a:hover > i.icon {
         text-decoration: none;
-        transition: all 0.2s;
         color:Green;
         transform: scale(0.9) rotate(-5deg);
         -ms-transform: scale(0.9) rotate(-5deg); /* IE 9 */
@@ -2024,19 +2023,14 @@ div.newsletter-contents .container-buttons {
     }
 
     .welcome-page .help {
-        overflow:hidden;
+        box-shadow: none;
+        border:1px solid rgba(204, 24, 30, 0.8);
     }
     .welcome-page .help .title {
         background:rgba(204, 24, 30, 0.8);
         margin:0;
         padding:0px 15px;
         color:White;
-    }
-    .welcome-page .help {
-        box-shadow: none;
-        border:1px solid rgba(204, 24, 30, 0.8);
-    }
-    .welcome-page .help .title {
         position:relative;
         vertical-align: middle;
         padding:4px 15px;
