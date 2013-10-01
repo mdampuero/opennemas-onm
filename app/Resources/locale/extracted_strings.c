@@ -1220,7 +1220,7 @@ gettext("Media manager");
 gettext("Static page");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Do you want to extend your site?");
+gettext("Upgrade your site");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("We have two ways to add functionality to you site.");

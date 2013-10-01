@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-01 17:15+0200\n"
+"POT-Creation-Date: 2013-10-01 18:05+0200\n"
 "PO-Revision-Date: 2013-10-01 17:21+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -5074,8 +5074,8 @@ msgid "Upload video"
 msgstr "Subir vídeo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1223
-msgid "Do you want to extend your site?"
-msgstr "Desexa estender o seu sitio?"
+msgid "Upgrade your site"
+msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1226
 msgid "We have two ways to add functionality to you site."
@@ -10621,6 +10621,9 @@ msgstr "Executar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9626
 msgid "Framework status"
 msgstr "Estado do framework"
+
+#~ msgid "Do you want to extend your site?"
+#~ msgstr "Desexa estender o seu sitio?"
 
 #~ msgid "Welcome to %1"
 #~ msgstr "Benvida a %1"
