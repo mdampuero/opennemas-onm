@@ -2095,10 +2095,12 @@ div.newsletter-contents .container-buttons {
         text-decoration: none;
     }
     .welcome-page .merchant .thumbnail .icon {
+        line-height: 50px;
         font-size:3em;
     }
     .welcome-page .merchant .thumbnail .title {
         margin-bottom:0px;
+        margin-top:0;
     }
     .welcome-page .merchant .thumbnail .description {
         font-size:.9em;

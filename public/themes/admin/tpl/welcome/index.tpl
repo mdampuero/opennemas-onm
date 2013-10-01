@@ -34,55 +34,79 @@
                         <h3 class="title">{t}Add content to your site{/t}</h3>
                         <div class="content">
                             <ul class="actions">
+                                {is_module_activated name="ARTICLE_MANAGER"}
+                                {acl isAllowed="ARTICLE_CREATE"}
                                 <li>
                                     <a href="{url name=admin_article_create}" title="{t}New article{/t}" class="thumbnail">
                                         <i class="icon icon-file-alt"></i>{t}New article{/t}
                                     </a>
                                 </li>
+                                {/acl}
+                                {/is_module_activated}
+                                {is_module_activated name="OPINION_MANAGER"}
+                                {acl isAllowed="OPINION_CREATE"}
                                 <li>
                                     <a href="{url name=admin_opinion_create}" title="{t}New opinion{/t}" class="thumbnail">
                                         <i class="icon icon-comment-alt"></i>{t}New opinion{/t}
                                     </a>
                                 </li>
+                                {/acl}
+                                {/is_module_activated}
+                                {is_module_activated name="IMAGE_MANAGER"}
+                                {acl isAllowed="IMAGE_CREATE"}
                                 <li>
                                     <a href="{url name=admin_image_new}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-picture"></i>{t}Upload images{/t}
                                     </a>
                                 </li>
+                                {/acl}
+                                {/is_module_activated}
 
+                                {is_module_activated name="ALBUM_MANAGER"}
+                                {acl isAllowed="ALBUM_CREATE"}
                                 <li>
                                     <a href="{url name=admin_album_create}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-stackexchange"></i>{t}New Album{/t}
                                     </a>
                                 </li>
+                                {/acl}
+                                {/is_module_activated}
 
+                                {is_module_activated name="VIDEO_MANAGER"}
+                                {acl isAllowed="VIDEO_CREATE"}
                                 <li>
                                     <a href="{url name=admin_videos_create}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-facetime-video"></i>{t}Upload video{/t}
                                     </a>
                                 </li>
+                                {/acl}
+                                {/is_module_activated}
 
+                                {is_module_activated name="STATIC_PAGES_MANAGER"}
+                                {acl isAllowed="STATIC_CREATE"}
                                 <li>
                                     <a href="{url name=admin_staticpages_create}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-file-text-alt"></i>{t}Static page{/t}
                                     </a>
                                 </li>
+                                {/acl}
+                                {/is_module_activated}
                             </ul>
                         </div>
                     </div>
 
                     <div class="panel merchant">
-                        <h3 class="title">{t}Do you want to extend your site?{/t}</h3>
+                        <h3 class="title">{t}Upgrade your site{/t}</h3>
                         <div class="content">
                             <p>{t}We have two ways to add functionality to you site.{/t}</p>
 
                             <div class="row-fluid">
-                                <a href="http://help.opennemas.com/knowledgebase/articles/221745-precios-de-opennemas-packs" class="thumbnail plans span6">
+                                <a href="http://help.opennemas.com/knowledgebase/articles/221745-precios-de-opennemas-packs" class="thumbnail plans span6" target="_blank">
                                     <i class="icon icon-dropbox"></i>
                                     <div class="title">{t}Plans{/t}</div>
                                     <div class="description">{t}Bundles multiple functionality in a reduced price{/t}</div>
                                 </a>
-                                <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" class="thumbnail modules span6">
+                                <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" class="thumbnail modules span6" target="_blank">
                                     <i class="icon icon-archive"></i>
                                     <div class="title">{t}Modules{/t}</div>
                                     <div class="description">{t}Adds an specific feature in your site{/t}</div>
