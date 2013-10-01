@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-10-01 18:05+0200\n"
-"PO-Revision-Date: 2013-10-01 18:46+0200\n"
+"PO-Revision-Date: 2013-10-01 18:53+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -3398,8 +3398,8 @@ msgid ""
 "&gt; </a>"
 msgstr ""
 "Usamos cookies para ofrecerle una experiencia mejorada. Al usar este sitio "
-"acepta el uso que hacemos de las cookies <a target=\"_blank\" href=\"%s\"> "
-"Más información &gt; </a>"
+"acepta el uso que hacemos de las cookies <a target=\"_blank\" href=\"%s\"> Más "
+"información &gt; </a>"
 
 #: /home/fran/Projects/OpenHost/opennemas/vendor/smarty/onm-plugins/function.date_format.php:6
 msgid "Y-m-d H:i:s"
@@ -5113,7 +5113,7 @@ msgstr "Subir vídeo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1223
 msgid "Upgrade your site"
-msgstr "Mejora tu periódico"
+msgstr "Mejore su periódico"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1226
 msgid "We have two ways to add functionality to you site."
