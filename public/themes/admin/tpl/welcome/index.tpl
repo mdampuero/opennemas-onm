@@ -114,8 +114,8 @@
                                     {/foreach}
                                 </div>
                                 <!-- Carousel nav -->
-                                <a class="carousel-custom-control pull-left btn" href="#myCarousel" data-slide="prev"><i class="icon icon-angle-left"></i></a>
-                                <a class="carousel-custom-control pull-right btn" href="#myCarousel" data-slide="next"><i class="icon icon-angle-right"></i></a>
+                                <a class="carousel-control left btn" href="#myCarousel" data-slide="prev"><i class="icon icon-angle-left"></i></a>
+                                <a class="carousel-control right btn" href="#myCarousel" data-slide="next"><i class="icon icon-angle-right"></i></a>
                             </div>
 
                             <hr>

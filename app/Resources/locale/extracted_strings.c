@@ -1169,13 +1169,25 @@ gettext("Delete all the contents in this category");
 gettext("Delete category");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Welcome to %1");
+gettext("Welcome to Opennemas");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Media manager");
+gettext("<strong>Are you new in Opennemas?</strong> If you need some help getting started to create awesome content, check out our online user documentation.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Media manager");
+gettext("Get started");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("or dismiss");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Add content to your site");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("New article");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("New article");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("New opinion");
@@ -1184,70 +1196,67 @@ gettext("New opinion");
 gettext("New opinion");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New article");
+gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New article");
-
-/* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Go to multimedia manager");
+gettext("Upload images");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Create new opinion");
+gettext("New Album");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New opinion");
+gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Create new article");
+gettext("Upload video");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New article");
+gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Welcome to your OpenNemas site!");
+gettext("Static page");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("If you need help getting started, check out our documentation on <a href=\"%1\">First Steps with OpenNemas</a>.\n           If you’d rather dive right in, here are a few things most people do first when they set up\n           a new OpenNemas site.");
+gettext("Do you want to extend your site?");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Learn more");
+gettext("We have two ways to add functionality to you site.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Basic Settings");
+gettext("Plans");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Here are a few easy things you can do to get your feet wet. Make sure to click Save on each Settings screen.");
+gettext("Bundles multiple functionality in a reduced price");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Change your site name and preferences");
+gettext("Modules");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Select your tagline and time zone");
+gettext("Adds an specific feature in your site");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Fill in your profile");
+gettext("If you have special needs or want some advice extending your site");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Add your own Content");
+gettext("Contact us");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Check out the <a href=\"#\">sample page</a> &amp; <a href=\"#\">post</a> editors to see how it all works, then delete the default content and write your own!");
+gettext("Need Help?");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Customize Your Site");
+gettext("We have created a lot of videos that will teach you to perform from easy tasks to the advanced ones.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Do you want more information check out our documentation.");
+gettext("If you prefer you can read our online documentation or if you have any doubt ask us.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Set a background color");
+gettext("Online documentation");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Select a new header image");
+gettext("Contact support");
 
 /* public/themes/admin/tpl//welcome/modals/_modal_users.tpl */
 gettext("Logged in users");
@@ -1964,6 +1973,15 @@ gettext("Go back");
 gettext("Title");
 
 /* public/themes/admin/tpl//album/new.tpl */
+gettext("Agency");
+
+/* public/themes/admin/tpl//album/new.tpl */
+gettext("Description");
+
+/* public/themes/admin/tpl//album/new.tpl */
+gettext("%1");
+
+/* public/themes/admin/tpl//album/new.tpl */
 gettext("Attributes");
 
 /* public/themes/admin/tpl//album/new.tpl */
@@ -1980,15 +1998,6 @@ gettext("No author assigned");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Tags");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Agency");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Description");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("%1");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Album images");
