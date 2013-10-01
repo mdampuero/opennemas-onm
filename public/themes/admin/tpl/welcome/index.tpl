@@ -74,18 +74,23 @@
                     <div class="panel merchant">
                         <h3 class="title">{t}Do you want to extend your site?{/t}</h3>
                         <div class="content">
-                            <p>{t}We have a lot of modules that add functionality to you site.{/t}</p>
-                            <ul>
-                                {foreach $modules as $module}
-                                <li>
-                                    <a href="#" title="{t}New article{/t}">
-                                        <strong>{$module}</strong>
-                                        <small>Module explanation</small>
-                                    </a>
-                                </li>
-                                {/foreach}
-                            </ul>
-                            {t}If you are interested in one of this modules. Contact with us by using the Help -> Contact us link in the bar above.{/t}
+                            <p>{t}We have two ways to add functionality to you site.{/t}</p>
+
+                            <div class="row-fluid">
+                                <a href="http://help.opennemas.com/knowledgebase/articles/221745-precios-de-opennemas-packs" class="thumbnail plans span6">
+                                    <i class="icon icon-dropbox"></i>
+                                    <div class="title">{t}Plans{/t}</div>
+                                    <div class="description">{t}Bundles multiple functionality in a reduced price{/t}</div>
+                                </a>
+                                <a href="http://help.opennemas.com/knowledgebase/articles/222016-precios-de-opennemas-m%C3%B3dulos" class="thumbnail modules span6">
+                                    <i class="icon icon-archive"></i>
+                                    <div class="title">{t}Modules{/t}</div>
+                                    <div class="description">{t}Adds an specific feature in your site{/t}</div>
+                                </a>
+                            </div>
+
+                            {t}If you have special needs or want some advice extending your site{/t}
+                            <a href="javascript:UserVoice.showPopupWidget();" class="btn btn-large contact">{t}Contact us{/t}</a>
                             <i class="icon icon-shopping-cart background-icon"></i>
                         </div>
                     </div>
@@ -117,8 +122,8 @@
                             <p>{t}If you prefer you can read our online documentation or if you have any doubt ask us.{/t}</p>
 
                             <ul>
-                                <li><a href="http://help.opennemas.com/knowledgebase">{t}Knownledge base{/t}</a></li>
-                                <li><a href="javascript:UserVoice.showPopupWidget();" class="support-button">{t}Contact support{/t}</a></li>
+                                <li><a href="http://help.opennemas.com/knowledgebase">{t}Online documentation{/t}</a></li>
+                                <li><a href="javascript:UserVoice.showPopupWidget();">{t}Contact support{/t}</a></li>
                             </ul>
                         </div>
                     </div>

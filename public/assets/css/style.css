@@ -110,7 +110,7 @@ h1,h2,h3,h4,h5,h6 {
     position: relative;
     margin: 0 auto;
     max-width: 974px;
-    width: 100%;
+    width: 95%;
 }
 
 .nowrap {white-space: nowrap;}
@@ -2039,9 +2039,10 @@ div.newsletter-contents .container-buttons {
     .welcome-page .panel.help .title {
         position:relative;
         vertical-align: middle;
+        padding:4px 15px;
     }
     .welcome-page .panel.help .title i.icon {
-        font-size:2em;
+        font-size:1.4em;
         display:inline-block;
         margin-right:10px;
         vertical-align: middle
@@ -2049,6 +2050,34 @@ div.newsletter-contents .container-buttons {
 
     .welcome-page .merchant {
         overflow:hidden;
+    }
+    .welcome-page .merchant .thumbnail {
+        text-align:center;
+        color:#333;
+        margin-top:20px;
+        margin-bottom:20px;
+    }
+    .welcome-page .merchant .thumbnail:hover {
+        text-decoration: none;
+    }
+    .welcome-page .merchant .thumbnail .icon {
+        font-size:3em;
+    }
+    .welcome-page .merchant .thumbnail .title {
+        margin-bottom:0px;
+    }
+    .welcome-page .merchant .thumbnail .description {
+        font-size:.9em;
+        max-width:80%;
+        margin:0 auto;
+        color:#999;
+    }
+    .welcome-page .merchant .contact {
+        padding: 10px 15px;
+        text-align: center;
+        margin: 10px auto;
+        display: block;
+        width:40%;
     }
     .welcome-page .merchant .background-icon {
         z-index:0;
