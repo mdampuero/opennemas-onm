@@ -147,6 +147,7 @@ class Instance
         define('OPINION_DIR', "opinions");
 
         define('MEDIA_IMG_PATH_URL', MEDIA_URL.MEDIA_DIR.SS.IMG_DIR);
+        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL."media".SS.MEDIA_DIR.SS.IMG_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
         define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR);
