@@ -48,25 +48,53 @@ class LetterController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $this->page = $request->query->filter('page', '0', FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
 
         $cm = new \ContentManager();
 
         $this->view->setConfig('letter-frontpage');
 
-        $cacheID = $this->view->generateCacheId('letter-frontpage', '', $this->page);
+        $cacheID = $this->view->generateCacheId('letter-frontpage', '', $page);
         if ($this->view->caching == 0
             || !$this->view->isCached('letter/letter-frontpage.tpl', $cacheID)
         ) {
-            $otherLetters = $cm->find_all(
+
+            $itemsPerPage = 10;
+
+
+            list($countLetters, $otherLetters) = $cm->getCountAndSlice(
                 'Letter',
-                'available=1 ',
-                'ORDER BY created DESC LIMIT 5'
+                null,
+                'in_litter != 1 AND contents.available=1',
+                'ORDER BY created DESC, available ASC',
+                $page,
+                $itemsPerPage
+            );
+
+            foreach ($otherLetters as &$letter) {
+                $letter->loadAllContentProperties();
+                if (!empty($letter->image)) {
+                    $letter->photo = $letter->photo;
+                }
+            }
+
+            $total = count($otherLetters)+1;
+
+            $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+                array(
+                    'page'  => $page,
+                    'items' => $itemsPerPage,
+                    'total' => $total,
+                    'url'   => $this->generateUrl(
+                        'frontend_participa_frontpage'
+                    )
+                )
             );
 
             $this->view->assign(
                 array(
-                    'otherLetters'=> $otherLetters
+                    'otherLetters' => $otherLetters,
+                    'pagination'   => $pagination,
                 )
             );
         }
@@ -105,6 +133,7 @@ class LetterController extends Controller
             || !$this->view->isCached('letter/letter.tpl', $cacheID)
         ) {
             $letter = new \Letter($letterId);
+            $letter->with_comment = 1;
 
             if (empty($letter)
                 && ($letter->available != 1 || $letter->in_litter != 0)
