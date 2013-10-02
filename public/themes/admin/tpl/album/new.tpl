@@ -100,7 +100,7 @@
             event.preventDefault();
             var parent = jQuery(this).parents('.image.thumbnail');
             var element = parent.children('img');
-
+            console.log(parent, element, element.attr('id'))
             $("#modal-edit-album-photo input#id_image").val( element.attr('id') );
 
             var footer_text = parent.children('textarea').html();
@@ -108,9 +108,6 @@
 
             // Change the image information in the edit modalbox
             var article_info = $("#modal-edit-album-photo .article-resource-image-info");
-            article_info.find(".image_size").html(element.data("width") + " x "+ element.data("height") + " px");
-            article_info.find(".file_size").html(element.data("filesize") + " Kb");
-            article_info.find(".created_time").html(element.data("created"));
 
             $("#modal-edit-album-photo .article-resource-image").find("img").attr('src', element.attr("src"));
             $("#modal-edit-album-photo").modal('show');
@@ -248,15 +245,6 @@
                                      src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
                                      id="img{$photo['photo']->pk_photo}"
                                      data-id="{$photo['photo']->pk_photo}"
-                                     data-title="{$photo['photo']->name}"
-                                     data-description="{$photo['photo']->description|escape:"html"}"
-                                     data-path="{$photo['photo']->path_file}"
-                                     data-width="{$photo['photo']->width}"
-                                     data-height="{$photo['photo']->height}"
-                                     data-filesize="{$photo['photo']->size}"
-                                     data-created="{$photo['photo']->created}"
-                                     data-tags="{$photo['photo']->metadata}"
-                                     data-footer="{$photo['description']|escape:"html"}"
                                      alt="{$photo->name}"/>
                                 <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
                                 <input type="hidden" name="album_photos_id[]" value="{$photo['id']}">
