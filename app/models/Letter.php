@@ -139,6 +139,13 @@ class Letter extends Content
             return false;
         }
 
+        if (array_key_exists('image', $data) && !empty($data['image'])) {
+            $this->setProperty('image', $data['image']);
+        }
+        if (array_key_exists('url', $data) && !empty($data['url'])) {
+            $this->setProperty('url', $data['url']);
+        }
+
         return $this->id;
     }
 
@@ -199,6 +206,13 @@ class Letter extends Content
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
+        }
+
+        if (array_key_exists('image', $data) && !empty($data['image'])) {
+            $this->setProperty('image', $data['image']);
+        }
+        if (array_key_exists('url', $data) && !empty($data['url'])) {
+            $this->setProperty('url', $data['url']);
         }
 
         return true;
@@ -277,12 +291,6 @@ class Letter extends Content
         $data["params"] = array('ip'=> $ip);
 
         if ($letter->create($data)) {
-            if (array_key_exists('image', $data) && !empty($data['image'])) {
-                $letter->setProperty('image', $data['image']);
-            }
-            if (array_key_exists('url', $data) && !empty($data['url'])) {
-                $letter->setProperty('url', $data['url']);
-            }
 
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }

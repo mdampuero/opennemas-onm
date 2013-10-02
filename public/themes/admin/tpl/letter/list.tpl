@@ -81,7 +81,8 @@
                     </th>
                     <th>{t}Title{/t}</th>
                     <th>{t}Author{/t}</th>
-                    <th  style='width:110px;' class="left">{t}Date{/t}</th>
+                    <th style='width:110px;' class="left">{t}Date{/t}</th>
+                    <th style='width:110px;'>{t}Image{/t}</th>
                     <th class="center" style='width:40px;'>{t}Available{/t}</th>
                     <th style='width:90px;' class="right">{t}Actions{/t}</th>
                </tr>
@@ -103,6 +104,12 @@
                     <td><span rel="tooltip" data-original-title="{$letter->body|strip_tags|clearslash}">{$letter->title}</span></td>
                     <td>{$letter->author}: {$letter->email}</td>
                     <td class="left"> {$letter->created} </td>
+                    <td>
+                    {if !empty($letter->image)}
+                        <img src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}"
+                                     title="{t}Media element (jpg, image, gif){/t}" />
+                    {/if}
+                    </td>
                     <td class="center">
                     {acl isAllowed="LETTER_AVAILABLE"}
                         {if $letter->content_status eq 0}
@@ -142,7 +149,7 @@
 
                 {foreachelse}
                 <tr>
-                    <td class="empty" colspan=10>
+                    <td class="empty" colspan="11">
                         {t}There is no letters here.{/t}
                     </td>
                 </tr>
