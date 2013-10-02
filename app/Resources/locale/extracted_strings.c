@@ -1931,15 +1931,6 @@ gettext("Close");
 gettext("Edit image properties");
 
 /* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
-gettext("Creation date");
-
-/* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
-gettext("Image size");
-
-/* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
-gettext("File size");
-
-/* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
 gettext("Description");
 
 /* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
@@ -5402,10 +5393,19 @@ gettext("Author");
 gettext("Date");
 
 /* public/themes/admin/tpl//letter/list.tpl */
+gettext("Image");
+
+/* public/themes/admin/tpl//letter/list.tpl */
 gettext("Available");
 
 /* public/themes/admin/tpl//letter/list.tpl */
 gettext("Actions");
+
+/* public/themes/admin/tpl//letter/list.tpl */
+gettext("Media");
+
+/* public/themes/admin/tpl//letter/list.tpl */
+gettext("Media element (jpg, image, gif)");
 
 /* public/themes/admin/tpl//letter/list.tpl */
 gettext("There is no letters here.");
@@ -5501,6 +5501,12 @@ gettext("Go back");
 gettext("Title");
 
 /* public/themes/admin/tpl//letter/new.tpl */
+gettext("Metadata");
+
+/* public/themes/admin/tpl//letter/new.tpl */
+gettext("List of words separated by words.");
+
+/* public/themes/admin/tpl//letter/new.tpl */
 gettext("Published");
 
 /* public/themes/admin/tpl//letter/new.tpl */
@@ -5520,9 +5526,6 @@ gettext("Created at");
 
 /* public/themes/admin/tpl//letter/new.tpl */
 gettext("Body");
-
-/* public/themes/admin/tpl//letter/new.tpl */
-gettext("image");
 
 /* public/themes/admin/tpl//letter/new.tpl */
 gettext("Related url");
@@ -8045,19 +8048,7 @@ gettext("Files uploaded successfully");
 gettext("The dropped files are uploaded but you should complete their information.");
 
 /* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("You can:");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Edit them now");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Upload more images and complete the information later");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Edit them");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Upload more images");
+gettext("Edit images");
 
 /* public/themes/admin/tpl//image/new.tpl */
 gettext("Editing image");
