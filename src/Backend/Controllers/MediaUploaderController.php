@@ -177,7 +177,22 @@ class MediaUploaderController extends Controller
         $rs = $GLOBALS['application']->conn->Execute("UPDATE contents SET `description`=? WHERE pk_content=?", array($description, $id));
 
         if ($rs) {
-            return new Response(json_encode(new \Photo($id)));
+            $photo = new \Photo($id);
+            $photo->crop_thumbnail_url = $this->generateUrl(
+                'asset_image',
+                array(
+                    'parameters' => 'zoomcrop,120,120,center,center',
+                    'real_path' => INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name
+                )
+            );
+            $photo->thumbnail_url = $this->generateUrl(
+                'asset_image',
+                array(
+                    'parameters' => 'thumbnail,300,300',
+                    'real_path' => INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name
+                )
+            );
+            return new Response(json_encode($photo));
         } else {
             return new Response('error while saving', 500);
         }
