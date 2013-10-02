@@ -1,11 +1,11 @@
 {is_module_activated name="IMAGE_MANAGER"}
 <hr>
-<table style="width:100%">
+<table style="width:100%;margin:0;">
     <tr>
         <td>
             <div id="related-images" class="resource-container tabs">
                 <ul>
-                    <li><a href="#special-image" title="{t}Image for home:{/t}">{t}Image for Special{/t}</a></li>
+                    <li><a href="#special-image" title="{t}Image for home:{/t}">{t}Image{/t}</a></li>
                 </ul><!-- / -->
                 <div id="frontpage-image" class="droppable-image-position droppable-position">
                     <div>

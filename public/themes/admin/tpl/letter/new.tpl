@@ -34,6 +34,29 @@ jQuery(document).ready(function($) {
             jQuery('#created').datetimepicker('option', 'minDate', new Date(start.getTime()));
         }
     });
+
+    $('#title').on('change', function(e, ui) {
+        fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+
+    load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+
+    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+        var category = $('#category_imag option:selected').val();
+        var text = $('#stringImageSearch').val();
+        var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+        load_ajax_in_container(
+            url,
+            $('#photos')
+        );
+    });
+
+    $('#photos').on('click', '.pager a', function(e, ui) {
+        e.preventDefault();
+        var link = $(this);
+        load_ajax_in_container(link.attr('href'), $('#photos'));
+    });
+
 });
 </script>
 {/block}
@@ -70,6 +93,15 @@ jQuery(document).ready(function($) {
                 <label for="title" class="control-label">{t}Title{/t}</label>
                 <div class="controls">
                     <input type="text" id="title" name="title" value="{$letter->title|clearslash|escape:"html"}" required="required" class="input-xxlarge" />
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" required="required" class="input-xxlarge"
+                            value="{$letter->metadata|clearslash|escape:"html"}"/>
+                    <div class="help-block">{t}List of words separated by words.{/t}</div>
                 </div>
             </div>
 
@@ -127,20 +159,13 @@ jQuery(document).ready(function($) {
             </div>
 
             <div class="control-group">
-                <label for="image" class="control-label">{t}image{/t}</label>
-                <div class="controls">
-                    <input type="file" id="imageFile" name="imageFile" value="{$letter->image}" class="input-xxlarge"/>
-                    <input type="hidden"   id="image" name="image" value="{$letter->image}" />
-                    <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}/{$photo1->path_file}{$photo1->name}" style="width:120px;">
-                </div>
-            </div>
-
-            <div class="control-group">
                 <label for="url" class="control-label">{t}Related url{/t}</label>
                 <div class="controls">
                     <input type="text" id="url" name="url" value="{$letter->url}" class="input-xxlarge"/>
                 </div>
             </div>
+
+            {include file="special/partials/_load_images.tpl"}
 
         </div>
     </div>

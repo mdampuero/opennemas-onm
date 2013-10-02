@@ -64,6 +64,9 @@ class LettersController extends Controller
             $page,
             $itemsPerPage
         );
+        foreach ($letters as &$letter) {
+            $letter->image = $letter->getProperty('image');
+        }
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -114,6 +117,8 @@ class LettersController extends Controller
                 'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
                 'params'    => $request->request->get('params'),
+                'image'     => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'url'       => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'body'      => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
             );
 
@@ -194,6 +199,8 @@ class LettersController extends Controller
                 'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
                 'params'    => $request->request->get('params'),
+                'image'     => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'url'       => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'body'      => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
             );
 
