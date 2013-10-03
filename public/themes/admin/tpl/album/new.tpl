@@ -285,7 +285,7 @@
 
             </div>
 
-            <input type="hidden" name="id" id="id" value="{$album->pk_album|default:""}" />
+            <input type="hidden" name="id" id="id" value="{$album->id|default:""}" />
         </div><!-- contentform-inner -->
     </div>
 </form>
