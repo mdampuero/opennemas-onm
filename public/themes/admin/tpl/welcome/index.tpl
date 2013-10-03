@@ -145,6 +145,10 @@
                                 <a class="carousel-control right btn" href="#myCarousel" data-slide="next"><i class="icon icon-angle-right"></i></a>
                             </div>
 
+                            <p>{t escape=off 1="http://www.youtube.com/user/OpennemasPublishing"}See more help videos in <a href="%1">our YouTube channel</a> or subscribe to it.{/t}</p>
+                            <script src="https://apis.google.com/js/plusone.js"></script>
+                            <div class="g-ytsubscribe" data-channel="OpennemasPublishing" data-layout="default"></div>
+
                             <hr>
                             <p>{t}If you prefer you can read our online documentation or if you have any doubt ask us.{/t}</p>
 
