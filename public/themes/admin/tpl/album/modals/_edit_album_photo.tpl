@@ -28,14 +28,12 @@ jQuery(document).ready(function() {
     });
 
     jQuery('#modal-edit-album-photo a.btn.save').on('click', function(e) {
-
         var imageID = jQuery("#modal-edit-album-photo input#id_image").val();
         var imageFooter = jQuery("#modal-edit-album-photo textarea#footer_image").val();
-        var parent = jQuery('#'+imageID).closest('.image.thumbnail');
+        var album_element = jQuery('#img'+imageID);
 
         //updated hidden textarea
-        parent.find('textarea').html(imageFooter);
-        console.log(parent.find('textarea'));
+        album_element.find('textarea').html(imageFooter);
 
         jQuery("#modal-edit-album-photo").modal('hide');
 
