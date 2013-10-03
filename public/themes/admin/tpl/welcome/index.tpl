@@ -5,6 +5,7 @@
 <script>
     $('body').on('click', '.dismiss', function(e, ui) {
         e.preventDefault();
+        $.ajax('{url name="admin_acl_user_set_meta"}?initial_tour_done=1');
         $(this).closest('.well').slideUp('fast');
     });
 </script>
@@ -20,6 +21,7 @@
 
         <div class="row-fluid">
             <div class="span12">
+                {if !$initial_tour_done}
                 <div class="well">
                     <h4>{t escape=off}<strong>Are you new in Opennemas?</strong> If you need some help getting started to create awesome content, check out our online user documentation.{/t}</h4>
                     <div class="pull-right buttons">
@@ -27,6 +29,7 @@
                         <a href="#dismiss" class="dismiss"> {t}or dismiss{/t}</a>
                     </div>
                 </div>
+                {/if}
             </div>
             <div class="row-fluid">
                 <div class="span6">

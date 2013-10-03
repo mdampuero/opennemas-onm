@@ -60,13 +60,18 @@ class WelcomeController extends Controller
 
         $youtubeVideoIds = $this->getYoutubeVideoIds();
 
+        $user = new \User($_SESSION['userid']);
+        $tourDone = $user->getMeta('initial_tour_done');
+
         $terms = s::get('terms_accepted');
+
         return $this->render(
             'welcome/index.tpl',
             array(
-                'terms_accepted' => $terms,
-                'modules'        => $availableModules,
-                'youtube_videos' => $youtubeVideoIds,
+                'terms_accepted'    => $terms,
+                'modules'           => $availableModules,
+                'youtube_videos'    => $youtubeVideoIds,
+                'initial_tour_done' => $tourDone,
             )
         );
     }
