@@ -1250,6 +1250,9 @@ gettext("Need Help?");
 gettext("We have created a lot of videos that will teach you to perform from easy tasks to the advanced ones.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
+gettext("See more help videos in <a href=\"%1\">our YouTube channel</a> or subscribe to it.");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
 gettext("If you prefer you can read our online documentation or if you have any doubt ask us.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
