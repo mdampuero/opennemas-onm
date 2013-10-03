@@ -29,22 +29,21 @@
                     var elements = '';
                     $.each(params.content, function(key, elem) {
                         var temp_params = $.extend(params, { 'content': elem });
-                        var image_element = '<li class="image thumbnail">'+
+                        var image_element = '<li class="image thumbnail" id="img'+elem.id+'" >'+
                             '<div class="overlay-image">'+
-                                    '<div>'+
-                                        '<ul class="image-buttons clearfix">'+
-                                            '<li><a href="#"  data-id="'+elem.id+'" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>'+
-                                            '<li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>'+
-                                        '</ul>'+
-                                    '</div>'+
+                                '<div>'+
+                                    '<ul class="image-buttons clearfix">'+
+                                        '<li><a href="#"  data-id="'+elem.id+'" class="edit-button" title="Editar"><i class="icon-pencil"></i></a></li>'+
+                                        '<li><a href="#" class="delete-button" title="{t}Drop{/t}"><i class="icon-trash"></i></a></li>'+
+                                    '</ul>'+
                                 '</div>'+
+                            '</div>'+
                             mediapicker.buildHTMLElement(temp_params, true)+
                             '<textarea name="album_photos_footer[]">'+elem.description+'</textarea>'+
                             '<input type="hidden" name="album_photos_id[]" value="'+elem.id+'">'
                             '</li>' ;
                         elements = elements + image_element;
-                    })
-
+                    });
 
                     container.find('.add-image').before(elements);
                 }
@@ -98,18 +97,16 @@
             event.preventDefault();
         }).on('click', '.edit-button', function (event, ui) {
             event.preventDefault();
-            var parent = jQuery(this).parents('.image.thumbnail');
-            var element = parent.children('img');
-            console.log(parent, element, element.attr('id'))
-            $("#modal-edit-album-photo input#id_image").val( element.attr('id') );
+            var id = jQuery(this).data('id');
 
-            var footer_text = parent.children('textarea').html();
-            $("#modal-edit-album-photo textarea#footer_image").val(footer_text);
+            var parent = jQuery(this).closest('.image.thumbnail');
+            var image_el = parent.find('img');
+            var footer_el = parent.children('textarea');
 
-            // Change the image information in the edit modalbox
-            var article_info = $("#modal-edit-album-photo .article-resource-image-info");
+            $("#modal-edit-album-photo input#id_image").val(id);
+            $("#modal-edit-album-photo textarea#footer_image").val(footer_el.html());
+            $("#modal-edit-album-photo .article-resource-image").find("img").attr('src', image_el.attr("src"));
 
-            $("#modal-edit-album-photo .article-resource-image").find("img").attr('src', element.attr("src"));
             $("#modal-edit-album-photo").modal('show');
         });
 
@@ -232,7 +229,7 @@
                         <ul>
                             {if !empty($photos)}
                             {foreach from=$photos item=photo key=key name=album_photos}
-                            <li class="image thumbnail">
+                            <li class="image thumbnail" id="img{$photo['photo']->pk_photo}">
                                 <div class="overlay-image">
                                     <div>
                                         <ul class="image-buttons clearfix">
@@ -243,7 +240,6 @@
                                 </div>
                                 <img
                                      src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo['photo']->path_file}{$photo['photo']->name}"
-                                     id="img{$photo['photo']->pk_photo}"
                                      data-id="{$photo['photo']->pk_photo}"
                                      alt="{$photo->name}"/>
                                 <textarea name="album_photos_footer[]">{$photo['description']}</textarea>
