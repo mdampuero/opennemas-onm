@@ -1,5 +1,5 @@
 {if isset($contentTypeCategories) && !empty($contentTypeCategories)}
-<select id="contentTypeCategories" data-href="{$contentProviderUrl}">
+<select id="contentTypeCategories" class="selector" data-href="{$contentProviderUrl}">
         <option value="0">{t}-- All categories --{/t}</option>
         {section name=as loop=$contentTypeCategories}
             <option value="{$contentTypeCategories[as]->pk_content_category}"
