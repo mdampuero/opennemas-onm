@@ -33,11 +33,14 @@ class AdminAuthenticationListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
+        $isAdmin   = strpos($_SERVER['REQUEST_URI'], '/admin') === 0;
+        $isManager = strpos($_SERVER['REQUEST_URI'], '/manager') === 0;
         if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()
-            || (strpos($_SERVER['REQUEST_URI'], '/admin') !== 0)
+            && (!$isAdmin || !$isManager)
         ) {
             return;
         }
+
 
         $request = $event->getRequest();
 
@@ -56,14 +59,18 @@ class AdminAuthenticationListener implements EventSubscriberInterface
         }
 
         if (!isset($_SESSION['userid'])
-            && !preg_match('@^/admin/login@', $request->getPathInfo())
+            && !preg_match('@login@', $request->getPathInfo())
         ) {
             $url = $request->getPathInfo();
 
             if (!empty($url)) {
                 $redirectTo = urlencode($request->getRequestUri());
             }
-            $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
+            if ($isAdmin) {
+                $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
+            } else {
+                $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
+            }
 
             $event->setResponse(new RedirectResponse($location, 301));
         } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
@@ -80,7 +87,6 @@ class AdminAuthenticationListener implements EventSubscriberInterface
                 $session->invalidate();
 
                 $event->setResponse(new RedirectResponse(SITE_URL_ADMIN));
-
             }
         }
     }
