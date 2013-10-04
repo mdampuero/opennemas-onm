@@ -1,3 +1,4 @@
+{acl isAllowed='IMAGE_ADMIN'}
 {is_module_activated name="IMAGE_MANAGER"}
 <div id="related_media" class="control-group">
     <label for="special-image" class="control-label">{t}Image for Special{/t}</label>
@@ -64,3 +65,4 @@ jQuery(document).ready(function($){
 });
 </script>
 {/is_module_activated}
+{/acl}

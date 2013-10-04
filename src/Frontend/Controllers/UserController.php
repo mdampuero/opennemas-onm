@@ -55,10 +55,14 @@ class UserController extends Controller
             $user = new \User($_SESSION['userid']);
             $user->getMeta();
 
+            // Get current time
+            $currentTime = new \DateTime();
+
             return $this->render(
                 'user/show.tpl',
                 array(
-                    'user'  => $user
+                    'user'         => $user,
+                    'current_time' => $currentTime
                 )
             );
         }

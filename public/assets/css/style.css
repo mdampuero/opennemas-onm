@@ -110,7 +110,7 @@ h1,h2,h3,h4,h5,h6 {
     position: relative;
     margin: 0 auto;
     max-width: 974px;
-    width: 100%;
+    width: 95%;
 }
 
 .nowrap {white-space: nowrap;}
@@ -1907,42 +1907,251 @@ div.newsletter-contents .container-buttons {
 /* =============================================================================
    Welcome page rules
    ========================================================================== */
+.welcome-page {
+  margin-top:40px;
+  background:White url(../../themes/admin/images/welcome-background.png) top right repeat-x;
+}
+.welcome-page .well {
+        position: relative;
+        border: 1px solid #ccc !important;
+        border-radius: 3px;
+        background-color: #6aafcf !important;
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.04);
+        padding: 15px 15px !important;
+        overflow: hidden;
 
-.welcome-page .hero-unit {
-    margin: 0 0 22px 0;
-    padding: 20px;
-    border: solid 1px #e6e6e6;
-    border-radius:0;
-    background: #f2f2f2;
-}
-.welcome-page .hero-unit h1 {
-    padding-bottom:10px;
-    color:#333;
-    font-weight: 600;
-    font-size:2.2em;
-}
-.welcome-page .hero-unit .lean {
-    margin-bottom: 17px;
-    color: #6f6f6f;
-    font-weight: 300;
-    font-size:13px;
-    font-family: "Open Sans", Arial;
-    line-height: 1.3;
-}
-.welcome-page .welcome-panel-column {
+        position: relative;
+        border: 1px solid #2a8cba !important;
+        border-radius: 3px;
+        background-color: #6aafcf !important;
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.04);
+    }
+    .welcome-page .well h4 {
+        font-weight:normal;
+        margin-top:0;
+        font-size: 18px;
+        font-weight: normal;
+        color: #fff;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+        line-height: 180%;
+        margin-right:200px;
+    }
+    .welcome-page .well div > *  {
+        vertical-align:middle;
+    }
+    .welcome-page .well .buttons {
+        position: absolute;
+        top: 25%;
+        right: 15px;
+        color:white;
+    }
+    .welcome-page .well .buttons .btn {
+        text-decoration:none;
+    }
+    .welcome-page .well .buttons .dismiss:hover {
+        text-decoration: underline;
+        color:White;
+    }
+    .welcome-page .well .buttons .dismiss {
+        margin-top:5px;
+        text-align: center;
+        font-size:1em;
+        font-weight: normal;
+        display:block;
+        float:none;
+        color:white;
+    }
+    .welcome-page .brand-link {
+        font-size:2em;
+        font-weight:bold;
+        padding-top:50px;
+        margin-bottom:40px;
+        text-shadow:1px 1px rgba(0, 0, 0, 0.15);
+    }
+    .welcome-page .panel {
+        background:white;
+        border:1px solid #ddd;
+        border-radius:3px;
+        border-top:1px solid rgba(0, 0, 0, 0.08);
+        box-shadow: inset 0 1px 0 #fff, inset 0 0 20px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+    .welcome-page .panel > .title {
+        line-height: 1.1;
+        margin: 0.8em;
+        padding: 0;
+        font-size: 17px;
+        font-weight: normal;
+        font-style: normal;
+        color: #000;
+    }
+    .welcome-page .panel .actions {
+        margin-top:20px;
+    }
+    .welcome-page .panel .actions li {
+        vertical-align: top;
+        display:inline-block;
+        margin-right:10px;
+        list-style:none;
+        margin-bottom:10px;
+    }
+    .welcome-page .panel .actions li a.thumbnail:hover {
+        box-shadow:0 0 3px Green;
+        border:1px solid Green;
+        color:Green;
+    }
+
+    .welcome-page .actions li a {
+        min-height:60px;
+        min-width:100px;
+        padding:5px;
+        color:#333;
+        text-align: center;
+        text-decoration: none;
+    }
+    .welcome-page .actions li a i.icon {
+        font-size:3em;
+        color:#555;
+        display: block;
+        margin:0 auto;
+    }
+    .welcome-page .actions li a:hover > i.icon {
+        text-decoration: none;
+        color:Green;
+        transform: scale(0.9) rotate(-5deg);
+        -ms-transform: scale(0.9) rotate(-5deg); /* IE 9 */
+        -webkit-transform: scale(0.9) rotate(-5deg); /* Safari and Chrome */
+    }
+
+    .welcome-page .help {
+        box-shadow: none;
+        border:1px solid rgba(204, 24, 30, 0.8);
+    }
+    .welcome-page .help .title {
+        background:rgba(204, 24, 30, 0.8);
+        margin:0;
+        padding:0px 15px;
+        color:White;
+        position:relative;
+        vertical-align: middle;
+        padding:4px 15px;
+    }
+    .welcome-page .help .title i.icon {
+        font-size:1.4em;
+        display:inline-block;
+        margin-right:10px;
+        vertical-align: middle
+    }
+
+    .welcome-page .help .carousel {
+        overflow:hidden;
+    }
+    .welcome-page .help .carousel .carousel-control {
+        display:none;
+    }
+    .welcome-page .help .carousel:hover .carousel-control {
+        transition:all 1;
+        display:block;
+    }
+
+    .welcome-page .help .carousel-control {
+        color:White;
+        background:rgba(0, 0, 0, 0.4);
+        border:2px solid Gray;
+    }
+    .welcome-page .help .carousel-control.left {
+        left:-33px;
+    }
+    .welcome-page .help .carousel-control.right {
+        right:-33px;
+        text-align:left;
+    }
+    .welcome-page .help .carousel-control.left i {
+        text-align:right;
+    }
+    .welcome-page .help .carousel-control.right i {
+        text-align:left;
+    }
+    .welcome-page .help .carousel-control i {
+        display:block;
+        font-size:39px;
+    }
+
+    .welcome-page .merchant {
+        overflow:hidden;
+    }
+    .welcome-page .merchant .thumbnail {
+        text-align:center;
+        color:#333;
+        margin-top:10px;
+        margin-bottom:20px;
+    }
+    .welcome-page .merchant .thumbnail:hover {
+        text-decoration: none;
+    }
+    .welcome-page .merchant .thumbnail .icon {
+        line-height: 50px;
+        font-size:3em;
+    }
+    .welcome-page .merchant .thumbnail .title {
+        margin-bottom:0px;
+        margin-top:0;
+    }
+    .welcome-page .merchant .thumbnail .description {
+        font-size:.9em;
+        max-width:90%;
+        margin:0 auto;
+        color:#999;
+    }
+    .welcome-page .merchant .contact {
+        padding: 10px 15px;
+        text-align: center;
+        margin: 10px auto;
+        display: block;
+        width:40%;
+    }
+    .welcome-page .merchant .background-icon {
+        z-index:0;
+        font-size:10em;
+        color:rgba(0,0,0,0.05);
+        position:absolute;
+        bottom:-10px;
+        right:10px;
+        transform: rotate(-25deg);
+        -ms-transform: rotate(-25deg); /* IE 9 */
+        -webkit-transform: rotate(-25deg); /* Safari and Chrome */
+    }
+
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%;
+        padding-top: 30px; height: 0; overflow: hidden;
+    }
+
+    .video-container iframe,
+    .video-container object,
+    .video-container embed {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+@media (max-width: 767px) {
+  .welcome-page .well h4 {
+    font-size:1.2em;
+    margin-right: 0;
+  }
+  .welcome-page .well .buttons {
+    position:relative;
+    float:none;
+    right:auto;
+    margin:;
+  }
+  .welcome-page .well .buttons .dismiss {
     display:inline-block;
-    margin-right:10px;
-    width:32%;
-    vertical-align: top;
+  }
 }
-.welcome-page .welcome-panel-column p {
-  margin-top:5px;
-}
-.welcome-page .welcome-panel-column p,
-.welcome-page .welcome-panel-column ul {
-  margin-left:18px;
-}
-
 /* =============================================================================
    Error page rules
 ============================================================================= */

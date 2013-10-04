@@ -81,7 +81,9 @@
                     <label for="body" class="control-label clearfix">
                         <div class="pull-left">{t}Body{/t}</div>
                         <div class="pull-right">
+                            {acl isAllowed='IMAGE_ADMIN'}
                             <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini"> + {t}Insert image{/t}</a>
+                            {/acl}
                         </div>
                     </label>
                     <div class="controls">

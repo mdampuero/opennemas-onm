@@ -1,5 +1,5 @@
 function hide_alerts () {
-    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+    $(".alert:not(.alert-sticky)").fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();
     });
 }
@@ -36,6 +36,8 @@ function toggleCheckbox()  {
 jQuery(document).ready(function($) {
 
     toggleCheckbox();
+
+    FastClick.attach(document.body);
 
     // Hide alerts after 5 seconds
     window.setInterval(function() {

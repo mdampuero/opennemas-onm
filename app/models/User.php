@@ -1009,10 +1009,11 @@ class User
             $GLOBALS['application']->conn->fetchMode = ADODB_FETCH_ASSOC;
             $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
 
-            if (!$rs->fields) {
-                return false;
+            if (!$rs) {
+                return array();
             }
 
+            $this->meta = array();
             foreach ($rs as $value) {
                 $this->meta[$rs->fields['meta_key']] = $rs->fields['meta_value'];
             }
@@ -1020,6 +1021,7 @@ class User
 
         if (is_string($meta)) {
             $value = null;
+
             if (array_key_exists($meta, $this->meta)) {
                 $value = $this->meta[$meta];
             }
@@ -1032,7 +1034,7 @@ class User
         return $value;
     }
 
-     /**
+    /**
      * Remove user meta given a named array
      *
      * @param int $userId   the user id to set configs to

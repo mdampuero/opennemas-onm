@@ -163,6 +163,7 @@ div#content-provider .ui-widget-header {
     max-height:100%;
 }
 #content-provider .ui-tabs-nav {
+    border-bottom: 1px solid Gray;
     padding:3px 0 0 0 !important;
     background:#F9F9F9 !important;
 }

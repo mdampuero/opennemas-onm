@@ -3,7 +3,7 @@
         <li class="contentbox ad-image {if isset($photo1) && $photo1->name}assigned{/if}">
             <div class="clearfix">
                 <div class="image-data clearfix">
-                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
+                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="frontpage-image" class="image thumbnail">
                         {if isset($photo1) && strtolower($photo1->type_img)=='swf'}
                         <div id="flash-container-replace"></div>
                         <!-- /flash-container-replace -->
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <a href="#media-uploader" data-toggle="modal" data-position="ad-image" class="btn btn-small">{t}Select image{/t}</a>
+                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="ad-image" class="btn btn-small">{t}Select image{/t}</a>
                     <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
                 </div>
             </div>

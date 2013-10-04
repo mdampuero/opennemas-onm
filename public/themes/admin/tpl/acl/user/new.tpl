@@ -9,10 +9,29 @@
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
     jQuery(document).ready(function($){
-        // PAssword strength checker
+        // Password strength checker
         var strength = $('#password').passStrength({
             userid: '#login'
         });
+
+        // Password and confirm password match
+        $("#passwordconfirm").keyup(validate);
+        function validate() {
+            var password1 = $("#password").val();
+            var password2 = $("#passwordconfirm").val();
+
+            if(password1 == password2) {
+                $(".checker").html(
+                    '<div class="alert-pass  alert-success"><strong>Valid</strong></div>'
+                );
+            }
+            else {
+                $(".checker").html(
+                    '<div class="alert-pass  alert-error"><strong>Invalid</strong></div>'
+                );
+            }
+
+        }
 
         $('#user-editing-form').tabs();
 
@@ -269,6 +288,7 @@ label {
                                 <div class="input-prepend">
                                     <span class="add-on"><i class="icon-key"></i></span>
                                     <input type="password" id="passwordconfirm" minlength=6 name="passwordconfirm" value="" data-password-equals="password" class="input-medium validate-password-confirm" maxlength="20"/>
+                                    <span class="checker"></span>
                                 </div>
                             </div>
                         </div>

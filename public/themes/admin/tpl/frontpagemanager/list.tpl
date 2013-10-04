@@ -136,7 +136,7 @@
 
         <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
             <div class="spinner"></div>
-            <div class="content-provider-block-wrapper wrapper-content clearfix">
+            <div class="content-provider-block-wrapper clearfix">
                 <ul>
                     {is_module_activated name="ARTICLE_MANAGER"}
                     {if empty($category) || $category eq 'home' || $category eq 0}

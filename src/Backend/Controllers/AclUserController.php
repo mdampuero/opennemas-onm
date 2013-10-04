@@ -454,14 +454,15 @@ class AclUserController extends Controller
      **/
     public function setMetaAction(Request $request)
     {
-        $user = new \User();
+        $user = new \User($_SESSION['userid']);
 
-        $settings = array(
-            'default_language' => 'gl_ES',
-            'test2' => 1
-        );
+        foreach ($request->query as $key => $value) {
+            if (!preg_match('@^_@', $key)) {
+                $settings[$key] = $request->query->filter($key, null, FILTER_SANITIZE_STRING);
+            }
+        }
 
-        $setted = $user->setMeta($_SESSION['userid'], $settings);
+        $setted = $user->setMeta($settings);
         if ($setted) {
             $message = 'Done';
             $httpCode = 200;
