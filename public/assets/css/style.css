@@ -196,6 +196,7 @@ font-size: 13px;
 .alert a { color:White; text-decoration:underline; }
 
 .btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover { font-size: 12px; }
+.content-action-buttons .popover { width:300px; }
 
 /*a.btn [class^="icon-"] { font-size:14px; }*/
 
