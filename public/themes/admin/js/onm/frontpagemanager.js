@@ -140,10 +140,8 @@ function initializePopovers() {
         var element = jQuery(this);
 
         jQuery(this).popover({
-            placement: 'left',
-            // trigger: 'manual',
+            placement: 'top',
             animation: false,
-            delay: 0,
             title: get_tooltip_title(element),
             content: get_tooltip_content(element),
             html : true
