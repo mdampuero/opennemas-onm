@@ -29,6 +29,9 @@ services:
     listener.session:
         class: Framework\EventListeners\SessionListener
 
+    listener.instance_not_available:
+        class: Framework\EventListeners\InstanceNotAvailableExceptionListener
+
     dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
         calls:
@@ -38,6 +41,7 @@ services:
             - ['addSubscriber', [ @listener.controller]]
             - ['addSubscriber', [ @listener.response]]
             - ['addSubscriber', [ @listener.session]]
+            - ['addSubscriber', [ @listener.instance_not_available]]
 
     framework:
         class: Onm\Framework\Framework
