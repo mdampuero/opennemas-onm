@@ -61,6 +61,7 @@
     </script>
     {include file="media_uploader/media_uploader.tpl"}
     <script>
+    jQuery(document).ready(function($){
         var mediapicker = $('#media-uploader').mediaPicker({
             upload_url: "{url name=admin_image_create category=0}",
             browser_url : "{url name=admin_media_uploader_browser}",
@@ -70,7 +71,6 @@
             handlers: {
                 'assign_content' : function( event, params ) {
                     var mediapicker = $(this).data('mediapicker');
-
                     if (params['position'] == 'body' || params['position'] == 'summary') {
                         var image_element = mediapicker.buildHTMLElement(params);
                         CKEDITOR.instances[params['position']].insertHtml(image_element, true);
@@ -87,6 +87,7 @@
                 }
             }
         });
+    });
     </script>
 {/block}
 
