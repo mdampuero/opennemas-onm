@@ -41,17 +41,11 @@ class AdminAuthenticationListener implements EventSubscriberInterface
             return;
         }
 
-
         $request = $event->getRequest();
-
-        global $sc;
-        $session = $sc->get('session');
-        $session->start();
-        $request->setSession($session);
-
+        $session = $request->getSession();
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
-        if ($isAsset) {
+        if ($isAsset && ($isAdmin || $isManager)) {
             // Log this error event to the webserver logging sysmte
             error_log("File does not exist: ".$request->getPathInfo(), 0);
 

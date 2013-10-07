@@ -26,6 +26,9 @@ services:
     listener.controller:
         class: Framework\EventListeners\ControllerListener
 
+    listener.session:
+        class: Framework\EventListeners\SessionListener
+
     dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
         calls:
@@ -34,6 +37,7 @@ services:
             - ['addSubscriber', [ @listener.instanceloader]]
             - ['addSubscriber', [ @listener.controller]]
             - ['addSubscriber', [ @listener.response]]
+            - ['addSubscriber', [ @listener.session]]
 
     framework:
         class: Onm\Framework\Framework
