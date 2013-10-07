@@ -173,9 +173,11 @@
         {script_tag src="/ckeditor/ckeditor.js" common=1}
         {script_tag src="/onm/jquery.onm-editor.js" common=1}
         <script type="text/javascript">
-        $.onmEditor({
-            language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
-        });
+        $(function() {
+            $.onmEditor({
+                language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
+            });
+        })
         </script>
 	{/block}
 
