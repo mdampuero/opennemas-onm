@@ -406,13 +406,14 @@ class User
         $sql = "SELECT id FROM users WHERE username=? OR email=? OR email=? OR username=?";
 
         $values = array($data['username'], $data['email'], $data['username'], $data['email']);
-        $rs = $GLOBALS['application']->conn->GetOne($sql, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
-        if (isset($data['id']) && $rs == $data['id']) {
+        // If is update, check for more than 1 result
+        if (isset($data['id']) && $rs->_numOfRows == 1 && $rs->fields['id'] == $data['id']) {
             return false;
         }
 
-        return ($rs != null && $rs != false);
+        return ($rs->fields != null && $rs->fields != false);
     }
 
     /**
