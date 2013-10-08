@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS `action_counters` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `counter` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `service` (`service`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `action_name` (`action_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `advertisements`
