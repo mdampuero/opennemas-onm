@@ -23,6 +23,19 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `action_counters`
+--
+DROP TABLE IF EXISTS `action_counters`;
+CREATE TABLE IF NOT EXISTS `action_counters` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `action_name` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `counter` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `service` (`service`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+--
 -- Table structure for table `advertisements`
 --
 
@@ -1507,7 +1520,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('time_zone', 's:3:"335";'),
 ('site_language', 's:5:"es_ES";'),
 ('mail_server', 's:9:"localhost";'),
-('mail_username', 's:9:"webmaster";'),
+('mail_username', 's:0:"";'),
 ('mail_password', 's:0:"";'),
 ('newsletter_sender', 's:30:"no-reply@postman.opennemas.com"'),
 ('max_mailing', 's:1:"0"'),
