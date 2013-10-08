@@ -473,7 +473,7 @@ jQuery(document).ready(function($) {
                     <tbody>
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="newsletter_sender" class="control-label">{t}Newsletter sender{/t}</label>
+                                <label for="newsletter_sender" class="control-label">{t}Newsletter sender{/t} (Sender)</label>
                             </th>
                             <td class="controls">
                                 <input type="text" id="newsletter_sender" name="newsletter_sender" value="{$configs['newsletter_sender']|default:'no-reply@postman.opennemas.com'}">
