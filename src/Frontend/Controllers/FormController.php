@@ -132,7 +132,7 @@ class FormController extends Controller
                     $text = \Swift_Message::newInstance();
                     $text
                         ->setSubject($subject)
-                        ->setBody(utf8_decode($body), 'text/html')
+                        ->setBody($body, 'text/html')
                         ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
                         ->setTo(array($recipient => $recipient))
                         ->setFrom(array($email => $name))
