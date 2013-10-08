@@ -21,11 +21,8 @@ function smarty_function_include_comscore_code($params, &$smarty)
                var _comscore = _comscore || [];
                _comscore.push({ c1: "2", c2: "'. $comscoreConfig['page_id'] .'" });
                (function() {
-                 var s = document.createElement("script"), '.
-                 'el = document.getElementsByTagName("script")[0]; s.async = true;
-                 s.src = (document.location.protocol == "https:" ? '.
-                    '"https://sb  <https://sb/>" :"http://b  <http://b/>") + '.
-                    '".scorecardresearch.com/beacon.js  <http://scorecardresearch.com/beacon.js>";
+                 var s = document.createElement("script"), el = document.getElementsByTagName("script")[0]; s.async = true;
+                 s.src = (document.location.protocol == "https:" ? "https://sb" :"http://b") + ".scorecardresearch.com/beacon.js";
                  el.parentNode.insertBefore(s, el);
                })();
             </script>
