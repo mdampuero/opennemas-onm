@@ -464,6 +464,17 @@ jQuery(document).ready(function($) {
 
                             </td>
                         </tr>
+                         <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="mail_sender" class="control-label">{t}Sender{/t} (Sender)</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="mail_sender" name="mail_sender" value="{$configs['mail_sender']|default:'no-reply@postman.opennemas.com'}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
                     </tbody>
                     </table>
                 </fieldset>
@@ -471,17 +482,7 @@ jQuery(document).ready(function($) {
                     <legend>{t}Newsletter{/t}</legend>
                     <table>
                     <tbody>
-                        <tr valign="top" class="control-group">
-                            <th scope="row">
-                                <label for="newsletter_sender" class="control-label">{t}Newsletter sender{/t} (Sender)</label>
-                            </th>
-                            <td class="controls">
-                                <input type="text" id="newsletter_sender" name="newsletter_sender" value="{$configs['newsletter_sender']|default:'no-reply@postman.opennemas.com'}">
-                            </td>
-                            <td>
 
-                            </td>
-                        </tr>
                         <tr valign="top" class="control-group">
                             <th scope="row">
                                 <label for="max_mailing" class="control-label">{t}Num Max emails sent by month{/t}</label>
