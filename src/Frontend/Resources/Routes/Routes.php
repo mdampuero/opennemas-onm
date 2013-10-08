@@ -839,10 +839,20 @@ $frontendRoutes->add(
         '/participa',
         array(
             '_controller' => 'Frontend:Controllers:FormController:frontpage',
+
         )
     )
 );
 
+$frontendRoutes->add(
+    'frontend_participa_form',
+    new Route(
+        '/participa/envia',
+        array(
+            '_controller' => 'Frontend:Controllers:FormController:frontpage',
+        )
+    )
+);
 
 $frontendRoutes->add(
     'frontend_participa_send',
