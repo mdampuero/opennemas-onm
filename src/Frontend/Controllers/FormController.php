@@ -91,7 +91,7 @@ class FormController extends Controller
             );
 
             // What happens when the CAPTCHA was entered incorrectly
-            if (1!=1  && !$resp->is_valid) {
+            if (!$resp->is_valid) {
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {
@@ -124,16 +124,19 @@ class FormController extends Controller
                     $recipient = $request->request->filter('recipient', null, FILTER_SANITIZE_STRING);
 
 
-
+                    $mailSender = s::get('mail_sender');
+                    if (empty($mailSender)) {
+                        $mailSender = "no-reply@postman.opennemas.com";
+                    }
                     //  Build the message
                     $text = \Swift_Message::newInstance();
                     $text
                         ->setSubject($subject)
                         ->setBody(utf8_decode($body), 'text/html')
-                        ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
+                        ->addPart(strip_tags(utf8_decode($body)), 'text/plain')
                         ->setTo(array($recipient => $recipient))
                         ->setFrom(array($email => $name))
-                        ->setSender(array('no-reply@postman.opennemas.com' => s::get('site_name')));
+                        ->setSender(array($mailSender => s::get('site_name')));
 
                     if (isset($_FILES['image1']) && !empty($_FILES['image1']["name"])) {
                         $file = $_FILES["image1"]["tmp_name"];
@@ -152,6 +155,9 @@ class FormController extends Controller
                     try {
                         $mailer = $this->get('mailer');
                         $mailer->send($text);
+
+                        $action = new \Action();
+                        $action->set(array('action_name'=>'form_1','counter'=>1));
 
                         $message = _("You have been sent mail .");
 
