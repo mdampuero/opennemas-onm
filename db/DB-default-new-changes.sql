@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `action_counters` (
   `counter` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `action_name` (`action_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8-general-ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 REPLACE INTO settings (`name`, `value`) VALUES ('mail_username', 's:0:""');
