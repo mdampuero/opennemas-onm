@@ -71,14 +71,14 @@ jQuery(document).ready(function($) {
             <ul class="old-button">
                 <li>
                     <button type="submit">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
+                        <img border="0" src="{$params.COMMON_ASSET_DIR}images/save.png"><br />
                         {t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
                     <a href="{url name=manager_instances}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
+                        <img border="0" src="{$params.COMMON_ASSET_DIR}images/previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
                         {t}Go back{/t}
                     </a>
                 </li>
