@@ -196,7 +196,13 @@ class InstanceManager
     {
         $instances = array();
 
-        if (!empty($params['name']) && $params['name'] != '*') {
+        if (!empty($params['name']) && $params['name'] != '*' &&
+            !empty($params['email']) && $params['email'] != '*'
+        ) {
+            $sql = "SELECT * FROM instances "
+                 ."WHERE name LIKE '%".$params['name']."%' AND "
+                 ."contact_mail LIKE '%".$params['email']."%' ORDER BY id DESC";
+        } elseif (!empty($params['name']) && $params['name'] != '*') {
             $sql = "SELECT * FROM instances "
                  ."WHERE name LIKE '%".$params['name']."%' ORDER BY id DESC";
         } elseif (!empty($params['email']) && $params['email'] != '*') {
