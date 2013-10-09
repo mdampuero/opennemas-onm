@@ -27,6 +27,7 @@
             </div>
             <div class="pull-right form-inline">
                 <div class="pager">
+                    <input type="text" id="email" placeholder="{t}Filter by e-mail{/t}" name="filter_email" onchange="this.form.submit();" value="{$filter_email}"/>
                     <input type="text" id="username" placeholder="{t}Filter by name{/t}" name="filter_name" onchange="this.form.submit();" value="{$filter_title}"/>
                     <form>
                         <label for="usergroup">
