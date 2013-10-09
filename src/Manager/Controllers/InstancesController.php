@@ -85,6 +85,7 @@ class InstancesController extends Controller
                 'instances'     => $instances,
                 'per_page'      => $itemsPerPage,
                 'filter_name'   => $findParams['name'],
+                'filter_email'  => $findParams['email'],
                 'timeZones'     => $availableTimeZones,
             )
         );
