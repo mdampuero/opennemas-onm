@@ -105,7 +105,7 @@ class FormController extends Controller
                         "Sorry, we were unable to complete your request.\n"
                         ."Check the form and try again"
                     );
-                    $message = _("Emails is required but will not be published");
+                    $message = _("Email is required but will not be published");
                     $class = 'error';
                 } else {
                     // Correct CAPTCHA, correct mail and name not empty
@@ -159,7 +159,7 @@ class FormController extends Controller
                         $action = new \Action();
                         $action->set(array('action_name'=>'form_1','counter'=>1));
 
-                        $message = _("You have been sent mail .");
+                        $message = _("The information has been sent");
 
                         $class   = 'success';
 
