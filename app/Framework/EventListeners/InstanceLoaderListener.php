@@ -33,6 +33,10 @@ class InstanceLoaderListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
+        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
+            return;
+        }
+
         mb_internal_encoding("UTF-8");
 
         global $sc;

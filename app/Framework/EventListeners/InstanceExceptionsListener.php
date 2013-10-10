@@ -19,20 +19,21 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * ExceptionListener.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class InstanceNotAvailableExceptionListener implements EventSubscriberInterface
+class InstanceExceptionsListener implements EventSubscriberInterface
 {
     protected $controller;
     protected $logger;
 
-    // public function __construct($controller, LoggerInterface $logger = null)
+    // public function __construct(/*$controller,*/ LoggerInterface $logger = null)
     // {
-    //     $this->controller = $controller;
+    //     // $this->controller = $controller;
     //     $this->logger = $logger;
     // }
 
@@ -49,20 +50,21 @@ class InstanceNotAvailableExceptionListener implements EventSubscriberInterface
         $exception = $event->getException();
         $request = $event->getRequest();
 
-        if ($exception instanceof \Onm\Instance\NotFoundException) {
-            echo 'yes';
+        // only handle not valid instance exceptions
+        if ($exception instanceof \Onm\Instance\NotFoundException
+            || $exception instanceof \Onm\Instance\NotActivatedException
+        ) {
             // $this->logException($exception, sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
 
             $attributes = array(
-                '_controller' => $this->controller,
+                '_controller' => 'Backend:Controllers:ErrorController:default', //$this->controller,
                 'exception'   => FlattenException::create($exception),
-                'logger'      => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
+                // 'logger'      => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
                 // keep for BC -- as $format can be an argument of the controller callable
                 // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
                 // @deprecated in 2.4, to be removed in 3.0
                 'format'      => $request->getRequestFormat(),
             );
-            // var_dump($attributes);die();
 
             $request = $request->duplicate(null, null, $attributes);
             $request->setMethod('GET');
@@ -70,7 +72,7 @@ class InstanceNotAvailableExceptionListener implements EventSubscriberInterface
             try {
                 $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
             } catch (\Exception $e) {
-                $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
+                // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
 
                 // set handling to false otherwise it wont be able to handle further more
                 $handling = false;
@@ -78,15 +80,13 @@ class InstanceNotAvailableExceptionListener implements EventSubscriberInterface
                 // re-throw the exception from within HttpKernel as this is a catch-all
                 return;
             }
+            // var_dump($response);die();
+
 
             $event->setResponse($response);
-
-            $handling = false;
-
         }
 
-
-
+        $handling = false;
     }
 
     public static function getSubscribedEvents()

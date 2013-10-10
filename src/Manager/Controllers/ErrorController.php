@@ -44,8 +44,7 @@ class ErrorController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        global $error;
-        $error = $this->request->get('error');
+        $error = $request->attributes->get('exception');
 
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
@@ -57,8 +56,9 @@ class ErrorController extends Controller
 
         switch ($name) {
             case 'ResourceNotFoundException':
+            case 'NotFoundHttpException':
                 $trace = $error->getTrace();
-                $path = $trace[0]['args'][0];
+                $path = $request->getRequestUri();
 
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
                 error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
