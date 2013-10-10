@@ -34,13 +34,6 @@ class Album extends Content
     public $agency = null;
 
     /**
-     * Unused variable
-     *
-     * @var string
-     **/
-    public $fuente = null;
-
-    /**
      * the id of the image that is the cover for this album
      */
     public $cover_id = null;
@@ -123,17 +116,15 @@ class Album extends Content
         parent::create($data);
 
         $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
-        $data['fuente'] = (empty($data['fuente']))? '': $data['fuente'];
 
         $sql = "INSERT INTO albums "
-                ." (`pk_album`,`subtitle`, `agency`,`fuente`,`cover_id`) "
+                ." (`pk_album`,`subtitle`, `agency`, `cover_id`) "
                 ." VALUES (?,?,?,?,?)";
 
         $values = array(
             $this->id,
             $data["subtitle"],
             $data["agency"],
-            $data["fuente"],
             $data['album_frontpage_image'],
         );
 
@@ -171,7 +162,6 @@ class Album extends Content
         $this->pk_album    = $rs->fields['pk_album'];
         $this->subtitle    = $rs->fields['subtitle'];
         $this->agency      = $rs->fields['agency'];
-        $this->fuente      = $rs->fields['fuente'];
         $this->cover_id    = $rs->fields['cover_id'];
         $this->cover_image = new Photo($rs->fields['cover_id']);
         $this->cover       = $this->cover_image->path_file.$this->cover_image->name;
@@ -190,17 +180,15 @@ class Album extends Content
     {
         parent::update($data);
 
-        $data['subtitle'] = (empty($data['subtitle']))? 0: $data['subtitle'];
-        $data['fuente']   = (empty($data['fuente']))? 0: $data['fuente'];
+        $data['subtitle'] = (empty($data['subtitle']))? 0 : $data['subtitle'];
 
         $sql = "UPDATE albums "
-             . "SET  `subtitle`=?, `agency`=?, `fuente`=?, `cover_id`=? "
+             . "SET  `subtitle`=?, `agency`=?, `cover_id`=? "
              ." WHERE pk_album=?";
 
         $values = array(
             $data['subtitle'],
             $data['agency'],
-            $data['fuente'],
             $data['album_frontpage_image'],
             $data['id']
         );
@@ -319,7 +307,6 @@ class Album extends Content
      **/
     public function saveAttachedPhotos($data)
     {
-        $albumPhoto = new AlbumPhoto;
         if (isset($data['album_photos_id']) && !empty($data['album_photos_id'])) {
             foreach ($data['album_photos_id'] as $position => $photoID) {
                 $photoFooter = filter_var($data['album_photos_footer'][$position], FILTER_SANITIZE_STRING);
