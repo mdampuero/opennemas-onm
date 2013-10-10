@@ -58,6 +58,9 @@ ALTER TABLE `articles`
 DROP `columns`,
 DROP `home_columns`;
 
+ALTER TABLE `albums`
+DROP `fuente`,
+
 UPDATE contents INNER JOIN articles ON contents.pk_content = articles.pk_article SET contents.body=articles.body
 ALTER TABLE `articles` DROP `body`;
 UPDATE contents INNER JOIN static_pages ON contents.pk_content = static_pages.pk_static_page SET contents.body=static_pages.body
@@ -67,3 +70,6 @@ ALTER TABLE `opinions` DROP `body`;
 UPDATE contents INNER JOIN letters ON contents.pk_content = letters.pk_letter SET contents.body=letters.body
 ALTER TABLE `letters` DROP `body`;
 
+ALTER TABLE `menues`
+  DROP `site`,
+  DROP `pk_father`;
