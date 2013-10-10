@@ -45,11 +45,9 @@
                     if (params['position'] == 'body') {
                         CKEDITOR.instances.body.insertHtml(image_element);
                     } else {
-                        console.log(params);
                         var container = $('#article_images').find('.'+params['position']);
 
                         var image_data_el = container.find('.image-data');
-                        console.log(image_data_el)
                         image_data_el.find('.related-element-id').val(params.content.pk_photo);
                         image_data_el.find('.related-element-footer').val(params.description);
                         image_data_el.find('.image').html(image_element);

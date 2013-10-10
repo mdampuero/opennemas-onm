@@ -8,7 +8,9 @@
             <div class="content">
                 <div class="image-data">
                     <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="frontpage-image" class="image thumbnail">
+                        {if is_object($photo1)}
                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
+                        {/if}
                     </a>
                     <div class="article-resource-footer">
                         <label for="title">{t}Footer text{/t}</label>
@@ -32,7 +34,9 @@
             <div class="content">
                 <div class="image-data">
                     <a href="#media-uploader" data-toggle="modal" data-position="inner-image" class="image thumbnail">
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}"/>
+                        {if is_object($photo2)}
+                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo2->path_file}{$photo2->name}"/>
+                        {/if}
                     </a>
                     <div class="article-resource-footer">
                         <label for="title">{t}Footer text{/t}</label>
@@ -57,7 +61,9 @@
             <div class="content">
                 <div class="image-data">
                     <a href="#media-uploader" data-toggle="modal" data-position="home-image" class="image thumbnail">
+                        {if is_object($photo3)}
                         <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo3->path_file}{$photo3->name}"/>
+                        {/if}
                     </a>
                     <div class="article-resource-footer">
                         <label for="title">{t}Image footer text{/t}</label>
