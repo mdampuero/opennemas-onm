@@ -59,8 +59,10 @@ class BlogController extends Controller
         $cacheId = "blog|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
 
-
-            $itemsPerPage = 8;
+            $itemsPerPage = s::get('items_in_blog');
+            if (empty($itemsPerPage )) {
+                $itemsPerPage = 8;
+            }
 
             $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(
@@ -222,7 +224,10 @@ class BlogController extends Controller
             $tagName = $GLOBALS['aplication']->conn->qstr($tagName);
             $tagSearchSQL = "AND metadata LIKE '%$tagName%'";
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = s::get('items_in_blog');
+            if (empty($itemsPerPage )) {
+                $itemsPerPage = 8;
+            }
 
             $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(

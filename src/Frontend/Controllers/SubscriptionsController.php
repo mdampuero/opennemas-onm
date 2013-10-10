@@ -92,7 +92,7 @@ class SubscriptionsController extends Controller
             );
 
             // What happens when the CAPTCHA was entered incorrectly
-            if (1!=1 && !$resp->is_valid) {
+            if (!$resp->is_valid) {
                 $message = _("The reCAPTCHA wasn't entered correctly. Go back and try it again.");
                 $class = 'error';
             } else {

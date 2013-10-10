@@ -61,6 +61,7 @@ class Template extends Smarty
 
         $this->addFilter("output", "js_includes");
         $this->addFilter("output", "css_includes");
+        $this->addFilter("output", "canonical_url");
 
         $this->setTemplateVars($theme);
 

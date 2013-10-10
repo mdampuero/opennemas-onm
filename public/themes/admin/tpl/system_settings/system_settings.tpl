@@ -281,6 +281,14 @@
                         <input type="number" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                     </div>
                 </div>
+                {is_module_activated name="FRONTPAGES_LAYOUT"}
+                <div class="control-group">
+                    <label for="items_in_blog" class="control-label">{t}Items per blog page{/t}</label>
+                    <div class="controls">
+                        <input type="number" id="items_in_blog" name="items_in_blog" value="{$configs['items_in_blog']|default:10}">
+                    </div>
+                </div>
+                {/is_module_activated}
             </fieldset>
             <fieldset>
                 <h3 class="settings-header">{t}Sessions{/t}</h3>

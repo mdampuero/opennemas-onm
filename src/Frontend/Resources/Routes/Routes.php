@@ -834,19 +834,41 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'frontend_letter_frontpage',
+    'frontend_participa_frontpage',
     new Route(
-        '/cartas-al-director',
+        '/participa',
         array(
-            '_controller' => 'Frontend:Controllers:LetterController:frontpage',
+            '_controller' => 'Frontend:Controllers:FormController:frontpage',
+
         )
     )
 );
 
 $frontendRoutes->add(
-    'frontend_participa_frontpage',
+    'frontend_participa_form',
     new Route(
-        '/participa',
+        '/participa/envia',
+        array(
+            '_controller' => 'Frontend:Controllers:FormController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_participa_send',
+    new Route(
+        '/participa/send',
+        array(
+            '_controller' => 'Frontend:Controllers:FormController:send',
+
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_letter_frontpage',
+    new Route(
+        '/cartas-al-director',
         array(
             '_controller' => 'Frontend:Controllers:LetterController:frontpage',
         )

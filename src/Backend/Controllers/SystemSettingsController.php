@@ -45,8 +45,8 @@ class SystemSettingsController extends Controller
             'recaptcha', 'google_maps_api_key','google_custom_search_api_key',
             'facebook','facebook_page','facebook_id','twitter_page', 'googleplus_page',
             'google_analytics','piwik', 'ojd', 'comscore', 'section_settings', 'paypal_mail',
-            'items_per_page','refresh_interval', 'google_news_name', 'google_page',
-            'webmastertools_google', 'webmastertools_bing',
+            'items_per_page','refresh_interval','items_in_blog', 'google_news_name',
+            'google_page', 'webmastertools_google', 'webmastertools_bing',
             'max_session_lifetime', 'onm_digest_user', 'onm_digest_pass',
             'cookies_hint_enabled', 'cookies_hint_url',
         );
