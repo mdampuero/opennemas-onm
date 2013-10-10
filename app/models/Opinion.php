@@ -39,13 +39,6 @@ class Opinion extends Content
     public $fk_author             = null;
 
     /**
-     * The contents of this opinion
-     *
-     * @var string
-     **/
-    public $body                  = null;
-
-    /**
      * The author img id
      *
      * @var int
@@ -269,13 +262,12 @@ class Opinion extends Content
         parent::update($data);
 
         $sql = "UPDATE opinions "
-             . "SET `fk_author`=?, `body`=?,`fk_author_img`=?, "
+             . "SET `fk_author`=?, `fk_author_img`=?, "
              . "`with_comment`=?, `type_opinion`=?"
              . "WHERE pk_opinion=?";
 
         $values = array(
             $data['fk_author'],
-            $data['body'],
             $data['fk_author_img'],
             $data['with_comment'],
             $data['type_opinion'],

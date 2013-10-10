@@ -34,13 +34,6 @@ class StaticPage extends Content
     public $content_type = 'static_page';
 
     /**
-     * The content of the static page
-     *
-     * @var string
-     */
-    public $body = null;
-
-    /**
      * The slug of the static page
      *
      * @var string

@@ -44,21 +44,28 @@ class Content
      *
      * @var string
      **/
-    public $title = null;
+    public $title = '';
 
     /**
      * The description of the content
      *
      * @var string
      **/
-    public $description         = null;
+    public $description         = '';
+
+    /**
+     * The main text of the content
+     *
+     * @var string
+     */
+    public $body = '';
 
     /**
      * The list of tags of this content separated by commas
      *
      * @var string
      **/
-    public $metadata            = null;
+    public $metadata            = '';
 
     /**
      * The date from when this will be available to publish
@@ -121,7 +128,7 @@ class Content
      *
      * @var string
      **/
-    public $category_name       = null;
+    public $category_name       = '';
 
     /**
      * View counter for this content
@@ -192,15 +199,6 @@ class Content
      * @var int 0|1|2
      **/
     public $content_status      = null;
-
-    /**
-     * Not used
-     *
-     * @deprecated  deprecated from 0.8
-     *
-     * @var string
-     **/
-    public $placeholder         = null;
 
     /**
      * An array for misc information of this content
