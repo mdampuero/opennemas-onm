@@ -195,7 +195,7 @@ class Comment
 
         $sql = 'INSERT INTO comments
                     (`content_id`, `author`, `author_email`, `author_url`, `author_ip`,
-                     `date`, `body`, `status`, `agent`,`type`,`parent_id`,`user_id`,content_type_referenced)
+                     `date`, `body`, `status`, `agent`, `type`, `parent_id`, `user_id`, `content_type_referenced`)
                 VALUES
                     (?,?,?,?,?,?,?,?,?,?,?,?,?)';
 

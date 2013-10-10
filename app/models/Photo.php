@@ -768,34 +768,6 @@ class Photo extends Content
     }
 
     /**
-     * Updates photo information
-     *
-     * @param array $data the new photo data to set
-     *
-     * @return boolean if the photo was updated
-     **/
-    public function setData($data)
-    {
-        parent::update($data);
-
-        $sql = "UPDATE `photos`
-                SET
-                WHERE `pk_photo`=?";
-
-        $values = array(
-            $data['author_name'],
-            $data['address'],
-            $data['id']
-        );
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Removes a photo given its id
      *
      * @param int $id the photo id to delete
