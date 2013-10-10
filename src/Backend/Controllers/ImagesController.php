@@ -377,7 +377,7 @@ class ImagesController extends Controller
             $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
             if (!empty($id)) {
                 $photo = new \Photo($id);
-                $photo->readAllData();
+                $photo->getMetaData();
 
                 $photos []= $photo;
             }
@@ -438,7 +438,7 @@ class ImagesController extends Controller
             );
 
             $photo = new \Photo($id);
-            if ($photo->setData($photoData)) {
+            if ($photo->update($photoData)) {
                 $ids []= $id;
                 $photosSaved++;
             }

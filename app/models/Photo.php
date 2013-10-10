@@ -590,7 +590,7 @@ class Photo extends Content
      *
      * @return stdClass a dummy object with the photo information
      **/
-    public function readAllData()
+    public function getMetaData()
     {
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
@@ -739,9 +739,14 @@ class Photo extends Content
      **/
     public function update($data)
     {
+        $data['pk_author'] = $_SESSION['userid'];
+        $data['fk_user_last_editor'] = $_SESSION['userid'];
+
         parent::update($data);
         $sql = "UPDATE photos
-                SET `name`=?, `path_file`=?, `size`=?, `width`=?, `height`=?,`author_name`=?
+                SET `name`=?, `path_file`=?, `size`=?,
+                    `width`=?, `height`=?,
+                    `author_name`=?, `address`=?,
                 WHERE pk_photo=?";
 
         $values = array(
@@ -751,6 +756,7 @@ class Photo extends Content
             $data['width'],
             $data['height'],
             $data['author_name'],
+            $data['address'],
             $data['id']
         );
 
@@ -770,12 +776,10 @@ class Photo extends Content
      **/
     public function setData($data)
     {
-        $data['pk_author'] = $_SESSION['userid'];
-        $data['fk_user_last_editor'] = $_SESSION['userid'];
         parent::update($data);
 
         $sql = "UPDATE `photos`
-                SET `author_name`=?, `address`=?,
+                SET
                 WHERE `pk_photo`=?";
 
         $values = array(
