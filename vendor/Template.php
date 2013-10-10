@@ -22,34 +22,94 @@ class Template extends Smarty
     public $templateBaseDir;
     public $allow_php_tag;
     public $container           = null;
+    public $filters             = array();
+    public $baseCachePath       = '';
 
     public $relative_path = null;
     static public $registry = array();
 
+    /**
+     * Initializes the Template class
+     *
+     * @param string $theme the theme to use
+     * @param array  $filters the list of filters to load
+     *
+     * @return void
+     **/
     public function __construct($theme, $filters = array())
     {
         // Call the parent constructor
         parent::__construct();
 
-        if (!file_exists(CACHE_PATH.DS.'smarty')) {
-            mkdir(CACHE_PATH.DS.'smarty', 0775);
-        }
+        $this->setBaseCachePath();
+
+        $this->setBasePaths($theme);
 
         global $sc;
         $baseTheme = '';
-        if (isset($sc->getParameter('instance')->theme)) {
+        if ($sc->hasParameter('instance') && isset($sc->getParameter('instance')->theme)) {
             $baseTheme = $sc->getParameter('instance')->theme->getParentTheme();
+
+            if (!empty($baseTheme)) {
+                $this->addTemplateDir(SITE_PATH."/themes/{$baseTheme}/tpl");
+            }
         }
 
+        $this->setupCachePath();
+
+        $this->setPluginLoadPaths();
+
+        $this->addFilter("output", "js_includes");
+        $this->addFilter("output", "css_includes");
+
+        $this->setTemplateVars($theme);
+
+
+        // Load filters
+        foreach ($this->filters as $filterSectionName => $filters) {
+            foreach ($filters as $filterName) {
+                $this->loadFilter($filterSectionName, $filterName);
+            }
+        }
+    }
+
+    /**
+     * Sets the template base path
+     *
+     * @param string $theme the theme to use
+     *
+     * @return void
+     **/
+    public function setBasePaths($theme)
+    {
         // Parent variables
-        $this->templateBaseDir = SITE_PATH.DS.'themes'.DS.$theme.DS;
+        $this->templateBaseDir = SITE_PATH.'/themes/'.$theme.DS;
         $this->setTemplateDir(realpath($this->templateBaseDir.'tpl').DS);
-        if (!empty($baseTheme)) {
-            $this->addTemplateDir(SITE_PATH.DS.'themes'.DS.$baseTheme.DS.'tpl');
-        }
-        $this->addTemplateDir(SITE_PATH.DS.'themes'.DS.'base'.DS.'tpl');
+        $this->addTemplateDir(SITE_PATH.'/themes/'.'base'.'/tpl');
+    }
 
-        $cachePath = CACHE_PATH.DS.'smarty'.DS.'config'.DS;
+    /**
+     * Sets the cache base path
+     *
+     * @return void
+     **/
+    public function setBaseCachePath()
+    {
+        $this->baseCachePath = CACHE_PATH;
+    }
+
+    /**
+     * Sets the cache environment path and copy cache configurations
+     *
+     * @return void
+     **/
+    public function setupCachePath()
+    {
+        if (!file_exists($this->baseCachePath.'/smarty')) {
+            mkdir($this->baseCachePath.'/smarty', 0775);
+        }
+
+        $cachePath = $this->baseCachePath.'/smarty/config/';
         $cacheFilePath = $cachePath.'cache.conf';
         $templateConfigPath = $this->templateBaseDir.'config';
 
@@ -63,39 +123,53 @@ class Template extends Smarty
             );
         }
 
-        $this->config_dir = realpath(CACHE_PATH.DS.'smarty'.DS.'config').'/';
+        $this->config_dir = realpath($this->baseCachePath.'/smarty/config');
 
         // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value) {
-            $directory = CACHE_PATH.DS.'smarty'.DS.$value;
+            $directory = $this->baseCachePath.'/smarty/'.$value;
             if (!is_dir($directory)) {
                 mkdir($directory, 0755);
             }
             $this->{$value."_dir"} = realpath($directory).'/';
         }
+    }
 
+    /**
+     * Sets the path where plugins are loaded from
+     *
+     * @return void
+     **/
+    public function setPluginLoadPaths()
+    {
+        $this->addPluginsDir(realpath($this->templateBaseDir.'plugins/'));
+        $this->addPluginsDir(realpath(SMARTY_DIR.DS.'../onm-plugins/'));
+    }
+
+    /**
+     * Sets some template paths
+     *
+     * @param string $theme the theme to use
+     *
+     * @return void
+     **/
+    public function setTemplateVars($theme)
+    {
         $this->error_reporting = E_ALL & ~E_NOTICE;
 
         $this->theme = $theme;
         $this->assign('THEME', $theme);
 
-        // Add global plugins path
-        $this->addPluginsDir(realpath($this->templateBaseDir.'plugins/').'/');
-        $this->addPluginsDir(realpath(SMARTY_DIR.DS.'../'.DS.'onm-plugins/'));
+        // Template variables
+        $baseUrl = SITE_URL.'/themes/'.$theme.'/';
+        $this->locale_dir       = $baseUrl.'locale/';
+        $this->css_dir          = $baseUrl.'css/';
+        $this->image_dir        = $baseUrl.'images/';
+        $this->js_dir           = $baseUrl.'js/';
+        $this->common_asset_dir = SITE_URL.'assets/';
+
         $this->caching          = false;
         $this->allow_php_tag    = true;
-
-
-        // Template variables
-        $baseUrl = SITE_URL.SS.'themes'.SS.$theme.SS;
-        $this->locale_dir       = $baseUrl.'locale'.SS;
-        $this->css_dir          = $baseUrl.'css'.SS;
-        $this->image_dir        = $baseUrl.'images'.SS;
-        $this->js_dir           = $baseUrl.'js'.SS;
-        $this->common_asset_dir = SITE_URL.SS.'assets'.SS;
-
-        $this->loadFilter("output", "js_includes");
-        $this->loadFilter("output", "css_includes");
 
         $this->assign(
             'params',
@@ -108,10 +182,15 @@ class Template extends Smarty
                 'THEME'            => $theme,
             )
         );
+    }
 
-        $this->theme = $theme;
-        $this->assign('THEME', $theme);
 
+
+    public function addFilter($filterSection, $filterName)
+    {
+        if (in_array($filterSection, array('pre', 'post', 'output'))) {
+            $this->filters [$filterSection][]= $filterName;
+        }
     }
 
     public function generateCacheId($seccion, $subseccion = null, $resource = null)
@@ -170,6 +249,8 @@ class Template extends Smarty
      * @param string $configFile This value will be concat with $this->config_dir
      * @param string $section Load this section if it's possible
      * @param string $defaultSection If $section don't exists then use $defaultSection
+     *
+     * @return void
      */
     public function loadConfigOrDefault($configFile, $section, $defaultSection = 'default')
     {
@@ -186,6 +267,7 @@ class Template extends Smarty
      *
      * @param string $configFile Absolute path to configuration dir
      * @param string $section
+     *
      * @return boolean
      */
     public function existsConfigSection($configFile, $section)

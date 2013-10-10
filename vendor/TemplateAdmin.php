@@ -10,24 +10,29 @@
 
 class TemplateAdmin extends Template
 {
-    public function __construct($theme, $filters = array())
+
+    /**
+     * Initializes the Template class
+     *
+     * @param string $theme the theme to use
+     * @param array  $filters the list of filters to load
+     *
+     * @return void
+     **/
+    public function __construct($theme = 'admin', $filters = array())
     {
-        // Call the parent constructor
-        parent::__construct($theme, $filters);
+        $this->addFilter("output", "trimwhitespace");
 
-        $this->loadFilter("output", "trimwhitespace");
+        parent::__construct($theme, $filters = array());
+    }
 
-        foreach (array('cache', 'compile') as $key => $value) {
-            $directory = COMMON_CACHE_PATH.DS.'smarty'.DS.'admin'.DS.$value;
-
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
-            $this->{$value."_dir"} = realpath($directory).'/';
-        }
-
-        $this->template_dir = $this->templateBaseDir.'tpl/';
-        $this->config_dir   = $this->templateBaseDir.'config/';
-        $this->addPluginsDir($this->templateBaseDir.'plugins/');
+    /**
+     * Sets the cache base path
+     *
+     * @return void
+     **/
+    public function setBaseCachePath()
+    {
+        $this->baseCachePath = COMMON_CACHE_PATH;
     }
 }
