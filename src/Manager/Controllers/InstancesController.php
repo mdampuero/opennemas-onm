@@ -52,7 +52,8 @@ class InstancesController extends Controller
     {
         $page = $request->query->getDigits('page', 1);
         $findParams = array(
-            'name' => $request->query->filter('filter_name', '*', FILTER_SANITIZE_STRING),
+            'name' => $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING),
+            'email' => $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING),
             'per_page' => $request->query->filter('filter_per_page', 20, FILTER_SANITIZE_STRING),
         );
 
@@ -84,6 +85,7 @@ class InstancesController extends Controller
                 'instances'     => $instances,
                 'per_page'      => $itemsPerPage,
                 'filter_name'   => $findParams['name'],
+                'filter_email'  => $findParams['email'],
                 'timeZones'     => $availableTimeZones,
             )
         );
