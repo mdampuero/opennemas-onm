@@ -107,12 +107,21 @@ class Agency
             $article->img2->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->changed);
         }
 
+        // Get author obj
+        $article->author = new \User($article->fk_author);
+
+        // Get author photo
+        $authorPhoto = new \Photo($article->author->avatar_img_id);
+        $article->author->photo = $authorPhoto;
+        $article->author = json_encode($article->author);
+
         $output = $tpl->fetch(
             'news_agency/newsml_templates/base.tpl',
             array(
-                'article'    => $article,
-                'photo'      => $article->img1,
-                'photoInner' => $article->img2,
+                'article'     => $article,
+                'authorPhoto' => $authorPhoto,
+                'photo'       => $article->img1,
+                'photoInner'  => $article->img2,
             )
         );
 

@@ -46,19 +46,23 @@ class BlogController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
+        $categoryManager = $this->get('category_repository');
+        $category = $categoryManager->findBy(array('name' => $categoryName));
+
+        if (empty($category)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+        $category = $category[0];
+
+        $this->view->setConfig('frontpages');
+
         $cacheId = "blog|$categoryName|$page";
-        if (!$this->view->isCached('blog/index.tpl', $cacheId)) {
+        if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
 
-            $cm = new \ContentManager();
-            $categoryManager = $this->get('category_repository');
-            $category = $categoryManager->findBy(array('name' => $categoryName));
-
-            if (empty($category)) {
-                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            $itemsPerPage = s::get('items_in_blog');
+            if (empty($itemsPerPage )) {
+                $itemsPerPage = 8;
             }
-            $category = $category[0];
-
-            $itemsPerPage = s::get('items_per_page');
 
             $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(
@@ -69,6 +73,7 @@ class BlogController extends Controller
                 $page,
                 $itemsPerPage
             );
+
             $imageIdsList = array();
             foreach ($articles as $content) {
                 if (isset($content->img1)) {
@@ -97,11 +102,13 @@ class BlogController extends Controller
                         ->loadRelatedContents($categoryName);
             }
 
+            $total = count($articles)+1;
+
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $countArticles,
+                    'total' => $total,
                     'url'   => $this->generateUrl(
                         'blog_category',
                         array(
@@ -113,14 +120,16 @@ class BlogController extends Controller
 
             $this->view->assign(
                 array(
-                    'articles'   => $articles,
-                    'category'   => $category,
-                    'pagination' => $pagination,
+                    'articles'              => $articles,
+                    'category'              => $category,
+                    'pagination'            => $pagination,
+                    'actual_category_title' => $category->title,
                 )
             );
         }
 
-        $this->getInnerAds();
+        $ads = $this->getInnerAds($category->id);
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'blog/blog.tpl',
@@ -130,6 +139,76 @@ class BlogController extends Controller
         );
     }
 
+
+    /**
+     * Action for synchronized blog frontpage
+     *
+     * @return Response the response object
+     **/
+    public function extCategoryAction(Request $request)
+    {
+        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+
+        $this->view->setConfig('frontpages');
+
+        // Get sync params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$categoryName.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        if (empty($wsUrl)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        $cm = new \ContentManager();
+        $cacheId = "sync|blog|$categoryName|$page";
+        if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
+            $ccm = \ContentCategoryManager::get_instance();
+            // Get category object
+            $category = unserialize(
+                $cm->getUrlContent(
+                    $wsUrl.'/ws/categories/object/'.$categoryName,
+                    true
+                )
+            );
+
+            // Get all contents for this frontpage
+            list($pagination, $articles) = unserialize(
+                $cm->getUrlContent(
+                    $wsUrl.'/ws/frontpages/allcontentblog/'.$categoryName.'/'.$page,
+                    true
+                )
+            );
+
+            $this->view->assign(
+                array(
+                    'articles'              => $articles,
+                    'category'              => $category,
+                    'pagination'            => $pagination,
+                    'actual_category_title' => $ccm->get_title($categoryName),
+                )
+            );
+        }
+
+        //$this->getInnerAds();
+        $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
+        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
+        $this->view->assign('advertisements', $ads);
+
+        return $this->render(
+            'blog/blog.tpl',
+            array(
+                'cache_id' => $cacheId
+            )
+        );
+    }
     /**
      * Description of the action
      *
@@ -145,7 +224,10 @@ class BlogController extends Controller
             $tagName = $GLOBALS['aplication']->conn->qstr($tagName);
             $tagSearchSQL = "AND metadata LIKE '%$tagName%'";
 
-            $itemsPerPage = s::get('items_per_page');
+            $itemsPerPage = s::get('items_in_blog');
+            if (empty($itemsPerPage )) {
+                $itemsPerPage = 8;
+            }
 
             $cm      = new \ContentManager();
             list($countArticles, $articles)= $cm->getCountAndSlice(
@@ -183,11 +265,13 @@ class BlogController extends Controller
                         ->loadRelatedContents($categoryName);
             }
 
+            $total = count($articles)+1;
+
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $countArticles,
+                    'total' => $total,
                     'url'   => $this->generateUrl(
                         'blog_category',
                         array(
@@ -205,7 +289,8 @@ class BlogController extends Controller
                 )
             );
 
-            $this->getInnerAds();
+            $ads = $this->getInnerAds();
+            $this->view->assign('advertisements', $ads);
         }
 
         return $this->render(
@@ -228,21 +313,8 @@ class BlogController extends Controller
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        $positions = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        $advertisement = \Advertisement::getInstance();
-        $banners = $advertisement->getAdvertisements($positions, $category);
-
-        if (count($banners<=0)) {
-            $cm = new \ContentManager();
-            $banners = $cm->getInTime($banners);
-            //$advertisement->renderMultiple($banners, &$tpl);
-            $advertisement->renderMultiple($banners, $advertisement);
-        }
-        // Get intersticial banner,1,2,9,10
-        $intersticial = $advertisement->getIntersticial(150, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

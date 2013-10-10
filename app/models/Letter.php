@@ -80,6 +80,29 @@ class Letter extends Content
                 return StringUtils::get_title($this->title);
 
                 break;
+            case 'content_type_name':
+                return 'Letter';
+                break;
+            case 'photo':
+                return $this->getPhoto();
+
+
+                break;
+
+            case 'summary':
+                $summary = substr(strip_tags($this->body), 0, 200);
+                $pos = strripos($summary, ".");
+
+                if ($pos > 100) {
+                    $summary = substr($summary, 0, $pos).".";
+                } else {
+
+                    $summary = substr($summary, 0, strripos($summary, " "));
+                }
+
+                return $summary;
+
+                break;
             default:
 
                 break;
@@ -113,9 +136,14 @@ class Letter extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
+        }
+
+        if (array_key_exists('image', $data) && !empty($data['image'])) {
+            $this->setProperty('image', $data['image']);
+        }
+        if (array_key_exists('url', $data) && !empty($data['url'])) {
+            $this->setProperty('url', $data['url']);
         }
 
         return $this->id;
@@ -136,12 +164,16 @@ class Letter extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return false;
         }
         $this->load($rs->fields);
         $this->ip = $this->params['ip'];
+
+        $this->loadAllContentProperties();
+        if (!empty($this->image)) {
+            $this->photo = $this->photo;
+        }
+        $this->summary;
 
         return $this;
     }
@@ -171,12 +203,15 @@ class Letter extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
-        $GLOBALS['application']->dispatch('onAfterUpdateLetter', $this);
+        if (array_key_exists('image', $data) && !empty($data['image'])) {
+            $this->setProperty('image', $data['image']);
+        }
+        if (array_key_exists('url', $data) && !empty($data['url'])) {
+            $this->setProperty('url', $data['url']);
+        }
 
         return true;
     }
@@ -195,10 +230,18 @@ class Letter extends Content
         $sql = 'DELETE FROM letters WHERE pk_letter ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return;
         }
+    }
+
+    /**
+     * Returns the Photo object that represents the user avatar
+     *
+     * @return Photo the photo object
+     **/
+    public function getPhoto()
+    {
+        return new \Photo($this->image);
     }
 
     /**
@@ -244,11 +287,39 @@ class Letter extends Content
 
         $ip = getRealIp();
         $data["params"] = array('ip'=> $ip);
+
         if ($letter->create($data)) {
+
             return "Su carta ha sido guardada y está pendiente de publicación.";
         }
 
         return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
             ."correctamente todos los campos.";
+    }
+
+    /**
+     * Renders the poll
+     *
+     * @param arrray $params parameters for rendering the content
+     * @param Template $smarty the Template object instance
+     *
+     * @return string the generated HTML
+     **/
+    public function render($params, $smarty)
+    {
+        //  if (!isset($tpl)) {
+            $tpl = new Template(TEMPLATE_USER);
+        //}
+
+        $tpl->assign('item', $this);
+        $tpl->assign('cssclass', $params['cssclass']);
+
+        try {
+            $html = $tpl->fetch('frontpage/contents/_content.tpl');
+        } catch (\Exception $e) {
+            $html = 'Letter not available';
+        }
+
+        return $html;
     }
 }

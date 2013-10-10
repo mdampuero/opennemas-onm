@@ -46,20 +46,17 @@ class AdvertisementController extends Controller
      **/
     public function getAction(Request $request)
     {
-        // Banner Id
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $id = \Content::resolveID($id);
 
-        $advertisement = new \Advertisement();
-        /* $banner = $advertisement->cache->read($id); */
-        $advertisement->setNumClics($id);
-        $banner = $advertisement->read($id);
+        $er = $this->get('entity_repository');
+
+        $advertisement = $er->find('Advertisement', $id);
 
         return $this->render(
             'ads/advertisement.tpl',
             array(
-                'banner'  => $banner,
-                'content' => $banner
+                'banner'  => $advertisement,
+                'content' => $advertisement
             )
         );
     }
@@ -79,13 +76,13 @@ class AdvertisementController extends Controller
         $content = '';
 
         if (isset($id)) {
-            $advertisement = new \Advertisement($id);
-            $url = $advertisement->getUrl($id);
+            $er = $this->get('entity_repository');
 
+            $advertisement = $er->find('Advertisement', $id);
             $advertisement->setNumClics($id);
 
-            if ($url) {
-                return $this->redirect($url);
+            if ($advertisement->url) {
+                return $this->redirect($advertisement->url);
             } else {
                 $content = '<script type="text/javascript">window.close();</script>';
             }

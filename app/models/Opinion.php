@@ -189,8 +189,6 @@ class Opinion extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -232,9 +230,7 @@ class Opinion extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         if ((int) $rs->fields['fk_author'] == 0) {
@@ -287,8 +283,6 @@ class Opinion extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -319,8 +313,6 @@ class Opinion extends Content
             parent::clearProperty('img2_footer');
         }
 
-        $GLOBALS['application']->dispatch('onAfterUpdateOpinion', $this);
-
         return true;
     }
 
@@ -335,11 +327,9 @@ class Opinion extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM opinions WHERE pk_opinion ='.($id);
+        $sql = 'DELETE FROM opinions WHERE pk_opinion =?';
 
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             return false;
         }
 
@@ -401,7 +391,6 @@ class Opinion extends Content
     */
     public static function getLatestAvailableOpinions($params = array())
     {
-
         $contents = array();
 
         // Setting up default parameters

@@ -44,24 +44,33 @@ class AlbumsController extends Controller
         $this->cm  = new \ContentManager();
 
         $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $subcategoryName    = null;
         $action             = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
+        $this->page         = $this->request->query->getDigits('page', 1);
 
-        if (!empty($this->categoryName)) {
-            $category = $this->ccm->get_id($this->categoryName);
-            $actual_category_id = $category; // FOR WIDGETS
-            $categoryRealName = $this->ccm->get_title($this->categoryName); //used in title
+        if (!empty($this->categoryName) && $this->categoryName != 'home') {
+            $categoryManager = $this->get('category_repository');
+            $category = $categoryManager->findBy(array('name' => $this->categoryName));
+
+            if (empty($category)) {
+                throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            }
+            $category         = $category[0];
+            $categoryRealName = $category->title;
+            $this->category   = $category->pk_content_category;
+
             $this->view->assign(
                 array(
                     'category_name'         => $this->categoryName ,
-                    'category'              => $category ,
-                    'actual_category_id'    => $actual_category_id ,
+                    'category'              => $category->pk_content_category,
+                    'actual_category_id'    => $category->pk_content_category,
                     'actual_category_title' => $categoryRealName,
                     'category_real_name'    => $categoryRealName ,
                 )
             );
         } else {
+
             $categoryRealName = 'Portada';
+            $this->category   = 0;
             $this->view->assign(
                 array(
                     'actual_category_title' => $categoryRealName,
@@ -69,6 +78,7 @@ class AlbumsController extends Controller
                 )
             );
         }
+
         $this->view->assign('actual_category', $this->categoryName);
     }
 
@@ -81,55 +91,77 @@ class AlbumsController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $this->page = $request->query->getDigits('page', 1);
 
         // Setup caching system
         $this->view->setConfig('gallery-frontpage');
         $cacheID = $this->view->generateCacheId($this->categoryName, '', $this->page);
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         // Don't execute the action logic if was cached before
         if (($this->view->caching == 0)
            || (!$this->view->isCached('gallery/gallery-frontpage.tpl', $cacheID))
         ) {
             $albumSettings = s::get('album_settings');
-            $total = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 2;
+            $itemsPerPage = isset($albumSettings['total_front']) ? $albumSettings['total_front'] : 8;
             $days  = isset($albumSettings['time_last']) ? $albumSettings['time_last'] : 4;
-            $order = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'views';
-            $category = $this->ccm->get_id($this->categoryName);
-            if (isset($category)
-                && !empty($category)
-            ) {
-                $albums = $this->cm->find_by_category(
+            $order = isset($albumSettings['orderFrontpage']) ? $albumSettings['orderFrontpage'] : 'created';
+
+            if ($order == 'favorite') {
+
+                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
                     'Album',
-                    $category,
-                    'fk_content_type=7 AND available=1',
-                    'ORDER BY  created DESC LIMIT '.$total
+                    (int) $this->category,
+                    'in_litter != 1 AND contents.available=1',
+                    'ORDER BY favorite DESC, created DESC',
+                    $this->page,
+                    $itemsPerPage
+                );
+
+            } elseif ($order == 'views') {
+
+                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
+                    'Album',
+                    (int) $this->category,
+                    'in_litter != 1 AND contents.available=1 '
+                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)',
+                    'ORDER BY views DESC, created DESC',
+                    $this->page,
+                    $itemsPerPage
                 );
             } else {
-                if ($order == 'favorite') {
-                    $albums = $this->cm->find(
-                        'Album',
-                        'fk_content_type=7 AND available=1 ',
-                        ' ORDER BY favorite DESC,  created DESC LIMIT '.$total
-                    );
-                } else {
-                    $albums = $this->cm->find(
-                        'Album',
-                        'fk_content_type=7 AND available=1 AND '.
-                        'created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)  ',
-                        ' ORDER BY views DESC,  created DESC LIMIT '.$total
-                    );
-                }
+                list($countAlbums, $albums)= $this->cm->getCountAndSlice(
+                    'Album',
+                    (int) $this->category,
+                    'in_litter != 1 AND contents.available=1',
+                    'ORDER BY created DESC',
+                    $this->page,
+                    $itemsPerPage
+                );
             }
+
+
+            $total = count($albums)+1;
+
+            $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+                array(
+                    'page'  => $this->page,
+                    'items' => $itemsPerPage,
+                    'total' => $total,
+                    'url'   => $this->generateUrl(
+                        'frontend_album_frontpage_category',
+                        array(
+                            'category_name' => $this->categoryName
+                        )
+                    )
+                )
+            );
 
             foreach ($albums as &$album) {
                 $album->cover_image = new \Photo($album->cover_id);
                 $album->cover       = $album->cover_image->path_file.$album->cover_image->name;
             }
-
-            $this->view->assign('albums', $albums);
         }
 
         // Send the response to the user
@@ -137,6 +169,8 @@ class AlbumsController extends Controller
             'album/album_frontpage.tpl',
             array(
                 'cache_id' => $cacheID,
+                'albums'              => $albums,
+                'pagination'            => $pagination,
             )
         );
     }
@@ -165,7 +199,9 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-inner');
 
         // Load advertisement for this action
-        $this->getAdsInner();
+        $ads = $this->getAds('innner');
+        $this->view->assign('advertisements', $ads);
+
 
         $cacheID = $this->view->generateCacheId($this->categoryName, null, $albumID);
         if (($this->view->caching == 0)
@@ -272,61 +308,29 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Returns the advertisements for the albums frontpage
+     * Retrieves the advertisement for the frontpage
+     *
+     * @param string $categoryName the category name where fetch ads from
      *
      * @return void
      **/
-    public function getAds()
+    public static function getAds($position = '')
     {
         $ccm = \ContentCategoryManager::get_instance();
-        $category_name='album';
-        $category = $ccm->get_id($category_name);
-
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        $banners = $advertisement->getAdvertisements(array(401, 402, 403, 405, 409, 410, 491, 492), $category);
-
-        $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial(450, '$category');
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
-    }
-
-    /**
-     * Fetches the advertisement
-     *
-     * @return
-     **/
-    private function getAdsInner()
-    {
-        $ccm = \ContentCategoryManager::get_instance();
-        $categoryName ='album';
+        $categoryName = 'album';
         $category = $ccm->get_id($categoryName);
 
-        $category = (!isset($category) || ($category=='home')) ? 0 : $category;
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        $banners = $advertisement->getAdvertisements(
-            array(501, 502, 503, 509, 510, 591, 592),
-            $category
-        );
-
-        $this->cm = new \ContentManager();
-        $banners = $this->cm->getInTime($banners);
-
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial(550, '$category');
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
+        // I have added the element 450 in order to integrate interstitial position
+        if ($position == 'inner') {
+            $positions = array(
+                7, 9, 501, 502, 503, 509, 510, 591, 592
+            );
+        } else {
+            $positions = array(
+                7, 9, 450, 401, 402, 403, 405, 409, 410, 491, 492
+            );
         }
+
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

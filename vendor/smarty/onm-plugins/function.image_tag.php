@@ -16,7 +16,7 @@ function smarty_function_image_tag($params, &$smarty)
     $src = $params['src'];
 
 
-    if (preg_match('@http://@', $src)) {
+    if (preg_match('@http(s)?://@', $src)) {
         $baseUrl = '';
     } elseif (!array_key_exists('base_url', $params)) {
         $baseUrl = INSTANCE_MEDIA.'images';

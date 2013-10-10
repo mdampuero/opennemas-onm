@@ -136,16 +136,16 @@
 
         <div id="content-provider" class="clearfix" title="{t}Available contents{/t}">
             <div class="spinner"></div>
-            <div class="content-provider-block-wrapper wrapper-content clearfix">
+            <div class="content-provider-block-wrapper clearfix">
                 <ul>
                     {is_module_activated name="ARTICLE_MANAGER"}
                     {if empty($category) || $category eq 'home' || $category eq 0}
                     <li>
-                        <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested articles{/t}</a>
+                        <a href="{url name=admin_articles_content_provider_suggested category=$category}">{t}Suggested{/t}</a>
                     </li>
                     {else}
                     <li>
-                         <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Other articles in this category{/t}</a>
+                         <a href="{url name=admin_articles_content_provider_category category=$category}">{t}Others in category{/t}</a>
                     </li>
                     {/if}
                     {/is_module_activated}
@@ -172,6 +172,11 @@
                     <li>
 
                         <a href="{url name=admin_albums_content_provider category=$category}">{t}Albums{/t}</a>
+                    </li>
+                    {/is_module_activated}
+                    {is_module_activated name="LETTER_MANAGER"}
+                    <li>
+                        <a href="{url name=admin_letters_content_provider category=$category}">{t}Letter{/t}</a>
                     </li>
                     {/is_module_activated}
                     {is_module_activated name="POLL_MANAGER"}

@@ -39,7 +39,6 @@ class UserController extends Controller
         $this->session = $this->get('session');
         $this->session->start();
 
-        require_once SITE_VENDOR_PATH.'/phpmailer/class.phpmailer.php';
         require_once 'recaptchalib.php';
     }
 
@@ -56,10 +55,14 @@ class UserController extends Controller
             $user = new \User($_SESSION['userid']);
             $user->getMeta();
 
+            // Get current time
+            $currentTime = new \DateTime();
+
             return $this->render(
                 'user/show.tpl',
                 array(
-                    'user'  => $user
+                    'user'         => $user,
+                    'current_time' => $currentTime
                 )
             );
         }
@@ -79,41 +82,18 @@ class UserController extends Controller
     public function registerAction(Request $request)
     {
         //Get config vars
-        $configRecaptcha = s::get('recaptcha');
         $configSiteName = s::get('site_name');
-
-        $recaptcha_challenge_field = $request->request->filter(
-            'recaptcha_challenge_field',
-            null,
-            FILTER_SANITIZE_STRING
-        );
-        $recaptcha_response_field = $request->request->filter(
-            'recaptcha_response_field',
-            null,
-            FILTER_SANITIZE_STRING
-        );
-
-        // Get reCaptcha validate response
-        $resp = \recaptcha_check_answer(
-            $configRecaptcha['private_key'],
-            $_SERVER["REMOTE_ADDR"],
-            $recaptcha_challenge_field,
-            $recaptcha_response_field
-        );
 
         $errors = array();
         // What happens when the CAPTCHA was entered incorrectly
         if ('POST' != $request->getMethod()) {
             // Do nothing
-        } elseif (!$resp->is_valid) {
-            $errors []= _('Verification image not valid. Try to fill it again.');
         } else {
-            // Correct CAPTCHA - Filter $_POST vars from FORM
             $data = array(
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
                 'email'         => $request->request->filter('user_email', null, FILTER_SANITIZE_EMAIL),
-                'username'         => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
+                'username'      => $request->request->filter('user_name', null, FILTER_SANITIZE_STRING),
                 'name'          => $request->request->filter('full_name', null, FILTER_SANITIZE_STRING),
                 'password'      => $request->request->filter('pwd', null, FILTER_SANITIZE_STRING),
                 'sessionexpire' => 15,
@@ -613,7 +593,7 @@ class UserController extends Controller
 
         $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = 15;
+        $itemsPerPage = 12;
 
         $cacheID = $this->view->generateCacheId('author-'.$slug, '', $page);
 
@@ -624,62 +604,65 @@ class UserController extends Controller
             // Get user by slug
             $ur = $this->get('user_repository');
             $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
-            $user->photo = new \Photo($user->avatar_img_id);
+            if (!empty($user)) {
+                $user->photo = new \Photo($user->avatar_img_id);
+                $user->getMeta();
 
+                $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
+                    ."AND available=1 AND in_litter=0";
 
-            $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
-                ."AND available=1 AND in_litter=0";
+                $er = $this->get('entity_repository');
+                $contentsCount  = $er->count($searchCriteria);
+                $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
 
-            $er = $this->get('entity_repository');
-            $contentsCount  = $er->count($searchCriteria);
-            $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
+                foreach ($contents as &$item) {
+                    $item = $item->get($item->id);
+                    $item->author = $user;
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $image = new \Photo($item->img1);
+                        $item->img1_path = $image->path_file.$image->name;
+                        $item->img1 = $image;
+                    }
 
-            foreach ($contents as &$item) {
-                $item = $item->get($item->id);
-                $item->author = $user;
-                if (isset($item->img1) && ($item->img1 > 0)) {
-                    $image = new \Photo($item->img1);
-                    $item->img1_path = $image->path_file.$image->name;
-                    $item->img1 = $image;
+                    if ($item->fk_content_type == 7) {
+                        $image = new \Photo($item->cover_id);
+                        $item->img1_path = $image->path_file.$image->name;
+                        $item->img1 = $image;
+                        $item->summary = $item->subtitle;
+                        $item->subtitle= '';
+                    }
+
+                    if ($item->fk_content_type == 9) {
+                        $item->obj_video = $item;
+                        $item->summary = $item->description;
+                    }
+
+                    if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                        $item->video = new \Video($item->fk_video2);
+                    }
                 }
+                // Build the pager
+                $pagination = \Onm\Pager\Slider::create(
+                    $contentsCount,
+                    $itemsPerPage,
+                    $this->generateUrl(
+                        'frontend_author_frontpage',
+                        array('slug' => $slug,)
+                    )
+                );
 
-                if ($item->fk_content_type == 7) {
-                    $image = new \Photo($item->cover_id);
-                    $item->img1_path = $image->path_file.$image->name;
-                    $item->img1 = $image;
-                    $item->summary = $item->subtitle;
-                    $item->subtitle= '';
-                }
-
-                if ($item->fk_content_type == 9) {
-                    $item->obj_video = $item;
-                    $item->summary = $item->description;
-                }
-
-                if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                    $item->video = new \Video($item->fk_video2);
-                }
+                $this->view->assign(
+                    array(
+                        'contents'   => $contents,
+                        'author'     => $user,
+                        'pagination' => $pagination,
+                    )
+                );
             }
-            // Build the pager
-            $pagination = \Onm\Pager\Slider::create(
-                $contentsCount,
-                $itemsPerPage,
-                $this->generateUrl(
-                    'frontend_author_frontpage',
-                    array('slug' => $slug,)
-                )
-            );
-
-            $this->view->assign(
-                array(
-                    'contents'   => $contents,
-                    'author'     => $user,
-                    'pagination' => $pagination,
-                )
-            );
         }
 
-        $this->getInnerAds();
+        $ads = $this->getInnerAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'user/author_frontpage.tpl',
@@ -688,6 +671,37 @@ class UserController extends Controller
             )
         );
 
+    }
+
+    /**
+     * Shows the author frontpage from external source
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function extAuthorFrontpageAction(Request $request)
+    {
+        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
+        $page = $request->query->getDigits('page', 1);
+
+        // Get sync params
+        $wsUrl = '';
+        $syncParams = s::get('sync_params');
+        foreach ($syncParams as $siteUrl => $categoriesToSync) {
+            foreach ($categoriesToSync as $value) {
+                if (preg_match('/'.$categoryName.'/i', $value)) {
+                    $wsUrl = $siteUrl;
+                }
+            }
+        }
+
+        if (empty($wsUrl)) {
+            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+        }
+
+        return $this->redirect($wsUrl.'/author/'.$slug);
     }
 
     /**
@@ -701,7 +715,7 @@ class UserController extends Controller
     {
 
         $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 15;
+        $itemsPerPage = 16;
 
         $cacheID = $this->view->generateCacheId('frontpage-authors', '', $page);
 
@@ -721,10 +735,10 @@ class UserController extends Controller
 
             $totalUsers = count($authorsContents);
 
-            if ($page <= 1) {
-                $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
+            if (empty($page)) {
+                $authorsContents = array_slice($authorsContents, ($page)*$itemsPerPage, $itemsPerPage);
             } else {
-                $authorsContents = array_slice($authorsContents, $page*$itemsPerPage, $itemsPerPage);
+                $authorsContents = array_slice($authorsContents, ($page-1)*$itemsPerPage, $itemsPerPage);
             }
 
             // Build the pager
@@ -751,7 +765,8 @@ class UserController extends Controller
             );
         }
 
-        $this->getInnerAds();
+        $ads = $this->getInnerAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'user/frontpage_authors.tpl',
@@ -771,23 +786,8 @@ class UserController extends Controller
      **/
     public static function getInnerAds($category = 'home')
     {
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-
         $positions = array(101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
 
-        $advertisement = \Advertisement::getInstance();
-        $banners = $advertisement->getAdvertisements($positions, $category);
-
-        if (count($banners<=0)) {
-            $cm = new \ContentManager();
-            $banners = $cm->getInTime($banners);
-            //$advertisement->renderMultiple($banners, &$tpl);
-            $advertisement->renderMultiple($banners, $advertisement);
-        }
-        // Get intersticial banner,1,2,9,10
-        $intersticial = $advertisement->getIntersticial(150, $category);
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, 0);
     }
 }

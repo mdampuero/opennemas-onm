@@ -40,7 +40,6 @@ class ImagesController extends Controller
         $this->checkAclOrForward('IMAGE_ADMIN');
 
         $request = $this->request;
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
@@ -335,18 +334,6 @@ class ImagesController extends Controller
         $this->checkAclOrForward('IMAGE_CREATE');
 
         $request = $this->request;
-        $category = $request->query->getDigits('category', '');
-
-        $ccm = \ContentCategoryManager::get_instance();
-
-        $category = filter_input(INPUT_GET, 'category', FILTER_SANITIZE_NUMBER_INT);
-        if (empty($category) || !array_key_exists($category, $ccm->categories)) {
-            m::add(_('Please provide a valid category for upload images.'), m::ERROR);
-
-            return $this->redirect(
-                $this->generateUrl('admin_images', array('category' => $category,))
-            );
-        }
 
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
         $maxPost        = (int) (ini_get('post_max_size'));
@@ -356,7 +343,6 @@ class ImagesController extends Controller
         return $this->render(
             'image/create.tpl',
             array(
-                'category'         => $category,
                 'max_allowed_size' => $maxAllowedSize,
             )
         );
@@ -391,9 +377,9 @@ class ImagesController extends Controller
             $id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
             if (!empty($id)) {
                 $photo = new \Photo($id);
-                if (!empty($photo->id)) {
-                    $photos []= $photo->readAllData($id);
-                }
+                $photo->readAllData();
+
+                $photos []= $photo;
             }
         }
         // Check if passed ids fits photos in database, if not redirect to listing
@@ -549,11 +535,12 @@ class ImagesController extends Controller
             case 'POST':
 
                 // check if category, and filesizes are properly setted and category_name is valid
-                $category = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_NUMBER_INT);
+                $category = $request->request->getDigits('category', 0);
                 if (empty($category) || !array_key_exists($category, $this->ccm->categories)) {
-                    // Raise an error with json
+                    $category_name = '';
+                } else {
+                    $category_name = $this->ccm->categories[$category]->name;
                 }
-                $category_name = $this->ccm->categories[$category]->name;
 
                 $upload = isset($_FILES['files']) ? $_FILES['files'] : null;
                 $info = array();
@@ -561,16 +548,19 @@ class ImagesController extends Controller
                 $photo = new \Photo();
                 if ($upload && is_array($upload['tmp_name'])) {
                     foreach ($upload['tmp_name'] as $index => $value) {
+                        $tempName = pathinfo($upload['name'][$index], PATHINFO_FILENAME);
+
                         $data = array(
                             'local_file'        => $upload['tmp_name'][$index],
                             'original_filename' => $upload['name'][$index],
-                            'title'             => '',
+                            'title'             => $tempName,
+                            'description'       => $tempName,
                             'fk_category'       => $category,
                             'category'          => $category,
                             'category_name'     => $category_name,
-                            'description'       => '',
                             'metadata'          => '',
                         );
+
                         try {
                             $photo = new \Photo();
                             $photo = $photo->createFromLocalFileAjax($data);
@@ -604,19 +594,20 @@ class ImagesController extends Controller
                         }
                     }
                 } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
+                    $tempName = pathinfo($upload['name'], PATHINFO_FILENAME);
                     $data = array(
-                        'local_file'    => $upload['tmp_name'],
-                        'original_filename' => $upload['name'][$index],
-                        'title'         => '',
-                        'fk_category'   => $category,
-                        'category'      => $category,
-                        'category_name' => $category_name,
-                        'description'   => '',
-                        'metadata'      => '',
+                        'local_file'        => $upload['tmp_name'],
+                        'original_filename' => $upload['name'],
+                        'title'             => $tempName,
+                        'description'       => $tempName,
+                        'fk_category'       => $category,
+                        'category'          => $category,
+                        'category_name'     => $category_name,
+                        'metadata'          => '',
                     );
 
                     try {
-                        $photo = new Photo();
+                        $photo = new \Photo();
                         $photo = $photo->createFromLocalFileAjax($data);
 
                         $thumbnailUrl = $this->generateUrl(
@@ -635,7 +626,7 @@ class ImagesController extends Controller
                             'size'          => $photo->size,
                             'type'          => isset($_SERVER['HTTP_X_FILE_TYPE'])
                                                 ? $_SERVER['HTTP_X_FILE_TYPE']
-                                                : $upload['type'][$index],
+                                                : $upload['type'],
                             'error'         => '',
                             'delete_url'    => '',
                             "delete_type"   => "DELETE",

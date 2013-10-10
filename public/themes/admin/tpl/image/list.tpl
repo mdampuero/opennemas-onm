@@ -5,9 +5,6 @@
     var image_manager_urls = {
         batchDelete: '{url name=admin_images_batchdelete}'
     }
-    jQuery(document).ready(function($) {
-        // $("img[rel]").overlay();
-    });
 </script>
 {/block}
 
@@ -16,13 +13,7 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Images{/t} :: </h2>
-                <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if !isset($datos_cat[0]->title)}{t}All categories{/t}{elseif ($category == 2)}{t}Advertisement{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
-                    <div class="options">
-                        {include file="common/drop_down_categories.tpl" home="{url name=admin_images l=a}" ads=1 opinion=1}
-                    </div>
-                </div>
+                <h2>{t}Images{/t}</h2>
             </div>
             <ul class="old-button">
                 {acl isAllowed="IMAGE_DELETE"}

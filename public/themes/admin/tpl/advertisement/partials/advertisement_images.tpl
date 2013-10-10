@@ -1,137 +1,149 @@
-<table id="advertisement-images">
-    <tr>
-        <td>
-            <div id="related-images" class="resource-container">
-                <div class="droppable-image-position droppable-position">
-                    <div>
-                        <a class="delete-button">
-                            <img src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/trash.png" id="remove_img1" alt="Eliminar" title="Eliminar" />
-                        </a>
-                        <div class="clearfix">
-                            <div class="thumbnail article-resource-image">
-                                {if isset($photo1) && strtolower($photo1->type_img)=='swf'}
-                                <div id="flash-container-replace"></div>
-                                <!-- /flash-container-replace -->
-                                <script>
-                                    var flashvars = {};
-                                    var params = { wmode: "opaque" };
-                                    var attributes = {};
-                                    swfobject.embedSWF("{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}", "flash-container-replace", "270", "150", "9.0.0", false, flashvars, params, attributes);
-                                </script>
-                                {elseif isset($photo1) && $photo1->name}
-                                <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->
-                                    path_file}{$photo1->name}" />
-                                {else}
-                                <div class="drop-here">
-                                    {t}Drop an image to here{/t}
-                                </div>
-                                {/if}
+<div id="related_media">
+    <ul class="related_images thumbnails clearfix">
+        <li class="contentbox ad-image {if isset($photo1) && $photo1->name}assigned{/if}">
+            <div class="clearfix">
+                <div class="image-data clearfix">
+                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="frontpage-image" class="image thumbnail">
+                        {if isset($photo1) && strtolower($photo1->type_img)=='swf'}
+                        <div id="flash-container-replace"></div>
+                        <!-- /flash-container-replace -->
+                        <script>
+                            var flashvars = {};
+                            var params = { wmode: "opaque" };
+                            var attributes = {};
+                            swfobject.embedSWF("{$smarty.const.MEDIA_IMG_PATH_URL}{$photo1->path_file}{$photo1->name}", "flash-container-replace", "270", "150", "9.0.0", false, flashvars, params, attributes);
+                        </script>
+                        {elseif isset($photo1) && $photo1->name}
+                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}" />
+                        {/if}
+                    </a>
+                    <div class="image-information" class="article-resource-image-info">
+                        <div class="image_title">{$photo1->name}</div>
+                        <div class="info">
+                            <div class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</div>
+                            <div class="file_size">{$photo1->size|default:0} Kb</div>
+                            <div class="created_time">{$photo1->created|default:""}</div>
+                            <div class="flash-based-warning" style="{if strtolower($photo1->type_img) !=='swf'}display:none{/if}">
+                                <div class="flash-based"><i class="icon-warning-sign"></i> {t}Flash based{/t}</div>
+                                <br>
+                                <label for="overlap" class="overlap-message">
+                                    <input type="checkbox" name="overlap" id="overlap" value="1" {if isset($advertisement->overlap) && $advertisement->overlap == 1}checked="checked"{/if} />
+                                    {t}Overide default click handler.{/t} <i class="icon-question-sign" title="{t}When you click in some Flash-based advertisements they redirect you to another web site. If you want to overlap that address with that specified by you above you should mark this.{/t}"> </i>
+                                </label>
                             </div>
-                            <div id="image-information" class="article-resource-image-info">
-                                <div>
-                                    <strong>{t}File name{/t}</strong>
-                                    <span class="filename">{$photo1->name|default:'default_img.jpg'}</span>
-                                </div>
-                                <div>
-                                    <strong>{t}Image size{/t}</strong>
-                                    <span class="image_size">{$photo1->width|default:0} x {$photo1->height|default:0}</span>
-                                    (px)
-                                </div>
-                                <div>
-                                    <strong>{t}File size{/t}</strong>
-                                    <span class="file_size">{$photo1->size|default:0}</span>
-                                    Kb
-                                </div>
-                                <div>
-                                    <strong>{t}Creation date{/t}</strong>
-                                    <span class="created_time">{$photo1->created|default:""}</span>
-                                </div>
-                                <div>
-                                    <strong>{t}Description{/t}</strong>
-                                    <span class="description">{$photo1->description|escape:'html'}</span>
-                                </div>
-                                <div>
-                                    <strong>{t}Tags{/t}</strong>
-                                    <span class="tags">{$photo1->metadata|default:""}</span>
-                                </div>
-                            </div>
+
                         </div>
-                        <!-- / -->
-                        <div id="footer_img_portada" class="article-resource-footer">
-                            <input class="related-element-id" type="hidden" name="img" value="{$advertisement->img|default:""}" /></div>
                     </div>
-                    <!-- / --> </div>
-                <!-- /frontpage-image --> </div>
-            <!-- /related-images --> </td>
-        <td id="photos_container">
-            <div style="border:1px double #ccc; border-bottom:0 none; background-color:#EEE; padding:7px;">
-            <strong>{t}Available images{/t}</strong>
+                    <div class="article-resource-footer">
+                        <input class="related-element-id" type="hidden" name="img" value="{$advertisement->img|default:""}" />
+                    </div>
+                </div>
+
+                <div class="not-set">
+                    {t}Image not set{/t}
+                </div>
+
+                <div class="btn-group">
+                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="ad-image" class="btn btn-small">{t}Select image{/t}</a>
+                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                </div>
             </div>
-            <div id="photos" class="photos clearfix">
-            </div>
-        </td>
-    </tr>
-</table>
+        </li>
+    </ul>
+</div>
 <style>
-    #related-images.resource-container { border:1px solid #ccc; padding:10px; }
+.related_images li {
+    margin:0;
+}
+.image-data .thumbnail {
+    float:left;
+    margin-right:10px;
+}
+.image-information {
+    float:left
+}
+.btn-group {
+    clear:both;
+    display:block;
+}
+.image-information .image-title {
+    font-weight:bold;
+}
+
+.image-information .info {
+    font-size: .9em;
+    color: gray;
+    margin:10px 0;
+}
+.flash-based {
+    margin:10px 0;
+}
+
+.contentbox{
+    border:0 none;
+    margin-bottom:10px;
+}
+
+.overlap-message {
+    display:block;
+    clear:both;
+}
+
+@media (min-width:800px) {
+    .image-data > * {
+        max-width:49%;
+    }
+
+    .content_part > div {
+        margin-left:18px;
+    }
+}
 </style>
 <script type="text/javascript">
-    jQuery(document).ready(function ($){
 
-        load_ajax_in_container('{url name=admin_images_content_provider_gallery category=2}', $('#photos'));
+jQuery(document).ready(function($) {
 
-        $('#photos').on('click', '.pager a', function(e, ui) {
-            e.preventDefault();
-            var link = $(this);
-            load_ajax_in_container(link.attr('href'), $('#photos'));
-        });
+    $('#formulario').on('change', "input[name='with_script']", function(e, ui) {
+        if ($(this).val() == '1') {
+            $('#script_content').show();
+            $('#normal_content').hide();
+            $('#hide_flash').hide();
+            $('#div_url1').hide();
+            $('#url').removeAttr('required');
+        } else {
+            $('#normal_content').show();
+            $('#script_content').hide();
+            $('#hide_flash').show();
+            $('#div_url1').show();
+            $('#url').attr('required', 'required');
+        }
+    }).on('change', '#type_medida', function(e, ui){
+        var selected_option = $("#type_medida option:selected").attr('value');
+        if (selected_option == 'DATE') {
+            $('#porfecha').show();
+        } else {
+            $('#porfecha').hide();
+        }
+    }).on('change', '#title', function(e, ui) {
+        fill_tags(jQuery('#title').val(),'#metadata', advertisement_urls.calculate_tags);
+    }).on('click', '#related_media .unset', function (e, ui) {
+        e.preventDefault();
 
-        jQuery('#related-images .delete-button').on('click', function () {
-            var parent = jQuery(this).parent();
-            var elementID = parent.find('.related-element-id');
+        var parent = jQuery(this).closest('.contentbox');
 
-            if (elementID.val() > 0) {
-                elementID.data('id', elementID.val());
-                elementID.val(null);
-                parent.fadeTo('slow', 0.5);
-            } else {
-                elementID.val(elementID.data('id'));
-                parent.fadeTo('slow', 1);
-            };
-        });
-        $( ".droppable-image-position" ).droppable({
-            accept: "#photos_container #photos img",
-            drop: function( event, ui ) {
-                var image = ui.draggable;
-                var parent = $(this);
+        parent.find('.related-element-id').val('');
+        parent.find('.related-element-footer').val('');
+        parent.find('.image').html('');
 
-                if (image.data('type-img') != 'swf') {
-                    // Change the image thumbnail to the new one
-                    parent.find('.article-resource-image').html("<img src=\"" + image.data("url") + "\" />");
-                } else {
-                    parent.find('.article-resource-image').html(
-                        "<div id=\"flash-container-replace\"><\/div>"+"<script> var flashvars = {}; var params = { wmode:\"opaque\" }; var attributes = {};" +
-                        "swfobject.embedSWF(\"" + image.data("url") + image.data("filename")  + "\",  \"flash-container-replace\", \"270\", \"150\", \"9.0.0\", false, flashvars, params, attributes);<\/script>"
-                    );
-                };
-
-                // Change the image information to the new one
-                var article_info = parent.find(".article-resource-image-info");
-                article_info.find(".filename").html(image.data("filename"));
-                article_info.find(".image_size").html(image.data("width") + " x "+ image.data("height") + " px");
-                article_info.find(".file_size").html(image.data("weight") + " Kb");
-                article_info.find(".created_time").html(image.data("created"));
-                article_info.find(".description").html(image.data("description"));
-                article_info.find(".tags").html(image.data("tags"));
-
-                // Change the form values
-                var article_inputs = parent.find(".article-resource-footer");
-                article_inputs.find("input[type='hidden']").attr('value', image.data("id"));
-                article_inputs.find("textarea").attr('value', image.data("description"));
-
-                // $('#params_width').val(image.data("width"));
-                // $('#params_height').val(image.data("height"));
-            }
-        });
+        parent.removeClass('assigned');
     });
+
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+
+    var tabs = $('#position-adv').tabs();
+    tabs.tabs('select', '{$place}');
+
+});
 </script>

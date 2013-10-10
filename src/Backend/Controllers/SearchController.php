@@ -38,8 +38,6 @@ class SearchController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('ADVANCED_SEARCH');
 
         $this->checkAclOrForward('SEARCH_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

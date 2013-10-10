@@ -38,8 +38,6 @@ class WidgetsController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('WIDGET_MANAGER');
 
         $this->checkAclOrForward('WIDGET_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
     }
 
     /**

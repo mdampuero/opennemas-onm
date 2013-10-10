@@ -40,8 +40,6 @@ class OpinionsController extends Controller
 
         $this->checkAclOrForward('OPINION_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData)
@@ -324,6 +322,10 @@ class OpinionsController extends Controller
 
             if ($opinion->create($data)) {
                 m::add(_('Opinion successfully created.'), m::SUCCESS);
+
+                // TODO: Move this to a post update hook
+                $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                $tplManager->delete(sprintf("%06d", $request->request->getDigits('fk_author')).'|1');
             } else {
                 m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
@@ -642,11 +644,6 @@ class OpinionsController extends Controller
 
             $opinion = new \Opinion();
             $msg = $opinion->set_position($positionValues, $_SESSION['userid']);
-
-            // FIXME: buscar otra forma de hacerlo
-            /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('home|0');
         }
 
         if (!empty($msg) && $msg == true) {
@@ -1056,7 +1053,6 @@ class OpinionsController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $data = array(
-                'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
                 'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
                 'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
                 'sessionexpire'   => 60,
@@ -1069,6 +1065,10 @@ class OpinionsController extends Controller
                 'deposit'         => 0,
                 'token'           => null,
             );
+
+            // Generate username and password from real name
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+            $data['password'] = md5($data['name']);
 
             $file = $request->files->get('avatar');
 
@@ -1121,7 +1121,6 @@ class OpinionsController extends Controller
 
         $data = array(
             'id'              => $userId,
-            'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
             'name'            => $request->request->filter('name', null, FILTER_SANITIZE_STRING),
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
@@ -1131,10 +1130,16 @@ class OpinionsController extends Controller
             'id_user_group'   => array(3),
             'ids_category'    => array(),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
+            'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
         );
 
         $file = $request->files->get('avatar');
         $user = new \User($userId);
+
+        // Generate username and password from real name
+        if (empty($data['username'])) {
+            $data['username'] = strtolower(str_replace('-', '.', \Onm\StringUtils::get_title($data['name'])));
+        }
 
         try {
             // Upload user avatar if exists
@@ -1157,7 +1162,7 @@ class OpinionsController extends Controller
             } else {
                 m::add(_('Unable to update the author with that information'), m::ERROR);
             }
-        } catch (FileException $e) {
+        } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
         }
 

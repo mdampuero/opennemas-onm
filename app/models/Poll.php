@@ -117,8 +117,6 @@ class Poll extends Content
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return null;
         }
 
@@ -151,9 +149,7 @@ class Poll extends Content
                 $tags   = StringUtils::get_tags($item);
                 $values = array($this->id,$item, $tags);
 
-                if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                    \Application::logDatabaseError();
-                }
+                $GLOBALS['application']->conn->Execute($sql, $values);
             }
         }
         $sql = 'INSERT INTO polls (`pk_poll`, `subtitle`,`total_votes`, `visualization`, `with_comment`)
@@ -167,8 +163,6 @@ class Poll extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -193,17 +187,13 @@ class Poll extends Content
                 $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
                 $values = array((int) $k, (int) $this->id, $item, $data['votes'][$k]);
 
-                if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                    \Application::logDatabaseError();
-                }
+                $GLOBALS['application']->conn->Execute($sql, $values);
                 $keys .= $k.', ';
             }
 
             $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
             $values = array((int)$this->id);
-            if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-                \Application::logDatabaseError();
-            }
+            $GLOBALS['application']->conn->Execute($sql, $values);
 
         }
 
@@ -217,9 +207,7 @@ class Poll extends Content
             $data['id']
         );
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
-            return(false);
+            return false;
         }
 
         $this->pk_poll = $data['id'];
@@ -241,14 +229,11 @@ class Poll extends Content
         $sql = 'DELETE FROM polls WHERE pk_poll ='.($id);
 
         if ($GLOBALS['application']->conn->Execute($sql)===false) {
-            \Application::logDatabaseError();
-
             return false;
         }
-        $sql='DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
 
+        $sql = 'DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
 
@@ -322,8 +307,6 @@ class Poll extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -337,8 +320,6 @@ class Poll extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         return true;
@@ -401,5 +382,4 @@ class Poll extends Content
 
         return $html;
     }
-
 }

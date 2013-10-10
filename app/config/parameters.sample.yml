@@ -1,16 +1,26 @@
 parameters:
     environment:       development # production
-    database_params:
-        database_replication: false
-        connections:
-            -
-                database_driver:   mysqli
-                database_host:     localhost
-                database_port:     3306
-                database_name:     onm-instances
-                database_user:     root
-                database_password: 1234
-                # slave:            true
+    database:
+        dbal:
+            default_connection: default
+            connections:
+                default:
+                    driver:               mysqli
+                    dbname:               onm-instances
+                    host:                 localhost
+                    port:                 3306
+                    user:                 root
+                    password:             root
+                    charset:              UTF-8
+                    # slaves:
+                    #     slave1:
+                    #         driver:               mysqli
+                    #         dbname:               ~
+                    #         host:                 localhost
+                    #         port:                 ~
+                    #         user:                 root
+                    #         password:             root
+                    #         charset:              ~
 
     mailer_transport:  mail
     mailer_host:       localhost
@@ -51,3 +61,5 @@ parameters:
         end_point:   https://manager.onm.local/managerws/
         base_domain: opennemas.com
         template:    retrincos
+
+    password_min_level: 1 # Weak(0) | Good(1) | Strong(2)

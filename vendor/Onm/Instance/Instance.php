@@ -114,7 +114,13 @@ class Instance
         define('COMMON_CACHE_PATH', realpath($commonCachepath));
 
         // Backup paths
-        define('BACKUP_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/backups"));
+        define('BACKUP_PATH', SITE_PATH.DS.'..'.DS."tmp/backups");
+
+        $maxUpload          = (int) (ini_get('upload_max_filesize'));
+        $maxPost            = (int) (ini_get('post_max_size'));
+        $memoryLimit        = (int) (ini_get('memory_limit'));
+        $maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
+        define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
 
         /**
          * Logging settings
@@ -147,6 +153,7 @@ class Instance
         define('OPINION_DIR', "opinions");
 
         define('MEDIA_IMG_PATH_URL', MEDIA_URL.MEDIA_DIR.SS.IMG_DIR);
+        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL."media".SS.MEDIA_DIR.SS.IMG_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
         define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR);

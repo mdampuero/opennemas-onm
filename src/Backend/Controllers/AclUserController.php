@@ -170,6 +170,11 @@ class AclUserController extends Controller
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
+        // Get minimum password level
+        $defaultLevel  = $this->container->getParameter('password_min_level');
+        $instanceLevel = s::get('pass_level');
+        $minPassLevel  = ($instanceLevel)? $instanceLevel: $defaultLevel;
+
         return $this->render(
             'acl/user/new.tpl',
             array(
@@ -178,6 +183,7 @@ class AclUserController extends Controller
                 'languages'                 => $languages,
                 'content_categories'        => $tree,
                 'content_categories_select' => $user->getAccessCategoryIds(),
+                'min_pass_level'            => $minPassLevel,
             )
         );
     }
@@ -251,7 +257,7 @@ class AclUserController extends Controller
             } else {
                 m::add(_('Unable to update the user with that information'), m::ERROR);
             }
-        } catch (FileException $e) {
+        } catch (\Exception $e) {
             m::add($e->getMessage(), m::ERROR);
         }
 
@@ -448,14 +454,15 @@ class AclUserController extends Controller
      **/
     public function setMetaAction(Request $request)
     {
-        $user = new \User();
+        $user = new \User($_SESSION['userid']);
 
-        $settings = array(
-            'default_language' => 'gl_ES',
-            'test2' => 1
-        );
+        foreach ($request->query as $key => $value) {
+            if (!preg_match('@^_@', $key)) {
+                $settings[$key] = $request->query->filter($key, null, FILTER_SANITIZE_STRING);
+            }
+        }
 
-        $setted = $user->setMeta($_SESSION['userid'], $settings);
+        $setted = $user->setMeta($settings);
         if ($setted) {
             $message = 'Done';
             $httpCode = 200;
@@ -571,7 +578,7 @@ class AclUserController extends Controller
             }
 
             // Display form
-            return $this->render('login/recover_pass.tpl');
+            return $this->render('login/recover_pass.tpl', array('token' => $token));
         }
     }
 
@@ -700,7 +707,10 @@ class AclUserController extends Controller
                 $user->updateUserPassword($user->id, $password);
                 $user->updateUserToken($user->id, null);
 
-                $this->view->assign('updated', true);
+                m::add(_('Password successfully updated'), m::SUCCESS);
+
+                return $this->redirect($this->generateUrl('admin_login_form'));
+
             } elseif ($password != $passwordVerify) {
                 m::add(_('Password and confirmation must be equal.'), m::ERROR);
             } else {

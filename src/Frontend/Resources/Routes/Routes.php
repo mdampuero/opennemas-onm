@@ -18,6 +18,16 @@ use Symfony\Component\Routing\RouteCollection;
 $frontendRoutes = new RouteCollection();
 
 $frontendRoutes->add(
+    'accept_cookies',
+    new Route(
+        '/accepted_cookies',
+        array(
+            '_controller' => 'Frontend:Controllers:UtilitiesController:acceptCookies',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'asset_image',
     new Route(
         '/asset/{parameters}/{real_path}',
@@ -37,6 +47,19 @@ $frontendRoutes->add(
         '/blog/section/{category_name}',
         array(
             '_controller' => 'Frontend:Controllers:BlogController:category',
+        ),
+        array(
+            'category' => '[a-z0-9\-]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'blog_sync_category',
+    new Route(
+        '/extseccion/blog/{category_name}',
+        array(
+            '_controller' => 'Frontend:Controllers:BlogController:extCategory',
         ),
         array(
             'category' => '[a-z0-9\-]+',
@@ -259,6 +282,19 @@ $frontendRoutes->add(
         '/authors',
         array(
             '_controller' => 'Frontend:Controllers:UserController:frontpageAuthors',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_external_author_frontpage',
+    new Route(
+        '/extauthor/{slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:UserController:extAuthorFrontpage',
+        ),
+        array(
+            'slug' => '[A-Za-z\d-]+',
         )
     )
 );
@@ -590,14 +626,12 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_album_frontpage_category',
     new Route(
-        '/album/{category_name}/{page}',
+        '/album/{category_name}',
         array(
             '_controller' => 'Frontend:Controllers:AlbumsController:frontpage',
-            'page'        => 1
         ),
         array(
-            'category_name' => '[a-z0-9\-]+',
-            'page'          => '([0-9]+)?'
+            'category_name' => '[a-z0-9\-]+'
         )
     )
 );
@@ -800,6 +834,38 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_participa_frontpage',
+    new Route(
+        '/participa',
+        array(
+            '_controller' => 'Frontend:Controllers:FormController:frontpage',
+
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_participa_form',
+    new Route(
+        '/participa/envia',
+        array(
+            '_controller' => 'Frontend:Controllers:FormController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_participa_send',
+    new Route(
+        '/participa/send',
+        array(
+            '_controller' => 'Frontend:Controllers:FormController:send',
+
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_letter_frontpage',
     new Route(
         '/cartas-al-director',
@@ -881,6 +947,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_video_ajax_paginated',
+    new Route(
+        '/video/more',
+        array(
+            '_controller' => 'Frontend:Controllers:VideosController:ajaxPaginated',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_video_frontpage_category',
     new Route(
         '/video/{category_name}/{page}',
@@ -942,6 +1018,16 @@ $frontendRoutes->add(
             'slug'          => '[a-z0-9\-]+',
             'article_id'    => '([0-9]+)',
             '_format'       => 'html|htm'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_article_external_link',
+    new Route(
+        '/redirect',
+        array(
+            '_controller' => 'Frontend:Controllers:ArticlesController:externalLink'
         )
     )
 );

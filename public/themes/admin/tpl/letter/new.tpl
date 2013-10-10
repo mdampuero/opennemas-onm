@@ -34,6 +34,29 @@ jQuery(document).ready(function($) {
             jQuery('#created').datetimepicker('option', 'minDate', new Date(start.getTime()));
         }
     });
+
+    $('#title').on('change', function(e, ui) {
+        fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+    });
+
+    load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+
+    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
+        var category = $('#category_imag option:selected').val();
+        var text = $('#stringImageSearch').val();
+        var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
+        load_ajax_in_container(
+            url,
+            $('#photos')
+        );
+    });
+
+    $('#photos').on('click', '.pager a', function(e, ui) {
+        e.preventDefault();
+        var link = $(this);
+        load_ajax_in_container(link.attr('href'), $('#photos'));
+    });
+
 });
 </script>
 {/block}
@@ -73,6 +96,15 @@ jQuery(document).ready(function($) {
                 </div>
             </div>
 
+            <div class="control-group">
+                <label for="metadata" class="control-label">{t}Metadata{/t}</label>
+                <div class="controls">
+                    <input type="text" id="metadata" name="metadata" required="required" class="input-xxlarge"
+                            value="{$letter->metadata|clearslash|escape:"html"}"/>
+                    <div class="help-block">{t}List of words separated by words.{/t}</div>
+                </div>
+            </div>
+
             {acl isAllowed="LETTER_AVAILABLE"}
             <div class="control-group">
                 <label for="available" class="control-label">{t}Published{/t}</label>
@@ -91,13 +123,13 @@ jQuery(document).ready(function($) {
                     <div class="form-inline-block">
                         <div class="control-group">
                             <label for="author" class="control-label">{t}Nickname{/t}</label>
-                            <input type="text" id="author" name="author" value="{$letter->author|clearslash}" class="required input-large" />
+                            <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="input-xlarge" />
                         </div>
 
                         <div class="control-group">
                             <label for="email" class="control-label">{t}Email{/t}</label>
                             <div class="controls">
-                                <input type="email" id="email" name="email" value="{$letter->email|clearslash}" class="required input-large" />
+                                <input type="email" id="email" name="email" value="{$letter->email|clearslash}" required="required" class="input-xlarge" />
                             </div>
                         </div>
                     </div>
@@ -115,16 +147,26 @@ jQuery(document).ready(function($) {
             <div class="control-group">
                 <label for="created" class="control-label">{t}Created at{/t}</label>
                 <div class="controls">
-                    <input type="text" id="created" name="created" value="{$letter->created}" class="required" />
+                    <input type="text" id="created" name="created" value="{$letter->created}"class="input-xxlarge" />
                 </div>
             </div>
 
             <div class="control-group">
                 <label for="body" class="control-label">{t}Body{/t}</label>
                 <div class="controls">
-                    <textarea name="body" id="body" required="required" class="onm-editor">{$letter->body|clearslash}</textarea>
+                    <textarea name="body" id="body"   class="onm-editor">{$letter->body|clearslash}</textarea>
                 </div>
             </div>
+
+            <div class="control-group">
+                <label for="url" class="control-label">{t}Related url{/t}</label>
+                <div class="controls">
+                    <input type="text" id="url" name="url" value="{$letter->url}" class="input-xxlarge"/>
+                </div>
+            </div>
+
+            {include file="special/partials/_load_images.tpl"}
+
         </div>
     </div>
 

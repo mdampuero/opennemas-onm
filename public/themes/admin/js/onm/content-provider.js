@@ -57,7 +57,7 @@ jQuery(document).ready(function($) {
 
     });
 //change select category
-    $('#content-provider').on('change', '#contentTypeCategories', function(e, ui) {
+    $('#content-provider').on('change', '#contentTypeCategories.selector', function(e, ui) {
         e.preventDefault();
 
         var category = $(this).val();

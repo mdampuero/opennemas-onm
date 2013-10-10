@@ -38,8 +38,6 @@ class MenusController extends Controller
 
         $this->checkAclOrForward('MENU_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->pages = array(
             'frontpage' => 1,
             'opinion'   => 4,
@@ -174,8 +172,6 @@ class MenusController extends Controller
                         'description' => $request->request->filter('description', null, FILTER_SANITIZE_STRING)
                     )
                 ),
-                'site'      => SITE,
-                'pk_father' => $request->request->filter('pk_father', 'user', FILTER_SANITIZE_STRING),
                 'items'     => json_decode($request->request->get('items')),
                 'position'  => $request->request->filter('position', '', FILTER_SANITIZE_STRING),
             );

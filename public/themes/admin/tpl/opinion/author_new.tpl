@@ -4,28 +4,28 @@
 {script_tag src="/onm/jquery.password-strength.js" common=1}
 {script_tag src="/onm/bootstrap-fileupload.min.js" common=1}
 <script>
-    jQuery(document).ready(function($){
-        $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
+jQuery(document).ready(function($){
+    $('[rel=tooltip]').tooltip({ placement: 'bottom', html: true });
 
-        $('#formulario').onmValidate({
-            'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
-        });
-
-        // PAssword strength checker
-        var strength = $('#password').passStrength({
-            userid: '#login'
-        });
-
-        // Avatar image uploader
-        $('.fileupload').fileupload({
-            name: 'avatar',
-            uploadtype:'image'
-        });
-
-        $('.delete').on('click', function(){
-            $('.file-input').val('0');
-        })
+    $('#formulario').onmValidate({
+        'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
+
+    // PAssword strength checker
+    var strength = $('#password').passStrength({
+        userid: '#login'
+    });
+
+    // Avatar image uploader
+    $('.fileupload').fileupload({
+        name: 'avatar',
+        uploadtype:'image'
+    });
+
+    $('.delete').on('click', function(){
+        $('.file-input').val('0');
+    })
+});
 </script>
 {/block}
 
@@ -126,13 +126,6 @@ label {
 
                     <fieldset>
                         <div class="control-group">
-                            <label for="login" class="control-label">{t}User name{/t}</label>
-                            <div class="controls">
-                                <input type="text" id="login" name="login" value="{$user->username|default:""}" class="input-xlarge" required="required" maxlength="20"/>
-                            </div>
-                        </div>
-
-                        <div class="control-group">
                             <label for="email" class="control-label">{t}Email{/t}</label>
                             <div class="controls">
                                 <input class="input-xlarge" id="email" type="email" name="email" placeholder="test@example.com"  value="{$user->email|default:""}" required="required">
@@ -179,6 +172,7 @@ label {
                                 </label>
                             </div>
                         </div>
+                        <input type="hidden" name="username" value="{$user->username|default:""}">
                     </fieldset>
 
                 </div>

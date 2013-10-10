@@ -52,7 +52,7 @@ jQuery(document).ready(function($) {
                 <li class="separator"></li>
                 <li>
                     {if !isset($smarty.request.stringSearch)}
-                        <a href="{url name=admin_images category=$photos[0]->category}" class="admin_add" title="{t}Go back{/t}">
+                        <a href="{url name=admin_images}" class="admin_add" title="{t}Go back{/t}">
                     {else}
                         <a href="{url name=admin_search stringSearch=$smarty.get.stringSearch} photo=on id=0"
                            title="Cancelar">

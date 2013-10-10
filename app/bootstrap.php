@@ -26,6 +26,8 @@ if (file_exists($configFile)) {
     require $configFile;
     require_once 'Application.php';
 
+    initEnvironment($sc->getParameter('environment'));
+
     // Loads one ONM instance from database
     $im = new \Onm\Instance\InstanceManager($onmInstancesConnection);
     try {

@@ -71,14 +71,14 @@ jQuery(document).ready(function($) {
             <ul class="old-button">
                 <li>
                     <button type="submit">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png"><br />
+                        <img border="0" src="{$params.COMMON_ASSET_DIR}images/save.png"><br />
                         {t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
                     <a href="{url name=manager_instances}" class="admin_add" value="{t}Cancel{/t}" title="{t}Cancel{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
+                        <img border="0" src="{$params.COMMON_ASSET_DIR}images/previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
                         {t}Go back{/t}
                     </a>
                 </li>
@@ -93,7 +93,6 @@ jQuery(document).ready(function($) {
         <div id="instance-edit" class="tabs">
             <ul>
                 <li><a href="#general">{t}General{/t}</a> </li>
-                {if $smarty.get.action neq "new"}
                 <li><a href="#general-information">{t}Information{/t}</a> </li>
                 <li><a href="#internals">{t}Internals{/t}</a> </li>
                 <li><a href="#database">{t}Database{/t}</a></li>
@@ -101,7 +100,6 @@ jQuery(document).ready(function($) {
                 <li><a href="#log">{t}Log{/t}</a></li>
                 <li><a href="#external">{t}External Services{/t}</a></li>
                 <li><a href="#modules">{t}Modules{/t}</a></li>
-                {/if}
             </ul>
             <div id="general">
                 <table>
@@ -207,7 +205,6 @@ jQuery(document).ready(function($) {
                     </tbody>
                 </table>
             </div>
-            {if $smarty.get.action neq "new"}
             <div id="general-information">
                 <table>
                     <tbody>
@@ -338,10 +335,9 @@ jQuery(document).ready(function($) {
                             </th>
                             <td class="controls">
                                 <input type="text" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
-                                <span class="default-value">{t}Default: 20 elements{/t}</span>
                             </td>
                             <td valign="top">
-
+                                <span class="default-value">{t}Default: 20 elements{/t}</span>
                             </td>
                         </tr>
                         <tr valign="top" class="control-group">
@@ -350,11 +346,24 @@ jQuery(document).ready(function($) {
                             </th>
                             <td class="controls">
                                 <input type="text" id="refresh_interval" name="refresh_interval" value="{$configs['refresh_interval']|default:900}">
-                                <span class="default-value">{t}Default: 900 secs{/t}</span>
                             </td>
                             <td valign="top">
-
+                                <span class="default-value">{t}Default: 900 secs{/t}</span>
                             </td>
+                        </tr>
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="pass_level" class="control-label">{t}Minimum password level{/t}:</label>
+                            </th>
+                            <td class="controls">
+                                <select name="pass_level" id="pass_level">
+                                    <option value="-1" {if !isset($configs['pass_level']) || $configs['pass_level'] eq -1}selected="selected"{/if}>{t}Default{/t}</option>
+                                    <option value="0" {if $configs['pass_level'] eq "0"}selected="selected"{/if}>{t}Weak{/t}</option>
+                                    <option value="1" {if $configs['pass_level'] eq "1"}selected="selected"{/if}>{t}Good{/t}</option>
+                                    <option value="2" {if $configs['pass_level'] eq "2"}selected="selected"{/if}>{t}Strong{/t}</option>
+                                </select>
+                            </td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -418,7 +427,9 @@ jQuery(document).ready(function($) {
             </div>
 
              <div id="mail">
-               <table>
+                <fieldset>
+                    <legend>{t}Mail{/t}</legend>
+                    <table>
                     <tbody>
                         <tr valign="top" class="control-group">
                             <th scope="row">
@@ -453,8 +464,51 @@ jQuery(document).ready(function($) {
 
                             </td>
                         </tr>
+                         <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="mail_sender" class="control-label">{t}Sender{/t} (Sender)</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="mail_sender" name="mail_sender" value="{$configs['mail_sender']|default:'no-reply@postman.opennemas.com'}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
                     </tbody>
-                </table>
+                    </table>
+                </fieldset>
+                <fieldset>
+                    <legend>{t}Newsletter{/t}</legend>
+                    <table>
+                    <tbody>
+
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="max_mailing" class="control-label">{t}Num Max emails sent by month{/t}</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="max_mailing" name="max_mailing" value="{$configs['max_mailing']|default:'12000'}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="site_title" class="control-label">{t}Last invoice date:{/t}</label>
+                            </th>
+                            <td class="controls">
+                                <input type="text" id="last_invoice" name="last_invoice" value="{if $configs['last_invoice']}{$configs['last_invoice']}{else} {/if}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </fieldset>
             </div>
 
             <div id="log">
@@ -684,7 +738,6 @@ jQuery(document).ready(function($) {
                     </tbody>
                 </table>
             </div>
-            {/if}
         </div>
     </div>
 </form>

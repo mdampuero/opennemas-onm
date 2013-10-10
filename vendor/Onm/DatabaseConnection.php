@@ -25,14 +25,14 @@ class DatabaseConnection
      *
      * @var AdodbConnection
      **/
-    public $connection = null;
+    public $masterConnection = null;
 
     /**
      * The read-only database connection
      *
      * @var AdodbConnection
      **/
-    public $readOnlyConnection = null;
+    public $slaveConnections = array();
 
     /**
      * Whether to use replication
@@ -48,7 +48,16 @@ class DatabaseConnection
      *
      * @var array
      **/
-    private $connnectionParams = null;
+    private $connectionParams = null;
+
+    /**
+     * Stores the query error
+     *
+     * @var string
+     **/
+    public $error = null;
+
+
 
     /**
      * Starts the database connection
@@ -57,41 +66,104 @@ class DatabaseConnection
      *
      * @return DatabaseConnection the object
      **/
-    public function connect($params)
+    public function __construct($params, $databaseName = null)
     {
-        $this->connnectionParams = $params;
-        $this->useReplication = false;
+        $this->connectionParams = $params;
 
-        if (array_key_exists('database_replication', $params)
-            && $params['database_replication'] == true
-        ) {
-            $this->useReplication = true;
-        };
-
-        $this->connnectionParams = $params['connections'];
-
-        foreach ($this->connnectionParams as $connParams) {
-
-            $connection = \ADONewConnection($connParams['database_driver']);
-            $connection->Connect(
-                $connParams['database_host'],
-                $connParams['database_user'],
-                $connParams['database_password'],
-                $connParams['database_name'],
-                $connParams['database_driver']
-            );
-            $connection->bulkBind = true;
-
-            if ($this->useReplication
-                && array_key_exists('slave', $connParams)
-                && $connParams['slave'] == true) {
-                $this->readOnlyConnection []= $connection;
-            } else {
-                $this->connection []= $connection;
-            }
+        if (!is_null($databaseName)) {
+            $this->replaceDatabaseName($databaseName);
         }
 
+
+        $this->defaultConnection = $params['dbal']['default_connection'];
+        $this->connectionParams  = $params['dbal']['connections'][$this->defaultConnection];
+        $this->useReplication    = array_key_exists('slaves', $this->connectionParams);
+
+        if (!array_key_exists('charset', $this->connectionParams)) {
+            $this->connectionParams = 'UTF8';
+        }
+    }
+
+    /**
+     * Redirects all the calls to the AdodbConnection instance
+     *
+     * @param string $method the method to call
+     * @param array $params the list of parameters to pass to the method
+     *
+     * @return mixed the result of the method call
+     **/
+    public function __call($method, $params)
+    {
+        $connection = $this->getConnection($method, $params);
+
+        $rs = call_user_func_array(array($connection, $method), $params);
+
+        if ($rs === false) {
+            $this->error = $connection->ErrorMsg();
+        }
+
+        return $rs;
+    }
+
+    public function selectDatabase($databaseName)
+    {
+        $this->connectionParams = $this->replaceKeyInArray(
+            function ($key, $value, $databaseName) {
+                if ($key == 'dbname' && !is_null($value)) {
+                    $value = $databaseName;
+                }
+                return $value;
+            },
+            $this->connectionParams,
+            $databaseName
+        );
+
         return $this;
+    }
+
+    private function replaceKeyInArray($callback, $array, $databaseName)
+    {
+        foreach ($array as $key => $value) {
+            if (is_array($array[$key])) {
+                $array[$key] = $this->replaceKeyInArray($callback, $array[$key], $databaseName);
+            } else {
+                $array[$key] = call_user_func($callback, $key, $array[$key], $databaseName);
+            }
+        }
+        return $array;
+    }
+
+    public function initConnection($params)
+    {
+        if ($params['charset'] == 'UTF-8') {
+            $params['charset'] = 'UTF8';
+        }
+
+        $connection = \ADONewConnection($params['driver']);
+
+        // Not valid/supported driver
+        if (!is_object($connection)) {
+            return null;
+        }
+
+        $connection->Connect(
+            $params['host'],
+            $params['user'],
+            $params['password'],
+            $params['dbname']
+        );
+
+        // Failed connection
+        if (!$connection->_connectionID) {
+            return null;
+        }
+
+        $connection->SetFetchMode(ADODB_FETCH_ASSOC);
+        $connection->bulkBind = true;
+
+        $connection->Execute("SET names '{$params['charset']}'");
+
+        return $connection;
     }
 
     /**
@@ -107,29 +179,84 @@ class DatabaseConnection
     {
         $isReadOnlyQuery = stripos($params[0], 'SELECT') !== false;
 
-        if ($this->useReplication && $isReadOnlyQuery) {
-            return $this->readOnlyConnection[0];
+        if ($this->useReplication
+            && $isReadOnlyQuery
+        ) {
+            $connection = $this->getSlaveConnection();
         } else {
-            return $this->connection[0];
+            $connection = $this->getMasterConnection();
         }
+
+        return $connection;
     }
 
     /**
-     * Redirects all the calls to the AdodbConnection instance
+     * Returns one slave database connection from the list of slave connections
      *
-     * @param string $method the method to call
-     * @param array $params the list of parameters to pass to the method
-     *
-     * @return mixed the result of the method call
+     * @return AdoDBConnection the master database connection
      **/
-    public function __call($method, $params)
+    public function getSlaveConnection()
     {
-        $connection = $this->getConnection($method, $params);
-        // $rs = $connection->Execute('SELECT * FROM articles');
-        $rs = call_user_func_array(array($connection, $method), $params);
+        // Initialize the slaves list is not defined
+        if (count($this->slaveConnections) < 1) {
+            // Little hack for avoid initialize the master connection if
+            // it will not be used
+            $this->slaveConnections[0] = null;
 
-        $this->error = $connection->ErrorMsg();
+            // Do not initialize an slave connection if
+            if (array_key_exists('slaves', $this->connectionParams)) {
+                $slavesList = $this->connectionParams['slaves'];
+                unset($this->connectionParams['slaves']);
 
-        return $rs;
+                // Try to initialize a slave connection
+                // from the list of slaves connection parameters
+                $slaveConnection = null;
+                do {
+
+                    $randomSlaveIndex = array_rand($slavesList);
+                    $slaveParams = $slavesList[$randomSlaveIndex];
+
+                    $slaveParams = array_filter(
+                        $slaveParams,
+                        function ($item) {
+                            return !is_null($item);
+                        }
+                    );
+                    $slaveParams = array_merge($this->connectionParams, $slaveParams);
+
+                    $slaveConnection = $this->initConnection($slaveParams);
+
+                    unset($slavesList[$randomSlaveIndex]);
+                } while (!is_object($slaveConnection) && !empty($slavesList));
+
+                if (!is_null($slaveConnection)) {
+                    $this->slaveConnections []= $slaveConnection;
+                }
+            }
+        }
+
+        $randomIndex = array_rand($this->slaveConnections);
+
+        // If the above random key has selected the master collection initialize it
+        if ($randomIndex == 0) {
+            $this->slaveConnections[0]= $this->getMasterConnection();
+        }
+
+        return $this->slaveConnections[$randomIndex];
+    }
+
+    /**
+     * Returns the master database connection
+     *
+     * @return AdoDBConnection the master database connection
+     **/
+    public function getMasterConnection()
+    {
+        // It the master collection is not initialized create it
+        if (!is_object($this->masterConnection)) {
+            $this->masterConnection = $this->initConnection($this->connectionParams);
+        }
+
+        return $this->masterConnection;
     }
 }

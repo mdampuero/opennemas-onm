@@ -131,8 +131,6 @@ class Photo extends Content
         $execution = $GLOBALS['application']->conn->Execute($sql, $values);
 
         if ($execution === false) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -236,7 +234,8 @@ class Photo extends Content
                 }
 
             } else {
-                Application::getLogger()->notice(
+                $logger = getService('logger');
+                $logger->notice(
                     sprintf(
                         'EFE Importer: Unable to register the '
                         .'photo object %s (destination: %s).',
@@ -256,10 +255,10 @@ class Photo extends Content
             $importedID = $photoID;
 
         } else {
-
             $importedID = null;
 
-            Application::getLogger()->notice(
+            $logger = getService('logger');
+            $logger->notice(
                 sprintf(
                     'Unable to create the photo file %s (destination: %s).',
                     $dataSource['local_file'],
@@ -288,7 +287,7 @@ class Photo extends Content
      **/
     public function createFromLocalFileAjax($dataSource)
     {
-
+        $photo = null;
         $filePath = $dataSource["local_file"];
         $originalFileName = $dataSource['original_filename'];
 
@@ -363,7 +362,8 @@ class Photo extends Content
                 $photoID = $photo->create($data);
 
                 if (!$photoID) {
-                    Application::getLogger()->notice(
+                    $logger = getService('logger');
+                    $logger->notice(
                         sprintf(
                             'EFE Importer: Unable to register the photo object %s (destination: %s).',
                             $dataSource['local_file'],
@@ -381,10 +381,10 @@ class Photo extends Content
                 $photo = new Photo($photoID);
 
             } else {
-
                 $importedID = null;
 
-                Application::getLogger()->notice(
+                $logger = getService('logger');
+                $logger->notice(
                     sprintf(
                         'EFE Importer: Unable to creathe the photo file %s (destination: %s).',
                         $dataSource['local_file'],
@@ -405,6 +405,139 @@ class Photo extends Content
     }
 
     /**
+     * Creates one photo using imagemagick and register in the database
+     *
+     * @param array $dataSource the data for the photo, must content the photo local_file
+     *
+     * @return int the id of the photo created
+     * @return boolean false if the photo was not created
+     **/
+    public function createWithImageMagick($dataSource, $dateForDirectory = null)
+    {
+
+        $photo = null;
+        $filePath = $dataSource["local_file"];
+        $originalFileName = $dataSource['original_filename'];
+
+        if (!empty($filePath)) {
+             // Check upload directory
+            $date = new DateTime();
+            $urn = "urn:newsml:"
+                .SITE
+                .":"
+                .$date->format("Ymd\THisO")
+                .":"
+                .StringUtils::cleanFileName($originalFileName)
+                .":2";
+
+            $dateForDirectory = $date->format("/Y/m/d/");
+            $mediaDir =
+                MEDIA_PATH.DS.IMG_DIR.DS.$dateForDirectory.DIRECTORY_SEPARATOR;
+
+            if (!is_dir($mediaDir)) {
+                FilesManager::createDirectory($mediaDir);
+            }
+
+            $filePathInfo = pathinfo($originalFileName);
+
+            // Getting information for creating
+            $t                  = gettimeofday();
+            $micro              = intval(substr($t['usec'], 0, 5));
+            $finalPhotoFileName = $date->format("YmdHis")
+                . $micro . "." . strtolower($filePathInfo['extension']);
+            $fileInformation    = new MediaItem($filePath);
+
+            // Building information for the photo image
+            $data = array(
+                'title'        => $originalFileName,
+                'name'         => $finalPhotoFileName,
+                'path_file'    => $dateForDirectory,
+                'fk_category'  => $dataSource["fk_category"],
+                'category'     => $dataSource["fk_category"],
+                'nameCat'      => $dataSource["category_name"],
+
+                'created'      => $fileInformation->atime,
+                'changed'      => $fileInformation->mtime,
+                'date'         => $fileInformation->mtime,
+                'size'         => round($fileInformation->size/1024, 2),
+                'width'        => $fileInformation->width,
+                'height'       => $fileInformation->height,
+                'type_img'     => strtolower($filePathInfo['extension']),
+                'media_type'   => 'image',
+
+                'author_name'  => !isset($dataSource['author_name']) ?'':$dataSource['author_name'],
+                'pk_author'    => $_SESSION['userid'],
+                'fk_publisher' => $_SESSION['userid'],
+                'description'  => $dataSource['description'],
+                'metadata'     => $dataSource["metadata"],
+                'urn_source'   => $urn,
+            );
+
+            if (is_dir($mediaDir) && !is_writable($mediaDir)) {
+                throw new Exception(
+                    sprintf(
+                        'Upload directory doesn\'t exists or you don\'t '
+                        .'have enought privileges to write files there',
+                        $mediaDir.$finalPhotoFileName
+                    )
+                );
+            }
+
+            $imageCreated =  new Imagick($dataSource['local_file']);
+
+            $imageCreated->writeImage(realpath($mediaDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
+            //$imageCreated->destroy();
+
+            if ($imageCreated) {
+
+                $photo = new Photo();
+                $photoID = $photo->create($data);
+
+                if (!$photoID) {
+                    $logger = getService('logger');
+                    $logger->notice(
+                        sprintf(
+                            'EFE Importer: Unable to register the photo object %s (destination: %s).',
+                            $dataSource['local_file'],
+                            $mediaDir.$finalPhotoFileName
+                        )
+                    );
+                    throw new Exception(
+                        sprintf(
+                            'Unable to register the photo object into OpenNemas.',
+                            $mediaDir.$finalPhotoFileName
+                        )
+                    );
+                }
+
+                $photo = new Photo($photoID);
+
+            } else {
+                $importedID = null;
+
+                $logger = getService('logger');
+                $logger->notice(
+                    sprintf(
+                        'Participa: Unable to creathe the photo file %s (destination: %s).',
+                        $dataSource['local_file'],
+                        $mediaDir.$finalPhotoFileName
+                    )
+                );
+                throw new Exception(
+                    sprintf(
+                        'Unable to create photo.',
+                        $mediaDir.$finalPhotoFileName
+                    )
+                );
+            }
+        }
+
+        return $photo;
+
+
+
+    }
+    /**
      * Returns an instance of the Photo object given a photo id
      *
      * @param int $id the photo id to load
@@ -420,9 +553,7 @@ class Photo extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if (!$rs) {
-            \Application::logDatabaseError();
-
-            return;
+            return null;
         }
 
         $this->pk_photo    = $rs->fields['pk_photo'];
@@ -440,6 +571,15 @@ class Photo extends Content
         $this->metadata    = ($this->metadata);
         $this->address     = $rs->fields['address'];
 
+        if (!empty($photo->address)) {
+            $positions = explode(',', $photo->address);
+            if (is_array($positions)) {
+                $photo->latlong = array(
+                    'lat' => $positions[0],
+                    'long' => $positions[1],
+                );
+            }
+        }
         return $this;
     }
 
@@ -450,45 +590,8 @@ class Photo extends Content
      *
      * @return stdClass a dummy object with the photo information
      **/
-    public function readAllData($id)
+    public function readAllData()
     {
-        $photo = new stdClass();
-        $this->read($id);
-
-        if (empty($this)) {
-            return $photo;
-        }
-
-        $photo->pk_photo    = $this->pk_photo;
-        $photo->id          = $this->pk_photo ;
-        $photo->name        = $this->name ;
-        $photo->title       = $this->title ;
-        $photo->description = $this->description ;
-        $photo->metadata    = $this->metadata ;
-        $photo->path_file   = $this->path_file;
-        if (!empty($this->path_file)) {
-            $photo->path_img    = $this->path_file.DS.$this->name;
-        }
-        $photo->size        = $this->size;
-        $photo->width       = $this->width;
-        $photo->height      = $this->height;
-        $photo->nameCat     = $this->nameCat;
-        $photo->category    = $this->category;
-        $photo->author_name = $this->author_name;
-        $photo->address     = $this->address;
-        $photo->latlong     = '';
-        $photo->infor       = '';
-
-        if (!empty($photo->address)) {
-            $positions = explode(',', $photo->address);
-            if (is_array($positions)) {
-                $photo->latlong = array(
-                    'lat' => $positions[0],
-                    'long' => $positions[1],
-                );
-            }
-        }
-
         $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
         if (is_file($image)) {
@@ -496,15 +599,15 @@ class Photo extends Content
 
             switch ($size['mime']) {
                 case "image/gif":
-                    $photo->infor = _("The image type is GIF </br>");
+                    $this->infor = _("The image type is GIF </br>");
 
                     break;
                 case "image/png":
-                    $photo->infor = _("The image type is PNG </br>");
+                    $this->infor = _("The image type is PNG </br>");
 
                     break;
                 case "image/bmp":
-                    $photo->infor = _("The image type is BMP </br>");
+                    $this->infor = _("The image type is BMP </br>");
 
                     break;
                 case 'image/jpeg':
@@ -519,13 +622,36 @@ class Photo extends Content
                         }
                     }
                     if (!empty($exifData)) {
-                        $photo->exif = $exifData;
+                        $this->exif = $exifData;
                     } else {
-                        $photo->exif = null;
+                        $this->exif = null;
                     }
 
                     if (empty($exif)) {
-                        $photo->infor .= _("No availabel EXIF data</br>");
+                        $this->infor .= _("No availabel EXIF data</br>");
+
+                    } else {
+
+                        if (empty($this->color)) {
+                            if ($exifData['COMPUTED']['IsColor']==0) {
+                                $this->color= 'BN';
+                            } else {
+                                $this->color= 'color';
+                            }
+                        }
+                        if (isset($exifData['IFD0'])) {
+                            if (empty($this->resolution)
+                                && !is_null($exifData['IFD0']['XResolution'])
+                            ) {
+                                $this->resolution =
+                                    $exifData['IFD0']['XResolution'];
+                            }
+                            if (empty($this->date)
+                                && !is_null($exifData['FILE']['FileDateTime'])
+                            ) {
+                                $this->date= $exifData['FILE']['FileDateTime'];
+                            }
+                        }
                     }
 
                     if (isset($info['APP13'])) {
@@ -570,24 +696,24 @@ class Photo extends Content
                             $myiptc['Photo_source']        = $iptc["2#183"][0];
 
                             $myiptc = array_map('map_entities', $myiptc);
-                            $photo->myiptc = $myiptc;
+                            $this->myiptc = $myiptc;
 
-                            if (empty($photo->description)) {
-                                $photo->description= $myiptc['Caption'];
+                            if (empty($this->description)) {
+                                $this->description= $myiptc['Caption'];
                             }
 
-                            if (empty($photo->metadata)) {
-                                $photo->metadata = map_entities($keywords);
+                            if (empty($this->metadata)) {
+                                $this->metadata = map_entities($keywords);
                             }
 
-                            if (empty($photo->author_name)) {
-                                $photo->author_name = $myiptc['Photographer'];
+                            if (empty($this->author_name)) {
+                                $this->author_name = $myiptc['Photographer'];
                             }
 
                             ini_set($errorReporting);
 
                         } else {
-                            $photo->infor .=  _("No availabel IPTC data</br>");
+                            $this->infor .=  _("No availabel IPTC data</br>");
                         }
                     }
                     break;
@@ -596,10 +722,10 @@ class Photo extends Content
             } // endswitch;
 
         } else {
-            $photo->infor .=  _("Invalid image file");
+            $this->infor .=  _("Invalid image file");
         }
 
-        return $photo;
+        return $this;
     }
 
     /**
@@ -629,8 +755,6 @@ class Photo extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -648,7 +772,6 @@ class Photo extends Content
     {
         $data['pk_author'] = $_SESSION['userid'];
         $data['fk_user_last_editor'] = $_SESSION['userid'];
-
         parent::update($data);
 
         $sql = "UPDATE `photos`
@@ -662,8 +785,6 @@ class Photo extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -685,19 +806,37 @@ class Photo extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
-        $image      = MEDIA_IMG_PATH . $this->path_file.$this->name;
+        $image = MEDIA_IMG_PATH . $this->path_file.$this->name;
 
         if (file_exists($image)) {
             @unlink($image);
         }
 
         return true;
+    }
 
+    /**
+     * Updates the file path of a photo
+     *
+     * @param string $path the new file path
+     * @param int $id the photo id
+     *
+     * @return boolean true if the file path was changed
+     **/
+    public function updatePath($path, $id)
+    {
+        $sql = "UPDATE `photos` SET `path_file`=? WHERE `pk_photo`=?";
+
+        $values = array($path, $id);
+
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -713,8 +852,6 @@ class Photo extends Content
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($id));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -774,39 +911,29 @@ class Photo extends Content
      **/
     public static function batchDelete($arrayIds)
     {
-
         $contents = implode(', ', $arrayIds);
 
         $sql = 'SELECT  path_file, name  FROM photos WHERE pk_photo IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
         while (!$rs->EOF) {
             $image      = MEDIA_IMG_PATH . $rs->fields['path_file'].$rs->fields['name'];
-            $thumbimage = MEDIA_IMG_PATH . $rs->fields['path_file'].'140-100-'.$rs->fields['name'];
 
             if (file_exists($image)) {
                 @unlink($image);
-            }
-            if (file_exists($thumbimage)) {
-                @unlink($thumbimage);
             }
 
             $rs->MoveNext();
         }
 
-        $sql = 'DELETE FROM photos '
-                .'WHERE `pk_photo` IN ('.$contents.')';
+        $sql = 'DELETE FROM photos WHERE `pk_photo` IN ('.$contents.')';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 

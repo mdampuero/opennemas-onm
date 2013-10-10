@@ -8,6 +8,25 @@
 -- Write date with each sentence and with stack method. (last writed in the top)
 ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT  '' AFTER  `type`;
 
+-- 2013-10-08
+--
+-- Table structure for table `action_counters`
+--
+DROP TABLE IF EXISTS `action_counters`;
+CREATE TABLE IF NOT EXISTS `action_counters` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `action_name` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `counter` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `action_name` (`action_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+
+REPLACE INTO settings (`name`, `value`) VALUES ('mail_username', 's:0:""');
+REPLACE INTO settings (`name`, `value`) VALUES ('mail_sender', 's:30:"no-reply@postman.opennemas.com"');
+
+
 -- 2013-07-17
 ALTER TABLE `contents`
   DROP `placeholder`,

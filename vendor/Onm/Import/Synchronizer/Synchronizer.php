@@ -42,7 +42,7 @@ class Synchronizer
     {
         $this->syncPath = implode(
             DIRECTORY_SEPARATOR,
-            array(CACHE_PATH, 'importers')
+            array($config['cache_path'], 'importers')
         );
         $this->syncFilePath = $this->syncPath.DIRECTORY_SEPARATOR.".sync";
 
@@ -282,6 +282,44 @@ class Synchronizer
         $this->unlockSync();
 
         return $report;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function syncMultiple($servers)
+    {
+        $messages = array();
+        foreach ($servers as $server) {
+            try {
+                if ($server['activated'] != '1') {
+                    continue;
+                }
+
+                $server['allowed_file_extesions_pattern'] = '.*';
+
+                $message = $this->sync($server);
+
+                $messages []= sprintf(
+                    _('Downloaded %d new articles and deleted %d old ones from "%s".'),
+                    $message['downloaded'],
+                    $message['deleted'],
+                    $server['name']
+                );
+
+            } catch (\Exception $e) {
+                $messages []= $e->getMessage();
+                $this->unlockSync();
+
+                throw $e;
+            }
+        }
+        $this->updateSyncFile();
+
+        return $messages;
     }
 
     /**

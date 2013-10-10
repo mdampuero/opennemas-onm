@@ -59,6 +59,36 @@
             });
         });
     </script>
+    {include file="media_uploader/media_uploader.tpl"}
+    <script>
+    jQuery(document).ready(function($){
+        var mediapicker = $('#media-uploader').mediaPicker({
+            upload_url: "{url name=admin_image_create category=0}",
+            browser_url : "{url name=admin_media_uploader_browser}",
+            months_url : "{url name=admin_media_uploader_months}",
+            maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+            // initially_shown: true,
+            handlers: {
+                'assign_content' : function( event, params ) {
+                    var mediapicker = $(this).data('mediapicker');
+                    if (params['position'] == 'body' || params['position'] == 'summary') {
+                        var image_element = mediapicker.buildHTMLElement(params);
+                        CKEDITOR.instances[params['position']].insertHtml(image_element, true);
+                    } else {
+                        var container = $('#related_media').find('.'+params['position']);
+                        var image_element = mediapicker.buildHTMLElement(params, true);
+
+                        var image_data_el = container.find('.image-data');
+                        image_data_el.find('.related-element-id').val(params.content.pk_photo);
+                        image_data_el.find('.related-element-footer').val(params.content.description);
+                        image_data_el.find('.image').html(image_element);
+                        container.addClass('assigned');
+                    };
+                }
+            }
+        });
+    });
+    </script>
 {/block}
 
 {block name="content"}
@@ -67,13 +97,23 @@
         <div class="wrapper-content">
             <div class="title"><h2>{if !isset($article->id)}{t}Creating article{/t}{else}{t}Editing article{/t}{/if}</h2></div>
             <ul class="old-button">
-                {acl isAllowed="ARTICLE_UPDATE"}
-                <li>
-                    <button type="submit" name="continue" value="1">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{if isset($article->id)}{t}Update{/t}{else}{t}Save{/t}{/if}
-                    </button>
-                </li>
-                {/acl}
+                {if isset($article->id)}
+                    {acl isAllowed="ARTICLE_UPDATE"}
+                    <li>
+                        <button type="submit" name="continue" value="1">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Update{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                {else}
+                    {acl isAllowed="ARTICLE_CREATE"}
+                    <li>
+                        <button type="submit" name="continue" value="1">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                        </button>
+                    </li>
+                    {/acl}
+                {/if}
 
                 <li>
                     <a href="#" accesskey="P" id="button_preview">
@@ -279,7 +319,7 @@
 
                     <div class="form-vertical contentform-main">
                         <div class="control-group">
-                            <label for="subtitle" class="control-label">{t}Pretitle{/t}</label>
+                            <label for="subtitle" class="control-label clearfix">{t}Pretitle{/t}</label>
                             <div class="controls">
                                 <div class="input-append" id="subtitle">
                                     <input  type="text" name="subtitle" value="{$article->subtitle|clearslash|escape:"html"}" class="input-xxlarge"/>
@@ -290,8 +330,15 @@
 
 
                         <div class="control-group clearfix">
-                            <label for="summary" class="control-label">
-                                {t}Summary{/t}
+                            <label for="summary" class="control-label clearfix">
+                                <div class="pull-left">
+                                    {t}Summary{/t}
+                                </div>
+                                <div class="pull-right">
+                                    {acl isAllowed='IMAGE_ADMIN'}
+                                    <a href="#media-uploader" data-toggle="modal" data-position="summary" class="btn btn-mini">{t}Insert image{/t}</a>
+                                    {/acl}
+                                </div>
                             </label>
                             <div class="controls">
                                 <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$article->summary|clearslash|escape:"html"}</textarea>
@@ -300,8 +347,13 @@
 
                         <div class="form-vertical">
                             <div class="control-group">
-                                <label for="metadata" class="control-label">
-                                    {t}Body{/t}
+                                <label for="metadata" class="control-label clearfix">
+                                    <div class="pull-left">{t}Body{/t}</div>
+                                    <div class="pull-right">
+                                        {acl isAllowed='IMAGE_ADMIN'}
+                                        <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini">{t}Insert image{/t}</a>
+                                        {/acl}
+                                    </div>
                                 </label>
                                 <div class="controls">
                                     <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
@@ -311,7 +363,7 @@
                     </div>
                 </div><!-- /contentform-main -->
 
-                <div id="article_images" class="clearfix">
+                <div id="related_media" class="clearfix">
                     {include  file="article/partials/_images.tpl"}
                 </div>
             </div><!-- /edicion-contenido -->
@@ -324,8 +376,17 @@
                         <div class="controls">
                             <input type="text" id="slug" name="slug" class="input-xxlarge" value="{$article->slug|clearslash}">
                             {if $article}
-                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$article->uri|clearslash}</span>
+                            {assign var=uri value="\" "|explode:$article->uri}
+                            <span class="help-block">&nbsp;{$smarty.const.SITE_URL}{$uri.0|clearslash}</span>
                             {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="form-vertical">
+                    <div class="control-group">
+                        <label for="bodyLink" class="control-label">{t}External link{/t}</label>
+                        <div class="controls">
+                            <input type="text" id="bodyLink" name="params[bodyLink]" class="input-xxlarge" value="{$article->params['bodyLink']}">
                         </div>
                     </div>
                 </div>

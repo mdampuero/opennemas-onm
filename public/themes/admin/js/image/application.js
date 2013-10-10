@@ -18,8 +18,9 @@ jQuery(function ($) {
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload();
     $('#fileupload').fileupload('option', {
-        maxFileSize: 5000000,
-        acceptFileTypes: /(\.|\/)(gif|jpe?g|png|swf)$/i
+        maxFileSize: 20000000,
+        acceptFileTypes: /(\.|\/)(gif|jpe?g|png|swf)$/i,
+        autoUpload : true
     });
 
     // Enable iframe cross-domain access via redirect page:
@@ -51,10 +52,6 @@ jQuery(function ($) {
                 .appendTo(document.body);
         }
     );
-
-    // Initialize the Bootstrap Image Gallery plugin:
-    $('#fileupload .files').imagegallery();
-
 
     // Initialize the Drag zone handler
     $('#fileupload').fileupload({ dropZone: $('#dropzone') });

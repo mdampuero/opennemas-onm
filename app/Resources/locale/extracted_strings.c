@@ -14,7 +14,7 @@ gettext("Go back to list");
 gettext("Go back to list");
 
 /* public/themes/admin/tpl//disqus/config.tpl */
-gettext("Short name:");
+gettext("Short name");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
 gettext("Comments");
@@ -33,6 +33,33 @@ gettext("Config");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
 gettext("Disqus not configured");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("E-mail");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Last login");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("End of subscription");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Status");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Paid");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Expired");
+
+/* public/themes/admin/tpl//paywall/partials/users_csv.tpl */
+gettext("Registered");
 
 /* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
 gettext("User name");
@@ -67,14 +94,32 @@ gettext("Edit");
 /* public/themes/admin/tpl//paywall/partials/user_listing.tpl */
 gettext("No users with paywall");
 
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Full name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Order id");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Payment date");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_csv.tpl */
+gettext("Amount");
+
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
-gettext("User");
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
+gettext("Full name");
 
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
 gettext("Order id");
 
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
-gettext("Created");
+gettext("Payment date");
 
 /* public/themes/admin/tpl//paywall/partials/purchases_listing.tpl */
 gettext("Amount");
@@ -224,6 +269,15 @@ gettext("Go back to list");
 gettext("Go back");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
+gettext("users");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Export list");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Filter by name");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
 gettext("Order by");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
@@ -239,16 +293,19 @@ gettext("Last login");
 gettext("End of subscription");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
-gettext("type");
+gettext("Status");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
 gettext("--All--");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
-gettext("Premium");
+gettext("Paid");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
 gettext("Registered");
+
+/* public/themes/admin/tpl//paywall/users.tpl */
+gettext("Expired");
 
 /* public/themes/admin/tpl//paywall/purchases.tpl */
 gettext("Paywall");
@@ -270,6 +327,27 @@ gettext("Go back to list");
 
 /* public/themes/admin/tpl//paywall/purchases.tpl */
 gettext("Go back");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("purchases");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Export list");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Filter by name or email");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Order by");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Payment date");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("User name");
+
+/* public/themes/admin/tpl//paywall/purchases.tpl */
+gettext("Full name");
 
 /* public/themes/admin/tpl//newsletter/modals/_add_container_label.tpl */
 gettext("Add Container label");
@@ -350,10 +428,10 @@ gettext("Newsletter subject");
 gettext("The subject of the emails in this bulletin");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Mailing list address");
+gettext("Email from");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("If you have a mailing list service to deliver newsletters add the address here");
+gettext("Email sender");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
 gettext("Newsletter links points to");
@@ -368,34 +446,22 @@ gettext("Point to frontpage");
 gettext("You can choose if you prefer that the links of the contents of the bulletin point within the content or contents on the frontpage");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Newsletter subscription type");
+gettext("Newsletter type");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Manage newsletter by e-mail");
+gettext("External Send");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Manage newsletter by subscriptors table");
+gettext("Internal Send");
+
+/* public/themes/admin/tpl//newsletter/config.tpl */
+gettext("Mailing list address");
+
+/* public/themes/admin/tpl//newsletter/config.tpl */
+gettext("If you have a mailing list service to deliver newsletters add the address here");
 
 /* public/themes/admin/tpl//newsletter/config.tpl */
 gettext("Mail address to receive new subscriptions");
-
-/* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Mail sender");
-
-/* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Verify that the domain has enabled <a href=\"http://en.wikipedia.org/wiki/Sender_Policy_Framework\" target=\"_blank\">SPF</a> settings for sending");
-
-/* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Enable frontpage subscription");
-
-/* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Enabled");
-
-/* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("Disabled");
-
-/* public/themes/admin/tpl//newsletter/config.tpl */
-gettext("If enabled, a link to newsletter subscription will appear at home frontpage header");
 
 /* public/themes/admin/tpl//newsletter/_partials/container_contents.tpl */
 gettext("Articles in Frontpage");
@@ -650,22 +716,28 @@ gettext("Subscriptors");
 gettext("Subscriptors");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
+gettext(" Since %1 you have sent %2 of %3 allowed");
+
+/* public/themes/admin/tpl//newsletter/list.tpl */
+gettext(" Since %1 you have sent %2 emails");
+
+/* public/themes/admin/tpl//newsletter/list.tpl */
 gettext("Title");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
 gettext("Created");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
-gettext("Sent");
+gettext("Updated");
+
+/* public/themes/admin/tpl//newsletter/list.tpl */
+gettext("Sendings");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
 gettext("Actions");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
 gettext("Newsletter");
-
-/* public/themes/admin/tpl//newsletter/list.tpl */
-gettext("Yes");
 
 /* public/themes/admin/tpl//newsletter/list.tpl */
 gettext("No");
@@ -800,7 +872,7 @@ gettext("Add selected");
 gettext("Parse list & add");
 
 /* public/themes/admin/tpl//newsletter/steps/3-pick-recipients.tpl */
-gettext("Write a list of email address by writing one per line.");
+gettext("Write a list of email address writing one per line (max 10).");
 
 /* public/themes/admin/tpl//newsletter/steps/3-pick-recipients.tpl */
 gettext("Receivers");
@@ -1463,9 +1535,6 @@ gettext("Remove");
 gettext("Display name");
 
 /* public/themes/admin/tpl//opinion/author_new.tpl */
-gettext("User name");
-
-/* public/themes/admin/tpl//opinion/author_new.tpl */
 gettext("Email");
 
 /* public/themes/admin/tpl//opinion/author_new.tpl */
@@ -1576,6 +1645,9 @@ gettext("Summary");
 /* public/themes/admin/tpl//opinion/new.tpl */
 gettext("Body");
 
+/* public/themes/admin/tpl//opinion/new.tpl */
+gettext("Insert image");
+
 /* public/themes/admin/tpl//opinion/author_list.tpl */
 gettext("Authors");
 
@@ -1649,100 +1721,40 @@ gettext("Yes, delete");
 gettext("No");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image or video for frontpage:");
+gettext("Frontpage image");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image for frontpage");
+gettext("Footer text");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image for inner article page:");
+gettext("Image not set");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image for inner article page");
+gettext("Set image");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image for home:");
+gettext("Inner image");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image for Home");
+gettext("Footer text");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Drop an image to here");
+gettext("Image not set");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("File name");
+gettext("Set image");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image size");
+gettext("Home image");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("File size");
+gettext("Image footer text");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Creation date");
+gettext("Image not set");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Description");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Tags");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Footer text for frontpage image:");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Drop an image to here");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("File name");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image size");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("File size");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Creation date");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Description");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Tags");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Footer text for inner image:");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Drop an image to here");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("File name");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Image size");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("File size");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Creation date");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Description");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Tags");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Footer text for Home image:");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Available images");
-
-/* public/themes/admin/tpl//article/partials/_images.tpl */
-gettext("Search images by title...");
+gettext("Set image");
 
 /* public/themes/admin/tpl//article/partials/_images.tpl */
 gettext("Image or video for frontpage:");
@@ -2021,6 +2033,9 @@ gettext("Update");
 gettext("Save");
 
 /* public/themes/admin/tpl//article/new.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//article/new.tpl */
 gettext("Preview");
 
 /* public/themes/admin/tpl//article/new.tpl */
@@ -2117,10 +2132,19 @@ gettext("Pretitle");
 gettext("Summary");
 
 /* public/themes/admin/tpl//article/new.tpl */
+gettext("Insert image");
+
+/* public/themes/admin/tpl//article/new.tpl */
 gettext("Body");
 
 /* public/themes/admin/tpl//article/new.tpl */
+gettext("Insert image");
+
+/* public/themes/admin/tpl//article/new.tpl */
 gettext("Slug");
+
+/* public/themes/admin/tpl//article/new.tpl */
+gettext("External link");
 
 /* public/themes/admin/tpl//widget/modals/_modalDelete.tpl */
 gettext("Delete widget");
@@ -2262,6 +2286,9 @@ gettext("Tags");
 
 /* public/themes/admin/tpl//widget/new.tpl */
 gettext("Content");
+
+/* public/themes/admin/tpl//widget/new.tpl */
+gettext("Insert image");
 
 /* public/themes/admin/tpl//widget/new.tpl */
 gettext("Write a tag and press Enter...");
@@ -2810,10 +2837,10 @@ gettext("Default layout for this frontpage");
 gettext("Available contents");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
-gettext("Suggested articles");
+gettext("Suggested");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
-gettext("Other articles in this category");
+gettext("Others in category");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
 gettext("Latest articles");
@@ -2829,6 +2856,9 @@ gettext("Videos");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
 gettext("Albums");
+
+/* public/themes/admin/tpl//frontpagemanager/list.tpl */
+gettext("Letter");
 
 /* public/themes/admin/tpl//frontpagemanager/list.tpl */
 gettext("Polls");
@@ -3062,6 +3092,9 @@ gettext("Tags");
 gettext("Body");
 
 /* public/themes/admin/tpl//static_pages/new.tpl */
+gettext("Insert image");
+
+/* public/themes/admin/tpl//static_pages/new.tpl */
 gettext("Write a tag and press Enter...");
 
 /* public/themes/admin/tpl//menues/modals/_modalAccept.tpl */
@@ -3141,6 +3174,12 @@ gettext("Video Category");
 
 /* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
 gettext("Static Page");
+
+/* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
+gettext("Sync category");
+
+/* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
+gettext("Sync blog category");
 
 /* public/themes/admin/tpl//menues/partials/_menu_item.tpl */
 gettext("Sync");
@@ -3290,13 +3329,19 @@ gettext("Sync category");
 gettext("Sync");
 
 /* public/themes/admin/tpl//menues/new.tpl */
-gettext("Add to menu");
-
-/* public/themes/admin/tpl//menues/new.tpl */
 gettext("Category blog");
 
 /* public/themes/admin/tpl//menues/new.tpl */
 gettext("Category blog");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync Blog Categories");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync blog category");
+
+/* public/themes/admin/tpl//menues/new.tpl */
+gettext("Sync category blog");
 
 /* public/themes/admin/tpl//search_advanced/content-provider.tpl */
 gettext("Write here the text for search...");
@@ -3397,14 +3442,38 @@ gettext("There was an error while performing the search please reload this tab b
 /* public/themes/admin/tpl//welcome/modals/_modal_users.tpl */
 gettext("Logged in users");
 
-/* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Welcome to %1");
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("Terms of Service Agreement");
+
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("In order to use the Opennemas platform you must read and accept our terms of use. You can find these terms in the next link <a href=\"http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms of use in Opennemas\">Terms of use in Opennemas</a>");
+
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("I have read and accept the Opennemas <a href=\"http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas\" title=\"Terms of use in Opennemas\">Terms of use</a> and <a href=\"http://help.opennemas.com/knowledgebase/articles/235300-opennemas-pol%C3%ADtica-de-privacidad\">Privacy policy</a>.");
+
+/* public/themes/admin/tpl//welcome/modals/policies.tpl */
+gettext("Yes, accept");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Media manager");
+gettext("Welcome to Opennemas");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Media manager");
+gettext("<strong>Are you new in Opennemas?</strong> If you need some help getting started to create awesome content, check out our online user documentation.");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Get started");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("or dismiss");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Add content to your site");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("New article");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("New article");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("New opinion");
@@ -3413,70 +3482,70 @@ gettext("New opinion");
 gettext("New opinion");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New article");
+gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New article");
-
-/* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Go to multimedia manager");
+gettext("Upload images");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
 gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Create new opinion");
+gettext("New Album");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New opinion");
+gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Create new article");
+gettext("Upload video");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("New article");
+gettext("Media manager");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Welcome to your OpenNemas site!");
+gettext("Static page");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("If you need help getting started, check out our documentation on <a href=\"%1\">First Steps with OpenNemas</a>.\n           If you’d rather dive right in, here are a few things most people do first when they set up\n           a new OpenNemas site.");
+gettext("Upgrade your site");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Learn more");
+gettext("We have two ways to add functionality to you site.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Basic Settings");
+gettext("Plans");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Here are a few easy things you can do to get your feet wet. Make sure to click Save on each Settings screen.");
+gettext("Bundles multiple functionality in a reduced price");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Change your site name and preferences");
+gettext("Modules");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Select your tagline and time zone");
+gettext("Adds an specific feature in your site");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Fill in your profile");
+gettext("If you have special needs or want some advice extending your site");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Add your own Content");
+gettext("Contact us");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Check out the <a href=\"#\">sample page</a> &amp; <a href=\"#\">post</a> editors to see how it all works, then delete the default content and write your own!");
+gettext("Need Help?");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Customize Your Site");
+gettext("We have created a lot of videos that will teach you to perform from easy tasks to the advanced ones.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Do you want more information check out our documentation.");
+gettext("See more help videos in <a href=\"%1\">our YouTube channel</a> or subscribe to it.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Set a background color");
+gettext("If you prefer you can read our online documentation or if you have any doubt ask us.");
 
 /* public/themes/admin/tpl//welcome/index.tpl */
-gettext("Select a new header image");
+gettext("Online documentation");
+
+/* public/themes/admin/tpl//welcome/index.tpl */
+gettext("Contact support");
 
 /* public/themes/admin/tpl//polls/modals/_modalAccept.tpl */
 gettext("Delete polls");
@@ -3779,15 +3848,6 @@ gettext("Please fill the form of<br> the side to search images");
 gettext("Image name");
 
 /* public/themes/admin/tpl//image/search.tpl */
-gettext("Category");
-
-/* public/themes/admin/tpl//image/search.tpl */
-gettext("All");
-
-/* public/themes/admin/tpl//image/search.tpl */
-gettext("Advertisement");
-
-/* public/themes/admin/tpl//image/search.tpl */
 gettext("Date period:");
 
 /* public/themes/admin/tpl//image/search.tpl */
@@ -3854,19 +3914,7 @@ gettext("Files uploaded successfully");
 gettext("The dropped files are uploaded but you should complete their information.");
 
 /* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("You can:");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Edit them now");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Upload more images and complete the information later");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Edit them");
-
-/* public/themes/admin/tpl//image/modals/_edit_uploaded_files.tpl */
-gettext("Upload more images");
+gettext("Edit images");
 
 /* public/themes/admin/tpl//image/modals/_modalAccept.tpl */
 gettext("Delete multiple images");
@@ -4073,7 +4121,7 @@ gettext("All");
 gettext("Advertisement");
 
 /* public/themes/admin/tpl//image/create.tpl */
-gettext("Uploading images to \"%1\"");
+gettext("Upload images");
 
 /* public/themes/admin/tpl//image/create.tpl */
 gettext("Go back");
@@ -4094,16 +4142,7 @@ gettext("Please click in the \"Edit uploaded\" button from above to edit latest 
 gettext("Add files...");
 
 /* public/themes/admin/tpl//image/create.tpl */
-gettext("Start upload");
-
-/* public/themes/admin/tpl//image/create.tpl */
-gettext("Cancel upload");
-
-/* public/themes/admin/tpl//image/create.tpl */
-gettext("Delete selected");
-
-/* public/themes/admin/tpl//image/create.tpl */
-gettext("Drop files here");
+gettext("Drop files anywhere here to upload or click on the \"Select Files\" button above.");
 
 /* public/themes/admin/tpl//image/create.tpl */
 gettext("User notes");
@@ -4158,12 +4197,6 @@ gettext("Delete");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Images");
-
-/* public/themes/admin/tpl//image/list.tpl */
-gettext("All categories");
-
-/* public/themes/admin/tpl//image/list.tpl */
-gettext("Advertisement");
 
 /* public/themes/admin/tpl//image/list.tpl */
 gettext("Delete");
@@ -4284,6 +4317,12 @@ gettext("FAQ");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Contact support");
+
+/* public/themes/admin/tpl//base/admin.tpl */
+gettext("Photo");
+
+/* public/themes/admin/tpl//base/admin.tpl */
+gettext("Photo");
 
 /* public/themes/admin/tpl//base/admin.tpl */
 gettext("Edit my profile");
@@ -4556,7 +4595,7 @@ gettext("Settings");
 gettext("Title");
 
 /* public/themes/admin/tpl//video/list.tpl */
-gettext("Category");
+gettext("Section");
 
 /* public/themes/admin/tpl//video/list.tpl */
 gettext("Views");
@@ -4754,28 +4793,19 @@ gettext("This settings allow printing home ads when ads in category are empty.")
 gettext("Floating ads (for drop them into columns)");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Drop an image to here");
+gettext("Flash based");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("File name");
+gettext("Overide default click handler.");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Image size");
+gettext("When you click in some Flash-based advertisements they redirect you to another web site. If you want to overlap that address with that specified by you above you should mark this.");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("File size");
+gettext("Image not set");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Creation date");
-
-/* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Description");
-
-/* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Tags");
-
-/* public/themes/admin/tpl//advertisement/partials/advertisement_images.tpl */
-gettext("Available images");
+gettext("Select image");
 
 /* public/themes/admin/tpl//advertisement/partials/advertisement_positions_poll_inner.tpl */
 gettext("Polls");
@@ -4937,6 +4967,9 @@ gettext("Delete");
 gettext("Send to trash");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
+gettext("Advertisement");
+
+/* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Creating banner");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
@@ -4997,34 +5030,10 @@ gettext("Restrictions");
 gettext("Without limits");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Click count");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Views count");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Date range");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Show this ad if satisfy one condition");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("# of clics");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Actual click count:");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Show this ad only if users had clicked in it less than a number of times.");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Max views");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Actual views count:");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Show this ad only if this add had been printed less than a number of times.");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Date range");
@@ -5042,10 +5051,10 @@ gettext("Show this ad within a range of dates.");
 gettext("Content");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Image or flash from library");
+gettext("Image or Flash object");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Custom HTML or Javascript code");
+gettext("HTML or Javascript code");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Size");
@@ -5055,12 +5064,6 @@ gettext("Width");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Height");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Hide Flash events");
-
-/* public/themes/admin/tpl//advertisement/new.tpl */
-gettext("Mark this if you want to overide the default click handler for Flash based ads.");
 
 /* public/themes/admin/tpl//advertisement/new.tpl */
 gettext("Display banner while");
@@ -5546,34 +5549,16 @@ gettext("Available images");
 gettext("Search images by title...");
 
 /* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("Image for home:");
-
-/* public/themes/admin/tpl//special/partials/_load_images.tpl */
 gettext("Image for Special");
 
 /* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("File name");
+gettext("Frontpage image");
 
 /* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("Image size");
+gettext("Image not set");
 
 /* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("File size");
-
-/* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("Creation date");
-
-/* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("Description");
-
-/* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("Tags");
-
-/* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("Available images");
-
-/* public/themes/admin/tpl//special/partials/_load_images.tpl */
-gettext("Search images by title...");
+gettext("Set image");
 
 /* public/themes/admin/tpl//special/list.tpl */
 gettext("Specials");
@@ -6116,15 +6101,6 @@ gettext("Close");
 gettext("Edit image properties");
 
 /* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
-gettext("Creation date");
-
-/* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
-gettext("Image size");
-
-/* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
-gettext("File size");
-
-/* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
 gettext("Description");
 
 /* public/themes/admin/tpl//album/modals/_edit_album_photo.tpl */
@@ -6185,13 +6161,16 @@ gettext("Go back to list");
 gettext("Total in widget home");
 
 /* public/themes/admin/tpl//album/config.tpl */
-gettext("Use  total in widget album for define how many videos can see in widgets in newspaper frontpage");
+gettext("Use  total in widget album for define how many albums can see in widgets in frontpage");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Cover size in widget album (width x height)");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Order album's frontpage by");
+
+/* public/themes/admin/tpl//album/config.tpl */
+gettext("Created Date");
 
 /* public/themes/admin/tpl//album/config.tpl */
 gettext("Most views");
@@ -6209,7 +6188,7 @@ gettext("Time of the last album most viewed (days)");
 gettext("Total in album frontpage");
 
 /* public/themes/admin/tpl//album/config.tpl */
-gettext("If previus select most views for order the album's frontpage. Use this to define the frontpage albums, the time range of the latest albums are the most viewed");
+gettext(" Use this to define how many albums can see in the album frontpage. ");
 
 /* public/themes/admin/tpl//album/list.tpl */
 gettext("Albums");
@@ -6368,10 +6347,10 @@ gettext("Delete");
 gettext("Send to trash");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Edit");
+gettext("Drop");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Drop");
+gettext("Write a tag and press Enter...");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Editing album");
@@ -6395,19 +6374,7 @@ gettext("Go back");
 gettext("Title");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Available");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Category");
-
-/* public/themes/admin/tpl//album/new.tpl */
 gettext("Agency");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Author");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("No author assigned");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Description");
@@ -6416,46 +6383,40 @@ gettext("Description");
 gettext("%1");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Keywords");
+gettext("Attributes");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("List of terms separated by comas");
+gettext("Available");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Images for this album");
+gettext("Category");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Images in this album");
+gettext("Author");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Cover image");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Drop");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("File name");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Creation date");
-
-/* public/themes/admin/tpl//album/new.tpl */
-gettext("Description");
+gettext("No author assigned");
 
 /* public/themes/admin/tpl//album/new.tpl */
 gettext("Tags");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Image size");
+gettext("Album images");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("File size");
+gettext("Drop");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Available images");
+gettext("Add images");
 
 /* public/themes/admin/tpl//album/new.tpl */
-gettext("Search images by title...");
+gettext("Cover image");
+
+/* public/themes/admin/tpl//album/new.tpl */
+gettext("Image not set");
+
+/* public/themes/admin/tpl//album/new.tpl */
+gettext("Set image");
 
 /* public/themes/admin/tpl//letter/modals/_modalAccept.tpl */
 gettext("Delete letters");
@@ -6545,13 +6506,55 @@ gettext("Author");
 gettext("Date");
 
 /* public/themes/admin/tpl//letter/list.tpl */
+gettext("Image");
+
+/* public/themes/admin/tpl//letter/list.tpl */
 gettext("Available");
 
 /* public/themes/admin/tpl//letter/list.tpl */
 gettext("Actions");
 
 /* public/themes/admin/tpl//letter/list.tpl */
+gettext("Media");
+
+/* public/themes/admin/tpl//letter/list.tpl */
+gettext("Media element (jpg, image, gif)");
+
+/* public/themes/admin/tpl//letter/list.tpl */
 gettext("There is no letters here.");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Texto");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Edit '%1'");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Edit");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Remove element from this frontpage");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Remove from this frontpage");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Customize in frontpage");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Customize content");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Remove from all frontpages");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Arquive");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Delete");
+
+/* public/themes/admin/tpl//letter/content-provider/letter.tpl */
+gettext("Send to trash");
 
 /* public/themes/admin/tpl//letter/new.tpl */
 gettext("Editing letter");
@@ -6575,6 +6578,12 @@ gettext("Go back");
 gettext("Title");
 
 /* public/themes/admin/tpl//letter/new.tpl */
+gettext("Metadata");
+
+/* public/themes/admin/tpl//letter/new.tpl */
+gettext("List of words separated by words.");
+
+/* public/themes/admin/tpl//letter/new.tpl */
 gettext("Published");
 
 /* public/themes/admin/tpl//letter/new.tpl */
@@ -6594,6 +6603,108 @@ gettext("Created at");
 
 /* public/themes/admin/tpl//letter/new.tpl */
 gettext("Body");
+
+/* public/themes/admin/tpl//letter/new.tpl */
+gettext("Related url");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Upload");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Browse");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Pick the item to insert");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("All months");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Search");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Insert");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Upload new media");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Add files...");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Drop files anywhere here to upload or click on the \"Add Files...\" button above.");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("File is too big");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("File is too small");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Filetype not allowed");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Max number of files exceeded");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Uploaded bytes exceed file size");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Empty file upload result");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Uploading files");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Clear");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Thumbnail details");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Edit image");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Delete image");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Saving...");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Saved");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Error saving");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Description");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Alignment");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Left");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Right");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("None");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Start");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Cancel");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Cancel");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Error");
+
+/* public/themes/admin/tpl//media_uploader/media_uploader.tpl */
+gettext("Uploaded");
 
 /* public/themes/admin/tpl//files/modals/_modalAccept.tpl */
 gettext("Delete newsstands");
@@ -7385,6 +7496,9 @@ gettext("Create new user");
 gettext("New user");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
+gettext("users");
+
+/* public/themes/admin/tpl//acl/user/list.tpl */
 gettext("Filter by name or email");
 
 /* public/themes/admin/tpl//acl/user/list.tpl */
@@ -7833,24 +7947,6 @@ gettext("Legal");
 
 /* public/themes/admin/tpl//login/regenerate_pass.tpl */
 gettext("The journalism CMS");
-
-/* public/themes/admin/tpl//login/regenerate_pass.tpl */
-gettext("User name");
-
-/* public/themes/admin/tpl//login/regenerate_pass.tpl */
-gettext("Password");
-
-/* public/themes/admin/tpl//login/regenerate_pass.tpl */
-gettext("Enter");
-
-/* public/themes/admin/tpl//login/regenerate_pass.tpl */
-gettext("Forgot Password?");
-
-/* public/themes/admin/tpl//login/regenerate_pass.tpl */
-gettext("Password successfully updated");
-
-/* public/themes/admin/tpl//login/regenerate_pass.tpl */
-gettext("Your password has been updated");
 
 /* public/themes/admin/tpl//login/regenerate_pass.tpl */
 gettext("User name");
@@ -8366,6 +8462,12 @@ gettext("Agency");
 gettext("When importing elements this will be the signature");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Import authors");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
+gettext("Activate this if you want to import the author of the elements if available");
+
+/* public/themes/admin/tpl//news_agency/config/new.tpl */
 gettext("Color");
 
 /* public/themes/admin/tpl//news_agency/config/new.tpl */
@@ -8504,6 +8606,18 @@ gettext("Google Web Master Tools");
 gettext("Bing Web Master Tools");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Cookies agreement");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Enable cookies agreement");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Mark this if you want to show a message to your users that your site is using cookies.");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Cookie agreement page URL");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Language & Time");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
@@ -8529,6 +8643,9 @@ gettext("When a user visits pages and stay on it for a while, this setting allow
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Items per page");
+
+/* public/themes/admin/tpl//system_settings/system_settings.tpl */
+gettext("Items per blog page");
 
 /* public/themes/admin/tpl//system_settings/system_settings.tpl */
 gettext("Sessions");
@@ -8672,7 +8789,7 @@ gettext("Account email:");
 gettext("You can get your PayPal account email from <a href=\"https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run\" target=\"_blank\">PayPal site</a>. This must be a business account for receiving payments");
 
 /* public/themes/manager/tpl/instances/modals/_modalDelete.tpl */
-gettext("Delete article");
+gettext("Delete instance");
 
 /* public/themes/manager/tpl/instances/modals/_modalDelete.tpl */
 gettext("Are you sure that do you want delete \"<span>%title%</span>\"?");
@@ -8744,6 +8861,9 @@ gettext("New widget");
 gettext("New");
 
 /* public/themes/manager/tpl/instances/list.tpl */
+gettext("Filter by e-mail");
+
+/* public/themes/manager/tpl/instances/list.tpl */
 gettext("Filter by name");
 
 /* public/themes/manager/tpl/instances/list.tpl */
@@ -8765,13 +8885,7 @@ gettext("Domains");
 gettext("Contact");
 
 /* public/themes/manager/tpl/instances/list.tpl */
-gettext("Articles");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Images");
-
-/* public/themes/manager/tpl/instances/list.tpl */
-gettext("Ads");
+gettext("Last access");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("Created");
@@ -8798,6 +8912,15 @@ gettext("Unpublished");
 gettext("Unpublished");
 
 /* public/themes/manager/tpl/instances/list.tpl */
+gettext("Articles");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Images");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Ads");
+
+/* public/themes/manager/tpl/instances/list.tpl */
 gettext("Edit");
 
 /* public/themes/manager/tpl/instances/list.tpl */
@@ -8805,6 +8928,9 @@ gettext("Delete");
 
 /* public/themes/manager/tpl/instances/list.tpl */
 gettext("There is no available instances yet");
+
+/* public/themes/manager/tpl/instances/list.tpl */
+gettext("Number of contents");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Creating new intance");
@@ -8942,6 +9068,21 @@ gettext("Refresh page every (secs):");
 gettext("Default: 900 secs");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Minimum password level");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Default");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Weak");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Good");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Strong");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Database Type:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
@@ -8972,6 +9113,9 @@ gettext("Database user:");
 gettext("Database password:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Mail");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Mail server");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
@@ -8979,6 +9123,18 @@ gettext("Username");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("Password");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Sender");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Newsletter");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Num Max emails sent by month");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Last invoice date:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("System log");

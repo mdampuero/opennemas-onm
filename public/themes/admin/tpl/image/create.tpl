@@ -1,8 +1,5 @@
 {extends file="base/admin.tpl"}
 
-{block name="prototype"}
-{/block}
-
 {block name="header-js" append}
 <script>
 var image_uploader ={
@@ -14,7 +11,7 @@ var image_uploader ={
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
-        <div class="title"><h2>{t 1=$datos_cat[0]->title}Uploading images to "%1"{/t}</h2></div>
+        <div class="title"><h2>{t}Upload images{/t}</h2></div>
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_images category=$category}">
@@ -48,26 +45,14 @@ var image_uploader ={
                         <input type="file" name="files[]" multiple>
                     </div>
                 </div>
-                <div class="btn-group">
-                    <button type="submit" class="btn btn-success start">{t}Start upload{/t}</button>
-                    <button type="reset" class="btn btn-danger cancel">{t}Cancel upload{/t}</button>
-                </div>
             </div>
-            <div class="pull-left">
+            <div class="pull-right">
                 <div class="progress progress-striped active fileupload-progressbar fade">
                     <div class="bar" style="width:0%;"></div>
                 </div>
             </div>
-            <div class="fileupload-buttonbar pull-right">
-                <div class="btn-group">
-                    <a href="#" class="btn">
-                        <input type="checkbox" class="toggle">
-                    </a>
-                    <button type="button" class="btn btn-danger delete">{t}Delete selected{/t}</button>
-                </div>
-            </div>
         </div>
-        <div id="dropzone" class="fade well">{t}Drop files here{/t}</div>
+        <div id="dropzone" class="fade well">{t}Drop files anywhere here to upload or click on the "Select Files" button above.{/t}</div>
         <table class="table zebra-striped condensed"><tbody class="files"></tbody></table>
 
         <div class="well">
@@ -84,21 +69,6 @@ var image_uploader ={
                 <li>{t escape=off}Only image files (<strong>JPG, GIF, PNG</strong>) are allowed.{/t}</li>
             </ul>
         </div>
-        <!-- gallery-loader is the loading container animation -->
-        <div id="gallery-loader"></div>
-        <!-- gallery-modal is the modal dialog used for the image gallery -->
-<!--         <div id="gallery-modal" class="modal hide fade">
-            <div class="modal-header">
-                <a href="#" class="close">&times;</a>
-                <h3 class="title"></h3>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <a class="btn btn-primary next">Next</a>
-                <a class="btn info prev">Previous</a>
-                <a class="btn success download" target="_blank">Download</a>
-            </div>
-        </div> -->
         <input type="hidden" name="category" value="{$category}" />
     </form>
     <div id="upload-helper" data-filecount=0></div>

@@ -143,16 +143,10 @@
                     <label for="site_logo" class="control-label">{t}Site logo{/t}</label>
                     <div class="controls">
                         <input type="file" id="site_logo" name="site_logo">
+                        {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
+                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:30px">
+                        {/if}
                     </div>
-                </div>
-
-                <div class="control-group">
-                    {if isset($configs['site_logo']) && $configs['section_settings']['allowLogo'] neq "0"}
-                        <label for="site_logo"></label>
-                        <div class="controls" >
-                            <img src="{$smarty.const.MEDIA_URL}{$smarty.const.MEDIA_DIR}/sections/{$configs['site_logo']}" style="max-height:100px;">
-                        </div>
-                    {/if}
                 </div>
 
                 <div class="control-group" {if $configs['section_settings']['allowLogo'] eq "0"}style="display:none"{/if}>
@@ -233,6 +227,24 @@
 
         <div id="misc" class="form-horizontal">
             <fieldset>
+                <h3 class="settings-header">{t}Cookies agreement{/t}</h3>
+
+                <div class="control-group">
+                    <label for="cookies_hint_enabled" class="control-label">{t}Enable cookies agreement{/t}</label>
+                    <div class="controls">
+                        <input type="checkbox" id="cookies_hint_enabled" name="cookies_hint_enabled" value="1" {if $configs['cookies_hint_enabled'] == 1}checked{/if}>
+                        <div class="help-block">{t}Mark this if you want to show a message to your users that your site is using cookies.{/t}</div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label for="webmastertools_bing" class="control-label">{t}Cookie agreement page URL{/t}</label>
+                    <div class="controls">
+                        <input type="text" id="cookies_hint_url" name="cookies_hint_url" class="input-xlarge" value="{$configs['cookies_hint_url']|default:""}">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
                 <h3 class="settings-header">{t}Language & Time{/t}</h3>
 
                 <div class="control-group">
@@ -269,6 +281,14 @@
                         <input type="number" id="items_per_page" name="items_per_page" value="{$configs['items_per_page']|default:20}">
                     </div>
                 </div>
+                {is_module_activated name="FRONTPAGES_LAYOUT"}
+                <div class="control-group">
+                    <label for="items_in_blog" class="control-label">{t}Items per blog page{/t}</label>
+                    <div class="controls">
+                        <input type="number" id="items_in_blog" name="items_in_blog" value="{$configs['items_in_blog']|default:10}">
+                    </div>
+                </div>
+                {/is_module_activated}
             </fieldset>
             <fieldset>
                 <h3 class="settings-header">{t}Sessions{/t}</h3>
@@ -386,6 +406,7 @@
                 </div>
 
             </fieldset>
+            {is_module_activated name="NEWS_AGENCY_IMPORTER"}
             <hr>
             <fieldset>
                 <h3 class="settings-header">{t}Opennemas News Agency{/t}</h3>
@@ -406,6 +427,7 @@
                 </div>
 
             </fieldset>
+            {/is_module_activated}
             {acl isAllowed="ONLY_MASTERS"}
             <hr>
             <fieldset>
@@ -475,12 +497,10 @@
                         <input type="text" id="recaptcha_private_key" name="recaptcha[private_key]" value="{$configs['recaptcha']['private_key']|default:""}" class="input-xlarge">
                     </div>
                 </div>
-
             </fieldset>
-
+            {is_module_activated name="PAYWALL"}
             <hr>
             <fieldset>
-
                 <h3 class="settings-header">{t}Paypal Settings{/t}</h3>
 
                 <div class="control-group">
@@ -490,8 +510,8 @@
                         <div class="help-block">{t escape=off}You can get your PayPal account email from <a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_registration-run" target="_blank">PayPal site</a>. This must be a business account for receiving payments{/t}</div>
                     </div>
                 </div>
-
             </fieldset>
+            {/is_module_activated}
         </div>
     </div>
 </div>

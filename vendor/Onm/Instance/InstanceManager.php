@@ -196,9 +196,16 @@ class InstanceManager
     {
         $instances = array();
 
-        if ($params['name'] != '*') {
+        if (!empty($params['name']) && !empty($params['email'])) {
+            $sql = "SELECT * FROM instances "
+                 ."WHERE name LIKE '%".$params['name']."%' AND "
+                 ."contact_mail LIKE '%".$params['email']."%' ORDER BY id DESC";
+        } elseif (!empty($params['name'])) {
             $sql = "SELECT * FROM instances "
                  ."WHERE name LIKE '%".$params['name']."%' ORDER BY id DESC";
+        } elseif (!empty($params['email'])) {
+            $sql = "SELECT * FROM instances "
+                 ."WHERE contact_mail LIKE '%".$params['email']."%' ORDER BY id DESC";
         } else {
             $sql = "SELECT * FROM instances ORDER BY id DESC";
         }
@@ -262,9 +269,6 @@ class InstanceManager
         // Fetch caches if exist
         $key = CACHE_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
         $totals = $cache->fetch($key);
-        $key = CACHE_PREFIX."getDBInformation_infor_".$settings['BD_DATABASE'];
-        $information = $cache->fetch($key);
-
 
         // If was not fetched from APC now is turn of DB
         if (!$totals) {
@@ -290,28 +294,21 @@ class InstanceManager
             );
         }
 
-        if (!$information) {
-            if (!isset($dbConection) || empty($dbConection)) {
-                $dbConection = self::getConnection($settings);
+        if (!isset($dbConection) || empty($dbConection)) {
+            $dbConection = self::getConnection($settings);
+        }
+
+        $sql = 'SELECT * FROM settings';
+
+        $rs = $dbConection->Execute($sql);
+
+        $information = array();
+        if ($rs !== false) {
+            while (!$rs->EOF) {
+                $information[ $rs->fields['name'] ] =
+                    @unserialize($rs->fields['value']);
+                $rs->MoveNext();
             }
-
-            $sql = 'SELECT * FROM settings';
-
-            $rs = $dbConection->Execute($sql);
-
-            if ($rs !== false) {
-                while (!$rs->EOF) {
-                    $information[ $rs->fields['name'] ] =
-                        @unserialize($rs->fields['value']);
-                    $rs->MoveNext();
-                }
-            }
-
-            $cache->save(
-                CACHE_PREFIX . "getDBInformation_infor_".$settings['BD_DATABASE'],
-                $information,
-                300
-            );
         }
 
         return array($totals, $information);
@@ -935,6 +932,9 @@ class InstanceManager
                 'Could not create the default database for the instance site_created'
             );
         }
+
+        s::invalidate('site_title');
+
         if (!s::set(
             'site_title',
             $data['name'].' - '.s::get('site_title')
@@ -943,6 +943,9 @@ class InstanceManager
                 'Could not create the default database for the instance - site_title'
             );
         }
+
+        s::invalidate('site_description');
+
         if (!s::set(
             'site_description',
             $data['name'].' - '.s::get('site_description')
@@ -951,6 +954,9 @@ class InstanceManager
                 'Could not create the default database for the instance - site_description'
             );
         }
+
+        s::invalidate('site_keywords');
+
         if (!s::set(
             'site_keywords',
             $data['name'].' - '.s::get('site_keywords')

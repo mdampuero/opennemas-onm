@@ -37,10 +37,7 @@ class ArticlesController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
 
-        // Check if the user can admin video
         $this->checkAclOrForward('ARTICLE_ADMIN');
-
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
 
         $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -98,7 +95,11 @@ class ArticlesController extends Controller
             $filterSQL []= ' contents.available='.$status;
         }
         if (!empty($title)) {
-            $filterSQL []= ' title LIKE \'%'.$title.'%\'';
+            $filterSQL []=
+                "(title LIKE '%{$title}%'"
+                ." OR description LIKE '%{$title}%'"
+                ." OR metadata LIKE '%{$title}%')";
+
         }
 
         $filterSQL = implode(' AND ', $filterSQL);
@@ -227,6 +228,10 @@ class ArticlesController extends Controller
                             array_key_exists('withGalleryInt', $params) ? $params['withGalleryInt'] : '',
                         'withGalleryHome'   =>
                             array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
+                        'only_subscribers'          =>
+                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                        'bodyLink'   =>
+                            array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -532,7 +537,9 @@ class ArticlesController extends Controller
                         'withGalleryHome'   =>
                             array_key_exists('withGalleryHome', $params) ? $params['withGalleryHome'] : '',
                         'only_subscribers'          =>
-                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : ''
+                            array_key_exists('only_subscribers', $params) ? $params['only_subscribers'] : '',
+                        'bodyLink'   =>
+                            array_key_exists('bodyLink', $params) ? $params['bodyLink'] : '',
                 ),
                 'subtitle'          => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
                 'metadata'          => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
@@ -1034,7 +1041,7 @@ class ArticlesController extends Controller
 
         // Get advertisements for single article
         $actualCategoryId = $ccm->get_id($category_name);
-        \Frontend\Controllers\ArticlesController::getInnerAds($actualCategoryId);
+        \Frontend\Controllers\ArticlesController::getAds($actualCategoryId);
 
         // Fetch media associated to the article
         if (isset($article->img2)

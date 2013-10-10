@@ -40,8 +40,6 @@ class CommentsController extends Controller
         // Check if the user can admin video
         $this->checkAclOrForward('COMMENT_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->statuses = array(
             \Comment::STATUS_ACCEPTED => _('Accepted'),
             \Comment::STATUS_REJECTED => _('Rejected'),

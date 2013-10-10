@@ -480,6 +480,9 @@ class ContentManager
 
         // Initialization of variables
         $contents = array();
+        if (empty($categoryID)) {
+            $categoryID = 0;
+        }
 
         $sql = 'SELECT * FROM content_positions '
               .'WHERE `fk_category`='.$categoryID.' '
@@ -558,7 +561,6 @@ class ContentManager
 
             // Handling if there were some errors into the execution
             if (!$rs) {
-                Application::logDatabaseError();
                 $returnValue = false;
             } else {
                 // Unset suggested flag if saving content positions in frontpage
@@ -594,13 +596,11 @@ class ContentManager
             $stmt = $GLOBALS['application']->conn->Prepare($sql, $values);
 
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-                Application::logDatabaseError();
-
                 return false;
             }
 
             /* Notice log of this action */
-            $logger = Application::getLogger();
+            $logger = getService('logger');
             $logger->notice(
                 'User '.$_SESSION['username'].' ('.$_SESSION['userid']
                 .') has executed action drop suggested flag at '.$contentIdsSQL.' ids'
@@ -630,7 +630,6 @@ class ContentManager
 
         // return the value and log if there were errors
         if (!$rs) {
-            Application::logDatabaseError();
             $returnValue = false;
         } else {
             $returnValue = true;
@@ -734,7 +733,6 @@ class ContentManager
             $returnValue = ($ucfirst === true)
                 ? ucfirst($contentID) : strtolower($contentID);
         } else {
-
             // retrieve the name for this id
             $sql = "SELECT path FROM attachments "
                  . "WHERE `pk_attachment`=$contentID";
@@ -1507,7 +1505,7 @@ class ContentManager
             $limit = ' LIMIT '.($page-1)*$numElements.', '.$numElements;
         }
 
-        if (!is_null($categoryId)) {
+        if (intval($categoryId)>0) {
             $sql = 'SELECT * FROM contents_categories, contents, '.$this->table.' '
                  . ' WHERE `contents_categories`.`pk_fk_content_category`='.$categoryId
                  . ' AND `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'`'
@@ -1610,6 +1608,9 @@ class ContentManager
         $items  = array();
         $_where = 'in_litter=0';
 
+        if (intval($pk_fk_content_category)<=0) {
+            return $items;
+        }
         if (!is_null($filter)) {
             // se busca desde la litter.php
             if (preg_match('/in_litter=1/i', $filter)) {
@@ -1685,7 +1686,7 @@ class ContentManager
      *
      * @return array a list of content information (not the object itself)
      **/
-    public function findHeadlinesWithImage()
+    public function findHeadlinesWithImage($frontIncluded = false)
     {
         $sql =
         'SELECT `contents`.`title`, `contents`.`pk_content` ,
@@ -1700,17 +1701,18 @@ class ContentManager
             AND `contents`.`available` =1
             AND `contents`.`fk_content_type` =1
             AND `contents`.`in_litter` =0
-        ORDER BY `created` DESC ';
+        ORDER BY `created` DESC LIMIT 400 ';
 
         $rs    = $GLOBALS['application']->conn->Execute($sql);
         $ccm   = ContentCategoryManager::get_instance();
         $items = array();
         while (!$rs->EOF) {
 
-            $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
-            $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
-
-            if ($rsAux->fields['num'] <= 0) {
+            if (!$frontIncluded) {
+                $sqlAux = 'SELECT count(*) as num FROM content_positions WHERE pk_fk_content=? AND fk_category=0';
+                $rsAux  = $GLOBALS['application']->conn->Execute($sqlAux, array($rs->fields['pk_content']));
+            }
+            if ($rsAux->fields['num'] <= 0 || $frontIncluded) {
                 $items[] = array(
                     'title'          => $rs->fields['title'],
                     'catName'        => $ccm->get_name($rs->fields['category_id']),
@@ -1992,7 +1994,7 @@ class ContentManager
 
         $sql =  'SELECT contents.pk_content, contents.title, contents.slug, '
             .'      contents_categories.catName, contents.created,'
-            .'      contents.changed, '
+            .'      contents.changed, contents.params, '
             .'      contents.metadata, contents.starttime, contents.endtime '
             .'FROM  contents, contents_categories '
             .'WHERE contents.pk_content = contents_categories.pk_fk_content '
@@ -2067,8 +2069,6 @@ class ContentManager
         $rs  = $GLOBALS['application']->conn->Execute($sql, array($contentId));
 
         if (!$rs) {
-            Application::logDatabaseError();
-
             return false;
         }
 
@@ -2283,23 +2283,19 @@ class ContentManager
         $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $GLOBALS['application']->conn->Execute($sql, array(\Comment::STATUS_ACCEPTED, $count));
 
-        if (!$rs) {
-            \Application::logDatabaseError();
-        } else {
-            while (!$rs->EOF) {
-                $content = new \Article();
-                $pk_content = $rs->fields['pk_content'];
-                $content->load($rs->fields);
-                $content->comment        =  $rs->fields['comment_body'];
-                $content->pk_comment     =  $rs->fields['comment_id'];
-                $content->comment_author =  $rs->fields['comment_author'];
+        while (!$rs->EOF) {
+            $content = new \Article();
+            $pk_content = $rs->fields['pk_content'];
+            $content->load($rs->fields);
+            $content->comment        =  $rs->fields['comment_body'];
+            $content->pk_comment     =  $rs->fields['comment_id'];
+            $content->comment_author =  $rs->fields['comment_author'];
 
-                $contents[$content->pk_comment] = $content;
-                $rs->MoveNext();
-            }
-
-            $rs->Close(); # optional
+            $contents[$content->pk_comment] = $content;
+            $rs->MoveNext();
         }
+
+        $rs->Close(); # optional
 
         return $contents;
     }

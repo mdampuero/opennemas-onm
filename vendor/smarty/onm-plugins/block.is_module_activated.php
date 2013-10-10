@@ -33,7 +33,11 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
             $returnContent = false;
             foreach ($modules as $module) {
                 $returnContent = ($returnContent || \Onm\Module\ModuleManager::isActivated($module));
+                if ($returnContent == true) {
+                    break;
+                }
             }
+
             $output = ($returnContent) ?  $content : "";
         } else {
             $output = (\Onm\Module\ModuleManager::isActivated($params['name'])) ?  $content : "";
@@ -41,4 +45,3 @@ function smarty_block_is_module_activated($params, $content, &$smarty, &$repeat)
         return $output;
     }
 }
-

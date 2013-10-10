@@ -83,7 +83,8 @@ class VideosController extends Controller
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($categoryName, '', $this->page);
@@ -133,12 +134,29 @@ class VideosController extends Controller
                     'ORDER BY created DESC LIMIT 3'
                 );
 
-                $othersVideos = $this->cm->find_all(
+
+                $itemsPerPage = 12;//$totalVideosFrontpage;
+                list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
                     'Video',
-                    ' available=1 ',
-                    'ORDER BY starttime DESC LIMIT 3,12'
+                    (int) $this->category,
+                    'in_litter != 1 AND contents.available=1',
+                    'ORDER BY created DESC',
+                    $this->page,
+                    $itemsPerPage
                 );
 
+                $total = count($othersVideos)+1;
+
+                $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+                    array(
+                        'page'  => $this->page,
+                        'items' => $itemsPerPage,
+                        'total' => $total,
+                        'url'   => $this->generateUrl(
+                            'frontend_video_ajax_paginated'
+                        )
+                    )
+                );
             }
 
             if (count($videos) > 0) {
@@ -159,6 +177,7 @@ class VideosController extends Controller
                 array(
                     'videos'        => $videos,
                     'others_videos' => $othersVideos,
+                    'pagination'    => $pagination,
                     'page'          => '1'
                 )
             );
@@ -201,7 +220,8 @@ class VideosController extends Controller
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $this->getAds('inner');
+        $ads = $this->getAds('inner');
+        $this->view->assign('advertisements', $ads);
 
         # If is not cached process this action
         $cacheID = $this->view->generateCacheId($this->category_name, null, $videoID);
@@ -359,37 +379,52 @@ class VideosController extends Controller
     public function ajaxPaginatedAction(Request $request)
     {
         // Items_page refers to the widget
-        $albumID   = $request->query->filter('album_id', null, FILTER_SANITIZE_STRING);
-        $page      = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
-        $itemsPage = 8;
+        $itemsPerPage = 12;//$totalVideosFrontpage;
+        list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
+            'Video',
+            (int) $this->category,
+            'in_litter != 1 AND contents.available=1',
+            'ORDER BY created DESC',
+            $this->page,
+            $itemsPerPage
+        );
 
-        // Redirect to album frontpage if id_album wasn't provided
-        if (is_null($albumID)) {
-            return new RedirectResponse($this->generateUrl('frontend_album_frontpage'));
+        $total = count($othersVideos)+1;
+
+        if ($countVideos > 0) {
+            foreach ($othersVideos as &$video) {
+                $video->category_name  = $video->loadCategoryName($video->id);
+                $video->category_title = $video->loadCategoryTitle($video->id);
+            }
+
+        } else {
+
+            return new RedirectResponse(
+                $this->generateUrl('frontend_video_ajax_paginated')
+            );
         }
 
-        // Get the album from the id and increment the numviews for it
-        $album = new \Album($albumID);
-        $this->view->assign('album', $album);
 
-        $album->category_name  = $album->loadCategoryName($album->id);
-        $album->category_title = $album->loadCategoryTitle($album->id);
-        $_albumArray           = $album->_getAttachedPhotos($album->id);
-        $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $page);
-
-        if (count($_albumArrayPaged) > $itemsPage) {
-            array_pop($_albumArrayPaged);
-        }
-
-        return $this->render(
-            'widgets/widget_gallery_thumbs.tpl',
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
-                'album_photos'       => $_albumArray,
-                'album_photos_paged' => $_albumArrayPaged,
-                'page'               => $page,
-                'items_page'         => $itemsPage,
+                'page'  => $this->page,
+                'items' => $itemsPerPage,
+                'total' => $total,
+                'url'   => $this->generateUrl(
+                    'frontend_video_ajax_paginated'
+                )
             )
         );
+
+        return $this->render(
+            'video/partials/_widget_more_videos.tpl',
+            array(
+                'others_videos'      => $othersVideos,
+                'page'               => $this->page,
+                'pagination'         => $pagination,
+            )
+        );
+
     }
 
     /**
@@ -399,31 +434,15 @@ class VideosController extends Controller
      */
     private function getAds($context = 'frontpage')
     {
+        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+
+        // I have added the element 150 in order to integrate all the code in the same query
         if ($context == 'inner') {
-            $positions = array(301, 302, 303, 305, 309, 310, 391, 392);
-            $intersticialId = 350;
+            $positions = array(350, 301, 302, 303, 305, 309, 310, 391, 392, 7, 9);
         } else {
-            $positions = array(201, 202, 203, 205, 209, 210, 291, 292);
-            $intersticialId = 250;
+            $positions = array(250, 201, 202, 203, 205, 209, 210, 291, 292, 7, 9);
         }
-        // Asignacion de valores y comprobaciones realizadas en init
-        // $ccm = ContentCategoryManager::get_instance();
-        // $category = $ccm->get_id($category_name);
-        // $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $advertisement = \Advertisement::getInstance();
-
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
-        /* $banners = $advertisement->cache->getAdvertisements(array(1, 2, 3, 10, 12, 11, 13), $category); */
-        $banners = $advertisement->getAdvertisements($positions, $this->category);
-        $banners = $this->cm->getInTime($banners);
-
-        //$advertisement->renderMultiple($banners, &$tpl);
-        $advertisement->renderMultiple($banners, $advertisement);
-
-        $intersticial = $advertisement->getIntersticial($intersticialId, '$category');
-        if (!empty($intersticial)) {
-            $advertisement->renderMultiple(array($intersticial), $advertisement);
-        }
+        return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
     }
 }

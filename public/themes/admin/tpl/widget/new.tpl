@@ -87,7 +87,14 @@
 
             <div class="contentform-main">
                 <div class="control-group">
-                    <label for="description" class="control-label">{t}Content{/t}</label>
+                    <label for="description" class="control-label clearfix">
+                        <div class="pull-left">{t}Content{/t}</div>
+                        <div class="pull-right">
+                            {acl isAllowed='IMAGE_ADMIN'}
+                            <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini insert-image" style="{if !isset($widget) || $widget->renderlet != 'html'}display:none{/if}"> + {t}Insert image{/t}</a>
+                            {/acl}
+                        </div>
+                    </label>
                     <div class="controls">
                         <div id="widget_textarea" style="{if isset($widget) && $widget->renderlet == 'intelligentwidget' || $action eq 'new'}display:none{else}display:inline{/if}">
                             <textarea id="widget_content" name="content" class="onm-editor">{$widget->content|default:""}</textarea>
@@ -130,18 +137,41 @@ jQuery(document).ready(function($) {
     $('#renderlet').on('change', function() {
         var value = $(this).find('option:selected').val();
         if(value == 'html') {
+            $('.insert-image').show();
             $('#widget_textarea').show();
             $('#select-widget').hide();
             $.onmEditor();
         } else if (value == 'intelligentwidget') {
+            $('.insert-image').hide();
             $('widget_textarea').hide();
             $('select-widget').show();
         } else {
+            $('.insert-image').hide();
             $('#widget_textarea').show();
             $('#select-widget').hide();
             CKEDITOR.instances.widget_content.destroy();
         }
     });
 });
+</script>
+{include file="media_uploader/media_uploader.tpl"}
+<script>
+    var mediapicker = $('#media-uploader').mediaPicker({
+        upload_url: "{url name=admin_image_create category=0}",
+        browser_url : "{url name=admin_media_uploader_browser}",
+        months_url : "{url name=admin_media_uploader_months}",
+        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        // initially_shown: true,
+        handlers: {
+            'assign_content' : function( event, params ) {
+                var mediapicker = $(this).data('mediapicker');
+                var image_element = mediapicker.buildHTMLElement(params);
+
+                if (params['position'] == 'body') {
+                    CKEDITOR.instances.widget_content.insertHtml(image_element);
+                }
+            }
+        }
+    });
 </script>
 {/block}

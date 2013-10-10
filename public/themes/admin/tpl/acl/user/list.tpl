@@ -3,14 +3,15 @@
 {block name="footer-js" append}
 <script>
 jQuery(function($){
-	$('#batch-delete').on('click', function(){
+	$('#batch-delete').on('click', function(e ,ui) {
+		e.preventDefault();
 		var form = $('#userform');
 		form.attr('action', '{url name="admin_acl_user_batchdelete"}');
+		form.submit();
 	});
 });
 </script>
 {/block}
-
 
 {block name="content"}
 <form action="{url name=admin_acl_user}" method="get" id="userform">
@@ -19,9 +20,9 @@ jQuery(function($){
 			<div class="title"><h2>{t}Users{/t}</h2></div>
 			<ul class="old-button">
 				<li>
-					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
+					<a id="batch-delete" title="{t}Delete selected users{/t}">
 						<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-					</button>
+					</a>
 				</li>
 				<li class="separator"></li>
 				<li>
@@ -37,6 +38,9 @@ jQuery(function($){
 		{render_messages}
 
 		<div class="table-info clearfix">
+            <div class="pull-left">
+                <strong>{$pagination->_totalItems} {t}users{/t}</strong>
+            </div>
 			<div class="pull-right form-inline">
 				<input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" />
 

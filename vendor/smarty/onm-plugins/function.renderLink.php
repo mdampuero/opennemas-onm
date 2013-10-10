@@ -5,13 +5,14 @@
  * Check type of menu element and prepare link
  *
  */
-function smarty_function_renderLink($params,&$smarty) {
+function smarty_function_renderLink($params, &$smarty)
+{
 
     $item = $params['item'];
     $nameMenu = $params['name'];
     $nameUrl = 'seccion';
     if (isset($nameMenu) && !empty($nameMenu)) {
-        if( $nameMenu == 'video') {
+        if ($nameMenu == 'video') {
             $nameUrl='video';
         } elseif ($nameMenu == 'album') {
             $nameUrl='album';
@@ -21,51 +22,42 @@ function smarty_function_renderLink($params,&$smarty) {
             $nameUrl='encuesta';
         }
     }
-    switch ($item->type){
+
+    switch ($item->type) {
         case 'category':
             $link = "/$nameUrl/$item->link/";
-        break;
+            break;
         case 'videoCategory':
             $link = "/video/$item->link/";
-        break;
+            break;
         case 'albumCategory':
             $link = "/album/$item->link/";
-        break;
-         case 'pollCategory':
+            break;
+        case 'pollCategory':
             $link = "/encuesta/$item->link/";
-        break;
+            break;
         case 'static':
             $link = "/".STATIC_PAGE_PATH."/$item->link/";
-        break;
+            break;
         case 'internal':
-             $link = "/$item->link/";
-        break;
+            $link = "/$item->link/";
+            break;
         case 'external':
-             $link = "$item->link";
-        break;
+            $link = "$item->link";
+            break;
         case 'syncCategory':
-             $link = "/ext$nameUrl/$item->link/";
+            $link = "/ext$nameUrl/$item->link/";
+            break;
+        case 'syncBlogCategory':
+            $link = "/ext$nameUrl/blog/$item->link/";
+            break;
         case 'blog-category':
-             $link = "/blog/section/$item->link";
-        break;
+            $link = "/blog/section/$item->link";
+            break;
         default:
-             $link = "/$item->link/";
-        break;
+            $link = "/$item->link/";
+            break;
     }
 
     return $link;
-
 }
-/*
- *
- * {*Definición de la variable 'section_url usada en menu y footer'*}
-    {if preg_match('/videos\.php/',$smarty.server.SCRIPT_NAME)}
-        {assign var='section_url' value='/video/'}
-    {elseif preg_match('/poll\.php/',$smarty.server.SCRIPT_NAME)}
-        {assign var='section_url' value='/encuesta/'}
-    {elseif preg_match('/gallery\.php/',$smarty.server.SCRIPT_NAME)}
-        {assign var='section_url' value='/album/'}
-    {else}
-        {assign var='section_url' value='/seccion/'}
-    {/if}
- */

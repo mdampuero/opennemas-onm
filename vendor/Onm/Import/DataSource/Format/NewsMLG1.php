@@ -136,14 +136,44 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * Returns the name of the rights.owner
+     *
+     * @return string the owner id
+     **/
+    public function getRightsOwner()
+    {
+        $owner = $this->getData()->xpath(
+            "//nitf/body/body.head/rights/rights.owner"
+        );
+
+        return $owner[0];
+    }
+    /**
+     * Returns the name of the rights.owner.photo
+     *
+     * @return string the owner id
+     **/
+    public function getRightsOwnerPhoto()
+    {
+        $owner = $this->getData()->xpath(
+            "//nitf/body/body.head/rights/rights.owner.photo"
+        );
+
+        return $owner[0];
+    }
+
+    /**
      * Returns the name of the service that authored this element
      *
      * @return string the service name
      **/
     public function getServicePartyName()
     {
-        $agencyName = $this->getData()
-            ->NewsEnvelope->SentFrom->Party->attributes()->FormalName;
+        $agencyName = $this->getData()->NewsEnvelope->SentFrom->Party;
+
+        if (!is_null($agencyName)) {
+            $agencyName = $agencyName->attributes()->FormalName;
+        }
 
         return (string) $agencyName;
     }
@@ -207,8 +237,14 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getBody()
     {
-        if (count($this->texts) > 0) {
+        if (count($this->texts) > 0 && ($this->texts[0]->body != '')) {
             return $this->texts[0]->body;
+        } else {
+            $bodies = $this->getData()->xpath(
+                "//nitf/body/body.content"
+            );
+
+            return $bodies[0];
         }
     }
 
@@ -280,15 +316,11 @@ class NewsMLG1 implements FormatInterface
     {
         $originalDate = (string) $this->getData()
                                     ->NewsItem->NewsManagement
-                                    ->ThisRevisionCreated;
-
-        // ISO 8601 doesn't match this date 20111211T103900+0000
-        $originalDate = preg_replace('@\+(\d){4}$@', '', $originalDate);
+                                    ->FirstCreated;
 
         return \DateTime::createFromFormat(
-            'Ymd\THis',
-            $originalDate,
-            new \DateTimeZone('UTC')
+            'Ymd\THisP',
+            $originalDate
         );
     }
 
@@ -359,7 +391,7 @@ class NewsMLG1 implements FormatInterface
                 foreach ($contents[0] as $componentName => $component) {
                     if ($componentName == 'NewsComponent') {
                         $photoComponent = new Photo($component);
-                        $this->photos[$photoComponent->id] = $photoComponent;
+                        $this->photos[] = $photoComponent;
                     }
                 }
             } else {

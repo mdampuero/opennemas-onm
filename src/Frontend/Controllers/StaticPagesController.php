@@ -56,8 +56,8 @@ class StaticPagesController extends Controller
             throw new ResourceNotFoundException();
         }
 
-        // TODO: review this advertisement
-        $this->getAds();
+        $ads = $this->getAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'static_pages/statics.tpl',
@@ -77,13 +77,10 @@ class StaticPagesController extends Controller
      **/
     public static function getAds()
     {
-        $advertisement = \Advertisement::getInstance();
+        $category = 0;
 
-        // APC cache version
-        $banners = $advertisement->getAdvertisements(array(1, 2, 103, 105, 9, 10));
+        $positions = array(1, 2, 103, 105, 7, 9, 10);
 
-        $cm = new \ContentManager();
-        $banners = $cm->getInTime($banners);
-        $advertisement->renderMultiple($banners, $advertisement);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }

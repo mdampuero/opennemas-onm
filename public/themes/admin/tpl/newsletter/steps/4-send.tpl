@@ -41,6 +41,10 @@
     </div>
 
     <div class="wrapper-content">
+        {render_messages}
+
+        <div id="warnings-validation"></div>
+
         <table class="table table-condensed">
             {foreach from=$sent_result item=result}
             <tr><td>

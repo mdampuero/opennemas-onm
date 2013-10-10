@@ -92,8 +92,6 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql);
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return false;
             }
 
@@ -190,8 +188,6 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return false;
             }
 
@@ -220,8 +216,6 @@ class ContentCategoryManager
                 $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
                 if (!$rs) {
-                    \Application::logDatabaseError();
-
                     return;
                 }
 
@@ -254,8 +248,6 @@ class ContentCategoryManager
             $rs  = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return false;
             }
 
@@ -291,9 +283,7 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryType));
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
-                return;
+                return false;
             }
 
             return $rs->fields;
@@ -326,8 +316,6 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return;
             }
 
@@ -359,9 +347,7 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryName));
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
-                return;
+                return null;
             }
 
             return $rs->fields;
@@ -390,8 +376,6 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql);
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
                 return;
             }
 
@@ -432,9 +416,7 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
-                return;
+                return null;
             }
 
             $items = array ();
@@ -672,9 +654,7 @@ class ContentCategoryManager
             $rs = $GLOBALS['application']->conn->Execute($sql, array($categoryId));
 
             if (!$rs) {
-                \Application::logDatabaseError();
-
-                return;
+                return null;
             }
 
             return $rs->fields['name'];
@@ -712,9 +692,7 @@ class ContentCategoryManager
 
             $rs = $GLOBALS['application']->conn->Execute($sql, array($category_name));
             if (!$rs) {
-                \Application::logDatabaseError();
-
-                return;
+                return null;
             }
 
             return $rs->fields['name'];
@@ -784,8 +762,6 @@ class ContentCategoryManager
         $rs1 = $GLOBALS['application']->conn->Execute($sql1);
 
         if (!$rs1) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -798,8 +774,6 @@ class ContentCategoryManager
         $rs = $GLOBALS['application']->conn->Execute($sql, array($pk_category));
 
         if (!$rs) {
-            \Application::logDatabaseError();
-
             return;
         }
 
@@ -1020,20 +994,17 @@ class ContentCategoryManager
      */
     public function get_category_name_by_content_id($id)
     {
-        if (is_numeric($id)) {
-            $sql = 'SELECT catName FROM contents_categories '
-                 . 'WHERE pk_fk_content=?';
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
-
-            if (!$rs) {
-                \Application::logDatabaseError();
-
-                return;
-            }
-
-            return $rs->fields['catName'];
+        if (!is_numeric($id)) {
+            return null;
         }
 
-        return null;
+        $sql = 'SELECT catName FROM contents_categories WHERE pk_fk_content=?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (!$rs) {
+            return null;
+        }
+
+        return $rs->fields['catName'];
     }
 }

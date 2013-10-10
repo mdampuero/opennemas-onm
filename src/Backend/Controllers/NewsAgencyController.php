@@ -40,8 +40,6 @@ class NewsAgencyController extends Controller
         // Check ACL
         $this->checkAclOrForward('IMPORT_ADMIN');
 
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-
         $this->syncFrom = array(
             '3600'         => sprintf(_('%d hour'), '1'),
             '10800'         => sprintf(_('%d hours'), '3'),
@@ -86,7 +84,8 @@ class NewsAgencyController extends Controller
         $itemsPage    = s::get('items_per_page') ?: 20;
 
         // Get the amount of minutes from last sync
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
 
         // Get LocalRepository instance
@@ -279,6 +278,10 @@ class NewsAgencyController extends Controller
             return $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
+        // Get server config
+        $servers = s::get('news_agency_config');
+        $server = $servers[$sourceId];
+
         // If the new has photos import them
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
@@ -331,6 +334,83 @@ class NewsAgencyController extends Controller
             }
         }
 
+        // Check if sync is from Opennemas instances for importing author
+        if ($element->getServicePartyName() == 'Opennemas') {
+            // Check if allow to import authors
+            if (isset($server['author']) && $server['author'] == '1') {
+
+                // Get author object,decode it and create new author
+                $authorObj = json_decode($element->getRightsOwner());
+                $authorArray = get_object_vars($authorObj);
+                $user = new \User();
+
+                // Create author
+                if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
+                    // Create new user
+                    $user->create($authorArray);
+
+                    // Set user meta if exists
+                    if ($authorObj->meta) {
+                        $userMeta = get_object_vars($authorObj->meta);
+                        $user->setMeta($userMeta);
+                    }
+
+                    // Fetch and save author image if exists
+                    $authorImgUrl = $element->getRightsOwnerPhoto();
+                    $cm = new \ContentManager();
+                    $authorPhotoRaw = $cm->getUrlContent($authorImgUrl);
+                    if ($authorPhotoRaw) {
+                        $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
+                        $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
+                        if (!is_dir($localImageDir)) {
+                            \FilesManager::createDirectory($localImageDir);
+                        }
+                        if (file_exists($localImagePath)) {
+                            unlink($localImagePath);
+                        }
+                        file_put_contents($localImagePath, $authorPhotoRaw);
+
+                        // Get all necessary data for the photo
+                        $infor = new \MediaItem($localImagePath);
+                        $data = array(
+                            'title'       => $authorObj->photo->name,
+                            'name'        => $authorObj->photo->name,
+                            'user_name'   => $authorObj->photo->name,
+                            'path_file'   => $authorObj->photo->path_file,
+                            'nameCat'     => $authorObj->username,
+                            'category'    => '',
+                            'created'     => $infor->atime,
+                            'changed'     => $infor->mtime,
+                            'date'        => $infor->mtime,
+                            'size'        => round($infor->size/1024, 2),
+                            'width'       => $infor->width,
+                            'height'      => $infor->height,
+                            'type'        => $infor->type,
+                            'type_img'    => substr($authorObj->photo->name, -3),
+                            'media_type'  => 'image',
+                            'author_name' => $authorObj->username,
+                        );
+
+                        $photo = new \Photo();
+                        $photoId = $photo->create($data);
+
+                        // Get new author id and update avatar_img_id
+                        $newAuthor = get_object_vars($user->findByEmail($authorObj->email));
+                        $authorId = $newAuthor['id'];
+                        $newAuthor['avatar_img_id'] = $photoId;
+                        unset($newAuthor['password']);
+                        $user->update($newAuthor);
+                    }
+                } else {
+                    // Fetch the user if exists and is not null
+                    if (!is_null($authorObj->email)) {
+                        $author = $user->findByEmail($authorObj->email);
+                        $authorId = $author->id;
+                    }
+                }
+            }
+        }
+
         // If the new has videos import them
         if ($element->hasVideos()) {
             $videos = $element->getVideos();
@@ -373,9 +453,6 @@ class NewsAgencyController extends Controller
             }
         }
 
-        $servers = s::get('news_agency_config');
-        $server = $servers[$sourceId];
-
         $values = array(
             'title'          => $element->title,
             'category'       => $category,
@@ -387,6 +464,7 @@ class NewsAgencyController extends Controller
             'metadata'       => \StringUtils::get_tags($element->title),
             'subtitle'       => $element->pretitle,
             'agency'         => $server['agency_string'],
+            'fk_author'      => (isset($authorId) ? $authorId : 0),
             'summary'        => $element->summary,
             'body'           => $element->body,
             'posic'          => 0,
@@ -480,30 +558,33 @@ class NewsAgencyController extends Controller
 
         $repository = new \Onm\Import\Repository\LocalRepository();
         $element    = $repository->findById($sourceId, $id);
-
+        $content = null;
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
+            foreach ($photos as $photo) {
 
-            if (array_key_exists($attachmentId, $photos)) {
-                $photo = $photos[$attachmentId];
-                // Get image from FTP
-                $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$photo->file_path
-                );
+                if ($photo->id == $attachmentId) {
 
-                // If no image from FTP check HTTP
-                if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$photo->name[$index];
+                    // Get image from FTP
+                    $filePath = realpath(
+                        $repository->syncPath.DS.$sourceId.DS.$photo->file_path
+                    );
+
+                    // If no image from FTP check HTTP
+                    if (!$filePath) {
+                        $filePath = $repository->syncPath.DS.
+                            $sourceId.DS.$photo->name[$index];
+                    }
+                    $content = @file_get_contents($filePath);
+
+                    $response = new Response(
+                        $content,
+                        200,
+                        array('content-type' => $photo->file_type)
+                    );
                 }
-                $content = @file_get_contents($filePath);
-
-                $response = new Response(
-                    $content,
-                    200,
-                    array('content-type' => $photo->file_type)
-                );
-            } else {
+            }
+            if (empty($content)) {
                 $response = new Response('Image not found', 404);
             }
 
@@ -523,7 +604,8 @@ class NewsAgencyController extends Controller
      **/
     public function unlockAction(Request $request)
     {
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
         $synchronizer->unlockSync();
         unset($_SESSION['error']);
 
@@ -547,47 +629,22 @@ class NewsAgencyController extends Controller
 
         $servers = s::get('news_agency_config');
 
-        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer();
+        $syncParams = array('cache_path' => CACHE_PATH);
+        $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
 
-        foreach ($servers as $server) {
-            try {
-                if ($server['activated'] != '1') {
-                    continue;
-                }
-
-                $server['allowed_file_extesions_pattern'] = '.*';
-
-                $message = $synchronizer->sync($server);
-
-                m::add(
-                    sprintf(
-                        _('Downloaded %d new articles and deleted %d old ones from "%s".'),
-                        $message['downloaded'],
-                        $message['deleted'],
-                        $server['name']
-                    )
+        try {
+            $message = $synchronizer->syncMultiple($servers);
+            m::add($message, m::SUCCESS);
+        } catch (\Onm\Import\Synchronizer\LockException $e) {
+            $errorMessage = $e->getMessage()
+                .sprintf(
+                    _('If you are sure <a href="%s">try to unlock it</a>'),
+                    $this->generateUrl('admin_news_agency_unlock')
                 );
-
-            } catch (\Onm\Import\SynchronizationException $e) {
-                m::add($e->getMessage(), m::ERROR);
-            } catch (\Onm\Import\Synchronizer\LockException $e) {
-                if (!isset($lockErrors)) {
-                    $errorMessage = $e->getMessage()
-                    .sprintf(
-                        _('If you are sure <a href="%s">try to unlock it</a>'),
-                        $this->generateUrl('admin_news_agency_unlock')
-                    );
-                    m::add($errorMessage, m::ERROR);
-
-                    $lockErrors = true;
-                }
-            } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
-
-                $synchronizer->unlockSync();
-            }
+            m::add($errorMessage, m::ERROR);
+        } catch (\Exception $e) {
+            m::add($e->getMessage(), m::ERROR);
         }
-        $synchronizer->updateSyncFile();
 
 
         return $this->redirect(
@@ -640,6 +697,7 @@ class NewsAgencyController extends Controller
             'color'         => $request->request->filter('color', '#424E51', FILTER_SANITIZE_STRING),
             'sync_from'     => $request->request->filter('sync_from', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->getDigits('activated', 0),
+            'author'        => $request->request->getDigits('author', 0),
         );
 
         $servers[$id] = $server;

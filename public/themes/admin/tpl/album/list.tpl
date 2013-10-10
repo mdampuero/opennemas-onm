@@ -94,7 +94,7 @@
                     <th class="left nowrap" style="width:100px;">Created</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    {if $category!='widget' && $category!='all'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                    {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
                     <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
@@ -136,7 +136,7 @@
                         {/if}
                     {/acl}
                 </td>
-                 {if $category!='widget' && $category!='all'}
+                {if $category!='widget'}
                 <td class="center">
                     {acl isAllowed="ALBUM_FAVORITE"}
                         {if $album->favorite == 1}
@@ -184,7 +184,7 @@
             {/foreach}
             </tbody>
             <tfoot>
-              <td colspan="9" class="center">
+              <td colspan="11" class="center">
                 <div class="pagination">
                     {$pagination->links|default:""}
                 </div>

@@ -23,6 +23,19 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `action_counters`
+--
+DROP TABLE IF EXISTS `action_counters`;
+CREATE TABLE IF NOT EXISTS `action_counters` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `action_name` varchar(255) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `counter` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `action_name` (`action_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
 -- Table structure for table `advertisements`
 --
 
@@ -1044,7 +1057,8 @@ INSERT INTO `menues` (`pk_menu`, `name`, `type`, `position`, `site`, `params`, `
 (4, 'album', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', 0),
 (5, 'video', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', 0),
 (7, 'encuesta', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', 0),
-(8, 'subHome', '', NULL, 'base-onm.local', 'a:1:{s:11:"description";s:0:"";}', 21);
+(8, 'subHome', '', NULL, 'base-onm.local', 'a:1:{s:11:"description";s:0:"";}', 21),
+(9, 'statics', '', NULL, '', 'a:1:{s:11:"description";s:0:"";}', NULL);
 
 -- --------------------------------------------------------
 
@@ -1506,8 +1520,11 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('time_zone', 's:3:"335";'),
 ('site_language', 's:5:"es_ES";'),
 ('mail_server', 's:9:"localhost";'),
-('mail_username', 's:9:"webmaster";'),
+('mail_username', 's:0:"";'),
 ('mail_password', 's:0:"";'),
+('newsletter_sender', 's:30:"no-reply@postman.opennemas.com"'),
+('max_mailing', 's:1:"0"'),
+('last_invoice', 's:19:"2013-07-28 10:00:00"'),
 ('google_maps_api_key', 's:86:"ABQIAAAA_RE85FLaf_hXdhkxaS463hQC49KlvU2s_1jV47V5-i8q6UJ2IBQiAxw97Jt7tEWzuIY513Qutp-Cqg";'),
 ('google_custom_search_api_key', 's:0:"";'),
 ('facebook', 'a:2:{s:7:"api_key";s:1:" ";s:10:"secret_key";s:1:" ";}'),

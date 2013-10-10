@@ -752,6 +752,14 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_letters_content_provider',
+    new Route(
+        '/letters/content-provider',
+        array('_controller' => 'Backend:Controllers:LettersController:contentProvider')
+    )
+);
+
+$adminRoutes->add(
     'admin_letters_content_list_provider',
     new Route(
         '/letters/content-list-provider',
@@ -2296,6 +2304,22 @@ $adminRoutes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_paywall_users_list_export',
+    new Route(
+        '/paywall/users/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:userListExport')
+    )
+);
+
+$adminRoutes->add(
+    'admin_paywall_purchases_list_export',
+    new Route(
+        '/paywall/purchases/list-export.csv',
+        array('_controller' => 'Backend:Controllers:PaywallController:purchasesListExport')
+    )
+);
+
 // Importer Efe controller routes
 $adminRoutes->add(
     'admin_news_agency',
@@ -2723,6 +2747,48 @@ $adminRoutes->add(
     new Route(
         '/login/user/reset-pass/{token}',
         array('_controller' => 'Backend:Controllers:AclUserController:regeneratePassword')
+    )
+);
+
+$adminRoutes->add(
+    'admin_welcome_accept_terms',
+    new Route(
+        '/accept-terms',
+        array('_controller' => 'Backend:Controllers:WelcomeController:acceptTerms')
+    )
+);
+
+$adminRoutes->add(
+    'admin_media_uploader',
+    new Route(
+        '/media-uploader',
+        array('_controller' => 'Backend:Controllers:MediaUploaderController:show')
+    )
+);
+
+$adminRoutes->add(
+    'admin_media_uploader_update_content',
+    new Route(
+        '/media-uploader/update-content',
+        array('_controller' => 'Backend:Controllers:MediaUploaderController:updateContent')
+    )
+);
+
+
+
+$adminRoutes->add(
+    'admin_media_uploader_browser',
+    new Route(
+        '/media-uploader/browser',
+        array('_controller' => 'Backend:Controllers:MediaUploaderController:browser')
+    )
+);
+
+$adminRoutes->add(
+    'admin_media_uploader_months',
+    new Route(
+        '/media-uploader/months',
+        array('_controller' => 'Backend:Controllers:MediaUploaderController:getMonths')
     )
 );
 

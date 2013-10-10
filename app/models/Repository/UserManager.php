@@ -77,8 +77,6 @@ class UserManager extends BaseManager
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
@@ -111,8 +109,6 @@ class UserManager extends BaseManager
         $rs = $GLOBALS['application']->conn->GetOne($sql);
 
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
 
