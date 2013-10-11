@@ -34,20 +34,6 @@ class StaticPage extends Content
     public $content_type = 'static_page';
 
     /**
-     * The slug of the static page
-     *
-     * @var string
-     **/
-    public $slug = null;
-
-    /**
-     * Handler to call MethodCacheManager
-     *
-     * @var MethodCacheManager
-     */
-    public $cache = null;
-
-    /**
      * Loads the static page information given an id
      *
      * @param int $id
@@ -74,11 +60,10 @@ class StaticPage extends Content
         $this->commonData($data);
 
         parent::create($data);
-        $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`, `static_pages`.`slug`)
+        $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`)
                 VALUES (?, ?)";
         $values = array(
             'pk_static_page' => $this->id,
-            'slug' => $data['slug']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -86,24 +71,6 @@ class StaticPage extends Content
         }
 
         return true;
-    }
-
-    /**
-     * Assigns the common data for the static page due dependency on Content]
-     *
-     * @param array $data the data to assign
-     *
-     * @return void
-     **/
-    protected function commonData(&$data)
-    {
-        // Merda dependencia Content
-        $data['category'] = 0;
-        $data['pk_author'] = $_SESSION['userid'];
-        $data['fk_publisher'] = $_SESSION['userid'];
-        $data['fk_user_lastEditor'] = $_SESSION['userid'];
-        $this->permalink = '/' . STATIC_PAGE_PATH . '/'.$data['slug'] . '.html';
-        $data['permalink'] = $this->permalink;
     }
 
     /**
@@ -116,46 +83,6 @@ class StaticPage extends Content
     public function read($id)
     {
         parent::read($id);
-
-        $sql    = "SELECT * FROM `static_pages` WHERE `static_pages`.`pk_static_page`=?";
-        $values = $id;
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-
-        if ($rs === false) {
-            return null;
-        }
-
-        $this->load($rs->fields);
-
-        return $this;
-    }
-
-    /**
-     * Load properties into the object instance
-     *
-     * @param array $properties Array of properties to load
-     *
-     * @return StaticPage the static page with the provided properties loaded
-     */
-    public function load($properties)
-    {
-        if (is_array($properties)) {
-            foreach ($properties as $k => $v) {
-
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        } elseif (is_object($properties)) {
-            $properties = get_object_vars($properties);
-            foreach ($properties as $k => $v) {
-
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
-                }
-            }
-        }
-        $this->id = $this->pk_static_page;
 
         return $this;
     }
@@ -170,15 +97,16 @@ class StaticPage extends Content
     public function update($data)
     {
         $data['category'] = 0;
-        $this->commonData($data);
+
+        // Merda dependencia Content
+        $data['category'] = 0;
+        $data['pk_author'] = $_SESSION['userid'];
+        $data['fk_publisher'] = $_SESSION['userid'];
+        $data['fk_user_lastEditor'] = $_SESSION['userid'];
+        $this->permalink = '/' . STATIC_PAGE_PATH . '/'.$data['slug'] . '.html';
+        $data['permalink'] = $this->permalink;
+
         parent::update($data);
-
-        $sql = 'UPDATE `static_pages` SET `slug`=? WHERE `pk_static_page`=?';
-        $values = array($data['slug'], $data['id']);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
 
         return true;
     }
@@ -194,8 +122,7 @@ class StaticPage extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM `static_pages`
-                WHERE `static_pages`.`pk_static_page`=?';
+        $sql = 'DELETE FROM `static_pages` WHERE `pk_static_page`=?';
         $values = array($id);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

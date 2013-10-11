@@ -224,8 +224,6 @@ class Article extends Content
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
-            \Application::logDatabaseError();
-
             return false;
         }
         if (!empty($data['relatedFront'])) {

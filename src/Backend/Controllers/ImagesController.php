@@ -438,8 +438,10 @@ class ImagesController extends Controller
             );
 
             $photo = new \Photo($id);
+
+            $ids []= $id;
+
             if ($photo->update($photoData)) {
-                $ids []= $id;
                 $photosSaved++;
             }
         }
@@ -448,21 +450,9 @@ class ImagesController extends Controller
             m::add(sprintf(_('Data successfully saved for %d photos'), $photosSaved), m::SUCCESS);
         }
 
-        if ($action == 'validate') {
-            $queryIDs = implode('&id[]=', $ids);
+        $queryIDs = implode('&id[]=', $ids);
 
-            return $this->redirect($this->generateUrl('admin_image_show').'?id[]='.$queryIDs);
-        } else {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_images',
-                    array(
-                        'category' => $_SESSION['category'],
-                        'page'     => $page,
-                    )
-                )
-            );
-        }
+        return $this->redirect($this->generateUrl('admin_image_show').'?id[]='.$queryIDs);
     }
 
     /**

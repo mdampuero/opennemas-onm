@@ -113,6 +113,7 @@ class LettersController extends Controller
 
             $data = array(
                 'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
                 'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
@@ -168,8 +169,6 @@ class LettersController extends Controller
             'letter/new.tpl',
             array('letter' => $letter,)
         );
-
-        return new Response($content);
     }
 
     /**
@@ -198,6 +197,7 @@ class LettersController extends Controller
             $data = array(
                 'id'        => $id,
                 'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
                 'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),

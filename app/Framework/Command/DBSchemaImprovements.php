@@ -110,7 +110,6 @@ EOF
         // Initialize Globals and Database
         $GLOBALS['application'] = new \Application();
         \Application::initDatabase();
-        \Application::initLogger();
 
         // Start executing script
         $output->writeln("\tImproving: ".$dataBaseName." DB\n");

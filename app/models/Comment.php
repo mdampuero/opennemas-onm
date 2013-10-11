@@ -203,8 +203,6 @@ class Comment
         $sql2 = "SELECT fk_content_type FROM contents WHERE pk_content=".$data['content_id'];
         $rs2  = $GLOBALS['application']->conn->Execute($sql2);
         if (!$rs2) {
-            \Application::logDatabaseError();
-
             throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
         }
 

@@ -593,7 +593,6 @@ class Content
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
-            $data['placeholder'],$data['home_placeholder'],
             $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
             $this->category_name, $data['params'], $data['id']
         );
@@ -1732,14 +1731,9 @@ class Content
         ) {
             return false;
         }
-        $sql = 'UPDATE contents SET `position`=?, `placeholder`=? '
-             . 'WHERE `pk_content`=?';
+        $sql = 'UPDATE contents SET `position`=? WHERE `pk_content`=?';
 
-        if (!is_array($position)) {
-            $values = array($position, $this->id);
-        } else {
-            $values = $position;
-        }
+        $values = array($position, $this->id);
 
         if (count($values) > 0) {
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);

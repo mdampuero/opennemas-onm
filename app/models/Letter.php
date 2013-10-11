@@ -115,7 +115,7 @@ class Letter extends Content
         parent::create($data);
 
         $sql = 'INSERT INTO letters ( `pk_letter`, `author`, `email`) '.
-                    ' VALUES (?,?,?,?)';
+                    ' VALUES (?,?,?)';
 
         $values = array(
             $this->id,
@@ -154,6 +154,7 @@ class Letter extends Content
         if (!$rs) {
             return false;
         }
+
         $this->load($rs->fields);
         $this->ip = $this->params['ip'];
 

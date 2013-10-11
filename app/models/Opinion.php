@@ -171,7 +171,7 @@ class Opinion extends Content
         $sql = 'INSERT INTO opinions
                     (`pk_opinion`, `fk_author`, `fk_author_img`,`with_comment`, type_opinion)
                 VALUES
-                    (?,?,?,?,?,?)';
+                    (?,?,?,?,?)';
 
         $values = array(
             $this->id,

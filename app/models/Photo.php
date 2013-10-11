@@ -414,7 +414,6 @@ class Photo extends Content
      **/
     public function createWithImageMagick($dataSource, $dateForDirectory = null)
     {
-
         $photo = null;
         $filePath = $dataSource["local_file"];
         $originalFileName = $dataSource['original_filename'];
@@ -463,7 +462,6 @@ class Photo extends Content
                 'width'        => $fileInformation->width,
                 'height'       => $fileInformation->height,
                 'type_img'     => strtolower($filePathInfo['extension']),
-                'media_type'   => 'image',
 
                 'author_name'  => !isset($dataSource['author_name']) ?'':$dataSource['author_name'],
                 'pk_author'    => $_SESSION['userid'],
@@ -497,14 +495,14 @@ class Photo extends Content
                     $logger = getService('logger');
                     $logger->notice(
                         sprintf(
-                            'EFE Importer: Unable to register the photo object %s (destination: %s).',
+                            'Unable to register the photo object %s (destination: %s).',
                             $dataSource['local_file'],
                             $mediaDir.$finalPhotoFileName
                         )
                     );
                     throw new Exception(
                         sprintf(
-                            'Unable to register the photo object into OpenNemas.',
+                            'Unable to register the photo object.',
                             $mediaDir.$finalPhotoFileName
                         )
                     );
@@ -739,22 +737,22 @@ class Photo extends Content
      **/
     public function update($data)
     {
-        $data['pk_author'] = $_SESSION['userid'];
+        $data['fk_author'] = $_SESSION['userid'];
         $data['fk_user_last_editor'] = $_SESSION['userid'];
 
         parent::update($data);
         $sql = "UPDATE photos
                 SET `name`=?, `path_file`=?, `size`=?,
                     `width`=?, `height`=?,
-                    `author_name`=?, `address`=?,
+                    `author_name`=?, `address`=?
                 WHERE pk_photo=?";
 
         $values = array(
-            $data['name'],
-            $data['path_file'],
-            $data['size'],
-            $data['width'],
-            $data['height'],
+            $this->name,
+            $this->path_file,
+            $this->size,
+            $this->width,
+            $this->height,
             $data['author_name'],
             $data['address'],
             $data['id']
