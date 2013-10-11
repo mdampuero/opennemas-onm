@@ -133,7 +133,6 @@ class FormController extends Controller
                     $text
                         ->setSubject($subject)
                         ->setBody($body, 'text/html')
-                        ->setBody(strip_tags(utf8_decode($body)), 'text/plain')
                         ->setTo(array($recipient => $recipient))
                         ->setFrom(array($email => $name))
                         ->setSender(array($mailSender => s::get('site_name')));
