@@ -519,7 +519,7 @@ class BooksController extends Controller
     {
         $positions = $request->request->get('positions');
 
-        $msg = '';
+        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
@@ -528,16 +528,15 @@ class BooksController extends Controller
             $pos = 1;
 
             foreach ($positions as $id) {
-                $_positions[] = array($pos, '1', $id);
+                $book = new \Book($id);
+                $result = $result && $book->setPosition($_positions, $_SESSION['userid']);
+
                 $pos += 1;
             }
 
-            $book= new \Book();
-            $msg = $book->set_position($_positions, $_SESSION['userid']);
-
         }
 
-        if ($msg) {
+        if ($result) {
             $msg = "<div class='alert alert-success'>"
                 ._("Positions saved successfully.")
                 .'<button data-dismiss="alert" class="close">×</button></div>';

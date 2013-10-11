@@ -628,6 +628,8 @@ class OpinionsController extends Controller
     {
         $containers = json_decode($request->get('positions'));
 
+        $result = true;
+
         if (isset($containers)
             && is_array($containers)
             && count($containers) > 0
@@ -637,23 +639,22 @@ class OpinionsController extends Controller
             foreach ($containers as $elements) {
                 $pos = 1;
                 foreach ($elements as $id) {
-                    $positionValues[] = array($pos, '1', $id);
+                    $opinion = new \Opinion($id);
+                    $result = $result &&  $opinion->setPosition($pos);
+
                     $pos++;
                 }
             }
-
-            $opinion = new \Opinion();
-            $msg = $opinion->set_position($positionValues, $_SESSION['userid']);
         }
 
-        if (!empty($msg) && $msg == true) {
+        if ($result === true) {
             $message = _('Positions saved successfully.');
             $output = sprintf(
                 '<div class="alert alert-success">%s<button data-dismiss="alert" class="close">×</button></div>',
                 $message
             );
         } else {
-            $output = _('Unable to save positions for the opinions widget.');
+            $message = _('Unable to save the positions.');
             $output = sprintf(
                 '<div class="alert alert-error">%s<button data-dismiss="alert" class="close">×</button></div>',
                 $message

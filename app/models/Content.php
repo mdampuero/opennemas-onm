@@ -1720,11 +1720,10 @@ class Content
      * Define content position in a widget
      *
      * @param int $position the position of the content
-     * @param int $lastEditor the id of the user that is changing this content
      *
      * @return pk_content or false
      */
-    public function set_position($position, $lastEditor)
+    public function setPosition($position)
     {
         if ($this->id == null
             && !is_array($position)
