@@ -12,12 +12,8 @@ function smarty_outputfilter_canonical_url($output, &$smarty)
 {
     // Check if is user template
     if ($smarty->smarty->theme != "admin" && $smarty->smarty->theme != "manager") {
-        // Check if SITE const already has www. and generate canonical url
-        if (preg_match('/www./', SITE)) {
-            $url = "http://".SITE.$_SERVER["REQUEST_URI"];
-        } else {
-            $url = "http://www.".SITE.$_SERVER["REQUEST_URI"];
-        }
+        // Generate canonical url
+        $url = "http://".SITE.$_SERVER["REQUEST_URI"];
 
         // Create tag <link> with the canonical url
         $canonical = '<link rel="canonical" href="'.$url.'"/>';
