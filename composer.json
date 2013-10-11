@@ -15,7 +15,7 @@
     "require": {
         "php"                            : ">=5.3.2",
 
-        "ext-apc": ">=3.1.12",
+        "ext-apc": "*",
         "ext-bz2": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
