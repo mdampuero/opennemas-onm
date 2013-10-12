@@ -128,7 +128,7 @@ class Content
      *
      * @var string
      **/
-    public $category_name       = '';
+    public $category_name       = null;
 
     /**
      * View counter for this content
