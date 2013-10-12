@@ -529,7 +529,7 @@ class BooksController extends Controller
 
             foreach ($positions as $id) {
                 $book = new \Book($id);
-                $result = $result && $book->setPosition($_positions, $_SESSION['userid']);
+                $result = $result && $book->setPosition($_positions);
 
                 $pos += 1;
             }

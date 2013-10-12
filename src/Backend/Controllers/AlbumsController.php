@@ -670,13 +670,9 @@ class AlbumsController extends Controller
         }
 
         if ($result) {
-            $message = "<div class='alert alert-success'>"
-                ._("Positions saved successfully.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+            $message = _("Positions saved successfully.");
         } else {
-            $message = "<div class='alert alert-error'>"
-                ._("Unable to save the new positions.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+            $message = _("Unable to save the new positions.");
         }
 
         return new Response($message);
