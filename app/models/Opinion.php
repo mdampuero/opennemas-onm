@@ -154,7 +154,6 @@ class Opinion extends Content
      **/
     public function create($data)
     {
-            var_dump($data);die();
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
 
