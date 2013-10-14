@@ -74,7 +74,7 @@ class Letter extends Content
 
                 break;
             case 'photo':
-                return $this->getPhoto();
+                return new \Photo($this->image);
 
                 break;
 
@@ -224,16 +224,6 @@ class Letter extends Content
     }
 
     /**
-     * Returns the Photo object that represents the user avatar
-     *
-     * @return Photo the photo object
-     **/
-    public function getPhoto()
-    {
-        return new \Photo($this->image);
-    }
-
-    /**
      * Determines if the content of a comment has bad words
      *
      * @param  array $data the data from the comment
@@ -249,40 +239,6 @@ class Letter extends Content
         $weight = StringUtils::getWeightBadWords($text);
 
         return $weight > 100;
-    }
-
-    /**
-     * Saves a letter given an array of data
-     *
-     * @param array $data the new letter information
-     *
-     * @return string
-     **/
-    public function saveLetter($data)
-    {
-        $_SESSION['username'] = $data['author'];
-        $_SESSION['userid'] = 'user';
-        $letter = new Letter();
-
-        // Prevent XSS attack
-        $data = array_map('strip_tags', $data);
-        $data['body'] = nl2br($data['body']);
-
-        if ($this->hasBadWords($data)) {
-            return "Su comentario fue rechazado debido al uso "
-                ."de palabras malsonantes.";
-        }
-
-        $ip = getRealIp();
-        $data["params"] = array('ip'=> $ip);
-
-        if ($letter->create($data)) {
-
-            return "Su carta ha sido guardada y está pendiente de publicación.";
-        }
-
-        return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
-            ."correctamente todos los campos.";
     }
 
     /**

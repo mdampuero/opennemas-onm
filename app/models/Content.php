@@ -1065,9 +1065,12 @@ class Content
 
         $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
-        $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $values = array($_SESSION['userid'], $currentTime, $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
             return false;
@@ -1388,14 +1391,16 @@ class Content
             return false;
         }
 
-        $changed = date("Y-m-d H:i:s");
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
 
         $sql = 'UPDATE contents SET `content_status`=?, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         if (!is_array($status)) {
-            $values = array($status, $last_editor, $changed, $this->id);
+            $values = array($status, $last_editor, $currentTime, $this->id);
         } else {
             $values = $status;
         }

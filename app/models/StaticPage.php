@@ -57,11 +57,11 @@ class StaticPage extends Content
     public function create($data)
     {
         $data['category'] = 0;
-        $this->commonData($data);
 
         parent::create($data);
+
         $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`)
-                VALUES (?, ?)";
+                VALUES (?)";
         $values = array(
             'pk_static_page' => $this->id,
         );
@@ -71,20 +71,6 @@ class StaticPage extends Content
         }
 
         return true;
-    }
-
-    /**
-     * Loads the static page information given a static page id
-     *
-     * @param  int    $id the static page to load
-     *
-     * @return StaticPage the static page object instance
-     */
-    public function read($id)
-    {
-        parent::read($id);
-
-        return $this;
     }
 
     /**
@@ -98,17 +84,7 @@ class StaticPage extends Content
     {
         $data['category'] = 0;
 
-        // Merda dependencia Content
-        $data['category'] = 0;
-        $data['pk_author'] = $_SESSION['userid'];
-        $data['fk_publisher'] = $_SESSION['userid'];
-        $data['fk_user_lastEditor'] = $_SESSION['userid'];
-        $this->permalink = '/' . STATIC_PAGE_PATH . '/'.$data['slug'] . '.html';
-        $data['permalink'] = $this->permalink;
-
-        parent::update($data);
-
-        return true;
+        return parent::update($data);
     }
 
     /**

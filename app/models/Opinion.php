@@ -154,6 +154,7 @@ class Opinion extends Content
      **/
     public function create($data)
     {
+            var_dump($data);die();
         $data['content_status'] = $data['available'];
         $data['position']   =  1;
 
@@ -165,6 +166,8 @@ class Opinion extends Content
         // Set author img to null if not exist
         (isset($data['fk_author_img']))
             ? $data['fk_author_img'] : $data['fk_author_img'] = null ;
+
+
 
         parent::create($data);
 

@@ -233,9 +233,6 @@ class User
             default:
                 break;
         }
-
-        // Get photo object from avatar_img_id
-
     }
 
     /**
