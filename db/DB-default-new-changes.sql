@@ -28,9 +28,7 @@ REPLACE INTO settings (`name`, `value`) VALUES ('mail_sender', 's:30:"no-reply@p
 
 
 -- 2013-07-17
-  ALTER TABLE `contents`
-  DROP `placeholder`,
-  DROP `home_placeholder`,
+ALTER TABLE `contents`
   ADD  `body` LONGTEXT NOT NULL AFTER  `description`,
   CHANGE  `description`  `description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
   CHANGE  `metadata`  `metadata` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
@@ -45,6 +43,12 @@ UPDATE contents INNER JOIN opinions ON contents.pk_content = opinions.pk_opinion
 UPDATE contents INNER JOIN letters ON contents.pk_content = letters.pk_letter SET contents.body=letters.body;
 UPDATE contents INNER JOIN static_pages ON contents.pk_content = static_pages.pk_static_page SET contents.body=static_pages.body;
 
+ALTER TABLE  `users` ADD INDEX  `user_username` (  `username` );
+ALTER TABLE  `users` ADD INDEX  `user_email` (  `email` );
+
+ALTER TABLE `contents`
+  DROP `placeholder`,
+  DROP `home_placeholder`;
 ALTER TABLE `articles` DROP `body`;
 ALTER TABLE `letters` DROP `body`;
 ALTER TABLE `opinions` DROP `body`;
@@ -69,6 +73,3 @@ DROP  `resolution` ,
 DROP  `type_img` ,
 DROP  `media_type` ,
 DROP  `color` ;
-
-ALTER TABLE  `users` ADD INDEX  `user_username` (  `username` );
-ALTER TABLE  `users` ADD INDEX  `user_email` (  `email` );
