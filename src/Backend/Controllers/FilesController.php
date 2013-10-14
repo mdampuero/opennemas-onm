@@ -688,25 +688,21 @@ class FilesController extends Controller
 
         $positions = $request->request->get('positions');
 
-        $msg = '';
+        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
         ) {
-            $_positions = array();
             $pos = 1;
-
             foreach ($positions as $id) {
-                $_positions[] = array($pos, '1', $id);
+                $file= new \Attachment($id);
+                $result = $result && $file->setPosition($pos);
+
                 $pos += 1;
             }
-
-            $file= new \Attachment();
-            $msg = $file->set_position($_positions, $_SESSION['userid']);
-
         }
 
-        if ($msg) {
+        if ($result) {
             $msg = "<div class='alert alert-success'>"
                 ._("Positions saved successfully.")
                 .'<button data-dismiss="alert" class="close">×</button></div>';

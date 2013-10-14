@@ -233,9 +233,6 @@ class User
             default:
                 break;
         }
-
-        // Get photo object from avatar_img_id
-
     }
 
     /**
@@ -1400,13 +1397,10 @@ class User
             'category'    => '',
             'created'     => $infor->atime,
             'changed'     => $infor->mtime,
-            'date'        => $infor->mtime,
             'size'        => round($infor->size/1024, 2),
             'width'       => $infor->width,
             'height'      => $infor->height,
             'type'        => $infor->type,
-            'type_img'    => $fileExtension,
-            'media_type'  => 'image',
             'author_name' => '',
         );
 

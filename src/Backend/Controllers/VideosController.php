@@ -690,7 +690,7 @@ class VideosController extends Controller
     public function savePositionsAction(Request $request)
     {
         $positions = $request->request->get('positions');
-        $msg = '';
+        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
@@ -699,12 +699,10 @@ class VideosController extends Controller
             $pos = 1;
 
             foreach ($positions as $id) {
-                $_positions[] = array($pos, '1', $id);
-                $pos += 1;
+                $video = new \Video($id);
+                $result = $result && $video->setPosition($pos);
+                $pos++;
             }
-
-            $video = new \Video();
-            $msg = $video->set_position($_positions, $_SESSION['userid']);
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */

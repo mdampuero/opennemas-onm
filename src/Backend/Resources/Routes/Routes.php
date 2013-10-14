@@ -842,15 +842,6 @@ $adminRoutes->add(
 
 // Image manager routes
 $adminRoutes->add(
-    'admin_images_statistics',
-    new Route(
-        '/images/statistics',
-        array(
-            '_controller' => 'Backend:Controllers:ImagesController:statistics',
-        )
-    )
-);
-$adminRoutes->add(
     'admin_images_search',
     new Route(
         '/images/search',
@@ -1186,7 +1177,7 @@ $adminRoutes->add(
     'admin_albums_savepositions',
     new Route(
         '/albums/save-positions',
-        array('_controller' => 'Backend:Controllers:CoversController:savePositions')
+        array('_controller' => 'Backend:Controllers:AlbumsController:savePositions')
     )
 );
 

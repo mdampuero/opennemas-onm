@@ -908,45 +908,6 @@ class ContentCategoryManager
     }
 
     /**
-     * Counts the media elements from a group type
-     *
-     * @param string $filter the WHERE clause to filter the contents with
-     *
-     * @return the counters for all the group types
-     **/
-    public function dataMediaByTypeGroup($filter = null)
-    {
-        $_where = '1=1';
-        if (!is_null($filter)) {
-            $_where = $filter;
-        }
-        $sql = 'SELECT count(photos.pk_photo) AS number,
-            `contents_categories`.`pk_fk_content_category` AS cat,
-            sum(`photos`.`size`) as size
-            FROM `contents_categories`,`photos`,`contents`
-            WHERE `photos`.`pk_photo`=`contents`.`pk_content`
-            AND `photos`.`pk_photo`=`contents_categories`.`pk_fk_content`
-            AND contents.`in_litter`=0
-            AND '.$_where.
-            ' GROUP BY `contents_categories`.`pk_fk_content_category`';
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $groups = array();
-
-        if ($rs!==false) {
-            while (!$rs->EOF) {
-                $groups[ $rs->fields['cat'] ] = new stdClass;
-                $groups[ $rs->fields['cat'] ]->total = $rs->fields['number'];
-                $groups[ $rs->fields['cat'] ]->size = $rs->fields['size'];
-                $rs->MoveNext();
-            }
-        }
-
-        return $groups;
-    }
-
-    /**
      * Order array of category menu and submenues.
      * Get category info if there is one selected or get first category info
      *
