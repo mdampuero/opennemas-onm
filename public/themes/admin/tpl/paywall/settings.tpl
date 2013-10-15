@@ -171,6 +171,10 @@
                             <p class="nopaymentmodes">{t}No available payment modes. Add a new one with the button below.{/t}</p>
                             {/foreach}
                         </div>
+                        <p>
+                            <input type="checkbox" name="settings[recurring]" value="1" {if (isset($settings['recurring']) && $settings['recurring'] eq 1)}checked{/if}>
+                            {t}Check this if you want to enable recurring payments{/t}
+                        </p>
                         <a id="add_payment_mode" class="btn">
                             <i class="icon-plus"></i>
                             {t}Add new payment mode{/t}
