@@ -149,7 +149,7 @@ class StaticPage extends Content
                 FROM `static_pages`, `contents` WHERE
                 in_litter = 0 AND
                 `contents`.`pk_content`= `static_pages`.`pk_static_page` AND
-                `static_pages`.`slug` LIKE ?
+                `contents`.`slug` LIKE ?
                 ORDER BY  pk_static_page DESC';
 
         $id = $GLOBALS['application']->conn->GetOne($sql, array($slug));
