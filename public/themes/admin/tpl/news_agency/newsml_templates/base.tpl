@@ -120,7 +120,7 @@
               <!-- The link to download image -->
               <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photo->path_file}{$photo->name}">
                 <MediaType FormalName="Photo" />
-                <MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />
+                {*<MimeType FormalName="{$photo->media_type}/{$photo->type_img}" />*}
                 <Characteristics>
                   <SizeInBytes>{$photo->size*1024}</SizeInBytes>
                   <Property FormalName="Onm_Filename" Value="{$photo->name}" />
@@ -185,7 +185,7 @@
               <!-- The link to download image -->
               <ContentItem Href="http://{$smarty.const.SITE}{$smarty.const.MEDIA_DIR_URL}{$smarty.const.IMG_DIR}{$photoInner->path_file}{$photoInner->name}">
                 <MediaType FormalName="Photo" />
-                <MimeType FormalName="{$photoInner->media_type}/{$photoInner->type_img}" />
+                {*<MimeType FormalName="{$photoInner->media_type}/{$photoInner->type_img}" />*}
                 <Characteristics>
                   <SizeInBytes>{$photoInner->size*1024}</SizeInBytes>
                   <Property FormalName="Onm_Filename" Value="{$photoInner->name}" />

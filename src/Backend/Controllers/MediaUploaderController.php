@@ -121,8 +121,8 @@ class MediaUploaderController extends Controller
         $cm = new \ContentManager();
         $er = $this->get('entity_repository');
 
-        $filter = 'contents.fk_content_type = 8 AND photos.media_type="image" '
-            .'AND contents.content_status=1 '.$filter;
+        $filter = 'contents.fk_content_type = 8 AND contents.content_status=1 '.$filter;
+
         if (is_null($category)) {
             $photos = $cm->find(
                 'Photo',

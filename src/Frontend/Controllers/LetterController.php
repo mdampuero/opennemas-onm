@@ -225,13 +225,32 @@ class LetterController extends Controller
                 $data['image']      = $this->saveImage($data);
 
                 $letter = new \Letter();
-                $msg = $letter->saveLetter($data);
+                $_SESSION['username'] = $data['author'];
+                $_SESSION['userid'] = 'user';
 
+                // Prevent XSS attack
+                $data = array_map('strip_tags', $data);
+                $data['body'] = nl2br($data['body']);
+
+                if ($letter->hasBadWords($data)) {
+                    $msg = "Su comentario fue rechazado debido al uso "
+                        ."de palabras malsonantes.";
+                } else {
+                    $ip = getRealIp();
+                    $data["params"] = array('ip'=> $ip);
+
+                    if ($letter->create($data)) {
+
+                        $msg = "Su carta ha sido guardada y está pendiente de publicación.";
+                    } else {
+                        $msg = "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
+                            ."correctamente todos los campos.";
+                    }
+                }
             } else {
                 $msg = _('<strong>Unable</strong> to save the letter.');
             }
         }
-
 
         $response = new RedirectResponse($this->generateUrl('frontend_participa_frontpage').'?msg="'.$msg.'"');
 

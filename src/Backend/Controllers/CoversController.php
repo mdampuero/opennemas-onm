@@ -601,22 +601,20 @@ class CoversController extends Controller
 
         $positions = $request->query->get('positions');
 
-        $msg = '';
+        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
         ) {
-            $_positions = array();
+            $pos = 1;
 
-            foreach ($positions as $pos => $id) {
-                $_positions[] = array($pos, '1', $id);
+            foreach ($positions as $id) {
+                $cover = new \Kiosko($id);
+                $result = $result && $cover->setPosition($pos);
             }
-
-            $cover = new \Kiosko();
-            $msg = $cover->set_position($_positions, $_SESSION['userid']);
         }
 
-        if ($msg) {
+        if ($result) {
             $msg = "<div class='alert alert-success'>"
                 ._("Positions saved successfully.")
                 .'<button data-dismiss="alert" class="close">×</button></div>';

@@ -653,36 +653,29 @@ class AlbumsController extends Controller
      **/
     public function savePositionsAction(Request $request)
     {
-        $request = $this->get('request');
-
         $positions = $request->query->get('positions');
 
-        $msg = '';
+        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
         ) {
-            $_positions = array();
+            $pos = 1;
+            foreach ($positions as $id) {
+                $album = new \Album($id);
+                $result = $result && $album->setPosition($pos);
 
-            foreach ($positions as $pos => $id) {
-                $_positions[] = array($pos, '1', $id);
+                $pos++;
             }
-
-            $album = new \Album();
-            $msg = $album->set_position($_positions, $_SESSION['userid']);
         }
 
-        if ($msg) {
-            $msg = "<div class='alert alert-success'>"
-                ._("Positions saved successfully.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+        if ($result) {
+            $message = _("Positions saved successfully.");
         } else {
-            $msg = "<div class='alert alert-error'>"
-                ._("Unable to save the new positions. Please contact with your system administrator.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+            $message = _("Unable to save the new positions.");
         }
 
-        return new Response($msg);
+        return new Response($message);
     }
 
     /**

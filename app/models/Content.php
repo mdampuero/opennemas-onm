@@ -33,25 +33,39 @@ class Content
     public $content_type = null;
 
     /**
+     * The content type name of the content
+     *
+     * @var string
+     **/
+    public $content_type_name = '';
+
+    /**
      * The title of the content
      *
      * @var string
      **/
-    public $title = null;
+    public $title = '';
 
     /**
      * The description of the content
      *
      * @var string
      **/
-    public $description         = null;
+    public $description         = '';
+
+    /**
+     * The main text of the content
+     *
+     * @var string
+     */
+    public $body = '';
 
     /**
      * The list of tags of this content separated by commas
      *
      * @var string
      **/
-    public $metadata            = null;
+    public $metadata            = '';
 
     /**
      * The date from when this will be available to publish
@@ -185,24 +199,6 @@ class Content
      * @var int 0|1|2
      **/
     public $content_status      = null;
-
-    /**
-     * Not used
-     *
-     * @deprecated  deprecated from 0.8
-     *
-     * @var string
-     **/
-    public $placeholder         = null;
-
-    /**
-     * Not used
-     *
-     * @deprecated  deprecated from 0.8
-     *
-     * @var string
-     **/
-    public $home_placeholder    = null;
 
     /**
      * An array for misc information of this content
@@ -374,17 +370,7 @@ class Content
      **/
     public function create($data)
     {
-        $sql = "INSERT INTO contents
-            (`fk_content_type`, `title`, `description`,
-            `metadata`, `starttime`, `endtime`,
-            `created`, `changed`, `content_status`,
-            `views`, `position`,`frontpage`, `placeholder`,`home_placeholder`,
-            `fk_author`, `fk_publisher`, `fk_user_last_editor`,
-            `in_home`, `home_pos`,`available`,
-            `slug`, `category_name`, `urn_source`, `params`)".
-           " VALUES (?,?,?, ?,?,?, ?,?,?, ?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
-
-
+        $data['body']   = (!array_key_exists('body', $data))? '': $data['body'];
         $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
         $data['available']        = (empty($data['available']))? 0: intval($data['available']);
         if (!isset($data['starttime']) || empty($data['starttime'])) {
@@ -398,10 +384,6 @@ class Content
         $data['endtime']          = (empty($data['endtime']))? '0000-00-00 00:00:00': $data['endtime'];
         $data['frontpage']        = (!isset($data['frontpage']) || empty($data['frontpage']))
                                     ? 0: intval($data['frontpage']);
-        $data['placeholder']      = (!isset($data['placeholder']) || empty($data['placeholder']))
-                                    ? 'placeholder_0_1': $data['placeholder'];
-        $data['home_placeholder'] = (!isset($data['home_placeholder']) || empty($data['home_placeholder']))
-                                    ? 'placeholder_0_1': $data['home_placeholder'];
         $data['position']         = (empty($data['position']))? '2': $data['position'];
         $data['in_home']          = (empty($data['in_home']))? 0: $data['in_home'];
         $data['home_pos']         = 100;
@@ -437,12 +419,21 @@ class Content
         $ccm     = ContentCategoryManager::get_instance();
         $catName = $ccm->get_name($data['category']);
 
+        $sql = "INSERT INTO contents
+            (`fk_content_type`, `content_type_name`, `title`, `description`, `body`,
+            `metadata`, `starttime`, `endtime`,
+            `created`, `changed`, `content_status`,
+            `views`, `position`,`frontpage`,
+            `fk_author`, `fk_publisher`, `fk_user_last_editor`,
+            `in_home`, `home_pos`,`available`,
+            `slug`, `category_name`, `urn_source`, `params`)".
+           " VALUES (?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
+
         $values = array(
-            $fk_content_type, $data['title'], $data['description'],
+            $fk_content_type, strtolower($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['created'], $data['changed'], $data['content_status'],
             $data['views'], $data['position'],$data['frontpage'],
-            $data['placeholder'],$data['home_placeholder'],
             $data['fk_author'], $data['fk_publisher'],
             $data['fk_user_last_editor'], $data['in_home'],
             $data['home_pos'],$data['available'],
@@ -450,7 +441,6 @@ class Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
             return false;
         }
 
@@ -514,16 +504,6 @@ class Content
      **/
     public function update($data)
     {
-        $sql = "UPDATE contents
-                SET `title`=?, `description`=?,
-                    `metadata`=?, `starttime`=?, `endtime`=?,
-                    `changed`=?, `in_home`=?, `frontpage`=?,
-                    `available`=?, `content_status`=?,
-                    `placeholder`=?, `home_placeholder`=?,
-                    `fk_author`=?, `fk_user_last_editor`=?,
-                    `slug`=?, `category_name`=?, `params`=?
-                WHERE pk_content= ?";
-
         $this->read($data['id']);
 
         if ($data['available'] == 1
@@ -535,6 +515,7 @@ class Content
         }
 
         $values = array(
+            'body'           => (!array_key_exists('body', $data))? '': $data['body'],
             'changed'        => date("Y-m-d H:i:s"),
             'starttime'      =>
                 (!isset($data['starttime'])) ? $this->starttime: $data['starttime'],
@@ -548,21 +529,17 @@ class Content
                 (!isset($data['frontpage'])) ? $this->frontpage: $data['frontpage'],
             'in_home'        =>
                 (!isset($data['in_home'])) ? $this->in_home: $data['in_home'],
-            'placeholder'    =>
-                (empty($this->placeholder)) ? 'placeholder_0_1': $this->placeholder,
             'params'         =>
                 (!isset($data['params']) || empty($data['params'])) ? null : serialize($data['params']),
             'description'    =>
                 (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
-            'home_placeholder' =>
-                (empty($this->home_placeholder)) ? 'placeholder_0_1': $this->home_placeholder,
             'fk_author' =>
                 (is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
         );
 
         $data = array_merge($data, $values);
 
-        $data['fk_publisher'] =  (empty($data['available']))? '':$_SESSION['userid'];
+        $data['fk_publisher'] =  (empty($data['available']))? '' : $_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])
             && !isset ($data['fk_user_last_editor'])
@@ -602,12 +579,20 @@ class Content
             $catName = $this->category_name;
         }
 
+        $sql = "UPDATE contents
+                SET `title`=?, `description`=?, `body`=?,
+                    `metadata`=?, `starttime`=?, `endtime`=?,
+                    `changed`=?, `in_home`=?, `frontpage`=?,
+                    `available`=?, `content_status`=?,
+                    `fk_author`=?, `fk_user_last_editor`=?,
+                    `slug`=?, `category_name`=?, `params`=?
+                WHERE pk_content= ?";
+
         $values = array(
-            $data['title'], $data['description'],
+            $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
-            $data['placeholder'],$data['home_placeholder'],
             $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
             $this->category_name, $data['params'], $data['id']
         );
@@ -1080,9 +1065,12 @@ class Content
 
         $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
                  `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
-        $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
+
+        $values = array($_SESSION['userid'], $currentTime, $this->id);
 
         if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
             return false;
@@ -1403,14 +1391,16 @@ class Content
             return false;
         }
 
-        $changed = date("Y-m-d H:i:s");
+        $currentTime = new \DateTime();
+        $currentTime->setTimezone(new \DateTimeZone('UTC'));
+        $currentTime = $currentTime->format('Y-m-d H:i:s');
 
         $sql = 'UPDATE contents SET `content_status`=?, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
         if (!is_array($status)) {
-            $values = array($status, $last_editor, $changed, $this->id);
+            $values = array($status, $last_editor, $currentTime, $this->id);
         } else {
             $values = $status;
         }
@@ -1735,25 +1725,19 @@ class Content
      * Define content position in a widget
      *
      * @param int $position the position of the content
-     * @param int $lastEditor the id of the user that is changing this content
      *
      * @return pk_content or false
      */
-    public function set_position($position, $lastEditor)
+    public function setPosition($position)
     {
         if ($this->id == null
             && !is_array($position)
         ) {
             return false;
         }
-        $sql = 'UPDATE contents SET `position`=?, `placeholder`=? '
-             . 'WHERE `pk_content`=?';
+        $sql = 'UPDATE contents SET `position`=? WHERE `pk_content`=?';
 
-        if (!is_array($position)) {
-            $values = array($position, $this->id);
-        } else {
-            $values = $position;
-        }
+        $values = array($position, $this->id);
 
         if (count($values) > 0) {
             $rs = $GLOBALS['application']->conn->Execute($sql, $values);
