@@ -97,7 +97,9 @@ class PaywallController extends Controller
         if (!array_key_exists('userid', $_SESSION)) {
             return $this->redirect($this->generateUrl('frontend_auth_login'));
         }
-        $selectedPlanId = $request->query->filter('plan');
+
+        $selectedPlanId   = $request->query->filter('plan');
+        $recurringPayment = $request->query->filter('recurring');
 
         if (empty($selectedPlanId)) {
             return $this->redirect($this->generateUrl('frontend_paywall_showcase'));
@@ -113,7 +115,11 @@ class PaywallController extends Controller
         }
 
         // URL to which the buyer's browser is returned after choosing to pay with PayPal
-        $returnUrl = $this->generateUrl('frontend_paywall_success_payment', array('user' => $_SESSION['userid']), true);
+        if ($recurringPayment == '1') {
+            $returnUrl = $this->generateUrl('frontend_paywall_success_recurring_payment', array('user' => $_SESSION['userid']), true);
+        } else {
+            $returnUrl = $this->generateUrl('frontend_paywall_success_payment', array('user' => $_SESSION['userid']), true);
+        }
         $cancelUrl = $this->generateUrl('frontend_paywall_cancel_payment', array(), true);
 
         // Total costs of this operation
@@ -149,6 +155,13 @@ class PaywallController extends Controller
         $setECDetails->ReqConfirmShipping = 0; // no shipping
         $setECDetails->NoShipping         = 1; // no shipping
         $setECDetails->BrandName          = s::get('site_name');
+        if ($recurringPayment == '1') {
+            // Billing agreement details
+            $billingAgreementDetails = new \BillingAgreementDetailsType('RecurringPayments');
+            $billingAgreementDetails->BillingAgreementDescription = $selectedPlan['description'];
+            $setECDetails->BillingAgreementDetails = array($billingAgreementDetails);
+        }
+
 
         $setECReqType = new \SetExpressCheckoutRequestType();
         $setECReqType->SetExpressCheckoutRequestDetails = $setECDetails;
@@ -326,11 +339,196 @@ class PaywallController extends Controller
                 )
             );
 
-            $planTime = strtoupper($_SESSION['paywall_transaction']['plan']['time']);
+            $planTime = strtolower($_SESSION['paywall_transaction']['plan']['time']);
 
             $newUserSubscriptionDate = new \DateTime();
             $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
-            $newUserSubscriptionDate->modify("+{$planTime} hours");
+            $newUserSubscriptionDate->modify("+1 {$planTime}");
+
+            $user = new \User($_SESSION['userid']);
+
+            $user->addSubscriptionLimit($newUserSubscriptionDate);
+
+            $_SESSION['meta'] = $user->getMeta();
+            unset($_SESSION['paywall_transaction']);
+
+            return $this->render('paywall/payment_success.tpl', array('time' => $newUserSubscriptionDate));
+        } elseif ($DoECResponse->Errors[0]->ErrorCode == '11607') {
+            $message = _('Your payment was already registered');
+        }
+
+        return $this->render(
+            'paywall/payment_error.tpl',
+            array(
+                'settings' => $paywallSettings,
+                'message'  => $message,
+            )
+        );
+    }
+
+    /**
+     * Description of the action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function returnSuccessRecurringPaymentAction(Request $request)
+    {
+        $token = $request->query->get('token');
+        $paywallSettings = s::get('paywall_settings');
+
+        // Some sanity checks before continue with the payment
+        if (!array_key_exists('paywall_transaction', $_SESSION)
+            || $token != $_SESSION['paywall_transaction']['token']
+        ) {
+            return $this->render(
+                'paywall/payment_error.tpl',
+                array(
+                    'settings' => $paywallSettings
+                )
+            );
+        }
+
+        $getExpressCheckoutDetailsRequest = new \GetExpressCheckoutDetailsRequestType($token);
+
+        $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
+        $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
+
+        // Perform the paypal API call
+        $paypalWrapper = $this->getPaypalService();
+        $paypalService = $paypalWrapper->getMerchantService();
+
+        try {
+            $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
+        } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($setECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
+            );
+
+            return $this->render(
+                'paywall/payment_error.tpl',
+                array(
+                    'settings' => $paywallSettings
+                )
+            );
+        }
+
+        // Some transaction data
+        $payerId         = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
+        $payerName       = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->FirstName;
+        $payerLastName   = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerName->LastName;
+        $currencyID      = $paywallSettings['money_unit'];
+        $price           = $_SESSION['paywall_transaction']['plan']['price'];
+        $planDescription = $_SESSION['paywall_transaction']['plan']['description'];
+        $planPeriod      = strtolower($_SESSION['paywall_transaction']['plan']['time']);
+
+        // Must be a valid date, in UTC/GMT format; for example, 2012-08-24T05:38:48Z
+        $billingStartDate = gmdate('c',strtotime("+1 {$planPeriod}"));
+
+        $RPProfileDetails = new \RecurringPaymentsProfileDetailsType();
+        $RPProfileDetails->SubscriberName = $payerName.' '.$payerLastName;
+        $RPProfileDetails->BillingStartDate = $billingStartDate;
+
+        // Initial non-recurring payment amount due immediately upon profile creation. Use an initial amount for enrolment or set-up fees.
+        $activationDetails = new \ActivationDetailsType();
+        $activationDetails->InitialAmount = new \BasicAmountType($currencyID, $price);
+
+        // CancelOnFailure – If this field is not set or you set it to CancelOnFailure, PayPal creates the recurring payment profile,
+        // but places it into a pending status until the initial payment completes.
+        // If the initial payment clears, PayPal notifies you by IPN that the pending profile has been activated.
+        // If the payment fails, PayPal notifies you by IPN that the pending profile has been canceled.
+        $activationDetails->FailedInitialAmountAction = 'CancelOnFailure';
+
+        // Regular payment period for this schedule which takes mandatory params
+        $paymentBillingPeriod =  new \BillingPeriodDetailsType();
+        $paymentBillingPeriod->BillingFrequency = '1';
+        $paymentBillingPeriod->BillingPeriod = $_SESSION['paywall_transaction']['plan']['time'];
+        $paymentBillingPeriod->Amount = new \BasicAmountType($currencyID, $price);
+
+        // Describes the recurring payments schedule, including the regular
+        // payment period, whether there is a trial period, and the number of
+        // payments that can fail before a profile is suspended which takes
+        // mandatory params
+        $scheduleDetails = new \ScheduleDetailsType();
+        $scheduleDetails->Description = $planDescription;
+        $scheduleDetails->ActivationDetails = $activationDetails;
+        $scheduleDetails->PaymentPeriod = $paymentBillingPeriod;
+
+        // CreateRecurringPaymentsProfileRequestDetailsType which takes mandatory params
+        $createRPProfileRequestDetail = new \CreateRecurringPaymentsProfileRequestDetailsType();
+        $createRPProfileRequestDetail->Token  = $token;
+        $createRPProfileRequestDetail->ScheduleDetails = $scheduleDetails;
+        $createRPProfileRequestDetail->RecurringPaymentsProfileDetails = $RPProfileDetails;
+
+        $createRPProfileRequest = new \CreateRecurringPaymentsProfileRequestType();
+        $createRPProfileRequest->CreateRecurringPaymentsProfileRequestDetails = $createRPProfileRequestDetail;
+
+        $createRPProfileReq =  new \CreateRecurringPaymentsProfileReq();
+        $createRPProfileReq->CreateRecurringPaymentsProfileRequest = $createRPProfileRequest;
+
+        try {
+            /* wrap API method calls on the service object with a try catch */
+            $createRPProfileResponse = $paypalService->CreateRecurringPaymentsProfile($createRPProfileReq);
+        } catch (Exception $ex) {
+            $errors = array();
+
+            foreach ($setECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in CreateRecurringPaymentsProfile API call. Original errors: ".implode(' ;', $errors)
+            );
+
+            return $this->render(
+                'paywall/payment_error.tpl',
+                array(
+                    'settings' => $paywallSettings
+                )
+            );
+        }
+
+        if(isset($createRPProfileResponse)) {
+            echo "<table>";
+            echo "<tr><td>Ack :</td><td><div id='Ack'>$createRPProfileResponse->Ack</div> </td></tr>";
+            echo "<tr><td>ProfileID :</td><td><div id='ProfileID'>".$createRPProfileResponse->CreateRecurringPaymentsProfileResponseDetails->ProfileID ."</div> </td></tr>";
+            echo "</table>";
+
+            echo "<pre>";
+            print_r($createRPProfileResponse);
+            echo "</pre>";
+        }
+
+        var_dump($createRPProfileResponse);die();
+
+        // Profile created, let's update some registries in the app
+        if (isset($createRPProfileResponse) && $createRPProfileResponse->Ack == 'Success') {
+
+            $order = new \Order();
+            $order->create(
+                array(
+                    'user_id'        => $_SESSION['userid'],
+                    'content_id'     => 0,
+                    'created'        => new \DateTime(),
+                    'payment_id'     => $paymentInfo->TransactionID,
+                    'payment_status' => $paymentInfo->PaymentStatus,
+                    'payment_amount' => (int) $paymentInfo->GrossAmount->value,
+                    'payment_method' => $paymentInfo->TransactionType,
+                    'type'           => 'paywall',
+                    'params'         => array(
+                        ''
+                    ),
+                )
+            );
+
+            $newUserSubscriptionDate = new \DateTime();
+            $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
+            $newUserSubscriptionDate->modify("+1 {$planTime}");
 
             $user = new \User($_SESSION['userid']);
 

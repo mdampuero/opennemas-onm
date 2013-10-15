@@ -36,15 +36,11 @@ class PaywallController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('PAYWALL');
 
         $this->times = array(
-            '24'    => _('1 day'),
-            '48'    => sprintf(_('%d days'), '2'),
-            '168'   => sprintf(_('1 week')),
-            '336'   => sprintf(_('%d week'), '2'),
-            '744'   => sprintf(_('1 month')),
-            '2232'  => sprintf(_('%d months'), '3'),
-            '4464'  => sprintf(_('6 months'), '3'),
-            '8928'  => sprintf(_('1 year')),
-            '17856' => sprintf(_('%d years'), '2'),
+            'Day'       => _('Day'),
+            'Week'      => _('Week'),
+            'SemiMonth' => _('SemiMonth'),
+            'Month'     => _('Month'),
+            'Year'      => _('Year'),
         );
 
         $this->moneyUnits = array(
@@ -441,7 +437,10 @@ class PaywallController extends Controller
     {
         $settingsForm = $request->request->get('settings');
 
-        $settings = array('payment_modes' => array());
+        $settings = array(
+            'payment_modes' => array(),
+            'recurring_payment_modes' => array(),
+        );
 
         // Check values
         $settings['paypal_username']  = $request->request->filter(
@@ -464,10 +463,15 @@ class PaywallController extends Controller
             'USD',
             FILTER_SANITIZE_STRING
         );
+        $settings['recurring']        = $request->request->filter(
+            'settings[recurring]',
+            '0',
+            FILTER_SANITIZE_STRING
+        );
         $settings['developer_mode']   = (boolean) $settingsForm['developer_mode'];
         $settings['vat_percentage']   = (int) $settingsForm['vat_percentage'];
 
-        // Check payment modes
+        // Check direct payment modes
         $number = count($settingsForm['payment_modes']['time']);
         if ($number > 0) {
             $paymentModes = array();
