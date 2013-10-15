@@ -110,8 +110,21 @@ ol.placeholder-element {
     margin:3px -10px -3px -5px !important;
     padding:5px;
     margin-top:3px;
-
 }
 .menuItem .edit-menu-form .send-button-wrapper {
     padding-left: 160px;
+}
+
+.menuItem .actions { margin-top: -2px;}
+.menuItem .actions a {
+    border: 1px solid #ddd;
+    display: inline-block;
+    padding: 4px;
+    line-height: 4px;
+    border-radius: 3px;
+    margin-right: 3px;
+}
+.menuItem .actions a:hover {
+    border-color:#999;
+    text-decoration: none;
 }

@@ -36,11 +36,6 @@
                         <img src="{$params.IMAGE_DIR}search.png" alt="{t}Search images{/t}"><br />{t}Search{/t}
                     </a>
                 </li>
-                <li>
-                    <a href="{url name=admin_images_statistics}">
-                        <img src="{$params.IMAGE_DIR}statistics.png" alt="{t}Statistics{/t}"><br />{t}Statistics{/t}
-                    </a>
-                </li>
                 {*<li class="separator"></li>
                 <li>
                     <a href="{url name=admin_images_config}">

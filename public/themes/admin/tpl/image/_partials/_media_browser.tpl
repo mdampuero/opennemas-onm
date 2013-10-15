@@ -66,7 +66,7 @@
                         {if !empty($photo->author_name)}
                             <div><span class="author"><strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}</span></div>
                         {/if}
-                        <div><strong>{t}Created{/t}</strong> {$photo->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}</div>
+                        <div><strong>{t}Created{/t}</strong> {$photo->created|date_format:"%Y-%m-%d %H:%M:%S"|default:""}</div>
 
                         <div><strong>{t}Resolution:{/t}</strong> {$photo->width} x {$photo->height} (px)</div>
                         <div><strong>{t}Size:{/t}</strong> {$photo->size} Kb</div>
@@ -97,7 +97,7 @@
             {/if}
         </td>
         <td class="nowrap">
-            {$photo->date|date_format:"%Y-%m-%d %H:%M:%S"|default:""}
+            {$photo->created|date_format:"%Y-%m-%d %H:%M:%S"|default:""}
         </td>
         <td class="right">
             <div class="btn-group">

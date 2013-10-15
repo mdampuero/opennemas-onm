@@ -162,9 +162,13 @@ class StaticPagesController extends Controller
             );
 
             $staticPage->create($data);
-            m::add(_('Static page created successfully.'));
 
-            return $this->redirect($this->generateUrl('admin_staticpages'));
+            m::add(_('Static page created successfully.'), m::SUCCESS);
+
+            return $this->redirect(
+                $this->generateUrl('admin_staticpages_show', array('id' => $staticPage->id))
+            );
+
         }
     }
 
@@ -180,7 +184,6 @@ class StaticPagesController extends Controller
         $this->checkAclOrForward('STATIC_UPDATE');
 
         $id         = $request->query->getDigits('id');
-        $continue   = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
         $staticPage = new \StaticPage($id);
 
         if (!is_null($staticPage->id)) {
@@ -217,17 +220,9 @@ class StaticPagesController extends Controller
                 m::add(_("Static page updated successfully."), m::SUCCESS);
             }
 
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl('admin_staticpages_show', array('id' => $staticPage->id))
-                );
-            } else {
-                $page = $request->request->getDigits('page', 1);
-
-                return $this->redirect(
-                    $this->generateUrl('admin_staticpages', array('page' => $page,))
-                );
-            }
+            return $this->redirect(
+                $this->generateUrl('admin_staticpages_show', array('id' => $staticPage->id))
+            );
         }
     }
 

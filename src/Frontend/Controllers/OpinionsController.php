@@ -443,7 +443,7 @@ class OpinionsController extends Controller
                     $opinion['author_uri'] = $this->generateUrl(
                         'frontend_opinion_author_frontpage',
                         array(
-                            'author_id'   => $opinion['pk_author'],
+                            'author_id'   => sprintf('%06d', $opinion['pk_author']),
                             'author_slug' => $opinion['author_name_slug'],
                         )
                     );
@@ -463,7 +463,7 @@ class OpinionsController extends Controller
                     'fileName'    => $this->generateUrl(
                         'frontend_opinion_author_frontpage',
                         array(
-                            'author_id' => $author->id,
+                            'author_id' => sprintf('%06d', $author->id),
                             'author_slug' => $author->slug,
                         )
                     ).'/?page=%d',
@@ -581,7 +581,7 @@ class OpinionsController extends Controller
                     $opinion->author_uri = $this->generateUrl(
                         'frontend_opinion_external_author_frontpage',
                         array(
-                            'author_id' => $author->id,
+                            'author_id' => sprintf('%06d', $author->id),
                             'author_slug' => $author->slug,
                         )
                     );
@@ -607,7 +607,7 @@ class OpinionsController extends Controller
                     'fileName'    => $this->generateUrl(
                         'frontend_opinion_external_author_frontpage',
                         array(
-                            'author_id' => $author->id,
+                            'author_id' => sprintf('%06d', $author->id),
                             'author_slug' => $author->slug,
                         )
                     ).'/?page=%d',
