@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8aabde3ede1af592a52a96791bfdc7ec",
+    "hash": "79197b586356a3b43f6bd083bb54d1d9",
     "packages": [
         {
             "name": "frandieguez/panorama-php",
@@ -50,12 +50,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "64ed228095ec1f99e1124debf87b4b8ebd83070b"
+                "reference": "bae39d07a8f56ff21ca773a6b4e1ed2ab13b1c03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/64ed228095ec1f99e1124debf87b4b8ebd83070b",
-                "reference": "64ed228095ec1f99e1124debf87b4b8ebd83070b",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/bae39d07a8f56ff21ca773a6b4e1ed2ab13b1c03",
+                "reference": "bae39d07a8f56ff21ca773a6b4e1ed2ab13b1c03",
                 "shasum": ""
             },
             "require": {
@@ -99,7 +99,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2013-09-02 21:53:44"
+            "time": "2013-10-10 08:13:00"
         },
         {
             "name": "monolog/monolog",
@@ -213,12 +213,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/merchant-sdk-php.git",
-                "reference": "bbed43f4c6d3cf584bc6e39e9c1380217fe5ff1c"
+                "reference": "1f2e2165d0d4233ee47dd519642650220459d23e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/bbed43f4c6d3cf584bc6e39e9c1380217fe5ff1c",
-                "reference": "bbed43f4c6d3cf584bc6e39e9c1380217fe5ff1c",
+                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/1f2e2165d0d4233ee47dd519642650220459d23e",
+                "reference": "1f2e2165d0d4233ee47dd519642650220459d23e",
                 "shasum": ""
             },
             "require": {
@@ -249,7 +249,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2013-08-22 17:48:12"
+            "time": "2013-10-01 04:26:49"
         },
         {
             "name": "paypal/sdk-core-php",
@@ -859,7 +859,7 @@
     },
     "platform": {
         "php": ">=5.3.2",
-        "ext-apc": ">=3.1.12",
+        "ext-apc": "*",
         "ext-bz2": "*",
         "ext-ctype": "*",
         "ext-curl": "*",
