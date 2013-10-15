@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+  <parser>
+    <target>api</target>
+  </parser>
+  <transformer>
+    <target>api</target>
+  </transformer>
+  <title><![CDATA[Opennemas]]></title>
+  <logging>
+    <level>warn</level>
+    <paths>
+        <default>api/build.log</default>
+        <errors>api/build.errors.log</errors>
+    </paths>
+  </logging>
+  <template name="responsive"/>
+</phpdoc>

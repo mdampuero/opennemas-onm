@@ -4,8 +4,11 @@
 -- Move all the applied changes into the DB-default-applied-changes.sql
 -- file whenever it's possible
 
+-- Please check rigth sql, use ; in the end of lines & -- for comments.
+-- Write date with each sentence and with stack method. (last writed in the top)
+ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT  '' AFTER  `type`;
 
--- 08-10-2013
+-- 2013-10-08
 --
 -- Table structure for table `action_counters`
 --
@@ -24,14 +27,49 @@ REPLACE INTO settings (`name`, `value`) VALUES ('mail_username', 's:0:""');
 REPLACE INTO settings (`name`, `value`) VALUES ('mail_sender', 's:30:"no-reply@postman.opennemas.com"');
 
 
+-- 2013-07-17
+ALTER TABLE `contents`
+  ADD  `body` LONGTEXT NOT NULL AFTER  `description`,
+  CHANGE  `description`  `description` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+  CHANGE  `metadata`  `metadata` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+  CHANGE  `slug`  `slug` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+  CHANGE  `params`  `params` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+  CHANGE  `category_name`  `category_name` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  CHANGE  `urn_source`  `urn_source` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  CHANGE  `title`  `title` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 
--- --------------------------------------------------------------------------
+UPDATE contents INNER JOIN articles ON contents.pk_content = articles.pk_article SET contents.body=articles.body;
+UPDATE contents INNER JOIN opinions ON contents.pk_content = opinions.pk_opinion SET contents.body=opinions.body;
+UPDATE contents INNER JOIN letters ON contents.pk_content = letters.pk_letter SET contents.body=letters.body;
+UPDATE contents INNER JOIN static_pages ON contents.pk_content = static_pages.pk_static_page SET contents.body=static_pages.body;
 
--- Please check rigth sql, use ; in the end of lines & -- for comments.
--- Write date with each sentence and with stack method. (last writed in the top)
-ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT  '' AFTER  `type`;
+ALTER TABLE  `users` ADD INDEX  `user_username` (  `username` );
+ALTER TABLE  `users` ADD INDEX  `user_email` (  `email` );
 
--- Added config parameters to monetize the newsletter.
-REPLACE INTO settings (`name`, `value`) VALUES ('newsletter_sender', 's:30:"no-reply@postman.opennemas.com"');
-REPLACE INTO settings (`name`, `value`) VALUES ('max_mailing', 's:1:"0"');
-REPLACE INTO settings (`name`, `value`) VALUES ('last_invoice', 's:19:"2013-07-28 10:00:00"');
+ALTER TABLE `contents`
+  DROP `placeholder`,
+  DROP `home_placeholder`;
+ALTER TABLE `articles` DROP `body`;
+ALTER TABLE `letters` DROP `body`;
+ALTER TABLE `opinions` DROP `body`;
+ALTER TABLE `static_pages`
+DROP `body`,
+DROP `slug`;
+
+ALTER TABLE `articles`
+DROP `columns`,
+DROP `home_columns`;
+
+ALTER TABLE `albums`
+DROP `fuente`;
+
+ALTER TABLE `menues`
+DROP `site`,
+DROP `pk_father`;
+
+ALTER TABLE  `photos`
+DROP  `date` ,
+DROP  `resolution` ,
+DROP  `type_img` ,
+DROP  `media_type` ,
+DROP  `color` ;

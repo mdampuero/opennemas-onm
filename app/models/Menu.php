@@ -245,7 +245,6 @@ class Menu
         $this->pk_menu   = $rs->fields['pk_menu'];
         $this->params    = $rs->fields['params'];
         $this->position  = $rs->fields['position'];
-        $this->pk_father = $rs->fields['pk_father'];
         $this->type      = $rs->fields['type'];
         $this->items     = $this->getMenuItems($this->pk_menu);
 

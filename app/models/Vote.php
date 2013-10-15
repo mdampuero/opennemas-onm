@@ -267,25 +267,6 @@ class Vote
     }
 
     /**
-     * Gets the karm for a vote given its pk.
-     *
-     * @param string $votePk the pk of the vote.
-     *
-     * @return int the karma number for the vote.
-     **/
-    public function get_karma($votePk)
-    {
-        $sql = 'SELECT karma FROM votes WHERE pk_vote=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($votePk));
-
-        if (!$rs) {
-            return;
-        }
-
-        return $rs->fields['karma'];
-    }
-
-    /**
      * Returns the HTML for a vote image
      *
      * @param int $i the voting position

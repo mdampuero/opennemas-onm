@@ -125,11 +125,13 @@ $('#title').on('change', function(e, ui) {
     fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
 });
 
-{if isset($widget) && $widget->renderlet !== 'html'}
-    CKEDITOR.instances.widget_content.destroy();
-{/if}
 
 jQuery(document).ready(function($) {
+
+    {if isset($widget) && $widget->renderlet !== 'html'}
+        CKEDITOR.instances.widget_content.destroy();
+    {/if}
+
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
     });
@@ -156,22 +158,24 @@ jQuery(document).ready(function($) {
 </script>
 {include file="media_uploader/media_uploader.tpl"}
 <script>
-    var mediapicker = $('#media-uploader').mediaPicker({
-        upload_url: "{url name=admin_image_create category=0}",
-        browser_url : "{url name=admin_media_uploader_browser}",
-        months_url : "{url name=admin_media_uploader_months}",
-        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
-        // initially_shown: true,
-        handlers: {
-            'assign_content' : function( event, params ) {
-                var mediapicker = $(this).data('mediapicker');
-                var image_element = mediapicker.buildHTMLElement(params);
+    $(function(){
+        var mediapicker = $('#media-uploader').mediaPicker({
+            upload_url: "{url name=admin_image_create category=0}",
+            browser_url : "{url name=admin_media_uploader_browser}",
+            months_url : "{url name=admin_media_uploader_months}",
+            maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+            // initially_shown: true,
+            handlers: {
+                'assign_content' : function( event, params ) {
+                    var mediapicker = $(this).data('mediapicker');
+                    var image_element = mediapicker.buildHTMLElement(params);
 
-                if (params['position'] == 'body') {
-                    CKEDITOR.instances.widget_content.insertHtml(image_element);
+                    if (params['position'] == 'body') {
+                        CKEDITOR.instances.widget_content.insertHtml(image_element);
+                    }
                 }
             }
-        }
-    });
+        });
+    })
 </script>
 {/block}

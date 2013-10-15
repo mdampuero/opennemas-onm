@@ -388,26 +388,26 @@ class SpecialsController extends Controller
     {
         $positions = $request->get('positions');
 
+        $result = true;
         if (isset($positions)
             && is_array($positions)
             && count($positions) > 0
         ) {
-            $positionValues = array();
-            $pos            = 1;
+            $pos = 1;
             foreach ($positions as $id) {
-                $positionValues[] = array($pos, '1', $id);
+                $special = new \Special($id);
+                $result = $result && $special->setPosition($pos);
+
                 $pos++;
             }
-
-            $special = new \Special();
-            $msg = $special->set_position($positionValues, $_SESSION['userid']);
 
             // FIXME: buscar otra forma de hacerlo
             /* Eliminar caché portada cuando actualizan orden opiniones {{{ */
             $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
             $tplManager->delete('home|0');
         }
-        if (!empty($msg) && $msg == true) {
+
+        if (!empty($result) && $result == true) {
             $output = _("Positions saved successfully.");
         } else {
             $output = _("Unable to save positions for the specials widget.");

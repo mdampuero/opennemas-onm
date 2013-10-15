@@ -47,13 +47,6 @@ class Article extends Content
     public $summary       = null;
 
     /**
-     * The body of the article
-     *
-     * @var string
-     **/
-    public $body          = null;
-
-    /**
      * The id of the image assigned for frontpage
      *
      * @var int
@@ -110,33 +103,11 @@ class Article extends Content
     public $with_comment  = null;
 
     /**
-     * The column where is placed this article
-     *
-     * @deprecated  deprecated from version 0.8
-     * @var string
-     **/
-    public $columns       = null;
-
-    /**
-     * The column where is placed this article in home
-     *
-     * @var string
-     **/
-    public $home_columns  = null;
-
-    /**
      * The inner title of this article
      *
      * @var string
      **/
     public $title_int     = null;
-
-    /**
-     * The list of clones that this article has
-     *
-     * @var array
-     **/
-    public static $clonesHash = null;
 
     /**
      * Initializes the Article object from an ID
@@ -219,8 +190,6 @@ class Article extends Content
         }
 
         $data['subtitle']= $data['subtitle'];
-        $data['columns'] = 1;
-        $data['home_columns'] = 1;
         $data['available'] = $data['content_status'];
         $data['img1_footer']
             = (!isset($data['img1_footer']) || empty($data['img1_footer']))
@@ -238,20 +207,23 @@ class Article extends Content
         parent::create($data);
 
         $sql = "INSERT INTO articles (`pk_article`, `subtitle`, `agency`,
-                            `summary`,`body`, `img1`, `img1_footer`,
+                            `summary`, `img1`, `img1_footer`,
                             `img2`, `img2_footer`, `fk_video`, `fk_video2`,
-                            `footer_video2`, `columns`, `home_columns`,
+                            `footer_video2`,
                             `with_comment`, `title_int`) " .
-                        "VALUES (?,?,?,?,?, ?,?,?,?, ?,?,?, ?,?,?,?)";
+                        "VALUES (?,?,?,?, ?,?,?,?, ?,?,?, ?,?)";
 
         $values = array(
-            $this->id, $data['subtitle'], $data['agency'],  $data['summary'],
-            $data['body'], $data['img1'], $data['img1_footer'],
+            $this->id,
+            $data['subtitle'], $data['agency'],  $data['summary'],
+            $data['img1'], $data['img1_footer'],
             $data['img2'], $data['img2_footer'], $data['fk_video'],
-            $data['fk_video2'], $data['footer_video2'], $data['columns'],
-            $data['home_columns'], $data['with_comment'], $data['title_int']);
+            $data['fk_video2'], $data['footer_video2'],
+            $data['with_comment'], $data['title_int']
+        );
 
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             return false;
         }
         if (!empty($data['relatedFront'])) {
@@ -291,8 +263,9 @@ class Article extends Content
     {
         parent::read($id);
 
-        $sql = 'SELECT * FROM articles WHERE pk_article = '.($id);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $sql = 'SELECT * FROM articles WHERE pk_article = ?';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+
         if (!$rs) {
             return;
         }
@@ -302,10 +275,10 @@ class Article extends Content
         $this->permalink = Uri::generate(
             'article',
             array(
-                'id' => $this->id,
-                'date' => date('Y-m-d', strtotime($this->created)),
+                'id'       => $this->id,
+                'date'     => date('Y-m-d', strtotime($this->created)),
                 'category' => $this->category_name,
-                'slug' => $this->slug,
+                'slug'     => $this->slug,
             )
         );
 
@@ -349,20 +322,18 @@ class Article extends Content
         parent::update($data);
 
         $sql = "UPDATE articles "
-                ."SET `subtitle`=?, `agency`=?, `summary`=?, `body`=?, "
+                ."SET `subtitle`=?, `agency`=?, `summary`=?, "
                 ."`img1`=?, `img1_footer`=?, `img2`=?, `img2_footer`=?, "
                 ."`fk_video`=?, `fk_video2`=?, `footer_video2`=?, "
-                ."`columns`=?, `with_comment`=?, `title_int`=? "
-                ."WHERE pk_article=".($data['id']);
+                ."`with_comment`=?, `title_int`=? "
+                ."WHERE pk_article=?";
 
         $values = array(
-            strtoupper($data['subtitle']), $data['agency'],
-            $data['summary'], $data['body'],
-            $data['img1'], $data['img1_footer'], $data['img2'],
-            $data['img2_footer'], $data['fk_video'], $data['fk_video2'],
-            $data['footer_video2'],
-            (isset($data['columns']))?$data['columns']:'',
-            $data['with_comment'], $data['title_int']
+            strtoupper($data['subtitle']), $data['agency'], $data['summary'],
+            $data['img1'], $data['img1_footer'], $data['img2'], $data['img2_footer'],
+            $data['fk_video'], $data['fk_video2'], $data['footer_video2'],
+            $data['with_comment'], $data['title_int'],
+            $data['id']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {

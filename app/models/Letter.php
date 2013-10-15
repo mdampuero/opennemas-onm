@@ -32,13 +32,6 @@ class Letter extends Content
     public $author            = null;
 
     /**
-     * The letter body
-     *
-     * @var string
-     **/
-    public $body              = null;
-
-    /**
      * Initializes Letter object instance
      *
      * @param int $id the letter id
@@ -80,12 +73,8 @@ class Letter extends Content
                 return StringUtils::get_title($this->title);
 
                 break;
-            case 'content_type_name':
-                return 'Letter';
-                break;
             case 'photo':
-                return $this->getPhoto();
-
+                return new \Photo($this->image);
 
                 break;
 
@@ -104,7 +93,7 @@ class Letter extends Content
 
                 break;
             default:
-
+                return parent::__get($name);
                 break;
         }
     }
@@ -125,14 +114,13 @@ class Letter extends Content
 
         parent::create($data);
 
-        $sql = 'INSERT INTO letters ( `pk_letter`, `author`, `email`, `body`) '.
-                    ' VALUES (?,?,?,?)';
+        $sql = 'INSERT INTO letters ( `pk_letter`, `author`, `email`) '.
+                    ' VALUES (?,?,?)';
 
         $values = array(
             $this->id,
             $data['author'],
             $data['email'],
-            $data['body']
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -166,6 +154,7 @@ class Letter extends Content
         if (!$rs) {
             return false;
         }
+
         $this->load($rs->fields);
         $this->ip = $this->params['ip'];
 
@@ -192,15 +181,13 @@ class Letter extends Content
         $data['category'] = 0;
 
         parent::update($data);
-        $sql = "UPDATE letters SET `author`=  ?,
-                                   `email`=  ?,
-                                   `body` = ?
-                            WHERE pk_letter = ?";
+        $sql = "UPDATE letters
+                SET `author`=  ?, `email`=  ?
+                WHERE pk_letter = ?";
 
         $values = array(
             $data['author'],
             $data['email'],
-            $data['body'],
             $data['id']
         );
 
@@ -237,24 +224,13 @@ class Letter extends Content
     }
 
     /**
-     * Returns the Photo object that represents the user avatar
-     *
-     * @return Photo the photo object
-     **/
-    public function getPhoto()
-    {
-        return new \Photo($this->image);
-    }
-
-    /**
      * Determines if the content of a comment has bad words
      *
      * @param  array $data the data from the comment
      * @return int higher values means more bad words
      **/
-    public function hasBadWorsComment($data)
+    public function hasBadWords($data)
     {
-
         $text = $data['title'] . ' ' . $data['body'];
 
         if (isset($data['author'])) {
@@ -263,40 +239,6 @@ class Letter extends Content
         $weight = StringUtils::getWeightBadWords($text);
 
         return $weight > 100;
-    }
-
-    /**
-     * Saves a letter given an array of data
-     *
-     * @param array $data the new letter information
-     *
-     * @return string
-     **/
-    public function saveLetter($data)
-    {
-        $_SESSION['username'] = $data['author'];
-        $_SESSION['userid'] = 'user';
-        $letter = new Letter();
-
-        // Prevent XSS attack
-        $data = array_map('strip_tags', $data);
-        $data['body'] = nl2br($data['body']);
-
-        if ($letter->hasBadWorsComment($data)) {
-            return "Su comentario fue rechazado debido al uso "
-                ."de palabras malsonantes.";
-        }
-
-        $ip = getRealIp();
-        $data["params"] = array('ip'=> $ip);
-
-        if ($letter->create($data)) {
-
-            return "Su carta ha sido guardada y está pendiente de publicación.";
-        }
-
-        return "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
-            ."correctamente todos los campos.";
     }
 
     /**

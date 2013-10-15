@@ -21,15 +21,6 @@ namespace Onm\Instance;
 class Instance
 {
     /**
-     * Initializes the instance object
-     *
-     * @return void
-     **/
-    public function __construct()
-    {
-    }
-
-    /**
      * Initializes all the application values for the instance
      *
      * @return void

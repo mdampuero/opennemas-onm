@@ -34,7 +34,6 @@
                                         </div>
 
                                         <input type="hidden" name="category" value="{$category}" />
-                                        <input type="hidden" name="media_type" value="image" />
                                     </div>
 
                                 </div>

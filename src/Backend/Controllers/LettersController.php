@@ -113,6 +113,7 @@ class LettersController extends Controller
 
             $data = array(
                 'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
                 'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
@@ -127,9 +128,12 @@ class LettersController extends Controller
             } else {
                 m::add(_('Unable to create the new letter.'), m::ERROR);
             }
-
-            return $this->redirect($this->generateUrl('admin_letters'));
-
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_letter_show',
+                    array('id' => $letter->id)
+                )
+            );
         } else {
             return $this->render('letter/new.tpl');
         }
@@ -165,8 +169,6 @@ class LettersController extends Controller
             'letter/new.tpl',
             array('letter' => $letter,)
         );
-
-        return new Response($content);
     }
 
     /**
@@ -195,6 +197,7 @@ class LettersController extends Controller
             $data = array(
                 'id'        => $id,
                 'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
                 'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
                 'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
@@ -210,17 +213,15 @@ class LettersController extends Controller
                 m::add(_('Unable to update the letter.'), m::ERROR);
             }
 
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_letter_show',
-                        array('id' => $letter->id)
-                    )
-                );
-            } else {
-                return $this->redirect($this->generateUrl('admin_letters'));
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_letter_show',
+                    array('id' => $letter->id)
+                )
+            );
         }
+
+        return $this->redirect($this->generateUrl('admin_letters'));
     }
 
     /**
