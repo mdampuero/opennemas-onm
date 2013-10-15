@@ -370,7 +370,6 @@ class AlbumsController extends Controller
 
         $request  = $this->get('request');
         $id       = $request->request->getDigits('id');
-        $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
 
         $album = new \Album($id);
 
@@ -384,7 +383,7 @@ class AlbumsController extends Controller
             && !\Acl::check('CONTENT_OTHER_UPDATE')
             && $album->fk_user != $_SESSION['userid']
         ) {
-            m::add(_("You don't have enought privileges for modify this album."), m::SUCCESS);
+            m::add(_("You don't have enough privileges for modify this album."), m::SUCCESS);
 
             return $this->redirect(
                 $this->generateUrl(
@@ -392,54 +391,40 @@ class AlbumsController extends Controller
                     array('category' => $album->category,)
                 )
             );
-        } else {
-            // Check empty data
-            if (count($request->request) < 1) {
-                m::add(_("Album data sent not valid."), m::ERROR);
-
-                return $this->redirect($this->generateUrl('admin_album_show', array('id' => $id)));
-            }
-
-            $data = array(
-                'id'          => $id,
-                'available'   => $request->request->getDigits('available', 0, FILTER_SANITIZE_STRING),
-                'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'category'    => $request->request->getDigits('category'),
-                'agency'      => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
-                'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'album_frontpage_image' =>
-                    $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
-                'album_photos_id'       => $request->request->get('album_photos_id'),
-                'album_photos_footer'   => $request->request->get('album_photos_footer'),
-                'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
-            );
-
-            $album->update($data);
-            m::add(_("Album updated successfully."), m::SUCCESS);
-
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
-            $tplManager->delete('home|1');
-
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl('admin_album_show', array('id' => $album->id))
-                );
-            } else {
-                $page = $this->request->request->getDigits('page', 1);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_albums',
-                        array(
-                            'category' => $album->category,
-                            'page'     => $page,
-                        )
-                    )
-                );
-            }
         }
+
+        // Check empty data
+        if (count($request->request) < 1) {
+            m::add(_("Album data sent not valid."), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_album_show', array('id' => $id)));
+        }
+
+        $data = array(
+            'id'          => $id,
+            'available'   => $request->request->getDigits('available', 0, FILTER_SANITIZE_STRING),
+            'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'category'    => $request->request->getDigits('category'),
+            'agency'      => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
+            'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'album_frontpage_image' =>
+                $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
+            'album_photos_id'       => $request->request->get('album_photos_id'),
+            'album_photos_footer'   => $request->request->get('album_photos_footer'),
+            'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
+        );
+
+        $album->update($data);
+        m::add(_("Album updated successfully."), m::SUCCESS);
+
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $album->category_name).'|'.$album->id);
+        $tplManager->delete('home|1');
+
+        return $this->redirect(
+            $this->generateUrl('admin_album_show', array('id' => $album->id))
+        );
     }
 
     /**
