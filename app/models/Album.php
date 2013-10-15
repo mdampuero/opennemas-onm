@@ -119,7 +119,7 @@ class Album extends Content
 
         $sql = "INSERT INTO albums "
                 ." (`pk_album`,`subtitle`, `agency`, `cover_id`) "
-                ." VALUES (?,?,?,?,?)";
+                ." VALUES (?,?,?,?)";
 
         $values = array(
             $this->id,
@@ -129,7 +129,7 @@ class Album extends Content
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-
+            return false;
         }
 
         $data['id'] = $this->id;
@@ -154,7 +154,8 @@ class Album extends Content
         parent::read($id);
 
         $sql = 'SELECT * FROM albums WHERE pk_album = ?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+        $rs = $GLOBALS['application']->conn->Execute($sql, $id);
+
         if (!$rs) {
             return null;
         }
