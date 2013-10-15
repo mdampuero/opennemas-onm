@@ -177,7 +177,7 @@
                 <div class="control-group">
                     <label for="description" class="control-label">{t}Description{/t}</label>
                     <div class="controls">
-                        <textarea name="description" id="description" class="onm-editor" data-preset="simple"  rows="8" class="input-xxlarge">{t 1=$album->description|clearslash}%1{/t}</textarea>
+                        <textarea name="description" id="description" class="onm-editor" data-preset="simple">{$album->description|clearslash}</textarea>
                     </div>
                 </div>
             </div>
