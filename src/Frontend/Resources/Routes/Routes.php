@@ -112,6 +112,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_paywall_success_recurring_payment',
+    new Route(
+        '/paywall/success_recurring_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:returnSuccessRecurringPayment',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_paywall_cancel_payment',
     new Route(
         '/paywall/cancel_payment',
@@ -120,7 +130,6 @@ $frontendRoutes->add(
         )
     )
 );
-
 
 
 $frontendRoutes->add(
@@ -1473,6 +1482,16 @@ $frontendRoutes->add(
         array(
             'category'    => '[a-z0-9\-]+',
             'page'        => '[0-9]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_ws_paypal_ipn',
+    new Route(
+        '/ws/paypal/ipn',
+        array(
+            '_controller' => 'Frontend:Controllers:IpnController:paywall',
         )
     )
 );
