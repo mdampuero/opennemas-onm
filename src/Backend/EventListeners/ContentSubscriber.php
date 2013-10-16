@@ -40,6 +40,15 @@ class ContentSubscriber implements EventSubscriberInterface
             'content.set_positions' => array(
                 array('refreshFrontpage', 10),
             ),
+            'author.update' => array(
+                array('deleteAllAuthorsCaches', 5),
+            ),
+            'opinion.update' => array(
+                array('deleteOpinionUpdateCaches', 5),
+            ),
+            'opinion.create' => array(
+                array('deleteOpinionCreateCaches', 5),
+            ),
         );
     }
 
@@ -117,5 +126,75 @@ class ContentSubscriber implements EventSubscriberInterface
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
 
         }
+    }
+
+    /**
+     * Perform the actions after update an author
+     *
+     * @param Event $event The event to handle
+     *
+     * @return void
+     **/
+    public function deleteAllAuthorsCaches(Event $event)
+    {
+        $authorId = $event->getArgument('authorId');
+
+        // Delete caches for all author opinions and frontpages
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        // Get the list articles for this author
+        $cm = new \ContentManager();
+        $opinions = $cm->getOpinionArticlesWithAuthorInfo(
+            'opinions.type_opinion=0 AND opinions.fk_author='.$authorId
+            .' AND contents.available=1 and contents.content_status=1',
+            'ORDER BY created DESC '
+        );
+
+        if (!empty($opinions)) {
+            foreach ($opinions as &$opinion) {
+                $tplManager->delete('opinion|'.$opinion['id']);
+            }
+        }
+        // Delete opinions frontpage caches
+        $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+
+        // Delete author frontpages caches
+        $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+
+    }
+    /**
+     * Perform the actions after update an author
+     *
+     * @param Event $event The event to handle
+     *
+     * @return void
+     **/
+    public function deleteOpinionUpdateCaches(Event $event)
+    {
+        $authorId = $event->getArgument('authorId');
+        $opinionId = $event->getArgument('opinionId');
+
+        // Delete caches for opinion inner, opinion frontpages and author frontpages
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+        $tplManager->delete('opinion|'.$opinionId);
+        $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+
+    }
+    /**
+     * Perform the actions after update an author
+     *
+     * @param Event $event The event to handle
+     *
+     * @return void
+     **/
+    public function deleteOpinionCreateCaches(Event $event)
+    {
+        $authorId = $event->getArgument('authorId');
+
+        // Delete caches for opinion frontpages and author frontpages
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+        $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+        $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+
     }
 }
