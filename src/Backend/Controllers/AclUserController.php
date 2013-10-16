@@ -253,6 +253,12 @@ class AclUserController extends Controller
                     $_SESSION['user_language'] = $meta['user_language'];
                 }
 
+                // Check if is an author and delete caches
+                if (in_array('3', $data['id_user_group'])) {
+                    // Clear caches
+                    dispatchEventWithParams('author.update', array('authorId' => $userId));
+                }
+
                 m::add(_('User data updated successfully.'), m::SUCCESS);
             } else {
                 m::add(_('Unable to update the user with that information'), m::ERROR);

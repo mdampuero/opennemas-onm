@@ -323,9 +323,8 @@ class OpinionsController extends Controller
             if ($opinion->create($data)) {
                 m::add(_('Opinion successfully created.'), m::SUCCESS);
 
-                // TODO: Move this to a post update hook
-                $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-                $tplManager->delete(sprintf("%06d", $request->request->getDigits('fk_author')).'|1');
+                // Clear caches
+                dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
             } else {
                 m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
@@ -409,14 +408,18 @@ class OpinionsController extends Controller
 
             if ($opinion->update($data)) {
                 m::add(_('Opinion successfully updated.'), m::SUCCESS);
+
+                // Clear caches
+                dispatchEventWithParams(
+                    'opinion.update',
+                    array(
+                        'authorId'  => $data['fk_author'],
+                        'opinionId' => $opinion->id,
+                    )
+                );
             } else {
                 m::add(_('Unable to update the opinion.'), m::ERROR);
             }
-
-            // TODO: Move this to a post update hook
-            $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tplManager->delete('opinion|1');
-            $tplManager->delete('opinion|'.$opinion->id);
 
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             if (isset($continue) && $continue==1) {
@@ -1158,6 +1161,9 @@ class OpinionsController extends Controller
                 foreach ($meta as $key => $value) {
                     $user->setMeta(array($key => $value));
                 }
+
+                // Clear caches
+                dispatchEventWithParams('author.update', array('authorId' => $userId));
 
                 m::add(_('Author data updated successfully.'), m::SUCCESS);
             } else {
