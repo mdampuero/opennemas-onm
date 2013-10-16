@@ -14,6 +14,7 @@ $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
 require __DIR__.'/../app/container.php';
+require __DIR__.'/../config/config.inc.php';
 
 // Init event dispatchers
 $dispatcher = $sc->get('event_dispatcher');
