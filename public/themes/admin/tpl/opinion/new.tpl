@@ -196,7 +196,7 @@
             </div><!-- /contentform-main -->
         </div><!-- /contentform-inner -->
         <div class="contentform-inner wide">
-            <div id="article_images" class="clearfix">
+            <div id="related_media" class="clearfix">
                 {include  file="article/partials/_images.tpl" article=$opinion withoutVideo='true'}
             </div>
         </div><!-- /contentform-inner -->

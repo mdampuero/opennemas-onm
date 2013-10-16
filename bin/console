@@ -14,10 +14,11 @@ $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
 require __DIR__.'/../app/container.php';
+require __DIR__.'/../config/config.inc.php';
 
 // Init event dispatchers
 $dispatcher = $sc->get('event_dispatcher');
-$eventListenersPath = APP_PATH.'Framework/EventListeners';
+$eventListenersPath = SRC_PATH.'Framework/EventListeners';
 if (is_dir($eventListenersPath)) {
     $listenerClasses = glob($eventListenersPath.'/*.php');
     foreach ($listenerClasses as $className) {
@@ -35,10 +36,10 @@ $application = new Application();
 // Iterate over all the available command classes and register them into the
 // console application
 // $basePath = APPLICATION_PATH.'/app/';
-$availableCommandClases = glob(APP_PATH.'*/Command/*');
+$availableCommandClases = glob(SRC_PATH.'*/Command/*');
 foreach ($availableCommandClases as $file) {
     $commandClass = str_replace(
-        array(APP_PATH, '.php', '/'),
+        array(SRC_PATH, '.php', '/'),
         array('', '', '\\'),
         $file
     );

@@ -187,6 +187,6 @@
 
 <style>
   #modal-element-customize-content  {
-    position:absolute;
+    position:fixed;
   }
 </style>
