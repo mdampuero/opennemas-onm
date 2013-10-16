@@ -551,7 +551,7 @@ function dispatchEventWithParams($eventName, $params = array())
         $event->setArgument($paramName, $paramValue);
     }
 
-    $eventDispatcher->dispatch('content.update', $event);
+    $eventDispatcher->dispatch($eventName, $event);
 }
 
 function debug()
