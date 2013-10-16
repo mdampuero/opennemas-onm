@@ -51,51 +51,44 @@ class GeneralExceptionsListener implements EventSubscriberInterface
         $exception = $event->getException();
         $request = $event->getRequest();
 
-        // only handle not valid instance exceptions
-        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-            || $exception instanceof \Symfony\Component\Routing\Exception\ResourceNotFoundException
-        ) {
-            // $this->logException($exception, sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+        // $this->logException($exception, sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
 
-            $uri = $event->getRequest()->getRequestUri();
+        $uri = $event->getRequest()->getRequestUri();
 
-            if (strpos($uri, '/admin') !== false) {
-                $controller = 'Backend:Controllers:ErrorController:default';
-            } elseif (strpos($uri, '/manager') !== false) {
-                $controller = 'Manager:Controllers:ErrorController:default';
-            } else {
-                $controller = 'Frontend:Controllers:ErrorController:default';
-            }
-
-            $attributes = array(
-                '_controller' => $controller, //$this->controller,
-                'exception'   => FlattenException::create($exception),
-                // 'logger'      => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
-                // keep for BC -- as $format can be an argument of the controller callable
-                // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
-                // @deprecated in 2.4, to be removed in 3.0
-                'format'      => $request->getRequestFormat(),
-            );
-
-            $request = $request->duplicate(null, null, $attributes);
-            $request->setMethod('GET');
-
-            try {
-                $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
-            } catch (\Exception $e) {
-                // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
-
-                // set handling to false otherwise it wont be able to handle further more
-                $handling = false;
-
-                // re-throw the exception from within HttpKernel as this is a catch-all
-                return;
-            }
-            // var_dump($response);die();
-
-
-            $event->setResponse($response);
+        if (strpos($uri, '/admin') !== false) {
+            $controller = 'Backend:Controllers:ErrorController:default';
+        } elseif (strpos($uri, '/manager') !== false) {
+            $controller = 'Manager:Controllers:ErrorController:default';
+        } else {
+            $controller = 'Frontend:Controllers:ErrorController:default';
         }
+
+        $attributes = array(
+            '_controller' => $controller, //$this->controller,
+            'exception'   => FlattenException::create($exception),
+            // 'logger'      => $this->logger instanceof DebugLoggerInterface ? $this->logger : null,
+            // keep for BC -- as $format can be an argument of the controller callable
+            // see src/Symfony/Bundle/TwigBundle/Controller/ExceptionController.php
+            // @deprecated in 2.4, to be removed in 3.0
+            'format'      => $request->getRequestFormat(),
+        );
+
+        $request = $request->duplicate(null, null, $attributes);
+        $request->setMethod('GET');
+
+        try {
+            $response = $event->getKernel()->handle($request, HttpKernelInterface::SUB_REQUEST, true);
+        } catch (\Exception $e) {
+            // $this->logException($exception, sprintf('Exception thrown when handling an exception (%s: %s)', get_class($e), $e->getMessage()), false);
+
+            // set handling to false otherwise it wont be able to handle further more
+            $handling = false;
+
+            // re-throw the exception from within HttpKernel as this is a catch-all
+            return;
+        }
+
+        $event->setResponse($response);
 
         $handling = false;
     }
@@ -103,7 +96,7 @@ class GeneralExceptionsListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::EXCEPTION => array('onKernelException', -128),
+            KernelEvents::EXCEPTION => array('onKernelException', 0),
         );
     }
 

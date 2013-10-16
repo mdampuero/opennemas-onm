@@ -44,19 +44,25 @@ class ErrorController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $error = $request->attributes->get('exception');
-
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
         }
+        $error = $request->attributes->get('exception');
 
-        $name = join('', array_slice(explode('\\', get_class($error)), -1));
+        $exceptionName = $error->getClass();
 
-        $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
+        if (defined('INSTANCE_UNIQUE_NAME')) {
+            $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
+        } else {
+            $errorID = strtoupper('ONM_FRAMEWORK_'.uniqid());
+        }
 
-        switch ($name) {
-            case 'ResourceNotFoundException':
-            case 'NotFoundHttpException':
+        $preview = \Backend\Controllers\ErrorController::highlightSource($error->getFile(), $error->getLine(), 7);
+
+        $this->view->assign('preview', $preview);
+
+        switch ($exceptionName) {
+            case 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException':
                 $trace = $error->getTrace();
                 $path = $request->getRequestUri();
 

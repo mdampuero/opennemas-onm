@@ -80,7 +80,6 @@ class InstanceExceptionsListener implements EventSubscriberInterface
                 // re-throw the exception from within HttpKernel as this is a catch-all
                 return;
             }
-            // var_dump($response);die();
 
 
             $event->setResponse($response);
@@ -92,7 +91,7 @@ class InstanceExceptionsListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::EXCEPTION => array('onKernelException', -128),
+            KernelEvents::EXCEPTION => array('onKernelException', 100),
         );
     }
 
