@@ -1491,7 +1491,7 @@ $frontendRoutes->add(
     new Route(
         '/ws/paypal/ipn',
         array(
-            '_controller' => 'Frontend:Controllers:IpnController:paywall',
+            '_controller' => 'Frontend:Controllers:PaypalNotificationsController:paywall',
         )
     )
 );

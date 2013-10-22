@@ -433,6 +433,7 @@ class PaywallController extends Controller
 
         $RPProfileDetails = new \RecurringPaymentsProfileDetailsType();
         $RPProfileDetails->SubscriberName = $payerName.' '.$payerLastName;
+        $RPProfileDetails->ProfileReference = $_SESSION['userid'];
         $RPProfileDetails->BillingStartDate = $billingStartDate;
 
         // Initial non-recurring payment amount due immediately upon profile creation. Use an initial amount for enrolment or set-up fees.
@@ -493,53 +494,24 @@ class PaywallController extends Controller
             );
         }
 
-        if(isset($createRPProfileResponse)) {
-            echo "<table>";
-            echo "<tr><td>Ack :</td><td><div id='Ack'>$createRPProfileResponse->Ack</div> </td></tr>";
-            echo "<tr><td>ProfileID :</td><td><div id='ProfileID'>".$createRPProfileResponse->CreateRecurringPaymentsProfileResponseDetails->ProfileID ."</div> </td></tr>";
-            echo "</table>";
+        // if(isset($createRPProfileResponse)) {
+        //     echo "<table>";
+        //     echo "<tr><td>Ack :</td><td><div id='Ack'>$createRPProfileResponse->Ack</div> </td></tr>";
+        //     echo "<tr><td>ProfileID :</td><td><div id='ProfileID'>".$createRPProfileResponse->CreateRecurringPaymentsProfileResponseDetails->ProfileID ."</div> </td></tr>";
+        //     echo "</table>";
 
-            echo "<pre>";
-            print_r($createRPProfileResponse);
-            echo "</pre>";
-        }
+        //     echo "<pre>";
+        //     print_r($createRPProfileResponse);
+        //     echo "</pre>";
+        // }
 
-        var_dump($createRPProfileResponse);die();
 
-        // Profile created, let's update some registries in the app
+        // Profile created
         if (isset($createRPProfileResponse) && $createRPProfileResponse->Ack == 'Success') {
-
-            $order = new \Order();
-            $order->create(
-                array(
-                    'user_id'        => $_SESSION['userid'],
-                    'content_id'     => 0,
-                    'created'        => new \DateTime(),
-                    'payment_id'     => $paymentInfo->TransactionID,
-                    'payment_status' => $paymentInfo->PaymentStatus,
-                    'payment_amount' => (int) $paymentInfo->GrossAmount->value,
-                    'payment_method' => $paymentInfo->TransactionType,
-                    'type'           => 'paywall',
-                    'params'         => array(
-                        ''
-                    ),
-                )
-            );
-
-            $newUserSubscriptionDate = new \DateTime();
-            $newUserSubscriptionDate->setTimezone(new \DateTimeZone('UTC'));
-            $newUserSubscriptionDate->modify("+1 {$planTime}");
-
-            $user = new \User($_SESSION['userid']);
-
-            $user->addSubscriptionLimit($newUserSubscriptionDate);
-
-            $_SESSION['meta'] = $user->getMeta();
-            unset($_SESSION['paywall_transaction']);
-
-            return $this->render('paywall/payment_success.tpl', array('time' => $newUserSubscriptionDate));
-        } elseif ($DoECResponse->Errors[0]->ErrorCode == '11607') {
-            $message = _('Your payment was already registered');
+            // Redirect user to success page
+            return $this->render('paywall/profile_created.tpl');
+        } else {
+            $message = _('Your subscription could not been created. Please try again.');
         }
 
         return $this->render(
