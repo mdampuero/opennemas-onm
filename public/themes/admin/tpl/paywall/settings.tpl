@@ -44,6 +44,28 @@
     .payment_mode {
         margin-bottom:10px;
     }
+    .settings-header {
+        border-bottom:1px solid #eeeeee;
+        margin-bottom:20px;
+        padding-bottom:10px;
+    }
+    fieldset {
+        margin-bottom:40px;
+    }
+    .step-number {
+        background:#ccc;
+        border-radius:20px;
+        padding:5px 10px;
+        color:White;
+        font-weight: bold;
+        font-family: Arial, Verdana;
+        font-size:1.2em;
+        display:inline-block;
+        line-height:1em;
+    }
+    ol li {
+        margin-bottom:5px;
+    }
 </style>
 {/block}
 
@@ -71,10 +93,10 @@
 
         {render_messages}
 
-        <div class="form-horizontal panel">
+        <div class="form-horizontal">
 
             <fieldset>
-                <h3 class="settings-header">{t}Paypal API authentication{/t}</h3>
+                <h4 class="settings-header"><div class="step-number">1</div> {t}Paypal API authentication{/t}</h4>
 
                 <p>{t escape=off}In order to <strong>connect Opennemas with Paypal</strong> you have to fill your Paypal API credentials below:{/t}</p>
 
@@ -105,16 +127,19 @@
                 </p>
             </fieldset>
 
-            <hr>
-
             <fieldset>
-                <h3 class="settings-header"> {t}Use the testing environment Sandbox{/t}</h3>
+                <h4 class="settings-header"><div class="step-number">2</div> {t}Use the testing environment Sandbox{/t}</h4>
 
                 <div id="money" class="control-group">
                     <div class="controls">
-                        <input type="radio" name="settings[developer_mode]" id="settings[developer_mode]" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}> {t}Real mode (recommended){/t}
-                        <br>
-                        <input type="radio" name="settings[developer_mode]" id="settings[developer_mode]" value="0" {if $settings['developer_mode'] == false}checked="checked"{/if}> {t}Testing mode{/t}
+                        <label for="developer_mode_yes">
+                            <input type="radio" name="settings[developer_mode]" id="developer_mode_yes" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}>
+                            {t}Real mode (recommended){/t}
+                        </label>
+                        <label for="developer_mode_no">
+                            <input type="radio" name="settings[developer_mode]" id="developer_mode_no" value="0" {if $settings['developer_mode'] == false}checked="checked"{/if}>
+                            {t}Testing mode{/t}
+                        </label>
                     </div>
                 </div>
                 <div class="help-block">
@@ -123,10 +148,8 @@
                 </div>
             </fieldset>
 
-            <hr>
-
             <fieldset>
-                <h3 class="settings-header">{t}Transaction details{/t}</h3>
+                <h4 class="settings-header"><div class="step-number">3</div> {t}Currency & taxes{/t}</h4>
 
                 <div id="money" class="control-group">
                     <label for="money_unit" class="control-label">{t}Money unit{/t}</label>
@@ -144,7 +167,7 @@
             </fieldset>
 
             <fieldset>
-                <h3 class="settings-header">{t}Payment modes{/t}</h3>
+                <h4 class="settings-header"><div class="step-number">4</div> {t}Payment modes{/t}</h4>
                 <p>{t}Below you can add different payment modes by including the time range that the user can purchase, the description and the price{/t}</p>
                 <div id="payment_modes" class="control-group">
                     <div class="controls">
@@ -171,16 +194,45 @@
                             <p class="nopaymentmodes">{t}No available payment modes. Add a new one with the button below.{/t}</p>
                             {/foreach}
                         </div>
-                        <p>
-                            <input type="checkbox" name="settings[recurring]" value="1" {if (isset($settings['recurring']) && $settings['recurring'] eq 1)}checked{/if}>
-                            {t}Check this if you want to enable recurring payments{/t}
-                        </p>
                         <a id="add_payment_mode" class="btn">
                             <i class="icon-plus"></i>
                             {t}Add new payment mode{/t}
                         </a>
                     </div>
                 </div>
+            </fieldset>
+
+            <fieldset>
+                <h4 class="settings-header"><div class="step-number">5</div> {t}Recurring payments (optional){/t}</h4>
+
+                <p>
+                    {t}Paypal allow your users to subscribe to your Paywall through recurring payments. This means that your users will be charged periodically without having to worry about payments and due dates, and will allow you to increase the user engagement.{/t}
+                </p>
+
+                <div class="control-group">
+                    <div class="control-label">
+                    </div>
+                    <div class="controls">
+                        <label for="recurring_checkbox">
+                            <input type="checkbox" name="settings[recurring]" value="1" {if (isset($settings['recurring']) && $settings['recurring'] eq 1)}checked{/if} id="recurring_checkbox">
+                            {t}Mark this if you want to enable recurring payments{/t}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="control-group well recurring-paypal-help {if (!isset($settings['recurring']) || $settings['recurring'] eq 0)}hide{/if}">
+                    <p>{t}You have to activate some options in the Paypal configuration to make recurring payments work. Please follow next steps:{/t}</p>
+                    <ol>
+                        <li>Go to your merchant Paypal <a class="btn btn-mini" href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_profile-ipn-notify" target="_blank">IPN web configuration page <i class="icon icon-external-link"></i></a> and log in with your merchant account.</li>
+                        <li>Click in the "Choose IPN configuration" button.</li>
+                        <li>Fill in the "Notification URL" field with this address <input type="text" class="input-xlarge" readonly="readonly" style="display:block" value="{url name="frontend_ws_paypal_ipn" absolute=true}"></li>
+                        <li>Enable the "Receive IPN messages" checkbox.</li>
+                        <li>Finally, click in the "Save" button to save this configuration.</li>
+                    </ol>
+                </div>
+
+
+
             </fieldset>
 
         </div>
@@ -198,6 +250,17 @@
             window.open (url, title, config='height=500, width=360, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
             return false;
         });
+
+        $('#recurring_checkbox').on('change', function(e, ui) {
+            var checkbox = $(this);
+
+            if (checkbox.is(':checked')) {
+                $('.recurring-paypal-help').show();
+            } else {
+                $('.recurring-paypal-help').hide();
+            }
+        })
+
     });
 </script>
 {/block}

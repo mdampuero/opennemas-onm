@@ -59,7 +59,7 @@ class PaypalNotificationsController extends Controller
         // First param takes ipn data to be validated. If null, raw POST data is read from input stream
         $ipnMessage = new \PPIPNMessage(null, $config);
 
-        if($ipnMessage->validate()) {
+        if ($ipnMessage->validate()) {
             // Get ipn data
             $ipnData = $ipnMessage->getRawData();
 
