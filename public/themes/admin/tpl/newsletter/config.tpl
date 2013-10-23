@@ -66,7 +66,7 @@ jQuery(document).ready(function($){
                     <label for="name" class="control-label">{t}Newsletter subject{/t}</label>
                     <div class="controls">
                         <input type="text" id="name" name="newsletter_maillist[name]" value="{$configs['newsletter_maillist']['name']|default:""}" class="input-xlarge"/>
-                        <div class="help-block">{t}The subject of the emails in this bulletin{/t}</div>
+                        <div class="help-block">{t}The subject of the emails in this newsletter{/t}</div>
                     </div>
                  </div>
                 <div class="control-group">
@@ -83,7 +83,7 @@ jQuery(document).ready(function($){
                             <option value="inner" {if $configs['newsletter_maillist']['link'] eq 'inner'} selected {/if}>{t}Point to inner{/t}</option>
                             <option value="front" {if $configs['newsletter_maillist']['link'] eq 'front'} selected {/if}>{t}Point to frontpage{/t}</option>
                         </select>
-                        <div class="help-block">{t}You can choose if you prefer that the links of the contents of the bulletin point within the content or contents on the frontpage{/t}</div>
+                        <div class="help-block">{t}You can choose if you prefer that the links of the contents of the newsletter point within the content or contents on the frontpage{/t}</div>
                     </div>
                 </div>
             </fieldset>

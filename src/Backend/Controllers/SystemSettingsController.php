@@ -101,6 +101,19 @@ class SystemSettingsController extends Controller
         if (!is_null($siteLogo)) {
             // Get file original name
             $siteLogoName = $siteLogo->getClientOriginalName();
+
+            // Check max height for site logo
+            $size = getimagesize($_FILES['site_logo']['tmp_name']);
+            if ($size[1] > 120) {
+                m::add(
+                    _('The maximum height for the "Site Logo" is 120px. Please adjust your image size.'),
+                    m::ERROR
+                );
+
+                // Send the user back to the form
+                return $this->redirect($this->generateUrl('admin_system_settings'));
+            }
+
             // Move uploaded file
             $siteLogo->move($uploadDirectory, $siteLogoName);
             // Save name on settings
