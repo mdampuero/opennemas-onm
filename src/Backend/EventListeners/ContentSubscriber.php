@@ -115,7 +115,7 @@ class ContentSubscriber implements EventSubscriberInterface
 
     public function refreshFrontpage(Event $event)
     {
-        $tplManager = new TemplateCacheManager(TEMPLATE_USER_PATH);
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
 
         $content = $event->getArgument('content');
 

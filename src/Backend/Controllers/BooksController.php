@@ -524,13 +524,10 @@ class BooksController extends Controller
             && is_array($positions)
             && count($positions) > 0
         ) {
-            $_positions = array();
             $pos = 1;
-
             foreach ($positions as $id) {
                 $book = new \Book($id);
-                $result = $result && $book->setPosition($_positions);
-
+                $result = $result && $book->setPosition($pos);
                 $pos += 1;
             }
 
