@@ -15,7 +15,7 @@
         });
 
         // Password and confirm password match
-        $("#passwordconfirm").keyup(validate);
+        $("#passwordconfirm").on('keyup blur', validate);
         function validate() {
             var password1 = $("#password").val();
             var password2 = $("#passwordconfirm").val();
