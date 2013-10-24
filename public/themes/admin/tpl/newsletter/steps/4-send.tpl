@@ -55,12 +55,6 @@
                     <span class="failed">{t}failed{/t}</span>
                 {/if}
             </td></tr>
-            {foreachelse}
-                <tr>
-                    <td>
-                        {t}There was no recipients to sent to{/t}
-                    </td>
-                </tr>
             {/foreach}
 
             <tfoot>

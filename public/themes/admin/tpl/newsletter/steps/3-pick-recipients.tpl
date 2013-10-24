@@ -77,7 +77,7 @@
 
 {block name="content"}
 
-<form action="{url name=admin_newsletter_send id=$id}" method="POST" name="newsletterForm" id="pick-recipients-form">
+<form action="#" method="POST" name="newsletterForm" id="pick-recipients-form">
 
     <div id="buttons-recipients" class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -88,10 +88,10 @@
             <ul class="old-button">
 
                 <li>
-                    <button type="submit" title="{t}Next{/t}" id="next-button">
+                    <a class="confirm-send-button" data-controls-modal="modal-confirm-send" href="#" title="{t}Next{/t}" id="next-button">
                         <img src="{$params.IMAGE_DIR}arrow_next.png" alt="{t}Next{/t}" /><br />
                         {t}Send newsletter{/t}
-                    </button>
+                    </a>
                 </li>
                  <li>
                     <a href="{url name=admin_newsletter_preview id=$id}" class="admin_add" title="{t}Previous{/t}" id="prev-button">
@@ -191,6 +191,7 @@
 
         <input type="hidden" id="recipients_hidden" name="recipients" />
 	</div>
-
 </form>
+
+{include file="newsletter/modals/_confirm_send.tpl"}
 {/block}

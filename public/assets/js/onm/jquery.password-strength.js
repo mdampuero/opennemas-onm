@@ -63,7 +63,7 @@
         return this.each(function() {
             var obj = $(this);
 
-            $(obj).unbind().keyup(function()
+            $(obj).unbind().on('keyup blur', function()
             {
                 var results = $.fn.teststrength($(this).val(),$(opts.userid).val(),opts);
 
