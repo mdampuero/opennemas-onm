@@ -189,4 +189,12 @@
   #modal-element-customize-content  {
     position:fixed;
   }
+  #modal-element-customize-content .form-horizontal .control-group {
+    margin-bottom: 10px;
+  }
+  #modal-element-customize-content div.modal-header {
+    font-size: 11px;
+    max-height: 45px;
+    overflow: hidden;
+ }
 </style>
