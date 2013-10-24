@@ -108,7 +108,8 @@
                 {else}
                     {acl isAllowed="ARTICLE_CREATE"}
                     <li>
-                        <button type="submit" name="continue" value="1">
+                        <button type="submit" name="continue" {acl isAllowed="ARTICLE_UPDATE"}value="1"{/acl}
+                                                              {acl isNotAllowed="ARTICLE_UPDATE"}value="0"{/acl}>
                             <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                         </button>
                     </li>
