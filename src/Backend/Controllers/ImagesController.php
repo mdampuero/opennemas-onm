@@ -540,6 +540,13 @@ class ImagesController extends Controller
                     foreach ($upload['tmp_name'] as $index => $value) {
                         $tempName = pathinfo($upload['name'][$index], PATHINFO_FILENAME);
 
+                        // Check if the image has an IPTC title an use it as original title
+                        $size = getimagesize($upload['tmp_name'][$index], $info);
+                        if (array_key_exists('APP13', $info)) {
+                            $iptc = iptcparse($info["APP13"]);
+                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                        }
+
                         $data = array(
                             'local_file'        => $upload['tmp_name'][$index],
                             'original_filename' => $upload['name'][$index],
@@ -548,7 +555,7 @@ class ImagesController extends Controller
                             'fk_category'       => $category,
                             'category'          => $category,
                             'category_name'     => $category_name,
-                            'metadata'          => '',
+                            'metadata'          => \Onm\StringUtils::get_tags($tempName),
                         );
 
                         try {
@@ -585,6 +592,14 @@ class ImagesController extends Controller
                     }
                 } elseif ($upload || isset($_SERVER['HTTP_X_FILE_NAME'])) {
                     $tempName = pathinfo($upload['name'], PATHINFO_FILENAME);
+
+                    // Check if the image has an IPTC title an use it as original title
+                    $size = getimagesize($upload['tmp_name'], $info);
+                    if (array_key_exists('APP13', $info)) {
+                        $iptc = iptcparse($info["APP13"]);
+                        $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                    }
+
                     $data = array(
                         'local_file'        => $upload['tmp_name'],
                         'original_filename' => $upload['name'],
@@ -593,7 +608,7 @@ class ImagesController extends Controller
                         'fk_category'       => $category,
                         'category'          => $category,
                         'category_name'     => $category_name,
-                        'metadata'          => '',
+                        'metadata'          => \Onm\StringUtils::get_tags($tempName),
                     );
 
                     try {
