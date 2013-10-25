@@ -151,7 +151,7 @@ class MonographsController extends Controller
             if ($special->available != 1
                 || $special->in_litter != 0
             ) {
-                return new RedirectResponse($this->generateUrl('frontend_monograph_frontpage'));
+                return new \RedirectResponse($this->generateUrl('frontend_monograph_frontpage'));
             }
 
             $contents = $special->getContents($specialID);
