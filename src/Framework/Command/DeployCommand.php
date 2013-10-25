@@ -51,6 +51,8 @@ EOF
 
         $this->updateCoreCode();
 
+        $this->compileTranslations();
+
         $this->executeMaintenance('disable');
 
         // Update themes
@@ -96,6 +98,21 @@ EOF
         $this->output->writeln(" - Updating vendor libraries");
         $composerOutput = exec($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o');
         $this->output->writeln($composerOutput."\n");
+    }
+
+    /**
+     * Compiles the onm core translations
+     **/
+    public function compileTranslations()
+    {
+        $command = $this->getApplication()->find('translation:core');
+        $arguments = array(
+            'command'      => 'translation:core',
+            '--only-compile' => true,
+        );
+
+        $input = new ArrayInput($arguments);
+        $returnCode = $command->run($input, $this->output);
     }
 
     /**
