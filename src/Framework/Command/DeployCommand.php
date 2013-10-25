@@ -43,13 +43,19 @@ EOF
     {
         $basePath = APPLICATION_PATH;
         $phpBinPath = exec('which php');
+        $this->input = $input;
+        $this->output = $output;
 
         chdir($basePath);
+
+        $this->executeMaintenance('enable');
 
         // Update onm-core
         $output->writeln(" - Updating onm instance");
         $gitOutput = exec('git pull');
         $output->writeln($gitOutput."\n");
+
+        $this->executeMaintenance('disable');
 
         // Update themes
         $output->write(" - Updating public themes");
@@ -59,7 +65,7 @@ EOF
                 continue;
             }
             chdir($theme);
-            $output->write("\n     * Updating ".basename($theme)." theme ");
+            $output->write("\n     * ".basename($theme));
             $gitOutput = exec('git pull');
             chdir($basePath);
             // $output->writeln("");
@@ -82,5 +88,22 @@ EOF
             $input = new ArrayInput($arguments);
             $returnCode = $command->run($input, $output);
         }
+    }
+
+    /**
+     * Enables or disables the maintenance mode
+     *
+     * @param string $action enable or disable
+     **/
+    public function executeMaintenance($action)
+    {
+        $command = $this->getApplication()->find('app:maintenance');
+        $arguments = array(
+            'command' => 'app:maintenance',
+            'action'  => $action,
+        );
+
+        $this->input = new ArrayInput($arguments);
+        $returnCode = $command->run($this->input, $this->output);
     }
 }

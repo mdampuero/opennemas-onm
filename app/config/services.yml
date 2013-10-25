@@ -39,6 +39,9 @@ services:
     listener.app_bootup:
         class: Framework\EventListeners\ApplicationBootupListener
 
+    listener.maintenance_mode:
+        class: Framework\EventListeners\MaintenanceModeListener
+
 
     dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
@@ -52,6 +55,7 @@ services:
             - ['addSubscriber', [ @listener.instance_exceptions]]
             - ['addSubscriber', [ @listener.general_error_handler]]
             - ['addSubscriber', [ @listener.app_bootup]]
+            - ['addSubscriber', [ @listener.maintenance_mode]]
 
     framework:
         class: Onm\Framework\Framework

@@ -3042,12 +3042,12 @@ div#modal-element-customize-content div.select-disposition{
 }
 
 .instance-error .wrapper {
-  width: 300px;
+  width: 400px;
   height: 230px;
   position: absolute;
   top: 50%;
   left: 50%;
-  margin: -165px -150px;
+  margin: -165px -200px;
 }
 .instance-error .code {
   font-size:9em;
@@ -3059,6 +3059,12 @@ div#modal-element-customize-content div.select-disposition{
   line-height:1.2em;
   margin:10px auto;
   text-align:center;
+}
+.instance-error .explanation {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2em;
+  line-height: 1.5em;
 }
 .instance-error .buttons {
   text-align:center;
