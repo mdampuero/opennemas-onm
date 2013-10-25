@@ -541,7 +541,7 @@ class ImagesController extends Controller
                         $tempName = pathinfo($upload['name'][$index], PATHINFO_FILENAME);
 
                         // Check if the image has an IPTC title an use it as original title
-                        $size = getimagesize($upload['tmp_name'][$i], $info);
+                        $size = getimagesize($upload['tmp_name'][$index], $info);
                         if (array_key_exists('APP13', $info)) {
                             $iptc = iptcparse($info["APP13"]);
                             $tempName = str_replace("\000", "", $iptc["2#120"][0]);
