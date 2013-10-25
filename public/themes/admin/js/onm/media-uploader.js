@@ -43,6 +43,12 @@
             this.updateHTML();
         },
 
+        replace: function(id, new_content) {
+            if (this.selections.hasOwnProperty(id)) {
+                this.selections[id] = new_content;
+            };
+        },
+
         remove: function(content) {
             delete this.selections[content.id];
             this.updateHTML();
@@ -412,6 +418,7 @@
                     }
                 }).done(function(data) {
                     contents[content_id] = data;
+                    _this.parent.selection_handler.replace(content_id, data);
                     _this.$element.find('.messages > *').hide().end().find('.messages .text-success').show();
                 }).fail(function() {
                     _this.$element.find('.messages > *').hide().end().find('.messages .text-error').show();
