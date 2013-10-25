@@ -87,7 +87,25 @@ class Categories
         $menu = new Menu();
         $menuCategories = $menu->getMenu('frontpage');
 
-        return $menuCategories->items;
+        $categories = array();
+        foreach ($menuCategories->items as $key => $value) {
+            if ($value->type == 'category' || $value->type == 'blog-category') {
+                if (!empty($value->submenu)) {
+                    foreach ($value->submenu as $subValue) {
+                        if ($subValue->type == 'category' || $subValue->type == 'blog-category') {
+                            $categories[$subValue->pk_item] = $subValue;
+                        }
+                    }
+                    unset($value->submenu);
+                    $categories[$key] = $value;
+                } else {
+                    $categories[$key] = $value;
+                }
+
+            }
+        }
+
+        return $categories;
     }
 
     private function validateInt($number)

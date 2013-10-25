@@ -222,6 +222,10 @@ class NewsletterController extends Controller
         $id = (int) $request->query->getDigits('id');
 
         $newsletter = new \Newsletter($id);
+        $sessId = 'data-recipients-'.$newsletter->id;
+        if (array_key_exists($sessId, $_SESSION)) {
+            $_SESSION['data-recipients-'.$newsletter->id] = array();
+        }
 
         return $this->render(
             'newsletter/steps/2-preview.tpl',
@@ -293,7 +297,7 @@ class NewsletterController extends Controller
         $recipients = array();
 
         $sessId = 'data-recipients-'.$newsletter->id;
-        if (array_key_exists($id, $_SESSION) && is_string($_SESSION[$sessID])) {
+        if (array_key_exists($id, $_SESSION) && is_string($_SESSION[$sessId])) {
             $recipients = json_decode($_SESSION['data-recipients-'.$newsletter->id]);
         }
 
@@ -323,85 +327,93 @@ class NewsletterController extends Controller
         $recipients = $request->request->get('recipients');
         $recipients = json_decode($recipients);
 
+        $sentResult = array();
         $newsletter = new \Newsletter($id);
-
-        $_SESSION['data-recipients-'.$newsletter->id] = array();
-
-        $nManager = $this->get('newsletter_manager');
-
-        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
-
-        $newsletterSender = s::get('newsletter_sender');
-        $configurations   = s::get('newsletter_maillist');
-
-        if (empty($newsletterSender)) {
+        $sessId = 'data-recipients-'.$newsletter->id;
+        if (array_key_exists($sessId, $_SESSION) && !empty($_SESSION[$sessId])) {
             m::add(
-                _(
-                    'Your newsletter configuration is not complete. Please'.
-                    ' contact with Opennemas administrator. newsletter_sender fault'
-                ),
+                sprintf(_('Sorry, newsletter "%d" was been sent previously'), $newsletter->id),
                 m::ERROR
             );
-
             return $this->redirect($this->generateUrl('admin_newsletters'));
-        }
+        } else {
 
-        $params = array(
-            'subject'            => $newsletter->title,
-            'newsletter_sender'  => $newsletterSender,
-            'mail_from'          => $configurations['sender'],
-            'mail_from_name'     => s::get('site_name'),
-        );
+            $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
 
-        $sentResult = array();
-        $maxAllowed = s::get('max_mailing');
-        $remaining = $maxAllowed - $this->checkMailing();
+            $nManager = $this->get('newsletter_manager');
 
-        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
+            $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        //  Build the message
-        $message = \Swift_Message::newInstance();
-        $message
-            ->setSubject($subject)
-            ->setBody($htmlContent, 'text/html')
-            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-            ->setSender($params['newsletter_sender']);
+            $newsletterSender = s::get('newsletter_sender');
+            $configurations   = s::get('newsletter_maillist');
 
-        $sent = 0;
-        if (!empty($recipients)) {
-            foreach ($recipients as $mailbox) {
-                if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
-                    try {
-                        // Send the mail
-                        $message->setTo(array($mailbox->email => $mailbox->name));
-                        $properlySent = $nManager->mailer->send($message);
-                        $sentResult []= array($mailbox, (bool)$properlySent);
-                        $remaining--;
-                        $sent++;
-                    } catch (\Exception $e) {
-                        $sentResult []= array($mailbox, false);
+            if (empty($newsletterSender)) {
+                m::add(
+                    _(
+                        'Your newsletter configuration is not complete. Please'.
+                        ' contact with Opennemas administrator. newsletter_sender fault'
+                    ),
+                    m::ERROR
+                );
+
+                return $this->redirect($this->generateUrl('admin_newsletters'));
+            }
+
+            $params = array(
+                'subject'            => $newsletter->title,
+                'newsletter_sender'  => $newsletterSender,
+                'mail_from'          => $configurations['sender'],
+                'mail_from_name'     => s::get('site_name'),
+            );
+
+            $maxAllowed = s::get('max_mailing');
+            $remaining = $maxAllowed - $this->checkMailing();
+
+            $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
+
+            //  Build the message
+            $message = \Swift_Message::newInstance();
+            $message
+                ->setSubject($subject)
+                ->setBody($htmlContent, 'text/html')
+                ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+                ->setSender($params['newsletter_sender']);
+
+            $sent = 0;
+            if (!empty($recipients)) {
+                foreach ($recipients as $mailbox) {
+                    if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
+                        try {
+                            // Send the mail
+                            $message->setTo(array($mailbox->email => $mailbox->name));
+                            $properlySent = $nManager->mailer->send($message);
+                            $sentResult []= array($mailbox, (bool)$properlySent);
+                            $remaining--;
+                            $sent++;
+                        } catch (\Exception $e) {
+                            $sentResult []= array($mailbox, false);
+                        }
+                    } else {
+                         $sentResult []= array($mailbox, false);
                     }
-                } else {
-                     $sentResult []= array($mailbox, false);
                 }
             }
+
+            if (empty($newsletter->sent)) {
+                $newsletter->update(array('sent' => $sent));
+            } else {
+                //duplicated newsletter for count month mail send
+
+                $newsletter->create(
+                    array(
+                        'title'   => $newsletter->title,
+                        'data'    => $newsletter->data,
+                        'html'    => $newsletter->html,
+                        'sent'    => $sent,
+                    )
+                );
+            }
         }
-
-        if (empty($newsletter->sent)) {
-            $newsletter->update(array('sent' => $sent));
-        } else {
-            //duplicated newsletter for count month mail send
-
-            $newsletter->create(
-                array(
-                    'title'   => $newsletter->title,
-                    'data'    => $newsletter->data,
-                    'html'    => $newsletter->html,
-                    'sent'    => $sent,
-                )
-            );
-        }
-
         return $this->render(
             'newsletter/steps/4-send.tpl',
             array(

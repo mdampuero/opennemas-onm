@@ -45,11 +45,12 @@
                     if (params['position'] == 'body') {
                         CKEDITOR.instances.body.insertHtml(image_element);
                     } else {
-                        var container = $('#article_images').find('.'+params['position']);
+                        var container = $('#related_media').find('.'+params['position']);
+                        var image_element = mediapicker.buildHTMLElement(params, true);
 
                         var image_data_el = container.find('.image-data');
                         image_data_el.find('.related-element-id').val(params.content.pk_photo);
-                        image_data_el.find('.related-element-footer').val(params.description);
+                        image_data_el.find('.related-element-footer').val(params.content.description);
                         image_data_el.find('.image').html(image_element);
                         container.addClass('assigned');
                     };
