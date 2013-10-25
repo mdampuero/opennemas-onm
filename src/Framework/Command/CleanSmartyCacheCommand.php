@@ -67,7 +67,7 @@ class CleanSmartyCacheCommand extends Command
         $fullCompileFolderPath = realpath($themePath.'/smarty/compile');
         if ($fullCompileFolderPath) {
             $out = exec('rm -r '.$fullCompileFolderPath);
-            $output->writeln($out);
+            $output->write($out);
         }
 
         $output->writeln('[REMOVED]');
@@ -85,7 +85,7 @@ class CleanSmartyCacheCommand extends Command
         $fullCompileFolderPath = realpath($themePath.'/smarty/cache');
         if ($fullCompileFolderPath) {
             $out = exec('rm -r '.$fullCompileFolderPath);
-            $output->writeln($out);
+            $output->write($out);
         }
 
         $output->writeln('[REMOVED]');
