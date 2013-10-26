@@ -12,6 +12,25 @@
             "email": "developers@openhost.es"
         }
     ],
+    "include-path": [
+        "app",
+        "app/models",
+        "vendor",
+        "models",
+        "vendor/core",
+        "src/",
+        "src/WebService/Handlers"
+    ],
+    "autoload": {
+        "files": [
+            "vendor/autoload.php",
+            "vendor/functions.php",
+            "vendor/adodb5/adodb.inc.php",
+            "vendor/Pager/Pager.php",
+            "vendor/smarty/smarty-legacy/Smarty.class.php"
+        ]
+    },
+
     "require": {
         "php"                            : ">=5.3.2",
 

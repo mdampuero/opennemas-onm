@@ -21,30 +21,9 @@ define('APP_PATH', realpath(APPLICATION_PATH.DIRECTORY_SEPARATOR."app/").DIRECTO
 define('SITE_WS_API_PATH', realpath(SRC_PATH.DIRECTORY_SEPARATOR."WebService/Handlers").DIRECTORY_SEPARATOR);
 define('PP_CONFIG_PATH', APP_PATH.'/config/');
 
-// Ensure library/ is on include_path
-set_include_path(
-    implode(
-        PATH_SEPARATOR,
-        array(
-            SITE_CORE_PATH,
-            SITE_VENDOR_PATH,
-            SITE_MODELS_PATH,
-            APP_PATH,
-            SRC_PATH,
-            SITE_WS_API_PATH,
-            get_include_path(),
-        )
-    )
-);
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
 require SITE_VENDOR_PATH.'/autoload.php';
-require_once SITE_VENDOR_PATH.'functions.php';
-require_once SITE_VENDOR_PATH.'/adodb5/adodb.inc.php';
-require_once SITE_VENDOR_PATH.'/Pager/Pager.php';
-require_once SITE_VENDOR_PATH.'/smarty/smarty-legacy/Smarty.class.php';
-require_once SITE_VENDOR_PATH.'/Template.php';
-
 require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
 $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
@@ -67,7 +46,6 @@ if (!interface_exists('SessionHandlerInterface')) {
 }
 
 // Registering fallbacks and include path usage
-$loader->registerNamespaceFallback(SITE_MODELS_PATH);
 $loader->registerNamespaceFallback(SITE_WS_API_PATH);
 $loader->useIncludePath(true);
 
