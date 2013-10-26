@@ -10,10 +10,19 @@
 namespace Onm\Pager;
 
 /**
-* Wrapper for easing the usageof Pager class
+* Wrapper for easing the usage of Pager class
 */
 class Slider
 {
+    /**
+     * Creates an slider pager from a set of parameters
+     *
+     * @param int $totalElements number of elements
+     * @param int $itemsPerpage number of elements to show per page
+     * @param string $baseUrl the base url to use in the pager
+     *
+     * @return Pager the pager object
+     **/
     public static function create($totalElements, $itemsPerpage, $baseUrl)
     {
         $pageComponent = (strpos($baseUrl, '?')) ? '&page=%d' : '?page=%d';
