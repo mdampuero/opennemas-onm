@@ -1,10 +1,12 @@
 #!/usr/bin/env php
 <?php
+set_time_limit(0);
+
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Console\Application;
 
-require __DIR__.'/../app/autoload.php';
+require_once __DIR__.'/../app/autoload.php';
 
 // Load the available route collection
 $routes = new \Symfony\Component\Routing\RouteCollection();
@@ -22,7 +24,7 @@ $eventListenersPath = SRC_PATH.'Framework/EventListeners';
 if (is_dir($eventListenersPath)) {
     $listenerClasses = glob($eventListenersPath.'/*.php');
     foreach ($listenerClasses as $className) {
-        require $className;
+        require_once $className;
         $eventListenerClassName = 'Framework\\EventListeners\\'.basename($className, '.php');
 
         $listenerInstance = new $eventListenerClassName;
