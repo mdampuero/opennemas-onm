@@ -23,7 +23,6 @@
     ],
     "autoload": {
         "files": [
-            "vendor/autoload.php",
             "vendor/functions.php",
             "vendor/adodb5/adodb.inc.php",
             "vendor/Pager/Pager.php",
