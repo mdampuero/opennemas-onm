@@ -212,7 +212,7 @@ class FrontpagesController extends Controller
                 true
             );
 
-            $this->view->assign('column', unserialize(htmlspecialchars_decode($allContentsInHomepage)));
+            $this->view->assign('column', unserialize(utf8_decode(htmlspecialchars_decode($allContentsInHomepage))));
 
             // Fetch layout for categories
             $layout = $cm->getUrlContent($wsUrl.'/ws/categories/layout/'.$categoryName, true);
