@@ -181,9 +181,11 @@ class BlogController extends Controller
 
             // Get all contents for this frontpage
             list($pagination, $articles) = unserialize(
-                $cm->getUrlContent(
-                    $wsUrl.'/ws/frontpages/allcontentblog/'.$categoryName.'/'.$page,
-                    true
+                utf8_decode(
+                    $cm->getUrlContent(
+                        $wsUrl.'/ws/frontpages/allcontentblog/'.$categoryName.'/'.$page,
+                        true
+                    )
                 )
             );
 
