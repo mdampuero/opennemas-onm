@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Debug\Debug;
 use Onm\Settings as s;
 
 /**
@@ -36,19 +35,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
             return;
         }
 
-        mb_internal_encoding("UTF-8");
-
-        global $sc;
-
-        $env = $sc->getParameter('environment');
-        initEnvironment($env);
-
-        // Register the Debugger into the application, transforms fatal errors into
-        // exceptions
-        // if ($env !== 'production') {
-        //     Debug::enable(null, ($env !== 'production'));
-        // }
-
         require_once 'Application.php';
 
         $request = $event->getRequest();
@@ -58,6 +44,7 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
         $instance = $im->load($_SERVER['SERVER_NAME']);
 
+        global $sc;
         $sc->setParameter('instance', $instance);
         $sc->setParameter('cache_prefix', $instance->internal_name);
 

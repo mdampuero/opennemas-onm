@@ -18,6 +18,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Settings as s;
+use Symfony\Component\Debug\Debug;
 
 /**
  * ResponseListener fixes the Response headers based on the Request.
@@ -76,7 +77,6 @@ class ApplicationBootupListener implements EventSubscriberInterface
         /**
         * Session de usuario
         **/
-        $GLOBALS['USER_ID'] = null;
         $GLOBALS['conn'] = null;
         define('ADVERTISEMENT_ENABLE', true);
 
@@ -103,6 +103,19 @@ class ApplicationBootupListener implements EventSubscriberInterface
             mkdir($commonCachepath, 0755, true);
         }
         define('COMMON_CACHE_PATH', realpath($commonCachepath));
+
+        mb_internal_encoding("UTF-8");
+
+        global $sc;
+
+        $env = $sc->getParameter('environment');
+        initEnvironment($env);
+
+        // Register the Debugger into the application, transforms fatal errors into
+        // exceptions
+        // if ($env !== 'production') {
+        Debug::enable(null, ($env !== 'production'));
+        // }
     }
 
     public static function getSubscribedEvents()
