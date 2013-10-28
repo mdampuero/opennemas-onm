@@ -31,6 +31,7 @@
             <directory>models</directory>
             <directory>../vendor/Onm</directory>
             <directory suffix=".php">app</directory>
+            <directory>../src/*/Tests</directory>
             <exclude>
                 <file>app/autoload.php</file>
                 <directory>../src/*/*Bundle/Resources</directory>
