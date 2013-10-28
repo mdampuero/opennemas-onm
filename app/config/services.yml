@@ -42,6 +42,8 @@ services:
     listener.maintenance_mode:
         class: Framework\EventListeners\MaintenanceModeListener
 
+    listener.l10n_system:
+        class: Framework\EventListeners\L10nSystemListener
 
     dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
@@ -56,6 +58,7 @@ services:
             - ['addSubscriber', [ @listener.general_error_handler]]
             - ['addSubscriber', [ @listener.app_bootup]]
             - ['addSubscriber', [ @listener.maintenance_mode]]
+            - ['addSubscriber', [ @listener.l10n_system]]
 
     framework:
         class: Onm\Framework\Framework

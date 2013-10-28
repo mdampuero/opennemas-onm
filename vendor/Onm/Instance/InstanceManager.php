@@ -98,7 +98,6 @@ class InstanceManager
             return $instance;
         }
 
-
         if (!$instance) {
             $instancesMatched = $cache->fetch('instance_'.$serverName);
 
