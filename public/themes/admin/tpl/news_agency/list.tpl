@@ -40,7 +40,7 @@
 				</a>
 			</li>
             <li class="separator"></li>
-            {acl isAllowed="IMPORT_EFE_CONFIG"}
+            {acl isAllowed="IMPORT_NEWS_AGENCY_CONFIG"}
 			<li>
 				<a href="{url name=admin_news_agency_servers}" class="admin_add" title="{t}Reload list{/t}">
 				    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config Europapress module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
