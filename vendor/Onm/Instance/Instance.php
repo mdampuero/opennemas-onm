@@ -67,25 +67,7 @@ class Instance
      */
     public function initInternalConstants()
     {
-        if (!empty($_SERVER['HTTPS'])
-            && $_SERVER['HTTPS'] !== 'off'
-            || $_SERVER['SERVER_PORT'] == 443
-        ) {
-            $protocol = "https://";
-        } else {
-            $protocol = "http://";
-        }
-
-        define('SS', "/");
-
         define('CACHE_PREFIX', INSTANCE_UNIQUE_NAME);
-
-        define('SITE', $_SERVER['SERVER_NAME']);
-
-        define('BASE_URL', '/');
-        define('ADMIN_DIR', "admin");
-        define('SITE_URL', $protocol.SITE.BASE_URL);
-        define('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
 
         define('SITE_ADMIN_DIR', "admin");
         define('SITE_ADMIN_TMP_DIR', "tmp");
@@ -98,29 +80,10 @@ class Instance
         }
         define('CACHE_PATH', realpath($cachepath));
 
-        $commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
-        if (!file_exists($commonCachepath)) {
-            mkdir($commonCachepath, 0755, true);
-        }
-        define('COMMON_CACHE_PATH', realpath($commonCachepath));
-
-        // Backup paths
-        define('BACKUP_PATH', SITE_PATH.DS.'..'.DS."tmp/backups");
-
-        $maxUpload          = (int) (ini_get('upload_max_filesize'));
-        $maxPost            = (int) (ini_get('post_max_size'));
-        $memoryLimit        = (int) (ini_get('memory_limit'));
-        $maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
-        define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
-
         /**
          * Logging settings
          **/
-        define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
         define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.INSTANCE_UNIQUE_NAME.'-application.log');
-
-        // TODO: delete from application
-        define('SYS_NAME_GROUP_ADMIN', 'Administrador');
 
         /**
          * Media paths and urls configurations
@@ -129,8 +92,6 @@ class Instance
         define('INSTANCE_MEDIA', MEDIA_URL.INSTANCE_UNIQUE_NAME.DS);
         define('INSTANCE_MEDIA_PATH', SITE_PATH.DS."media".DS.INSTANCE_UNIQUE_NAME.DS);
 
-        define('STATIC_PAGE_PATH', 'estaticas');
-
         // External server or a local dir
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);
         // Full path to the instance media files
@@ -138,10 +99,6 @@ class Instance
 
         // local path to write media (/path/to/media)
         define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
-        define('IMG_DIR', "images");
-        define('FILE_DIR', "files");
-        define('ADS_DIR', "advertisements");
-        define('OPINION_DIR', "opinions");
 
         define('MEDIA_IMG_PATH_URL', MEDIA_URL.MEDIA_DIR.SS.IMG_DIR);
         define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL."media".SS.MEDIA_DIR.SS.IMG_DIR);
@@ -156,30 +113,5 @@ class Instance
         **/
         define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
         define('TEMPLATE_USER_URL', "/themes".SS.TEMPLATE_USER.SS);
-
-        define('TEMPLATE_ADMIN', "admin");
-        define('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.DS."themes".DS.TEMPLATE_ADMIN.SS);
-        define('TEMPLATE_ADMIN_PATH_WEB', SS."themes".SS.TEMPLATE_ADMIN.SS);
-        define('TEMPLATE_ADMIN_URL', SS."themes".SS.TEMPLATE_ADMIN.SS);
-        define('ADVERTISEMENT_ENABLE', true);
-
-        define('TEMPLATE_MANAGER', "manager");
-
-        /**
-         * Mail settings
-         **/
-        define('MAIL_HOST', "localhost");
-        // 217.76.146.62, ssl://smtp.gmail.com:465, ssl://smtp.gmail.com:587
-        define('MAIL_USER', "");
-        define('MAIL_PASS', "");
-        define('MAIL_FROM', 'noreply@opennemas.com');
-
-        /**
-        * Session de usuario
-        **/
-        $GLOBALS['USER_ID'] = null;
-        $GLOBALS['conn'] = null;
-
-        define('ITEMS_PAGE', "20"); // TODO: delete from application
     }
 }

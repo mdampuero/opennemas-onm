@@ -147,6 +147,30 @@ function getUserRealIP()
 }
 
 /**
+ * Cleans double slashes and trailing slash from an string url
+ *
+ * @param string $url the url to normalize
+ * @return string the normalized url
+ **/
+function normalizeUrl($url)
+{
+    $urlParts = explode('?', $url);
+    $urlPart = array_shift($urlParts);
+
+    if (strlen($urlPart) > 1) {
+        $normalizedUrl = rtrim($urlPart, '/');
+    } else {
+        $normalizedUrl = $url;
+    }
+
+    while (strpos($normalizedUrl, '//') != false) {
+        $normalizedUrl = str_replace('//', '/', $normalizedUrl);
+    }
+
+    return $normalizedUrl.'?'.implode('?', $urlParts);
+}
+
+/**
  * Register in the log one event in the content
  *
  * @return void
@@ -175,8 +199,8 @@ function logContentEvent($action = null, $content = null)
  **/
 function url($urlName, $params = array(), $absolute = false)
 {
-    global $generator;
-    return $generator->generate($urlName, $params, $absolute);
+    global $sc;
+    return $sc->get('url_generator')->generate($urlName, $params, $absolute);
 }
 
 /**

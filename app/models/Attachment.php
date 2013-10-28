@@ -10,7 +10,6 @@
  *
  * @package    Model
  */
-use Onm\Message as m;
 
 /**
  * Attachment

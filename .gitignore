@@ -22,6 +22,7 @@ vendor/swiftmailer
 vendor/psr
 vendor/paypal
 app/config/parameters.yml
+app/Resources/**/*.mo
 /bin/import-tools/joomla/importer.log
 /bin/import-tools/joomla/configuration.ini
 /bin/import-tools/joomla/configuration.ini-ideal

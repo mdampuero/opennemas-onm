@@ -581,7 +581,7 @@ class AdsController extends Controller
      * Builds the sql
      *
      * @param Request $request the request object
-     * @param string filter the sql filter to build the final filter
+     * @param string $filter the sql filter to build the final filter
      *
      * @return Response the response object
      **/

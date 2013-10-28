@@ -47,8 +47,8 @@ class FrontpagesController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $page     = $this->request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
-        $category = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
+        $page     = $request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
+        $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
         $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', array('category' => $category));
 
@@ -171,8 +171,8 @@ class FrontpagesController extends Controller
             $category = (int) $category;
 
             // Get the form-encoded places from request
-            $contentsPositions = $this->request->request->get('contents_positions', null);
-            $lastVersion       = $this->request->request->get('last_version', null);
+            $contentsPositions = $request->request->get('contents_positions', null);
+            $lastVersion       = $request->request->get('last_version', null);
 
             $categoryID = ($category == 'home') ? 0 : $category;
 
@@ -348,7 +348,7 @@ class FrontpagesController extends Controller
      **/
     public function previewAction(Request $request)
     {
-        $categoryName        = $this->request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
+        $categoryName        = $request->request->get('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->view          = new \Template(TEMPLATE_USER);
         $this->view->caching = false;
 
@@ -358,7 +358,7 @@ class FrontpagesController extends Controller
         \Frontend\Controllers\FrontpagesController::getAds($categoryName);
 
         $cm = new \ContentManager;
-        $contentsRAW = $this->request->request->get('contents');
+        $contentsRAW = $request->request->get('contents');
         $contents = json_decode($contentsRAW, true);
 
         $contentsInHomepage = $cm->getContentsForHomepageFromArray($contents);

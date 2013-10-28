@@ -44,24 +44,72 @@ class ErrorController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        global $error;
-        $error = $this->request->get('error');
-
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
         }
+        $error = $request->attributes->get('exception');
 
-        $name = join('', array_slice(explode('\\', get_class($error)), -1));
+        $exceptionName = $error->getClass();
 
-        $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
+        if (defined('INSTANCE_UNIQUE_NAME')) {
+            $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
+        } else {
+            $errorID = strtoupper('ONM_FRAMEWORK_'.uniqid());
+        }
 
         $preview = self::highlightSource($error->getFile(), $error->getLine(), 7);
+
         $this->view->assign('preview', $preview);
 
-        switch ($name) {
-            case 'ResourceNotFoundException':
+        switch ($exceptionName) {
+            case 'Onm\Instance\NotFoundException':
                 $trace = $error->getTrace();
-                $path = $trace[0]['args'][0];
+
+                $errorMessage = _('Instance not found');
+                if ($this->request->isXmlHttpRequest()) {
+                    $content = $errorMesage;
+                } else {
+                    $content = $this->renderView(
+                        'error/instance_not_found.tpl',
+                        array(
+                            'error_message' => $errorMessage,
+                            'error'         => $error,
+                            'error_id'      => $errorID,
+                            'environment'   => $environment,
+                            'backtrace'     => $error->getTrace(),
+                        )
+                    );
+                }
+                return new Response($content, 404);
+
+                break;
+
+            case 'Onm\Instance\NotActivatedException':
+                $trace = $error->getTrace();
+
+                $errorMessage = _('Instance not activated');
+                if ($this->request->isXmlHttpRequest()) {
+                    $content = $errorMesage;
+                } else {
+                    $content = $this->renderView(
+                        'error/instance_not_activated.tpl',
+                        array(
+                            'error_message' => $errorMessage,
+                            'error'         => $error,
+                            'error_id'      => $errorID,
+                            'environment'   => $environment,
+                            'backtrace'     => $error->getTrace(),
+                        )
+                    );
+                }
+                return new Response($content, 404);
+
+                break;
+
+            case 'ResourceNotFoundException':
+            case 'Symfony\Component\HttpKernel\Exception\NotFoundHttpException':
+                $trace = $error->getTrace();
+                $path = $request->getRequestUri();
 
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
                 error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
@@ -93,7 +141,7 @@ class ErrorController extends Controller
                         'error_message' => $errorMessage,
                         'error'         => $error,
                         'error_id'      => $errorID,
-                        'environment'   => $environment,
+                        // 'environment'   => $environment,
                         'backtrace'     => $error->getTrace(),
                     )
                 );

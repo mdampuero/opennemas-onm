@@ -174,6 +174,7 @@ class InstanceManager
         ) {
             $onmInstancesConnection = $connectionData;
         }
+
         $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
         $conn->Connect(
             $onmInstancesConnection['BD_HOST'],
