@@ -3042,30 +3042,24 @@ div#modal-element-customize-content div.select-disposition{
 }
 
 .instance-error .wrapper {
-  width: 400px;
-  height: 230px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -165px -200px;
+  width:100%;
 }
 .instance-error .code {
   font-size:9em;
-  line-height:1em;
   text-align:center;
+  float:left;
+  margin-right:20px;
 }
 .instance-error .desc {
-  font-size:2.2em;
-  line-height:1.2em;
-  margin:10px auto;
-  text-align:center;
+  font-size: 3em;
+  font-style: italic;
+  line-height: 1.2em;
+  margin-top: 9px;
+  margin-bottom: 16px;
+  text-rendering: optimizeLegibility;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 .instance-error .explanation {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.2em;
-  line-height: 1.5em;
-}
-.instance-error .buttons {
-  text-align:center;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 23px;
 }

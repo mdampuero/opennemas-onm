@@ -72,6 +72,7 @@ class ErrorController extends Controller
                     $content = $this->renderView(
                         'error/instance_not_found.tpl',
                         array(
+                            'server'      => $request->server,
                             'error_message' => $errorMessage,
                             'error'         => $error,
                             'error_id'      => $errorID,
@@ -94,6 +95,7 @@ class ErrorController extends Controller
                     $content = $this->renderView(
                         'error/instance_not_activated.tpl',
                         array(
+                            'server'        => $request->server,
                             'error_message' => $errorMessage,
                             'error'         => $error,
                             'error_id'      => $errorID,
