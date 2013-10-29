@@ -123,7 +123,6 @@ class ErrorController extends Controller
                         array(
                             'error_message' => $errorMessage,
                             'error'         => $error,
-                            'error_id'      => $errorID,
                             'environment'   => $environment,
                             'backtrace'     => $error->getTrace(),
                         )
@@ -131,6 +130,28 @@ class ErrorController extends Controller
                 }
 
                 return new Response($content, 404);
+                break;
+
+            case 'Onm\Security\Exception\AccessDeniedException':
+                $errorMessage = _('You are not allowed to perform this action.');
+
+                if ($this->request->isXmlHttpRequest()) {
+                    $content = $errorMesage;
+                } else {
+                    $content = $this->renderView(
+                        'error/404.tpl',
+                        array(
+                            'error_message' => $errorMessage,
+                            'error'         => $error,
+                            'environment'   => $environment,
+                            'backtrace'     => $error->getTrace(),
+                        )
+                    );
+                }
+
+                return new Response($content, 404);
+                break;
+
                 break;
             default:
                 // Change this handle to a more generic error template
@@ -143,7 +164,7 @@ class ErrorController extends Controller
                         'error_message' => $errorMessage,
                         'error'         => $error,
                         'error_id'      => $errorID,
-                        // 'environment'   => $environment,
+                        'environment'   => $environment,
                         'backtrace'     => $error->getTrace(),
                     )
                 );

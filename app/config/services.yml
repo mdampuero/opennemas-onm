@@ -131,3 +131,6 @@ services:
     automatic_contents:
         class: Onm\MachineSearcher
         arguments: [ @cache ]
+
+    acl_checker:
+        class: Onm\Security\Acl

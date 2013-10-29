@@ -27,6 +27,13 @@ use Symfony\Component\HttpFoundation\Request;
 class Controller extends ContainerAware
 {
     /**
+     * Initial method for controllers
+     **/
+    public function init()
+    {
+    }
+
+    /**
      * Fetches unsetted variables from the container
      *
      * @param string $name the property name
@@ -233,6 +240,8 @@ class Controller extends ContainerAware
      **/
     public function checkAclOrForward($aclName)
     {
-        return \Acl::checkOrForward($aclName);
+        $aclSystem = $this->get('acl_checker');
+
+        $aclSystem->isGranted($aclName);
     }
 }
