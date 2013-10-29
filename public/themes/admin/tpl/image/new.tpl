@@ -133,9 +133,17 @@ jQuery(document).ready(function($) {
         geolocate_photo()
     });
 
-    $('.address_search_input').on('blur', function(e,ui){
-        e.preventDefault();
-        geolocate_photo()
+    $('.address_search_input').on({
+        blur : function(e,ui){
+            e.preventDefault();
+            geolocate_photo()
+        },
+        keyup : function(e,ui){
+            if (e.which == 13) {
+                e.preventDefault();
+                geolocate_photo();
+            }
+        },
     });
 
     $('.geolocate_user_button').on('click', function(e,ui){
