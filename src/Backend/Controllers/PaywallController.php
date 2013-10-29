@@ -15,6 +15,7 @@
 namespace Backend\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -471,6 +472,20 @@ class PaywallController extends Controller
         $settings['developer_mode']   = (boolean) $settingsForm['developer_mode'];
         $settings['vat_percentage']   = (int) $settingsForm['vat_percentage'];
 
+        // Check API credentials
+        $isValid = $this->validateCredentials(
+            $settings['paypal_username'],
+            $settings['paypal_password'],
+            $settings['paypal_signature'],
+            $settings['developer_mode']
+        );
+
+        // Check IPN end point if recurring payment is enabled
+        $isIpnValid = true;
+        if ($settings['recurring']) {
+            $isIpnValid = (s::get('valid_ipn'))? s::get('valid_ipn') : false;
+        }
+
         // Check direct payment modes
         $number = count($settingsForm['payment_modes']['time']);
         if ($number > 0) {
@@ -484,9 +499,249 @@ class PaywallController extends Controller
             }
         }
 
-        $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
-
         s::set('paywall_settings', $settings);
+
+        if (!$isValid) {
+            $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect. Please try again."));
+        } elseif ($isIpnValid == 'waiting') {
+            $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute and try again."));
+        } elseif (!$isIpnValid) {
+            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it and try again."));
+        } else {
+            $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
+        }
+
+        return $this->redirect($this->generateUrl('admin_paywall_settings'));
+    }
+
+    /**
+     * Validates user Paypal API Credentials
+     *
+     * @param $userName the username from credentials
+     * @param $password the password from credentials
+     * @param $signature the signature from credentials
+     * @param $mode the paypal selected mode (sandbox, live)
+     *
+     * @return Response the response object
+     **/
+    public function validateCredentials($userName, $password, $signature, $mode)
+    {
+        // Try getting balance to check API credentials
+        $getBalanceRequest = new \GetBalanceRequestType();
+
+        // 0 – Return only the balance for the primary currency holding.
+        // 1 – Return the balance for each currency holding.
+        $getBalanceRequest->ReturnAllCurrencies = 1;
+
+        $getBalanceReq = new \GetBalanceReq();
+        $getBalanceReq->GetBalanceRequest = $getBalanceRequest;
+
+        $APICredentials = array(
+            "acct1.UserName"  => $userName,
+            "acct1.Password"  => $password,
+            "acct1.Signature" => $signature,
+            "mode"            => ($mode == false) ? 'sandbox' : 'live',
+        );
+
+        $paypalService = new \PayPalAPIInterfaceServiceService($APICredentials);
+        try {
+            /* wrap API method calls on the service object with a try catch */
+            $getBalanceResponse = $paypalService->GetBalance($getBalanceReq);
+        } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($getBalanceResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in getBalanceResponse API call. Original errors: ".implode(' ;', $errors)
+            );
+        }
+
+        // Connection is ok return true
+        if ($getBalanceResponse->Ack == 'Success') {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Set checkout to validate user IPN end point
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function setValidateIpnAction(Request $request)
+    {
+        $userName  = $request->request->filter('username', '', FILTER_SANITIZE_STRING);
+        $password  = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
+        $signature = $request->request->filter('signature', '', FILTER_SANITIZE_STRING);
+        $mode      = $request->request->filter('mode', '', FILTER_SANITIZE_STRING);
+
+        $itemDetails = new \PaymentDetailsItemType();
+        $itemDetails->Name         = 'Test IPN url';
+        $itemDetails->Amount       = new \BasicAmountType("EUR", '0.01');
+        $itemDetails->Quantity     = '1';
+        $itemDetails->ItemCategory = 'Digital';
+
+        $paymentDetails = new \PaymentDetailsType();
+        $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
+        $paymentDetails->OrderTotal = new \BasicAmountType("EUR", '0.01');
+        $paymentDetails->PaymentAction = "Sale";
+
+        $setECReqDetails = new \SetExpressCheckoutRequestDetailsType();
+        $setECReqDetails->PaymentDetails[0] = $paymentDetails;
+        $setECReqDetails->CancelURL = $this->generateUrl('admin_paywall_settings', array(), true);
+        $setECReqDetails->ReturnURL = $this->generateUrl(
+            'admin_paywall_do_validate_ipn',
+            array('username' => $userName, 'password' => $password, 'signature' => $signature, 'mode' => $mode),
+            true
+        );
+        $setECReqDetails->BrandName = s::get('site_name');
+
+        $setECReqType = new \SetExpressCheckoutRequestType();
+        $setECReqType->SetExpressCheckoutRequestDetails = $setECReqDetails;
+
+        $setECReq = new \SetExpressCheckoutReq();
+        $setECReq->SetExpressCheckoutRequest = $setECReqType;
+
+        $APICredentials = array(
+            "acct1.UserName"  => $userName,
+            "acct1.Password"  => $password,
+            "acct1.Signature" => $signature,
+            "mode"            => $mode
+        );
+
+        $paypalService = new \PayPalAPIInterfaceServiceService($APICredentials);
+        try {
+            /* wrap API method calls on the service object with a try catch */
+            $setECResponse = $paypalService->SetExpressCheckout($setECReq);
+        } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($setECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in setECResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
+            );
+        }
+
+        if ($setECResponse->Ack == 'Success') {
+            $service = new \Onm\Merchant\PaypalWrapper($APICredentials);
+            $token = $setECResponse->Token;
+            $paypalUrl = $service->getServiceUrl().'&token='.$token;
+
+            return new Response($paypalUrl);
+        } else {
+            return new Response('', '404');
+        }
+    }
+
+    /**
+     * Do the checkout to validate user IPN end point
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function doValidateIpnAction(Request $request)
+    {
+        $token     = $request->query->get('token');
+        $userName  = $request->query->get('username', '', FILTER_SANITIZE_STRING);
+        $password  = $request->query->get('password', '', FILTER_SANITIZE_STRING);
+        $signature = $request->query->get('signature', '', FILTER_SANITIZE_STRING);
+        $mode      = $request->query->get('mode', '', FILTER_SANITIZE_STRING);
+
+        $getExpressCheckoutDetailsRequest = new \GetExpressCheckoutDetailsRequestType($token);
+        $getExpressCheckoutReq = new \GetExpressCheckoutDetailsReq();
+        $getExpressCheckoutReq->GetExpressCheckoutDetailsRequest = $getExpressCheckoutDetailsRequest;
+
+        $APICredentials = array(
+            "acct1.UserName"  => $userName,
+            "acct1.Password"  => $password,
+            "acct1.Signature" => $signature,
+            "mode"            => $mode
+        );
+
+        $paypalService = new \PayPalAPIInterfaceServiceService($APICredentials);
+        try {
+            /* wrap API method calls on the service object with a try catch */
+            $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
+        } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($getECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in getECResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
+            );
+        }
+
+        $payerId = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
+
+        $orderTotal = new \BasicAmountType();
+        $orderTotal->currencyID = 'EUR';
+        $orderTotal->value = '0.01';
+
+        $paymentDetails= new \PaymentDetailsType();
+        $paymentDetails->OrderTotal = $orderTotal;
+
+        $DoECRequestDetails = new \DoExpressCheckoutPaymentRequestDetailsType();
+        $DoECRequestDetails->PayerID = $payerId;
+        $DoECRequestDetails->Token = $token;
+        $DoECRequestDetails->PaymentAction = "Sale";
+        $DoECRequestDetails->PaymentDetails[0] = $paymentDetails;
+
+        $DoECRequest = new \DoExpressCheckoutPaymentRequestType();
+        $DoECRequest->DoExpressCheckoutPaymentRequestDetails = $DoECRequestDetails;
+
+        $DoECReq = new \DoExpressCheckoutPaymentReq();
+        $DoECReq->DoExpressCheckoutPaymentRequest = $DoECRequest;
+
+        try {
+            $DoECResponse = $paypalService->DoExpressCheckoutPayment($DoECReq);
+        } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($DoECResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in DoECResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
+            );
+        }
+
+        // Payment done, let's update some registries in the app
+        if (isset($DoECResponse) && $DoECResponse->Ack == 'Success') {
+            s::set('valid_ipn', 'waiting');
+
+            $paymentInfo = $DoECResponse->DoExpressCheckoutPaymentResponseDetails->PaymentInfo[0];
+            // Do the refund of the transaction
+            $refundReqest = new \RefundTransactionRequestType();
+
+            $refundReqest->RefundType = 'Full';
+            $refundReqest->TransactionID = $paymentInfo->TransactionID;
+
+            $refundReq = new \RefundTransactionReq();
+            $refundReq->RefundTransactionRequest = $refundReqest;
+            try {
+                /* wrap API method calls on the service object with a try catch */
+                $refundResponse = $paypalService->RefundTransaction($refundReq);
+            } catch (\Exception $ex) {
+                $errors = array();
+
+                foreach ($refundResponse->Errors as $error) {
+                    $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+                }
+                $this->get('logger')->notice(
+                    "Paywall: Error in refundResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
+                );
+            }
+        }
 
         return $this->redirect($this->generateUrl('admin_paywall_settings'));
     }

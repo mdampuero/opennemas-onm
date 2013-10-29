@@ -245,7 +245,7 @@ class PaywallController extends Controller
         } catch (\Exception $ex) {
             $errors = array();
 
-            foreach ($setECResponse->Errors as $error) {
+            foreach ($getECResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
             $this->get('logger')->notice(
@@ -299,10 +299,10 @@ class PaywallController extends Controller
 
         try {
             $DoECResponse = $paypalService->DoExpressCheckoutPayment($DoECReq);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $errors = array();
 
-            foreach ($setECResponse->Errors as $error) {
+            foreach ($DoECResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
             $this->get('logger')->notice(
@@ -404,7 +404,7 @@ class PaywallController extends Controller
         } catch (\Exception $ex) {
             $errors = array();
 
-            foreach ($setECResponse->Errors as $error) {
+            foreach ($getECResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
             $this->get('logger')->notice(
@@ -428,8 +428,20 @@ class PaywallController extends Controller
         $planDescription = $_SESSION['paywall_transaction']['plan']['description'];
         $planPeriod      = strtolower($_SESSION['paywall_transaction']['plan']['time']);
 
+        // Check if is an activation
+        if (isset($_SESSION['paywall_transaction']['plan']['paywallTimeLimit'])) {
+            $timeLimit = $_SESSION['paywall_transaction']['plan']['paywallTimeLimit'];
+        } else {
+            $timeLimit = false;
+        }
+
         // Must be a valid date, in UTC/GMT format; for example, 2012-08-24T05:38:48Z
-        $billingStartDate = gmdate('c',strtotime("+1 {$planPeriod}"));
+        if ($timeLimit) {
+            // if is an reactivation
+            $billingStartDate = gmdate('c', strtotime($timeLimit));
+        } else {
+            $billingStartDate = gmdate('c',strtotime("+1 {$planPeriod}"));
+        }
 
         $RPProfileDetails = new \RecurringPaymentsProfileDetailsType();
         $RPProfileDetails->SubscriberName = $payerName.' '.$payerLastName;
@@ -438,7 +450,10 @@ class PaywallController extends Controller
 
         // Initial non-recurring payment amount due immediately upon profile creation. Use an initial amount for enrolment or set-up fees.
         $activationDetails = new \ActivationDetailsType();
-        $activationDetails->InitialAmount = new \BasicAmountType($currencyID, $price);
+        if (!$timeLimit) {
+            // if is not an activation charge initial amount
+            $activationDetails->InitialAmount = new \BasicAmountType($currencyID, $price);
+        }
 
         // CancelOnFailure – If this field is not set or you set it to CancelOnFailure, PayPal creates the recurring payment profile,
         // but places it into a pending status until the initial payment completes.
@@ -476,10 +491,10 @@ class PaywallController extends Controller
         try {
             /* wrap API method calls on the service object with a try catch */
             $createRPProfileResponse = $paypalService->CreateRecurringPaymentsProfile($createRPProfileReq);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $errors = array();
 
-            foreach ($setECResponse->Errors as $error) {
+            foreach ($createRPProfileResponse->Errors as $error) {
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
             $this->get('logger')->notice(
@@ -521,6 +536,241 @@ class PaywallController extends Controller
                 'message'  => $message,
             )
         );
+    }
+
+    /**
+     * Cancel the active recurring payment for paywall subscription
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function cancelRecurringPaymentAction(Request $request)
+    {
+        // Get recurring profile ID for this user
+        $user = new \User($_SESSION['userid']);
+        $recurringProfileId = $user->getMeta('recurring_payment_id');
+        if (!$recurringProfileId) {
+            return false;
+        }
+
+        // The ManageRecurringPaymentsProfileStatus API operation cancels, suspends, or reactivates a recurring payments profile.
+        // Cancel – Only profiles in Active or Suspended state can be canceled.
+        // Suspend – Only profiles in Active state can be suspended.
+        // Reactivate – Only profiles in a suspended state can be reactivated.
+        $manageRPPStatusReqestDetails = new \ManageRecurringPaymentsProfileStatusRequestDetailsType();
+        $manageRPPStatusReqestDetails->Action =  'Cancel';
+        $manageRPPStatusReqestDetails->ProfileID =  $recurringProfileId;
+
+        $manageRPPStatusReqest = new \ManageRecurringPaymentsProfileStatusRequestType();
+        $manageRPPStatusReqest->ManageRecurringPaymentsProfileStatusRequestDetails = $manageRPPStatusReqestDetails;
+
+        $manageRPPStatusReq = new \ManageRecurringPaymentsProfileStatusReq();
+        $manageRPPStatusReq->ManageRecurringPaymentsProfileStatusRequest = $manageRPPStatusReqest;
+
+        // Perform the paypal API call
+        $paypalWrapper = $this->getPaypalService();
+        $paypalService = $paypalWrapper->getMerchantService();
+
+        try {
+            /* wrap API method calls on the service object with a try catch */
+            $manageRPPStatusResponse = $paypalService->ManageRecurringPaymentsProfileStatus($manageRPPStatusReq);
+        } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($manageRPPStatusResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in ManageRecurringPaymentsProfileStatus API call. Original errors: ".implode(' ;', $errors)
+            );
+        }
+
+        // Check if Profile was canceled
+        if (isset($manageRPPStatusResponse) && $manageRPPStatusResponse->Ack == 'Success') {
+            $user->setMeta(array('canceled_recurring_payment_id' => $recurringProfileId));
+            $error = false;
+        } else {
+            $error = true;
+        }
+
+        return $this->render(
+            'paywall/profile_canceled.tpl',
+            array(
+                'error'  => $error,
+            )
+        );
+    }
+
+    /**
+     * Activate the canceled recurring payment for paywall subscription
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function activateRecurringPaymentAction(Request $request)
+    {
+        // Get recurring profile ID for this user
+        $user = new \User($_SESSION['userid']);
+        $recurringProfileId = $user->getMeta('recurring_payment_id');
+        if (!$recurringProfileId) {
+            return false;
+        }
+
+        // Obtain information about a recurring payments profile.
+        $getRPPDetailsReqest = new \GetRecurringPaymentsProfileDetailsRequestType();
+        $getRPPDetailsReqest->ProfileID = $recurringProfileId;
+
+        $getRPPDetailsReq = new \GetRecurringPaymentsProfileDetailsReq();
+        $getRPPDetailsReq->GetRecurringPaymentsProfileDetailsRequest = $getRPPDetailsReqest;
+
+        // Perform the paypal API call
+        $paypalWrapper = $this->getPaypalService();
+        $paypalService = $paypalWrapper->getMerchantService();
+
+        try {
+            /* wrap API method calls on the service object with a try catch */
+            $getRPPDetailsResponse = $paypalService->GetRecurringPaymentsProfileDetails($getRPPDetailsReq);
+        } catch (\Exception $ex) {
+            $errors = array();
+
+            foreach ($getRPPDetailsResponse->Errors as $error) {
+                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+            }
+            $this->get('logger')->notice(
+                "Paywall: Error in GetRecurringPaymentsProfileDetails API call. Original errors: ".implode(' ;', $errors)
+            );
+        }
+
+        // if(isset($getRPPDetailsResponse)) {
+        //     echo "<table>";
+        //     echo "<tr><td>Ack :</td><td><div id='Ack'>$getRPPDetailsResponse->Ack</div> </td></tr>";
+        //     echo "<tr><td>ProfileID :</td><td><div id='ProfileID'>". $getRPPDetailsResponse->GetRecurringPaymentsProfileDetailsResponseDetails->ProfileID ."</div> </td></tr>";
+        //     echo "</table>";
+
+        //     echo "<pre>";
+        //     print_r($getRPPDetailsResponse);
+        //     echo "</pre>";
+        // }
+
+        if (isset($getRPPDetailsResponse) && $getRPPDetailsResponse->Ack == 'Success') {
+            // Fetch paywall settings
+            $paywallSettings = s::get('paywall_settings');
+
+            // Set some values from response
+            $price = $getRPPDetailsResponse->GetRecurringPaymentsProfileDetailsResponseDetails->CurrentRecurringPaymentsPeriod->Amount->value;
+            $period = $getRPPDetailsResponse->GetRecurringPaymentsProfileDetailsResponseDetails->CurrentRecurringPaymentsPeriod->BillingPeriod;
+            $description = $getRPPDetailsResponse->GetRecurringPaymentsProfileDetailsResponseDetails->Description;
+
+            // Get user next day of payment
+            $paywallTimeLimit = $user->getMeta('paywall_time_limit');
+
+            // Set selectedPlan user when creating the recurring profile
+            $selectedPlan = array(
+                'price' => $price,
+                'description' => $description,
+                'time' => $period,
+                'paywallTimeLimit' => $paywallTimeLimit,
+            );
+
+            // URL to which the buyer's browser is returned after choosing to pay with PayPal
+            $returnUrl = $this->generateUrl(
+                'frontend_paywall_success_recurring_payment',
+                array('user' => $_SESSION['userid'], ),
+                true
+            );
+            $cancelUrl = $this->generateUrl('frontend_paywall_cancel_payment', array(), true);
+
+            // Total costs of this operation
+            $orderTotalAmount = (int) $price;
+            $orderTotal = new \BasicAmountType($paywallSettings['money_unit'], $orderTotalAmount);
+
+            $taxesTotal = 0; //(int) $selectedPlan['price'] *($paywallSettings['vat_percentage']/100);
+            $taxTotal = new \BasicAmountType($paywallSettings['money_unit'], $taxesTotal);
+
+            // Information about the products to buy
+            $itemDetails = new \PaymentDetailsItemType();
+            $itemDetails->Name         = $description;
+            $itemDetails->Amount       = $orderTotal;
+            $itemDetails->Quantity     = '1';
+            $itemDetails->ItemCategory = 'Digital';
+
+            // Complete informatin about the buy
+            $paymentDetails = new \PaymentDetailsType();
+            $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
+            $paymentDetails->PaymentAction         = 'Sale';
+            $paymentDetails->OrderTotal            = new \BasicAmountType(
+                $paywallSettings['money_unit'],
+                $orderTotalAmount + $taxesTotal
+            );
+            $paymentDetails->ItemTotal             = $orderTotal;
+            $paymentDetails->TaxTotal              = $taxTotal;
+
+            // Information about the purchase
+            $setECDetails = new \SetExpressCheckoutRequestDetailsType();
+            $setECDetails->PaymentDetails[0] = $paymentDetails;
+            $setECDetails->CancelURL         = $cancelUrl;
+            $setECDetails->ReturnURL         = $returnUrl;
+            $setECDetails->ReqConfirmShipping = 0; // no shipping
+            $setECDetails->NoShipping         = 1; // no shipping
+            $setECDetails->BrandName          = s::get('site_name');
+
+            // Billing agreement details
+            $billingAgreementDetails = new \BillingAgreementDetailsType('RecurringPayments');
+            $billingAgreementDetails->BillingAgreementDescription = $description;
+            $setECDetails->BillingAgreementDetails = array($billingAgreementDetails);
+
+            $setECReqType = new \SetExpressCheckoutRequestType();
+            $setECReqType->SetExpressCheckoutRequestDetails = $setECDetails;
+
+            $setECReq = new \SetExpressCheckoutReq();
+            $setECReq->SetExpressCheckoutRequest = $setECReqType;
+
+            // Perform the paypal API call
+            $paypalWrapper = $this->getPaypalService();
+            $paypalService = $paypalWrapper->getMerchantService();
+
+            $setECResponse = $paypalService->SetExpressCheckout($setECReq);
+
+            if ($setECResponse->Ack == 'Success') {
+                $token = $setECResponse->Token;
+
+                $_SESSION['paywall_transaction']   = array(
+                    'plan'  => $selectedPlan,
+                    'token' => $token,
+                );
+
+                $paypalUrl = $paypalWrapper->getServiceUrl().'&token='.$token;
+                return $this->redirect($paypalUrl);
+
+            } else {
+                $errors = array();
+
+                foreach ($setECResponse->Errors as $error) {
+                    $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
+                }
+                $this->get('logger')->notice(
+                    "Paywall: Error in SetEC API call. Original errors: ".implode(' ;', $errors)
+                );
+
+                return $this->render(
+                    'paywall/prifile_activated.tpl',
+                    array(
+                        'error' => true,
+                    )
+                );
+            }
+        } else {
+
+            return $this->render(
+                'paywall/prifile_activated.tpl',
+                array(
+                    'error' => true,
+                )
+            );
+        }
+
     }
 
     /**

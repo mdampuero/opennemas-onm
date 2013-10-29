@@ -298,7 +298,7 @@ class Theme
     /**
      * Registers a default disposition for image in the theme
      *
-     * @param array $menuDefinition the menu definition
+     * @param array $disposition the menu definition
      *
      * @return Theme the object
      **/
@@ -325,9 +325,9 @@ class Theme
 
 
     /**
-     * Registers a parent theme to inherance tpl files
+     * Registers a parent theme to inheritance tpl files
      *
-     * @param string $baseTheme name theme
+     * @param string $parentTheme name theme
      *
      * @return Theme the object
      **/
@@ -346,7 +346,6 @@ class Theme
     public function getParentTheme()
     {
         if (isset($this->parentTheme) && !empty($this->parentTheme)) {
-
             return $this->parentTheme;
         }
 

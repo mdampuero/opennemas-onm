@@ -22,6 +22,7 @@ class UserManager extends BaseManager
      * Initializes the Users Manager
      *
      * @param CacheInterface $cache the cache handler
+     * @param string $cachePrefix the prefix to use in the cache
      **/
     public function __construct(CacheInterface $cache, $cachePrefix)
     {
@@ -29,6 +30,9 @@ class UserManager extends BaseManager
         $this->cachePrefix = $cachePrefix;
     }
 
+    /**
+     * {@inherit_doc}
+     **/
     public function find($id)
     {
         $user = null;

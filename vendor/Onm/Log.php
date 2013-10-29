@@ -14,6 +14,7 @@ namespace Onm;
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
+use Psr\Log\LoggerInterface;
 
 /**
  * Implements an easy initialization of Monolog service

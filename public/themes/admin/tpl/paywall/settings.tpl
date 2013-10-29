@@ -100,24 +100,24 @@
 
                 <p>{t escape=off}In order to <strong>connect Opennemas with Paypal</strong> you have to fill your Paypal API credentials below:{/t}</p>
 
-                <div id="money" class="control-group">
+                <div class="control-group">
                     <label for="paypal_username" class="control-label">{t}User name{/t}</label>
                     <div class="controls">
-                        <input type="text" name="settings[paypal_username]" value="{$settings['paypal_username']}" class="input-xlarge" required>
+                        <input type="text" id="username" name="settings[paypal_username]" value="{$settings['paypal_username']}" class="input-xlarge" required>
                     </div>
                 </div>
 
-                <div id="money" class="control-group">
+                <div class="control-group">
                     <label for="paypal_password" class="control-label">{t}Password{/t}</label>
                     <div class="controls">
-                        <input type="text" name="settings[paypal_password]" value="{$settings['paypal_password']}" class="input-xlarge" required>
+                        <input type="text" id="password" name="settings[paypal_password]" value="{$settings['paypal_password']}" class="input-xlarge" required>
                     </div>
                 </div>
 
-                <div id="money" class="control-group">
+                <div class="control-group">
                     <label for="paypal_signature" class="control-label">{t}Signature{/t}</label>
                     <div class="controls">
-                        <input type="text" name="settings[paypal_signature]" value="{$settings['paypal_signature']}" class="input-xlarge" required>
+                        <input type="text" id="signature" name="settings[paypal_signature]" value="{$settings['paypal_signature']}" class="input-xlarge" required>
                     </div>
                 </div>
 
@@ -130,14 +130,14 @@
             <fieldset>
                 <h4 class="settings-header"><div class="step-number">2</div> {t}Use the testing environment Sandbox{/t}</h4>
 
-                <div id="money" class="control-group">
+                <div class="control-group">
                     <div class="controls">
                         <label for="developer_mode_yes">
-                            <input type="radio" name="settings[developer_mode]" id="developer_mode_yes" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}>
+                            <input type="radio" name="settings[developer_mode]" id="developer_mode_no" value="1" {if $settings['developer_mode'] == true}checked="checked"{/if}>
                             {t}Real mode (recommended){/t}
                         </label>
                         <label for="developer_mode_no">
-                            <input type="radio" name="settings[developer_mode]" id="developer_mode_no" value="0" {if $settings['developer_mode'] == false}checked="checked"{/if}>
+                            <input type="radio" name="settings[developer_mode]" id="developer_mode_yes" value="0" {if $settings['developer_mode'] == false}checked="checked"{/if}>
                             {t}Testing mode{/t}
                         </label>
                     </div>
@@ -158,7 +158,7 @@
                     </div>
                 </div>
 
-                <div id="money" class="control-group">
+                <div class="control-group">
                     <label for="vat_percentage" class="control-label">{t}VAT %{/t}</label>
                     <div class="controls">
                         <input type="number" name="settings[vat_percentage]" value="{$settings['vat_percentage']}" step="any" min="0" required>
@@ -219,20 +219,26 @@
                         </label>
                     </div>
                 </div>
-
+                {capture name=ipn}{setting name=valid_ipn}{/capture}
                 <div class="control-group well recurring-paypal-help {if (!isset($settings['recurring']) || $settings['recurring'] eq 0)}hide{/if}">
                     <p>{t}You have to activate some options in the Paypal configuration to make recurring payments work. Please follow next steps:{/t}</p>
                     <ol>
-                        <li>Go to your merchant Paypal <a class="btn btn-mini" href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_profile-ipn-notify" target="_blank">IPN web configuration page <i class="icon icon-external-link"></i></a> and log in with your merchant account.</li>
-                        <li>Click in the "Choose IPN configuration" button.</li>
-                        <li>Fill in the "Notification URL" field with this address <input type="text" class="input-xlarge" readonly="readonly" style="display:block" value="{url name="frontend_ws_paypal_ipn" absolute=true}"></li>
-                        <li>Enable the "Receive IPN messages" checkbox.</li>
-                        <li>Finally, click in the "Save" button to save this configuration.</li>
+                        <li>{t}Go to your merchant Paypal{/t} <a class="btn btn-mini" href="https://www.paypal.com/cgi-bin/customerprofileweb?cmd=_profile-ipn-notify" target="_blank">{t}IPN web configuration page {/t}<i class="icon icon-external-link"></i></a>{t} and log in with your merchant account{/t}.</li>
+                        <li>{t}Click in the "Choose IPN configuration" button{/t}.</li>
+                        <li>{t}Fill in the "Notification URL" field with this address{/t}<input type="text" class="input-xlarge" readonly="readonly" style="display:block" value="{url name='frontend_ws_paypal_ipn' absolute=true}"></li>
+                        <li>{t}Enable the "Receive IPN messages" checkbox{/t}.</li>
+                        <li>{t}Click on the validate button to check ipn is working fine and enable recurring payment{/t}.
+                            {if $smarty.capture.ipn == 'valid'}
+                            <a id="validate-ipn" class="btn btn-mini btn-success">{t}Valid{/t}</a>
+                            {elseif $smarty.capture.ipn == 'waiting'}
+                            <a id="validate-ipn" class="btn btn-mini btn-warning">{t}Waiting{/t}</a>
+                            {else}
+                            <a id="validate-ipn" class="btn btn-mini btn-danger">{t}Validate{/t}</a>
+                            {/if}
+                        </li>
+                        <li>{t}Finally, click in the "Save" button to save this configuration{/t}.</li>
                     </ol>
                 </div>
-
-
-
             </fieldset>
 
         </div>
@@ -249,6 +255,32 @@
             var title = 'PayPal identification informations';
             window.open (url, title, config='height=500, width=360, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');
             return false;
+        });
+
+        $('#validate-ipn').on('click', function(e, ui) {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var signature = $("#signature").val();
+
+            if ($('#developer_mode_no').is(':checked')) {
+                var mode = 'live';
+            } else {
+                var mode = 'sandbox';
+            }
+
+            $.ajax({
+                url: '{url name=admin_paywall_set_validate_ipn}',
+                type: "POST",
+                data: {
+                    username : username,
+                    password : password,
+                    signature : signature,
+                    mode : mode
+                }
+            }).done(function(data) {
+                window.location.href = data;
+            }).fail(function () {
+            });
         });
 
         $('#recurring_checkbox').on('change', function(e, ui) {

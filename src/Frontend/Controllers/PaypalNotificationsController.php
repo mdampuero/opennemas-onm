@@ -56,7 +56,8 @@ class PaypalNotificationsController extends Controller
             "acct1.Signature" => $databaseSettings['paypal_signature'],
         );
 
-        // First param takes ipn data to be validated. If null, raw POST data is read from input stream
+        // First param takes ipn data to be validated.
+        // If null, raw POST data is read from input stream
         $ipnMessage = new \PPIPNMessage(null, $config);
 
         if ($ipnMessage->validate()) {
@@ -65,9 +66,12 @@ class PaypalNotificationsController extends Controller
 
             dispatchEventWithParams('paywall.recurring', array('ipnData' => $ipnData));
 
-            error_log("Success: Got valid IPN data");
         } else {
-            error_log("Error: Got invalid IPN data");
+            // Write in log
+            $logger = getService('logger');
+            $logger->error('Unable to validate IPN data');
         }
+
+        return true;
     }
 }
