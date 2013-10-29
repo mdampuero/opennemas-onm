@@ -142,13 +142,13 @@ label {
 			<ul class="old-button">
                 <li>
                     <button action="submit"  name="action" value="validate">
-                        <img src="{$params.IMAGE_DIR}save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
+                        <img src="{$params.COMMON_ASSET_DIR}images/save.png" title="{t}Save and exit{/t}" alt="{t}Save and exit{/t}"><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
                     <a href="{url name=manager_acl_user type=$user->type}">
-                        <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                        <img src="{$params.COMMON_ASSET_DIR}images/previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
 			</ul>
@@ -177,7 +177,7 @@ label {
                         </div>
                         {else}
                         <div class="fileupload-preview thumbnail" style="width: 140px; height: 140px;" rel="tooltip" data-original-title="{t escape=off}If you want a custom avatar sign up in <a href='http://www.gravatar.com'>gravatar.com</a> with the same email address as you have here in OpenNemas{/t}">
-                            {gravatar email=$user->email image_dir=$params.IMAGE_DIR image=true size="150"}
+                            {gravatar email=$user->email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
                         </div>
                         {/if}
                         <div>

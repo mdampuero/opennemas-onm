@@ -8,7 +8,7 @@
         </div>
         <div class="old-buttons pull-right">
             <a href="{url name=manager_framework_commands}">
-                <img border="0" src="{$params.IMAGE_DIR}previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
+                <img border="0" src="{$params.COMMON_ASSET_DIR}images/previous.png" title="{t}Cancel{/t}" alt="{t}Cancel{/t}" /><br />
                 Go back
             </a>
         </div>
