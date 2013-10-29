@@ -240,8 +240,6 @@ class Controller extends ContainerAware
      **/
     public function checkAclOrForward($aclName)
     {
-        $aclSystem = $this->get('acl_checker');
-
-        $aclSystem->isGranted($aclName);
+        $this->get('acl_checker')->isGranted($aclName);
     }
 }
