@@ -78,34 +78,16 @@ class AclUserController extends Controller
             $groupsOptions[$cat->id] = $cat->name;
         }
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $usersCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_acl_user',
-                    array(
-                        'name'  => $filter['name'],
-                        'group' => $filter['group'],
-                        'type'  => $filter['type'],
-                    )
-                ).'&page=%d',
-            )
-        );
-
         return $this->render(
             'acl/user/list.tpl',
             array(
-                'users'         => $users,
-                'user_groups'   => $groups,
-                'groupsOptions' => $groupsOptions,
-                'pagination'    => $pagination,
+                'users'           => $users,
+                'user_groups'     => $groups,
+                'groupsOptions'   => $groupsOptions,
+
+                'total_num_users' => $usersCount,
+                'url_filters'     => $filter,
+                'items_per_page'  => $itemsPerPage,
             )
         );
     }
