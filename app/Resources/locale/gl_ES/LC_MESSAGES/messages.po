@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-29 15:17+0100\n"
-"PO-Revision-Date: 2013-10-29 15:55+0200\n"
+"POT-Creation-Date: 2013-10-29 18:25+0100\n"
+"PO-Revision-Date: 2013-10-29 18:26+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AclUserController.php:76
 #: /home/fran/Projects/OpenHost/opennemas/src/Manager/Controllers/AclUserController.php:60
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6902
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8426
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8429
 msgid "--All--"
 msgstr "--Todos--"
 
@@ -160,7 +160,7 @@ msgstr "Non foi posíbel eliminar o grupo de usuarios co identificador «%d»"
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Controllers/AdsController.php:87
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4046
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6179
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8135
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8144
 msgid "-- All --"
 msgstr "-- Todos --"
 
@@ -202,12 +202,12 @@ msgstr "Non publicado"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7601
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7613
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7616
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8345
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8348
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8357
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8351
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8360
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8927
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8363
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8930
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8933
 msgid "Published"
 msgstr "Publicado"
 
@@ -2188,7 +2188,7 @@ msgstr "Publicidade"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3455
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4400
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4739
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8789
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8792
 msgid "Widgets"
 msgstr "Widgets"
 
@@ -2215,8 +2215,8 @@ msgstr "Contidos"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3437
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6137
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6542
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8753
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8939
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8756
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8942
 msgid "Articles"
 msgstr "Artigos"
 
@@ -2228,7 +2228,7 @@ msgstr "Artigos"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3875
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4403
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6545
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8756
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8759
 msgid "Opinions"
 msgstr "Opinións"
 
@@ -2263,13 +2263,13 @@ msgstr "Comentarios (Disqus)"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6554
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7457
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7460
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8780
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8783
 msgid "Polls"
 msgstr "Enquéritos"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:96
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6056
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8786
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8789
 msgid "Static Pages"
 msgstr "Páxinas estáticas"
 
@@ -2278,7 +2278,7 @@ msgstr "Páxinas estáticas"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5621
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5729
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6557
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8783
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8786
 msgid "Specials"
 msgstr "Especiais"
 
@@ -2300,8 +2300,8 @@ msgstr "Multimedia"
 #: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:100
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7946
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7967
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8771
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8942
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8774
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8945
 msgid "Images"
 msgstr "Imaxes"
 
@@ -2312,7 +2312,7 @@ msgstr "Imaxes"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2546
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3452
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6560
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8777
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8780
 msgid "Files"
 msgstr "Ficheiros"
 
@@ -2326,7 +2326,7 @@ msgstr "Ficheiros"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7529
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7670
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7859
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8774
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8777
 msgid "Videos"
 msgstr "Vídeos"
 
@@ -2340,7 +2340,7 @@ msgstr "Vídeos"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3464
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4409
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6551
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8768
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8771
 msgid "Albums"
 msgstr "Álbumes"
 
@@ -2364,7 +2364,7 @@ msgstr "Busca global"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:180
 #: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:118
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8687
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8690
 msgid "Trash"
 msgstr "Lixo"
 
@@ -2377,7 +2377,7 @@ msgstr "Lixo"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:539
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:677
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7454
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9167
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9170
 msgid "Newsletter"
 msgstr "Boletín de novas"
 
@@ -2389,7 +2389,7 @@ msgstr "Boletín de novas"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7349
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7790
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7835
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8240
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8243
 msgid "Keywords"
 msgstr "Palabras chave"
 
@@ -2398,12 +2398,12 @@ msgstr "Palabras chave"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6392
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6992
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6995
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8372
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8438
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8465
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8507
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9518
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8375
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8441
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8468
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8510
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9521
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9524
 msgid "Paywall"
 msgstr "Paywall"
 
@@ -2516,18 +2516,18 @@ msgstr "Mailman de Andalucía"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7589
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7673
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7964
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8387
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8444
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8474
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8510
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9506
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8390
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8447
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8477
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8513
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9509
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9512
 msgid "Settings"
 msgstr "Preferencias"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:351
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2036
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8996
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8999
 msgid "General"
 msgstr "Xeral"
 
@@ -2540,7 +2540,7 @@ msgstr "Usuarios e grupos"
 #: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:31
 #: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:120
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6875
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9413
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9416
 msgid "Users"
 msgstr "Usuarios"
 
@@ -2551,8 +2551,8 @@ msgstr "Grupos de usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Backend/Resources/Menu.php:375
 #: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:92
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8825
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9320
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8828
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9323
 msgid "Cache manager"
 msgstr "Xestor de caché"
 
@@ -2566,7 +2566,7 @@ msgid "Instances"
 msgstr "Instancias"
 
 #: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:11
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8879
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8882
 msgid "Instance Manager"
 msgstr "Xestor de instancias"
 
@@ -2581,9 +2581,9 @@ msgstr "Ordes"
 #: /home/fran/Projects/OpenHost/opennemas/src/Manager/Resources/Menu.php:23
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:593
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3686
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8423
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8609
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8633
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8426
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8612
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8636
 msgid "Status"
 msgstr "Estado"
 
@@ -2687,7 +2687,7 @@ msgstr "A portadilla para a categoría %s foi limpada correctamente."
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3467
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4418
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7316
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8273
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8276
 msgid "Advertisement"
 msgstr "Publicidade"
 
@@ -2793,8 +2793,8 @@ msgstr "Busca interna"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3734
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5543
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7019
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8837
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9545
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8840
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9548
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -2909,20 +2909,20 @@ msgstr "Activar/desactivar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7631
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7634
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7643
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8210
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8636
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8648
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8924
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8948
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9362
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9467
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8219
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8639
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8651
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8927
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8951
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9365
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9470
 msgid "Edit"
 msgstr "Editar"
 
 #: /home/fran/Projects/OpenHost/opennemas/app/models/Privilege.php:231
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3068
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3728
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9536
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9539
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -3064,11 +3064,11 @@ msgstr "Publicar/despublicar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7664
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7943
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7949
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8213
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8693
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8951
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9419
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8222
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8696
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8954
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9422
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9425
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -3299,7 +3299,7 @@ msgstr "Xestor avanzado de portadas"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5825
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6362
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7358
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8330
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8333
 msgid "Category"
 msgstr "Categoría"
 
@@ -3365,7 +3365,7 @@ msgstr "Sincronización de instancias"
 
 #: /home/fran/Projects/OpenHost/opennemas/vendor/Onm/Module/ModuleManager.php:119
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6800
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9338
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9341
 msgid "User groups"
 msgstr "Grupos de usuarios"
 
@@ -3474,21 +3474,21 @@ msgstr "hai %d meses"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:71
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:128
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:176
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8792
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8795
 msgid "The journalism CMS"
 msgstr "O CMS para xornalismo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:131
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7016
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8501
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8534
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8594
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8621
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8654
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8669
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8795
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9542
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8504
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8537
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8597
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8624
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8657
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8672
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8798
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9545
 msgid "User name"
 msgstr "Nome do usuario"
 
@@ -3498,17 +3498,17 @@ msgstr "Nome do usuario"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2234
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2837
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7037
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8537
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8798
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8858
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9161
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9560
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8540
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8801
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8861
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9164
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9563
 msgid "Password"
 msgstr "Contrasinal"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:11
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:137
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8801
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8804
 msgid "Enter"
 msgstr "Entrar"
 
@@ -3523,8 +3523,8 @@ msgstr "Esqueceu o contrasinal?"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:215
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4937
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6635
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8804
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9299
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8807
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9302
 msgid "About"
 msgstr "Sobre"
 
@@ -3541,10 +3541,10 @@ msgstr "Sobre"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4943
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6638
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6641
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8807
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8810
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9302
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8813
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9305
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9308
 msgid "Help"
 msgstr "Axuda"
 
@@ -3560,10 +3560,10 @@ msgstr "Axuda"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4949
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6644
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6647
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8813
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8816
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9308
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8819
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9311
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9314
 msgid "Privacy Policy"
 msgstr "Política de privacidade"
 
@@ -3579,10 +3579,10 @@ msgstr "Política de privacidade"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4955
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6650
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6653
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8819
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8822
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9314
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8825
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9317
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9320
 msgid "Legal"
 msgstr "Información legal"
 
@@ -3713,9 +3713,9 @@ msgstr ""
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:101
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:209
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6920
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8414
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8600
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8624
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8417
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8603
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8627
 msgid "E-mail"
 msgstr "Correo electrónico"
 
@@ -3845,7 +3845,7 @@ msgstr "Destinatarios"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6317
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7805
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7844
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8159
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8168
 msgid "Preview"
 msgstr "Previsualizar"
 
@@ -3943,9 +3943,9 @@ msgid "New newsletter"
 msgstr "Novo boletín"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:416
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8384
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8441
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8471
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8387
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8444
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8474
 msgid "Config newsletter module"
 msgstr "Configuración do módulo de boletín de novas"
 
@@ -4006,17 +4006,17 @@ msgstr "Dende %1 enviaronse %2 emails"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7592
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7787
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7832
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8324
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8702
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8327
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8705
 msgid "Title"
 msgstr "Título"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:443
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6197
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8165
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8186
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8333
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8915
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8174
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8195
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8336
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8918
 msgid "Created"
 msgstr "Creado"
 
@@ -4061,12 +4061,12 @@ msgstr "Envio"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6929
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7166
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7610
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8168
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8327
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8717
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8921
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9353
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9455
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8177
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8330
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8720
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8924
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9356
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9458
 msgid "Actions"
 msgstr "Accións"
 
@@ -4122,12 +4122,12 @@ msgstr "Accións"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7742
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8027
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8048
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8738
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8750
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8969
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9032
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9335
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9407
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8741
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8753
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8972
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9035
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9338
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9410
 msgid "No"
 msgstr "Non"
 
@@ -4213,12 +4213,12 @@ msgstr "Configuración"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7973
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8063
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8066
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8513
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8516
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8978
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9377
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8519
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8981
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9380
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9488
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9383
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9491
 msgid "Save"
 msgstr "Gardar"
 
@@ -4286,12 +4286,12 @@ msgstr "Gardar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7979
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7985
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7988
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8390
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8393
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8477
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8396
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8480
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8519
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8483
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8522
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8525
 msgid "Go back to list"
 msgstr "Volver á lista"
 
@@ -4383,7 +4383,7 @@ msgstr "Suscricións"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5561
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7127
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7130
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8885
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8888
 msgid "New"
 msgstr "Novo"
 
@@ -4449,17 +4449,17 @@ msgstr "Subscribir"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8069
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8072
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8075
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8087
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8396
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8483
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8525
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8993
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9383
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8096
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8399
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8486
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8528
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8996
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9386
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9389
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9491
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9392
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9494
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9497
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9500
 msgid "Go back"
 msgstr "Atrás"
 
@@ -4472,7 +4472,7 @@ msgstr "Filtrar por nome"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2615
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5198
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5210
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8270
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8273
 msgid "All"
 msgstr "Todos"
 
@@ -4496,9 +4496,9 @@ msgstr "Filtrar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4748
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5612
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5999
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8411
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8582
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8903
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8414
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8585
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8906
 msgid "Name"
 msgstr "Nome"
 
@@ -4507,9 +4507,9 @@ msgstr "Nome"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2771
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2825
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6926
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8918
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9026
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9452
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8921
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9029
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9455
 msgid "Activated"
 msgstr "Activado"
 
@@ -4534,16 +4534,16 @@ msgstr "Desactivado polo administrador"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4214
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6932
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6938
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9458
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9464
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9461
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9467
 msgid "Edit user"
 msgstr "Editar usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:620
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6788
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6860
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9326
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9398
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9329
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9401
 msgid "Delete user"
 msgstr "Eliminar usuario"
 
@@ -4584,10 +4584,10 @@ msgstr ""
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7286
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7718
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8024
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8735
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8966
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9332
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9404
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8738
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8969
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9335
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9407
 msgid "Yes, delete"
 msgstr "Si, eliminar"
 
@@ -4723,12 +4723,12 @@ msgstr "Actualizar"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6749
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7934
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7937
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8981
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8984
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8987
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8990
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9620
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8993
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9623
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9626
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -4753,7 +4753,7 @@ msgstr "Apelido"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5360
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6770
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7271
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9029
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9032
 msgid "Yes"
 msgstr "Si"
 
@@ -4955,7 +4955,7 @@ msgstr "Eliminar categoría"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7283
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7715
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8021
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8963
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8966
 msgid "Are you sure that do you want delete \"<span>%title%</span>\"?"
 msgstr "Tes certeza de que queres eliminar «<span>%title%</span>»?"
 
@@ -5028,7 +5028,7 @@ msgstr "Subsección de"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1139
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1310
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2855
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8150
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8159
 msgid "Color"
 msgstr "Cor"
 
@@ -5145,7 +5145,7 @@ msgstr "Conteñen varias funcionalidades nun prezo reducido"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:1244
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6050
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9017
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9020
 msgid "Modules"
 msgstr "Modulos"
 
@@ -5440,7 +5440,7 @@ msgstr "Miniatura"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5678
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6191
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7595
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8705
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8708
 msgid "Section"
 msgstr "Sección"
 
@@ -5453,8 +5453,8 @@ msgstr "Sección"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5333
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5336
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5417
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8249
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8708
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8252
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8711
 msgid "Date"
 msgstr "Data"
 
@@ -5583,8 +5583,8 @@ msgstr "Edición de ePapel"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6956
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6959
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7325
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9482
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9485
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9488
 msgid "Save and exit"
 msgstr "Gardar e saír"
 
@@ -5659,8 +5659,8 @@ msgstr "Configuración do módulo de álbum"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7157
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7160
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7598
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8711
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8714
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8717
 msgid "Views"
 msgstr "Vistas"
 
@@ -5868,8 +5868,8 @@ msgstr "Editar propiedades da imaxe"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6527
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7796
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7841
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8237
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9605
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8240
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9608
 msgid "Description"
 msgstr "Descrición"
 
@@ -5995,7 +5995,7 @@ msgid "Internal"
 msgstr "Interno"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2045
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9014
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9017
 msgid "External Services"
 msgstr "Servizos externos"
 
@@ -6106,7 +6106,7 @@ msgstr "Idioma por omisión"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2129
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7061
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9584
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9587
 msgid "Used for displayed messages, interface and measures in your page."
 msgstr "Usado para os mensaxes, interface e medidas na súa páxina web."
 
@@ -6157,7 +6157,7 @@ msgstr ""
 "válida."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2162
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9200
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9203
 msgid "Google Services"
 msgstr "Servizos de Google"
 
@@ -6184,7 +6184,7 @@ msgstr ""
 "sitio web Google Maps sign up</a>."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2177
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9212
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9215
 msgid "Google Search API key:"
 msgstr "Chave da API de Google Search:"
 
@@ -6229,7 +6229,7 @@ msgstr ""
 "páxina de Youtube."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2198
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9215
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9218
 msgid "Facebook"
 msgstr "Facebook"
 
@@ -6287,13 +6287,13 @@ msgid "Opennemas News Agency"
 msgstr "Axencias de novas Opennemas"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2231
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8834
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8855
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8837
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8858
 msgid "User"
 msgstr "Usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2240
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9245
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9248
 msgid "Piwik Statistics"
 msgstr "Estadísticas de Piwik"
 
@@ -6338,7 +6338,7 @@ msgstr ""
 "identificador de páxina"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2270
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9260
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9263
 msgid "Recaptcha"
 msgstr "Recaptcha"
 
@@ -6658,8 +6658,8 @@ msgstr "Estado:"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4766
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5201
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6704
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8933
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8936
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8939
 msgid "Unpublished"
 msgstr "Non publicado"
 
@@ -6674,8 +6674,8 @@ msgid "Path"
 msgstr "Ruta"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:2639
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8204
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8207
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8213
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8216
 msgid "[Link]"
 msgstr "[Ligazón]"
 
@@ -6784,9 +6784,9 @@ msgstr "O url do servidor para esta orixe. Exemplo: ftp://exemplo.com/ruta"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3740
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6917
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7025
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9158
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9446
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9551
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9161
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9449
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9554
 msgid "Username"
 msgstr "Nome de usuario"
 
@@ -7070,8 +7070,7 @@ msgstr "Este artigo foi importado con anterioridade."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3098
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6974
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8219
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9500
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9503
 msgid "Basic information"
 msgstr "Información básica"
 
@@ -7288,8 +7287,8 @@ msgstr "Configurar módulo de comentarios"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3542
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4238
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7961
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8291
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8897
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8294
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8900
 msgid "Search"
 msgstr "Buscar"
 
@@ -7375,13 +7374,13 @@ msgstr "Creando autor"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4910
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4913
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6998
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9524
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9527
 msgid "Photo"
 msgstr "Foto"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3719
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7001
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9527
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9530
 msgid ""
 "If you want a custom avatar sign up in <a href='http://www.gravatar."
 "com'>gravatar.com</a> with the same email address as you have here in "
@@ -7393,31 +7392,31 @@ msgstr ""
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3722
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7004
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9530
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9533
 msgid "Add new photo"
 msgstr "Engadir nova foto"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3725
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7007
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9533
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9536
 msgid "Change"
 msgstr "Cambiar"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3731
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7013
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9539
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9542
 msgid "Display name"
 msgstr "Nome en pantalla"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3737
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7022
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9548
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9551
 msgid "Twitter user"
 msgstr "Usuario de twitter"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3743
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7028
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9554
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9557
 msgid "Blog Url"
 msgstr "Url do blogue"
 
@@ -7429,7 +7428,7 @@ msgstr "Biografía curta"
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:3749
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4205
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7034
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9557
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9560
 msgid "Biography"
 msgstr "Biografía"
 
@@ -7661,23 +7660,23 @@ msgstr "Avatar"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4202
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6914
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8504
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8597
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8657
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8672
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9443
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8507
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8600
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8660
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8675
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9446
 msgid "Full name"
 msgstr "Nome completo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4220
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6944
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9470
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9473
 msgid "Delete this user"
 msgstr "Eliminar este usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4223
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6947
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9473
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9476
 msgid ""
 "There is no users created yet or <br/>your search don't match your criteria"
 msgstr ""
@@ -8083,7 +8082,7 @@ msgid "Pick layout"
 msgstr "Seleccionar disposición"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4742
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8882
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8885
 msgid "New widget"
 msgstr "Novo widget"
 
@@ -8132,7 +8131,7 @@ msgid "OpenNeMaS administration"
 msgstr "Administración de OpenNemas"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4889
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9281
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9284
 msgid "Go to admin main page"
 msgstr "Ir á páxina principal do administrador"
 
@@ -8151,8 +8150,8 @@ msgstr "Preguntas frecuentes"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4916
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4919
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9284
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9287
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9290
 msgid "Edit my profile"
 msgstr "Editar o meu perfíl"
 
@@ -8173,7 +8172,7 @@ msgid "Logout from control panel"
 msgstr "Saír do panel de administración"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:4934
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9296
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9299
 msgid "Log out"
 msgstr "Saír da sesión"
 
@@ -8233,7 +8232,7 @@ msgstr "Axencia:"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5027
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:5855
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9044
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9047
 msgid "Created:"
 msgstr "Creado:"
 
@@ -8762,7 +8761,7 @@ msgstr "Título do menú…"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6128
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7802
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8234
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8237
 msgid "Link"
 msgstr "Ligazón"
 
@@ -8856,7 +8855,7 @@ msgstr "Só dispoñíbel para subscritores"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6398
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6401
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8540
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8543
 msgid "Signature"
 msgstr "Sinatura"
 
@@ -9010,7 +9009,7 @@ msgid "%1 temporary deactivated."
 msgstr "%1 está temporalmente desactivado."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6662
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9323
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9326
 msgid "We already have being informed of this error: %1"
 msgstr "Xa fomos informados deste erro: %1"
 
@@ -9060,98 +9059,98 @@ msgstr "O compoñente slug da url"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6791
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6863
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9329
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9401
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9332
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9404
 msgid "Are you sure that do you want to delete \"<span>%title%</span>\"?"
 msgstr "Tes certeza de que queres eliminar «<span>%title%</span>»?"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6803
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9341
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9344
 msgid "New Privilege"
 msgstr "Novo privilexio"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6806
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9344
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9347
 msgid "New User Group"
 msgstr "Novo grupo de usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6809
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9347
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9350
 msgid "New User group"
 msgstr "Nuevo grupo de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6812
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6854
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9350
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9392
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9353
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9395
 msgid "Group name"
 msgstr "Nome do grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6818
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6821
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9356
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9359
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9362
 msgid "Edit group"
 msgstr "Editar grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6827
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9365
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9368
 msgid "Delete group"
 msgstr "Eliminar grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6830
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9368
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9371
 msgid "There is no groups created yet."
 msgstr "Non hai ningún grupo creado aínda."
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6833
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9371
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9374
 msgid "Editing group"
 msgstr "Editando grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6836
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9374
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9377
 msgid "Creating user group"
 msgstr "Creando grupo de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6857
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6986
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6989
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9395
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9512
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9398
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9515
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9518
 msgid "Privileges"
 msgstr "Privilexios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6872
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9410
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9413
 msgid "Editing user group"
 msgstr "Editando grupo de usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6878
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9416
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9419
 msgid "Delete selected users"
 msgstr "Eliminar usuarios seleccionados"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6887
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8378
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9425
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8381
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9428
 msgid "Create new user"
 msgstr "Crear novo usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6890
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8381
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9428
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8384
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9431
 msgid "New user"
 msgstr "Novo usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6893
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8399
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8402
 msgid "users"
 msgstr "usuarios"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6896
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8492
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8495
 msgid "Filter by name or email"
 msgstr "Filtrar por nome ou correo"
 
@@ -9161,13 +9160,13 @@ msgstr "tipo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6905
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7052
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9575
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9578
 msgid "Backend"
 msgstr "Panel de control"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6908
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7055
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9578
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9581
 msgid "Frontend"
 msgstr "Públicos"
 
@@ -9176,27 +9175,27 @@ msgid "and group"
 msgstr "e grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6923
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9449
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9452
 msgid "Group"
 msgstr "Grupo"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6935
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9461
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9464
 msgid "Activate user"
 msgstr "Usuario activado"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6950
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9476
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9479
 msgid "Editing user"
 msgstr "Editando usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6953
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9479
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9482
 msgid "Creating user"
 msgstr "Crear usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:6977
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9503
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9506
 msgid "User info"
 msgstr "Información do usuario"
 
@@ -9205,39 +9204,39 @@ msgid "Remove image"
 msgstr "Eliminar imaxe"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7040
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9563
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9566
 msgid "Confirm password"
 msgstr "Confirmar contrasinal"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7043
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9566
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9569
 msgid "Session expire time:"
 msgstr "Tempo de expiración de sesión:"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7046
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9569
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9572
 msgid "minutes"
 msgstr "minutos"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7049
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9572
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9575
 msgid "User type"
 msgstr "Tipo de usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7058
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9581
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9584
 msgid "User language"
 msgstr "Idioma do usuario"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7064
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7067
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9587
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9590
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9593
 msgid "User group:"
 msgstr "Grupos de usuarios:"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7070
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9593
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9596
 msgid "Master"
 msgstr "Mestre"
 
@@ -9246,7 +9245,7 @@ msgid "HOME"
 msgstr "Portada"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7082
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9596
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9599
 msgid "Paywall time limit:"
 msgstr "Límite de tiempo del paywall:"
 
@@ -9269,7 +9268,7 @@ msgid "Banner type:"
 msgstr "Tipo de banner:"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7139
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8132
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8141
 msgid "Type:"
 msgstr "Tipo:"
 
@@ -9387,7 +9386,7 @@ msgid "Show this ad if satisfy one condition"
 msgstr "Mostra esta publicidade só se cumpre unha condición"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7388
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8099
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8108
 msgid "From"
 msgstr "Desde"
 
@@ -9686,7 +9685,7 @@ msgid "Iniciar"
 msgstr "Iniciar"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:7958
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8081
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8090
 msgid "Search images"
 msgstr "Buscar imaxes"
 
@@ -9742,165 +9741,173 @@ msgstr "Editando imaxe"
 msgid "Go back to listing"
 msgstr "Volver á lista"
 
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8081
+msgid "Pick a location for the image"
+msgstr "Escolla unha localización para a imaxe"
+
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8084
+msgid "Geolocate photo with my position"
+msgstr "Xeolocalizar foto coa miña posición"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8087
+msgid "Assign location"
+msgstr "Asignar localización"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8093
 msgid "Search result"
 msgstr "Resultado da busca"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8090
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8099
 msgid "Please fill the form of<br> the side to search images"
 msgstr ""
 "Complete o formulario do<br>\n"
 "lado para buscar imaxes"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8093
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8102
 msgid "Image name"
 msgstr "Nome da imaxe"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8096
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8105
 msgid "Date period:"
 msgstr "Rango de datas:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8102
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8111
 msgid "To"
 msgstr "Ate"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8105
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8114
 msgid "Width (px.)"
 msgstr "Ancho (px.)"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8108
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8117
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8126
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8135
 msgid "Min"
 msgstr "Mínimo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8111
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8120
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8129
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8138
 msgid "Max"
 msgstr "Máximo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8114
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8123
 msgid "Height (px.)"
 msgstr "Alto (px.)"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8123
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8132
 msgid "Weight (kB)"
 msgstr "Peso (kb)"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8138
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8147
 msgid "Others"
 msgstr "Outros"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8141
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8150
 msgid "Color:"
 msgstr "Cor:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8144
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8153
 msgid " - All types - "
 msgstr "- Tódolos tipos -"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8147
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8156
 msgid "Black and white"
 msgstr "Branco e negro"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8153
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8183
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8201
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8162
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8192
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8210
 msgid "Author:"
 msgstr "Autor:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8156
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8165
 msgid "No available images with your search criteria"
 msgstr ""
 "Non hai ningunha imaxe dispoñíbel que coincida co seu criterio de busca"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8162
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8999
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8171
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9002
 msgid "Information"
 msgstr "Información"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8171
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8180
 msgid "Image preview"
 msgstr "Tamaño da imaxe"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8174
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8195
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8183
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8204
 msgid "No available description"
 msgstr "Descrición no dispoñíbel"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8177
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8186
 msgid "Filename"
 msgstr "Nome de ficheiro"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8180
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8198
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8189
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8207
 msgid "No tags"
 msgstr "Sen etiquetas"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8189
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8228
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8198
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8231
 msgid "Resolution:"
 msgstr "Resolución:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8192
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8231
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8201
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8234
 msgid "Size:"
 msgstr "Tamaño:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8216
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8225
 msgid "No available images<br> for this search"
 msgstr ""
 "Non hai ningunha imaxes dispoñíbel<br> \n"
 "con este criterio de busca"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8222
-msgid "Geolocation"
-msgstr "Xeolocalización"
-
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8225
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8228
 msgid "Original filename:"
 msgstr "Nome do ficheiro orixinal:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8243
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8246
 msgid "Used for searches and automated suggestions."
 msgstr "Usado para buscas e suxestións automáticas."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8246
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8249
 msgid "Copyright"
 msgstr "Copyright"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8252
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8255
+msgid "Location"
+msgstr "Localización"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8258
 msgid "View advanced data"
 msgstr "Ver datos avanzados"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8255
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8261
 msgid "EXIF Data"
 msgstr "Datos EXIF"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8258
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8264
 msgid "No available EXIF data."
 msgstr "Non hai datos EXIF dispoñíbeis."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8261
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8267
 msgid "IPTC Data"
 msgstr "Datos IPTC"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8264
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8270
 msgid "No available IPTC data."
 msgstr "Non hai datos IPTC dispoñíbeis."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8267
-msgid "Geolocate photo with my position"
-msgstr "Xeolocalizar foto coa miña posición"
-
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8276
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8297
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8279
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8300
 msgid "Write here the text for search..."
 msgstr "Escriba aquí o texto a buscar..."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8279
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8303
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8282
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8306
 msgid ""
 "There was an error while performing the search please reload this tab by "
 "changing to another one."
@@ -9908,155 +9915,155 @@ msgstr ""
 "Produciuse un erro ao subir o realizar a busca, recargue esta lapela "
 "cambiando a outra."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8282
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8285
 msgid "Global search"
 msgstr "Busca global"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8285
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8288
 msgid "Please fill the form for searching contents"
 msgstr "Complete o formulario para buscar contidos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8288
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8291
 msgid "Text to search"
 msgstr "Texto para buscar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8294
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8297
 msgid "Content type"
 msgstr "Tipo de contido"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8300
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8303
 msgid "No results"
 msgstr "Sen resultados"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8306
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8309
 msgid "We cant find any content with your search criteria."
 msgstr "Non foi posíbel atopar ningún contido co seu criterio de busca."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8309
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8312
 msgid "Your search \"<b>%1</b>\" didn't return any element."
 msgstr "O seu criterio \"<b>%1</b>\" non devolveu ningún resultado."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8312
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8315
 msgid "Suggestions:"
 msgstr "Suxestións:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8315
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8318
 msgid "Check if all the words are written correctly."
 msgstr "Comprobe se tódalas palabras están escritas correctamente."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8318
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8321
 msgid "Use other words."
 msgstr "Usar outras palabras"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8321
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8324
 msgid "Use more general search criteria."
 msgstr "Usar un criterio de busca máis xenérico."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8336
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8339
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8342
 msgid "In library"
 msgstr "En hemeroteca"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8342
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8351
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8345
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8354
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8363
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8357
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8366
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8369
 msgid "In pending"
 msgstr "En pendentes"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8369
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8372
 msgid "There isn't any existent elements that matches your search criteria"
 msgstr ""
 "No hai ningún elemento existente que coincida con seu criterio de busca"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8375
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8453
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8378
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8456
 msgid "Premium users"
 msgstr "Usuarios premium"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8402
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8489
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8405
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8492
 msgid "Export list"
 msgstr "Exportar listado"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8405
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8891
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9431
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8408
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8894
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9434
 msgid "Filter by name"
 msgstr "Filtrar por nome"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8408
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8495
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8411
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8498
 msgid "Order by"
 msgstr "Orde por"
-
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8417
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8603
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8627
-msgid "Last login"
-msgstr "Último inicio de sesión"
 
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8420
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8606
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8630
+msgid "Last login"
+msgstr "Último inicio de sesión"
+
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8423
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8609
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8633
 msgid "End of subscription"
 msgstr "Fin da uscrición"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8429
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8612
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8639
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8432
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8615
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8642
 msgid "Paid"
 msgstr "Pago"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8432
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8618
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8645
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8435
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8621
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8648
 msgid "Registered"
 msgstr "Rexistrado"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8435
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8615
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8642
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8438
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8618
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8645
 msgid "Expired"
 msgstr "Expirado"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8447
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8450
 msgid "Subscribed users"
 msgstr "Usuarios rexistrados"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8450
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8453
 msgid "Purchases last month"
 msgstr "Compras o mes pasado"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8456
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8462
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8459
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8465
 msgid "Show all…"
 msgstr "Mostrar todo…"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8459
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8462
 msgid "Lastest purchases"
 msgstr "Últimas compras"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8468
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8471
 msgid "Purchases listing"
 msgstr "Listado de compras"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8486
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8489
 msgid "purchases"
 msgstr "compras"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8498
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8663
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8678
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8501
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8666
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8681
 msgid "Payment date"
 msgstr "Data de pagamento"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8528
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8531
 msgid "Paypal API authentication"
 msgstr "Autenticación da API de Paypal"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8531
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8534
 msgid ""
 "In order to <strong>connect Opennemas with Paypal</strong> you have to fill "
 "your Paypal API credentials below:"
@@ -10064,28 +10071,28 @@ msgstr ""
 "Para <strong> conectar Opennemas con Paypal </strong> ten que cubrir as súas "
 "credenciais da API de PayPal a continuación:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8543
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8546
 msgid "If you don't have these identification params click on the next link"
 msgstr ""
 "Se non ten estes parámetros de identificación prema na seguinte ligazón"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8546
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8549
 msgid "Obtain your Paypal identification data"
 msgstr "Obter os seus datos de identificación de Paypal"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8549
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8552
 msgid "Use the testing environment Sandbox"
 msgstr "Use o ámbito de probas Sandbox"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8552
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8555
 msgid "Real mode (recommended)"
 msgstr "Modo real (recomendado)"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8555
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8558
 msgid "Testing mode"
 msgstr "Modo de proba"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8558
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8561
 msgid ""
 "Paypal allows you to enable a testing environment where <strong>all the "
 "transactions will not be real</strong>, so you can test if the paywall is "
@@ -10095,34 +10102,34 @@ msgstr ""
 "transaccións non serán reais </strong>, para que poida probar si o Paywall "
 "funciona ben."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8561
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8564
 msgid ""
 "Active a testing environment in your Paypal account (only if you are a "
 "developer)"
 msgstr ""
 "Activa un ámbito de proba na súa conta de Paypal (só se é un desenvolvedor)"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8564
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8567
 msgid "More information"
 msgstr "Máis información"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8567
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8570
 msgid "Transaction details"
 msgstr "Detalles da transacción"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8570
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8573
 msgid "Money unit"
 msgstr "Moeda"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8573
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8576
 msgid "VAT %"
 msgstr "IVE %"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8576
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8579
 msgid "Payment modes"
 msgstr "Modos de pagamento"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8579
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8582
 msgid ""
 "Below you can add different payment modes by including the time range that "
 "the user can purchase, the description and the price"
@@ -10130,218 +10137,218 @@ msgstr ""
 "Abaixo, pode engadir distintas modalidades de pagamento, incluíndo o período "
 "de tempo que o usuario pode comprar, a descrición e o prezo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8585
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8588
 msgid "Set a price"
 msgstr "Fixar prezo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8588
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8591
 msgid "No available payment modes. Add a new one with the button below."
 msgstr "Non hai modos de pago dispoñibles. Engadir un novo co botón de abaixo."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8591
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8594
 msgid "Add new payment mode"
 msgstr "Engadir novo modo de pagamento"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8651
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8654
 msgid "No users with paywall"
 msgstr "Non hai usuarios con acceso pagado"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8660
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8675
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8663
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8678
 msgid "Order id"
 msgstr "Id de orde"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8666
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8681
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8669
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8684
 msgid "Amount"
 msgstr "Cantidade"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8684
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8687
 msgid "No purchases available"
 msgstr "Ningunha compra dispoñible"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8690
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8693
 msgid "Deletes the selected elements"
 msgstr "Eliminar elementos seleccionados"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8696
 #: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8699
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8720
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8702
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8723
 msgid "Restore"
 msgstr "Restaurar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8723
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8726
 msgid "Delete this content"
 msgstr "Eliminar este contido"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8726
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8729
 msgid "There is no elements in the trash"
 msgstr "Non hai ningún elemento no lixo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8729
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8732
 msgid "Delete contents"
 msgstr "Eliminar contidos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8732
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8735
 msgid "Are you sure you want to delete the selected contents?"
 msgstr "Tes certeza que queres eliminar os contidos seleccionados?"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8741
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8744
 msgid "Restore contents from trash"
 msgstr "Restaurar contidos desde o lixo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8744
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8747
 msgid "Are you sure you want to restore from trash the selected contents?"
 msgstr ""
 "Tes certeza que queres restaurar desde o lixo os contidos seleccionados?"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8747
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8750
 msgid "Yes, restore"
 msgstr "Si, restaurar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8759
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8945
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8762
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8948
 msgid "Ads"
 msgstr "Anuncios"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8762
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8765
 msgid "Coments"
 msgstr "Comentarios"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8765
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8768
 msgid "Covers"
 msgstr "Portadas"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8828
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8831
 msgid "A new instance has been created"
 msgstr "Creouse unha nova instancia"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8831
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8834
 msgid "You can access your newspaper with the information bellow"
 msgstr "Pode acceder ao seu xornal con a información de embaixo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8840
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8843
 msgid "Newspaper URL"
 msgstr "URL do xornal"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8843
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8876
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8846
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8879
 msgid "Sincerely"
 msgstr "Atentamente"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8846
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8849
 msgid "Welcome to OpenNemas"
 msgstr "Benvido a OpenNemas"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8849
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8852
 msgid "Your Opennemas' Newspaper is now available"
 msgstr "O seu xornal Opennemas está dispoñíbel"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8852
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8855
 msgid "Your data are"
 msgstr "Os seus datos son"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8861
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8864
 msgid "You can access to newspaper with this link"
 msgstr "Podes acceder ao xornal con este enlace"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8864
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8867
 msgid "You can also access the administrative area through this link"
 msgstr "Tamén pode acceder ao área de administración mediante esta ligazón"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8867
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8870
 msgid "using the username and password provided in the email"
 msgstr ""
 "usando o nome de usuario e contrasinal que lle fornecemos no correo "
 "electrónico"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8870
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8873
 msgid ""
 "Please change your password on your first access to the administrative area"
 msgstr ""
 "Por favor, cambie o seu contrasinal ao acceder a primeira vez na área de "
 "administración"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8873
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8876
 msgid "In case you have any problems, please contact via e-mail"
 msgstr ""
 "No caso de que atope calquera problema, contacte connosco mediante correo "
 "electrónico"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8888
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8891
 msgid "Filter by e-mail"
 msgstr "Filtrar por e-mail"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8894
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8897
 msgid "Per page"
 msgstr "Por páxina"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8900
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8903
 msgid "#"
 msgstr "#"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8906
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8909
 msgid "Domains"
 msgstr "Dominios"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8909
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8912
 msgid "Contact"
 msgstr "Contacto"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8912
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8915
 msgid "Last access"
 msgstr "Último accesso"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8954
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8957
 msgid "There is no available instances yet"
 msgstr "Aínda non hai ningunha instancia"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8957
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8960
 msgid "Number of contents"
 msgstr "Número de contidos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8960
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8963
 msgid "Delete instance"
 msgstr "Eliminar instancia"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8972
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8975
 msgid "Creating new intance"
 msgstr "Creando nova instancia"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8975
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:8978
 msgid "Editing instance \"%1\""
 msgstr "Editando a instancia «%1»"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9002
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9005
 msgid "Internals"
 msgstr "Configuracións internas"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9005
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9008
 msgid "Database"
 msgstr "Base de datos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9008
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9152
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9011
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9155
 msgid "Mail"
 msgstr "Correo electrónico"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9011
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9014
 msgid "Log"
 msgstr "Rexistro"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9020
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9023
 msgid "Instance name"
 msgstr "Nome da instancia"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9023
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9026
 msgid "(Human readable name)"
 msgstr "(Nome lexíbel por humanos)"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9035
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9038
 msgid "Domains:"
 msgstr "Dominios:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9038
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9041
 msgid ""
 "List of domains separated by commas. You can use wildcards, i.e. *.example."
 "com"
@@ -10349,133 +10356,133 @@ msgstr ""
 "Lista de dominios separados por comas. Pode usar comodíns, p.ex. *.exemplo."
 "com"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9041
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9044
 msgid "User contact IP:"
 msgstr "IP do usuario de contacto:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9047
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9050
 msgid "User name:"
 msgstr "Nome de usuario:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9050
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9053
 msgid "User password:"
 msgstr "Contrasinal do usuario:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9053
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9056
 msgid "(The password must have between 8 and 16 characters)"
 msgstr "(O contrasinal debe ter entre 8 e 16 caracteres)"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9056
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9059
 msgid "User contact mail:"
 msgstr "Correo-e do usuario de contacto"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9059
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9062
 msgid "Site title:"
 msgstr "Título do sitio:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9062
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9065
 msgid "Site description:"
 msgstr "Descrición do sitio:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9065
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9068
 msgid "Site keywords:"
 msgstr "Palabras chave do sitio:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9068
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9071
 msgid "Site agency:"
 msgstr "Axencia do sitio:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9071
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9074
 msgid "Time Zone:"
 msgstr "Fuso horario:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9074
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9077
 msgid "Language"
 msgstr "Idioma:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9077
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9080
 msgid "Internal name:"
 msgstr "Nome interno:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9080
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9083
 msgid "Used for cache prefixes and internal ONM operations"
 msgstr "Usado para os prefixos da cache e operacións internas de ONM"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9083
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9086
 msgid "Template:"
 msgstr "Plantilla:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9086
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9089
 msgid "External media url:"
 msgstr "URL de medios externos:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9089
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9092
 msgid "Enable advertisements:"
 msgstr "Publicidade habilitada:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9092
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9182
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9188
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9095
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9185
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9191
 msgid "Default: true"
 msgstr "Por omisión: verdadeiro"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9095
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9098
 msgid "Items per page:"
 msgstr "Elementos por páxina:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9098
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9101
 msgid "Default: 20 elements"
 msgstr "Por omisión: 20 elementos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9101
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9104
 msgid "Refresh page every (secs):"
 msgstr "Actualizar páxina cada (seg):"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9104
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9107
 msgid "Default: 900 secs"
 msgstr "Por omisión: 900 segundos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9107
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9110
 msgid "Minimum password level"
 msgstr "Nivel mínimo de contrasinal"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9110
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9113
 msgid "Default"
 msgstr "Por omisión"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9113
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9116
 msgid "Weak"
 msgstr "Débil"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9116
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9119
 msgid "Good"
 msgstr "Bo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9119
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9122
 msgid "Strong"
 msgstr "Forte"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9122
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9125
 msgid "Database Type:"
 msgstr "Tipo de base de datos:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9125
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9128
 msgid "Mysql/Percona"
 msgstr "Mysql/Percona"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9128
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9131
 msgid "Mysql/Percona old driver"
 msgstr "Mysql/Percona driver antigo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9131
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9134
 msgid "Postgres"
 msgstr "Postgres"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9134
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9137
 msgid "Oracle"
 msgstr "Oracle"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9137
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9140
 msgid ""
 "Please doble check your database settings, those will be used as the default "
 "Database data access for this instance."
@@ -10483,72 +10490,72 @@ msgstr ""
 "Comprobe as preferencias da súa base de datos, xa que se usaranse como os "
 "datos de acceso á base de datos para esta instancia."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9140
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9143
 msgid "Database server:"
 msgstr "Servidor da base de datos:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9143
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9146
 msgid "Database name:"
 msgstr "Nome da base de datos:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9146
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9149
 msgid "Database user:"
 msgstr "Usuario da base de datos:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9149
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9152
 msgid "Database password:"
 msgstr "Contrasinal da base de datos:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9155
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9158
 msgid "Mail server"
 msgstr "Servidor de correo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9164
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9167
 msgid "Sender"
 msgstr "Remitente"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9170
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9173
 msgid "Num Max emails sent by month"
 msgstr "Número máximo de emails por mes"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9173
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9176
 msgid "Last invoice date:"
 msgstr "Data da última factura"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9176
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9179
 msgid "System log"
 msgstr "Rexistro do sistema"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9179
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9194
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9182
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9197
 msgid "Enable Log:"
 msgstr "Activar rexistro:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9185
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9188
 msgid "Log level:"
 msgstr "Nivel do rexistro:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9191
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9194
 msgid "Database log"
 msgstr "Rexistro da base de datos"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9197
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9200
 msgid "Default: false"
 msgstr "Por omisión: falso"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9203
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9206
 msgid "Google Maps API key:"
 msgstr "Chave da API de Google Maps:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9206
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9221
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9236
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9251
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9266
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9209
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9224
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9239
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9254
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9269
 msgid "Get API keys"
 msgstr "Obter chaves da API"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9209
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9212
 msgid ""
 "You can get your Google Maps API Key from <a href=\"http://code.google.com/"
 "intl/gl-GL/apis/maps/signup.html\">Google maps sign up website</a>."
@@ -10556,11 +10563,11 @@ msgstr ""
 "Pode obter as suas chaves de Google Maps desde <a href=\"http://code.google."
 "com/intl/gl-GL/apis/maps/signup.html\">o sitio web Google Maps sign up</a>."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9218
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9221
 msgid "APP key:"
 msgstr "Chave do aplicativo:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9224
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9227
 msgid ""
 "You can get your Facebook App Keys from <a href=\"https://developers."
 "facebook.com/apps\">Facebook Developers website</a>."
@@ -10568,19 +10575,19 @@ msgstr ""
 "Pode obter as súas chaves de aplicativo de Facebook desde <a href=\"https://"
 "developers.facebook.com/apps\">o sitio web Facebook Developers</a>."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9227
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9230
 msgid "Secret key:"
 msgstr "Chave secreta:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9230
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9233
 msgid "Google Analytics Statistics"
 msgstr "Estatísticas de Google Analytics"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9233
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9236
 msgid "API key:"
 msgstr "Chave da API:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9239
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9242
 msgid ""
 "You can get your Google Analytics Site ID from <a href=\"https://www.google."
 "com/analytics/\">GAnalytics site</a> under the General Overview list (should "
@@ -10591,15 +10598,15 @@ msgstr ""
 "Vista previa (debería ser algo semellante a UA-546457-3). Pode deixar o "
 "campo «Dominio base» en branco se o desexa."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9242
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9245
 msgid "Base domain:"
 msgstr "Dominio base:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9248
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9251
 msgid "Page ID:"
 msgstr "ID da páxina:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9254
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9257
 msgid ""
 "You can get your Piwik Site information from <a href=\"https://piwik."
 "openhost.es/admin\">our Piwik server</a>."
@@ -10607,16 +10614,16 @@ msgstr ""
 "Pode obter información do sitio de Piwik desde <a href=\"https://piwik."
 "openhost.es/admin\">o noso servidor de Piwik</a>."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9257
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9272
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9260
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9275
 msgid "Private key:"
 msgstr "Chave privada:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9263
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9266
 msgid "Public Key:"
 msgstr "Chave pública:"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9269
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9272
 msgid ""
 "You can get your recaptcha API Keys from <a href=\"https://www.google.com/"
 "recaptcha/admin/create\">reCATPCHA website</a>."
@@ -10624,56 +10631,56 @@ msgstr ""
 "Pode obter as súas chaves de reCAPTCHA desde <a href=\"https://www.google."
 "com/recaptcha/admin/create\">o sitio web de reCAPTCHA</a>."
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9275
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9278
 msgid "Activated modules"
 msgstr "Módulos activados"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9278
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9281
 msgid "Welcome to OpenNeMas instance manager"
 msgstr "Benvido ao xestor de instancias de OpenNeMas"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9290
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9293
 msgid "Do you really want to exit from manager?"
 msgstr "Ten certeza que quere saír do xestor?"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9293
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9296
 msgid "Logout from manager"
 msgstr "Saír do xestor"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9434
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9437
 msgid "or"
 msgstr "ou"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9437
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9440
 msgid "username"
 msgstr "nome de usuario"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9440
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9443
 msgid "and group:"
 msgstr "e grupo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9599
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9617
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9602
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9620
 msgid "Application commands"
 msgstr "Ordes do aplicativo"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9602
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9605
 msgid "Command name"
 msgstr "Nome da orde"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9608
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9611
 msgid "Params"
 msgstr "Parámetros"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9611
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9614
 msgid "Deploy"
 msgstr "Despregar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9614
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9617
 msgid "Execute"
 msgstr "Executar"
 
-#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9626
+#: /home/fran/Projects/OpenHost/opennemas/app//Resources/locale/extracted_strings.c:9629
 msgid "Framework status"
 msgstr "Estado do framework"
 

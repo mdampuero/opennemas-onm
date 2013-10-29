@@ -8077,6 +8077,15 @@ gettext("Go back");
 /* public/themes/admin/tpl//image/new.tpl */
 gettext("Go back to listing");
 
+/* public/themes/admin/tpl//image/new.tpl */
+gettext("Pick a location for the image");
+
+/* public/themes/admin/tpl//image/new.tpl */
+gettext("Geolocate photo with my position");
+
+/* public/themes/admin/tpl//image/new.tpl */
+gettext("Assign location");
+
 /* public/themes/admin/tpl//image/search.tpl */
 gettext("Search images");
 
@@ -8216,12 +8225,6 @@ gettext("Delete");
 gettext("No available images<br> for this search");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Basic information");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Geolocation");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("Original filename:");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
@@ -8249,6 +8252,9 @@ gettext("Copyright");
 gettext("Date");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
+gettext("Location");
+
+/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("View advanced data");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
@@ -8262,9 +8268,6 @@ gettext("IPTC Data");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("No available IPTC data.");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Geolocate photo with my position");
 
 /* public/themes/admin/tpl//image/_partials/categories.tpl */
 gettext("All");
