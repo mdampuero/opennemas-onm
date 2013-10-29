@@ -106,6 +106,7 @@
 
 {block name="footer-js" append}
 <script type="text/javascript">
+var map, marker;
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
@@ -126,7 +127,6 @@ jQuery(document).ready(function($) {
         $(this).parent().find('.info').toggle();
     });
 
-    var map;
 
     $('.geocode_button').on('click', function(e,ui){
         e.preventDefault();
@@ -171,9 +171,9 @@ jQuery(document).ready(function($) {
             var pos_long = 0;
         }
 
+        // Styles from http://snazzymaps.com/
         var styles = [
-            {
-                "featureType": "water",
+            {                "featureType": "water",
                 "stylers": [
                     {
                         "visibility": "on"
@@ -281,9 +281,17 @@ jQuery(document).ready(function($) {
         if (pos_lat == 0 || pos_long == 0) {
             geolocate_user();
         } else {
-            map.addMarker({
-              lat: pos_lat,
-              lng: pos_long
+            map.removeMarkers();
+            marker = map.addMarker({
+                lat: pos_lat,
+                lng: pos_long,
+                draggable: true,
+                cursor: 'move',
+                animation: google.maps.Animation.DROP,
+                dragend : function(evt) {
+                    $('.final_address').val(evt.latLng.lat() + ', '+ evt.latLng.lng());
+                    $('.address_search_input').val(evt.latLng.lat() + ', '+ evt.latLng.lng());
+                }
             });
             map.setCenter(pos_lat, pos_long);
         }
@@ -297,12 +305,21 @@ jQuery(document).ready(function($) {
                 if (status == 'OK'){
                     var latlng = results[0].geometry.location;
                     map.setCenter(latlng.lat(), latlng.lng());
-                    map.addMarker({
+                    marker = map.addMarker({
                         lat: latlng.lat(),
-                        lng: latlng.lng()
+                        lng: latlng.lng(),
+                        // draggable: true,
+                        cursor: 'move',
+                        animation: google.maps.Animation.DROP,
+                        dragend : function(evt) {
+                            $('.final_address').val(evt.latLng.lat() + ', '+ evt.latLng.lng());
+                            $('.address_search_input').val(evt.latLng.lat() + ', '+ evt.latLng.lng());
+                        }
                     });
+
+                    $('.final_address').val(latlng.lat() + ', '+ latlng.lng());
+                    $('.address_search_input').val(latlng.lat() + ', '+ latlng.lng());
                 }
-                $('.final_address').val(latlng.lat() + ', '+ latlng.lng());
             }
         });
     }
@@ -314,8 +331,16 @@ jQuery(document).ready(function($) {
                 map.setCenter(position.coords.latitude, position.coords.longitude);
                 map.addMarker({
                     lat: position.coords.latitude,
-                    lng: position.coords.longitude
+                    lng: position.coords.longitude,
+                    // draggable: true,
+                    cursor: 'move',
+                    animation: google.maps.Animation.DROP,
+                    dragend : function(evt) {
+                        $('.final_address').val(evt.latLng.lat() + ', '+ evt.latLng.lng());
+                        $('.address_search_input').val(evt.latLng.lat() + ', '+ evt.latLng.lng());
+                    }
                 });
+
                 $('.final_address').val(position.coords.latitude + ', '+ position.coords.longitude);
                 $('.address_search_input').val(position.coords.latitude + ', '+ position.coords.longitude);
             },
