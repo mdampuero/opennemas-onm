@@ -153,10 +153,15 @@ jQuery(document).ready(function($) {
         coordinates = orig_address.split(",");
         coordinates = $.map(coordinates, function(elem) {
             return parseFloat(elem);
-        })
+        });
 
-        var pos_lat  = coordinates[0];
-        var pos_long = coordinates[1];
+        if (coordinates.length == 2) {
+            var pos_lat  = coordinates[0];
+            var pos_long = coordinates[1];
+        } else {
+            var pos_lat  = 0;
+            var pos_long = 0;
+        }
 
         var styles = [
             {
