@@ -36,12 +36,3 @@ $framework = $sc->get('framework');
 $response = $framework->handle($request);
 $response->send();
 $framework->terminate($request, $response);
-
-
-// if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
-//     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
-// } elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
-//     $sc->setParameter('dispatcher.exceptionhandler', 'Manager:Controllers:ErrorController:default');
-// } else {
-//     $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
-// }

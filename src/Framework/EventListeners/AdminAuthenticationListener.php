@@ -44,9 +44,15 @@ class AdminAuthenticationListener implements EventSubscriberInterface
         $isAdmin   = strpos($url, '/admin') === 0;
         $isManager = strpos($url, '/manager') === 0;
 
-        $isAsset = preg_match('@(^asset).*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
+        $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
+
         if ($isAsset) {
-            // Log this error event to the webserver logging sysmte
+            $isDynAsset = preg_match('@^/asset@', $request->getPathInfo());
+            if ($isDynAsset) {
+                return;
+            }
+
+            // Log this error event to the web server logging system
             error_log("File does not exist: ".$request->getPathInfo(), 0);
 
             $event->setResponse(new Response('Content not available', 404));
