@@ -149,7 +149,7 @@ class ErrorController extends Controller
                     );
                 }
 
-                return new Response($content, 404);
+                return new Response($content, 401);
                 break;
 
                 break;
