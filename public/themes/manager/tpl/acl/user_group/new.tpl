@@ -19,13 +19,13 @@
             <ul class="old-button">
                 <li>
                     <button type="submit" name="action" value="validate">
-                        <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
+                        <img border="0" src="{$params.COMMON_ASSET_DIR}images/save.png" alt="{t}Save{/t}" ><br />{t}Save{/t}
                     </button>
                 </li>
                 <li class="separator"></li>
                 <li>
                     <a href="{url name="manager_acl_usergroups"}" title="{t}Go back{/t}">
-                        <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
+                        <img src="{$params.COMMON_ASSET_DIR}images/previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
             </ul>

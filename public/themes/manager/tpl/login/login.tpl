@@ -15,7 +15,7 @@
     <meta name="description" content="OpenNeMaS - An specialized CMS focused in journalism." />
     <meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
 
-    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
+    <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
 
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}

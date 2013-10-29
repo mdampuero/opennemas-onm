@@ -7,20 +7,20 @@
                 <td align="center"></td>
                 <td align="center">
                     <a href="{$smarty.const.SITE_URL}controllers/acl/user.php?action=read&id={$user['userid']}" title="{t}Edit user{/t}">
-                        <img src="{$params.IMAGE_DIR}/users_edit.png" border="0" />
+                        <img src="{$params.COMMON_ASSET_DIR}images/users_edit.png" border="0" />
                     </a>
                     <a href="index.php?action=purge&userid={$user['userid']}" class="modal" title="{t}Drop session{/t}">
-                        <img src="{$params.IMAGE_DIR}/publish_r.png" border="0" />
+                        <img src="{$params.COMMON_ASSET_DIR}images/publish_r.png" border="0" />
                     </a>
                 </td>
-                <td><img src="{$params.IMAGE_DIR}/iconos/database.gif" border="0" alt="" title="{t}Logged in from database{/t}" /></td>
+                <td><img src="{$params.COMMON_ASSET_DIR}iconos/database.gif" border="0" alt="" title="{t}Logged in from database{/t}" /></td>
             </tr>
         {else}
             <tr>
                 <td>{$user['username']}</td>
                 <td align="center">{date(' H:i ', $user['expire'])}</td>
                 <td align="center">-</td>
-                <td><img src="{$params.IMAGE_DIR}/iconos/database.gif" border="0" alt="" title="{t}Logged from database{/t}" /></td>
+                <td><img src="{$params.COMMON_ASSET_DIR}iconos/database.gif" border="0" alt="" title="{t}Logged from database{/t}" /></td>
             </tr>
         {/if}
         {foreachelse}

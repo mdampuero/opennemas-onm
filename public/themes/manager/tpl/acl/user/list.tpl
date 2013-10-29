@@ -20,13 +20,13 @@ jQuery(function($){
 			<ul class="old-button">
 				<li>
 					<button type="submit" id="batch-delete" title="{t}Delete selected users{/t}">
-						<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+						<img src="{$params.COMMON_ASSET_DIR}images/trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
 					</button>
 				</li>
 				<li class="separator"></li>
 				<li>
 					<a href="{url name=manager_acl_user_create}" title="{t}Create new user{/t}">
-						<img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New user{/t}
+						<img src="{$params.COMMON_ASSET_DIR}images/user_add.png" alt="Nuevo"><br />{t}New user{/t}
 					</a>
 				</li>
 			</ul>
