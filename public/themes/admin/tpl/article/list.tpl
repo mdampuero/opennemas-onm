@@ -112,7 +112,7 @@
              {acl hasCategoryAccess=$article->category}
                 <tr>
                     <td>
-                        <input type="checkbox" class="minput"  id="selected_{$smarty.section.c.iteration}" name="selected_fld[]" value="{$article->id}"  style="cursor:pointer;" />
+                        <input type="checkbox" class="minput"  id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$article->id}"  style="cursor:pointer;" />
                     </td>
                     <td class="left" >
                         <span  rel="tooltip" data-original-title="{t 1=$article->editor}Last author: %1{/t}">{$article->title|clearslash}</span>
