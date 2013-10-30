@@ -21,19 +21,33 @@ use Symfony\Component\HttpFoundation\Request;
 class MaintenanceController extends Controller
 {
     /**
-     * Initializes the controller
-     **/
-    public function init()
-    {
-    }
-
-    /**
      * Shows the maintenance mode page
      *
      * @return string the response string
      **/
-    public function defaultAction()
+    public function defaultAction(Request $request)
     {
+        $preferedLanguage = $request->getPreferredLanguage();
+
+        global $sc;
+        $availableLanguages = $sc->getParameter('available_languages');
+
+        $locale = '';
+        foreach ($availableLanguages as $lang => $name) {
+            if (strpos($lang, $preferedLanguage) === 0) {
+                $locale = $lang.'.UTF-8';
+                break;
+            }
+        }
+
+        $localeDir = realpath(APP_PATH.'/Resources/locale/');
+        $domain = 'messages';
+
+        putenv("LC_MESSAGES=$locale");
+        setlocale(LC_ALL, $locale);
+        bindtextdomain($domain, $localeDir);
+        textdomain($domain);
+
         $this->view = new \TemplateAdmin();
         $output = $this->renderView('maintenance/index.tpl');
 

@@ -3062,4 +3062,5 @@ div#modal-element-customize-content div.select-disposition{
 .instance-error .explanation {
   font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 23px;
+  line-height: 1.3em;
 }
