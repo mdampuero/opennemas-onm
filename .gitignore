@@ -31,3 +31,6 @@ app/Resources/**/*.mo
 /bin/import-tools/canarias/libs/canariasImport-config.inc.php-dist
 /bin/import-tools/onmToOnm/libs/onm-config.inc.php
 /bin/import-tools/onmToOnm/log/log.txt
+/app/Resources/locale/es_ES/LC_MESSAGES/messages.mo
+/app/Resources/locale/gl_ES/LC_MESSAGES/messages.mo
+/app/Resources/locale/pt_BR/LC_MESSAGES/messages.mo
