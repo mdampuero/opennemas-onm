@@ -1172,15 +1172,11 @@ class InstanceManager
     public function deleteDefaultAssetsForInstance($mediaPath)
     {
         if (!is_dir($mediaPath)) {
-            throw new DefaultAssetsForInstanceNotDeletedException(
-                "Could not delete assets of the instance"
-            );
+            return false;
         }
 
         if (!fm::deleteDirectoryRecursively($mediaPath)) {
-            throw new DefaultAssetsForInstanceNotDeletedException(
-                "Could not delete assets directory."
-            );
+            return false;
         }
 
         return true;
