@@ -445,7 +445,37 @@ class InstancesController extends Controller
 
         if (!$request->isXmlHttpRequest()) {
             return $this->redirect($this->generateUrl('manager_instances'));
+        } else {
+            return new Response('ok');
         }
+    }
+
+    /**
+     * Batch Delete instances given its ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchDeleteAction(Request $request)
+    {
+        $selected = $request->query->get('selected', null);
+
+        if (is_array($selected) && count($selected) > 0) {
+            foreach ($selected as $id) {
+                $delete = $this->instanceManager->delete($id);
+                if (!$delete) {
+                    m::add(sprintf(_("Unable to delete instance %d."), $id), m::ERROR);
+                    if (is_array($delete) && count($delete) > 0) {
+                        m::add($delete, m::ERROR);
+                    }
+                } else {
+                    m::add(sprintf(_("Instance %d deleted successfully."), $id), m::SUCCESS);
+                }
+            }
+        }
+
+        return $this->redirect($this->generateUrl('manager_instances'));
     }
 
     /**

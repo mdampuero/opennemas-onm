@@ -332,7 +332,7 @@ class FrontpagesController extends Controller
                 $output.= "\tarticle.onm-new div.nw-category-name div.". $theCategory->name .
                           " { color:" . $theCategory->color . "; }\n\t\t";
 
-                $output.= "\tarticle.onm-new div.". $theCategory->name .
+                $output.= "\tarticle.onm-new .". $theCategory->name .
                           " { color:" . $theCategory->color . "; }\n\t\t";
 
                 $output.= "\tarticle.onm-new hr.category-line.". $theCategory->name .
@@ -345,6 +345,20 @@ class FrontpagesController extends Controller
                            { color:" . $theCategory->color . ";
                             text-decoration: underline; }\n
                           \t\t";
+                $output.= "\t nav#menu.menu div.mainmenu ul li.cat.". $theCategory->name .":hover a,
+                            nav#menu.menu div.submenu ul li.subcat.". $theCategory->name .":hover a
+                           { color:" . $theCategory->color . ";
+                            text-decoration: underline; }\n
+                          \t\t";
+                $output.= "\t.bg-".$theCategory->name." { background-color:" . $theCategory->color . " !important;}\n";
+
+                $output.= "\t.text-".$theCategory->name." { color:" . $theCategory->color . " !important;}\n";
+                $output.= "\t.bg-".$theCategory->name." { background-color:" . $theCategory->color . " !important;}\n";
+                $output.= "\t.border-".$theCategory->name." { border-color:" . $theCategory->color . " !important;}\n";
+                $output.= "\t.".$theCategory->name." .colorize-bg  { background-color:" . $theCategory->color . " !important;}\n";
+
+                $output.= "\t.high-menu li.".$theCategory->name.".active { background-color:" . $theCategory->color . " !important;}\n";
+                $output.= "\t.high-menu li.".$theCategory->name.":hover { background-color:" . $theCategory->color . " !important;}\n";
 
                 $output.= "\t.widget a.category-color.". $theCategory->name .", ".
                           "\t.widget .category-color.". $theCategory->name .
@@ -400,8 +414,12 @@ class FrontpagesController extends Controller
                 .article-inner div.content-category a:hover, .article-inner blockquote {
                     color:". $actual. ";}\n";
 
-             $output.="\t.bgcolorize {
+            $output.="\t.bgcolorize {
                 background-color:". $actual. "!important;}\n";
+
+            $output.="\t.colorize-text {
+                color:". $actual. "!important;}\n";
+
 
         } elseif ($current == "mobile") {
             $output.= "\t#footerwrap { background-color: ".$siteColor." !important;}";
@@ -449,6 +467,9 @@ class FrontpagesController extends Controller
 
             $output.="\t.bgcolorize {
                 background-color:". $siteColor. "!important;}\n";
+
+             $output.="\t.colorize-text {
+                color:". $siteColor. "!important;}\n";
         }
 
         return new Response(

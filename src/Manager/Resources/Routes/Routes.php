@@ -93,6 +93,16 @@ $managerRoutes->add(
 );
 
 $managerRoutes->add(
+    'manager_instance_batch_delete',
+    new Route(
+        '/instance/batch-delete',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:batchDelete',
+        )
+    )
+);
+
+$managerRoutes->add(
     'manager_instance_toggleavailable',
     new Route(
         '/instance/{id}/toggle-available',

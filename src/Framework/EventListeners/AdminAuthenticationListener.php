@@ -33,40 +33,50 @@ class AdminAuthenticationListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $isAdmin   = strpos($_SERVER['REQUEST_URI'], '/admin') === 0;
-        $isManager = strpos($_SERVER['REQUEST_URI'], '/manager') === 0;
-        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()
-            && (!$isAdmin || !$isManager)
-        ) {
+        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
             return;
         }
 
         $request = $event->getRequest();
         $session = $request->getSession();
+        $url = $request->getPathInfo();
+
+        $isAdmin   = strpos($url, '/admin') === 0;
+        $isManager = strpos($url, '/manager') === 0;
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
-        if ($isAsset && ($isAdmin || $isManager)) {
-            // Log this error event to the webserver logging sysmte
+
+        if ($isAsset) {
+            $isDynAsset = preg_match('@^/asset@', $request->getPathInfo());
+            if ($isDynAsset) {
+                return;
+            }
+
+            // Log this error event to the web server logging system
             error_log("File does not exist: ".$request->getPathInfo(), 0);
 
             $event->setResponse(new Response('Content not available', 404));
+
+            return;
         }
 
         if (!isset($_SESSION['userid'])
             && !preg_match('@login@', $request->getPathInfo())
         ) {
-            $url = $request->getPathInfo();
 
             if (!empty($url)) {
                 $redirectTo = urlencode($request->getRequestUri());
             }
             if ($isAdmin) {
                 $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
-            } else {
+            } elseif ($isManager) {
                 $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
             }
 
-            $event->setResponse(new RedirectResponse($location, 301));
+            if (isset($location)) {
+                $event->setResponse(new RedirectResponse($location, 301));
+            }
+
         } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
             $event->setResponse(new RedirectResponse('/', 301));
         } else {
@@ -83,6 +93,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
                 $event->setResponse(new RedirectResponse(SITE_URL_ADMIN));
             }
         }
+
     }
 
     public static function getSubscribedEvents()

@@ -49,12 +49,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
         $sc->setParameter('cache_prefix', $instance->internal_name);
 
         $app = \Application::load();
-
-        $timezone = \Onm\Settings::get('time_zone');
-        if (isset($timezone)) {
-            $availableTimezones = \DateTimeZone::listIdentifiers();
-            date_default_timezone_set($availableTimezones[$timezone]);
-        }
     }
 
     public static function getSubscribedEvents()

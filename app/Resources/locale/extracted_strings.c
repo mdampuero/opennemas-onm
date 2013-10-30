@@ -6620,22 +6620,43 @@ gettext("Execution time");
 gettext("There is no SQL errors registered in database.");
 
 /* public/themes/admin/tpl//error/instance_not_found.tpl */
-gettext("Instance not found - Opennemas");
+gettext("%1 not found - Opennemas");
 
 /* public/themes/admin/tpl//error/instance_not_found.tpl */
-gettext("Online newspaper not found.");
+gettext("The CMS for journalism");
 
 /* public/themes/admin/tpl//error/instance_not_found.tpl */
-gettext("Maybe time for creating yours.");
+gettext("%1 doesn’t exist.");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("Do you want to register %1?");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("About");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("Help");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("Privacy Policy");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("Legal");
+
+/* public/themes/admin/tpl//error/instance_not_found.tpl */
+gettext("Legal");
 
 /* public/themes/admin/tpl//error/instance_not_activated.tpl */
-gettext("Instance not activated - Opennemas");
+gettext("'%1' not activated - Opennemas");
 
 /* public/themes/admin/tpl//error/instance_not_activated.tpl */
-gettext("Online newspaper not activated.");
-
-/* public/themes/admin/tpl//error/instance_not_activated.tpl */
-gettext("Contact with support.");
+gettext("%1 temporary deactivated.");
 
 /* public/themes/admin/tpl//error/404.tpl */
 gettext("We already have being informed of this error: %1");
@@ -8056,6 +8077,15 @@ gettext("Go back");
 /* public/themes/admin/tpl//image/new.tpl */
 gettext("Go back to listing");
 
+/* public/themes/admin/tpl//image/new.tpl */
+gettext("Pick a location for the image");
+
+/* public/themes/admin/tpl//image/new.tpl */
+gettext("Geolocate photo with my position");
+
+/* public/themes/admin/tpl//image/new.tpl */
+gettext("Assign location");
+
 /* public/themes/admin/tpl//image/search.tpl */
 gettext("Search images");
 
@@ -8195,12 +8225,6 @@ gettext("Delete");
 gettext("No available images<br> for this search");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Basic information");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Geolocation");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("Original filename:");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
@@ -8228,6 +8252,9 @@ gettext("Copyright");
 gettext("Date");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
+gettext("Location");
+
+/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("View advanced data");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
@@ -8241,9 +8268,6 @@ gettext("IPTC Data");
 
 /* public/themes/admin/tpl//image/_partials/photo_data.tpl */
 gettext("No available IPTC data.");
-
-/* public/themes/admin/tpl//image/_partials/photo_data.tpl */
-gettext("Geolocate photo with my position");
 
 /* public/themes/admin/tpl//image/_partials/categories.tpl */
 gettext("All");

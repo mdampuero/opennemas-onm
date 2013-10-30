@@ -39,16 +39,16 @@ class UserManager extends BaseManager
 
         $cacheId = $this->cachePrefix . "_user_" . $id.microtime(true);
 
-        if (!$this->hasCache()
-            || ($user = $this->cache->fetch($cacheId)) === false
-            || !is_object($user)
-        ) {
+        // if (!$this->hasCache()
+        //     || ($user = $this->cache->fetch($cacheId)) === false
+        //     || !is_object($user)
+        // ) {
             $user = new \User($id);
 
-            if ($this->hasCache()) {
-                $this->cache->save($cacheId, $user);
-            }
-        }
+            // if ($this->hasCache()) {
+            //     $this->cache->save($cacheId, $user);
+            // }
+        // }
 
         return $user;
     }
