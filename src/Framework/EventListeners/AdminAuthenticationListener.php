@@ -69,11 +69,14 @@ class AdminAuthenticationListener implements EventSubscriberInterface
             }
             if ($isAdmin) {
                 $location = $request->getBaseUrl() .'/admin/login/?forward_to='.$redirectTo;
-            } else {
+            } elseif ($isManager) {
                 $location = $request->getBaseUrl() .'/manager/login/?forward_to='.$redirectTo;
             }
 
-            $event->setResponse(new RedirectResponse($location, 301));
+            if (isset($location)) {
+                $event->setResponse(new RedirectResponse($location, 301));
+            }
+
         } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
             $event->setResponse(new RedirectResponse('/', 301));
         } else {
