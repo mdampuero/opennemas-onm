@@ -308,7 +308,7 @@ jQuery(document).ready(function($) {
                     marker = map.addMarker({
                         lat: latlng.lat(),
                         lng: latlng.lng(),
-                        // draggable: true,
+                        draggable: true,
                         cursor: 'move',
                         animation: google.maps.Animation.DROP,
                         dragend : function(evt) {
@@ -332,7 +332,7 @@ jQuery(document).ready(function($) {
                 map.addMarker({
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
-                    // draggable: true,
+                    draggable: true,
                     cursor: 'move',
                     animation: google.maps.Animation.DROP,
                     dragend : function(evt) {
@@ -371,7 +371,9 @@ jQuery(document).ready(function($) {
         var image_id = $('.target_image_id').val();
 
         var element = $('#photo-' + image_id).find('.photo_address');
-        console.log(element);
+        delete map;
+        $('#map_canvas').html('&nbsp;');
+
         element.val(location);
 
         jQuery("#modal-image-location").modal('hide');
