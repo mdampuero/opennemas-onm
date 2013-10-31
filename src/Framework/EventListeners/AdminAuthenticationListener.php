@@ -47,7 +47,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
 
         if ($isAsset) {
-            $isDynAsset = preg_match('@^/asset@', $request->getPathInfo());
+            $isDynAsset = preg_match('@/(asset|nocache)@', $request->getPathInfo());
             if ($isDynAsset) {
                 return;
             }
