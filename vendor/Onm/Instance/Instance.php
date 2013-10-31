@@ -34,7 +34,6 @@ class Instance
 
         if (empty($this->settings['MEDIA_URL'])) {
             $this->settings['MEDIA_URL'] = '/media/';
-
         }
 
         foreach ($this->settings as $key => $value) {
