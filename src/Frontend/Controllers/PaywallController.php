@@ -306,7 +306,7 @@ class PaywallController extends Controller
                 $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
             }
             $this->get('logger')->notice(
-                "Paywall: Error in GetExpresCheckoutDetails API call. Original errors: ".implode(' ;', $errors)
+                "Paywall: Error in DoExpressCheckoutPayment API call. Original errors: ".implode(' ;', $errors)
             );
 
             return $this->render(

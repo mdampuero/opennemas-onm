@@ -91,6 +91,7 @@
     </div>
     <div class="wrapper-content clearfix">
 
+        <div id="warnings-validation"></div>
         {render_messages}
 
         <div class="form-horizontal">
@@ -142,6 +143,12 @@
                         </label>
                     </div>
                 </div>
+                <p class="help-block">
+                    {t}Validate here your Paypal API credentials in the selected mode{/t}
+                    <a href="#" id="validate-credentials" class="btn btn-mini btn-danger">{t}Validate{/t}</a>
+                    <img src="{$params.IMAGE_DIR}spinner.gif" alt="{t}Checking{/t}" style="display: none;" id="loading_image">
+                </p>
+                <br>
                 <div class="help-block">
                     <p>{t escape=off}Paypal allows you to enable a testing environment where <strong>all the transactions will not be real</strong>, so you can test if the paywall is working well.{/t}</p>
                     {t}Active a testing environment in your Paypal account (only if you are a developer){/t} <a href="https://developer.paypal.com/">{t}More information{/t}</a>
@@ -235,12 +242,22 @@
                             {else}
                             <a id="validate-ipn" class="btn btn-mini btn-danger">{t}Validate{/t}</a>
                             {/if}
+                            <img src="{$params.IMAGE_DIR}spinner.gif" alt="{t}Checking{/t}" style="display: none;" id="loading_image_ipn">
                         </li>
                         <li>{t}Finally, click in the "Save" button to save this configuration{/t}.</li>
                     </ol>
                 </div>
             </fieldset>
+            <fieldset>
+                <h4 class="settings-header"><div class="step-number">6</div> {t}Accept Opennemas payment agreements terms{/t}</h4>
 
+                <div class="controls">
+                    <label for="terms">
+                        <input type="checkbox" name="settings[terms]" value="1" {if (isset($settings['terms']) && $settings['terms'] eq 1)}checked{/if} id="terms" required>
+                        {t escape=off}Read and accept the <a href="http://help.opennemas.com/" target="_blank">payment agreements terms</a> of Opennemas{/t}
+                    </label>
+                </div>
+            </fieldset>
         </div>
     </div>
 </form>
@@ -268,6 +285,7 @@
                 var mode = 'sandbox';
             }
 
+            $('#loading_image_ipn').show();
             $.ajax({
                 url: '{url name=admin_paywall_set_validate_ipn}',
                 type: "POST",
@@ -280,6 +298,54 @@
             }).done(function(data) {
                 window.location.href = data;
             }).fail(function () {
+                $('#warnings-validation').html(
+                    '<div class="alert alert-error">'+
+                        '<button class="close" data-dismiss="alert">×</button>'+
+                        '{t}Could not connect to PayPal. Validate your API credentials and try again{/t}'+
+                    '</div>'
+                );
+                $('#loading_image_ipn').hide();
+            });
+        });
+
+        $('#validate-credentials').on('click', function(e, ui) {
+            var username = $("#username").val();
+            var password = $("#password").val();
+            var signature = $("#signature").val();
+
+            if ($('#developer_mode_no').is(':checked')) {
+                var mode = 'live';
+            } else {
+                var mode = 'sandbox';
+            }
+
+            $('#loading_image').show();
+            $.ajax({
+                url: '{url name=admin_paywall_validate_api}',
+                type: "POST",
+                data: {
+                    username : username,
+                    password : password,
+                    signature : signature,
+                    mode : mode
+                }
+            }).done(function() {
+                $('#warnings-validation').html(
+                    '<div class="alert alert-success">'+
+                        '<button class="close" data-dismiss="alert">×</button>'+
+                        '{t}Paypal API authentication is correct.{/t}'+
+                    '</div>'
+                );
+                $('#loading_image').hide();
+                $('#validate-credentials').removeClass('btn-danger').addClass('btn-success');
+            }).fail(function() {
+                $('#warnings-validation').html(
+                    '<div class="alert alert-error">'+
+                        '<button class="close" data-dismiss="alert">×</button>'+
+                        '{t}Paypal API authentication is incorrect. Please try again.{/t}'+
+                    '</div>'
+                );
+                $('#loading_image').hide();
             });
         });
 

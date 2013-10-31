@@ -72,6 +72,6 @@ class PaypalNotificationsController extends Controller
             $logger->error('Unable to validate IPN data');
         }
 
-        return true;
+        return new Response('', 200);
     }
 }

@@ -473,16 +473,12 @@ class PaywallController extends Controller
         $settings['vat_percentage']   = (int) $settingsForm['vat_percentage'];
 
         // Check API credentials
-        $isValid = $this->validateCredentials(
-            $settings['paypal_username'],
-            $settings['paypal_password'],
-            $settings['paypal_signature'],
-            $settings['developer_mode']
-        );
+        $isValid = (s::get('valid_credentials'))? s::get('valid_credentials') : false;
 
         // Check IPN end point if recurring payment is enabled
         $isIpnValid = true;
-        if ($settings['recurring']) {
+
+        if ($settings['recurring'] == '1') {
             $isIpnValid = (s::get('valid_ipn'))? s::get('valid_ipn') : false;
         }
 
@@ -499,16 +495,16 @@ class PaywallController extends Controller
             }
         }
 
-        s::set('paywall_settings', $settings);
-
         if (!$isValid) {
             $this->get('session')->getFlashBag()->add('error', _("Paypal API authentication is incorrect. Please try again."));
-        } elseif ($isIpnValid == 'waiting') {
+        } elseif ($isIpnValid === 'waiting') {
             $this->get('session')->getFlashBag()->add('notice', _("We are checking your IPN url. Please wait a minute and try again."));
         } elseif (!$isIpnValid) {
             $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please validate it and try again."));
         } else {
             $this->get('session')->getFlashBag()->add('success', _("Paywall settings saved."));
+            // If config is all ok save data
+            s::set('paywall_settings', $settings);
         }
 
         return $this->redirect($this->generateUrl('admin_paywall_settings'));
@@ -524,8 +520,13 @@ class PaywallController extends Controller
      *
      * @return Response the response object
      **/
-    public function validateCredentials($userName, $password, $signature, $mode)
+    public function validateCredentialsAction(Request $request)
     {
+        $userName  = $request->request->filter('username', '', FILTER_SANITIZE_STRING);
+        $password  = $request->request->filter('password', '', FILTER_SANITIZE_STRING);
+        $signature = $request->request->filter('signature', '', FILTER_SANITIZE_STRING);
+        $mode      = $request->request->filter('mode', '', FILTER_SANITIZE_STRING);
+
         // Try getting balance to check API credentials
         $getBalanceRequest = new \GetBalanceRequestType();
 
@@ -540,7 +541,7 @@ class PaywallController extends Controller
             "acct1.UserName"  => $userName,
             "acct1.Password"  => $password,
             "acct1.Signature" => $signature,
-            "mode"            => ($mode == false) ? 'sandbox' : 'live',
+            "mode"            => $mode
         );
 
         $paypalService = new \PayPalAPIInterfaceServiceService($APICredentials);
@@ -548,22 +549,17 @@ class PaywallController extends Controller
             /* wrap API method calls on the service object with a try catch */
             $getBalanceResponse = $paypalService->GetBalance($getBalanceReq);
         } catch (\Exception $ex) {
-            $errors = array();
-
-            foreach ($getBalanceResponse->Errors as $error) {
-                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
-            }
-            $this->get('logger')->notice(
-                "Paywall: Error in getBalanceResponse API call. Original errors: ".implode(' ;', $errors)
-            );
+            $this->get('logger')->notice("Paywall: Error in getBalanceResponse API call.");
         }
 
         // Connection is ok return true
-        if ($getBalanceResponse->Ack == 'Success') {
-            return true;
+        if (isset($getBalanceResponse) && $getBalanceResponse->Ack == 'Success') {
+            s::set('valid_credentials', 'valid');
+            return new Response('ok', '200');
+        } else {
+            s::set('valid_credentials', false);
+            return new Response('fail', '404');
         }
-
-        return false;
     }
 
     /**
@@ -619,24 +615,17 @@ class PaywallController extends Controller
             /* wrap API method calls on the service object with a try catch */
             $setECResponse = $paypalService->SetExpressCheckout($setECReq);
         } catch (\Exception $ex) {
-            $errors = array();
-
-            foreach ($setECResponse->Errors as $error) {
-                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
-            }
-            $this->get('logger')->notice(
-                "Paywall: Error in setECResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
-            );
+            $this->get('logger')->notice("Paywall: Error in setECResponse validate IPN API call.");
         }
 
-        if ($setECResponse->Ack == 'Success') {
+        if (isset($setECResponse) && $setECResponse->Ack == 'Success') {
             $service = new \Onm\Merchant\PaypalWrapper($APICredentials);
             $token = $setECResponse->Token;
             $paypalUrl = $service->getServiceUrl().'&token='.$token;
 
             return new Response($paypalUrl);
         } else {
-            return new Response('', '404');
+            return new Response('fail', '404');
         }
     }
 
@@ -671,14 +660,9 @@ class PaywallController extends Controller
             /* wrap API method calls on the service object with a try catch */
             $getECResponse = $paypalService->GetExpressCheckoutDetails($getExpressCheckoutReq);
         } catch (\Exception $ex) {
-            $errors = array();
-
-            foreach ($getECResponse->Errors as $error) {
-                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
-            }
-            $this->get('logger')->notice(
-                "Paywall: Error in getECResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
-            );
+            $this->get('logger')->notice("Paywall: Error in getECResponse validate IPN API call.");
+            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));
+            return $this->redirect($this->generateUrl('admin_paywall_settings'));
         }
 
         $payerId = $getECResponse->GetExpressCheckoutDetailsResponseDetails->PayerInfo->PayerID;
@@ -705,14 +689,7 @@ class PaywallController extends Controller
         try {
             $DoECResponse = $paypalService->DoExpressCheckoutPayment($DoECReq);
         } catch (\Exception $ex) {
-            $errors = array();
-
-            foreach ($DoECResponse->Errors as $error) {
-                $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
-            }
-            $this->get('logger')->notice(
-                "Paywall: Error in DoECResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
-            );
+            $this->get('logger')->notice("Paywall: Error in DoECResponse validate IPN API call.");
         }
 
         // Payment done, let's update some registries in the app
@@ -732,15 +709,10 @@ class PaywallController extends Controller
                 /* wrap API method calls on the service object with a try catch */
                 $refundResponse = $paypalService->RefundTransaction($refundReq);
             } catch (\Exception $ex) {
-                $errors = array();
-
-                foreach ($refundResponse->Errors as $error) {
-                    $errors []= "[{$error->ErrorCode}] {$error->ShortMessage} | {$error->LongMessage}";
-                }
-                $this->get('logger')->notice(
-                    "Paywall: Error in refundResponse validate IPN API call. Original errors: ".implode(' ;', $errors)
-                );
+                $this->get('logger')->notice("Paywall: Error in refundResponse validate IPN API call.");
             }
+        } else {
+            $this->get('session')->getFlashBag()->add('error', _("Paypal IPN configuration is incorrect. Please correct it and try again."));
         }
 
         return $this->redirect($this->generateUrl('admin_paywall_settings'));

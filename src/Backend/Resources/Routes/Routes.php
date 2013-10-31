@@ -2305,6 +2305,14 @@ $adminRoutes->add(
 );
 
 $adminRoutes->add(
+    'admin_paywall_validate_api',
+    new Route(
+        '/paywall/settings/validate/api',
+        array('_controller' => 'Backend:Controllers:PaywallController:validateCredentials')
+    )
+);
+
+$adminRoutes->add(
     'admin_paywall_set_validate_ipn',
     new Route(
         '/paywall/settings/set/validate/ipn',
