@@ -242,13 +242,6 @@ $menuXml = '<?xml version="1.0"?>
             link="http://www.cronicasdelaemigracion.com//agenda/"
             privilege="SCHEDULE_ADMIN"
         />
-        <node
-            module_name="CRONICAS_MODULES"
-            title="'.htmlspecialchars(_("Statistics Google Analytics"), ENT_QUOTES).'"
-            id="analytics_manager"
-            target="external"
-            link="https://www.google.com/analytics/web/#report/visitors-overview/a32255002w59223403p60488603/"
-            privilege="STATS_ADMIN" />
 
     </submenu>
 
