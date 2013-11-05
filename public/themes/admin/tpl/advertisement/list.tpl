@@ -137,7 +137,7 @@
                                      title="{t}Media element (jpg, image, gif){/t}" />
                             {/if}
                             {assign var="type_advertisement" value=$ad->type_advertisement}
-                            {$map.$type_advertisement}
+                            {$map.$type_advertisement['name']}
                         </label>
                     </td>
                     <td style="">
