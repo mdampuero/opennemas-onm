@@ -14,7 +14,7 @@
  * @package Onm
  * @subpackage Model
  **/
-class AdvertisementPositions extends Content
+class AdvertisementPositions
 {
     /**
      * Array with all ads positions
@@ -22,6 +22,13 @@ class AdvertisementPositions extends Content
      * @var string
      **/
     private $positions = array();
+
+    /**
+     * Array with only theme positions
+     *
+     * @var string
+     **/
+    private $themePositions = array();
 
     /**
      * Initializes this class
@@ -586,14 +593,7 @@ class AdvertisementPositions extends Content
                 'name'  => '[B] Big Banner Inferior',
                 'group' => 'newsletter'
             ),
-
         );
-
-        // Add defined theme positions
-        $container = getContainerParameter('instance');
-        $themeAdsPositions = $container->theme->getAdsPositions();
-
-        $this->positions = $this->positions + $themeAdsPositions;
     }
 
     /**
@@ -604,13 +604,13 @@ class AdvertisementPositions extends Content
      *
      * @return void
      **/
-    public function addPosition($id, $positionData)
+    public function addPositions($positions)
     {
-        if (array_key_exists($id, $this->positions)) {
-            throw new \Exception('Position id is already in use');
-        }
+        $this->themePositions = $positions;
 
-        $this->positions[$id] = $positionData;
+        foreach ($positions as $id => $data) {
+            $this->positions[$id] = $data;
+        }
 
         return $this;
     }
@@ -649,9 +649,19 @@ class AdvertisementPositions extends Content
      *
      * @return array list of all positions
      **/
-    public function getAllPositions()
+    public function getAllAdsPositions()
     {
         return $this->positions;
+    }
+
+    /**
+     * Retrieves only theme defined advertisement positions
+     *
+     * @return array list of only theme positions
+     **/
+    public function getThemeAdsPositions()
+    {
+        return $this->themePositions;
     }
 
     /**
@@ -661,7 +671,7 @@ class AdvertisementPositions extends Content
      *
      * @return array list of all positions for a group
      **/
-    public function getGroupAdsPositions($groupName = null, $positions = array())
+    public function getAdsPositionsForGroup($groupName = null, $positions = array())
     {
         $groupPositions = array();
         if (!is_null($groupName)) {

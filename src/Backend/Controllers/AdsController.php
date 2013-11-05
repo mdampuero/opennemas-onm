@@ -67,9 +67,9 @@ class AdsController extends Controller
     public function listAction(Request $request)
     {
         // Get ads positions
-        $adsPosition = new \AdvertisementPositions();
-        $adsNames = $adsPosition->getAllAdsNames();
-        $map = $adsPosition->getAllPositions();
+        $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
+        $map      = $positionManager->getAllAdsPositions();
+        $adsNames = $positionManager->getAllAdsNames();
 
         // Get page
         $page = $request->query->getDigits('page', 1);
@@ -221,11 +221,10 @@ class AdsController extends Controller
                 )
             );
         } else {
-            $themeAds = $this->container->getParameter('instance')->theme->getAdsPositions();
-
+            $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
             return $this->render(
                 'advertisement/new.tpl',
-                array('themeAds' => $themeAds)
+                array('themeAds' => $positionManager->getThemeAdsPositions())
             );
         }
     }
@@ -265,11 +264,10 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $themeAds = $this->container->getParameter('instance')->theme->getAdsPositions();
-
+        $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
         return $this->render(
             'advertisement/new.tpl',
-            array('advertisement' => $ad, 'themeAds' => $themeAds)
+            array('advertisement' => $ad, 'themeAds' => $positionManager->getThemeAdsPositions())
         );
 
     }

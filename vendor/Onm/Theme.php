@@ -135,6 +135,9 @@ class Theme
                 $this->{$propertyName} = $settings[$propertyName];
             }
         }
+
+        // Instaciate ads manager
+        $this->adsManager = new \AdvertisementPositions();
     }
 
     /**
@@ -359,55 +362,12 @@ class Theme
     }
 
     /**
-     * Registers some ads positions in the theme
+     * Retrieves an instace of ads manager
      *
-     * @param array $adsPositions with ads positions for this theme
-     *
-     * @return Theme the object
+     * @return $this->adsManager
      **/
-    public function registerAdsPositions($adsPositions)
+    public function getAdsPositionManager()
     {
-        $this->adsPositions = $adsPositions;
-
-        return $this;
+        return $this->adsManager;
     }
-
-    /**
-     * Returns all ads positions defined for this theme and group if exists
-     *
-     * @param array $groupName group name for ads positions
-     *
-     * @return array the ads positions
-     **/
-    public function getAdsPositions($groupName = null)
-    {
-        if (is_null($groupName)) {
-            return $this->adsPositions;
-        }
-
-        $groupPositions = array();
-        foreach ($this->adsPositions as $key => $value) {
-            if ($value['group'] == $groupName) {
-                $groupPositions[$key] = $value;
-            }
-        }
-
-        return $groupPositions;
-
-    }
-
-    /**
-     * Returns all ads names defined for this theme
-     *
-     * @return array the ads names
-     **/
-    public function getAdsNames()
-    {
-        $adsNames = array();
-        foreach ($this->adsPositions as $key => $value) {
-            $adsNames[$key] = $value['name'];
-        }
-        return $adsNames;
-    }
-
 }
