@@ -292,8 +292,8 @@ class ArticlesController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get article_inner positions
-        $adsPosition = new \AdvertisementPositions();
-        $positions = $adsPosition->getGroupAdsPositions('article_inner', array(7, 9));
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

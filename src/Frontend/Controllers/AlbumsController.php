@@ -321,11 +321,11 @@ class AlbumsController extends Controller
         $category = $ccm->get_id($categoryName);
 
         // Get album_inner positions
-        $adsPosition = new \AdvertisementPositions();
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
         if ($position == 'inner') {
-            $positions = $adsPosition->getGroupAdsPositions('album_inner', array(7, 9));
+            $positions = $positionManager->getAdsPositionsForGroup('album_inner', array(7, 9));
         } else {
-            $positions = $adsPosition->getGroupAdsPositions('album_frontpage', array(7, 9));
+            $positions = $positionManager->getAdsPositionsForGroup('album_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

@@ -275,8 +275,8 @@ class NewStandController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get news_stand positions
-        $adsPosition = new \AdvertisementPositions();
-        $positions = $adsPosition->getGroupAdsPositions('frontpage', array(103, 105));
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('frontpage', array(103, 105));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

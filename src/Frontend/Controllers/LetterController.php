@@ -328,8 +328,8 @@ class LetterController extends Controller
         $category = 0;
 
         // Get letter positions
-        $adsPosition = new \AdvertisementPositions();
-        $positions = $adsPosition->getGroupAdsPositions('article_inner', array(7, 9));
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

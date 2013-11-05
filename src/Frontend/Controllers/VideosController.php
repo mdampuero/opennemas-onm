@@ -437,11 +437,11 @@ class VideosController extends Controller
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
         // Get video positions
-        $adsPosition = new \AdvertisementPositions();
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
         if ($context == 'inner') {
-            $positions = $adsPosition->getGroupAdsPositions('video_inner', array(7, 9));
+            $positions = $positionManager->getAdsPositionsForGroup('video_inner', array(7, 9));
         } else {
-            $positions = $adsPosition->getGroupAdsPositions('video_frontpage', array(7, 9));
+            $positions = $positionManager->getAdsPositionsForGroup('video_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);

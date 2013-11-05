@@ -828,11 +828,11 @@ class OpinionsController extends Controller
     private function getAds($context = '')
     {
         // Get opinion positions
-        $adsPosition = new \AdvertisementPositions();
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
         if ($context == 'inner') {
-            $positions = $adsPosition->getGroupAdsPositions('opinion_inner', array(7, 9));
+            $positions = $positionManager->getAdsPositionsForGroup('opinion_inner', array(7, 9));
         } else {
-            $positions = $adsPosition->getGroupAdsPositions('opinion_frontpage', array(7, 9));
+            $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
         $ccm = \ContentCategoryManager::get_instance();

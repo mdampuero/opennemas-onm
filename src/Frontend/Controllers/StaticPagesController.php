@@ -80,8 +80,8 @@ class StaticPagesController extends Controller
         $category = 0;
 
         // Get static_pages positions
-        $adsPosition = new \AdvertisementPositions();
-        $positions = $adsPosition->getGroupAdsPositions(null, array(1, 2, 103, 105, 7, 9, 10));
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup(null, array(1, 2, 103, 105, 7, 9, 10));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
