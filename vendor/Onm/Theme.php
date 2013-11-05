@@ -70,6 +70,13 @@ class Theme
     public $menus = array();
 
     /**
+     * Registered ads positions for this theme
+     *
+     * @var array
+     **/
+    public $adsPositions = array();
+
+    /**
      * The l10n domain
      *
      * @var string
@@ -323,7 +330,6 @@ class Theme
         return false;
     }
 
-
     /**
      * Registers a parent theme to inheritance tpl files
      *
@@ -351,4 +357,57 @@ class Theme
 
         return false;
     }
+
+    /**
+     * Registers some ads positions in the theme
+     *
+     * @param array $adsPositions with ads positions for this theme
+     *
+     * @return Theme the object
+     **/
+    public function registerAdsPositions($adsPositions)
+    {
+        $this->adsPositions = $adsPositions;
+
+        return $this;
+    }
+
+    /**
+     * Returns all ads positions defined for this theme and group if exists
+     *
+     * @param array $groupName group name for ads positions
+     *
+     * @return array the ads positions
+     **/
+    public function getAdsPositions($groupName = null)
+    {
+        if (is_null($groupName)) {
+            return $this->adsPositions;
+        }
+
+        $groupPositions = array();
+        foreach ($this->adsPositions as $key => $value) {
+            if ($value['group'] == $groupName) {
+                $groupPositions[$key] = $value;
+            }
+        }
+
+        return $groupPositions;
+
+    }
+
+    /**
+     * Returns all ads names defined for this theme
+     *
+     * @return array the ads names
+     **/
+    public function getAdsNames()
+    {
+        $adsNames = array();
+        foreach ($this->adsPositions as $key => $value) {
+            $adsNames[$key] = $value['name'];
+        }
+        return $adsNames;
+    }
+
 }
