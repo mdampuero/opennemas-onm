@@ -66,10 +66,13 @@ class AdsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $map = \Advertisement::$map;
+        // Get ads positions
+        $adsPosition = new \AdvertisementPositions();
+        $adsNames = $adsPosition->getAllAdsNames();
+        $map = $adsPosition->getAllPositions();
 
+        // Get page
         $page = $request->query->getDigits('page', 1);
-
         list($filter, $queryString) = $this->buildFilter(
             $request,
             'in_litter != 1 AND fk_content_categories LIKE \'%' . $this->category . '%\''
@@ -77,7 +80,7 @@ class AdsController extends Controller
 
         // Filters
         $filterOptions = array(
-            'type_advertisement' => array('-1' => _("-- All --")) + $map,
+            'type_advertisement' => array('-1' => _("-- All --")) + $adsNames,
             'available' => array(
                 '-1' => _("-- All --"),
                 '0'  => _("No published"),
@@ -218,7 +221,12 @@ class AdsController extends Controller
                 )
             );
         } else {
-            return $this->render('advertisement/new.tpl');
+            $themeAds = $this->container->getParameter('instance')->theme->getAdsPositions();
+
+            return $this->render(
+                'advertisement/new.tpl',
+                array('themeAds' => $themeAds)
+            );
         }
     }
 
@@ -257,9 +265,11 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
+        $themeAds = $this->container->getParameter('instance')->theme->getAdsPositions();
+
         return $this->render(
             'advertisement/new.tpl',
-            array('advertisement' => $ad,)
+            array('advertisement' => $ad, 'themeAds' => $themeAds)
         );
 
     }
