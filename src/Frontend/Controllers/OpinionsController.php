@@ -827,10 +827,12 @@ class OpinionsController extends Controller
      */
     private function getAds($context = '')
     {
+        // Get opinion positions
+        $adsPosition = new \AdvertisementPositions();
         if ($context == 'inner') {
-            $positions = array(7, 9, 750, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
+            $positions = $adsPosition->getGroupAdsPositions('opinion_inner', array(7, 9));
         } else {
-            $positions = array(7, 9, 650, 601, 602, 603, 605, 609, 610, 691, 692);
+            $positions = $adsPosition->getGroupAdsPositions('opinion_frontpage', array(7, 9));
         }
 
         $ccm = \ContentCategoryManager::get_instance();

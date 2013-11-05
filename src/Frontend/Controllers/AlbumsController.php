@@ -199,7 +199,7 @@ class AlbumsController extends Controller
         $this->view->setConfig('gallery-inner');
 
         // Load advertisement for this action
-        $ads = $this->getAds('innner');
+        $ads = $this->getAds('inner');
         $this->view->assign('advertisements', $ads);
 
 
@@ -320,15 +320,12 @@ class AlbumsController extends Controller
         $categoryName = 'album';
         $category = $ccm->get_id($categoryName);
 
-        // I have added the element 450 in order to integrate interstitial position
+        // Get album_inner positions
+        $adsPosition = new \AdvertisementPositions();
         if ($position == 'inner') {
-            $positions = array(
-                7, 9, 501, 502, 503, 509, 510, 591, 592
-            );
+            $positions = $adsPosition->getGroupAdsPositions('album_inner', array(7, 9));
         } else {
-            $positions = array(
-                7, 9, 450, 401, 402, 403, 405, 409, 410, 491, 492
-            );
+            $positions = $adsPosition->getGroupAdsPositions('album_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);

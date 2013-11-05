@@ -327,12 +327,9 @@ class LetterController extends Controller
     {
         $category = 0;
 
-        // I have added the element 150 in order to integrate all the code in the same query
-        if ($position == 'inner') {
-            $positions = array(7, 9, 150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
-        } else {
-            $positions = array(7, 9, 150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
-        }
+        // Get letter positions
+        $adsPosition = new \AdvertisementPositions();
+        $positions = $adsPosition->getGroupAdsPositions('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

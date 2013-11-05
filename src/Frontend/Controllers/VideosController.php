@@ -436,11 +436,12 @@ class VideosController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // I have added the element 150 in order to integrate all the code in the same query
+        // Get video positions
+        $adsPosition = new \AdvertisementPositions();
         if ($context == 'inner') {
-            $positions = array(350, 301, 302, 303, 305, 309, 310, 391, 392, 7, 9);
+            $positions = $adsPosition->getGroupAdsPositions('video_inner', array(7, 9));
         } else {
-            $positions = array(250, 201, 202, 203, 205, 209, 210, 291, 292, 7, 9);
+            $positions = $adsPosition->getGroupAdsPositions('video_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
