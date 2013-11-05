@@ -24,21 +24,13 @@ class AdvertisementPositions
     private $positions = array();
 
     /**
-     * Array with only theme positions
-     *
-     * @var string
-     **/
-    private $themePositions = array();
-
-    /**
      * Initializes this class
      **/
     public function __construct()
     {
         $this->positions = array(
-            /**
-             Frontpage banners
-             */
+
+            // Frontpage banners
             1 => array(
                 'name'  => 'Top Left LeaderBoard',
                 'group' => 'frontpage'
@@ -162,9 +154,7 @@ class AdvertisementPositions
                 'group' => 'frontpage'
             ),
 
-            /**
-             Article inner banners
-             */
+            // Article inner banners
             101 => array(
                 'name'  => '[I] Big banner superior',
                 'group' => 'article_inner'
@@ -226,9 +216,7 @@ class AdvertisementPositions
                 'group' => 'article_inner'
             ),
 
-            /**
-             Videos frontpage banners
-             */
+            // Videos frontpage banners
             201 => array(
                 'name'  => '[V] Big banner superior',
                 'group' => 'video_frontpage'
@@ -266,9 +254,7 @@ class AdvertisementPositions
                 'group' => 'video_frontpage'
             ),
 
-            /**
-             Video inner banners
-             */
+            // Video inner banners
             301 => array(
                 'name'  => '[VI] Big banner superior',
                 'group' => 'video_inner'
@@ -306,9 +292,7 @@ class AdvertisementPositions
                 'group' => 'video_inner'
             ),
 
-            /**
-             Albums frontpage banners
-             */
+            // Albums frontpage banners
             401 => array(
                 'name'  => '[A] Big banner superior',
                 'group' => 'album_frontpage'
@@ -350,9 +334,7 @@ class AdvertisementPositions
                 'group' => 'album_frontpage'
             ),
 
-            /**
-             Albums inner banners
-             */
+            // Albums inner banners
             501 => array(
                 'name'  => '[AI] Big banner superior',
                 'group' => 'album_inner'
@@ -390,9 +372,7 @@ class AdvertisementPositions
                 'group' => 'album_inner'
             ),
 
-            /**
-             Opinion frontpage banners
-             */
+            // Opinion frontpage banners
             601 => array(
                 'name'  => '[O] Big banner superior',
                 'group' => 'opinion_frontpage'
@@ -434,9 +414,7 @@ class AdvertisementPositions
                 'group' => 'opinion_frontpage'
             ),
 
-            /**
-             Opinion inner banners
-             */
+            // Opinion inner banners
             701 => array(
                 'name'  => '[OI] Big Banner Top(I) (728X90)',
                 'group' => 'opinion_inner'
@@ -498,9 +476,8 @@ class AdvertisementPositions
                 'group' => 'opinion_inner'
             ),
 
-            /**
-             Polls frontpage banners
-             */
+
+            // Polls frontpage banners
             801 => array(
                 'name'  => '[E] Big banner superior',
                 'group' => 'polls_frontpage'
@@ -542,9 +519,8 @@ class AdvertisementPositions
                 'group' => 'polls_frontpage'
             ),
 
-            /**
-             Polls inner banners
-             */
+
+            // Polls inner banners
             901 => array(
                 'name'  => '[EI] Big banner superior',
                 'group' => 'polls_inner'
@@ -582,9 +558,7 @@ class AdvertisementPositions
                 'group' => 'polls_inner'
             ),
 
-            /**
-             Newsletter banners
-             */
+            // Newsletter banners
             1001 => array(
                 'name'  => '[B] Big banner superior',
                 'group' => 'newsletter'
@@ -606,9 +580,8 @@ class AdvertisementPositions
      **/
     public function addPositions($positions)
     {
-        $this->themePositions = $positions;
-
         foreach ($positions as $id => $data) {
+            $data['custom'] = true;
             $this->positions[$id] = $data;
         }
 
@@ -655,13 +628,20 @@ class AdvertisementPositions
     }
 
     /**
-     * Retrieves only theme defined advertisement positions
+     * Retrieves all the theme advertisement positions
      *
-     * @return array list of only theme positions
+     * @return array list of all positions
      **/
     public function getThemeAdsPositions()
     {
-        return $this->themePositions;
+        $themeAds = array();
+        foreach ($this->positions as $key => $value) {
+            if (array_key_exists('custom', $value)) {
+                $themeAds[$key] = $value;
+            }
+        }
+
+        return $themeAds;
     }
 
     /**

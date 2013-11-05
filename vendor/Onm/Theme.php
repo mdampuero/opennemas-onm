@@ -136,7 +136,7 @@ class Theme
             }
         }
 
-        // Instaciate ads manager
+        // Instantiate ads manager
         $this->adsManager = new \AdvertisementPositions();
     }
 
