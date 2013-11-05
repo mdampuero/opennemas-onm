@@ -253,6 +253,7 @@
                         {is_module_activated name="NEWSLETTER_MANAGER"}
                         <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
                         {/is_module_activated}
+                        <li><a href="#publi-others">{t}Others{/t}</a></li>
                     </ul>
 
                     <div id="publi-portada">
@@ -299,6 +300,21 @@
                         {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
                     </div>
                     {/is_module_activated}
+                    <div id="publi-others">
+                        {foreach $themeAds as $adId => $ad}
+                        <tr>
+                            <td colspan="2">
+                                <label>
+                                    {$ad['name']}
+                                    <input type="radio" name="type_advertisement" value="{$adId}" {if isset($advertisement) && $advertisement->type_advertisement == $adId}checked="checked" {/if}/>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr/></td>
+                        </tr>
+                        {/foreach}
+                    </div>
                 </div><!-- /position-adv -->
             </div>
         </div>

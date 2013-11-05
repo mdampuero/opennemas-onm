@@ -475,6 +475,12 @@ function getService($serviceName)
     return $sc->get($serviceName);
 }
 
+function getContainerParameter($paramName)
+{
+    global $sc;
+    return $sc->getParameter($paramName);
+}
+
 function generateRandomString($length = 10)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

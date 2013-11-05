@@ -70,6 +70,13 @@ class Theme
     public $menus = array();
 
     /**
+     * Registered ads positions for this theme
+     *
+     * @var array
+     **/
+    public $adsPositions = array();
+
+    /**
      * The l10n domain
      *
      * @var string
@@ -128,6 +135,9 @@ class Theme
                 $this->{$propertyName} = $settings[$propertyName];
             }
         }
+
+        // Instantiate ads manager
+        $this->adsManager = new \AdvertisementPositions();
     }
 
     /**
@@ -323,7 +333,6 @@ class Theme
         return false;
     }
 
-
     /**
      * Registers a parent theme to inheritance tpl files
      *
@@ -350,5 +359,15 @@ class Theme
         }
 
         return false;
+    }
+
+    /**
+     * Retrieves an instace of ads manager
+     *
+     * @return $this->adsManager
+     **/
+    public function getAdsPositionManager()
+    {
+        return $this->adsManager;
     }
 }
