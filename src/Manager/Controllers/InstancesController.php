@@ -503,4 +503,31 @@ class InstancesController extends Controller
 
         return $this->redirect($this->generateUrl('manager_instances'));
     }
+
+    /**
+     * Set the activated flag for instances in batch
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchAvailableAction(Request $request)
+    {
+        $selected = $request->query->get('selected', null);
+        $status   = $request->query->getDigits('status', 0);
+
+        if (is_array($selected) && count($selected) > 0) {
+            foreach ($selected as $id) {
+                $instance = $this->instanceManager->read($id);
+                if ($instance === false) {
+                    m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
+                } else {
+                    $this->instanceManager->changeActivated($id, $status);
+                    m::add(sprintf(_("Instance %d updated successfully."), $id), m::SUCCESS);
+                }
+            }
+        }
+
+        return new Response('ok', 200);
+    }
 }

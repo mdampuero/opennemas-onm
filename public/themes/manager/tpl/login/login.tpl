@@ -20,7 +20,6 @@
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}
         {css_tag href="/style.css" media="screen" common=1}
-        {css_tag href="/style-navbar.css" media="screen"}
         {css_tag href="/loginadmin.css" media="screen" common=1}
     {/block}
 
