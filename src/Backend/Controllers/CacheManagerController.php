@@ -315,9 +315,12 @@ class CacheManagerController extends Controller
     public function cleanFrontpageAction(Request $request)
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
+        $category = $this->request->request->filter('category', '', FILTER_SANITIZE_STRING);
+        if (empty($category)) {
+            $category = $this->request->query->filter('category', '', FILTER_SANITIZE_STRING);
+        }
 
-        if (isset($category)) {
+        if (!empty($category)) {
             $ccm = \ContentCategoryManager::get_instance();
             if ($category != 'home' && $category != 'opinion') {
                 $category_name = $ccm->get_name($category);
