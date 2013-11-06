@@ -103,6 +103,16 @@ $managerRoutes->add(
 );
 
 $managerRoutes->add(
+    'manager_instance_batch_available',
+    new Route(
+        '/instance/batch-available',
+        array(
+            '_controller' => 'Manager:Controllers:InstancesController:batchAvailable',
+        )
+    )
+);
+
+$managerRoutes->add(
     'manager_instance_toggleavailable',
     new Route(
         '/instance/{id}/toggle-available',
