@@ -611,17 +611,14 @@ class CoversController extends Controller
             foreach ($positions as $id) {
                 $cover = new \Kiosko($id);
                 $result = $result && $cover->setPosition($pos);
+                $pos++;
             }
         }
 
         if ($result) {
-            $msg = "<div class='alert alert-success'>"
-                ._("Positions saved successfully.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+            $msg = _("Positions saved successfully.");
         } else {
-            $msg = "<div class='alert alert-error'>"
-                ._("Unable to save the new positions. Please contact with your system administrator.")
-                .'<button data-dismiss="alert" class="close">×</button></div>';
+            $msg = _("Unable to save the new positions. Please contact with your system administrator.");
         }
 
         return new Response($msg);
