@@ -155,19 +155,21 @@ function getUserRealIP()
 function normalizeUrl($url)
 {
     $urlParts = explode('?', $url);
-    $urlPart = array_shift($urlParts);
+    $url      = $urlParts[0];
 
-    if (strlen($urlPart) > 1) {
-        $normalizedUrl = rtrim($urlPart, '/');
-    } else {
-        $normalizedUrl = $url;
+    $urlParams = '';
+    if (array_key_exists('1', $urlParts)) {
+        $urlParams = '?'.$urlParts[1];
+    }
+    $url = rtrim($url, '/');
+
+    if ($urlParams !== '' && $url !== '/') {
+        while (strpos($url, '//') != false) {
+            $url = str_replace('//', '/', $url);
+        }
     }
 
-    while (strpos($normalizedUrl, '//') != false) {
-        $normalizedUrl = str_replace('//', '/', $normalizedUrl);
-    }
-
-    return $normalizedUrl.'?'.implode('?', $urlParts);
+    return $url.$urlParams;
 }
 
 /**
