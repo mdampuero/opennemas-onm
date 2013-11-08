@@ -45,6 +45,12 @@ services:
     listener.l10n_system:
         class: Framework\EventListeners\L10nSystemListener
 
+    listener.content_subscriber:
+        class: Backend\EventListeners\ContentSubscriberListener
+
+    listener.news_agency:
+        class: Framework\EventListeners\NewsAgencyListener
+
     dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
         calls:
@@ -59,6 +65,8 @@ services:
             - ['addSubscriber', [ @listener.app_bootup]]
             - ['addSubscriber', [ @listener.maintenance_mode]]
             - ['addSubscriber', [ @listener.l10n_system]]
+            - ['addSubscriber', [ @listener.content_subscriber]]
+            - ['addSubscriber', [ @listener.news_agency]]
 
     framework:
         class: Onm\Framework\Framework

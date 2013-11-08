@@ -576,7 +576,7 @@ function initEnvironment($environment = 'production')
  **/
 function dispatchEventWithParams($eventName, $params = array())
 {
-    $eventDispatcher = getService('event_dispatcher');
+    $eventDispatcher = getService('dispatcher');
 
     $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {
