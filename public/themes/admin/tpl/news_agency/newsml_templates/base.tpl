@@ -88,7 +88,7 @@
                     </abstract>
                   </body.head>
                   <body.content>
-                    {$article->body|replace:'<br />':"</p><p>"|unescape:"htmlall"}
+                    {$article->body|replace:'<br />':"</p><p>"|unescape:"htmlall"|htmlspecialchars}
                   </body.content>
                 </body>
               </nitf>
@@ -156,7 +156,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p>{$photo->description|unescape:"htmlall"|trim}</p>
+                        <p>{$photo->description|htmlspecialchars_decode|trim}</p>
                       </body.content>
                     </body>
                   </nitf>
@@ -221,7 +221,7 @@
                         </dateline>
                       </body.head>
                       <body.content>
-                        <p>{$photoInner->description|unescape:"htmlall"|trim}</p>
+                        <p>{$photoInner->description|htmlspecialchars_decode|trim}</p>
                       </body.content>
                     </body>
                   </nitf>
