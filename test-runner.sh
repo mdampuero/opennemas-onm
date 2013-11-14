@@ -6,7 +6,7 @@ if ! which inotifywait > /dev/null; then
 fi
 
 while true; do
-    inotifywait -r -e modify app/ src/ vendor/Onm/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
+    inotifywait -qq -r -e modify app/ src/ vendor/Onm/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
     clear &&
     ant phpunit;
 done
