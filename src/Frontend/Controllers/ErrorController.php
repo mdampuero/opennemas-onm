@@ -49,22 +49,22 @@ class ErrorController extends Controller
         $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
-        $error = $request->get('error');
+        $error = $request->attributes->get('exception');
 
         if ($this->container->hasParameter('environment')) {
             $environment = $this->container->getParameter('environment');
         }
 
-        $name = join('', array_slice(explode('\\', get_class($error)), -1));
+        $name = join('', array_slice(explode('\\', $error->getClass()), -1));
 
         $errorID = strtoupper(INSTANCE_UNIQUE_NAME.'_'.uniqid());
 
-
         switch ($name) {
             case 'ResourceNotFoundException':
+            case 'NotFoundHttpException':
                 $trace = $error->getTrace();
-                $path = $trace[0]['args'][0];
 
+                $path = $request->getRequestUri();
 
                 $page = new \stdClass();
 

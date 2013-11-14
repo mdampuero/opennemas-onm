@@ -134,7 +134,6 @@ class InstanceManager
 
             //If found matching instance initialize its contants and return it
             if ($matchedInstance) {
-
                 $instance = new Instance();
                 foreach ($matchedInstance as $key => $value) {
                     $instance->{$key} = $value;

@@ -60,7 +60,7 @@ class CacheManagerController extends Controller
     public function defaultAction(Request $request)
     {
         list($this->filter, $this->params, $this->page, $this->itemsPerPage) =
-            $this->buildFilter($this->request);
+            $this->buildFilter($request);
 
         // Get available cache files
         $caches = $this->templateManager->scan($this->filter);

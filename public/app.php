@@ -15,47 +15,24 @@ use Symfony\Component\Routing\Route;
 
 require __DIR__.'/../app/autoload.php';
 
-// Load the available route collection
-$routes = new \Symfony\Component\Routing\RouteCollection();
+// Little hack to allow final slashes in the url
+$_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
 
-$routeFiles = glob(SRC_PATH.'/*/Resources/Routes/Routes.php');
-foreach ($routeFiles as $routeFile) {
-    require $routeFile;
-}
+$configFile = implode(
+    DIRECTORY_SEPARATOR,
+    array(APPLICATION_PATH, 'config', 'config.inc.php')
+);
+require_once $configFile;
 
 // Create the request object
+// TODO: this should be moved to the container
+Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
-// Create the Request context from the request, useful for the matcher
-$context = new RequestContext();
-$context->fromRequest($request);
-
-// Inialize the url matcher
-$matcher = new UrlMatcher($routes, $context);
-
-//Initialize the url generator
-global $generator;
-$generator = new \Symfony\Component\Routing\Generator\UrlGenerator($routes, $context);
-
 $sc = include __DIR__.'/../app/container.php';
 
-require 'bootstrap.php';
-
-$timezone = \Onm\Settings::get('time_zone');
-if (isset($timezone)) {
-    $availableTimezones = \DateTimeZone::listIdentifiers();
-    date_default_timezone_set($availableTimezones[$timezone]);
-}
-
-if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
-    $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
-} elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
-    $sc->setParameter('dispatcher.exceptionhandler', 'Manager:Controllers:ErrorController:default');
-} else {
-    $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
-}
-
-// Dispatch the response
-$dispatcher = new \Onm\Framework\Dispatcher\Dispatcher($matcher, $request, $sc);
-$dispatcher->dispatch();
+$framework = $sc->get('framework');
+$response = $framework->handle($request);
+$response->send();
+$framework->terminate($request, $response);

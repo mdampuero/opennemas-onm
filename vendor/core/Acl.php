@@ -39,7 +39,7 @@ class Acl
     /**
      * Checks if the current user has access to category given its id.
      *
-     * @param  string  $category
+     * @param  string  $categoryId the category id to check
      *
      * @return boolean
     */

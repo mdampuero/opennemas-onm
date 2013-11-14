@@ -37,19 +37,19 @@ class CleanSmartyCacheCommand extends Command
 
         if ($themeName != null) {
             $folder = $baseTmpInstancesPath.'/'.$themeName;
-            $output->writeln(" - Cleaning smarty files for instance ".$themeName);
+            if (!file_exists($folder)) {
+                $output->writeln('Instance name not valid');
+                return 1;
+            }
+
+            $output->writeln(" - Cleaning temporary files for instance ".$themeName);
             $this->cleanCompileForTheme($input, $output, $folder);
             $this->cleanCacheForTheme($input, $output, $folder);
         } else {
-            $output->writeln(" - Cleaning smarty compile files for all instances.");
+            $output->writeln(" - Cleaning temporary files");
 
             foreach (glob($baseTmpInstancesPath.'/*') as $folder) {
                 $this->cleanCompileForTheme($input, $output, $folder);
-            }
-
-            $output->writeln(" - Cleaning smarty cache files for all instances.");
-
-            foreach (glob($baseTmpInstancesPath.'/*') as $folder) {
                 $this->cleanCacheForTheme($input, $output, $folder);
             }
         }
@@ -62,12 +62,12 @@ class CleanSmartyCacheCommand extends Command
      **/
     private function cleanCompileForTheme($input, $output, $themePath)
     {
-        $output->write("\t* Compile files for ".basename($themePath). ' instance ');
+        $output->write("\t* '".basename($themePath)."' compile files ");
 
         $fullCompileFolderPath = realpath($themePath.'/smarty/compile');
         if ($fullCompileFolderPath) {
             $out = exec('rm -r '.$fullCompileFolderPath);
-            echo $out;
+            $output->write($out);
         }
 
         $output->writeln('[REMOVED]');
@@ -80,12 +80,12 @@ class CleanSmartyCacheCommand extends Command
      **/
     private function cleanCacheForTheme($input, $output, $themePath)
     {
-        $output->write("\t* Cache files for ".basename($themePath). ' instance ');
+        $output->write("\t* '".basename($themePath)."' cache files ");
 
         $fullCompileFolderPath = realpath($themePath.'/smarty/cache');
         if ($fullCompileFolderPath) {
             $out = exec('rm -r '.$fullCompileFolderPath);
-            echo $out;
+            $output->write($out);
         }
 
         $output->writeln('[REMOVED]');

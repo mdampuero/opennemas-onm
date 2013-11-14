@@ -240,15 +240,11 @@ class FrontpagesController extends Controller
      **/
     public static function getAds($category = 'home')
     {
-
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // I have added the element 50 in order to integrate interstitial position
-        $positions = array(
-            50, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15,
-            16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
-            36, 103, 105, 9, 91, 92
-        );
+        // Get frontpage positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('frontpage');
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

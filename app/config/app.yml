@@ -1,5 +1,6 @@
 parameters:
     # Framework Base Configuration
+    kernel.secret:
     framework:
         secret:          %secret%
         charset:         UTF-8

@@ -1,3 +1,4 @@
+.maintenance
 *~
 build
 cache.properties
@@ -22,6 +23,7 @@ vendor/swiftmailer
 vendor/psr
 vendor/paypal
 app/config/parameters.yml
+app/Resources/**/*.mo
 /bin/import-tools/joomla/importer.log
 /bin/import-tools/joomla/configuration.ini
 /bin/import-tools/joomla/configuration.ini-ideal
@@ -29,3 +31,6 @@ app/config/parameters.yml
 /bin/import-tools/canarias/libs/canariasImport-config.inc.php-dist
 /bin/import-tools/onmToOnm/libs/onm-config.inc.php
 /bin/import-tools/onmToOnm/log/log.txt
+/app/Resources/locale/es_ES/LC_MESSAGES/messages.mo
+/app/Resources/locale/gl_ES/LC_MESSAGES/messages.mo
+/app/Resources/locale/pt_BR/LC_MESSAGES/messages.mo

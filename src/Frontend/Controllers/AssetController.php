@@ -133,7 +133,7 @@ class AssetController extends Controller
 
             $originalFormat = strtolower($image->getImagick()->getImageFormat());
 
-            $blob = $image->show(
+            $contents = $image->get(
                 $originalFormat,
                 array(
                     'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
@@ -143,8 +143,7 @@ class AssetController extends Controller
                 )
             );
 
-            die();
-
+            return new Response($contents, 200, array('Content-Type' => $originalFormat));
         } else {
             return new Response('', 404);
         }

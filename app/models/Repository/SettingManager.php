@@ -22,6 +22,7 @@ class SettingManager
      * Initializes the menu manager
      *
      * @param CacheInterface $cache the cache instance
+     * @param string $cachePrefix the prefix to use in the cache
      **/
     public function __construct(CacheInterface $cache, $cachePrefix)
     {

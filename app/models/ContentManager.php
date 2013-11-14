@@ -47,7 +47,7 @@ class ContentManager
      * If a valid content type name is given, it initializes some values for accessing
      * some particular database tables
      *
-     * @param [type] [varname] [description]
+     * @param string $contentType the content type to work with
      *
      * @return void
      **/
@@ -208,10 +208,11 @@ class ContentManager
     }
 
     /**
-     * undocumented function
+     * Searches for contents given a criteria
      *
-     * @return void
-     * @author
+     * @param array $params parameters to filter contents with
+     *
+     * @return array list of contents that matched the criteria
      **/
     public static function search($params = array())
     {
@@ -845,7 +846,7 @@ class ContentManager
      *                             default is 0.
      * @param integer $days Interval of days on which the consultation
      *                             takes place. For default is 2.
-     * @param integer $num Number of objects that the function returns.
+     * @param integer $maxElements Number of objects that the function returns.
      *                             For default is 8.
      * @param boolean $all Get all the content regardless of content
      *                             status and endtime.
@@ -1393,7 +1394,7 @@ class ContentManager
      * @param int|null    $pk_fk_content_category Id de categoria (para
      *                                             find_by_category y si null
      *                                             es find).
-     * @param string url the base path used by the pager
+     * @param string      $url the base path used by the pager
      *
      * @return array Array ($items, $pager)
      */
@@ -1684,6 +1685,8 @@ class ContentManager
     /**
      * Returns title, catName, slugs, dates and images of last headlines
      *
+     * @param boolean $frontIncluded description not available
+     *
      * @return array a list of content information (not the object itself)
      **/
     public function findHeadlinesWithImage($frontIncluded = false)
@@ -1934,7 +1937,8 @@ class ContentManager
     /**
      * Returns the name of a content type given its id.
      *
-     * @param  int $id the content type id
+     * @param int $id the content type id
+     * @param string $ucfirst whether to apply the ucfirst function
      *
      * @return string the content type name
      **/

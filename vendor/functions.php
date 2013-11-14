@@ -147,6 +147,32 @@ function getUserRealIP()
 }
 
 /**
+ * Cleans double slashes and trailing slash from an string url
+ *
+ * @param string $url the url to normalize
+ * @return string the normalized url
+ **/
+function normalizeUrl($url)
+{
+    $urlParts = explode('?', $url);
+    $url      = $urlParts[0];
+
+    $urlParams = '';
+    if (array_key_exists('1', $urlParts)) {
+        $urlParams = '?'.$urlParts[1];
+    }
+    $url = rtrim($url, '/');
+
+    if ($urlParams !== '' && $url !== '/') {
+        while (strpos($url, '//') != false) {
+            $url = str_replace('//', '/', $url);
+        }
+    }
+
+    return $url.$urlParams;
+}
+
+/**
  * Register in the log one event in the content
  *
  * @return void
@@ -175,8 +201,8 @@ function logContentEvent($action = null, $content = null)
  **/
 function url($urlName, $params = array(), $absolute = false)
 {
-    global $generator;
-    return $generator->generate($urlName, $params, $absolute);
+    global $sc;
+    return $sc->get('url_generator')->generate($urlName, $params, $absolute);
 }
 
 /**
@@ -451,6 +477,12 @@ function getService($serviceName)
     return $sc->get($serviceName);
 }
 
+function getContainerParameter($paramName)
+{
+    global $sc;
+    return $sc->getParameter($paramName);
+}
+
 function generateRandomString($length = 10)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -544,7 +576,7 @@ function initEnvironment($environment = 'production')
  **/
 function dispatchEventWithParams($eventName, $params = array())
 {
-    $eventDispatcher = getService('event_dispatcher');
+    $eventDispatcher = getService('dispatcher');
 
     $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {

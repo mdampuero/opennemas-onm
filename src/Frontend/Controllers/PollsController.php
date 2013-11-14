@@ -301,17 +301,12 @@ class PollsController extends Controller
      **/
     protected function getAds($context = 'frontpage')
     {
-        // Load internal banners, principal banners (1,2,3,11,13) and use cache to performance
+        // Get polls positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
         if ($context == 'inner') {
-            $positions = array(
-                950,
-                901, 902, 903, 905, 909, 910, 991, 992, 7, 9
-            );
+            $positions = $positionManager->getAdsPositionsForGroup('polls_inner', array(7, 9));
         } else {
-            $positions = array(
-                850,
-                801, 802, 803, 805, 809, 810, 891, 892, 7, 9
-            );
+            $positions = $positionManager->getAdsPositionsForGroup('polls_frontpage', array(7, 9));
         }
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);

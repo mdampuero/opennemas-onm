@@ -49,7 +49,9 @@
     <div class="error-page-message error-mini">
         <div class="icon">:(</div>
         <div class="message">{$error_message}</div>
+        {if $error_id}
         <div class="error-tracing">{t 1=$error_id}We already have being informed of this error: %1{/t}</div>
+        {/if}
     </div>
 {/if}
 </div>

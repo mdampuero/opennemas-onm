@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @package Backend_EventListeners
  **/
-class ContentSubscriber implements EventSubscriberInterface
+class ContentSubscriberListener implements EventSubscriberInterface
 {
     /**
      * Register the content event handler

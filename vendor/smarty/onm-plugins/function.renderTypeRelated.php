@@ -83,7 +83,7 @@ function smarty_function_renderTypeRelated($params, &$smarty)
     if ($content->fk_content_type==3) {
         $html.=' target="_blank"';
     }
-    $html.='><span '.$class.'>&nbsp;</span>'.clearslash($content->title).'</a>';
+    $html.='><span '.$class.'></span>'.clearslash($content->title).'</a>';
 
     return $html;
 }

@@ -12,7 +12,6 @@
  * @package Model
  */
 use Onm\Message as m;
-use Onm\Settings as s;
 use Onm\StringUtils;
 
 /**
@@ -217,23 +216,12 @@ class Photo extends Content
             $dataSource['local_file'],
             realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName
         );
+
         if ($fileCopied) {
             $photo = new Photo();
             $photoID = $photo->create($data);
 
-            if ($photoID) {
-
-                if (preg_match('/^(jpeg|jpg|gif|png)$/', strtolower($filePathInfo['extension']))) {
-                    $imageThumbSize = s::get(
-                        array(
-                            'image_thumb_size',
-                            'image_inner_thumb_size',
-                            'image_front_thumb_size',
-                        )
-                    );
-                }
-
-            } else {
+            if (!$photoID) {
                 $logger = getService('logger');
                 $logger->notice(
                     sprintf(

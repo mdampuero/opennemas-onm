@@ -27,6 +27,11 @@ class TranslationCoreCommand extends Command
         $this
             ->setName('translation:core')
             ->setDescription('Extracts and updates the localized strings')
+            ->setDefinition(
+                array(
+                    new InputOption('only-compile', 'oc', InputOption::VALUE_NONE, 'Only compile translations'),
+                )
+            )
             ->setHelp(
                 <<<EOF
 The <info>l10n:core:update</info> extracts all the strings from the application and
@@ -41,12 +46,15 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $basePath = APPLICATION_PATH;
+        $onlyCompile = $input->getOption('only-compile');
 
         chdir($basePath);
 
         // Update onm-core
-        $this->extractTrans($input, $output);
-        $this->updateTrans($input, $output);
+        if (!$onlyCompile) {
+            $this->extractTrans($input, $output);
+            $this->updateTrans($input, $output);
+        }
         $this->compileTrans($input, $output);
     }
 

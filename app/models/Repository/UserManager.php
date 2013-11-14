@@ -22,6 +22,7 @@ class UserManager extends BaseManager
      * Initializes the Users Manager
      *
      * @param CacheInterface $cache the cache handler
+     * @param string $cachePrefix the prefix to use in the cache
      **/
     public function __construct(CacheInterface $cache, $cachePrefix)
     {
@@ -29,22 +30,25 @@ class UserManager extends BaseManager
         $this->cachePrefix = $cachePrefix;
     }
 
+    /**
+     * {@inherit_doc}
+     **/
     public function find($id)
     {
         $user = null;
 
         $cacheId = $this->cachePrefix . "_user_" . $id.microtime(true);
 
-        if (!$this->hasCache()
-            || ($user = $this->cache->fetch($cacheId)) === false
-            || !is_object($user)
-        ) {
+        // if (!$this->hasCache()
+        //     || ($user = $this->cache->fetch($cacheId)) === false
+        //     || !is_object($user)
+        // ) {
             $user = new \User($id);
 
-            if ($this->hasCache()) {
-                $this->cache->save($cacheId, $user);
-            }
-        }
+            // if ($this->hasCache()) {
+            //     $this->cache->save($cacheId, $user);
+            // }
+        // }
 
         return $user;
     }

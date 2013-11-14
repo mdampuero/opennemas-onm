@@ -61,7 +61,6 @@ class Application
         // // $rs = $dbConn->qstr('test;\'');
         // var_dump($rs);die();
 
-
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
         $GLOBALS['application']->conn->bulkBind = true;

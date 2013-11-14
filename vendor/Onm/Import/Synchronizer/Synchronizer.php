@@ -31,10 +31,17 @@ class Synchronizer
     public $syncPath = '';
 
 
+    /**
+     * File path used for locking purposes
+     *
+     * @var string
+     **/
     protected $lockFile = '';
 
     /**
      * Initializes the object and initializes configuration
+     *
+     * @param array $config the configuration for the synchronizer (cache_path, importers)
      *
      * @return void
      */
@@ -111,9 +118,9 @@ class Synchronizer
     }
 
     /**
-     * Returns true if the syncPath exists and is writtable
+     * Returns true if the syncPath exists and is writable
      *
-     * @return boolean true if syncPath is present and writtable
+     * @return boolean true if syncPath is present and writable
      */
     public function isSyncEnvironmetReady()
     {
@@ -127,8 +134,7 @@ class Synchronizer
     /**
      * Creates the syncPath, to allow to work with it
      *
-     * @param array $params the parameters to manipulate
-     *                      the behaviour of this function
+     * @param array $params the parameters to manipulate the behavior of this function
      */
     public function setupSyncEnvironment($params = array())
     {
@@ -146,10 +152,9 @@ class Synchronizer
     /**
      * Update statistics of synchronization file
      *
-     * @param array|string importedElements, ids of new imported elements
+     * @param array $importedElements ids of new imported elements
      *
-     * @return array, array('lastimport' => Date,
-     *                      'imported_elements' => array())
+     * @return array array('lastimport' => Date, 'imported_elements' => array())
      */
     public function updateSyncFile($importedElements = array())
     {
@@ -212,6 +217,8 @@ class Synchronizer
      * Fetches the files present in $cacheDir with source.
      *
      * @param string $cacheDir the directory where search files from.
+     * @param string $sourceId the source identificator
+     * @param string $pattern the pattern of file to download
      *
      * @return array the list of files
      */
@@ -236,7 +243,7 @@ class Synchronizer
     /**
      * Sync elements from news agency server and stores them into temporary dir
      *
-     * @param $params, misc params that alteres function behaviour
+     * @param array $params misc params that alters function behavior
      *
      * @return boolean, true if all goes well
      *
@@ -244,7 +251,7 @@ class Synchronizer
      */
     public function sync($params = array())
     {
-        // Check if the folder where store elements is ready and writtable
+        // Check if the folder where store elements is ready and writable
         if (!$this->isSyncEnvironmetReady()) {
             $this->setupSyncEnvironment();
         }
@@ -285,10 +292,11 @@ class Synchronizer
     }
 
     /**
-     * undocumented function
+     * Perform a synchronization over an array of servers
+     *
+     * @param array $servers a list of servers with its configuration
      *
      * @return void
-     * @author
      **/
     public function syncMultiple($servers)
     {
@@ -324,6 +332,8 @@ class Synchronizer
 
     /**
      * Removes the local files for a given source id
+     *
+     * @param int $id the source identification
      *
      * @return boolean true if the files were deleted
      * @throws Exception If the files weren't deleted

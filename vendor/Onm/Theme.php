@@ -70,6 +70,13 @@ class Theme
     public $menus = array();
 
     /**
+     * Registered ads positions for this theme
+     *
+     * @var array
+     **/
+    public $adsPositions = array();
+
+    /**
      * The l10n domain
      *
      * @var string
@@ -128,6 +135,9 @@ class Theme
                 $this->{$propertyName} = $settings[$propertyName];
             }
         }
+
+        // Instantiate ads manager
+        $this->adsManager = new \AdvertisementPositions();
     }
 
     /**
@@ -298,7 +308,7 @@ class Theme
     /**
      * Registers a default disposition for image in the theme
      *
-     * @param array $menuDefinition the menu definition
+     * @param array $disposition the menu definition
      *
      * @return Theme the object
      **/
@@ -323,11 +333,10 @@ class Theme
         return false;
     }
 
-
     /**
-     * Registers a parent theme to inherance tpl files
+     * Registers a parent theme to inheritance tpl files
      *
-     * @param string $baseTheme name theme
+     * @param string $parentTheme name theme
      *
      * @return Theme the object
      **/
@@ -346,10 +355,19 @@ class Theme
     public function getParentTheme()
     {
         if (isset($this->parentTheme) && !empty($this->parentTheme)) {
-
             return $this->parentTheme;
         }
 
         return false;
+    }
+
+    /**
+     * Retrieves an instace of ads manager
+     *
+     * @return $this->adsManager
+     **/
+    public function getAdsPositionManager()
+    {
+        return $this->adsManager;
     }
 }
