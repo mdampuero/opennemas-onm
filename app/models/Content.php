@@ -534,7 +534,7 @@ class Content
             'description'    =>
                 (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'fk_author' =>
-                (is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
+                (!isset($data['fk_author']) || is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
         );
 
         $data = array_merge($data, $values);
