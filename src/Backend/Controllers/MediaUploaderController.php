@@ -157,7 +157,7 @@ class MediaUploaderController extends Controller
         }
 
         $response = new Response();
-        $response->setContent(json_encode($photos));
+        $response->setContent(@json_encode($photos));
         $response->headers->set('Content-Type', 'application/json');
 
         return $response;
