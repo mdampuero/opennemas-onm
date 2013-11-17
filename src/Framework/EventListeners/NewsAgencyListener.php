@@ -23,7 +23,7 @@ use Onm\Settings as s;
  *
  * @package Backend_EventListeners
  **/
-class NewsAgency implements EventSubscriberInterface
+class NewsAgencyListener implements EventSubscriberInterface
 {
     /**
      * Register the content event handler

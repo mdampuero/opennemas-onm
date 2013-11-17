@@ -28,6 +28,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'utilities_sharrre',
+    new Route(
+        '/utilities/sharrre',
+        array(
+            '_controller' => 'Frontend:Controllers:UtilitiesController:sharrre',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'asset_image',
     new Route(
         '/asset/{parameters}/{real_path}',
