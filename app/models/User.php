@@ -929,9 +929,15 @@ class User
      *
      * @return array multidimensional array with information about authors
      */
-    public static function getAllUsersAuthors()
+    public static function getAllUsersAuthors($filter = null)
     {
-        $sql = 'SELECT `id` FROM users WHERE fk_user_group  LIKE "%3%" ORDER BY `name`';
+        if (!is_null($filter)) {
+            $_where = $filter;
+        } else {
+            $_where = '';
+        }
+
+        $sql = 'SELECT `id` FROM users WHERE fk_user_group '.$_where.' LIKE "%3%" ORDER BY `name`';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -950,8 +956,7 @@ class User
         }
 
         // Order names with accents
-        uasort($authors, function($a, $b)
-        {
+        uasort($authors, function ($a, $b) {
             $patterns = array(
                 'a' => '(á|à|â|ä|Á|À|Â|Ä)',
                 'e' => '(é|è|ê|ë|É|È|Ê|Ë)',

@@ -52,11 +52,11 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'blog_category',
+    'category_frontpage',
     new Route(
         '/blog/section/{category_name}',
         array(
-            '_controller' => 'Frontend:Controllers:BlogController:category',
+            '_controller' => 'Frontend:Controllers:CategoryController:category',
         ),
         array(
             'category' => '[a-z0-9\-]+',
@@ -65,11 +65,11 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'blog_sync_category',
+    'categ_sync_frontpage',
     new Route(
         '/extseccion/blog/{category_name}',
         array(
-            '_controller' => 'Frontend:Controllers:BlogController:extCategory',
+            '_controller' => 'Frontend:Controllers:CategoryController:extCategory',
         ),
         array(
             'category' => '[a-z0-9\-]+',
@@ -78,11 +78,11 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
-    'blog_tag',
+    'tag_frontpage',
     new Route(
-        '/blog/tag/{category_name}',
+        '/tag/{category_name}',
         array(
-            '_controller' => 'Frontend:Controllers:BlogController:tag',
+            '_controller' => 'Frontend:Controllers:TagsController:tag',
         ),
         array(
             'category' => '[a-z0-9\-]+',
@@ -1288,6 +1288,20 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_opinion_editorial_frontpage',
+    new Route(
+        '/opinion/editorial',
+        array(
+           '_controller' => 'Frontend:Controllers:OpinionsController:frontpageAuthor',
+        ),
+        array(
+           'author_slug'    => 'editorial',
+           'author_id'      => '1'
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_opinion_external_author_frontpage',
     new Route(
         '/extopinion/autor/{author_id}/{author_slug}',
@@ -1400,6 +1414,46 @@ $frontendRoutes->add(
         array(
            '_controller' => 'Frontend:Controllers:OpinionsController:extFrontpage',
         )
+    )
+);
+
+
+$frontendRoutes->add(
+    'frontend_blog_frontpage',
+    new Route(
+        '/blog',
+        array(
+           '_controller' => 'Frontend:Controllers:BlogsController:frontpage',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_blog_author_frontpage',
+    new Route(
+        '/blog/autor/{author_id}/{author_slug}',
+        array(
+           '_controller' => 'Frontend:Controllers:BlogsController:frontpageAuthor',
+        ),
+        array(
+           'author_slug'    => '(.*)?',
+           'author_id'      => '([0-9]+)'
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_blog_show',
+    new Route(
+        '/blog/{blog_title}/{blog_id}.{_format}',
+        array(
+           '_controller' => 'Frontend:Controllers:BlogsController:show',
+           '_format'     => 'html'
+        ),
+        array(
+            'blog_title' => '[a-z0-9\-]+',
+            'blog_id'    => '[a-z0-9\-]+',
+       )
     )
 );
 
