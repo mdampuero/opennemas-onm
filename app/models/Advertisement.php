@@ -419,7 +419,7 @@ class Advertisement extends Content
         // Generate sql with or without category
         $cm = new \ContentManager();
         if ($category !== 0) {
-            $config = s::get(array('ads_settings'));
+            $config = s::get('ads_settings');
             if (isset($config['ads_settings']['no_generics'])
                 && ($config['ads_settings']['no_generics'] == '1')
             ) {
