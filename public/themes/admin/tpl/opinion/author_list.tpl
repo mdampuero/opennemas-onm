@@ -71,7 +71,7 @@ jQuery(function($){
                     </td>
 
                     <td class="left">
-                        {$user->bio}
+                        {if $user->is_blog}<strong>Blog </strong>: {/if}{$user->bio}
                     </td>
 
                     <td class="right nowrap">

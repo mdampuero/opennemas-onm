@@ -950,6 +950,9 @@ class User
         while (!$rs->EOF) {
             $authors[$i]         = new \User($rs->fields['id']);
             $authors[$i]->params = $authors[$i]->getMeta();
+            if (array_key_exists('is_blog', $authors[$i]->params)) {
+                $authors[$i]->is_blog = $authors[$i]->params['is_blog'];
+            }
 
             $rs->MoveNext();
             $i++;

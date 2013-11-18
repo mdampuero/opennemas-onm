@@ -143,7 +143,14 @@ label {
                         </div>
 
                         <div class="control-group">
-                            <label for="url" class="control-label">{t}Blog Url{/t}</label>
+                            <label for="meta[twitter]" class="control-label">{t}View as Blog{/t}</label>
+                            <div class="controls">
+                                <input type="checkbox" name="meta[is_blog]" id="meta[is_blog]" {if $user->meta['is_blog'] eq 1}checked="checked"{/if}>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="url" class="control-label">{t}Other Blog Url{/t}</label>
                             <div class="controls">
                                 <input type="text" name="url" id="url" placeholder="http://" value="{$user->url|default:""}" class="input-xxlarge" >
                             </div>
