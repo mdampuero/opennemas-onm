@@ -26,7 +26,7 @@ use Onm\Settings as s;
  *
  * @package Frontend_Controllers
  **/
-class BlogController extends Controller
+class BlogsController extends Controller
 {
     /**
      * Common code for all the actions
@@ -64,13 +64,16 @@ class BlogController extends Controller
             || !$this->view->isCached('blog/blog.tpl', $cacheID)
         ) {
             //
-            $filter = ' isBlog == 1 ';
-            $authorsBlog = \User::getAllUsersAuthors($filter);
+            $orderBy = 'ORDER BY created DESC';
+            $authorsBlog = \User::getAllUsersAuthors();
+            $authors = array();
             foreach ($authorsBlog as $author) {
-                $authors[$author->id] = $author ;
+                if ($author->is_blog == 1) {
+                    $authors[$author->id] = $author;
+                }
             }
-
-            $where = ' AND fk_author IN '.implode(', ', array_keys($authorsIds));
+            $where = ' AND opinions.fk_author IN ('.implode(', ', array_keys($authors)).") ";
+            var_dump($where);
             // Fetch last blog items
 
             $itemsPerPage = s::get('items_per_page');
@@ -130,7 +133,6 @@ class BlogController extends Controller
 
             $this->view->assign(
                 array(
-                    'editorial'  => $editorial,
                     'opinions'   => $blogs,
                     'authors'    => $authors,
                     'pagination' => $pagination,
@@ -143,7 +145,7 @@ class BlogController extends Controller
         $this->view->assign('advertisements', $ads);
 
         return $this->render(
-            'opinion/opinion_frontpage.tpl',
+            'opinion/blog_frontpage.tpl',
             array('cache_id' => $cacheID)
         );
     }
@@ -272,7 +274,7 @@ class BlogController extends Controller
         $this->view->assign('advertisements', $ads);
 
         return $this->render(
-            'blog/blog_author_index.tpl',
+            'opinion/blog_author_index.tpl',
             array('cache_id' => $cacheID)
         );
 
@@ -333,7 +335,7 @@ class BlogController extends Controller
 
         // Show in Frontpage
         return $this->render(
-            'blog/blog_inner.tpl',
+            'opinion/blog_inner.tpl',
             array('cache_id' => $cacheID)
         );
     }

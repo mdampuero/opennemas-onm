@@ -180,35 +180,39 @@ class OpinionsController extends Controller
             );
 
             $authors = array();
-            foreach ($opinions as &$opinion) {
+            $opinionsResult = array();
+            foreach ($opinions as $opinion) {
                 if (!array_key_exists($opinion->fk_author, $authors)) {
                     $author = new \User($opinion->fk_author);
                     $authors[$opinion->fk_author] = $author;
                 }
-                $opinion->author           = $authors[$opinion->fk_author];
-                $opinion->name             = $opinion->author->name;
-                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
-                $item = new \Content();
-                $item->loadAllContentProperties($opinion->pk_content);
-                $opinion->summary = $item->summary;
-                $opinion->img1_footer = $item->img1_footer;
-                if (isset($item->img1) && ($item->img1 > 0)) {
-                    $opinion->img1 = new \Photo($item->img1);
-                }
+                if ($opinion->author->is_blog != 1) {
+                    $opinion->author           = $authors[$opinion->fk_author];
+                    $opinion->name             = $opinion->author->name;
+                    $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+                    $item = new \Content();
+                    $item->loadAllContentProperties($opinion->pk_content);
+                    $opinion->summary = $item->summary;
+                    $opinion->img1_footer = $item->img1_footer;
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $opinion->img1 = new \Photo($item->img1);
+                    }
 
-                $opinion->author->uri = \Uri::generate(
-                    'opinion_author_frontpage',
-                    array(
-                        'slug' => $opinion->author->name,
-                        'id'   => $opinion->author->id
-                    )
-                );
+                    $opinion->author->uri = \Uri::generate(
+                        'opinion_author_frontpage',
+                        array(
+                            'slug' => $opinion->author->name,
+                            'id'   => $opinion->author->id
+                        )
+                    );
+                    $opinionsResult[] = $opinion;
+                }
             }
 
             $this->view->assign(
                 array(
                     'editorial'  => $editorial,
-                    'opinions'   => $opinions,
+                    'opinions'   => $opinionsResult,
                     'authors'    => $authors,
                     'pagination' => $pagination,
                     'page'       => $this->page
