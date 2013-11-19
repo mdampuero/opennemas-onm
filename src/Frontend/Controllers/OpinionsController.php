@@ -186,7 +186,7 @@ class OpinionsController extends Controller
                     $author = new \User($opinion->fk_author);
                     $authors[$opinion->fk_author] = $author;
                 }
-                if ($opinion->author->is_blog != 1) {
+                if ($author->is_blog != 1) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
                     $opinion->author_name_slug = \StringUtils::get_title($opinion->name);

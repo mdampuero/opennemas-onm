@@ -26,7 +26,7 @@ class Uri
        'opinion'   =>  array( 'opinion/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'blog'      =>  array( 'blog/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'opinion_author_frontpage'  =>  array( 'opinion/autor/_ID_/_SLUG_'),
-       'blog_author_frontpage'   =>  array( 'blog/autor/_ID_/_SLUG_'),
+       'blog_author_frontpage'   =>  array( 'blog/author/_SLUG_'),
        'section'   =>  array( 'seccion/_ID_'),
        'video'     =>  array( 'video/_CATEGORY_/_SLUG_/_DATE__ID_.html'),
        'album'     =>  array( 'album/_CATEGORY_/_SLUG_/_DATE__ID_.html'),

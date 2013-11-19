@@ -80,12 +80,12 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'tag_frontpage',
     new Route(
-        '/tag/{category_name}',
+        '/tag/{tag_name}',
         array(
             '_controller' => 'Frontend:Controllers:TagsController:tag',
         ),
         array(
-            'category' => '[a-z0-9\-]+',
+            'tag_name' => '[a-z0-9\-]+',
         )
     )
 );
@@ -281,7 +281,7 @@ $frontendRoutes->add(
             '_controller' => 'Frontend:Controllers:UserController:authorFrontpage',
         ),
         array(
-            'slug' => '[A-Za-z\d-]+',
+            'slug' => '[A-Za-z\d-.]+',
         )
     )
 );
@@ -1431,13 +1431,12 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_blog_author_frontpage',
     new Route(
-        '/blog/autor/{author_id}/{author_slug}',
+        '/blog/author/{author_slug}',
         array(
            '_controller' => 'Frontend:Controllers:BlogsController:frontpageAuthor',
         ),
         array(
-           'author_slug'    => '(.*)?',
-           'author_id'      => '([0-9]+)'
+           'author_slug'    => '[a-z0-9\-.]+'
         )
     )
 );
@@ -1445,12 +1444,14 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_blog_show',
     new Route(
-        '/blog/{blog_title}/{blog_id}.{_format}',
+        '/blog/{author_name}/{blog_title}/{blog_id}.{_format}',
         array(
            '_controller' => 'Frontend:Controllers:BlogsController:show',
-           '_format'     => 'html'
+           '_format'     => 'html',
+           'author_name' => 'author',
         ),
         array(
+            'author_name' => '[a-z0-9\-]+',
             'blog_title' => '[a-z0-9\-]+',
             'blog_id'    => '[a-z0-9\-]+',
        )

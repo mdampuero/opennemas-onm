@@ -73,11 +73,8 @@ class BlogsController extends Controller
                 }
             }
             $where = ' AND opinions.fk_author IN ('.implode(', ', array_keys($authors)).") ";
-            var_dump($where);
             // Fetch last blog items
-
-            $itemsPerPage = s::get('items_per_page');
-
+            $itemsPerPage = s::get('items_in_blog');
             list($countItems, $blogs)= $this->cm->getCountAndSlice(
                 'Opinion',
                 null,
@@ -161,111 +158,108 @@ class BlogsController extends Controller
     public function frontpageAuthorAction(Request $request)
     {
         // Index author's frontpage
-        $authorID = $request->query->getDigits('author_id', null);
-        if (empty($authorID)) {
-            return new RedirectResponse($this->generateUrl('frontend_blog_author'));
+        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        if (empty($slug)) {
+            return new RedirectResponse($this->generateUrl('frontend_blog_frontpage'));
         }
 
         // Author frontpage
-        $cacheID = $this->view->generateCacheId($this->category_name, $authorID, $this->page);
+        $cacheID = $this->view->generateCacheId($this->category_name, $slug, $this->page);
 
         // Don't execute the app logic if there are caches available
         if (($this->view->caching == 0)
             || !$this->view->isCached('blog/frontpage_author.tpl', $cacheID)
         ) {
-            // Get author info
-            $author = new \User($authorID);
-            $author->params = $author->getMeta();
-            $author->slug   = strtolower(
-                $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING)
-            );
-
-
-            // Regular authors
-            $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$author->id;
-            $author->slug = \StringUtils::get_title($author->name);
-
-
-            // generate pagination params
             $itemsPerPage = s::get('items_per_page');
-            $_limit = ' LIMIT '.(($this->page-1)*$itemsPerPage).', '.($itemsPerPage);
 
-            // Get the number of total opinions for this author for pagination purpouses
-            $countItems = $this->cm->cache->count(
-                'Opinion',
-                $filter
-                .' AND contents.available=1  and contents.content_status=1 '
-            );
+            $ur = $this->get('user_repository');
+            $author = $ur->findOneBy("username='{$slug}'", 'ID DESC');
+            if (!empty($author)) {
+                $author->slug = $author->username;
+                $author->photo = new \Photo($author->avatar_img_id);
+                $author->getMeta();
 
-            // Get the list articles for this author
-            $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
-                $filter
-                .' AND contents.available=1 and contents.content_status=1',
-                'ORDER BY created DESC '.$_limit
-            );
+                $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$author->id;
+                  // generate pagination params
 
-            if (!empty($blogs)) {
-                foreach ($blogs as &$blog) {
-                    // Overload blog array with more information
-                    $item = new \Content();
-                    $item->loadAllContentProperties($blog['pk_content']);
-                    $blog['summary']           = $item->summary;
-                    $blog['img1_footer']       = $item->img1_footer;
-                    $blog['pk_author']         = $author->id;
-                    $blog['author_name_slug']  = $author->slug;
-                    if (isset($item->img1) && ($item->img1 > 0)) {
-                        $blog['img1'] = new \Photo($item->img1);
+                $_limit = ' LIMIT '.(($this->page-1)*$itemsPerPage).', '.($itemsPerPage);
+
+                // Get the number of total opinions for this author for pagination purpouses
+                $countItems = $this->cm->cache->count(
+                    'Opinion',
+                    $filter
+                    .' AND contents.available=1  and contents.content_status=1 '
+                );
+
+                // Get the list articles for this author
+                $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
+                    $filter
+                    .' AND contents.available=1 and contents.content_status=1',
+                    'ORDER BY created DESC '.$_limit
+                );
+
+                if (!empty($blogs)) {
+                    foreach ($blogs as &$blog) {
+                        // Overload blog array with more information
+                        $item = new \Content();
+                        $item->loadAllContentProperties($blog['pk_content']);
+                        $blog['summary']           = $item->summary;
+                        $blog['img1_footer']       = $item->img1_footer;
+                        $blog['pk_author']         = $author->id;
+                        $blog['author_name_slug']  = $author->slug;
+                        if (isset($item->img1) && ($item->img1 > 0)) {
+                            $blog['img1'] = new \Photo($item->img1);
+                        }
+
+                        // Generate blog item uri
+                        $blog['uri'] = $this->generateUrl(
+                            'frontend_blog_show',
+                            array(
+                                'blog_id'     => date('YmdHis', strtotime($blog['created'])).$blog['id'],
+                                'author_name' => $blog['author_name_slug'],
+                                'blog_title'  => $blog['slug'],
+                            )
+                        );
+
+                        // Generate author uri
+                        $blog['author_uri'] = $this->generateUrl(
+                            'frontend_blog_author_frontpage',
+                            array(
+                                'author_id'   => sprintf('%06d', $blog['pk_author']),
+                                'author_slug' => $blog['author_name_slug'],
+                            )
+                        );
                     }
-
-                    // Generate blog item uri
-                    $blog['uri'] = $this->generateUrl(
-                        'frontend_blog_show',
-                        array(
-                            'blog_id'     => date('YmdHis', strtotime($blog['created'])).$blog['id'],
-                            'author_name' => $blog['author_name_slug'],
-                            'blog_title'  => $blog['slug'],
-                        )
-                    );
-
-                    // Generate author uri
-                    $blog['author_uri'] = $this->generateUrl(
-                        'frontend_blog_author_frontpage',
-                        array(
-                            'author_id'   => sprintf('%06d', $blog['pk_author']),
-                            'author_slug' => $blog['author_name_slug'],
-                        )
-                    );
                 }
+                $pagination = \Pager::factory(
+                    array(
+                        'mode'        => 'Sliding',
+                        'perPage'     => $itemsPerPage,
+                        'append'      => false,
+                        'path'        => '',
+                        'delta'       => 4,
+                        'clearIfVoid' => true,
+                        'urlVar'      => 'page',
+                        'totalItems'  => $countItems,
+                        'fileName'    => $this->generateUrl(
+                            'frontend_blog_author_frontpage',
+                            array(
+                                'author_id' => sprintf('%06d', $author->id),
+                                'author_slug' => $author->slug,
+                            )
+                        ).'/?page=%d',
+                    )
+                );
+
+                $this->view->assign(
+                    array(
+                        'pagination' => $pagination,
+                        'blogs'      => $blogs,
+                        'author'     => $author,
+                        'page'       => $this->page,
+                    )
+                );
             }
-
-            $pagination = \Pager::factory(
-                array(
-                    'mode'        => 'Sliding',
-                    'perPage'     => $itemsPerPage,
-                    'append'      => false,
-                    'path'        => '',
-                    'delta'       => 4,
-                    'clearIfVoid' => true,
-                    'urlVar'      => 'page',
-                    'totalItems'  => $countItems,
-                    'fileName'    => $this->generateUrl(
-                        'frontend_blog_author_frontpage',
-                        array(
-                            'author_id' => sprintf('%06d', $author->id),
-                            'author_slug' => $author->slug,
-                        )
-                    ).'/?page=%d',
-                )
-            );
-
-            $this->view->assign(
-                array(
-                    'pagination' => $pagination,
-                    'blogs'      => $blogs,
-                    'author'     => $author,
-                    'page'       => $this->page,
-                )
-            );
 
         } // End if isCached
 
@@ -329,7 +323,13 @@ class BlogsController extends Controller
                 $photo = new \Photo($blog->img2);
                 $this->view->assign('photo', $photo);
             }
-
+            $this->view->assign(
+                array(
+                    'blog'     => $blog,
+                    'content'  => $blog,
+                    'author'   => $author,
+                )
+            );
 
         } // End if isCached
 
