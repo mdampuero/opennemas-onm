@@ -419,7 +419,7 @@ class Advertisement extends Content
         // Generate sql with or without category
         $cm = new \ContentManager();
         if ($category !== 0) {
-            $config = s::get(array('ads_settings'));
+            $config = s::get('ads_settings');
             if (isset($config['ads_settings']['no_generics'])
                 && ($config['ads_settings']['no_generics'] == '1')
             ) {
@@ -533,7 +533,7 @@ class Advertisement extends Content
         }
         if ($this->type_advertisement == 37) {
             //floating ads
-            $params['beforeHTML'] = "<div class=\"$wrapperClass\">";
+            $params['beforeHTML'] = "<div class=\"$wrapperClass\" style=\"text-align: center;\">";
             $params['afterHTML']  = "</div>";
         }
 
@@ -619,7 +619,7 @@ class Advertisement extends Content
                             </div>'.$flashObject.'</div>';
                 }
 
-                $content = '<div style="width:'.$width.'px; height:'.$height.'px;">'.$content.'</div>';
+                $content = '<div style="width:'.$width.'px; height:'.$height.'px; margin: 0 auto;">'.$content.'</div>';
             } else {
                 // Image
                 $imageObject = '<img src="'. $mediaUrl.'" width="'.$width.'" height="'.$height.'" />';
