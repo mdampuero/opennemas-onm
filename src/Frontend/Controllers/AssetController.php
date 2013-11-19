@@ -30,7 +30,7 @@ class AssetController extends Controller
      **/
     public function imageAction(Request $request)
     {
-        $this->view = new TemplateAdmin(TEMPLATE_ADMIN);
+        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
         $parameters = $request->query->get('parameters');
         $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
 
