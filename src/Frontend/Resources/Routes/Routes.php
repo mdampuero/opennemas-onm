@@ -1448,7 +1448,7 @@ $frontendRoutes->add(
     new Route(
         'nocache/css/{cb}/{category}.css',
         array(
-            '_controller' => 'Frontend:Controllers:FrontpagesController:css',
+            '_controller' => 'Frontend:Controllers:AssetController:customCss',
             'category'    => 'home',
             'cb'          => '12345'
         ),
