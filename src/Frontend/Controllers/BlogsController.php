@@ -225,7 +225,6 @@ class BlogsController extends Controller
                         $blog['author_uri'] = $this->generateUrl(
                             'frontend_blog_author_frontpage',
                             array(
-                                'author_id'   => sprintf('%06d', $blog['pk_author']),
                                 'author_slug' => $blog['author_name_slug'],
                             )
                         );
