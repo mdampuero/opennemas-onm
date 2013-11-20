@@ -82,10 +82,10 @@ $frontendRoutes->add(
     new Route(
         '/tag/{tag_name}',
         array(
-            '_controller' => 'Frontend:Controllers:TagsController:tag',
+            '_controller' => 'Frontend:Controllers:TagsController:tags',
         ),
         array(
-            'tag_name' => '[a-z0-9\-]+',
+            'tag_name' => '[a-z0-9\-.]+',
         )
     )
 );
@@ -791,6 +791,7 @@ $frontendRoutes->add(
     )
 );
 
+
 $frontendRoutes->add(
     'frontend_archive_content',
     new Route(
@@ -842,6 +843,18 @@ $frontendRoutes->add(
         )
     )
 );
+
+$frontendRoutes->add(
+    'frontend_archive',
+    new Route(
+        '/archive/{component}',
+        array(
+            '_controller' => 'Frontend:Controllers:ArchiveController:archive',
+            'component'   => 'content|digital',
+        )
+    )
+);
+
 
 $frontendRoutes->add(
     'frontend_participa_frontpage',
@@ -1451,7 +1464,7 @@ $frontendRoutes->add(
            'author_name' => 'author',
         ),
         array(
-            'author_name' => '[a-z0-9\-]+',
+            'author_name' => '[a-z0-9\-.]+',
             'blog_title' => '[a-z0-9\-]+',
             'blog_id'    => '[a-z0-9\-]+',
        )
