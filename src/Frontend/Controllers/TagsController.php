@@ -41,8 +41,7 @@ class TagsController extends Controller
 
         $cacheId = "tag|$tagName|$page";
         if (!$this->view->isCached('blog/tag.tpl', $cacheId)) {
-            $tagName = $GLOBALS['aplication']->conn->qstr($tagName);
-            $tagSearchSQL = "AND metadata LIKE '%$tagName%'";
+            $tagSearch = $GLOBALS['application']->conn->qstr("%{$tagName}%");
 
             $itemsPerPage = s::get('items_in_blog');
             if (empty($itemsPerPage )) {
@@ -53,11 +52,12 @@ class TagsController extends Controller
             list($countArticles, $articles)= $cm->getCountAndSlice(
                 'Article',
                 null,
-                'in_litter != 1 AND contents.available=1 '.$tagSearchSQL,
-                'ORDER BY created DESC, available ASC',
+                "in_litter != 1 AND contents.available=1 AND metadata LIKE {$tagSearch}",
+                ' ORDER BY created DESC, available ASC',
                 $page,
                 $itemsPerPage
             );
+
             $imageIdsList = array();
             foreach ($articles as $content) {
                 if (isset($content->img1)) {
@@ -82,7 +82,7 @@ class TagsController extends Controller
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
                         ->loadAttachedVideo()
-                        ->loadRelatedContents($categoryName);
+                        ->loadRelatedContents($tagName);
             }
 
             $total = count($articles)+1;
@@ -95,7 +95,7 @@ class TagsController extends Controller
                     'url'   => $this->generateUrl(
                         'tag_frontpage',
                         array(
-                            'category_name' => $categoryName,
+                            'tag_name' => $tagName,
                         )
                     )
                 )
@@ -103,8 +103,8 @@ class TagsController extends Controller
 
             $this->view->assign(
                 array(
-                    'articles'   => $articles,
-                    'category'   => $category,
+                    'contents'   => $articles,
+                    'tagName'   => $tagName,
                     'pagination' => $pagination,
                 )
             );
@@ -114,7 +114,7 @@ class TagsController extends Controller
         }
 
         return $this->render(
-            'blog/tag.tpl',
+            'frontpage/tags.tpl',
             array(
                 'cache_id' => $cacheId
             )
