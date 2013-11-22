@@ -544,7 +544,9 @@ class ImagesController extends Controller
                         $size = getimagesize($upload['tmp_name'][$index], $imageInfo);
                         if (array_key_exists('APP13', $imageInfo)) {
                             $iptc = iptcparse($imageInfo["APP13"]);
-                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                            if (array_key_exists('2#120', $iptc)) {
+                                $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                            }
                         }
 
                         $data = array(
@@ -597,7 +599,9 @@ class ImagesController extends Controller
                     $size = getimagesize($upload['tmp_name'], $imageInfo);
                     if (array_key_exists('APP13', $imageInfo)) {
                         $iptc = iptcparse($imageInfo["APP13"]);
-                        $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                        if (array_key_exists('2#120', $iptc)) {
+                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                        }
                     }
 
                     $data = array(
