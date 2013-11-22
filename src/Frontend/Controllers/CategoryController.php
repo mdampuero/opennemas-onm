@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains the class Frontend\Controllers\BlogController
+ * Contains the class Frontend\Controllers\CategoryController
  *
  * @package Frontend_Controllers
  **/
@@ -24,7 +24,7 @@ use Onm\Settings as s;
  *
  * @package Backend_Controllers
  **/
-class BlogController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Common code for all the actions
@@ -56,7 +56,7 @@ class BlogController extends Controller
 
         $this->view->setConfig('frontpages');
 
-        $cacheId = "blog|$categoryName|$page";
+        $cacheId = "category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
 
             $itemsPerPage = s::get('items_in_blog');
@@ -110,7 +110,7 @@ class BlogController extends Controller
                     'items' => $itemsPerPage,
                     'total' => $total,
                     'url'   => $this->generateUrl(
-                        'blog_category',
+                        'category_frontpage',
                         array(
                             'category_name' => $categoryName,
                         )
@@ -168,7 +168,7 @@ class BlogController extends Controller
         }
 
         $cm = new \ContentManager();
-        $cacheId = "sync|blog|$categoryName|$page";
+        $cacheId = "sync|category|$categoryName|$page";
         if (!$this->view->isCached('blog/blog.tpl', $cacheId)) {
             $ccm = \ContentCategoryManager::get_instance();
             // Get category object
@@ -211,98 +211,6 @@ class BlogController extends Controller
             )
         );
     }
-    /**
-     * Description of the action
-     *
-     * @return Response the response object
-     **/
-    public function tagsAction(Request $request)
-    {
-        $tagName = $request->query->filter('tag_name', '', FILTER_SANITIZE_STRING);
-        $page    = $request->query->getDigits('page', 1);
-
-        $cacheId = "tag|$tagName|$page";
-        if (!$this->view->isCached('blog/tag.tpl', $cacheId)) {
-            $tagName = $GLOBALS['aplication']->conn->qstr($tagName);
-            $tagSearchSQL = "AND metadata LIKE '%$tagName%'";
-
-            $itemsPerPage = s::get('items_in_blog');
-            if (empty($itemsPerPage )) {
-                $itemsPerPage = 8;
-            }
-
-            $cm      = new \ContentManager();
-            list($countArticles, $articles)= $cm->getCountAndSlice(
-                'Article',
-                null,
-                'in_litter != 1 AND contents.available=1 '.$tagSearchSQL,
-                'ORDER BY created DESC, available ASC',
-                $page,
-                $itemsPerPage
-            );
-            $imageIdsList = array();
-            foreach ($articles as $content) {
-                if (isset($content->img1)) {
-                    $imageIdsList []= $content->img1;
-                }
-            }
-            $imageIdsList = array_unique($imageIdsList);
-
-            if (count($imageIdsList) > 0) {
-                $imageList = $cm->find('Photo', 'pk_content IN ('. implode(',', $imageIdsList) .')');
-            } else {
-                $imageList = array();
-            }
-
-            // Overloading information for contents
-            foreach ($articles as &$content) {
-
-                // Load category related information
-                $content->category_name  = $content->loadCategoryName($content->id);
-                $content->category_title = $content->loadCategoryTitle($content->id);
-
-                // Load attached and related contents from array
-                $content->loadFrontpageImageFromHydratedArray($imageList)
-                        ->loadAttachedVideo()
-                        ->loadRelatedContents($categoryName);
-            }
-
-            $total = count($articles)+1;
-
-            $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-                array(
-                    'page'  => $page,
-                    'items' => $itemsPerPage,
-                    'total' => $total,
-                    'url'   => $this->generateUrl(
-                        'blog_category',
-                        array(
-                            'category_name' => $categoryName,
-                        )
-                    )
-                )
-            );
-
-            $this->view->assign(
-                array(
-                    'articles'   => $articles,
-                    'category'   => $category,
-                    'pagination' => $pagination,
-                )
-            );
-
-            $ads = $this->getInnerAds();
-            $this->view->assign('advertisements', $ads);
-        }
-
-        return $this->render(
-            'blog/tag.tpl',
-            array(
-                'cache_id' => $cacheId
-            )
-        );
-    }
-
 
     /**
      * Fetches advertisements for article inner

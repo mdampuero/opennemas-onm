@@ -56,10 +56,14 @@
 			</td>
 			<td class="center">
                 {acl isAllowed="OPINION_FRONTPAGE"}
-                {if $opinion->in_home == 1}
-                <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=0 type=$type page=$page}" class="no_home" title="Sacar de portada" ></a>
+                {if $opinion->author->meta['is_blog'] neq 1}
+                    {if $opinion->in_home == 1}
+                    <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=0 type=$type page=$page}" class="no_home" title="Sacar de portada" ></a>
+                    {else}
+                    <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=1 type=$type page=$page}" class="go_home" title="Meter en portada" ></a>
+                    {/if}
                 {else}
-                <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=1 type=$type page=$page}" class="go_home" title="Meter en portada" ></a>
+                    Blog
                 {/if}
                 {/acl}
 			</td>
