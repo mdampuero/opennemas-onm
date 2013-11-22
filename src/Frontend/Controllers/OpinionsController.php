@@ -185,8 +185,10 @@ class OpinionsController extends Controller
                 if (!array_key_exists($opinion->fk_author, $authors)) {
                     $author = new \User($opinion->fk_author);
                     $authors[$opinion->fk_author] = $author;
+                } else {
+                    $author = $authors[$opinion->fk_author];
                 }
-                if ($author->is_blog != 1) {
+                if (!array_key_exists('is_blog', $author->meta) || $author->meta['is_blog'] != 1) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
                     $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
@@ -388,6 +390,12 @@ class OpinionsController extends Controller
             $author->slug   = strtolower(
                 $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING)
             );
+
+            if (array_key_exists('is_blog', $author->params) && $author->params['is_blog'] == 1) {
+                return new RedirectResponse(
+                    $this->generateUrl('frontend_blog_author_frontpage', array('author_slug' => $author->username))
+                );
+            }
 
             // Setting filters for the further SQLs
             if ($author->id == 1 && $author->slug == 'editorial') {
