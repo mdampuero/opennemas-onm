@@ -10,29 +10,31 @@
  */
 function smarty_outputfilter_disqus_sync($output, &$smarty)
 {
+    $url = $_SERVER['REQUEST_URI'];
+
+    $applicableUrl = array_key_exists('content', $smarty->tpl_vars);
+
     // Check if is user template
-    if ($smarty->smarty->theme != "admin" && $smarty->smarty->theme != "manager") {
+    if ($applicableUrl) {
         global $sc;
         $cache = $sc->get('cache');
 
         $syncImg = '';
         $lastSync = $cache->fetch(CACHE_PREFIX.'disqus_last_sync');
-        if (!$lastSync || ($lastSync+300) < time()) {
+
+        if (!$lastSync
+            || ($lastSync + 300) < time()
+        ) {
             // Generate url
-            $src = "http://".SITE.DS.'comments/disqus/sync';
-            // $generator = $this->container->get('url_generator');
-            // $generator->generate($urlName, $params, $absolute);
+            $imageUrl = $sc->get('url_generator')
+                 ->generate('frontend_comments_disqus_sync', array(), true);
 
             // Generate image to call disqus sync action
-            $syncImg = '<img src="'.$src.'">';
+            $syncImg = '<img src="'.$imageUrl.'" style="display:none">';
 
             // Add image to the html <head> block
             $output = str_replace('</body>', $syncImg.'</body>', $output);
-
-            // Save last sync time in cache
-            $cache->save(CACHE_PREFIX.'disqus_last_sync', time());
         }
     }
-
     return $output;
 }

@@ -200,6 +200,10 @@ class CommentsDisqusController extends Controller
             $comment->updateContentTotalComments($id);
         }
 
+
+        // Save last sync time in cache
+        $this->container->get('cache')->save(CACHE_PREFIX.'disqus_last_sync', time());
+
         return $this->redirect($this->generateUrl('admin_comments_disqus'));
     }
 }
