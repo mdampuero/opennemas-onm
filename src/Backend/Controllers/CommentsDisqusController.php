@@ -122,6 +122,9 @@ class CommentsDisqusController extends Controller
         // Set API call params
         $params = array('forum' => $disqusShortName, 'order' =>  'asc', 'limit' => 100);
 
+        // Save last sync time in cache
+        $this->container->get('cache')->save(CACHE_PREFIX.'disqus_last_sync', time());
+
         // Fetch last comment date
         $comment = new \Comment();
         $lastDate = $comment->getLastCommentDate();
@@ -199,10 +202,6 @@ class CommentsDisqusController extends Controller
         foreach ($contents as $id) {
             $comment->updateContentTotalComments($id);
         }
-
-
-        // Save last sync time in cache
-        $this->container->get('cache')->save(CACHE_PREFIX.'disqus_last_sync', time());
 
         return $this->redirect($this->generateUrl('admin_comments_disqus'));
     }

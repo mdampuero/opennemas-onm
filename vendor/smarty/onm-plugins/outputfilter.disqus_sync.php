@@ -32,9 +32,10 @@ function smarty_outputfilter_disqus_sync($output, &$smarty)
             // Generate image to call disqus sync action
             $syncImg = '<img src="'.$imageUrl.'" style="display:none">';
 
-            // Add image to the html <head> block
+            // Add image to the end of <body> block
             $output = str_replace('</body>', $syncImg.'</body>', $output);
         }
     }
+
     return $output;
 }

@@ -211,6 +211,11 @@ EOF
             $comment->updateContentTotalComments($id);
         }
 
+        // Get service container and save disqus_last_sync time
+        global $sc;
+        $cache = $sc->get('cache');
+        $cache->save(CACHE_PREFIX.'disqus_last_sync', time());
+
         $output->writeln("\t<info>Disqus comments imported successfully</info>");
     }
 }
