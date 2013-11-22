@@ -2222,6 +2222,14 @@ $adminRoutes->add(
     )
 );
 
+$adminRoutes->add(
+    'admin_comments_disqus_sync',
+    new Route(
+        '/comments/disqus/sync',
+        array('_controller' => 'Backend:Controllers:CommentsDisqusController:sync')
+    )
+);
+
 // Trash controller routes
 $adminRoutes->add(
     'admin_trash',

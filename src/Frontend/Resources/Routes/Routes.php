@@ -521,6 +521,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_comments_disqus_sync',
+    new Route(
+        '/comments/disqus/sync',
+        array(
+            '_controller' => 'Frontend:Controllers:CommentsController:disqusSync',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_redirect_content',
     new Route(
         '/redirect/content',

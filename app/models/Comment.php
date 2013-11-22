@@ -227,6 +227,11 @@ class Comment
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             throw new \Exception('DB Error: '.$GLOBALS['application']->conn->ErrorMsg());
         }
+
+        $data['id'] = $GLOBALS['application']->conn->Insert_ID();
+        $this->load($data);
+
+        return $this;
     }
 
     /**
@@ -384,5 +389,138 @@ class Comment
     protected function isValidStatus($statusName)
     {
         return in_array($statusName, $this->getValidStatuses());
+    }
+
+    /**
+     * Returns a metaproperty value from the current comment
+     *
+     * @param string $property the property name to fetch
+     *
+     * @return boolean true if it is in the category
+     **/
+    public function getProperty($property)
+    {
+        if ($this->id == null) {
+            return false;
+        }
+
+        if (isset($this->$property)) {
+            return $this->$property;
+        }
+
+        $sql = 'SELECT `meta_value` FROM `commentsmeta` WHERE fk_content=? AND `meta_name`=?';
+        $values = array($this->id, $property);
+
+        $value = $GLOBALS['application']->conn->GetOne($sql, $values);
+
+        return $value;
+    }
+
+    /**
+     * Returns a comment id from property and value
+     *
+     * @param string $property the property name to fetch
+     *
+     * @return int $commentId if it is in the category, 0 otherwise
+     **/
+    public function getCommentIdFromPropertyAndValue($property, $value)
+    {
+        $sql = 'SELECT `fk_content` FROM `commentsmeta` WHERE `meta_name`=? AND `meta_value`=?';
+        $values = array($property, $value);
+
+        $commentId = $GLOBALS['application']->conn->GetOne($sql, $values);
+
+        if (!$commentId) {
+            return 0;
+        }
+
+        return $commentId;
+    }
+
+    /**
+     * Sets a metaproperty for the actual comment
+     *
+     * @param string $property the name of the property
+     * @param mixed $value     the value of the property
+     *
+     * @return boolean true if the property was setted
+     **/
+    public function setProperty($property, $value)
+    {
+        if ($this->id == null || empty($property)) {
+            return false;
+        }
+
+        $sql = "INSERT INTO commentsmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($this->id, $property, $value, $value);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if ($rs === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Updates the parent_id field for a comment
+     *
+     * @param string $parentId the id of the parent comment
+     *
+     * @return boolean true if the parent_id was updated
+     **/
+    public function updateParentId($parentId = null)
+    {
+        if (is_null($parentId)) {
+            return false;
+        }
+
+        $sql = "UPDATE comments SET parent_id = ? WHERE id = ?";
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($parentId, $this->id));
+
+        if (is_null($rs->fields['max'])) {
+            return false;
+        }
+
+        return $rs->fields['max'];
+    }
+
+    /**
+     * Get the datetime of last comment
+     *
+     * @return string $date datetime of last comment false otherwise
+     **/
+    public function getLastCommentDate()
+    {
+        $sql = 'SELECT max(date) as max FROM `comments`';
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+
+        if (is_null($rs->fields['max'])) {
+            return false;
+        }
+
+        return $rs->fields['max'];
+    }
+
+    /**
+     * Update a content comments total number
+     *
+     * @return boolean true if the number of comments was updated
+     **/
+    public function updateContentTotalComments($id)
+    {
+        $sql = 'SELECT count(id) as total FROM `comments` WHERE `content_id` = ? GROUP BY `content_id`';
+        $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
+
+        if (is_null($rs->fields['total'])) {
+            return false;
+        }
+
+        // Set number of comments for contents
+        \Content::setPropertyWithContentId($id, 'num_comments', $rs->fields['total']);
+
+        return true;
     }
 }

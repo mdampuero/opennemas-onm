@@ -56,6 +56,7 @@
         "ext-zip": "*",
         "ext-zlib": "*",
 
+        "drexarj/disqus-php"             : "dev-master",
         "frandieguez/panorama-php"       : "1.0.2",
         "imagine/imagine"                : "dev-develop",
         "monolog/monolog"                : "1.3.*",
