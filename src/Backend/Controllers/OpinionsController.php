@@ -1040,6 +1040,11 @@ class OpinionsController extends Controller
         }
 
         $user->meta = $user->getMeta();
+        if (array_key_exists('is_blog', $user->meta)) {
+            $user->is_blog = $user->meta['is_blog'];
+        } else {
+            $user->is_blog = 0;
+        }
 
         return $this->render('opinion/author_new.tpl', array('user' => $user));
     }
@@ -1063,6 +1068,7 @@ class OpinionsController extends Controller
                 'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => array(3),
+                'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '', FILTER_SANITIZE_STRING),
                 'ids_category'    => array(),
                 'activated'       => 0,
                 'type'            => 0,
@@ -1088,6 +1094,7 @@ class OpinionsController extends Controller
                 if ($user->create($data)) {
                     // Set all usermeta information (twitter, rss, language)
                     $meta = $request->request->get('meta');
+                    $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
                     foreach ($meta as $key => $value) {
                         $user->setMeta(array($key => $value));
                     }
@@ -1131,6 +1138,7 @@ class OpinionsController extends Controller
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => 60,
             'id_user_group'   => $user->id_user_group,
             'ids_category'    => $user->accesscategories,
@@ -1158,6 +1166,7 @@ class OpinionsController extends Controller
             if ($user->update($data)) {
                 // Set all usermeta information (twitter, rss, language)
                 $meta = $request->request->get('meta');
+                $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
                 foreach ($meta as $key => $value) {
                     $user->setMeta(array($key => $value));
                 }

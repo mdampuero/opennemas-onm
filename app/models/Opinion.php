@@ -363,9 +363,14 @@ class Opinion extends Content
             $this->author_name_slug = 'director';
         } else {
 
-            $aut = new \User($this->fk_author);
-            $this->name = StringUtils::get_title($aut->name);
+            $author = new \User($this->fk_author);
+            $this->name = StringUtils::get_title($author->name);
             $this->author_name_slug = $this->name;
+
+            if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+                $tpl->assign('item', $this);
+                return $tpl->fetch('frontpage/contents/_blog.tpl');
+            }
         }
 
         $tpl->assign('item', $this);

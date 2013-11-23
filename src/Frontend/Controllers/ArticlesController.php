@@ -141,7 +141,7 @@ class ArticlesController extends Controller
                     // Add category name
                     foreach ($relatedContents as $key => &$content) {
                         $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
-                        if ($key == 0 && $content->content_type == 'Article' && !empty($content->img1)) {
+                        if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
                              $content->photo = new \Photo($content->img1);
                         }
                     }
