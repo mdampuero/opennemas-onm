@@ -60,7 +60,7 @@ class OpinionsController extends Controller
             $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
         } else {
             $where = 'AND contents.in_home=0 ';
-            $orderBy='ORDER BY created DESC ';
+            $orderBy='ORDER BY starttime DESC ';
         }
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
