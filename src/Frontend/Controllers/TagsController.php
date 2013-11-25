@@ -79,6 +79,11 @@ class TagsController extends Controller
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
+                // Get number comments for a content
+                if ($content->with_comment == 1) {
+                    $content->num_comments = $content->getProperty('num_comments');
+                }
+
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
                         ->loadAttachedVideo()
