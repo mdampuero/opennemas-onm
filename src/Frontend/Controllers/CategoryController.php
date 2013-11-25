@@ -69,7 +69,7 @@ class CategoryController extends Controller
                 'Article',
                 (int) $category->pk_content_category,
                 'in_litter != 1 AND contents.available=1',
-                'ORDER BY created DESC, available ASC',
+                'ORDER BY starttime DESC, available ASC',
                 $page,
                 $itemsPerPage
             );
