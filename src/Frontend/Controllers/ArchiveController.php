@@ -39,6 +39,7 @@ class ArchiveController extends Controller
         $this->ccm = new \ContentCategoryManager();
         $this->request = $this->get('request');
         $today = new \DateTime();
+        $today->modify('-1 day');
         // Fetch HTTP variables
         $this->categoryName  = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->page          = $this->request->query->getDigits('page', 1);

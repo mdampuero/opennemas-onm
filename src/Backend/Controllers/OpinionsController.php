@@ -1129,6 +1129,7 @@ class OpinionsController extends Controller
     {
         $userId = $request->query->getDigits('id');
         $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
+        $user   = new \User($userId);
 
         $data = array(
             'id'              => $userId,
@@ -1139,14 +1140,13 @@ class OpinionsController extends Controller
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
             'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => 60,
-            'id_user_group'   => array(3),
-            'ids_category'    => array(),
+            'id_user_group'   => $user->id_user_group,
+            'ids_category'    => $user->accesscategories,
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
             'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
         );
 
         $file = $request->files->get('avatar');
-        $user = new \User($userId);
 
         // Generate username and password from real name
         if (empty($data['username'])) {

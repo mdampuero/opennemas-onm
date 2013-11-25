@@ -332,7 +332,7 @@ class Comment
      *
      * @return void
      **/
-    public function deleteFromFilter($filter)
+    public static function deleteFromFilter($filter)
     {
         $sql = 'DELETE FROM `comments` WHERE '. $filter;
         $rs = $GLOBALS['application']->conn->Execute($sql);
