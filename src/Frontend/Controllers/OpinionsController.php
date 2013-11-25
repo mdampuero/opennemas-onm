@@ -437,6 +437,7 @@ class OpinionsController extends Controller
                     $opinion['img1_footer'] = $item->img1_footer;
                     $opinion['pk_author'] = $author->id;
                     $opinion['author_name_slug']  = $author->slug;
+                    $opinion['comments']  = $item->comments;
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $opinion['img1'] = new \Photo($item->img1);
                     }

@@ -207,6 +207,7 @@ class BlogsController extends Controller
                         $blog['img1_footer']       = $item->img1_footer;
                         $blog['pk_author']         = $author->id;
                         $blog['author_name_slug']  = $author->slug;
+                        $blog['comments']          = $item->comments;
                         if (isset($item->img1) && ($item->img1 > 0)) {
                             $blog['img1'] = new \Photo($item->img1);
                         }
