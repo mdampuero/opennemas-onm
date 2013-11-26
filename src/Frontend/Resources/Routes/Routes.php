@@ -1348,7 +1348,7 @@ $frontendRoutes->add(
             '_format'     => 'html'
         ),
         array(
-            'author_name'    => '[a-z0-9\-]+',
+            'author_name'    => '[a-z0-9\-.]+',
             'opinion_title'  => '[a-z0-9\-]+',
             'opinion_id'     => '[a-z0-9\-]+',
         )
@@ -1365,7 +1365,7 @@ $frontendRoutes->add(
             '_format'     => 'html'
         ),
         array(
-            'author_name'   => '[a-z0-9\-]+',
+            'author_name'   => '[a-z0-9\-.]+',
             'opinion_title' => '[a-z0-9\-]+',
             'opinion_id'    => '[a-z0-9\-]+',
             'date'          => '([0-9]{4})-([0-1][0-9])-([0-3][0-9])',
@@ -1398,7 +1398,7 @@ $frontendRoutes->add(
             '_format'     => 'html'
         ),
         array(
-            'author_name'    => '[a-z0-9\-]+',
+            'author_name'    => '[a-z0-9\-.]+',
             'opinion_title'  => '[a-z0-9\-]+',
             'opinion_id'     => '[a-z0-9\-]+',
         )
@@ -1414,7 +1414,7 @@ $frontendRoutes->add(
            '_format'     => 'html'
         ),
         array(
-            'opinion_title' => '[a-z0-9\-]+',
+            'opinion_title' => '[a-z0-9\-.]+',
             'opinion_id'    => '[a-z0-9\-]+',
        )
     )
