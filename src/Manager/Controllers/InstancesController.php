@@ -241,7 +241,7 @@ class InstancesController extends Controller
                 'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
                 'settings'      => $settings,
                 'site_created'  => $request->request
-                    ->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
+                    ->filter('site_created', date("Y-m-d - H:m:s"), FILTER_SANITIZE_STRING)
             );
 
             // Also get timezone if comes from openhost form
@@ -351,7 +351,7 @@ class InstancesController extends Controller
             'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
             'settings'      => $settings,
-            'site_created'  => $request->request->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
+            'site_created'  => $request->request->filter('site_created', date("Y-m-d - H:m:s"), FILTER_SANITIZE_STRING)
         );
 
         // Also get timezone if comes from openhost form
