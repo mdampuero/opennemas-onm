@@ -60,7 +60,7 @@ class OpinionsController extends Controller
             $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
         } else {
             $where = 'AND contents.in_home=0 ';
-            $orderBy='ORDER BY created DESC ';
+            $orderBy='ORDER BY starttime DESC ';
         }
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
@@ -437,6 +437,7 @@ class OpinionsController extends Controller
                     $opinion['img1_footer'] = $item->img1_footer;
                     $opinion['pk_author'] = $author->id;
                     $opinion['author_name_slug']  = $author->slug;
+                    $opinion['comments']  = $item->comments;
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $opinion['img1'] = new \Photo($item->img1);
                     }

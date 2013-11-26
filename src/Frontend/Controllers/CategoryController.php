@@ -69,7 +69,7 @@ class CategoryController extends Controller
                 'Article',
                 (int) $category->pk_content_category,
                 'in_litter != 1 AND contents.available=1',
-                'ORDER BY created DESC, available ASC',
+                'ORDER BY starttime DESC, available ASC',
                 $page,
                 $itemsPerPage
             );
@@ -90,11 +90,15 @@ class CategoryController extends Controller
 
             // Overloading information for contents
             foreach ($articles as &$content) {
-
                 // Load category related information
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
                 $content->author         = new \User($content->fk_author);
+
+                // Get number comments for a content
+                if ($content->with_comment == 1) {
+                    $content->num_comments = $content->getProperty('num_comments');
+                }
 
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)

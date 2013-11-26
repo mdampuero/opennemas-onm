@@ -64,7 +64,7 @@ class BlogsController extends Controller
             || !$this->view->isCached('blog/blog.tpl', $cacheID)
         ) {
             //
-            $orderBy = 'ORDER BY created DESC';
+            $orderBy = 'ORDER BY starttime DESC';
             $authorsBlog = \User::getAllUsersAuthors();
             $authors = array();
             foreach ($authorsBlog as $author) {
@@ -195,7 +195,7 @@ class BlogsController extends Controller
                 $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
                     $filter
                     .' AND contents.available=1 and contents.content_status=1',
-                    'ORDER BY created DESC '.$_limit
+                    'ORDER BY starttime DESC '.$_limit
                 );
 
                 if (!empty($blogs)) {
@@ -207,6 +207,7 @@ class BlogsController extends Controller
                         $blog['img1_footer']       = $item->img1_footer;
                         $blog['pk_author']         = $author->id;
                         $blog['author_name_slug']  = $author->slug;
+                        $blog['comments']          = $item->comments;
                         if (isset($item->img1) && ($item->img1 > 0)) {
                             $blog['img1'] = new \Photo($item->img1);
                         }

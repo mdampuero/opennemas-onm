@@ -111,6 +111,10 @@ class Memcache extends AbstractCache
      */
     protected function doFetch($id)
     {
+        if (is_array($id)) {
+            return $this->memcache->getMulti($id);
+        }
+
         return $this->memcache->get($id);
     }
 
@@ -139,6 +143,10 @@ class Memcache extends AbstractCache
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
+        if (is_array($id)) {
+            return $this->memcache->setMulti($id, (int) $lifeTime);
+        }
+
         return $this->memcache->set($id, $data, (int) $lifeTime);
     }
 
