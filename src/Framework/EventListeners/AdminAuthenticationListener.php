@@ -79,20 +79,21 @@ class AdminAuthenticationListener implements EventSubscriberInterface
 
         } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
             $event->setResponse(new RedirectResponse('/', 301));
-        } else {
-            $maxIdleTime = ((int) s::get('max_session_lifetime', 60) * 60);
-            $lastUsedSession = $session->getMetadataBag()->getLastUsed();
-
-            // If the max idle time is set and the session was used in a time before the max idle time
-            // invalidate session and redirect to
-            if ($maxIdleTime > 0
-                && time() - $lastUsedSession > $maxIdleTime
-            ) {
-                $session->invalidate();
-
-                $event->setResponse(new RedirectResponse(SITE_URL_ADMIN));
-            }
         }
+        // else {
+        //     $maxIdleTime = ((int) s::get('max_session_lifetime', 60) * 60);
+        //     $lastUsedSession = $session->getMetadataBag()->getLastUsed();
+
+        //     // If the max idle time is set and the session was used in a time before the max idle time
+        //     // invalidate session and redirect to
+        //     if ($maxIdleTime > 0
+        //         && time() - $lastUsedSession > $maxIdleTime
+        //     ) {
+        //         $session->invalidate();
+
+        //         $event->setResponse(new RedirectResponse(SITE_URL_ADMIN));
+        //     }
+        // }
 
     }
 
