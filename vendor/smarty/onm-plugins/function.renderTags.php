@@ -45,8 +45,8 @@ function smarty_function_renderTags($params, &$smarty)
     foreach ($params['metas'] as $tag) {
         $tag = trim($tag);
         if (!empty($tag)) {
-            $output .= ' <a '.$class.' href="' . $url.'&q='.$tag
-                .'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+            $fullUrl = htmlentities($url.'&q='.$tag, ENT_QUOTES);
+            $output .= ' <a '.$class.' href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
         }
     }
 
