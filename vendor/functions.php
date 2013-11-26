@@ -502,7 +502,8 @@ function generateRandomString($length = 10)
  **/
 function html_attribute($string)
 {
-    return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $string = stripslashes(html_entity_decode($string));
+    return htmlspecialchars(strip_tags($string), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
 // added Claudio Bustos  clbustos#entelchile.net
