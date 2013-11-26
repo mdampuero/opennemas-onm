@@ -51,7 +51,7 @@
 {/block}
 
 {block name="content" append}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id category=$category page=$page filter=$filter}{else}{url name=admin_ad_create filter=$filter}{/if}" method="post" id="formulario">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -66,7 +66,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_ads category=$category page=$page}" title="{t}Go back{/t}">
+                    <a href="{url name=admin_ads category=$category page=$page filter=$filter}" title="{t}Go back{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
