@@ -493,6 +493,18 @@ function generateRandomString($length = 10)
     return $randomString;
 }
 
+/**
+ * Prepares HTML code to use it as html entity attribute
+ *
+ * @param string $string the string to clean
+ *
+ * @return string $string the cleaned string
+ **/
+function html_attribute($string)
+{
+    return htmlentities(strip_tags(stripslashes($string)));
+}
+
 // added Claudio Bustos  clbustos#entelchile.net
 if (!defined('ADODB_ERROR_HANDLER_TYPE')) {
     define('ADODB_ERROR_HANDLER_TYPE', E_USER_ERROR);
