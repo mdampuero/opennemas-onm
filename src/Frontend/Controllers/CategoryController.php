@@ -73,6 +73,7 @@ class CategoryController extends Controller
                 $page,
                 $itemsPerPage
             );
+            $articles = $cm->getInTime($articles);
 
             $imageIdsList = array();
             foreach ($articles as $content) {
