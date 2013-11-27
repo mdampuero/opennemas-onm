@@ -84,7 +84,6 @@ class AclUserController extends Controller
                 'users'           => $users,
                 'user_groups'     => $groups,
                 'groupsOptions'   => $groupsOptions,
-
                 'total_num_users' => $usersCount,
                 'url_filters'     => $filter,
                 'items_per_page'  => $itemsPerPage,

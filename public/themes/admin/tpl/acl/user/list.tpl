@@ -39,7 +39,7 @@ jQuery(function($){
 
 		<div class="table-info clearfix">
             <div class="pull-left">
-                <strong>{$pagination->_totalItems} {t}users{/t}</strong>
+                <strong>{$total_num_users} {t}users{/t}</strong>
             </div>
 			<div class="pull-right form-inline">
 				<input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" />
