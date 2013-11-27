@@ -129,6 +129,7 @@ class CategoryController extends Controller
                     'category'              => $category,
                     'pagination'            => $pagination,
                     'actual_category_title' => $category->title,
+                    'actual_category'       => $category->name
                 )
             );
         }
