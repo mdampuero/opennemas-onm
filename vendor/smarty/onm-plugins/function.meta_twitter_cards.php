@@ -16,7 +16,11 @@ function smarty_function_meta_twitter_cards($params, &$smarty) {
         $content = $smarty->tpl_vars['content']->value;
 
         $output []= '<meta name="twitter:title" content="'.$content->title.'">';
-        $output []= '<meta name="twitter:description" content="'.trim(html_attribute($content->summary)).'">';
+        $summary = $content->summary;
+        if (!empty($content->summary)) {
+            $summary = html_attribute(mb_substr($content->body, 0, 80))."...";
+        }
+        $output []= '<meta name="twitter:description" content="'.trim(html_attribute($sumamry)).'">';
 
         $user = preg_split('@.com/[#!/]*@', s::get('twitter_page'));
         $twitterUser = $user[1];
@@ -30,7 +34,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty) {
             $output []= '<meta name="twitter:image:src" content="'.$imageUrl.'">';
         }
 
-        $output []= '<meta name="twitter:domain" content="'."http://".SITE.$content->uri.'">';
+        $output []= '<meta name="twitter:domain" content="'."http://".SITE.'/'.$content->uri.'">';
     }
 
     return implode("\n", $output);
