@@ -42,7 +42,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
         $url = $request->getPathInfo();
 
         $isAdmin   = strpos($url, '/admin') === 0;
-        $isManager = strpos($url, '/manager') === 0;
+        $isManager = preg_match('@^/manager(?!ws)@i', $url, $matches) === 1;
 
         $isAsset = preg_match('@.*\.(png|gif|jpg|ico|css|js)$@', $request->getPathInfo());
 
