@@ -141,7 +141,7 @@ class AdsController extends Controller
                 'delta'       => 4,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
-                'totalItems'  => $countAds,
+                'totalItems'  => count($ads),
                 'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
             )
         );
