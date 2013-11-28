@@ -56,7 +56,7 @@
                                 <input type="search" name="search_string" placeholder="{t}Search...{/t}" class="string-search" accesskey="s">
                             </form>
                         </li>
-                        {if !is_null($errorMessage)}
+                        {if is_null($errorMessage)}
                         {if {count_pending_comments} gt 0}
                         <li class="notification-messages">
                             <a class="" title="{count_pending_comments} {t}Pending comments{/t}"
