@@ -112,7 +112,7 @@ class AdsController extends Controller
             $itemsPerPage
         );
 
-        foreach ($ads as &$ad) {
+        foreach ($ads as $key => &$ad) {
             //Distinguir entre flash o no flash
             $img = new \Photo($ad->path);
             if ($img->type_img == "swf") {
@@ -126,10 +126,8 @@ class AdsController extends Controller
             $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
             $ad->advertisement_placeholder = $adv_placeholder;
 
-            if (!in_array($this->category, $ad->fk_content_categories)
-               || $ad->fk_content_categories != array(0)
-            ) {
-                unset($ad);
+            if (!in_array($this->category, $ad->fk_content_categories)) {
+                unset($ads[$key]);
             }
         }
 

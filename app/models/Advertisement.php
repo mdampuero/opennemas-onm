@@ -420,8 +420,8 @@ class Advertisement extends Content
         $cm = new \ContentManager();
         if ($category !== 0) {
             $config = s::get('ads_settings');
-            if (isset($config['ads_settings']['no_generics'])
-                && ($config['ads_settings']['no_generics'] == '1')
+            if (isset($config['no_generics'])
+                && ($config['no_generics'] == '1')
             ) {
                 $generics = '';
             } else {
