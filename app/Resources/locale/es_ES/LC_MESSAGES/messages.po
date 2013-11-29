@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-11-29 11:19+0100\n"
-"PO-Revision-Date: 2013-11-29 11:11+0100\n"
+"PO-Revision-Date: 2013-11-29 11:36+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -9573,7 +9573,7 @@ msgstr "Entrar"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7994
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8135
 msgid "Forgot Password?"
-msgstr "Olvidó su contraseña"
+msgstr "¿ Olvidó su contraseña ?"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7997
 msgid ""
