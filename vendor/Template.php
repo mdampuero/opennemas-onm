@@ -62,7 +62,6 @@ class Template extends Smarty
         $this->addFilter("output", "js_includes");
         $this->addFilter("output", "css_includes");
         $this->addFilter("output", "canonical_url");
-        $this->addFilter("output", "disqus_sync");
 
         $this->setTemplateVars($theme);
 

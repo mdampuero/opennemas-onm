@@ -44,13 +44,13 @@ gettext("Config disqus module");
 gettext("Config");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
-gettext("Disqus module sinchronization");
+gettext("Disqus module sync");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
-gettext("Disqus module sinchronization");
+gettext("Disqus module sync");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
-gettext("Disqus module sinchronization");
+gettext("Disqus module sync");
 
 /* public/themes/admin/tpl//disqus/list.tpl */
 gettext("Synchronize");

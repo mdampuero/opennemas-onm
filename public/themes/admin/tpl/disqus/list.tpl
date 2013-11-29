@@ -22,6 +22,9 @@ iframe {
     padding: 0;
 }
 </style>
+{/block}
+
+{block name="header-js" prepend}
 <script type="text/javascript">
 jQuery(document).ready(function($){
     $('.iframe iframe').css('min-height', ($(window).height() - 140) + 'px');
@@ -50,8 +53,8 @@ jQuery(document).ready(function($){
             </li>
             {if !empty($disqus_secret_key)}
             <li>
-                <a href="{url name=admin_comments_disqus_sync}" class="disqus_sync" title="{t}Disqus module sinchronization{/t}">
-                    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Disqus module sinchronization{/t}" alt="{t}Disqus module sinchronization{/t}" ><br />{t}Synchronize{/t}
+                <a href="{url name=admin_comments_disqus_sync}" class="disqus_sync" title="{t}Disqus module sync{/t}">
+                    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Disqus module sync{/t}" alt="{t}Disqus module sync{/t}" ><br />{t}Synchronize{/t}
                 </a>
             </li>
             {/if}
