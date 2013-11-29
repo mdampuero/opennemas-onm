@@ -103,13 +103,10 @@ class AdsController extends Controller
         $itemsPerPage = s::get('items_per_page');
 
         $cm = new \ContentManager();
-        list($countAds, $ads)= $cm->getCountAndSlice(
+        $ads = $cm->find_all(
             'Advertisement',
-            null,
             $filter,
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+            'ORDER BY created DESC '
         );
 
         foreach ($ads as $key => &$ad) {
@@ -130,6 +127,8 @@ class AdsController extends Controller
                 unset($ads[$key]);
             }
         }
+
+        $filteredAds = array_slice($ads, ($page-1)*$itemsPerPage, $itemsPerPage);
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -152,7 +151,7 @@ class AdsController extends Controller
             'advertisement/list.tpl',
             array(
                 'pagination'     => $pagination,
-                'advertisements' => $ads,
+                'advertisements' => $filteredAds,
                 'filter_options' => $filterOptions,
                 'map'            => $map,
                 'page'           => $page,
