@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-29 11:19+0100\n"
+"POT-Creation-Date: 2013-11-29 13:07+0100\n"
 "PO-Revision-Date: 2012-03-09 11:34+0100\n"
 "Last-Translator: Fran Dieguez <fran@openhost.es>\n"
 "Language-Team: Galician\n"
@@ -3548,7 +3548,7 @@ msgstr ""
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:47
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:50
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:53
-msgid "Disqus module sinchronization"
+msgid "Disqus module sync"
 msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:56
