@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-29 11:19+0100\n"
-"PO-Revision-Date: 2013-11-29 11:36+0100\n"
+"POT-Creation-Date: 2013-11-29 13:07+0100\n"
+"PO-Revision-Date: 2013-11-29 13:08+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -2069,11 +2069,9 @@ msgid "You have been unsubscribed from our newsletter"
 msgstr "Se ha desubscrito del boletín de noticias"
 
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/SubscriptionsController.php:233
-#, fuzzy
 msgid "Sorry, that email is not in our database"
 msgstr ""
-"Lo sentimos, pero el correo electrónico ya está suscrito a nuestro boletín "
-"de noticias"
+"Lo sentimos, pero ese correo electrónico no esta en nuestras bases de datos"
 
 #: /home/others/www/idealgallego/onm-instance/src/Frontend/Controllers/UserController.php:118
 msgid "The email address is already in use."
@@ -2195,14 +2193,14 @@ msgid "You must provide an id for delete an instance."
 msgstr "Debe proporcionar un identificador para eliminar una instancia."
 
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:468
-#, fuzzy, php-format
+#, php-format
 msgid "Unable to delete instance %d."
-msgstr "No se pudo eliminar la instancia."
+msgstr "No se pudo eliminar la instancia %d."
 
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:473
-#, fuzzy, php-format
+#, php-format
 msgid "Instance %d deleted successfully."
-msgstr "Instancia eliminada correctamente."
+msgstr "Instancia %d eliminada correctamente."
 
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:494
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:523
@@ -2211,9 +2209,9 @@ msgid "Unable to find the instance with the id %d"
 msgstr "No se pudo encontrar la instancia con el identificador «%d»"
 
 #: /home/others/www/idealgallego/onm-instance/src/Manager/Controllers/InstancesController.php:526
-#, fuzzy, php-format
+#, php-format
 msgid "Instance %d updated successfully."
-msgstr "Instancia eliminada correctamente."
+msgstr "Instancia %d actualizada correctamente."
 
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Resources/Menu.php:10
 msgid "Web site"
@@ -3255,13 +3253,12 @@ msgstr ""
 "un ficheiro más pequeño o contacte con su administrador"
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Video.php:384
-#, fuzzy
 msgid ""
 "There was a problem while converting your video. Please contact with your "
 "administrator."
 msgstr ""
-"Se ha producido un error al convertir el archivo. <br />Por favor, contacte "
-"con el administrador de sistema"
+"Se ha producido un error al convertir el video. Por favor, contacte con el "
+"administrador de sistema"
 
 #: /home/others/www/idealgallego/onm-instance/app/models/Video.php:396
 #, php-format
@@ -3476,14 +3473,12 @@ msgid "%d months ago"
 msgstr "hace %d meses"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:2
-#, fuzzy
 msgid "Syncing from Disqus"
-msgstr "Sincronizando desde los orígenes"
+msgstr "Sincronizando desde disqus"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:5
-#, fuzzy
 msgid "Downloading comments from Disqus, please wait..."
-msgstr "Descargando artículos desde EuropaPress, por favor espere..."
+msgstr "Descargando comentarios desde Disqus, por favor espere..."
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8198
@@ -3647,16 +3642,16 @@ msgid ""
 "A shortname is the unique identifier assigned to a Disqus site. All the "
 "comments posted to a site are referenced with the shortname"
 msgstr ""
+"Un shortname es el identificador único asignado a un sitio de Disqus. Todos "
+"los comentarios publicados en un sitio se referencian con el shortname"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:29
-#, fuzzy
 msgid ""
 "You can get your Disqus secret key in <a href=\"http://disqus.com/api/"
 "applications/\" target=\"_blank\">here</a>"
 msgstr ""
-"Puede obtener sus llaves de aplicación de Facebook desde <a href=\"https://"
-"developers.facebook.com/apps\" target=\"_blank\">el sitio web Facebook "
-"Developers</a>."
+"Puede obtener sus llaves de aplicación de Disqus desde <a href=\"http://"
+"disqus.com/api/applications/\" target=\"_blank\">aqui</a>"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:35
 msgid "Disqus module configuration"
@@ -3676,14 +3671,12 @@ msgstr "Configuración"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:47
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:50
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:53
-#, fuzzy
-msgid "Disqus module sinchronization"
-msgstr "Configuración de módulo Disqus"
+msgid "Disqus module sync"
+msgstr "Sincronización del módulo Disqus"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:56
-#, fuzzy
 msgid "Synchronize"
-msgstr "Sincronizado con %1"
+msgstr "Sincronizar"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:59
 msgid "Disqus not configured"
@@ -5427,9 +5420,8 @@ msgid "New opinion"
 msgstr "Nueva opinión"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1499
-#, fuzzy
 msgid "Blog"
-msgstr "Url del blog"
+msgstr "Blog"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1502
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1967
@@ -5596,14 +5588,12 @@ msgid "Username"
 msgstr "Nombre de usuario"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1583
-#, fuzzy
 msgid "View as Blog"
-msgstr "Número de visualizaciones"
+msgstr "Ver como Blog"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1586
-#, fuzzy
 msgid "Other Blog Url"
-msgstr "Url del blog"
+msgstr "Otra url de blog"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:1589
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:7685
@@ -10302,24 +10292,20 @@ msgstr ""
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8825
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8834
-#, fuzzy
 msgid "Delete instances"
-msgstr "Eliminar instancia"
+msgstr "Eliminar instancias"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8828
-#, fuzzy
 msgid "You must select some instances."
-msgstr "Debe seleccionar algún elemento."
+msgstr "Debe seleccionar algúna instancia."
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8837
-#, fuzzy
 msgid "Are you sure you want to delete <span>%num%</span> instances?"
-msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> imágenes?"
+msgstr "¿Está seguro de que quiere eliminar <span>%num%</span> instancias?"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8846
-#, fuzzy
 msgid "You must select some instances"
-msgstr "Debe seleccionar algún elemento."
+msgstr "Debe seleccionar algúna instancia."
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8849
 msgid "Delete instance"
@@ -10381,21 +10367,18 @@ msgid "Newspaper URL"
 msgstr "URL del periódico"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8930
-#, fuzzy
 msgid "Batch activate"
-msgstr "Acciones en lote"
+msgstr "Activar en lote"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8933
-#, fuzzy
 msgid "Batch desactivate"
-msgstr "Eliminar en lote"
+msgstr "Desactivar en lote"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8936
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8939
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8942
-#, fuzzy
 msgid "New Instance"
-msgstr "Instancias"
+msgstr "Nueva instancia"
 
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:8948
 msgid "Filter by e-mail"
