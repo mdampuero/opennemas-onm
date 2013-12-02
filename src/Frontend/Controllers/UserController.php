@@ -588,7 +588,7 @@ class UserController extends Controller
                 </ul>';
         }
 
-        return new Response($output,'200');
+        return new Response($output);
     }
 
     /**
