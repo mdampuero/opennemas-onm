@@ -15,6 +15,7 @@
 namespace Frontend\Controllers;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -578,7 +579,7 @@ class UserController extends Controller
                 </ul>';
         }
 
-        return $output;
+        return new Response($output);
     }
 
     /**
