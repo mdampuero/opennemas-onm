@@ -122,6 +122,16 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_paywall_success_recurring_payment',
+    new Route(
+        '/paywall/success_recurring_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:returnSuccessRecurringPayment',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_paywall_cancel_payment',
     new Route(
         '/paywall/cancel_payment',
@@ -131,7 +141,35 @@ $frontendRoutes->add(
     )
 );
 
+$frontendRoutes->add(
+    'frontend_paywall_cancel_recurring_payment',
+    new Route(
+        '/paywall/cancel_recurring_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:cancelRecurringPayment',
+        )
+    )
+);
 
+$frontendRoutes->add(
+    'frontend_paywall_activate_recurring_payment',
+    new Route(
+        '/paywall/activate_recurring_payment',
+        array(
+            '_controller' => 'Frontend:Controllers:PaywallController:activateRecurringPayment',
+        )
+    )
+);
+
+$frontendRoutes->add(
+    'frontend_ws_paypal_ipn',
+    new Route(
+        '/ws/paypal/ipn',
+        array(
+            '_controller' => 'Frontend:Controllers:PaypalNotificationsController:paywall',
+        )
+    )
+);
 
 $frontendRoutes->add(
     'frontend_newsletter_subscribe_show',
