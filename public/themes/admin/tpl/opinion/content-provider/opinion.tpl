@@ -6,8 +6,14 @@
     <div class="description">
         <input type="checkbox" class="action-button" name="selected-{$content->id}">
         <div class="title">
-            <span class="type">{t}Opinion{/t}</span>
-            {$content->author_object->name} - {$content->title}
+            {if $content->author_object->meta['is_blog'] neq 1}
+                <span class="type">{t}Opinion{/t}</span>
+                {$content->author_object->name} - {$content->title}
+            {else}
+                <strong>{t}Blog{/t}</strong> {$content->author_object->name} - {$content->title}
+            {/if}
+
+
         </div>
     </div>
     <div class="content-action-buttons btn-group">

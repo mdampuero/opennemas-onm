@@ -542,9 +542,11 @@ class ImagesController extends Controller
 
                         // Check if the image has an IPTC title an use it as original title
                         $size = getimagesize($upload['tmp_name'][$index], $imageInfo);
-                        if (array_key_exists('APP13', $imageInfo)) {
+                        if (isset($imageInfo['APP13'])) {
                             $iptc = iptcparse($imageInfo["APP13"]);
-                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                            if (isset($iptc['2#120'])) {
+                                $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                            }
                         }
 
                         $data = array(
@@ -595,9 +597,11 @@ class ImagesController extends Controller
 
                     // Check if the image has an IPTC title an use it as original title
                     $size = getimagesize($upload['tmp_name'], $imageInfo);
-                    if (array_key_exists('APP13', $imageInfo)) {
+                    if (isset($imageInfo['APP13'])) {
                         $iptc = iptcparse($imageInfo["APP13"]);
-                        $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                        if (isset($iptc['2#120'])) {
+                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                        }
                     }
 
                     $data = array(

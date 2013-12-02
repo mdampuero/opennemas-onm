@@ -141,7 +141,7 @@ class ArticlesController extends Controller
                     // Add category name
                     foreach ($relatedContents as $key => &$content) {
                         $content->category_name = $this->ccm->get_category_name_by_content_id($content->id);
-                        if ($key == 0 && $content->content_type == 'Article' && !empty($content->img1)) {
+                        if ($key == 0 && $content->content_type == 1 && !empty($content->img1)) {
                              $content->photo = new \Photo($content->img1);
                         }
                     }
@@ -291,8 +291,9 @@ class ArticlesController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // I have added the element 150 in order to integrate all the code in the same query
-        $positions = array(7, 9, 150, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        // Get article_inner positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return  \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

@@ -241,7 +241,7 @@ class InstancesController extends Controller
                 'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
                 'settings'      => $settings,
                 'site_created'  => $request->request
-                    ->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
+                    ->filter('site_created', date("Y-m-d - H:m:s"), FILTER_SANITIZE_STRING)
             );
 
             // Also get timezone if comes from openhost form
@@ -351,7 +351,7 @@ class InstancesController extends Controller
             'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
             'settings'      => $settings,
-            'site_created'  => $request->request->filter('site_created', date("d-m-Y - H:m"), FILTER_SANITIZE_STRING)
+            'site_created'  => $request->request->filter('site_created', date("Y-m-d - H:m:s"), FILTER_SANITIZE_STRING)
         );
 
         // Also get timezone if comes from openhost form
@@ -502,5 +502,32 @@ class InstancesController extends Controller
         );
 
         return $this->redirect($this->generateUrl('manager_instances'));
+    }
+
+    /**
+     * Set the activated flag for instances in batch
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchAvailableAction(Request $request)
+    {
+        $selected = $request->query->get('selected', null);
+        $status   = $request->query->getDigits('status', 0);
+
+        if (is_array($selected) && count($selected) > 0) {
+            foreach ($selected as $id) {
+                $instance = $this->instanceManager->read($id);
+                if ($instance === false) {
+                    m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
+                } else {
+                    $this->instanceManager->changeActivated($id, $status);
+                    m::add(sprintf(_("Instance %d updated successfully."), $id), m::SUCCESS);
+                }
+            }
+        }
+
+        return new Response('ok', 200);
     }
 }

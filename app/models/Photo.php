@@ -602,7 +602,7 @@ class Photo extends Content
                     if (isset($info)) {
                         foreach ($info as $key => $val) {
                             if ($key != 'APP1') {
-                                $exifData = read_exif_data($image, 0, true);
+                                $exifData = @read_exif_data($image, 0, true);
                                 break;
                             }
                         }

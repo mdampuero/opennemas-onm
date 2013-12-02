@@ -186,6 +186,13 @@ abstract class AbstractCache implements CacheInterface
      */
     private function getNamespacedId($id)
     {
+        if (is_array($id)) {
+            foreach ($id as &$idPart) {
+                $idPart = $this->getNamespacedId($idPart);
+            }
+            return $id;
+        }
+
         return $this->namespace . $id;
     }
 

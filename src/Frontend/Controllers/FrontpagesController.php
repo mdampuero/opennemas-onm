@@ -124,11 +124,17 @@ class FrontpagesController extends Controller
                 $content->category_name  = $content->loadCategoryName($content->id);
                 $content->category_title = $content->loadCategoryTitle($content->id);
 
+                // Get number comments for a content
+                if ($content->with_comment == 1) {
+                    $content->num_comments = $content->getProperty('num_comments');
+                }
+
                 // Load attached and related contents from array
                 $content->loadFrontpageImageFromHydratedArray($imageList)
                         ->loadAttachedVideo()
                         ->loadRelatedContents($categoryName);
             }
+
             $this->view->assign('column', $contentsInHomepage);
 
             $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
@@ -240,245 +246,12 @@ class FrontpagesController extends Controller
      **/
     public static function getAds($category = 'home')
     {
-
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // I have added the element 50 in order to integrate interstitial position
-        $positions = array(
-            50, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15,
-            16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
-            36, 103, 105, 9, 91, 92
-        );
+        // Get frontpage positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('frontpage');
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
-    }
-
-    /**
-     * Retrieves the styleSheet rules for the frontpage
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function cssAction(Request $request)
-    {
-        $categoryName = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $cm = new \ContentManager;
-        $ccm = \ContentCategoryManager::get_instance();
-        $actualCategoryId = $ccm->get_id($categoryName);
-        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
-        $finalCss = "";
-
-        // Styles to print each item
-        $rules = '';
-        //content_id | title_catID | serialize(font-family:;font-size:;color:)
-        if (is_array($contentsInHomepage)) {
-            foreach ($contentsInHomepage as $k => $item) {
-                $element = 'bgcolor_'.$actualCategoryId;
-                $bgcolor = $item->getProperty($element);
-                if (!empty($bgcolor)) {
-                    $rules .="#content-{$item->pk_content}.onm-new {\n";
-                    $rules .= "\tbackground-color:{$bgcolor} !important; \n";
-                    $rules .= "}\n";
-                    $rules .="#content-{$item->pk_content}.colorize {\n";
-                    $rules .= "\tpadding:10px !important; \n";
-                    $rules .= "\border-radius:5px !important; \n";
-                    $rules .= "}\n";
-                }
-
-                $element = 'title'."_".$actualCategoryId;
-                $properties = $item->getProperty($element);
-                if (!empty($properties)) {
-                    $properties = json_decode($properties);
-                    if (!empty($properties)) {
-                        // #content-81115.onm-new h3.nw-title a
-                        $rules .="#content-{$item->pk_content} .title a, ";
-                        $rules .="#content-{$item->pk_content} .nw-title a {\n";
-                        foreach ($properties as $property => $value) {
-                            if (!empty($value)) {
-                                    $rules .= "\t{$property}:{$value}; \n";
-                            }
-                        }
-                        $rules .= "}\n";
-                    }
-                }
-            }
-        }
-
-        $output = $rules;
-
-        // RenderColorMenu - ADDED RENDER COLOR MENU
-        $current = (isset($categoryName) ? $categoryName : null);
-        $configColor = s::get('site_color');
-        $siteColor = (isset($configColor) ? '#'.$configColor : '#dedede');
-
-        // Styles to print each category's new
-        $actual = '';
-
-        $categories = $ccm->categories;
-        if (isset($categories) && !empty($categories)) {
-            foreach ($categories as $theCategory) {
-
-                if (empty($theCategory->color)) {
-                    $theCategory->color = $siteColor;
-                } else {
-                    if (!preg_match('@^#@', $theCategory->color)) {
-                        $theCategory->color = '#'.$theCategory->color;
-
-                    }
-                }
-
-                $output.= "\tarticle.onm-new div.nw-category-name div.". $theCategory->name .
-                          " { color:" . $theCategory->color . "; }\n\t\t";
-
-                $output.= "\tarticle.onm-new .". $theCategory->name .
-                          " { color:" . $theCategory->color . "; }\n\t\t";
-
-                $output.= "\tarticle.onm-new hr.category-line.". $theCategory->name .
-                          " { border-color:" . $theCategory->color . "; }\n".
-                          "\tarticle.onm-new .content-category.". $theCategory->name ." a:hover
-                           { color:" . $theCategory->color . " !important; }\n
-                          \t\t";
-                $output.= "\t nav#menu.menu div.mainmenu ul li.cat.". $theCategory->name .":hover a,
-                            nav#menu.menu div.submenu ul li.subcat.". $theCategory->name .":hover a
-                           { color:" . $theCategory->color . ";
-                            text-decoration: underline; }\n
-                          \t\t";
-                $output.= "\t nav#menu.menu div.mainmenu ul li.cat.". $theCategory->name .":hover a,
-                            nav#menu.menu div.submenu ul li.subcat.". $theCategory->name .":hover a
-                           { color:" . $theCategory->color . ";
-                            text-decoration: underline; }\n
-                          \t\t";
-                $output.= "\t.bg-".$theCategory->name." { background-color:" . $theCategory->color . " !important;}\n";
-
-                $output.= "\t.text-".$theCategory->name." { color:" . $theCategory->color . " !important;}\n";
-                $output.= "\t.bg-".$theCategory->name." { background-color:" . $theCategory->color . " !important;}\n";
-                $output.= "\t.border-".$theCategory->name." { border-color:" . $theCategory->color . " !important;}\n";
-                $output.= "\t.".$theCategory->name." .colorize-bg  { background-color:" . $theCategory->color . " !important;}\n";
-
-                $output.= "\t.high-menu li.".$theCategory->name.".active { background-color:" . $theCategory->color . " !important;}\n";
-                $output.= "\t.high-menu li.".$theCategory->name.":hover { background-color:" . $theCategory->color . " !important;}\n";
-
-                $output.= "\t.widget a.category-color.". $theCategory->name .", ".
-                          "\t.widget .category-color.". $theCategory->name .
-                          " { color:" . $theCategory->color . " !important; }\n".
-                          ".widget div.tab-lastest.". $theCategory->name .":hover".
-                          " { background-color:" . $theCategory->color . "; }\n".
-                          ".widget div.tab-lastest.". $theCategory->name .":hover .category-color".
-                          " { color:#FFF !important;}\n
-                          \t\t";
-
-                if ($current == $theCategory->name) {
-                    $actual = $theCategory->color;
-                }
-            }//end-foreach
-
-            if ($current == 'home' || $current == null) {
-                $actual = $siteColor;
-            }
-
-            $output.= "\tdiv.main-menu, ul.nav-menu, div#footer-container
-                { background-color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.main-menu-border{ border-color:" . $actual . " !important;}\n";
-            $output.= "\t.main-menu-border ul li a:hover, .main-menu-border ul li a:focus,
-                .main-menu-border ul li.active a, .main-menu-border ul.nav li.active a,
-                .main-menu-border ul.nav li:hover a  { background-color:" . $actual . " !important;}\n";
-            $output.= "\tarticle.opinion-element .header h2.author_name a { color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.author-and-date a { color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.opinion-index-author header h1.section-title a { color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.more-news h4 { color:" . $actual . " !important;}\n";
-
-            $output.= "\th1#title a.big-text-logo  { color:" . $actual . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header.colorize, ".
-                ".frontpage article .article-info span { color:" . $actual . " !important;}\n";
-
-            $output.= "\tdiv.widget .category-header, "
-                    ."\tdiv.widget-last-articles .header-title { background-color:" . $actual . " !important;}\n";
-            $output.= "\tarticle.onm-new.highlighted-2-cols div.nw-subtitle div, ".
-                "article.onm-new.highlighted-3-cols div.nw-subtitle div { background-color:" . $actual . " !important;}\n";
-
-            $output.= "\t.frontpage article.album .nw-subtitle, .frontpage article.video .nw-subtitle, ".
-                "\t div.opinion-list article.opinion-element h1.title a, ".
-                ".frontpage article.opinion .nw-subtitle a { color:" . $actual . " !important;}\n";
-
-            $output.= "\tdiv.widget .title h5, div.widget .title h5, ".
-                "div.widget-content time ".
-                "\t{color: ". $actual. " !important; }\n";
-            $output.= "\tdiv.widget-today-news .number {background-color: ". $actual. " !important; }\n";
-
-            $output.="\tnav .submenu.colorized {
-                background-color:". $actual. ";}\n";
-
-            $output.="\t div.mainmenu ul li.active, .article-inner h1.title,
-                .article-inner div.content-category a:hover, .article-inner blockquote {
-                    color:". $actual. ";}\n";
-
-            $output.="\t.bgcolorize {
-                background-color:". $actual. "!important;}\n";
-
-            $output.="\t.colorize-text {
-                color:". $actual. "!important;}\n";
-
-
-        } elseif ($current == "mobile") {
-            $output.= "\t#footerwrap { background-color: ".$siteColor." !important;}";
-            $output.= "\t#navtabs li a { background-color: ".$siteColor." !important;}";
-
-            $output.= "\tli.post .category, li.post:hover .title { color: ".$siteColor." !important;}";
-
-            $output.= "\t#infoblock .subtitle strong { color: ".$siteColor." !important;}";
-
-        } else {
-
-            $output.= "\tdiv.main-menu, ul.nav-menu, div#footer-container
-                { background-color:" . $siteColor . " !important;}\n";
-            $output.= "\tdiv.main-menu-border{ border-color:" . $siteColor . " !important;}\n";
-            $output.= "\t.main-menu-border ul li a:hover, .main-menu-border ul li a:focus,
-                .main-menu-border ul li.active a, .main-menu-border ul.nav li.active a,
-                .main-menu-border ul.nav li:hover a  { color:" . $siteColor . " !important;}\n";
-
-            $output.= "\th1#title a.big-text-logo  { color:" . $siteColor . " !important;}\n";
-            $output.= "\tdiv.widget .widget-header.colorize, ".
-                ".frontpage article .article-info span { color:" . $siteColor . " !important;}\n";
-
-            $output.= "\tdiv.widget-last-articles .header-title { background-color:" . $siteColor . " !important;}\n";
-
-            $output.= "\t.frontpage article.album .nw-subtitle, .frontpage article.video .nw-subtitle, ".
-                ".frontpage article.opinion .nw-subtitle a { color:" . $siteColor . " !important;}\n";
-
-            $output.= "\tarticle.article-inner .author-and-date .author { color:" . $siteColor . " !important;}\n";
-
-            $output.= "\tdiv.widget-today-news .number {background-color: ". $siteColor. " !important; }\n";
-
-            $output.= "\tdiv .opinion-element div.more a, ".
-                "div .opinion-element .author_name a { color:" . $siteColor . " !important;}\n";
-
-            $output.= "\tdiv.opinion-inner header div.author-info a.opinion-author-name, ".
-                "div.opinion-index-author header h1.section-title a { color:" . $siteColor . " !important;}\n";
-
-
-            $output.= "\tdiv.letter-inner span.author{ color:" . $siteColor . " !important;}\n";
-
-            $output.= "\tdiv.list-of-videos article.interested-video div.info-interested-video ".
-                "div.category a{ color:" . $siteColor . " !important;}\n";
-
-            $output.= "\t.category-color:" . $siteColor . " !important;}\n";
-
-            $output.="\t.bgcolorize {
-                background-color:". $siteColor. "!important;}\n";
-
-             $output.="\t.colorize-text {
-                color:". $siteColor. "!important;}\n";
-        }
-
-        return new Response(
-            $output,
-            200,
-            array(
-                'Expire'       => new \DateTime("+5 min"),
-                'Content-Type' => 'text/css',
-            )
-        );
     }
 }

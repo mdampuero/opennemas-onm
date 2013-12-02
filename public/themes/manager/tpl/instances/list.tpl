@@ -7,15 +7,33 @@
             <h2>{t}Instance Manager{/t}</h2>
         </div>
         <ul class="old-button">
-            <li>
-                <a class="delChecked" data-controls-modal="modal-instance-batchDelete" href="#" title="{t}Delete{/t}">
-                    <img src="{$params.COMMON_ASSET_DIR}images/trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
+            <li class="batch-actions">
+                <a href="#">
+                    <img src="{$params.COMMON_ASSET_DIR}images/select.png" title="{t}Batch actions{/t}" alt="{t}Batch actions{/t}"/>
+                    <br/>{t}Batch actions{/t}
                 </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="delChecked" data-controls-modal="modal-instance-batchDelete" href="#" title="{t}Delete{/t}">
+                            {t}Batch delete{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="batch-activate">
+                            {t}Batch activate{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="batch-desactivate">
+                            {t}Batch desactivate{/t}
+                        </a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a href="{url name=manager_instance_create}" class="admin_add"
-                   title="{t}New widget{/t}">
-                    <img border="0" src="{$params.COMMON_ASSET_DIR}images/list-add.png" title="" alt="" />
+                   title="{t}New Instance{/t}">
+                    <img border="0" src="{$params.COMMON_ASSET_DIR}images/list-add.png" title="{t}New Instance{/t}" alt="{t}New Instance{/t}"/>
                     <br />{t}New{/t}
                 </a>
             </li>
@@ -64,6 +82,7 @@
                     <th width="200px">{t}Contact{/t}</th>
                     <th class="center">{t}Last access{/t}</th>
                     <th width="100px" class="center">{t}Created{/t}</th>
+                    <th class="center" width="60px">{t}Articles{/t}</th>
                     <th class="center" width="70px">{t}Activated{/t}</th>
                     <th class="center" width="10px">{t}Actions{/t}</th>
                     {else}
@@ -103,20 +122,22 @@
                      <td class="nowrap center">
                         {$instance->configs['site_created']}
                     </td>
+                     <td class="nowrap center">
+                        {$instance->totals[1]}
+                    </td>
                     <td class="center">
                         {if $instance->activated == 1}
                         <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Published{/t}">
-                            <img src="{$params.COMMON_ASSET_DIR}images/publish_g.png" border="0" alt="{t}Published{/t}" /></a>
+                            <img src="{$params.COMMON_ASSET_DIR}images/publish_g.png" alt="{t}Published{/t}"/></a>
                         {else}
                         <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Unpublished{/t}">
-                            <img src="{$params.COMMON_ASSET_DIR}images/publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
+                            <img src="{$params.COMMON_ASSET_DIR}images/publish_r.png" alt="{t}Unpublished{/t}"/></a>
                         {/if}
                     </td>
 
                     <td class="right nowrap">
                         <div class="btn-group">
-                            <a href="#" class="btn info" rel="popover" data-content="{t}Articles{/t}: {$instance->totals[1]}<br>
-                                                                                     {t}Images{/t}: {$instance->totals[8]}<br>
+                            <a href="#" class="btn info" rel="popover" data-content="{t}Images{/t}: {$instance->totals[8]}<br>
                                                                                      {t}Ads{/t}: {$instance->totals[2]}<br>">
                                 <i class="icon-info-sign"></i>
                             </a>
@@ -134,14 +155,14 @@
                 </tr>
                 {foreachelse}
                 <tr>
-                    <td class="empty" colspan="9">{t}There is no available instances yet{/t}</td>
+                    <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
                 </tr>
                 {/foreach}
             </tbody>
 
             <tfoot>
                 <tr>
-                    <td colspan="9" class="center">
+                    <td colspan="10" class="center">
                         <div class="pager">
                             <form>
                                 <img src="{$params.COMMON_ASSET_DIR}images/first.png" class="first"/>
@@ -181,8 +202,45 @@
                 trigger: 'hover',
             });
 
-            $("#manager").tablesorter({ headers: { 0: { sorter: false } } })
-                         .tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
+            $("#manager").tablesorter({
+                            headers: { 0: { sorter: false } } ,
+                            textExtraction:function(s){
+                                if($(s).find('img').length == 0) return $(s).text();
+                                return $(s).find('img').attr('alt');
+                            }
+                        }).tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
+
+            $('.minput').on('click', function() {
+                checkbox = $(this).find('input[type="checkbox"]');
+                var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
+                if (checked_elements > 0) {
+                    $('.old-button .batch-actions').fadeIn('fast');
+                } else {
+                    $('.old-button .batch-actions').fadeOut('fast');
+                }
+            });
+
+            $('#batch-activate').on('click', function (e, ui) {
+                e.preventDefault();
+                $.get(
+                    '{url name=manager_instance_batch_available status=1}',
+                    $('#formulario').serializeArray()
+                ).done(function() {
+                    window.location.href = '{url name=manager_instances}';
+                }).fail(function() {
+                });
+            });
+
+            $('#batch-desactivate').on('click', function (e, ui) {
+                e.preventDefault();
+                $.get(
+                    '{url name=manager_instance_batch_available status=0}',
+                    $('#formulario').serializeArray()
+                ).done(function(data) {
+                    window.location.href = '{url name=manager_instances}';
+                }).fail(function() {
+                });
+            });
         });
     </script>
 {/block}

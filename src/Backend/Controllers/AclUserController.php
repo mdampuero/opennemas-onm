@@ -84,7 +84,6 @@ class AclUserController extends Controller
                 'users'           => $users,
                 'user_groups'     => $groups,
                 'groupsOptions'   => $groupsOptions,
-
                 'total_num_users' => $usersCount,
                 'url_filters'     => $filter,
                 'items_per_page'  => $itemsPerPage,
@@ -180,6 +179,13 @@ class AclUserController extends Controller
             $this->checkAclOrForward('USER_UPDATE');
         }
 
+        $user = new \User($userId);
+
+        $accessCategories = array();
+        foreach ($user->accesscategories as $key => $value) {
+            $accessCategories[] = (int)$value->pk_content_category;
+        }
+
         $data = array(
             'id'              => $userId,
             'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
@@ -191,13 +197,12 @@ class AclUserController extends Controller
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-            'id_user_group'   => $request->request->get('id_user_group', array()),
-            'ids_category'    => $request->request->get('ids_category', array()),
+            'id_user_group'   => $request->request->get('id_user_group', $user->id_user_group),
+            'ids_category'    => $request->request->get('ids_category', $accessCategories),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
 
         $file = $request->files->get('avatar');
-        $user = new \User($userId);
 
         try {
             // Upload user avatar if exists

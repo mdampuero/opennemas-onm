@@ -6,6 +6,28 @@
 
 -- Please check rigth sql, use ; in the end of lines & -- for comments.
 -- Write date with each sentence and with stack method. (last writed in the top)
+
+--
+-- New sql for sync dysqus comments
+--
+CREATE TABLE IF NOT EXISTS `commentsmeta` (
+  `fk_content` bigint(32) NOT NULL,
+  `meta_name` varchar(255) NOT NULL,
+  `meta_value` text,
+  PRIMARY KEY (`fk_content`,`meta_name`),
+  KEY `fk_content` (`fk_content`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `comments` CHANGE `id` `id` BIGINT( 32 ) UNSIGNED NOT NULL AUTO_INCREMENT;
+ALTER TABLE `comments` CHANGE `content_id` `content_id` BIGINT( 32 ) UNSIGNED NOT NULL DEFAULT '0';
+ALTER TABLE `comments` CHANGE `author` `author` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `comments` CHANGE `author_email` `author_email` VARCHAR( 200 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `comments` CHANGE `author_ip` `author_ip` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '';
+ALTER TABLE `comments` CHANGE `parent_id` `parent_id` BIGINT( 32 ) NOT NULL DEFAULT '0';
+
+--
+-- Already executed in production servers
+--
 ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT  '' AFTER  `type`;
 
 -- 2013-10-08

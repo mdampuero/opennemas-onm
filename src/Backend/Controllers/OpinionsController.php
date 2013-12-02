@@ -97,23 +97,18 @@ class OpinionsController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countOpinions,
-                'fileName'    => $this->generateUrl(
+                'page'  => $page,
+                'items' => $itemsPerPage,
+                'total' => $countOpinions,
+                'url'   => $this->generateUrl(
                     'admin_opinions',
                     array(
                         'status' => $status,
                         'author' => $author,
                     )
-                ).'&page=%d',
+                ).'&page=%d'
             )
         );
 
@@ -409,12 +404,15 @@ class OpinionsController extends Controller
             if ($opinion->update($data)) {
                 m::add(_('Opinion successfully updated.'), m::SUCCESS);
 
+                $author = new \User($data['fk_author']);
+
                 // Clear caches
                 dispatchEventWithParams(
                     'opinion.update',
                     array(
-                        'authorId'  => $data['fk_author'],
-                        'opinionId' => $opinion->id,
+                        'authorSlug' => $author->username,
+                        'authorId'   => $data['fk_author'],
+                        'opinionId'  => $opinion->id,
                     )
                 );
             } else {
@@ -1040,6 +1038,11 @@ class OpinionsController extends Controller
         }
 
         $user->meta = $user->getMeta();
+        if (array_key_exists('is_blog', $user->meta)) {
+            $user->is_blog = $user->meta['is_blog'];
+        } else {
+            $user->is_blog = 0;
+        }
 
         return $this->render('opinion/author_new.tpl', array('user' => $user));
     }
@@ -1063,6 +1066,7 @@ class OpinionsController extends Controller
                 'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
                 'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
                 'id_user_group'   => array(3),
+                'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '', FILTER_SANITIZE_STRING),
                 'ids_category'    => array(),
                 'activated'       => 0,
                 'type'            => 0,
@@ -1088,6 +1092,7 @@ class OpinionsController extends Controller
                 if ($user->create($data)) {
                     // Set all usermeta information (twitter, rss, language)
                     $meta = $request->request->get('meta');
+                    $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
                     foreach ($meta as $key => $value) {
                         $user->setMeta(array($key => $value));
                     }
@@ -1123,6 +1128,13 @@ class OpinionsController extends Controller
         $userId = $request->query->getDigits('id');
         $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
 
+        $user   = new \User($userId);
+
+        $accessCategories = array();
+        foreach ($user->accesscategories as $key => $value) {
+            $accessCategories[] = (int)$value->pk_content_category;
+        }
+
         $data = array(
             'id'              => $userId,
             'email'           => $request->request->filter('email', null, FILTER_SANITIZE_STRING),
@@ -1130,15 +1142,15 @@ class OpinionsController extends Controller
             'bio'             => $request->request->filter('bio', '', FILTER_SANITIZE_STRING),
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
+            'meta[is_blog]'   => $request->request->filter('meta[is_blog]', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => 60,
-            'id_user_group'   => array(3),
-            'ids_category'    => array(),
+            'id_user_group'   => $user->id_user_group,
+            'ids_category'    => $accessCategories,
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
             'username'        => $request->request->filter('username', null, FILTER_SANITIZE_STRING),
         );
 
         $file = $request->files->get('avatar');
-        $user = new \User($userId);
 
         // Generate username and password from real name
         if (empty($data['username'])) {
@@ -1158,6 +1170,7 @@ class OpinionsController extends Controller
             if ($user->update($data)) {
                 // Set all usermeta information (twitter, rss, language)
                 $meta = $request->request->get('meta');
+                $meta['is_blog'] = (empty($meta['is_blog'])) ? 0 : 1;
                 foreach ($meta as $key => $value) {
                     $user->setMeta(array($key => $value));
                 }

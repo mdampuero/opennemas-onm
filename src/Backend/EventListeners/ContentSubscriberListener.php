@@ -22,7 +22,7 @@ use Symfony\Component\EventDispatcher\Event;
  *
  * @package Backend_EventListeners
  **/
-class ContentSubscriber implements EventSubscriberInterface
+class ContentSubscriberListener implements EventSubscriberInterface
 {
     /**
      * Register the content event handler
@@ -171,14 +171,20 @@ class ContentSubscriber implements EventSubscriberInterface
     public function deleteOpinionUpdateCaches(Event $event)
     {
         $authorId = $event->getArgument('authorId');
+        $authorSlug = $event->getArgument('authorSlug');
         $opinionId = $event->getArgument('opinionId');
+
 
         // Delete caches for opinion inner, opinion frontpages and author frontpages
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+
+        $authorSlug = preg_replace('/[^a-zA-Z0-9\s]+/', '', $authorSlug);
+        $tplManager->delete($authorSlug, 'blog_author_index.tpl');
         $tplManager->delete('opinion', 'opinion_frontpage.tpl');
         $tplManager->delete('opinion|'.$opinionId);
+        $tplManager->delete('blog', 'blog_frontpage.tpl');
+        $tplManager->delete('blog|'.$opinionId);
         $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
-
     }
     /**
      * Perform the actions after update an author
@@ -195,6 +201,7 @@ class ContentSubscriber implements EventSubscriberInterface
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
         $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
         $tplManager->delete('opinion', 'opinion_frontpage.tpl');
+        $tplManager->delete('blog', 'blog_frontpage.tpl');
 
     }
 }

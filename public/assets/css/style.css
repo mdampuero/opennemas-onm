@@ -242,7 +242,7 @@ a.btn-danger { color:White; }
 }
 
 
-a.btn:not(.btn-mini):not(.btn-large) { padding:4px 8px;}
+a.btn:not(.btn-mini) { padding:4px 8px;}
 a.btn-primary,a.btn-primary:hover,a.btn-warning,a.btn-warning:hover,a.btn-danger,a.btn-danger:hover,a.btn-success,a.btn-success:hover,a.btn-info,a.btn-info:hover,a.btn-inverse,a.btn-inverse:hover{color:#ffffff;text-shadow:0 -1px 0 rgba(0, 0, 0, 0.25);}
 a.btn-primary.active,a.btn-warning.active,a.btn-danger.active,a.btn-success.active,a.btn-info.active,a.btn-dark.active{color:rgba(255, 255, 255, 0.75);}
 
@@ -3034,7 +3034,7 @@ div#modal-element-customize-content div.select-disposition{
 .manager .global-user-tools .usermenu .login-name { color:White; }
 .manager .global-user-tools .usermenu a { color:White; }
 
-.manager .wrapper-content {max-width: 1200px; width:97%;}
+.manager .wrapper-content {max-width: 1400px;}
 
 .instance-error {
   background:rgb(255, 255, 255);

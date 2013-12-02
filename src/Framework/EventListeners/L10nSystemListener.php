@@ -53,7 +53,9 @@ class L10nSystemListener implements EventSubscriberInterface
             \Application::$language = $forceLanguage;
         } else {
             $language = \Onm\Settings::get('site_language');
-            if (array_key_exists('user_language', $_SESSION)) {
+            if (isset($_SESSION)
+                && array_key_exists('user_language', $_SESSION)
+            ) {
                 $userLanguage = $_SESSION['user_language'] ?: 'default';
             } else {
                 $userLanguage = 'default';

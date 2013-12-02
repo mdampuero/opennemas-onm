@@ -534,7 +534,7 @@ class Content
             'description'    =>
                 (empty($data['description']) && !isset($data['description'])) ? '' : $data['description'],
             'fk_author' =>
-                (is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
+                (!isset($data['fk_author']) || is_null($data['fk_author']))? $this->fk_author : $data['fk_author']
         );
 
         $data = array_merge($data, $values);
@@ -2139,6 +2139,34 @@ class Content
         $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
               ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
         $values = array($this->id, $property, $value, $value);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+
+        if ($rs === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Sets a metaproperty for the actual content
+     *
+     * @param string $id the id of the content
+     * @param string $property the name of the property
+     * @param mixed $value     the value of the property
+     *
+     * @return boolean true if the property was setted
+     **/
+    public static function setPropertyWithContentId($id, $property, $value)
+    {
+        if (is_null($id) || empty($property)) {
+            return false;
+        }
+
+        $sql = "INSERT INTO contentmeta (`fk_content`, `meta_name`, `meta_value`)"
+              ." VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE `meta_value`=?";
+        $values = array($id, $property, $value, $value);
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 

@@ -155,19 +155,21 @@ function getUserRealIP()
 function normalizeUrl($url)
 {
     $urlParts = explode('?', $url);
-    $urlPart = array_shift($urlParts);
+    $url      = $urlParts[0];
 
-    if (strlen($urlPart) > 1) {
-        $normalizedUrl = rtrim($urlPart, '/');
-    } else {
-        $normalizedUrl = $url;
+    $urlParams = '';
+    if (array_key_exists('1', $urlParts)) {
+        $urlParams = '?'.$urlParts[1];
+    }
+    $url = rtrim($url, '/');
+
+    if ($urlParams !== '' && $url !== '/') {
+        while (strpos($url, '//') != false) {
+            $url = str_replace('//', '/', $url);
+        }
     }
 
-    while (strpos($normalizedUrl, '//') != false) {
-        $normalizedUrl = str_replace('//', '/', $normalizedUrl);
-    }
-
-    return $normalizedUrl.'?'.implode('?', $urlParts);
+    return $url.$urlParams;
 }
 
 /**
@@ -475,6 +477,12 @@ function getService($serviceName)
     return $sc->get($serviceName);
 }
 
+function getContainerParameter($paramName)
+{
+    global $sc;
+    return $sc->getParameter($paramName);
+}
+
 function generateRandomString($length = 10)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -483,6 +491,19 @@ function generateRandomString($length = 10)
         $randomString .= $characters[rand(0, strlen($characters) - 1)];
     }
     return $randomString;
+}
+
+/**
+ * Prepares HTML code to use it as html entity attribute
+ *
+ * @param string $string the string to clean
+ *
+ * @return string $string the cleaned string
+ **/
+function html_attribute($string)
+{
+    $string = html_entity_decode($string, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars(strip_tags(stripslashes($string)), ENT_QUOTES | ENT_HTML5, 'UTF-8');
 }
 
 // added Claudio Bustos  clbustos#entelchile.net
@@ -568,7 +589,7 @@ function initEnvironment($environment = 'production')
  **/
 function dispatchEventWithParams($eventName, $params = array())
 {
-    $eventDispatcher = getService('event_dispatcher');
+    $eventDispatcher = getService('dispatcher');
 
     $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {

@@ -60,7 +60,7 @@ class OpinionsController extends Controller
             $orderBy='ORDER BY contents.in_home DESC, position ASC, created DESC ';
         } else {
             $where = 'AND contents.in_home=0 ';
-            $orderBy='ORDER BY created DESC ';
+            $orderBy='ORDER BY starttime DESC ';
         }
         // Index frontpage
         $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
@@ -180,35 +180,41 @@ class OpinionsController extends Controller
             );
 
             $authors = array();
-            foreach ($opinions as &$opinion) {
+            $opinionsResult = array();
+            foreach ($opinions as $opinion) {
                 if (!array_key_exists($opinion->fk_author, $authors)) {
                     $author = new \User($opinion->fk_author);
                     $authors[$opinion->fk_author] = $author;
+                } else {
+                    $author = $authors[$opinion->fk_author];
                 }
-                $opinion->author           = $authors[$opinion->fk_author];
-                $opinion->name             = $opinion->author->name;
-                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
-                $item = new \Content();
-                $item->loadAllContentProperties($opinion->pk_content);
-                $opinion->summary = $item->summary;
-                $opinion->img1_footer = $item->img1_footer;
-                if (isset($item->img1) && ($item->img1 > 0)) {
-                    $opinion->img1 = new \Photo($item->img1);
-                }
+                if (!array_key_exists('is_blog', $author->meta) || $author->meta['is_blog'] != 1) {
+                    $opinion->author           = $authors[$opinion->fk_author];
+                    $opinion->name             = $opinion->author->name;
+                    $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+                    $item = new \Content();
+                    $item->loadAllContentProperties($opinion->pk_content);
+                    $opinion->summary = $item->summary;
+                    $opinion->img1_footer = $item->img1_footer;
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $opinion->img1 = new \Photo($item->img1);
+                    }
 
-                $opinion->author->uri = \Uri::generate(
-                    'opinion_author_frontpage',
-                    array(
-                        'slug' => $opinion->author->name,
-                        'id'   => $opinion->author->id
-                    )
-                );
+                    $opinion->author->uri = \Uri::generate(
+                        'opinion_author_frontpage',
+                        array(
+                            'slug' => $opinion->author->name,
+                            'id'   => $opinion->author->id
+                        )
+                    );
+                    $opinionsResult[] = $opinion;
+                }
             }
 
             $this->view->assign(
                 array(
                     'editorial'  => $editorial,
-                    'opinions'   => $opinions,
+                    'opinions'   => $opinionsResult,
                     'authors'    => $authors,
                     'pagination' => $pagination,
                     'page'       => $this->page
@@ -385,6 +391,12 @@ class OpinionsController extends Controller
                 $request->query->filter('author_slug', null, FILTER_SANITIZE_STRING)
             );
 
+            if (array_key_exists('is_blog', $author->params) && $author->params['is_blog'] == 1) {
+                return new RedirectResponse(
+                    $this->generateUrl('frontend_blog_author_frontpage', array('author_slug' => $author->username))
+                );
+            }
+
             // Setting filters for the further SQLs
             if ($author->id == 1 && $author->slug == 'editorial') {
                 // Editorial
@@ -425,6 +437,7 @@ class OpinionsController extends Controller
                     $opinion['img1_footer'] = $item->img1_footer;
                     $opinion['pk_author'] = $author->id;
                     $opinion['author_name_slug']  = $author->slug;
+                    $opinion['comments']  = $item->comments;
                     if (isset($item->img1) && ($item->img1 > 0)) {
                         $opinion['img1'] = new \Photo($item->img1);
                     }
@@ -827,10 +840,12 @@ class OpinionsController extends Controller
      */
     private function getAds($context = '')
     {
+        // Get opinion positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
         if ($context == 'inner') {
-            $positions = array(7, 9, 750, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 791, 792, 793);
+            $positions = $positionManager->getAdsPositionsForGroup('opinion_inner', array(7, 9));
         } else {
-            $positions = array(7, 9, 650, 601, 602, 603, 605, 609, 610, 691, 692);
+            $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
         $ccm = \ContentCategoryManager::get_instance();
