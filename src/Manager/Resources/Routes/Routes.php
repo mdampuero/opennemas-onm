@@ -133,11 +133,11 @@ $managerRoutes->add(
 );
 
 $managerRoutes->add(
-    'manager_framework_apc',
+    'manager_framework_opcache_status',
     new Route(
-        '/framework/apc',
+        '/framework/opcache',
         array(
-            '_controller' => 'Manager:Controllers:FrameworkStatusController:apcStatus',
+            '_controller' => 'Manager:Controllers:FrameworkStatusController:opcacheStatus',
         )
     )
 );

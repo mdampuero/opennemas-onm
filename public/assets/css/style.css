@@ -3064,3 +3064,61 @@ div#modal-element-customize-content div.select-disposition{
   font-size: 23px;
   line-height: 1.3em;
 }
+
+
+/* =============================================================================
+   Manager opcache rules
+   ========================================================================== */
+.opcache-stats tbody tr:nth-child(even) {
+    background-color: #eee
+}
+.opcache-stats table {
+    text-align:left;
+    border-collapse:separate;
+    border-spacing:3 10px;
+    width: 100%
+}
+
+.opcache-stats #status table {
+    float:left;
+    width:50%;
+}
+
+.opcache-stats .tabs > div {
+  dis
+}
+.opcache-stats #graph {
+    float: right;
+    width: 40%;
+    z-index:99;
+}
+
+.opcache-stats #graph form {
+    position: absolute;
+    right: 220px;
+    top: 100px;
+}
+
+.opcache-stats #graphcontainer {
+    position:relative;
+}
+.opcache-stats #graph > svg {
+    position: absolute;
+    right: 0px;
+    top: 0;
+}
+
+#stats-opcode {
+    color:White;
+    position: absolute;
+    right: 200px;
+    top: 190px;
+}
+
+.opcache-stats #stats-opcode th, .opcode-stats #stats-opcode td {
+    padding: 6px 10px;
+    font-size: 0.8em;
+}
+#stats-opcode td {
+  color:#333 !important;
+}
