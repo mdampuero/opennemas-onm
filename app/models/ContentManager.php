@@ -591,9 +591,9 @@ class ContentManager
             $contentIdsSQL = implode(', ', $contentIds);
 
             $sql = 'UPDATE contents '
-                 . 'SET `frontpage`=0, `fk_user_last_editor`=?, `changed`=? '
+                 . 'SET `frontpage`=0, `changed`=? '
                  . 'WHERE `pk_content` IN ('.$contentIdsSQL.')';
-            $values = array($_SESSION['userid'], date("Y-m-d H:i:s"));
+            $values = array(date("Y-m-d H:i:s"));
             $stmt = $GLOBALS['application']->conn->Prepare($sql, $values);
 
             if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
