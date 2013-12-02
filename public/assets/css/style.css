@@ -3035,3 +3035,32 @@ div#modal-element-customize-content div.select-disposition{
 .manager .global-user-tools .usermenu a { color:White; }
 
 .manager .wrapper-content {max-width: 1400px;}
+
+.instance-error {
+  background:rgb(255, 255, 255);
+  color: rgb(51, 51, 51);
+}
+
+.instance-error .wrapper {
+  width:100%;
+}
+.instance-error .code {
+  font-size:9em;
+  text-align:center;
+  float:left;
+  margin-right:20px;
+}
+.instance-error .desc {
+  font-size: 3em;
+  font-style: italic;
+  line-height: 1.2em;
+  margin-top: 9px;
+  margin-bottom: 16px;
+  text-rendering: optimizeLegibility;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.instance-error .explanation {
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 23px;
+  line-height: 1.3em;
+}

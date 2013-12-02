@@ -97,23 +97,18 @@ class OpinionsController extends Controller
             $itemsPerPage
         );
 
-        $pagination = \Pager::factory(
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countOpinions,
-                'fileName'    => $this->generateUrl(
+                'page'  => $page,
+                'items' => $itemsPerPage,
+                'total' => $countOpinions,
+                'url'   => $this->generateUrl(
                     'admin_opinions',
                     array(
                         'status' => $status,
                         'author' => $author,
                     )
-                ).'&page=%d',
+                ).'&page=%d'
             )
         );
 
@@ -409,12 +404,15 @@ class OpinionsController extends Controller
             if ($opinion->update($data)) {
                 m::add(_('Opinion successfully updated.'), m::SUCCESS);
 
+                $author = new \User($data['fk_author']);
+
                 // Clear caches
                 dispatchEventWithParams(
                     'opinion.update',
                     array(
-                        'authorId'  => $data['fk_author'],
-                        'opinionId' => $opinion->id,
+                        'authorSlug' => $author->username,
+                        'authorId'   => $data['fk_author'],
+                        'opinionId'  => $opinion->id,
                     )
                 );
             } else {
