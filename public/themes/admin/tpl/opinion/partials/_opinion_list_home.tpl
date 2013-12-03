@@ -193,12 +193,6 @@
             {$opinion->views}
         </td>
         <td class="center">
-            {$opinoin->ratings}
-         </td>
-        <td class="center">
-            {$opinion->comments}
-        </td>
-        <td class="center">
             {$opinion->created}
         </td>
         <td class="center">
