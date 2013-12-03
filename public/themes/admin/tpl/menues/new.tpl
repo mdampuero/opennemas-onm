@@ -390,6 +390,7 @@
                     {/if}
                     {/is_module_activated}
                     {/is_module_activated}
+                </div>
             </div>
         </div><!-- fin -->
 
