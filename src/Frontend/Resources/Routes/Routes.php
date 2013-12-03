@@ -85,7 +85,7 @@ $frontendRoutes->add(
             '_controller' => 'Frontend:Controllers:TagsController:tags',
         ),
         array(
-            'tag_name' => '[a-z0-9\-.]+',
+            'tag_name' => '[A-Za-z0-9\-.]+',
         )
     )
 );
