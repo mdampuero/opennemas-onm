@@ -68,12 +68,12 @@ class CategoryController extends Controller
             list($countArticles, $articles)= $cm->getCountAndSlice(
                 'Article',
                 (int) $category->pk_content_category,
-                'in_litter != 1 AND contents.available=1',
+                'in_litter != 1 AND contents.available=1 AND '.
+                '( starttime="0000-00-00 00:00:00" OR starttime<=NOW() )',
                 'ORDER BY starttime DESC, available ASC',
                 $page,
                 $itemsPerPage
             );
-            $articles = $cm->getInTime($articles);
 
             $imageIdsList = array();
             foreach ($articles as $content) {
