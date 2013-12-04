@@ -60,8 +60,8 @@ function smarty_function_include_google_analytics_code($params, &$smarty)
             $output .= "_gaq.push(['_trackPageview']);"
                     ."(function() {\n"
                     ."var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;\n"
-                    ."ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www')"
-                    ." + '.google-analytics.com/ga.js';\n"
+                    ."ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://')"
+                    ." + 'stats.g.doubleclick.net/dc.js';\n"
                     ."var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);\n"
                     ."})();\n"
                     ."</script>\n";
