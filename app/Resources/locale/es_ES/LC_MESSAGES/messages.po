@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: onmadmin 0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-29 13:07+0100\n"
-"PO-Revision-Date: 2013-11-29 13:08+0100\n"
+"POT-Creation-Date: 2013-12-04 11:25+0100\n"
+"PO-Revision-Date: 2013-12-04 11:25+0100\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -286,7 +286,7 @@ msgstr "Estado de publicación cambiado correctamente para la publicidad «%s»"
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AdsController.php:681
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/AlbumsController.php:822
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CoversController.php:656
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:966
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:964
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/PollsController.php:728
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/SpecialsController.php:650
 msgid "Settings saved successfully."
@@ -369,7 +369,7 @@ msgstr "Álbum «%s» eliminado correctamente."
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/BooksController.php:538
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/CoversController.php:619
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/FilesController.php:707
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:654
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:652
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/SpecialsController.php:411
 #: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/VideosController.php:715
 msgid "Positions saved successfully."
@@ -1392,129 +1392,129 @@ msgstr ""
 "Especifique el identificador de un subscriptor para cambiar el estado de su "
 "subscripción."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:190
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:193
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:185
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:188
 #, php-format
 msgid "You must put %d opinions %s in the home widget"
 msgstr "Debes seleccionar %d opiniones %s para el Widget de portada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:238
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:233
 #, php-format
 msgid "Unable to find the opinion with the id \"%d\""
 msgstr "No se pudo encontrar la opinión con el identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:248
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:370
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:243
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:365
 msgid ""
 "You can't modify this opinion because you don't have enought privileges."
 msgstr ""
 "No puedes modificar este artículo de opinión porque no tienes permisos "
 "suficientes."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:324
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:319
 msgid "Opinion successfully created."
 msgstr "Opinión creada correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:329
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:324
 msgid "Unable to create the new opinion."
 msgstr "No se pudo crear la nueva opinión."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:381
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:376
 msgid "Opinion data sent not valid."
 msgstr "Los datos enviados de la opinión no son válidos."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:410
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:405
 msgid "Opinion successfully updated."
 msgstr "Opinión actualizada correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:421
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:419
 msgid "Unable to update the opinion."
 msgstr "No se pudo actualizar la opinión."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:458
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:456
 msgid "Opinion deleted successfully."
 msgstr "Opinión eliminada correctamente"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:460
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:458
 msgid "You must give an id for delete an opinion."
 msgstr "Debe proporcionar un identificador para eliminar una opinión."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:498
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:551
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:591
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:496
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:549
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:589
 #, php-format
 msgid "Unable to find an opinion with the id \"%d\""
 msgstr "No se pudo encontrar la opinión con el identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:507
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:505
 #, php-format
 msgid "Successfully changed availability for the opinion \"%s\""
 msgstr "Estado de disponibilidad cambiado correctamente para la opinión «%s»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:554
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:552
 #, php-format
 msgid "Successfully changed in home state for the opinion \"%s\""
 msgstr "Estado de «En Portada» cambiado correctamente para la opinión «%s»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:596
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:594
 #, php-format
 msgid "Successfully changed favorite state for the opinion \"%s\""
 msgstr "Estado de «Favorito» cambiado correctamente para la opinión «%s»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:660
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:658
 msgid "Unable to save the positions."
 msgstr "No se pudieron guardar las posiciones."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:696
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:754
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:805
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:694
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:752
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:803
 #, php-format
 msgid "Unable to find a opinion with the id \"%d\""
 msgstr "No se pudo encontrar la opinion con el identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:701
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:699
 #, php-format
 msgid "Successfully deleted %d opinions"
 msgstr "Se han eliminado %d opiniones con éxito"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:759
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:757
 #, php-format
 msgid "Successfully changed the available status of %d opinions"
 msgstr "Estado de disponibilidad cambiado correctamente para %d opiniones"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:810
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:808
 #, php-format
 msgid "Successfully changed the home status of %d opinions"
 msgstr ""
 "Estado de disponibilidad en portada cambiado correctamente para %d opiniones"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1032
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1030
 #, php-format
 msgid "Unable to find the author with the id '%d'"
 msgstr "No se pudo encontrar el autor con el identificador «%d»"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1102
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1100
 msgid "Author created successfully."
 msgstr "Autor creado correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1111
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1109
 msgid "Unable to create the author with that information"
 msgstr "No se pudo crear el autor con la información proporcionada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1183
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1181
 msgid "Author data updated successfully."
 msgstr "Datos del autor actualizados correctamente."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1185
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1183
 msgid "Unable to update the author with that information"
 msgstr "No se pudo actualizar el autor con la información proporcionada"
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1234
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1232
 #, php-format
 msgid "You have deleted %d authors."
 msgstr "Se han eliminado %d autores."
 
-#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1236
+#: /home/others/www/idealgallego/onm-instance/src/Backend/Controllers/OpinionsController.php:1234
 msgid "You haven't selected any author to delete."
 msgstr "No ha seleccionado ningún autor para eliminar."
 
@@ -10785,6 +10785,50 @@ msgstr "nombre de usuario"
 #: /home/others/www/idealgallego/onm-instance/app//Resources/locale/extracted_strings.c:9500
 msgid "and group:"
 msgstr "y grupo:"
+
+#, fuzzy
+#~ msgid "Day"
+#~ msgstr "Mostrar"
+
+#, fuzzy
+#~ msgid "SemiMonth"
+#~ msgstr "1 mes"
+
+#, fuzzy
+#~ msgid "Month"
+#~ msgstr "1 mes"
+
+#, fuzzy
+#~ msgid "Paypal API authentication is incorrect. Please try again."
+#~ msgstr "Autenticación del API de Paypal"
+
+#, fuzzy
+#~ msgid "Opcache status"
+#~ msgstr "Estado del framework"
+
+#, fuzzy
+#~ msgid "Validate"
+#~ msgstr "Válido hasta"
+
+#, fuzzy
+#~ msgid "Checking"
+#~ msgstr "Comprobar"
+
+#, fuzzy
+#~ msgid "IPN web configuration page "
+#~ msgstr "Configuración de módulo"
+
+#, fuzzy
+#~ msgid "Valid"
+#~ msgstr "Válido hasta"
+
+#, fuzzy
+#~ msgid "Waiting"
+#~ msgstr "Listado"
+
+#, fuzzy
+#~ msgid "Paypal API authentication is correct."
+#~ msgstr "Autenticación del API de Paypal"
 
 #~ msgid "Statistics Google Analytics"
 #~ msgstr "Estadísticas de Google Analytics"
