@@ -63,6 +63,9 @@ EOF
         if (!$skipCleaning) {
             $this->cleanCache();
         }
+
+        $this->cleanOpCodeCache();
+
     }
 
     /**
@@ -142,6 +145,22 @@ EOF
         $command = $this->getApplication()->find('clean:smarty-cache');
         $arguments = array(
             'command' => 'clean:smarty-cache',
+        );
+
+        $input = new ArrayInput($arguments);
+        $returnCode = $command->run($input, $this->output);
+    }
+
+    /**
+     * Cleans the Zend Opcode Cache
+     *
+     * @return void
+     **/
+    public function cleanOpcodeCache()
+    {
+        $command = $this->getApplication()->find('clean:opcode');
+        $arguments = array(
+            'command' => 'clean:opcode',
         );
 
         $input = new ArrayInput($arguments);

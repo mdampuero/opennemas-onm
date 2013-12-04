@@ -86,7 +86,7 @@ class EntityManager extends BaseManager
             return false;
         }
 
-        $content = array();
+        $contents = array();
         while (!$rs->EOF) {
             $content = new \Content();
             $content->load($rs->fields);

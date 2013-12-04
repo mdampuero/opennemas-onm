@@ -59,11 +59,20 @@ class UserController extends Controller
             // Get current time
             $currentTime = new \DateTime();
 
+            // Get user orders
+            $order = new \Order();
+            $userOrders = $order->find('user_id = '.$_SESSION['userid']);
+
+            // Fetch paywall settings
+            $paywallSettings = s::get('paywall_settings');
+
             return $this->render(
                 'user/show.tpl',
                 array(
-                    'user'         => $user,
-                    'current_time' => $currentTime
+                    'user'             => $user,
+                    'current_time'     => $currentTime,
+                    'paywall_settings' => $paywallSettings,
+                    'user_orders'      => $userOrders
                 )
             );
         }

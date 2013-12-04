@@ -631,7 +631,7 @@ class Advertisement extends Content
         $output = $params['beforeHTML'].$content.$params['afterHTML'];
 
         // Increase number of views for this advertisement
-        $this->setNumViews($this->pk_advertisement);
+        // $this->setNumViews($this->pk_advertisement);
 
         return $output;
     }

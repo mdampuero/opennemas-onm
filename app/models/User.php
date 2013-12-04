@@ -1060,6 +1060,25 @@ class User
     }
 
     /**
+     * Remove user meta given a named array
+     *
+     * @param int $userId   the user id to set configs to
+     * @param array  $userMeta a named array with settings and its values
+     *
+     * @return  boolean true if all went well
+     */
+    public function deleteMetaKey($userId, $metaKey)
+    {
+        $sql = 'DELETE FROM usermeta WHERE `user_id`=? AND `meta_key`=?' ;
+
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId), $metaKey))===false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Sets an user state to disabled/not activated
      *
      * @param  int $id the use id
