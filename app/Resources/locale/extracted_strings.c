@@ -230,6 +230,15 @@ gettext("Real mode (recommended)");
 gettext("Testing mode");
 
 /* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Validate here your Paypal API credentials in the selected mode");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Validate");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Checking");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
 gettext("Paypal allows you to enable a testing environment where <strong>all the transactions will not be real</strong>, so you can test if the paywall is working well.");
 
 /* public/themes/admin/tpl//paywall/settings.tpl */
@@ -239,7 +248,7 @@ gettext("Active a testing environment in your Paypal account (only if you are a 
 gettext("More information");
 
 /* public/themes/admin/tpl//paywall/settings.tpl */
-gettext("Transaction details");
+gettext("Currency & taxes");
 
 /* public/themes/admin/tpl//paywall/settings.tpl */
 gettext("Money unit");
@@ -264,6 +273,69 @@ gettext("No available payment modes. Add a new one with the button below.");
 
 /* public/themes/admin/tpl//paywall/settings.tpl */
 gettext("Add new payment mode");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Recurring payments (optional)");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Paypal allow your users to subscribe to your Paywall through recurring payments. This means that your users will be charged periodically without having to worry about payments and due dates, and will allow you to increase the user engagement.");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Mark this if you want to enable recurring payments");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("You have to activate some options in the Paypal configuration to make recurring payments work. Please follow next steps:");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Go to your merchant Paypal");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("IPN web configuration page ");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext(" and log in with your merchant account");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Click in the \"Choose IPN configuration\" button");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Fill in the \"Notification URL\" field with this address");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Enable the \"Receive IPN messages\" checkbox");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Click on the validate button to check ipn is working fine and enable recurring payment");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Valid");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Waiting");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Validate");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Checking");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Finally, click in the \"Save\" button to save this configuration");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Accept Opennemas payment agreements terms");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Read and accept the <a href=\"http://help.opennemas.com/\" target=\"_blank\">payment agreements terms</a> of Opennemas");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Could not connect to PayPal. Validate your API credentials and try again");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Paypal API authentication is correct.");
+
+/* public/themes/admin/tpl//paywall/settings.tpl */
+gettext("Paypal API authentication is incorrect. Please try again.");
 
 /* public/themes/admin/tpl//paywall/users.tpl */
 gettext("Paywall");
@@ -9365,6 +9437,9 @@ gettext("Legal");
 gettext("Legal");
 
 /* public/themes/manager/tpl/framework/status.tpl */
+gettext("Framework status");
+
+/* public/themes/manager/tpl/framework/opcache_status.tpl */
 gettext("Framework status");
 
 /* public/themes/manager/tpl/framework/commands/commands.tpl */
