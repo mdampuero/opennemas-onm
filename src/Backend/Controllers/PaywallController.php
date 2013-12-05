@@ -469,6 +469,11 @@ class PaywallController extends Controller
             '0',
             FILTER_SANITIZE_STRING
         );
+        $settings['terms']            = $request->request->filter(
+            'settings[terms]',
+            '0',
+            FILTER_SANITIZE_STRING
+        );
         $settings['developer_mode']   = (boolean) $settingsForm['developer_mode'];
         $settings['vat_percentage']   = (int) $settingsForm['vat_percentage'];
 
