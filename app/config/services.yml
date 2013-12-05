@@ -51,6 +51,9 @@ services:
     listener.news_agency:
         class: Framework\EventListeners\NewsAgencyListener
 
+    listener.varnish_cleaner:
+        class: Framework\EventListeners\VarnishCleanerListener
+
     dispatcher:
         class: Symfony\Component\EventDispatcher\EventDispatcher
         calls:
@@ -67,6 +70,7 @@ services:
             - ['addSubscriber', [ @listener.l10n_system]]
             - ['addSubscriber', [ @listener.content_subscriber]]
             - ['addSubscriber', [ @listener.news_agency]]
+            - ['addSubscriber', [ @listener.varnish_cleaner]]
 
     framework:
         class: Onm\Framework\Framework
@@ -142,3 +146,7 @@ services:
 
     acl_checker:
         class: Onm\Security\Acl
+
+    varnish_cleaner:
+        class: Onm\Varnish\VarnishCleaner
+        arguments: [ %varnish% ]

@@ -35,6 +35,7 @@ class ContentSubscriberListener implements EventSubscriberInterface
             'content.update' => array(
                 array('deleteEntityRepositoryCache', 10),
                 array('deleteSmartyCache', 5),
+                array('sendVarnishRequestCleaner', 5),
             ),
             // 'content.create' => array(),
             'content.set_positions' => array(
@@ -111,6 +112,22 @@ class ContentSubscriberListener implements EventSubscriberInterface
         }
 
         return false;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function sendVarnishRequestCleaner(Event $event)
+    {
+        $content = $event->getArgument('content');
+
+        $banRequest = 'obj.http.x-tags ~ '.$content->id;
+
+        global $sc;
+        $sc->setParameter('varnish_ban_request', $banRequest);
     }
 
     public function refreshFrontpage(Event $event)
