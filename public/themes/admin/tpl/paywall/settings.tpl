@@ -208,7 +208,7 @@
                     </div>
                 </div>
             </fieldset>
-
+{*
             <fieldset>
                 <h4 class="settings-header"><div class="step-number">5</div> {t}Recurring payments (optional){/t}</h4>
 
@@ -258,6 +258,7 @@
                     </label>
                 </div>
             </fieldset>
+*}
         </div>
     </div>
 </form>
