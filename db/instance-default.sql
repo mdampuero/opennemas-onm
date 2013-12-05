@@ -1473,7 +1473,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('facebook_page', 's:52:"http://www.facebook.com/pages/OpenNemas/282535299100";'),
 ('twitter_page', 's:28:"http://twitter.com/opennemas";'),
 ('facebook_id', 's:12:"282535299100";'),
-('site_footer', 's:218:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\r\nCarretera Cabenca - Boveda (priorato) s/n<br />\r\nBoveda, Amoeiro<br />\r\n32980, Ourense<br />\r\nTelf: +34 988980045<br />\r\nOpenHost, S.L.</p>\r\n";'),
+('site_footer', 's:219:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\r\nCarretera Cabeanca - Boveda (priorato) s/n<br />\r\nBoveda, Amoeiro<br />\r\n32980, Ourense<br />\r\nTelf: +34 988980045<br />\r\nOpenHost, S.L.</p>\r\n";'),
 ('site_title', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
 ('site_description', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
 ('europapress_server_auth', 'a:3:{s:6:"server";s:0:"";s:8:"username";s:0:"";s:8:"password";s:0:"";}'),
