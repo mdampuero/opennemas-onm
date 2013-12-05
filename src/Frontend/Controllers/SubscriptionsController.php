@@ -54,6 +54,7 @@ class SubscriptionsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->view->assign('actual_category', 'newsletter');
         return $this->render('static_pages/subscription.tpl');
     }
 
@@ -246,6 +247,7 @@ class SubscriptionsController extends Controller
             'static_pages/subscription.tpl',
             array(
                 'message' => $message,
+                'actual_category' => 'newsletter',
                 'class'   => $class,
             )
         );

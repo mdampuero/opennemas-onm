@@ -94,7 +94,7 @@ class ArchiveController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'newslibraryDate' => $date,
-               // 'category_name'   => $this->categoryName,
+                'actual_category' => 'archive',
             )
         );
     }
@@ -145,6 +145,7 @@ class ArchiveController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'category_name'   => $this->categoryName,
+                'actual_category' => 'archive',
                 'newslibraryDate' => $date,
             )
         );
