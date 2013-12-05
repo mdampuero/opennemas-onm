@@ -40,7 +40,7 @@ function smarty_function_renderLink($params, &$smarty)
             $link = "/".STATIC_PAGE_PATH."/$item->link/";
             break;
         case 'internal':
-            $link = "/$item->link/";
+            $link = "$item->link";
             break;
         case 'external':
             $link = "$item->link";

@@ -43,7 +43,6 @@ class MenusController extends Controller
             'opinion'   => 4,
             'album'     => 7,
             'video'     => 9,
-            'mobile'    => 3,
             'poll'      => 11,
             'letter'    => 17,
             'kiosko'    => 14,

@@ -1075,7 +1075,6 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (23, 4, 'Sociedad', 'sociedad', 'category', 2, 0),
 (24, 4, 'Deportes', 'deportes', 'category', 3, 0),
 (37, 8, 'opinion', 'opinion', 'internal', 1, 21),
-(28, 8, 'mobile', 'mobile', 'internal', 2, 21),
 (31, 5, 'Curiosidades', 'curiosidades', 'videoCategory', 2, 0),
 (32, 5, 'Deportes', 'deportes', 'category', 3, 0),
 (33, 5, 'Sociedad', 'sociedad', 'category', 4, 0),
@@ -1090,7 +1089,6 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (5, 1, 'EconomÃ­a', 'economia', 'category', 5, 0),
 (19, 1, 'PolÃ­tica', 'politica', 'category', 4, 0),
 (4, 1, 'OpiniÃ³n', 'opinion', 'internal', 3, 0),
-(3, 1, 'VersiÃ³n mÃ³vil', 'mobile', 'internal', 2, 21),
 (21, 1, 'Portada', 'home', 'internal', 1, 0),
 (25, 1, 'Cultura', 'cultura', 'category', 8, 0);
 

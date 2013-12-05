@@ -222,13 +222,18 @@
                             {foreach from=$pages item=value key=page}
                                 <li id="page_{$page}"
                                     data-item-id="{$value}"
-                                    data-title="{$page}"
-                                    data-link={if $page eq 'frontpage'}"home"
-                                            {elseif $page eq 'poll'}"encuesta"
-                                            {elseif $page eq 'kiosko'}"portadas-papel"
-                                            {elseif $page eq 'letter'}"participa"
-                                            {elseif $page eq 'boletin'}"newsletter"
+                                    data-title={if $page eq 'frontpage'}"Portada"
+                                            {elseif $page eq 'poll'}"Encuesta"
+                                            {elseif $page eq 'kiosko'}"Portadas Papel"
+                                            {elseif $page eq 'letter'}"Textos Al Director"
+                                            {elseif $page eq 'boletin'}"Bolet&iacute;n"
                                             {else}{$page}{/if}
+                                    data-link={if $page eq 'frontpage'}"/"
+                                            {elseif $page eq 'poll'}"/encuesta/"
+                                            {elseif $page eq 'kiosko'}"/portadas-papel/"
+                                            {elseif $page eq 'letter'}"/participa/"
+                                            {elseif $page eq 'boletin'}"/newsletter/"
+                                            {else}"/{$page}/"{/if}
                                     data-type="internal"
                                     class="drag-category"
                                     pk_menu="">
@@ -236,7 +241,7 @@
                                         <span class="type">{t}Module{/t}:</span>
                                         <span class="menu-title">
                                             {if $page eq 'frontpage'}
-                                                home
+                                                Portada
                                             {elseif $page eq 'poll'}
                                                 Encuesta
                                             {elseif $page eq 'letter'}
