@@ -64,6 +64,7 @@ class StaticPagesController extends Controller
             array(
                 'page'               => $page,
                 'content'            => $page,
+                'actual_category'    => $page->slug,
                 'category_real_name' => $page->title,
                 'content_id'         => $page->id
             )
