@@ -280,3 +280,11 @@ div#intesticial-ad iframe {
   background-color: #fff;
   cursor: default;
 }
+
+/* -------------------------------------------------------------
+  Opinion frontpage author style
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+article.onm-new.opinion a.opinion-author-name {
+    text-transform: uppercase;
+}
