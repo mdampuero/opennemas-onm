@@ -77,7 +77,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
                 $event->setResponse(new RedirectResponse($location, 301));
             }
 
-        } elseif (isset($_SESSION['type']) && $_SESSION['type'] != 0) {
+        } elseif (($isAdmin || $isManager) && isset($_SESSION['type']) && $_SESSION['type'] != 0) {
             $event->setResponse(new RedirectResponse('/', 301));
         }
         // else {
