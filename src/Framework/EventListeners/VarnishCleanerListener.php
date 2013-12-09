@@ -1,28 +1,22 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
+/**
+ * This file is part of the Onm package.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- */
+ **/
 
 namespace Framework\EventListeners;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
-use Onm\Settings as s;
 
 /**
- * ResponseListener fixes the Response headers based on the Request.
+ * VarnishCleanerListener fixes the Response headers based on the Request.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @author Fran Diéguez
  */
 class VarnishCleanerListener implements EventSubscriberInterface
 {
@@ -35,20 +29,17 @@ class VarnishCleanerListener implements EventSubscriberInterface
     {
         global $sc;
 
-        $logger = $sc->get('logger');
-
-        if ($sc->hasParameter('varnish_ban_request')) {
+        if ($sc->hasParameter('varnish')
+            && $sc->hasParameter('varnish_ban_request')
+        ) {
             $banRequest = $sc->getParameter('varnish_ban_request');
 
             $varnishCleaner = $sc->get('varnish_cleaner');
             $varnishCleaner->ban($banRequest);
 
+            $logger = $sc->get('logger');
             $logger->notice('Varnish BAN queued: '.$sc->getParameter('varnish_ban_request'));
         }
-        //  elseif (!preg_match('@media@', $_SERVER['REQUEST_URI'])) {
-        //     $logger->notice('TerminateEVent: varnish_cleaner do not have requests'.$_SERVER['REQUEST_URI']);
-        // }
-
     }
 
     public static function getSubscribedEvents()

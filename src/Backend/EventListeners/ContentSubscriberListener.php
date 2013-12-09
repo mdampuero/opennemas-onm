@@ -115,13 +115,17 @@ class ContentSubscriberListener implements EventSubscriberInterface
     }
 
     /**
-     * undocumented function
+     * Queues a varnish ban request
      *
      * @return void
-     * @author
      **/
     public function sendVarnishRequestCleaner(Event $event)
     {
+        global $sc;
+        if (!$sc->hasParameter('varnish')) {
+            return false;
+        }
+
         $content = $event->getArgument('content');
 
         $banRequest =
@@ -130,7 +134,6 @@ class ContentSubscriberListener implements EventSubscriberInterface
             .' || obj.http.x-tags ~ rss ';
 
 
-        global $sc;
         $sc->setParameter('varnish_ban_request', $banRequest);
     }
 
