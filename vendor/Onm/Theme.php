@@ -139,7 +139,10 @@ class Theme
         // Instantiate ads manager
         $this->adsManager = new \AdvertisementPositions();
 
-        bindtextdomain('base', realpath(TEMPLATE_USER_PATH.'../base/locale/'));
+        // TODO:  this if was added to here in order to avoid test to pass.
+        if (defined('TEMPLATE_USER_PATH')) {
+            bindtextdomain('base', realpath(TEMPLATE_USER_PATH.'../base/locale/'));
+        }
     }
 
     /**
