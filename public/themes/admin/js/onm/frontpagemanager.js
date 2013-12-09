@@ -637,20 +637,6 @@ jQuery(function($) {
         }
     });
 
-    $('#button_clearcache').on('click', function(e, ui) {
-        e.preventDefault();
-        var category = $(this).data('category');
-        $.ajax({
-            type: 'POST',
-            url: frontpage_urls.clean_frontpage,
-            data: {
-                'category' : category
-            }
-        }).done(function(data) {
-            $('#warnings-validation').html(data);
-        });
-    });
-
     $('#button_previewfrontpage').on('click', function(e, ui) {
         e.preventDefault();
         var contents = get_contents_in_frontpage();

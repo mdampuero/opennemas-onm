@@ -17,7 +17,6 @@
         var frontpage_urls = {
             save_positions: '{url name=admin_frontpage_savepositions}',
             preview_frontpage: '{url name=admin_frontpage_preview category=$category}',
-            clean_frontpage: '{url name=admin_tpl_manager_cleanfrontpage}',
             toggle_suggested: '{url name=admin_content_toggle_suggested}',
             quick_info: '{url name=admin_content_quick_info}',
             set_arquived: '{url name=admin_content_set_archived}',
@@ -83,12 +82,6 @@
                 </li>
 
                 <li class="separator"></li>
-
-                <li>
-                     <button data-category="{$category}" id="button_clearcache" title="{t}Clean cache{/t}">
-                         <img src="{$params.IMAGE_DIR}clearcache.png" alt="" /><br />{t}Clean cache{/t}
-                     </button>
-                </li>
 
                 <li>
                     <a href="#" id="button_previewfrontpage"  data-category-name="{if $category eq 0}home{else}{$datos_cat[0]->name}{/if}" title="{t}Preview frontpage with actual content positions{/t}">

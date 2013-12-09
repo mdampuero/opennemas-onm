@@ -28,16 +28,6 @@ use Onm\LayoutManager;
  **/
 class FrontpagesController extends Controller
 {
-
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
     /**
      * Displays the frontpage elements for a given frontpage id
      *
@@ -231,10 +221,7 @@ class FrontpagesController extends Controller
                 );
             }
 
-            // Clean caches
-            $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tcacheManager->delete($category . '|RSS');
-            $tcacheManager->delete($category . '|0');
+            dispatchEventWithParams('frontpage.save_position', array('category' => $category));
         }
 
         // If this request is Ajax return properly formated result.
