@@ -35,6 +35,7 @@ class ContentSubscriberListener implements EventSubscriberInterface
             'content.update' => array(
                 array('deleteEntityRepositoryCache', 10),
                 array('deleteSmartyCache', 5),
+                array('sendVarnishRequestCleaner', 5),
             ),
             // 'content.create' => array(),
             'content.set_positions' => array(
@@ -49,6 +50,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
             'opinion.create' => array(
                 array('deleteOpinionCreateCaches', 5),
             ),
+            'frontpage.save_position' => array(
+                array('cleanFrontpage', 5))
         );
     }
 
@@ -113,6 +116,29 @@ class ContentSubscriberListener implements EventSubscriberInterface
         return false;
     }
 
+    /**
+     * Queues a varnish ban request
+     *
+     * @return void
+     **/
+    public function sendVarnishRequestCleaner(Event $event)
+    {
+        global $sc;
+        if (!$sc->hasParameter('varnish')) {
+            return false;
+        }
+
+        $content = $event->getArgument('content');
+
+        $banRequest =
+            'obj.http.x-tags ~ '.$content->id
+            .' || obj.http.x-tags ~ sitemap '
+            .' || obj.http.x-tags ~ rss ';
+
+
+        $sc->setParameter('varnish_ban_request', $banRequest);
+    }
+
     public function refreshFrontpage(Event $event)
     {
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -125,6 +151,42 @@ class ContentSubscriberListener implements EventSubscriberInterface
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS');
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
 
+        }
+    }
+
+    /**
+     * Cleans the category frontpage given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function cleanFrontpage(Event $event)
+    {
+        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+
+        $category = $event->getArgument('category');
+
+        if (isset($category)) {
+            $ccm = \ContentCategoryManager::get_instance();
+
+            if ($category == '0' || $category == 'home') {
+                $categoryName = 'home';
+            } elseif ($category == 'opinion') {
+                $categoryName = 'opinion';
+                $tplManager->delete($categoryName, 'opinion_frontpage.tpl');
+            } else {
+                $categoryName = $ccm->get_name($category);
+            }
+
+            $categoryName = preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName);
+
+            $tplManager->delete($categoryName . '|RSS');
+            $tplManager->delete($categoryName . '|0');
+
+            global $sc;
+
+            $sc->get('logger')->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
         }
     }
 

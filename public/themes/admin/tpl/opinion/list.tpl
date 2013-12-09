@@ -84,12 +84,6 @@
             {/acl}
             {acl isAllowed="OPINION_SETTINGS"}
             <li>
-                <button type="submit" id="opinion_clearcache">
-                    <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="{t}Clean cache{/t}"/>
-                    <br />{t}Clean cache{/t}
-                </button>
-            </li>
-            <li>
                 <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config opinion module{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config opinion module{/t}"/><br />
                     {t}Settings{/t}
@@ -157,16 +151,6 @@
             e.preventDefault();
             $('#formulario').attr('action', "{url name=admin_opinions_batch_delete}");
             $('#formulario').submit();
-        });
-
-        $('#opinion_clearcache').on('click', function(e, ui) {
-            e.preventDefault();
-            jQuery.ajax({
-                url: "{url name=admin_tpl_manager_cleanfrontpage category=opinion}",
-                success: function(data){
-                    jQuery('#warnings-validation').html(data);
-                }
-            });
         });
 
         {if $home}

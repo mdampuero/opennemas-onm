@@ -57,6 +57,13 @@ Disallow: /harm/to/self
 Sitemap: ".SITE_URL."sitemapnews.xml.gz
 Sitemap: ".SITE_URL."sitemapweb.xml.gz
 ";
-        return new Response($content, 200, array('Content-Type' => 'text/plain'));
+        return new Response(
+            $content,
+            200,
+            array(
+                'Content-Type' => 'text/plain',
+                'x-tags'       => 'robots'
+            )
+        );
     }
 }

@@ -149,7 +149,7 @@ class OpinionsController extends Controller
     {
         $page =  $request->query->getDigits('page', 1);
         $configurations = s::get('opinion_settings');
-        $itemsPerPage = s::get('items_per_page');
+        $itemsPerPage   = s::get('items_per_page');
 
         $numEditorial = $configurations['total_editorial'];
         $numDirector  = $configurations['total_director'];
@@ -647,6 +647,8 @@ class OpinionsController extends Controller
                 }
             }
         }
+
+        dispatchEventWithParams('frontpage.save_position', array('category' => 'opinion'));
 
         if ($result === true) {
             $message = _('Positions saved successfully.');

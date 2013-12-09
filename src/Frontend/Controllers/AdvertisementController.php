@@ -52,12 +52,14 @@ class AdvertisementController extends Controller
 
         $advertisement = $er->find('Advertisement', $id);
 
+        // Returns the HTML for the add and a header to varnish
         return $this->render(
             'ads/advertisement.tpl',
             array(
                 'banner'  => $advertisement,
                 'content' => $advertisement
-            )
+            ),
+            new Response('', 200, array('x-tags' => "ad,$id"))
         );
     }
 
