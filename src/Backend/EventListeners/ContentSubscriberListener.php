@@ -124,7 +124,11 @@ class ContentSubscriberListener implements EventSubscriberInterface
     {
         $content = $event->getArgument('content');
 
-        $banRequest = 'obj.http.x-tags ~ '.$content->id;
+        $banRequest =
+            'obj.http.x-tags ~ '.$content->id
+            .' || obj.http.x-tags ~ sitemap '
+            .' || obj.http.x-tags ~ rss ';
+
 
         global $sc;
         $sc->setParameter('varnish_ban_request', $banRequest);

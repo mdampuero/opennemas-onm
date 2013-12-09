@@ -211,7 +211,14 @@ class RssController extends Controller
             );
         } // IS CACHED
 
-        $response = new Response('', 200, array('Content-Type' => 'text/xml; charset=UTF-8'));
+        $response = new Response(
+            '',
+            200,
+            array(
+                'Content-Type' => 'text/xml; charset=UTF-8',
+                'x-tags'       => 'rss',
+            )
+        );
 
         return $this->render(
             'rss/rss.tpl',

@@ -203,6 +203,8 @@ class SitemapController extends Controller
             $headers = array('Content-Type' => 'application/xml charset=utf-8');
         }
 
+        $headers['x-tags'] = 'sitemap';
+
         return new Response($contents, 200, $headers);
     }
 }
