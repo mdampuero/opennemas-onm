@@ -53,7 +53,7 @@ class FrontpagesController extends Controller
         $categoryName    = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $this->view->setConfig('frontpages');
 
-        $cacheID = $this->view->generateCacheId($categoryName, null, 0);
+        $cacheID = $this->view->generateCacheId('frontpage', '', $categoryName);
 
         $actualCategory = (empty($subcategory_name))? $categoryName : $subcategory_name;
         $this->view->assign(
