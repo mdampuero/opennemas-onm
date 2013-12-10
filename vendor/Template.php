@@ -125,7 +125,7 @@ class Template extends Smarty
             );
         }
 
-        $this->config_dir = realpath($this->baseCachePath.'/smarty/config');
+        $this->setConfigDir(realpath($this->baseCachePath.'/smarty/config'));
 
         // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value) {
