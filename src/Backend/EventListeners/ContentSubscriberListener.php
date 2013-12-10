@@ -182,7 +182,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
             $categoryName = preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName);
 
             $tplManager->delete($categoryName . '|RSS');
-            $tplManager->delete($categoryName . '|0');
+
+            $tplManager->delete('frontpage|'.$categoryName);
 
             global $sc;
 
