@@ -27,7 +27,7 @@ function smarty_function_meta_twitter_cards($params, &$smarty)
         if (empty($summary)) {
             $summary = mb_substr($content->body, 0, 80)."...";
         }
-        $summary = trim(html_attribute($sumamry));
+        $summary = trim(html_attribute($summary));
         $url = "http://".SITE.'/'.$content->uri;
 
         // Writing Twitter card info
