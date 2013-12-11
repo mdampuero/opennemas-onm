@@ -180,6 +180,7 @@ class ContentSubscriberListener implements EventSubscriberInterface
             }
 
             $categoryName = preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName);
+            $categoryName = preg_replace('@-@', '', $categoryName);
 
             $tplManager->delete($categoryName . '|RSS');
 
