@@ -38,7 +38,6 @@ function smarty_function_render_menu($params, &$smarty) {
     $output .= "\n". $smarty->fetch( $tpl );
     $smarty->caching = $caching;
 
-
 	// Render menu items
 	return $output;
 }
