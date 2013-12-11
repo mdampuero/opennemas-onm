@@ -186,8 +186,6 @@ class Template extends Smarty
         );
     }
 
-
-
     public function addFilter($filterSection, $filterName)
     {
         if (in_array($filterSection, array('pre', 'post', 'output'))) {
@@ -206,6 +204,8 @@ class Template extends Smarty
         } else {
             $cacheId = ('home|'.$resource);
         }
+        $cacheId = preg_replace('@-@', '', $cacheId);
+
         return $cacheId;
     }
 
