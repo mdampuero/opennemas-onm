@@ -126,13 +126,14 @@ class StringUtils
         // $title = self::normalize_name($title);
         $title = self::clearSpecialChars($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
+        $title = trim($title);
 
         if ($useStopList) {
             // Remove stop list
             $titule = self::removeShorts($title);
         }
 
-        if (empty($titule) || $titule == " ") {
+        if (empty(trim($titule)) || $titule == " ") {
             $titule = $title;
         }
 
