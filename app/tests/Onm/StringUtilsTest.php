@@ -94,6 +94,20 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetTitle()
     {
         $this->assertEquals(
+            'es-por-tu-bien',
+            $this->object->get_title(
+                '"Es por tu bien..."'
+            )
+        );
+
+        $this->assertEquals(
+            'es-por-tu-bien',
+            $this->object->get_title(
+                '"Es por tu bien…"'
+            )
+        );
+
+        $this->assertEquals(
             'lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-cras-elit-sapien-'.
             'porttitor-non-aliquam-ac-sagittis-urna',
             $this->object->get_title(
@@ -126,6 +140,12 @@ class StringUtilsTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->assertEquals(
+            '0001-cambio-look-mariana-antoniale',
+            $this->object->get_title(
+                '0001 ¡El cambio de look de Mariana Antoniale!'
+            )
+        );
     }
 
     /**
