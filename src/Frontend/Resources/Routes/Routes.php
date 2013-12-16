@@ -1335,6 +1335,18 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_opinion_editorial_frontpage',
+    new Route(
+        '/editorial',
+        array(
+           '_controller' => 'Frontend:Controllers:OpinionsController:frontpageAuthor',
+           'author_slug'    => 'editorial',
+           'author_id'      => '000001'
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_opinion_author_frontpage',
     new Route(
         '/opinion/autor/{author_id}/{author_slug}',
@@ -1348,19 +1360,6 @@ $frontendRoutes->add(
     )
 );
 
-$frontendRoutes->add(
-    'frontend_opinion_editorial_frontpage',
-    new Route(
-        '/opinion/editorial',
-        array(
-           '_controller' => 'Frontend:Controllers:OpinionsController:frontpageAuthor',
-        ),
-        array(
-           'author_slug'    => 'editorial',
-           'author_id'      => '1'
-        )
-    )
-);
 
 $frontendRoutes->add(
     'frontend_opinion_external_author_frontpage',
