@@ -11,11 +11,13 @@ require __DIR__.'/../app/autoload.php';
 
 
 $_SERVER['SERVER_NAME']   = 'www.cronicasdelaemigracion.com';
-//$_SERVER['SERVER_NAME'] = 'onm-cronicas.local:8080';
+//$_SERVER['SERVER_NAME']   = 'cronicas.local:8080';
 $_SERVER['REQUEST_URI']   = '/';
 $_SERVER['REQUEST_PORT']  = '8080';
 $_SERVER['SERVER_PORT']   = '8080';
-$_SERVER['HTTP_HOST']     ='www.cronicasdelaemigracion.com';
+$_SERVER['HTTP_HOST']     = 'www.cronicasdelaemigracion.com';
+
+define('INSTANCE_UNIQUE_NAME', 'cronicas');
 
 // Load the available route collection
 $routes = new \Symfony\Component\Routing\RouteCollection();
@@ -24,24 +26,22 @@ $routes = new \Symfony\Component\Routing\RouteCollection();
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
 
-require __DIR__.'/../app/container.php';
 
+$sc = include __DIR__.'/../app/container.php';
 
-require __DIR__.'/../app/bootstrap.php';
-
-/**
- * Setup view
+ /*
+$framework = $sc->get('framework');
+$response = $framework->handle($request);
+$response->send();
+$framework->terminate($request, $response);
 */
-$tpl = new Template(TEMPLATE_USER);
-
-$urlBase = SITE_URL."seccion/";
 
 $date          =  new DateTime();
 $directoryDate = $date->format("/Y/m/d/");
 $basePath      = SITE_PATH."/media/cronicas/library".$directoryDate;
 $curly         = array();
 
-if ( !file_exists($basePath) ) {
+if (!file_exists($basePath)) {
     mkdir($basePath, 0777, true);
 }
 
@@ -49,18 +49,56 @@ if ( !file_exists($basePath) ) {
 $mh = curl_multi_init();
 
 $menu = new \Menu();
-$menu->getMenu('archive');
+//$menu->getMenu('archive');
+
+
+$menu->name  ='archive';
+$menu->items = array();
+
+$item       = new stdClass();
+$item->link = 'home';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'cronicas';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'galicia';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'galicia-exporta';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'castillaleon';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'asturias';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'canarias';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'andalucia';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'catabria';
+array_push($menu->items, $item);
+$item       = new stdClass();
+$item->link = 'paisvasco';
+array_push($menu->items, $item);
 
 if (count(($menu->items)) <= 0) {
     echo "There are no frontpages. You must define archive menu. \n";
     die();
 }
 
+$urlBase = 'http://'.$_SERVER['SERVER_NAME'].'/'."seccion/";
+//$urlBase = SITE_URL.'/'."seccion/";
+
 foreach ($menu->items as $item) {
 
     $category_name = $item->link;
 
-    if ( !empty($category_name) ) {
+    if (!empty($category_name)) {
 
         $curly[$category_name] = curl_init();
 
