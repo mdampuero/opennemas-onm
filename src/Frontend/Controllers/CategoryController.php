@@ -207,7 +207,7 @@ class CategoryController extends Controller
 
         //$this->getInnerAds();
         $wsActualCategoryId = $cm->getUrlContent($wsUrl.'/ws/categories/id/'.$categoryName);
-        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/frontpage/'.$wsActualCategoryId, true));
+        $ads = unserialize($cm->getUrlContent($wsUrl.'/ws/ads/article/'.$wsActualCategoryId, true));
         $this->view->assign('advertisements', $ads);
 
         return $this->render(
@@ -229,7 +229,9 @@ class CategoryController extends Controller
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $positions = array(7, 9, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 191, 192, 193);
+        // Get article_inner positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('article_inner', array(7, 9));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
