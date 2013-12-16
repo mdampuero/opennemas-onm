@@ -218,7 +218,7 @@
                     '{url name=manager_instance_batch_available status=1}',
                     $('#formulario').serializeArray()
                 ).done(function() {
-                    window.location.href = '{url name=manager_instances}';
+                    window.location.href = '{url name=manager_instances filter_name=$filter_name filter_email=$filter_email}';
                 }).fail(function() {
                 });
             });
@@ -229,7 +229,7 @@
                     '{url name=manager_instance_batch_available status=0}',
                     $('#formulario').serializeArray()
                 ).done(function(data) {
-                    window.location.href = '{url name=manager_instances}';
+                    window.location.href = '{url name=manager_instances filter_name=$filter_name filter_email=$filter_email}';
                 }).fail(function() {
                 });
             });

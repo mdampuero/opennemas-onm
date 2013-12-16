@@ -37,7 +37,7 @@ jQuery(document).ready(function ($){
     });
 
     $('#modal-instance-batchDelete a.btn.yes').on('click', function(e, ui){
-        $('#formulario').attr('action', '{url name="manager_instance_batch_delete"}');
+        $('#formulario').attr('action', '{url name="manager_instance_batch_delete" filter_name=$filter_name filter_email=$filter_email}');
         $('#formulario').submit();
         e.preventDefault();
     });
