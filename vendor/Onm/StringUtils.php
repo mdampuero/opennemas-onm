@@ -121,6 +121,7 @@ class StringUtils
      **/
     public static function get_title($title, $useStopList = true, $delimiter = '-')
     {
+        $titule = '';
         $title = self::toAscii($title);
 
         // $title = self::normalize_name($title);
@@ -133,7 +134,8 @@ class StringUtils
             $titule = self::removeShorts($title);
         }
 
-        if (empty(trim($titule)) || $titule == " ") {
+        $titule = trim($titule);
+        if (empty($titule) || $titule == " ") {
             $titule = $title;
         }
 
