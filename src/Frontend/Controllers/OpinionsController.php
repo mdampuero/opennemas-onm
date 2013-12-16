@@ -76,6 +76,7 @@ class OpinionsController extends Controller
             $totalDirector = 1;
             if (!empty($configurations) && array_key_exists('total_editorial', $configurations)) {
                 $totalEditorial = $configurations['total_editorial'];
+                $this->view->assign('actual_category', 'editorial');
             }
             if (!empty($configurations) && array_key_exists('total_director', $configurations)) {
                 $totalDirector = $configurations['total_director'];
@@ -203,8 +204,8 @@ class OpinionsController extends Controller
                     $opinion->author->uri = \Uri::generate(
                         'opinion_author_frontpage',
                         array(
-                            'slug' => $opinion->author->name,
-                            'id'   => $opinion->author->id
+                            'slug' => $opinion->author->username,
+                            'id'   => sprintf('%06d', $opinion->author->id)
                         )
                     );
                     $opinionsResult[] = $opinion;
@@ -371,8 +372,10 @@ class OpinionsController extends Controller
      **/
     public function frontpageAuthorAction(Request $request)
     {
+
         // Index author's frontpage
         $authorID = $request->query->getDigits('author_id', null);
+
         if (empty($authorID)) {
             return new RedirectResponse($this->generateUrl('frontend_opinion_frontpage'));
         }
@@ -401,6 +404,7 @@ class OpinionsController extends Controller
             if ($author->id == 1 && $author->slug == 'editorial') {
                 // Editorial
                 $filter = 'opinions.type_opinion=1';
+                $this->view->assign('actual_category', 'editorial');
             } elseif ($author->id == 2 && $author->slug == 'director') {
                 // Director
                 $filter =  'opinions.type_opinion=2';
@@ -721,6 +725,7 @@ class OpinionsController extends Controller
             if ($opinion->type_opinion == 1) {
                 $where =' opinions.type_opinion = 1';
                 $opinion->name = 'Editorial';
+                $this->view->assign('actual_category', 'editorial');
             } elseif ($opinion->type_opinion == 2) {
                 $where =' opinions.type_opinion = 2';
                 $opinion->name = 'Director';
