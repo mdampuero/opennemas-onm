@@ -202,14 +202,6 @@
                 trigger: 'hover',
             });
 
-            $("#manager").tablesorter({
-                            headers: { 0: { sorter: false } } ,
-                            textExtraction:function(s){
-                                if($(s).find('img').length == 0) return $(s).text();
-                                return $(s).find('img').attr('alt');
-                            }
-                        }).tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
-
             $('.minput').on('click', function() {
                 checkbox = $(this).find('input[type="checkbox"]');
                 var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
@@ -241,6 +233,14 @@
                 }).fail(function() {
                 });
             });
+
+            $("#manager").tablesorter({
+                            headers: { 0: { sorter: false } } ,
+                            textExtraction:function(s){
+                                if($(s).find('img').length == 0) return $(s).text();
+                                return $(s).find('img').attr('alt');
+                            }
+                        }).tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
         });
     </script>
 {/block}
