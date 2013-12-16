@@ -54,7 +54,6 @@ class InstancesController extends Controller
         $findParams = array(
             'name' => $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING),
             'email' => $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING),
-            'per_page' => $request->query->filter('filter_per_page', 20, FILTER_SANITIZE_STRING),
         );
 
         $instances = $this->instanceManager->findAll($findParams);
@@ -75,15 +74,12 @@ class InstancesController extends Controller
             $instance->domains = preg_split("@, @", $instance->domains);
         }
 
-        $itemsPerPage =  $findParams['per_page'];
-
         $availableTimeZones = \DateTimeZone::listIdentifiers();
 
         return $this->render(
             'instances/list.tpl',
             array(
                 'instances'     => $instances,
-                'per_page'      => $itemsPerPage,
                 'filter_name'   => $findParams['name'],
                 'filter_email'  => $findParams['email'],
                 'timeZones'     => $availableTimeZones,
@@ -459,6 +455,9 @@ class InstancesController extends Controller
      **/
     public function batchDeleteAction(Request $request)
     {
+        $filter_name  = $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING);
+        $filter_email = $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING);
+
         $selected = $request->query->get('selected', null);
 
         if (is_array($selected) && count($selected) > 0) {
@@ -475,7 +474,12 @@ class InstancesController extends Controller
             }
         }
 
-        return $this->redirect($this->generateUrl('manager_instances'));
+        return $this->redirect(
+            $this->generateUrl(
+                'manager_instances',
+                array('filter_name' => $filter_name, 'filter_email' => $filter_email)
+            )
+        );
     }
 
     /**
