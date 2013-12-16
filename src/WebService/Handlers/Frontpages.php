@@ -177,7 +177,7 @@ class Frontpages
                 'items' => $itemsPerPage,
                 'total' => $countArticles,
                 'url'   => $generator->generate(
-                    'blog_sync_category',
+                    'categ_sync_frontpage',
                     array(
                         'category_name' => $categoryName,
                     )
