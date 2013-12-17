@@ -76,7 +76,6 @@ class OpinionsController extends Controller
             $totalDirector = 1;
             if (!empty($configurations) && array_key_exists('total_editorial', $configurations)) {
                 $totalEditorial = $configurations['total_editorial'];
-                $this->view->assign('actual_category', 'editorial');
             }
             if (!empty($configurations) && array_key_exists('total_director', $configurations)) {
                 $totalDirector = $configurations['total_director'];
@@ -412,6 +411,7 @@ class OpinionsController extends Controller
                 // Regular authors
                 $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$author->id;
                 $author->slug = \StringUtils::get_title($author->name);
+                $this->view->assign('actual_category', 'opinion');
             }
 
             // generate pagination params
