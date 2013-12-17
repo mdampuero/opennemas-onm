@@ -558,14 +558,31 @@ class Advertisement extends Content
             if (preg_match('/<iframe/', $this->script)) {
                 $content = $this->script;
             } else {
-                $url = url('frontend_ad_get', array('id' => $this->pk_content));
+                // Check for external advertisement Script
+                if (isset($this->extWsUrl)) {
+                    $url = $this->extWsUrl."ads/get/".$this->pk_content;
+                } else {
+                    $url = url('frontend_ad_get', array('id' => $this->pk_content));
+                }
+
                 $content = '<iframe src="'.$url.'" style="width:'.$width.'px; height:'.$height.'px; overflow: hidden;" '.
                 ' scrolling="no"></iframe>';
             }
 
         } else {
-            global $sc;
-            $photo = $sc->get('entity_repository')->find('Photo', $this->img);
+            // Check for external advertisement Flash/Image based
+            if (isset($this->extWsUrl)) {
+                $cm = new \ContentManager;
+                $photo = $cm->getUrlContent($this->extWsUrl."ws/images/id/".$this->img, true);
+                $url = $this->extUrl;
+                $mediaUrl = $this->extMediaUrl.$photo->path_file. $photo->name;
+            } else {
+                global $sc;
+                $photo = $sc->get('entity_repository')->find('Photo', $this->img);
+                $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
+                      .sprintf('%06d', $this->pk_advertisement).'.html';
+                $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;
+            }
 
             // If the Ad is Flash/Image based try to get the width and height fixed
             if (isset($photo)) {
@@ -576,10 +593,6 @@ class Advertisement extends Content
                     $height = $photo->height;
                 }
             }
-
-            $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
-                  .sprintf('%06d', $this->pk_advertisement).'.html';
-            $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;
 
             // TODO: controlar los banners swf especiales con div por encima
             if (strtolower($photo->type_img) == 'swf') {

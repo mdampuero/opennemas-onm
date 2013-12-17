@@ -17,6 +17,13 @@ class Ads
 
         $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
+        foreach ($ads as &$ad) {
+            $ad->extWsUrl = SITE_URL;
+            $ad->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($ad->created))
+                      .sprintf('%06d', $ad->pk_advertisement).'.html';
+            $ad->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+        }
+
         return serialize($ads);
     }
 
@@ -33,6 +40,13 @@ class Ads
 
         $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
 
+        foreach ($ads as &$ad) {
+            $ad->extWsUrl = SITE_URL;
+            $ad->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($ad->created))
+                      .sprintf('%06d', $ad->pk_advertisement).'.html';
+            $ad->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+        }
+
         return serialize($ads);
     }
 
@@ -43,12 +57,18 @@ class Ads
     {
         $category = (!isset($category) || ($category=='home'))? 0: $category;
 
-        $positions = array(
-            750,
-            701, 702, 703, 704, 705, 706, 707, 708, 709, 710
-        );
+        // Get opinion positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('opinion_inner', array(7, 9));
 
         $ads = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+
+        foreach ($ads as &$ad) {
+            $ad->extWsUrl = SITE_URL;
+            $ad->extUrl = SITE_URL.'ads/'. date('YmdHis', strtotime($ad->created))
+                      .sprintf('%06d', $ad->pk_advertisement).'.html';
+            $ad->extMediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images';
+        }
 
         return serialize($ads);
     }
