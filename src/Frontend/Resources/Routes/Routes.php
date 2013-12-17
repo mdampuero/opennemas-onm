@@ -501,9 +501,12 @@ $frontendRoutes->add(
 $frontendRoutes->add(
     'frontend_search_internal',
     new Route(
-        '/search/',
+        '/search',
         array(
-            '_controller' => 'Frontend:Controllers:SearchController:internal',
+            '_controller' => 'Frontend:Controllers:TagsController:tags',
+        ),
+        array(
+            'tag_name' => '[A-Za-z0-9\-.]+',
         )
     )
 );
