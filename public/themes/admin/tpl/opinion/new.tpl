@@ -14,7 +14,9 @@
             $('#title').inputLengthControl();
 
             $('#title input').on('change', function(e, ui) {
-                fill_tags_improved($('#title input').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+                if (tags_input.val().length == 0) {
+                    fill_tags_improved($('#title input').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+                }
             });
             $('#formulario').onmValidate({
                 'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'

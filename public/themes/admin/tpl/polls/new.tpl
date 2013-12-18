@@ -6,7 +6,9 @@
         var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
 
         $('#title').on('change', function(e, ui) {
-            fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+            if (tags_input.val().length == 0) {
+                fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+            }
         });
         $('#formulario').onmValidate({
             'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
