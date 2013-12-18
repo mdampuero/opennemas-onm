@@ -395,6 +395,19 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_rss_author',
+    new Route(
+        '/rss/author/{author_slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:RssController:authorRSS'
+        ),
+        array(
+            'author_slug' => '[A-Za-z\d-.]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_rss_subcategory',
     new Route(
         '/rss/{category_name}/{subcategory_name}',
@@ -427,19 +440,6 @@ $frontendRoutes->add(
         '/rss',
         array(
             '_controller' => 'Frontend:Controllers:RssController:generalRSS',
-        )
-    )
-);
-
-$frontendRoutes->add(
-    'frontend_rss_author',
-    new Route(
-        '/rss/{author_slug}',
-        array(
-            '_controller' => 'Frontend:Controllers:RssController:authorRSS'
-        ),
-        array(
-            'author_slug' => '[A-Za-z\d-.]+',
         )
     )
 );

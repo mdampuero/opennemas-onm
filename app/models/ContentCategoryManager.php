@@ -611,7 +611,7 @@ class ContentCategoryManager
 
         // First loop categories
         foreach ($categories as $category) {
-            $category->params = unserialize($category->params);
+            $category->params = @unserialize($category->params);
             if ($category->fk_content_category == 0
                 && $category->internal_category == 1
                 && $category->inmenu == 1
