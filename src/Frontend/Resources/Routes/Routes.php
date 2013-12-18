@@ -432,6 +432,19 @@ $frontendRoutes->add(
 );
 
 $frontendRoutes->add(
+    'frontend_rss_author',
+    new Route(
+        '/rss/{author_slug}',
+        array(
+            '_controller' => 'Frontend:Controllers:RssController:authorRSS'
+        ),
+        array(
+            'author_slug' => '[A-Za-z\d-.]+',
+        )
+    )
+);
+
+$frontendRoutes->add(
     'frontend_robots',
     new Route(
         '/robots.txt',
