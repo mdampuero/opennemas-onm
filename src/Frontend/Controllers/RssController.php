@@ -226,4 +226,85 @@ class RssController extends Controller
             $response
         );
     }
+
+    /**
+     * Shows the author frontpage
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function authorRSSAction(Request $request)
+    {
+
+        $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = 50;
+
+        $this->view->setConfig('rss');
+
+        $cacheID = $this->view->generateCacheId('authorRSS-'.$slug, '', $page);
+
+        if (($this->view->caching == 0)
+           || (!$this->view->isCached('rss/rss.tpl', $cacheID))
+        ) {
+            // Get user by slug
+            $ur = $this->get('user_repository');
+            $user = $ur->findOneBy("username='{$slug}'", 'ID DESC');
+            if (!empty($user)) {
+                $title_rss   = 'RSS de «'.$user->name.'»';
+                $user->photo = new \Photo($user->avatar_img_id);
+                $user->getMeta();
+
+                $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7) "
+                    ."AND available=1 AND in_litter=0";
+
+                $er = $this->get('entity_repository');
+                $contentsCount  = $er->count($searchCriteria);
+                $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
+                $photos = array();
+
+                foreach ($contents as &$item) {
+                    $item = $item->get($item->id);
+                    $item->author = $user;
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $photos[$item->id] = new \Photo($item->img1);
+
+                    }
+
+                    if ($item->fk_content_type == 7) {
+                        $photos[$item->id] = new \Photo($item->cover_id);
+                    }
+
+                    if (empty($item->summary)) {
+                        $item->summary = substr(strip_tags($item->body), 0, 350);
+                    }
+                }
+
+                $this->view->assign(
+                    array(
+                        'rss'       => $contents,
+                        'author'    => $user,
+                        'title_rss' => $title_rss,
+                    )
+                );
+            }
+        }
+
+        $response = new Response(
+            '',
+            200,
+            array(
+                'Content-Type' => 'text/xml; charset=UTF-8',
+                'x-tags'       => 'rss',
+            )
+        );
+
+        return $this->render(
+            'rss/rss.tpl',
+            array('cache_id' => $cacheID),
+            $response
+        );
+
+    }
 }
