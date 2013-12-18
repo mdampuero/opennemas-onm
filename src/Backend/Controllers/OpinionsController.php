@@ -62,9 +62,11 @@ class OpinionsController extends Controller
      **/
     public function listAction(Request $request)
     {
+
         $page   =  $request->query->getDigits('page', 1);
         $author =  (int) $request->query->filter('author', 0, FILTER_VALIDATE_INT);
         $status =  (int) $request->query->filter('status', -1);
+        $contentType =  $request->query->filter('contentType', 'opinion');
 
         $itemsPerPage = s::get('items_per_page');
 
@@ -83,6 +85,22 @@ class OpinionsController extends Controller
                 $filterSQL []= 'opinions.type_opinion=1';
             }
         }
+         // Fetch all authors
+        $allAuthors = \User::getAllUsersAuthors();
+
+        $authorsBlog = array();
+        foreach ($allAuthors as $authorData) {
+            if ($authorData->is_blog == 1) {
+                $authorsBlog[$authorData->id] = $authorData;
+            }
+        }
+        if (!empty($authorsBlog)) {
+            if ($contentType == 'blog') {
+                $filterSQL [] = ' opinions.fk_author IN ('.implode(', ', array_keys($authorsBlog)).") ";
+            } else {
+                $filterSQL [] = ' opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+            }
+        }
 
         $filterSQL = implode(' AND ', $filterSQL);
 
@@ -97,18 +115,25 @@ class OpinionsController extends Controller
             $itemsPerPage
         );
 
+        if ($contentType == 'blog') {
+            $route = 'admin_blogs';
+        } else {
+            $route = 'admin_opinions';
+        }
+
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
                 'page'  => $page,
                 'items' => $itemsPerPage,
                 'total' => $countOpinions,
                 'url'   => $this->generateUrl(
-                    'admin_opinions',
+                    $route,
                     array(
                         'status' => $status,
                         'author' => $author,
+                        'contentType' => $contentType,
                     )
-                ).'&page=%d'
+                ).""
             )
         );
 
@@ -119,9 +144,6 @@ class OpinionsController extends Controller
         } else {
             $opinions = array();
         }
-
-        // Fetch all authors
-        $allAuthors = \User::getAllUsersAuthors();
 
         return $this->render(
             'opinion/list.tpl',
@@ -134,6 +156,7 @@ class OpinionsController extends Controller
                 'home'       => false,
                 'pagination' => $pagination,
                 'total'      => $countOpinions,
+                'contentType'=> $contentType,
             )
         );
     }
