@@ -15,7 +15,7 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{t}{$contentType|capitalize}{/t} ::</h2>
+            <h2>{if $contentType eq 'blog'}Posts{else}{t}Opinions{/t} {/if}::</h2>
             <div class="section-picker">
                 <div class="title-picker btn">
                     <span class="text">{if $home}{t}Opinion frontpage{/t}{else}{t}Listing{/t}{/if}</span>
@@ -26,7 +26,7 @@
                     <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
                     {/acl}
                     <a href="{url name=admin_opinions}" {if !$home &&  $contentType neq 'blog'}class="active"{/if}>{t}Listing{/t}</a>
-                    <a href="{url name=admin_blogs}" {if $contentType eq 'blog'}class="active"{/if}>{t}Listing Posts{/t}</a>
+                    <a href="{url name=admin_blogs}" {if $contentType eq 'blog'}class="active"{/if}>{t}Listing{/t} Posts</a>
                 </div>
             </div>
         </div>
