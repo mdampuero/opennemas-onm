@@ -151,6 +151,18 @@ class OpinionsController extends Controller
             }
 
             $itemsPerPage = s::get('items_per_page');
+             // Fetch all authors
+            $allAuthors = \User::getAllUsersAuthors();
+
+            $authorsBlog = array();
+            foreach ($allAuthors as $authorData) {
+                if ($authorData->is_blog == 1) {
+                    $authorsBlog[$authorData->id] = $authorData;
+                }
+            }
+            if (!empty($authorsBlog)) {
+                $where .= ' AND opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
+            }
 
             list($countOpinions, $opinions)= $this->cm->getCountAndSlice(
                 'Opinion',

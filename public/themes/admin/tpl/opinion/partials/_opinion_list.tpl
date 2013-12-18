@@ -1,5 +1,5 @@
 <div class="table-info clearfix">
-    <div class="pull-left"><strong>{t 1=$total}%1 opinions{/t}</strong></div>
+    <div class="pull-left"><strong>{t 1=$total}%1 items{/t}</strong></div>
     <div class="pull-right form-inline">
         {t}Status:{/t}
         <select name="status">
@@ -15,7 +15,7 @@
                 <option value="-1" {if isset($author) && $author eq "-1"} selected {/if}> {t}Director{/t} </option>
                 <option value="-2" {if isset($author) && $author eq "-2"} selected {/if}> {t}Editorial{/t} </option>
                 {section name=as loop=$autores}
-                    <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name}</option>
+                    <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name} {if $autores[as]->meta['is_blog'] eq 1} (Blogger) {/if}</option>
                 {/section}
             </select>
             <button type="submit" class="btn"><i class="icon-search"></i></button>
@@ -124,7 +124,7 @@
 		<tr >
 			<td colspan="11" class="center">
                 <div class="pagination">
-    				{$pagination->links|default:""}&nbsp;
+    				{$pagination|default:""}
                 </div>
 			</td>
 		</tr>

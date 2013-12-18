@@ -1917,6 +1917,18 @@ $adminRoutes->add(
         '/opinions',
         array(
             '_controller' => 'Backend:Controllers:OpinionsController:list',
+            'contentType' => 'opinion'
+        )
+    )
+);
+
+$adminRoutes->add(
+    'admin_blogs',
+    new Route(
+        '/opinions/blog',
+        array(
+            '_controller' => 'Backend:Controllers:OpinionsController:list',
+            'contentType' => 'blog',
         )
     )
 );
