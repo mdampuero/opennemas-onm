@@ -74,6 +74,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
 
         $cacheHandler->delete(INSTANCE_UNIQUE_NAME . "_" . $contentType . "_" . $id);
 
+        $this->cleanOpcode();
+
         return false;
     }
 
@@ -111,6 +113,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
                 );
                 $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|RSS');
             }
+
+            $this->cleanOpcode();
         }
 
         return false;
@@ -151,6 +155,7 @@ class ContentSubscriberListener implements EventSubscriberInterface
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS');
             $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
 
+            $this->cleanOpcode();
         }
     }
 
@@ -189,6 +194,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
             global $sc;
 
             $sc->get('logger')->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
+
+            $this->cleanOpcode();
         }
     }
 
@@ -224,6 +231,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
         // Delete author frontpages caches
         $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
 
+        $this->cleanOpcode();
+
     }
     /**
      * Perform the actions after update an author
@@ -249,6 +258,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
         $tplManager->delete('blog', 'blog_frontpage.tpl');
         $tplManager->delete('blog|'.$opinionId);
         $tplManager->delete(sprintf('%06d', $authorId), 'opinion_author_index.tpl');
+
+        $this->cleanOpcode();
     }
     /**
      * Perform the actions after update an author
@@ -267,5 +278,17 @@ class ContentSubscriberListener implements EventSubscriberInterface
         $tplManager->delete('opinion', 'opinion_frontpage.tpl');
         $tplManager->delete('blog', 'blog_frontpage.tpl');
 
+        $this->cleanOpcode();
+    }
+
+    /**
+     * Resets the PHP 5.5 Opcode if supported
+     *
+     **/
+    public function cleanOpcode()
+    {
+        if (extension_loaded('Zend Opcache')) {
+            opcache_reset();
+        }
     }
 }
