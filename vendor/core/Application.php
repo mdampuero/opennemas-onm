@@ -38,7 +38,7 @@ class Application
     public static function load()
     {
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==null) {
-            $GLOBALS['application'] = new Application();
+            $GLOBALS['application'] = new \Application;
 
             // Setting up DataBase connection
             self::initDatabase();
