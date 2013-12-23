@@ -87,7 +87,7 @@
                         </div>
                     </label>
                     <div class="controls">
-                        <textarea name="body" id="body" <tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
+                        <textarea name="body" id="body" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
                     </div>
                 </div>
             </div>
