@@ -54,25 +54,8 @@ class LocalRepository
     {
         $filesSynced = \Onm\Import\Synchronizer\Synchronizer::getLocalFileList($this->syncPath);
 
-        $counTotalElements = count($filesSynced);
-        if ($params['title'] == '*'
-            && array_key_exists('items_page', $params)
-            && array_key_exists('page', $params)
-        ) {
-            $files = array_slice(
-                $filesSynced,
-                $params['items_page'] * ($params['page']-1),
-                $params['items_page']
-            );
-        } else {
-            $files = $filesSynced;
-        }
-        unset($filesSynced);
-
         $elements = array();
-        $elementsCount = 0;
-
-        foreach ($files as $file) {
+        foreach ($filesSynced as $file) {
             $fileParts = explode('/', $file);
             $sourceId = (int) $fileParts[0];
 
@@ -112,15 +95,22 @@ class LocalRepository
             $element->source_id = $sourceId;
 
             $elements []= $element;
-            $elementsCount++;
         }
 
-        if ($params['title'] != '*' || $params['source'] != '*') {
-            $counTotalElements = $elementsCount;
+        $counTotalElements = count($elements);
+        if (array_key_exists('items_page', $params)
+            && array_key_exists('page', $params)
+        ) {
+            $files = array_slice(
+                $elements,
+                $params['items_page'] * ($params['page']-1),
+                $params['items_page']
+            );
+        } else {
+            $files = $elements;
         }
 
-
-        return array($counTotalElements, $elements);
+        return array($counTotalElements, $files);
     }
 
     /**
