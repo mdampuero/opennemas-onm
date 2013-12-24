@@ -108,6 +108,10 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
+    instance_manager:
+        class: Onm\Instance\InstanceManager
+        arguments: [ @db_conn_manager, @cache ]
+
     category_repository:
         class: Repository\CategoryManager
         arguments: [ @cache, %cache_prefix% ]

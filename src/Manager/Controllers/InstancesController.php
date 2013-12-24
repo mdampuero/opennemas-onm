@@ -29,17 +29,6 @@ use Onm\Settings as s;
  **/
 class InstancesController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        global $onmInstancesConnection;
-        $this->instanceManager = new im($onmInstancesConnection);
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-    }
 
     /**
      * Shows a list of instances
@@ -56,11 +45,12 @@ class InstancesController extends Controller
             'email' => $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING),
         );
 
-        $instances = $this->instanceManager->findAll($findParams);
+        $instanceManager = getService('instance_manager');
+
+        $instances = $instanceManager->findAll($findParams);
 
         foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) =
-                $this->instanceManager->getDBInformation($instance->settings);
+            list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
 
             // Get real time for last login
             if (isset($instance->configs['last_login'])) {
@@ -75,6 +65,8 @@ class InstancesController extends Controller
         }
 
         $availableTimeZones = \DateTimeZone::listIdentifiers();
+
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
 
         return $this->render(
             'instances/list.tpl',
@@ -100,11 +92,12 @@ class InstancesController extends Controller
             'name' => $request->query->filter('filter_name', '*', FILTER_SANITIZE_STRING),
         );
 
-        $instances = $this->instanceManager->findAll($findParams);
+        $instanceManager = getService('instance_manager');
+
+        $instances = $instanceManager->findAll($findParams);
 
         foreach ($instances as &$instance) {
-            list($instance->totals, $instance->configs) =
-                $this->instanceManager->getDBInformation($instance->settings);
+            list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
 
             // Get real time for last login
             if (isset($instance->configs['last_login'])) {
@@ -117,6 +110,8 @@ class InstancesController extends Controller
 
             $instance->domains = preg_split("@, @", $instance->domains);
         }
+
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
 
         $response = $this->render(
             'instances/csv.tpl',
@@ -157,7 +152,9 @@ class InstancesController extends Controller
 
         $templates = im::getAvailableTemplates();
 
-        $instance = $this->instanceManager->read($id);
+        $instanceManager = getService('instance_manager');
+
+        $instance = $instanceManager->read($id);
 
         if ($instance === false) {
             m::add(sprintf(_('Unable to find an instance with the id "%d"'), $id), m::ERROR);
@@ -165,8 +162,9 @@ class InstancesController extends Controller
             return $this->redirect($this->generateUrl('manager_instances'));
         }
 
-        list($instance->totals, $instance->configs) =
-            $this->instanceManager->getDBInformation($instance->settings);
+        list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
+
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
 
         return $this->render(
             'instances/edit.tpl',
@@ -251,11 +249,11 @@ class InstancesController extends Controller
                 }
             }
 
-            $errors = array();
-            // Check for reapeted internalnameshort and if so, add a number at the end
-            $data = $this->instanceManager->checkInternalShortName($data);
+            $instanceManager = getService('instance_manager');
 
-            $errors = $this->instanceManager->create($data);
+            // Check for reapeted internalnameshort and if so, add a number at the end
+            $data   = $instanceManager->checkInternalShortName($data);
+            $errors = $instanceManager->create($data);
 
             if (is_array($errors) && count($errors) > 0) {
                 m::add($errors, m::ERROR);
@@ -266,6 +264,8 @@ class InstancesController extends Controller
             return $this->redirect($this->generateUrl('manager_instances'));
         } else {
             $templates = im::getAvailableTemplates();
+
+            $this->view = new \TemplateManager(TEMPLATE_MANAGER);
 
             return $this->render(
                 'instances/edit.tpl',
@@ -386,15 +386,18 @@ class InstancesController extends Controller
         s::invalidate('site_name', $data['internal_name']);
         s::invalidate('last_invoice', $data['internal_name']);
 
+
+        $instanceManager = getService('instance_manager');
+
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn // is used in settings set
-        $GLOBALS['application']->conn = $this->instanceManager->getConnection($settings);
+        $GLOBALS['application']->conn = $instanceManager->getConnection($settings);
 
         foreach ($request->request->all() as $key => $value) {
             if (in_array($key, $configurationsKeys)) {
                 s::set($key, $value);
             }
         }
-        $errors = $this->instanceManager->update($data);
+        $errors = $instanceManager->update($data);
 
         if (is_array($errors) && count($errors) > 0) {
             m::add($errors, m::ERROR);
@@ -426,7 +429,9 @@ class InstancesController extends Controller
         $id = $request->query->getDigits('id');
 
         if (!empty($id)) {
-            $delete = $this->instanceManager->delete($id);
+            $instanceManager = getService('instance_manager');
+
+            $delete = $instanceManager->delete($id);
             if (!$delete) {
                 m::add(_("Unable to delete the instance."), m::ERROR);
                 if (is_array($delete) && count($delete) > 0) {
@@ -461,8 +466,10 @@ class InstancesController extends Controller
         $selected = $request->query->get('selected', null);
 
         if (is_array($selected) && count($selected) > 0) {
+            $instanceManager = getService('instance_manager');
+
             foreach ($selected as $id) {
-                $delete = $this->instanceManager->delete($id);
+                $delete = $instanceManager->delete($id);
                 if (!$delete) {
                     m::add(sprintf(_("Unable to delete instance %d."), $id), m::ERROR);
                     if (is_array($delete) && count($delete) > 0) {
@@ -492,7 +499,9 @@ class InstancesController extends Controller
     public function toggleAvailableAction(Request $request)
     {
         $id = $request->query->getDigits('id');
-        $instance = $this->instanceManager->read($id);
+
+        $instanceManager = getService('instance_manager');
+        $instance = $instanceManager->read($id);
 
         if ($instance === false) {
             m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
@@ -500,7 +509,7 @@ class InstancesController extends Controller
             return $this->redirect($this->generateUrl('manager_instances'));
         }
 
-        $this->instanceManager->changeActivated(
+        $instanceManager->changeActivated(
             $instance->id,
             ($instance->activated+1) % 2
         );
@@ -521,12 +530,14 @@ class InstancesController extends Controller
         $status   = $request->query->getDigits('status', 0);
 
         if (is_array($selected) && count($selected) > 0) {
+            $instanceManager = getService('instance_manager');
+
             foreach ($selected as $id) {
-                $instance = $this->instanceManager->read($id);
+                $instance = $instanceManager->read($id);
                 if ($instance === false) {
                     m::add(sprintf(_('Unable to find the instance with the id %d'), $id), m::ERROR);
                 } else {
-                    $this->instanceManager->changeActivated($id, $status);
+                    $instanceManager->changeActivated($id, $status);
                     m::add(sprintf(_("Instance %d updated successfully."), $id), m::SUCCESS);
                 }
             }
