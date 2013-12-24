@@ -25,14 +25,14 @@ class DatabaseConnection
      *
      * @var AdodbConnection
      **/
-    public $masterConnection = null;
+    private $masterConnection = null;
 
     /**
      * The read-only database connection
      *
      * @var AdodbConnection
      **/
-    public $slaveConnections = array();
+    private $slaveConnections = array();
 
     /**
      * Whether to use replication
@@ -161,7 +161,8 @@ class DatabaseConnection
         $connection->SetFetchMode(ADODB_FETCH_ASSOC);
         $connection->bulkBind = true;
 
-        $connection->Execute("SET names '{$params['charset']}'");
+        // Commented for now as it crashes the
+        // $connection->Execute("SET names '{$params['charset']}'");
 
         return $connection;
     }
