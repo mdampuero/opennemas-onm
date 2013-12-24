@@ -65,21 +65,6 @@ class ApplicationBootupListener implements EventSubscriberInterface
 
         define('TEMPLATE_MANAGER', "manager");
 
-        /**
-         * Mail settings
-         **/
-        define('MAIL_HOST', "localhost");
-        // 217.76.146.62, ssl://smtp.gmail.com:465, ssl://smtp.gmail.com:587
-        define('MAIL_USER', "");
-        define('MAIL_PASS', "");
-        define('MAIL_FROM', 'noreply@opennemas.com');
-
-        /**
-        * Session de usuario
-        **/
-        $GLOBALS['conn'] = null;
-        define('ADVERTISEMENT_ENABLE', true);
-
         define('ITEMS_PAGE', "20"); // TODO: delete from application
 
         define('TEMPLATE_ADMIN', "admin");
@@ -112,10 +97,8 @@ class ApplicationBootupListener implements EventSubscriberInterface
         initEnvironment($env);
 
         // Register the Debugger into the application, transforms fatal errors into
-        // exceptions
-        // if ($env !== 'production') {
+        // exceptions only in development environments
         Debug::enable(null, ($env !== 'production'));
-        // }
     }
 
     public static function getSubscribedEvents()
