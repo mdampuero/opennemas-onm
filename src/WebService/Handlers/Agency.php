@@ -96,6 +96,9 @@ class Agency
             // Add DateTime with format Y-m-d H:i:s
             $article->img1->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->created);
             $article->img1->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img1->changed);
+            if (!mb_check_encoding($article->img1->description)) {
+                $article->img1->description = utf8_encode($article->img1->description);
+            }
         }
 
         if (!empty($imageInnerId)) {
@@ -105,6 +108,9 @@ class Agency
             // Add DateTime with format Y-m-d H:i:s
             $article->img2->created_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->created);
             $article->img2->updated_datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $article->img2->changed);
+            if (!mb_check_encoding($article->img2->description)) {
+                $article->img2->description = utf8_encode($article->img2->description);
+            }
         }
 
         // Get author obj
