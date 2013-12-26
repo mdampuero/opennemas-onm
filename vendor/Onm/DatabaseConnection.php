@@ -118,6 +118,20 @@ class DatabaseConnection
             $databaseName
         );
 
+        $this->resetConnections();
+
+        return $this;
+    }
+
+    /**
+     * Deletes stablished connections
+     *
+     **/
+    public function resetConnections()
+    {
+        $this->masterConnection = null;
+        $this->slaveConnections = array();
+
         return $this;
     }
 
