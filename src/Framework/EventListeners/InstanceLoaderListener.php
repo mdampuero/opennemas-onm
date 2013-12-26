@@ -45,6 +45,9 @@ class InstanceLoaderListener implements EventSubscriberInterface
         $sc->setParameter('instance', $instance);
         $sc->setParameter('cache_prefix', $instance->internal_name);
 
+        if ($instance->internal_name == 'onm_manager') {
+            return false;
+        }
         // Initialize the instance database connection
         $databaseName               = $instance->getDatabaseName();
         $databaseInstanceConnection = getService('db_conn');
