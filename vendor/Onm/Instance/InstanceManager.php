@@ -20,7 +20,6 @@ use Onm\Instance\Instance;
  */
 class InstanceManager
 {
-
     /**
      * The connection to the database
      **/
@@ -35,9 +34,9 @@ class InstanceManager
      * Initializes the Request object
      *
      */
-    public function __construct($connection, $cache)
+    public function __construct($databaseConnection, $cache)
     {
-        $this->connection = $connection;
+        $this->connection = $databaseConnection;
         $this->cache      = $cache;
 
         return $this;
@@ -71,6 +70,33 @@ class InstanceManager
             return $instance;
         }
 
+        $instance = $this->fetchInstance($serverName);
+
+        //If found matching instance initialize its contants and return it
+        if (is_object($instance)) {
+            define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
+
+            $instance->boot();
+
+            // If this instance is not activated throw an exception
+            if ($instance->activated != '1') {
+                $message =_('Instance not activated');
+                throw new \Onm\Instance\NotActivatedException($message);
+            }
+        } else {
+            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Builds the instance object given a serverName
+     *
+     * @return \Onm\Instance|null the instance object
+     **/
+    public function fetchInstance($serverName)
+    {
         $instancesMatched = $this->cache->fetch('instances_'.$serverName);
 
         if (!is_array($instancesMatched)) {
@@ -103,24 +129,9 @@ class InstanceManager
             }
         }
 
-        //If found matching instance initialize its contants and return it
-        if ($matchedInstance) {
-            $instance = new Instance();
-            foreach ($matchedInstance as $key => $value) {
-                $instance->{$key} = $value;
-            }
-
-            define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
-
-            $instance->boot();
-
-            // If this instance is not activated throw an exception
-            if ($instance->activated != '1') {
-                $message =_('Instance not activated');
-                throw new \Onm\Instance\NotActivatedException($message);
-            }
-        } else {
-            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+        $instance = new Instance();
+        foreach ($matchedInstance as $key => $value) {
+            $instance->{$key} = $value;
         }
 
         return $instance;
@@ -485,8 +496,8 @@ class InstanceManager
 
             if (!$this->update($data)) {
                 throw new InstanceNotRegisteredException(
-                    "Could not create the instance reference into the instance "
-                    ."table: {$this->connection->ErrorMsg()}"
+                    "Could not create the instance reference into the instance table:"
+                    .$this->connection->ErrorMsg()
                 );
             }
 
@@ -553,7 +564,7 @@ class InstanceManager
         $sql = "DELETE FROM instances WHERE id=?";
         $rs = $this->connection->Execute($sql, array($id));
 
-        if (!$rs || $this->connection->Affected_Rows()==0) {
+        if (!$rs || $this->connection->Affected_Rows() == 0) {
             throw new DeleteRegisteredInstanceException(
                 "Could not delete instance reference."
             );
@@ -585,7 +596,7 @@ class InstanceManager
 
         exec($dump, $output, $return_var);
 
-        if ($return_var!=0) {
+        if ($return_var != 0) {
             fm::deleteDirectoryRecursively($backupPath);
             return false;
         }
