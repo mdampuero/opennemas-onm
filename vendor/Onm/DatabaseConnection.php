@@ -233,12 +233,7 @@ class DatabaseConnection
      **/
     public function getConnection($method, $params)
     {
-        if (array_key_exists('0', $params)) {
-            # code...
-        }
-        $isReadOnlyQuery =  $method !== 'StartTrans'
-                            && $method !== 'CompleteTrans'
-                            && stripos($params[0], 'SELECT') !== false;
+        $isReadOnlyQuery =  $this->isReadOnlyAction($method, $params);
 
         if ($this->useReplication
             && $isReadOnlyQuery
@@ -249,6 +244,23 @@ class DatabaseConnection
         }
 
         return $connection;
+    }
+
+    /**
+     * Returns true if the action will perform read only actoin
+     *
+     * @return void
+     * @author
+     **/
+    public function isReadOnlyAction($method, $params)
+    {
+        return  (
+                    $method !== 'StartTrans'
+                    || $method !== 'CompleteTrans'
+                    || $method !== 'FailTrans'
+                    || $method !== 'HasFailedTrans'
+                )
+                && stripos($params[0], 'SELECT') !== false;
     }
 
     /**
