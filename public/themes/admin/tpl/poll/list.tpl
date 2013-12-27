@@ -195,8 +195,8 @@
             e.preventDefault();
         });
     </script>
-    {include file="polls/modals/_modalDelete.tpl"}
-    {include file="polls/modals/_modalBatchDelete.tpl"}
-    {include file="polls/modals/_modalAccept.tpl"}
+    {include file="poll/modals/_modalDelete.tpl"}
+    {include file="poll/modals/_modalBatchDelete.tpl"}
+    {include file="poll/modals/_modalAccept.tpl"}
 
 {/block}
