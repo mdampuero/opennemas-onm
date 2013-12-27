@@ -25,14 +25,14 @@ class DatabaseConnection
      *
      * @var AdodbConnection
      **/
-    private $masterConnection = null;
+    public $masterConnection = null;
 
     /**
      * The read-only database connection
      *
      * @var AdodbConnection
      **/
-    private $slaveConnections = array();
+    public $slaveConnections = array();
 
     /**
      * Whether to use replication
@@ -48,7 +48,7 @@ class DatabaseConnection
      *
      * @var array
      **/
-    private $connectionParams = null;
+    public $connectionParams = null;
 
     /**
      * Stores the query error
@@ -66,22 +66,63 @@ class DatabaseConnection
      *
      * @return DatabaseConnection the object
      **/
-    public function __construct($params, $databaseName = null)
+    public function __construct($params)
     {
-        $this->connectionParams = $params;
+        // Check if the connection params are valid
+        if (!$this->isConfigurationValid($params)) {
+            throw new \Exception('Database connection parameters not valid');
+        };
 
-        if (!is_null($databaseName)) {
-            $this->replaceDatabaseName($databaseName);
-        }
+        // Store connection params are valid
+        $this->fullConnectionParams = $params;
+        $this->defaultConnection    = $params['dbal']['default_connection'];
+        $this->connectionParams     = $params['dbal']['connections'][$this->defaultConnection];
+        $this->useReplication       = $this->configHasSlaves();
 
-
-        $this->defaultConnection = $params['dbal']['default_connection'];
-        $this->connectionParams  = $params['dbal']['connections'][$this->defaultConnection];
-        $this->useReplication    = array_key_exists('slaves', $this->connectionParams);
-
+        // Set default params
         if (!array_key_exists('charset', $this->connectionParams)) {
-            $this->connectionParams = 'UTF8';
+            $this->connectionParams['charset'] = 'UTF8';
         }
+    }
+
+    /**
+     * Checks if the given database configuration params are valid
+     *  - Params is an array
+     *  - Params has a dbal key
+     *  - params[dbal] has a connections key hat is an array
+     *  - params has a default_connection key that is a key inside the connections array
+     *
+     * @return boolean true if the given params are valid
+     **/
+    public function isConfigurationValid($params)
+    {
+        return (
+            is_array($params)
+            && array_key_exists('dbal', $params)
+            && (array_key_exists('connections', $params['dbal']) && is_array($params['dbal']['connections']))
+            && array_key_exists('default_connection', $params['dbal'])
+            && array_key_exists($params['dbal']['default_connection'], $params['dbal']['connections'])
+        );
+    }
+
+    /**
+     * Returns true if the configuration has slave connection params
+     *
+     * @return boolean true if the configuration has slave connection params
+     **/
+    public function configHasSlaves()
+    {
+        return array_key_exists('slaves', $this->connectionParams);
+    }
+
+    /**
+     * Returns the current configuration parameters
+     *
+     * @return array the database configuration parameters
+     **/
+    public function getCurrentDatabaseParams()
+    {
+        return $this->connectionParams;
     }
 
     /**
@@ -192,7 +233,12 @@ class DatabaseConnection
      **/
     public function getConnection($method, $params)
     {
-        $isReadOnlyQuery = stripos($params[0], 'SELECT') !== false;
+        if (array_key_exists('0', $params)) {
+            # code...
+        }
+        $isReadOnlyQuery =  $method !== 'StartTrans'
+                            && $method !== 'CompleteTrans'
+                            && stripos($params[0], 'SELECT') !== false;
 
         if ($this->useReplication
             && $isReadOnlyQuery
