@@ -610,7 +610,7 @@ jQuery(function($) {
                 async: false,
                 type: 'POST',
                 dataType: 'json',
-                data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved },
+                data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
                 beforeSend: function(xhr) {
                     $('#warnings-validation').html(
                     "<div class='alert alert-notice'>" +
