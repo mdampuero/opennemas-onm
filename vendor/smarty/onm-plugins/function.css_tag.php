@@ -7,7 +7,6 @@
 
 function smarty_function_css_tag($params, &$smarty)
 {
-
     $output = "";
 
     if (empty($params['href'])) {
@@ -28,10 +27,7 @@ function smarty_function_css_tag($params, &$smarty)
         $server = SS."themes".SS.$smarty->theme.SS.$basepath;
     }
 
-    $mtime = '1234';
-    if (file_exists($file)) {
-        $mtime = filemtime($file);
-    }
+    $mtime = DEPLOYED_AT;
 
     //Comprobar si tiene type definido
     if (isset($params['type'])) {

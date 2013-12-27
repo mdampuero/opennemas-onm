@@ -104,6 +104,10 @@ class ApplicationBootupListener implements EventSubscriberInterface
         }
         define('COMMON_CACHE_PATH', realpath($commonCachepath));
 
+        if (!defined('DEPLOYED_AT')) {
+            define('DEPLOYED_AT', '0000000000');
+        }
+
         mb_internal_encoding("UTF-8");
 
         global $sc;
