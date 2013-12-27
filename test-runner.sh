@@ -5,7 +5,11 @@ if ! which inotifywait > /dev/null; then
     exit 1;
 fi
 
-while getopts “c:r:p:v” OPTION
+usage() {
+    echo "test-runner.sh [-c] [-h|?]";
+}
+
+while getopts "ch?" OPTION
 do
      case $OPTION in
          h)
@@ -14,10 +18,6 @@ do
              ;;
          c)
              CI="-ci"
-             ;;
-         ?)
-             usage
-             exit
              ;;
      esac
 done
