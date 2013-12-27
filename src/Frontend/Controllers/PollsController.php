@@ -253,6 +253,9 @@ class PollsController extends Controller
         $page = 0;
         $pollId = \Content::resolveID($dirtyID);
 
+        if (empty($pollId) || is_null($pollId)) {
+            $pollId = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
+        }
 
         // Redirect to album frontpage if id_album wasn't provided
         if (is_null($pollId)) {

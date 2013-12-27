@@ -113,7 +113,7 @@ class PollsController extends Controller
         );
 
         return $this->render(
-            'polls/list.tpl',
+            'poll/list.tpl',
             array(
                 'polls'      => $polls,
                 'pagination' => $pagination,
@@ -183,7 +183,7 @@ class PollsController extends Controller
         );
 
         return $this->render(
-            'polls/list.tpl',
+            'poll/list.tpl',
             array(
                 'polls'      => $polls,
                 'pagination' => $pagination,
@@ -233,7 +233,7 @@ class PollsController extends Controller
                 )
             );
         } else {
-            return $this->render('polls/new.tpl');
+            return $this->render('poll/new.tpl');
         }
     }
 
@@ -259,7 +259,7 @@ class PollsController extends Controller
 
 
         return $this->render(
-            'polls/new.tpl',
+            'poll/new.tpl',
             array(
                 'poll'  => $poll,
                 'items' => $poll->items,
@@ -632,7 +632,7 @@ class PollsController extends Controller
         );
 
         return $this->render(
-            'polls/content-provider.tpl',
+            'poll/content-provider.tpl',
             array(
                 'polls' => $polls,
                 'pager'  => $pagination,
@@ -733,7 +733,7 @@ class PollsController extends Controller
             $configurations = s::get(array('poll_settings',));
 
             return $this->render(
-                'polls/config.tpl',
+                'poll/config.tpl',
                 array('configs' => $configurations,)
             );
         }
