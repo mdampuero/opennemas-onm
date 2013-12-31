@@ -1,5 +1,8 @@
 parameters:
-    environment:       development # production
+    secret: test
+    locale: en
+    # environment:       production
+    environment:       development
     database:
         dbal:
             default_connection: default
@@ -42,10 +45,9 @@ parameters:
             server: localhost
             prefix: onm
 
-    dispatcher.exceptionhandler: "Framework:Controllers:ErrorController:default"
     session_params:
-        save_path:     tmp/instances
-        name: _onm_sess
+        name:          _onm_sess
+        gc_maxlifetime: 86400
 
     logger_file_path: tmp/log/application.log
     dev_token: 1234
@@ -63,3 +65,10 @@ parameters:
         template:    retrincos
 
     password_min_level: 1 # Weak(0) | Good(1) | Strong(2)
+
+    varnish:
+        header_name: X-Varnish-Ban
+        servers:
+            server1:
+                host: localhost
+                port: 80
