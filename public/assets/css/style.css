@@ -3091,34 +3091,37 @@ div#modal-element-customize-content div.select-disposition{
     float: right;
     width: 40%;
     z-index:99;
+    position:relative;
+    text-align: center;
 }
 
 .opcache-stats #graph form {
-    position: absolute;
-    right: 220px;
-    top: 100px;
+    text-align:left;
 }
 
 .opcache-stats #graphcontainer {
-    position:relative;
+    position:absolute;
+    right: 35%;
+    top: 25%;
+    z-index:99;
+    text-align:center;
+    min-width:150px;
 }
 .opcache-stats #graph > svg {
-    position: absolute;
-    right: 0px;
-    top: 0;
+
 }
 
-#stats-opcode {
+#graphcontainer #stats-opcode {
     color:White;
-    position: absolute;
-    right: 200px;
-    top: 190px;
 }
 
 .opcache-stats #stats-opcode th, .opcode-stats #stats-opcode td {
     padding: 6px 10px;
     font-size: 0.8em;
+    white-space: nowrap;
+    padding: 0 13px;
 }
 #stats-opcode td {
   color:#333 !important;
+  padding: 0 13px;
 }
