@@ -63,8 +63,11 @@ class FrameworkStatusController extends Controller
      **/
     public function opcacheStatusAction(Request $request)
     {
+        $config = $status = $mem = $stats =  $freeKeys =  $notSupportedMessage = null;
+        $statusKeyValues = $directivesKeyValues = $newDirs = null;
+
         if (!extension_loaded('Zend OPcache')) {
-            $errorMessage = 'You do not have the Zend OPcache extension loaded.';
+            $notSupportedMessage = 'You do not have the Zend OPcache extension loaded.';
         }
 
         $action = $request->query->filter('action', null, FILTER_SANITIZE_STRING);
@@ -76,10 +79,14 @@ class FrameworkStatusController extends Controller
         // Fetch configuration and status information from OpCache
         $config = opcache_get_configuration();
         $status = opcache_get_status();
+        if (!$config['directives']['opcache.enable']) {
+            $notSupportedMessage = 'Zend OPcache extension loaded but not activated [opcache.enable != true].';
+        }
 
         $mem      = $status['memory_usage'];
         $stats    = $status['opcache_statistics'];
         $freeKeys = $stats['max_cached_keys'] - $stats['num_cached_keys'];
+        // var_dump($status);die();
 
         $statusKeyValues = array();
         foreach ($status as $key => $value) {
@@ -189,14 +196,15 @@ class FrameworkStatusController extends Controller
         return $this->render(
             'framework/opcache_status.tpl',
             array(
-                'config'               => $config,
-                'status'               => $status,
-                'mem'                  => $mem,
-                'stats'                => $stats,
-                'free_keys'            => $freeKeys,
-                'status_key_values'    => $statusKeyValues,
-                'directive_key_values' => $directivesKeyValues,
-                'files_key_values'     => $newDirs,
+                'not_supported_message' => $notSupportedMessage,
+                'config'                => $config,
+                'status'                => $status,
+                'mem'                   => $mem,
+                'stats'                 => $stats,
+                'free_keys'             => $freeKeys,
+                'status_key_values'     => $statusKeyValues,
+                'directive_key_values'  => $directivesKeyValues,
+                'files_key_values'      => $newDirs,
             )
         );
     }
