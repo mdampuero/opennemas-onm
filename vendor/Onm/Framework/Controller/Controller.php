@@ -212,7 +212,7 @@ class Controller extends ContainerAware
             }
         }
 
-        return $this->container->get('event_dispatcher')->dispatch($eventName, $event);
+        return $this->container->get('dispatcher')->dispatch($eventName, $event);
     }
 
     /**
@@ -226,7 +226,7 @@ class Controller extends ContainerAware
      **/
     public function generateUrl($urlName, $params = array(), $absolute = false)
     {
-        $generator = $this->container->get('url_generator');
+        $generator = $this->container->get('router');
 
         return $generator->generate($urlName, $params, $absolute);
     }
