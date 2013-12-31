@@ -45,7 +45,7 @@
                 <td></td>
                 <td class="right">
                     <div class="btn-group">
-                        <a href="{url name=manager_framework_command_execute command="app:deploy"}" class="btn btn-danger deploy btn-large" data-loading-text="Loading...">
+                        <a href="{url name=manager_framework_command_execute command="app:deploy"}" class="btn btn-danger deploy btn-huge" data-loading-text="Loading...">
                             <i class="icon-cloud-download icon-2x"></i>
                             {t}Deploy{/t}
                         </a>
@@ -92,7 +92,7 @@
                     <div class="btn-group">
                         <a class="btn btn-danger" href="{url name=manager_framework_command_execute command=$command->getName()}">
                             <i class="icon icon-cog"></i>
-                            Execute
+                            {t}Execute{/t}
                         </a>
                     </div>
                 </td>

@@ -1,0 +1,114 @@
+manager_framework_commands:
+    path: /commands
+    defaults: { _controller:  Manager:Controllers:CommandsController:list }
+
+manager_framework_command_execute:
+    path: /commands/execute
+    defaults: { _controller:  Manager:Controllers:CommandsController:executeCommand }
+
+manager_instances:
+    path: /instances
+    defaults: { _controller:  Manager:Controllers:InstancesController:list }
+
+manager_instances_list_export:
+    path: /instance/list-export.csv
+    defaults: { _controller:  Manager:Controllers:InstancesController:listExport }
+
+manager_instance_show:
+    path: /instance/{id}/show
+    defaults: { _controller:  Manager:Controllers:InstancesController:show }
+
+manager_instance_create:
+    path: /instance/create
+    defaults: { _controller:  Manager:Controllers:InstancesController:create }
+
+manager_instance_update:
+    path: /instance/{id}/update
+    defaults: { _controller:  Manager:Controllers:InstancesController:update }
+
+manager_instance_delete:
+    path: /instance/{id}/delete
+    defaults: { _controller:  Manager:Controllers:InstancesController:delete }
+
+manager_instance_batch_delete:
+    path: /instance/batch-delete
+    defaults: { _controller:  Manager:Controllers:InstancesController:batchDelete }
+
+manager_instance_batch_available:
+    path: /instance/batch-available
+    defaults: { _controller:  Manager:Controllers:InstancesController:batchAvailable }
+
+manager_instance_toggleavailable:
+    path: /instance/{id}/toggle-available
+    defaults: { _controller:  Manager:Controllers:InstancesController:toggleAvailable }
+
+manager_framework_check_dependencies:
+    path: /framework/check-dependencies
+    defaults: { _controller:  Manager:Controllers:FrameworkStatusController:checkDependencies }
+
+manager_framework_opcache_status:
+    path: /framework/opcache
+    defaults: { _controller:  Manager:Controllers:FrameworkStatusController:opcacheStatus }
+
+manager_login_form:
+    path: /login
+    defaults: { _controller:  Manager:Controllers:AuthenticationController:default }
+
+manager_login_processform:
+    path: /login/process
+    defaults: { _controller:  Manager:Controllers:AuthenticationController:processform }
+    methods:  [POST]
+
+manager_logout:
+    path: /logout
+    defaults: { _controller:  Manager:Controllers:AuthenticationController:logout }
+
+# User management routes
+manager_acl_user:
+    path: /acl/users
+    defaults: { _controller:  Manager:Controllers:AclUserController:list }
+
+manager_acl_user_create:
+    path: /acl/user/create
+    defaults: { _controller:  Manager:Controllers:AclUserController:create }
+
+manager_acl_user_show:
+    path: /acl/user/{id}/show
+    defaults: { _controller:  Manager:Controllers:AclUserController:show }
+
+manager_acl_user_update:
+    path: /acl/user/{id}/update
+    defaults: { _controller:  Manager:Controllers:AclUserController:update }
+
+manager_acl_user_delete:
+    path: /acl/user/{id}/delete
+    defaults: { _controller:  Manager:Controllers:AclUserController:delete }
+
+manager_acl_user_batchdelete:
+    path: /acl/user/batchdelete
+    defaults: { _controller:  Manager:Controllers:AclUserController:batchDelete }
+
+manager_acl_user_toogle_enabled:
+    path: /acl/user/{id}/toogle-enabled
+    defaults: { _controller:  Manager:Controllers:AclUserController:toogleEnabled }
+
+# User groups managerment routes
+manager_acl_usergroups:
+    path: /acl/usergroups
+    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:list }
+
+manager_acl_usergroups_show:
+    path: /acl/usergroup/{id}/show
+    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:show }
+
+manager_acl_usergroups_create:
+    path: /acl/usergroup/create
+    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:create }
+
+manager_acl_usergroups_update:
+    path: /acl/usergroup/{id}/update
+    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:update }
+
+manager_acl_usergroups_delete:
+    path: /acl/usergroup/{id}/delete
+    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:delete }

@@ -3075,8 +3075,10 @@ div#modal-element-customize-content div.select-disposition{
 .opcache-stats table {
     text-align:left;
     border-collapse:separate;
-    border-spacing:3 10px;
     width: 100%
+}
+.opcache-stats #files table {
+    border-spacing:3px 10px;
 }
 
 .opcache-stats #status table {
