@@ -27,11 +27,11 @@ class DispatcherPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('event_dispatcher')) {
+        if (!$container->hasDefinition('dispatcher')) {
             return;
         }
 
-        $definition = $container->getDefinition('event_dispatcher');
+        $definition = $container->getDefinition('dispatcher');
 
         foreach ($container->findTaggedServiceIds('kernel.event_subscriber') as $id => $attributes) {
             // We must assume that the class value has been correctly filled, even if the service is created by a factory

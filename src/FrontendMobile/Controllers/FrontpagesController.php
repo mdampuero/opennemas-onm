@@ -29,7 +29,7 @@ class FrontpagesController extends Controller
     public function init()
     {
         $this->view = new \Template(TEMPLATE_USER);
-        define('BASE_PATH', 'mobile');
+        define('BASE_PATH', '/mobile');
     }
 
     /**
@@ -136,10 +136,9 @@ class FrontpagesController extends Controller
      **/
     public function latestNewsAction(Request $request)
     {
-        $cm = new \ContentManager();
+        $cm  = new \ContentManager();
         $ccm = \ContentCategoryManager::get_instance();
 
-        //Is category initialized redirect the user to /
         $categoryName    = 'ultimas';
 
         // TODO: Get rid of this when posible
@@ -150,19 +149,7 @@ class FrontpagesController extends Controller
             'available=1 AND content_status=1 AND fk_content_type=1',
             'ORDER BY created DESC, changed DESC LIMIT 20'
         );
-        if (empty($contents)) {
-            $contentsInHomepage = $cm->getContentsForHomepageOfCategory(0);
 
-            //Deleting widgets
-            foreach ($contentsInHomepage as $content) {
-                if ($content->content_type != 'Widget'
-                    && $content->content_type != '2'
-                ) {
-                    $contents[] = $content;
-                }
-            }
-            $contents = $cm->sortArrayofObjectsByProperty($contents, 'starttime');
-        }
         //Filter by scheduled
         $contents = $cm->getInTime($contents);
 
@@ -185,13 +172,12 @@ class FrontpagesController extends Controller
 
             foreach ($contents as $content) {
                 if ((isset($content->img1)  && !empty($content->img1))
-                    || (isset($content->img2) && !empty($content->img2))) {
+                    || (isset($content->img2) && !empty($content->img2))
+                ) {
                     // Search the images and get path
                     foreach ($photos as $photo) {
-                        if ($photo->pk_content == $content->img1
-                            || $photo->pk_content == $content->img2
-                        ) {
-                            $photos[$content->id] = $photo->path_file . $photo->name;
+                        if ($photo->pk_content == $content->img1 || $photo->pk_content == $content->img2) {
+                            $photosContents[$content->id] = $photo->path_file . $photo->name;
                             break;
                         }
                     }
@@ -202,7 +188,7 @@ class FrontpagesController extends Controller
         return $this->render(
             'mobile/frontpage-mobile.tpl',
             array(
-                'photosArticles' => $photos,
+                'photosArticles' => $photosContents,
                 'ccm'            => $ccm,
                 'articles_home'  => $contents,
                 'section'        => 'ultimas'

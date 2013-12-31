@@ -1,0 +1,5 @@
+webservice_root:
+    path: '/{other}'
+    defaults: { _controller: WebService:Controllers:WebServiceController:default, other: default }
+    requirements:
+        other: '.*'

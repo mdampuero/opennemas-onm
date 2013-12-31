@@ -27,7 +27,6 @@ require SITE_VENDOR_PATH.'/autoload.php';
 if (file_exists(APPLICATION_PATH.'/.deploy.php')) {
     require APPLICATION_PATH.'/.deploy.php';
 }
-require_once __DIR__.'/../vendor/symfony/class-loader/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
 $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 
