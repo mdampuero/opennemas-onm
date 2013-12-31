@@ -6,7 +6,7 @@
 function smarty_function_paginate_links($params, &$smarty) {
 
     global $sc;
-    $generator = $sc->get('url_generator');
+    $generator = $sc->get('router');
 
     $total = $params['total'];
     $itemsPerPage = $params['items_per_page'];

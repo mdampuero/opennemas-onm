@@ -29,7 +29,7 @@ function smarty_function_disqus_sync($params, &$smarty)
             $uuid = uniqid();
 
             // Generate url
-            $imageUrl = $sc->get('url_generator')
+            $imageUrl = $sc->get('router')
                  ->generate('frontend_comments_disqus_sync', array('uuid' => $uuid), true);
 
             // Generate image to call disqus sync action
