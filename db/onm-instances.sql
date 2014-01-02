@@ -2,28 +2,22 @@
 -- version 3.4.10.1deb1
 -- http://www.phpmyadmin.net
 --
--- Servidor: localhost
--- Xerado en: 02 de Out de 2012 ás 15:37
--- Versión do servidor: 5.5.24
--- Versión do PHP: 5.3.10-1ubuntu3.4
+-- Host: localhost
+-- Generation Time: Jan 02, 2014 at 01:37 PM
+-- Server version: 5.5.30
+-- PHP Version: 5.5.7-1+sury.org~precise+1
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
 --
--- Base de datos: `onm-instances`
+-- Database: `instance`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da táboa `instances`
+-- Table structure for table `instances`
 --
 
 CREATE TABLE IF NOT EXISTS `instances` (
@@ -36,19 +30,19 @@ CREATE TABLE IF NOT EXISTS `instances` (
   `contact_mail` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `domain_name` (`domains`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- A extraer datos da táboa `instances`
+-- Dumping data for table `instances`
 --
 
-INSERT INTO `instances` (`internal_name`, `name`, `domains`, `settings`, `activated`, `contact_mail`) VALUES
-('opennemas', 'Opennemas Default instance', 'opennemas.onm', 'a:7:{s:13:"TEMPLATE_USER";s:5:"admin";s:9:"MEDIA_URL";s:0:"";s:7:"BD_TYPE";s:6:"mysqli";s:7:"BD_HOST";s:9:"localhost";s:11:"BD_DATABASE";s:9:"c-default";s:7:"BD_USER";s:4:"root";s:7:"BD_PASS";s:4:"root";}', 1, 'devs@opennemas.com');
+INSERT INTO `instances` (`id`, `internal_name`, `name`, `domains`, `settings`, `activated`, `contact_mail`) VALUES
+(1, 'opennemas', 'Opennemas Default instance', 'opennemas.onm', 'a:7:{s:13:"TEMPLATE_USER";s:5:"admin";s:9:"MEDIA_URL";s:0:"";s:7:"BD_TYPE";s:6:"mysqli";s:7:"BD_HOST";s:9:"localhost";s:11:"BD_DATABASE";s:9:"c-default";s:7:"BD_USER";s:4:"root";s:7:"BD_PASS";s:4:"root";}', 1, 'devs@opennemas.com');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `settings`
+-- Table structure for table `settings`
 --
 
 CREATE TABLE IF NOT EXISTS `settings` (
@@ -58,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
--- Volcado de datos para la tabla `settings`
+-- Dumping data for table `settings`
 --
 
 INSERT INTO `settings` (`name`, `value`) VALUES
@@ -71,40 +65,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users`
---
-
-CREATE TABLE IF NOT EXISTS `users` (
-  `pk_user` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `login` varchar(100) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL,
-  `sessionexpire` tinyint(2) unsigned NOT NULL DEFAULT '15',
-  `email` varchar(255) DEFAULT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
-  `deposit` decimal(10,0) NOT NULL DEFAULT '0',
-  `token` varchar(50) DEFAULT NULL,
-  `authorize` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 authorized - 0 unauthorized',
-  `fk_user_group` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`pk_user`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`pk_user`, `login`, `password`, `sessionexpire`, `email`, `name`, `type`, `deposit`, `token`, `authorize`, `fk_user_group`) VALUES
-(3, 'macada', '2f575705daf41049194613e47027200b', 30, 'david.martinez@openhost.es', 'David Martinez', 0, '0', NULL, 1, 4),
-(5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, 'fran@openhost.es', 'Francisco Dieguez', 0, '0', NULL, 1, 4),
-(4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, 'alex@openhost.es', 'Alexandre Rico', 0, '0', NULL, 1, 4),
-(7, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, 'sandra@openhost.es', 'Sandra Pereira', 0, '0', NULL, 1, 4),
-(8, 'toni', '4f2e7812dfe802a5cb0d5e465abb7ffc', 15, 'toni@openhost.es', 'Toni Martinez', 0, 0, NULL, 1, 4);
-
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usermeta`
+-- Table structure for table `usermeta`
 --
 
 CREATE TABLE IF NOT EXISTS `usermeta` (
@@ -116,11 +77,44 @@ CREATE TABLE IF NOT EXISTS `usermeta` (
   KEY `meta_key` (`meta_key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `sessionexpire` tinyint(2) unsigned NOT NULL DEFAULT '15',
+  `url` varchar(255) DEFAULT '',
+  `bio` text,
+  `avatar_img_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `email` varchar(255) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-backend, 1-frontend',
+  `deposit` decimal(10,0) NOT NULL DEFAULT '0',
+  `token` varchar(50) DEFAULT NULL,
+  `activated` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 activated - 0 deactivated',
+  `fk_user_group` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `sessionexpire`, `url`, `bio`, `avatar_img_id`, `email`, `name`, `type`, `deposit`, `token`, `activated`, `fk_user_group`) VALUES
+(3, 'macada', '2f575705daf41049194613e47027200b', 30, '', NULL, 0, 'david.martinez@openhost.es', 'David Martinez', 0, 0, NULL, 1, '4'),
+(5, 'fran', '6d87cd9493f11b830bbfdf628c2c4f08', 65, '', NULL, 0, 'fran@openhost.es', 'Francisco Dieguez', 0, 0, NULL, 1, '4'),
+(4, 'alex', '4c246829b53bc5712d52ee777c52ebe7', 60, '', NULL, 0, 'alex@openhost.es', 'Alexandre Rico', 0, 0, NULL, 1, '4'),
+(7, 'sandra', 'bd80e7c35b56dccd2d1796cf39cd05f6', 99, '', NULL, 0, 'sandra@openhost.es', 'Sandra Pereira', 0, 0, NULL, 1, '4');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `user_groups`
+-- Table structure for table `user_groups`
 --
 
 CREATE TABLE IF NOT EXISTS `user_groups` (
@@ -130,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `user_groups` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
--- Volcado de datos para la tabla `user_groups`
+-- Dumping data for table `user_groups`
 --
 
 INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
@@ -139,7 +133,7 @@ INSERT INTO `user_groups` (`pk_user_group`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `user_groups_privileges`
+-- Table structure for table `user_groups_privileges`
 --
 
 CREATE TABLE IF NOT EXISTS `user_groups_privileges` (
@@ -147,7 +141,3 @@ CREATE TABLE IF NOT EXISTS `user_groups_privileges` (
   `pk_fk_privilege` int(10) unsigned NOT NULL,
   PRIMARY KEY (`pk_fk_user_group`,`pk_fk_privilege`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
