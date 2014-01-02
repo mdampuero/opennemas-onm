@@ -63,7 +63,7 @@ class PaypalNotifications implements EventSubscriberInterface
                     $initialStatus = $ipnData['initial_payment_status'];
                     $initialStatus = $ipnData['initial_payment_status'];
                     $initialMethod = 'initial_payment_amount';
-                } else{
+                } else {
                     $initialTxnId = 'no initial payment';
                     $initialPayment = 0;
                     $initialStatus = 'no initial payment';
