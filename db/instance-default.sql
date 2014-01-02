@@ -305,18 +305,18 @@ CREATE TABLE IF NOT EXISTS `books` (
 --
 
 CREATE TABLE IF NOT EXISTS `comments` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `content_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `author` varchar(150) DEFAULT NULL,
-  `author_email` varchar(100) NOT NULL DEFAULT '',
-  `author_url` varchar(200) NOT NULL DEFAULT '',
-  `author_ip` varchar(100) NOT NULL DEFAULT '',
+  `id` bigint(32) unsigned NOT NULL AUTO_INCREMENT,
+  `content_id` bigint(32) unsigned NOT NULL DEFAULT '0',
+  `author` varchar(200) DEFAULT NULL,
+  `author_email` varchar(200) DEFAULT '',
+  `author_url` varchar(200) DEFAULT '',
+  `author_ip` varchar(100) DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `body` text,
   `status` varchar(20) NOT NULL DEFAULT 'pending',
   `agent` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
-  `parent_id` bigint(20) NOT NULL DEFAULT '0',
+  `parent_id` bigint(32) NOT NULL DEFAULT '0',
   `user_id` int(10) NOT NULL DEFAULT '0',
   `content_type_referenced` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
@@ -324,7 +324,8 @@ CREATE TABLE IF NOT EXISTS `comments` (
   KEY `comment_status_date` (`status`,`date`),
   KEY `comment_parent_id` (`parent_id`),
   KEY `comment_date` (`date`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=224 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
 
 --
 -- A extraer datos da táboa `comments`
@@ -332,6 +333,18 @@ CREATE TABLE IF NOT EXISTS `comments` (
 
 INSERT INTO `comments` (`id`, `content_id`, `author`, `author_email`, `author_url`, `author_ip`, `date`, `body`, `status`, `agent`, `type`, `parent_id`, `user_id`, `content_type_referenced`) VALUES
 (1, 184, 'John Doe', 'autor@ejemplo.com', '', '77.209.125.150', '2013-06-17 13:51:43', 'Este es un comentario de prueba', 'accepted', '', '', 0, 0, 'opinion');
+
+--
+-- Estrutura da táboa `commentsmeta`
+--
+
+CREATE TABLE IF NOT EXISTS `commentsmeta` (
+  `fk_content` bigint(32) NOT NULL,
+  `meta_name` varchar(255) NOT NULL,
+  `meta_value` text,
+  PRIMARY KEY (`fk_content`,`meta_name`),
+  KEY `fk_content` (`fk_content`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
