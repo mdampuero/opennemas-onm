@@ -74,6 +74,8 @@ class ContentSubscriberListener implements EventSubscriberInterface
 
         $cacheHandler->delete(INSTANCE_UNIQUE_NAME . "_" . $contentType . "_" . $id);
 
+        $this->cleanOpcode();
+
         return false;
     }
 
