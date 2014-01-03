@@ -257,7 +257,7 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Lists all the available recipients and allos to select them before send
+     * Lists all the available recipients and allows to select them before send
      * the newsletter
      *
      * @param Request $request the request object
@@ -289,9 +289,11 @@ class NewsletterController extends Controller
 
         // Ajax request
         if ($request->isXmlHttpRequest()) {
-            header('Content-type: application/json');
-            echo json_encode($accounts);
-            exit(0);
+            return new Response(
+                json_encode($accounts),
+                200,
+                array('Content-type' => 'application/json')
+            );
         }
 
         $recipients = array();
