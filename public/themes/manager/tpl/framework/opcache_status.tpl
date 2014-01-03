@@ -4,7 +4,7 @@
 <div class="top-action-bar">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{t}Framework status{/t}</h2>
+            <h2>{t}Zend Opcache status{/t}</h2>
         </div>
         <ul class="old-button">
             <li>
@@ -19,6 +19,7 @@
 </div>
 
 <div class="wrapper-content opcache-stats">
+    {if empty($not_supported_message)}
     <div id="opcache-stats-tabs" class="tabs">
         <ul>
             <li><a href="#status">Status</a></li>
@@ -34,7 +35,7 @@
             </table>
 
             <div id="graph" class="clearfix">
-                <div id="graphcontainer">
+                <div id="graphcontainer" class="clearfix">
                     <form>
                         <label><input type="radio" name="dataset" value="memory" checked> Memory</label>
                         <label><input type="radio" name="dataset" value="keys"> Keys</label>
@@ -86,7 +87,9 @@
         </div>
 
     </div>
-
+    {else}
+    <div class="well">{$not_supported_message}</div>
+    {/if}
 </div>
 {/block}
 
@@ -124,7 +127,7 @@
     var arc = d3.svg.arc()
             .innerRadius(radius - 20)
             .outerRadius(radius - 50);
-    var svg = d3.select("#graphcontainer").append("svg")
+    var svg = d3.select("#graph").append("svg")
             .attr("width", width)
             .attr("height", height)
             .append("g")

@@ -7,7 +7,6 @@
 
 function smarty_function_script_tag($params, &$smarty)
 {
-
     $output = "";
 
     if (empty($params['src'])) {
@@ -16,7 +15,7 @@ function smarty_function_script_tag($params, &$smarty)
     }
 
     $src = $params['src'];
-    $mtime = '1234';
+    $mtime = DEPLOYED_AT;
     $server = '';
     //Comprobar si es un link externo
     if (!array_key_exists('external', $params)) {
@@ -30,7 +29,6 @@ function smarty_function_script_tag($params, &$smarty)
         }
 
         if (file_exists($file)) {
-            $mtime = filemtime($file);
             $server = $serverUrl.$basepath;
         }
     }

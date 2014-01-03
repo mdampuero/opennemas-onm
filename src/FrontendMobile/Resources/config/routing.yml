@@ -1,0 +1,51 @@
+frontendmobile_redirect_web:
+    path: /redirect_web
+    defaults: { _controller: FrontendMobile:Controllers:FrontpagesController:redirectCompleteWeb }
+
+frontendmobile_opinion_frontpage:
+    path: /opinion
+    defaults: { _controller: FrontendMobile:Controllers:OpinionsController:frontpage }
+
+frontendmobile_opinion_frontpage2:
+    path: /seccion/opinion
+    defaults: { _controller: FrontendMobile:Controllers:OpinionsController:frontpage }
+
+frontendmobile_frontpages_category:
+    path: /seccion/{category}
+    defaults: { _controller: FrontendMobile:Controllers:FrontpagesController:show, category: null }
+    requirements:
+        category : '[a-z0-9\-\._]+'
+
+frontendmobile_frontpages_category:
+    path: /seccion/{category}/{subcategory}
+    defaults: { _controller: FrontendMobile:Controllers:FrontpagesController:show, category: null, subcategory : null }
+    requirements:
+        category    : '[a-z0-9\-\._]+'
+        subcategory : '[a-z0-9\-\._]+'
+
+frontendmobile_latestnews:
+    path: /ultimas-noticias
+    defaults: { _controller: FrontendMobile:Controllers:FrontpagesController:latestNews }
+
+frontendmobile_latestnews2:
+    path: /ultimas
+    defaults: { _controller: FrontendMobile:Controllers:FrontpagesController:latestNews }
+
+frontendmobile_opinion_show:
+    path: /opinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
+    defaults: { _controller: FrontendMobile:Controllers:OpinionsController:show, _format: html }
+    requirements:
+        author_name    : '[a-zA-Z0-9\-]+'
+        opinion_title  : '[a-z0-9\-]+'
+        opinion_id     : '[a-z0-9\-]+'
+
+frontendmobile_article_show:
+    path: /{component}/{category_name}/{slug}/{article_id}.{_format}
+    defaults: { _controller: FrontendMobile:Controllers:ArticlesController:show, component: articulo, _format: html, page: 1 }
+    requirements:
+        component     : 'articulo|artigo|article'
+        category_name : '[a-z0-9\-]+'
+        slug          : '[a-z0-9\-]+'
+        article_id    : '([0-9]+)'
+        _format       : 'html|htm'
+

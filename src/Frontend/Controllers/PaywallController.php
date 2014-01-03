@@ -440,7 +440,7 @@ class PaywallController extends Controller
             // if is an reactivation
             $billingStartDate = gmdate('c', strtotime($timeLimit));
         } else {
-            $billingStartDate = gmdate('c',strtotime("+1 {$planPeriod}"));
+            $billingStartDate = gmdate('c', strtotime("+1 {$planPeriod}"));
         }
 
         $RPProfileDetails = new \RecurringPaymentsProfileDetailsType();

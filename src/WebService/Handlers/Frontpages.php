@@ -168,7 +168,7 @@ class Frontpages
         }
 
         // Get url generator
-        $generator = $this->restler->container->get('url_generator');
+        $generator = $this->restler->container->get('router');
 
         // Set pagination
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(

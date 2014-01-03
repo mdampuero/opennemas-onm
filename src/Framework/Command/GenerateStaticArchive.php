@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrateOnmCategory extends Command
+class GenerateStaticArchive extends Command
 {
     protected function configure()
     {

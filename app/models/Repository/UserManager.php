@@ -118,5 +118,4 @@ class UserManager extends BaseManager
 
         return $rs;
     }
-
 }

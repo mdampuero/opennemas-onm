@@ -36,7 +36,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         global $sc;
-        $eventDispatcher = $sc->get('event_dispatcher');
+        $eventDispatcher = $sc->get('dispatcher');
 
         $output->writeln('Executing cron actions');
 

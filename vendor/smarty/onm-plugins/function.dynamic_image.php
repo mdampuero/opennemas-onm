@@ -23,7 +23,7 @@ function smarty_function_dynamic_image($params, &$smarty)
 
     if (array_key_exists('transform', $params)) {
         global $sc;
-        $generator = $sc->get('url_generator');
+        $generator = $sc->get('router');
 
         $urlParams = array(
             'real_path'  => $baseUrl.$src,

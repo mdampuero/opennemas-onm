@@ -243,7 +243,8 @@ class AclUserController extends Controller
                 $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
             } else {
                 $request->getSession()->getFlashBag()->add(
-                    'error', _('Unable to update the user with that information')
+                    'error',
+                    _('Unable to update the user with that information')
                 );
             }
         } catch (\Exception $e) {
@@ -417,7 +418,7 @@ class AclUserController extends Controller
                 'error',
                 _('You haven\'t selected any user to delete.')
             );
-         }
+        }
 
         if (strpos($request->server->get('HTTP_REFERER'), 'users/frontend') !== false) {
             return $this->redirect($this->generateUrl('admin_acl_user_front'));

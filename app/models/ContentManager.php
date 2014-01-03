@@ -1526,7 +1526,6 @@ class ContentManager
         }
         if ($debug == true) {
             var_dump($sql);
-            die();
         }
 
         $rs = $GLOBALS['application']->conn->Execute($sql);

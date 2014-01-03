@@ -202,7 +202,7 @@ function logContentEvent($action = null, $content = null)
 function url($urlName, $params = array(), $absolute = false)
 {
     global $sc;
-    return $sc->get('url_generator')->generate($urlName, $params, $absolute);
+    return $sc->get('router')->generate($urlName, $params, $absolute);
 }
 
 /**
