@@ -40,6 +40,11 @@
                 <directory>../src/*/Bundle/*Bundle/Tests</directory>
             </exclude>
         </whitelist>
+        <blacklist>
+            <directory>cache</directory>
+            <directory>log</directory>
+            <directory>../public</directory>
+        </blacklist>
     </filter>
 
     <selenium>
