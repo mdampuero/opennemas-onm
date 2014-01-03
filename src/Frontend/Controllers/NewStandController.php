@@ -44,7 +44,7 @@ class NewStandController extends Controller
         // $subcategory_name = $this->request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
         // solo se usa al cachear en show (tiene sentido?¿) Tp viene por .htaccess
         // $page  = $this->request->query->getDigits('page', 1);
-        $this->category_name    = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         $this->view->assign(array( 'actual_category' => $this->category_name, ));
 
