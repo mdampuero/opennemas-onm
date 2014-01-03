@@ -43,7 +43,6 @@
                         <select name="renderlet" id="renderlet">
                             <option value="intelligentwidget" {if isset($widget) && $widget->renderlet == 'intelligentwidget'}selected="selected"{/if}>{t}Intelligent Widget{/t}</option>
                             <option value="html" {if isset($widget) && $widget->renderlet == 'html'}selected="selected"{/if}>{t}HTML{/t}</option>
-                            <option value="php" {if isset($widget) && $widget->renderlet == 'php'}selected="selected"{/if}>{t}PHP{/t}</option>
                             <option value="smarty" {if isset($widget) && $widget->renderlet == 'smarty'}selected="selected"{/if}>{t}Smarty{/t}</option>
                         </select>
                     </div>
@@ -138,7 +137,7 @@ jQuery(document).ready(function($) {
 
     $('#renderlet').on('change', function() {
         var value = $(this).find('option:selected').val();
-        if(value == 'html') {
+        if (value == 'html') {
             $('.insert-image').show();
             $('#widget_textarea').show();
             $('#select-widget').hide();

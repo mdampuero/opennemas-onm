@@ -304,10 +304,6 @@ class Widget extends Content
                 $content = $this->renderletHTML($params);
 
                 break;
-            case 'php':
-                $content = $this->renderletPHP($params);
-
-                break;
             case 'smarty':
                 $content = $this->renderletSmarty($params);
 
@@ -333,21 +329,6 @@ class Widget extends Content
     private function renderletHTML()
     {
         return $this->content;
-    }
-
-    /**
-     * Renders a PHP widget
-     *
-     * @return string the generated HTML
-     **/
-    private function renderletPHP()
-    {
-        ob_start();
-        eval($this->content);
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        return $output;
     }
 
     /**
