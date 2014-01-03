@@ -20,20 +20,8 @@ use Onm\Message  as m;
  *
  * @package  Core
  */
-class NewsletterManager
+class NewsletterManager extends BaseManager
 {
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author
-     **/
-    public function __construct($mailer, $logger)
-    {
-        $this->mailer = $mailer;
-        $this->logger = $logger;
-    }
-
     /**
      * Performs searches in newsletters
      *
@@ -60,13 +48,13 @@ class NewsletterManager
             $limit = '';
         }
 
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
 
         $sql = 'SELECT * FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order.' '.$limit;
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs  = $this->dbConn->Execute($sql);
 
-        $sql2 = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
-        $countNm = $GLOBALS['application']->conn->GetOne($sql2);
+        $sql2    = 'SELECT COUNT(`pk_newsletter`)  FROM `newsletter_archive` WHERE '.$whereClause. ' ORDER BY '.$order;
+        $countNm = $this->dbConn->GetOne($sql2);
 
         if (!$rs) {
             return;

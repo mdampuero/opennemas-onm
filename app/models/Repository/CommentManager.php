@@ -9,8 +9,6 @@
  **/
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-
 /**
  * Handles common operations with comments
  *
@@ -61,8 +59,8 @@ class CommentManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT * FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->Execute($sql);
 
         if ($rs === false) {
             return false;
@@ -94,7 +92,7 @@ class CommentManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT count(id) FROM `comments` WHERE $filterSQL";
-        $rs = $GLOBALS['application']->conn->GetOne($sql);
+        $rs = $this->dbConn->GetOne($sql);
 
         if ($rs === false) {
             return false;
@@ -127,8 +125,8 @@ class CommentManager extends BaseManager
                 WHERE `content_id`=? AND `status`=?
                 ORDER BY `date` DESC $limitSQL";
         $values = array($contentID, \Comment::STATUS_ACCEPTED);
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->Execute($sql, $values);
 
         if ($rs == false) {
             return array();
@@ -145,8 +143,6 @@ class CommentManager extends BaseManager
         return $comments;
     }
 
-
-
     /**
      * Gets the number of public comments
      *
@@ -160,9 +156,8 @@ class CommentManager extends BaseManager
             return false;
         }
 
-        $sql = "SELECT count(id) FROM comments
-                WHERE content_id = ? AND `status` =?";
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentID, \Comment::STATUS_ACCEPTED));
+        $sql = "SELECT count(id) FROM comments WHERE content_id = ? AND `status` =?";
+        $rs = $this->dbConn->GetOne($sql, array($contentID, \Comment::STATUS_ACCEPTED));
 
         return intval($rs);
     }
@@ -181,9 +176,8 @@ class CommentManager extends BaseManager
     public static function getPublicCommentsAndTotalCount($contentId, $elemsByPage, $offset)
     {
         // Get the total number of comments
-        $sql = 'SELECT count(pk_comment) FROM comments
-                WHERE content_id = ? AND content_status=?';
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array($contentId, \Comment::STATUS_ACCEPTED));
+        $sql = 'SELECT count(pk_comment) FROM comments WHERE content_id = ? AND content_status=?';
+        $rs = $this->dbConn->GetOne($sql, array($contentId, \Comment::STATUS_ACCEPTED));
 
         // If there is no comments do a early return
         if ($rs === false) {
@@ -209,7 +203,7 @@ class CommentManager extends BaseManager
     public function countPendingComments()
     {
         $sql = "SELECT count(id) FROM `comments` WHERE `status`=?";
-        $rs = $GLOBALS['application']->conn->GetOne($sql, array(\Comment::STATUS_PENDING));
+        $rs  = $this->dbConn->GetOne($sql, array(\Comment::STATUS_PENDING));
 
         return intval($rs);
     }

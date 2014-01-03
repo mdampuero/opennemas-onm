@@ -16,16 +16,6 @@ use Onm\Cache\CacheInterface;
  *
  * @package Repository
  **/
-class MenuManager
+class MenuManager extends BaseManager
 {
-    /**
-     * Initializes the menu manager
-     *
-     * @param CacheInterface $cache the cache instance
-     **/
-    public function __construct(CacheInterface $cache, $cachePrefix)
-    {
-        $this->cache = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
 }
