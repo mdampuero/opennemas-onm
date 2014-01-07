@@ -87,7 +87,7 @@
                         </div>
                     </label>
                     <div class="controls">
-                        <textarea name="body" id="body" required="required" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
+                        <textarea name="body" id="body" tabindex="5" class="onm-editor">{$page->body|default:""}</textarea>
                     </div>
                 </div>
             </div>
@@ -117,8 +117,9 @@ jQuery(document).ready(function($){
     var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
 
     $('#title').on('change', function(e, ui) {
-        fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
-
+        if (tags_input.val().length == 0) {
+            fill_tags_improved($('#title').val(), tags_input, '{url name=admin_utils_calculate_tags}');
+        }
         var slugy = jQuery.trim(jQuery('#slug').attr('value'));
         if ((slugy.length <= 0) && (previous!=slugy)) {
 

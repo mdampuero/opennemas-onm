@@ -121,17 +121,20 @@ class StringUtils
      **/
     public static function get_title($title, $useStopList = true, $delimiter = '-')
     {
+        $titule = '';
         $title = self::toAscii($title);
 
         // $title = self::normalize_name($title);
         $title = self::clearSpecialChars($title);
         $title = mb_ereg_replace('[^a-z0-9\- ]', '', $title);
+        $title = trim($title);
 
         if ($useStopList) {
             // Remove stop list
             $titule = self::removeShorts($title);
         }
 
+        $titule = trim($titule);
         if (empty($titule) || $titule == " ") {
             $titule = $title;
         }

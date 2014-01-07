@@ -70,13 +70,14 @@
                     </a>
                 </li>
                 {/acl}
-
+                {if $page <= 1}
                 <li class="separator"></li>
                 <li>
                     <a href="#" id="save-positions" title="{t}Save positions{/t}">
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                     </a>
                 </li>
+                {/if}
             </ul>
         </div>
     </div>

@@ -28,15 +28,6 @@ use Onm\Message as m;
  **/
 class AclUserController extends Controller
 {
-
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
     /**
      * Show a paginated list of backend users
      *
@@ -87,34 +78,15 @@ class AclUserController extends Controller
             $groupsOptions[$cat->id] = $cat->name;
         }
 
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $usersCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_acl_user',
-                    array(
-                        'name'  => $filter['name'],
-                        'group' => $filter['group'],
-                        'type'  => $filter['type'],
-                    )
-                ).'&page=%d',
-            )
-        );
-
         return $this->render(
             'acl/user/list.tpl',
             array(
-                'users'         => $users,
-                'user_groups'   => $groups,
-                'groupsOptions' => $groupsOptions,
-                'pagination'    => $pagination,
+                'users'           => $users,
+                'user_groups'     => $groups,
+                'groupsOptions'   => $groupsOptions,
+                'total_num_users' => $usersCount,
+                'url_filters'     => $filter,
+                'items_per_page'  => $itemsPerPage,
             )
         );
     }
@@ -144,16 +116,19 @@ class AclUserController extends Controller
 
         $ccm = new \ContentCategoryManager();
 
-        $user = new \User($id);
+        $user = $this->get('user_repository')->find($id);
         if (is_null($user->id)) {
-            m::add(sprintf(_("Unable to find the user with the id '%d'"), $id), m::ERROR);
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                sprintf(_("Unable to find the user with the id '%d'"), $id)
+            );
 
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
 
         // Fetch user photo if exists
         if (!empty($user->avatar_img_id)) {
-            $user->photo = new \Photo($user->avatar_img_id);
+            $user->photo = $this->get('entity_repository')->find('Photo', $user->avatar_img_id);
         }
 
         $user->meta = $user->getMeta();
@@ -166,7 +141,7 @@ class AclUserController extends Controller
         }
 
         $userGroup = new \UserGroup();
-        $tree = $ccm->getCategoriesTree();
+        $tree      = $ccm->getCategoriesTree();
         $languages = $this->container->getParameter('available_languages');
         $languages = array_merge(array('default' => _('Default system language')), $languages);
 
@@ -204,6 +179,13 @@ class AclUserController extends Controller
             $this->checkAclOrForward('USER_UPDATE');
         }
 
+        $user = new \User($userId);
+
+        $accessCategories = array();
+        foreach ($user->accesscategories as $key => $value) {
+            $accessCategories[] = (int)$value->pk_content_category;
+        }
+
         $data = array(
             'id'              => $userId,
             'username'        => $request->request->filter('login', null, FILTER_SANITIZE_STRING),
@@ -215,13 +197,12 @@ class AclUserController extends Controller
             'url'             => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
             'type'            => $request->request->filter('type', '0', FILTER_SANITIZE_STRING),
             'sessionexpire'   => $request->request->getDigits('sessionexpire'),
-            'id_user_group'   => $request->request->get('id_user_group', array()),
-            'ids_category'    => $request->request->get('ids_category', array()),
+            'id_user_group'   => $request->request->get('id_user_group', $user->id_user_group),
+            'ids_category'    => $request->request->get('ids_category', $accessCategories),
             'avatar_img_id'   => $request->request->filter('avatar', null, FILTER_SANITIZE_STRING),
         );
 
         $file = $request->files->get('avatar');
-        $user = new \User($userId);
 
         try {
             // Upload user avatar if exists
@@ -259,28 +240,20 @@ class AclUserController extends Controller
                     dispatchEventWithParams('author.update', array('authorId' => $userId));
                 }
 
-                m::add(_('User data updated successfully.'), m::SUCCESS);
+                $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));
             } else {
-                m::add(_('Unable to update the user with that information'), m::ERROR);
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to update the user with that information')
+                );
             }
         } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
+            $request->getSession()->getFlashBag()->add('error', $e->getMessage());
         }
 
-        if ($action == 'validate') {
-            $redirectUrl = $this->generateUrl('admin_acl_user_show', array('id' => $userId));
-        } else {
-            // If a regular user is upating him/her information redirect to welcome page
-            if (($userId == $_SESSION['userid'])
-                && !\Acl::check('USER_UPDATE')
-            ) {
-                $redirectUrl = $this->generateUrl('admin_welcome');
-            } else {
-                $redirectUrl = $this->generateUrl('admin_acl_user');
-            }
-        }
-
-        return $this->redirect($redirectUrl);
+        return $this->redirect(
+            $this->generateUrl('admin_acl_user_show', array('id' => $userId))
+        );
     }
 
     /**
@@ -343,7 +316,10 @@ class AclUserController extends Controller
                         $user->setMeta(array('paywall_time_limit' => $time->format('Y-m-d H:i:s')));
                     }
 
-                    m::add(_('User created successfully.'), m::SUCCESS);
+                    $request->getSession()->getFlashBag()->add(
+                        'success',
+                        _('User created successfully.')
+                    );
 
                     return $this->redirect(
                         $this->generateUrl(
@@ -352,10 +328,16 @@ class AclUserController extends Controller
                         )
                     );
                 } else {
-                    m::add(_('Unable to create the user with that information'), m::ERROR);
+                    $request->getSession()->getFlashBag()->add(
+                        'error',
+                        _('Unable to create the user with that information')
+                    );
                 }
             } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    $e->getMessage()
+                );
             }
         }
 
@@ -394,6 +376,12 @@ class AclUserController extends Controller
         if (!is_null($userId)) {
             $user = new \User();
             $user->delete($userId);
+
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully deleted user with id "%d".'), $userId)
+            );
+
             if (!$request->isXmlHttpRequest()) {
                 return $this->redirect($this->generateUrl('admin_acl_user'));
             } else {
@@ -420,9 +408,16 @@ class AclUserController extends Controller
             foreach ($selected as $userId) {
                 $user->delete((int) $userId);
             }
-            m::add(sprintf(_('You have deleted %d users.'), count($selected)), m::SUCCESS);
+
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                sprintf(_('You have deleted %d users.'), count($selected))
+            );
         } else {
-            m::add(_('You haven\'t selected any user to delete.'), m::ERROR);
+            $request->getSession()->getFlashBag()->add(
+                'error',
+                _('You haven\'t selected any user to delete.')
+            );
         }
 
         if (strpos($request->server->get('HTTP_REFERER'), 'users/frontend') !== false) {
@@ -430,25 +425,6 @@ class AclUserController extends Controller
         } else {
             return $this->redirect($this->generateUrl('admin_acl_user'));
         }
-    }
-
-    /**
-     * Returns a connected users panel
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function connectedUsersAction(Request $request)
-    {
-        $this->checkAclOrForward('BACKEND_ADMIN');
-
-        $sessions = $GLOBALS['Session']->getSessions();
-
-        return $this->render(
-            'acl/panel/show_panel.ajax.html',
-            array('users' => $sessions)
-        );
     }
 
     /**
@@ -576,11 +552,17 @@ class AclUserController extends Controller
                         ."user {$user->id}: ".$e->getMessage()
                     );
 
-                    m::add(_('Unable to send your recover password email. Please try it later.'), m::ERROR);
+                    $request->getSession()->getFlashBag()->add(
+                        'error',
+                        _('Unable to send your recover password email. Please try it later.')
+                    );
                 }
 
             } else {
-                m::add(_('Unable to find an user with that email.'), m::ERROR);
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to find an user with that email.')
+                );
             }
 
             // Display form
@@ -657,11 +639,17 @@ class AclUserController extends Controller
                         ."user {$user->id}: ".$e->getMessage()
                     );
 
-                    m::add(_('Unable to send your recover username email. Please try it later.'), m::ERROR);
+                    $request->getSession()->getFlashBag()->add(
+                        'error',
+                        _('Unable to send your recover username email. Please try it later.')
+                    );
                 }
 
             } else {
-                m::add(_('Unable to find an user with that email.'), m::ERROR);
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to find an user with that email.')
+                );
             }
 
             // Display form
@@ -690,13 +678,11 @@ class AclUserController extends Controller
 
         if ('POST' !== $request->getMethod()) {
             if (empty($user->id)) {
-                m::add(
-                    _(
-                        'Unable to find the password reset request. '
-                        .'Please check the url we sent you in the email.'
-                    ),
-                    m::ERROR
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to find the password reset request.  Please check the url we sent you in the email.')
                 );
+
                 $this->view->assign('userNotValid', true);
             } else {
                 $this->view->assign(
@@ -713,25 +699,21 @@ class AclUserController extends Controller
                 $user->updateUserPassword($user->id, $password);
                 $user->updateUserToken($user->id, null);
 
-                m::add(_('Password successfully updated'), m::SUCCESS);
+                $request->getSession()->getFlashBag()->add('success', _('Password successfully updated'));
 
                 return $this->redirect($this->generateUrl('admin_login_form'));
 
             } elseif ($password != $passwordVerify) {
-                m::add(_('Password and confirmation must be equal.'), m::ERROR);
+                $request->getSession()->getFlashBag()->add('error', _('Password and confirmation must be equal.'));
             } else {
-                m::add(
-                    _(
-                        'Unable to find the password reset request. '
-                        .'Please check the url we sent you in the email.'
-                    ),
-                    m::ERROR
+                $request->getSession()->getFlashBag()->add(
+                    'error',
+                    _('Unable to find the password reset request.  Please check the url we sent you in the email.')
                 );
             }
 
         }
 
         return $this->render('login/regenerate_pass.tpl', array('token' => $token, 'user' => $user));
-
     }
 }

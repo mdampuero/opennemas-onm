@@ -541,10 +541,12 @@ class ImagesController extends Controller
                         $tempName = pathinfo($upload['name'][$index], PATHINFO_FILENAME);
 
                         // Check if the image has an IPTC title an use it as original title
-                        $size = getimagesize($upload['tmp_name'][$index], $info);
-                        if (array_key_exists('APP13', $info)) {
-                            $iptc = iptcparse($info["APP13"]);
-                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                        $size = getimagesize($upload['tmp_name'][$index], $imageInfo);
+                        if (isset($imageInfo['APP13'])) {
+                            $iptc = iptcparse($imageInfo["APP13"]);
+                            if (isset($iptc['2#120'])) {
+                                $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                            }
                         }
 
                         $data = array(
@@ -594,10 +596,12 @@ class ImagesController extends Controller
                     $tempName = pathinfo($upload['name'], PATHINFO_FILENAME);
 
                     // Check if the image has an IPTC title an use it as original title
-                    $size = getimagesize($upload['tmp_name'], $info);
-                    if (array_key_exists('APP13', $info)) {
-                        $iptc = iptcparse($info["APP13"]);
-                        $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                    $size = getimagesize($upload['tmp_name'], $imageInfo);
+                    if (isset($imageInfo['APP13'])) {
+                        $iptc = iptcparse($imageInfo["APP13"]);
+                        if (isset($iptc['2#120'])) {
+                            $tempName = str_replace("\000", "", $iptc["2#120"][0]);
+                        }
                     }
 
                     $data = array(

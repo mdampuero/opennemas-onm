@@ -1,8 +1,6 @@
 {extends file="base/admin.tpl"}
 
-
 {block name="header-css" append}
-    {script_tag src="/jquery/jquery.min.js"}
 <style type="text/css">
 
 .iframe {
@@ -24,12 +22,19 @@ iframe {
     padding: 0;
 }
 </style>
+{/block}
+
+{block name="header-js" prepend}
 <script type="text/javascript">
-jQuery(document).ready(function(){
-    jQuery('.iframe iframe').css('min-height', (jQuery(window).height() - 140) + 'px');
-    jQuery(window).resize(function(){
-        jQuery('.iframe iframe').css('min-height', (jQuery(window).height() - 140) + 'px');
+jQuery(document).ready(function($){
+    $('.iframe iframe').css('min-height', ($(window).height() - 140) + 'px');
+    $(window).resize(function(){
+        $('.iframe iframe').css('min-height', ($(window).height() - 140) + 'px');
     })
+
+    $('.disqus_sync').on('click',function(e, ui) {
+        $('#modal-sync').modal('show');
+    });
 });
 </script>
 {/block}
@@ -43,14 +48,21 @@ jQuery(document).ready(function(){
         <ul class="old-button">
             <li>
                 <a href="{url name=admin_comments_disqus_config}" title="{t}Disqus module configuration{/t}">
-                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config Europapress module{/t}" ><br />{t}Config{/t}
+                    <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config disqus module{/t}" ><br />{t}Config{/t}
                 </a>
             </li>
+            {if !empty($disqus_secret_key)}
+            <li>
+                <a href="{url name=admin_comments_disqus_sync}" class="disqus_sync" title="{t}Disqus module sync{/t}">
+                    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Disqus module sync{/t}" alt="{t}Disqus module sync{/t}" ><br />{t}Synchronize{/t}
+                </a>
+            </li>
+            {/if}
         </ul>
     </div>
 </div>
 <div class="iframe">
-    {if !empty($disqus_shortname)}
+    {if !empty($disqus_shortname) && !empty($disqus_secret_key)}
     <iframe src="http://{$disqus_shortname}.disqus.com/admin/moderate/?template=wordpress" style="width: 100%; height: 80%; min-height:700px;"></iframe>
     {else}
         <div class="wrapper-content center">
@@ -58,6 +70,7 @@ jQuery(document).ready(function(){
         </div>
     {/if}
 </div>
+{include file="disqus/modals/_modal_sync_dialog.tpl"}
 {/block}
 
 {block name="copyright"}

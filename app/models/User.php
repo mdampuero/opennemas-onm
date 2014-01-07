@@ -929,9 +929,15 @@ class User
      *
      * @return array multidimensional array with information about authors
      */
-    public static function getAllUsersAuthors()
+    public static function getAllUsersAuthors($filter = null)
     {
-        $sql = 'SELECT `id` FROM users WHERE fk_user_group  LIKE "%3%" ORDER BY `name`';
+        if (!is_null($filter)) {
+            $_where = $filter;
+        } else {
+            $_where = '';
+        }
+
+        $sql = 'SELECT `id` FROM users WHERE fk_user_group '.$_where.' LIKE "%3%" ORDER BY `name`';
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
 
@@ -944,14 +950,16 @@ class User
         while (!$rs->EOF) {
             $authors[$i]         = new \User($rs->fields['id']);
             $authors[$i]->params = $authors[$i]->getMeta();
+            if (array_key_exists('is_blog', $authors[$i]->params)) {
+                $authors[$i]->is_blog = $authors[$i]->params['is_blog'];
+            }
 
             $rs->MoveNext();
             $i++;
         }
 
         // Order names with accents
-        uasort($authors, function($a, $b)
-        {
+        uasort($authors, function ($a, $b) {
             $patterns = array(
                 'a' => '(á|à|â|ä|Á|À|Â|Ä)',
                 'e' => '(é|è|ê|ë|É|È|Ê|Ë)',
@@ -1045,6 +1053,25 @@ class User
         $sql = 'DELETE FROM usermeta WHERE `user_id`=?';
 
         if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId)))===false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Remove user meta given a named array
+     *
+     * @param int $userId   the user id to set configs to
+     * @param array  $userMeta a named array with settings and its values
+     *
+     * @return  boolean true if all went well
+     */
+    public function deleteMetaKey($userId, $metaKey)
+    {
+        $sql = 'DELETE FROM usermeta WHERE `user_id`=? AND `meta_key`=?' ;
+
+        if ($GLOBALS['application']->conn->Execute($sql, array(intval($userId), $metaKey))===false) {
             return false;
         }
 

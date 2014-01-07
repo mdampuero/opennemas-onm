@@ -96,7 +96,7 @@ class Frontpages
                 }
             }
             // Use htmlspecialchars to avoid utf-8 erros with json_encode
-            return htmlspecialchars(serialize($contentsInHomepage));
+            return htmlspecialchars(utf8_encode(serialize($contentsInHomepage)));
         }
     }
 
@@ -168,7 +168,7 @@ class Frontpages
         }
 
         // Get url generator
-        $generator = $this->restler->container->get('url_generator');
+        $generator = $this->restler->container->get('router');
 
         // Set pagination
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(
@@ -177,7 +177,7 @@ class Frontpages
                 'items' => $itemsPerPage,
                 'total' => $countArticles,
                 'url'   => $generator->generate(
-                    'blog_sync_category',
+                    'categ_sync_frontpage',
                     array(
                         'category_name' => $categoryName,
                     )
@@ -185,6 +185,6 @@ class Frontpages
             )
         );
 
-        return serialize(array($pagination, $articles));
+        return utf8_encode(serialize(array($pagination, $articles)));
     }
 }

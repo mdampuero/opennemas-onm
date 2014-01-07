@@ -34,7 +34,6 @@ class Instance
 
         if (empty($this->settings['MEDIA_URL'])) {
             $this->settings['MEDIA_URL'] = '/media/';
-
         }
 
         foreach ($this->settings as $key => $value) {
@@ -71,8 +70,8 @@ class Instance
 
         define('SITE_ADMIN_DIR', "admin");
         define('SITE_ADMIN_TMP_DIR', "tmp");
-        define('SITE_ADMIN_PATH', SITE_PATH.SS.SITE_ADMIN_DIR.SS);
-        define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.SS);
+        define('SITE_ADMIN_PATH', SITE_PATH.'/'.SITE_ADMIN_DIR.'/');
+        define('SITE_ADMIN_TMP_PATH', SITE_ADMIN_PATH.SITE_ADMIN_TMP_DIR.'/');
         $cachepath = APPLICATION_PATH.DS.'tmp'
             .DS.'instances'.DS.INSTANCE_UNIQUE_NAME;
         if (!file_exists($cachepath)) {
@@ -95,23 +94,23 @@ class Instance
         // External server or a local dir
         define('MEDIA_DIR', INSTANCE_UNIQUE_NAME);
         // Full path to the instance media files
-        define('MEDIA_DIR_URL', MEDIA_URL.MEDIA_DIR.SS);
+        define('MEDIA_DIR_URL', MEDIA_URL.MEDIA_DIR.'/');
 
         // local path to write media (/path/to/media)
         define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
 
-        define('MEDIA_IMG_PATH_URL', MEDIA_URL.MEDIA_DIR.SS.IMG_DIR);
-        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL."media".SS.MEDIA_DIR.SS.IMG_DIR);
+        define('MEDIA_IMG_PATH_URL', MEDIA_URL.MEDIA_DIR.'/'.IMG_DIR);
+        define('MEDIA_IMG_ABSOLUTE_URL', SITE_URL."media".'/'.MEDIA_DIR.'/'.IMG_DIR);
         // TODO: A Eliminar
         // TODO: delete from application
         define('MEDIA_IMG_PATH', MEDIA_PATH.DS.IMG_DIR);
         // TODO: delete from application
-        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.MEDIA_DIR.SS.IMG_DIR);
+        define('MEDIA_IMG_PATH_WEB', MEDIA_URL.MEDIA_DIR.'/'.IMG_DIR);
 
         /**
         * Template settings
         **/
         define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
-        define('TEMPLATE_USER_URL', "/themes".SS.TEMPLATE_USER.SS);
+        define('TEMPLATE_USER_URL', "/themes".'/'.TEMPLATE_USER.'/');
     }
 }

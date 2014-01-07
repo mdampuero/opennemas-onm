@@ -257,4 +257,26 @@ class CommentsController extends Controller
 
         return  new Response($message, $httpCode);
     }
+
+    /**
+     * Synchronize disqus comments to local database
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function disqusSyncAction(Request $request)
+    {
+        // Get query param uuid
+        $uuid = $request->query->filter('uuid', null, FILTER_SANITIZE_STRING);
+
+        // Get disqus last sync cache
+        $lastSync = $this->container->get('cache')->fetch(CACHE_PREFIX.'disqus_last_sync');
+
+        if ($lastSync['uuid'] == $uuid) {
+            \Onm\DisqusSync::saveDisqusCommentsToDatabase();
+        }
+
+        return  new Response('', 200);
+    }
 }

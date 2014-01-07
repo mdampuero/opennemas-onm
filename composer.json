@@ -5,7 +5,7 @@
     "homepage": "http://opennemas.com",
     "type": "cms",
     "license": "closed source",
-    "version": "0.8.3",
+    "version": "1.0",
     "authors": [
         {
             "name": "OpenHost developers",
@@ -31,49 +31,50 @@
     },
 
     "require": {
-        "php"                            : ">=5.3.2",
-
-        "ext-apc": "*",
-        "ext-bz2": "*",
-        "ext-ctype": "*",
-        "ext-curl": "*",
-        "ext-date": "*",
-        "ext-fileinfo": "*",
-        "ext-filter": "*",
-        "ext-intl": ">=1.1.0",
-        "ext-imagick": "*",
-        "ext-json": "*",
-        "ext-openssl": "*",
-        "ext-pcre": "*",
-        "ext-pdo": "*",
-        "ext-Phar": ">=2.0.1",
-        "ext-posix": "*",
-        "ext-session": "*",
-        "ext-simplexml": "*",
-        "ext-spl": "*",
-        "ext-xml": "*",
-        "ext-xsl": "*",
-        "ext-zip": "*",
-        "ext-zlib": "*",
-
+        "php"                            : ">=5.3.3",
+        "drexarj/disqus-php"             : "dev-master",
         "frandieguez/panorama-php"       : "1.0.2",
         "imagine/imagine"                : "dev-develop",
-        "monolog/monolog"                : "1.3.*",
-
         "paypal/adaptivepayments-sdk-php": "dev-master",
         "paypal/merchant-sdk-php"        : "dev-master",
-
-        "swiftmailer/swiftmailer"        : "4.3.*",
-
-	    "symfony/framework-bundle"       : "2.3.*",
-        "symfony/http-kernel"            : "2.3.*",
-        "symfony/class-loader"           : "2.3.*",
-        "symfony/config"                 : "2.3.*",
-        "symfony/console"                : "2.3.*",
-        "symfony/dependency-injection"   : "2.3.*",
-        "symfony/event-dispatcher"       : "2.3.*",
-        "symfony/http-foundation"        : "2.3.*",
-        "symfony/routing"                : "2.3.*",
-        "symfony/yaml"                   : "2.3.*"
+        "symfony/symfony": "2.3.*",
+        "doctrine/orm": ">=2.2.3,<2.4-dev",
+        "doctrine/doctrine-bundle": "1.2.*",
+        "doctrine/migrations": "dev-master",
+        "doctrine/doctrine-migrations-bundle": "dev-master",
+        "twig/extensions": "1.0.*",
+        "symfony/assetic-bundle": "2.3.*",
+        "symfony/swiftmailer-bundle": "2.3.*",
+        "symfony/monolog-bundle": "2.3.*",
+        "sensio/distribution-bundle": "2.3.*",
+        "sensio/framework-extra-bundle": "2.3.*",
+        "sensio/generator-bundle": "2.3.*",
+        "php-ffmpeg/php-ffmpeg": "0.5.*@dev"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ],
+        "post-update-cmd": [
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "stable",
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "public",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        },
+        "branch-alias": {
+            "dev-master": "2.3-dev"
+        }
     }
 }

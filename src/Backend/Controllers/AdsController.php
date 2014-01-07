@@ -66,10 +66,14 @@ class AdsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $map = \Advertisement::$map;
+        // Get ads positions
+        $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
+        $map        = $positionManager->getAllAdsPositions();
+        $adsNames   = $positionManager->getAllAdsNames();
+        $filtersUrl = $request->query->get('filter');
 
+        // Get page
         $page = $request->query->getDigits('page', 1);
-
         list($filter, $queryString) = $this->buildFilter(
             $request,
             'in_litter != 1 AND fk_content_categories LIKE \'%' . $this->category . '%\''
@@ -77,7 +81,7 @@ class AdsController extends Controller
 
         // Filters
         $filterOptions = array(
-            'type_advertisement' => array('-1' => _("-- All --")) + $map,
+            'type_advertisement' => array('-1' => _("-- All --")) + $adsNames,
             'available' => array(
                 '-1' => _("-- All --"),
                 '0'  => _("No published"),
@@ -99,16 +103,13 @@ class AdsController extends Controller
         $itemsPerPage = s::get('items_per_page');
 
         $cm = new \ContentManager();
-        list($countAds, $ads)= $cm->getCountAndSlice(
+        $ads = $cm->find_all(
             'Advertisement',
-            null,
             $filter,
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
+            'ORDER BY created DESC '
         );
 
-        foreach ($ads as &$ad) {
+        foreach ($ads as $key => &$ad) {
             //Distinguir entre flash o no flash
             $img = new \Photo($ad->path);
             if ($img->type_img == "swf") {
@@ -122,12 +123,12 @@ class AdsController extends Controller
             $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
             $ad->advertisement_placeholder = $adv_placeholder;
 
-            if (!in_array($this->category, $ad->fk_content_categories)
-               || $ad->fk_content_categories != array(0)
-            ) {
-                unset($ad);
+            if (!in_array($this->category, $ad->fk_content_categories)) {
+                unset($ads[$key]);
             }
         }
+
+        $filteredAds = array_slice($ads, ($page-1)*$itemsPerPage, $itemsPerPage);
 
         // Build the pager
         $pagination = \Pager::factory(
@@ -139,7 +140,7 @@ class AdsController extends Controller
                 'delta'       => 4,
                 'clearIfVoid' => true,
                 'urlVar'      => 'page',
-                'totalItems'  => $countAds,
+                'totalItems'  => count($ads),
                 'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
             )
         );
@@ -150,10 +151,11 @@ class AdsController extends Controller
             'advertisement/list.tpl',
             array(
                 'pagination'     => $pagination,
-                'advertisements' => $ads,
+                'advertisements' => $filteredAds,
                 'filter_options' => $filterOptions,
                 'map'            => $map,
                 'page'           => $page,
+                'filter'         => $filtersUrl,
             )
         );
     }
@@ -169,6 +171,7 @@ class AdsController extends Controller
     {
         $this->checkAclOrForward('ADVERTISEMENT_CREATE');
         $page = $request->request->getDigits('page', 1);
+        $filter = $request->query->get('filter');
 
         if ('POST' == $request->getMethod()) {
 
@@ -214,11 +217,19 @@ class AdsController extends Controller
             return $this->redirect(
                 $this->generateUrl(
                     'admin_ads',
-                    array('category' => $firstCategory, 'page' => $page)
+                    array('category' => $firstCategory, 'page' => $page, 'filter'   => $filter)
                 )
             );
         } else {
-            return $this->render('advertisement/new.tpl');
+            $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
+            return $this->render(
+                'advertisement/new.tpl',
+                array(
+                    'themeAds' => $positionManager->getThemeAdsPositions(),
+                    'filter'   => $filter,
+                    'page'     => $page,
+                )
+            );
         }
     }
 
@@ -233,7 +244,9 @@ class AdsController extends Controller
     {
         $this->checkAclOrForward('ADVERTISEMENT_UPDATE');
 
-        $id = $request->query->getDigits('id', null);
+        $id     = $request->query->getDigits('id', null);
+        $filter = $request->query->get('filter');
+        $page   = $request->query->getDigits('page', 1);
 
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
@@ -257,9 +270,15 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
+        $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
         return $this->render(
             'advertisement/new.tpl',
-            array('advertisement' => $ad,)
+            array(
+                'advertisement' => $ad,
+                'themeAds'      => $positionManager->getThemeAdsPositions(),
+                'filter'        => $filter,
+                'page'          => $page,
+            )
         );
 
     }
@@ -275,9 +294,8 @@ class AdsController extends Controller
         $this->checkAclOrForward('ADVERTISEMENT_UPDATE');
 
         $id = $request->query->getDigits('id');
-
-        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-        $ad = new \Advertisement($id);
+        $filter = $request->query->get('filter');
+        $page   = $request->query->getDigits('page', 1);
 
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
@@ -331,15 +349,16 @@ class AdsController extends Controller
             m::add(_('Unable to update the advertisement data.'), m::ERROR);
         }
 
-        if ($continue) {
-            return $this->redirect(
-                $this->generateUrl('admin_ad_show', array('id' => $ad->id))
-            );
-        } else {
-            return $this->redirect(
-                $this->generateUrl('admin_ad_show', array('id' => $data['id']))
-            );
-        }
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_ad_show',
+                array(
+                    'id'     => $data['id'],
+                    'filter' => $filter,
+                    'page'   => $page
+                )
+            )
+        );
     }
 
     /**
@@ -356,6 +375,7 @@ class AdsController extends Controller
         $id       = $request->query->getDigits('id');
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
+        $filter   = $request->query->get('filter');
 
         if (!empty($id)) {
             $ad = new \Advertisement($id);
@@ -487,11 +507,11 @@ class AdsController extends Controller
     {
         $this->checkAclOrForward('ADVERTISEMENT_AVAILA');
 
-        $id          = $request->query->getDigits('id', 0);
-        $status      = $request->query->getDigits('status', 0);
-        $queryString = $request->query->filter('queryString', '', FILTER_SANITIZE_STRING);
-        $category    = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page        = $request->query->getDigits('page', 1);
+        $id       = $request->query->getDigits('id', 0);
+        $status   = $request->query->getDigits('status', 0);
+        $filter   = $request->query->filter('filter', '', FILTER_SANITIZE_STRING);
+        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page     = $request->query->getDigits('page', 1);
 
         $ad = new \Advertisement($id);
 
@@ -506,9 +526,9 @@ class AdsController extends Controller
             $this->generateUrl(
                 'admin_ads',
                 array(
-                    'category'    => $category,
-                    'page'        => $page,
-                    'queryString' => $queryString,
+                    'category' => $category,
+                    'page'     => $page,
+                    'filter'   => $filter,
                 )
             )
         );

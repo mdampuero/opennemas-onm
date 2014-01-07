@@ -15,7 +15,7 @@
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
-            <h2>{t}Opinions{/t} :: </h2>
+            <h2>{if $contentType eq 'blog'}Posts{else}{t}Opinions{/t} {/if}::</h2>
             <div class="section-picker">
                 <div class="title-picker btn">
                     <span class="text">{if $home}{t}Opinion frontpage{/t}{else}{t}Listing{/t}{/if}</span>
@@ -25,7 +25,8 @@
                     {acl isAllowed="OPINION_FRONTPAGE"}
                     <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
                     {/acl}
-                    <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
+                    <a href="{url name=admin_opinions}" {if !$home &&  $contentType neq 'blog'}class="active"{/if}>{t}Listing{/t}</a>
+                    <a href="{url name=admin_blogs}" {if $contentType eq 'blog'}class="active"{/if}>{t}Listing{/t} Posts</a>
                 </div>
             </div>
         </div>
@@ -83,12 +84,6 @@
             {/if}
             {/acl}
             {acl isAllowed="OPINION_SETTINGS"}
-            <li>
-                <button type="submit" id="opinion_clearcache">
-                    <img border="0" src="{$params.IMAGE_DIR}clearcache.png" title="{t}Clean cache{/t}" alt="{t}Clean cache{/t}"/>
-                    <br />{t}Clean cache{/t}
-                </button>
-            </li>
             <li>
                 <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config opinion module{/t}">
                     <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config opinion module{/t}"/><br />
@@ -157,16 +152,6 @@
             e.preventDefault();
             $('#formulario').attr('action', "{url name=admin_opinions_batch_delete}");
             $('#formulario').submit();
-        });
-
-        $('#opinion_clearcache').on('click', function(e, ui) {
-            e.preventDefault();
-            jQuery.ajax({
-                url: "{url name=admin_tpl_manager_cleanfrontpage category=opinion}",
-                success: function(data){
-                    jQuery('#warnings-validation').html(data);
-                }
-            });
         });
 
         {if $home}

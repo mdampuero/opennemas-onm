@@ -7,10 +7,33 @@
             <h2>{t}Instance Manager{/t}</h2>
         </div>
         <ul class="old-button">
+            <li class="batch-actions">
+                <a href="#">
+                    <img src="{$params.COMMON_ASSET_DIR}images/select.png" title="{t}Batch actions{/t}" alt="{t}Batch actions{/t}"/>
+                    <br/>{t}Batch actions{/t}
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="delChecked" data-controls-modal="modal-instance-batchDelete" href="#" title="{t}Delete{/t}">
+                            {t}Batch delete{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="batch-activate">
+                            {t}Batch activate{/t}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="batch-desactivate">
+                            {t}Batch desactivate{/t}
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 <a href="{url name=manager_instance_create}" class="admin_add"
-                   title="{t}New widget{/t}">
-                    <img border="0" src="{$params.COMMON_ASSET_DIR}images/list-add.png" title="" alt="" />
+                   title="{t}New Instance{/t}">
+                    <img border="0" src="{$params.COMMON_ASSET_DIR}images/list-add.png" title="{t}New Instance{/t}" alt="{t}New Instance{/t}"/>
                     <br />{t}New{/t}
                 </a>
             </li>
@@ -19,7 +42,7 @@
 </div>
 <div class="wrapper-content">
     {render_messages}
-    <form action="{url name=manager_instances}" method="get" name="formulario" id="formulario">
+    <form action="{url name=manager_instances}" method="GET" name="formulario" id="formulario">
         <div class="table-info clearfix">
             <div class="pull-left">
                 {count($instances)} instances
@@ -29,7 +52,6 @@
                 <div class="pager">
                     <input type="text" id="email" placeholder="{t}Filter by e-mail{/t}" name="filter_email" onchange="this.form.submit();" value="{$filter_email}"/>
                     <input type="text" id="username" placeholder="{t}Filter by name{/t}" name="filter_name" onchange="this.form.submit();" value="{$filter_name}"/>
-                    <form>
                         <label for="usergroup">
                             {t}Per page{/t}
                             <select class="pagesize">
@@ -42,12 +64,9 @@
                                 <option value="1000">1000</option>
                             </select>
                         </label>
-                    </form>
                     <input type="hidden" name="page" value="1" />
                     <button type="submit" class="btn">{t}Search{/t}</button>
                 </div>
-            </th>
-
             </div>
         </div>
 
@@ -56,12 +75,14 @@
             <thead>
                 <tr>
                     {if count($instances) > 0}
+                    <th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
                     <th width="25px">{t}#{/t}</th>
                     <th width="200px">{t}Name{/t}</th>
                     <th width="200px">{t}Domains{/t}</th>
                     <th width="200px">{t}Contact{/t}</th>
                     <th class="center">{t}Last access{/t}</th>
                     <th width="100px" class="center">{t}Created{/t}</th>
+                    <th class="center" width="60px">{t}Articles{/t}</th>
                     <th class="center" width="70px">{t}Activated{/t}</th>
                     <th class="center" width="10px">{t}Actions{/t}</th>
                     {else}
@@ -73,6 +94,9 @@
             <tbody>
                 {foreach from=$instances item=instance name=instance_list}
                 <tr>
+                    <td>
+                        <input type="checkbox" name="selected[]" value="{$instance->id}" class="minput"/>
+                    </td>
                     <td>
                         {$instance->id}
                     </td>
@@ -98,20 +122,22 @@
                      <td class="nowrap center">
                         {$instance->configs['site_created']}
                     </td>
+                     <td class="nowrap center">
+                        {$instance->totals[1]}
+                    </td>
                     <td class="center">
                         {if $instance->activated == 1}
                         <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Published{/t}">
-                            <img src="{$params.COMMON_ASSET_DIR}images/publish_g.png" border="0" alt="{t}Published{/t}" /></a>
+                            <img src="{$params.COMMON_ASSET_DIR}images/publish_g.png" alt="{t}Published{/t}"/></a>
                         {else}
                         <a href="{url name=manager_instance_toggleavailable id=$instance->id}" title="{t}Unpublished{/t}">
-                            <img src="{$params.COMMON_ASSET_DIR}images/publish_r.png" border="0" alt="{t}Unpublished{/t}" /></a>
+                            <img src="{$params.COMMON_ASSET_DIR}images/publish_r.png" alt="{t}Unpublished{/t}"/></a>
                         {/if}
                     </td>
 
                     <td class="right nowrap">
                         <div class="btn-group">
-                            <a href="#" class="btn info" rel="popover" data-content="{t}Articles{/t}: {$instance->totals[1]}<br>
-                                                                                     {t}Images{/t}: {$instance->totals[8]}<br>
+                            <a href="#" class="btn info" rel="popover" data-content="{t}Images{/t}: {$instance->totals[8]}<br>
                                                                                      {t}Ads{/t}: {$instance->totals[2]}<br>">
                                 <i class="icon-info-sign"></i>
                             </a>
@@ -129,14 +155,14 @@
                 </tr>
                 {foreachelse}
                 <tr>
-                    <td class="empty" colspan="8">{t}There is no available instances yet{/t}</td>
+                    <td class="empty" colspan="10">{t}There is no available instances yet{/t}</td>
                 </tr>
                 {/foreach}
             </tbody>
 
             <tfoot>
                 <tr>
-                    <td colspan="8" class="center">
+                    <td colspan="10" class="center">
                         <div class="pager">
                             <form>
                                 <img src="{$params.COMMON_ASSET_DIR}images/first.png" class="first"/>
@@ -153,6 +179,8 @@
     </form>
 </div>
 {include file="instances/modals/_modalDelete.tpl"}
+{include file="instances/modals/_modalAccept.tpl"}
+{include file="instances/modals/_modalBatchDelete.tpl"}
 {/block}
 
 {block name="header-css" append}
@@ -174,8 +202,45 @@
                 trigger: 'hover',
             });
 
-            $("#manager").tablesorter()
-                         .tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
+            $('.minput').on('click', function() {
+                checkbox = $(this).find('input[type="checkbox"]');
+                var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
+                if (checked_elements > 0) {
+                    $('.old-button .batch-actions').fadeIn('fast');
+                } else {
+                    $('.old-button .batch-actions').fadeOut('fast');
+                }
+            });
+
+            $('#batch-activate').on('click', function (e, ui) {
+                e.preventDefault();
+                $.get(
+                    '{url name=manager_instance_batch_available status=1}',
+                    $('#formulario').serializeArray()
+                ).done(function() {
+                    window.location.href = '{url name=manager_instances filter_name=$filter_name filter_email=$filter_email}';
+                }).fail(function() {
+                });
+            });
+
+            $('#batch-desactivate').on('click', function (e, ui) {
+                e.preventDefault();
+                $.get(
+                    '{url name=manager_instance_batch_available status=0}',
+                    $('#formulario').serializeArray()
+                ).done(function(data) {
+                    window.location.href = '{url name=manager_instances filter_name=$filter_name filter_email=$filter_email}';
+                }).fail(function() {
+                });
+            });
+
+            $("#manager").tablesorter({
+                            headers: { 0: { sorter: false } } ,
+                            textExtraction:function(s){
+                                if($(s).find('img').length == 0) return $(s).text();
+                                return $(s).find('img').attr('alt');
+                            }
+                        }).tablesorterPager({ container: $(".pager"), positionFixed: false, size: 20 });
         });
     </script>
 {/block}

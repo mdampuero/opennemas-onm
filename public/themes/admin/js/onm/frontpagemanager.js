@@ -610,7 +610,7 @@ jQuery(function($) {
                 async: false,
                 type: 'POST',
                 dataType: 'json',
-                data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved },
+                data: { 'contents_positions': els, 'last_version': frontpage_info.last_saved, 'contents_count': els.length },
                 beforeSend: function(xhr) {
                     $('#warnings-validation').html(
                     "<div class='alert alert-notice'>" +
@@ -635,20 +635,6 @@ jQuery(function($) {
                 );
             });
         }
-    });
-
-    $('#button_clearcache').on('click', function(e, ui) {
-        e.preventDefault();
-        var category = $(this).data('category');
-        $.ajax({
-            type: 'POST',
-            url: frontpage_urls.clean_frontpage,
-            data: {
-                'category' : category
-            }
-        }).done(function(data) {
-            $('#warnings-validation').html(data);
-        });
     });
 
     $('#button_previewfrontpage').on('click', function(e, ui) {

@@ -30,6 +30,7 @@ class OpinionsController extends Controller
     public function init()
     {
         $this->view = new \Template(TEMPLATE_USER);
+        define('BASE_PATH', '/mobile');
     }
 
     /**

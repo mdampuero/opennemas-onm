@@ -50,7 +50,7 @@
                 {acl isAllowed="ADVERTISEMENT_CREATE"}
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_ad_create category=$category page=$page}" class="admin_add" accesskey="N" tabindex="1">
+                    <a href="{url name=admin_ad_create category=$category page=$page filter=$filter}" class="admin_add" accesskey="N" tabindex="1">
                         <img src="{$params.IMAGE_DIR}list-add.png" alt="{t}New{/t}"><br />{t}New{/t}
                     </a>
                 </li>
@@ -137,7 +137,7 @@
                                      title="{t}Media element (jpg, image, gif){/t}" />
                             {/if}
                             {assign var="type_advertisement" value=$ad->type_advertisement}
-                            {$map.$type_advertisement}
+                            {$map.$type_advertisement['name']}
                         </label>
                     </td>
                     <td style="">
@@ -162,11 +162,11 @@
                     {acl isAllowed="ADVERTISEMENT_AVAILA"}
                     <td class="center" style="width:40px;">
                         {if $ad->available == 1}
-                            <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=0 page=$page}"
+                            <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=0 page=$page filter=$filter}"
                                 title={t}"Published"{/t}>
                                 <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                         {else}
-                            <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=1 page=$page}"
+                            <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=1 page=$page filter=$filter}"
                                 title={t escape=off}"Unresolved"{/t}>
                                 <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}" /></a>
                         {/if}
@@ -176,7 +176,7 @@
                     <td class="right">
                         <div class="btn-group">
                         {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                            <a class="btn" href="{url name=admin_ad_show id=$ad->id}" title="{t}Edit{/t}">
+                            <a class="btn" href="{url name=admin_ad_show id=$ad->id  category=$category page=$page filter=$filter}" title="{t}Edit{/t}">
                                 <i class="icon-pencil"></i>
                             </a>
                         {/acl}

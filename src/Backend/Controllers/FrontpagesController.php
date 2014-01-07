@@ -28,16 +28,6 @@ use Onm\LayoutManager;
  **/
 class FrontpagesController extends Controller
 {
-
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
     /**
      * Displays the frontpage elements for a given frontpage id
      *
@@ -171,6 +161,7 @@ class FrontpagesController extends Controller
             $category = (int) $category;
 
             // Get the form-encoded places from request
+            $numberOfContents  = $request->request->getDigits('contents_count');
             $contentsPositions = $request->request->get('contents_positions', null);
             $lastVersion       = $request->request->get('last_version', null);
 
@@ -180,7 +171,8 @@ class FrontpagesController extends Controller
             $validReceivedData = is_array($contentsPositions)
                                  && !empty($contentsPositions)
                                  && !is_null($categoryID)
-                                 && !is_null($lastVersion);
+                                 && !is_null($lastVersion)
+                                 && count($contentsPositions) === (int) $numberOfContents;
 
             if ($validReceivedData) {
                 foreach ($contentsPositions as $params) {
@@ -231,10 +223,7 @@ class FrontpagesController extends Controller
                 );
             }
 
-            // Clean caches
-            $tcacheManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-            $tcacheManager->delete($category . '|RSS');
-            $tcacheManager->delete($category . '|0');
+            dispatchEventWithParams('frontpage.save_position', array('category' => $category));
         }
 
         // If this request is Ajax return properly formated result.

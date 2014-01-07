@@ -305,18 +305,18 @@ CREATE TABLE IF NOT EXISTS `books` (
 --
 
 CREATE TABLE IF NOT EXISTS `comments` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `content_id` bigint(20) unsigned NOT NULL DEFAULT '0',
-  `author` varchar(150) DEFAULT NULL,
-  `author_email` varchar(100) NOT NULL DEFAULT '',
-  `author_url` varchar(200) NOT NULL DEFAULT '',
-  `author_ip` varchar(100) NOT NULL DEFAULT '',
+  `id` bigint(32) unsigned NOT NULL AUTO_INCREMENT,
+  `content_id` bigint(32) unsigned NOT NULL DEFAULT '0',
+  `author` varchar(200) DEFAULT NULL,
+  `author_email` varchar(200) DEFAULT '',
+  `author_url` varchar(200) DEFAULT '',
+  `author_ip` varchar(100) DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `body` text,
   `status` varchar(20) NOT NULL DEFAULT 'pending',
   `agent` varchar(255) NOT NULL DEFAULT '',
   `type` varchar(20) NOT NULL DEFAULT '',
-  `parent_id` bigint(20) NOT NULL DEFAULT '0',
+  `parent_id` bigint(32) NOT NULL DEFAULT '0',
   `user_id` int(10) NOT NULL DEFAULT '0',
   `content_type_referenced` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
@@ -324,7 +324,8 @@ CREATE TABLE IF NOT EXISTS `comments` (
   KEY `comment_status_date` (`status`,`date`),
   KEY `comment_parent_id` (`parent_id`),
   KEY `comment_date` (`date`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=224 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
 
 --
 -- A extraer datos da táboa `comments`
@@ -332,6 +333,18 @@ CREATE TABLE IF NOT EXISTS `comments` (
 
 INSERT INTO `comments` (`id`, `content_id`, `author`, `author_email`, `author_url`, `author_ip`, `date`, `body`, `status`, `agent`, `type`, `parent_id`, `user_id`, `content_type_referenced`) VALUES
 (1, 184, 'John Doe', 'autor@ejemplo.com', '', '77.209.125.150', '2013-06-17 13:51:43', 'Este es un comentario de prueba', 'accepted', '', '', 0, 0, 'opinion');
+
+--
+-- Estrutura da táboa `commentsmeta`
+--
+
+CREATE TABLE IF NOT EXISTS `commentsmeta` (
+  `fk_content` bigint(32) NOT NULL,
+  `meta_name` varchar(255) NOT NULL,
+  `meta_value` text,
+  PRIMARY KEY (`fk_content`,`meta_name`),
+  KEY `fk_content` (`fk_content`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1075,7 +1088,6 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (23, 4, 'Sociedad', 'sociedad', 'category', 2, 0),
 (24, 4, 'Deportes', 'deportes', 'category', 3, 0),
 (37, 8, 'opinion', 'opinion', 'internal', 1, 21),
-(28, 8, 'mobile', 'mobile', 'internal', 2, 21),
 (31, 5, 'Curiosidades', 'curiosidades', 'videoCategory', 2, 0),
 (32, 5, 'Deportes', 'deportes', 'category', 3, 0),
 (33, 5, 'Sociedad', 'sociedad', 'category', 4, 0),
@@ -1090,7 +1102,6 @@ INSERT INTO `menu_items` (`pk_item`, `pk_menu`, `title`, `link_name`, `type`, `p
 (5, 1, 'EconomÃ­a', 'economia', 'category', 5, 0),
 (19, 1, 'PolÃ­tica', 'politica', 'category', 4, 0),
 (4, 1, 'OpiniÃ³n', 'opinion', 'internal', 3, 0),
-(3, 1, 'VersiÃ³n mÃ³vil', 'mobile', 'internal', 2, 21),
 (21, 1, 'Portada', 'home', 'internal', 1, 0),
 (25, 1, 'Cultura', 'cultura', 'category', 8, 0);
 
@@ -1475,7 +1486,7 @@ INSERT INTO `settings` (`name`, `value`) VALUES
 ('facebook_page', 's:52:"http://www.facebook.com/pages/OpenNemas/282535299100";'),
 ('twitter_page', 's:28:"http://twitter.com/opennemas";'),
 ('facebook_id', 's:12:"282535299100";'),
-('site_footer', 's:221:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\r\nPorto Cabeanca-Boveda s/n<br />\r\n32980 Boveda, Amoeiro<br />\r\nOurense - Spain<br />\r\nTelf/Phone: +34 655172329<br />\r\nOpenHost Media Press</p>\r\n";'),
+('site_footer', 's:219:"<p><strong>Plataforma Opennemas - CMS for digital newspapers</strong><br />\r\nCarretera Cabeanca - Boveda (priorato) s/n<br />\r\nBoveda, Amoeiro<br />\r\n32980, Ourense<br />\r\nTelf: +34 988980045<br />\r\nOpenHost, S.L.</p>\r\n";'),
 ('site_title', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
 ('site_description', 's:84:"Opennemas newspapers - CMS periodico digital - Online service for digital newspapers";'),
 ('europapress_server_auth', 'a:3:{s:6:"server";s:0:"";s:8:"username";s:0:"";s:8:"password";s:0:"";}'),

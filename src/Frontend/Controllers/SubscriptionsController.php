@@ -54,6 +54,7 @@ class SubscriptionsController extends Controller
      **/
     public function showAction(Request $request)
     {
+        $this->view->assign('actual_category', 'newsletter');
         return $this->render('static_pages/subscription.tpl');
     }
 
@@ -83,6 +84,7 @@ class SubscriptionsController extends Controller
         $class            = "";
 
         if (empty($verify)) {
+
             // Get reCaptcha validate response
             $resp = recaptcha_check_answer(
                 $configRecaptcha['private_key'],
@@ -97,10 +99,17 @@ class SubscriptionsController extends Controller
                 $class = 'error';
             } else {
                 // Correct CAPTCHA, bad mail and name empty
-                $email = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
-                $name  = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
+                $email  = $request->request->filter('email', null, FILTER_SANITIZE_STRING);
+                $name   = $request->request->filter('name', null, FILTER_SANITIZE_STRING);
+                $type = $request->request->filter('subscription', null, FILTER_SANITIZE_STRING);
 
-                if (empty($email) || empty($name)) {
+                if ($type == 'alta' && (empty($email) || empty($name))) {
+                    $message = _(
+                        "Sorry, we were unable to complete your request.\n"
+                        ."Check the form and try again"
+                    );
+                    $class = 'error';
+                } elseif ($type == 'baja' && empty($email)) {
                     $message = _(
                         "Sorry, we were unable to complete your request.\n"
                         ."Check the form and try again"
@@ -112,7 +121,7 @@ class SubscriptionsController extends Controller
                     //Filter $_POST vars from request
                     $data['name']                = $name;
                     $data['email']               = $email;
-                    $data['subscription']        = $request->request->filter('subscription', null, FILTER_SANITIZE_STRING);
+                    $data['subscription']        = $type;
                     $data['subscritorEntity']    = $request->request->filter('entity', null, FILTER_SANITIZE_STRING);
                     $data['subscritorCountry']   = $request->request->filter('country', null, FILTER_SANITIZE_STRING);
                     $data['subscritorCommunity'] = $request->request->filter('community', null, FILTER_SANITIZE_STRING);
@@ -123,7 +132,6 @@ class SubscriptionsController extends Controller
                     switch ($action) {
                         // Logic for subscription sending a mail to s::get('newsletter_maillist')
                         case 'submit':
-
                             // Build mail body
                             $formulario= "Nombre y Apellidos: ". $data['name']." \r\n".
                                 "Email: ".$data['email']." \r\n";
@@ -182,12 +190,11 @@ class SubscriptionsController extends Controller
 
                             break;
                         case 'create_subscriptor':
-
-                            if ($user->exists_email($data['email'])) {
-                                $message = _("Sorry, that email is already subscribed to our newsletter");
-                                $class = 'error';
-                            } else {
-                                if ($data['subscription'] == 'alta') {
+                            if ($data['subscription'] == 'alta') {
+                                if ($user->exists_email($data['email'])) {
+                                    $message = _("Sorry, that email is already subscribed to our newsletter");
+                                    $class = 'error';
+                                } else {
                                     $data['subscription'] = 1;
                                     $data['status'] = 2;
 
@@ -203,7 +210,9 @@ class SubscriptionsController extends Controller
                                         );
                                         $class = 'error';
                                     }
-                                } else {
+                                }
+                            } else {
+                                if ($user->exists_email($data['email'])) {
                                     $data['subscription'] = 0;
                                     $data['status'] = 3;
 
@@ -221,8 +230,12 @@ class SubscriptionsController extends Controller
                                         );
                                         $class = 'error';
                                     }
+                                } else {
+                                    $message = _("Sorry, that email is not in our database");
+                                    $class = 'error';
                                 }
                             }
+
                             break;
                     }
 
@@ -234,6 +247,7 @@ class SubscriptionsController extends Controller
             'static_pages/subscription.tpl',
             array(
                 'message' => $message,
+                'actual_category' => 'newsletter',
                 'class'   => $class,
             )
         );

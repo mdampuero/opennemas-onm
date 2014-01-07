@@ -62,6 +62,7 @@ class Template extends Smarty
         $this->addFilter("output", "js_includes");
         $this->addFilter("output", "css_includes");
         $this->addFilter("output", "canonical_url");
+        // $this->addFilter("output", "disqus_sync");
 
         $this->setTemplateVars($theme);
 
@@ -124,7 +125,7 @@ class Template extends Smarty
             );
         }
 
-        $this->config_dir = realpath($this->baseCachePath.'/smarty/config');
+        $this->setConfigDir(realpath($this->baseCachePath.'/smarty/config'));
 
         // Create cache and compile dirs if not exists to make template instance aware
         foreach (array('cache', 'compile') as $key => $value) {
@@ -185,8 +186,6 @@ class Template extends Smarty
         );
     }
 
-
-
     public function addFilter($filterSection, $filterName)
     {
         if (in_array($filterSection, array('pre', 'post', 'output'))) {
@@ -205,6 +204,8 @@ class Template extends Smarty
         } else {
             $cacheId = ('home|'.$resource);
         }
+        $cacheId = preg_replace('@-@', '', $cacheId);
+
         return $cacheId;
     }
 

@@ -38,15 +38,14 @@ class ArchiveController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->ccm = new \ContentCategoryManager();
         $this->request = $this->get('request');
-
+        $today = new \DateTime();
+        $today->modify('-1 day');
         // Fetch HTTP variables
         $this->categoryName  = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
         $this->page          = $this->request->query->getDigits('page', 1);
-        $this->year          = $this->request->query->filter('year', '', FILTER_SANITIZE_STRING);
-        $this->month         = $this->request->query->filter('month', '', FILTER_SANITIZE_STRING);
-        $this->day           = $this->request->query->filter('day', '', FILTER_SANITIZE_STRING);
-
-
+        $this->year          = $this->request->query->filter('year', $today->format('Y'), FILTER_SANITIZE_STRING);
+        $this->month         = $this->request->query->filter('month', $today->format('m'), FILTER_SANITIZE_STRING);
+        $this->day           = $this->request->query->filter('day', $today->format('d'), FILTER_SANITIZE_STRING);
     }
 
 
@@ -95,7 +94,7 @@ class ArchiveController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'newslibraryDate' => $date,
-               // 'category_name'   => $this->categoryName,
+                'actual_category' => 'archive',
             )
         );
     }
@@ -146,6 +145,7 @@ class ArchiveController extends Controller
             array(
                 'cache_id' => $cacheID,
                 'category_name'   => $this->categoryName,
+                'actual_category' => 'archive',
                 'newslibraryDate' => $date,
             )
         );

@@ -382,7 +382,7 @@ class Video extends Content
                     throw new \Exception(
                         _(
                             'There was a problem while converting your video. '
-                            .'Please contact with your adminstrator.'
+                            .'Please contact with your administrator.'
                         )
                     );
                 };

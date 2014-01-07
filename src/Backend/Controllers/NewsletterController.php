@@ -257,7 +257,7 @@ class NewsletterController extends Controller
     }
 
     /**
-     * Lists all the available recipients and allos to select them before send
+     * Lists all the available recipients and allows to select them before send
      * the newsletter
      *
      * @param Request $request the request object
@@ -289,9 +289,11 @@ class NewsletterController extends Controller
 
         // Ajax request
         if ($request->isXmlHttpRequest()) {
-            header('Content-type: application/json');
-            echo json_encode($accounts);
-            exit(0);
+            return new Response(
+                json_encode($accounts),
+                200,
+                array('Content-type' => 'application/json')
+            );
         }
 
         $recipients = array();
@@ -508,35 +510,37 @@ class NewsletterController extends Controller
      **/
     public function checkModuleActivated()
     {
-        if (is_null(s::get('newsletter_sender'))
-            || !(s::get('newsletter_sender') )
-        ) {
+        $sender   = s::get('newsletter_sender');
+        $maillist = s::get('newsletter_maillist');
+        $type     = s::get('newsletter_subscriptionType');
+        $config   = s::get('newsletter_maillist');
+
+        if (is_null($sender) || !$sender) {
             m::add(
                 _('Please contact with Opennemas administrator to start to use your Newsletter module')
             );
         }
-        if (is_null(s::get('newsletter_maillist'))
-            || !(s::get('newsletter_subscriptionType') )
-        ) {
+
+        if (is_null($maillist) || !$type) {
             m::add(
                 _('Please provide your Newsletter configuration to start to use your Newsletter module')
             );
 
             return $this->redirect($this->generateUrl('admin_newsletter_config'));
         } else {
-            $configurations = s::get('newsletter_maillist');
+            foreach ($config as $key => $value) {
+                if ($type == 'submit' || ($key != 'subscription' && $key != 'email')) {
+                    if (empty($value)) {
+                        m::add(
+                            _(
+                                'Your newsletter configuration is not complete. Please'.
+                                ' go to settings and complete the form.'
+                            ),
+                            m::ERROR
+                        );
 
-            foreach ($configurations as $key => $value) {
-                if (empty($value)) {
-                    m::add(
-                        _(
-                            'Your newsletter configuration is not complete. Please'.
-                            ' go to settings and complete the form.'
-                        ),
-                        m::ERROR
-                    );
-
-                    return $this->redirect($this->generateUrl('admin_newsletter_config'));
+                        return $this->redirect($this->generateUrl('admin_newsletter_config'));
+                    }
                 }
             }
         }

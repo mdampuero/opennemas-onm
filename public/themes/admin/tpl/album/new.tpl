@@ -111,7 +111,9 @@
         });
 
         jQuery('#title').on('change', function(e, ui) {
-            fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+            if (tags_input.val().length == 0) {
+                fill_tags(jQuery('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+            }
         });
 
     });

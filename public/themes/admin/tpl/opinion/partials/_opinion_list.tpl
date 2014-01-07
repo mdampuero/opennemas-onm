@@ -1,5 +1,5 @@
 <div class="table-info clearfix">
-    <div class="pull-left"><strong>{t 1=$total}%1 opinions{/t}</strong></div>
+    <div class="pull-left"><strong>{t 1=$total}%1 items{/t}</strong></div>
     <div class="pull-right form-inline">
         {t}Status:{/t}
         <select name="status">
@@ -15,7 +15,7 @@
                 <option value="-1" {if isset($author) && $author eq "-1"} selected {/if}> {t}Director{/t} </option>
                 <option value="-2" {if isset($author) && $author eq "-2"} selected {/if}> {t}Editorial{/t} </option>
                 {section name=as loop=$autores}
-                    <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name}</option>
+                    <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name} {if $autores[as]->meta['is_blog'] eq 1} (Blogger) {/if}</option>
                 {/section}
             </select>
             <button type="submit" class="btn"><i class="icon-search"></i></button>
@@ -56,10 +56,14 @@
 			</td>
 			<td class="center">
                 {acl isAllowed="OPINION_FRONTPAGE"}
-                {if $opinion->in_home == 1}
-                <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=0 type=$type page=$page}" class="no_home" title="Sacar de portada" ></a>
+                {if $opinion->author->meta['is_blog'] neq 1}
+                    {if $opinion->in_home == 1}
+                    <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=0 type=$type page=$page}" class="no_home" title="Sacar de portada" ></a>
+                    {else}
+                    <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=1 type=$type page=$page}" class="go_home" title="Meter en portada" ></a>
+                    {/if}
                 {else}
-                <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=1 type=$type page=$page}" class="go_home" title="Meter en portada" ></a>
+                    Blog
                 {/if}
                 {/acl}
 			</td>
@@ -120,7 +124,7 @@
 		<tr >
 			<td colspan="11" class="center">
                 <div class="pagination">
-    				{$pagination->links|default:""}&nbsp;
+    				{$pagination|default:""}
                 </div>
 			</td>
 		</tr>

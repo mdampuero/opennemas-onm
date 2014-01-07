@@ -213,8 +213,8 @@ class SpecialsController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_specials',
-                    array('category' => $data['category'])
+                    'admin_special_show',
+                    array('id' => $special->id)
                 )
             );
         } else {
@@ -289,7 +289,6 @@ class SpecialsController extends Controller
 
         $id = $request->query->getDigits('id');
 
-        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
         $special = new \Special($id);
 
         if ($special->id != null) {
@@ -310,8 +309,8 @@ class SpecialsController extends Controller
                 'available'      => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
                 'img1'           => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
                 'category_imag'  => $request->request->filter('category_imag', '', FILTER_SANITIZE_STRING),
-                'noticias_right' => json_decode($request->request->get('noticias_right')),
-                'noticias_left'  => json_decode($request->request->get('noticias_left')),
+                'noticias_right' => json_decode($request->request->get('noticias_right_input')),
+                'noticias_left'  => json_decode($request->request->get('noticias_left_input')),
             );
 
             if ($special->update($data)) {
@@ -320,21 +319,12 @@ class SpecialsController extends Controller
                 m::add(_('Unable to update the special.'), m::ERROR);
             }
 
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_special_show',
-                        array('id' => $special->id)
-                    )
-                );
-            } else {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_specials',
-                        array('category' => $data['category'])
-                    )
-                );
-            }
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_special_show',
+                    array('id' => $special->id)
+                )
+            );
         }
     }
 

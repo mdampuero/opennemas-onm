@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 
-require __DIR__.'/../app/autoload.php';
+$loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
@@ -24,8 +24,6 @@ $configFile = implode(
 );
 require_once $configFile;
 
-// Create the request object
-// TODO: this should be moved to the container
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));
@@ -36,12 +34,3 @@ $framework = $sc->get('framework');
 $response = $framework->handle($request);
 $response->send();
 $framework->terminate($request, $response);
-
-
-// if (preg_match('@^/admin@', $request->getRequestUri(), $matches)) {
-//     $sc->setParameter('dispatcher.exceptionhandler', 'Backend:Controllers:ErrorController:default');
-// } elseif (preg_match('@^/manager@', $request->getRequestUri(), $matches)) {
-//     $sc->setParameter('dispatcher.exceptionhandler', 'Manager:Controllers:ErrorController:default');
-// } else {
-//     $sc->setParameter('dispatcher.exceptionhandler', 'Frontend:Controllers:ErrorController:default');
-// }

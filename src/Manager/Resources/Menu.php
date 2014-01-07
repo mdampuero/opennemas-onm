@@ -24,6 +24,11 @@ $menuXml = '<?xml version="1.0"?>
             id="support_help"
             link="'.url('manager_framework_check_dependencies').'"
         />
+        <node
+            title="'.htmlspecialchars(_("Opcache status"), ENT_QUOTES).'"
+            id="support_help"
+            link="'.url('manager_framework_opcache_status').'"
+        />
     </submenu>
     <submenu title="'.htmlspecialchars(_("Settings"), ENT_QUOTES).'" id="system" link="#">
         <submenu title="'.htmlspecialchars(_("Users & Groups"), ENT_QUOTES).'" id="user-group_manager" link="#">

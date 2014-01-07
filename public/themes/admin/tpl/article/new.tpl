@@ -52,7 +52,9 @@
                 if (title_int_element.val().length == 0) {
                     title_int_element.val(title.val());
                 };
-                fill_tags_improved(title.val() + " " + category.data('name') + " " + metatags.val(), tags_input, '{url name=admin_utils_calculate_tags}');
+                if (tags_input.val().length == 0) {
+                    fill_tags_improved(title.val() + " " + category.data('name') + " " + metatags.val(), tags_input, '{url name=admin_utils_calculate_tags}');
+                }
             });
             $('#formulario').on('submit', function(){
                 save_related_contents();

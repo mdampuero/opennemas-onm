@@ -159,7 +159,7 @@ jQuery(document).ready(function($) {
                                 <label for="site_title" class="control-label">{t}Created:{/t}</label>
                             </th>
                             <td class="controls">
-                                <input type="text" id="site_created" name="site_created" value="{if $configs['site_created']}{$configs['site_created']}{else}{$smarty.now|date_format:"%d-%m-%Y - %H:%M"}{/if}">
+                                <input type="text" id="site_created" name="site_created" value="{if $configs['site_created']}{$configs['site_created']}{else}{$smarty.now|date_format:"%Y-%m-%d - %H:%M:%S"}{/if}">
                             </td>
                             <td>
 

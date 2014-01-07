@@ -98,7 +98,6 @@ class InstanceManager
             return $instance;
         }
 
-
         if (!$instance) {
             $instancesMatched = $cache->fetch('instance_'.$serverName);
 
@@ -135,7 +134,6 @@ class InstanceManager
 
             //If found matching instance initialize its contants and return it
             if ($matchedInstance) {
-
                 $instance = new Instance();
                 foreach ($matchedInstance as $key => $value) {
                     $instance->{$key} = $value;
@@ -199,17 +197,20 @@ class InstanceManager
 
         if (!empty($params['name']) && !empty($params['email'])) {
             $sql = "SELECT * FROM instances "
-                 ."WHERE name LIKE '%".$params['name']."%' AND "
+                 ."WHERE (name LIKE '%".$params['name']."%' OR "
+                 ."domains LIKE '%".$params['name']."%') AND "
                  ."contact_mail LIKE '%".$params['email']."%' ORDER BY id DESC";
         } elseif (!empty($params['name'])) {
             $sql = "SELECT * FROM instances "
-                 ."WHERE name LIKE '%".$params['name']."%' ORDER BY id DESC";
+                 ."WHERE name LIKE '%".$params['name']."%' OR "
+                 ."domains LIKE '%".$params['name']."%' ORDER BY id DESC";
         } elseif (!empty($params['email'])) {
             $sql = "SELECT * FROM instances "
                  ."WHERE contact_mail LIKE '%".$params['email']."%' ORDER BY id DESC";
         } else {
             $sql = "SELECT * FROM instances ORDER BY id DESC";
         }
+
         $rs = $this->connection->Execute($sql);
 
         if (!$rs) {
@@ -1173,15 +1174,11 @@ class InstanceManager
     public function deleteDefaultAssetsForInstance($mediaPath)
     {
         if (!is_dir($mediaPath)) {
-            throw new DefaultAssetsForInstanceNotDeletedException(
-                "Could not delete assets of the instance"
-            );
+            return false;
         }
 
         if (!fm::deleteDirectoryRecursively($mediaPath)) {
-            throw new DefaultAssetsForInstanceNotDeletedException(
-                "Could not delete assets directory."
-            );
+            return false;
         }
 
         return true;

@@ -101,15 +101,6 @@ class CommandsController extends Controller
             $output = 'Command not valid';
         }
 
-        // $arguments = array(
-        //     'command' => $commandName,
-        //     // 'name'    => 'Fabien',
-        //     // '--yell'  => true,
-        // );
-
-        // $input = new ArrayInput($arguments);
-        // $returnCode = $command->run($input, $output);
-
         return $this->render(
             'framework/commands/execute.tpl',
             array(
@@ -130,11 +121,10 @@ class CommandsController extends Controller
 
             // Iterate over all the available command classes and register them into the
             // console application
-            $basePath = APPLICATION_PATH.'/app/';
-            $availableCommandClases = glob($basePath.'*/Command/*');
+            $availableCommandClases = glob(SRC_PATH.'*/Command/*');
             foreach ($availableCommandClases as $file) {
                 $commandClass = str_replace(
-                    array($basePath, '.php', '/'),
+                    array(SRC_PATH, '.php', '/'),
                     array('', '', '\\'),
                     $file
                 );

@@ -1,0 +1,5 @@
+managerws_root:
+    path: '/{url}'
+    defaults: { _controller: ManagerWebService:Controllers:WebServiceController:default, url: 'default' }
+    requirements:
+        url: '.*'

@@ -198,7 +198,7 @@ class TrashController extends Controller
                 if (!empty($content->id)) {
                     $name = \ContentManager::getContentTypeNameFromId($content->fk_content_type);
 
-                    $contentClassName = ucwords($name);
+                    $contentClassName = classify($name);
                     $content = new $contentClassName($contentId);
                     $content->remove($contentId);
                 } else {

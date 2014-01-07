@@ -12,7 +12,7 @@
  */
 namespace Onm\Cache;
 
-use \Memcache as BaseMemcache;
+use \Memcached as BaseMemcache;
 
 /**
  * Memcache cache driver.
@@ -40,8 +40,9 @@ class Memcache extends AbstractCache
         if (array_key_exists('server', $options)
             && array_key_exists('port', $options)
         ) {
-            $memcache = new \Memcache();
-            $memcache->connect($options['server'], $options['port']);
+            $memcache = new \Memcached();
+            $memcache->addServer($options['server'], $options['port']);
+            $memcache->setOption(\Memcached::OPT_BINARY_PROTOCOL, true);
             $this->setMemcache($memcache);
         }
 
@@ -110,6 +111,10 @@ class Memcache extends AbstractCache
      */
     protected function doFetch($id)
     {
+        if (is_array($id)) {
+            return $this->memcache->getMulti($id);
+        }
+
         return $this->memcache->get($id);
     }
 
@@ -138,7 +143,11 @@ class Memcache extends AbstractCache
      */
     protected function doSave($id, $data, $lifeTime = 0)
     {
-        return $this->memcache->set($id, $data, 0, (int) $lifeTime);
+        if (is_array($id)) {
+            return $this->memcache->setMulti($id, (int) $lifeTime);
+        }
+
+        return $this->memcache->set($id, $data, (int) $lifeTime);
     }
 
     /**

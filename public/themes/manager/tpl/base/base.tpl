@@ -14,12 +14,11 @@
     <title>OpenNeMaS - Manager</title>
     {/block}
 
-    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
+    <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" common=1}
         {css_tag href="/fontawesome/font-awesome.min.css" common=1}
         {css_tag href="/style.css" common=1}
-        {css_tag href="/style-navbar.css"}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css" common=1}
     {/block}
@@ -60,7 +59,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="usericon"></span> <span class="longtext">{$smarty.session.username}</span> <b class="caret"></b></a>
                             <div class="dropdown-menu">
                                 <div class="avatar">
-                                    {gravatar email=$smarty.session.email image_dir=$params.IMAGE_DIR image=true size="150"}
+                                    {gravatar email=$smarty.session.email image_dir="{$params.COMMON_ASSET_DIR}images/" image=true size="150"}
                                 </div><!-- /.avatar -->
                                 <div class="user-info">
                                     <div class="complete-name">{$smarty.session.realname|ucfirst}</div>

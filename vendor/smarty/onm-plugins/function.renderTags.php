@@ -19,20 +19,33 @@ function smarty_function_renderTags($params, &$smarty)
         $separator = $params['separator'];
     }
 
-    if (!array_key_exists('url', $params)) {
-        $url ='';
-        $googleKey = \Onm\Settings::get('google_custom_search_api_key');
-        global $generator;
+    global $generator;
+    if (array_key_exists('internal', $params) && ($params['internal'] == true)) {
         if (is_object($generator)) {
-            $name = 'frontend_search_google';
+            $name ='tag_frontpage';
             $url = $generator->generate($name);
-            $url = "{$url}?cx=&ie=UTF-8&key={$googleKey}";
         } else {
-            $url = "/search/google?cx=&ie=UTF-8&key={$googleKey}";
+            $url = '/tag';
         }
+
+
     } else {
-        //
-        $url = $params['url'];
+        $params['internal'] = false;
+        if (!array_key_exists('url', $params)) {
+            $url ='';
+            $googleKey = \Onm\Settings::get('google_custom_search_api_key');
+
+            if (is_object($generator)) {
+                $name = 'frontend_search_google';
+                $url = $generator->generate($name);
+                $url = "{$url}?cx=&ie=UTF-8&key={$googleKey}";
+            } else {
+                $url = "/search/google?cx=&ie=UTF-8&key={$googleKey}";
+            }
+        } else {
+            //
+            $url = $params['url'];
+        }
     }
 
     if (!array_key_exists('class', $params)) {
@@ -42,11 +55,22 @@ function smarty_function_renderTags($params, &$smarty)
         $class = $params['class'];
     }
 
+    $i = 1;
     foreach ($params['metas'] as $tag) {
         $tag = trim($tag);
         if (!empty($tag)) {
-            $output .= ' <a '.$class.' href="' . $url.'&q='.$tag
-                .'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+            if ($params['internal']) {
+                $tag2 = \Onm\StringUtils::generateSlug($tag);
+                $fullUrl = htmlentities($url.'/'.$tag2, ENT_QUOTES);
+            } else {
+                $fullUrl = htmlentities($url.'&q='.$tag, ENT_QUOTES);
+            }
+            $output .= ' <a '.$class.' href="'.$fullUrl.'" title="'. $tag . '">' . $tag . '</a>'. $separator;
+
+            if (array_key_exists('limit', $params) && $params['limit'] <= $i) {
+                return $output;
+            }
+            $i++;
         }
     }
 

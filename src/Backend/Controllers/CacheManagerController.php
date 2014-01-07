@@ -306,51 +306,6 @@ class CacheManagerController extends Controller
     }
 
     /**
-     * Cleans the category frontpage given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function cleanFrontpageAction(Request $request)
-    {
-        $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-        $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
-
-        if (isset($category)) {
-            $ccm = \ContentCategoryManager::get_instance();
-            if ($category != 'home' && $category != 'opinion') {
-                $category_name = $ccm->get_name($category);
-                $title = $ccm->get_title($category_name);
-                $title = sprintf(_("Frontpage for category %s"), $title);
-            } elseif ($category == 'opinion') {
-                $category_name = 'opinion';
-                $title = 'Opinion';
-                $tplManager->delete($category_name, 'opinion_frontpage.tpl');
-            } else {
-                $category_name = 'home';
-                $title = _('General frontpage');
-            }
-            $category_name = preg_replace('/[^a-zA-Z0-9\s]+/', '', $category_name);
-
-            $tplManager->delete($category_name . '|RSS');
-            $delete = $tplManager->delete($category_name . '|0');
-
-            $content = "<div class='alert alert-success'>"
-                    ."<button class='close' data-dismiss='alert'>×</button>"
-                    ."<strong>{$title}</strong>: "._("cache deleted succesfully.")
-                ."</div>";
-        } else {
-            $content = "<div class='alert alert-error'>"
-                    ."<button class='close' data-dismiss='alert'>×</button>"
-                    ._("There was an error trying to delete the requested cache page.")
-                ."</div>";
-        }
-
-        return new Response($content);
-    }
-
-    /**
      * Builds the search filter for listing the listing cache action
      *
      * @param Request $request the request object

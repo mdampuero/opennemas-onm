@@ -24,6 +24,7 @@ class DeployCommand extends Command
             ->setDefinition(
                 array(
                     new InputOption('skip-cleaning', 's', InputOption::VALUE_NONE, 'Skip cleaning caches'),
+                    new InputOption('skip-themes', 't', InputOption::VALUE_NONE, 'Skip themes deploy'),
                 )
             )
             ->setName('app:deploy')
@@ -56,13 +57,35 @@ EOF
         $this->executeMaintenance('disable');
 
         // Update themes
-        $this->updateThemes();
+        $skipThemes = $input->getOption('skip-themes');
+        if (!$skipThemes) {
+            $this->updateThemes();
+        }
 
         // Clean cache if required
         $skipCleaning = $input->getOption('skip-cleaning');
         if (!$skipCleaning) {
             $this->cleanCache();
         }
+
+        $currentTimestamp = time();
+
+        $this->generateDeployFile();
+
+        $this->cleanOpCodeCache();
+    }
+
+    /**
+     * Saves a file with a deploy version with the actual timestamp
+     *
+     * @return void
+     **/
+    public function generateDeployFile()
+    {
+        $time = time();
+        $contents = "<?php define('DEPLOYED_AT', '$time');";
+
+        file_put_contents(APPLICATION_PATH.'/.deploy.php', $contents);
     }
 
     /**
@@ -142,6 +165,22 @@ EOF
         $command = $this->getApplication()->find('clean:smarty-cache');
         $arguments = array(
             'command' => 'clean:smarty-cache',
+        );
+
+        $input = new ArrayInput($arguments);
+        $returnCode = $command->run($input, $this->output);
+    }
+
+    /**
+     * Cleans the Zend Opcode Cache
+     *
+     * @return void
+     **/
+    public function cleanOpcodeCache()
+    {
+        $command = $this->getApplication()->find('clean:opcode');
+        $arguments = array(
+            'command' => 'clean:opcode',
         );
 
         $input = new ArrayInput($arguments);

@@ -15,12 +15,11 @@
     <meta name="description" content="OpenNeMaS - An specialized CMS focused in journalism." />
     <meta name="keywords" content="CMS, Opennemas, OpenHost, journalism" />
 
-    <link rel="icon" href="{$params.IMAGE_DIR}favicon.png">
+    <link rel="icon" href="{$params.COMMON_ASSET_DIR}images/favicon.png">
 
     {block name="header-css"}
         {css_tag href="/bootstrap/bootstrap.css" media="screen" common=1}
         {css_tag href="/style.css" media="screen" common=1}
-        {css_tag href="/style-navbar.css" media="screen"}
         {css_tag href="/loginadmin.css" media="screen" common=1}
     {/block}
 

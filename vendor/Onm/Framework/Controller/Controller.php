@@ -27,6 +27,13 @@ use Symfony\Component\HttpFoundation\Request;
 class Controller extends ContainerAware
 {
     /**
+     * Initial method for controllers
+     **/
+    public function init()
+    {
+    }
+
+    /**
      * Fetches unsetted variables from the container
      *
      * @param string $name the property name
@@ -205,7 +212,7 @@ class Controller extends ContainerAware
             }
         }
 
-        return $this->container->get('event_dispatcher')->dispatch($eventName, $event);
+        return $this->container->get('dispatcher')->dispatch($eventName, $event);
     }
 
     /**
@@ -219,7 +226,7 @@ class Controller extends ContainerAware
      **/
     public function generateUrl($urlName, $params = array(), $absolute = false)
     {
-        $generator = $this->container->get('url_generator');
+        $generator = $this->container->get('router');
 
         return $generator->generate($urlName, $params, $absolute);
     }
@@ -233,6 +240,6 @@ class Controller extends ContainerAware
      **/
     public function checkAclOrForward($aclName)
     {
-        return \Acl::checkOrForward($aclName);
+        $this->get('acl_checker')->isGranted($aclName);
     }
 }

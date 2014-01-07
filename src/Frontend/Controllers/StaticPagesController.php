@@ -64,6 +64,7 @@ class StaticPagesController extends Controller
             array(
                 'page'               => $page,
                 'content'            => $page,
+                'actual_category'    => $page->slug,
                 'category_real_name' => $page->title,
                 'content_id'         => $page->id
             )
@@ -79,7 +80,9 @@ class StaticPagesController extends Controller
     {
         $category = 0;
 
-        $positions = array(1, 2, 103, 105, 7, 9, 10);
+        // Get static_pages positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup(null, array(1, 2, 103, 105, 7, 9, 10));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

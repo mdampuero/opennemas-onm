@@ -51,7 +51,7 @@
 {/block}
 
 {block name="content" append}
-<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id}{else}{url name=admin_ad_create}{/if}" method="post" id="formulario">
+<form action="{if $advertisement->id}{url name=admin_ad_update id=$advertisement->id category=$category page=$page filter=$filter}{else}{url name=admin_ad_create filter=$filter}{/if}" method="post" id="formulario">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -66,7 +66,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_ads category=$category page=$page}" title="{t}Go back{/t}">
+                    <a href="{url name=admin_ads category=$category page=$page filter=$filter}" title="{t}Go back{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -107,8 +107,7 @@
         <div class="control-group" id="div_url1" style="display:{if !isset($advertisement) || $advertisement->with_script==0}block{else}none{/if};">
             <label for="url" class="control-label">{t}Url{/t}</label>
             <div class="controls">
-                <input type="text" id="url" name="url" class="input-xxlarge" value="{$advertisement->url}" placeholder="http://"
-                    {if $advertisement->with_script neq 1}required="required"{/if} />
+                <input type="url" id="url" name="url" class="input-xxlarge" value="{$advertisement->url}" placeholder="http://" {if !empty($advertisement)  && ($advertisement->with_script neq 1)} required="required"{/if} />
             </div>
         </div>
 
@@ -253,6 +252,7 @@
                         {is_module_activated name="NEWSLETTER_MANAGER"}
                         <li><a href="#publi-newsletter">{t}Newsletter{/t}</a></li>
                         {/is_module_activated}
+                        <li><a href="#publi-others">{t}Others{/t}</a></li>
                     </ul>
 
                     <div id="publi-portada">
@@ -299,6 +299,21 @@
                         {include file="advertisement/partials/advertisement_positions_newsletter.tpl"}
                     </div>
                     {/is_module_activated}
+                    <div id="publi-others">
+                        {foreach $themeAds as $adId => $ad}
+                        <tr>
+                            <td colspan="2">
+                                <label>
+                                    {$ad['name']}
+                                    <input type="radio" name="type_advertisement" value="{$adId}" {if isset($advertisement) && $advertisement->type_advertisement == $adId}checked="checked" {/if}/>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr/></td>
+                        </tr>
+                        {/foreach}
+                    </div>
                 </div><!-- /position-adv -->
             </div>
         </div>

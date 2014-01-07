@@ -44,7 +44,7 @@ class NewStandController extends Controller
         // $subcategory_name = $this->request->query->filter('subcategory_name', '', FILTER_SANITIZE_STRING);
         // solo se usa al cachear en show (tiene sentido?¿) Tp viene por .htaccess
         // $page  = $this->request->query->getDigits('page', 1);
-        $this->category_name    = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
 
         $this->view->assign(array( 'actual_category' => $this->category_name, ));
 
@@ -274,13 +274,9 @@ class NewStandController extends Controller
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
-        // I have added the element 150 in order to integrate all the code in the same query
-        $positions = array(
-            50,
-            1, 2, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 15,
-            16, 21, 22, 24, 25, 31, 32, 33, 34, 35,
-            36, 103, 105,  91, 92
-        );
+        // Get news_stand positions
+        $positionManager = getContainerParameter('instance')->theme->getAdsPositionManager();
+        $positions = $positionManager->getAdsPositionsForGroup('frontpage', array(103, 105));
 
         return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }

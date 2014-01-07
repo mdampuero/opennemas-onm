@@ -38,7 +38,7 @@ class Application
     public static function load()
     {
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==null) {
-            $GLOBALS['application'] = new Application();
+            $GLOBALS['application'] = new \Application;
 
             // Setting up DataBase connection
             self::initDatabase();
@@ -60,7 +60,6 @@ class Application
         // $rs = $dbConn->Execute('SELECT * FROM instances LIMIT 1');
         // // $rs = $dbConn->qstr('test;\'');
         // var_dump($rs);die();
-
 
         $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
         $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);

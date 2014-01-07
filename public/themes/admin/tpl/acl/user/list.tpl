@@ -39,7 +39,7 @@ jQuery(function($){
 
 		<div class="table-info clearfix">
             <div class="pull-left">
-                <strong>{$pagination->_totalItems} {t}users{/t}</strong>
+                <strong>{$total_num_users} {t}users{/t}</strong>
             </div>
 			<div class="pull-right form-inline">
 				<input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" />
@@ -156,7 +156,7 @@ jQuery(function($){
 				<tr >
 					<td colspan="8" class="center">
 		                <div class="pagination">
-		    				{$pagination->links|default:""}&nbsp;
+		                	{paginate_links url='admin_acl_user' items_per_page=$items_per_page filters=$url_filters total=$total_num_users}
 		                </div>
 					</td>
 				</tr>

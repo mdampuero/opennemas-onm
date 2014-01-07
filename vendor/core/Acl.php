@@ -42,7 +42,7 @@ class Acl
      * @param  string  $categoryId the category id to check
      *
      * @return boolean
-    */
+     **/
     public static function checkCategoryAccess($categoryID)
     {
 
