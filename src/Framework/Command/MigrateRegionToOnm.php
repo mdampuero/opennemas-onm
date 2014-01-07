@@ -23,107 +23,488 @@ use Onm\Settings as s;
 
 class MigrateRegionToOnm extends Command
 {
+    /**
+     * Array of database settings to use in migration process.
+     *
+     * @var array
+     */
+    protected $settings = array();
+
+
+    protected $template = array(
+        'settings' => array(),
+        'tables' => array(),
+        'relations' => array(
+            // array(
+            //     'table1' => 'Usuarios',
+            //     'id1'    => 'idUsuarios',
+            //     'table2' => 'Columna',
+            //     'id2'    => 'idUsuario'
+            // )
+        ),
+        'fields' => array(
+            // 'id' => array(
+            //     'table-origin' => 'Usuarios',
+            //     'field-origin' => 'idUsuarios',
+            //     'table-final'  => 'users',
+            //     'type'         => 'raw'
+            // )
+        )
+    );
+
+    protected $usuarios = array(
+        'settings' => array(
+            'table-origin' => 'Usuarios',
+            'id-origin'    => 'idUsuarios',
+            'table-final'  => 'users',
+            'id-final'     => 'id'
+        ),
+        'tables' => array(
+            'Usuarios',
+        ),
+        'relations' => array(
+            // array(
+            //     'table1' => 'Usuarios',
+            //     'id1'    => 'idUsuarios',
+            //     'table2' => 'Columna',
+            //     'id2'    => 'idUsuario'
+            // ),
+        ),
+        'fields' => array(
+            'id' => array(
+                'table-origin' => 'Usuarios',
+                'field-origin' => 'idUsuarios',
+                'table-final'  => 'users',
+                'type'         => 'raw'
+            ),
+            'username' => array(
+                'table-origin' => 'Usuarios',
+                'field-origin' => 'Nombre',
+                'table-final'  => 'users',
+                'type'         => 'raw'
+            ),
+            'image_avatar' => array(
+                'table-origin' => 'Usuarios',
+                'field-origin' => 'Foto',
+                'table-final'  => 'images',
+                'type'         => 'media'
+            ),
+        )
+    );
+
+    protected $articles = array(
+        'settings' => array(
+            'table-origin' => 'Noticias',
+            'id-origin'    => 'idNoticias',
+            'table-final'  => 'articles',
+            'id-final'     => 'pk_article'
+        ),
+        'tables' => array(
+            'Noticias',
+        ),
+        'relations' => array(
+            // array(
+            //     'table1' => 'Usuarios',
+            //     'id1'    => 'idUsuarios',
+            //     'table2' => 'Columna',
+            //     'id2'    => 'idUsuario'
+            // ),
+        ),
+        'fields' => array(
+            'pk_article' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'idNoticias',
+                'table-final'  => 'articles',
+                'type'         => 'raw'
+            ),
+            'title_int' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Titulo',
+                'table-final'  => 'articles',
+                'type'         => 'raw'
+            ),
+            'title_int' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Titulo',
+                'table-final'  => 'articles',
+                'type'         => 'raw'
+            ),
+            'subtitle' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Subtitulo',
+                'table-final'  => 'articles',
+                'type'         => 'raw'
+            ),
+            'summary' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Entradilla',
+                'table-final'  => 'articles',
+                'type'         => 'raw'
+            ),
+            'body' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Contenido',
+                'table-final'  => 'contents',
+                'type'         => 'raw'
+            ),
+            'starttime' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'HoraPublicacion',
+                'table-final'  => 'contents',
+                'type'         => 'timestamp'
+            ),
+            'created' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'HoraAlta',
+                'table-final'  => 'contents',
+                'type'         => 'timestamp'
+            ),
+            'available' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Publicada',
+                'table-final'  => 'contents',
+                'type'         => 'boolean'
+            ),
+            'agency' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Fuente',
+                'table-final'  => 'articles',
+                'type'         => 'raw'
+            ),
+            'views' => array(
+                'table-origin' => 'Noticias',
+                'field-origin' => 'Visitas',
+                'table-final'  => 'contents',
+                'type'         => 'integer'
+            ),
+        )
+    );
+
+    protected $categorias = array(
+        'settings' => array(
+            'table-origin' => 'Noticias_Categorias',
+            'id-origin'    => 'idNoticias_Categorias',
+            'table-final'  => 'content_categories',
+            'id-final'     => 'pk_content_category'
+        ),
+        'tables' => array(
+            'Noticias_Categorias',
+        ),
+        'relations' => array(),
+        'fields' => array(
+            'id' => array(
+                'table-origin' => 'Noticias_Categorias',
+                'field-origin' => 'idNoticias_Categorias',
+                'table-final'  => 'content_categories',
+                'type'         => 'raw'
+            ),
+            'name' => array(
+                'table-origin' => 'Noticias_Categorias',
+                'field-origin' => 'Nombre',
+                'table-final'  => 'content_categories',
+                'type'         => 'raw'
+            ),
+            'parent_id' => array(
+                'table-origin' => 'Noticias_Categorias',
+                'field-origin' => 'idPadre',
+                'table-final'  => 'content_categories',
+                'type'         => 'raw'
+            ),
+        )
+    );
 
     protected $originalCategories = array();
 
+    /**
+     * Array of database translations
+     *
+     * @var array
+     */
+    protected $translations;
+
+    /**
+     * Array to save some results during the migration process.
+     *
+     * @var array
+     */
+    protected $stats = array(
+        'user'      => array(
+            'already_imported' => 0,
+            'error'            => 0,
+            'imported'         => 0
+        ),
+        'category' => array(
+            'already_imported' => 0,
+            'error'            => 0,
+            'imported'         => 0
+        ),
+        'article'   => array(
+            'already_imported' => 0,
+            'error'            => 0,
+            'imported'         => 0
+        )
+    );
+
+
+    /**
+     * Configures the current command.
+     */
     protected function configure()
     {
         $this
             ->setDefinition(
                 array(
-                    new InputArgument('originDB', InputArgument::REQUIRED, 'originDB'),
-                    new InputArgument('finalDB', InputArgument::REQUIRED, 'finalDB'),
-
+                    new InputArgument(
+                        'originDB',
+                        InputArgument::REQUIRED,
+                        'originDB'
+                    ),
+                    new InputArgument(
+                        'finalDB',
+                        InputArgument::REQUIRED,
+                        'finalDB'
+                    ),
                 )
             )
             ->setName('migrate:region')
             ->setDescription('Migrate a region database to Openemas')
             ->setHelp(
-                <<<EOF
-The <info>migrate:region</info> command migrates one region DB to new openenmas database.
-
-<info>php bin/console migrate:region originDB finalDB</info>
-
-EOF
+                "\nThe <info>migrate:region</info> command migrates one region "
+                . "DB to new openenmas database.\n\n<info>php bin/console migra"
+                . "te:region originDB finalDB</info>"
+            )->addOption(
+                'host',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Host IP/name (default: localhost)'
+            )->addOption(
+                'type',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Database type'
+            )->addOption(
+                'user',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Database user (default:root)'
+            )->addOption(
+                'pass',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Database password'
+            )->addOption(
+                'url',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Region site url'
+            )->addOption(
+                'instance',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Instance name'
+            )->addOption(
+                'prefix',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Prefix used in data tables'
+            )->addOption(
+                'media-dir',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Instance media directory'
             );
     }
 
+    /**
+     * Executes the current command.
+     *
+     * @param InputInterface  $input  An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('region importer');
-        return;
+        $this->output = $output;
+        $this->output->writeln(
+            '<fg=yellow>*** Starting ONM Migrator ***</fg=yellow>'
+        );
 
-        $basePath = APPLICATION_PATH;
+        chdir(APPLICATION_PATH);
+
         $phpBinPath = exec('which php');
-
-        chdir($basePath);
-
-        $dataBaseHost = 'localhost';
-        $dataBaseType = 'mysqli';
-        $dataBaseUser = 'root';
-
-        $originDataBaseName = $input->getArgument('originDB');
-        $dataBaseName       = $input->getArgument('finalDB');
-
         $dialog = $this->getHelperSet()->get('dialog');
 
-        $validator = function($value) {
-            if (trim($value) == '') {
+        // Default database configuration values
+        $this->settings['database']['host'] = 'localhost';
+        $this->settings['database']['type'] = 'mysqli';
+        $this->settings['database']['user'] = 'root';
+        $this->settings['database']['pass'] = '';
+
+        // Get arguments (required)
+        $this->settings['database']['origin'] = $input->getArgument('originDB');
+        $this->settings['database']['final']  = $input->getArgument('finalDB');
+
+        // Get options (optional)
+        if ($input->getOption('host')) {
+            $this->settings['database']['host'] = $input->getOption('host');
+        }
+        if ($input->getOption('type')) {
+            $this->settings['database']['type'] = $input->getOption('type');
+        }
+        if ($input->getOption('user')) {
+            $this->settings['database']['user'] = $input->getOption('user');
+        }
+
+        // Get database password or prompt
+        if ($input->getOption('pass')) {
+            $this->settings['database']['pass'] = $input->getOption('pass');
+        } else {
+            $this->settings['database']['pass'] = $dialog->askHiddenResponse(
+                $this->output,
+                'What is the database user password?',
+                false
+            );
+
+            if (trim($this->settings['database']['pass']) == '') {
                 throw new \Exception('The password can not be empty');
             }
-        };
+        }
 
-        $dataBasePass = $password = $dialog->askHiddenResponse(
-            $output,
-            'What is the database user password?',
-            false
+        // Get new instance name or prompt
+        if ($input->getOption('instance')) {
+            $this->settings['instance'] = $input->getOption('instance');
+        } else {
+            $this->settings['instance'] = $dialog->ask(
+                $this->output,
+                'What is the instance name? ',
+                false
+            );
+            $this->output->writeln("-: ".$this->settings['instance']);
+
+            if (trim($this->settings['instance']) == '') {
+                throw new \Exception('The instance can not be empty');
+            }
+        }
+
+        // Get prefix to use in database tables or prompt (it could be empty)
+        if ($input->getOption('prefix')) {
+            $this->settings['database']['prefix'] = $input->getOption('prefix');
+        } else {
+            $this->settings['database']['prefix'] = $dialog->ask(
+                $this->output,
+                'What is the prefix in database tables? (Ex: wp_2_) ',
+                false
+            );
+            $this->output->writeln("-: ".$this->settings['database']['prefix']);
+        }
+
+        // Get url or prompt (it could be empty)
+        if ($input->getOption('url')) {
+            $this->settings['url'] = $input->getOption('url');
+        } else {
+            $this->settings['url'] = $dialog->ask(
+                $this->output,
+                'What is the ' . $this->settings['instance'] . ' site URL? ',
+                false
+            );
+            $this->output->writeln("-: ".$this->settings['url']);
+        }
+
+        // Get media directory path or prompt (it could be empty)
+        if ($input->getOption('media-dir')) {
+            $this->settings['media-dir'] = $input->getOption('media-dir');
+        } else {
+            $this->settings['media-dir'] = $dialog->ask(
+                $this->output,
+                'Where is the ' . $this->settings['instance']
+                . ' media directory? ',
+                '/opt/backup_opennemas/mundiario/wp-content/uploads/'
+            );
+            $this->output->writeln("-: ".$this->settings['media-dir']);
+
+            if (trim($this->settings['media-dir']) == '') {
+                throw new \Exception('The directory can not be empty');
+            }
+        }
+
+        $this->displayMigrateInfo($this->output);
+
+        $this->configureMigrator();
+
+        $this->prepareDatabase();
+        $this->import();
+
+        $this->displayResults();
+        $this->displayFinalInfo();
+    }
+
+    /**
+     * Displays a message before starting migration.
+     */
+    protected function displayMigrateInfo()
+    {
+        $this->output->writeln(
+            "\n<fg=yellow>Migrating from <fg=red>"
+            . $this->settings['database']['origin'] . '</fg=red> to <fg=green>'
+            . $this->settings['database']['final']
+            . '</fg=green>...</fg=yellow>'
         );
 
-        $dbPrefix = $dialog->ask(
-            $output,
-            'What is the prefix in database tables (Ex: wp_2_)?',
-            'wp_'
+        $this->output->writeln(
+            '   Instance:        ' . $this->settings['instance'] . "\n" .
+            '   Site url:        ' . $this->settings['url'] . "\n" .
+            '   Media directory: ' . $this->settings['media-dir'] . "\n"
         );
-        $output->writeln("-: ".$dbPrefix);
 
-        $originalUrl = $dialog->ask(
-            $output,
-            'What is the region site URL?',
-            'http://mundiario.com'
+        $this->output->writeln(
+            '   Database:      ' . $this->settings['database']['final'] ."\n" .
+            '   Database host: ' . $this->settings['database']['host'] ."\n" .
+            '   Database type: ' . $this->settings['database']['type'] ."\n" .
+            '   Database user: ' . $this->settings['database']['user'] ."\n" .
+            '   Database pass: ' . $this->settings['database']['pass'] ."\n"
         );
-        $output->writeln("-: ".$originalUrl);
+    }
 
-        $originalDirectory = $dialog->ask(
-            $output,
-            'Where is the region media directory?',
-            '/opt/backup_opennemas/mundiario/wp-content/uploads/'
+    /**
+     * Displays a message when ONM Migrator finishes the migration.
+     */
+    protected function displayFinalInfo()
+    {
+        $this->output->writeln(
+            '<fg=yellow>*** ONM Importer finished ***</fg=yellow>'
         );
-        $output->writeln("-: ".$originalDirectory);
+    }
 
-        $instanceName = $dialog->ask(
-            $output,
-            'Where is the instance name?',
-            'mundiario'
-        );
-        $output->writeln("-: ".$instanceName);
+    /**
+     * Display results after importing.
+     */
+    public function displayResults()
+    {
+        var_dump($this->stats);
+    }
 
-        define('ORIGINAL_URL', $originalUrl);
-        define('ORIGINAL_MEDIA', $originalDirectory);
+    /**
+     * Configures the current migrator.
+     */
+    protected function configureMigrator()
+    {
+        define('ORIGINAL_URL', $this->settings['url']);
+        define('ORIGINAL_MEDIA', $this->settings['media-dir']);
         define('ORIGINAL_MEDIA_COMMON', '/opt/backup_opennemas/mundiario/wp-content/uploads/');
 
-        define('CACHE_PREFIX', 'region');
-        define('BD_HOST', $dataBaseHost);
-        define('BD_USER', $dataBaseUser);
-        define('BD_PASS', $dataBasePass);
-        define('BD_TYPE', $dataBaseType);
-        define('BD_DATABASE', $dataBaseName);
-        define('ORIGIN_BD_DATABASE', $originDataBaseName);
-        define('PREFIX', $dbPrefix);
+        define('CACHE_PREFIX', $this->settings['instance']);
+
+        define('BD_HOST', $this->settings['database']['host']);
+        define('BD_USER', $this->settings['database']['user']);
+        define('BD_PASS', $this->settings['database']['pass']);
+        define('BD_TYPE', $this->settings['database']['type']);
+        define('BD_DATABASE', $this->settings['database']['final']);
+        define('ORIGIN_BD_DATABASE', $this->settings['database']['origin']);
+        define('PREFIX', $this->settings['database']['prefix']);
 
         // Initialize internal constants for logger
         // Logger
         define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
-        define('INSTANCE_UNIQUE_NAME', $instanceName);
+        define('INSTANCE_UNIQUE_NAME', $this->settings['instance']);
 
         define('IMG_DIR', "images");
         define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
@@ -131,269 +512,432 @@ EOF
         // Initialize Globals and Database
         $GLOBALS['application'] = new \Application();
         \Application::initDatabase();
-        \Application::initLogger();
+        // \Application::initLogger();
 
-
+        // Create new connection and connect
         $GLOBALS['application']->connOrigin = \ADONewConnection(BD_TYPE);
-        $GLOBALS['application']->connOrigin->Connect(BD_HOST, BD_USER, BD_PASS, ORIGIN_BD_DATABASE);
+        $GLOBALS['application']->connOrigin->Connect(
+            BD_HOST,
+            BD_USER,
+            BD_PASS,
+            ORIGIN_BD_DATABASE
+        );
 
         $_SESSION['username'] = 'script';
         $_SESSION['userid']   = 11;
-        // Execute functions
-        $output->writeln("\t<fg=blue>Migrating: ".$originDataBaseName."->".$dataBaseName."</fg=blue>");
-
-        $this->output = $output;
-
-        $this->prepareDatabase();
-
-        $this->importCategories();
-        $this->loadCategories();
-
-     //   $this->updateMetadatas();
-
-//        $this->importVideos();
-
-        $this->importbodyArticles();
-
-        $this->importOtherImages();
-/*
-        $this->importUsers();
-
-        if ($dbPrefix != 'wp_') {
-            $this->importImages('wp_');
-        }
-        $this->importImages();
-
-        $this->importArticles();
-        $this->updateBody();
-
-        $this->importGalleries();
-
-        $this->importVideos();
-        */
-
-        $output->writeln(
-            "\n\t ***Migration finished for Database: ".$dataBaseName."***"
-        );
-        $this->printResults();
     }
-
-    protected function prepareDatabase()
-    {
-
-        $sql = "ALTER TABLE `translation_ids` ".
-            "ADD `slug`  VARCHAR( 200 ) NOT NULL DEFAULT  '' ";
-        $rss = $GLOBALS['application']->conn->Execute($sql);
-
-        $sql = "INSERT INTO user_groups (`pk_user_group`, `name`) VALUES (3, 'autores')";
-        $rss = $GLOBALS['application']->conn->Execute($sql);
-
-        $sql="DELETE FROM `wp-mundiario`.`wp_users` WHERE `wp_users`.`user_login` = 'macada'";
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-    }
-
 
     /**
-     * Read users data and insert this in new database
+     * Prepare database for importing.
      *
-     * @return void
-     **/
+     * @note This method is called after collecting options/arguments and before
+     *       importing.
+     */
+    protected function prepareDatabase()
+    {
+        // $sql = "ALTER TABLE `translation_ids` ".
+        //     "ADD `slug`  VARCHAR( 200 ) NOT NULL DEFAULT  '' ";
+        // $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        // $sql = "INSERT INTO user_groups (`pk_user_group`, `name`) VALUES (3, 'autores')";
+        // $rss = $GLOBALS['application']->conn->Execute($sql);
+
+        // $sql="DELETE FROM `wp-mundiario`.`wp_users` WHERE `wp_users`.`user_login` = 'macada'";
+        // $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+    }
+
+    /**
+     * Import from origin database to final database
+     */
+    protected function import()
+    {
+        $this->loadTranslations();
+
+        // $this->importUsers();
+        // $this->importCategories();
+        $this->importArticles();
+
+        // $this->importCategories();
+        // $this->updateMetadatas();
+        // $this->importVideos();
+        // $this->importbodyArticles();
+        // $this->importOtherImages();
+
+
+        // if ($this->settings['database']['prefix'] != 'wp_') {
+        //     $this->importImages('wp_');
+        // }
+        // $this->importImages();
+
+        // $this->updateBody();
+
+        // $this->importGalleries();
+
+        // $this->importVideos();
+    }
+
+    /**
+     * Imports users from origin database.
+     */
     protected function importUsers()
     {
-        $sql2 = "SELECT umeta_id, user_id, meta_key, meta_value  FROM `wp_usermeta` ".
-            "WHERE  meta_key IN ('first_name', 'last_name', 'description', ".
-            "'wp_biographia_short_bio', 'userphoto_image_file','twitter' )";
+        $data = $this->getSource($this->usuarios);
+        return $this->saveUsers($this->usuarios, $data);
+    }
 
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql2);
-        $rs2     = $GLOBALS['application']->connOrigin->Execute($request);
+    /**
+     * Imports articles from origin database
+     */
+    protected function importArticles()
+    {
+        $data = $this->getSource($this->articles);
+        var_dump($data);
+        // return $this->saveArticles($this->articles, $data);
+    }
 
-        $usersMeta = $rs2->getArray();
-        $data      = array();
-        foreach ($usersMeta as $user) {
-            $userID = $user['user_id'];
+    /**
+     * Imports categories from origin database.
+     */
+    protected function importCategories()
+    {
+        $data = $this->getSource($this->categorias);
+        return $this->saveCategories($this->categorias, $data);
+    }
 
-            $key                 = $user['meta_key'];
-            $data[$userID][$key] = $user['meta_value'];
+    /**
+     * Gets all source fields from database for each entity.
+     *
+     * @param  array $schema Database schema.
+     * @return array         Array of fields used to create new entities.
+     */
+    protected function getSource($schema)
+    {
+        $data = array();
 
-        }
-
-        $sql = "SELECT `ID`, `user_login`, `user_pass`, `user_nicename`, `user_email`, "
-            ." `user_url`, `user_registered`, `user_activation_key`, `user_status`, "
-            ." `display_name`, `spam`, `deleted` FROM `wp_users` ";
+        // Select all ids
+        $sql = 'SELECT ' . $schema['settings']['table-origin'] . '.'
+            . $schema['settings']['id-origin']
+            . ' FROM ' . $schema['settings']['table-origin'];
+            // . ' LIMIT 1,10';
 
         $request = $GLOBALS['application']->connOrigin->Prepare($sql);
         $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
-        $IDCategory = 1; //assign category for media elements
+        $ids     = $rs->getArray();
 
-        if (!$rs) {
-            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
-        } else {
+        $total = count($ids);
+        foreach ($ids as $id) {
+        // for ($x = 0; $x < 2; $x++) {
+            // $id = $ids[$x];
+            // $this->output->writeln('Processing article '. $x.' of '. $total);
 
-            $totalRows = $rs->_numOfRows;
-            $current   = 1;
+            // Build sql statement 'SELECT' chunk
+            $sql = 'SELECT ';
+            $i = 0;
+            foreach ($schema['fields'] as $key => $field) {
+                $sql = $sql . $field['table-origin'] . '.'
+                    . $field['field-origin'] . ' AS ' . $key;
 
-
-            while (!$rs->EOF) {
-                if (1!=1 && $this->elementIsImported($rs->fields['ID'], 'user')) {
-                    $this->output->writeln("[{$current}/{$totalRows}] user already imported");
-                } else {
-                    $originalID = $rs->fields['ID'];
-                    $photoId    = '';
-
-                    if (!empty($data[$originalID]['userphoto_image_file'])
-                         && !is_null($data[$originalID]['userphoto_image_file'])) {
-
-                        $file    = ORIGINAL_MEDIA.'files/'.$data[$originalID]['userphoto_image_file'];
-                        $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
-                        if (empty($photoId)) {
-                            $file    = ORIGINAL_MEDIA_COMMON.'userphoto/'.$data[$originalID]['userphoto_image_file'];
-                            $photoId = $this->uploadUserAvatar($file, $rs->fields['user_nicename']);
-                        }
-                    }
-
-                    $values = array(
-                        'username'      => $rs->fields['user_nicename'],
-                        'password'      => $rs->fields['user_pass'],
-                        'sessionexpire' =>'30',
-                        'email'         => $rs->fields['user_email'],
-                        'name'          => $data[$originalID]['first_name']." ".$data[$originalID]['last_name'],
-                        'type'          => 0,
-                        'deposit'       => '',
-                        'token'         => '',
-                        'activated'     => 1,
-                        'fk_user_group' => '',
-                        'avatar_img_id' => $photoId,
-                        'bio'           => $data[$originalID]['wp_biographia_short_bio'],
-                        'url'           => $rs->fields['user_url'],
-                        'id_user_group' => array('3'),
-                    );
-
-                    try {
-                        $user   = new \User();
-                        $user->create($values);
-                        $userID = $user->id;
-
-                        if (!empty($userID)) {
-                            $user->updateUserPassword($userID, $rs->fields['user_pass']);
-                            if (isset($data[$originalID])
-                                && isset($data[$originalID]['twitter'])
-                                && !empty($data[$originalID]['twitter'])) {
-                                $user->setMeta(array('twitter' => $data[$originalID]['twitter']));
-                            }
-                            if (isset($data[$originalID])
-                                && isset($data[$originalID]['description'])) {
-                                    $user->setMeta(array('bio_description' => $data[$originalID]['description']));
-                            }
-
-                            $this->insertRefactorID($originalID, $userID, 'user', $rs->fields['user_login']);
-                    //        $this->output->writeln('- User '. $userID. ' ok');
-                        } else {
-                            $this->output->writeln('Problem inserting id'.$originalID.'-'.$rs->fields['user_login'] .'\n');
-                        }
-                    } catch (\Exception $e) {
-
-                    }
+                if ($i < count($schema['fields']) - 1) {
+                    $sql .= ',';
                 }
-                $current++;
-                $rs->MoveNext();
+
+                $i++;
             }
 
-            $rs->Close();
-            $this->output->writeln("Importer Users Finished");
-        }
-    }
+            // Build sql statement 'FROM' chunk
+            $sql .= ' FROM ';
+            foreach ($schema['tables'] as $key => $table) {
+                $sql .= $table;
 
-    protected function importCategories()
-    {
-
-        $sql = "SELECT * FROM ".PREFIX."terms, ".PREFIX."term_taxonomy ".
-               "WHERE ".PREFIX."terms.term_id = ".PREFIX."term_taxonomy.term_id AND taxonomy='category' ".
-               " ORDER BY ".PREFIX."terms.term_id DESC";
-
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs = $GLOBALS['application']->connOrigin->Execute($request);
-
-        $categories = $rs->getArray();
-
-        foreach ($categories as $category) {
-
-            $originalID = $category['term_id'];
-
-            if ($this->elementIsImported($originalID, 'category')) {
-                 $this->output->writeln("Category with id {$originalID} already imported\n");
-            } else {
-                $data = array(
-                    'name'              => $category['slug'],
-                    'title'             => $category['name'],
-                    'inmenu'            => 1,
-                    'subcategory'       => 0,
-                    'internal_category' => 1,
-                    'logo_path'         => '',
-                    'color'             => '',
-                    'params'            => array(
-                        'title'         => $category['name'],
-                        'inrss'         => 1,
-                    ),
-                );
-
-                $sql = "INSERT INTO content_categories
-                    (`name`, `title`,`inmenu`,`fk_content_category`,
-                    `internal_category`, `logo_path`,`color`, `params`)
-                    VALUES (?,?,?,?,?,?,?,?)";
-                $values = array(
-                    $data['name'],
-                    $data['title'],
-                    $data['inmenu'],
-                    $data['subcategory'],
-                    $data['internal_category'],
-                    $data['logo_path'],
-                    $data['color'],
-                    serialize($data['params']),
-                );
-
-                $rs    = $GLOBALS['application']->conn->Execute($sql, $values);
-                $newID = $GLOBALS['application']->conn->Insert_ID();
-
-                $this->output->writeln("Importing category with id {$originalID} - ");
-                $this->insertRefactorID($originalID, $newID, 'category', $category['slug']);
-              //  $this->output->writeln("new id {$newID} [DONE]\n");
+                if ($key < count($schema['tables']) - 1) {
+                    $sql .= ', ';
+                }
             }
 
+            // Build sql statement 'WHERE' chuck
+            $sql.= ' WHERE '
+                    . $schema['settings']['table-origin'] . '.'
+                    . $schema['settings']['id-origin'] . '='
+                    . $id[$schema['settings']['id-origin']];
+
+            if (isset($schema['relations'])
+                    && count($schema['relations']) > 0) {
+                foreach ($schema['relations'] as $key => $relation) {
+                    if ($key < count($schema['relations'])) {
+                        $sql .= ' AND ';
+                    }
+                    $sql .=  $relation['table1'] . '.' . $relation['id1'] . '='
+                        . $relation['table2'] . '.' . $relation['id2'];
+                }
+
+            }
+
+            var_dump($sql);
+
+            // Execute sql and save in array
+            $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+            $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+            $results = $rs->getArray();
+
+            if (count($results) > 0) {
+                foreach ($results as $result) {
+                    $data[] = $result;
+                }
+            }
         }
-        $this->output->writeln("Importer Categories Finished");
-        return $this;
+
+        return $data;
     }
 
     /**
-     * Fetches the original categories
+     * Saves the users and returns the amount of new users.
      *
-     **/
-    protected function loadCategories()
+     * @param  array    $schema Database schema.
+     * @param  array    $data   Users to save.
+     */
+    protected function saveUsers($schema, $data)
     {
-        $this->categories = array();
+        foreach ($data as $item) {
+            if (!$this->elementIsImported($item['id'], 'author')) {
+                // Default values
+                $values = array(
+                    'sessionexpire' => '30',
+                    'url'           => '',
+                    'bio'           => '',
+                    'avatar_img_id' => 0,
+                    'type'          => 0,
+                    'deposit'       => '',
+                    'token'         => '',
+                    'activated'     => 1,
+                    'id_user_group' => array('3'),
+                );
 
-        $sql = "SELECT * FROM translation_ids WHERE type ='category'";
+                $values['username'] = isset($item['username']) ?
+                    $this->parseField(
+                        $item['username'],
+                        $schema['fields']['username']['type']
+                    ) : null;
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+                $values['password'] = isset($item['password']) ?
+                    $this->parseField(
+                        $item['password'],
+                        $schema['fields']['password']['type']
+                    ) : null;
 
-        $categories = $rs->GetArray();
+                $values['email'] = isset($item['email']) ?
+                    $this->parseField(
+                        $item['email'],
+                        $schema['fields']['email']['type']
+                    ) : null;
 
-        foreach ($categories as $category) {
-            $this->categories[$category['pk_content_old']] = $category['pk_content'];
-            $this->originalCategories[] = $category['pk_content_old'];
+                $values['name'] = isset($item['name']) ?
+                    $this->parseField(
+                        $item['name'],
+                        $schema['fields']['name']['type']
+                    ) : null;
+
+                $values['avatar_img_id'] = isset($item['avatar_img_id']) ?
+                    $this->parseField(
+                        $item['avatar_img_id'],
+                        $schema['fields']['avatar_img_id']['type']
+                    ) : 0;
+
+                $values['bio'] = isset($item['bio']) ?
+                    $this->parseField(
+                        $item['bio'],
+                        $schema['fields']['bio']['type']
+                    ) : '';
+
+                $values['url'] = isset($item['url']) ?
+                    $this->parseField(
+                        $item['url'],
+                        $schema['fields']['url']['type']
+                    ) : '';
+
+
+                try {
+                    $user   = new \User();
+                    $user->create($values);
+
+                    $id = $user->id;
+                    $this->createTranslation($item['id'], $id, 'author');
+
+                    $this->stats['user']['imported']++;
+                } catch (\Exception $e) {
+                    $this->stats['user']['error']++;
+                }
+            } else {
+                $this->stats['user']['already_imported']++;
+            }
         }
-
-        return $this;
     }
 
-    protected function matchCategory($categoryId)
+    /**
+     * Saves the categories and returns the amount of new categories.
+     *
+     * @param  array    $schema Database schema.
+     * @param  array    $data   Categories to save.
+     */
+    protected function saveCategories($schema, $data)
     {
-        if (array_key_exists($categoryId, $this->categories)) {
-            return $this->categories[$categoryId];
+        foreach ($data as $item) {
+            if (!$this->elementIsImported($item['id'], 'category')) {
+                $values = array(
+                    'name'              => '',
+                    'title'             => '',
+                    'inmenu'            => 0,
+                    'posmenu'           => 10,
+                    'subcategory'       => 0,
+                    'internal_category' => 0,
+                    'logo_path'         => null,
+                    'color'             => null,
+                    'params'            => null
+                );
+
+                $values['title'] = isset($item['name']) ?
+                    $this->parseField(
+                        $item['name'],
+                        $schema['fields']['name']['type']
+                    ) : '';
+
+
+                $values['name'] = isset($item['name']) ?
+                    $this->parseField(
+                        $item['name'],
+                        $schema['fields']['name']['type']
+                    ) : '';
+
+                $values['subcategory'] = isset($item['parent_id'])
+                    && isset($this->translations['category'][$item['parent_id']]) ?
+                    $this->translations['category'][$item['parent_id']]
+                    : null;
+
+                try {
+                    $category = new \ContentCategory();
+                    $category->create($values);
+
+                    $id = $category->pk_content_category;
+                    $this->createTranslation($item['id'], $id, 'category');
+
+                    $this->stats['category']['already_imported']++;
+                } catch (\Exception $e) {
+                    $this->stats['category']['error']++;
+                }
+            } else {
+                $this->stats['category']['already_imported']++;
+            }
+        }
+    }
+
+    /**
+     * Creates a translation entry.
+     *
+     * @param integer $old  Old content id used in old database.
+     * @param integer $new  New content id.
+     * @param string  $type Type of the translation.
+     */
+    protected function createTranslation($old, $new, $type)
+    {
+        $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`,
+            `type`) VALUES (?,?,?)';
+        $values = array($old, $new, $type);
+
+        $stmt = $GLOBALS['application']->conn->Prepare($sql);
+        $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+
+        if (!$rss) {
+            $this->output->writeln(
+                'createTranslation: '
+                . $GLOBALS['application']->conn->ErrorMsg()
+            );
+        }
+
+        $this->translations[$type][$old] = $new;
+    }
+
+    /**
+     * Parses and returns the field.
+     *
+     * @param  string $field Field to parse.
+     * @param  string $type  Type of the field.
+     * @return mixed         String if the field
+     */
+    protected function parseField($field, $type)
+    {
+        switch ($type) {
+            case 'raw': // Remove spaces at beginning and end
+                return trim($field);
+                break;
+            case 'body': // Replaces the content of the field
+                return '<p>'. preg_replace(
+                    array(
+                        "/([\r\n])+/i",
+                        "/([\n]{2,})/i",
+                        "/([\n]{2,})/i",
+                        "/(\n)/i"
+                    ),
+                    array('</p><p>', '</p><p>', '<br>', '<br>'),
+                    $field
+                ) . '</p>';
+                break;
+            case 'media': // Saves the media
+                return 0;
+            default:
+                return $field;
+                break;
+        }
+    }
+
+    /**
+     * Fetches all translations.
+     */
+    protected function loadTranslations()
+    {
+        $sql = 'SELECT * FROM translation_ids';
+        $this->translations = array(
+            'author'   => array(),
+            'category' => array(),
+            'article'  => array()
+        );
+
+
+        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $translations = $rs->GetArray();
+
+        foreach ($translations as $translation) {
+            $this->translations[$translation['type']]
+                [$translation['pk_content_old']] = $translation['pk_content'];
+        }
+    }
+
+    /**
+     * Returns the new category id.
+     *
+     * @param int $id Old category id.
+     */
+    protected function matchCategory($id)
+    {
+        if (array_key_exists($id, $this->translations['category'])) {
+            return $this->translation['categories'][$id];
         } else {
             return 20;
         }
+    }
+
+    /**
+     * Read the correspondence between identifiers
+     *
+     * @return mixed The new element id if it's already imported. Otherwise,
+     *                return false.
+     */
+    protected function elementIsImported($oldId, $type)
+    {
+        if (isset($this->translations[$type][$oldId])) {
+            return $this->translations[$type][$oldId];
+        }
+
+        return false;
     }
 
     /**
@@ -401,100 +945,100 @@ EOF
      *
      * @return void
      **/
-    protected function importArticles()
-    {
+    // protected function importArticles()
+    // {
 
-        $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_values($this->originalCategories)).") ";
-        $limit = " ORDER BY `".PREFIX."term_relationships`.`term_taxonomy_id`";
+    //     $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_values($this->originalCategories)).") ";
+    //     $limit = " ORDER BY `".PREFIX."term_relationships`.`term_taxonomy_id`";
 
-        $sql = "SELECT * FROM `".PREFIX."posts`, `".PREFIX."term_relationships` WHERE ".
-            "`post_type` = 'post' AND `ID`=`object_id` AND post_status='publish' ".
-            " AND ".$where." ".$limit;
+    //     $sql = "SELECT * FROM `".PREFIX."posts`, `".PREFIX."term_relationships` WHERE ".
+    //         "`post_type` = 'post' AND `ID`=`object_id` AND post_status='publish' ".
+    //         " AND ".$where." ".$limit;
 
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+    //     $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
-        if (!$rs) {
-            $this->output->writeln('DB problem: '. $GLOBALS['application']->connOrigin->ErrorMsg());
-        } else {
-            $totalRows = $rs->_numOfRows;
-            $current   = 1;
+    //     if (!$rs) {
+    //         $this->output->writeln('DB problem: '. $GLOBALS['application']->connOrigin->ErrorMsg());
+    //     } else {
+    //         $totalRows = $rs->_numOfRows;
+    //         $current   = 1;
 
-            while (!$rs->EOF) {
-                $originalArticleID = $rs->fields['ID'];
-                if ($this->elementIsImported($originalArticleID, 'article') ) {
-                     //$this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
-                } else {
-                   // $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
+    //         while (!$rs->EOF) {
+    //             $originalArticleID = $rs->fields['ID'];
+    //             if ($this->elementIsImported($originalArticleID, 'article') ) {
+    //                  //$this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
+    //             } else {
+    //                // $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
 
-                    $data = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
-                    if (!empty($rs->fields['post_excerpt'])) {
-                        $summary = $this->convertoUTF8($rs->fields['post_excerpt']);
-                    } else {
-                        $summary = $this->convertoUTF8(strip_tags(substr($data['body'], 0, 250)));
-                    }
-                    $values = array(
-                        'title' => $this->convertoUTF8($rs->fields['post_title']),
-                        'category' => $this->matchCategory($rs->fields['term_taxonomy_id']),
-                        'with_comment' => 1,
-                        'available' => 1,
-                        'content_status' => 1,
-                        'frontpage' => 0,
-                        'in_home' => 0,
-                        'title_int' => $this->convertoUTF8($rs->fields['post_title']),
-                        'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_title'])),
-                        'subtitle' => '',
-                        'slug' => $rs->fields['post_name'],
-                        'agency' => '',
-                        'summary' => $summary,
-                        'description' => strip_tags(substr($summary, 0,150)),
-                        'body' => $data['body'],
-                        'posic' => 0,
-                        'id' => 0,
-                        'img1' => $data['img'],
-                        'img2' => $data['img'],
-                        'img2_footer' => $data['footer'],
-                        'fk_video' => '',
-                        'fk_video2' => '',
-                        'footer_video2' => '',
-                        'created' => $rs->fields['post_date_gmt'],
-                        'starttime' => $rs->fields['post_date_gmt'],
-                        'changed' => $rs->fields['post_modified_gmt'],
-                        'fk_user' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                        'fk_author' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                        'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                        'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                    );
+    //                 $data = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
+    //                 if (!empty($rs->fields['post_excerpt'])) {
+    //                     $summary = $this->convertoUTF8($rs->fields['post_excerpt']);
+    //                 } else {
+    //                     $summary = $this->convertoUTF8(strip_tags(substr($data['body'], 0, 250)));
+    //                 }
+    //                 $values = array(
+    //                     'title' => $this->convertoUTF8($rs->fields['post_title']),
+    //                     'category' => $this->matchCategory($rs->fields['term_taxonomy_id']),
+    //                     'with_comment' => 1,
+    //                     'available' => 1,
+    //                     'content_status' => 1,
+    //                     'frontpage' => 0,
+    //                     'in_home' => 0,
+    //                     'title_int' => $this->convertoUTF8($rs->fields['post_title']),
+    //                     'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_title'])),
+    //                     'subtitle' => '',
+    //                     'slug' => $rs->fields['post_name'],
+    //                     'agency' => '',
+    //                     'summary' => $summary,
+    //                     'description' => strip_tags(substr($summary, 0,150)),
+    //                     'body' => $data['body'],
+    //                     'posic' => 0,
+    //                     'id' => 0,
+    //                     'img1' => $data['img'],
+    //                     'img2' => $data['img'],
+    //                     'img2_footer' => $data['footer'],
+    //                     'fk_video' => '',
+    //                     'fk_video2' => '',
+    //                     'footer_video2' => '',
+    //                     'created' => $rs->fields['post_date_gmt'],
+    //                     'starttime' => $rs->fields['post_date_gmt'],
+    //                     'changed' => $rs->fields['post_modified_gmt'],
+    //                     'fk_user' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+    //                     'fk_author' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+    //                     'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+    //                     'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
+    //                 );
 
-                    $article      = new \Article();
-                    $newArticleID = $article->create($values);
+    //                 $article      = new \Article();
+    //                 $newArticleID = $article->create($values);
 
-                    if (!empty($newArticleID)) {
-                        $this->insertRefactorID($originalArticleID, $newArticleID, 'article', $rs->fields['post_name']);
-                    //  $this->output->writeln('-'. $originalArticleID.'->'.
-                    //         $newArticleID. ' article ok');
-                    $this->output->write('.');
-                    } else {
-                        $this->output->writeln('Problem inserting article '.$originalArticleID.
-                            ' - '. $rs->fields['post_name'] .'\n');
-                    }
-                }
-                $current++;
-                $rs->MoveNext();
-            }
-            $this->output->writeln('Imported  '.$current.' articles \n');
+    //                 if (!empty($newArticleID)) {
+    //                     $this->createTranslation($originalArticleID, $newArticleID, 'article', $rs->fields['post_name']);
+    //                 //  $this->output->writeln('-'. $originalArticleID.'->'.
+    //                 //         $newArticleID. ' article ok');
+    //                 $this->output->write('.');
+    //                 } else {
+    //                     $this->output->writeln('Problem inserting article '.$originalArticleID.
+    //                         ' - '. $rs->fields['post_name'] .'\n');
+    //                 }
+    //             }
+    //             $current++;
+    //             $rs->MoveNext();
+    //         }
+    //         $this->output->writeln('Imported  '.$current.' articles \n');
 
-        $rs->Close();
-        }
-        return true;
-    }
+    //     $rs->Close();
+    //     }
+    //     return true;
+    // }
 
     /**
      * Read images data and insert this in new database
      *
      * @return void
      **/
-    protected function importImages($prefix=null)
+    protected function importImages($prefix = null)
     {
         if (empty($prefix)) {
            $prefix = PREFIX;
@@ -564,7 +1108,7 @@ EOF
                         $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
 
                         if (!empty($imageID)) {
-                            $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
+                            $this->createTranslation($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                             // $this->output->writeln('- Image '. $imageID. ' ok');
                             $this->output->write('.');
                         } else {
@@ -572,7 +1116,7 @@ EOF
 
                             $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
                             if (!empty($imageID)) {
-                                $this->insertRefactorID($originalImageID, $imageID, 'image', $rs->fields['post_name']);
+                                $this->createTranslation($originalImageID, $imageID, 'image', $rs->fields['post_name']);
                                 // $this->output->writeln('- Image '. $imageID. ' ok');
                             } else {
                                 $this->output->write('.');
@@ -665,7 +1209,7 @@ EOF
                         $result  = $album->create($data);
                         $albumID = $result->id;
                         if (!empty($albumID)) {
-                            $this->insertRefactorID($originalID, $albumID, 'gallery', $rs->fields['post_name']);
+                            $this->createTranslation($originalID, $albumID, 'gallery', $rs->fields['post_name']);
                             //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
                          //   $this->output->writeln('- Gallery '. $albumID. ' ok');
                         } else {
@@ -684,53 +1228,6 @@ EOF
     }
 
     /**
-     *  insert the correspondence between identifiers
-     *
-     * @return void
-     **/
-    protected function insertRefactorID($contentID, $newID, $type, $slug="")
-    {
-        $sql    = 'INSERT INTO translation_ids (`pk_content_old`, `pk_content`, `type`, `slug`)
-                VALUES (?, ?, ?, ?)';
-        $values = array($contentID, $newID, $type, $slug);
-
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-        $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-
-        if (!$rss) {
-            $this->output->writeln('\n insertRefactorID: '.$GLOBALS['application']->conn->ErrorMsg());
-        }
-
-    }
-
-    /**
-     * Read the correspondence between identifiers
-     *
-     * @return void
-     **/
-    protected function elementIsImported($contentID, $contentType)
-    {
-        if (isset($contentID) && isset($contentType)) {
-            $sql = 'SELECT * FROM `translation_ids` WHERE `pk_content_old`=? AND type=?';
-
-            $values = array($contentID, $contentType);
-
-            $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-
-            if (!$rss) {
-                $this->output->writeln('- is imported '.$GLOBALS['application']->conn->ErrorMsg());
-            } else {
-                return ($rss->fields['pk_content']);
-            }
-
-        } else {
-            //$this->output->writeln("There is imported {$contentID} - {$contentType}\n.");
-        }
-        return 0;
-    }
-
-    /**
      * update some fields in content table
      *
      * @param int $contentId the content id
@@ -738,7 +1235,7 @@ EOF
      *
      * @return void
      **/
-    protected  function updateFields($contentID, $params)
+    protected function updateFields($contentID, $params)
     {
         if (isset($contentID) && isset($params)) {
             $sql    = 'UPDATE `contents` SET {$params}  WHERE pk_content=?';
@@ -760,7 +1257,8 @@ EOF
      *
      * @return string
      **/
-    protected function getOnmIdImage($guid) {
+    protected function getOnmIdImage($guid)
+    {
         $sql = "SELECT ID FROM `".PREFIX."posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ".
             " AND guid = '".$guid."'";
@@ -792,9 +1290,8 @@ EOF
 
     }
 
-
-
-    protected function clearLabelsInBodyArticle($body) {
+    protected function clearLabelsInBodyArticle($body)
+    {
 
         /*[gallery link="file" ids="8727,8728,8729,8730,8731,8732"]
         [caption id="attachment_9084" align="alignnone" width="400"]<a href="http://mundiario.com/wp-content/uploads/2013/06/alicante-2.jpg"><img class="size-full wp-image-9084" alt="EstaciÃ³n de Alicante, desde ahora enlazada por AVE." src="http://mundiario.com/wp-content/uploads/2013/06/alicante-2.jpg" width="400" height="225" /></a> EstaciÃ³n de Alicante, desde ahora enlazada por AVE.[/caption]
@@ -832,7 +1329,7 @@ EOF
                         $this->output->writeln('- Image from Body '. $guid. ' fault');
                     }
                 }
-            /*    $date = new \DateTime();
+                $date = new \DateTime();
                 $date = $date->format('Y-m-d H:i:s');
                 $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
                 $oldID = $this->elementIsImported('fotos', 'category');
@@ -864,7 +1361,7 @@ EOF
                     );
 
                 $img  = $photo->createFromLocalFile($imageData);
-                $this->output->writeln('- Image from Body inserted'. $img. ' '); */
+                $this->output->writeln('- Image from Body inserted'. $img. ' ');
             }
             $newBody = preg_replace($patern, '', $body);
         //    $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
@@ -1019,299 +1516,276 @@ EOF
     }
 
 
-    public function printResults()
-    {
-
-        $sql = "SELECT type , count( * ) AS `total` FROM `translation_ids` GROUP BY type";
-
-        $count_sql = $GLOBALS['application']->conn->Prepare($sql);
-        $rs        = $GLOBALS['application']->conn->Execute($count_sql);
-
-        if (!$rs) {
-            $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-        } else {
-            while (!$rs->EOF) {
-                $this->output->writeln("There are imported {$rs->fields['total']} ".
-                    "type {$rs->fields['type']}.\n");
-                $rs->MoveNext();
-            }
-            $rs->Close(); # optional
-        }
-
-    }
-
-
     /***** functions fixing mundiario  fails */
 
-    public function updateMetadatas() {
+    // public function updateMetadatas()
+    // {
 
-        $sql = "SELECT pk_content, metadata, title FROM contents ";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+    //     $sql = "SELECT pk_content, metadata, title FROM contents ";
+    //     $rs = $GLOBALS['application']->conn->Execute($sql);
 
-        $values= array();
-        while (!$rs->EOF) {
+    //     $values= array();
+    //     while (!$rs->EOF) {
 
-            $tags = StringUtils::get_tags($rs->fields['metadata']);
-            if(empty($tags)) {
-                $tags = StringUtils::get_tags($rs->fields['title']);
-            }
+    //         $tags = StringUtils::get_tags($rs->fields['metadata']);
+    //         if(empty($tags)) {
+    //             $tags = StringUtils::get_tags($rs->fields['title']);
+    //         }
 
-            $values[] =  array(
-                $tags,
-                $rs->fields['pk_content'],
-            );
+    //         $values[] =  array(
+    //             $tags,
+    //             $rs->fields['pk_content'],
+    //         );
 
-            $rs->MoveNext();
-        }
+    //         $rs->MoveNext();
+    //     }
 
-        if (!empty($values)) {
-            $sql    = 'UPDATE `contents` SET metadata =?  WHERE pk_content=?';
+    //     if (!empty($values)) {
+    //         $sql    = 'UPDATE `contents` SET metadata =?  WHERE pk_content=?';
 
-            $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if (!$rss) {
-                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-            }
+    //         $stmt = $GLOBALS['application']->conn->Prepare($sql);
+    //         $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+    //         if (!$rss) {
+    //             $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //         }
 
-        } else {
-            //$this->output->writeln("Please provide a contentID and views to update it.");
-        }
-
-    }
+    //     } else {
+    //         //$this->output->writeln("Please provide a contentID and views to update it.");
+    //     }
+    // }
 
 
      /* create new video */
+    // public function createVideo($video)
+    // {
+    //     $newVideoID = null;
 
-    public function createVideo($video) {
-        $newVideoID = null;
+    //     preg_match(
+    //         '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
+    //         $video,
+    //         $match
+    //     );
 
-        preg_match(
-            '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
-            $video,
-            $match
-        );
+    //     $oldID = $this->elementIsImported('videos', 'category');
 
-        $oldID = $this->elementIsImported('videos', 'category');
+    //     if (empty($oldID)) {
+    //         $IDCategory ='6'; //videos
+    //     } else {
+    //         $IDCategory = $this->matchCategory($oldID); //assign category 'videos' for media elements
+    //     }
 
-        if (empty($oldID)) {
-            $IDCategory ='6'; //videos
-        } else {
-            $IDCategory = $this->matchCategory($oldID); //assign category 'videos' for media elements
-        }
+    //     if (!empty($match[1])) {
 
-        if (!empty($match[1])) {
+    //         $url= "http://www.youtube.com/watch?v=".$match[1] ;
 
-            $url= "http://www.youtube.com/watch?v=".$match[1] ;
+    //         if ($url) {
+    //             try {
+    //                 $videoP = new \Panorama\Video($url);
+    //                 $information = $videoP->getVideoDetails();
 
-            if ($url) {
-                try {
-                    $videoP = new \Panorama\Video($url);
-                    $information = $videoP->getVideoDetails();
+    //                 $values = array(
+    //                     'file_path'      => $url,
+    //                     'video_url'      => $url,
+    //                     'category'       => $IDCategory,
+    //                     'available'      => 1,
+    //                     'content_status' => 1,
+    //                     'title'          => $information['title'],
+    //                     'metadata'       => StringUtils::get_tags($information['title']),
+    //                     'description'    => $information['title'].' video '.$url,
+    //                     'author_name'    => $url,
+    //                 );
 
-                    $values = array(
-                        'file_path'      => $url,
-                        'video_url'      => $url,
-                        'category'       => $IDCategory,
-                        'available'      => 1,
-                        'content_status' => 1,
-                        'title'          => $information['title'],
-                        'metadata'       => StringUtils::get_tags($information['title']),
-                        'description'    => $information['title'].' video '.$url,
-                        'author_name'    => $url,
-                    );
+    //             } catch (\Exception $e) {
+    //                $this->output->writeln("\n 1 Can't get video information. Check the $url");
+    //                 return;
+    //             }
 
-                } catch (\Exception $e) {
-                   $this->output->writeln("\n 1 Can't get video information. Check the $url");
-                    return;
-                }
+    //             $video = new \Video();
+    //             $values['information'] = $information;
 
-                $video = new \Video();
-                $values['information'] = $information;
+    //             try {
+    //                 $newVideoID = $video->create($values);
+    //             } catch (\Exception $e) {
 
-                try {
-                    $newVideoID = $video->create($values);
-                } catch (\Exception $e) {
+    //                 $this->output->writeln("1 Problem with video: {$e->getMessage()} {$url}  ");
+    //             }
 
-                    $this->output->writeln("1 Problem with video: {$e->getMessage()} {$url}  ");
-                }
+    //             if (empty($newVideoID)) {
+    //                 $this->output->writeln("2 Problem with video: {$url}  ");
+    //             }
 
-                if (empty($newVideoID)) {
-                    $this->output->writeln("2 Problem with video: {$url}  ");
-                }
+    //         } else {
+    //             $this->output->writeln("There was an error while uploading the form, not all the required data was sent.");
 
-            } else {
-                $this->output->writeln("There was an error while uploading the form, not all the required data was sent.");
+    //         }
+    //     }
 
-            }
-        }
+    //     $this->output->writeln("new id {$newVideoID} [DONE]");
+    //     return $newVideoID;
+    // }
 
-        $this->output->writeln("new id {$newVideoID} [DONE]");
-        return $newVideoID;
-    }
+    // public function importVideos()
+    // {
 
-    public function importVideos()
-    {
+    //     $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
+    //         "`meta_key` = 'usn_videolink' ";
 
-        $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
-            "`meta_key` = 'usn_videolink' ";
+    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+    //     $rs =$GLOBALS['application']->connOrigin->Execute($request);
 
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs =$GLOBALS['application']->connOrigin->Execute($request);
+    //     if (!$rs) {
+    //         $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
 
-        if (!$rs) {
-            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
+    //     } else {
 
-        } else {
+    //         $totalRows = $rs->_numOfRows;
+    //         $current = 1;
+    //         while (!$rs->EOF) {
 
-            $totalRows = $rs->_numOfRows;
-            $current = 1;
-            while (!$rs->EOF) {
+    //             $videoID = $this->createVideo($rs->fields['meta_value']);
+    //             if(!empty($videoID)) {
+    //                 $this->createTranslation($rs->fields['post_id'], $videoID, 'youtube', $rs->fields['meta_value']);
+    //             }
+    //             $current++;
+    //             $rs->MoveNext();
+    //         }
+    //         $rs->Close(); # optional
+    //     }
 
-                $videoID = $this->createVideo($rs->fields['meta_value']);
-                if(!empty($videoID)) {
-                    $this->insertRefactorID($rs->fields['post_id'], $videoID, 'youtube', $rs->fields['meta_value']);
-                }
-                $current++;
-                $rs->MoveNext();
-            }
-            $rs->Close(); # optional
-        }
+    // }
 
-    }
+    // public function importbodyArticles()
+    // {
+    //     //check if body is empty & get from wp
+    //     //check if /files/emprendedores or /files/galicia
+    //     $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
+    //      ." WHERE pk_article = pk_content AND (body = '' OR img1 = 0 )";
 
-    public function importbodyArticles() {
-                //check if body is empty & get from wp
-                //check if /files/emprendedores or /files/galicia
-        $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
-         ." WHERE pk_article = pk_content AND (body = '' OR img1 = 0 )";
+    //     $request = $GLOBALS['application']->conn->Prepare($sql2);
+    //     $rs2     = $GLOBALS['application']->conn->Execute($request);
+    //     if (!$rs2) {
+    //         $this->output->writeln('- sql '.$sql2);
+    //         $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //     }
 
-        $request = $GLOBALS['application']->conn->Prepare($sql2);
-        $rs2     = $GLOBALS['application']->conn->Execute($request);
-        if (!$rs2) {
-            $this->output->writeln('- sql '.$sql2);
-            $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-        }
+    //     $items = $rs2->getArray();
+    //     $this->output->writeln('- hay '.count($items));
 
-        $items = $rs2->getArray();
-        $this->output->writeln('- hay '.count($items));
+    //     $pks   = array();
+    //     foreach ($items as $item) {
+    //         $pk_content_old       = $item['pk_content_old'];
+    //         $pks[$pk_content_old] = $item['pk_content'];
+    //     }
+    //     $values = array();
 
-        $pks   = array();
-        foreach ($items as $item) {
-            $pk_content_old       = $item['pk_content_old'];
-            $pks[$pk_content_old] = $item['pk_content'];
-        }
-        $values = array();
+    //     $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
+    //         "ID IN (".implode(', ', array_keys($pks)).")";
 
-        $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
-            "ID IN (".implode(', ', array_keys($pks)).")";
-
-        // Fetch the list of Opinions available for one author in EditMaker
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
-
-
-        if (!$rs) {
-            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
-        } else {
-            while (!$rs->EOF) {
-                $data = $this->clearLabelsInBodyArticle($rs->fields['post_excerpt']);
-                $data2 = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
-                $newBody = preg_replace(
-                    array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
-                    array('</p><p>', '</p><p>', '<br>', '<br>'),
-                    $data2['body']
-                );
-                if(empty($data['img'])) {
-                   $data['img'] = $data2['img'];
-                }
-                $id = $rs->fields['ID'];
-                $values[] = array(
-                    $data['img'],
-                    $newBody,
-                    $pks[$id]
-                );
-                $this->output->write(".");
-
-                if(!empty($data['img'])) {
-             //       $this->output->writeln(" - img- ".$data['img']." - ".$pks[$id]." -".substr($newBody, 0, 50));
-                }
-                $rs->MoveNext();
-            }
-            $rs->Close(); # optional
-        }
-
-        $this->output->writeln('- updating '.count($values));
-        if (!empty($values)) {
-            $sql    = 'UPDATE `articles` SET img1=?, body =?  WHERE pk_article=?';
-
-            $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if (!$rss) {
-                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-            }
-
-        } else {
-
-        }
-
-    }
-
-    public function importOtherImages() {
-                //check if body is empty & get from wp
-                //check if /files/emprendedores or /files/galicia
-        $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
-         ." WHERE pk_article = pk_content AND img1 = 0 ";
-
-        $request = $GLOBALS['application']->conn->Prepare($sql2);
-        $rs2     = $GLOBALS['application']->conn->Execute($request);
-        if (!$rs2) {
-            $this->output->writeln('- sql '.$sql2);
-            $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-        }
-
-        $items = $rs2->getArray();
-        $this->output->writeln('- hay '.count($items));
-
-        $pks   = array();
-        foreach ($items as $item) {
-            $pk_content_old       = $item['pk_content_old'];
-            $pks[$pk_content_old] = $item['pk_content'];
-        }
+    //     // Fetch the list of Opinions available for one author in EditMaker
+    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+    //     $rs      = $GLOBALS['application']->connOrigin->Execute($request);
 
 
-        $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
-            "post_id IN (".implode(', ', array_keys($pks)).") AND `meta_key` = '_thumbnail_id'";
+    //     if (!$rs) {
+    //         $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
+    //     } else {
+    //         while (!$rs->EOF) {
+    //             $data = $this->clearLabelsInBodyArticle($rs->fields['post_excerpt']);
+    //             $data2 = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
+    //             $newBody = preg_replace(
+    //                 array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
+    //                 array('</p><p>', '</p><p>', '<br>', '<br>'),
+    //                 $data2['body']
+    //             );
+    //             if(empty($data['img'])) {
+    //                $data['img'] = $data2['img'];
+    //             }
+    //             $id = $rs->fields['ID'];
+    //             $values[] = array(
+    //                 $data['img'],
+    //                 $newBody,
+    //                 $pks[$id]
+    //             );
+    //             $this->output->write(".");
 
-        // Fetch the list of Opinions available for one author in EditMaker
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+    //             if(!empty($data['img'])) {
+    //          //       $this->output->writeln(" - img- ".$data['img']." - ".$pks[$id]." -".substr($newBody, 0, 50));
+    //             }
+    //             $rs->MoveNext();
+    //         }
+    //         $rs->Close(); # optional
+    //     }
 
-        $items    = $rs->getArray();
-        $values   = array();
-        foreach ($items as $item) {
+    //     $this->output->writeln('- updating '.count($values));
+    //     if (!empty($values)) {
+    //         $sql    = 'UPDATE `articles` SET img1=?, body =?  WHERE pk_article=?';
 
-            $id  = $item['post_id'];
-            $img = $this->elementIsImported($item['meta_value'], 'image');
-            if (!empty($img)) {
-                $values[] = array(
-                    $img,
-                    $pks[$id]
-                );
-                $this->output->writeln($id. "->".$pks[$id]."  thumbnail - width {$img} - " );
-            }
-        }
+    //         $stmt = $GLOBALS['application']->conn->Prepare($sql);
+    //         $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+    //         if (!$rss) {
+    //             $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //         }
 
-        if (!empty($values)) {
-            $sql    = 'UPDATE `articles` SET img1=?  WHERE pk_article = ?';
+    //     } else {
 
-            $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if (!$rss) {
-                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-            }
+    //     }
+    // }
 
-        }
+    // public function importOtherImages()
+    // {
+    //     //check if body is empty & get from wp
+    //     //check if /files/emprendedores or /files/galicia
+    //     $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
+    //      ." WHERE pk_article = pk_content AND img1 = 0 ";
 
-    }
+    //     $request = $GLOBALS['application']->conn->Prepare($sql2);
+    //     $rs2     = $GLOBALS['application']->conn->Execute($request);
+    //     if (!$rs2) {
+    //         $this->output->writeln('- sql '.$sql2);
+    //         $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //     }
+
+    //     $items = $rs2->getArray();
+    //     $this->output->writeln('- hay '.count($items));
+
+    //     $pks   = array();
+    //     foreach ($items as $item) {
+    //         $pk_content_old       = $item['pk_content_old'];
+    //         $pks[$pk_content_old] = $item['pk_content'];
+    //     }
+
+
+    //     $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
+    //         "post_id IN (".implode(', ', array_keys($pks)).") AND `meta_key` = '_thumbnail_id'";
+
+    //     // Fetch the list of Opinions available for one author in EditMaker
+    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
+    //     $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+
+    //     $items    = $rs->getArray();
+    //     $values   = array();
+    //     foreach ($items as $item) {
+
+    //         $id  = $item['post_id'];
+    //         $img = $this->elementIsImported($item['meta_value'], 'image');
+    //         if (!empty($img)) {
+    //             $values[] = array(
+    //                 $img,
+    //                 $pks[$id]
+    //             );
+    //             $this->output->writeln($id. "->".$pks[$id]."  thumbnail - width {$img} - " );
+    //         }
+    //     }
+
+    //     if (!empty($values)) {
+    //         $sql    = 'UPDATE `articles` SET img1=?  WHERE pk_article = ?';
+
+    //         $stmt = $GLOBALS['application']->conn->Prepare($sql);
+    //         $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+    //         if (!$rss) {
+    //             $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //         }
+
+    //     }
+    // }
 }
-
