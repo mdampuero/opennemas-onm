@@ -8,8 +8,8 @@ function smarty_function_url($params, &$smarty) {
 
     $url = '';
 
-    global $sc;
-    $generator = $sc->get('router');
+    global $kernel;
+    $generator = $kernel->getContainer()->get('router');
     if (is_object($generator)) {
         if (array_key_exists('name', $params)) {
             $name = $params['name'];

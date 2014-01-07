@@ -577,8 +577,7 @@ class Advertisement extends Content
                 $url = $this->extUrl;
                 $mediaUrl = $this->extMediaUrl.$photo->path_file. $photo->name;
             } else {
-                global $sc;
-                $photo = $sc->get('entity_repository')->find('Photo', $this->img);
+                $photo = getService('entity_repository')->find('Photo', $this->img);
                 $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
                       .sprintf('%06d', $this->pk_advertisement).'.html';
                 $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;

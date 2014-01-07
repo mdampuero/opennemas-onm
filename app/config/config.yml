@@ -1,0 +1,165 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: app.yml }
+
+    # - { resource: security.yml }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enabled: true, enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_proxies: ~
+    trusted_hosts:   ~
+    session:         ~
+    fragments:       ~
+    http_method_override: true
+
+web_profiler:
+    toolbar: true
+    intercept_redirects: false
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    spool:     { type: memory }
+
+parameters:
+    # Session Configuration
+    session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\\NativeSessionStorage"
+    session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
+
+services:
+    kernel.listener.app_bootup:
+        class: Framework\EventListener\ApplicationBootupListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 101 }
+
+    kernel.listener.instanceloader:
+        class: Framework\EventListener\InstanceLoaderListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+
+    kernel.listener.session:
+        class: Framework\EventListener\SessionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1 }
+
+    kernel.listener.admin_auth:
+        class: Framework\EventListener\AdminAuthenticationListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    kernel.listener.l10n_system:
+        class: Framework\EventListener\L10nSystemListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
+    kernel.listener.controller:
+        class: Framework\EventListener\ControllerListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    kernel.listener.instance_exceptions:
+        class: Framework\EventListener\InstanceExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
+
+    kernel.listener.maintenance_mode:
+        class: Framework\EventListener\MaintenanceModeListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+
+    # kernel.listener.general_error_handler:
+    #     class: Framework\EventListener\GeneralExceptionsListener
+    #     tags:
+    #         - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 0 }
+
+    listener.content_subscriber:
+        class: Framework\EventListener\ContentActionsSubscriber
+        tags:
+            - {name: kernel.event_subscriber}
+
+    kernel.listener.news_agency:
+        class: Framework\EventListener\NewsAgencyCronActionSubscriber
+        tags:
+            - {name: kernel.event_subscriber}
+
+    kernel.listener.varnish_cleaner:
+        class: Framework\EventListener\VarnishCleanerListener
+
+    cache:
+        class: %cache_handler%
+        arguments: [ %cache_handler_params% ]
+
+    category_repository:
+        class: Repository\CategoryManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    comment_repository:
+        class: Repository\CommentManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    entity_repository:
+        class: Repository\EntityManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    user_repository:
+        class: Repository\UserManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    menu_repository:
+        class: Repository\MenuManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    usergroup_repository:
+        class: Repository\UserGroupManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    setting_repository:
+        class: Repository\SettingManager
+        arguments: [ @cache, %cache_prefix% ]
+
+    newsletter_manager:
+        class: Repository\NewsletterManager
+        arguments: [ @mailer, @logger ]
+
+    automatic_contents:
+        class: Onm\MachineSearcher
+        arguments: [ @cache ]
+
+    acl_checker:
+        class: Onm\Security\Acl
+
+    varnish_cleaner:
+        class: Onm\Varnish\VarnishCleaner
+        arguments: [ %varnish% ]
+
+    instance_manager:
+        class: Onm\Instance\InstanceManager
+
+#     session_storage:
+#         class: %session_storage_class%
+#         arguments: [ %session_params% ]
+
+#     session:
+#         class: %session_handler_class%
+#         arguments: [ @session_storage ]

@@ -201,8 +201,8 @@ function logContentEvent($action = null, $content = null)
  **/
 function url($urlName, $params = array(), $absolute = false)
 {
-    global $sc;
-    return $sc->get('router')->generate($urlName, $params, $absolute);
+    global $kernel;
+    return $kernel->getContainer()->get('router')->generate($urlName, $params, $absolute);
 }
 
 /**
@@ -473,14 +473,14 @@ function getRealIp()
 
 function getService($serviceName)
 {
-    global $sc;
-    return $sc->get($serviceName);
+    global $kernel;
+    return $kernel->getContainer()->get($serviceName);
 }
 
 function getContainerParameter($paramName)
 {
-    global $sc;
-    return $sc->getParameter($paramName);
+    global $kernel;
+    return $kernel->getContainer()->getParameter($paramName);
 }
 
 function generateRandomString($length = 10)
@@ -589,7 +589,7 @@ function initEnvironment($environment = 'production')
  **/
 function dispatchEventWithParams($eventName, $params = array())
 {
-    $eventDispatcher = getService('dispatcher');
+    $eventDispatcher = getService('event_dispatcher');
 
     $event = new \Symfony\Component\EventDispatcher\GenericEvent();
     foreach ($params as $paramName => $paramValue) {

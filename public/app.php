@@ -24,6 +24,19 @@ $configFile = implode(
 );
 require_once $configFile;
 
+
+$kernel = new AppKernel('dev', true);
+$kernel->loadClassCache();
+//$kernel = new AppCache($kernel);
+$request = Request::createFromGlobals();
+$response = $kernel->handle($request);
+// var_dump($kernel->getContainer()->get('router')->getRouteCollection());die();
+
+$response->send();
+$kernel->terminate($request, $response);
+
+die();
+
 Request::enableHttpMethodParameterOverride();
 $request = Request::createFromGlobals();
 $request->setTrustedProxies(array('127.0.0.1'));

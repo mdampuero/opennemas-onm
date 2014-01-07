@@ -26,159 +26,74 @@ parameters:
 
     available_languages: {'en_US' : "English", 'es_ES' : "Español", 'gl_ES' : "Galego"}
 
-imports:
-    - { resource: parameters.yml }
+# services:
+#     db_conn:
+#         class: Onm\DatabaseConnection
+#         arguments: [ %database% ]
 
-services:
-    resolver:
-        class: Onm\Framework\ControllerResolver
+#     db_conn_manager:
+#         class: Onm\DatabaseConnection
+#         arguments: [  %database% ]
 
-    listener.router:
-        class: Symfony\Component\HttpKernel\EventListener\RouterListener
-        arguments: [ @matcher ]
-        tags:
-            - { name: dispatcher.listener }
+#     session_storage:
+#         class: %session_storage_class%
+#         arguments: [ %session_params% ]
 
-    listener.response:
-        class: Symfony\Component\HttpKernel\EventListener\ResponseListener
-        arguments: [ %charset% ]
-        tags:
-            - { name: dispatcher.listener }
+#     session:
+#         class: %session_handler_class%
+#         arguments: [ @session_storage ]
 
-    listener.instanceloader:
-        class: Framework\EventListeners\InstanceLoaderListener
-        tags:
-            - { name: dispatcher.listener }
+#     logger:
+#         class: Onm\Log
+#         arguments: [ %logger_level% ]
 
-    listener.admin_auth:
-        class: Framework\EventListeners\AdminAuthenticationListener
-        tags:
-            - { name: dispatcher.listener }
+#     mailer:
+#         class: Onm\Mailer
+#         arguments: [ %swiftmailer% ]
 
-    listener.controller:
-        class: Framework\EventListeners\ControllerListener
-        tags:
-            - { name: dispatcher.listener }
+#     cache:
+#         class: %cache_handler%
+#         arguments: [ %cache_handler_params% ]
 
-    listener.session:
-        class: Framework\EventListeners\SessionListener
-        tags:
-            - { name: dispatcher.listener }
+#     category_repository:
+#         class: Repository\CategoryManager
+#         arguments: [ @cache, %cache_prefix% ]
 
-    listener.instance_exceptions:
-        class: Framework\EventListeners\InstanceExceptionsListener
-        tags:
-            - { name: dispatcher.listener }
+#     comment_repository:
+#         class: Repository\CommentManager
+#         arguments: [ @cache, %cache_prefix% ]
 
-    listener.general_error_handler:
-        class: Framework\EventListeners\GeneralExceptionsListener
-        tags:
-            - { name: dispatcher.listener }
+#     entity_repository:
+#         class: Repository\EntityManager
+#         arguments: [ @cache, %cache_prefix% ]
 
-    listener.app_bootup:
-        class: Framework\EventListeners\ApplicationBootupListener
-        tags:
-            - { name: dispatcher.listener }
+#     user_repository:
+#         class: Repository\UserManager
+#         arguments: [ @cache, %cache_prefix% ]
 
-    listener.maintenance_mode:
-        class: Framework\EventListeners\MaintenanceModeListener
-        tags:
-            - { name: dispatcher.listener }
+#     menu_repository:
+#         class: Repository\MenuManager
+#         arguments: [ @cache, %cache_prefix% ]
 
-    listener.l10n_system:
-        class: Framework\EventListeners\L10nSystemListener
-        tags:
-            - { name: dispatcher.listener }
+#     usergroup_repository:
+#         class: Repository\UserGroupManager
+#         arguments: [ @cache, %cache_prefix% ]
 
-    listener.content_subscriber:
-        class: Backend\EventListeners\ContentSubscriberListener
-        tags:
-            - { name: dispatcher.listener }
+#     setting_repository:
+#         class: Repository\SettingManager
+#         arguments: [ @cache, %cache_prefix% ]
 
-    listener.news_agency:
-        class: Framework\EventListeners\NewsAgencyListener
-        tags:
-            - { name: dispatcher.listener }
+#     newsletter_manager:
+#         class: Repository\NewsletterManager
+#         arguments: [ @mailer, @logger ]
 
-    listener.varnish_cleaner:
-        class: Framework\EventListeners\VarnishCleanerListener
-        tags:
-            - { name: dispatcher.listener }
+#     automatic_contents:
+#         class: Onm\MachineSearcher
+#         arguments: [ @cache ]
 
-    dispatcher:
-        class: Symfony\Component\EventDispatcher\EventDispatcher
+#     acl_checker:
+#         class: Onm\Security\Acl
 
-    framework:
-        class: Onm\Framework\Framework
-        arguments: [ @dispatcher, @resolver ]
-
-    db_conn:
-        class: Onm\DatabaseConnection
-        arguments: [ %database% ]
-
-    db_conn_manager:
-        class: Onm\DatabaseConnection
-        arguments: [  %database% ]
-
-    session_storage:
-        class: %session_storage_class%
-        arguments: [ %session_params% ]
-
-    session:
-        class: %session_handler_class%
-        arguments: [ @session_storage ]
-
-    logger:
-        class: Onm\Log
-        arguments: [ %logger_level% ]
-
-    mailer:
-        class: Onm\Mailer
-        arguments: [ %swiftmailer% ]
-
-    cache:
-        class: %cache_handler%
-        arguments: [ %cache_handler_params% ]
-
-    category_repository:
-        class: Repository\CategoryManager
-        arguments: [ @cache, %cache_prefix% ]
-
-    comment_repository:
-        class: Repository\CommentManager
-        arguments: [ @cache, %cache_prefix% ]
-
-    entity_repository:
-        class: Repository\EntityManager
-        arguments: [ @cache, %cache_prefix% ]
-
-    user_repository:
-        class: Repository\UserManager
-        arguments: [ @cache, %cache_prefix% ]
-
-    menu_repository:
-        class: Repository\MenuManager
-        arguments: [ @cache, %cache_prefix% ]
-
-    usergroup_repository:
-        class: Repository\UserGroupManager
-        arguments: [ @cache, %cache_prefix% ]
-
-    setting_repository:
-        class: Repository\SettingManager
-        arguments: [ @cache, %cache_prefix% ]
-
-    newsletter_manager:
-        class: Repository\NewsletterManager
-        arguments: [ @mailer, @logger ]
-
-    automatic_contents:
-        class: Onm\MachineSearcher
-        arguments: [ @cache ]
-
-    acl_checker:
-        class: Onm\Security\Acl
-
-    varnish_cleaner:
-        class: Onm\Varnish\VarnishCleaner
-        arguments: [ %varnish% ]
+#     varnish_cleaner:
+#         class: Onm\Varnish\VarnishCleaner
+#         arguments: [ %varnish% ]

@@ -1,271 +1,270 @@
 accept_cookies:
     path: /accepted_cookies
-    defaults: { _controller: Frontend:Controllers:UtilitiesController:acceptCookies }
+    defaults: { _controller: FrontendBundle:Utilities:acceptCookies }
 
 utilities_sharrre:
     path: /utilities/sharrre
-    defaults: { _controller: Frontend:Controllers:UtilitiesController:sharrre }
+    defaults: { _controller: FrontendBundle:Utilities:sharrre }
 
 asset_image:
     path: /asset/{parameters}/{real_path}
-    defaults: { _controller: Frontend:Controllers:AssetController:image }
+    defaults: { _controller: FrontendBundle:Asset:image }
     requirements:
         parameters : "[^/]+"
         real_path : ".+"
 
 category_frontpage:
     path: /blog/section/{category_name}
-    defaults: { _controller: Frontend:Controllers:CategoryController:category }
+    defaults: { _controller: FrontendBundle:Category:category }
     requirements:
         category: "[a-z0-9\-]+"
 
 categ_sync_frontpage:
     path: /extseccion/blog/{category_name}
-    defaults: { _controller: Frontend:Controllers:CategoryController:extCategory }
+    defaults: { _controller: FrontendBundle:Category:extCategory }
     requirements:
         category: "[a-z0-9\-]+"
 
 tag_frontpage:
     path: /tag/{tag_name}
-    defaults: { _controller: Frontend:Controllers:TagsController:tags }
+    defaults: { _controller: FrontendBundle:Tags:tags }
     requirements:
         tag_name: "[A-Za-z0-9\-.]+"
 
-
 frontend_paywall_showcase:
     path: /paywall
-    defaults: { _controller: Frontend:Controllers:PaywallController:showcase }
+    defaults: { _controller: FrontendBundle:Paywall:showcase }
 
 frontend_paywall_prepare_payment:
     path: /paywall/prepare_payment
-    defaults: { _controller: Frontend:Controllers:PaywallController:preparePayment }
+    defaults: { _controller: FrontendBundle:Paywall:preparePayment }
 
 frontend_paywall_success_payment:
     path: /paywall/success_payment
-    defaults: { _controller: Frontend:Controllers:PaywallController:returnSuccessPayment }
+    defaults: { _controller: FrontendBundle:Paywall:returnSuccessPayment }
 
 frontend_paywall_success_recurring_payment:
     path: /paywall/success_recurring_payment
-    defaults: { _controller: Frontend:Controllers:PaywallController:returnSuccessRecurringPayment }
+    defaults: { _controller: FrontendBundle:Paywall:returnSuccessRecurringPayment }
 
 frontend_paywall_cancel_payment:
     path: /paywall/cancel_payment
-    defaults: { _controller: Frontend:Controllers:PaywallController:returnCancelPayment }
+    defaults: { _controller: FrontendBundle:Paywall:returnCancelPayment }
 
 frontend_paywall_cancel_recurring_payment:
     path: /paywall/cancel_recurring_payment
-    defaults: { _controller: Frontend:Controllers:PaywallController:cancelRecurringPayment }
+    defaults: { _controller: FrontendBundle:Paywall:cancelRecurringPayment }
 
 frontend_paywall_activate_recurring_payment:
     path: /paywall/activate_recurring_payment
-    defaults: { _controller: Frontend:Controllers:PaywallController:activateRecurringPayment }
+    defaults: { _controller: FrontendBundle:Paywall:activateRecurringPayment }
 
 frontend_ws_paypal_ipn:
     path: /ws/paypal/ipn
-    defaults: { _controller: Frontend:Controllers:PaypalNotificationsController:paywall }
+    defaults: { _controller: FrontendBundle:PaypalNotifications:paywall }
 
 frontend_newsletter_subscribe_show:
     path: /newsletter
-    defaults: { _controller: Frontend:Controllers:SubscriptionsController:show }
+    defaults: { _controller: FrontendBundle:Subscriptions:show }
 
 frontend_newsletter_subscribe_es:
     path: /boletin
-    defaults: { _controller: Frontend:Controllers:SubscriptionsController:show }
+    defaults: { _controller: FrontendBundle:Subscriptions:show }
 
 frontend_newsletter_subscribe_create:
     path: /newsletter/subscription/create
-    defaults: { _controller: Frontend:Controllers:SubscriptionsController:create }
+    defaults: { _controller: FrontendBundle:Subscriptions:create }
 
 frontend_auth_login:
     path: /login
-    defaults: { _controller: Frontend:Controllers:AuthenticationController:login }
+    defaults: { _controller: FrontendBundle:Authentication:login }
 
 frontend_auth_logout:
     path: /logout
-    defaults: { _controller: Frontend:Controllers:AuthenticationController:logout }
+    defaults: { _controller: FrontendBundle:Authentication:logout }
 
 frontend_user_register:
     path: /user/register
-    defaults: { _controller: Frontend:Controllers:UserController:register }
+    defaults: { _controller: FrontendBundle:User:register }
 
 frontend_user_show:
     path: /user/me
-    defaults: { _controller: Frontend:Controllers:UserController:show }
+    defaults: { _controller: FrontendBundle:User:show }
 
 frontend_user_update:
     path: /user/update
-    defaults: { _controller: Frontend:Controllers:UserController:update }
+    defaults: { _controller: FrontendBundle:User:update }
 
 frontend_user_recoverpass:
     path: /user/recover-pass
-    defaults: { _controller: Frontend:Controllers:UserController:recoverPassword }
+    defaults: { _controller: FrontendBundle:User:recoverPassword }
 
 frontend_user_recoverusername:
     path: /user/recover-user
-    defaults: { _controller: Frontend:Controllers:UserController:recoverUsername }
+    defaults: { _controller: FrontendBundle:User:recoverUsername }
 
 frontend_user_resetpass:
     path: /user/reset-pass/{token}
-    defaults: { _controller: Frontend:Controllers:UserController:regeneratePassword }
+    defaults: { _controller: FrontendBundle:User:regeneratePassword }
 
 frontend_user_activate:
     path: /user/activate/{token}
-    defaults: { _controller: Frontend:Controllers:UserController:activate }
+    defaults: { _controller: FrontendBundle:User:activate }
 
 frontend_user_menu:
     path: /user/get/menu
-    defaults: { _controller: Frontend:Controllers:UserController:getUserMenu }
+    defaults: { _controller: FrontendBundle:User:getUserMenu }
 
 frontend_user_user_box:
     path: /user/user_box
-    defaults: { _controller: Frontend:Controllers:UserController:userBox }
+    defaults: { _controller: FrontendBundle:User:userBox }
 
 frontend_author_frontpage:
     path: /author/{slug}
-    defaults: { _controller: Frontend:Controllers:UserController:authorFrontpage }
+    defaults: { _controller: FrontendBundle:User:authorFrontpage }
     requirements:
         slug: "[A-Za-z\d-.]+"
 
 frontend_frontpage_authors:
     path: /authors
-    defaults: { _controller: Frontend:Controllers:UserController:frontpageAuthors }
+    defaults: { _controller: FrontendBundle:User:frontpageAuthors }
 
 frontend_external_author_frontpage:
     path: /extauthor/{slug}
-    defaults: { _controller: Frontend:Controllers:UserController:extAuthorFrontpage }
+    defaults: { _controller: FrontendBundle:User:extAuthorFrontpage }
     requirements:
         slug: "[A-Za-z\d-]+"
 
 # Common content management routes
 frontend_ad_get:
     path: /ads/get/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:AdvertisementController:get, _format:html }
+    defaults: { _controller: FrontendBundle:Advertisement:get, _format:html }
 
 frontend_ad_redirect:
     path: /ads/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:AdvertisementController:redirect, _format:html }
+    defaults: { _controller: FrontendBundle:Advertisement:redirect, _format:html }
 
 frontend_rss_listing:
     path: /rss/listado
-    defaults: { _controller: Frontend:Controllers:RssController:index }
+    defaults: { _controller: FrontendBundle:Rss:index }
 
 frontend_rss_opinion_author:
     path: /rss/opinion/{author}
-    defaults: { _controller: Frontend:Controllers:RssController:generalRSS, category_name:opinion }
+    defaults: { _controller: FrontendBundle:Rss:generalRSS, category_name:opinion }
     requirements:
         author: "\d+"
 
 frontend_rss_author:
     path: /rss/author/{author_slug}
-    defaults: { _controller: Frontend:Controllers:RssController:authorRSS }
+    defaults: { _controller: FrontendBundle:Rss:authorRSS }
     requirements:
         author_slug: "[A-Za-z\d-.]+"
 
 frontend_rss_subcategory:
     path: /rss/{category_name}/{subcategory_name}
-    defaults: { _controller: Frontend:Controllers:RssController:generalRSS }
+    defaults: { _controller: FrontendBundle:Rss:generalRSS }
     requirements:
         category_name    : "[a-z\d-]+"
         subcategory_name : "[a-z\d-]+"
 
 frontend_rss_category:
     path: /rss/{category_name}
-    defaults: { _controller: Frontend:Controllers:RssController:generalRSS }
+    defaults: { _controller: FrontendBundle:Rss:generalRSS }
     requirements:
         category_name    : "[A-Za-z\d-]+"
 
 frontend_rss:
     path: /rss
-    defaults: { _controller: Frontend:Controllers:RssController:generalRSS }
+    defaults: { _controller: FrontendBundle:Rss:generalRSS }
 
 frontend_robots:
     path: /robots.txt
-    defaults: { _controller: Frontend:Controllers:RobotsController:index }
+    defaults: { _controller: FrontendBundle:Robots:index }
 
 frontend_sitemapnews:
     path: /sitemapnews.{_format}
-    defaults: { _controller: Frontend:Controllers:SitemapController:news, _format: xml }
+    defaults: { _controller: FrontendBundle:Sitemap:news, _format: xml }
     requirements:
         _format: "xml|xml.gz"
 
 frontend_sitemapweb:
     path: /sitemapweb.{_format}
-    defaults: { _controller: Frontend:Controllers:SitemapController:web, _format:xml }
+    defaults: { _controller: FrontendBundle:Sitemap:web, _format:xml }
     requirements:
         _format: "xml|xml.gz"
 
 frontend_sitemapindex:
     path: /sitemap.{_format}
-    defaults: { _controller: Frontend:Controllers:SitemapController:index, _format:xml }
+    defaults: { _controller: FrontendBundle:Sitemap:index, _format:xml }
     requirements:
         _format: "xml|xml.gz"
 
 frontend_staticpage:
     path: /estaticas/{slug}.{_format}
-    defaults: { _controller: Frontend:Controllers:StaticPagesController:show, _format:html }
+    defaults: { _controller: FrontendBundle:StaticPages:show, _format:html }
     requirements:
         _format : html|htm
         slug    : "[A-Za-z\d-]+"
 
 frontend_search_internal:
     path: /search
-    defaults: { _controller: Frontend:Controllers:TagsController:tags }
+    defaults: { _controller: FrontendBundle:Tags:tags }
     requirements:
         tag_name: "[A-Za-z0-9\-.]+"
 
 frontend_search_google:
     path: /search/google
-    defaults: { _controller: Frontend:Controllers:SearchController:google }
+    defaults: { _controller: FrontendBundle:Search:google }
 
 frontend_rating_vote:
     path: /ratings/vote
-    defaults: { _controller: Frontend:Controllers:RatingsController:vote }
+    defaults: { _controller: FrontendBundle:Ratings:vote }
 
 frontend_comments_get:
     path: /comments/get
-    defaults: { _controller: Frontend:Controllers:CommentsController:get }
+    defaults: { _controller: FrontendBundle:Comments:get }
 
 frontend_comments_ajax:
     path: /comments/ajax
-    defaults: { _controller: Frontend:Controllers:CommentsController:ajax }
+    defaults: { _controller: FrontendBundle:Comments:ajax }
 
 frontend_comments_vote:
     path: /comments/vote
-    defaults: { _controller: Frontend:Controllers:CommentsController:vote }
+    defaults: { _controller: FrontendBundle:Comments:vote }
 
 frontend_comments_save:
     path: /comments/save
-    defaults: { _controller: Frontend:Controllers:CommentsController:save }
+    defaults: { _controller: FrontendBundle:Comments:save }
 
 frontend_comments_disqus_sync:
     path: /comments/disqus/sync
-    defaults: { _controller: Frontend:Controllers:CommentsController:disqusSync }
+    defaults: { _controller: FrontendBundle:Comments:disqusSync }
 
 frontend_redirect_content:
     path: /redirect/content
-    defaults: { _controller: Frontend:Controllers:RedirectorsController:content }
+    defaults: { _controller: FrontendBundle:Redirectors:content }
 
 frontend_redirect_category:
     path: /redirect/category
-    defaults: { _controller: Frontend:Controllers:RedirectorsController:category }
+    defaults: { _controller: FrontendBundle:Redirectors:category }
 
 frontend_playground:
     path: /playground/{action}
-    defaults: { _controller: Frontend:Controllers:PlaygroundController:default }
+    defaults: { _controller: FrontendBundle:Playground:default }
 
 frontend_books:
     path: /libros
-    defaults: { _controller: Frontend:Controllers:BooksController:frontpage }
+    defaults: { _controller: FrontendBundle:Books:frontpage }
 
 frontend_book_show:
     path: /libro/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:BooksController:show, _format: html }
+    defaults: { _controller: FrontendBundle:Books:show, _format: html }
     requirements:
         id : "([0-9]+)"
 
 frontend_book_show_with_slug:
     path: /libro/{category_name}/{slug}/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:BooksController:show, _format:html }
+    defaults: { _controller: FrontendBundle:Books:show, _format:html }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "([a-z0-9\-]+)?"
@@ -273,27 +272,27 @@ frontend_book_show_with_slug:
 
 frontend_books_widget:
     path: /libros/widget
-    defaults: { _controller: Frontend:Controllers:BooksController:ajaxPaginationList }
+    defaults: { _controller: FrontendBundle:Books:ajaxPaginationList }
 
 frontend_album_ajax:
     path: /album/ajax
-    defaults: { _controller: Frontend:Controllers:AlbumsController:ajaxPaginated }
+    defaults: { _controller: FrontendBundle:Albums:ajaxPaginated }
 
 frontend_album_frontpage:
     path: /album/{page}
-    defaults: { _controller: Frontend:Controllers:AlbumsController:frontpage, page : 1 }
+    defaults: { _controller: FrontendBundle:Albums:frontpage, page : 1 }
     requirements:
         page: "([0-9]+)?"
 
 frontend_album_frontpage_category:
     path: /album/{category_name}
-    defaults: { _controller: Frontend:Controllers:AlbumsController:frontpage }
+    defaults: { _controller: FrontendBundle:Albums:frontpage }
     requirements:
         category_name: "[a-z0-9\-]+"
 
 frontend_album_show_with_date_slug:
     path: /album/{category_name}/{date}/{slug}/{album_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:AlbumsController:show, _format : html, page :1 }
+    defaults: { _controller: FrontendBundle:Albums:show, _format : html, page :1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         date         : "([0-9]{4})-([0-1][0-9])-([0-3][0-9])"
@@ -302,7 +301,7 @@ frontend_album_show_with_date_slug:
 
 frontend_album_show_with_date_slug:
     path: /album/{category_name}/{slug}/{album_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:AlbumsController:show, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Albums:show, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -310,20 +309,20 @@ frontend_album_show_with_date_slug:
 
 frontend_monograph_frontpage:
     path: /especiales/{page}
-    defaults: { _controller: Frontend:Controllers:MonographsController:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
     requirements:
         page: "([0-9]+)?"
 
 frontend_monograph_frontpage_category:
     path: /especiales/{category_name}/{page}
-    defaults: { _controller: Frontend:Controllers:MonographsController:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Monographs:frontpage, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         page         : "([0-9]+)?"
 
 frontend_monograph_show:
     path: /especiales/{category_name}/{slug}/{special_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:MonographsController:show, _format:html, page:1 }
+    defaults: { _controller: FrontendBundle:Monographs:show, _format:html, page:1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -331,20 +330,20 @@ frontend_monograph_show:
 
 frontend_poll_frontpage:
     path: /{component}/{page}
-    defaults: { _controller: Frontend:Controllers:PollsController:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
     requirements:
         page     : "([0-9]+)?"
         component: "encuesta|poll|enquerito|enquisa"
 
 frontend_poll_vote:
     path: /poll/addvote/{id}
-    defaults: { _controller: Frontend:Controllers:PollsController:addVote }
+    defaults: { _controller: FrontendBundle:Polls:addVote }
     requirements:
         id           : "([0-9]+)"
 
 frontend_poll_frontpage_category:
     path: /{component}/{category_name}/{page}
-    defaults: { _controller: Frontend:Controllers:PollsController:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Polls:frontpage, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         page         : "([0-9]+)?"
@@ -352,7 +351,7 @@ frontend_poll_frontpage_category:
 
 frontend_poll_show:
     path: /{component}/{category_name}/{slug}/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:PollsController:show, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Polls:show, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -362,7 +361,7 @@ frontend_poll_show:
 
 frontend_archive_content:
     path: /archive/content/{year}/{month}/{day}
-    defaults: { _controller: Frontend:Controllers:ArchiveController:archive, page: 1 }
+    defaults: { _controller: FrontendBundle:Archive:archive, page: 1 }
     requirements:
         year      : "[0-9]+"
         month     : "[0-9]+"
@@ -370,7 +369,7 @@ frontend_archive_content:
 
 frontend_archive_category:
     path: /archive/content/{year}/{month}/{day}/{category_name}.{_format}
-    defaults: { _controller: Frontend:Controllers:ArchiveController:archiveCategory, page: 1 }
+    defaults: { _controller: FrontendBundle:Archive:archiveCategory, page: 1 }
     requirements:
         category_name : "[a-z0-9\-]+"
         year      : "([0-9]+)"
@@ -380,7 +379,7 @@ frontend_archive_category:
 
 frontend_digital_frontpage:
     path: /archive/digital/{year}/{month}/{day}/{category_name}.{_format}
-    defaults: { _controller: Frontend:Controllers:ArchiveController:digitalFrontpage, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Archive:digitalFrontpage, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         year      : "([0-9]+)"
@@ -389,29 +388,29 @@ frontend_digital_frontpage:
 
 frontend_archive:
     path: /archive/{component}
-    defaults: { _controller: Frontend:Controllers:ArchiveController:archive }
+    defaults: { _controller: FrontendBundle:Archive:archive }
     requirements:
         component  : "content|digital"
 
 frontend_participa_frontpage:
     path: /participa
-    defaults: { _controller: Frontend:Controllers:FormController:frontpage }
+    defaults: { _controller: FrontendBundle:Form:frontpage }
 
 frontend_participa_form:
     path: /participa/envia
-    defaults: { _controller: Frontend:Controllers:FormController:frontpage }
+    defaults: { _controller: FrontendBundle:Form:frontpage }
 
 frontend_participa_send:
     path: /participa/send
-    defaults: { _controller: Frontend:Controllers:FormController:send }
+    defaults: { _controller: FrontendBundle:Form:send }
 
 frontend_letter_frontpage:
     path: /cartas-al-director
-    defaults: { _controller: Frontend:Controllers:LetterController:frontpage }
+    defaults: { _controller: FrontendBundle:Letter:frontpage }
 
 frontend_letter_show:
     path: /cartas-al-director/{author}/{slug}/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:LetterController:show, _format: html }
+    defaults: { _controller: FrontendBundle:Letter:show, _format: html }
     requirements:
         author  : "([a-z0-9\-]+)"
         slug    : "[a-z0-9\-]+"
@@ -419,40 +418,40 @@ frontend_letter_show:
 
 frontend_letter_save:
     path: /cartas-al-director/save
-    defaults: { _controller: Frontend:Controllers:LetterController:save }
+    defaults: { _controller: FrontendBundle:Letter:save }
 
 frontend_video_ajax_more:
     path: /video/more/{category}
-    defaults: { _controller: Frontend:Controllers:VideosController:ajaxMore, page: 1 }
+    defaults: { _controller: FrontendBundle:Videos:ajaxMore, page: 1 }
     requirements:
         category: "([0-9]+)"
 
 frontend_video_ajax_incategory:
     path: /video/incategory/{category}
-    defaults: { _controller: Frontend:Controllers:VideosController:ajaxInCategory, page: 1 }
+    defaults: { _controller: FrontendBundle:Videos:ajaxInCategory, page: 1 }
     requirements:
         category: "([0-9]+)"
 
 frontend_video_frontpage:
     path: /video/{page}
-    defaults: { _controller: Frontend:Controllers:VideosController:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Videos:frontpage, page: 1 }
     requirements:
         page: "([0-9]+)?"
 
 frontend_video_ajax_paginated:
     path: /video/more
-    defaults: { _controller: Frontend:Controllers:VideosController:ajaxPaginated }
+    defaults: { _controller: FrontendBundle:Videos:ajaxPaginated }
 
 frontend_video_frontpage_category:
     path: /video/{category_name}/{page}
-    defaults: { _controller: Frontend:Controllers:VideosController:frontpage, page: 1 }
+    defaults: { _controller: FrontendBundle:Videos:frontpage, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         page         : "([0-9]+)?"
 
 frontend_video_show_with_slug:
     path: /video/{category_name}/{slug}/{video_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:VideosController:show, _format: html }
+    defaults: { _controller: FrontendBundle:Videos:show, _format: html }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -460,7 +459,7 @@ frontend_video_show_with_slug:
 
 frontend_video_show_with_date_slug:
     path: /video/{category_name}/{date}/{slug}/{video_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:VideosController:show, _format: html }
+    defaults: { _controller: FrontendBundle:Videos:show, _format: html }
     requirements:
         category_name: "[a-z0-9\-]+"
         date         : "([0-9]{4})-([0-1][0-9])-([0-3][0-9])"
@@ -469,7 +468,7 @@ frontend_video_show_with_date_slug:
 
 frontend_article_show:
     path: /articulo/{category_name}/{slug}/{article_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:ArticlesController:show, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -478,11 +477,11 @@ frontend_article_show:
 
 frontend_article_external_link:
     path: /redirect
-    defaults: { _controller: Frontend:Controllers:ArticlesController:externalLink }
+    defaults: { _controller: FrontendBundle:Articles:externalLink }
 
 frontend_external_article_show:
     path: /extarticulo/{category_name}/{slug}/{article_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:ArticlesController:extShow, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Articles:extShow, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -491,7 +490,7 @@ frontend_external_article_show:
 
 frontend_article_show_gl:
     path: /artigo/{category_name}/{slug}/{article_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:ArticlesController:show, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -500,7 +499,7 @@ frontend_article_show_gl:
 
 frontend_article_show_old_with_date:
     path: /articulo/{category_name}/{date}/{slug}/{article_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:ArticlesController:show, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Articles:show, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -510,14 +509,14 @@ frontend_article_show_old_with_date:
 
 frontend_content_print:
     path: /content/print/{slug}/{content_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:ContentsController:print, _format: html,  page: 1 }
+    defaults: { _controller: FrontendBundle:Contents:print, _format: html,  page: 1 }
     requirements:
         slug         : "[a-z0-9\-]+"
         content_id   : "([0-9]+)"
 
 frontend_external_content_print:
     path: /content/extprint/{category_name}/{slug}/{content_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:ContentsController:extPrint, _format: html, page: 1 }
+    defaults: { _controller: FrontendBundle:Contents:extPrint, _format: html, page: 1 }
     requirements:
         category_name: "[a-z0-9\-]+"
         slug         : "[a-z0-9\-]+"
@@ -525,22 +524,22 @@ frontend_external_content_print:
 
 frontend_content_share_by_mail:
     path: /content/share-by-email/{content_id}
-    defaults: { _controller: Frontend:Controllers:ContentsController:shareByEmail }
+    defaults: { _controller: FrontendBundle:Contents:shareByEmail }
 frontend_content_vote:
     path: /content/rate
-    defaults: { _controller: Frontend:Controllers:ContentsController:rateContent }
+    defaults: { _controller: FrontendBundle:Contents:rateContent }
 
 frontend_content_stats:
     path: /content/stats
-    defaults: { _controller: Frontend:Controllers:ContentsController:stats }
+    defaults: { _controller: FrontendBundle:Contents:stats }
 
 frontend_newstand_frontpage:
     path: /portadas-papel
-    defaults: { _controller: Frontend:Controllers:NewStandController:frontpage }
+    defaults: { _controller: FrontendBundle:NewStand:frontpage }
 
 frontend_newstand_frontpage_date:
     path: /portadas-papel/{year}/{month}/{day}
-    defaults: { _controller: Frontend:Controllers:NewStandController:frontpage, month: 0, day: 1 }
+    defaults: { _controller: FrontendBundle:NewStand:frontpage, month: 0, day: 1 }
     requirements:
         year  : "[0-9]{4}"
         month : "[0-9]{1,2}"
@@ -548,7 +547,7 @@ frontend_newstand_frontpage_date:
 
 frontend_newstand_frontpage_category:
     path: /portadas-papel/{category_name}/{year}/{month}
-    defaults: { _controller: Frontend:Controllers:NewStandController:frontpage }
+    defaults: { _controller: FrontendBundle:NewStand:frontpage }
     requirements:
         category_name : "[a-z0-9\-]+"
         year          : "([0-9]{4})"
@@ -556,18 +555,18 @@ frontend_newstand_frontpage_category:
 
 frontend_newstand_show:
     path: /portadas-papel/{category_name}/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:NewStandController:show, _format: html }
+    defaults: { _controller: FrontendBundle:NewStand:show, _format: html }
     requirements:
         category_name : "[a-z0-9\-]+"
         id            : "([0-9]+)"
 
 frontend_newstandPaypal_frontpage:
     path: /kiosko
-    defaults: { _controller: Frontend:Controllers:NewStandPaypalController:frontpage }
+    defaults: { _controller: FrontendBundle:NewStandPaypal:frontpage }
 
 frontend_newstandPaypal_frontpage_date:
     path: /kiosko/{year}/{month}/{day}
-    defaults: { _controller: Frontend:Controllers:NewStandPaypalController:frontpage, month: date(n), day: 1 }
+    defaults: { _controller: FrontendBundle:NewStandPaypal:frontpage, month: date(n), day: 1 }
     requirements:
         year  : "[0-9]{4}"
         month : "[0-9]{1,2}"
@@ -575,7 +574,7 @@ frontend_newstandPaypal_frontpage_date:
 
 frontend_newstandPaypal_frontpage_category:
     path: /kiosko/{category_name}/{year}/{month}
-    defaults: { _controller: Frontend:Controllers:NewStandPaypalController:frontpage }
+    defaults: { _controller: FrontendBundle:NewStandPaypal:frontpage }
     requirements:
         category_name : "[a-z0-9\-]+"
         year          : "([0-9]{4})"
@@ -583,18 +582,18 @@ frontend_newstandPaypal_frontpage_category:
 
 frontend_newstandPaypal_show:
     path: /kiosko/{category_name}/{id}.{_format}
-    defaults: { _controller: Frontend:Controllers:NewStandPaypalController:show, _format: html }
+    defaults: { _controller: FrontendBundle:NewStandPaypal:show, _format: html }
     requirements:
         category_name : "[a-z0-9\-]+"
         id            : "([0-9]+)"
 
 frontend_opinion_editorial_frontpage:
     path: /editorial
-    defaults: { _controller: Frontend:Controllers:OpinionsController:frontpageAuthor, author_slug: editorial, author_id: 000001 }
+    defaults: { _controller: FrontendBundle:Opinions:frontpageAuthor, author_slug: editorial, author_id: 000001 }
 
 frontend_opinion_author_frontpage:
     path: /opinion/autor/{author_id}/{author_slug}
-    defaults: { _controller: Frontend:Controllers:OpinionsController:frontpageAuthor }
+    defaults: { _controller: FrontendBundle:Opinions:frontpageAuthor }
     requirements:
         author_slug   : "(.*)?"
         author_id     : "([0-9]+)"
@@ -602,14 +601,14 @@ frontend_opinion_author_frontpage:
 
 frontend_opinion_external_author_frontpage:
     path: /extopinion/autor/{author_id}/{author_slug}
-    defaults: { _controller: Frontend:Controllers:OpinionsController:extFrontpageAuthor }
+    defaults: { _controller: FrontendBundle:Opinions:extFrontpageAuthor }
     requirements:
            author_slug   : "(.*)?"
            author_id     : "([0-9]+)"
 
 frontend_opinion_show_with_author_slug:
     path: /opinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:OpinionsController:show, author_name: author, _format: html }
+    defaults: { _controller: FrontendBundle:Opinions:show, author_name: author, _format: html }
     requirements:
         author_name   : "[a-z0-9\-.]+"
         opinion_title : "[a-z0-9\-]+"
@@ -617,7 +616,7 @@ frontend_opinion_show_with_author_slug:
 
 frontend_opinion_show_with_author_slug_and_date:
     path: /opinion/{author_name}/{date}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:OpinionsController:show, author_name:author, _format: html }
+    defaults: { _controller: FrontendBundle:Opinions:show, author_name:author, _format: html }
     requirements:
         author_name  : "[a-z0-9\-.]+"
         opinion_title: "[a-z0-9\-]+"
@@ -626,14 +625,14 @@ frontend_opinion_show_with_author_slug_and_date:
 
 frontend_opinion_show:
     path: /opinion/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:OpinionsController:show, _format : html }
+    defaults: { _controller: FrontendBundle:Opinions:show, _format : html }
     requirements:
         opinion_title: "[a-z0-9\-]+"
         opinion_id   : "[a-z0-9\-]+"
 
 frontend_opinion_external_show_with_author_slug:
     path: /extopinion/{author_name}/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:OpinionsController:extShow, author_name:author, _format: html }
+    defaults: { _controller: FrontendBundle:Opinions:extShow, author_name:author, _format: html }
     requirements:
         author_name   : "[a-z0-9\-.]+"
         opinion_title : "[a-z0-9\-]+"
@@ -641,33 +640,33 @@ frontend_opinion_external_show_with_author_slug:
 
 frontend_opinion_external_show:
     path: /extopinion/{opinion_title}/{opinion_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:OpinionsController:extShow, _format : html }
+    defaults: { _controller: FrontendBundle:Opinions:extShow, _format : html }
     requirements:
         opinion_title: "[a-z0-9\-.]+"
         opinion_id   : "[a-z0-9\-]+"
 
 frontend_opinion_frontpage:
     path: /opinion
-    defaults: { _controller: Frontend:Controllers:OpinionsController:frontpage }
+    defaults: { _controller: FrontendBundle:Opinions:frontpage }
 
 frontend_opinion_external_frontpage:
     path: /extseccion/opinion
-    defaults: { _controller: Frontend:Controllers:OpinionsController:extFrontpage }
+    defaults: { _controller: FrontendBundle:Opinions:extFrontpage }
 
 
 frontend_blog_frontpage:
     path: /blog
-    defaults: { _controller: Frontend:Controllers:BlogsController:frontpage }
+    defaults: { _controller: FrontendBundle:Blogs:frontpage }
 
 frontend_blog_author_frontpage:
     path: /blog/author/{author_slug}
-    defaults: { _controller: Frontend:Controllers:BlogsController:frontpageAuthor }
+    defaults: { _controller: FrontendBundle:Blogs:frontpageAuthor }
     requirements:
         author_slug : "[a-z0-9\-.]+"
 
 frontend_blog_show:
     path: /blog/{author_name}/{blog_title}/{blog_id}.{_format}
-    defaults: { _controller: Frontend:Controllers:BlogsController:show_format, _format: html, author_name: author }
+    defaults: { _controller: FrontendBundle:Blogs:show_format, _format: html, author_name: author }
     requirements:
         author_name : "[a-z0-9\-.]+"
         blog_title  : "[a-z0-9\-]+"
@@ -675,36 +674,36 @@ frontend_blog_show:
 
 frontend_frontpage_home:
     path: /home
-    defaults: { _controller: Frontend:Controllers:FrontpagesController:show, category: home }
+    defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
 
 frontend_frontpage:
     path: /{category}
-    defaults: { _controller: Frontend:Controllers:FrontpagesController:show, category : home }
+    defaults: { _controller: FrontendBundle:Frontpages:show, category : home }
     requirements:
         category: "(^[mobile])"
 
 frontend_frontpage_category:
     path: /seccion/{category}
-    defaults: { _controller: Frontend:Controllers:FrontpagesController:show, category: home }
+    defaults: { _controller: FrontendBundle:Frontpages:show, category: home }
     requirements:
         category: "[a-z0-9\-]+"
 
 
 frontend_frontpage_category_css:
     path: nocache/css/{cb}/{category}.css
-    defaults: { _controller: Frontend:Controllers:AssetController:customCss, category: home, cb:12345 }
+    defaults: { _controller: FrontendBundle:Asset:customCss, category: home, cb:12345 }
     requirements:
         category : "[a-z0-9\-]+"
 
 frontend_externalfrontpage_category:
     path: /extseccion/{category}
-    defaults: { _controller: Frontend:Controllers:FrontpagesController:extShow, category:home }
+    defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
     requirements:
         category : "[a-z0-9\-]+"
 
 frontend_externalfrontpage_category_page:
     path: /extseccion/{category}/{page}
-    defaults: { _controller: Frontend:Controllers:FrontpagesController:extShow, category:home }
+    defaults: { _controller: FrontendBundle:Frontpages:extShow, category:home }
     requirements:
         category : "[a-z0-9\-]+"
         page     : "[0-9]+"

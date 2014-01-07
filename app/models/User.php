@@ -511,8 +511,8 @@ class User
      **/
     private function readAccessCategories($id = null)
     {
-        global $sc;
-        $cache = $sc->get('cache');
+        global $kernel;
+        $cache = $kernel->getContainer()->get('cache');
 
         $id = (!is_null($id))? $id: $this->id;
 

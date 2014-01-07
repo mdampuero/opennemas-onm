@@ -1,1352 +1,1352 @@
 admin_content_set_available:
     path:     /content/set-available
-    defaults: { _controller  : Backend:Controllers:ContentController:setAvailable }
+    defaults: { _controller  : BackendBundle:Content:setAvailable }
 
 admin_content_set_draft:
     path:     /content/set-draft
-    defaults: { _controller  : Backend:Controllers:ContentController:setDraft }
+    defaults: { _controller  : BackendBundle:Content:setDraft }
 
 admin_content_toggle_available:
     path:     /content/toggle-available
-    defaults: { _controller  : Backend:Controllers:ContentController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Content:toggleAvailable }
 
 admin_content_set_archived:
     path:     /content/set-archived
-    defaults: { _controller  : Backend:Controllers:ContentController:setArchived }
+    defaults: { _controller  : BackendBundle:Content:setArchived }
 
 admin_content_toggle_suggested:
     path:     /content/toggle-suggested
-    defaults: { _controller  : Backend:Controllers:ContentController:toggleSuggested }
+    defaults: { _controller  : BackendBundle:Content:toggleSuggested }
 
 admin_content_quick_info:
     path:     /content/quick-info
-    defaults: { _controller  : Backend:Controllers:ContentController:quickInfo }
+    defaults: { _controller  : BackendBundle:Content:quickInfo }
 
 admin_content_send_to_trash:
     path:     /content/send-to-trash
-    defaults: { _controller  : Backend:Controllers:ContentController:sendToTrash }
+    defaults: { _controller  : BackendBundle:Content:sendToTrash }
 
 admin_content_update_property:
     path:     /content/update-property
-    defaults: { _controller  : Backend:Controllers:ContentController:updateProperty }
+    defaults: { _controller  : BackendBundle:Content:updateProperty }
 
 # Frontpage management routes
 admin_frontpage_list:
     path:     /frontpages/{category}
-    defaults: { _controller  : 'Backend:Controllers:FrontpagesController:show', category: home }
+    defaults: { _controller  : BackendBundle:Frontpages:show', category: home }
 
 admin_frontpage_savepositions:
     path:     /frontpage/save-positions
-    defaults: { _controller  : Backend:Controllers:FrontpagesController:savePositions }
+    defaults: { _controller  : BackendBundle:Frontpages:savePositions }
 
 admin_frontpage_preview:
     path:     /frontpages/{category}/preview
-    defaults: { _controller  : Backend:Controllers:FrontpagesController:preview }
+    defaults: { _controller  : BackendBundle:Frontpages:preview }
 
 admin_frontpage_get_preview:
     path:     /frontpages/{category}/get-preview
-    defaults: { _controller  : Backend:Controllers:FrontpagesController:getPreview }
+    defaults: { _controller  : BackendBundle:Frontpages:getPreview }
 
 admin_frontpage_pick_layout:
     path:     /frontpages/{category}/pick-layout
-    defaults: { _controller  : Backend:Controllers:FrontpagesController:pickLayout }
+    defaults: { _controller  : BackendBundle:Frontpages:pickLayout }
 
 admin_frontpage_last_version:
     path:     /frontpages/{category}/exists-new-version
-    defaults: { _controller  : Backend:Controllers:FrontpagesController:lastVersion }
+    defaults: { _controller  : BackendBundle:Frontpages:lastVersion }
 
 # Static Pages controller
 admin_staticpages:
     path:     /static-pages
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:list }
+    defaults: { _controller  : BackendBundle:StaticPages:list }
 
 admin_staticpages_show:
     path:     /static-pages/{id}/show
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:show }
+    defaults: { _controller  : BackendBundle:StaticPages:show }
 
 admin_staticpages_create:
     path:     /static-pages/create
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:create }
+    defaults: { _controller  : BackendBundle:StaticPages:create }
 
 admin_staticpages_update:
     path:     /static-pages/{id}/update
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:update }
+    defaults: { _controller  : BackendBundle:StaticPages:update }
 
 admin_staticpages_delete:
     path:     /static-pages/{id}/delete
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:delete }
+    defaults: { _controller  : BackendBundle:StaticPages:delete }
 
 admin_staticpages_toggle_available:
     path:     /static-pages/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:StaticPages:toggleAvailable }
 
 admin_staticpages_build_slug:
     path:     /static-pages/{id}/build-slug
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:buildSlug }
+    defaults: { _controller  : BackendBundle:StaticPages:buildSlug }
 
 admin_staticpages_clean_metadata:
     path:     /static-pages/{id}/clean_metadata
-    defaults: { _controller  : Backend:Controllers:StaticPagesController:cleanMetadata }
+    defaults: { _controller  : BackendBundle:StaticPages:cleanMetadata }
 
 # Widget manager routes
 admin_widgets:
     path:     /widgets
-    defaults: { _controller  : Backend:Controllers:WidgetsController:list }
+    defaults: { _controller  : BackendBundle:Widgets:list }
 
 admin_widget_show:
     path:     /widget/{id}/show
-    defaults: { _controller  : Backend:Controllers:WidgetsController:show }
+    defaults: { _controller  : BackendBundle:Widgets:show }
 
 admin_widget_delete:
     path:     /widget/{id}/delete
-    defaults: { _controller  : Backend:Controllers:WidgetsController:delete }
+    defaults: { _controller  : BackendBundle:Widgets:delete }
 
 admin_widget_create:
     path:     /widget/create
-    defaults: { _controller  : Backend:Controllers:WidgetsController:create }
+    defaults: { _controller  : BackendBundle:Widgets:create }
 
 admin_widget_update:
     path:     /widget/{id}/update
-    defaults: { _controller  : Backend:Controllers:WidgetsController:update }
+    defaults: { _controller  : BackendBundle:Widgets:update }
 
 admin_widget_toogle_available:
     path:     /widget/{id}/toogle_available
-    defaults: { _controller  : Backend:Controllers:WidgetsController:toogleAvailable }
+    defaults: { _controller  : BackendBundle:Widgets:toogleAvailable }
 
 admin_widgets_content_provider:
     path:     /widget/content-provider
-    defaults: { _controller  : Backend:Controllers:WidgetsController:contentProvider }
+    defaults: { _controller  : BackendBundle:Widgets:contentProvider }
 
 # Menu manager routes
 admin_menus:
     path:     /menus
-    defaults: { _controller  : Backend:Controllers:MenusController:list }
+    defaults: { _controller  : BackendBundle:Menus:list }
 
 admin_menu_show:
     path:     /menu/{id}/show
-    defaults: { _controller  : Backend:Controllers:MenusController:show }
+    defaults: { _controller  : BackendBundle:Menus:show }
 
 admin_menu_create:
     path:     /menu/create
-    defaults: { _controller  : Backend:Controllers:MenusController:create }
+    defaults: { _controller  : BackendBundle:Menus:create }
 
 admin_menu_update:
     path:     /menu/{id}/update
-    defaults: { _controller  : Backend:Controllers:MenusController:update }
+    defaults: { _controller  : BackendBundle:Menus:update }
 
 admin_menu_delete:
     path:     /menu/{id}/delete
-    defaults: { _controller  : Backend:Controllers:MenusController:delete }
+    defaults: { _controller  : BackendBundle:Menus:delete }
 
 admin_menu_batchdelete:
     path:     /menus/batchdelete
-    defaults: { _controller  : Backend:Controllers:MenusController:batchDelete }
+    defaults: { _controller  : BackendBundle:Menus:batchDelete }
 
 admin_instance_sync:
     path:     /instance-sync
-    defaults: { _controller  : Backend:Controllers:InstanceSyncController:list }
+    defaults: { _controller  : BackendBundle:InstanceSync:list }
 
 admin_instance_sync_create:
     path:     /instance-sync/create
-    defaults: { _controller  : Backend:Controllers:InstanceSyncController:create }
+    defaults: { _controller  : BackendBundle:InstanceSync:create }
 
 admin_instance_sync_fetch_categories:
     path:     /instance-sync/fetch-categories
-    defaults: { _controller  : Backend:Controllers:InstanceSyncController:fetchCategories }
+    defaults: { _controller  : BackendBundle:InstanceSync:fetchCategories }
 
 admin_instance_sync_show:
     path:     /instance-sync/show
-    defaults: { _controller  : Backend:Controllers:InstanceSyncController:show }
+    defaults: { _controller  : BackendBundle:InstanceSync:show }
 
 admin_instance_sync_delete:
     path:     /instance-sync/delete
-    defaults: { _controller  : Backend:Controllers:InstanceSyncController:delete }
+    defaults: { _controller  : BackendBundle:InstanceSync:delete }
 
 # Polls manager routes
 admin_polls:
     path:     /polls
-    defaults: { _controller  : Backend:Controllers:PollsController:list }
+    defaults: { _controller  : BackendBundle:Polls:list }
 
 admin_polls_widget:
     path:     /polls/widget
-    defaults: { _controller  : Backend:Controllers:PollsController:widget }
+    defaults: { _controller  : BackendBundle:Polls:widget }
 
 admin_poll_create:
     path:     /polls/create
-    defaults: { _controller  : Backend:Controllers:PollsController:create }
+    defaults: { _controller  : BackendBundle:Polls:create }
 
 admin_poll_show:
     path:     /poll/{id}/show
-    defaults: { _controller  : Backend:Controllers:PollsController:show }
+    defaults: { _controller  : BackendBundle:Polls:show }
 
 admin_poll_update:
     path:     /poll/{id}/update
-    defaults: { _controller  : Backend:Controllers:PollsController:update }
+    defaults: { _controller  : BackendBundle:Polls:update }
 
 admin_poll_delete:
     path:     /poll/{id}/delete
-    defaults: { _controller  : Backend:Controllers:PollsController:delete }
+    defaults: { _controller  : BackendBundle:Polls:delete }
 
 admin_polls_config:
     path:     /polls/config
-    defaults: { _controller  : Backend:Controllers:PollsController:config }
+    defaults: { _controller  : BackendBundle:Polls:config }
 
 admin_polls_batchpublish:
     path:     /polls/batch-publish
-    defaults: { _controller  : Backend:Controllers:PollsController:batchPublish }
+    defaults: { _controller  : BackendBundle:Polls:batchPublish }
 
 admin_polls_batchdelete:
     path:     /polls/batch-delete
-    defaults: { _controller  : Backend:Controllers:PollsController:batchDelete }
+    defaults: { _controller  : BackendBundle:Polls:batchDelete }
 
 admin_poll_toggleavailable:
     path:     /poll/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:PollsController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Polls:toggleAvailable }
 
 admin_poll_togglefavorite:
     path:     /poll/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:PollsController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Polls:toggleFavorite }
 
 admin_poll_toggleinhome:
     path:     /poll/{id}/toggle-inhome
-    defaults: { _controller  : Backend:Controllers:PollsController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Polls:toggleInHome }
 
 
 admin_polls_content_provider:
     path:     /polls/content-provider
-    defaults: { _controller  : Backend:Controllers:PollsController:contentProvider }
+    defaults: { _controller  : BackendBundle:Polls:contentProvider }
 
 admin_polls_content_provider_related:
     path:     /polls/content-provider-related
-    defaults: { _controller  : Backend:Controllers:PollsController:contentProviderRelated }
+    defaults: { _controller  : BackendBundle:Polls:contentProviderRelated }
 
 # Ads manager routes
 admin_ads:
     path:     /ads
-    defaults: { _controller  : Backend:Controllers:AdsController:list }
+    defaults: { _controller  : BackendBundle:Ads:list }
 
 admin_ad_create:
     path:     /ads/create
-    defaults: { _controller  : Backend:Controllers:AdsController:create }
+    defaults: { _controller  : BackendBundle:Ads:create }
 
 admin_ad_show:
     path:     /ad/{id}/show
-    defaults: { _controller  : Backend:Controllers:AdsController:show }
+    defaults: { _controller  : BackendBundle:Ads:show }
 
 admin_ad_update:
     path:     /ads/{id}/update
-    defaults: { _controller  : Backend:Controllers:AdsController:update }
+    defaults: { _controller  : BackendBundle:Ads:update }
 
 admin_ad_delete:
     path:     /ad/{id}/delete
-    defaults: { _controller  : Backend:Controllers:AdsController:delete }
+    defaults: { _controller  : BackendBundle:Ads:delete }
 
 admin_ads_batchpublish:
     path:     /ads/batch-publish
-    defaults: { _controller  : Backend:Controllers:AdsController:batchPublish }
+    defaults: { _controller  : BackendBundle:Ads:batchPublish }
 
 admin_ads_batchdelete:
     path:     /ads/batch-delete
-    defaults: { _controller  : Backend:Controllers:AdsController:batchDelete }
+    defaults: { _controller  : BackendBundle:Ads:batchDelete }
 
 admin_ads_content_provider:
     path:     /ads/content-provider
-    defaults: { _controller  : Backend:Controllers:AdsController:contentProvider }
+    defaults: { _controller  : BackendBundle:Ads:contentProvider }
 
 admin_ad_toggleavailable:
     path:     /ads/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:AdsController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Ads:toggleAvailable }
 
 admin_ads_config:
     path:     /ads/config
-    defaults: { _controller  : Backend:Controllers:AdsController:config }
+    defaults: { _controller  : BackendBundle:Ads:config }
 
 # Special manager routes
 admin_specials:
     path:     /specials
-    defaults: { _controller  : Backend:Controllers:SpecialsController:list }
+    defaults: { _controller  : BackendBundle:Specials:list }
 
 admin_specials_widget:
     path:     /specials/widget
-    defaults: { _controller  : Backend:Controllers:SpecialsController:widget }
+    defaults: { _controller  : BackendBundle:Specials:widget }
 
 admin_special_create:
     path:     /special/create
-    defaults: { _controller  : Backend:Controllers:SpecialsController:create }
+    defaults: { _controller  : BackendBundle:Specials:create }
 
 admin_special_show:
     path:     /special/{id}/show
-    defaults: { _controller  : Backend:Controllers:SpecialsController:show }
+    defaults: { _controller  : BackendBundle:Specials:show }
 
 admin_special_update:
     path:     /special/{id}/update
-    defaults: { _controller  : Backend:Controllers:SpecialsController:update }
+    defaults: { _controller  : BackendBundle:Specials:update }
 
 admin_special_delete:
     path:     /special/{id}/delete
-    defaults: { _controller  : Backend:Controllers:SpecialsController:delete }
+    defaults: { _controller  : BackendBundle:Specials:delete }
 
 admin_special_widget_save_positions:
     path:     /specials/widget/save-positions
-    defaults: { _controller  : Backend:Controllers:SpecialsController:savePositions }
+    defaults: { _controller  : BackendBundle:Specials:savePositions }
 
 admin_specials_config:
     path:     /specials/config
-    defaults: { _controller  : Backend:Controllers:SpecialsController:config }
+    defaults: { _controller  : BackendBundle:Specials:config }
 
 admin_special_toggleavailable:
     path:     /special/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:SpecialsController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Specials:toggleAvailable }
 
 admin_special_togglefavorite:
     path:     /special/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:SpecialsController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Specials:toggleFavorite }
 
 admin_special_togglefavorite:
     path:     /special/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:SpecialsController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Specials:toggleFavorite }
 
 admin_special_toggleinhome:
     path:     /special/{id}/toggle-in-home
-    defaults: { _controller  : Backend:Controllers:SpecialsController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Specials:toggleInHome }
 
 admin_specials_batchpublish:
     path:     /special/batch-publish
-    defaults: { _controller  : Backend:Controllers:SpecialsController:batchPublish }
+    defaults: { _controller  : BackendBundle:Specials:batchPublish }
 
 admin_specials_batchdelete:
     path:     /special/batch-delete
-    defaults: { _controller  : Backend:Controllers:SpecialsController:batchDelete }
+    defaults: { _controller  : BackendBundle:Specials:batchDelete }
 
 # Letter manager routes
 admin_letters:
     path:     /letters
-    defaults: { _controller  : Backend:Controllers:LettersController:list }
+    defaults: { _controller  : BackendBundle:Letters:list }
 
 admin_letter_create:
     path:     /letter/create
-    defaults: { _controller  : Backend:Controllers:LettersController:create }
+    defaults: { _controller  : BackendBundle:Letters:create }
 
 admin_letter_show:
     path:     /letter/{id}/show
-    defaults: { _controller  : Backend:Controllers:LettersController:show }
+    defaults: { _controller  : BackendBundle:Letters:show }
 
 admin_letter_update:
     path:     /letter/{id}/update
-    defaults: { _controller  : Backend:Controllers:LettersController:update }
+    defaults: { _controller  : BackendBundle:Letters:update }
 
 admin_letter_delete:
     path:     /letter/{id}/delete
-    defaults: { _controller  : Backend:Controllers:LettersController:delete }
+    defaults: { _controller  : BackendBundle:Letters:delete }
 
 admin_letter_toggleavailable:
     path:     /letter/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:LettersController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Letters:toggleAvailable }
 
 admin_letters_batchpublish:
     path:     /letter/batch-publish
-    defaults: { _controller  : Backend:Controllers:LettersController:batchPublish }
+    defaults: { _controller  : BackendBundle:Letters:batchPublish }
 
 admin_letters_batchdelete:
     path:     /letter/batch-delete
-    defaults: { _controller  : Backend:Controllers:LettersController:batchDelete }
+    defaults: { _controller  : BackendBundle:Letters:batchDelete }
 
 admin_letters_content_provider:
     path:     /letters/content-provider
-    defaults: { _controller  : Backend:Controllers:LettersController:contentProvider }
+    defaults: { _controller  : BackendBundle:Letters:contentProvider }
 
 admin_letters_content_list_provider:
     path:     /letters/content-list-provider
-    defaults: { _controller  : Backend:Controllers:LettersController:contentListProvider }
+    defaults: { _controller  : BackendBundle:Letters:contentListProvider }
 
 # Category manager routes
 admin_categories:
     path:     /categories
-    defaults: { _controller  : Backend:Controllers:CategoriesController:list }
+    defaults: { _controller  : BackendBundle:Categories:list }
 
 admin_categories_config:
     path:     /categories/config
-    defaults: { _controller  : Backend:Controllers:CategoriesController:config }
+    defaults: { _controller  : BackendBundle:Categories:config }
 
 admin_category_create:
     path:     /category/create
-    defaults: { _controller  : Backend:Controllers:CategoriesController:create }
+    defaults: { _controller  : BackendBundle:Categories:create }
 
 admin_category_show:
     path:     /category/{id}/show
-    defaults: { _controller  : Backend:Controllers:CategoriesController:show }
+    defaults: { _controller  : BackendBundle:Categories:show }
 
 admin_category_update:
     path:     /category/{id}/update
-    defaults: { _controller  : Backend:Controllers:CategoriesController:update }
+    defaults: { _controller  : BackendBundle:Categories:update }
 
 admin_category_delete:
     path:     /category/{id}/delete
-    defaults: { _controller  : Backend:Controllers:CategoriesController:delete }
+    defaults: { _controller  : BackendBundle:Categories:delete }
 
 admin_category_empty:
     path:     /category/{id}/empty
-    defaults: { _controller  : Backend:Controllers:CategoriesController:empty }
+    defaults: { _controller  : BackendBundle:Categories:empty }
 
 admin_category_toggleavailable:
     path:     /category/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:CategoriesController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Categories:toggleAvailable }
 
 admin_category_togglerss:
     path:     /category/{id}/toggle-rss
-    defaults: { _controller  : Backend:Controllers:CategoriesController:toggleRss }
+    defaults: { _controller  : BackendBundle:Categories:toggleRss }
 
 # Image manager routes
 admin_images_search:
     path:     /images/search
-    defaults: { _controller  : Backend:Controllers:ImagesController:search }
+    defaults: { _controller  : BackendBundle:Images:search }
 
 admin_images:
     path:     /images
-    defaults: { _controller  : Backend:Controllers:ImagesController:list }
+    defaults: { _controller  : BackendBundle:Images:list }
 
 admin_image_new:
     path:     /images/new
-    defaults: { _controller  : Backend:Controllers:ImagesController:new }
+    defaults: { _controller  : BackendBundle:Images:new }
 
 admin_image_show:
     path:     /images/show
-    defaults: { _controller  : Backend:Controllers:ImagesController:show }
+    defaults: { _controller  : BackendBundle:Images:show }
 
 admin_image_create:
     path:     /image/create
-    defaults: { _controller  : Backend:Controllers:ImagesController:create }
+    defaults: { _controller  : BackendBundle:Images:create }
 
 admin_image_update:
     path:     /image/update
-    defaults: { _controller  : Backend:Controllers:ImagesController:update }
+    defaults: { _controller  : BackendBundle:Images:update }
 
 admin_image_delete:
     path:     /image/{id}/delete
-    defaults: { _controller  : Backend:Controllers:ImagesController:delete }
+    defaults: { _controller  : BackendBundle:Images:delete }
 
 admin_images_batchdelete:
     path:     /images/batchdelete
-    defaults: { _controller  : Backend:Controllers:ImagesController:batchDelete }
+    defaults: { _controller  : BackendBundle:Images:batchDelete }
 
 admin_images_config:
     path:     /images/config
-    defaults: { _controller  : Backend:Controllers:ImagesController:config }
+    defaults: { _controller  : BackendBundle:Images:config }
 
 admin_images_content_provider_gallery:
     path:     /images/content-provider-gallery
-    defaults: { _controller  : Backend:Controllers:ImagesController:contentProviderGallery }
+    defaults: { _controller  : BackendBundle:Images:contentProviderGallery }
 
 # Videos controller routes
 admin_videos:
     path:     /videos
-    defaults: { _controller  : Backend:Controllers:VideosController:list }
+    defaults: { _controller  : BackendBundle:Videos:list }
 
 admin_videos_create:
     path:     /videos/create
-    defaults: { _controller  : Backend:Controllers:VideosController:create }
+    defaults: { _controller  : BackendBundle:Videos:create }
 
 admin_videos_get_info:
     path:     /videos/get-video-information
-    defaults: { _controller  : Backend:Controllers:VideosController:videoInformation }
+    defaults: { _controller  : BackendBundle:Videos:videoInformation }
 
 admin_video_show:
     path:     /videos/{id}/show
-    defaults: { _controller  : Backend:Controllers:VideosController:show }
+    defaults: { _controller  : BackendBundle:Videos:show }
 
 admin_videos_update:
     path:     /videos/{id}/update
-    defaults: { _controller  : Backend:Controllers:VideosController:update }
+    defaults: { _controller  : BackendBundle:Videos:update }
 
 admin_video_delete:
     path:     /videos/{id}/delete
-    defaults: { _controller  : Backend:Controllers:VideosController:delete }
+    defaults: { _controller  : BackendBundle:Videos:delete }
 
 admin_videos_widget:
     path:     /videos/widget
-    defaults: { _controller  : Backend:Controllers:VideosController:widget }
+    defaults: { _controller  : BackendBundle:Videos:widget }
 
 admin_videos_config:
     path:     /videos/config
-    defaults: { _controller  : Backend:Controllers:VideosController:config }
+    defaults: { _controller  : BackendBundle:Videos:config }
 
 admin_video_save_positions:
     path:     /videos/save-positions
-    defaults: { _controller  : Backend:Controllers:VideosController:savePositions }
+    defaults: { _controller  : BackendBundle:Videos:savePositions }
 
 admin_video_toggle_available:
     path:     /videos/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:VideosController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Videos:toggleAvailable }
 
 admin_video_toggle_favorite:
     path:     /videos/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:VideosController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Videos:toggleFavorite }
 
 admin_video_toggle_inhome:
     path:     /videos/{id}/toggle-inhome
-    defaults: { _controller  : Backend:Controllers:VideosController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Videos:toggleInHome }
 
 admin_video_get_relations:
     path:     /videos/{id}/relations
-    defaults: { _controller  : Backend:Controllers:VideosController:relations }
+    defaults: { _controller  : BackendBundle:Videos:relations }
 
 admin_video_batchdelete:
     path:     /videos/batch-delete
-    defaults: { _controller  : Backend:Controllers:VideosController:batchDelete }
+    defaults: { _controller  : BackendBundle:Videos:batchDelete }
 
 admin_video_batchpublish:
     path:     /videos/batch-publish
-    defaults: { _controller  : Backend:Controllers:VideosController:batchPublish }
+    defaults: { _controller  : BackendBundle:Videos:batchPublish }
 
 admin_videos_content_provider:
     path:     /videos/content-provider
-    defaults: { _controller  : Backend:Controllers:VideosController:contentProvider }
+    defaults: { _controller  : BackendBundle:Videos:contentProvider }
 
 admin_videos_content_provider_related:
     path:     /videos/content-provider-related
-    defaults: { _controller  : Backend:Controllers:VideosController:contentProviderRelated }
+    defaults: { _controller  : BackendBundle:Videos:contentProviderRelated }
 
 admin_videos_content_provider_gallery:
     path:     /videos/content-provider-gallery
-    defaults: { _controller  : Backend:Controllers:VideosController:contentProviderGallery }
+    defaults: { _controller  : BackendBundle:Videos:contentProviderGallery }
 
 # Album controller routes
 admin_albums:
     path:     /albums
-    defaults: { _controller  : Backend:Controllers:AlbumsController:list }
+    defaults: { _controller  : BackendBundle:Albums:list }
 
 admin_albums_config:
     path:     /albums/config
-    defaults: { _controller  : Backend:Controllers:AlbumsController:config }
+    defaults: { _controller  : BackendBundle:Albums:config }
 
 admin_albums_widget:
     path:     /albums/widget
-    defaults: { _controller  : Backend:Controllers:AlbumsController:widget }
+    defaults: { _controller  : BackendBundle:Albums:widget }
 
 admin_album_create:
     path:     /album/create
-    defaults: { _controller  : Backend:Controllers:AlbumsController:create }
+    defaults: { _controller  : BackendBundle:Albums:create }
 
 admin_album_update:
     path:     /album/{id}/update
-    defaults: { _controller  : Backend:Controllers:AlbumsController:update }
+    defaults: { _controller  : BackendBundle:Albums:update }
 
 admin_album_show:
     path:     /albums/{id}/show
-    defaults: { _controller  : Backend:Controllers:AlbumsController:show }
+    defaults: { _controller  : BackendBundle:Albums:show }
 
 admin_album_delete:
     path:     /albums/{id}/delete
-    defaults: { _controller  : Backend:Controllers:AlbumsController:delete }
+    defaults: { _controller  : BackendBundle:Albums:delete }
 
 admin_album_toggle_available:
     path:     /album/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:AlbumsController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Albums:toggleAvailable }
 
 admin_album_toggle_favorite:
     path:     /album/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:AlbumsController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Albums:toggleFavorite }
 
 admin_album_toggle_inhome:
     path:     /album/{id}/toggle-inhome
-    defaults: { _controller  : Backend:Controllers:AlbumsController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Albums:toggleInHome }
 
 admin_album_batchdelete:
     path:     /albums/batch-delete
-    defaults: { _controller  : Backend:Controllers:AlbumsController:batchDelete }
+    defaults: { _controller  : BackendBundle:Albums:batchDelete }
 
 admin_album_batchpublish:
     path:     /albums/batch-publish
-    defaults: { _controller  : Backend:Controllers:AlbumsController:batchPublish }
+    defaults: { _controller  : BackendBundle:Albums:batchPublish }
 
 admin_albums_savepositions:
     path:     /albums/save-positions
-    defaults: { _controller  : Backend:Controllers:AlbumsController:savePositions }
+    defaults: { _controller  : BackendBundle:Albums:savePositions }
 
 admin_albums_content_provider:
     path:     /albums/content-provider
-    defaults: { _controller  : Backend:Controllers:AlbumsController:contentProvider }
+    defaults: { _controller  : BackendBundle:Albums:contentProvider }
 
 admin_albums_content_provider_related:
     path:     /albums/content-provider-related
-    defaults: { _controller  : Backend:Controllers:AlbumsController:contentProviderRelated }
+    defaults: { _controller  : BackendBundle:Albums:contentProviderRelated }
 
 # Covers controller routes
 admin_covers:
     path:     /covers
-    defaults: { _controller  : Backend:Controllers:CoversController:list }
+    defaults: { _controller  : BackendBundle:Covers:list }
 
 admin_cover_create:
     path:     /cover/create
-    defaults: { _controller  : Backend:Controllers:CoversController:create }
+    defaults: { _controller  : BackendBundle:Covers:create }
 
 admin_cover_show:
     path:     /covers/{id}/show
-    defaults: { _controller  : Backend:Controllers:CoversController:show }
+    defaults: { _controller  : BackendBundle:Covers:show }
 
 admin_cover_update:
     path:     /cover/{id}/update
-    defaults: { _controller  : Backend:Controllers:CoversController:update }
+    defaults: { _controller  : BackendBundle:Covers:update }
 
 admin_cover_toggleavailable:
     path:     /cover/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:CoversController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Covers:toggleAvailable }
 
 admin_cover_togglefavorite:
     path:     /cover/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:CoversController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Covers:toggleFavorite }
 
 admin_cover_toggleinhome:
     path:     /cover/{id}/toggle-inhome
-    defaults: { _controller  : Backend:Controllers:CoversController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Covers:toggleInHome }
 
 admin_covers_batchpublish:
     path:     /covers/batch-publish
-    defaults: { _controller  : Backend:Controllers:CoversController:batchPublish }
+    defaults: { _controller  : BackendBundle:Covers:batchPublish }
 
 admin_covers_batchdelete:
     path:     /covers/batch-delete
-    defaults: { _controller  : Backend:Controllers:CoversController:batchDelete }
+    defaults: { _controller  : BackendBundle:Covers:batchDelete }
 
 admin_covers_savepositions:
     path:     /covers/save-positions
-    defaults: { _controller  : Backend:Controllers:CoversController:savePositions }
+    defaults: { _controller  : BackendBundle:Covers:savePositions }
 
 admin_cover_delete:
     path:     /cover/{id}/delete
-    defaults: { _controller  : Backend:Controllers:CoversController:delete }
+    defaults: { _controller  : BackendBundle:Covers:delete }
 
 admin_covers_widget:
     path:     /cover/widget
-    defaults: { _controller  : Backend:Controllers:CoversController:widget }
+    defaults: { _controller  : BackendBundle:Covers:widget }
 
 admin_covers_config:
     path:     /covers/config
-    defaults: { _controller  : Backend:Controllers:CoversController:config }
+    defaults: { _controller  : BackendBundle:Covers:config }
 
 # Books controller routes
 admin_books:
     path:     /books
-    defaults: { _controller  : Backend:Controllers:BooksController:list }
+    defaults: { _controller  : BackendBundle:Books:list }
 
 admin_books_widget:
     path:     /books/widget
-    defaults: { _controller  : Backend:Controllers:BooksController:widget, category  : widget }
+    defaults: { _controller  : BackendBundle:Books:widget, category  : widget }
 
 admin_books_create:
     path:     /books/create
-    defaults: { _controller  : Backend:Controllers:BooksController:create }
+    defaults: { _controller  : BackendBundle:Books:create }
 
 admin_books_show:
     path:     /books/{id}/show
-    defaults: { _controller  : Backend:Controllers:BooksController:show }
+    defaults: { _controller  : BackendBundle:Books:show }
 
 admin_books_update:
     path:     /books/{id}/update
-    defaults: { _controller  : Backend:Controllers:BooksController:update }
+    defaults: { _controller  : BackendBundle:Books:update }
 
 admin_books_delete:
     path:     /books/{id}/delete
-    defaults: { _controller  : Backend:Controllers:BooksController:delete }
+    defaults: { _controller  : BackendBundle:Books:delete }
 
 admin_books_save_positions:
     path:     /books/save-positions
-    defaults: { _controller  : Backend:Controllers:BooksController:savePositions }
+    defaults: { _controller  : BackendBundle:Books:savePositions }
 
 admin_books_toggle_available:
     path:     /books/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:BooksController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Books:toggleAvailable }
 
 admin_books_toggle_inhome:
     path:     /books/{id}/toggle-inhome
-    defaults: { _controller  : Backend:Controllers:BooksController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Books:toggleInHome }
 
 admin_books_batchdelete:
     path:     /books/batch-delete
-    defaults: { _controller  : Backend:Controllers:BooksController:batchDelete }
+    defaults: { _controller  : BackendBundle:Books:batchDelete }
 
 admin_books_batchpublish:
     path:     /books/batch-publish
-    defaults: { _controller  : Backend:Controllers:BooksController:batchPublish }
+    defaults: { _controller  : BackendBundle:Books:batchPublish }
 
 # Files controller routes
 admin_files:
     path:     /files
-    defaults: { _controller  : Backend:Controllers:FilesController:list }
+    defaults: { _controller  : BackendBundle:Files:list }
 
 admin_files_statistics:
     path:     /files/statistics
-    defaults: { _controller  : Backend:Controllers:FilesController:statistics }
+    defaults: { _controller  : BackendBundle:Files:statistics }
 
 admin_files_widget:
     path:     /files/widget
-    defaults: { _controller  : Backend:Controllers:FilesController:widget }
+    defaults: { _controller  : BackendBundle:Files:widget }
 
 admin_files_create:
     path:     /files/create
-    defaults: { _controller  : Backend:Controllers:FilesController:create }
+    defaults: { _controller  : BackendBundle:Files:create }
 
 admin_files_show:
     path:     /files/{id}/show
-    defaults: { _controller  : Backend:Controllers:FilesController:show }
+    defaults: { _controller  : BackendBundle:Files:show }
 
 admin_files_update:
     path:     /files/{id}/update
-    defaults: { _controller  : Backend:Controllers:FilesController:update }
+    defaults: { _controller  : BackendBundle:Files:update }
 
 admin_files_delete:
     path:     /files/{id}/delete
-    defaults: { _controller  : Backend:Controllers:FilesController:delete }
+    defaults: { _controller  : BackendBundle:Files:delete }
 
 admin_files_toggle_favorite:
     path:     /files/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:FilesController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Files:toggleFavorite }
 
 admin_files_toggle_in_home:
     path:     /files/{id}/toggle-in-home
-    defaults: { _controller  : Backend:Controllers:FilesController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Files:toggleInHome }
 
 admin_files_toggle_available:
     path:     /files/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:FilesController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Files:toggleAvailable }
 
 admin_file_save_positions:
     path:     /files/save-positions
-    defaults: { _controller  : Backend:Controllers:FilesController:savePositions }
+    defaults: { _controller  : BackendBundle:Files:savePositions }
 
 admin_files_batchdelete:
     path:     /files/batch-delete
-    defaults: { _controller  : Backend:Controllers:FilesController:batchDelete }
+    defaults: { _controller  : BackendBundle:Files:batchDelete }
 
 admin_files_batchpublish:
     path:     /files/batch-publish
-    defaults: { _controller  : Backend:Controllers:FilesController:batchPublish }
+    defaults: { _controller  : BackendBundle:Files:batchPublish }
 
 admin_files_content_provider:
     path:     /files/content-provider
-    defaults: { _controller  : Backend:Controllers:FilesController:contentListProvider }
+    defaults: { _controller  : BackendBundle:Files:contentListProvider }
 
 # Search controller routes
 admin_search:
     path:     /search
-    defaults: { _controller  : Backend:Controllers:SearchController:default }
+    defaults: { _controller  : BackendBundle:Search:default }
 
 admin_search_content_provider:
     path:     /search/content-provider
-    defaults: { _controller  : Backend:Controllers:SearchController:contentProvider }
+    defaults: { _controller  : BackendBundle:Search:contentProvider }
 
 # Keywork controller routes
 admin_newsletters:
     path:     /newsletters
-    defaults: { _controller  : Backend:Controllers:NewsletterController:list }
+    defaults: { _controller  : BackendBundle:Newsletter:list }
 
 admin_newsletter_create:
     path:     /newsletter/create
-    defaults: { _controller  : Backend:Controllers:NewsletterController:create }
+    defaults: { _controller  : BackendBundle:Newsletter:create }
 
 admin_newsletter_show_contents:
     path:     /newsletter/{id}/contents
-    defaults: { _controller  : Backend:Controllers:NewsletterController:showContents }
+    defaults: { _controller  : BackendBundle:Newsletter:showContents }
 
 admin_newsletter_save_contents:
     path:     /newsletter/save-contents
-    defaults: { _controller  : Backend:Controllers:NewsletterController:saveContents }
+    defaults: { _controller  : BackendBundle:Newsletter:saveContents }
 
 admin_newsletter_preview:
     path:     /newsletter/{id}/preview
-    defaults: { _controller  : Backend:Controllers:NewsletterController:preview }
+    defaults: { _controller  : BackendBundle:Newsletter:preview }
 
 admin_newsletter_save_html:
     path:     /newsletter/{id}/save-html
-    defaults: { _controller  : Backend:Controllers:NewsletterController:saveHtmlContent }
+    defaults: { _controller  : BackendBundle:Newsletter:saveHtmlContent }
 
 admin_newsletter_pick_recipients:
     path:     /newsletter/{id}/pick-recipients
-    defaults: { _controller  : Backend:Controllers:NewsletterController:pickRecipients }
+    defaults: { _controller  : BackendBundle:Newsletter:pickRecipients }
 
 admin_newsletter_send:
     path:     /newsletter/{id}/send
-    defaults: { _controller  : Backend:Controllers:NewsletterController:send }
+    defaults: { _controller  : BackendBundle:Newsletter:send }
 
 admin_newsletter_delete:
     path:     /newsletter/{id}/delete
-    defaults: { _controller  : Backend:Controllers:NewsletterController:delete }
+    defaults: { _controller  : BackendBundle:Newsletter:delete }
 
 admin_newsletter_config:
     path:     /newsletters/config
-    defaults: { _controller  : Backend:Controllers:NewsletterController:config }
+    defaults: { _controller  : BackendBundle:Newsletter:config }
 
 admin_newsletter_subscriptors:
     path:     /newsletters/subscriptors
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:list }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:list }
 
 admin_newsletter_subscriptor_create:
     path:     /newsletters/subscriptor/create
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:create }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:create }
 
 admin_newsletter_subscriptor_show:
     path:     /newsletters/subscriptor/{id}/show
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:show }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:show }
 
 admin_newsletter_subscriptor_update:
     path:     /newsletters/subscriptor/{id}/update
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:update }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:update }
 
 admin_newsletter_subscriptor_delete:
     path:     /newsletters/subscriptor/{id}/delete
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:delete }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:delete }
 
 admin_newsletter_subscriptor_toggle_subscription:
     path:     /newsletters/subscriptor/{id}/toggle-subscription
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:toggleSubscription }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:toggleSubscription }
 
 admin_newsletter_subscriptor_toggle_activated:
     path:     /newsletters/subscriptor/{id}/toggle-activated
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:toggleActivated }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:toggleActivated }
 
 admin_newsletter_subscriptor_batch_delete:
     path:     /newsletters/subscriptors/batch-delete
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:batchDelete }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:batchDelete }
 
 admin_newsletter_subscriptors_batch_subscribe:
     path:     /newsletters/subscriptors/batch-subscribe
-    defaults: { _controller  : Backend:Controllers:NewsletterSubscriptorsController:batchSubscribe }
+    defaults: { _controller  : BackendBundle:NewsletterSubscriptors:batchSubscribe }
 
 # Keywork controller routes
 admin_keywords:
     path:     /keywords
-    defaults: { _controller  : Backend:Controllers:KeywordsController:list }
+    defaults: { _controller  : BackendBundle:Keywords:list }
 
 admin_keyword_create:
     path:     /keywords/create
-    defaults: { _controller  : Backend:Controllers:KeywordsController:create }
+    defaults: { _controller  : BackendBundle:Keywords:create }
 
 admin_keyword_show:
     path:     /keywords/{id}/show
-    defaults: { _controller  : Backend:Controllers:KeywordsController:show }
+    defaults: { _controller  : BackendBundle:Keywords:show }
 
 admin_keyword_update:
     path:     /keywords/{id}/update
-    defaults: { _controller  : Backend:Controllers:KeywordsController:update }
+    defaults: { _controller  : BackendBundle:Keywords:update }
 
 admin_keyword_delete:
     path:     /keywords/{id}/delete
-    defaults: { _controller  : Backend:Controllers:KeywordsController:delete }
+    defaults: { _controller  : BackendBundle:Keywords:delete }
 
 admin_keyword_autolink:
     path:     /keywords/autolink
-    defaults: { _controller  : Backend:Controllers:KeywordsController:autolink }
+    defaults: { _controller  : BackendBundle:Keywords:autolink }
 
 # Statistics controller routes
 admin_statistics:
     path:     /statistics
-    defaults: { _controller  : Backend:Controllers:StatisticsController:default }
+    defaults: { _controller  : BackendBundle:Statistics:default }
 
 admin_statistics_widget:
     path:     /statistics/widget
-    defaults: { _controller  : Backend:Controllers:StatisticsController:getWidget }
+    defaults: { _controller  : BackendBundle:Statistics:getWidget }
 
 # Article controller routes
 admin_articles:
     path:     /articles
-    defaults: { _controller  : Backend:Controllers:ArticlesController:list }
+    defaults: { _controller  : BackendBundle:Articles:list }
 
 admin_article_create:
     path:     /article/create
-    defaults: { _controller  : Backend:Controllers:ArticlesController:create }
+    defaults: { _controller  : BackendBundle:Articles:create }
 
 admin_article_show:
     path:     /article/{id}/show
-    defaults: { _controller  : Backend:Controllers:ArticlesController:show }
+    defaults: { _controller  : BackendBundle:Articles:show }
 
 admin_article_delete:
     path:     /article/{id}/delete
-    defaults: { _controller  : Backend:Controllers:ArticlesController:delete }
+    defaults: { _controller  : BackendBundle:Articles:delete }
 
 admin_article_update:
     path:     /article/{id}/update
-    defaults: { _controller  : Backend:Controllers:ArticlesController:update }
+    defaults: { _controller  : BackendBundle:Articles:update }
 
 admin_article_toggleavailable:
     path:     /article/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:ArticlesController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Articles:toggleAvailable }
 
 admin_article_preview:
     path:     /article/preview
-    defaults: { _controller  : Backend:Controllers:ArticlesController:preview }
+    defaults: { _controller  : BackendBundle:Articles:preview }
 
 admin_article_get_preview:
     path:     /article/get-preview
-    defaults: { _controller  : Backend:Controllers:ArticlesController:getPreview }
+    defaults: { _controller  : BackendBundle:Articles:getPreview }
 
 admin_articles_content_provider_suggested:
     path:     /articles/content-provider-suggested
-    defaults: { _controller  : Backend:Controllers:ArticlesController:contentProviderSuggested }
+    defaults: { _controller  : BackendBundle:Articles:contentProviderSuggested }
 
 admin_articles_content_provider_category:
     path:     /articles/content-provider-category
-    defaults: { _controller  : Backend:Controllers:ArticlesController:contentProviderCategory }
+    defaults: { _controller  : BackendBundle:Articles:contentProviderCategory }
 
 admin_articles_content_provider_related:
     path:     /articles/content-provider-related
-    defaults: { _controller  : Backend:Controllers:ArticlesController:contentProviderRelated }
+    defaults: { _controller  : BackendBundle:Articles:contentProviderRelated }
 
 admin_articles_content_provider_in_frontpage:
     path:     /articles/content-provider-in-frontpage
-    defaults: { _controller  : Backend:Controllers:ArticlesController:contentProviderInFrontpage }
+    defaults: { _controller  : BackendBundle:Articles:contentProviderInFrontpage }
 
 
 admin_articles_batchdelete:
     path:     /articles/batch-delete
-    defaults: { _controller  : Backend:Controllers:ArticlesController:batchDelete }
+    defaults: { _controller  : BackendBundle:Articles:batchDelete }
 
 admin_articles_batchpublish:
     path:     /articles/batch-publish
-    defaults: { _controller  : Backend:Controllers:ArticlesController:batchPublish }
+    defaults: { _controller  : BackendBundle:Articles:batchPublish }
 
 # Opinion controller routes
 admin_opinions:
     path:     /opinions
-    defaults: { _controller  : Backend:Controllers:OpinionsController:list, contentType  : opinion }
+    defaults: { _controller  : BackendBundle:Opinions:list, contentType  : opinion }
 
 admin_blogs:
     path:     /opinions/blog
-    defaults: { _controller  : Backend:Controllers:OpinionsController:list, contentType  : blog }
+    defaults: { _controller  : BackendBundle:Opinions:list, contentType  : blog }
 
 admin_opinions_frontpage:
     path:     /opinions/frontpage
-    defaults: { _controller  : Backend:Controllers:OpinionsController:frontpage }
+    defaults: { _controller  : BackendBundle:Opinions:frontpage }
 
 admin_opinion_create:
     path:     /opinion/create
-    defaults: { _controller  : Backend:Controllers:OpinionsController:create }
+    defaults: { _controller  : BackendBundle:Opinions:create }
 
 admin_opinion_show:
     path:     /opinion/{id}/show
-    defaults: { _controller  : Backend:Controllers:OpinionsController:show }
+    defaults: { _controller  : BackendBundle:Opinions:show }
 
 admin_opinion_update:
     path:     /opinion/{id}/update
-    defaults: { _controller  : Backend:Controllers:OpinionsController:update }
+    defaults: { _controller  : BackendBundle:Opinions:update }
 
 admin_opinion_delete:
     path:     /opinion/{id}/delete
-    defaults: { _controller  : Backend:Controllers:OpinionsController:delete }
+    defaults: { _controller  : BackendBundle:Opinions:delete }
 
 admin_opinion_toggleavailable:
     path:     /opinion/{id}/toggle-available
-    defaults: { _controller  : Backend:Controllers:OpinionsController:toggleAvailable }
+    defaults: { _controller  : BackendBundle:Opinions:toggleAvailable }
 
 admin_opinion_toggleinhome:
     path:     /opinion/{id}/toggle-inhome
-    defaults: { _controller  : Backend:Controllers:OpinionsController:toggleInHome }
+    defaults: { _controller  : BackendBundle:Opinions:toggleInHome }
 
 admin_opinion_togglefavorite:
     path:     /opinion/{id}/toggle-favorite
-    defaults: { _controller  : Backend:Controllers:OpinionsController:toggleFavorite }
+    defaults: { _controller  : BackendBundle:Opinions:toggleFavorite }
 
 admin_opinions_batch_delete:
     path:     /opinions/batch-delete
-    defaults: { _controller  : Backend:Controllers:OpinionsController:batchDelete }
+    defaults: { _controller  : BackendBundle:Opinions:batchDelete }
 
 admin_opinions_batch_publish:
     path:     /opinions/batch-publish
-    defaults: { _controller  : Backend:Controllers:OpinionsController:batchPublish }
+    defaults: { _controller  : BackendBundle:Opinions:batchPublish }
 
 admin_opinions_batch_inhome:
     path:     /opinions/batch-inhome
-    defaults: { _controller  : Backend:Controllers:OpinionsController:batchInHome }
+    defaults: { _controller  : BackendBundle:Opinions:batchInHome }
 
 admin_opinions_batch_inhome:
     path:     /opinions/save-positions
-    defaults: { _controller  : Backend:Controllers:OpinionsController:batchInHome }
+    defaults: { _controller  : BackendBundle:Opinions:batchInHome }
 
 admin_opinions_savepositions:
     path:     /opinions/batch-inhome
-    defaults: { _controller  : Backend:Controllers:OpinionsController:savePositions }
+    defaults: { _controller  : BackendBundle:Opinions:savePositions }
 
 admin_opinions_content_provider:
     path:     /opinions/content-provider
-    defaults: { _controller  : Backend:Controllers:OpinionsController:contentProvider }
+    defaults: { _controller  : BackendBundle:Opinions:contentProvider }
 
 admin_opinions_content_provider_related:
     path:     /opinions/content-provider-related
-    defaults: { _controller  : Backend:Controllers:OpinionsController:contentProviderRelated }
+    defaults: { _controller  : BackendBundle:Opinions:contentProviderRelated }
 
 admin_opinions_config:
     path:     /opinions/config
-    defaults: { _controller  : Backend:Controllers:OpinionsController:config }
+    defaults: { _controller  : BackendBundle:Opinions:config }
 
 # Opinion author controller routes
 admin_opinion_authors:
     path:     /opinion/authors
-    defaults: { _controller  : Backend:Controllers:OpinionsController:listAuthor }
+    defaults: { _controller  : BackendBundle:Opinions:listAuthor }
 
 admin_opinion_author_show:
     path:     /opinion/author/{id}/show
-    defaults: { _controller  : Backend:Controllers:OpinionsController:showAuthor }
+    defaults: { _controller  : BackendBundle:Opinions:showAuthor }
 
 admin_opinion_author_create:
     path:     /opinion/authors/create
-    defaults: { _controller  : Backend:Controllers:OpinionsController:createAuthor }
+    defaults: { _controller  : BackendBundle:Opinions:createAuthor }
 
 admin_opinion_author_update:
     path:     /opinion/author/{id}/update
-    defaults: { _controller  : Backend:Controllers:OpinionsController:updateAuthor }
+    defaults: { _controller  : BackendBundle:Opinions:updateAuthor }
 
 admin_opinion_author_delete:
     path:     /opinion/author/{id}/delete
-    defaults: { _controller  : Backend:Controllers:OpinionsController:deleteAuthor }
+    defaults: { _controller  : BackendBundle:Opinions:deleteAuthor }
 
 admin_opinion_author_batchdelete:
     path:     /opinion/authors/batch-delete
-    defaults: { _controller  : Backend:Controllers:OpinionsController:batchDeleteAuthor }
+    defaults: { _controller  : BackendBundle:Opinions:batchDeleteAuthor }
 
 # Comments controller routes
 admin_comments:
     path:     /comments
-    defaults: { _controller  : Backend:Controllers:CommentsController:list }
+    defaults: { _controller  : BackendBundle:Comments:list }
 
 admin_comments_config:
     path:     /comments/config
-    defaults: { _controller  : Backend:Controllers:CommentsController:config }
+    defaults: { _controller  : BackendBundle:Comments:config }
 
 admin_comments_show:
     path:     /comments/{id}/show
-    defaults: { _controller  : Backend:Controllers:CommentsController:show }
+    defaults: { _controller  : BackendBundle:Comments:show }
 
 admin_comments_update:
     path:     /comments/{id}/update
-    defaults: { _controller  : Backend:Controllers:CommentsController:update }
+    defaults: { _controller  : BackendBundle:Comments:update }
 
 admin_comments_delete:
     path:     /comments/{id}/delete
-    defaults: { _controller  : Backend:Controllers:CommentsController:delete }
+    defaults: { _controller  : BackendBundle:Comments:delete }
 
 admin_comments_toggle_status:
     path:     /comments/{id}/toggle-status
-    defaults: { _controller  : Backend:Controllers:CommentsController:toggleStatus }
+    defaults: { _controller  : BackendBundle:Comments:toggleStatus }
 
 admin_comments_batch_status:
     path:     /comments/batch-status
-    defaults: { _controller  : Backend:Controllers:CommentsController:batchStatus }
+    defaults: { _controller  : BackendBundle:Comments:batchStatus }
 
 admin_comments_batch_delete:
     path:     /comments/batch-delete
-    defaults: { _controller  : Backend:Controllers:CommentsController:batchDelete }
+    defaults: { _controller  : BackendBundle:Comments:batchDelete }
 
 # Comments by Disqus controller routes
 admin_comments_disqus:
     path:     /comments/disqus
-    defaults: { _controller  : Backend:Controllers:CommentsDisqusController:default }
+    defaults: { _controller  : BackendBundle:CommentsDisqus:default }
 
 admin_comments_disqus_config:
     path:     /comments/disqus/config
-    defaults: { _controller  : Backend:Controllers:CommentsDisqusController:config }
+    defaults: { _controller  : BackendBundle:CommentsDisqus:config }
 
 admin_comments_disqus_sync:
     path:     /comments/disqus/sync
-    defaults: { _controller  : Backend:Controllers:CommentsDisqusController:sync }
+    defaults: { _controller  : BackendBundle:CommentsDisqus:sync }
 
 # Trash controller routes
 admin_trash:
     path:     /trash
-    defaults: { _controller  : Backend:Controllers:TrashController:default }
+    defaults: { _controller  : BackendBundle:Trash:default }
 
 admin_trash_delete:
     path:     /trash/{id}/delete
-    defaults: { _controller  : Backend:Controllers:TrashController:delete }
+    defaults: { _controller  : BackendBundle:Trash:delete }
 
 admin_trash_restore:
     path:     /trash/{id}/restore
-    defaults: { _controller  : Backend:Controllers:TrashController:restore }
+    defaults: { _controller  : BackendBundle:Trash:restore }
 
 admin_trash_batchdelete:
     path:     /trash/batchdelete
-    defaults: { _controller  : Backend:Controllers:TrashController:batchDelete }
+    defaults: { _controller  : BackendBundle:Trash:batchDelete }
 
 admin_trash_batchrestore:
     path:     /trash/batchrestore
-    defaults: { _controller  : Backend:Controllers:TrashController:batchRestore }
+    defaults: { _controller  : BackendBundle:Trash:batchRestore }
 
 # Paywall controller routes
 admin_paywall:
     path:     /paywall
-    defaults: { _controller  : Backend:Controllers:PaywallController:default }
+    defaults: { _controller  : BackendBundle:Paywall:default }
 
 admin_paywall_users:
     path:     /paywall/users
-    defaults: { _controller  : Backend:Controllers:PaywallController:users }
+    defaults: { _controller  : BackendBundle:Paywall:users }
 
 admin_paywall_purchases:
     path:     /paywall/purchases
-    defaults: { _controller  : Backend:Controllers:PaywallController:purchases }
+    defaults: { _controller  : BackendBundle:Paywall:purchases }
 
 admin_paywall_settings:
     path:     /paywall/settings
-    defaults: { _controller  : Backend:Controllers:PaywallController:settings }
+    defaults: { _controller  : BackendBundle:Paywall:settings }
 
 admin_paywall_settings_save:
     path:     /paywall/settings/save
-    defaults: { _controller  : Backend:Controllers:PaywallController:settingsSave }
+    defaults: { _controller  : BackendBundle:Paywall:settingsSave }
 
 admin_paywall_validate_api:
     path:     /paywall/settings/validate/api
-    defaults: { _controller  : Backend:Controllers:PaywallController:validateCredentials }
+    defaults: { _controller  : BackendBundle:Paywall:validateCredentials }
 
 admin_paywall_set_validate_ipn:
     path:     /paywall/settings/set/validate/ipn
-    defaults: { _controller  : Backend:Controllers:PaywallController:setValidateIpn }
+    defaults: { _controller  : BackendBundle:Paywall:setValidateIpn }
 
 admin_paywall_do_validate_ipn:
     path:     /paywall/settings/do/validate/ipn
-    defaults: { _controller  : Backend:Controllers:PaywallController:doValidateIpn }
+    defaults: { _controller  : BackendBundle:Paywall:doValidateIpn }
 
 admin_paywall_users_list_export:
     path:     /paywall/users/list-export.csv
-    defaults: { _controller  : Backend:Controllers:PaywallController:userListExport }
+    defaults: { _controller  : BackendBundle:Paywall:userListExport }
 
 admin_paywall_purchases_list_export:
     path:     /paywall/purchases/list-export.csv
-    defaults: { _controller  : Backend:Controllers:PaywallController:purchasesListExport }
+    defaults: { _controller  : BackendBundle:Paywall:purchasesListExport }
 
 # Importer Efe controller routes
 admin_news_agency:
     path:     /news-agency
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:list }
+    defaults: { _controller  : BackendBundle:NewsAgency:list }
 
 admin_news_agency_servers:
     path:     /news-agency/servers
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:configListServers }
+    defaults: { _controller  : BackendBundle:NewsAgency:configListServers }
 
 admin_news_agency_server_create:
     path:     /news-agency/servers/create
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:configCreateServer }
+    defaults: { _controller  : BackendBundle:NewsAgency:configCreateServer }
 
 admin_news_agency_server_show:
     path:     /news-agency/servers/{id}/show
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:configShowServer }
+    defaults: { _controller  : BackendBundle:NewsAgency:configShowServer }
 
 
 admin_news_agency_server_update:
     path:     /news-agency/servers/{id}/update
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:configUpdateServer }
+    defaults: { _controller  : BackendBundle:NewsAgency:configUpdateServer }
 
 admin_news_agency_server_delete:
     path:     /news-agency/servers/{id}/delete
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:configDeleteServer }
+    defaults: { _controller  : BackendBundle:NewsAgency:configDeleteServer }
 
 admin_news_agency_server_clean_files:
     path:     /news-agency/servers/{id}/clean
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:removeServerFiles }
+    defaults: { _controller  : BackendBundle:NewsAgency:removeServerFiles }
 
 admin_news_agency_unlock:
     path:     /news-agency/unlock
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:unlock }
+    defaults: { _controller  : BackendBundle:NewsAgency:unlock }
 
 admin_news_agency_sync:
     path:     /news-agency/sync
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:sync }
+    defaults: { _controller  : BackendBundle:NewsAgency:sync }
 
 admin_news_agency_import:
     path:     /news-agency/{source_id}/{id}/import
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:import }
+    defaults: { _controller  : BackendBundle:NewsAgency:import }
 
 admin_news_agency_show:
     path:     /news-agency/{source_id}/{id}/show
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:show }
+    defaults: { _controller  : BackendBundle:NewsAgency:show }
 
 admin_news_agency_showattachment:
     path:     /news-agency/{source_id}/{id}/attachment/{attachment_id}
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:showAttachment }
+    defaults: { _controller  : BackendBundle:NewsAgency:showAttachment }
 
 admin_news_agency_pickcategory:
     path:     /news-agency/{source_id}/{id}/pickcategory
-    defaults: { _controller  : Backend:Controllers:NewsAgencyController:selectCategoryWhereToImport }
+    defaults: { _controller  : BackendBundle:NewsAgency:selectCategoryWhereToImport }
 
 # Importer XML file controller routes
 admin_importer_xmlfile:
     path:     /importer/xml-file
-    defaults: { _controller  : Backend:Controllers:ImporterXmlfileController:default }
+    defaults: { _controller  : BackendBundle:ImporterXmlfile:default }
 admin_importer_xmlfile_config:
     path:     /importer/xml-file/config
-    defaults: { _controller  : Backend:Controllers:ImporterXmlfileController:config }
+    defaults: { _controller  : BackendBundle:ImporterXmlfile:config }
 
 admin_importer_xmlfile_import:
     path:     /importer/xml-file/import
-    defaults: { _controller  : Backend:Controllers:ImporterXmlfileController:import }
+    defaults: { _controller  : BackendBundle:ImporterXmlfile:import }
 
 # Template cache controller routes
 admin_tpl_manager:
     path:     /system/cachemanager
-    defaults: { _controller  : Backend:Controllers:CacheManagerController:default }
+    defaults: { _controller  : BackendBundle:CacheManager:default }
 
 admin_tpl_manager_config:
     path:     /system/cachemanager/config
-    defaults: { _controller  : Backend:Controllers:CacheManagerController:config }
+    defaults: { _controller  : BackendBundle:CacheManager:config }
 
 admin_tpl_manager_refresh:
     path:     /system/cachemanager/refresh
-    defaults: { _controller  : Backend:Controllers:CacheManagerController:refresh }
+    defaults: { _controller  : BackendBundle:CacheManager:refresh }
 
 admin_tpl_manager_update:
     path:     /system/cachemanager/update
-    defaults: { _controller  : Backend:Controllers:CacheManagerController:update }
+    defaults: { _controller  : BackendBundle:CacheManager:update }
 
 admin_tpl_manager_delete:
     path:     /system/cachemanager/delete
-    defaults: { _controller  : Backend:Controllers:CacheManagerController:delete }
+    defaults: { _controller  : BackendBundle:CacheManager:delete }
 
 admin_tpl_manager_deleteall:
     path:     /system/cachemanager/deleteall
-    defaults: { _controller  : Backend:Controllers:CacheManagerController:deleteAll }
+    defaults: { _controller  : BackendBundle:CacheManager:deleteAll }
 
 admin_tpl_manager_cleanfrontpage:
     path:     /system/cachemanager/cleanfrontapge
-    defaults: { _controller  : Backend:Controllers:CacheManagerController:cleanFrontpage }
+    defaults: { _controller  : BackendBundle:CacheManager:cleanFrontpage }
 
 # Database error controller routes
 admin_databaseerrors:
     path:     /system/databaseerrors
-    defaults: { _controller  : Backend:Controllers:DatabaseErrorsController:default }
+    defaults: { _controller  : BackendBundle:DatabaseErrors:default }
 admin_databaseerrors_purge:
     path:     /system/databaseerrors/purge
-    defaults: { _controller  : Backend:Controllers:DatabaseErrorsController:purge }
+    defaults: { _controller  : BackendBundle:DatabaseErrors:purge }
 
 # User management routes
 admin_acl_user:
     path:     /acl/users
-    defaults: { _controller  : Backend:Controllers:AclUserController:list }
+    defaults: { _controller  : BackendBundle:AclUser:list }
 
 admin_acl_user_create:
     path:     /acl/user/create
-    defaults: { _controller  : Backend:Controllers:AclUserController:create }
+    defaults: { _controller  : BackendBundle:AclUser:create }
 
 admin_acl_user_show:
     path:     /acl/user/{id}/show
-    defaults: { _controller  : Backend:Controllers:AclUserController:show }
+    defaults: { _controller  : BackendBundle:AclUser:show }
 
 admin_acl_user_update:
     path:     /acl/user/{id}/update
-    defaults: { _controller  : Backend:Controllers:AclUserController:update }
+    defaults: { _controller  : BackendBundle:AclUser:update }
 
 admin_acl_user_delete:
     path:     /acl/user/{id}/delete
-    defaults: { _controller  : Backend:Controllers:AclUserController:delete }
+    defaults: { _controller  : BackendBundle:AclUser:delete }
 
 admin_acl_user_batchdelete:
     path:     /acl/users/batchdelete
-    defaults: { _controller  : Backend:Controllers:AclUserController:batchDelete }
+    defaults: { _controller  : BackendBundle:AclUser:batchDelete }
 
 admin_acl_user_connected_users:
     path:     /acl/users/connected-users
-    defaults: { _controller  : Backend:Controllers:AclUserController:connectedUsers }
+    defaults: { _controller  : BackendBundle:AclUser:connectedUsers }
 
 admin_acl_user_set_meta:
     path:     /acl/user/set-meta
-    defaults: { _controller  : Backend:Controllers:AclUserController:setMeta }
+    defaults: { _controller  : BackendBundle:AclUser:setMeta }
 
 admin_acl_user_toogle_enabled:
     path:     /acl/user/{id}/toogle-enabled
-    defaults: { _controller  : Backend:Controllers:AclUserController:toogleEnabled }
+    defaults: { _controller  : BackendBundle:AclUser:toogleEnabled }
 
 # Privilege management routes
 admin_acl_privileges:
     path:     /acl/privileges
-    defaults: { _controller  : Backend:Controllers:AclPrivilegesController:list }
+    defaults: { _controller  : BackendBundle:AclPrivileges:list }
 
 admin_acl_privileges_show:
     path:     /acl/privilege/show/{id}
-    defaults: { _controller  : Backend:Controllers:AclPrivilegesController:show }
+    defaults: { _controller  : BackendBundle:AclPrivileges:show }
 
 admin_acl_privileges_create:
     path:     /acl/privilege/create
-    defaults: { _controller  : Backend:Controllers:AclPrivilegesController:create }
+    defaults: { _controller  : BackendBundle:AclPrivileges:create }
 
 admin_acl_privileges_update:
     path:     /acl/privilege/{id}/update
-    defaults: { _controller  : Backend:Controllers:AclPrivilegesController:update }
+    defaults: { _controller  : BackendBundle:AclPrivileges:update }
 
 admin_acl_privileges_delete:
     path:     /acl/privilege/{id}/delete
-    defaults: { _controller  : Backend:Controllers:AclPrivilegesController:delete }
+    defaults: { _controller  : BackendBundle:AclPrivileges:delete }
 
 # User groups managerment routes
 admin_acl_usergroups:
     path:     /acl/usergroups
-    defaults: { _controller  : Backend:Controllers:AclUserGroupsController:list }
+    defaults: { _controller  : BackendBundle:AclUserGroups:list }
 
 admin_acl_usergroups_show:
     path:     /acl/usergroup/{id}/show
-    defaults: { _controller  : Backend:Controllers:AclUserGroupsController:show }
+    defaults: { _controller  : BackendBundle:AclUserGroups:show }
 
 admin_acl_usergroups_create:
     path:     /acl/usergroup/create
-    defaults: { _controller  : Backend:Controllers:AclUserGroupsController:create }
+    defaults: { _controller  : BackendBundle:AclUserGroups:create }
 
 admin_acl_usergroups_update:
     path:     /acl/usergroup/{id}/update
-    defaults: { _controller  : Backend:Controllers:AclUserGroupsController:update }
+    defaults: { _controller  : BackendBundle:AclUserGroups:update }
 
 admin_acl_usergroups_delete:
     path:     /acl/usergroup/{id}/delete
-    defaults: { _controller  : Backend:Controllers:AclUserGroupsController:delete }
+    defaults: { _controller  : BackendBundle:AclUserGroups:delete }
 
 admin_system_settings:
     path:     /system/settings
-    defaults: { _controller  : Backend:Controllers:SystemSettingsController:default }
+    defaults: { _controller  : BackendBundle:SystemSettings:default }
 
 admin_system_settings_save:
     path:     /system/settings/save
-    defaults: { _controller  : Backend:Controllers:SystemSettingsController:save }
+    defaults: { _controller  : BackendBundle:SystemSettings:save }
     methods:  [POST]
 
 admin_utils_calculate_tags:
     path:     /utils/calculate-tags
-    defaults: { _controller  : Backend:Controllers:UtilsController:calculateTags }
+    defaults: { _controller  : BackendBundle:Utils:calculateTags }
 
 admin_login_form:
     path:     /login
-    defaults: { _controller  : Backend:Controllers:AuthenticationController:default }
+    defaults: { _controller  : BackendBundle:Authentication:default }
 
 admin_login_processform:
     path:     /login/process
-    defaults: { _controller  : Backend:Controllers:AuthenticationController:processform }
+    defaults: { _controller  : BackendBundle:Authentication:processform }
     methods:  [POST]
 
 admin_logout:
     path:     /logout
-    defaults: { _controller  : Backend:Controllers:AuthenticationController:logout }
+    defaults: { _controller  : BackendBundle:Authentication:logout }
 
 admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
-    defaults: { _controller  : Backend:Controllers:AclUserController:recoverPassword }
+    defaults: { _controller  : BackendBundle:AclUser:recoverPassword }
 
 admin_acl_user_recover_user:
     path:     /login/user/recover-user
-    defaults: { _controller  : Backend:Controllers:AclUserController:recoverUsername }
+    defaults: { _controller  : BackendBundle:AclUser:recoverUsername }
 
 admin_acl_user_reset_pass:
     path:     /login/user/reset-pass/{token}
-    defaults: { _controller  : Backend:Controllers:AclUserController:regeneratePassword }
+    defaults: { _controller  : BackendBundle:AclUser:regeneratePassword }
 
 admin_welcome_accept_terms:
     path:     /accept-terms
-    defaults: { _controller  : Backend:Controllers:WelcomeController:acceptTerms }
+    defaults: { _controller  : BackendBundle:Welcome:acceptTerms }
 
 admin_media_uploader:
     path:     /media-uploader
-    defaults: { _controller  : Backend:Controllers:MediaUploaderController:show }
+    defaults: { _controller  : BackendBundle:MediaUploader:show }
 
 admin_media_uploader_update_content:
     path:     /media-uploader/update-content
-    defaults: { _controller  : Backend:Controllers:MediaUploaderController:updateContent }
+    defaults: { _controller  : BackendBundle:MediaUploader:updateContent }
 
 admin_media_uploader_browser:
     path:     /media-uploader/browser
-    defaults: { _controller  : Backend:Controllers:MediaUploaderController:browser }
+    defaults: { _controller  : BackendBundle:MediaUploader:browser }
 
 admin_media_uploader_months:
     path:     /media-uploader/months
-    defaults: { _controller  : Backend:Controllers:MediaUploaderController:getMonths }
+    defaults: { _controller  : BackendBundle:MediaUploader:getMonths }
 
