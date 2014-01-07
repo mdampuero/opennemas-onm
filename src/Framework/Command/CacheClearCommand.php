@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class CacheClearCommand extends Command
 {
@@ -39,9 +40,15 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // var_dump(APPLICATION_DIR.'/cache/*');die();
+        $fileSystem = new Filesystem();
 
-        // rmdir(APPLICATION_DIR.'/cache/*');
+        $basePath = realpath(APP_PATH."/cache/");
+        if (file_exists($basePath)) {
+            $fileSystem->remove($basePath);
+            $output->writeln(APP_PATH.' removed succesfully');
+        } else {
+            $output->writeln(APP_PATH.' doesn\'t exists');
+        }
 
         return false;
     }
