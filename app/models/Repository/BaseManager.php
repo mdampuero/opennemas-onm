@@ -9,6 +9,9 @@
  **/
 namespace Repository;
 
+use Onm\Cache\CacheInterface;
+use Onm\DatabaseConnection;
+
 /**
  * Default BaseManager contains common functions to the rest of Entity Managers
  *
@@ -16,6 +19,18 @@ namespace Repository;
  **/
 abstract class BaseManager
 {
+    /**
+     * Initializes the menu manager
+     *
+     * @param CacheInterface $cache the cache instance
+     **/
+    public function __construct(DatabaseConnection $dbConn, CacheInterface $cache, $cachePrefix)
+    {
+        $this->dbConn = $dbConn;
+        $this->cache = $cache;
+        $this->cachePrefix = $cachePrefix;
+    }
+
     /**
      * Builds the SQL WHERE filter given an array or string with the desired filter
      *

@@ -18,17 +18,6 @@ use Onm\Cache\CacheInterface;
  **/
 class UserGroupManager extends BaseManager
 {
-    /**
-     * Initializes the menu manager
-     *
-     * @param CacheInterface $cache the cache instance
-     **/
-    public function __construct(CacheInterface $cache, $cachePrefix)
-    {
-        $this->cache = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
-
     public function find($id)
     {
         $group = null;
@@ -72,8 +61,8 @@ class UserGroupManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT * FROM `user_groups` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->Execute($sql);
 
         if ($rs === false) {
             return false;
@@ -84,7 +73,7 @@ class UserGroupManager extends BaseManager
             $userGroup = new \UserGroup();
             $userGroup->load($rs->fields);
 
-            $userGroups   []= $userGroup;
+            $userGroups []= $userGroup;
             $rs->MoveNext();
         }
 
@@ -99,7 +88,7 @@ class UserGroupManager extends BaseManager
                 ." FROM user_groups_privileges"
                 ." WHERE pk_fk_user_group IN (".implode(',', $userGroupIds).")";
 
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $this->dbConn->Execute($sql);
         $privileges = $rs->getArray();
         if (!$rs) {
             return;

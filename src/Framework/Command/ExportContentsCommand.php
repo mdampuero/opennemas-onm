@@ -53,7 +53,6 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-
         // Get arguments
         $limit = $input->getOption('limit');
         $instance = $input->getOption('instance');

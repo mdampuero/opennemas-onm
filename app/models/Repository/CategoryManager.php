@@ -9,8 +9,6 @@
  **/
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-
 /**
  * Handles common actions in Menus
  *
@@ -18,17 +16,6 @@ use Onm\Cache\CacheInterface;
  **/
 class CategoryManager extends BaseManager
 {
-    /**
-     * Initializes the menu manager
-     *
-     * @param CacheInterface $cache the cache instance
-     **/
-    public function __construct(CacheInterface $cache, $cachePrefix)
-    {
-        $this->cache = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
-
     public function find($id)
     {
         $category = null;
@@ -74,8 +61,8 @@ class CategoryManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT * FROM `content_categories` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->Execute($sql);
 
         if ($rs === false) {
             return false;

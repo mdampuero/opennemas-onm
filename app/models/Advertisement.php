@@ -406,7 +406,7 @@ class Advertisement extends Content
         $banners = array();
         $finalBanners = array();
 
-        if (!is_array($types) || count($types) <= 0 && !ADVERTISEMENT_ENABLE) {
+        if (!is_array($types) || count($types) <= 0) {
             return $banners;
         }
 
@@ -519,10 +519,6 @@ class Advertisement extends Content
     public function render($params, $tpl = null)
     {
         $output = '';
-
-        if (defined('ADVERTISEMENT_ENABLE')  && !ADVERTISEMENT_ENABLE) {
-            return $output;
-        }
 
         if (array_key_exists('cssclass', $params)
             && isset($params['cssclass'])

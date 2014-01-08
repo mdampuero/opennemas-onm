@@ -22,19 +22,6 @@ use Onm\Cache\CacheInterface;
  **/
 class EntityManager extends BaseManager
 {
-    /**
-     * Initializes a new <tt>EntityRepository</tt>.
-     *
-     * @param DatabaseConnection $em The EntityManager to use.
-     * @param ClassMetadata $classMetadata The class descriptor.
-     **/
-    public function __construct(CacheInterface $cacheHandler, $cachePrefix)
-    {
-        // $this->dbConn = $databaseConnection;
-        $this->cache       = $cacheHandler;
-        $this->cachePrefix = $cachePrefix;
-    }
-
     public function find($contentType, $id)
     {
         $entity = null;
@@ -79,8 +66,8 @@ class EntityManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT * FROM `contents` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->Execute($sql);
 
         if ($rs === false) {
             return false;
@@ -112,22 +99,12 @@ class EntityManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT  count(pk_content) FROM `contents` WHERE $filterSQL";
-        $rs = $GLOBALS['application']->conn->GetOne($sql);
+        $rs  = $this->dbConn->GetOne($sql);
 
         if ($rs === false) {
             return false;
         }
 
         return $rs;
-    }
-
-    /**
-     * Indicates if the EntityRepository has the cache handler enabled
-     *
-     * @return boolean true if it has cache
-     **/
-    protected function hasCache()
-    {
-        return $this->cache != null;
     }
 }
