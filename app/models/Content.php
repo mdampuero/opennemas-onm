@@ -302,7 +302,8 @@ class Content
 
                 break;
             case 'comments':
-                return $this->comments = \Repository\CommentManager::countCommentsForContentId($this->id);
+                $commentRepository = getService('comment_repository');
+                return $this->comments = $commentRepository->countCommentsForContentId($this->id);
 
                 break;
             case 'content_type_l10n_name':

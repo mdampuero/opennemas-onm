@@ -150,7 +150,7 @@ class CommentManager extends BaseManager
      *
      * @return integer the number of public comments
      **/
-    public static function countCommentsForContentId($contentID)
+    public function countCommentsForContentId($contentID)
     {
         if (empty($contentID)) {
             return false;
