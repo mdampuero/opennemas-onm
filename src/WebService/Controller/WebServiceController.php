@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace WebService\Controllers;
+namespace WebService\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -22,24 +22,16 @@ use Onm\Settings as s;
 class WebServiceController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        require_once SITE_VENDOR_PATH.'/Restler/restler.php';
-        require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
-        require_once SITE_VENDOR_PATH.'/Restler/OnmAuth.php';
-    }
-
-    /**
      * Forwards all the web service requests to Restler
      *
      * @return Response the response object
      **/
     public function defaultAction(Request $request)
     {
+        require_once SITE_VENDOR_PATH.'/Restler/restler.php';
+        require_once SITE_VENDOR_PATH.'/Restler/xmlformat.php';
+        require_once SITE_VENDOR_PATH.'/Restler/OnmAuth.php';
+
         // Change the request uri to trick Restler
         $_SERVER['REQUEST_URI'] = str_replace('/ws', '', $_SERVER['REQUEST_URI']);
 

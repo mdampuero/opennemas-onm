@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace ManagerWebService\Controllers;
+namespace ManagerWebService\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -15,20 +15,10 @@ use Onm\Framework\Controller\Controller;
 /**
  * Handles the actions for the manager web service
  *
- * @package ManagerWebService_Controllers
+ * @package ManagerWebService_Controller
  **/
 class WebServiceController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-    }
-
     /**
      * Description of the action
      *
@@ -36,6 +26,8 @@ class WebServiceController extends Controller
      **/
     public function defaultAction(Request $request)
     {
+        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
+
         require_once SITE_VENDOR_PATH.'luracast/restler/vendor/restler.php';
 
         // Change the request uri to trick Restler

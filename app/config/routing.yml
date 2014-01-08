@@ -6,17 +6,17 @@ frontendmobile:
     resource: @FrontendMobileBundle/Resources/config/routing.yml
     prefix:   /mobile
 
-# manager_webservice:
-#     resource: "../../src/ManagerWebService/Resources/config/routing.yml"
-#     prefix:   /managerws
+manager_webservice:
+    resource: @ManagerWebServiceBundle/Resources/config/routing.yml
+    prefix:   /managerws
 
-# manager:
-#     resource: "../../src/Manager/Resources/config/routing.yml"
-#     prefix:   /manager
+manager:
+    resource: @ManagerBundle/Resources/config/routing.yml
+    prefix:   /manager
 
-# webservice:
-#     resource: @WebServiceBundle/Resources/config/routing.yml"
-#     prefix:   /ws
+webservice:
+    resource: @WebServiceBundle/Resources/config/routing.yml
+    prefix:   /ws
 
 frontend:
     resource: @FrontendBundle/Resources/config/routing.yml
@@ -27,9 +27,9 @@ admin_welcome:
     path: '/admin'
     defaults: { _controller  : BackendBundle:Welcome:default }
 
-# manager_welcome:
-#     path: '/manager'
-#     defaults: { _controller: Manager:Controllers:WelcomeController:default }
+manager_welcome:
+    path: '/manager'
+    defaults: { _controller: ManagerBundle:Welcome:default }
 
 frontendmobile_root:
     path: '/mobile'

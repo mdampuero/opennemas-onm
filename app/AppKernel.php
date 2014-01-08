@@ -28,6 +28,8 @@ class AppKernel extends Kernel
             new Framework\OnmFrameworkBundle(),
             new Frontend\FrontendBundle(),
             new FrontendMobile\FrontendMobileBundle(),
+            new Manager\ManagerBundle(),
+            new ManagerWebService\ManagerWebServiceBundle(),
             new WebService\WebServiceBundle(),
         );
 

@@ -12,7 +12,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Manager\Controllers;
+namespace Manager\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +57,7 @@ class ErrorController extends Controller
             $errorID = strtoupper('ONM_FRAMEWORK_'.uniqid());
         }
 
-        $preview = \Backend\Controllers\ErrorController::highlightSource($error->getFile(), $error->getLine(), 7);
+        $preview = \Backend\Controller\ErrorController::highlightSource($error->getFile(), $error->getLine(), 7);
 
         $this->view->assign('preview', $preview);
 

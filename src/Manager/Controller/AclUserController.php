@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Manager\Controllers;
+namespace Manager\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +23,6 @@ use Onm\Message as m;
  **/
 class AclUserController extends Controller
 {
-
     /**
      * Common code for all the actions
      *

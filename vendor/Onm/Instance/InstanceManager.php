@@ -265,8 +265,8 @@ class InstanceManager
      */
     public function getDBInformation($settings)
     {
-        global $sc;
-        $cache = $sc->get('cache');
+        global $kernel;
+        $cache = $kernel->getContainer()->get('cache');
 
         // Fetch caches if exist
         $key = CACHE_PREFIX."getDBInformation_totals_".$settings['BD_DATABASE'];
