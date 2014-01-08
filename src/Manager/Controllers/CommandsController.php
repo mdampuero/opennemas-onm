@@ -92,7 +92,7 @@ class CommandsController extends Controller
 
         chdir(APPLICATION_PATH);
 
-        $output = shell_exec('bin/console '.$commandName.' ' .$params.' 2>&1');
+        $output = shell_exec('app/console '.$commandName.' ' .$params.' 2>&1');
 
         $application = $this->getApplication();
         try {
