@@ -21,22 +21,10 @@ parameters:
     cache_prefix: onm
     logger_level: normal
 
-    # Session Configuration
-    session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\\NativeSessionStorage"
-    session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
 
     available_languages: {'en_US' : "English", 'es_ES' : "Español", 'gl_ES' : "Galego"}
 
 # services:
-
-
-#     session_storage:
-#         class: %session_storage_class%
-#         arguments: [ %session_params% ]
-
-#     session:
-#         class: %session_handler_class%
-#         arguments: [ @session_storage ]
 
 #     logger:
 #         class: Onm\Log
@@ -49,7 +37,6 @@ parameters:
 #     cache:
 #         class: %cache_handler%
 #         arguments: [ %cache_handler_params% ]
-
 
 #     automatic_contents:
 #         class: Onm\MachineSearcher

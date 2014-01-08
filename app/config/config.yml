@@ -23,6 +23,7 @@ framework:
     session:
         name: __onm_seess
         gc_maxlifetime: 86400
+        handler_id: session.handler.memcache
     fragments:       ~
     http_method_override: true
 
@@ -38,11 +39,6 @@ swiftmailer:
     username:  %mailer_user%
     password:  %mailer_password%
     spool:     { type: memory }
-
-parameters:
-    # Session Configuration
-    session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\\NativeSessionStorage"
-    session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
 
 services:
     kernel.listener.app_bootup:
@@ -88,7 +84,7 @@ services:
     kernel.listener.varnish_cleaner:
         class: Framework\EventListener\VarnishCleanerListener
         tags:
-            - {name: kernel.event_subscriber}
+            - {name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 100}
 
     # kernel.listener.general_error_handler:
     #     class: Framework\EventListener\GeneralExceptionsListener
@@ -167,10 +163,12 @@ services:
         class: Onm\Instance\InstanceManager
         arguments: [ @db_conn_manager, @cache ]
 
-#     session_storage:
-#         class: %session_storage_class%
-#         arguments: [ %session_params% ]
+    session.memcache:
+        class: Memcached
+        calls:
+             - [ addServer, [ %session_memcache_host%, %session_memcache_port% ]]
 
-#     session:
-#         class: %session_handler_class%
-#         arguments: [ @session_storage ]
+    session.handler.memcache:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
+        arguments: [ @session.memcache, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]
+
