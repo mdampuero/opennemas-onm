@@ -27,15 +27,6 @@ use Onm\Settings as s;
 class WelcomeController extends Controller
 {
     /**
-     * Initializes the welcome controller
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
-    /**
      * Handles the default action
      *
      * @param Request $request the request object
@@ -44,12 +35,6 @@ class WelcomeController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        // $instances = $this->get('db_conn')->Execute('SELECT count(*) FROM instances');
-        //
-        // $request->getSession()->getFlashBag()->add(
-        //     'notice',
-        //     'Your changes were saved!'
-        // );
         $modulesActivated = s::get('activated_modules');
 
         $availableModules = \Onm\Module\ModuleManager::getAvailableModules();
