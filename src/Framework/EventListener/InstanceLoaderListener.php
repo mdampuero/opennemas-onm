@@ -55,7 +55,8 @@ class InstanceLoaderListener implements EventSubscriberInterface
         }
 
         // CRAP: take this out, Workaround
-        $app = \Application::load();
+        \Application::load();
+        \Application::initDatabase($databaseInstanceConnection);
     }
 
     public static function getSubscribedEvents()
