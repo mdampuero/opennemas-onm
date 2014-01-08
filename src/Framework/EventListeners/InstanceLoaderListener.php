@@ -39,19 +39,21 @@ class InstanceLoaderListener implements EventSubscriberInterface
 
         // Load instance from database
         $instanceManager = getService('instance_manager');
-        $instance        = $instanceManager->load($_SERVER['SERVER_NAME']);
+        $instance        = $instanceManager->load($request->server->get('SERVER_NAME'));
 
         global $sc;
         $sc->setParameter('instance', $instance);
         $sc->setParameter('cache_prefix', $instance->internal_name);
 
-        if ($instance->internal_name == 'onm_manager') {
-            return false;
-        }
         // Initialize the instance database connection
-        $databaseName               = $instance->getDatabaseName();
-        $databaseInstanceConnection = getService('db_conn');
-        $databaseInstanceConnection->selectDatabase($databaseName);
+        if ($instance->internal_name !== 'onm_manager') {
+            $databaseName               = $instance->getDatabaseName();
+            $databaseInstanceConnection = getService('db_conn');
+            $databaseInstanceConnection->selectDatabase($databaseName);
+        } else {
+            $databaseName               = $instance->getDatabaseName();
+            $databaseInstanceConnection = getService('db_conn_manager');
+        }
 
         // CRAP: take this out, Workaround
         $app = \Application::load();

@@ -63,6 +63,7 @@ class InstanceManager
                 'INSTANCE_UNIQUE_NAME' => $instance->internal_name,
                 'MEDIA_URL'            => '',
                 'TEMPLATE_USER'        => '',
+                'BD_DATABASE'        => 'onm-instances',
             );
 
             $instance->boot();
@@ -111,6 +112,10 @@ class InstanceManager
 
             $instancesMatched = $rs->GetArray();
             $this->cache->save('instance_'.$serverName, $instancesMatched);
+        }
+
+        if (!(is_array($instancesMatched) && count($instancesMatched) > 0)) {
+            return false;
         }
 
         $matchedInstance = null;
