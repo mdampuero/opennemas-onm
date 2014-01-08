@@ -20,7 +20,9 @@ framework:
     default_locale:  "%locale%"
     trusted_proxies: ~
     trusted_hosts:   ~
-    session:         ~
+    session:
+        name: __onm_seess
+        gc_maxlifetime: 86400
     fragments:       ~
     http_method_override: true
 
@@ -48,10 +50,15 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 101 }
 
+    kernel.listener.maintenance_mode:
+        class: Framework\EventListener\MaintenanceModeListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+
     kernel.listener.instanceloader:
         class: Framework\EventListener\InstanceLoaderListener
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
 
     kernel.listener.session:
         class: Framework\EventListener\SessionListener
@@ -78,18 +85,17 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
-
-    kernel.listener.maintenance_mode:
-        class: Framework\EventListener\MaintenanceModeListener
+    kernel.listener.varnish_cleaner:
+        class: Framework\EventListener\VarnishCleanerListener
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+            - {name: kernel.event_subscriber}
 
     # kernel.listener.general_error_handler:
     #     class: Framework\EventListener\GeneralExceptionsListener
     #     tags:
     #         - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 0 }
 
-    listener.content_subscriber:
+    kernel.listener.content_subscriber:
         class: Framework\EventListener\ContentActionsSubscriber
         tags:
             - {name: kernel.event_subscriber}
@@ -106,37 +112,45 @@ services:
         class: %cache_handler%
         arguments: [ %cache_handler_params% ]
 
+    db_conn:
+        class: Onm\DatabaseConnection
+        arguments: [ %database% ]
+
+    db_conn_manager:
+        class: Onm\DatabaseConnection
+        arguments: [  %database% ]
+
     category_repository:
         class: Repository\CategoryManager
-        arguments: [ @cache, %cache_prefix% ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     comment_repository:
         class: Repository\CommentManager
-        arguments: [ @cache, %cache_prefix% ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     entity_repository:
         class: Repository\EntityManager
-        arguments: [ @cache, %cache_prefix% ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     user_repository:
         class: Repository\UserManager
-        arguments: [ @cache, %cache_prefix% ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     menu_repository:
         class: Repository\MenuManager
-        arguments: [ @cache, %cache_prefix% ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     usergroup_repository:
         class: Repository\UserGroupManager
-        arguments: [ @cache, %cache_prefix% ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     setting_repository:
         class: Repository\SettingManager
-        arguments: [ @cache, %cache_prefix% ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     newsletter_manager:
         class: Repository\NewsletterManager
-        arguments: [ @mailer, @logger ]
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
     automatic_contents:
         class: Onm\MachineSearcher
@@ -151,6 +165,7 @@ services:
 
     instance_manager:
         class: Onm\Instance\InstanceManager
+        arguments: [ @db_conn_manager, @cache ]
 
 #     session_storage:
 #         class: %session_storage_class%

@@ -18,15 +18,7 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
 
-$configFile = implode(
-    DIRECTORY_SEPARATOR,
-    array(APPLICATION_PATH, 'config', 'config.inc.php')
-);
-require_once $configFile;
-
-
-// $kernel = new AppKernel('prod', false);
-$kernel = new AppKernel('dev', true);
+$kernel = new AppKernel('prod', false);
 $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 $request = Request::createFromGlobals();
