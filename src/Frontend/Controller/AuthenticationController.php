@@ -43,7 +43,7 @@ class AuthenticationController extends Controller
     }
 
     /**
-     * Perfoms the login action
+     * Performs the login action
      *
      * @param Request $request the request object
      *
@@ -159,8 +159,5 @@ class AuthenticationController extends Controller
         session_destroy();
 
         return new RedirectResponse(SITE_URL);
-        // } else {
-            // return new Response("Are you hijacking my session dude?!", 400);
-        // }
     }
 }
