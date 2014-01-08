@@ -666,7 +666,7 @@ frontend_blog_author_frontpage:
 
 frontend_blog_show:
     path: /blog/{author_name}/{blog_title}/{blog_id}.{_format}
-    defaults: { _controller: FrontendBundle:Blogs:show_format, _format: html, author_name: author }
+    defaults: { _controller: FrontendBundle:Blogs:show, _format: html, author_name: author }
     requirements:
         author_name : "[a-z0-9\-.]+"
         blog_title  : "[a-z0-9\-]+"

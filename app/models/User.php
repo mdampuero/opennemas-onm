@@ -597,7 +597,7 @@ class User
     }
 
     /**
-     * Aauthenticate by using the database
+     * Authenticate by using the database
      *
      * @param  string  $username
      * @param  string  $password

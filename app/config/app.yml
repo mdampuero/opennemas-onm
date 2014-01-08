@@ -55,37 +55,37 @@ parameters:
 #         class: %cache_handler%
 #         arguments: [ %cache_handler_params% ]
 
-#     category_repository:
-#         class: Repository\CategoryManager
-#         arguments: [ @cache, %cache_prefix% ]
+    category_repository:
+        class: Repository\CategoryManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
-#     comment_repository:
-#         class: Repository\CommentManager
-#         arguments: [ @cache, %cache_prefix% ]
+    comment_repository:
+        class: Repository\CommentManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
-#     entity_repository:
-#         class: Repository\EntityManager
-#         arguments: [ @cache, %cache_prefix% ]
+    entity_repository:
+        class: Repository\EntityManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
-#     user_repository:
-#         class: Repository\UserManager
-#         arguments: [ @cache, %cache_prefix% ]
+    user_repository:
+        class: Repository\UserManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
-#     menu_repository:
-#         class: Repository\MenuManager
-#         arguments: [ @cache, %cache_prefix% ]
+    menu_repository:
+        class: Repository\MenuManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
-#     usergroup_repository:
-#         class: Repository\UserGroupManager
-#         arguments: [ @cache, %cache_prefix% ]
+    usergroup_repository:
+        class: Repository\UserGroupManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
-#     setting_repository:
-#         class: Repository\SettingManager
-#         arguments: [ @cache, %cache_prefix% ]
+    setting_repository:
+        class: Repository\SettingManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
-#     newsletter_manager:
-#         class: Repository\NewsletterManager
-#         arguments: [ @mailer, @logger ]
+    newsletter_manager:
+        class: Repository\NewsletterManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
 
 #     automatic_contents:
 #         class: Onm\MachineSearcher
@@ -97,3 +97,7 @@ parameters:
 #     varnish_cleaner:
 #         class: Onm\Varnish\VarnishCleaner
 #         arguments: [ %varnish% ]
+
+    instance_manager:
+        class: Onm\Instance\InstanceManager
+        arguments: [ @db_conn_manager, @cache ]

@@ -21,14 +21,4 @@ namespace Onm\Instance;
  **/
 class NotFoundException extends \Exception
 {
-    /**
-     * Initializes the exception
-     *
-     * @param string $message the message that raises the exception
-     * @param int    $code    the code that identifies this exception
-     **/
-    public function __construct($message = null, $code = 0)
-    {
-        parent::__construct($message, $code);
-    }
 }

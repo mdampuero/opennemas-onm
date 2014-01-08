@@ -113,4 +113,14 @@ class Instance
         define('TEMPLATE_USER_PATH', SITE_PATH.DS."themes".DS.TEMPLATE_USER.DS);
         define('TEMPLATE_USER_URL', "/themes".'/'.TEMPLATE_USER.'/');
     }
+
+    /**
+     * Returns the database name for the instance
+     *
+     * @return string the database name
+     **/
+    public function getDatabaseName()
+    {
+        return $this->settings['BD_DATABASE'];
+    }
 }

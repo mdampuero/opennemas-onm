@@ -35,8 +35,6 @@ class InstanceLoaderListener implements EventSubscriberInterface
             return;
         }
 
-        // require_once 'Application.php';
-
         $request = $event->getRequest();
 
         global $kernel;
@@ -49,6 +47,19 @@ class InstanceLoaderListener implements EventSubscriberInterface
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;
 
+        global $sc;
+        $sc->setParameter('instance', $instance);
+        $sc->setParameter('cache_prefix', $instance->internal_name);
+
+        if ($instance->internal_name == 'onm_manager') {
+            return false;
+        }
+        // Initialize the instance database connection
+        $databaseName               = $instance->getDatabaseName();
+        $databaseInstanceConnection = getService('db_conn');
+        $databaseInstanceConnection->selectDatabase($databaseName);
+
+        // CRAP: take this out, Workaround
         $app = \Application::load();
     }
 

@@ -50,7 +50,8 @@ class Settings
             return false;
         };
 
-        $cache = getService('cache');
+        $cache  = getService('cache');
+        $dbConn = getService('db_conn');
 
         if (!is_array($settingName)) {
             // Try to fetch the setting from cache first
@@ -59,7 +60,8 @@ class Settings
             // If was not fetched from cache now is turn of DB
             if (!$settingValue) {
                 $sql = "SELECT value FROM `settings` WHERE name = ?";
-                $rs = $GLOBALS['application']->conn->GetOne($sql, array($settingName));
+
+                $rs = $dbConn->GetOne($sql, array($settingName));
 
                 if ($rs === false) {
                     return false;
@@ -97,7 +99,7 @@ class Settings
             if (!is_null($settingValue)) {
                 $settings = implode("', '", $settingName);
                 $sql         = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
-                $rs          = $GLOBALS['application']->conn->Execute($sql);
+                $rs          = $dbConn->Execute($sql);
 
                 if (!$rs) {
                     return false;

@@ -80,8 +80,7 @@ class ContentCategoryManager
     */
     public function findAll()
     {
-        global $kernel;
-        $cache = $kernel->getContainer()->get('cache');
+        $cache = getService('cache');
 
         $cacheKey = CACHE_PREFIX.'_content_categories';
         $categories = $cache->fetch($cacheKey);
