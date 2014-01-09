@@ -141,7 +141,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             .' || obj.http.x-tags ~ rss ';
 
 
-        // $kernel->getContainer()->setParameter('varnish_ban_request', $banRequest);
+        $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
     }
 
     public function refreshFrontpage(Event $event)
@@ -192,9 +192,9 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
             $tplManager->delete('frontpage|'.$categoryName);
 
-            global $sc;
+            global $kernel;
 
-            $sc->get('logger')->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
+            $kernel->getContainer()->get('logger')->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
             $this->cleanOpcode();
         }
@@ -247,7 +247,6 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $authorId = $event->getArgument('authorId');
         $authorSlug = $event->getArgument('authorSlug');
         $opinionId = $event->getArgument('opinionId');
-
 
         // Delete caches for opinion inner, opinion frontpages and author frontpages
         $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);

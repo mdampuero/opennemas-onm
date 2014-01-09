@@ -20,6 +20,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class VarnishCleanerListener implements EventSubscriberInterface
 {
+    private $enabled = false;
+
+    /**
+     * Initializes the VarnishCleanerListener
+     *
+     * @return void
+     * @author
+     **/
+    public function __construct($varnishConf, $varnishCleaner, $messageExchanger, $logger)
+    {
+        if (is_array($varnishConf) && count($varnishConf) > 0) {
+            $this->enabled = true;
+        }
+
+        $this->varnishCleaner   = $varnishCleaner;
+        $this->messageExchanger = $messageExchanger;
+        $this->logger           = $logger;
+    }
+
     /**
      * Filters the Response.
      *
@@ -27,19 +46,19 @@ class VarnishCleanerListener implements EventSubscriberInterface
      */
     public function onKernelTerminate()
     {
-        global $kernel;
-        $container = $kernel->getContainer();
-
-        if ($container->hasParameter('varnish')
-            && $container->hasParameter('varnish_ban_request')
+        // If varnish cleaner is configured and new messages were registered
+        // send messages to varnish
+        if ($this->enabled
+            && count($this->messageExchanger->getMessages()) > 0
         ) {
-            $banRequest = $container->getParameter('varnish_ban_request');
+            $banRequests = $this->messageExchanger->getMessages();
 
-            $varnishCleaner = $container->get('varnish_cleaner');
-            $varnishCleaner->ban($banRequest);
+            $varnishCleaner = $this->varnishCleaner;
+            foreach ($banRequests as $banRequest) {
+                $varnishCleaner->ban($banRequest);
+            }
 
-            $logger = $container->get('logger');
-            $logger->notice('Varnish BAN queued: '.$container->getParameter('varnish_ban_request'));
+            $this->logger->notice('Varnish BAN queued: '.implode(', ', $banRequests));
         }
     }
 

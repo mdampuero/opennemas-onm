@@ -81,11 +81,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
-    kernel.listener.varnish_cleaner:
-        class: Framework\EventListener\VarnishCleanerListener
-        tags:
-            - {name: kernel.event_listener, event: kernel.terminate, method: onKernelTerminate, priority: 100}
-
     # kernel.listener.general_error_handler:
     #     class: Framework\EventListener\GeneralExceptionsListener
     #     tags:
@@ -100,9 +95,6 @@ services:
         class: Framework\EventListener\NewsAgencyCronActionSubscriber
         tags:
             - {name: kernel.event_subscriber}
-
-    kernel.listener.varnish_cleaner:
-        class: Framework\EventListener\VarnishCleanerListener
 
     cache:
         class: %cache_handler%
@@ -155,9 +147,18 @@ services:
     acl_checker:
         class: Onm\Security\Acl
 
+    kernel.listener.varnish_cleaner:
+        class: Framework\EventListener\VarnishCleanerListener
+        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @logger ]
+        tags:
+            - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
+
     varnish_cleaner:
-        class: Onm\Varnish\VarnishCleaner
+        class: Onm\Varnish\BanMessagePusher
         arguments: [ %varnish% ]
+
+    varnish_ban_message_exchanger:
+        class: Onm\Varnish\MessageExchanger
 
     instance_manager:
         class: Onm\Instance\InstanceManager

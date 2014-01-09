@@ -67,7 +67,7 @@ class AdsController extends Controller
     public function listAction(Request $request)
     {
         // Get ads positions
-        $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
+        $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
         $map        = $positionManager->getAllAdsPositions();
         $adsNames   = $positionManager->getAllAdsNames();
         $filtersUrl = $request->query->get('filter');
@@ -221,7 +221,7 @@ class AdsController extends Controller
                 )
             );
         } else {
-            $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
+            $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
             return $this->render(
                 'advertisement/new.tpl',
                 array(
@@ -270,7 +270,7 @@ class AdsController extends Controller
             $this->view->assign('photo1', $photo1);
         }
 
-        $positionManager = $this->container->getParameter('instance')->theme->getAdsPositionManager();
+        $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
         return $this->render(
             'advertisement/new.tpl',
             array(

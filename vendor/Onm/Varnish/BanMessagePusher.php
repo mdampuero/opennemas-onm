@@ -12,9 +12,8 @@ namespace Onm\Varnish;
 /**
 * Class that allows to send Varnish ban/purge commands
 */
-class VarnishCleaner
+class BanMessagePusher
 {
-
     public function __construct($serverConfiguration)
     {
         $this->headerName = $serverConfiguration['header_name'];
