@@ -254,11 +254,12 @@ class DatabaseConnection
      **/
     public function isReadOnlyAction($method, $params)
     {
-        return  (
-                    $method !== 'StartTrans'
-                    || $method !== 'CompleteTrans'
-                    || $method !== 'FailTrans'
-                    || $method !== 'HasFailedTrans'
+        return  !(
+                    $method == 'StartTrans'
+                    || $method == 'CompleteTrans'
+                    || $method == 'FailTrans'
+                    || $method == 'HasFailedTrans'
+                    || $method == 'Insert_ID'
                 )
                 && stripos($params[0], 'SELECT') !== false;
     }
