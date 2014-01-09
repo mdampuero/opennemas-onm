@@ -22,14 +22,14 @@ function smarty_function_dynamic_image($params, &$smarty)
     $resource = preg_replace('@(?<!:)//@', '/', $resource);
 
     if (array_key_exists('transform', $params)) {
-        global $sc;
-        $generator = $sc->get('router');
+        getService('router');
 
         $urlParams = array(
             'real_path'  => $baseUrl.$src,
             'parameters' => urlencode($params['transform']),
         );
         try {
+            $generator = getService('router');
             $resource = $generator->generate('asset_image', $urlParams);
         } catch (\Exception $e) {
             $resource = '#failed';
