@@ -48,10 +48,10 @@ class AppKernel extends Kernel
         // $loader->load(__DIR__.'/config/config.yml');
     }
 
-    public function getCacheDir()
-    {
-        return realpath(parent::getRootDir().'/../tmp/cache');
-    }
+    // public function getCacheDir()
+    // {
+    //     return realpath(parent::getRootDir().'/../tmp/cache');
+    // }
 
     public function getLogDir()
     {
