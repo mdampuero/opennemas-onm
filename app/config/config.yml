@@ -81,10 +81,10 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
-    # kernel.listener.general_error_handler:
-    #     class: Framework\EventListener\GeneralExceptionsListener
-    #     tags:
-    #         - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 0 }
+    kernel.listener.general_error_handler:
+        class: Framework\EventListener\GeneralExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 
     kernel.listener.content_subscriber:
         class: Framework\EventListener\ContentActionsSubscriber
