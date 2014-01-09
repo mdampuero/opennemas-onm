@@ -2,6 +2,125 @@ parameters:
 #    onm_test.example.class: Onm\TestBundle\Example
 
 services:
-#    onm_test.example:
-#        class: %onm_test.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    kernel.listener.app_bootup:
+        class: Framework\EventListener\ApplicationBootupListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 101 }
+
+    kernel.listener.maintenance_mode:
+        class: Framework\EventListener\MaintenanceModeListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 100 }
+
+    kernel.listener.instanceloader:
+        class: Framework\EventListener\InstanceLoaderListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 99 }
+
+    kernel.listener.session:
+        class: Framework\EventListener\SessionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1 }
+
+    kernel.listener.admin_auth:
+        class: Framework\EventListener\AdminAuthenticationListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
+    kernel.listener.l10n_system:
+        class: Framework\EventListener\L10nSystemListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
+    kernel.listener.controller:
+        class: Framework\EventListener\ControllerListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    kernel.listener.instance_exceptions:
+        class: Framework\EventListener\InstanceExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
+    kernel.listener.general_error_handler:
+        class: Framework\EventListener\GeneralExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
+    kernel.listener.content_subscriber:
+        class: Framework\EventListener\ContentActionsSubscriber
+        tags:
+            - {name: kernel.event_subscriber}
+
+    kernel.listener.news_agency:
+        class: Framework\EventListener\NewsAgencyCronActionSubscriber
+        tags:
+            - {name: kernel.event_subscriber}
+
+    cache:
+        class: %cache_handler%
+        arguments: [ %cache_handler_params% ]
+
+    db_conn:
+        class: Onm\DatabaseConnection
+        arguments: [ %database% ]
+
+    db_conn_manager:
+        class: Onm\DatabaseConnection
+        arguments: [  %database% ]
+
+    category_repository:
+        class: Repository\CategoryManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    comment_repository:
+        class: Repository\CommentManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    entity_repository:
+        class: Repository\EntityManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    user_repository:
+        class: Repository\UserManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    menu_repository:
+        class: Repository\MenuManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    usergroup_repository:
+        class: Repository\UserGroupManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    setting_repository:
+        class: Repository\SettingManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    newsletter_manager:
+        class: Repository\NewsletterManager
+        arguments: [ @db_conn, @cache, %cache_prefix% ]
+
+    automatic_contents:
+        class: Onm\MachineSearcher
+        arguments: [ @cache ]
+
+    acl_checker:
+        class: Onm\Security\Acl
+
+    kernel.listener.varnish_cleaner:
+        class: Framework\EventListener\VarnishCleanerListener
+        arguments: [ %varnish%, @varnish_cleaner, @varnish_ban_message_exchanger, @logger ]
+        tags:
+            - {name: kernel.event_listener, event: kernel.response, method: onKernelTerminate, priority: 100}
+
+    varnish_cleaner:
+        class: Onm\Varnish\BanMessagePusher
+        arguments: [ %varnish% ]
+
+    varnish_ban_message_exchanger:
+        class: Onm\Varnish\MessageExchanger
+
+    instance_manager:
+        class: Onm\Instance\InstanceManager
+        arguments: [ @db_conn_manager, @cache ]
