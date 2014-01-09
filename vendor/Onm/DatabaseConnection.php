@@ -256,10 +256,13 @@ class DatabaseConnection
     {
         return  !(
                     $method == 'StartTrans'
+                    || $method == 'BeginTrans'
+                    || $method == 'CommitTrans'
                     || $method == 'CompleteTrans'
                     || $method == 'FailTrans'
                     || $method == 'HasFailedTrans'
                     || $method == 'Insert_ID'
+                    || $method == 'RollbackTrans'
                 )
                 && stripos($params[0], 'SELECT') !== false;
     }
