@@ -237,7 +237,7 @@ class AclUserController extends Controller
                 // Check if is an author and delete caches
                 if (in_array('3', $data['id_user_group'])) {
                     // Clear caches
-                    dispatchEventWithParams('author.update', array('authorId' => $userId));
+                    $this->dispatchEvent('author.update', array('authorId' => $userId));
                 }
 
                 $request->getSession()->getFlashBag()->add('success', _('User data updated successfully.'));

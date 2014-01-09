@@ -145,7 +145,7 @@ class Controller extends SymfonyController
             }
         }
 
-        return $this->container->get('dispatcher')->dispatch($eventName, $event);
+        return $this->container->get('event_dispatcher')->dispatch($eventName, $event);
     }
 
     /**

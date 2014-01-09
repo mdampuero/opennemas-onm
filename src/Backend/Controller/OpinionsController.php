@@ -342,7 +342,7 @@ class OpinionsController extends Controller
                 m::add(_('Opinion successfully created.'), m::SUCCESS);
 
                 // Clear caches
-                dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
+                $this->dispatchEvent('opinion.create', array('authorId' => $data['fk_author']));
             } else {
                 m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
@@ -430,7 +430,7 @@ class OpinionsController extends Controller
                 $author = new \User($data['fk_author']);
 
                 // Clear caches
-                dispatchEventWithParams(
+                $this->dispatchEvent(
                     'opinion.update',
                     array(
                         'authorSlug' => $author->username,
@@ -671,7 +671,7 @@ class OpinionsController extends Controller
             }
         }
 
-        dispatchEventWithParams('frontpage.save_position', array('category' => 'opinion'));
+        $this->dispatchEvent('frontpage.save_position', array('category' => 'opinion'));
 
         if ($result === true) {
             $message = _('Positions saved successfully.');
@@ -1201,7 +1201,7 @@ class OpinionsController extends Controller
                 }
 
                 // Clear caches
-                dispatchEventWithParams('author.update', array('authorId' => $userId));
+                $this->dispatchEvent('author.update', array('authorId' => $userId));
 
                 m::add(_('Author data updated successfully.'), m::SUCCESS);
             } else {
