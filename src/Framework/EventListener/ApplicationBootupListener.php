@@ -96,12 +96,8 @@ class ApplicationBootupListener implements EventSubscriberInterface
 
         mb_internal_encoding("UTF-8");
 
-        $env = getContainerParameter('environment');
-        initEnvironment($env);
-
-        // Register the Debugger into the application, transforms fatal errors into
-        // exceptions only in development environments
-        Debug::enable(null, ($env !== 'production'));
+        // $env = getContainerParameter('environment');
+        // initEnvironment($env);
     }
 
     public static function getSubscribedEvents()

@@ -39,7 +39,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
 
         $request = $event->getRequest();
         $session = $request->getSession();
-        $url = $request->getPathInfo();
+        $url     = $request->getPathInfo();
 
         $isAdmin   = strpos($url, '/admin') === 0;
         $isManager = preg_match('@^/manager(?!ws)@i', $url, $matches) === 1;
