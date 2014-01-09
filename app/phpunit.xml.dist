@@ -11,7 +11,7 @@
     processIsolation            = "false"
     stopOnFailure               = "false"
     syntaxCheck                 = "false"
-    bootstrap                   = "autoload.php" >
+    bootstrap                   = "bootstrap.php.cache" >
 
     <testsuites>
         <testsuite name="Project Test Suite">
@@ -30,10 +30,8 @@
         <whitelist>
             <directory>models</directory>
             <directory>../vendor/Onm</directory>
-            <directory suffix=".php">app</directory>
-            <directory>../src/*/Tests</directory>
+            <directory>../src/</directory>
             <exclude>
-                <file>app/autoload.php</file>
                 <directory>../src/*/*Bundle/Resources</directory>
                 <directory>../src/*/*Bundle/Tests</directory>
                 <directory>../src/*/Bundle/*Bundle/Resources</directory>
@@ -43,7 +41,6 @@
         <blacklist>
             <directory>cache</directory>
             <directory>log</directory>
-            <directory>../public</directory>
         </blacklist>
     </filter>
 
