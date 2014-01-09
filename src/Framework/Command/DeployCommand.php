@@ -50,7 +50,7 @@ EOF
 
         $this->executeMaintenance('enable');
 
-        // $this->updateCoreCode();
+        $this->updateCoreCode();
 
         $this->cleanSymfonyCache();
 
