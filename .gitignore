@@ -43,3 +43,4 @@ vendor/swiftmailer
 vendor/symfony
 vendor/temporary-filesystem
 vendor/twig
+vendor/smarty

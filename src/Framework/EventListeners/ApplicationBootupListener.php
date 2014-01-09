@@ -48,6 +48,7 @@ class ApplicationBootupListener implements EventSubscriberInterface
         }
 
         define('SS', "/");
+        define('DS', DIRECTORY_SEPARATOR);
         define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
 
         define('SITE', $_SERVER['SERVER_NAME']);
