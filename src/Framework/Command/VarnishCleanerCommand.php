@@ -9,13 +9,13 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class VarnishCleanerCommand extends Command
+class VarnishCleanerCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -42,11 +42,9 @@ EOF
     {
         $output->writeln(" - Cleaning Varnish cache");
 
-        global $sc;
-
         $request = $input->getArgument('request');
 
-        $cleaner = $sc->get('varnish_cleaner');
+        $cleaner = $this->getContainer()->get('varnish_cleaner');
 
         $response = $cleaner->ban($request);
 

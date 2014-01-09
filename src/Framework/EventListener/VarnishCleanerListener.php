@@ -55,10 +55,12 @@ class VarnishCleanerListener implements EventSubscriberInterface
 
             $varnishCleaner = $this->varnishCleaner;
             foreach ($banRequests as $banRequest) {
-                $varnishCleaner->ban($banRequest);
-            }
+                $response = $varnishCleaner->ban($banRequest);
 
-            $this->logger->notice('Varnish BAN queued: '.implode(', ', $banRequests));
+                foreach ($response as $message) {
+                    $this->logger->notice($message);
+                }
+            }
         }
     }
 

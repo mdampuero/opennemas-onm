@@ -72,7 +72,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $id = $content->id;
         $contentType = \underscore(get_class($content));
 
-        $cacheHandler->delete(INSTANCE_UNIQUE_NAME . "_" . $contentType . "_" . $id);
+        $cacheHandler->delete($contentType . "_" . $id);
 
         $this->cleanOpcode();
 
@@ -135,12 +135,11 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         $content = $event->getArgument('content');
 
-        $banRequest =
-            'obj.http.x-tags ~ '.$content->id
-            .' || obj.http.x-tags ~ sitemap '
-            .' || obj.http.x-tags ~ rss ';
-
-
+        $banRequest = 'obj.http.x-tags ~ '.$content->id;
+        $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
+        $banRequest = 'obj.http.x-tags ~ sitemap ';
+        $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
+        $banRequest = 'obj.http.x-tags ~ rss ';
         $kernel->getContainer()->get('varnish_ban_message_exchanger')->addBanMessage($banRequest);
     }
 

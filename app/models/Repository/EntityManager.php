@@ -26,7 +26,7 @@ class EntityManager extends BaseManager
     {
         $entity = null;
 
-        $cacheId = $this->cachePrefix . "_" . \underscore($contentType) . "_" . $id;
+        $cacheId = \underscore($contentType) . "_" . $id;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
