@@ -420,24 +420,26 @@ class User
      *
      * @return boolean
      **/
-    private function createAccessCategoriesDb($IdsCategory)
+    private function createAccessCategoriesDb($categoryIds)
     {
         if ($this->deleteAccessCategoriesDb()) {
             $sql = "INSERT INTO users_content_categories (`pk_fk_user`, `pk_fk_content_category`)
                     VALUES (?,?)";
 
-            $values = array();
-            for ($iIndex = 0; $iIndex < count($IdsCategory); $iIndex++) {
-                $values[] = array($this->id, $IdsCategory[$iIndex]);
+            if (count($categoryIds) > 0) {
+                $values = array();
+                for ($iIndex = 0; $iIndex < count($categoryIds); $iIndex++) {
+                    $values[] = array($this->id, $categoryIds[$iIndex]);
+                }
+
+                $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+                if ($rs === false) {
+                    $GLOBALS['application']->conn->RollbackTrans();
+
+                    return false;
+                }
             }
 
-            // bulk insert
-            $rs = $GLOBALS['application']->conn->Execute($sql, $values);
-            if ($rs === false) {
-                $GLOBALS['application']->conn->RollbackTrans();
-
-                return false;
-            }
 
             $this->readAccessCategories($this->id);
 
@@ -550,8 +552,8 @@ class User
      **/
     private function deleteAccessCategoriesDb()
     {
-        global $sc;
-        $cache = $sc->get('cache');
+        global $kernel;
+        $cache = $kernel->getContainer()->get('cache');
 
         $sql = 'DELETE FROM users_content_categories WHERE pk_fk_user=?';
         $values = array(intval($this->id));
