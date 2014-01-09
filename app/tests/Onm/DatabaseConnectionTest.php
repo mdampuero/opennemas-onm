@@ -203,9 +203,16 @@ class DatabaseConnectionTest extends \PHPUnit_Framework_TestCase
         $dbConn = new \Onm\DatabaseConnection($this->validConfig);
 
         $this->assertTrue($dbConn->isReadOnlyAction('Execute', array('SELECT * FROM contents')));
-        $this->assertTrue($dbConn->isReadOnlyAction('GetOne', array('SELECT * FROM contents')));
         $this->assertFalse($dbConn->isReadOnlyAction('Execute', array('UPDATE * FROM contents')));
         $this->assertFalse($dbConn->isReadOnlyAction('Execute', array('INSERT * FROM contents')));
-        $this->assertTrue($dbConn->isReadOnlyAction('StartTrans', array('SELECT * FROM contents')));
+
+        $this->assertTrue($dbConn->isReadOnlyAction('GetOne', array('SELECT * FROM contents')));
+
+        $this->assertFalse($dbConn->isReadOnlyAction('StartTrans', array('SELECT * FROM contents')));
+
+        $this->assertFalse($dbConn->isReadOnlyAction('CompleteTrans'));
+        $this->assertFalse($dbConn->isReadOnlyAction('FailTrans'));
+        $this->assertFalse($dbConn->isReadOnlyAction('HasFailedTrans'));
+        $this->assertFalse($dbConn->isReadOnlyAction('Insert_ID'));
     }
 }
