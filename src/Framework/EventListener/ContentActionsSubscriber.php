@@ -25,6 +25,17 @@ use Symfony\Component\EventDispatcher\Event;
 class ContentActionsSubscriber implements EventSubscriberInterface
 {
     /**
+     * Initializes the object
+     *
+     * @return void
+     **/
+    public function __construct($cache, $logger)
+    {
+        $this->cacheHandler = $cache;
+        $this->logger       = $logger;
+    }
+
+    /**
      * Register the content event handler
      *
      * @return void
@@ -64,15 +75,12 @@ class ContentActionsSubscriber implements EventSubscriberInterface
      **/
     public function deleteEntityRepositoryCache(Event $event)
     {
-        global $kernel;
-        $cacheHandler = $kernel->getContainer()->get('cache');
-
         $content = $event->getArgument('content');
 
         $id = $content->id;
         $contentType = \underscore(get_class($content));
 
-        $cacheHandler->delete($contentType . "_" . $id);
+        $this->cacheHandler->delete($contentType . "_" . $id);
 
         $this->cleanOpcode();
 
@@ -191,9 +199,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
             $tplManager->delete('frontpage|'.$categoryName);
 
-            global $kernel;
-
-            $kernel->getContainer()->get('logger')->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
+            $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
             $this->cleanOpcode();
         }

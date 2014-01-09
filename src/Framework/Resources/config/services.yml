@@ -49,6 +49,7 @@ services:
 
     kernel.listener.content_subscriber:
         class: Framework\EventListener\ContentActionsSubscriber
+        arguments: [ @cache, @logger ]
         tags:
             - {name: kernel.event_subscriber}
 
