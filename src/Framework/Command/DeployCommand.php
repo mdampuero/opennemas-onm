@@ -23,8 +23,8 @@ class DeployCommand extends Command
         $this
             ->setDefinition(
                 array(
-                    new InputOption('skip-cleaning', 's', InputOption::VALUE_NONE, 'Skip cleaning caches'),
-                    new InputOption('skip-themes', 't', InputOption::VALUE_NONE, 'Skip themes deploy'),
+                    new InputOption('skip-cleaning-caches', 'c', InputOption::VALUE_NONE, 'Skip cleaning caches'),
+                    new InputOption('skip-theme-deploy', 't', InputOption::VALUE_NONE, 'Skip themes deploy'),
                 )
             )
             ->setName('app:deploy')
@@ -57,13 +57,13 @@ EOF
         $this->executeMaintenance('disable');
 
         // Update themes
-        $skipThemes = $input->getOption('skip-themes');
+        $skipThemes = $input->getOption('skip-theme-deploy');
         if (!$skipThemes) {
             $this->updateThemes();
         }
 
         // Clean cache if required
-        $skipCleaning = $input->getOption('skip-cleaning');
+        $skipCleaning = $input->getOption('skip-cleaning-caches');
         if (!$skipCleaning) {
             $this->cleanCache();
         }
