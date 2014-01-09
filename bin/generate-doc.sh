@@ -6,8 +6,13 @@ if ! which inotifywait > /dev/null; then
 fi
 
 usage() {
-    echo "test-runner.sh [-c] [-h|?]";
+    echo "generate-doc.sh [-c] [-h|?]";
 }
+
+# Absolute path to this script. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f $0)
+# Absolute path this script is in. /home/user/bin
+SCRIPTPATH=`dirname $SCRIPT`
 
 while getopts "ch?" OPTION
 do
@@ -23,7 +28,7 @@ do
 done
 
 while true; do
-    inotifywait -qq -r -e modify app/ src/ vendor/Onm/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
+    inotifywait -qq -r -e modify $SCRIPTPATH/../app/ $SCRIPTPATH/../src/ $SCRIPTPATH/../vendor/Onm/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
     clear &&
-    ant phpunit$CI;
+    ant phpdoc;
 done

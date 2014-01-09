@@ -1,3 +1,0 @@
-watch( '((vendor/core/.*\.php)|(src/.*.php)|(app/.*\.php)|(public/core/.*\.php)|(vendor/Onm/.*\.php))$' )  {|md|
-    system("ant phpdoc")
-}
