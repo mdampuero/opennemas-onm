@@ -17,8 +17,8 @@ function smarty_function_disqus_sync($params, &$smarty)
         && (\Onm\Settings::get('disqus_secret_key'))
     ) {
 
-        global $sc;
-        $cache = $sc->get('cache');
+        global $kernel;
+        $cache = $kernel->getContainer()->get('cache');
 
         $lastSync = $cache->fetch(CACHE_PREFIX.'disqus_last_sync');
 
