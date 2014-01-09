@@ -252,7 +252,7 @@ class DatabaseConnection
      * @return void
      * @author
      **/
-    public function isReadOnlyAction($method, $params)
+    public function isReadOnlyAction($method, $params = array())
     {
         return  !(
                     $method == 'StartTrans'
