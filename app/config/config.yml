@@ -20,7 +20,7 @@ framework:
     trusted_proxies: ~
     trusted_hosts:   ~
     session:
-        name: __onm_seess
+        name: __onm_sess
         gc_maxlifetime: 86400
         handler_id: session.handler.memcache
     fragments:       ~
