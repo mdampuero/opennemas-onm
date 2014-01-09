@@ -53,12 +53,6 @@ class ControllerListener implements EventSubscriberInterface
 
         $template->container = $kernel->getContainer();
 
-        // $routes = $kernel->getContainer()->get('router')->getRouteCollection();
-        // foreach ($routes as $route) {
-        //     var_dump($route);
-        // }
-        // die();
-
         $controller[0]->view = $template;
 
         if (method_exists($controller[0], 'init')) {
