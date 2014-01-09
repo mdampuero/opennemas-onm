@@ -21,7 +21,7 @@ class CacheClearCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('cache:clear')
+            ->setName('cache:clear:onm')
             ->setDescription('Cleans all the Symfony generated files')
             ->setDefinition(
                 array(

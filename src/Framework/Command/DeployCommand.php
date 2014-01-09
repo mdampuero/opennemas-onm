@@ -50,7 +50,9 @@ EOF
 
         $this->executeMaintenance('enable');
 
-        $this->updateCoreCode();
+        // $this->updateCoreCode();
+
+        $this->cleanSymfonyCache();
 
         $this->compileTranslations();
 
@@ -113,12 +115,12 @@ EOF
         $phpBinPath = exec('which php');
 
         // Update onm-core
-        $this->output->writeln(" - Updating onm instance");
+        $this->output->writeln("Updating core ONM code");
         $gitOutput = exec('git pull');
         $this->output->writeln($gitOutput."\n");
 
         // Update dependencies
-        $this->output->writeln(" - Updating vendor libraries");
+        $this->output->writeln("Updating vendor libraries");
         $composerOutput = exec($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o');
         $this->output->writeln($composerOutput."\n");
     }
@@ -143,7 +145,7 @@ EOF
      **/
     public function updateThemes()
     {
-        $this->output->writeln(" - Updating public themes");
+        $this->output->writeln("Updating public themes");
         foreach (glob($this->basePath.'/public/themes/*') as $theme) {
             // Avoid to execute pull in admin and manager themes.
             if (basename($theme) == 'admin' || basename($theme) == 'manager') {
@@ -165,6 +167,21 @@ EOF
         $command = $this->getApplication()->find('clean:smarty-cache');
         $arguments = array(
             'command' => 'clean:smarty-cache',
+        );
+
+        $input = new ArrayInput($arguments);
+        $returnCode = $command->run($input, $this->output);
+    }
+
+    /**
+     * Executes the cache:clear
+     *
+     **/
+    public function cleanSymfonyCache()
+    {
+        $command = $this->getApplication()->find('cache:clear');
+        $arguments = array(
+            'command' => 'cache:clear',
         );
 
         $input = new ArrayInput($arguments);
