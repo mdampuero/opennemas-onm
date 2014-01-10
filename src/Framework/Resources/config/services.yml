@@ -44,6 +44,7 @@ services:
 
     kernel.listener.general_error_handler:
         class: Framework\EventListener\GeneralExceptionsListener
+        arguments: [ %kernel.environment%, @logger ]
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 

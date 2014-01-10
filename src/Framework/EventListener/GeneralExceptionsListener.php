@@ -32,11 +32,11 @@ class GeneralExceptionsListener implements EventSubscriberInterface
     protected $controller;
     protected $logger;
 
-    // public function __construct(/*$controller,*/ LoggerInterface $logger = null)
-    // {
-    //     // $this->controller = $controller;
-    //     $this->logger = $logger;
-    // }
+    public function __construct($environment, LoggerInterface $logger = null)
+    {
+        $this->environment = $environment;
+        $this->logger = $logger;
+    }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
@@ -46,11 +46,10 @@ class GeneralExceptionsListener implements EventSubscriberInterface
             return false;
         }
 
-        $env = getContainerParameter('environment');
-
-        if ($env !== 'production') {
+        if ($this->environment !== 'prod') {
             return false;
         }
+
 
         $handling = true;
 
