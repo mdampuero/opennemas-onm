@@ -14,6 +14,7 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+require_once __DIR__.'/../app/AppKernel.php';
 
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
