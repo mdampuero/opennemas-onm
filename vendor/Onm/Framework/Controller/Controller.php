@@ -57,9 +57,11 @@ class Controller extends SymfonyController
             unset($parameters['cache_id']);
         }
 
-        $this->view->assign($parameters);
+        if (count($parameters) > 0) {
+            $this->view->assign($parameters);
+        }
 
-        $this->template = $this->view->createTemplate($view, $cacheID);
+        // $this->template = $templateSystem->createTemplate($view, $cacheID);
 
         return $this->view->fetch($view, $cacheID);
     }
@@ -93,7 +95,6 @@ class Controller extends SymfonyController
         }
 
         return $data;
-
     }
 
     /**

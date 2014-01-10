@@ -126,3 +126,9 @@ services:
     instance_manager:
         class: Onm\Instance\InstanceManager
         arguments: [ @db_conn_manager, @cache ]
+
+    onm_templating:
+        class: Onm\Templating\Templating
+        arguments: [ @service_container ]
+    view:
+        alias: onm_templating

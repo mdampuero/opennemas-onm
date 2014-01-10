@@ -41,20 +41,6 @@ class ControllerListener implements EventSubscriberInterface
         $controller = $event->getController();
         $controllerName = get_class($controller[0]);
 
-        if (strpos($controllerName, 'Frontend') === 0) {
-            $template = new \Template(TEMPLATE_USER);
-        } elseif (strpos($controllerName, 'Backend') === 0) {
-            $template = new \TemplateAdmin();
-        } else {
-            $template = new \TemplateManager();
-        }
-
-        global $kernel;
-
-        $template->container = $kernel->getContainer();
-
-        $controller[0]->view = $template;
-
         if (method_exists($controller[0], 'init')) {
             $controller[0]->init();
         }
