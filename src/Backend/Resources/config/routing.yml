@@ -33,7 +33,7 @@ admin_content_update_property:
 # Frontpage management routes
 admin_frontpage_list:
     path:     /frontpages/{category}
-    defaults: { _controller  : BackendBundle:Frontpages:show', category: home }
+    defaults: { _controller  : BackendBundle:Frontpages:show, category: home }
 
 admin_frontpage_savepositions:
     path:     /frontpage/save-positions

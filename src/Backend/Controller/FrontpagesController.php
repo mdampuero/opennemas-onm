@@ -78,7 +78,7 @@ class FrontpagesController extends Controller
         }
 
         $layoutTheme = s::get('frontpage_layout_'.$categoryID, 'default');
-        $layoutSettings = $this->container->getParameter('instance')->theme->getLayout($layoutTheme);
+        $layoutSettings = $this->container->get('instance_manager')->current_instance->theme->getLayout($layoutTheme);
 
         $menu = new \Menu();
         $menu->getMenu($layoutSettings['menu']);
@@ -115,7 +115,7 @@ class FrontpagesController extends Controller
             )
         );
 
-        $layouts = $this->container->getParameter('instance')->theme->getLayouts();
+        $layouts = $this->container->get('instance_manager')->current_instance->theme->getLayouts();
         $lastSaved = s::get('frontpage_'.$categoryID.'_last_saved');
 
         if ($lastSaved == false) {
