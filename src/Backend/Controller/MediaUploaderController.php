@@ -23,16 +23,6 @@ use Onm\Settings as s;
 class MediaUploaderController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \TemplateAdmin(TEMPLATE_ADMIN);
-    }
-
-    /**
      * Shows the media uploader
      *
      * @return Response the response object

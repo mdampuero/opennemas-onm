@@ -344,7 +344,7 @@ class FrontpagesController extends Controller
         $this->view->assign(array( 'category_name' => $categoryName, 'actual_category' => $categoryName,));
 
         // Get frontpage ads
-        \Frontend\Controllers\FrontpagesController::getAds($categoryName);
+        \Frontend\Controller\FrontpagesController::getAds($categoryName);
 
         $cm = new \ContentManager;
         $contentsRAW = $request->request->get('contents');
