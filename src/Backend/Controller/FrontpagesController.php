@@ -110,7 +110,7 @@ class FrontpagesController extends Controller
             array(
                 'contents'  => $contentElementsInFrontpage,
                 'home'      => ($categoryID == 0),
-                'smarty'    => $this->view,
+                // 'smarty'    => $this->view,
                 'category'  => $category,
             )
         );
@@ -272,7 +272,7 @@ class FrontpagesController extends Controller
             $category = 0;
         }
 
-        $availableLayouts = $this->container->getParameter('instance')->theme->getLayouts();
+        $availableLayouts = $this->container->get('instance_manager')->current_instance->theme->getLayouts();
         $availableLayouts = array_keys($availableLayouts);
 
         $layoutValid  = in_array($layout, $availableLayouts);
@@ -403,7 +403,7 @@ class FrontpagesController extends Controller
 
         $session = $this->get('session');
 
-        $session->set('last_preview', $this->renderView('frontpage/frontpage.tpl'));
+        $session->set('last_preview', $this->view->fetch('frontpage/frontpage.tpl'));
 
         return new Response('OK');
     }

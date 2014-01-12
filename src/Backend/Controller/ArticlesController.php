@@ -1101,7 +1101,7 @@ class ArticlesController extends Controller
 
         $session->set(
             'last_preview',
-            $this->renderView(
+            $this->view->fetch(
                 'article/article.tpl',
                 array(
                     'relationed'            => $relat,

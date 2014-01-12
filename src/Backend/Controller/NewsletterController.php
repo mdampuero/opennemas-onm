@@ -388,7 +388,7 @@ class NewsletterController extends Controller
                         try {
                             // Send the mail
                             $message->setTo(array($mailbox->email => $mailbox->name));
-                            $properlySent = $nManager->mailer->send($message);
+                            $properlySent = $this->get('mailer')->send($message);
                             $sentResult []= array($mailbox, (bool)$properlySent);
                             $remaining--;
                             $sent++;

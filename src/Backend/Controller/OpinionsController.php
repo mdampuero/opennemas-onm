@@ -179,7 +179,7 @@ class OpinionsController extends Controller
 
         $cm = new \ContentManager();
         $rating = new \Rating();
-        $commentManager = new \Repository\CommentManager();
+        $commentManager = $this->get('comment_repository');
 
         $opinions = $cm->find(
             'Opinion',

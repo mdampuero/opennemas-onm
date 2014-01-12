@@ -204,14 +204,17 @@ class CoversController extends Controller
     {
         $this->checkAclOrForward('KIOSKO_UPDATE');
 
-        $id = $this->request->query->getDigits('id', null);
+        $id = $request->query->getDigits('id', null);
 
         $cover = new \Kiosko($id);
 
         if (is_null($cover->id)) {
-            m::add(sprintf(_('Unable to find the cover with the id "%d"'), $id));
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                sprintf(_('Unable to find the cover with the id "%d"'), $id)
+            );
 
-            return $this->redirect($this->generateUrl('admin_videos'));
+            return $this->redirect($this->generateUrl('admin_covers'));
         }
 
         return $this->render(
@@ -234,75 +237,75 @@ class CoversController extends Controller
     {
         $this->checkAclOrForward('KIOSKO_CREATE');
 
-        if ('POST' == $request->getMethod()) {
-            $postInfo = $request->request;
+        if ('POST' !== $request->getMethod()) {
+            return $this->render('covers/read.tpl');
+        }
 
-            $coverData = array(
-                'title'        => $postInfo->filter('title', null, FILTER_SANITIZE_STRING),
-                'metadata'     => $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'type'         => (int) $postInfo->getDigits('type', 0),
-                'category'     => (int) $postInfo->getDigits('category'),
-                'available'    => (int) $postInfo->getDigits('available', 1),
-                'favorite'     => (int) $postInfo->getDigits('favorite', 1),
-                'date'         => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
-                'price'        => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
-                'fk_publisher' => (int) $_SESSION['userid'],
-            );
+        $postInfo = $request->request;
 
-            $dateTime = new \DateTime($coverData['date']);
-            $coverData['name'] = $dateTime->format('Ymd').date('His').'-'.$coverData['category'].'.pdf';
-            $coverData['path'] = $dateTime->format('Y/m/d').'/';
-            $path = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $coverData['path'];
+        $coverData = array(
+            'title'        => $postInfo->filter('title', null, FILTER_SANITIZE_STRING),
+            'metadata'     => $postInfo->filter('metadata', null, FILTER_SANITIZE_STRING),
+            'type'         => (int) $postInfo->getDigits('type', 0),
+            'category'     => (int) $postInfo->getDigits('category'),
+            'available'    => (int) $postInfo->getDigits('available', 1),
+            'favorite'     => (int) $postInfo->getDigits('favorite', 1),
+            'date'         => $postInfo->filter('date', null, FILTER_SANITIZE_STRING),
+            'price'        => $postInfo->filter('price', null, FILTER_SANITIZE_NUMBER_FLOAT),
+            'fk_publisher' => (int) $_SESSION['userid'],
+        );
 
-            try {
-                // Create folder if it doesn't exist
-                if (!file_exists($path)) {
-                    \FilesManager::createDirectory($path);
-                }
-                $uploadStatus = false;
+        $dateTime = new \DateTime($coverData['date']);
+        $coverData['name'] = $dateTime->format('Ymd').date('His').'-'.$coverData['category'].'.pdf';
+        $coverData['path'] = $dateTime->format('Y/m/d').'/';
+        $path = INSTANCE_MEDIA_PATH. KIOSKO_DIR. $coverData['path'];
 
-                foreach ($request->files as $file) {
-                    // Move uploaded file
-                    $uploadStatus = $file->isValid() && $file->move(realpath($path), $coverData['name']);
-                }
+        try {
+            // Create folder if it doesn't exist
+            if (!file_exists($path)) {
+                \FilesManager::createDirectory($path);
+            }
+            $uploadStatus = false;
 
-                if (!$uploadStatus) {
-                    throw new \Exception(
-                        sprintf(
-                            _(
-                                'There was an error while uploading the file. '
-                                .'Try to upload a file smaller than %d MB or contact with '
-                                .'your administrator'
-                            ),
-                            (int) ini_get('upload_max_filesize')
-                        )
-                    );
-                }
+            foreach ($request->files as $file) {
+                // Move uploaded file
+                $uploadStatus = $file->isValid() && $file->move(realpath($path), $coverData['name']);
+            }
 
-                $kiosko = new \Kiosko();
-                // TODO: clean the post var
-                if (!$kiosko->create($coverData)) {
-                    throw new \Exception(_('There was a problem with the cover data. Try again'));
-                }
-
-                return $this->redirect(
-                    $this->generateUrl('admin_covers', array('category' => $postInfo->getDigits('category')))
-                );
-
-            } catch (\Exception $e) {
-                m::add($e->getMessage(), m::ERROR);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_covers',
-                        array(
-                            'category' => $postInfo->getDigits('category'),
-                        )
+            if (!$uploadStatus) {
+                throw new \Exception(
+                    sprintf(
+                        _(
+                            'There was an error while uploading the file. '
+                            .'Try to upload a file smaller than %d MB or contact with '
+                            .'your administrator'
+                        ),
+                        (int) ini_get('upload_max_filesize')
                     )
                 );
             }
-        } else {
-            return $this->render('covers/read.tpl');
+
+            $kiosko = new \Kiosko();
+            // TODO: clean the post var
+            if (!$kiosko->create($coverData)) {
+                throw new \Exception(_('There was a problem with the cover data. Try again'));
+            }
+
+            return $this->redirect(
+                $this->generateUrl('admin_covers', array('category' => $postInfo->getDigits('category')))
+            );
+
+        } catch (\Exception $e) {
+            $this->get('session')->getFlashBag()->add('error', $e->getMessage());
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_covers',
+                    array(
+                        'category' => $postInfo->getDigits('category'),
+                    )
+                )
+            );
         }
     }
 
@@ -318,41 +321,44 @@ class CoversController extends Controller
         $this->checkAclOrForward('KIOSKO_UPDATE');
 
         $id = $request->query->getDigits('id');
-        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+
         $cover = new \Kiosko($id);
+        if ($cover->id != null) {
+            $this->get('session')->getFlashBag()->add('error', _('Cover id not valid.'));
+
+            return $this->redirect(
+                $this->generateUrl(
+                    'admin_covers',
+                    array(
+                        'category' => $cover->category,
+                    )
+                )
+            );
+        }
         $_POST['fk_user_last_editor']=$_SESSION['userid'];
 
-        if ($cover->id != null) {
-            if (!\Acl::isAdmin()
-                && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $cover->pk_user != $_SESSION['userid']
-            ) {
-                m::add(_("You can't modify this cover because you don't have enought privileges."));
-            } else {
-                $cover->update($_POST);
-                m::add(_("Cover updated successfully."), m::SUCCESS);
-            }
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_cover_show',
-                        array('id' => $cover->id)
-                    )
-                );
-            } else {
-                $page = $this->request->request->getDigits('page', 1);
-
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_covers',
-                        array(
-                            'category' => $cover->category,
-                            'page'     => $page,
-                        )
-                    )
-                );
-            }
+        if (!\Acl::isAdmin()
+            && !\Acl::check('CONTENT_OTHER_UPDATE')
+            && $cover->pk_user != $_SESSION['userid']
+        ) {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                _("You can't modify this cover because you don't have enough privileges.")
+            );
+        } else {
+            $cover->update($_POST);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _("Cover updated successfully.")
+            );
         }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_cover_show',
+                array('id' => $cover->id)
+            )
+        );
     }
 
     /**
@@ -377,9 +383,9 @@ class CoversController extends Controller
             $rel->deleteAll($id);
 
             $cover->delete($id, $_SESSION['userid']);
-            m::add(_("Cover '{$cover->title}' deleted successfully."), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add('successs', sprintf(_("Cover %s deleted successfully."), $cover->title));
         } else {
-            m::add(_('You must give an id for delete the cover.'), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', _('You must give an id for delete the cover.'));
         }
 
         return $this->redirect(
@@ -404,7 +410,6 @@ class CoversController extends Controller
     {
         $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -412,13 +417,16 @@ class CoversController extends Controller
 
         $cover = new \Kiosko($id);
         if (is_null($cover->id)) {
-            m::add(sprintf(_('Unable to find a cover with id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', sprintf(_('Unable to find a cover with id "%d"'), $id));
         } else {
             $cover->toggleAvailable($cover->id);
             if ($status == 0) {
                 $cover->set_favorite($status);
             }
-            m::add(sprintf(_('Successfully changed availability for the cover "%s"'), $cover->title), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully changed availability for the cover "%s"'), $cover->title)
+            );
         }
 
         return $this->redirect(
@@ -443,7 +451,6 @@ class CoversController extends Controller
     {
         $this->checkAclOrForward('KIOSKO_AVAILABLE');
 
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -451,11 +458,13 @@ class CoversController extends Controller
 
         $cover = new \Kiosko($id);
         if (is_null($cover->id)) {
-            m::add(sprintf(_('Unable to find cover with id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', sprintf(_('Unable to find cover with id "%d"'), $id));
         } else {
-
             $cover->set_favorite($status);
-            m::add(sprintf(_('Successfully changed suggested flag for cover "%s"'), $cover->title), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully changed suggested flag for cover "%s"'), $cover->title)
+            );
         }
 
         return $this->redirect(
@@ -489,10 +498,13 @@ class CoversController extends Controller
 
         $cover = new \Kiosko($id);
         if (is_null($cover->id)) {
-            m::add(sprintf(_('Unable to find a cover with the id "%d"'), $id), m::ERROR);
+            $this->get('session')->getFlashBag()->add('error', sprintf(_('Unable to find cover with id "%d"'), $id));
         } else {
             $cover->set_inhome($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed suggested flag for cover "%s"'), $cover->title), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                sprintf(_('Successfully changed suggested in home flag for cover "%s"'), $cover->title)
+            );
         }
 
         return $this->redirect(
@@ -533,7 +545,10 @@ class CoversController extends Controller
 
                 $cover->delete($element, $_SESSION['userid']);
 
-                m::add(sprintf(_('Video "%s" deleted successfully.'), $cover->title), m::SUCCESS);
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    sprintf(_('Video "%s" deleted successfully.'), $cover->title)
+                );
             }
         }
 
@@ -653,7 +668,10 @@ class CoversController extends Controller
                 s::set($key, $value);
             }
 
-            m::add(_('Settings saved successfully.'), m::SUCCESS);
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                _('Settings saved successfully.')
+            );
 
             $httpParams = array(array('action'=>'list'),);
 

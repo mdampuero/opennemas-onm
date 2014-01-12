@@ -48,6 +48,8 @@ class ErrorController extends Controller
             $errorID = strtoupper('ONM_FRAMEWORK_'.uniqid());
         }
 
+        $this->view = new \TemplateAdmin();
+
         $preview = self::highlightSource($error->getFile(), $error->getLine(), 7);
 
         $this->view->assign('preview', $preview);

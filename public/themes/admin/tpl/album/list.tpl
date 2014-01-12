@@ -21,7 +21,7 @@
                     <div class="options">
                         <h4>{t}Other{/t}</h4>
                         <a href="{url name=admin_albums_widget}" {if $category == 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
-                        {include file="common/drop_down_categories.tpl" home="{url name=admin_albums l=1 status=$status}"}
+                        {include file="common/drop_down_categories.tpl" home={url name=admin_albums l=1 status=$status}}
                     </div>
                 </div>
             </div>

@@ -53,7 +53,7 @@ class MenusController extends Controller
 
         $this->menuPositions = array_merge(
             $this->menuPositions,
-            $this->container->getParameter('instance')->theme->getMenus()
+            $this->container->get('instance_manager')->current_instance->theme->getMenus()
         );
         $this->view->assign('menu_positions', $this->menuPositions);
 

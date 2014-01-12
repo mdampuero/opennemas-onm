@@ -27,12 +27,14 @@ class Templating
      * @var string
      **/
     private $frontendTemplateEngine;
+
     /**
      * The backend template engine
      *
      * @var string
      **/
     private $backendTemplateEngine;
+
     /**
      * The manage template engine
      *
