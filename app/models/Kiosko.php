@@ -286,29 +286,31 @@ class Kiosko extends Content
      **/
     public function createThumb($file_pdf, $path)
     {
-        $img_name = basename($file_pdf, ".pdf") . '.jpg';
-        $tmp_name = '/tmp/' . basename($file_pdf, ".pdf") . '.png';
+        $imageFileName = basename($file_pdf, ".pdf") . '.jpg';
+        $tmpName = '/tmp/' . basename($file_pdf, ".pdf") . '.png';
 
         // Thumbnail first page (see [0])
         if (file_exists($this->kiosko_path.$path. $file_pdf)) {
             try {
-
                 $imagick = new \Imagick($this->kiosko_path.$path.$file_pdf.'[0]');
+                $imagick->setImageBackgroundColor('white');
                 $imagick->thumbnailImage(650, 0);
+                $imagick = $imagick->flattenImages();
+                $imagick->setFormat('png');
                 // First, save to PNG (*.pdf => /tmp/xxx.png)
-                $imagick->writeImage($tmp_name);
+                $imagick->writeImage($tmpName);
                 // finally, save to jpg (/tmp/xxx.png => *.jpg)
                 // to avoid problems with the image
-                $imagick = new \Imagick($tmp_name);
+                $imagick = new \Imagick($tmpName);
 
-                $imagick->writeImage($this->kiosko_path.$path.'650-'.$img_name);
+                $imagick->writeImage($this->kiosko_path.$path.'650-'.$imageFileName);
 
                 $imagick->thumbnailImage(180, 0);
                 // Write the new image to a file
-                $imagick->writeImage($this->kiosko_path.$path.$img_name);
+                $imagick->writeImage($this->kiosko_path.$path.$imageFileName);
 
                 //remove temp image
-                unlink($tmp_name);
+                unlink($tmpName);
             } catch (Exception $e) {
                 // Nothing
             }
