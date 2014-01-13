@@ -50,12 +50,14 @@
     <h4>{t}Pick the method to add the video:{/t}</h4>
 
     <ul class="video-type-selector">
+        {is_module_activated name="VIDEO_LOCAL_MANAGER"}
         <li class="file">
             <a href="{url name=admin_videos_create type=file category=$category}" class="clearfix">
                 <img src="{$params.IMAGE_DIR}video/video-file-source.png" alt="" />
                 {t}Upload file from my computer{/t}
             </a>
         </li>
+        {/is_module_activated}
         <li class="web">
             <a href="{url name=admin_videos_create type="web-source" category=$category}" class="clearfix">
                 <img src="{$params.IMAGE_DIR}video/video-web-source.png" alt="" />
