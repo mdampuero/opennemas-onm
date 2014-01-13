@@ -37,6 +37,8 @@ function smarty_function_renderTypeRelated($params, &$smarty)
         case 4:
             //Opinion
             $class = 'class="res-opinion" ';
+            $author = new \User($content->fk_author);
+            $content->category_name = \StringUtils::get_title($author->name);
 
             break;
         case 7:
