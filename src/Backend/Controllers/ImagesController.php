@@ -538,6 +538,13 @@ class ImagesController extends Controller
                 $photo = new \Photo();
                 if ($upload && is_array($upload['tmp_name'])) {
                     foreach ($upload['tmp_name'] as $index => $value) {
+
+                        if (empty($upload['tmp_name'][$index])) {
+                            $info [] = array(
+                                'error'         => _('Not valid file or the file exceeds the max allowed file size.'),
+                            );
+                            continue;
+                        }
                         $tempName = pathinfo($upload['name'][$index], PATHINFO_FILENAME);
 
                         // Check if the image has an IPTC title an use it as original title
