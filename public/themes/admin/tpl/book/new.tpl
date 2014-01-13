@@ -93,9 +93,10 @@ input[type="text"].required {
                 </td>
                 <td>
                     {if (isset($book->file_img) && !empty($book->file_img) )}
-                         <input name="file_img_name" type="text" readonly="readonly" value="{$book->file_img|default:''}"/>
-                     {/if}
-                      <input name="file_img" type="file"/>
+                        <input name="file_img_name" type="text" readonly="readonly" value="{$book->file_img|default:''}"/>
+                    {else}
+                        <input name="file_img" type="file" accept="image/jpg, image/jpeg"/>
+                    {/if}
                 </td>
             </tr>
                 <tr>
