@@ -151,7 +151,7 @@
                     <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$books[as]->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    <a href="{url name=admin_books_show id=$books[as]->pk_book}" title="{$books[as]->title|clearslash}">
+                    <a href="{url name=admin_book_show id=$books[as]->pk_book}" title="{$books[as]->title|clearslash}">
                         {$books[as]->title|clearslash}
                     </a>
                 </td>
@@ -190,7 +190,7 @@
                 <td class="right">
                     <div class="btn-group">
                        {acl isAllowed="BOOK_UPDATE"}
-                            <a class="btn"  href="{url name=admin_books_show id=$books[as]->pk_book}" title="{t}Edit book{/t}" >
+                            <a class="btn"  href="{url name=admin_book_show id=$books[as]->pk_book}" title="{t}Edit book{/t}" >
                                <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
                        {/acl}

@@ -346,12 +346,7 @@ class FilesController extends Controller
                 }
 
                 return $this->redirect(
-                    $this->generateUrl(
-                        'admin_files',
-                        array(
-                            'category' => $this->category,
-                        )
-                    )
+                    $this->generateUrl('admin_files', array('category' => $this->category,))
                 );
 
             } else {
@@ -430,12 +425,7 @@ class FilesController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl(
-                'admin_files_show',
-                array(
-                    'id' => $id,
-                )
-            )
+            $this->generateUrl('admin_file_show', array('id' => $id,))
         );
     }
 
