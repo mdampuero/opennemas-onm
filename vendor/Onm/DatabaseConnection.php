@@ -256,6 +256,8 @@ class DatabaseConnection
     {
         return  !(
                     $method == 'StartTrans'
+                    || $method == 'BeginTrans'
+                    || $method == 'CommitTrans'
                     || $method == 'CompleteTrans'
                     || $method == 'FailTrans'
                     || $method == 'HasFailedTrans'
