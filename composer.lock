@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "7e8f4916ff42c477b0c8c72ff6d7e0dc",
+    "hash": "9db5797678e0bbd8af2a7067a01e1c81",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1561,11 +1561,11 @@
         },
         {
             "name": "smarty/smarty",
-            "version": "v3.1.12",
+            "version": "v3.1.14",
             "source": {
                 "type": "svn",
                 "url": "http://smarty-php.googlecode.com/svn",
-                "reference": "/tags/v3.1.12/@4664"
+                "reference": "/tags/v3.1.14/@4752"
             },
             "require": {
                 "php": ">=5.2"
@@ -1573,7 +1573,9 @@
             "type": "library",
             "autoload": {
                 "classmap": [
-                    "distribution/libs/Smarty.class.php"
+                    "distribution/libs/Smarty.class.php",
+                    "distribution/libs/SmartyBC.class.php",
+                    "distribution/libs/sysplugins/smarty_security.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1599,7 +1601,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2012-09-25 22:13:16"
+            "time": "2013-07-02 16:38:47"
         },
         {
             "name": "swiftmailer/swiftmailer",
