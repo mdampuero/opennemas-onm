@@ -147,7 +147,7 @@ class CommentsController extends Controller
         if (count($request->request) < 1) {
             m::add(_("Comment data sent not valid."), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_comments_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
         }
 
         $data = array(
@@ -163,7 +163,7 @@ class CommentsController extends Controller
             m::add($e->getMessage(), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl('admin_comments_show', array('id' => $id)));
+        return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
     }
 
     /**

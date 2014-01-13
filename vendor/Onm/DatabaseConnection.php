@@ -233,10 +233,8 @@ class DatabaseConnection
      **/
     public function getConnection($method, $params)
     {
-        $isReadOnlyQuery =  $this->isReadOnlyAction($method, $params);
-
         if ($this->useReplication
-            && $isReadOnlyQuery
+            && $this->isReadOnlyAction($method, $params)
         ) {
             $connection = $this->getSlaveConnection();
         } else {

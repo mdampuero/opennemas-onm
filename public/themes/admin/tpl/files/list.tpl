@@ -195,7 +195,7 @@
                     <td class="rigth nowrap">
                         <div class="btn-group">
                             {acl isAllowed="FILE_UPDATE"}
-                                <a class="btn"  href="{url name=admin_files_show id=$attaches[c]->id}" title="{t}Edit file{/t}">
+                                <a class="btn"  href="{url name=admin_file_show id=$attaches[c]->id}" title="{t}Edit file{/t}">
                                     <i class="icon-pencil"></i> Edit
                                 </a>
                             {/acl}

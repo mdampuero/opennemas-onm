@@ -142,7 +142,7 @@
 
                         <div class="btn-group">
                             {acl isAllowed="COMMENT_UPDATE"}
-                                <a class="btn" href="{url name=admin_comments_show id=$comment->id}" title="{t}Edit{/t}" >
+                                <a class="btn" href="{url name=admin_comment_show id=$comment->id}" title="{t}Edit{/t}" >
                                     <i class="icon-pencil"></i>
                                 </a>
                             {/acl}

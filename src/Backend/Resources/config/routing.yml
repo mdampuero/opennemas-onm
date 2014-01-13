@@ -60,7 +60,7 @@ admin_staticpages:
     path:     /static-pages
     defaults: { _controller  : BackendBundle:StaticPages:list }
 
-admin_staticpages_show:
+admin_staticpage_show:
     path:     /static-pages/{id}/show
     defaults: { _controller  : BackendBundle:StaticPages:show }
 
@@ -637,7 +637,7 @@ admin_books_create:
     path:     /books/create
     defaults: { _controller  : BackendBundle:Books:create }
 
-admin_books_show:
+admin_book_show:
     path:     /books/{id}/show
     defaults: { _controller  : BackendBundle:Books:show }
 
@@ -686,7 +686,7 @@ admin_files_create:
     path:     /files/create
     defaults: { _controller  : BackendBundle:Files:create }
 
-admin_files_show:
+admin_file_show:
     path:     /files/{id}/show
     defaults: { _controller  : BackendBundle:Files:show }
 
@@ -1011,7 +1011,7 @@ admin_comments_config:
     path:     /comments/config
     defaults: { _controller  : BackendBundle:Comments:config }
 
-admin_comments_show:
+admin_comment_show:
     path:     /comments/{id}/show
     defaults: { _controller  : BackendBundle:Comments:show }
 

@@ -78,7 +78,7 @@
                     <td class="right nowrap">
                         <div class="btn-group">
                         {acl isAllowed="STATIC_UPDATE"}
-                            <a class="btn" href="{url name=admin_staticpages_show id=$pages[k]->id}" title="{t}Modify{/t}">
+                            <a class="btn" href="{url name=admin_staticpage_show id=$pages[k]->id}" title="{t}Modify{/t}">
                                 <i class="icon-pencil"></i>{t}Edit{/t}
                             </a>
                         {/acl}

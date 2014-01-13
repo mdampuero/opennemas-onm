@@ -120,6 +120,7 @@ class ModuleManager
                 'USER_MANAGER'              => _('Users'),
                 'USERVOICE_SUPPORT'         => _('UserVoice integration'),
                 'VIDEO_MANAGER'             => _('Videos'),
+                'VIDEO_LOCAL_MANAGER'       => _('Videos (local)'),
                 'WIDGET_MANAGER'            => _('Widgets'),
                 'PAYWALL'                   => _('Paywall'),
             );

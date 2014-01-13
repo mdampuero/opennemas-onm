@@ -166,7 +166,7 @@ class StaticPagesController extends Controller
             m::add(_('Static page created successfully.'), m::SUCCESS);
 
             return $this->redirect(
-                $this->generateUrl('admin_staticpages_show', array('id' => $staticPage->id))
+                $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
             );
 
         }
@@ -196,7 +196,7 @@ class StaticPagesController extends Controller
                 if (count($request->request) < 1) {
                     m::add(_("Static Page data sent not valid."), m::ERROR);
 
-                    return $this->redirect($this->generateUrl('admin_staticpages_show', array('id' => $id)));
+                    return $this->redirect($this->generateUrl('admin_staticpage_show', array('id' => $id)));
                 }
 
                 $data = array(
@@ -221,7 +221,7 @@ class StaticPagesController extends Controller
             }
 
             return $this->redirect(
-                $this->generateUrl('admin_staticpages_show', array('id' => $staticPage->id))
+                $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
             );
         }
     }
