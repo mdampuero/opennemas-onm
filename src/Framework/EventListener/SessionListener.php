@@ -25,6 +25,16 @@ use Onm\Settings as s;
 class SessionListener implements EventSubscriberInterface
 {
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function __construct($session)
+    {
+        $this->session = $session;
+    }
+    /**
      * Filters the Response.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
@@ -46,11 +56,8 @@ class SessionListener implements EventSubscriberInterface
             exit();
         }
 
-        global $kernel;
-        $container = $kernel->getContainer();
-        $session = $container->get('session');
-        $session->start();
-        $request->setSession($session);
+        $this->session->start();
+        $request->setSession($this->session);
     }
 
     public static function getSubscribedEvents()
