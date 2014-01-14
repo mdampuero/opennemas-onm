@@ -221,7 +221,7 @@ class VideosController extends Controller
                     'metadata'       => $request->filter('metadata', null, FILTER_SANITIZE_STRING),
                     'description'    => $request->filter('description', null, FILTER_SANITIZE_STRING),
                     'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
-                    'fk_author'      => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
+                    'fk_author'      => $request->filter('fk_author', 0, FILTER_VALIDATE_INT),
                 );
 
                 try {
