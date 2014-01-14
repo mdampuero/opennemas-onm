@@ -22,6 +22,7 @@
         "src/WebService/Handlers"
     ],
     "autoload": {
+        "psr-0": { "": "src/" },
         "files": [
             "vendor/functions.php",
             "vendor/adodb5/adodb.inc.php",
