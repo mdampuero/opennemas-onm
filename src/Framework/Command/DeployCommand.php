@@ -164,13 +164,17 @@ EOF
      **/
     public function cleanCache()
     {
-        $command = $this->getApplication()->find('clean:smarty-cache');
-        $arguments = array(
-            'command' => 'clean:smarty-cache',
-        );
+        try {
+            $command = $this->getApplication()->find('clean:smarty-cache');
+            $arguments = array(
+                'command' => 'clean:smarty-cache',
+            );
 
-        $input = new ArrayInput($arguments);
-        $returnCode = $command->run($input, $this->output);
+            $input = new ArrayInput($arguments);
+            $returnCode = $command->run($input, $this->output);
+        } catch (\Exception $e) {
+
+        }
     }
 
     /**
