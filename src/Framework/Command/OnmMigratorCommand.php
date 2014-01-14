@@ -12,208 +12,25 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Parser;
+
 use Onm\StringUtils;
 use Onm\Settings as s;
 
-class MigrateRegionToOnm extends Command
+class OnmMigratorCommand extends ContainerAwareCommand
 {
     /**
      * Array of database settings to use in migration process.
      *
      * @var array
      */
-    protected $settings = array();
-
-
-    protected $template = array(
-        'settings' => array(),
-        'tables' => array(),
-        'relations' => array(
-            // array(
-            //     'table1' => 'Usuarios',
-            //     'id1'    => 'idUsuarios',
-            //     'table2' => 'Columna',
-            //     'id2'    => 'idUsuario'
-            // )
-        ),
-        'fields' => array(
-            // 'id' => array(
-            //     'table-origin' => 'Usuarios',
-            //     'field-origin' => 'idUsuarios',
-            //     'table-final'  => 'users',
-            //     'type'         => 'raw'
-            // )
-        )
-    );
-
-    protected $usuarios = array(
-        'settings' => array(
-            'table-origin' => 'Usuarios',
-            'id-origin'    => 'idUsuarios',
-            'table-final'  => 'users',
-            'id-final'     => 'id'
-        ),
-        'tables' => array(
-            'Usuarios',
-        ),
-        'relations' => array(
-            // array(
-            //     'table1' => 'Usuarios',
-            //     'id1'    => 'idUsuarios',
-            //     'table2' => 'Columna',
-            //     'id2'    => 'idUsuario'
-            // ),
-        ),
-        'fields' => array(
-            'id' => array(
-                'table-origin' => 'Usuarios',
-                'field-origin' => 'idUsuarios',
-                'table-final'  => 'users',
-                'type'         => 'raw'
-            ),
-            'username' => array(
-                'table-origin' => 'Usuarios',
-                'field-origin' => 'Nombre',
-                'table-final'  => 'users',
-                'type'         => 'raw'
-            ),
-            'image_avatar' => array(
-                'table-origin' => 'Usuarios',
-                'field-origin' => 'Foto',
-                'table-final'  => 'images',
-                'type'         => 'media'
-            ),
-        )
-    );
-
-    protected $articles = array(
-        'settings' => array(
-            'table-origin' => 'Noticias',
-            'id-origin'    => 'idNoticias',
-            'table-final'  => 'articles',
-            'id-final'     => 'pk_article'
-        ),
-        'tables' => array(
-            'Noticias',
-        ),
-        'relations' => array(
-            // array(
-            //     'table1' => 'Usuarios',
-            //     'id1'    => 'idUsuarios',
-            //     'table2' => 'Columna',
-            //     'id2'    => 'idUsuario'
-            // ),
-        ),
-        'fields' => array(
-            'pk_article' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'idNoticias',
-                'table-final'  => 'articles',
-                'type'         => 'raw'
-            ),
-            'title_int' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Titulo',
-                'table-final'  => 'articles',
-                'type'         => 'raw'
-            ),
-            'title_int' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Titulo',
-                'table-final'  => 'articles',
-                'type'         => 'raw'
-            ),
-            'subtitle' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Subtitulo',
-                'table-final'  => 'articles',
-                'type'         => 'raw'
-            ),
-            'summary' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Entradilla',
-                'table-final'  => 'articles',
-                'type'         => 'raw'
-            ),
-            'body' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Contenido',
-                'table-final'  => 'contents',
-                'type'         => 'raw'
-            ),
-            'starttime' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'HoraPublicacion',
-                'table-final'  => 'contents',
-                'type'         => 'timestamp'
-            ),
-            'created' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'HoraAlta',
-                'table-final'  => 'contents',
-                'type'         => 'timestamp'
-            ),
-            'available' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Publicada',
-                'table-final'  => 'contents',
-                'type'         => 'boolean'
-            ),
-            'agency' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Fuente',
-                'table-final'  => 'articles',
-                'type'         => 'raw'
-            ),
-            'views' => array(
-                'table-origin' => 'Noticias',
-                'field-origin' => 'Visitas',
-                'table-final'  => 'contents',
-                'type'         => 'integer'
-            ),
-        )
-    );
-
-    protected $categorias = array(
-        'settings' => array(
-            'table-origin' => 'Noticias_Categorias',
-            'id-origin'    => 'idNoticias_Categorias',
-            'table-final'  => 'content_categories',
-            'id-final'     => 'pk_content_category'
-        ),
-        'tables' => array(
-            'Noticias_Categorias',
-        ),
-        'relations' => array(),
-        'fields' => array(
-            'id' => array(
-                'table-origin' => 'Noticias_Categorias',
-                'field-origin' => 'idNoticias_Categorias',
-                'table-final'  => 'content_categories',
-                'type'         => 'raw'
-            ),
-            'name' => array(
-                'table-origin' => 'Noticias_Categorias',
-                'field-origin' => 'Nombre',
-                'table-final'  => 'content_categories',
-                'type'         => 'raw'
-            ),
-            'parent_id' => array(
-                'table-origin' => 'Noticias_Categorias',
-                'field-origin' => 'idPadre',
-                'table-final'  => 'content_categories',
-                'type'         => 'raw'
-            ),
-        )
-    );
-
-    protected $originalCategories = array();
+    protected $settings;
 
     /**
      * Array of database translations
@@ -227,23 +44,7 @@ class MigrateRegionToOnm extends Command
      *
      * @var array
      */
-    protected $stats = array(
-        'user'      => array(
-            'already_imported' => 0,
-            'error'            => 0,
-            'imported'         => 0
-        ),
-        'category' => array(
-            'already_imported' => 0,
-            'error'            => 0,
-            'imported'         => 0
-        ),
-        'article'   => array(
-            'already_imported' => 0,
-            'error'            => 0,
-            'imported'         => 0
-        )
-    );
+    protected $stats = array();
 
 
     /**
@@ -252,66 +53,17 @@ class MigrateRegionToOnm extends Command
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    new InputArgument(
-                        'originDB',
-                        InputArgument::REQUIRED,
-                        'originDB'
-                    ),
-                    new InputArgument(
-                        'finalDB',
-                        InputArgument::REQUIRED,
-                        'finalDB'
-                    ),
-                )
-            )
             ->setName('migrate:region')
             ->setDescription('Migrate a region database to Openemas')
             ->setHelp(
                 "\nThe <info>migrate:region</info> command migrates one region "
                 . "DB to new openenmas database.\n\n<info>php bin/console migra"
                 . "te:region originDB finalDB</info>"
-            )->addOption(
-                'host',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Host IP/name (default: localhost)'
-            )->addOption(
-                'type',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Database type'
-            )->addOption(
-                'user',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Database user (default:root)'
-            )->addOption(
-                'pass',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Database password'
-            )->addOption(
-                'url',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Region site url'
-            )->addOption(
-                'instance',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Instance name'
-            )->addOption(
-                'prefix',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Prefix used in data tables'
-            )->addOption(
-                'media-dir',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Instance media directory'
+            )
+            ->addArgument(
+                'conf-file',
+                InputArgument::REQUIRED,
+                'conf-file'
             );
     }
 
@@ -328,106 +80,14 @@ class MigrateRegionToOnm extends Command
             '<fg=yellow>*** Starting ONM Migrator ***</fg=yellow>'
         );
 
-        chdir(APPLICATION_PATH);
+        $path = $input->getArgument('conf-file');
+        $yaml = new Parser();
+        $this->settings = $yaml->parse(file_get_contents($path));
 
-        $phpBinPath = exec('which php');
-        $dialog = $this->getHelperSet()->get('dialog');
-
-        // Default database configuration values
-        $this->settings['database']['host'] = 'localhost';
-        $this->settings['database']['type'] = 'mysqli';
-        $this->settings['database']['user'] = 'root';
-        $this->settings['database']['pass'] = '';
-
-        // Get arguments (required)
-        $this->settings['database']['origin'] = $input->getArgument('originDB');
-        $this->settings['database']['final']  = $input->getArgument('finalDB');
-
-        // Get options (optional)
-        if ($input->getOption('host')) {
-            $this->settings['database']['host'] = $input->getOption('host');
-        }
-        if ($input->getOption('type')) {
-            $this->settings['database']['type'] = $input->getOption('type');
-        }
-        if ($input->getOption('user')) {
-            $this->settings['database']['user'] = $input->getOption('user');
-        }
-
-        // Get database password or prompt
-        if ($input->getOption('pass')) {
-            $this->settings['database']['pass'] = $input->getOption('pass');
-        } else {
-            $this->settings['database']['pass'] = $dialog->askHiddenResponse(
-                $this->output,
-                'What is the database user password?',
-                false
-            );
-
-            if (trim($this->settings['database']['pass']) == '') {
-                throw new \Exception('The password can not be empty');
-            }
-        }
-
-        // Get new instance name or prompt
-        if ($input->getOption('instance')) {
-            $this->settings['instance'] = $input->getOption('instance');
-        } else {
-            $this->settings['instance'] = $dialog->ask(
-                $this->output,
-                'What is the instance name? ',
-                false
-            );
-            $this->output->writeln("-: ".$this->settings['instance']);
-
-            if (trim($this->settings['instance']) == '') {
-                throw new \Exception('The instance can not be empty');
-            }
-        }
-
-        // Get prefix to use in database tables or prompt (it could be empty)
-        if ($input->getOption('prefix')) {
-            $this->settings['database']['prefix'] = $input->getOption('prefix');
-        } else {
-            $this->settings['database']['prefix'] = $dialog->ask(
-                $this->output,
-                'What is the prefix in database tables? (Ex: wp_2_) ',
-                false
-            );
-            $this->output->writeln("-: ".$this->settings['database']['prefix']);
-        }
-
-        // Get url or prompt (it could be empty)
-        if ($input->getOption('url')) {
-            $this->settings['url'] = $input->getOption('url');
-        } else {
-            $this->settings['url'] = $dialog->ask(
-                $this->output,
-                'What is the ' . $this->settings['instance'] . ' site URL? ',
-                false
-            );
-            $this->output->writeln("-: ".$this->settings['url']);
-        }
-
-        // Get media directory path or prompt (it could be empty)
-        if ($input->getOption('media-dir')) {
-            $this->settings['media-dir'] = $input->getOption('media-dir');
-        } else {
-            $this->settings['media-dir'] = $dialog->ask(
-                $this->output,
-                'Where is the ' . $this->settings['instance']
-                . ' media directory? ',
-                '/opt/backup_opennemas/mundiario/wp-content/uploads/'
-            );
-            $this->output->writeln("-: ".$this->settings['media-dir']);
-
-            if (trim($this->settings['media-dir']) == '') {
-                throw new \Exception('The directory can not be empty');
-            }
-        }
+        $basePath = APPLICATION_PATH;
+        chdir($basePath);
 
         $this->displayMigrateInfo($this->output);
-
         $this->configureMigrator();
 
         $this->prepareDatabase();
@@ -442,26 +102,35 @@ class MigrateRegionToOnm extends Command
      */
     protected function displayMigrateInfo()
     {
-        $this->output->writeln(
-            "\n<fg=yellow>Migrating from <fg=red>"
+        $info = "\n<fg=yellow>Migrating from <fg=red>"
             . $this->settings['database']['origin'] . '</fg=red> to <fg=green>'
             . $this->settings['database']['final']
-            . '</fg=green>...</fg=yellow>'
-        );
+            . "</fg=green>...</fg=yellow>\n";
 
-        $this->output->writeln(
-            '   Instance:        ' . $this->settings['instance'] . "\n" .
-            '   Site url:        ' . $this->settings['url'] . "\n" .
-            '   Media directory: ' . $this->settings['media-dir'] . "\n"
-        );
+        if (isset($this->settings['database']['instance'])) {
+            $info .= "\n   Instance:        "
+                . $this->settings['database']['instance'];
+        }
 
-        $this->output->writeln(
-            '   Database:      ' . $this->settings['database']['final'] ."\n" .
-            '   Database host: ' . $this->settings['database']['host'] ."\n" .
-            '   Database type: ' . $this->settings['database']['type'] ."\n" .
-            '   Database user: ' . $this->settings['database']['user'] ."\n" .
-            '   Database pass: ' . $this->settings['database']['pass'] ."\n"
-        );
+        if (isset($this->settings['url'])) {
+            $info .= "\n   Site url:        " . $this->settings['url'];
+        }
+
+        if (isset($this->settings['media_dir'])) {
+            $info .= "\n   Media dir:        "
+                . $this->settings['database']['instance']
+                . '   Media directory: '
+                . $this->settings['database']['media_dir'] . "\n";
+        }
+
+        $info = "\n   Database origin: " . $this->settings['database']['origin']
+            . "\n   Database final:  " . $this->settings['database']['final']
+            . "\n   Database host:   " . $this->settings['database']['host']
+            . "\n   Database type:   " . $this->settings['database']['type']
+            . "\n   Database user:   " . $this->settings['database']['user']
+            . "\n   Database pass:   " . $this->settings['database']['password'];
+
+        $this->output->writeln($info);
     }
 
     /**
@@ -479,7 +148,23 @@ class MigrateRegionToOnm extends Command
      */
     public function displayResults()
     {
-        var_dump($this->stats);
+        $this->output->writeln(
+            '<fg=yellow>*** ONM Migrator Stats ***</fg=yellow>'
+        );
+
+        foreach ($this->stats as $section => $stats) {
+            $this->output->writeln(
+                ucwords($section) . " ("
+                . ($stats['end'] - $stats['start']) . " secs.)"
+            );
+
+            $this->output->writeln(
+                "<fg=green>Imported: " . $stats['imported']
+                . "</fg=green><fg=yellow>\tAlready imported: "
+                . $stats['already_imported'] . "</fg=yellow><fg=red>\tError: "
+                . $stats['error'] . "</fg=red>\n"
+            );
+        }
     }
 
     /**
@@ -487,15 +172,15 @@ class MigrateRegionToOnm extends Command
      */
     protected function configureMigrator()
     {
-        define('ORIGINAL_URL', $this->settings['url']);
-        define('ORIGINAL_MEDIA', $this->settings['media-dir']);
+        define('ORIGINAL_URL', $this->settings['database']['url']);
+        define('ORIGINAL_MEDIA', $this->settings['database']['media_dir']);
         define('ORIGINAL_MEDIA_COMMON', '/opt/backup_opennemas/mundiario/wp-content/uploads/');
 
-        define('CACHE_PREFIX', $this->settings['instance']);
+        define('CACHE_PREFIX', $this->settings['database']['instance']);
 
         define('BD_HOST', $this->settings['database']['host']);
         define('BD_USER', $this->settings['database']['user']);
-        define('BD_PASS', $this->settings['database']['pass']);
+        define('BD_PASS', $this->settings['database']['password']);
         define('BD_TYPE', $this->settings['database']['type']);
         define('BD_DATABASE', $this->settings['database']['final']);
         define('ORIGIN_BD_DATABASE', $this->settings['database']['origin']);
@@ -503,25 +188,35 @@ class MigrateRegionToOnm extends Command
 
         // Initialize internal constants for logger
         // Logger
-        define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
-        define('INSTANCE_UNIQUE_NAME', $this->settings['instance']);
+        define(
+            'SYS_LOG_PATH',
+            realpath(
+                SITE_PATH . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
+                . "tmp/logs"
+            )
+        );
+        define('INSTANCE_UNIQUE_NAME', $this->settings['database']['instance']);
 
         define('IMG_DIR', "images");
-        define('MEDIA_PATH', SITE_PATH."media".DS.INSTANCE_UNIQUE_NAME);
-
-        // Initialize Globals and Database
-        $GLOBALS['application'] = new \Application();
-        \Application::initDatabase();
-        // \Application::initLogger();
-
-        // Create new connection and connect
-        $GLOBALS['application']->connOrigin = \ADONewConnection(BD_TYPE);
-        $GLOBALS['application']->connOrigin->Connect(
-            BD_HOST,
-            BD_USER,
-            BD_PASS,
-            ORIGIN_BD_DATABASE
+        define(
+            'MEDIA_PATH',
+            SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
         );
+
+        $this->originConnection = new \Onm\DatabaseConnection(
+            getContainerParameter('database')
+        );
+        $this->originConnection->selectDatabase(
+            $this->settings['database']['origin']
+        );
+
+        $this->targetConnection = getService('db_conn');
+        $this->targetConnection->selectDatabase(
+            $this->settings['database']['final']
+        );
+
+        \Application::load();
+        \Application::initDatabase($this->targetConnection);
 
         $_SESSION['username'] = 'script';
         $_SESSION['userid']   = 11;
@@ -530,20 +225,11 @@ class MigrateRegionToOnm extends Command
     /**
      * Prepare database for importing.
      *
-     * @note This method is called after collecting options/arguments and before
+     * @note This method is called after collecting arguments and before
      *       importing.
      */
     protected function prepareDatabase()
     {
-        // $sql = "ALTER TABLE `translation_ids` ".
-        //     "ADD `slug`  VARCHAR( 200 ) NOT NULL DEFAULT  '' ";
-        // $rss = $GLOBALS['application']->conn->Execute($sql);
-
-        // $sql = "INSERT INTO user_groups (`pk_user_group`, `name`) VALUES (3, 'autores')";
-        // $rss = $GLOBALS['application']->conn->Execute($sql);
-
-        // $sql="DELETE FROM `wp-mundiario`.`wp_users` WHERE `wp_users`.`user_login` = 'macada'";
-        // $request = $GLOBALS['application']->connOrigin->Prepare($sql);
     }
 
     /**
@@ -553,55 +239,107 @@ class MigrateRegionToOnm extends Command
     {
         $this->loadTranslations();
 
-        // $this->importUsers();
-        // $this->importCategories();
-        $this->importArticles();
+        foreach ($this->settings['database']['schemas'] as $schema) {
+            switch ($schema['type']) {
+                case 'article':
+                    $this->importArticles($schema);
+                    break;
+                case 'category':
+                    $this->importCategories($schema);
+                    break;
+                case 'opinion':
+                    $this->importOpinions($schema);
+                    break;
+                case 'user':
+                    $this->importUsers($schema);
+                    break;
+                case 'user_group':
+                    // $this->importUserGroups($schema);
+                    break;
+                case 'video':
+                    // $this->importVideos();
+                    break;
+                case 'image':
+                    // $this->importImages();
+                default:
+                    break;
+            }
+        }
 
-        // $this->importCategories();
-        // $this->updateMetadatas();
-        // $this->importVideos();
         // $this->importbodyArticles();
         // $this->importOtherImages();
-
-
-        // if ($this->settings['database']['prefix'] != 'wp_') {
-        //     $this->importImages('wp_');
-        // }
-        // $this->importImages();
 
         // $this->updateBody();
 
         // $this->importGalleries();
-
-        // $this->importVideos();
-    }
-
-    /**
-     * Imports users from origin database.
-     */
-    protected function importUsers()
-    {
-        $data = $this->getSource($this->usuarios);
-        return $this->saveUsers($this->usuarios, $data);
     }
 
     /**
      * Imports articles from origin database
+     *
+     * @param array $schema Database schema to get the data to import.
      */
-    protected function importArticles()
+    protected function importArticles($schema)
     {
-        $data = $this->getSource($this->articles);
-        var_dump($data);
-        // return $this->saveArticles($this->articles, $data);
+        $this->stats['articles']['start'] = time();
+        $data = $this->getSource($schema);
+
+        $this->saveArticles($schema, $data);
+        $this->stats['articles']['end'] = time();
     }
 
     /**
      * Imports categories from origin database.
+     *
+     * @param array $schema Database schema to get the data to import.
      */
-    protected function importCategories()
+    protected function importCategories($schema)
     {
-        $data = $this->getSource($this->categorias);
-        return $this->saveCategories($this->categorias, $data);
+        $this->stats['categories']['start'] = time();
+        $data = $this->getSource($schema);
+
+        $this->saveCategories($schema, $data);
+        $this->stats['categories']['end'] = time();
+    }
+
+    /**
+     * Imports opinions from origin database.
+     */
+    protected function importOpinions($schema)
+    {
+        $this->stats['opinions']['start'] = time();
+        $data = $this->getSource($schema);
+
+        $this->saveOpinions($schema, $data);
+        $this->stats['opinions']['end'] = time();
+    }
+
+    /**
+     * Imports users from origin database.
+     *
+     * @param array $schema Database schema to get the data to import.
+     */
+    protected function importUsers($schema)
+    {
+        $this->stats['users']['start'] = time();
+        $data = $this->getSource($schema);
+
+        $this->saveUsers($schema, $data);
+        $this->stats['users']['end'] = time();
+    }
+
+    /**
+     * Imports user groups from origin database.
+     *
+     * @param array $schema Database schema to get the data to import.
+     */
+    protected function importUserGroups($schema)
+    {
+        $this->stats['user_groups']['start'] = time();
+        $data = $this->getSource($schema);
+
+        $this->saveUserGroups($schema, $data);
+        $this->stats['user_groups']['end'] = time();
     }
 
     /**
@@ -615,28 +353,25 @@ class MigrateRegionToOnm extends Command
         $data = array();
 
         // Select all ids
-        $sql = 'SELECT ' . $schema['settings']['table-origin'] . '.'
-            . $schema['settings']['id-origin']
-            . ' FROM ' . $schema['settings']['table-origin'];
-            // . ' LIMIT 1,10';
+        $sql = 'SELECT ' . $schema['table_origin'] . '.'
+            . $schema['id_origin']
+            . ' FROM ' . $schema['table_origin']
+            . ' LIMIT 1,10';
 
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
-
+        $request = $this->originConnection->Prepare($sql);
+        $rs      = $this->originConnection->Execute($request);
         $ids     = $rs->getArray();
 
         $total = count($ids);
         foreach ($ids as $id) {
-        // for ($x = 0; $x < 2; $x++) {
-            // $id = $ids[$x];
-            // $this->output->writeln('Processing article '. $x.' of '. $total);
+            // $this->output->writeln('Processing article '. $x + 1 . ' of '. $total);
 
             // Build sql statement 'SELECT' chunk
             $sql = 'SELECT ';
             $i = 0;
             foreach ($schema['fields'] as $key => $field) {
-                $sql = $sql . $field['table-origin'] . '.'
-                    . $field['field-origin'] . ' AS ' . $key;
+                $sql = $sql . $field['table_origin'] . '.'
+                    . $field['field_origin'] . ' AS ' . $key;
 
                 if ($i < count($schema['fields']) - 1) {
                     $sql .= ',';
@@ -657,9 +392,9 @@ class MigrateRegionToOnm extends Command
 
             // Build sql statement 'WHERE' chuck
             $sql.= ' WHERE '
-                    . $schema['settings']['table-origin'] . '.'
-                    . $schema['settings']['id-origin'] . '='
-                    . $id[$schema['settings']['id-origin']];
+                    . $schema['table_origin'] . '.'
+                    . $schema['id_origin'] . '='
+                    . $id[$schema['id_origin']];
 
             if (isset($schema['relations'])
                     && count($schema['relations']) > 0) {
@@ -670,18 +405,26 @@ class MigrateRegionToOnm extends Command
                     $sql .=  $relation['table1'] . '.' . $relation['id1'] . '='
                         . $relation['table2'] . '.' . $relation['id2'];
                 }
-
             }
 
-            var_dump($sql);
-
             // Execute sql and save in array
-            $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-            $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+            $request = $this->originConnection->Prepare($sql);
+            $rs      = $this->originConnection->Execute($request);
             $results = $rs->getArray();
 
             if (count($results) > 0) {
                 foreach ($results as $result) {
+                    if (isset($schema['collections'])) {
+                        foreach ($schema['collections'] as $key => $value) {
+                            $result[$key] = array();
+
+                            foreach ($schema['collections'][$key] as $field) {
+                                $result[$key][] = $result[$field];
+                                unset($result[$field]);
+                            }
+                        }
+                    }
+
                     $data[] = $result;
                 }
             }
@@ -691,96 +434,93 @@ class MigrateRegionToOnm extends Command
     }
 
     /**
-     * Saves the users and returns the amount of new users.
+     * Saves the articles.
      *
-     * @param  array    $schema Database schema.
-     * @param  array    $data   Users to save.
+     * @param  array $schema Database schema.
+     * @param  array $data   Users to save.
      */
-    protected function saveUsers($schema, $data)
+    protected function saveArticles($schema, $data)
     {
+        $this->stats['articles']['already_imported'] = 0;
+        $this->stats['articles']['error']            = 0;
+        $this->stats['articles']['imported']         = 0;
+
         foreach ($data as $item) {
-            if (!$this->elementIsImported($item['id'], 'author')) {
-                // Default values
+            if (!$this->elementIsImported($item['id'], 'article')) {
                 $values = array(
-                    'sessionexpire' => '30',
-                    'url'           => '',
-                    'bio'           => '',
-                    'avatar_img_id' => 0,
-                    'type'          => 0,
-                    'deposit'       => '',
-                    'token'         => '',
-                    'activated'     => 1,
-                    'id_user_group' => array('3'),
+                    'title'          => null,
+                    'with_comment'   => 1,
+                    'available'      => 1,
+                    'content_status' => 1,
+                    'category'       => 20,
+                    'frontpage'      => 0,
+                    'in_home'        => 0,
+                    'title_int'      => null,
+                    'metadata'       => null,
+                    'subtitle'       => null,
+                    'slug'           => null,
+                    'agency'         => null,
+                    'summary'        => null,
+                    'description'    => null,
+                    'body'           => null,
+                    'posic'          => 0,
+                    'id'             => 0,
+                    'img1'           => null,
+                    'img2'           => null,
+                    'img1_footer'    => null,
+                    'img2_footer'    => null,
+                    'fk_video'       => null,
+                    'fk_video2'      => null,
+                    'footer_video2'  => null,
+                    'created'        => null,
+                    'starttime'      => null,
+                    'changed'        => null,
+                    'fk_user'        => null,
+                    'fk_author'      => null,
+                    'fk_publisher'   => null,
                 );
 
-                $values['username'] = isset($item['username']) ?
-                    $this->parseField(
-                        $item['username'],
-                        $schema['fields']['username']['type']
-                    ) : null;
+                foreach ($item as $key => $value) {
+                    $parsed = $this->parseField(
+                        $value,
+                        $schema['fields'][$key]['type']
+                    );
 
-                $values['password'] = isset($item['password']) ?
-                    $this->parseField(
-                        $item['password'],
-                        $schema['fields']['password']['type']
-                    ) : null;
-
-                $values['email'] = isset($item['email']) ?
-                    $this->parseField(
-                        $item['email'],
-                        $schema['fields']['email']['type']
-                    ) : null;
-
-                $values['name'] = isset($item['name']) ?
-                    $this->parseField(
-                        $item['name'],
-                        $schema['fields']['name']['type']
-                    ) : null;
-
-                $values['avatar_img_id'] = isset($item['avatar_img_id']) ?
-                    $this->parseField(
-                        $item['avatar_img_id'],
-                        $schema['fields']['avatar_img_id']['type']
-                    ) : 0;
-
-                $values['bio'] = isset($item['bio']) ?
-                    $this->parseField(
-                        $item['bio'],
-                        $schema['fields']['bio']['type']
-                    ) : '';
-
-                $values['url'] = isset($item['url']) ?
-                    $this->parseField(
-                        $item['url'],
-                        $schema['fields']['url']['type']
-                    ) : '';
-
+                    // Overwrite only if it has a default value
+                    if (array_key_exists($key, $values)) {
+                        $values[$key] = $parsed;
+                    }
+                }
 
                 try {
-                    $user   = new \User();
-                    $user->create($values);
+                    $article = new \Article();
+                    $article->create($values);
 
-                    $id = $user->id;
-                    $this->createTranslation($item['id'], $id, 'author');
+                    $id = $article->id;
+                    $this->createTranslation($item['id'], $id, 'article');
 
-                    $this->stats['user']['imported']++;
+                    $this->stats['articles']['imported']++;
                 } catch (\Exception $e) {
-                    $this->stats['user']['error']++;
+                    $this->stats['articles']['error']++;
                 }
             } else {
-                $this->stats['user']['already_imported']++;
+                $this->stats['articles']['already_imported']++;
             }
         }
     }
 
     /**
-     * Saves the categories and returns the amount of new categories.
+     * Saves the categories.
      *
      * @param  array    $schema Database schema.
      * @param  array    $data   Categories to save.
      */
     protected function saveCategories($schema, $data)
     {
+        $this->stats['categories']['already_imported'] = 0;
+        $this->stats['categories']['error']            = 0;
+        $this->stats['categories']['imported']         = 0;
+
         foreach ($data as $item) {
             if (!$this->elementIsImported($item['id'], 'category')) {
                 $values = array(
@@ -788,30 +528,27 @@ class MigrateRegionToOnm extends Command
                     'title'             => '',
                     'inmenu'            => 0,
                     'posmenu'           => 10,
-                    'subcategory'       => 0,
                     'internal_category' => 0,
+                    'subcategory'       => 0,
                     'logo_path'         => null,
-                    'color'             => null,
-                    'params'            => null
+                    'params'            => null,
+                    'color'             => null
                 );
 
-                $values['title'] = isset($item['name']) ?
-                    $this->parseField(
-                        $item['name'],
-                        $schema['fields']['name']['type']
-                    ) : '';
+                foreach ($item as $key => $value) {
+                    // Parse only if it isn't an old id to translate
+                    if ($schema['fields'][$key]['type'] != 'translation') {
+                        $parsed = $this->parseField(
+                            $value,
+                            $schema['fields'][$key]['type']
+                        );
 
-
-                $values['name'] = isset($item['name']) ?
-                    $this->parseField(
-                        $item['name'],
-                        $schema['fields']['name']['type']
-                    ) : '';
-
-                $values['subcategory'] = isset($item['parent_id'])
-                    && isset($this->translations['category'][$item['parent_id']]) ?
-                    $this->translations['category'][$item['parent_id']]
-                    : null;
+                        // Overwrite only if it has a default value
+                        if (array_key_exists($key, $values)) {
+                            $values[$key] = $parsed;
+                        }
+                    }
+                }
 
                 try {
                     $category = new \ContentCategory();
@@ -820,12 +557,198 @@ class MigrateRegionToOnm extends Command
                     $id = $category->pk_content_category;
                     $this->createTranslation($item['id'], $id, 'category');
 
-                    $this->stats['category']['already_imported']++;
+                    $this->stats['categories']['imported']++;
                 } catch (\Exception $e) {
-                    $this->stats['category']['error']++;
+                    $this->stats['categories']['error']++;
                 }
             } else {
-                $this->stats['category']['already_imported']++;
+                $this->stats['categories']['already_imported']++;
+            }
+        }
+    }
+
+    /**
+     * Save the opinions.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Opinions to save.
+     */
+    protected function saveOpinions($schema, $data)
+    {
+        $this->stats['opinions']['already_imported'] = 0;
+        $this->stats['opinions']['error']            = 0;
+        $this->stats['opinions']['imported']         = 0;
+
+        foreach ($data as $item) {
+            if (!$this->elementIsImported($item['id'], 'opinion')) {
+                $values = array(
+                    'fk_author'      => null,
+                    'fk_author_img'  => null,
+                    'with_comment'   => 1,
+                    'type_opinion'   => 1,
+                    'title'          => null,
+                    'available'      => 1,
+                    'content_status' => 1,
+                    'category'       => 20,
+                    'frontpage'      => 0,
+                    'in_home'        => 0,
+                    'metadata'       => null,
+                    'slug'           => null,
+                    'description'    => null,
+                    'body'           => null,
+                    'posic'          => 0,
+                    'created'        => null,
+                    'starttime'      => null,
+                    'changed'        => null,
+                    'fk_user'        => null,
+                    'fk_publisher'   => null
+                );
+
+                foreach ($item as $key => $value) {
+                    // Parse only if it isn't an old id to translate
+                    if ($schema['fields'][$key]['type'] != 'translation') {
+                        $parsed = $this->parseField(
+                            $value,
+                            $schema['fields'][$key]['type']
+                        );
+
+                        // Overwrite only if it has a default value
+                        if (array_key_exists($key, $values)) {
+                            $values[$key] = $parsed;
+                            $this->output->writeln("overwrite " . $key);
+                        }
+                    }
+                }
+
+                try {
+                    $opinion = new \Opinion();
+                    $opinion->create($values);
+
+                    $id = $opinion->id;
+                    $this->createTranslation($item['id'], $id, 'opinion');
+
+                    $this->stats['opinions']['imported']++;
+                } catch (\Exception $e) {
+                    $this->stats['opinions']['error']++;
+                }
+            } else {
+                $this->stats['opinions']['already_imported']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the users.
+     *
+     * @param  array $schema Database schema.
+     * @param  array $data   Users to save.
+     */
+    protected function saveUsers($schema, $data)
+    {
+        $this->stats['users']['already_imported'] = 0;
+        $this->stats['users']['error']            = 0;
+        $this->stats['users']['imported']         = 0;
+
+        foreach ($data as $item) {
+            if (!$this->elementIsImported($item['id'], 'author')) {
+                // Default values
+                $values = array(
+                    'username'      => '',
+                    'password'      => null,
+                    'sessionexpire' => '30',
+                    'url'           => '',
+                    'bio'           => '',
+                    'avatar_img_id' => 0,
+                    'email'         => null,
+                    'name'          => null,
+                    'type'          => 0,
+                    'deposit'       => 0,
+                    'token'         => null,
+                    'activated'     => 1,
+                    'id_user_group' => array('3'),
+                );
+
+                foreach ($item as $key => $value) {
+                    // Parse only if it isn't an old id to translate
+                    if ($schema['fields'][$key]['type'] != 'translation') {
+                        $parsed = $this->parseField(
+                            $value,
+                            $schema['fields'][$key]['type']
+                        );
+
+                        // Overwrite only if it has a default value
+                        if (array_key_exists($key, $values)) {
+                            $values[$key] = $parsed;
+                        }
+                    }
+                }
+
+                try {
+                    $user   = new \User();
+                    $user->create($values);
+
+                    $id = $user->id;
+                    $this->createTranslation($item['id'], $id, 'author');
+
+                    $this->stats['users']['imported']++;
+                } catch (\Exception $e) {
+                    echo $e;
+                    $this->stats['users']['error']++;
+                }
+            } else {
+                $this->stats['users']['already_imported']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the user groups.
+     *
+     * @param  array $schema Database schema.
+     * @param  array $data   User groups to save.
+     */
+    protected function saveUserGroups($schema, $data)
+    {
+        $this->stats['user_groups']['already_imported'] = 0;
+        $this->stats['user_groups']['error']            = 0;
+        $this->stats['user_groups']['imported']         = 0;
+
+        foreach ($data as $item) {
+            if (!$this->elementIsImported($item['id'], 'user_group')) {
+                // Default values
+                $values = array(
+                    'name' => null,
+                );
+
+                foreach ($item as $key => $value) {
+                    // Parse only if it isn't an old id to translate
+                    if ($schema['fields'][$key]['type'] != 'translation') {
+                        $parsed = $this->parseField(
+                            $value,
+                            $schema['fields'][$key]['type']
+                        );
+
+                        // Overwrite only if it has a default value
+                        if (array_key_exists($key, $values)) {
+                            $values[$key] = $parsed;
+                        }
+                    }
+                }
+
+                try {
+                    $user   = new \User();
+                    $user->create($values);
+
+                    $id = $user->id;
+                    $this->createTranslation($item['id'], $id, 'author');
+
+                    $this->stats['user_groups']['imported']++;
+                } catch (\Exception $e) {
+                    echo $e;
+                    $this->stats['user_groups']['error']++;
+                }
+            } else {
+                $this->stats['user_groups']['already_imported']++;
             }
         }
     }
@@ -839,17 +762,16 @@ class MigrateRegionToOnm extends Command
      */
     protected function createTranslation($old, $new, $type)
     {
-        $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`,
-            `type`) VALUES (?,?,?)';
+        $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
+            . '`type`) VALUES (?,?,?)';
         $values = array($old, $new, $type);
 
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
-        $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, $values);
 
         if (!$rss) {
             $this->output->writeln(
-                'createTranslation: '
-                . $GLOBALS['application']->conn->ErrorMsg()
+                'createTranslation: ' . $this->targetConnection->ErrorMsg()
             );
         }
 
@@ -861,13 +783,16 @@ class MigrateRegionToOnm extends Command
      *
      * @param  string $field Field to parse.
      * @param  string $type  Type of the field.
-     * @return mixed         String if the field
+     * @return mixed         The field after parsing.
      */
     protected function parseField($field, $type)
     {
         switch ($type) {
             case 'raw': // Remove spaces at beginning and end
                 return trim($field);
+                break;
+            case 'utf8':
+                return $this->convertoUTF8($field);
                 break;
             case 'body': // Replaces the content of the field
                 return '<p>'. preg_replace(
@@ -883,6 +808,14 @@ class MigrateRegionToOnm extends Command
                 break;
             case 'media': // Saves the media
                 return 0;
+            case 'category_translation':
+                return $this->matchCategory($field);
+                break;
+            case 'author_translation':
+                return $this->matchAuthor($field);
+            case 'timestamp':
+                return date('Y-m-d H:i:s', $field);
+                break;
             default:
                 return $field;
                 break;
@@ -901,8 +834,7 @@ class MigrateRegionToOnm extends Command
             'article'  => array()
         );
 
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $rs = $this->targetConnection->Execute($sql);
         $translations = $rs->GetArray();
 
         foreach ($translations as $translation) {
@@ -919,17 +851,33 @@ class MigrateRegionToOnm extends Command
     protected function matchCategory($id)
     {
         if (array_key_exists($id, $this->translations['category'])) {
-            return $this->translation['categories'][$id];
+            return $this->translations['category'][$id];
         } else {
             return 20;
         }
     }
 
     /**
+     * Returns the new author id.
+     *
+     * @param int $id Old author id.
+     */
+    protected function matchAuthor($id)
+    {
+        if (array_key_exists($id, $this->translations['author'])) {
+            return $this->translations['author'][$id];
+        } else {
+            return 0;
+        }
+    }
+
+    /**
      * Read the correspondence between identifiers
      *
-     * @return mixed The new element id if it's already imported. Otherwise,
-     *                return false.
+     * @param  integer $oldId Element id (origin database).
+     * @param  string  $type  Element type.
+     * @return mixed          The new element id if it's already imported.
+     *                        Otherwise, return false.
      */
     protected function elementIsImported($oldId, $type)
     {
@@ -941,97 +889,18 @@ class MigrateRegionToOnm extends Command
     }
 
     /**
-     * Read articles data and insert in new database
+     * Converts a given string to UTF-8 codification
      *
-     * @return void
+     * @return string
      **/
-    // protected function importArticles()
-    // {
+    protected function convertoUTF8($string)
+    {
+        return mb_convert_encoding($string, 'UTF-8');
+       // return $string;
+    }
 
-    //     $where = " `".PREFIX."term_relationships`.`term_taxonomy_id` IN (".implode(', ', array_values($this->originalCategories)).") ";
-    //     $limit = " ORDER BY `".PREFIX."term_relationships`.`term_taxonomy_id`";
 
-    //     $sql = "SELECT * FROM `".PREFIX."posts`, `".PREFIX."term_relationships` WHERE ".
-    //         "`post_type` = 'post' AND `ID`=`object_id` AND post_status='publish' ".
-    //         " AND ".$where." ".$limit;
 
-    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-    //     $rs      = $GLOBALS['application']->connOrigin->Execute($request);
-
-    //     if (!$rs) {
-    //         $this->output->writeln('DB problem: '. $GLOBALS['application']->connOrigin->ErrorMsg());
-    //     } else {
-    //         $totalRows = $rs->_numOfRows;
-    //         $current   = 1;
-
-    //         while (!$rs->EOF) {
-    //             $originalArticleID = $rs->fields['ID'];
-    //             if ($this->elementIsImported($originalArticleID, 'article') ) {
-    //                  //$this->output->writeln("[{$current}/{$totalRows}] Article with id {$originalArticleID} already imported\n");
-    //             } else {
-    //                // $this->output->writeln("[{$current}/{$totalRows}] Importing article with id {$originalArticleID} - ");
-
-    //                 $data = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
-    //                 if (!empty($rs->fields['post_excerpt'])) {
-    //                     $summary = $this->convertoUTF8($rs->fields['post_excerpt']);
-    //                 } else {
-    //                     $summary = $this->convertoUTF8(strip_tags(substr($data['body'], 0, 250)));
-    //                 }
-    //                 $values = array(
-    //                     'title' => $this->convertoUTF8($rs->fields['post_title']),
-    //                     'category' => $this->matchCategory($rs->fields['term_taxonomy_id']),
-    //                     'with_comment' => 1,
-    //                     'available' => 1,
-    //                     'content_status' => 1,
-    //                     'frontpage' => 0,
-    //                     'in_home' => 0,
-    //                     'title_int' => $this->convertoUTF8($rs->fields['post_title']),
-    //                     'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_title'])),
-    //                     'subtitle' => '',
-    //                     'slug' => $rs->fields['post_name'],
-    //                     'agency' => '',
-    //                     'summary' => $summary,
-    //                     'description' => strip_tags(substr($summary, 0,150)),
-    //                     'body' => $data['body'],
-    //                     'posic' => 0,
-    //                     'id' => 0,
-    //                     'img1' => $data['img'],
-    //                     'img2' => $data['img'],
-    //                     'img2_footer' => $data['footer'],
-    //                     'fk_video' => '',
-    //                     'fk_video2' => '',
-    //                     'footer_video2' => '',
-    //                     'created' => $rs->fields['post_date_gmt'],
-    //                     'starttime' => $rs->fields['post_date_gmt'],
-    //                     'changed' => $rs->fields['post_modified_gmt'],
-    //                     'fk_user' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-    //                     'fk_author' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-    //                     'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-    //                     'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-    //                 );
-
-    //                 $article      = new \Article();
-    //                 $newArticleID = $article->create($values);
-
-    //                 if (!empty($newArticleID)) {
-    //                     $this->createTranslation($originalArticleID, $newArticleID, 'article', $rs->fields['post_name']);
-    //                 //  $this->output->writeln('-'. $originalArticleID.'->'.
-    //                 //         $newArticleID. ' article ok');
-    //                 $this->output->write('.');
-    //                 } else {
-    //                     $this->output->writeln('Problem inserting article '.$originalArticleID.
-    //                         ' - '. $rs->fields['post_name'] .'\n');
-    //                 }
-    //             }
-    //             $current++;
-    //             $rs->MoveNext();
-    //         }
-    //         $this->output->writeln('Imported  '.$current.' articles \n');
-
-    //     $rs->Close();
-    //     }
-    //     return true;
-    // }
 
     /**
      * Read images data and insert this in new database
@@ -1052,8 +921,8 @@ class MigrateRegionToOnm extends Command
         $sql = "SELECT * FROM `".$prefix."posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ";
 
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+        $request = $this->targetConnection->Prepare($sql);
+        $rs      = $this->targetConnection->Execute($request);
 
         $oldID = $this->elementIsImported('fotos', 'category');
         if (empty($oldID)) {
@@ -1062,7 +931,7 @@ class MigrateRegionToOnm extends Command
            $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
         }
         if (!$rs) {
-            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
+            $this->output->writeln($this->targetConnection->ErrorMsg());
         } else {
 
             $totalRows = $rs->_numOfRows;
@@ -1141,8 +1010,8 @@ class MigrateRegionToOnm extends Command
             "`post_content` LIKE '%gallery%'  AND post_status !='trash' ";
          /*[gallery link="file" ids="8727,8728,8729,8730,8731,8732"]*/
 
-        $request    = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs         = $GLOBALS['application']->connOrigin->Execute($request);
+        $request    = $this->targetConnection->Prepare($sql);
+        $rs         = $this->targetConnection->Execute($request);
         $oldID = $this->elementIsImported('fotos', 'category');
 
         if (empty($oldID)) {
@@ -1153,7 +1022,7 @@ class MigrateRegionToOnm extends Command
 
 
         if (!$rs) {
-            $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
+            $this->output->writeln($this->targetConnection->ErrorMsg());
         } else {
 
             $totalRows = $rs->_numOfRows;
@@ -1241,10 +1110,10 @@ class MigrateRegionToOnm extends Command
             $sql    = 'UPDATE `contents` SET {$params}  WHERE pk_content=?';
             $values = array($params, $contentID);
 
-            $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+            $stmt = $this->targetConnection->Prepare($sql);
+            $rss  = $this->targetConnection->Execute($stmt, $values);
             if (!$rss) {
-                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+                $this->output->writeln($this->targetConnection->ErrorMsg());
             }
 
         } else {
@@ -1265,16 +1134,16 @@ class MigrateRegionToOnm extends Command
 
 
         // Fetch the list of Opinions available for one author in EditMaker
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+        $request = $this->targetConnection->Prepare($sql);
+        $rs      = $this->targetConnection->Execute($request);
 
         $imageID='';
         if (!$rs || empty($rs->fields['ID'])) {
             $sql = "SELECT ID FROM `wp_posts` WHERE ".
             "`post_type` = 'attachment'  AND post_status !='trash' ".
             " AND guid LIKE '%".$guid."%'";
-            $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-            $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+            $request = $this->targetConnection->Prepare($sql);
+            $rs      = $this->targetConnection->Execute($request);
             if (!$rs->fields['ID']) {
                 // $this->output->writeln('- Image '. $guid. ' fault');
             } else {
@@ -1292,15 +1161,7 @@ class MigrateRegionToOnm extends Command
 
     protected function clearLabelsInBodyArticle($body)
     {
-
-        /*[gallery link="file" ids="8727,8728,8729,8730,8731,8732"]
-        [caption id="attachment_9084" align="alignnone" width="400"]<a href="http://mundiario.com/wp-content/uploads/2013/06/alicante-2.jpg"><img class="size-full wp-image-9084" alt="EstaciÃ³n de Alicante, desde ahora enlazada por AVE." src="http://mundiario.com/wp-content/uploads/2013/06/alicante-2.jpg" width="400" height="225" /></a> EstaciÃ³n de Alicante, desde ahora enlazada por AVE.[/caption]
-        <a href="http://mundiario.com/wp-content/uploads/2013/05/368875884_b4b5266888_z.jpg"><img class="alignnone size-medium wp-image-7398" alt="Angela Merkel - World Economic Forum Annual Meeting Davos 2007" src="http://mundiario.com/wp-content/uploads/2013/05/368875884_b4b5266888_z-420x275.jpg" width="420" height="275" /></a>
-        */
         $result = array();
-        #Deleted [caption id="attachment_2302" align="aligncenter" width="300" caption="El partido ultra Jobbik siembra el terror entre las minorías y los extranjeros en Hungría."][/caption]
-        //Allow!!<a title="Kobe Bryant" href="http://www.flickr.com/photos/42161969@N03/4067656449/" target="_blank"><img title="Kobe Bryant" alt="Kobe Bryant" src="http://farm3.staticflickr.com/2493/4067656449_a576ba8a59.jpg" /></a>
-
 
         $newBody = $body;
         $img     = '';
@@ -1322,7 +1183,7 @@ class MigrateRegionToOnm extends Command
                 if (!empty($result[1]) ) {
 
                     $newGuid = $result[1][0].".".$result[2][0];
-                    var_dump($newGuid);
+                    // var_dump($newGuid);
                     $img     = $this->getOnmIdImage($newGuid);
 
                     if (empty($img)) {
@@ -1391,7 +1252,6 @@ class MigrateRegionToOnm extends Command
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
-
     }
 
        /**
@@ -1456,104 +1316,6 @@ class MigrateRegionToOnm extends Command
         }
         return $photoId;
     }
-
-    /**
-     * Converts a given string to UTF-8 codification
-     *
-     * @return string
-     **/
-    protected function convertoUTF8($string)
-    {
-       // return mb_convert_encoding($string, 'UTF-8');
-       return $string;
-    }
-
-
-     /**
-     * update some fields in content table
-     *
-     * @param int $contentId the content id
-     * @param string $params new values for the content table
-     *
-     * @return void
-     **/
-    public  function updateBody()
-    {
-        $sql = "SELECT body, pk_article FROM articles WHERE body != ''";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        $values= array();
-        while (!$rs->EOF) {
-
-            $newBody = preg_replace(
-                array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
-                array('</p><p>', '</p><p>', '<br>', '<br>'),
-                $rs->fields['body']
-            );
-            $newBody = '<p>'.($newBody).'</p>';
-
-            $values[] =  array(
-                $newBody,
-                $rs->fields['pk_article'],
-            );
-
-            $rs->MoveNext();
-        }
-
-        if (!empty($values)) {
-            $sql    = 'UPDATE `articles` SET body =?  WHERE pk_article=?';
-
-            $stmt = $GLOBALS['application']->conn->Prepare($sql);
-            $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-            if (!$rss) {
-                $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-            }
-
-        } else {
-            //$this->output->writeln("Please provide a contentID and views to update it.");
-        }
-
-    }
-
-
-    /***** functions fixing mundiario  fails */
-
-    // public function updateMetadatas()
-    // {
-
-    //     $sql = "SELECT pk_content, metadata, title FROM contents ";
-    //     $rs = $GLOBALS['application']->conn->Execute($sql);
-
-    //     $values= array();
-    //     while (!$rs->EOF) {
-
-    //         $tags = StringUtils::get_tags($rs->fields['metadata']);
-    //         if(empty($tags)) {
-    //             $tags = StringUtils::get_tags($rs->fields['title']);
-    //         }
-
-    //         $values[] =  array(
-    //             $tags,
-    //             $rs->fields['pk_content'],
-    //         );
-
-    //         $rs->MoveNext();
-    //     }
-
-    //     if (!empty($values)) {
-    //         $sql    = 'UPDATE `contents` SET metadata =?  WHERE pk_content=?';
-
-    //         $stmt = $GLOBALS['application']->conn->Prepare($sql);
-    //         $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
-    //         if (!$rss) {
-    //             $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
-    //         }
-
-    //     } else {
-    //         //$this->output->writeln("Please provide a contentID and views to update it.");
-    //     }
-    // }
-
 
      /* create new video */
     // public function createVideo($video)
@@ -1630,11 +1392,11 @@ class MigrateRegionToOnm extends Command
     //     $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
     //         "`meta_key` = 'usn_videolink' ";
 
-    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-    //     $rs =$GLOBALS['application']->connOrigin->Execute($request);
+    //     $request = $this->targetConnection->Prepare($sql);
+    //     $rs =$this->targetConnection->Execute($request);
 
     //     if (!$rs) {
-    //         $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
+    //         $this->output->writeln($this->targetConnection->ErrorMsg());
 
     //     } else {
 
@@ -1651,7 +1413,6 @@ class MigrateRegionToOnm extends Command
     //         }
     //         $rs->Close(); # optional
     //     }
-
     // }
 
     // public function importbodyArticles()
@@ -1661,11 +1422,11 @@ class MigrateRegionToOnm extends Command
     //     $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
     //      ." WHERE pk_article = pk_content AND (body = '' OR img1 = 0 )";
 
-    //     $request = $GLOBALS['application']->conn->Prepare($sql2);
-    //     $rs2     = $GLOBALS['application']->conn->Execute($request);
+    //     $request = $this->targetConnection->Prepare($sql2);
+    //     $rs2     = $this->targetConnection->Execute($request);
     //     if (!$rs2) {
     //         $this->output->writeln('- sql '.$sql2);
-    //         $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //         $this->output->writeln($this->targetConnection->ErrorMsg());
     //     }
 
     //     $items = $rs2->getArray();
@@ -1682,12 +1443,12 @@ class MigrateRegionToOnm extends Command
     //         "ID IN (".implode(', ', array_keys($pks)).")";
 
     //     // Fetch the list of Opinions available for one author in EditMaker
-    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-    //     $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+    //     $request = $this->targetConnection->Prepare($sql);
+    //     $rs      = $this->targetConnection->Execute($request);
 
 
     //     if (!$rs) {
-    //         $this->output->writeln($GLOBALS['application']->connOrigin->ErrorMsg());
+    //         $this->output->writeln($this->targetConnection->ErrorMsg());
     //     } else {
     //         while (!$rs->EOF) {
     //             $data = $this->clearLabelsInBodyArticle($rs->fields['post_excerpt']);
@@ -1720,10 +1481,10 @@ class MigrateRegionToOnm extends Command
     //     if (!empty($values)) {
     //         $sql    = 'UPDATE `articles` SET img1=?, body =?  WHERE pk_article=?';
 
-    //         $stmt = $GLOBALS['application']->conn->Prepare($sql);
-    //         $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+    //         $stmt = $this->targetConnection->Prepare($sql);
+    //         $rss  = $this->targetConnection->Execute($stmt, $values);
     //         if (!$rss) {
-    //             $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //             $this->output->writeln($this->targetConnection->ErrorMsg());
     //         }
 
     //     } else {
@@ -1738,11 +1499,11 @@ class MigrateRegionToOnm extends Command
     //     $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
     //      ." WHERE pk_article = pk_content AND img1 = 0 ";
 
-    //     $request = $GLOBALS['application']->conn->Prepare($sql2);
-    //     $rs2     = $GLOBALS['application']->conn->Execute($request);
+    //     $request = $this->targetConnection->Prepare($sql2);
+    //     $rs2     = $this->targetConnection->Execute($request);
     //     if (!$rs2) {
     //         $this->output->writeln('- sql '.$sql2);
-    //         $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //         $this->output->writeln($this->targetConnection->ErrorMsg());
     //     }
 
     //     $items = $rs2->getArray();
@@ -1759,8 +1520,8 @@ class MigrateRegionToOnm extends Command
     //         "post_id IN (".implode(', ', array_keys($pks)).") AND `meta_key` = '_thumbnail_id'";
 
     //     // Fetch the list of Opinions available for one author in EditMaker
-    //     $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-    //     $rs      = $GLOBALS['application']->connOrigin->Execute($request);
+    //     $request = $this->targetConnection->Prepare($sql);
+    //     $rs      = $this->targetConnection->Execute($request);
 
     //     $items    = $rs->getArray();
     //     $values   = array();
@@ -1780,10 +1541,10 @@ class MigrateRegionToOnm extends Command
     //     if (!empty($values)) {
     //         $sql    = 'UPDATE `articles` SET img1=?  WHERE pk_article = ?';
 
-    //         $stmt = $GLOBALS['application']->conn->Prepare($sql);
-    //         $rss  = $GLOBALS['application']->conn->Execute($stmt, $values);
+    //         $stmt = $this->targetConnection->Prepare($sql);
+    //         $rss  = $this->targetConnection->Execute($stmt, $values);
     //         if (!$rss) {
-    //             $this->output->writeln($GLOBALS['application']->conn->ErrorMsg());
+    //             $this->output->writeln($this->targetConnection->ErrorMsg());
     //         }
 
     //     }
