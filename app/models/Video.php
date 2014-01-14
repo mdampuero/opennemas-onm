@@ -425,51 +425,25 @@ class Video extends Content
         // Get the thumbnail sizes
         $sizes = array_merge($defaultThumbnailSizes, $sizes);
 
-        // init ffmpeg object from flv for getting its thumbnail
-        $movie = new ffmpeg_movie($flvPath);
-        // Get the number of frames of the video
-        $totalFrames = $movie->getFrameCount();
-        //$height = $movie->getFrameHeight();
-        //$width = $movie->getFrameWidth();
+        $ffmpeg = \FFMpeg\FFMpeg::create(array(
+            'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
+            'ffprobe.binaries' => '/usr/bin/ffprobe',
+            'timeout'          => 3600, // The timeout for the underlying process
+            'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+        ));
+        $video = $ffmpeg->open($flvPath);
 
         foreach ($sizes as $name => $sizeValues) {
-
-            $thumbnailFrameNumber = (int) round($totalFrames*2/5);
-
-            // Need to create a GD image ffmpeg-php to work on it
-            // Choose the frame you want to save as jpeg
-            $image = imagecreatetruecolor(
-                $sizeValues['width'],
-                $sizeValues['height']
-            );
-            // Receives the frame
-
-            $frame = $movie->getFrame($thumbnailFrameNumber);
-            if (gettype($frame) != 'object') {
-                $thumbnailFrameNumber = 1;
-                do {
-                    if ($thumbnailFrameNumber > $totalFrames) {
-                        break 1;
-                    }
-                    $frame = $movie->getFrame($thumbnailFrameNumber);
-                    // $valid = gettype($frame);
-                    $thumbnailFrameNumber++;
-                } while (gettype($frame) != 'object');
-            }
-
-            // Convert to a GD image
-            $image = $frame->toGDImage();
-
             // Getting file information from flv file
             // for building  save path and final filename for the thumbnail
             $flvFileInfo = pathinfo($flvPath);
 
             $basePath = $flvFileInfo['dirname'];
             $baseName = $flvFileInfo['filename']."-".$name.'.jpg';
-
-            // Save to disk.
             $imageFile = $basePath.DIRECTORY_SEPARATOR.$baseName;
-            imagejpeg($image, $imageFile, 90);
+
+            $frame = $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(10));
+            $frame->save($imageFile);
             $thumbs[$name] = $baseName;
         }
 
