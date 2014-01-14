@@ -157,7 +157,7 @@ class StaticPagesController extends Controller
                 $data,
                 array(
                     'slug'     => $staticPage->buildSlug($data['slug'], $data['id'], $data['title']),
-                    'metadata' => \StringUtils::normalize_metadata($data['metadata']),
+                    'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
                 )
             );
 
@@ -212,7 +212,7 @@ class StaticPagesController extends Controller
                     $data,
                     array(
                         'slug'     => $staticPage->buildSlug($data['slug'], 0, $data['title']),
-                        'metadata' => \StringUtils::normalize_metadata($data['metadata']),
+                        'metadata' => \Onm\StringUtils::normalize_metadata($data['metadata']),
                     )
                 );
 

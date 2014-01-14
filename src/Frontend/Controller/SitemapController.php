@@ -112,7 +112,7 @@ class SitemapController extends Controller
                 'ORDER BY in_home DESC, position ASC, changed DESC LIMIT 100'
             );
             foreach ($opinions as &$opinion) {
-                $opinion['author_name_slug'] = \StringUtils::get_title($opinion['name']);
+                $opinion['author_name_slug'] = \Onm\StringUtils::get_title($opinion['name']);
             }
 
             $this->view->assign('articlesByCategory', $articlesByCategory);
@@ -163,7 +163,7 @@ class SitemapController extends Controller
             );
 
             foreach ($opinions as &$opinion) {
-                $opinion['author_name_slug'] = \StringUtils::get_title($opinion['name']);
+                $opinion['author_name_slug'] = \Onm\StringUtils::get_title($opinion['name']);
             }
 
             $this->view->assign('articlesByCategory', $articlesByCategory);

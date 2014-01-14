@@ -1090,7 +1090,7 @@ class ArticlesController extends Controller
                     'id'       => $element['pk_content'],
                     'date'     => date('YmdHis', strtotime($element['created'])),
                     'category' => $element['catName'],
-                    'slug'     => \StringUtils::get_title($element['title']),
+                    'slug'     => \Onm\StringUtils::get_title($element['title']),
                 )
             );
         }

@@ -108,7 +108,7 @@ class BlogsController extends Controller
 
                     $blog->author           = $authors[$blog->fk_author];
                     $blog->name             = $blog->author->name;
-                    $blog->author_name_slug = \StringUtils::get_title($blog->name);
+                    $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
                     // ????
                     $item = new \Content();
                     $item->loadAllContentProperties($blog->pk_content);
@@ -316,7 +316,7 @@ class BlogsController extends Controller
             $blog->author = $author;
 
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-            $blog->author_name_slug = \StringUtils::get_title($blog->name);
+            $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
 
             // Associated media code --------------------------------------
             if (isset($blog->img2) && ($blog->img2 > 0)) {

@@ -203,7 +203,7 @@ class OpinionsController extends Controller
                 if (!array_key_exists('is_blog', $author->meta) || $author->meta['is_blog'] != 1) {
                     $opinion->author           = $authors[$opinion->fk_author];
                     $opinion->name             = $opinion->author->name;
-                    $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+                    $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
                     $item = new \Content();
                     $item->loadAllContentProperties($opinion->pk_content);
                     $opinion->summary = $item->summary;
@@ -323,7 +323,7 @@ class OpinionsController extends Controller
                 }
                 $opinion->author           = $authors[$opinion->fk_author];
                 $opinion->name             = $opinion->author->name;
-                $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+                $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
                 $opinion->author->uri = $this->generateUrl(
                     'frontend_opinion_external_author_frontpage',
                     array(
@@ -422,7 +422,7 @@ class OpinionsController extends Controller
             } else {
                 // Regular authors
                 $filter = 'opinions.type_opinion=0 AND opinions.fk_author='.$author->id;
-                $author->slug = \StringUtils::get_title($author->name);
+                $author->slug = \Onm\StringUtils::get_title($author->name);
                 $this->view->assign('actual_category', 'opinion');
             }
 
@@ -703,7 +703,7 @@ class OpinionsController extends Controller
             $opinion->author = $author;
 
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
-            $opinion->author_name_slug = \StringUtils::get_title($opinion->name);
+            $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
 
             // Machine suggested contents code -----------------------------
             $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
@@ -718,7 +718,7 @@ class OpinionsController extends Controller
                 $element = new \Opinion($suggest['pk_content']);
                 if (!empty($element->author)) {
                     $suggest['author_name'] = $element->author;
-                    $suggest['author_name_slug'] = \StringUtils::get_title($element->author);
+                    $suggest['author_name_slug'] = \Onm\StringUtils::get_title($element->author);
                 } else {
                     $suggest['author_name_slug'] = "author";
                 }

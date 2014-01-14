@@ -309,7 +309,7 @@ class NewsAgencyController extends Controller
                         'fk_category'   => $category,
                         'category_name' => $categoryInstance->name,
                         'category'      => $categoryInstance->name,
-                        'metadata'      => \StringUtils::get_tags($photo->title),
+                        'metadata'      => \Onm\StringUtils::get_tags($photo->title),
                         'author_name'   => '&copy; EFE '.date('Y'),
                         'original_filename' => $fileName,
                     );
@@ -436,7 +436,7 @@ class NewsAgencyController extends Controller
                         'available'      => 1,
                         'content_status' => 0,
                         'title'          => $video->title,
-                        'metadata'       => \StringUtils::get_tags($video->title),
+                        'metadata'       => \Onm\StringUtils::get_tags($video->title),
                         'description'    => '',
                         'author_name'    => 'internal',
                     );
@@ -461,7 +461,7 @@ class NewsAgencyController extends Controller
             'frontpage'      => 0,
             'in_home'        => 0,
             'title_int'      => $element->title,
-            'metadata'       => \StringUtils::get_tags($element->title),
+            'metadata'       => \Onm\StringUtils::get_tags($element->title),
             'subtitle'       => $element->pretitle,
             'agency'         => $server['agency_string'],
             'fk_author'      => (isset($authorId) ? $authorId : 0),

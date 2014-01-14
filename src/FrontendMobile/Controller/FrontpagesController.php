@@ -81,7 +81,7 @@ class FrontpagesController extends Controller
                 ) {
                     // If the content is an opinion fetch its authors slug's
                     if ($content->content_type == 4) {
-                        $content->author_name_slug = \StringUtils::get_title($content->author);
+                        $content->author_name_slug = \Onm\StringUtils::get_title($content->author);
                     }
 
                     if (isset($content->img1) && !empty($content->img1)) {

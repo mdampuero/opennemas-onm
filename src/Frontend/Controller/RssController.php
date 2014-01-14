@@ -151,7 +151,7 @@ class RssController extends Controller
                 }
                 //Generate author-name-slug for generate_uri
                 foreach ($articles_home as &$art) {
-                    $art['author_name_slug'] = \StringUtils::get_title($art['name']);
+                    $art['author_name_slug'] = \Onm\StringUtils::get_title($art['name']);
 
                     $art['uri'] = \Uri::generate(
                         'opinion',
