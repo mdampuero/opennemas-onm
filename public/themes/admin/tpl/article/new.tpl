@@ -344,7 +344,9 @@
                                 </div>
                             </label>
                             <div class="controls">
-                                <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$article->summary|clearslash|escape:"html"}</textarea>
+                                <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">
+                                    {$article->summary|clearslash|escape:"html"|default:"&nbsp;"}
+                                </textarea>
                             </div>
                         </div>
 
@@ -359,7 +361,7 @@
                                     </div>
                                 </label>
                                 <div class="controls">
-                                    <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash}</textarea>
+                                    <textarea name="body" id="body" class="onm-editor">{$article->body|clearslash|default:"&nbsp;"}</textarea>
                                 </div>
                             </div>
                         </div>
