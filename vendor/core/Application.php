@@ -39,9 +39,6 @@ class Application
     {
         if (!isset($GLOBALS['application']) || $GLOBALS['application']==null) {
             $GLOBALS['application'] = new \Application;
-
-            // Setting up DataBase connection
-            self::initDatabase();
         }
 
         return $GLOBALS['application'];
@@ -52,17 +49,8 @@ class Application
      *
      * @return void
      **/
-    public static function initDatabase()
+    public static function initDatabase($dbConn)
     {
-        // $dbConn = getService('db_conn');
-        // $GLOBALS['application']->conn = $dbConn;
-
-        // $rs = $dbConn->Execute('SELECT * FROM instances LIMIT 1');
-        // // $rs = $dbConn->qstr('test;\'');
-        // var_dump($rs);die();
-
-        $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
-        $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
-        $GLOBALS['application']->conn->bulkBind = true;
+        $GLOBALS['application']->conn = $dbConn;
     }
 }

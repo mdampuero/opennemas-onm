@@ -48,7 +48,7 @@ class DatabaseConnection
      *
      * @var array
      **/
-    private $connectionParams = null;
+    public $connectionParams = null;
 
     /**
      * Stores the query error
@@ -66,22 +66,63 @@ class DatabaseConnection
      *
      * @return DatabaseConnection the object
      **/
-    public function __construct($params, $databaseName = null)
+    public function __construct($params)
     {
-        $this->connectionParams = $params;
+        // Check if the connection params are valid
+        if (!$this->isConfigurationValid($params)) {
+            throw new \Exception('Database connection parameters not valid');
+        };
 
-        if (!is_null($databaseName)) {
-            $this->replaceDatabaseName($databaseName);
-        }
+        // Store connection params are valid
+        $this->fullConnectionParams = $params;
+        $this->defaultConnection    = $params['dbal']['default_connection'];
+        $this->connectionParams     = $params['dbal']['connections'][$this->defaultConnection];
+        $this->useReplication       = $this->configHasSlaves();
 
-
-        $this->defaultConnection = $params['dbal']['default_connection'];
-        $this->connectionParams  = $params['dbal']['connections'][$this->defaultConnection];
-        $this->useReplication    = array_key_exists('slaves', $this->connectionParams);
-
+        // Set default params
         if (!array_key_exists('charset', $this->connectionParams)) {
-            $this->connectionParams = 'UTF8';
+            $this->connectionParams['charset'] = 'UTF8';
         }
+    }
+
+    /**
+     * Checks if the given database configuration params are valid
+     *  - Params is an array
+     *  - Params has a dbal key
+     *  - params[dbal] has a connections key hat is an array
+     *  - params has a default_connection key that is a key inside the connections array
+     *
+     * @return boolean true if the given params are valid
+     **/
+    public function isConfigurationValid($params)
+    {
+        return (
+            is_array($params)
+            && array_key_exists('dbal', $params)
+            && (array_key_exists('connections', $params['dbal']) && is_array($params['dbal']['connections']))
+            && array_key_exists('default_connection', $params['dbal'])
+            && array_key_exists($params['dbal']['default_connection'], $params['dbal']['connections'])
+        );
+    }
+
+    /**
+     * Returns true if the configuration has slave connection params
+     *
+     * @return boolean true if the configuration has slave connection params
+     **/
+    public function configHasSlaves()
+    {
+        return array_key_exists('slaves', $this->connectionParams);
+    }
+
+    /**
+     * Returns the current configuration parameters
+     *
+     * @return array the database configuration parameters
+     **/
+    public function getCurrentDatabaseParams()
+    {
+        return $this->connectionParams;
     }
 
     /**
@@ -117,6 +158,20 @@ class DatabaseConnection
             $this->connectionParams,
             $databaseName
         );
+
+        $this->resetConnections();
+
+        return $this;
+    }
+
+    /**
+     * Deletes stablished connections
+     *
+     **/
+    public function resetConnections()
+    {
+        $this->masterConnection = null;
+        $this->slaveConnections = array();
 
         return $this;
     }
@@ -161,7 +216,8 @@ class DatabaseConnection
         $connection->SetFetchMode(ADODB_FETCH_ASSOC);
         $connection->bulkBind = true;
 
-        $connection->Execute("SET names '{$params['charset']}'");
+        // Commented for now as it crashes the
+        // $connection->Execute("SET names '{$params['charset']}'");
 
         return $connection;
     }
@@ -177,10 +233,8 @@ class DatabaseConnection
      **/
     public function getConnection($method, $params)
     {
-        $isReadOnlyQuery = stripos($params[0], 'SELECT') !== false;
-
         if ($this->useReplication
-            && $isReadOnlyQuery
+            && $this->isReadOnlyAction($method, $params)
         ) {
             $connection = $this->getSlaveConnection();
         } else {
@@ -188,6 +242,26 @@ class DatabaseConnection
         }
 
         return $connection;
+    }
+
+    /**
+     * Returns true if the action will perform read only actoin
+     *
+     * @return void
+     * @author
+     **/
+    public function isReadOnlyAction($method, $params = array())
+    {
+        return  !(
+                    $method == 'StartTrans'
+                    || $method == 'BeginTrans'
+                    || $method == 'CommitTrans'
+                    || $method == 'CompleteTrans'
+                    || $method == 'FailTrans'
+                    || $method == 'HasFailedTrans'
+                    || $method == 'Insert_ID'
+                )
+                && stripos($params[0], 'SELECT') !== false;
     }
 
     /**

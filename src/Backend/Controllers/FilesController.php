@@ -291,11 +291,8 @@ class FilesController extends Controller
     {
         $this->checkAclOrForward('FILE_CREATE');
 
-        $request = $this->request;
-
         if ('POST' != $request->getMethod()) {
             return $this->render('files/new.tpl', array('category' => $this->category,));
-
         } else {
             set_time_limit(0);
 
@@ -306,12 +303,10 @@ class FilesController extends Controller
                 $directoryDate = $date->format("/Y/m/d/");
                 $basePath      = $this->fileSavePath.$directoryDate;
 
-                $fileType      = $_FILES['path']['type'];
-                $fileSize      = $_FILES['path']['size'];
                 $fileName      = \Onm\StringUtils::cleanFileName($_FILES['path']['name']);
                 // Create folder if it doesn't exist
                 if (!file_exists($basePath)) {
-                     \FilesManager::createDirectory($basePath);
+                    \FilesManager::createDirectory($basePath);
                 }
 
                 $data = array(
@@ -346,12 +341,7 @@ class FilesController extends Controller
                 }
 
                 return $this->redirect(
-                    $this->generateUrl(
-                        'admin_files',
-                        array(
-                            'category' => $this->category,
-                        )
-                    )
+                    $this->generateUrl('admin_files', array('category' => $this->category,))
                 );
 
             } else {
@@ -414,28 +404,23 @@ class FilesController extends Controller
 
         $file = new \Attachment($id);
           $data = array(
-                    'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-                    'available'    => 1,
-                    'id'           => $id,
-                    'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
-                    'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'fk_publisher' => $_SESSION['userid'],
-                );
+                'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+                'available'    => 1,
+                'id'           => $id,
+                'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+                'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                'fk_publisher' => $_SESSION['userid'],
+            );
 
         if ($file->update($data)) {
-            m::add(sprintf(_('File information updated successfuly.')), m::SUCCESS);
+            m::add(sprintf(_('File information updated successfully.')), m::SUCCESS);
         } else {
             m::add(sprintf(_('There was a problem while saving the file information.')), m::ERROR);
         }
 
         return $this->redirect(
-            $this->generateUrl(
-                'admin_files_show',
-                array(
-                    'id' => $id,
-                )
-            )
+            $this->generateUrl('admin_file_show', array('id' => $id,))
         );
     }
 

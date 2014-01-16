@@ -109,7 +109,6 @@
                     <th>{t}Title{/t}</th>
                     <th class="center" style="width:30px">{t}Permanence{/t}</th>
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     {acl isAllowed="ADVERTISEMENT_AVAILA"}
                     <th class="center" style="width:40px;">{t}Available{/t}</th>
                     {/acl}
@@ -155,9 +154,6 @@
 
                     <td style="text-align:center;">
                         {$ad->num_clic_count|number_format:0:',':'.'}
-                    </td>
-                    <td style="text-align:center;">
-                         {$ad->views|number_format:0:',':'.'}
                     </td>
                     {acl isAllowed="ADVERTISEMENT_AVAILA"}
                     <td class="center" style="width:40px;">

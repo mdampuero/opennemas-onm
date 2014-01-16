@@ -40,5 +40,4 @@ class Acl
             throw new \Onm\Security\Exception\AccessDeniedException();
         }
     }
-
 }

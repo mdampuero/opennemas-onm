@@ -531,6 +531,7 @@ class ContentManager
         $clean = ContentManager::clearContentPositionsForHomePageOfCategory(
             $categoryID
         );
+
         if (!$clean) {
             return false;
         }

@@ -315,7 +315,7 @@ class BooksController extends Controller
             if (count($request->request) < 1) {
                 m::add(_("Book data sent not valid."), m::ERROR);
 
-                return $this->redirect($this->generateUrl('admin_books_show', array('id' => $id)));
+                return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
             }
 
             $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';

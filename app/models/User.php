@@ -597,7 +597,7 @@ class User
     }
 
     /**
-     * Aauthenticate by using the database
+     * Authenticate by using the database
      *
      * @param  string  $username
      * @param  string  $password
@@ -612,7 +612,7 @@ class User
         if (!$managerDb) {
             $rs = $GLOBALS['application']->conn->Execute($sql, array(strval($username), strval($username)));
         } else {
-            $conn = \Onm\Instance\InstanceManager::getInstance()->getConnection();
+            $conn = getService('instance_manager')->getConnection();
             $rs =  $conn->Execute($sql, array(strval($username), strval($username)));
         }
 

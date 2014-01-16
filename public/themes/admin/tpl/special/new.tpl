@@ -39,8 +39,6 @@
             });
 
             jQuery('#noticias_left_input').val(JSON.stringify(els));
-
-            console.log($('#noticias_left_input').val(), $('#noticias_right_input').val())
         });
 
         $('#title').on('change', function(e, ui) {

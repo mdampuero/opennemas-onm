@@ -193,14 +193,12 @@ class Special extends Content
             $data['pdf_path'] = '';
         }
 
-        $sql    = "UPDATE specials "
-                 . "SET `subtitle`=?, `img1`=?,  `pdf_path`=?  "
-                 . "WHERE pk_special=?";
+        $sql = "UPDATE specials SET `subtitle`=?, `img1`=?,  `pdf_path`=? WHERE pk_special=?";
         $values = array(
-                $data['subtitle'],
-                $data['img1'],
-                $data['pdf_path'],
-                intval($data['id']),
+            $data['subtitle'],
+            $data['img1'],
+            $data['pdf_path'],
+            intval($data['id']),
         );
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -256,7 +254,7 @@ class Special extends Content
             if (!empty($contents)) {
                 foreach ($contents as $content) {
                     $this->setContents(
-                        $this->pk_special,
+                        $this->id,
                         $content->id,
                         ($content->position *2-1),
                         "",
@@ -271,7 +269,7 @@ class Special extends Content
             if (!empty($contents)) {
                 foreach ($contents as $content) {
                     $this->setContents(
-                        $this->pk_special,
+                        $this->id,
                         $content->id,
                         ($content->position *2),
                         "",

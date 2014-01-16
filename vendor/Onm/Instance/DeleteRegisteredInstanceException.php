@@ -1,6 +1,6 @@
 <?php
 /**
- * Defines the Onm\Instance\NotActivatedException
+ * Defines the Onm\Instance\DeleteRegisteredInstanceException
  *
  * This file is part of the onm package.
  * (c) 2009-2011 OpenHost S.L. <contact@openhost.es>
@@ -14,11 +14,8 @@
 namespace Onm\Instance;
 
 /**
- * Extends exception for handling not activated instances.
- *
- * @package    Onm
- * @subpackage Instance
+ * Exceptions for handling unsuccessfull instance deletion
  **/
-class NotActivatedException extends \Exception
+class DeleteRegisteredInstanceException extends \Exception
 {
 }

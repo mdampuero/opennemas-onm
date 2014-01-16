@@ -9,8 +9,6 @@
  **/
 namespace Repository;
 
-use Onm\Cache\CacheInterface;
-
 /**
  * Handles common operations with users
  *
@@ -18,18 +16,6 @@ use Onm\Cache\CacheInterface;
  */
 class UserManager extends BaseManager
 {
-    /**
-     * Initializes the Users Manager
-     *
-     * @param CacheInterface $cache the cache handler
-     * @param string $cachePrefix the prefix to use in the cache
-     **/
-    public function __construct(CacheInterface $cache, $cachePrefix)
-    {
-        $this->cache = $cache;
-        $this->cachePrefix = $cachePrefix;
-    }
-
     /**
      * {@inherit_doc}
      **/
@@ -77,8 +63,8 @@ class UserManager extends BaseManager
         // Executing the SQL
         $sql = "SELECT * FROM `users` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
-        $GLOBALS['application']->conn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->Execute($sql);
 
         if ($rs === false) {
             return false;
@@ -110,7 +96,7 @@ class UserManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT count(id) FROM `users` WHERE $filterSQL";
-        $rs = $GLOBALS['application']->conn->GetOne($sql);
+        $rs = $this->dbConn->GetOne($sql);
 
         if ($rs === false) {
             return false;

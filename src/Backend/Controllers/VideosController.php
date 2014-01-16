@@ -187,7 +187,7 @@ class VideosController extends Controller
         $this->checkAclOrForward('VIDEO_CREATE');
 
         if ('POST' == $request->getMethod()) {
-            $request  = $request->request;
+            $requestPost  = $request->request;
 
             $type     = $request->filter('type', null, FILTER_SANITIZE_STRING);
             $page     = $request->getDigits('page', 1);
@@ -215,13 +215,13 @@ class VideosController extends Controller
                     'file_type'      => $_FILES["video_file"]["type"],
                     'file_path'      => $_FILES["video_file"]["tmp_name"],
                     'category'       => $category,
-                    'available'      => $request->filter('available', null, FILTER_SANITIZE_STRING),
-                    'content_status' => $request->filter('content_status', null, FILTER_SANITIZE_STRING),
-                    'title'          => $request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'metadata'       => $request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'description'    => $request->filter('description', null, FILTER_SANITIZE_STRING),
-                    'author_name'    => $request->filter('author_name', null, FILTER_SANITIZE_STRING),
-                    'fk_author'      => $request->filter('fk_author', 0, FILTER_VALIDATE_INT),
+                    'available'      => $requestPost->filter('available', null, FILTER_SANITIZE_STRING),
+                    'content_status' => $requestPost->filter('content_status', null, FILTER_SANITIZE_STRING),
+                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
+                    'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+                    'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
                 );
 
                 try {

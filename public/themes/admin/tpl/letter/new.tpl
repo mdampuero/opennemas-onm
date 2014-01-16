@@ -3,6 +3,7 @@
 
 {block name="footer-js" append}
 {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
+{include file="media_uploader/media_uploader.tpl"}
 <script>
 jQuery(document).ready(function($) {
     $('#formulario').onmValidate({
@@ -39,24 +40,31 @@ jQuery(document).ready(function($) {
         fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
     });
 
-    load_ajax_in_container('{url name=admin_images_content_provider_gallery category=$category}', $('#photos'));
+    var mediapicker = $('#media-uploader').mediaPicker({
+        upload_url: "{url name=admin_image_create category=0}",
+        browser_url : "{url name=admin_media_uploader_browser}",
+        months_url : "{url name=admin_media_uploader_months}",
+        maxFileSize: '{$smarty.const.MAX_UPLOAD_FILE}',
+        // initially_shown: true,
+        handlers: {
+            'assign_content' : function( event, params ) {
+                var mediapicker = $(this).data('mediapicker');
+                if (params['position'] == 'body' || params['position'] == 'summary') {
+                    var image_element = mediapicker.buildHTMLElement(params);
+                    CKEDITOR.instances[params['position']].insertHtml(image_element, true);
+                } else {
+                    var container = $('#related_media').find('.'+params['position']);
+                    var image_element = mediapicker.buildHTMLElement(params, true);
 
-    $('#stringImageSearch, #category_imag').on('change', function(e, ui) {
-        var category = $('#category_imag option:selected').val();
-        var text = $('#stringImageSearch').val();
-        var url = '{url name=admin_images_content_provider_gallery}?'+'category='+category+'&metadatas='+encodeURIComponent(text);
-        load_ajax_in_container(
-            url,
-            $('#photos')
-        );
+                    var image_data_el = container.find('.image-data');
+                    image_data_el.find('.related-element-id').val(params.content.pk_photo);
+                    image_data_el.find('.related-element-footer').val(params.content.description);
+                    image_data_el.find('.image').html(image_element);
+                    container.addClass('assigned');
+                };
+            }
+        }
     });
-
-    $('#photos').on('click', '.pager a', function(e, ui) {
-        e.preventDefault();
-        var link = $(this);
-        load_ajax_in_container(link.attr('href'), $('#photos'));
-    });
-
 });
 </script>
 {/block}
@@ -165,7 +173,38 @@ jQuery(document).ready(function($) {
                 </div>
             </div>
 
-            {include file="special/partials/_load_images.tpl"}
+            {acl isAllowed='IMAGE_ADMIN'}
+            {is_module_activated name="IMAGE_MANAGER"}
+            <div id="related_media" class="control-group">
+                <label for="special-image" class="control-label">{t}Image for Special{/t}</label>
+                <div class="controls">
+                    <ul class="related-images thumbnails">
+                        <li class="contentbox frontpage-image {if isset($photo1) && $photo1->name}assigned{/if}">
+                            <h3 class="title">{t}Frontpage image{/t}</h3>
+                            <div class="content">
+                                <div class="image-data">
+                                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="image thumbnail">
+                                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$photo1->path_file}{$photo1->name}"/>
+                                    </a>
+                                    <input type="hidden" name="img1" value="{$special->img1|default:""}" class="related-element-id" />
+                                </div>
+
+                                <div class="not-set">
+                                    {t}Image not set{/t}
+                                </div>
+
+                                <div class="btn-group">
+                                    <a href="#media-uploader" data-toggle="modal" data-position="frontpage-image" class="btn btn-small">{t}Set image{/t}</a>
+                                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            {/is_module_activated}
+            {/acl}
+
 
         </div>
     </div>

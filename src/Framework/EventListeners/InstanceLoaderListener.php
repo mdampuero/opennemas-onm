@@ -35,20 +35,29 @@ class InstanceLoaderListener implements EventSubscriberInterface
             return;
         }
 
-        require_once 'Application.php';
-
         $request = $event->getRequest();
 
-        // Loads one ONM instance from database
-        $im = new \Onm\Instance\InstanceManager($request->getHttpHost());
-
-        $instance = $im->load($_SERVER['SERVER_NAME']);
+        // Load instance from database
+        $instanceManager = getService('instance_manager');
+        $instance        = $instanceManager->load($request->server->get('SERVER_NAME'));
 
         global $sc;
         $sc->setParameter('instance', $instance);
         $sc->setParameter('cache_prefix', $instance->internal_name);
 
-        $app = \Application::load();
+        // Initialize the instance database connection
+        if ($instance->internal_name !== 'onm_manager') {
+            $databaseName               = $instance->getDatabaseName();
+            $databaseInstanceConnection = getService('db_conn');
+            $databaseInstanceConnection->selectDatabase($databaseName);
+        } else {
+            $databaseName               = $instance->getDatabaseName();
+            $databaseInstanceConnection = getService('db_conn_manager');
+        }
+
+        // CRAP: take this out, Workaround
+        \Application::load();
+        \Application::initDatabase($databaseInstanceConnection);
     }
 
     public static function getSubscribedEvents()

@@ -71,7 +71,8 @@
                 <label for="path" class="control-label">{t}Path{/t}</label>
                 <div class="controls">
                     {if !is_null($attaches)}
-                    <input type="text" id="path" name="path" value="{$attaches->path|clearslash}" class="input-xlarge" required="required" readonly="readonly">
+                    <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}">{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}{$attaches->path}</a>
+                    <input type="hidden" id="path" name="path" value="{$attaches->path|clearslash}" class="input-xlarge" required="required" readonly="readonly">
                     {else}
                     <input type="file" id="path" name="path" value="" required="required" />
                     {/if}
