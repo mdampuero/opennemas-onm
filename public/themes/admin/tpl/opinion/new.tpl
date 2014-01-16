@@ -178,7 +178,7 @@
                 <div class="control-group">
                     <label for="summary" class="control-label">{t}Summary{/t}</label>
                     <div class="controls">
-                        <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$opinion->summary|clearslash|escape:"html"}</textarea>
+                        <textarea name="summary" id="summary" class="onm-editor" data-preset="simple">{$opinion->summary|clearslash|escape:"html"|default:"&nbsp;"}</textarea>
                     </div>
                 </div>
                 <div class="form-vertical">
@@ -192,7 +192,7 @@
                         </div>
                     </label>
                     <div class="controls">
-                        <textarea name="body" id="body" class="onm-editor">{$opinion->body|clearslash}</textarea>
+                        <textarea name="body" id="body" class="onm-editor">{$opinion->body|clearslash|default:"&nbsp;"}</textarea>
                     </div>
                 </div>
             </div><!-- /contentform-main -->
