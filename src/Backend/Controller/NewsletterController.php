@@ -342,8 +342,6 @@ class NewsletterController extends Controller
 
             $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
 
-            $nManager = $this->get('newsletter_manager');
-
             $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
             $newsletterSender = s::get('newsletter_sender');
@@ -405,7 +403,6 @@ class NewsletterController extends Controller
                 $newsletter->update(array('sent' => $sent));
             } else {
                 //duplicated newsletter for count month mail send
-
                 $newsletter->create(
                     array(
                         'title'   => $newsletter->title,

@@ -33,9 +33,9 @@ class WelcomeController extends Controller
      *
      * @return void
      **/
-    public function defaultAction(Request $request)
+    public function defaultAction()
     {
-        $modulesActivated = s::get('activated_modules');
+        // $modulesActivated = s::get('activated_modules');
 
         $availableModules = \Onm\Module\ModuleManager::getAvailableModules();
         $availableModules = array_values($availableModules);

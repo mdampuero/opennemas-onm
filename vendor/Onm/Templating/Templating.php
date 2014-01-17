@@ -40,7 +40,7 @@ class Templating
      *
      * @var string
      **/
-    private $manageTemplateEngine;
+    private $managerTemplateEngine;
 
     public function __construct($container)
     {

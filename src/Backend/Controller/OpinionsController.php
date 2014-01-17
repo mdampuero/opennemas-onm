@@ -178,9 +178,6 @@ class OpinionsController extends Controller
         $numDirector  = $configurations['total_director'];
 
         $cm = new \ContentManager();
-        $rating = new \Rating();
-        $commentManager = $this->get('comment_repository');
-
         $opinions = $cm->find(
             'Opinion',
             'in_home=1 and available=1 and type_opinion=0',

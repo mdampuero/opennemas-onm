@@ -44,7 +44,7 @@ class RssController extends Controller
      *
      * @return Response the response object
      **/
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $cacheID = $this->view->generateCacheId('Index', '', "RSS");
 

@@ -159,7 +159,7 @@ class LetterController extends Controller
             );
         }
 
-        $ads = $this->getAds('inner');
+        $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
         return $this->render(
@@ -323,7 +323,7 @@ class LetterController extends Controller
      *
      * @return void
      **/
-    public function getAds($position = '')
+    public function getAds()
     {
         $category = 0;
 

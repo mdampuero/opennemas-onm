@@ -673,8 +673,6 @@ class CoversController extends Controller
                 _('Settings saved successfully.')
             );
 
-            $httpParams = array(array('action'=>'list'),);
-
             return $this->redirect($this->generateUrl('admin_covers_config'));
         }
     }

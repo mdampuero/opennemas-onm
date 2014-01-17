@@ -44,7 +44,7 @@ class SearchController extends Controller
      *
      * @return Response the response object
      **/
-    public function googleAction(Request $request)
+    public function googleAction()
     {
         \Frontend\Controller\FrontpagesController::getAds();
 
