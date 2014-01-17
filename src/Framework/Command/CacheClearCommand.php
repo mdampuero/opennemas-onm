@@ -9,20 +9,20 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class CacheClearCommand extends Command
+class CacheClearCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('cache:clear')
-            ->setDescription('Resets the Zend OpCache registers')
+            ->setName('cache:clear:onm')
+            ->setDescription('Cleans all the Symfony generated files')
             ->setDefinition(
                 array(
                     new InputOption('no-warmup', 'w', InputOption::VALUE_OPTIONAL, 'The database password'),
@@ -40,14 +40,14 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fileSystem = new Filesystem();
+        $fileSystem = $this->getContainer()->get('filesystem');
 
-        $basePath = realpath(APP_PATH."/cache/");
+        $basePath = realpath($this->getContainer()->get('kernel')->getCacheDir());
         if (file_exists($basePath)) {
             $fileSystem->remove($basePath);
-            $output->writeln(APP_PATH.' removed succesfully');
+            $output->writeln($basePath.' removed succesfully');
         } else {
-            $output->writeln(APP_PATH.' doesn\'t exists');
+            $output->writeln($basePath.' doesn\'t exists');
         }
 
         return false;

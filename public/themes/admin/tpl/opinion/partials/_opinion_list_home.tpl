@@ -7,8 +7,8 @@
             <th class="center" style="width:130px;">{t}Date{/t}</th>
             <th class="center" style="width:10px;">{t}Home{/t}</th>
             <th class="center" style="width:10px;">{t}Available{/t}</th>
-            <th class="center" style="width:20px;">{t}Favorite{/t}</th>
-            <th class="center" style="width:90px;">{t}Actions{/t}</th>
+            <th class="center" style="width:10px;">{t}Favorite{/t}</th>
+            <th class="right" style="width:10px;">{t}Actions{/t}</th>
         </tr>
     </thead>
     {if count($director) > 0}
@@ -61,7 +61,7 @@
                     &nbsp;
                 </a>
             </td>
-            <td class="center">
+            <td class="right">
                 <div class="btn-group">
                 {acl isAllowed="OPINION_UPDATE"}
                     <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
@@ -105,12 +105,6 @@
             {$opinion->views}
         </td>
         <td class="center">
-            {$opinion->ratings}
-        </td>
-        <td class="center">
-            {$opinion->comments}
-        </td>
-        <td class="center">
             {$opinion->created}
         </td>
         <td class="center">
@@ -138,7 +132,7 @@
                 &nbsp;
             </a>
         </td>
-        <td class="center">
+        <td class="right">
             <div class="btn-group">
 
             {acl isAllowed="OPINION_UPDATE"}
@@ -234,7 +228,7 @@
             {/if}
         {/acl}
         </td>
-        <td class="center">
+        <td class="right">
             <div class="btn-group">
 
             {acl isAllowed="OPINION_UPDATE"}

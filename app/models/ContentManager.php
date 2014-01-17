@@ -2240,8 +2240,8 @@ class ContentManager
     */
     public function getUrlContent($url, $decodeJson = false)
     {
-        global $sc;
-        $cache = $sc->get('cache');
+        global $kernel;
+        $cache = $kernel->getContainer()->get('cache');
 
         $externalContent = $cache->fetch(CACHE_PREFIX.$url);
         if (!$externalContent) {

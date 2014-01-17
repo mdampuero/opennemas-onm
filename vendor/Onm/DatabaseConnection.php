@@ -252,6 +252,10 @@ class DatabaseConnection
      **/
     public function isReadOnlyAction($method, $params = array())
     {
+        // Alternative algorithm
+        // return ($method == 'Execute' || $method == 'GetOne')
+        //         && (array_key_exists(0, $params) && stripos($params[0], 'SELECT') !== false);
+
         return  !(
                     $method == 'StartTrans'
                     || $method == 'BeginTrans'
@@ -260,6 +264,7 @@ class DatabaseConnection
                     || $method == 'FailTrans'
                     || $method == 'HasFailedTrans'
                     || $method == 'Insert_ID'
+                    || $method == 'RollbackTrans'
                 )
                 && stripos($params[0], 'SELECT') !== false;
     }

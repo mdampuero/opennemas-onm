@@ -8,6 +8,9 @@
  * file that was distributed with this source code.
  **/
 // Define path to application directory
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Composer\Autoload\ClassLoader;
+
 defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../'));
 
@@ -23,13 +26,16 @@ define('PP_CONFIG_PATH', APP_PATH.'/config/');
 
 define('INSTALLATION_HASH', substr(hash('md5', APPLICATION_PATH), 0, 8));
 
-require SITE_VENDOR_PATH.'/autoload.php';
 if (file_exists(APPLICATION_PATH.'/.deploy.php')) {
     require APPLICATION_PATH.'/.deploy.php';
 }
 
-$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
+/**
+ * @var $loader ClassLoader
+ */
+$loader = require __DIR__.'/../vendor/autoload.php';
 
+$loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
 // Registering namespaces
 $loader->registerNamespaces(
     array(
@@ -52,3 +58,7 @@ $loader->registerNamespaceFallback(SITE_WS_API_PATH);
 $loader->useIncludePath(true);
 
 $loader->register();
+
+AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
+
+return $loader;

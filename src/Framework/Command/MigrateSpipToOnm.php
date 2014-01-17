@@ -265,7 +265,7 @@ EOF
                  $this->output->writeln("Category with id {$originalID} already imported\n");
             } else {
                 $data = array(
-                    'name'              => \StringUtils::get_title($category['titre']),
+                    'name'              => \Onm\StringUtils::get_title($category['titre']),
                     'title'             => $category['titre'],
                     'inmenu'            => 1,
                     'id_parent'         => $this->elementIsImported($category['id_parent'], 'category'),
@@ -431,7 +431,7 @@ EOF
                     if ($rs->fields['accepter_forum'] == 'non') {
                         $withComments = 0;
                     }
-                    $slug = \StringUtils::get_title($this->convertoUTF8($rs->fields['titre']));
+                    $slug = \Onm\StringUtils::get_title($this->convertoUTF8($rs->fields['titre']));
                     $values = array(
                         'title' => $this->convertoUTF8($rs->fields['titre']),
                         'category' => $this->matchCategory($rs->fields['id_rubrique']),
@@ -839,7 +839,7 @@ EOF
                     if ($rs->fields['accepter_forum'] == 'non') {
                         $withComments = 0;
                     }
-                    $slug = \StringUtils::get_title($this->convertoUTF8($rs->fields['titre']));
+                    $slug = \Onm\StringUtils::get_title($this->convertoUTF8($rs->fields['titre']));
                     $values = array(
                         'title' => $this->convertoUTF8($rs->fields['titre']),
                         'category' => 4,

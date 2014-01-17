@@ -1,36 +1,36 @@
 backend:
-    resource: "../../src/Backend/Resources/config/routing.yml"
+    resource: @BackendBundle/Resources/config/routing.yml
     prefix:   /admin
 
 frontendmobile:
-    resource: "../../src/FrontendMobile/Resources/config/routing.yml"
+    resource: @FrontendMobileBundle/Resources/config/routing.yml
     prefix:   /mobile
 
 manager_webservice:
-    resource: "../../src/ManagerWebService/Resources/config/routing.yml"
+    resource: @ManagerWebServiceBundle/Resources/config/routing.yml
     prefix:   /managerws
 
 manager:
-    resource: "../../src/Manager/Resources/config/routing.yml"
+    resource: @ManagerBundle/Resources/config/routing.yml
     prefix:   /manager
 
 webservice:
-    resource: "../../src/WebService/Resources/config/routing.yml"
+    resource: @WebServiceBundle/Resources/config/routing.yml
     prefix:   /ws
 
 frontend:
-    resource: "../../src/Frontend/Resources/config/routing.yml"
+    resource: @FrontendBundle/Resources/config/routing.yml
     prefix:   /
 
 # base paths
 admin_welcome:
     path: '/admin'
-    defaults: { _controller  : Backend:Controllers:WelcomeController:default }
+    defaults: { _controller  : BackendBundle:Welcome:default }
 
 manager_welcome:
     path: '/manager'
-    defaults: { _controller: Manager:Controllers:WelcomeController:default }
+    defaults: { _controller: ManagerBundle:Welcome:default }
 
 frontendmobile_root:
     path: '/mobile'
-    defaults: { _controller : FrontendMobile:Controllers:FrontpagesController:show }
+    defaults: { _controller : FrontendMobileBundle:Frontpages:show }

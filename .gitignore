@@ -1,6 +1,7 @@
 !public/themes/admin
 !public/themes/manager
 #public/admin/themes/default/compile/*
+public/bundles
 *.sublime-*
 *~
 .deploy.php

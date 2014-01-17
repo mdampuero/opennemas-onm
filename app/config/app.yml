@@ -7,6 +7,7 @@ parameters:
         csrf_protection: true
         default_locale:  %locale%
 
+
     # Swiftmailer Configuration
     swiftmailer:
         transport: %mailer_transport%
@@ -20,169 +21,26 @@ parameters:
     cache_prefix: onm
     logger_level: normal
 
-    # Session Configuration
-    session_storage_class: "Symfony\Component\HttpFoundation\Session\Storage\\NativeSessionStorage"
-    session_handler_class: "Symfony\Component\HttpFoundation\Session\Session"
-
     available_languages: {'en_US' : "English", 'es_ES' : "Español", 'gl_ES' : "Galego"}
 
-imports:
-    - { resource: parameters.yml }
+# services:
 
-services:
-    resolver:
-        class: Onm\Framework\ControllerResolver
+#     logger:
+#         class: Onm\Log
+#         arguments: [ %logger_level% ]
 
-    listener.router:
-        class: Symfony\Component\HttpKernel\EventListener\RouterListener
-        arguments: [ @matcher ]
-        tags:
-            - { name: dispatcher.listener }
+#     mailer:
+#         class: Onm\Mailer
+#         arguments: [ %swiftmailer% ]
 
-    listener.response:
-        class: Symfony\Component\HttpKernel\EventListener\ResponseListener
-        arguments: [ %charset% ]
-        tags:
-            - { name: dispatcher.listener }
+#     automatic_contents:
+#         class: Onm\MachineSearcher
+#         arguments: [ @cache ]
 
-    listener.instanceloader:
-        class: Framework\EventListeners\InstanceLoaderListener
-        tags:
-            - { name: dispatcher.listener }
+#     acl_checker:
+#         class: Onm\Security\Acl
 
-    listener.admin_auth:
-        class: Framework\EventListeners\AdminAuthenticationListener
-        tags:
-            - { name: dispatcher.listener }
+#     varnish_cleaner:
+#         class: Onm\Varnish\VarnishCleaner
+#         arguments: [ %varnish% ]
 
-    listener.controller:
-        class: Framework\EventListeners\ControllerListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.session:
-        class: Framework\EventListeners\SessionListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.instance_exceptions:
-        class: Framework\EventListeners\InstanceExceptionsListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.general_error_handler:
-        class: Framework\EventListeners\GeneralExceptionsListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.app_bootup:
-        class: Framework\EventListeners\ApplicationBootupListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.maintenance_mode:
-        class: Framework\EventListeners\MaintenanceModeListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.l10n_system:
-        class: Framework\EventListeners\L10nSystemListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.content_subscriber:
-        class: Backend\EventListeners\ContentSubscriberListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.news_agency:
-        class: Framework\EventListeners\NewsAgencyListener
-        tags:
-            - { name: dispatcher.listener }
-
-    listener.varnish_cleaner:
-        class: Framework\EventListeners\VarnishCleanerListener
-        tags:
-            - { name: dispatcher.listener }
-
-    dispatcher:
-        class: Symfony\Component\EventDispatcher\EventDispatcher
-
-    framework:
-        class: Onm\Framework\Framework
-        arguments: [ @dispatcher, @resolver ]
-
-    db_conn:
-        class: Onm\DatabaseConnection
-        arguments: [ %database% ]
-
-    db_conn_manager:
-        class: Onm\DatabaseConnection
-        arguments: [  %database% ]
-
-    session_storage:
-        class: %session_storage_class%
-        arguments: [ %session_params% ]
-
-    session:
-        class: %session_handler_class%
-        arguments: [ @session_storage ]
-
-    logger:
-        class: Onm\Log
-        arguments: [ %logger_level% ]
-
-    mailer:
-        class: Onm\Mailer
-        arguments: [ %swiftmailer% ]
-
-    cache:
-        class: %cache_handler%
-        arguments: [ %cache_handler_params% ]
-
-    category_repository:
-        class: Repository\CategoryManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    comment_repository:
-        class: Repository\CommentManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    entity_repository:
-        class: Repository\EntityManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    user_repository:
-        class: Repository\UserManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    menu_repository:
-        class: Repository\MenuManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    usergroup_repository:
-        class: Repository\UserGroupManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    setting_repository:
-        class: Repository\SettingManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    newsletter_manager:
-        class: Repository\NewsletterManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
-
-    automatic_contents:
-        class: Onm\MachineSearcher
-        arguments: [ @cache ]
-
-    acl_checker:
-        class: Onm\Security\Acl
-
-    varnish_cleaner:
-        class: Onm\Varnish\VarnishCleaner
-        arguments: [ %varnish% ]
-
-    instance_manager:
-        class: Onm\Instance\InstanceManager
-        arguments: [ @db_conn_manager, @cache ]
