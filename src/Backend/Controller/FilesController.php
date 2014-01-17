@@ -154,8 +154,6 @@ class FilesController extends Controller
     {
         $request = $this->request;
         $cm      = new \ContentManager();
-        $category = $request->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
 
         $files = $cm->find_all(
             'Attachment',
@@ -188,7 +186,6 @@ class FilesController extends Controller
      **/
     public function statisticsAction(Request $request)
     {
-        $nameCategory     = 'GLOBAL';
         $cm               = new \ContentManager();
         $total_num_photos = 0;
         $files            = $size = $sub_size = $num_photos = array();
@@ -398,9 +395,6 @@ class FilesController extends Controller
 
         $request = $this->request;
         $id      = $request->request->getDigits('id');
-
-        $category = $request->request->filter('category', null, FILTER_SANITIZE_STRING);
-        $page     = $request->request->getDigits('page', 1);
 
         $file = new \Attachment($id);
           $data = array(
@@ -613,8 +607,7 @@ class FilesController extends Controller
             $this->generateUrl(
                 'admin_files',
                 array(
-                    'page' => $page,
-                    'status' => $status,
+                    'page'     => $page,
                     'category' => $this->category,
                 )
             )

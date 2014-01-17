@@ -659,7 +659,6 @@ class Content
     {
         $changed = date("Y-m-d H:i:s");
 
-        $data = array(0, 0, $lastEditor, $changed, $id);
         $this->set_available(0, $lastEditor);
 
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
@@ -968,8 +967,7 @@ class Content
 
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
-        $sql = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?,
-                 `changed`=? WHERE `pk_content`=?';
+        $stmt = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
 
         $values = array(
             $_SESSION['userid'],
@@ -2225,7 +2223,6 @@ class Content
 
         $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-        $items = array();
 
         if ($rs == false) {
             return false;

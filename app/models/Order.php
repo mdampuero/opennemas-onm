@@ -132,7 +132,6 @@ class Order
             return array();
         }
 
-
         $orders = array();
         while (!$rs->EOF) {
             $order = new \Order();
@@ -150,7 +149,7 @@ class Order
             $order->payment_amount = $rs->fields['payment_amount'];
             $order->payment_method = $rs->fields['payment_method'];
             $order->type           = $rs->fields['type'];
-            $order->params         = @unserialize($element['params']);
+            $order->params         = @unserialize($rs->fields['params']);
             $order->getUser();
 
             // Overload user info to order obj for ordering propouses

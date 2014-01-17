@@ -289,12 +289,6 @@ class ArticlesController extends Controller
                 );
             }
         } else {
-            $category = $request->request->getDigits('category', 0);
-
-            $cm = new \ContentManager();
-
-
-
             $authorsComplete = \User::getAllUsersAuthors();
             $authors = array( '0' => _(' - Select one author - '));
             foreach ($authorsComplete as $author) {
@@ -891,8 +885,6 @@ class ArticlesController extends Controller
     public function contentProviderInFrontpageAction(Request $request)
     {
         $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
 
         $cm = new  \ContentManager();
 

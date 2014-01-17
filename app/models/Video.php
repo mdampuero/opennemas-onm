@@ -347,7 +347,7 @@ class Video extends Content
 
         $ffmpgePath = exec("which ffmpeg");
 
-        $originalVideoPath  = $originalVideo['file_path'];
+        // $originalVideoPath  = $originalVideo['file_path'];
         $fileType           = $originalVideo['file_type'];
         $temporaryVideoPath = $originalVideo['file_path'];
 

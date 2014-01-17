@@ -369,8 +369,6 @@ class Photo extends Content
                 $photo = new Photo($photoID);
 
             } else {
-                $importedID = null;
-
                 $logger = getService('logger');
                 $logger->notice(
                     sprintf(
@@ -499,8 +497,6 @@ class Photo extends Content
                 $photo = new Photo($photoID);
 
             } else {
-                $importedID = null;
-
                 $logger = getService('logger');
                 $logger->notice(
                     sprintf(

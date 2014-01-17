@@ -1144,14 +1144,13 @@ class ContentManager
         }
 
         $_comented = 'AND pk_content IN (SELECT DISTINCT(fk_content) FROM comments) ';
-        $_limit    = 'LIMIT 0 , '.$num;
         $_order_by = 'ORDER BY starttime DESC';
 
         $_where= $_where_slave.$_days.$_comented;
         if (intval($category)>0) {
             $sql = 'SELECT * FROM contents_categories, contents '
                  . 'WHERE '.$_where
-                 . ' AND `contents_categories`.`pk_fk_content_category`=' .$pk_fk_content_category
+                 . ' AND `contents_categories`.`pk_fk_content_category`=' .$category
                  . ' AND `contents_categories`.`pk_fk_content`=`contents`.`pk_content` '
                  . $_order_by;
         } else {
@@ -1340,7 +1339,6 @@ class ContentManager
         $pk_fk_content_category = null
     ) {
         $this->init($contentType);
-        $items  = array();
         $_where = 'AND in_litter=0';
 
         if (!is_null($filter)) {
@@ -1488,8 +1486,6 @@ class ContentManager
         $debug = false
     ) {
         $this->init($contentType);
-        $items  = array();
-        $_where = '';
 
         if (empty($filter)) {
             $filterCount = ' contents.in_litter != 1 ';

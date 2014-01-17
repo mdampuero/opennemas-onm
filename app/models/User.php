@@ -473,7 +473,7 @@ class User
             return false;
         }
 
-        $newUserCategories = self::readAccessCategories($idUser);
+        self::readAccessCategories($idUser);
 
         return true;
     }
@@ -1392,7 +1392,6 @@ class User
     public function uploadUserAvatar($file, $userName)
     {
         // Generate image path and upload directory
-        $userNameNormalized = \Onm\StringUtils::normalize_name($userName);
         $relativeAuthorImagePath ="/authors/".$userName;
         $uploadDirectory =  MEDIA_IMG_PATH .$relativeAuthorImagePath;
 

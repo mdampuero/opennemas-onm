@@ -266,7 +266,6 @@ class CategoriesController extends Controller
     {
         $this->checkAclOrForward('CATEGORY_UPDATE');
 
-        $configurations = s::get('section_settings');
         $id = $request->query->getDigits('id');
         $params = $request->request->get('params');
         $inrss = (array_key_exists('inrss', $params) && $params['inrss'] == true);
@@ -332,9 +331,6 @@ class CategoriesController extends Controller
     public function deleteAction(Request $request)
     {
         $this->checkAclOrForward('CATEGORY_DELETE');
-
-        $category = new \ContentCategory();
-        $ccm = \ContentCategoryManager::get_instance();
 
         $id = $request->query->getDigits('id');
         $category = new \ContentCategory($id);

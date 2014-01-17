@@ -88,7 +88,6 @@ class AuthenticationController extends Controller
 
         // Configs for bad login
         $badLoginAttemptsLimit = 3; // 3 failed attempts
-        $lockoutTime = 600; // 10 minutes
 
         $user = new \User();
 

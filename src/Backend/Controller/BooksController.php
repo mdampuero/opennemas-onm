@@ -212,8 +212,6 @@ class BooksController extends Controller
     {
         $this->checkAclOrForward('BOOK_CREATE');
 
-        $page    = $request->query->getDigits('page', 1);
-
         if ('POST' != $request->getMethod()) {
             $this->view->assign('category', $this->category);
 
@@ -304,6 +302,7 @@ class BooksController extends Controller
 
             return $this->redirect($this->generateUrl('admin_books'));
         }
+
         if (!\Acl::isAdmin()
             && !\Acl::check('CONTENT_OTHER_UPDATE')
             && $book->fk_user != $_SESSION['userid']) {
@@ -388,8 +387,7 @@ class BooksController extends Controller
             $this->generateUrl(
                 'admin_books',
                 array(
-                    'category' => $book->category,
-                    'page' => $page
+                    'category' => $book->category
                 )
             )
         );

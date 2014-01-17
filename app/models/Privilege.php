@@ -1132,5 +1132,7 @@ class Privilege
                 'module'       => 'IMPORT',
             ),
         );
+
+        return self::$privileges;
     }
 }

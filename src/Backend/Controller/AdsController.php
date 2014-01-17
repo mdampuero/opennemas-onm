@@ -375,7 +375,6 @@ class AdsController extends Controller
         $id       = $request->query->getDigits('id');
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
-        $filter   = $request->query->get('filter');
 
         if (!empty($id)) {
             $ad = new \Advertisement($id);

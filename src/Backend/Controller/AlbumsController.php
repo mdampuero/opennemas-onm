@@ -212,7 +212,6 @@ class AlbumsController extends Controller
         if ('POST' == $this->request->getMethod()) {
             $request  = $this->request->request;
 
-            $type     = $request->filter('type', null, FILTER_SANITIZE_STRING);
             $page     = $request->getDigits('page', 1);
             $category = $request->getDigits('category');
             $continue = $request->filter('continue', false, FILTER_SANITIZE_STRING);

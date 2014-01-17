@@ -45,12 +45,8 @@ class DatabaseErrorsController extends Controller
             return $this->redirect($this->generateUrl('admin_welcome'));
         }
 
-        $cm = new \ContentManager();
-
         $page = $request->query->getDigits('page', 1);
         $search = $request->query->filter('search', '', FILTER_SANITIZE_STRING);
-
-        $filters = (isset($_REQUEST['filter'])) ? $_REQUEST['filter']: null;
 
         $sql = "SELECT count(*) FROM adodb_logsql";
         $rsTotalErrors = $GLOBALS['application']->conn->getOne($sql);
@@ -109,7 +105,7 @@ class DatabaseErrorsController extends Controller
         }
 
         $sql = "TRUNCATE TABLE `adodb_logsql`";
-        $rs = $GLOBALS['application']->conn->Execute($sql);
+        $GLOBALS['application']->conn->Execute($sql);
 
         m::add(_('SQL errors registered in database cleaned sucessfully.'). m::SUCCESS);
 

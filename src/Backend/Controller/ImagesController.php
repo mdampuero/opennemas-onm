@@ -419,7 +419,6 @@ class ImagesController extends Controller
 
         $request   = $this->request;
         $photosRAW = $request->request->get('description');
-        $action    = $request->request->filter('action', 'update');
         $page      = $request->request->getDigits('page', 1);
 
         $ids = array();

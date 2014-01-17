@@ -173,7 +173,6 @@ class AclUserController extends Controller
     public function updateAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
-        $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
 
         if ($userId != $_SESSION['userid']) {
             $this->checkAclOrForward('USER_UPDATE');
@@ -266,8 +265,6 @@ class AclUserController extends Controller
     public function createAction(Request $request)
     {
         $this->checkAclOrForward('USER_CREATE');
-
-        $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
 
         $user = new \User();
 

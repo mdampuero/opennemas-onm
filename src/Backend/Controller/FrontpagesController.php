@@ -37,7 +37,6 @@ class FrontpagesController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $page     = $request->query->filter('page', 1, FILTER_SANITIZE_NUMBER_INT);
         $category = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
         $_SESSION['_from'] = $this->generateUrl('admin_frontpage_list', array('category' => $category));
@@ -55,12 +54,11 @@ class FrontpagesController extends Controller
 
         $this->view->assign(
             array(
-                'subcat' => $subcat,
+                'subcat'       => $subcat,
                 'allcategorys' => $parentCategories,
-                'datos_cat' => $datos_cat
+                'datos_cat'    => $datos_cat
             )
         );
-        $allcategorys = $parentCategories;
 
         // Check if the user can edit frontpages
         if (!\Acl::check('ARTICLE_FRONTPAGE')) {
@@ -369,7 +367,6 @@ class FrontpagesController extends Controller
             $imageList = array();
         }
 
-        $column = array();
         // Overloading information for contents
         foreach ($contentsInHomepage as &$content) {
             // Load category related information

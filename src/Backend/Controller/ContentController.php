@@ -260,6 +260,7 @@ class ContentController extends Controller
                 $message = $content->getQuickInfo();
             } else {
                 $code = 404;
+                $error = 'Content does not exists';
                 $message = array('error' => $error);
             }
         } else {
