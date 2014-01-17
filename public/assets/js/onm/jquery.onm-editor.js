@@ -104,7 +104,9 @@
                     language: settings.language,
                     extraPlugins: 'magicline,font',
                     magicline_color: 'blue',
-                    forcePasteAsPlainText : false
+                    forcePasteAsPlainText : false,
+                    fillEmptyBlocks : false,
+                    ignoreEmptyParagraph : true,
                 };
 
                 var editor_preset;
