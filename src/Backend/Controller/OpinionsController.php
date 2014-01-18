@@ -12,7 +12,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Backend\Controller;
+namespace Backend\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -178,6 +178,9 @@ class OpinionsController extends Controller
         $numDirector  = $configurations['total_director'];
 
         $cm = new \ContentManager();
+        $rating = new \Rating();
+        //$commentManager = new \Repository\CommentManager();
+
         $opinions = $cm->find(
             'Opinion',
             'in_home=1 and available=1 and type_opinion=0',
@@ -339,7 +342,7 @@ class OpinionsController extends Controller
                 m::add(_('Opinion successfully created.'), m::SUCCESS);
 
                 // Clear caches
-                $this->dispatchEvent('opinion.create', array('authorId' => $data['fk_author']));
+                dispatchEventWithParams('opinion.create', array('authorId' => $data['fk_author']));
             } else {
                 m::add(_('Unable to create the new opinion.'), m::ERROR);
             }
@@ -427,7 +430,7 @@ class OpinionsController extends Controller
                 $author = new \User($data['fk_author']);
 
                 // Clear caches
-                $this->dispatchEvent(
+                dispatchEventWithParams(
                     'opinion.update',
                     array(
                         'authorSlug' => $author->username,
@@ -668,7 +671,7 @@ class OpinionsController extends Controller
             }
         }
 
-        $this->dispatchEvent('frontpage.save_position', array('category' => 'opinion'));
+        dispatchEventWithParams('frontpage.save_position', array('category' => 'opinion'));
 
         if ($result === true) {
             $message = _('Positions saved successfully.');
@@ -1198,7 +1201,7 @@ class OpinionsController extends Controller
                 }
 
                 // Clear caches
-                $this->dispatchEvent('author.update', array('authorId' => $userId));
+                dispatchEventWithParams('author.update', array('authorId' => $userId));
 
                 m::add(_('Author data updated successfully.'), m::SUCCESS);
             } else {
