@@ -342,8 +342,6 @@ class NewsletterController extends Controller
 
             $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
 
-            $nManager = $this->get('mailer');
-
             $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
             $newsletterSender = s::get('newsletter_sender');
@@ -388,7 +386,7 @@ class NewsletterController extends Controller
                         try {
                             // Send the mail
                             $message->setTo(array($mailbox->email => $mailbox->name));
-                            $properlySent = $nManager->send($message);
+                            $properlySent = $this->get('mailer')->send($message);
                             $sentResult []= array($mailbox, (bool)$properlySent);
                             $remaining--;
                             $sent++;
