@@ -12,7 +12,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  **/
-namespace Backend\Controller;
+namespace Backend\Controllers;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -403,6 +403,7 @@ class NewsletterController extends Controller
                 $newsletter->update(array('sent' => $sent));
             } else {
                 //duplicated newsletter for count month mail send
+
                 $newsletter->create(
                     array(
                         'title'   => $newsletter->title,
