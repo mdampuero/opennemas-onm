@@ -50,7 +50,6 @@ class ContentsController extends Controller
     public function printAction(Request $request)
     {
         $dirtyID      = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
-        $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Resolve article ID
         $contentID = \Content::resolveID($dirtyID);
@@ -147,6 +146,7 @@ class ContentsController extends Controller
             // If the content is external load it from the external webservice
             $contentID = $request->request->getDigits('content_id', null);
             if (false && $ext == 1) {
+                $cm = new \ContentManager();
                 $content = $cm->getUrlContent($wsUrl.'/ws/contents/read/'.$contentID, true);
                 $content = unserialize($content);
             } else {
@@ -279,7 +279,7 @@ class ContentsController extends Controller
                 throw new ResourceNotFoundException();
             } else {
                 $rating = new \Rating($content->id);
-                $update = $rating->update($voteValue, $ip);
+                $rating->update($voteValue, $ip);
 
                 // Render the rating system after rating the content
                 $content = $rating->render('', 'result', 1);

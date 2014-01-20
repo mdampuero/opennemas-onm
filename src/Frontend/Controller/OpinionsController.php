@@ -303,7 +303,6 @@ class OpinionsController extends Controller
 
             if ($this->page == 1) {
                 $opinions = $this->cm->getUrlContent($wsUrl.'/ws/opinions/authorsinhome/', true);
-                $totalHome = count($opinions);
             } else {
                 // Fetch last opinions of contributors and paginate them by ITEM_PAGE
                 $opinions = $this->cm->getUrlContent($wsUrl.'/ws/opinions/authorsnotinhomepaged/'.$this->page, true);

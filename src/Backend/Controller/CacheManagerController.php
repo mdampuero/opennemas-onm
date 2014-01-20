@@ -248,7 +248,7 @@ class CacheManagerController extends Controller
             $cacheGroupsCacheEnabled = $request->request->get('caching');
             $cacheGroupsLifeTime     = $request->request->get('cache_lifetime');
 
-            foreach ($cacheGroups as $i => $section) {
+            foreach ($cacheGroups as $section) {
                 $caching          = (isset($cacheGroupsCacheEnabled[$section]))? 1: 0;
                 $cache_lifetime   = intval($cacheGroupsLifeTime[$section]);
 

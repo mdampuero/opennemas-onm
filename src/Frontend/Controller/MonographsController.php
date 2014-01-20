@@ -49,7 +49,6 @@ class MonographsController extends Controller
 
         } else {
             $category_real_name = 'Portada';
-            $category_name      = 'home';
             $this->category     = 0;
             $actual_category_id = 0;
         }

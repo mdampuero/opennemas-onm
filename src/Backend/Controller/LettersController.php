@@ -106,9 +106,6 @@ class LettersController extends Controller
         $this->checkAclOrForward('LETTER_CREATE');
 
         if ('POST' == $request->getMethod()) {
-            $page     = $request->request->getDigits('page', 1);
-            $category = $request->request->getDigits('category');
-
             $letter = new \Letter();
 
             $data = array(
@@ -182,46 +179,45 @@ class LettersController extends Controller
     {
         $this->checkAclOrForward('LETTER_UPDATE');
 
-        $id = $request->query->getDigits('id');
-        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-        $letter = new \Letter($id);
+        // Check empty data
+        if (count($request->request) < 1) {
+            m::add(_("Letter data sent not valid."), m::ERROR);
 
-        if ($letter->id != null) {
-            // Check empty data
-            if (count($request->request) < 1) {
-                m::add(_("Letter data sent not valid."), m::ERROR);
-
-                return $this->redirect($this->generateUrl('admin_letter_show', array('id' => $id)));
-            }
-
-            $data = array(
-                'id'        => $id,
-                'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
-                'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-                'params'    => $request->request->get('params'),
-                'image'     => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'url'       => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'body'      => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-            );
-
-            if ($letter->update($data)) {
-                m::add(_('Letter successfully updated.'), m::SUCCESS);
-            } else {
-                m::add(_('Unable to update the letter.'), m::ERROR);
-            }
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_letter_show',
-                    array('id' => $letter->id)
-                )
-            );
+            return $this->redirect($this->generateUrl('admin_letter_show', array('id' => $id)));
         }
 
-        return $this->redirect($this->generateUrl('admin_letters'));
+        $id = $request->query->getDigits('id');
+        $letter = new \Letter($id);
+        if ($letter->id == null) {
+            return $this->redirect($this->generateUrl('admin_letters'));
+        }
+
+        $data = array(
+            'id'        => $id,
+            'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
+            'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+            'params'    => $request->request->get('params'),
+            'image'     => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+            'url'       => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'body'      => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+        );
+
+        if ($letter->update($data)) {
+            m::add(_('Letter successfully updated.'), m::SUCCESS);
+        } else {
+            m::add(_('Unable to update the letter.'), m::ERROR);
+        }
+
+        return $this->redirect(
+            $this->generateUrl(
+                'admin_letter_show',
+                array('id' => $letter->id)
+            )
+        );
+
     }
 
     /**
@@ -348,7 +344,6 @@ class LettersController extends Controller
     {
         $this->checkAclOrForward('LETTER_AVAILABLE');
 
-        $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
 
         if (is_array($selected)

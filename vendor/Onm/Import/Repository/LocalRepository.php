@@ -22,9 +22,6 @@ use \Onm\Import\DataSource\DataSourceFactory;
  */
 class LocalRepository
 {
-    // the instance object
-    private static $instance = null;
-
     private $config = array();
 
     public $syncPath = '';
@@ -36,6 +33,8 @@ class LocalRepository
      */
     public function __construct($config = array())
     {
+        $this->config = $config;
+
         $this->syncPath = implode(
             DIRECTORY_SEPARATOR,
             array(CACHE_PATH, 'importers')

@@ -69,7 +69,8 @@ class Redis extends AbstractCache
      */
     public function getIds()
     {
-
+        // TODO: implement
+        $keys = array();
 
         return $keys;
     }
@@ -82,7 +83,7 @@ class Redis extends AbstractCache
         $data = $this->redis->get($id);
 
         $dataUnserialized = @unserialize($data);
-        if ($data !== false || $str === 'b:0;') {
+        if ($data !== false || $data === 'b:0;') {
             return $data;
         } else {
             return $dataUnserialized;

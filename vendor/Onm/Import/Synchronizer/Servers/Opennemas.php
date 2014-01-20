@@ -71,10 +71,7 @@ class Opennemas extends ServerAbstract implements ServerInterface
         if ($res == 0) {
             throw new \Exception(
                 sprintf(
-                    _(
-                        'Can\'t connect to server %s. Please check your'
-                        .' connection details.'
-                    ),
+                    _('Can\'t connect to server %s. Please check your connection details.'),
                     $params['name']
                 )
             );

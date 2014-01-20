@@ -45,9 +45,9 @@ class ErrorController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $errorCode     = $request->query->filter('errordoc', 404, FILTER_SANITIZE_STRING);
-        $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
+        // $errorCode     = $request->query->filter('errordoc', 404, FILTER_SANITIZE_STRING);
+        // $category_name = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
+        // $cache_page    = $request->query->filter('page', 0, FILTER_VALIDATE_INT);
 
         $error = $request->attributes->get('exception');
 
@@ -62,7 +62,7 @@ class ErrorController extends Controller
         switch ($name) {
             case 'ResourceNotFoundException':
             case 'NotFoundHttpException':
-                $trace = $error->getTrace();
+                // $trace = $error->getTrace();
 
                 $path = $request->getRequestUri();
 
@@ -75,7 +75,7 @@ class ErrorController extends Controller
                 $errorMessage = sprintf('Oups! We can\'t find anything at "%s".', $path);
                 error_log('File not found: '.$path.'ERROR_ID: '.$errorID);
                 if ($this->request->isXmlHttpRequest()) {
-                    $content = $errorMesage;
+                    $content = $errorMessage;
                 } else {
                     $content = $this->renderView(
                         'static_pages/404.tpl',

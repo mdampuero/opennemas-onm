@@ -94,7 +94,6 @@ class VideosController extends Controller
             $videosSettings = s::get('video_settings');
 
             $totalVideosFrontpage = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
-            $days = isset($videosSettings['time_last']) ? $videosSettings['time_last']: 365;
 
             if (isset($categoryName)
                 && !empty($categoryName)

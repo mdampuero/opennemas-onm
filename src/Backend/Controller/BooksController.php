@@ -220,7 +220,7 @@ class BooksController extends Controller
         } else {
             $bookSavePath       = INSTANCE_MEDIA_PATH.'/books/';
             $imageName          = StringUtils::cleanFileName($_FILES['file_img']['name']);
-            $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
 
             $data = array(
                 'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
@@ -321,7 +321,7 @@ class BooksController extends Controller
 
             if (!empty($_FILES['file_img']['name'])) {
                 $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-                $uploadStatusPdfImg = @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+                @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
             } else {
                 $imageName = $book->file_img;
             }

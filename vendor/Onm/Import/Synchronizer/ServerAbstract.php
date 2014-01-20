@@ -201,8 +201,6 @@ abstract class ServerAbstract
         $deletedFiles = 0;
 
         if (count($localFileList) > 0) {
-            $serverFileList = array();
-
             foreach ($localFileList as $file) {
                 $file = basename($file);
                 $filePath = $cacheDir.DIRECTORY_SEPARATOR.$file;

@@ -149,7 +149,7 @@ class AuthenticationController extends Controller
      **/
     public function logoutAction(Request $request)
     {
-        $csrf = $request->query->filter('csrf', null, FILTER_SANITIZE_STRING);
+        // $csrf = $request->query->filter('csrf', null, FILTER_SANITIZE_STRING);
         // if ($csrf === $_SESSION['csrf']) {
         $_SESSION = array();
         if (isset($_COOKIE[session_name()])) {

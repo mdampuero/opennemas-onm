@@ -216,11 +216,6 @@ class AclUserController extends Controller
      **/
     public function createAction(Request $request)
     {
-        // TODO : Check Acl in manager
-        // $this->checkAclOrForward('USER_CREATE');
-
-        $action = $request->request->filter('action', null, FILTER_SANITIZE_STRING);
-
         $user = new \User();
 
         if ($request->getMethod() == 'POST') {

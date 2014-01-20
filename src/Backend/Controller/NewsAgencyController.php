@@ -818,7 +818,7 @@ class NewsAgencyController extends Controller
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_news_agency_config', array('page' => $page))
+                $this->generateUrl('admin_news_agency_config')
             );
         }
 
@@ -861,7 +861,7 @@ class NewsAgencyController extends Controller
             );
 
             return $this->redirect(
-                $this->generateUrl('admin_news_agency_config', array('page' => $page))
+                $this->generateUrl('admin_news_agency_config')
             );
         }
 

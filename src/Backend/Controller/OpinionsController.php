@@ -71,7 +71,6 @@ class OpinionsController extends Controller
         $itemsPerPage = s::get('items_per_page');
 
         $filterSQL = array('in_litter != 1');
-        $filterStatus = $filterAuthor = '';
         if ($status >= 0) {
             $filterSQL []= ' content_status='.$status;
         }
@@ -172,7 +171,6 @@ class OpinionsController extends Controller
     {
         $page =  $request->query->getDigits('page', 1);
         $configurations = s::get('opinion_settings');
-        $itemsPerPage   = s::get('items_per_page');
 
         $numEditorial = $configurations['total_editorial'];
         $numDirector  = $configurations['total_director'];
@@ -658,8 +656,6 @@ class OpinionsController extends Controller
             && is_array($containers)
             && count($containers) > 0
         ) {
-            $positionValues = array();
-
             foreach ($containers as $elements) {
                 $pos = 1;
                 foreach ($elements as $id) {
@@ -1151,8 +1147,6 @@ class OpinionsController extends Controller
     public function updateAuthorAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
-        $action = $request->request->filter('action', 'update', FILTER_SANITIZE_STRING);
-
         $user   = new \User($userId);
 
         $accessCategories = array();

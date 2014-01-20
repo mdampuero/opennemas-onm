@@ -109,7 +109,6 @@ class MediaUploaderController extends Controller
         }
 
         $cm = new \ContentManager();
-        $er = $this->get('entity_repository');
 
         $filter = 'contents.fk_content_type = 8 AND contents.content_status=1 '.$filter;
 

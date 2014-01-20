@@ -34,11 +34,11 @@ class AssetController extends Controller
         $parameters = $request->query->get('parameters');
         $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
 
-        $finalParameters = array();
         $parameters      = explode(',', urldecode($parameters));
 
         $method = array_shift($parameters);
 
+        // $finalParameters = array();
         // $hash = substr(md5($parameters.$path), 0, 2);
 
         // var_dump($hash);die();
@@ -84,7 +84,7 @@ class AssetController extends Controller
                 $width         = $parameters[0];
                 $height        = $parameters[1];
                 $verticalPos   = $parameters[2];
-                $horizontalPos = $parameters[3];
+                // $horizontalPos = $parameters[3];
                 $mode = ImageInterface::THUMBNAIL_OUTBOUND;
 
                 if ($imageWidth >= $imageHeight) {
@@ -104,7 +104,7 @@ class AssetController extends Controller
                 if ($topY < 0) {
                     $topY = 0;
                 }
-                $newSize = $image->getSize();
+                // $newSize = $image->getSize();
 
                 // var_dump($width, $height, $widthResize, $heightResize, $topX, $topY);die();
 

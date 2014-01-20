@@ -63,9 +63,9 @@ class ArchiveController extends Controller
         $cacheID = $this->view->generateCacheId($date, '', $this->page);
 
         if (($this->view->caching == 0)
-           || (!$this->view->isCached('archive/archive.tpl', $cacheID))) {
+           || (!$this->view->isCached('archive/archive.tpl', $cacheID))
+        ) {
 
-            $fp = new \Frontpage();
             $cm = new \ContentManager();
             $allCategories = $this->ccm->categories;
 

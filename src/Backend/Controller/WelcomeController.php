@@ -76,7 +76,7 @@ class WelcomeController extends Controller
 
         $xml = simplexml_load_string($youtubeRss);
 
-        $videosYoutube = array();
+        $videosYoutubeIds = array();
         foreach ($xml->channel->item as $item) {
             preg_match('@v=(.*)&@', $item->link, $matches);
 
@@ -85,6 +85,7 @@ class WelcomeController extends Controller
         }
         shuffle($videosYoutubeIds);
         $videosYoutubeIds = array_splice($videosYoutubeIds, 0, 5);
+
         return $videosYoutubeIds;
     }
 

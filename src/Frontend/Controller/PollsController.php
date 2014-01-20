@@ -250,7 +250,6 @@ class PollsController extends Controller
     {
         $dirtyID = $request->request->filter('id', '', FILTER_SANITIZE_STRING);
         $answer = $request->request->filter('answer', '', FILTER_SANITIZE_STRING);
-        $page = 0;
         $pollId = \Content::resolveID($dirtyID);
 
         if (empty($pollId) || is_null($pollId)) {
@@ -327,7 +326,7 @@ class PollsController extends Controller
     {
         $tplManager = new \TemplateCacheManager($this->view->templateBaseDir);
         $cacheID    = $this->view->generateCacheId($categoryName, '', $pollId);
-        $result = $tplManager->delete($cacheID, 'poll.tpl');
+        $tplManager->delete($cacheID, 'poll.tpl');
 
         $cacheID = $this->view->generateCacheId('poll'.$categoryName, '', $this->page);
         $tplManager->delete($cacheID, 'poll_frontpage.tpl');

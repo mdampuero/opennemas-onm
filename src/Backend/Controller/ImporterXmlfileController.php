@@ -37,9 +37,7 @@ class ImporterXmlfileController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('PAPER_IMPORT');
 
-        if (is_null(s::get('xml_file_schema'))
-            && $action != 'config'
-        ) {
+        if (is_null(s::get('xml_file_schema'))) {
             m::add(_('Please provide XML file schema'));
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile_config'));

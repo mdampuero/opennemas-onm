@@ -39,14 +39,12 @@ class InstancesController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page = $request->query->getDigits('page', 1);
         $findParams = array(
-            'name' => $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING),
+            'name'  => $request->query->filter('filter_name', '', FILTER_SANITIZE_STRING),
             'email' => $request->query->filter('filter_email', '', FILTER_SANITIZE_STRING),
         );
 
         $instanceManager = getService('instance_manager');
-
         $instances = $instanceManager->findAll($findParams);
 
         foreach ($instances as &$instance) {
@@ -320,9 +318,6 @@ class InstancesController extends Controller
                 $this->generateUrl('manager_instance_show', array('id' => $id))
             );
         }
-
-        //If is creating a new instance, get DB params on the fly
-        $internalNameShort = trim(substr($internalName, 0, 11));
 
         $settingsRAW = $request->request->get('settings');
         $settings = array(

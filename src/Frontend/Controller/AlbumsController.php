@@ -44,7 +44,6 @@ class AlbumsController extends Controller
         $this->cm  = new \ContentManager();
 
         $this->categoryName = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $action             = $this->request->query->filter('action', 'frontpage', FILTER_SANITIZE_STRING);
         $this->page         = $this->request->query->getDigits('page', 1);
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {

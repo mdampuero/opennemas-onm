@@ -159,20 +159,18 @@ class FrameworkStatusController extends Controller
         if (!array_key_exists('scripts', $status)) {
             $status['scripts'] = array();
         }
-        $filesKeyValues = array();
         $dirs = array();
         foreach ($status['scripts'] as $key => $data) {
             $dirs[dirname($key)][basename($key)] = $data;
         }
         asort($dirs);
 
-        $id = 1;
         $newDirs = array();
 
         foreach ($dirs as $dir => $files) {
             $memoryConsumption = 0;
             $newFiles = array();
-            foreach ($files as $file => $data) {
+            foreach ($files as $data) {
                 $memoryConsumption += $data["memory_consumption"];
 
                 $newFile = $data;

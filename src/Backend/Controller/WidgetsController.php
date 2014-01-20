@@ -141,7 +141,6 @@ class WidgetsController extends Controller
         $this->checkAclOrForward('WIDGET_DELETE');
 
         $id   = $request->query->getDigits('id');
-        $page = $request->query->getDigits('page', 1);
 
         $widget = new \Widget();
         $widget->delete($id);

@@ -236,7 +236,6 @@ class RssController extends Controller
      **/
     public function authorRSSAction(Request $request)
     {
-
         $slug         = $request->query->filter('author_slug', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 50;
@@ -260,7 +259,6 @@ class RssController extends Controller
                     ."AND available=1 AND in_litter=0";
 
                 $er = $this->get('entity_repository');
-                $contentsCount  = $er->count($searchCriteria);
                 $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
                 $photos = array();
 
@@ -291,19 +289,17 @@ class RssController extends Controller
             }
         }
 
-        $response = new Response(
-            '',
-            200,
-            array(
-                'Content-Type' => 'text/xml; charset=UTF-8',
-                'x-tags'       => 'rss',
-            )
-        );
-
         return $this->render(
             'rss/rss.tpl',
             array('cache_id' => $cacheID),
-            $response
+            new Response(
+                '',
+                200,
+                array(
+                    'Content-Type' => 'text/xml; charset=UTF-8',
+                    'x-tags'       => 'rss',
+                )
+            )
         );
 
     }

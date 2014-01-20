@@ -490,7 +490,6 @@ class PaywallController extends Controller
         // Check direct payment modes
         $number = count($settingsForm['payment_modes']['time']);
         if ($number > 0) {
-            $paymentModes = array();
             for ($i=0; $i < $number; $i++) {
                 $settings['payment_modes'] []= array(
                     'time'              => $settingsForm['payment_modes']['time'][$i],
@@ -712,7 +711,7 @@ class PaywallController extends Controller
             $refundReq->RefundTransactionRequest = $refundReqest;
             try {
                 /* wrap API method calls on the service object with a try catch */
-                $refundResponse = $paypalService->RefundTransaction($refundReq);
+                $paypalService->RefundTransaction($refundReq);
             } catch (\Exception $ex) {
                 $this->get('logger')->notice("Paywall: Error in refundResponse validate IPN API call.");
             }

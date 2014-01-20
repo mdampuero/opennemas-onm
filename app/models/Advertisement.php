@@ -532,11 +532,9 @@ class Advertisement extends Content
             $params['afterHTML']  = "</div>";
         }
 
-        $cssclass             = $params['cssclass'];
         $width                = $this->params['width'];
         $height               = $this->params['height'];
         $overlap              = (isset($this->params['overlap']))? $this->params['overlap']: false;
-        $isBastardIE          = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
 
         // Extract width and height properties from CSS
         $width  = $params['width'];

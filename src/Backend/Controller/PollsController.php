@@ -146,7 +146,6 @@ class PollsController extends Controller
         $ccm = new \ContentCategoryManager();
 
         $page         = $request->query->getDigits('page', 1);
-        $category     = $request->query->getDigits('category', 'all');
         $itemsPerPage = s::get('items_per_page') ?: 20;
 
         list($countPolls, $polls) =$cm->getCountAndSlice(

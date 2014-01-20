@@ -91,14 +91,10 @@ class UserController extends Controller
      **/
     public function registerAction(Request $request)
     {
-        //Get config vars
-        $configSiteName = s::get('site_name');
-
         $errors = array();
+
         // What happens when the CAPTCHA was entered incorrectly
-        if ('POST' != $request->getMethod()) {
-            // Do nothing
-        } else {
+        if ('POST' == $request->getMethod()) {
             $data = array(
                 'activated'     => 0, // Before activation by mail, user is not allowed
                 'cpwd'          => $request->request->filter('cpwd', null, FILTER_SANITIZE_STRING),
@@ -283,8 +279,6 @@ class UserController extends Controller
 
                 // Set token to null
                 $user->updateUserToken($user->id, null);
-
-                $group = \UserGroup::getGroupName($user->fk_user_group);
 
                 $_SESSION = array(
                     'userid'           => $user->id,
@@ -694,7 +688,6 @@ class UserController extends Controller
     {
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $slug = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
-        $page = $request->query->getDigits('page', 1);
 
         // Get sync params
         $wsUrl = '';
@@ -723,7 +716,6 @@ class UserController extends Controller
      **/
     public function frontpageAuthorsAction(Request $request)
     {
-
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = 16;
 

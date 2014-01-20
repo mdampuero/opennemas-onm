@@ -79,7 +79,6 @@ class VideosController extends Controller
         $page           = $request->query->getDigits('page', 1);
         $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $configurations = s::get('video_settings');
-        $numFavorites   = $configurations['total_widget'];
 
         $cm = new \ContentManager();
 
@@ -420,8 +419,6 @@ class VideosController extends Controller
                 'authors'     => $authors,
             )
         );
-
-        return new Response($content);
     }
 
     /**
@@ -662,7 +659,6 @@ class VideosController extends Controller
     {
         $id = $request->query->filter('id', null, FILTER_DEFAULT);
 
-        $video = new \Video($id);
         $relations = array();
         $msg ='';
         $relations = \RelatedContent::getContentRelations($id);
@@ -695,7 +691,6 @@ class VideosController extends Controller
             && is_array($positions)
             && count($positions) > 0
         ) {
-            $_positions = array();
             $pos = 1;
 
             foreach ($positions as $id) {

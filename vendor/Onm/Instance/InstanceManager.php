@@ -221,8 +221,6 @@ class InstanceManager
      */
     public function read($id)
     {
-        $instances = array();
-
         $sql = "SELECT SQL_CACHE * FROM instances WHERE id = ?";
         $rs = $this->connection->Execute($sql, array($id));
         if (!$rs) {

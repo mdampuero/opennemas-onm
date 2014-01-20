@@ -54,7 +54,6 @@ class ArticlesController extends Controller
     {
         $dirtyID      = $request->query->filter('article_id', '', FILTER_SANITIZE_STRING);
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
-        $slug         = $request->query->filter('slug', '', FILTER_SANITIZE_STRING);
 
         // Resolve article ID
         $articleID = \Content::resolveID($dirtyID);

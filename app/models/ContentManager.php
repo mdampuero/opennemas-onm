@@ -862,7 +862,6 @@ class ContentManager
         $all = false
     ) {
         $this->init($contentType);
-        $items = array();
 
         $sql = "SELECT COUNT(comments.content_id) as num_comments, contents.*, articles.*
                 FROM contents, comments, articles

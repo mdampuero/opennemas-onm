@@ -136,9 +136,8 @@ class ArticlesController extends Controller
         );
 
         if (isset($articles) && is_array($articles)) {
-            $user    = new \User();
-            $rating  = new \Rating();
 
+            $user    = new \User();
             foreach ($articles as &$article) {
                 $article->category_name = $article->loadCategoryName($article->id);
                 $article->publisher = $user->getUserName($article->fk_publisher);
@@ -345,7 +344,6 @@ class ArticlesController extends Controller
 
         // Para usar el id de articulo al borrar un comentario
         $_SESSION['olderId'] = $id;
-        $cm = new \ContentManager();
 
         // Photos de noticia
         if (!empty($article->img1)) {

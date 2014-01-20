@@ -76,7 +76,6 @@ class SitemapController extends Controller
         ) {
             //TODO: add this value in a config file for easy editing
             $maxArticlesByCategory = 250;
-            $numContents = 50;
 
             // Foreach available category retrieve last $maxArticlesByCategory articles in there
             $articlesByCategory = array();

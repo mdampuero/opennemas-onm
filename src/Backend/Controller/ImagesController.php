@@ -419,7 +419,6 @@ class ImagesController extends Controller
 
         $request   = $this->request;
         $photosRAW = $request->request->get('description');
-        $page      = $request->request->getDigits('page', 1);
 
         $ids = array();
         $photosSaved = 0;

@@ -66,13 +66,12 @@ class FormController extends Controller
      **/
     public function sendAction(Request $request)
     {
-
         if ('POST' != $request->getMethod()) {
             return new RedirectResponse($this->generateUrl('frontend_participa_frontpage'));
         }
+
         //Get configuration params
         $configRecaptcha = s::get('recaptcha');
-        $configSiteName  = s::get('site_name');
 
         // Get request params
         $verify           = $request->request->filter('security_code', "", FILTER_SANITIZE_STRING);

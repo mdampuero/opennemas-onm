@@ -234,7 +234,6 @@ class NewsletterSubscriptorsController extends Controller
     public function toggleSubscriptionAction(Request $request)
     {
         $id   = $request->query->getDigits('id', null);
-        $page = $request->query->getDigits('page', 1);
 
         $user = new \Subscriptor($id);
 
@@ -254,7 +253,6 @@ class NewsletterSubscriptorsController extends Controller
     public function toggleActivatedAction(Request $request)
     {
         $id   = $request->query->getDigits('id', null);
-        $page = $request->query->getDigits('page', 1);
 
         $user = new \Subscriptor($id);
 
