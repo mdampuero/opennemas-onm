@@ -105,7 +105,6 @@
                     extraPlugins: 'magicline,font',
                     magicline_color: 'blue',
                     forcePasteAsPlainText : false,
-                    fillEmptyBlocks : false,
                     ignoreEmptyParagraph : true,
                 };
 
