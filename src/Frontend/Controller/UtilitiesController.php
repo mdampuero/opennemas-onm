@@ -71,7 +71,10 @@ class UtilitiesController extends Controller
         if ($json['url']) {
             if ($type == 'googlePlus') {
                 //source http://www.helmutgranda.com/2011/11/01/get-a-url-google-count-via-php/
-                $content = $this->createCurlRequest("https://plusone.google.com/u/0/_/+1/fastbutton?url=".$url."&count=true");
+                $content = $this->createCurlRequest(
+                    "https://plusone.google.com/u/0/_/+1/fastbutton?url=".$url."&count=true",
+                    300
+                );
 
                 $dom = new \DOMDocument;
                 $dom->preserveWhiteSpace = false;
@@ -112,8 +115,15 @@ class UtilitiesController extends Controller
      *
      * @return string the HTML content of the url
      **/
-    private function createCurlRequest($encUrl)
+    private function createCurlRequest($encUrl, $cacheTimeout = 300)
     {
+        $cache = $this->get('cache');
+        $cachedValue = $cache->fetch($encUrl);
+
+        if ($cachedValue !== false) {
+            return $cachedValue;
+        }
+
         $options = array(
             CURLOPT_RETURNTRANSFER => true, // return web page
             CURLOPT_HEADER => false, // don't return headers
@@ -142,6 +152,9 @@ class UtilitiesController extends Controller
             /*print_r($errmsg);
             print_r($errmsg);*/
         }
+
+        $cache->save($encUrl, $content);
+
 
         return $content;
     }
