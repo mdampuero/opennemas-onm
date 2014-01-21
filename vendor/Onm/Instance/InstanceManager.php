@@ -705,7 +705,7 @@ class InstanceManager
         // Insert user with data from the openhost form
         //TODO: PROVISIONAL WHILE DONT DELETE $GLOBALS['application']->conn
         //// is used in settings set
-        $im = $this->getInstance();
+        $im = getService('instance_manager');
         $GLOBALS['application']->conn =
             $im->getConnection($data['settings']);
 
@@ -939,8 +939,8 @@ class InstanceManager
         }
         $filePath = $backupPath.DS."user.sql";
         $handle = fopen($filePath, "w");
-        foreach ($rs as $userInfo) {
-            fwrite($handle, $userInfo[0].";\n");
+        foreach ($rs->fields as $userInfo) {
+            fwrite($handle, $userInfo.";\n");
         }
         fclose($handle);
 
