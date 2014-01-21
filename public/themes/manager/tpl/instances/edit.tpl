@@ -50,12 +50,19 @@ table.adminform {
 {/block}
 
 {block name="footer-js"}
+{script_tag src="/jquery/jquery-ui-timepicker-addon.js" common=1}
 <script>
 jQuery(document).ready(function($) {
     $('#instance-edit').tabs();
 
     $('#formulario').onmValidate({
         'lang' : '{$smarty.const.CURRENT_LANGUAGE|default:"en"}'
+    });
+
+    jQuery('#domain_expire').datepicker({
+        hourGrid: 4,
+        showAnim: 'fadeIn',
+        dateFormat: 'yy-mm-dd',
     });
 });
 </script>
@@ -144,7 +151,19 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact" class="control-label">{t}User contact IP:{/t}</label>
+                                <label for="domain_expire" class="control-label">{t}Domain expire date:{/t}</label>
+                            </th>
+                            <td class="controls">
+                                <input type="datetime" id="domain_expire" name="domain_expire" value="{$configs['domain_expire']|default:""}">
+                            </td>
+                            <td>
+
+                            </td>
+                        </tr>
+
+                        <tr valign="top" class="control-group">
+                            <th scope="row">
+                                <label for="contact_IP" class="control-label">{t}User contact IP:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="text" readonly id="contact_IP" name="contact_IP" value="{$configs['contact_IP']|default:""}">
@@ -156,7 +175,7 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title" class="control-label">{t}Created:{/t}</label>
+                                <label for="site_created" class="control-label">{t}Created:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="text" id="site_created" name="site_created" value="{if $configs['site_created']}{$configs['site_created']}{else}{$smarty.now|date_format:"%Y-%m-%d - %H:%M:%S"}{/if}">
@@ -168,7 +187,7 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact" class="control-label">{t}User name:{/t}</label>
+                                <label for="contact_name" class="control-label">{t}User name:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="text" id="contact_name" name="contact_name" value="{$configs['contact_name']|default:""}" required="required">
@@ -180,7 +199,7 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact" class="control-label">{t}User password:{/t}</label>
+                                <label for="password" class="control-label">{t}User password:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="password" id="password" class="{if !isset($instance)}required validate-password required="required"{/if}" name="password" value="" {if isset($instance)}readonly="readonly"{/if}>
@@ -192,7 +211,7 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="contact" class="control-label">{t}User contact mail:{/t}</label>
+                                <label for="contact_mail" class="control-label">{t}User contact mail:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="email" id="contact_mail" name="contact_mail" value="{$configs['contact_mail']|default:""}" required="required">
@@ -222,7 +241,7 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title" class="control-label">{t}Site description:{/t}</label>
+                                <label for="site_description" class="control-label">{t}Site description:{/t}</label>
                             </th>
                             <td class="controls">
                                 <textarea id="site_description" name="site_description" cols="50" rows="7">{$configs['site_description']|default:""}</textarea>
@@ -233,7 +252,7 @@ jQuery(document).ready(function($) {
                         </tr>
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title" class="control-label">{t}Site keywords:{/t}</label>
+                                <label for="site_keywords" class="control-label">{t}Site keywords:{/t}</label>
                             </th>
                             <td class="controls">
                                 <textarea id="site_keywords" name="site_keywords" cols="50" rows="5">{$configs['site_keywords']|default:""}</textarea>
@@ -244,7 +263,7 @@ jQuery(document).ready(function($) {
                         </tr>
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title" class="control-label">{t}Site agency:{/t}</label>
+                                <label for="site_agency" class="control-label">{t}Site agency:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="text" id="site_agency" name="site_agency" value="{$configs['site_agency']|default:""}">
@@ -497,7 +516,7 @@ jQuery(document).ready(function($) {
 
                         <tr valign="top" class="control-group">
                             <th scope="row">
-                                <label for="site_title" class="control-label">{t}Last invoice date:{/t}</label>
+                                <label for="last_invoice" class="control-label">{t}Last invoice date:{/t}</label>
                             </th>
                             <td class="controls">
                                 <input type="text" id="last_invoice" name="last_invoice" value="{if $configs['last_invoice']}{$configs['last_invoice']}{else} {/if}">
