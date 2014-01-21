@@ -87,7 +87,7 @@ class Instances extends \Onm\Rest\RestBase
         }
 
         $errors = array();
-        $im = \Onm\Instance\InstanceManager::getInstance();
+        $im = getService('instance_manager');
         // Check for reapeted internalnameshort and if so, add a number at the end
         $data = $im->checkInternalShortName($data);
         $errors = $im->create($data);
@@ -176,7 +176,7 @@ class Instances extends \Onm\Rest\RestBase
      */
     protected function postCheckInstanceName($url)
     {
-        $im = \Onm\Instance\InstanceManager::getInstance();
+        $im = getService('instance_manager');
         $url = filter_var($url, FILTER_SANITIZE_STRING);
         return $im->checkInstanceExists($url);
     }
@@ -190,7 +190,7 @@ class Instances extends \Onm\Rest\RestBase
      */
     public function postCheckMailInUse($email)
     {
-        $im = \Onm\Instance\InstanceManager::getInstance();
+        $im = getService('instance_manager');
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
         return $im->checkMailExists($email);
     }
