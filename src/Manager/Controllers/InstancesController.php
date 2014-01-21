@@ -232,6 +232,7 @@ class InstancesController extends Controller
                 'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
                 'internal_name' => $internalName,
                 'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
+                'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),
                 'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
                 'settings'      => $settings,
                 'site_created'  => $request->request
@@ -345,6 +346,7 @@ class InstancesController extends Controller
             'user_pass'     => $request->request->filter('password', '', FILTER_SANITIZE_STRING),
             'internal_name' => $internalName,
             'domains'       => $request->request->filter('domains', '', FILTER_SANITIZE_STRING),
+            'domain_expire' => $request->request->filter('domain_expire', '', FILTER_SANITIZE_STRING),
             'activated'     => $request->request->filter('activated', '', FILTER_SANITIZE_NUMBER_INT),
             'settings'      => $settings,
             'site_created'  => $request->request->filter('site_created', date("Y-m-d - H:m:s"), FILTER_SANITIZE_STRING)
@@ -366,7 +368,7 @@ class InstancesController extends Controller
         $configurationsKeys = array(
             'site_title', 'site_description','site_keywords',
             'site_agency','site_name','site_created',
-            'contact_mail','contact_name','contact_IP',
+            'contact_mail','contact_name','contact_IP','domain_expire',
             'time_zone','site_language', 'pass_level',
             'newsletter_sender',  'max_mailing', 'mail_server', 'last_invoice',
             'mail_username','mail_password','google_maps_api_key',
