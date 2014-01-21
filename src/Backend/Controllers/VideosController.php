@@ -189,9 +189,9 @@ class VideosController extends Controller
         if ('POST' == $request->getMethod()) {
             $requestPost  = $request->request;
 
-            $type     = $request->filter('type', null, FILTER_SANITIZE_STRING);
-            $page     = $request->getDigits('page', 1);
-            $category = $request->getDigits('category');
+            $type     = $requestPost->filter('type', null, FILTER_SANITIZE_STRING);
+            $page     = $requestPost->getDigits('page', 1);
+            $category = $requestPost->getDigits('category');
 
             if ($type === 'file') {
                 // Check if the video file entry was completed
