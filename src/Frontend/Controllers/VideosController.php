@@ -157,6 +157,8 @@ class VideosController extends Controller
                         )
                     )
                 );
+
+                $this->view->assign('pagination', $pagination);
             }
 
             if (count($videos) > 0) {
@@ -177,7 +179,6 @@ class VideosController extends Controller
                 array(
                     'videos'        => $videos,
                     'others_videos' => $othersVideos,
-                    'pagination'    => $pagination,
                     'page'          => '1'
                 )
             );
