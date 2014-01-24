@@ -3343,6 +3343,18 @@ gettext("Body");
 /* public/themes/admin/tpl//letter/new.tpl */
 gettext("Related url");
 
+/* public/themes/admin/tpl//letter/new.tpl */
+gettext("Image for Special");
+
+/* public/themes/admin/tpl//letter/new.tpl */
+gettext("Frontpage image");
+
+/* public/themes/admin/tpl//letter/new.tpl */
+gettext("Image not set");
+
+/* public/themes/admin/tpl//letter/new.tpl */
+gettext("Set image");
+
 /* public/themes/admin/tpl//letter/list.tpl */
 gettext("Letters to the Editor");
 
@@ -4572,9 +4584,6 @@ gettext("Intelligent Widget");
 
 /* public/themes/admin/tpl//widget/new.tpl */
 gettext("HTML");
-
-/* public/themes/admin/tpl//widget/new.tpl */
-gettext("PHP");
 
 /* public/themes/admin/tpl//widget/new.tpl */
 gettext("Smarty");
@@ -6226,6 +6235,54 @@ gettext("No");
 /* public/themes/admin/tpl//comment/modals/_modalBatchDelete.tpl */
 gettext("You must select some elements.");
 
+/* public/themes/admin/tpl//comment/modals/_modalChange.tpl */
+gettext("Change comments system");
+
+/* public/themes/admin/tpl//comment/modals/_modalChange.tpl */
+gettext("Are you sure you want to change the comments system?");
+
+/* public/themes/admin/tpl//comment/modals/_modalChange.tpl */
+gettext("Yes, change");
+
+/* public/themes/admin/tpl//comment/modals/_modalChange.tpl */
+gettext("No");
+
+/* public/themes/admin/tpl//comment/facebook/config.tpl */
+gettext("Settings");
+
+/* public/themes/admin/tpl//comment/facebook/config.tpl */
+gettext("Save");
+
+/* public/themes/admin/tpl//comment/facebook/config.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//comment/facebook/config.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//comment/facebook/config.tpl */
+gettext("Go back to list");
+
+/* public/themes/admin/tpl//comment/facebook/config.tpl */
+gettext("You can get your Facebook User Id in <a href=\"http://facebook.com/\" target=\"_blank\">here</a>");
+
+/* public/themes/admin/tpl//comment/facebook/config.tpl */
+gettext("You can get your Facebook App Id in <a href=\"http://facebook.com/\" target=\"_blank\">here</a>");
+
+/* public/themes/admin/tpl//comment/select_module.tpl */
+gettext("Comments");
+
+/* public/themes/admin/tpl//comment/select_module.tpl */
+gettext("Pick the method to manage comments:");
+
+/* public/themes/admin/tpl//comment/select_module.tpl */
+gettext("Opennemas");
+
+/* public/themes/admin/tpl//comment/select_module.tpl */
+gettext("Disqus");
+
+/* public/themes/admin/tpl//comment/select_module.tpl */
+gettext("Facebook");
+
 /* public/themes/admin/tpl//comment/config.tpl */
 gettext("Comments");
 
@@ -7059,12 +7116,6 @@ gettext("Clicks");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
 gettext("Clicks");
-
-/* public/themes/admin/tpl//advertisement/list.tpl */
-gettext("Views");
-
-/* public/themes/admin/tpl//advertisement/list.tpl */
-gettext("Views");
 
 /* public/themes/admin/tpl//advertisement/list.tpl */
 gettext("Available");
@@ -8834,10 +8885,10 @@ gettext("Sync category");
 gettext("Sync");
 
 /* public/themes/admin/tpl//menues/new.tpl */
-gettext("Category blog");
+gettext("Automatic Categories");
 
 /* public/themes/admin/tpl//menues/new.tpl */
-gettext("Category blog");
+gettext("Automatic Categories");
 
 /* public/themes/admin/tpl//menues/new.tpl */
 gettext("Sync Blog Categories");
@@ -8982,6 +9033,9 @@ gettext("Domains:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("List of domains separated by commas. You can use wildcards, i.e. *.example.com");
+
+/* public/themes/manager/tpl/instances/edit.tpl */
+gettext("Domain expire date:");
 
 /* public/themes/manager/tpl/instances/edit.tpl */
 gettext("User contact IP:");
@@ -9454,8 +9508,11 @@ gettext("Deploy");
 /* public/themes/manager/tpl/framework/commands/commands.tpl */
 gettext("Execute");
 
+/* public/themes/manager/tpl/framework/commands/commands.tpl */
+gettext("Execute");
+
 /* public/themes/manager/tpl/framework/opcache_status.tpl */
-gettext("Framework status");
+gettext("Zend Opcache status");
 
 /* public/themes/manager/tpl/framework/status.tpl */
 gettext("Framework status");
