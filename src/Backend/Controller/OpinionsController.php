@@ -1147,6 +1147,15 @@ class OpinionsController extends Controller
     public function updateAuthorAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
+
+        if (count($request->request) < 1) {
+            m::add(_("User data sent not valid."), m::ERROR);
+
+            return $this->redirect(
+                $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
+            );
+        }
+
         $user   = new \User($userId);
 
         $accessCategories = array();
