@@ -178,6 +178,12 @@ class AclUserController extends Controller
             $this->checkAclOrForward('USER_UPDATE');
         }
 
+        if (count($request->request) < 1) {
+            m::add(_("User data sent not valid."), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_acl_user_show', array('id' => $userId)));
+        }
+
         $user = new \User($userId);
 
         $accessCategories = array();
