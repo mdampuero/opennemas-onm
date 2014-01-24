@@ -229,11 +229,11 @@
                                             {elseif $page eq 'boletin'}"Bolet&iacute;n"
                                             {else}{$page}{/if}
                                     data-link={if $page eq 'frontpage'}"/"
-                                            {elseif $page eq 'poll'}"/encuesta/"
-                                            {elseif $page eq 'kiosko'}"/portadas-papel/"
-                                            {elseif $page eq 'letter'}"/participa/"
-                                            {elseif $page eq 'boletin'}"/newsletter/"
-                                            {else}"/{$page}/"{/if}
+                                            {elseif $page eq 'poll'}"encuesta/"
+                                            {elseif $page eq 'kiosko'}"portadas-papel/"
+                                            {elseif $page eq 'letter'}"participa/"
+                                            {elseif $page eq 'boletin'}"newsletter/"
+                                            {else}"{$page}/"{/if}
                                     data-type="internal"
                                     class="drag-category"
                                     pk_menu="">
@@ -331,7 +331,7 @@
 
                     {is_module_activated name="FRONTPAGES_LAYOUT"}
                     {if count($categories) > 0}
-                    <h3 href="#listado">{t}Category blog{/t}</h3>
+                    <h3 href="#listado">{t}Automatic Categories{/t}</h3>
                     <div id="listado">
                         <ul id='availableCategories' class="elementsContainer">
                             {foreach $categories as $blog}
@@ -343,7 +343,7 @@
                                     class="drag-category"
                                     pk_menu="">
                                     <div>
-                                        <span class="type">{t}Category blog{/t}:</span>
+                                        <span class="type">{t}Automatic Categories{/t}:</span>
                                         <span class="menu-title">{$blog->title}</span>
                                         <div class="btn-group actions" style="float:right;">
                                             <a href="#" class="add-item"><i class="icon-plus"></i></a>
