@@ -74,35 +74,6 @@ class OnmMigratorCommand extends ContainerAwareCommand
     }
 
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->output = $output;
-        $this->output->writeln(
-            '<fg=yellow>*** Starting ONM Migrator ***</fg=yellow>'
-        );
-
-        $path = $input->getArgument('conf-file');
-        $yaml = new Parser();
-        $this->settings = $yaml->parse(file_get_contents($path));
-
-        $basePath = APPLICATION_PATH;
-        chdir($basePath);
-
-        $this->displayConfigurationInfo();
-        $this->configureMigrator();
-
-        $this->prepareDatabase();
-        $this->import();
-
-        $this->displayFinalInfo();
-    }
-
-    /**
      * Configures the current migrator.
      */
     protected function configureMigrator()
@@ -120,6 +91,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
             )
         );
         define('INSTANCE_UNIQUE_NAME', $this->settings['database']['instance']);
+        define('FILE_DIR', INSTANCE_UNIQUE_NAME.'/files');
 
         define('IMG_DIR', "images");
         define(
@@ -131,12 +103,12 @@ class OnmMigratorCommand extends ContainerAwareCommand
             getContainerParameter('database')
         );
         $this->originConnection->selectDatabase(
-            $this->settings['database']['origin']
+            $this->settings['database']['source']
         );
 
         $this->targetConnection = getService('db_conn');
         $this->targetConnection->selectDatabase(
-            $this->settings['database']['final']
+            $this->settings['database']['target']
         );
 
         \Application::load();
@@ -144,6 +116,40 @@ class OnmMigratorCommand extends ContainerAwareCommand
 
         $_SESSION['username'] = 'script';
         $_SESSION['userid']   = 11;
+    }
+
+    /**
+     * Returns true if $string is equal to all values in $params.
+     *
+     * @param  string  $string String to convert.
+     * @param  string  $params Values to compare.
+     * @return boolean
+     */
+    protected function convertToBoolean($string, $params)
+    {
+        foreach ($params['value'] as $value) {
+            if ($string != $value) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the new value according to the given mapping.
+     *
+     * @param  array $string String to convert.
+     * @param  array $params Mapping to use while converting.
+     * @return mixed
+     */
+    protected function convertToMap($string, $params)
+    {
+        if (isset($params['map']) && isset($params['map'][$string])) {
+            return $params['map'][$string];
+        }
+
+        return false;
     }
 
     /**
@@ -237,7 +243,6 @@ class OnmMigratorCommand extends ContainerAwareCommand
         );
     }
 
-
     /**
      * Display results after importing a section.
      *
@@ -278,6 +283,35 @@ class OnmMigratorCommand extends ContainerAwareCommand
     }
 
     /**
+     * Executes the current command.
+     *
+     * @param InputInterface  $input  An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->output = $output;
+        $this->output->writeln(
+            '<fg=yellow>*** Starting ONM Migrator ***</fg=yellow>'
+        );
+
+        $path = $input->getArgument('conf-file');
+        $yaml = new Parser();
+        $this->settings = $yaml->parse(file_get_contents($path));
+
+        $basePath = APPLICATION_PATH;
+        chdir($basePath);
+
+        $this->displayConfigurationInfo();
+        $this->configureMigrator();
+
+        $this->prepareDatabase();
+        $this->import();
+
+        $this->displayFinalInfo();
+    }
+
+    /**
      * Gets all source fields from database for each entity.
      *
      * @param  array $schema Database schema.
@@ -289,8 +323,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $this->stats[$schema['target']]['already_imported'] = 0;
 
         // Select all ids
-        $sql = 'SELECT ' . $schema['table_origin'] . '.'
-            . $schema['id_origin'] . ' FROM ' . $schema['table_origin'];
+        $sql = 'SELECT ' . $schema['source']['table'] . '.'
+            . $schema['source']['id'] . ' FROM ' . $schema['source']['table'];
 
         // Add logical comparisons to 'WHERE' chunk
         if (isset($schema['filters'])
@@ -312,8 +346,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
             }
         }
 
-        $sql .= ' ORDER BY ' . $schema['table_origin'] . '.'
-            . $schema['id_origin'] . ' LIMIT 0,60';
+        $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
+            . $schema['source']['id'] . ' LIMIT 0,100';
 
         $request = $this->originConnection->Prepare($sql);
         $rs      = $this->originConnection->Execute($request);
@@ -329,7 +363,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
             }
 
             if (!$this->elementIsImported(
-                $id[$schema['id_origin']],
+                $id[$schema['source']['id']],
                 $schema['translation']['name']
             )) {
 
@@ -341,8 +375,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
                             in_array('constant', $field['type'])) {
                         $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key;
                     } else {
-                        $sql = $sql . $field['table_origin'] . '.'
-                            . $field['field_origin'] . ' AS ' . $key;
+                        $sql = $sql . $field['table'] . '.'
+                            . $field['field'] . ' AS ' . $key;
                     }
 
                     if ($i < count($schema['fields']) - 1) {
@@ -355,7 +389,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 // Build sql statement 'FROM' chunk
                 $sql .= ' FROM ';
                 foreach ($schema['tables'] as $key => $table) {
-                    $sql .= $table;
+                    $sql .= $table['table'];
+
+                    if (isset($table['alias'])) {
+                        $sql .= ' AS ' . $table['alias'];
+                    }
 
                     if ($key < count($schema['tables']) - 1) {
                         $sql .= ', ';
@@ -364,9 +402,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
 
                 // Build sql statement 'WHERE' chuck
                 $sql.= ' WHERE ('
-                        . $schema['table_origin'] . '.'
-                        . $schema['id_origin'] . '='
-                        . $id[$schema['id_origin']] . ')';
+                        . (isset($schema['source']['alias']) ?
+                            $schema['source']['alias'] :
+                            $schema['source']['table']) . '.'
+                        . $schema['source']['id'] . '='
+                        . $id[$schema['source']['id']] . ')';
 
                 if (isset($schema['relations'])
                         && count($schema['relations']) > 0) {
@@ -439,7 +479,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
         foreach ($this->settings['database']['schemas'] as $schema) {
             $this->output->writeln(
                 "\n<fg=yellow>Migrating from <fg=red>"
-                . $schema['table_origin'] . '</fg=red> to <fg=green>'
+                . $schema['source']['table'] . '</fg=red> to <fg=green>'
                 . $schema['target']
                 . "</fg=green>...</fg=yellow>"
             );
@@ -452,17 +492,23 @@ class OnmMigratorCommand extends ContainerAwareCommand
             $data = $this->getSource($schema);
 
             switch ($schema['target']) {
-                case 'article':
-                    $this->saveArticles($schema, $data);
-                    break;
-                case 'category':
-                    $this->saveCategories($schema, $data);
-                    break;
                 case 'album':
                     $this->saveAlbums($schema, $data);
                     break;
                 case 'album_photos':
                     $this->saveAlbumPhotos($schema, $data);
+                    break;
+                case 'article':
+                    $this->saveArticles($schema, $data);
+                    break;
+                case 'attachment':
+                    $this->saveAttachments($schema, $data);
+                    break;
+                case 'category':
+                    $this->saveCategories($schema, $data);
+                    break;
+                case 'comment':
+                    $this->saveComments($schema, $data);
                     break;
                 case 'photo':
                     $this->savePhotos($schema, $data);
@@ -687,7 +733,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     foreach ($photos['album_photos_id'] as $photo) {
                         $this->createTranslation(
                             $photo,
-                            $album,
+                            $album->id,
                             $schema['translation']['name']
                         );
 
@@ -764,8 +810,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the articles.
      *
-     * @param  array $schema Database schema.
-     * @param  array $data   Users to save.
+     * @param array $schema Database schema.
+     * @param array $data   Users to save.
      */
     protected function saveArticles($schema, $data)
     {
@@ -812,7 +858,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 );
 
                 // Overwrite only if it has a default value
-                if ($parsedd !== false && array_key_exists($key, $values)) {
+                if ($parsed !== false && array_key_exists($key, $values)) {
                     $values[$key] = $parsed;
                 }
             }
@@ -846,10 +892,45 @@ class OnmMigratorCommand extends ContainerAwareCommand
     }
 
     /**
+     * Saves the attachments.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Attachments to save.
+     */
+    protected function saveAttachments($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'pk_attachment' => 0,
+                'title'         => '',
+                'path'          => '',
+                'category'      => 20
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                $attachment = new \Attachment();
+                $attachment->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $attachment->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
      * Saves the categories.
      *
-     * @param  array    $schema Database schema.
-     * @param  array    $data   Categories to save.
+     * @param array $schema Database schema.
+     * @param array $data   Categories to save.
      */
     protected function saveCategories($schema, $data)
     {
@@ -866,19 +947,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'color'             => null
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $parsed;
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
                 $category = new \ContentCategory();
@@ -887,6 +956,49 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->createTranslation(
                     $item[$schema['translation']['field']],
                     $category->pk_content_category,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Save the comments.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Categories to save.
+     */
+    protected function saveComments($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'pk_content'   => 0,
+                'content_id'   => 0,
+                'author'       => '',
+                'author_email' => '',
+                'author_ip'    => '',
+                'date'         => date('now'),
+                'body'         => '',
+                'status'       => 'pending',
+                'agent'        => '',
+                'type'         => '',
+                'parent'       => 0,
+                'user_id'      => 0,
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                $comment = new \Comment();
+                $comment->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $comment->id,
                     $schema['translation']['name']
                 );
 
@@ -1247,8 +1359,10 @@ class OnmMigratorCommand extends ContainerAwareCommand
         }
     }
 
-
-    protected function clearLabelsInBodyArticle($body)
+    /**
+     *
+     */
+    private function convertToBody($body)
     {
         $result = array();
 
@@ -1341,5 +1455,44 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
+    }
+
+    /**
+     * Parses the values in $values and merges $default and $values according to
+     * database schema.
+     *
+     * @param  array $default Default values.
+     * @param  array $values  Values retrieved from database.
+     * @param  array $schema  Database schema.
+     * @return array          Merged array.
+     */
+    private function merge($default, $values, $schema)
+    {
+        foreach ($values as $key => $value) {
+            $parsed = $this->parseField(
+                $value,
+                $schema['fields'][$key]['type'],
+                isset($schema['fields'][$key]['params']) ?
+                $schema['fields'][$key]['params'] : null
+            );
+
+            // Overwrite only if it has a default value
+            if ($parsed !== false && array_key_exists($key, $default)) {
+                $default[$key] = $parsed;
+            }
+        }
+
+        if (isset($schema['merge'])) {
+            foreach ($schema['merge'] as $target => $origin) {
+                $merged = '';
+                foreach ($origin as $field) {
+                    $merged .= $default[$field] . ' ';
+                }
+
+                $default[$target] = $merged;
+            }
+        }
+
+        return $default;
     }
 }
