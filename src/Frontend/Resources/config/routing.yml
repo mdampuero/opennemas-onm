@@ -236,10 +236,6 @@ frontend_comments_save:
     path: /comments/save
     defaults: { _controller: FrontendBundle:Comments:save }
 
-frontend_comments_disqus_sync:
-    path: /comments/disqus/sync
-    defaults: { _controller: FrontendBundle:Comments:disqusSync }
-
 frontend_redirect_content:
     path: /redirect/content
     defaults: { _controller: FrontendBundle:Redirectors:content }
