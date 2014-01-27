@@ -507,7 +507,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
             $this->stats[$key]['imported']         = 0;
             $this->stats[$key]['start']            = time();
 
-            $data = $this->getSource($schema);
+            $data = $this->getSource($key, $schema);
 
             switch ($schema['target']) {
                 case 'album':
