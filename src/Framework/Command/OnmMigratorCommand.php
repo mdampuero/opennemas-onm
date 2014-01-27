@@ -153,6 +153,17 @@ class OnmMigratorCommand extends ContainerAwareCommand
     }
 
     /**
+     * Returns the string of keywords separated by commas.
+     *
+     * @param  string $string String to converto to metadata.
+     * @return string         Keywords separated by commas.
+     */
+    protected function convertToMetadata($string)
+    {
+        return \Onm\StringUtils::get_tags($string);
+    }
+
+    /**
      * Convert a given string to slug.
      *
      * @return string
@@ -227,19 +238,22 @@ class OnmMigratorCommand extends ContainerAwareCommand
 
     /**
      * Displays a message when ONM Migrator finishes the migration.
+     *
+     * @param integer
      */
-    protected function displayFinalInfo()
+    protected function displayFinalInfo($time)
     {
-        // $this->output->writeln(
-        //     '<fg=yellow>*** ONM Migrator Stats ***</fg=yellow>'
-        // );
+        $this->output->writeln(
+            '<fg=yellow>*** ONM Migrator Stats ***</fg=yellow>'
+        );
 
-        // foreach ($this->stats as $section => $stats) {
-        //     $this->displaySectionResults($section, $stats);
-        // }
+        foreach ($this->stats as $section => $stats) {
+            $this->displaySectionResults($section, $stats);
+        }
 
         $this->output->writeln(
-            '<fg=yellow>*** ONM Importer finished ***</fg=yellow>'
+            '<fg=yellow>*** ONM Importer finished in '
+            . $time . ' secs. ***</fg=yellow>'
         );
     }
 
@@ -290,12 +304,14 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $start = time();
         $this->output = $output;
         $this->output->writeln(
             '<fg=yellow>*** Starting ONM Migrator ***</fg=yellow>'
         );
 
         $path = $input->getArgument('conf-file');
+        $this->debug = $input->getOption('debug');
         $yaml = new Parser();
         $this->settings = $yaml->parse(file_get_contents($path));
 
@@ -308,7 +324,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $this->prepareDatabase();
         $this->import();
 
-        $this->displayFinalInfo();
+        $end = time();
+        $this->displayFinalInfo($end - $start);
     }
 
     /**
@@ -324,12 +341,12 @@ class OnmMigratorCommand extends ContainerAwareCommand
 
         // Select all ids
         $sql = 'SELECT ' . $schema['source']['table'] . '.'
-            . $schema['source']['id'] . ' FROM ' . $schema['source']['table'];
+            . $schema['source']['id'] . ' FROM ' . $schema['source']['table']
+            . ' WHERE 1';
 
         // Add logical comparisons to 'WHERE' chunk
         if (isset($schema['filters'])
                 && count($schema['filters']) > 0) {
-            $sql .= ' WHERE 1';
             foreach ($schema['filters'] as $condition) {
                 $sql .= ' AND (';
 
@@ -544,11 +561,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
     protected function loadTranslations()
     {
         $sql = 'SELECT * FROM translation_ids';
-        $this->translations = array(
-            'author'   => array(),
-            'category' => array(),
-            'article'  => array()
-        );
+        $this->translations = array();
 
         $rs = $this->targetConnection->Execute($sql);
         $translations = $rs->GetArray();
@@ -574,6 +587,42 @@ class OnmMigratorCommand extends ContainerAwareCommand
         }
 
         return false;
+    }
+
+    /**
+     * Parses the values in $values and merges $default and $values according to
+     * database schema.
+     *
+     * @param  array $default Default values.
+     * @param  array $values  Values retrieved from database.
+     * @param  array $schema  Database schema.
+     * @return array          Merged array.
+     */
+    protected function merge($default, $values, $schema)
+    {
+        foreach ($values as $key => $value) {
+            $values[$key] = $this->parseField(
+                $value,
+                $schema['fields'][$key]['type'],
+                isset($schema['fields'][$key]['params']) ?
+                $schema['fields'][$key]['params'] : null
+            );
+        }
+
+        $default = array_merge($default, $values);
+
+        if (isset($schema['merge'])) {
+            foreach ($schema['merge'] as $target => $origin) {
+                $merged = '';
+                foreach ($origin['fields'] as $field) {
+                    $merged .= $default[$field] . $origin['separator'];
+                }
+
+                $default[$target] = $merged;
+            }
+        }
+
+        return $default;
     }
 
     /**
@@ -683,42 +732,31 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'position'    => 0
             );
 
-            // Parse and translate old ids
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
+            $values = $this->merge($values, $item, $schema);
 
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $parsed;
+            if ($values['photo'] !== false) {
+                // Group photos by album
+                if (!isset($albums[$values['album']]['album_photos_id'])) {
+                    $albums[$values['album']]['album_photos_id'] = array();
                 }
-            }
 
-            // Group photos by album
-            if (!isset($albums[$values['album']]['album_photos_id'])) {
-                $albums[$values['album']]['album_photos_id'] = array();
-            }
+                if (!isset($albums[$values['album']]['album_photos_footer'])) {
+                    $albums[$values['album']]['album_photos_footer'] = array();
+                }
 
-            if (!isset($albums[$values['album']]['album_photos_footer'])) {
-                $albums[$values['album']]['album_photos_footer'] = array();
-            }
+                if (!$this->elementIsImported(
+                    $values['photo'],
+                    $schema['translation']['name']
+                )) {
 
-            if (!$this->elementIsImported(
-                $values['photo'],
-                $schema['translation']['name']
-            )) {
+                    $albums[$values['album']]['album_photos_id'][] =
+                        $values['photo'];
 
-                $albums[$values['album']]['album_photos_id'][] =
-                    $values['photo'];
-
-                $albums[$values['album']]['album_photos_footer'][] =
-                    $values['description'];
-            } else {
-                $this->stats[$schema['target']]['already_imported']++;
+                    $albums[$values['album']]['album_photos_footer'][] =
+                        $values['description'];
+                } else {
+                    $this->stats[$schema['target']]['already_imported']++;
+                }
             }
         }
 
@@ -776,19 +814,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'agency'                => ''
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $parsed;
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
                 $album = new \Album();
@@ -849,32 +875,10 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'fk_publisher'   => null,
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $parsed;
-                }
-            }
-
-            if (isset($schema['merge'])) {
-                foreach ($schema['merge'] as $target => $origin) {
-                    $merged = '';
-                    foreach ($origin as $field) {
-                        $merged .= $values[$field] . ' ';
-                    }
-
-                    $values[$target] = $merged;
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
+
                 $article = new \Article();
                 $article->create($values);
 
@@ -1041,19 +1045,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'fk_publisher'   => null
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $parsed;
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
                 $opinion = new \Opinion();
@@ -1115,42 +1107,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'origin_path'         => ''
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $this->parseField(
-                        $value,
-                        $schema['fields'][$key]['type'],
-                        isset($schema['fields'][$key]['params']) ?
-                        $schema['fields'][$key]['params'] : null
-                    );
-                }
-            }
-
-            if (isset($schema['merge'])) {
-                foreach ($schema['merge'] as $target => $origin) {
-                    $i = count($origin['fields']) - 1;
-                    $merged = '';
-                    foreach ($origin['fields'] as $field) {
-                        $merged .= $values[$field];
-
-                        if ($origin['separator'] && $i > 0) {
-                            $merged .= $origin['separator'];
-                        }
-
-                        $i--;
-                    }
-
-                    $values[$target] = $merged;
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
                 $photo = new \Photo();
@@ -1161,18 +1118,25 @@ class OnmMigratorCommand extends ContainerAwareCommand
                         $values,
                         $values['directory']
                     );
-                } else {
-                    $id = $photo->create($values);
+
+                    // Update article img2 and img2_footer
+                    if (isset($values['article'])
+                            && $values['article'] !== false) {
+                        $this->updateArticlePhoto(
+                            $values['article'],
+                            $id,
+                            $values['img2_footer']
+                        );
+                    }
+
+                    $this->createTranslation(
+                        $item[$schema['translation']['field']],
+                        $id,
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$schema['target']]['imported']++;
                 }
-
-
-                $this->createTranslation(
-                    $item[$schema['translation']['field']],
-                    $id,
-                    $schema['translation']['name']
-                );
-
-                $this->stats[$schema['target']]['imported']++;
             } catch (\Exception $e) {
                 $this->stats[$schema['target']]['error']++;
             }
@@ -1193,24 +1157,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'privileges' => array()
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $this->parseField(
-                        $value,
-                        $schema['fields'][$key]['type'],
-                        isset($schema['fields'][$key]['params']) ?
-                        $schema['fields'][$key]['params'] : null
-                    );
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
                 $group   = new \UserGroup();
@@ -1255,24 +1202,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'id_user_group' => array('3'),
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $this->parseField(
-                        $value,
-                        $schema['fields'][$key]['type'],
-                        isset($schema['fields'][$key]['params']) ?
-                        $schema['fields'][$key]['params'] : null
-                    );
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
                 $user = new \User();
@@ -1313,28 +1243,14 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'author_name'    => '',
             );
 
-            foreach ($item as $key => $value) {
-                $parsed = $this->parseField(
-                    $value,
-                    $schema['fields'][$key]['type'],
-                    isset($schema['fields'][$key]['params']) ?
-                    $schema['fields'][$key]['params'] : null
-                );
-
-                // Overwrite only if it has a default value
-                if ($parsed !== false && array_key_exists($key, $values)) {
-                    $values[$key] = $this->parseField(
-                        $value,
-                        $schema['fields'][$key]['type'],
-                        isset($schema['fields'][$key]['params']) ?
-                        $schema['fields'][$key]['params'] : null
-                    );
-                }
-            }
+            $values = $this->merge($values, $item, $schema);
 
             try {
                 $videoP = new \Panorama\Video($values['video_url']);
                 $values['information'] = $videoP->getVideoDetails();
+
+                var_dump($values['metadata']);die();
+
 
                 foreach ($values['information'] as $key => $value) {
                     // Overwrite only if it has a default value
@@ -1357,6 +1273,24 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$schema['target']]['error']++;
             }
         }
+    }
+
+    /**
+     * Updates img2 and im2_footer fields from an article.
+     *
+     * @param integer $id     Article id.
+     * @param integer $photo  Photo id.
+     * @param string  $footer Footer value for the photo.
+     */
+    protected function updateArticlePhoto($id, $photo, $footer)
+    {
+        $sql = "UPDATE articles  SET `img2`=?, `img2_footer`=?"
+            ."WHERE pk_article=?";
+
+        $values = array($photo, $footer, $id);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, $values);
     }
 
     /**
@@ -1455,44 +1389,5 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
-    }
-
-    /**
-     * Parses the values in $values and merges $default and $values according to
-     * database schema.
-     *
-     * @param  array $default Default values.
-     * @param  array $values  Values retrieved from database.
-     * @param  array $schema  Database schema.
-     * @return array          Merged array.
-     */
-    private function merge($default, $values, $schema)
-    {
-        foreach ($values as $key => $value) {
-            $parsed = $this->parseField(
-                $value,
-                $schema['fields'][$key]['type'],
-                isset($schema['fields'][$key]['params']) ?
-                $schema['fields'][$key]['params'] : null
-            );
-
-            // Overwrite only if it has a default value
-            if ($parsed !== false && array_key_exists($key, $default)) {
-                $default[$key] = $parsed;
-            }
-        }
-
-        if (isset($schema['merge'])) {
-            foreach ($schema['merge'] as $target => $origin) {
-                $merged = '';
-                foreach ($origin as $field) {
-                    $merged .= $default[$field] . ' ';
-                }
-
-                $default[$target] = $merged;
-            }
-        }
-
-        return $default;
     }
 }
