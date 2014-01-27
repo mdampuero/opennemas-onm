@@ -1005,6 +1005,14 @@ admin_opinion_author_batchdelete:
 # Comments controller routes
 admin_comments:
     path:     /comments
+    defaults: { _controller  : BackendBundle:Comments:default }
+
+admin_comments_select:
+    path:     /comments/select
+    defaults: { _controller  : BackendBundle:Comments:select }
+
+admin_comments_list:
+    path:     /comments/list
     defaults: { _controller  : BackendBundle:Comments:list }
 
 admin_comments_config:
@@ -1038,15 +1046,20 @@ admin_comments_batch_delete:
 # Comments by Disqus controller routes
 admin_comments_disqus:
     path:     /comments/disqus
-    defaults: { _controller  : BackendBundle:CommentsDisqus:default }
+    defaults: { _controller  : BackendBundle:Comments:defaultDisqus }
 
 admin_comments_disqus_config:
     path:     /comments/disqus/config
-    defaults: { _controller  : BackendBundle:CommentsDisqus:config }
+    defaults: { _controller  : BackendBundle:Comments:configDisqus }
 
-admin_comments_disqus_sync:
-    path:     /comments/disqus/sync
-    defaults: { _controller  : BackendBundle:CommentsDisqus:sync }
+# Comments by Facebook controller routes
+admin_comments_facebook:
+    path:     /comments/facebook
+    defaults: { _controller  : BackendBundle:Comments:defaultFacebook }
+
+admin_comments_facebook_config:
+    path:     /comments/facebook/config
+    defaults: { _controller  : BackendBundle:Comments:configFacebook }
 
 # Trash controller routes
 admin_trash:
