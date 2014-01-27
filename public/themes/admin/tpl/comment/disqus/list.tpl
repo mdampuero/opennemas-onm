@@ -43,7 +43,7 @@ jQuery(document).ready(function($){
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
-            <h2 class="disqus">{t}Comments{/t}</h2>
+            <h2>{t}Comments{/t}</h2>
         </div>
         <ul class="old-button">
             <li>
@@ -51,13 +51,6 @@ jQuery(document).ready(function($){
                     <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" title="{t}Config disqus module{/t}" alt="{t}Config disqus module{/t}" ><br />{t}Config{/t}
                 </a>
             </li>
-            {if !empty($disqus_secret_key)}
-            <li>
-                <a href="{url name=admin_comments_disqus_sync}" class="disqus_sync" title="{t}Disqus module sync{/t}">
-                    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Disqus module sync{/t}" alt="{t}Disqus module sync{/t}" ><br />{t}Synchronize{/t}
-                </a>
-            </li>
-            {/if}
         </ul>
     </div>
 </div>
@@ -70,7 +63,6 @@ jQuery(document).ready(function($){
         </div>
     {/if}
 </div>
-{include file="disqus/modals/_modal_sync_dialog.tpl"}
 {/block}
 
 {block name="copyright"}

@@ -27,7 +27,7 @@
                 {acl isAllowed="COMMENT_DELETE"}
                 <li>
                    <a class="delChecked" data-controls-modal="modal-comment-batchDelete" href="#" title="{t}Delete{/t}" alt="{t}Delete{/t}">
-                       <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />Eliminar
+                       <img border="0" src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
                    </a>
                 </li>
                 {/acl}
@@ -49,8 +49,14 @@
                 {/acl}
                 <li class="separator"></li>
                 <li>
+                    <a class="change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png" alt="{t}Change system{/t}"><br>
+                        {t}Change system{/t}
+                    </a>
+                </li>
+                <li>
                     <a href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
-                        <img border="0" src="/themes/admin/images/template_manager/configure48x48.png" alt=""><br>
+                        <img border="0" src="{$params.IMAGE_DIR}/template_manager/configure48x48.png" alt="{t}Settings{/t}"><br>
                         {t}Settings{/t}
                     </a>
                 </li>
@@ -179,7 +185,7 @@
     </div>
 
 </form>
-     <script>
+    <script>
         jQuery('#buton-batchReject').on('click', function(){
             jQuery('#formulario').attr('action', "{url name=admin_comments_batch_status category=$category page=$page}");
             jQuery('#formulario').submit();
@@ -199,4 +205,5 @@
     {include file="comment/modals/_modalDelete.tpl"}
     {include file="comment/modals/_modalBatchDelete.tpl"}
     {include file="comment/modals/_modalAccept.tpl"}
+    {include file="comment/modals/_modalChange.tpl"}
 {/block}

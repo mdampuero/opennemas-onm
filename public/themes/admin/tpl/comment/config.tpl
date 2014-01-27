@@ -45,7 +45,6 @@
                 </div>
             </fieldset>
         </div>
-    </fieldset>
-    <div></div>
+    </div>
 </form>
 {/block}
