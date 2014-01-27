@@ -46,6 +46,20 @@ abstract class AbstractCache implements CacheInterface
      */
     public function fetch($id)
     {
+        if (is_array($id)) {
+            $ids = array();
+            foreach ($id as $key) {
+                $ids []= $this->getNamespacedId($key);
+            }
+            $rawValues = $this->doFetch($ids);
+
+            $values = array();
+            foreach ($rawValues as $key => $value) {
+                $values [str_replace($this->namespace. '_', '', $key)] = $value;
+            }
+
+            return $values;
+        }
         return $this->doFetch($this->getNamespacedId($id));
     }
 
@@ -74,6 +88,15 @@ abstract class AbstractCache implements CacheInterface
      */
     public function save($id, $data, $lifeTime = 0)
     {
+        if (is_array($id)) {
+            $values = array();
+            foreach ($id as $key => $value) {
+                $values [$this->getNamespacedId($key)] = $value;
+            }
+
+            return $this->doSave($values, $data, $lifeTime);
+        }
+
         return $this->doSave($this->getNamespacedId($id), $data, $lifeTime);
     }
 

@@ -78,7 +78,7 @@ class ArticlesController extends Controller
 
         $cacheID = $this->view->generateCacheId($categoryName, null, $articleID);
 
-        $layout = s::get('frontpage_layout_'.$actualCategoryId, 'default');
+        $layout = $this->get('setting_repository')->get('frontpage_layout_'.$actualCategoryId, 'default');
         $layoutFile = 'layouts/'.$layout.'.tpl';
 
         $this->view->assign('layoutFile', $layoutFile);

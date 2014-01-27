@@ -37,7 +37,7 @@ class SettingManager extends BaseManager
 
         if (!is_array($settingName)) {
             // Try to fetch the setting from cache first
-            $settingValue = $this->cache->fetch($this->cachePrefix . $settingName);
+            $settingValue = $this->cache->fetch($settingName);
 
             // If was not fetched from cache now is turn of DB
             if (!$settingValue) {
@@ -56,30 +56,16 @@ class SettingManager extends BaseManager
                     $settingValue = unserialize($rs);
                 }
 
-                $this->cache->save($this->cachePrefix . $settingName, $settingValue);
+                $this->cache->save($settingName, $settingValue);
             }
         } else {
             // Try to fetch each setting from cache first
             $cacheSettingName = array();
-            foreach ($settingName as $key) {
-                $cacheSettingName []= $this->cachePrefix . $key;
-            }
 
-            $cacheSettingValue = $this->cache->fetch($cacheSettingName);
-
-            $settingValue = array();
-
-            if (!empty($cacheSettingValue)) {
-                foreach ($cacheSettingValue as $key => $value) {
-
-                    $keyName = str_replace($this->cachePrefix, "", $key);
-
-                    $settingValue[$keyName] = $value;
-                }
-            }
+            $settingValue = $this->cache->fetch($settingName);
 
             // If all the keys were not fetched from cache now is turn of DB
-            if (!is_null($settingValue)) {
+            if (is_null($settingValue)) {
                 $settings = implode("', '", $settingName);
                 $sql      = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
                 $rs       = $this->dbConn->Execute($sql);
@@ -93,12 +79,7 @@ class SettingManager extends BaseManager
                     $settingValue[$option['name']] = unserialize($option['value']);
                 }
 
-                $cacheSettingName = array();
-                foreach ($settingValue as $key => $option) {
-                    $cacheSettingName [$this->cachePrefix . $key] = $option;
-                }
-                $this->cache->save($settingName, $cacheSettingName);
-
+                $this->cache->save($settingValue, '');
             }
 
         }
