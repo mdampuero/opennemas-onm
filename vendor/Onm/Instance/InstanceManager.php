@@ -98,7 +98,8 @@ class InstanceManager
      **/
     public function fetchInstance($serverName)
     {
-        $instancesMatched = $this->cache->fetch('instances_'.$serverName);
+        $instanceCacheKey = 'instances_'.$serverName;
+        $instancesMatched = $this->cache->fetch($instanceCacheKey);
 
         if (!is_array($instancesMatched)) {
             //TODO: improve search for allowing subdomains with wildcards
@@ -111,7 +112,7 @@ class InstanceManager
             }
 
             $instancesMatched = $rs->GetArray();
-            $this->cache->save('instance_'.$serverName, $instancesMatched);
+            $this->cache->save($instanceCacheKey, $instancesMatched);
         }
 
         if (!(is_array($instancesMatched) && count($instancesMatched) > 0)) {
