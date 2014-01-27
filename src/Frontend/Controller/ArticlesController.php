@@ -56,12 +56,12 @@ class ArticlesController extends Controller
         $categoryName = $request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
         // Resolve article ID
-        $articleID = \Content::resolveID($dirtyID);
+        $er = $this->get('entity_repository');
+        $articleID = $er->resolveID($dirtyID);
         if (empty($articleID)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
-        $er = $this->get('entity_repository');
         $article = $er->find('Article', $articleID);
 
         // Load config
