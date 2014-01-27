@@ -496,6 +496,18 @@ a.unpublishing:hover {
   font-weight: bold;
 }
 
+.step-number {
+    background:#ccc;
+    border-radius:20px;
+    padding:5px 10px;
+    color:White;
+    font-weight: bold;
+    font-family: Arial, Verdana;
+    font-size:1.2em;
+    display:inline-block;
+    line-height:1em;
+}
+
 /* -------------------------------------------------------------
   Content from styles.css
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

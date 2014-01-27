@@ -288,3 +288,8 @@ div#intesticial-ad iframe {
 article.onm-new.opinion a.opinion-author-name {
     text-transform: uppercase;
 }
+
+/* -------------------------------------------------------------
+  Comments wrapper definition
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+#comentarios.article-comments { margin: 10px 0;}
