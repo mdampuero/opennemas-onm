@@ -331,13 +331,14 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Gets all source fields from database for each entity.
      *
-     * @param  array $schema Database schema.
-     * @return array         Array of fields used to create new entities.
+     * @param  string $name   Schema name.
+     * @param  array  $schema Database schema.
+     * @return array          Array of fields used to create new entities.
      */
-    protected function getSource($schema)
+    protected function getSource($name, $schema)
     {
         $data = array();
-        $this->stats[$schema['target']]['already_imported'] = 0;
+        $this->stats[$name]['already_imported'] = 0;
 
         // Select all ids
         $sql = 'SELECT ' . $schema['source']['table'] . '.'
@@ -479,7 +480,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     }
                 }
             } else {
-                $this->stats[$schema['target']]['already_imported']++;
+                $this->stats[$name]['already_imported']++;
             }
         }
 
@@ -493,7 +494,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
     {
         $this->loadTranslations();
 
-        foreach ($this->settings['database']['schemas'] as $schema) {
+        foreach ($this->settings['database']['schemas'] as $key => $schema) {
             $this->output->writeln(
                 "\n<fg=yellow>Migrating from <fg=red>"
                 . $schema['source']['table'] . '</fg=red> to <fg=green>'
@@ -501,56 +502,56 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 . "</fg=green>...</fg=yellow>"
             );
 
-            $this->stats[$schema['target']]['already_imported'] = 0;
-            $this->stats[$schema['target']]['error']            = 0;
-            $this->stats[$schema['target']]['imported']         = 0;
-            $this->stats[$schema['target']]['start']            = time();
+            $this->stats[$key]['already_imported'] = 0;
+            $this->stats[$key]['error']            = 0;
+            $this->stats[$key]['imported']         = 0;
+            $this->stats[$key]['start']            = time();
 
             $data = $this->getSource($schema);
 
             switch ($schema['target']) {
                 case 'album':
-                    $this->saveAlbums($schema, $data);
+                    $this->saveAlbums($key, $schema, $data);
                     break;
                 case 'album_photos':
-                    $this->saveAlbumPhotos($schema, $data);
+                    $this->saveAlbumPhotos($key, $schema, $data);
                     break;
                 case 'article':
-                    $this->saveArticles($schema, $data);
+                    $this->saveArticles($key, $schema, $data);
                     break;
                 case 'attachment':
-                    $this->saveAttachments($schema, $data);
+                    $this->saveAttachments($key, $schema, $data);
                     break;
                 case 'category':
-                    $this->saveCategories($schema, $data);
+                    $this->saveCategories($key, $schema, $data);
                     break;
                 case 'comment':
-                    $this->saveComments($schema, $data);
+                    $this->saveComments($key, $schema, $data);
                     break;
                 case 'photo':
-                    $this->savePhotos($schema, $data);
+                    $this->savePhotos($key, $schema, $data);
                     break;
                 case 'opinion':
-                    $this->saveOpinions($schema, $data);
+                    $this->saveOpinions($key, $schema, $data);
                     break;
                 case 'user':
-                    $this->saveUsers($schema, $data);
+                    $this->saveUsers($key, $schema, $data);
                     break;
                 case 'user_group':
-                    $this->saveUserGroups($schema, $data);
+                    $this->saveUserGroups($key, $schema, $data);
                     break;
                 case 'video':
-                    $this->saveVideos($schema, $data);
+                    $this->saveVideos($key, $schema, $data);
                     break;
                 default:
                     break;
             }
 
-            $this->stats[$schema['target']]['end'] = time();
+            $this->stats[$key]['end'] = time();
 
             $this->displaySectionResults(
-                $schema['target'],
-                $this->stats[$schema['target']]
+                $key,
+                $this->stats[$key]
             );
         }
     }
@@ -719,10 +720,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the photos related to an existing album.
      *
-     * @param  array    $schema Database schema.
-     * @param  array    $data   Photos to save.
+     * @param  array $name   Schema name.
+     * @param  array $schema Database schema.
+     * @param  array $data   Photos to save.
      */
-    protected function saveAlbumPhotos($schema, $data)
+    protected function saveAlbumPhotos($name, $schema, $data)
     {
         $albums = array();
 
@@ -757,7 +759,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $albums[$values['album']]['album_photos_footer'][] =
                         $values['description'];
                 } else {
-                    $this->stats[$schema['target']]['already_imported']++;
+                    $this->stats[$name]['already_imported']++;
                 }
             }
         }
@@ -777,11 +779,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
                             $schema['translation']['name']
                         );
 
-                        $this->stats[$schema['target']]['imported']++;
+                        $this->stats[$name]['imported']++;
                     }
                 }
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -789,10 +791,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the albums.
      *
-     * @param  array    $schema Database schema.
-     * @param  array    $data   Albums to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Albums to save.
      */
-    protected function saveAlbums($schema, $data)
+    protected function saveAlbums($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -828,9 +831,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -838,10 +841,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the articles.
      *
-     * @param array $schema Database schema.
-     * @param array $data   Users to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Users to save.
      */
-    protected function saveArticles($schema, $data)
+    protected function saveArticles($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -890,9 +894,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -900,10 +904,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the attachments.
      *
-     * @param array $schema Database schema.
-     * @param array $data   Attachments to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Attachments to save.
      */
-    protected function saveAttachments($schema, $data)
+    protected function saveAttachments($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -925,9 +930,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -935,10 +940,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the categories.
      *
-     * @param array $schema Database schema.
-     * @param array $data   Categories to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Categories to save.
      */
-    protected function saveCategories($schema, $data)
+    protected function saveCategories($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -965,9 +971,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -975,10 +981,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Save the comments.
      *
-     * @param array $schema Database schema.
-     * @param array $data   Categories to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Comments to save.
      */
-    protected function saveComments($schema, $data)
+    protected function saveComments($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -1008,9 +1015,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -1018,10 +1025,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Save the opinions.
      *
-     * @param array $schema Database schema.
-     * @param array $data   Opinions to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Opinions to save.
      */
-    protected function saveOpinions($schema, $data)
+    protected function saveOpinions($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -1059,9 +1067,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -1069,10 +1077,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the photos.
      *
-     * @param  array $schema Database schema.
-     * @param  array $data   User groups to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   User groups to save.
      */
-    protected function savePhotos($schema, $data)
+    protected function savePhotos($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -1137,10 +1146,10 @@ class OnmMigratorCommand extends ContainerAwareCommand
                         $schema['translation']['name']
                     );
 
-                    $this->stats[$schema['target']]['imported']++;
+                    $this->stats[$name]['imported']++;
                 }
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -1148,10 +1157,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the user groups.
      *
-     * @param  array $schema Database schema.
-     * @param  array $data   User groups to save.
+     * @param string $name   Schema name.
+     * @param array $schema  Database schema.
+     * @param array $data    User groups to save.
      */
-    protected function saveUserGroups($schema, $data)
+    protected function saveUserGroups($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -1171,10 +1181,10 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
                 echo $e;
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -1182,10 +1192,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the users.
      *
-     * @param  array $schema Database schema.
-     * @param  array $data   Users to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Users to save.
      */
-    protected function saveUsers($schema, $data)
+    protected function saveUsers($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -1216,9 +1227,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
@@ -1226,10 +1237,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     /**
      * Saves the videos.
      *
-     * @param  array $schema Database schema.
-     * @param  array $data   Users to save.
+     * @param string $name   Schema name.
+     * @param array  $schema Database schema.
+     * @param array  $data   Users to save.
      */
-    protected function saveVideos($schema, $data)
+    protected function saveVideos($name, $schema, $data)
     {
         foreach ($data as $item) {
             $values = array(
@@ -1267,9 +1279,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $schema['translation']['name']
                 );
 
-                $this->stats[$schema['target']]['imported']++;
+                $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
-                $this->stats[$schema['target']]['error']++;
+                $this->stats[$name]['error']++;
             }
         }
     }
