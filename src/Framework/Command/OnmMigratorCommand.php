@@ -614,7 +614,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
         if (isset($schema['merge'])) {
             foreach ($schema['merge'] as $target => $origin) {
                 $merged = '';
-                $i = count($origin['fields']);
+                $i = count($origin['fields']) - 1;
                 foreach ($origin['fields'] as $field) {
                     $merged .= $default[$field] . ($i > 0 ? $origin['separator'] : '');
                     $i--;
