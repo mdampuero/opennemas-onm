@@ -226,14 +226,13 @@ class Poll extends Content
     {
         parent::remove($id);
 
-        $sql = 'DELETE FROM polls WHERE pk_poll ='.($id);
-
-        if ($GLOBALS['application']->conn->Execute($sql)===false) {
+        $sql = 'DELETE FROM polls WHERE pk_poll=?';
+        if ($GLOBALS['application']->conn->Execute($sql, array($id))===false) {
             return false;
         }
 
-        $sql = 'DELETE FROM poll_items WHERE fk_pk_poll ='.($id);
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $sql = 'DELETE FROM poll_items WHERE fk_pk_poll=?';
+        if ($GLOBALS['application']->conn->Execute($sql, array($id)) === false) {
             return false;
         }
 

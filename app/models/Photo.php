@@ -369,8 +369,6 @@ class Photo extends Content
                 $photo = new Photo($photoID);
 
             } else {
-                $importedID = null;
-
                 $logger = getService('logger');
                 $logger->notice(
                     sprintf(
@@ -499,8 +497,6 @@ class Photo extends Content
                 $photo = new Photo($photoID);
 
             } else {
-                $importedID = null;
-
                 $logger = getService('logger');
                 $logger->notice(
                     sprintf(
@@ -607,6 +603,7 @@ class Photo extends Content
                             }
                         }
                     }
+
                     if (!empty($exifData)) {
                         $this->exif = $exifData;
                     } else {
@@ -617,7 +614,6 @@ class Photo extends Content
                         $this->infor .= _("No availabel EXIF data</br>");
 
                     } else {
-
                         if (empty($this->color)) {
                             if ($exifData['COMPUTED']['IsColor']==0) {
                                 $this->color= 'BN';
@@ -625,6 +621,7 @@ class Photo extends Content
                                 $this->color= 'color';
                             }
                         }
+
                         if (isset($exifData['IFD0'])) {
                             if (empty($this->resolution)
                                 && !is_null($exifData['IFD0']['XResolution'])

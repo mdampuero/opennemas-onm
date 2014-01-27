@@ -1,5 +1,11 @@
-managerws_root:
-    path: '/{url}'
-    defaults: { _controller: ManagerWebService:Controllers:WebServiceController:default, url: 'default' }
+# managerws_root:
+#     path: '/{url}'
+#     defaults: { _controller: ManagerWebService:WebService:default, url: '' }
+#     requirements:
+#         url: '.*'
+
+managerwebservice_root:
+    path: '/{other}'
+    defaults: { _controller: ManagerWebServiceBundle:WebService:default, other: '' }
     requirements:
-        url: '.*'
+        other: '.*'

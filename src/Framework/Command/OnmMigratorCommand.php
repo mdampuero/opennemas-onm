@@ -6,31 +6,41 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * Migrate one Category between two Openemas
  *
- *
- **/
+ */
 namespace Framework\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
 use Onm\StringUtils;
-use Onm\Settings as s;
 
 class OnmMigratorCommand extends ContainerAwareCommand
 {
+    /**
+     * If true, debug messages will be shown during importing.
+     *
+     * @var boolean
+     */
+    protected $debug;
+
     /**
      * Array of database settings to use in migration process.
      *
      * @var array
      */
     protected $settings;
+
+    /**
+     * Array to save some results during the migration process.
+     *
+     * @var array
+     */
+    protected $stats = array();
 
     /**
      * Array of database translations
@@ -40,131 +50,27 @@ class OnmMigratorCommand extends ContainerAwareCommand
     protected $translations;
 
     /**
-     * Array to save some results during the migration process.
-     *
-     * @var array
-     */
-    protected $stats = array();
-
-
-    /**
      * Configures the current command.
      */
     protected function configure()
     {
         $this
-            ->setName('migrate:region')
+            ->setName('migrate:onm')
             ->setDescription('Migrate a region database to Openemas')
             ->setHelp(
-                "\nThe <info>migrate:region</info> command migrates one region "
-                . "DB to new openenmas database.\n\n<info>php bin/console migra"
-                . "te:region originDB finalDB</info>"
+                "Migrates an existing database to a openenmas database."
             )
             ->addArgument(
                 'conf-file',
                 InputArgument::REQUIRED,
-                'conf-file'
+                'Describes origin database and how to import from it.'
+            )
+            ->addOption(
+                'debug',
+                false,
+                InputOption::VALUE_NONE,
+                'If set, the command will be run in debug mode.'
             );
-    }
-
-    /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $this->output = $output;
-        $this->output->writeln(
-            '<fg=yellow>*** Starting ONM Migrator ***</fg=yellow>'
-        );
-
-        $path = $input->getArgument('conf-file');
-        $yaml = new Parser();
-        $this->settings = $yaml->parse(file_get_contents($path));
-
-        $basePath = APPLICATION_PATH;
-        chdir($basePath);
-
-        $this->displayMigrateInfo($this->output);
-        $this->configureMigrator();
-
-        $this->prepareDatabase();
-        $this->import();
-
-        $this->displayResults();
-        $this->displayFinalInfo();
-    }
-
-    /**
-     * Displays a message before starting migration.
-     */
-    protected function displayMigrateInfo()
-    {
-        $info = "\n<fg=yellow>Migrating from <fg=red>"
-            . $this->settings['database']['origin'] . '</fg=red> to <fg=green>'
-            . $this->settings['database']['final']
-            . "</fg=green>...</fg=yellow>\n";
-
-        if (isset($this->settings['database']['instance'])) {
-            $info .= "\n   Instance:        "
-                . $this->settings['database']['instance'];
-        }
-
-        if (isset($this->settings['url'])) {
-            $info .= "\n   Site url:        " . $this->settings['url'];
-        }
-
-        if (isset($this->settings['media_dir'])) {
-            $info .= "\n   Media dir:        "
-                . $this->settings['database']['instance']
-                . '   Media directory: '
-                . $this->settings['database']['media_dir'] . "\n";
-        }
-
-        $info = "\n   Database origin: " . $this->settings['database']['origin']
-            . "\n   Database final:  " . $this->settings['database']['final']
-            . "\n   Database host:   " . $this->settings['database']['host']
-            . "\n   Database type:   " . $this->settings['database']['type']
-            . "\n   Database user:   " . $this->settings['database']['user']
-            . "\n   Database pass:   " . $this->settings['database']['password'];
-
-        $this->output->writeln($info);
-    }
-
-    /**
-     * Displays a message when ONM Migrator finishes the migration.
-     */
-    protected function displayFinalInfo()
-    {
-        $this->output->writeln(
-            '<fg=yellow>*** ONM Importer finished ***</fg=yellow>'
-        );
-    }
-
-    /**
-     * Display results after importing.
-     */
-    public function displayResults()
-    {
-        $this->output->writeln(
-            '<fg=yellow>*** ONM Migrator Stats ***</fg=yellow>'
-        );
-
-        foreach ($this->stats as $section => $stats) {
-            $this->output->writeln(
-                ucwords($section) . " ("
-                . ($stats['end'] - $stats['start']) . " secs.)"
-            );
-
-            $this->output->writeln(
-                "<fg=green>Imported: " . $stats['imported']
-                . "</fg=green><fg=yellow>\tAlready imported: "
-                . $stats['already_imported'] . "</fg=yellow><fg=red>\tError: "
-                . $stats['error'] . "</fg=red>\n"
-            );
-        }
     }
 
     /**
@@ -172,19 +78,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function configureMigrator()
     {
-        define('ORIGINAL_URL', $this->settings['database']['url']);
-        define('ORIGINAL_MEDIA', $this->settings['database']['media_dir']);
-        define('ORIGINAL_MEDIA_COMMON', '/opt/backup_opennemas/mundiario/wp-content/uploads/');
-
+        define('DS', DIRECTORY_SEPARATOR);
         define('CACHE_PREFIX', $this->settings['database']['instance']);
-
-        define('BD_HOST', $this->settings['database']['host']);
-        define('BD_USER', $this->settings['database']['user']);
-        define('BD_PASS', $this->settings['database']['password']);
-        define('BD_TYPE', $this->settings['database']['type']);
-        define('BD_DATABASE', $this->settings['database']['final']);
-        define('ORIGIN_BD_DATABASE', $this->settings['database']['origin']);
-        define('PREFIX', $this->settings['database']['prefix']);
 
         // Initialize internal constants for logger
         // Logger
@@ -196,6 +91,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
             )
         );
         define('INSTANCE_UNIQUE_NAME', $this->settings['database']['instance']);
+        define('FILE_DIR', INSTANCE_UNIQUE_NAME.'/files');
 
         define('IMG_DIR', "images");
         define(
@@ -207,12 +103,12 @@ class OnmMigratorCommand extends ContainerAwareCommand
             getContainerParameter('database')
         );
         $this->originConnection->selectDatabase(
-            $this->settings['database']['origin']
+            $this->settings['database']['source']
         );
 
         $this->targetConnection = getService('db_conn');
         $this->targetConnection->selectDatabase(
-            $this->settings['database']['final']
+            $this->settings['database']['target']
         );
 
         \Application::load();
@@ -223,534 +119,68 @@ class OnmMigratorCommand extends ContainerAwareCommand
     }
 
     /**
-     * Prepare database for importing.
+     * Returns true if $string is equal to all values in $params.
      *
-     * @note This method is called after collecting arguments and before
-     *       importing.
+     * @param  string  $string String to convert.
+     * @param  string  $params Values to compare.
+     * @return boolean
      */
-    protected function prepareDatabase()
+    protected function convertToBoolean($string, $params)
     {
-    }
-
-    /**
-     * Import from origin database to final database
-     */
-    protected function import()
-    {
-        $this->loadTranslations();
-
-        foreach ($this->settings['database']['schemas'] as $schema) {
-            switch ($schema['type']) {
-                case 'article':
-                    $this->importArticles($schema);
-                    break;
-                case 'category':
-                    $this->importCategories($schema);
-                    break;
-                case 'opinion':
-                    $this->importOpinions($schema);
-                    break;
-                case 'user':
-                    $this->importUsers($schema);
-                    break;
-                case 'user_group':
-                    // $this->importUserGroups($schema);
-                    break;
-                case 'video':
-                    // $this->importVideos();
-                    break;
-                case 'image':
-                    // $this->importImages();
-                default:
-                    break;
+        foreach ($params['value'] as $value) {
+            if ($string != $value) {
+                return false;
             }
         }
 
-        // $this->importbodyArticles();
-        // $this->importOtherImages();
-
-        // $this->updateBody();
-
-        // $this->importGalleries();
+        return true;
     }
 
     /**
-     * Imports articles from origin database
+     * Returns the new value according to the given mapping.
      *
-     * @param array $schema Database schema to get the data to import.
+     * @param  array $string String to convert.
+     * @param  array $params Mapping to use while converting.
+     * @return mixed
      */
-    protected function importArticles($schema)
+    protected function convertToMap($string, $params)
     {
-        $this->stats['articles']['start'] = time();
-        $data = $this->getSource($schema);
-
-        $this->saveArticles($schema, $data);
-        $this->stats['articles']['end'] = time();
-    }
-
-    /**
-     * Imports categories from origin database.
-     *
-     * @param array $schema Database schema to get the data to import.
-     */
-    protected function importCategories($schema)
-    {
-        $this->stats['categories']['start'] = time();
-        $data = $this->getSource($schema);
-
-        $this->saveCategories($schema, $data);
-        $this->stats['categories']['end'] = time();
-    }
-
-    /**
-     * Imports opinions from origin database.
-     */
-    protected function importOpinions($schema)
-    {
-        $this->stats['opinions']['start'] = time();
-        $data = $this->getSource($schema);
-
-        $this->saveOpinions($schema, $data);
-        $this->stats['opinions']['end'] = time();
-    }
-
-    /**
-     * Imports users from origin database.
-     *
-     * @param array $schema Database schema to get the data to import.
-     */
-    protected function importUsers($schema)
-    {
-        $this->stats['users']['start'] = time();
-        $data = $this->getSource($schema);
-
-        $this->saveUsers($schema, $data);
-        $this->stats['users']['end'] = time();
-    }
-
-    /**
-     * Imports user groups from origin database.
-     *
-     * @param array $schema Database schema to get the data to import.
-     */
-    protected function importUserGroups($schema)
-    {
-        $this->stats['user_groups']['start'] = time();
-        $data = $this->getSource($schema);
-
-        $this->saveUserGroups($schema, $data);
-        $this->stats['user_groups']['end'] = time();
-    }
-
-    /**
-     * Gets all source fields from database for each entity.
-     *
-     * @param  array $schema Database schema.
-     * @return array         Array of fields used to create new entities.
-     */
-    protected function getSource($schema)
-    {
-        $data = array();
-
-        // Select all ids
-        $sql = 'SELECT ' . $schema['table_origin'] . '.'
-            . $schema['id_origin']
-            . ' FROM ' . $schema['table_origin']
-            . ' LIMIT 1,10';
-
-        $request = $this->originConnection->Prepare($sql);
-        $rs      = $this->originConnection->Execute($request);
-        $ids     = $rs->getArray();
-
-        $total = count($ids);
-        foreach ($ids as $id) {
-            // $this->output->writeln('Processing article '. $x + 1 . ' of '. $total);
-
-            // Build sql statement 'SELECT' chunk
-            $sql = 'SELECT ';
-            $i = 0;
-            foreach ($schema['fields'] as $key => $field) {
-                $sql = $sql . $field['table_origin'] . '.'
-                    . $field['field_origin'] . ' AS ' . $key;
-
-                if ($i < count($schema['fields']) - 1) {
-                    $sql .= ',';
-                }
-
-                $i++;
-            }
-
-            // Build sql statement 'FROM' chunk
-            $sql .= ' FROM ';
-            foreach ($schema['tables'] as $key => $table) {
-                $sql .= $table;
-
-                if ($key < count($schema['tables']) - 1) {
-                    $sql .= ', ';
-                }
-            }
-
-            // Build sql statement 'WHERE' chuck
-            $sql.= ' WHERE '
-                    . $schema['table_origin'] . '.'
-                    . $schema['id_origin'] . '='
-                    . $id[$schema['id_origin']];
-
-            if (isset($schema['relations'])
-                    && count($schema['relations']) > 0) {
-                foreach ($schema['relations'] as $key => $relation) {
-                    if ($key < count($schema['relations'])) {
-                        $sql .= ' AND ';
-                    }
-                    $sql .=  $relation['table1'] . '.' . $relation['id1'] . '='
-                        . $relation['table2'] . '.' . $relation['id2'];
-                }
-            }
-
-            // Execute sql and save in array
-            $request = $this->originConnection->Prepare($sql);
-            $rs      = $this->originConnection->Execute($request);
-            $results = $rs->getArray();
-
-            if (count($results) > 0) {
-                foreach ($results as $result) {
-                    if (isset($schema['collections'])) {
-                        foreach ($schema['collections'] as $key => $value) {
-                            $result[$key] = array();
-
-                            foreach ($schema['collections'][$key] as $field) {
-                                $result[$key][] = $result[$field];
-                                unset($result[$field]);
-                            }
-                        }
-                    }
-
-                    $data[] = $result;
-                }
-            }
+        if (isset($params['map']) && isset($params['map'][$string])) {
+            return $params['map'][$string];
         }
 
-        return $data;
+        return false;
     }
 
     /**
-     * Saves the articles.
+     * Convert a given string to slug.
      *
-     * @param  array $schema Database schema.
-     * @param  array $data   Users to save.
+     * @return string
      */
-    protected function saveArticles($schema, $data)
+    protected function convertToSlug($string)
     {
-        $this->stats['articles']['already_imported'] = 0;
-        $this->stats['articles']['error']            = 0;
-        $this->stats['articles']['imported']         = 0;
-
-        foreach ($data as $item) {
-            if (!$this->elementIsImported($item['id'], 'article')) {
-                $values = array(
-                    'title'          => null,
-                    'with_comment'   => 1,
-                    'available'      => 1,
-                    'content_status' => 1,
-                    'category'       => 20,
-                    'frontpage'      => 0,
-                    'in_home'        => 0,
-                    'title_int'      => null,
-                    'metadata'       => null,
-                    'subtitle'       => null,
-                    'slug'           => null,
-                    'agency'         => null,
-                    'summary'        => null,
-                    'description'    => null,
-                    'body'           => null,
-                    'posic'          => 0,
-                    'id'             => 0,
-                    'img1'           => null,
-                    'img2'           => null,
-                    'img1_footer'    => null,
-                    'img2_footer'    => null,
-                    'fk_video'       => null,
-                    'fk_video2'      => null,
-                    'footer_video2'  => null,
-                    'created'        => null,
-                    'starttime'      => null,
-                    'changed'        => null,
-                    'fk_user'        => null,
-                    'fk_author'      => null,
-                    'fk_publisher'   => null,
-                );
-
-                foreach ($item as $key => $value) {
-                    $parsed = $this->parseField(
-                        $value,
-                        $schema['fields'][$key]['type']
-                    );
-
-                    // Overwrite only if it has a default value
-                    if (array_key_exists($key, $values)) {
-                        $values[$key] = $parsed;
-                    }
-                }
-
-                try {
-                    $article = new \Article();
-                    $article->create($values);
-
-                    $id = $article->id;
-                    $this->createTranslation($item['id'], $id, 'article');
-
-                    $this->stats['articles']['imported']++;
-                } catch (\Exception $e) {
-                    $this->stats['articles']['error']++;
-                }
-            } else {
-                $this->stats['articles']['already_imported']++;
-            }
-        }
+        return \Onm\StringUtils::get_title($string);
     }
 
     /**
-     * Saves the categories.
+     * Converts a given string to UTF-8 codification
      *
-     * @param  array    $schema Database schema.
-     * @param  array    $data   Categories to save.
+     * @return string
      */
-    protected function saveCategories($schema, $data)
+    protected function convertToUtf8($string)
     {
-        $this->stats['categories']['already_imported'] = 0;
-        $this->stats['categories']['error']            = 0;
-        $this->stats['categories']['imported']         = 0;
-
-        foreach ($data as $item) {
-            if (!$this->elementIsImported($item['id'], 'category')) {
-                $values = array(
-                    'name'              => '',
-                    'title'             => '',
-                    'inmenu'            => 0,
-                    'posmenu'           => 10,
-                    'internal_category' => 0,
-                    'subcategory'       => 0,
-                    'logo_path'         => null,
-                    'params'            => null,
-                    'color'             => null
-                );
-
-                foreach ($item as $key => $value) {
-                    // Parse only if it isn't an old id to translate
-                    if ($schema['fields'][$key]['type'] != 'translation') {
-                        $parsed = $this->parseField(
-                            $value,
-                            $schema['fields'][$key]['type']
-                        );
-
-                        // Overwrite only if it has a default value
-                        if (array_key_exists($key, $values)) {
-                            $values[$key] = $parsed;
-                        }
-                    }
-                }
-
-                try {
-                    $category = new \ContentCategory();
-                    $category->create($values);
-
-                    $id = $category->pk_content_category;
-                    $this->createTranslation($item['id'], $id, 'category');
-
-                    $this->stats['categories']['imported']++;
-                } catch (\Exception $e) {
-                    $this->stats['categories']['error']++;
-                }
-            } else {
-                $this->stats['categories']['already_imported']++;
-            }
-        }
+        return utf8_encode($string);
     }
 
     /**
-     * Save the opinions.
+     * Returns a YouTube URL.
      *
-     * @param array $schema Database schema.
-     * @param array $data   Opinions to save.
+     * @param  string $string Video id.
+     * @return string
      */
-    protected function saveOpinions($schema, $data)
+    protected function convertToYoutube($string)
     {
-        $this->stats['opinions']['already_imported'] = 0;
-        $this->stats['opinions']['error']            = 0;
-        $this->stats['opinions']['imported']         = 0;
-
-        foreach ($data as $item) {
-            if (!$this->elementIsImported($item['id'], 'opinion')) {
-                $values = array(
-                    'fk_author'      => null,
-                    'fk_author_img'  => null,
-                    'with_comment'   => 1,
-                    'type_opinion'   => 1,
-                    'title'          => null,
-                    'available'      => 1,
-                    'content_status' => 1,
-                    'category'       => 20,
-                    'frontpage'      => 0,
-                    'in_home'        => 0,
-                    'metadata'       => null,
-                    'slug'           => null,
-                    'description'    => null,
-                    'body'           => null,
-                    'posic'          => 0,
-                    'created'        => null,
-                    'starttime'      => null,
-                    'changed'        => null,
-                    'fk_user'        => null,
-                    'fk_publisher'   => null
-                );
-
-                foreach ($item as $key => $value) {
-                    // Parse only if it isn't an old id to translate
-                    if ($schema['fields'][$key]['type'] != 'translation') {
-                        $parsed = $this->parseField(
-                            $value,
-                            $schema['fields'][$key]['type']
-                        );
-
-                        // Overwrite only if it has a default value
-                        if (array_key_exists($key, $values)) {
-                            $values[$key] = $parsed;
-                            $this->output->writeln("overwrite " . $key);
-                        }
-                    }
-                }
-
-                try {
-                    $opinion = new \Opinion();
-                    $opinion->create($values);
-
-                    $id = $opinion->id;
-                    $this->createTranslation($item['id'], $id, 'opinion');
-
-                    $this->stats['opinions']['imported']++;
-                } catch (\Exception $e) {
-                    $this->stats['opinions']['error']++;
-                }
-            } else {
-                $this->stats['opinions']['already_imported']++;
-            }
-        }
-    }
-
-    /**
-     * Saves the users.
-     *
-     * @param  array $schema Database schema.
-     * @param  array $data   Users to save.
-     */
-    protected function saveUsers($schema, $data)
-    {
-        $this->stats['users']['already_imported'] = 0;
-        $this->stats['users']['error']            = 0;
-        $this->stats['users']['imported']         = 0;
-
-        foreach ($data as $item) {
-            if (!$this->elementIsImported($item['id'], 'author')) {
-                // Default values
-                $values = array(
-                    'username'      => '',
-                    'password'      => null,
-                    'sessionexpire' => '30',
-                    'url'           => '',
-                    'bio'           => '',
-                    'avatar_img_id' => 0,
-                    'email'         => null,
-                    'name'          => null,
-                    'type'          => 0,
-                    'deposit'       => 0,
-                    'token'         => null,
-                    'activated'     => 1,
-                    'id_user_group' => array('3'),
-                );
-
-                foreach ($item as $key => $value) {
-                    // Parse only if it isn't an old id to translate
-                    if ($schema['fields'][$key]['type'] != 'translation') {
-                        $parsed = $this->parseField(
-                            $value,
-                            $schema['fields'][$key]['type']
-                        );
-
-                        // Overwrite only if it has a default value
-                        if (array_key_exists($key, $values)) {
-                            $values[$key] = $parsed;
-                        }
-                    }
-                }
-
-                try {
-                    $user   = new \User();
-                    $user->create($values);
-
-                    $id = $user->id;
-                    $this->createTranslation($item['id'], $id, 'author');
-
-                    $this->stats['users']['imported']++;
-                } catch (\Exception $e) {
-                    echo $e;
-                    $this->stats['users']['error']++;
-                }
-            } else {
-                $this->stats['users']['already_imported']++;
-            }
-        }
-    }
-
-    /**
-     * Saves the user groups.
-     *
-     * @param  array $schema Database schema.
-     * @param  array $data   User groups to save.
-     */
-    protected function saveUserGroups($schema, $data)
-    {
-        $this->stats['user_groups']['already_imported'] = 0;
-        $this->stats['user_groups']['error']            = 0;
-        $this->stats['user_groups']['imported']         = 0;
-
-        foreach ($data as $item) {
-            if (!$this->elementIsImported($item['id'], 'user_group')) {
-                // Default values
-                $values = array(
-                    'name' => null,
-                );
-
-                foreach ($item as $key => $value) {
-                    // Parse only if it isn't an old id to translate
-                    if ($schema['fields'][$key]['type'] != 'translation') {
-                        $parsed = $this->parseField(
-                            $value,
-                            $schema['fields'][$key]['type']
-                        );
-
-                        // Overwrite only if it has a default value
-                        if (array_key_exists($key, $values)) {
-                            $values[$key] = $parsed;
-                        }
-                    }
-                }
-
-                try {
-                    $user   = new \User();
-                    $user->create($values);
-
-                    $id = $user->id;
-                    $this->createTranslation($item['id'], $id, 'author');
-
-                    $this->stats['user_groups']['imported']++;
-                } catch (\Exception $e) {
-                    echo $e;
-                    $this->stats['user_groups']['error']++;
-                }
-            } else {
-                $this->stats['user_groups']['already_imported']++;
-            }
-        }
+        return 'http://www.youtube.com/watch?v=' . $string;
     }
 
     /**
@@ -779,46 +209,332 @@ class OnmMigratorCommand extends ContainerAwareCommand
     }
 
     /**
-     * Parses and returns the field.
-     *
-     * @param  string $field Field to parse.
-     * @param  string $type  Type of the field.
-     * @return mixed         The field after parsing.
+     * Displays a message before starting migration.
      */
-    protected function parseField($field, $type)
+    protected function displayConfigurationInfo()
     {
-        switch ($type) {
-            case 'raw': // Remove spaces at beginning and end
-                return trim($field);
-                break;
-            case 'utf8':
-                return $this->convertoUTF8($field);
-                break;
-            case 'body': // Replaces the content of the field
-                return '<p>'. preg_replace(
-                    array(
-                        "/([\r\n])+/i",
-                        "/([\n]{2,})/i",
-                        "/([\n]{2,})/i",
-                        "/(\n)/i"
-                    ),
-                    array('</p><p>', '</p><p>', '<br>', '<br>'),
-                    $field
-                ) . '</p>';
-                break;
-            case 'media': // Saves the media
-                return 0;
-            case 'category_translation':
-                return $this->matchCategory($field);
-                break;
-            case 'author_translation':
-                return $this->matchAuthor($field);
-            case 'timestamp':
-                return date('Y-m-d H:i:s', $field);
-                break;
-            default:
-                return $field;
-                break;
+        $info = '';
+        if (isset($this->settings['database']['instance'])) {
+            $info .= "Instance: " . $this->settings['database']['instance'];
+        }
+
+        if (isset($this->settings['database']['url'])) {
+            $info .= "\nSite url: " . $this->settings['database']['url'];
+        }
+
+        $this->output->writeln($info);
+    }
+
+    /**
+     * Displays a message when ONM Migrator finishes the migration.
+     */
+    protected function displayFinalInfo()
+    {
+        // $this->output->writeln(
+        //     '<fg=yellow>*** ONM Migrator Stats ***</fg=yellow>'
+        // );
+
+        // foreach ($this->stats as $section => $stats) {
+        //     $this->displaySectionResults($section, $stats);
+        // }
+
+        $this->output->writeln(
+            '<fg=yellow>*** ONM Importer finished ***</fg=yellow>'
+        );
+    }
+
+    /**
+     * Display results after importing a section.
+     *
+     * @param string $section Section imported
+     * @param array  $stats   Results after importing $section.
+     */
+    protected function displaySectionResults($section, $stats)
+    {
+        $this->output->writeln(
+            ucwords($section) . " ("
+            . ($stats['end'] - $stats['start']) . " secs.)"
+        );
+
+        $this->output->writeln(
+            "<fg=green>Imported: " . $stats['imported']
+            . "</fg=green><fg=yellow>\tAlready imported: "
+            . $stats['already_imported'] . "</fg=yellow><fg=red>\tError: "
+            . $stats['error'] . "</fg=red>\n"
+        );
+    }
+
+    /**
+     * Read the correspondence between identifiers
+     *
+     * @param  integer $oldId Element id (origin database).
+     * @param  string  $type  Element type.
+     * @return mixed          The new element id if it's already imported.
+     *                        Otherwise, return false.
+     */
+    protected function elementIsImported($oldId, $type)
+    {
+        if (array_key_exists($type, $this->translations)
+                && array_key_exists($oldId, $this->translations[$type])) {
+            return $this->translations[$type][$oldId];
+        }
+
+        return false;
+    }
+
+    /**
+     * Executes the current command.
+     *
+     * @param InputInterface  $input  An InputInterface instance
+     * @param OutputInterface $output An OutputInterface instance
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->output = $output;
+        $this->output->writeln(
+            '<fg=yellow>*** Starting ONM Migrator ***</fg=yellow>'
+        );
+
+        $path = $input->getArgument('conf-file');
+        $yaml = new Parser();
+        $this->settings = $yaml->parse(file_get_contents($path));
+
+        $basePath = APPLICATION_PATH;
+        chdir($basePath);
+
+        $this->displayConfigurationInfo();
+        $this->configureMigrator();
+
+        $this->prepareDatabase();
+        $this->import();
+
+        $this->displayFinalInfo();
+    }
+
+    /**
+     * Gets all source fields from database for each entity.
+     *
+     * @param  array $schema Database schema.
+     * @return array         Array of fields used to create new entities.
+     */
+    protected function getSource($schema)
+    {
+        $data = array();
+        $this->stats[$schema['target']]['already_imported'] = 0;
+
+        // Select all ids
+        $sql = 'SELECT ' . $schema['source']['table'] . '.'
+            . $schema['source']['id'] . ' FROM ' . $schema['source']['table'];
+
+        // Add logical comparisons to 'WHERE' chunk
+        if (isset($schema['filters'])
+                && count($schema['filters']) > 0) {
+            $sql .= ' WHERE 1';
+            foreach ($schema['filters'] as $condition) {
+                $sql .= ' AND (';
+
+                foreach ($condition as $key => $value) {
+                    $sql .= $value['table'] . '.' . $value['field']
+                        . '=\'' . $value['value'] . '\'';
+
+                    if ($key < count($condition) - 1) {
+                        $sql .= ' OR ';
+                    }
+                }
+
+                $sql .= ')';
+            }
+        }
+
+        $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
+            . $schema['source']['id'] . ' LIMIT 0,100';
+
+        $request = $this->originConnection->Prepare($sql);
+        $rs      = $this->originConnection->Execute($request);
+        $ids     = $rs->getArray();
+
+        $total = count($ids);
+        $current = 1;
+        foreach ($ids as $id) {
+            if ($this->debug) {
+                $this->output->writeln(
+                    '   Processing item ' . $current++ . ' of ' . $total . '...'
+                );
+            }
+
+            if (!$this->elementIsImported(
+                $id[$schema['source']['id']],
+                $schema['translation']['name']
+            )) {
+
+                // Build sql statement 'SELECT' chunk
+                $sql = 'SELECT ';
+                $i = 0;
+                foreach ($schema['fields'] as $key => $field) {
+                    if (isset($field['type']) &&
+                            in_array('constant', $field['type'])) {
+                        $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key;
+                    } else {
+                        $sql = $sql . $field['table'] . '.'
+                            . $field['field'] . ' AS ' . $key;
+                    }
+
+                    if ($i < count($schema['fields']) - 1) {
+                        $sql .= ',';
+                    }
+
+                    $i++;
+                }
+
+                // Build sql statement 'FROM' chunk
+                $sql .= ' FROM ';
+                foreach ($schema['tables'] as $key => $table) {
+                    $sql .= $table['table'];
+
+                    if (isset($table['alias'])) {
+                        $sql .= ' AS ' . $table['alias'];
+                    }
+
+                    if ($key < count($schema['tables']) - 1) {
+                        $sql .= ', ';
+                    }
+                }
+
+                // Build sql statement 'WHERE' chuck
+                $sql.= ' WHERE ('
+                        . (isset($schema['source']['alias']) ?
+                            $schema['source']['alias'] :
+                            $schema['source']['table']) . '.'
+                        . $schema['source']['id'] . '='
+                        . $id[$schema['source']['id']] . ')';
+
+                if (isset($schema['relations'])
+                        && count($schema['relations']) > 0) {
+
+                    foreach ($schema['relations'] as $key => $relation) {
+                        if ($key < count($schema['relations'])) {
+                            $sql .= ' AND (';
+                        }
+                        $sql .= $relation['table1'] . '.' . $relation['id1'] .
+                            '=' . $relation['table2'] . '.' . $relation['id2']
+                            . ')';
+                    }
+                }
+
+                // Add logical comparisons to 'WHERE' chunk
+                if (isset($schema['conditions'])
+                        && count($schema['conditions']) > 0) {
+                    foreach ($schema['conditions'] as $condition) {
+                        $sql .= ' AND (';
+
+                        foreach ($condition as $key => $value) {
+                            $sql .= $value['table'] . '.' . $value['field']
+                                . '=\'' . $value['value'] . '\'';
+
+                            if ($key < count($condition) - 1) {
+                                $sql .= ' OR ';
+                            }
+                        }
+
+                        $sql .= ')';
+                    }
+                }
+
+                // Execute sql and save in array
+                $request = $this->originConnection->Prepare($sql);
+                $rs      = $this->originConnection->Execute($request);
+                $results = $rs->getArray();
+
+                if (count($results) > 0) {
+                    foreach ($results as $result) {
+                        if (isset($schema['collections'])) {
+                            foreach ($schema['collections'] as $key => $value) {
+                                $result[$key] = array();
+
+                                foreach ($value as $field) {
+                                    $result[$key][] = $result[$field];
+                                    unset($result[$field]);
+                                }
+                            }
+                        }
+
+                        $data[] = $result;
+                    }
+                }
+            } else {
+                $this->stats[$schema['target']]['already_imported']++;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Import from origin database to final database
+     */
+    protected function import()
+    {
+        $this->loadTranslations();
+
+        foreach ($this->settings['database']['schemas'] as $schema) {
+            $this->output->writeln(
+                "\n<fg=yellow>Migrating from <fg=red>"
+                . $schema['source']['table'] . '</fg=red> to <fg=green>'
+                . $schema['target']
+                . "</fg=green>...</fg=yellow>"
+            );
+
+            $this->stats[$schema['target']]['already_imported'] = 0;
+            $this->stats[$schema['target']]['error']            = 0;
+            $this->stats[$schema['target']]['imported']         = 0;
+            $this->stats[$schema['target']]['start']            = time();
+
+            $data = $this->getSource($schema);
+
+            switch ($schema['target']) {
+                case 'album':
+                    $this->saveAlbums($schema, $data);
+                    break;
+                case 'album_photos':
+                    $this->saveAlbumPhotos($schema, $data);
+                    break;
+                case 'article':
+                    $this->saveArticles($schema, $data);
+                    break;
+                case 'attachment':
+                    $this->saveAttachments($schema, $data);
+                    break;
+                case 'category':
+                    $this->saveCategories($schema, $data);
+                    break;
+                case 'comment':
+                    $this->saveComments($schema, $data);
+                    break;
+                case 'photo':
+                    $this->savePhotos($schema, $data);
+                    break;
+                case 'opinion':
+                    $this->saveOpinions($schema, $data);
+                    break;
+                case 'user':
+                    $this->saveUsers($schema, $data);
+                    break;
+                case 'user_group':
+                    $this->saveUserGroups($schema, $data);
+                    break;
+                case 'video':
+                    $this->saveVideos($schema, $data);
+                    break;
+                default:
+                    break;
+            }
+
+            $this->stats[$schema['target']]['end'] = time();
+
+            $this->displaySectionResults(
+                $schema['target'],
+                $this->stats[$schema['target']]
+            );
         }
     }
 
@@ -844,322 +560,809 @@ class OnmMigratorCommand extends ContainerAwareCommand
     }
 
     /**
-     * Returns the new category id.
+     * Returns the new object id.
      *
-     * @param int $id Old category id.
+     * @param  int   $id Old object id.
+     * @return mixed     If the translation exists return the new object id.
+     *                   Otherwise, returns false.
      */
-    protected function matchCategory($id)
+    protected function matchTranslation($id, $type)
     {
-        if (array_key_exists($id, $this->translations['category'])) {
-            return $this->translations['category'][$id];
-        } else {
-            return 20;
-        }
-    }
-
-    /**
-     * Returns the new author id.
-     *
-     * @param int $id Old author id.
-     */
-    protected function matchAuthor($id)
-    {
-        if (array_key_exists($id, $this->translations['author'])) {
-            return $this->translations['author'][$id];
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * Read the correspondence between identifiers
-     *
-     * @param  integer $oldId Element id (origin database).
-     * @param  string  $type  Element type.
-     * @return mixed          The new element id if it's already imported.
-     *                        Otherwise, return false.
-     */
-    protected function elementIsImported($oldId, $type)
-    {
-        if (isset($this->translations[$type][$oldId])) {
-            return $this->translations[$type][$oldId];
+        if (array_key_exists($type, $this->translations)
+                && array_key_exists($id, $this->translations[$type])) {
+            return $this->translations[$type][$id];
         }
 
         return false;
     }
 
     /**
-     * Converts a given string to UTF-8 codification
+     * Parses and returns the field.
      *
-     * @return string
-     **/
-    protected function convertoUTF8($string)
+     * @param  string $field Field to parse.
+     * @param  array  $types Array of types.
+     * @return mixed         The field after parsing.
+     */
+    protected function parseField($field, $types, $params = null)
     {
-        return mb_convert_encoding($string, 'UTF-8');
-       // return $string;
-    }
-
-
-
-
-    /**
-     * Read images data and insert this in new database
-     *
-     * @return void
-     **/
-    protected function importImages($prefix = null)
-    {
-        if (empty($prefix)) {
-           $prefix = PREFIX;
-        }
-        $settings = array( 'image_thumb_size'=>'140',
-                            'image_inner_thumb_size'=>'470',
-                            'image_front_thumb_size'=>'350');
-        foreach ($settings as $key => $value) {
-            s::set($key, $value);
-        }
-        $sql = "SELECT * FROM `".$prefix."posts` WHERE ".
-            "`post_type` = 'attachment'  AND post_status !='trash' ";
-
-        $request = $this->targetConnection->Prepare($sql);
-        $rs      = $this->targetConnection->Execute($request);
-
-        $oldID = $this->elementIsImported('fotos', 'category');
-        if (empty($oldID)) {
-            $IDCategory ='1'; //fotografias
-        } else {
-           $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
-        }
-        if (!$rs) {
-            $this->output->writeln($this->targetConnection->ErrorMsg());
-        } else {
-
-            $totalRows = $rs->_numOfRows;
-            $current   = 1;
-            $photo     = new \Photo();
-
-            while (!$rs->EOF) {
-                if(!empty($rs->fields['guid'])) {
-                    if ($this->elementIsImported($rs->fields['ID'], 'image')) {
-                        $this->output->writeln("[{$current}/{$totalRows}] Image already imported");
+        foreach ($types as $type) {
+            switch ($type) {
+                case 'body': // Replaces the content of the field
+                    $field = '<p>'. preg_replace(
+                        array(
+                            "/([\r\n])+/i",
+                            "/([\n]{2,})/i",
+                            "/([\n]{2,})/i",
+                            "/(\n)/i"
+                        ),
+                        array('</p><p>', '</p><p>', '<br>', '<br>'),
+                        $field
+                    ) . '</p>';
+                    break;
+                case 'date':
+                    $field = date($params['format'], strtotime($field));
+                    break;
+                case 'raw': // Remove spaces at beginning and end
+                    $field = trim($field);
+                    break;
+                case 'slug':
+                    $field = $this->convertToSlug($field);
+                    break;
+                case 'substr':
+                    $field = substr(
+                        $field,
+                        0,
+                        strpos($field, $params['delimiter'])
+                    );
+                    break;
+                case 'substrr':
+                    if (strrpos($field, $params['delimiter'])) {
+                        $field = substr(
+                            $field,
+                            strrpos($field, $params['delimiter']) + 1
+                        );
                     } else {
-
-                        $originalImageID = $rs->fields['ID'];
-
-                        ///http://mundiario.com/wp-content/uploads/2013/06/Brasil-360x225.png
-                        //http://mundiario.com/galicia/files/2013/07/6696140347_824d45603a_z-360x225.jpg
-                        //http://mundiario.com/emprendedores/files/2013/07/6696140347_824d45603a_z-360x225.jpg
-                        $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $rs->fields['guid']);
-
-                        $imageData = array(
-                            'title' => $this->convertoUTF8(strip_tags($rs->fields['post_title'])),
-                            'category' => $IDCategory,
-                            'fk_category' => $IDCategory,
-                            'category_name'=> '',
-                            'content_status' => 1,
-                            'frontpage' => 0,
-                            'in_home' => 0,
-                            'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_name'].$rs->fields['post_excerpt'])),
-                            'description' => $this->convertoUTF8(strip_tags(substr($rs->fields['post_excerpt'], 0, 150))),
-                            'id' => 0,
-                            'created' => $rs->fields['post_date_gmt'],
-                            'starttime' => $rs->fields['post_date_gmt'],
-                            'changed' => $rs->fields['post_modified_gmt'],
-                            'fk_user' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_author' =>  $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_publisher' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'local_file' => $local_file,
-                            'author_name' => '',
-                        );
-
-                        $date = new \DateTime($rs->fields['post_date_gmt']);
-                        $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
-
-                        if (!empty($imageID)) {
-                            $this->createTranslation($originalImageID, $imageID, 'image', $rs->fields['post_name']);
-                            // $this->output->writeln('- Image '. $imageID. ' ok');
-                            $this->output->write('.');
-                        } else {
-                            $imageData['local_file'] = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA_COMMON, $rs->fields['guid']);
-
-                            $imageID = @$photo->createFromLocalFile($imageData, $date->format('/Y/m/d/'));
-                            if (!empty($imageID)) {
-                                $this->createTranslation($originalImageID, $imageID, 'image', $rs->fields['post_name']);
-                                // $this->output->writeln('- Image '. $imageID. ' ok');
-                            } else {
-                                $this->output->write('.');
-                                $this->output->writeln('Problem image '.$originalImageID.
-                                    "-". $rs->fields['guid'] .' -> '.$imageData['local_file'] ."\n");
-                            }
-                        }
+                        $field = '';
                     }
-                }
-                $current++;
-                $rs->MoveNext();
-            }
-            $this->output->writeln("Importer Images Finished");
-            $rs->Close();
-        }
-    }
-
-
-    protected function importGalleries()
-    {
-        $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
-            "`post_content` LIKE '%gallery%'  AND post_status !='trash' ";
-         /*[gallery link="file" ids="8727,8728,8729,8730,8731,8732"]*/
-
-        $request    = $this->targetConnection->Prepare($sql);
-        $rs         = $this->targetConnection->Execute($request);
-        $oldID = $this->elementIsImported('fotos', 'category');
-
-        if (empty($oldID)) {
-            $IDCategory ='3'; //galleries
-        } else {
-           $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
-        }
-
-
-        if (!$rs) {
-            $this->output->writeln($this->targetConnection->ErrorMsg());
-        } else {
-
-            $totalRows = $rs->_numOfRows;
-            $current   = 1;
-            $album     = new \Album();
-
-            while (!$rs->EOF) {
-                 $originalID = $rs->fields['ID'];
-                if ($this->elementIsImported($originalID, 'gallery')) {
-                    $this->output->writeln("[{$current}/{$totalRows}] Gallery already imported");
-                } else {
-
-                    preg_match_all('/\[gallery.*?ids="(.*)".*?\]/', $rs->fields['post_content'], $result);
-
-                    if (!empty($result[0]) ) {
-                        $ids = array();
-                        $originIds = explode(',', $result[1][0]);
-                        foreach ($originIds as $id) {
-                            $ids[] =$this->elementIsImported($id, 'image');
-                        }
-
-                        $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $rs->fields['post_content']);
-                        $newBody = $this->convertoUTF8(strip_tags($newBody, '<p><a><br>'));
-
-                        $data = array(
-                            'title'          => $this->convertoUTF8($rs->fields['post_title']),
-                            'category'       => $IDCategory,
-                            'with_comment'   => 1,
-                            'content_status' => 1,
-                            'available'      => 1,
-                            'metadata'       => \Onm\StringUtils::get_tags($this->convertoUTF8($rs->fields['post_title'])),
-                            'subtitle'       => '',
-                            'agency'         => '',
-                            'summary'        => $newBody,
-                            'fuente'         => '',
-                            'category_name'  => 'fotos',
-                            'description'    => $newBody,
-                            'created'        => $rs->fields['post_date_gmt'],
-                            'starttime'      => $rs->fields['post_date_gmt'],
-                            'changed'        => $rs->fields['post_modified_gmt'],
-                            'fk_user'        => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_author'      => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_publisher'   => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'fk_user_last_editor' => $this->elementIsImported($rs->fields['post_author'], 'user'),
-                            'slug'           => $rs->fields['post_name'],
-                            'album_photos_id' => $ids,
-                            'album_photos_footer'=> null,
-                            'album_frontpage_image' => $ids[0],
+                    break;
+                case 'timestamp':
+                    $field = date('Y-m-d H:i:s', $field);
+                    break;
+                case 'translation':
+                    $field = $this->matchTranslation(
+                        $field,
+                        $params['translation']
+                    );
+                    break;
+                case 'utf8':
+                    $field = $this->convertToUtf8($field);
+                    break;
+                case 'youtube':
+                    $field = $this->convertToYoutube($field);
+                    break;
+                default:
+                    if (method_exists($this, 'convertTo' . $type)) {
+                        $field = call_user_func(
+                            array($this, 'convertTo' . $type),
+                            $field,
+                            $params
                         );
-
-                        $album->cover_id = $ids[0];
-
-                        $result  = $album->create($data);
-                        $albumID = $result->id;
-                        if (!empty($albumID)) {
-                            $this->createTranslation($originalID, $albumID, 'gallery', $rs->fields['post_name']);
-                            //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
-                         //   $this->output->writeln('- Gallery '. $albumID. ' ok');
-                        } else {
-                            $this->output->writeln('Problem inserting album '.$originalID.' - '.$rs->fields['post_name'] ."\n");
-                        }
                     }
-                }
-
-                $current++;
-                $rs->MoveNext();
+                    break;
             }
         }
-        $rs->Close(); # optional
-        $this->output->writeln("Importer Galleries Finished");
 
+        return $field;
     }
 
     /**
-     * update some fields in content table
+     * Prepare database for importing.
      *
-     * @param int $contentId the content id
-     * @param string $params new values for the content table
-     *
-     * @return void
-     **/
-    protected function updateFields($contentID, $params)
+     * @note This method is called after collecting arguments and before
+     *       importing.
+     */
+    protected function prepareDatabase()
     {
-        if (isset($contentID) && isset($params)) {
-            $sql    = 'UPDATE `contents` SET {$params}  WHERE pk_content=?';
-            $values = array($params, $contentID);
-
-            $stmt = $this->targetConnection->Prepare($sql);
-            $rss  = $this->targetConnection->Execute($stmt, $values);
-            if (!$rss) {
-                $this->output->writeln($this->targetConnection->ErrorMsg());
-            }
-
-        } else {
-            //$this->output->writeln("Please provide a contentID and views to update it.");
-        }
     }
 
     /**
-     * Clear body for
+     * Saves the photos related to an existing album.
      *
-     * @return string
-     **/
-    protected function getOnmIdImage($guid)
+     * @param  array    $schema Database schema.
+     * @param  array    $data   Photos to save.
+     */
+    protected function saveAlbumPhotos($schema, $data)
     {
-        $sql = "SELECT ID FROM `".PREFIX."posts` WHERE ".
-            "`post_type` = 'attachment'  AND post_status !='trash' ".
-            " AND guid = '".$guid."'";
+        $albums = array();
 
+        foreach ($data as $item) {
+            $values = array(
+                'album'       => 0,
+                'photo'       => 0,
+                'description' => '',
+                'position'    => 0
+            );
 
-        // Fetch the list of Opinions available for one author in EditMaker
-        $request = $this->targetConnection->Prepare($sql);
-        $rs      = $this->targetConnection->Execute($request);
+            // Parse and translate old ids
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
 
-        $imageID='';
-        if (!$rs || empty($rs->fields['ID'])) {
-            $sql = "SELECT ID FROM `wp_posts` WHERE ".
-            "`post_type` = 'attachment'  AND post_status !='trash' ".
-            " AND guid LIKE '%".$guid."%'";
-            $request = $this->targetConnection->Prepare($sql);
-            $rs      = $this->targetConnection->Execute($request);
-            if (!$rs->fields['ID']) {
-                // $this->output->writeln('- Image '. $guid. ' fault');
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $parsed;
+                }
+            }
+
+            // Group photos by album
+            if (!isset($albums[$values['album']]['album_photos_id'])) {
+                $albums[$values['album']]['album_photos_id'] = array();
+            }
+
+            if (!isset($albums[$values['album']]['album_photos_footer'])) {
+                $albums[$values['album']]['album_photos_footer'] = array();
+            }
+
+            if (!$this->elementIsImported(
+                $values['photo'],
+                $schema['translation']['name']
+            )) {
+
+                $albums[$values['album']]['album_photos_id'][] =
+                    $values['photo'];
+
+                $albums[$values['album']]['album_photos_footer'][] =
+                    $values['description'];
             } else {
-                $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
+                $this->stats[$schema['target']]['already_imported']++;
             }
-
-        } else {
-            $imageID = $this->elementIsImported($rs->fields['ID'], 'image');
-
         }
 
-        return $imageID;
+        foreach ($albums as $id => $photos) {
+            try {
+                $album = new \Album();
+                $album->read($id);
 
+                if ($album->id != 0) {
+                    $album->saveAttachedPhotos($photos);
+
+                    foreach ($photos['album_photos_id'] as $photo) {
+                        $this->createTranslation(
+                            $photo,
+                            $album->id,
+                            $schema['translation']['name']
+                        );
+
+                        $this->stats[$schema['target']]['imported']++;
+                    }
+                }
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
     }
 
-    protected function clearLabelsInBodyArticle($body)
+    /**
+     * Saves the albums.
+     *
+     * @param  array    $schema Database schema.
+     * @param  array    $data   Albums to save.
+     */
+    protected function saveAlbums($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'title'                 => null,
+                'available'             => 1,
+                'content_status'        => 1,
+                'category'              => 20,
+                'frontpage'             => 0,
+                'in_home'               => 0,
+                'metadata'              => null,
+                'slug'                  => null,
+                'description'           => null,
+                'body'                  => '',
+                'posic'                 => 0,
+                'created'               => null,
+                'starttime'             => null,
+                'changed'               => null,
+                'fk_user'               => null,
+                'fk_publisher'          => null,
+                'album_frontpage_image' => 0,
+                'agency'                => ''
+            );
+
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
+
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $parsed;
+                }
+            }
+
+            try {
+                $album = new \Album();
+                $album->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $album->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the articles.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Users to save.
+     */
+    protected function saveArticles($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'title'          => null,
+                'with_comment'   => 1,
+                'available'      => 1,
+                'content_status' => 1,
+                'category'       => 20,
+                'frontpage'      => 0,
+                'in_home'        => 0,
+                'title_int'      => null,
+                'metadata'       => null,
+                'subtitle'       => null,
+                'slug'           => null,
+                'agency'         => null,
+                'summary'        => null,
+                'description'    => null,
+                'body'           => '',
+                'posic'          => 0,
+                'id'             => 0,
+                'img1'           => null,
+                'img2'           => null,
+                'img1_footer'    => null,
+                'img2_footer'    => null,
+                'fk_video'       => null,
+                'fk_video2'      => null,
+                'footer_video2'  => null,
+                'created'        => null,
+                'starttime'      => null,
+                'changed'        => null,
+                'fk_user'        => null,
+                'fk_author'      => null,
+                'fk_publisher'   => null,
+            );
+
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
+
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $parsed;
+                }
+            }
+
+            if (isset($schema['merge'])) {
+                foreach ($schema['merge'] as $target => $origin) {
+                    $merged = '';
+                    foreach ($origin as $field) {
+                        $merged .= $values[$field] . ' ';
+                    }
+
+                    $values[$target] = $merged;
+                }
+            }
+
+            try {
+                $article = new \Article();
+                $article->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $article->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the attachments.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Attachments to save.
+     */
+    protected function saveAttachments($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'pk_attachment' => 0,
+                'title'         => '',
+                'path'          => '',
+                'category'      => 20
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                $attachment = new \Attachment();
+                $attachment->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $attachment->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the categories.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Categories to save.
+     */
+    protected function saveCategories($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'name'              => '',
+                'title'             => '',
+                'inmenu'            => 0,
+                'posmenu'           => 10,
+                'internal_category' => 0,
+                'subcategory'       => 0,
+                'logo_path'         => null,
+                'params'            => null,
+                'color'             => null
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                $category = new \ContentCategory();
+                $category->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $category->pk_content_category,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Save the comments.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Categories to save.
+     */
+    protected function saveComments($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'pk_content'   => 0,
+                'content_id'   => 0,
+                'author'       => '',
+                'author_email' => '',
+                'author_ip'    => '',
+                'date'         => date('now'),
+                'body'         => '',
+                'status'       => 'pending',
+                'agent'        => '',
+                'type'         => '',
+                'parent'       => 0,
+                'user_id'      => 0,
+            );
+
+            $values = $this->merge($values, $item, $schema);
+
+            try {
+                $comment = new \Comment();
+                $comment->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $comment->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Save the opinions.
+     *
+     * @param array $schema Database schema.
+     * @param array $data   Opinions to save.
+     */
+    protected function saveOpinions($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'fk_author'      => null,
+                'fk_author_img'  => null,
+                'with_comment'   => 1,
+                'type_opinion'   => 1,
+                'title'          => null,
+                'available'      => 1,
+                'content_status' => 1,
+                'category'       => 20,
+                'frontpage'      => 0,
+                'in_home'        => 0,
+                'metadata'       => null,
+                'slug'           => null,
+                'description'    => null,
+                'body'           => '',
+                'posic'          => 0,
+                'created'        => null,
+                'starttime'      => null,
+                'changed'        => null,
+                'fk_user'        => null,
+                'fk_publisher'   => null
+            );
+
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
+
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $parsed;
+                }
+            }
+
+            try {
+                $opinion = new \Opinion();
+                $opinion->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $opinion->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the photos.
+     *
+     * @param  array $schema Database schema.
+     * @param  array $data   User groups to save.
+     */
+    protected function savePhotos($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'title'               => null,
+                'description'         => null,
+                'body'                => '',
+                'starttime'           => null,
+                'endtime'             => null,
+                'created'             => null,
+                'changed'             => null,
+                'metadata'            => null,
+                'content_status'      => 1,
+                'fk_category'         => 20,
+                'fk_user'             => null,
+                'fk_author'           => null,
+                'fk_user_last_editor' => null,
+                'posic'               => 0,
+                'frontpage'           => 0,
+                'slug'                => null,
+                'available'           => 1,
+                'category'            => 20,
+                'id'                  => 0,
+                'name'                => '',
+                'path_file'           => '',
+                'size'                => null,
+                'width'               => null,
+                'height'              => null,
+                'author_name'         => '',
+                'category_name'       => '',
+                'nameCat'             => '',
+                'local_file'          => null,
+                'extension'           => '',
+                'directory'           => '',
+                'origin_path'         => ''
+            );
+
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
+
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $this->parseField(
+                        $value,
+                        $schema['fields'][$key]['type'],
+                        isset($schema['fields'][$key]['params']) ?
+                        $schema['fields'][$key]['params'] : null
+                    );
+                }
+            }
+
+            if (isset($schema['merge'])) {
+                foreach ($schema['merge'] as $target => $origin) {
+                    $i = count($origin['fields']) - 1;
+                    $merged = '';
+                    foreach ($origin['fields'] as $field) {
+                        $merged .= $values[$field];
+
+                        if ($origin['separator'] && $i > 0) {
+                            $merged .= $origin['separator'];
+                        }
+
+                        $i--;
+                    }
+
+                    $values[$target] = $merged;
+                }
+            }
+
+            try {
+                $photo = new \Photo();
+                $id = null;
+
+                if (is_file($values['local_file'])) {
+                    $id = $photo->createFromLocalFile(
+                        $values,
+                        $values['directory']
+                    );
+                } else {
+                    $id = $photo->create($values);
+                }
+
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the user groups.
+     *
+     * @param  array $schema Database schema.
+     * @param  array $data   User groups to save.
+     */
+    protected function saveUserGroups($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'name'       => null,
+                'privileges' => array()
+            );
+
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
+
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $this->parseField(
+                        $value,
+                        $schema['fields'][$key]['type'],
+                        isset($schema['fields'][$key]['params']) ?
+                        $schema['fields'][$key]['params'] : null
+                    );
+                }
+            }
+
+            try {
+                $group   = new \UserGroup();
+                $group->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $group->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                echo $e;
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the users.
+     *
+     * @param  array $schema Database schema.
+     * @param  array $data   Users to save.
+     */
+    protected function saveUsers($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'username'      => '',
+                'password'      => null,
+                'sessionexpire' => '30',
+                'url'           => '',
+                'bio'           => '',
+                'avatar_img_id' => 0,
+                'email'         => null,
+                'name'          => null,
+                'type'          => 0,
+                'deposit'       => 0,
+                'token'         => null,
+                'activated'     => 1,
+                'id_user_group' => array('3'),
+            );
+
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
+
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $this->parseField(
+                        $value,
+                        $schema['fields'][$key]['type'],
+                        isset($schema['fields'][$key]['params']) ?
+                        $schema['fields'][$key]['params'] : null
+                    );
+                }
+            }
+
+            try {
+                $user = new \User();
+                $user->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $user->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     * Saves the videos.
+     *
+     * @param  array $schema Database schema.
+     * @param  array $data   Users to save.
+     */
+    protected function saveVideos($schema, $data)
+    {
+        foreach ($data as $item) {
+            $values = array(
+                'file_path'      => '',
+                'video_url'      => '',
+                'category'       => 20,
+                'available'      => 1,
+                'content_status' => 1,
+                'information'    => '',
+                'title'          => '',
+                'metadata'       => '',
+                'description'    => '',
+                'author_name'    => '',
+            );
+
+            foreach ($item as $key => $value) {
+                $parsed = $this->parseField(
+                    $value,
+                    $schema['fields'][$key]['type'],
+                    isset($schema['fields'][$key]['params']) ?
+                    $schema['fields'][$key]['params'] : null
+                );
+
+                // Overwrite only if it has a default value
+                if ($parsed !== false && array_key_exists($key, $values)) {
+                    $values[$key] = $this->parseField(
+                        $value,
+                        $schema['fields'][$key]['type'],
+                        isset($schema['fields'][$key]['params']) ?
+                        $schema['fields'][$key]['params'] : null
+                    );
+                }
+            }
+
+            try {
+                $videoP = new \Panorama\Video($values['video_url']);
+                $values['information'] = $videoP->getVideoDetails();
+
+                foreach ($values['information'] as $key => $value) {
+                    // Overwrite only if it has a default value
+                    if (array_key_exists($key, $values)) {
+                        $values[$key] = $value;
+                    }
+                }
+
+                $video = new \Video();
+                $video->create($values);
+
+                $this->createTranslation(
+                    $item[$schema['translation']['field']],
+                    $video->id,
+                    $schema['translation']['name']
+                );
+
+                $this->stats[$schema['target']]['imported']++;
+            } catch (\Exception $e) {
+                $this->stats[$schema['target']]['error']++;
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private function convertToBody($body)
     {
         $result = array();
 
@@ -1254,299 +1457,42 @@ class OnmMigratorCommand extends ContainerAwareCommand
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
     }
 
-       /**
-     * Process an uploaded photo for user
+    /**
+     * Parses the values in $values and merges $default and $values according to
+     * database schema.
      *
-     * @param Symfony\Component\HttpFoundation\File\UploadedFile $file the uploaded file
-     * @param string $userName the user real name
-     *
-     * @return Response the response object
-     **/
-    protected function uploadUserAvatar($file, $userName)
+     * @param  array $default Default values.
+     * @param  array $values  Values retrieved from database.
+     * @param  array $schema  Database schema.
+     * @return array          Merged array.
+     */
+    private function merge($default, $values, $schema)
     {
-        // Generate image path and upload directory
-        $userNameNormalized      = \Onm\StringUtils::normalize_name($userName);
-        $relativeAuthorImagePath ="/authors/".$userName;
-        $uploadDirectory         =  MEDIA_PATH."/images".$relativeAuthorImagePath;
-
-        // Get original information of the uploaded image
-        $originalFileName = $file;
-        $originalFileData = pathinfo($originalFileName);
-        $fileExtension    = strtolower($originalFileData['extension']);
-
-        // Generate new file name
-        $currentTime = gettimeofday();
-        $microTime   = intval(substr($currentTime['usec'], 0, 5));
-        $newFileName = date("YmdHis").$microTime.".".$fileExtension;
-
-        // Check upload directory
-        if (!is_dir($uploadDirectory)) {
-            \FilesManager::createDirectory($uploadDirectory);
-        }
-
-        // Upload file
-        $fileCopied = @copy($file, $uploadDirectory."/".$newFileName);
-        $photoId = 0;
-        if ($fileCopied) {
-            // Get all necessary data for the photo
-            $infor = new \MediaItem($uploadDirectory.'/'.$newFileName);
-            $data  = array(
-                'title'       => $originalFileName,
-                'name'        => $newFileName,
-                'user_name'   => $newFileName,
-                'path_file'   => $relativeAuthorImagePath,
-                'nameCat'     => $userName,
-                'category'    => '',
-                'created'     => $infor->atime,
-                'changed'     => $infor->mtime,
-                'size'        => round($infor->size/1024, 2),
-                'width'       => $infor->width,
-                'height'      => $infor->height,
-                'type'        => $infor->type,
-                'fk_author'   => $this->elementIsImported(7, 'user'),
-                'author_name' => '',
+        foreach ($values as $key => $value) {
+            $parsed = $this->parseField(
+                $value,
+                $schema['fields'][$key]['type'],
+                isset($schema['fields'][$key]['params']) ?
+                $schema['fields'][$key]['params'] : null
             );
 
-            // Create new photo
-            $photo = new \Photo();
-            $photoId = $photo->create($data);
-
-        } else {
-            // $this->output->writeln('- No photo move -',"{$file}, '-> '.{$uploadDirectory}."/".{$newFileName}");
+            // Overwrite only if it has a default value
+            if ($parsed !== false && array_key_exists($key, $default)) {
+                $default[$key] = $parsed;
+            }
         }
-        return $photoId;
+
+        if (isset($schema['merge'])) {
+            foreach ($schema['merge'] as $target => $origin) {
+                $merged = '';
+                foreach ($origin as $field) {
+                    $merged .= $default[$field] . ' ';
+                }
+
+                $default[$target] = $merged;
+            }
+        }
+
+        return $default;
     }
-
-     /* create new video */
-    // public function createVideo($video)
-    // {
-    //     $newVideoID = null;
-
-    //     preg_match(
-    //         '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i',
-    //         $video,
-    //         $match
-    //     );
-
-    //     $oldID = $this->elementIsImported('videos', 'category');
-
-    //     if (empty($oldID)) {
-    //         $IDCategory ='6'; //videos
-    //     } else {
-    //         $IDCategory = $this->matchCategory($oldID); //assign category 'videos' for media elements
-    //     }
-
-    //     if (!empty($match[1])) {
-
-    //         $url= "http://www.youtube.com/watch?v=".$match[1] ;
-
-    //         if ($url) {
-    //             try {
-    //                 $videoP = new \Panorama\Video($url);
-    //                 $information = $videoP->getVideoDetails();
-
-    //                 $values = array(
-    //                     'file_path'      => $url,
-    //                     'video_url'      => $url,
-    //                     'category'       => $IDCategory,
-    //                     'available'      => 1,
-    //                     'content_status' => 1,
-    //                     'title'          => $information['title'],
-    //                     'metadata'       => StringUtils::get_tags($information['title']),
-    //                     'description'    => $information['title'].' video '.$url,
-    //                     'author_name'    => $url,
-    //                 );
-
-    //             } catch (\Exception $e) {
-    //                $this->output->writeln("\n 1 Can't get video information. Check the $url");
-    //                 return;
-    //             }
-
-    //             $video = new \Video();
-    //             $values['information'] = $information;
-
-    //             try {
-    //                 $newVideoID = $video->create($values);
-    //             } catch (\Exception $e) {
-
-    //                 $this->output->writeln("1 Problem with video: {$e->getMessage()} {$url}  ");
-    //             }
-
-    //             if (empty($newVideoID)) {
-    //                 $this->output->writeln("2 Problem with video: {$url}  ");
-    //             }
-
-    //         } else {
-    //             $this->output->writeln("There was an error while uploading the form, not all the required data was sent.");
-
-    //         }
-    //     }
-
-    //     $this->output->writeln("new id {$newVideoID} [DONE]");
-    //     return $newVideoID;
-    // }
-
-    // public function importVideos()
-    // {
-
-    //     $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
-    //         "`meta_key` = 'usn_videolink' ";
-
-    //     $request = $this->targetConnection->Prepare($sql);
-    //     $rs =$this->targetConnection->Execute($request);
-
-    //     if (!$rs) {
-    //         $this->output->writeln($this->targetConnection->ErrorMsg());
-
-    //     } else {
-
-    //         $totalRows = $rs->_numOfRows;
-    //         $current = 1;
-    //         while (!$rs->EOF) {
-
-    //             $videoID = $this->createVideo($rs->fields['meta_value']);
-    //             if(!empty($videoID)) {
-    //                 $this->createTranslation($rs->fields['post_id'], $videoID, 'youtube', $rs->fields['meta_value']);
-    //             }
-    //             $current++;
-    //             $rs->MoveNext();
-    //         }
-    //         $rs->Close(); # optional
-    //     }
-    // }
-
-    // public function importbodyArticles()
-    // {
-    //     //check if body is empty & get from wp
-    //     //check if /files/emprendedores or /files/galicia
-    //     $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
-    //      ." WHERE pk_article = pk_content AND (body = '' OR img1 = 0 )";
-
-    //     $request = $this->targetConnection->Prepare($sql2);
-    //     $rs2     = $this->targetConnection->Execute($request);
-    //     if (!$rs2) {
-    //         $this->output->writeln('- sql '.$sql2);
-    //         $this->output->writeln($this->targetConnection->ErrorMsg());
-    //     }
-
-    //     $items = $rs2->getArray();
-    //     $this->output->writeln('- hay '.count($items));
-
-    //     $pks   = array();
-    //     foreach ($items as $item) {
-    //         $pk_content_old       = $item['pk_content_old'];
-    //         $pks[$pk_content_old] = $item['pk_content'];
-    //     }
-    //     $values = array();
-
-    //     $sql = "SELECT * FROM `".PREFIX."posts` WHERE ".
-    //         "ID IN (".implode(', ', array_keys($pks)).")";
-
-    //     // Fetch the list of Opinions available for one author in EditMaker
-    //     $request = $this->targetConnection->Prepare($sql);
-    //     $rs      = $this->targetConnection->Execute($request);
-
-
-    //     if (!$rs) {
-    //         $this->output->writeln($this->targetConnection->ErrorMsg());
-    //     } else {
-    //         while (!$rs->EOF) {
-    //             $data = $this->clearLabelsInBodyArticle($rs->fields['post_excerpt']);
-    //             $data2 = $this->clearLabelsInBodyArticle($rs->fields['post_content']);
-    //             $newBody = preg_replace(
-    //                 array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"),
-    //                 array('</p><p>', '</p><p>', '<br>', '<br>'),
-    //                 $data2['body']
-    //             );
-    //             if(empty($data['img'])) {
-    //                $data['img'] = $data2['img'];
-    //             }
-    //             $id = $rs->fields['ID'];
-    //             $values[] = array(
-    //                 $data['img'],
-    //                 $newBody,
-    //                 $pks[$id]
-    //             );
-    //             $this->output->write(".");
-
-    //             if(!empty($data['img'])) {
-    //          //       $this->output->writeln(" - img- ".$data['img']." - ".$pks[$id]." -".substr($newBody, 0, 50));
-    //             }
-    //             $rs->MoveNext();
-    //         }
-    //         $rs->Close(); # optional
-    //     }
-
-    //     $this->output->writeln('- updating '.count($values));
-    //     if (!empty($values)) {
-    //         $sql    = 'UPDATE `articles` SET img1=?, body =?  WHERE pk_article=?';
-
-    //         $stmt = $this->targetConnection->Prepare($sql);
-    //         $rss  = $this->targetConnection->Execute($stmt, $values);
-    //         if (!$rss) {
-    //             $this->output->writeln($this->targetConnection->ErrorMsg());
-    //         }
-
-    //     } else {
-
-    //     }
-    // }
-
-    // public function importOtherImages()
-    // {
-    //     //check if body is empty & get from wp
-    //     //check if /files/emprendedores or /files/galicia
-    //     $sql2 = "SELECT  pk_content_old, pk_content FROM `articles`, `translation_ids` "
-    //      ." WHERE pk_article = pk_content AND img1 = 0 ";
-
-    //     $request = $this->targetConnection->Prepare($sql2);
-    //     $rs2     = $this->targetConnection->Execute($request);
-    //     if (!$rs2) {
-    //         $this->output->writeln('- sql '.$sql2);
-    //         $this->output->writeln($this->targetConnection->ErrorMsg());
-    //     }
-
-    //     $items = $rs2->getArray();
-    //     $this->output->writeln('- hay '.count($items));
-
-    //     $pks   = array();
-    //     foreach ($items as $item) {
-    //         $pk_content_old       = $item['pk_content_old'];
-    //         $pks[$pk_content_old] = $item['pk_content'];
-    //     }
-
-
-    //     $sql = "SELECT * FROM `".PREFIX."postmeta` WHERE ".
-    //         "post_id IN (".implode(', ', array_keys($pks)).") AND `meta_key` = '_thumbnail_id'";
-
-    //     // Fetch the list of Opinions available for one author in EditMaker
-    //     $request = $this->targetConnection->Prepare($sql);
-    //     $rs      = $this->targetConnection->Execute($request);
-
-    //     $items    = $rs->getArray();
-    //     $values   = array();
-    //     foreach ($items as $item) {
-
-    //         $id  = $item['post_id'];
-    //         $img = $this->elementIsImported($item['meta_value'], 'image');
-    //         if (!empty($img)) {
-    //             $values[] = array(
-    //                 $img,
-    //                 $pks[$id]
-    //             );
-    //             $this->output->writeln($id. "->".$pks[$id]."  thumbnail - width {$img} - " );
-    //         }
-    //     }
-
-    //     if (!empty($values)) {
-    //         $sql    = 'UPDATE `articles` SET img1=?  WHERE pk_article = ?';
-
-    //         $stmt = $this->targetConnection->Prepare($sql);
-    //         $rss  = $this->targetConnection->Execute($stmt, $values);
-    //         if (!$rss) {
-    //             $this->output->writeln($this->targetConnection->ErrorMsg());
-    //         }
-
-    //     }
-    // }
 }

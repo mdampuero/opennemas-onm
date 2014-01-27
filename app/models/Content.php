@@ -659,7 +659,6 @@ class Content
     {
         $changed = date("Y-m-d H:i:s");
 
-        $data = array(0, 0, $lastEditor, $changed, $id);
         $this->set_available(0, $lastEditor);
 
         $sql = 'UPDATE contents SET `in_litter`=?, `changed`=?, '
@@ -968,8 +967,7 @@ class Content
 
         $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
 
-        $sql = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?,
-                 `changed`=? WHERE `pk_content`=?';
+        $stmt = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
 
         $values = array(
             $_SESSION['userid'],
@@ -1062,36 +1060,36 @@ class Content
      *
      * @return boolean
      **/
-    public function suggestToHomepage()
-    {
-        // OLD APPROACH
-        if (($this->id == null)) {
-            return false;
-        }
+    // public function suggestToHomepage()
+    // {
+    //     // OLD APPROACH
+    //     if (($this->id == null)) {
+    //         return false;
+    //     }
 
-        $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
-                 `changed`=? WHERE `pk_content`=?';
+    //     $sql = 'UPDATE contents SET `in_home`=2, `fk_user_last_editor`=?,
+    //              `changed`=? WHERE `pk_content`=?';
 
-        $currentTime = new \DateTime();
-        $currentTime->setTimezone(new \DateTimeZone('UTC'));
-        $currentTime = $currentTime->format('Y-m-d H:i:s');
+    //     $currentTime = new \DateTime();
+    //     $currentTime->setTimezone(new \DateTimeZone('UTC'));
+    //     $currentTime = $currentTime->format('Y-m-d H:i:s');
 
-        $values = array($_SESSION['userid'], $currentTime, $this->id);
+    //     $values = array($_SESSION['userid'], $currentTime, $this->id);
 
-        if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
-            return false;
-        }
+    //     if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+    //         return false;
+    //     }
 
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
+    //     /* Notice log of this action */
+    //     logContentEvent(__METHOD__, $this);
 
-        // Set status for it's updated to next event
-        $this->in_home = 2;
+    //     // Set status for it's updated to next event
+    //     $this->in_home = 2;
 
-        dispatchEventWithParams('content.update', array('content' => $this));
+    //     dispatchEventWithParams('content.update', array('content' => $this));
 
-        return true;
-    }
+    //     return true;
+    // }
 
     /**
      * TODO:  move to ContentCategory class
@@ -2225,7 +2223,6 @@ class Content
 
         $sql = 'SELECT `meta_name`, `meta_value` FROM `contentmeta` WHERE fk_content=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($this->id));
-        $items = array();
 
         if ($rs == false) {
             return false;

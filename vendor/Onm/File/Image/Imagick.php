@@ -288,6 +288,6 @@ class Imagick extends Common implements ImageInterface
 
         echo $this->_image->getImageBlob();
 
-        die();
+        return;
     }
 }

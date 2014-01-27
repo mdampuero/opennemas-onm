@@ -64,8 +64,8 @@ class MethodCacheManager
      **/
     public function __construct($object, $options = array())
     {
-        global $sc;
-        $this->cache = $sc->get('cache');
+        global $kernel;
+        $this->cache = $kernel->getContainer()->get('cache');
 
         $this->object = $object;
 

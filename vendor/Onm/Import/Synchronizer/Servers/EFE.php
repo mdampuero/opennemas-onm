@@ -94,10 +94,7 @@ class EFE extends ServerAbstract implements ServerInterface
 
         throw new \Exception(
             sprintf(
-                _(
-                    'Can\'t connect to server %s. Please check your'
-                    .' connection details.'
-                ),
+                _('Can\'t connect to server %s. Please check your connection details.'),
                 $params['name']
             )
         );

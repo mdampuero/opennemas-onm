@@ -126,7 +126,6 @@ class MachineSearcher
 
         $contentTypeNames = explode(',', $szContentsType);
 
-        $ids = array();
         foreach ($contentTypeNames as $contentTypeName) {
             $contentTypeIds []= \ContentManager::getContentTypeIdFromName($contentTypeName);
         }

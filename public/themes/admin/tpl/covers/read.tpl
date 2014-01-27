@@ -38,18 +38,8 @@ jQuery(document).ready(function($) {
         <div class="title"><h2>{if !isset($cover->id)}{t}New ePaper{/t}{else}{t}Editing ePaper{/t}{/if}</h2></div>
         <ul class="old-button">
             <li>
-            {if isset($video->id)}
                 <button type="submit">
-            {else}
-                <button type="submit">
-            {/if}
                     <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}"><br />{t}Save{/t}
-                </button>
-            </li>
-            <li>
-                <button type="submit" name="continue" value="1">
-                    <img border="0" src="{$params.IMAGE_DIR}save_and_continue.png" title="Guardar y continuar" alt="Guardar y continuar" ><br />
-                    {t}Save and continue{/t}
                 </button>
             </li>
             <li class="separator"></li>
@@ -61,8 +51,6 @@ jQuery(document).ready(function($) {
         </ul>
     </div>
 </div>
-
-
 
 <div class="wrapper-content">
 
@@ -81,7 +69,7 @@ jQuery(document).ready(function($) {
             <div class="control-group">
                 <label for="metadata" class="control-label">{t}Keywords{/t}</label>
                 <div class="controls">
-                    <input type="text" id="metadata" name="metadata" value="{$cover->metadata}" required="required" class="input-xxlarge"/>
+                    <input type="text" id="metadata" name="metadata" value="{$cover->metadata|default:""}" required="required" class="input-xxlarge"/>
                     <div class="help">{t}List of words separated by commas{/t}.</div>
                 </div>
             </div>
@@ -89,7 +77,7 @@ jQuery(document).ready(function($) {
             <div class="control-group">
                 <label for="price" class="control-label">{t}Price{/t}</label>
                 <div class="controls">
-                    <input type="text" id="price" name="price" value="{$cover->price|number_format:2:".":","|default:"0"}" required="required" class="input-xxlarge"/>
+                    <input type="number" step="any" id="price" name="price" value="{$cover->price|number_format:2:".":","|default:"0"}" required="required" />
                     <div class="help">{t}Split decimals with a dot{/t}.</div>
                 </div>
             </div>

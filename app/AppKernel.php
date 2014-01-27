@@ -16,14 +16,21 @@ class AppKernel extends Kernel
     {
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-        //     new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-        //     new Symfony\Bundle\TwigBundle\TwigBundle(),
-        //     new Symfony\Bundle\MonologBundle\MonologBundle(),
-        //     new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
-        //     new Symfony\Bundle\AsseticBundle\AsseticBundle(),
-        //     new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            // new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Symfony\Bundle\MonologBundle\MonologBundle(),
+            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
+            // new Symfony\Bundle\AsseticBundle\AsseticBundle(),
+            // new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Framework\FrameworkBundle()
+
+            new Backend\BackendBundle(),
+            new Framework\OnmFrameworkBundle(),
+            new Frontend\FrontendBundle(),
+            new FrontendMobile\FrontendMobileBundle(),
+            new Manager\ManagerBundle(),
+            new ManagerWebService\ManagerWebServiceBundle(),
+            new WebService\WebServiceBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -37,14 +44,14 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        // $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
-        $loader->load(__DIR__.'/config/app.yml');
+        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
+        // $loader->load(__DIR__.'/config/config.yml');
     }
 
-    public function getCacheDir()
-    {
-        return realpath(parent::getRootDir().'/../tmp/cache');
-    }
+    // public function getCacheDir()
+    // {
+    //     return realpath(parent::getRootDir().'/../tmp/cache');
+    // }
 
     public function getLogDir()
     {

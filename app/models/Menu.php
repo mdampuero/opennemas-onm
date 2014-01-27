@@ -197,13 +197,12 @@ class Menu
         $GLOBALS['application']->conn->StartTrans();
 
         // Delete menu elements
-
         $this->emptyMenu($id);
 
         $sql = 'DELETE FROM menues WHERE pk_menu=?';
-        $rs = $GLOBALS['application']->conn->Execute($sql, array($this->pk_menu));
+        $GLOBALS['application']->conn->Execute($sql, array($this->pk_menu));
 
-        $result = $GLOBALS['application']->conn->CompleteTrans();
+        $GLOBALS['application']->conn->CompleteTrans();
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
@@ -270,7 +269,7 @@ class Menu
             return null;
         }
 
-        $this->name      = $name;
+        $this->name      = $rs->fields['name'];
         $this->pk_menu   = $rs->fields['pk_menu'];
         $this->params    = $rs->fields['params'];
         $this->position  = $rs->fields['position'];

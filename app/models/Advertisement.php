@@ -417,7 +417,6 @@ class Advertisement extends Content
         $types = implode(',', $types);
 
         // Generate sql with or without category
-        $cm = new \ContentManager();
         if ($category !== 0) {
             $config = s::get('ads_settings');
             if (isset($config['no_generics'])
@@ -533,11 +532,9 @@ class Advertisement extends Content
             $params['afterHTML']  = "</div>";
         }
 
-        $cssclass             = $params['cssclass'];
         $width                = $this->params['width'];
         $height               = $this->params['height'];
         $overlap              = (isset($this->params['overlap']))? $this->params['overlap']: false;
-        $isBastardIE          = preg_match('/MSIE /', $_SERVER['HTTP_USER_AGENT']);
 
         // Extract width and height properties from CSS
         $width  = $params['width'];
@@ -573,8 +570,7 @@ class Advertisement extends Content
                 $url = $this->extUrl;
                 $mediaUrl = $this->extMediaUrl.$photo->path_file. $photo->name;
             } else {
-                global $sc;
-                $photo = $sc->get('entity_repository')->find('Photo', $this->img);
+                $photo = getService('entity_repository')->find('Photo', $this->img);
                 $url = SITE_URL.'ads/'. date('YmdHis', strtotime($this->created))
                       .sprintf('%06d', $this->pk_advertisement).'.html';
                 $mediaUrl = SITE_URL.'media/'.INSTANCE_UNIQUE_NAME.'/images'.$photo->path_file. $photo->name;

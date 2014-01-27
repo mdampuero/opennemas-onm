@@ -43,7 +43,7 @@ class Schedule extends Content
             $item->bgcolor        = $rs->fields['bgcolor'];
             $item->ensign         = $rs->fields['ensign'];
             $item->position       = $rs->fields['position'];
-            $item->name = \StringUtils::get_title($rs->fields['calendar_title']);
+            $item->name           = \Onm\StringUtils::get_title($rs->fields['calendar_title']);
 
             $calendars[]=$item;
             $rs->MoveNext();
@@ -76,10 +76,10 @@ class Schedule extends Content
             $item->startdate = $rs->fields['startdate'];
             $item->enddate   = $rs->fields['enddate'];
             $item->section   = $rs->fields['section'];
-            $item->name = \StringUtils::get_slug(
+            $item->slug      =  \Onm\StringUtils::get_slug($rs->fields['subject']);
+            $item->name      = \Onm\StringUtils::get_slug(
                 html_entity_decode($rs->fields['subject'], ENT_QUOTES, 'UTF-8')
             );
-            $item->slug =  \StringUtils::get_slug($rs->fields['subject']);
 
             $events[]=$item;
             $rs->MoveNext();

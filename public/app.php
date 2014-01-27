@@ -14,23 +14,15 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
+require_once __DIR__.'/../app/AppKernel.php';
 
 // Little hack to allow final slashes in the url
 $_SERVER['REQUEST_URI'] = normalizeUrl($_SERVER['REQUEST_URI']);
 
-$configFile = implode(
-    DIRECTORY_SEPARATOR,
-    array(APPLICATION_PATH, 'config', 'config.inc.php')
-);
-require_once $configFile;
-
-Request::enableHttpMethodParameterOverride();
+$kernel = new AppKernel('prod', false);
+$kernel->loadClassCache();
+//$kernel = new AppCache($kernel);
 $request = Request::createFromGlobals();
-$request->setTrustedProxies(array('127.0.0.1'));
-
-$sc = include __DIR__.'/../app/container.php';
-
-$framework = $sc->get('framework');
-$response = $framework->handle($request);
+$response = $kernel->handle($request);
 $response->send();
-$framework->terminate($request, $response);
+$kernel->terminate($request, $response);

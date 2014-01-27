@@ -28,7 +28,8 @@ do
 done
 
 while true; do
-    inotifywait -qq -r -e modify $SCRIPTPATH/../app/ $SCRIPTPATH/../src/ $SCRIPTPATH/../vendor/Onm/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
+    ant phpunit$CI;
+    inotifywait -qq -r -e modify $SCRIPTPATH/../app/ @$SCRIPTPATH/../app/cache $SCRIPTPATH/../src/ $SCRIPTPATH/../vendor/Onm/ --excludei "(tpl|js|css|jpg|png|yml|yaml)$" &&
     clear &&
     ant phpunit$CI;
 done

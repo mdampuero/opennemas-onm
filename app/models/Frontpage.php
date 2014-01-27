@@ -243,10 +243,7 @@ class Frontpage extends Content
 
     public function getCategoriesWithFrontpage($date)
     {
-        // if category = 0 => home
-        if (is_null($category)
-            && is_null($date)
-        ) {
+        if (is_null($date)) {
             return false;
         }
 

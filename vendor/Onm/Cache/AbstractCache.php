@@ -193,7 +193,7 @@ abstract class AbstractCache implements CacheInterface
             return $id;
         }
 
-        return $this->namespace . $id;
+        return $this->namespace . '_'. $id;
     }
 
     /**

@@ -254,7 +254,7 @@ class Rating
     {
         $active = ($value >= $currentPos) ? "active" : '';
 
-        return $imageTpl = "<li><div class='vote-element {$active}'>&nbsp;</div></li>";
+        return "<li><div class='vote-element {$active}'>&nbsp;</div></li>";
     }
 
     /**

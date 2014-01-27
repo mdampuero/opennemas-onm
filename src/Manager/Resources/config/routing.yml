@@ -1,114 +1,114 @@
 manager_framework_commands:
     path: /commands
-    defaults: { _controller:  Manager:Controllers:CommandsController:list }
+    defaults: { _controller:  ManagerBundle:Commands:list }
 
 manager_framework_command_execute:
     path: /commands/execute
-    defaults: { _controller:  Manager:Controllers:CommandsController:executeCommand }
+    defaults: { _controller:  ManagerBundle:Commands:executeCommand }
 
 manager_instances:
     path: /instances
-    defaults: { _controller:  Manager:Controllers:InstancesController:list }
+    defaults: { _controller:  ManagerBundle:Instances:list }
 
 manager_instances_list_export:
     path: /instance/list-export.csv
-    defaults: { _controller:  Manager:Controllers:InstancesController:listExport }
+    defaults: { _controller:  ManagerBundle:Instances:listExport }
 
 manager_instance_show:
     path: /instance/{id}/show
-    defaults: { _controller:  Manager:Controllers:InstancesController:show }
+    defaults: { _controller:  ManagerBundle:Instances:show }
 
 manager_instance_create:
     path: /instance/create
-    defaults: { _controller:  Manager:Controllers:InstancesController:create }
+    defaults: { _controller:  ManagerBundle:Instances:create }
 
 manager_instance_update:
     path: /instance/{id}/update
-    defaults: { _controller:  Manager:Controllers:InstancesController:update }
+    defaults: { _controller:  ManagerBundle:Instances:update }
 
 manager_instance_delete:
     path: /instance/{id}/delete
-    defaults: { _controller:  Manager:Controllers:InstancesController:delete }
+    defaults: { _controller:  ManagerBundle:Instances:delete }
 
 manager_instance_batch_delete:
     path: /instance/batch-delete
-    defaults: { _controller:  Manager:Controllers:InstancesController:batchDelete }
+    defaults: { _controller:  ManagerBundle:Instances:batchDelete }
 
 manager_instance_batch_available:
     path: /instance/batch-available
-    defaults: { _controller:  Manager:Controllers:InstancesController:batchAvailable }
+    defaults: { _controller:  ManagerBundle:Instances:batchAvailable }
 
 manager_instance_toggleavailable:
     path: /instance/{id}/toggle-available
-    defaults: { _controller:  Manager:Controllers:InstancesController:toggleAvailable }
+    defaults: { _controller:  ManagerBundle:Instances:toggleAvailable }
 
 manager_framework_check_dependencies:
     path: /framework/check-dependencies
-    defaults: { _controller:  Manager:Controllers:FrameworkStatusController:checkDependencies }
+    defaults: { _controller:  ManagerBundle:FrameworkStatus:checkDependencies }
 
 manager_framework_opcache_status:
     path: /framework/opcache
-    defaults: { _controller:  Manager:Controllers:FrameworkStatusController:opcacheStatus }
+    defaults: { _controller:  ManagerBundle:FrameworkStatus:opcacheStatus }
 
 manager_login_form:
     path: /login
-    defaults: { _controller:  Manager:Controllers:AuthenticationController:default }
+    defaults: { _controller:  ManagerBundle:Authentication:default }
 
 manager_login_processform:
     path: /login/process
-    defaults: { _controller:  Manager:Controllers:AuthenticationController:processform }
+    defaults: { _controller:  ManagerBundle:Authentication:processform }
     methods:  [POST]
 
 manager_logout:
     path: /logout
-    defaults: { _controller:  Manager:Controllers:AuthenticationController:logout }
+    defaults: { _controller:  ManagerBundle:Authentication:logout }
 
 # User management routes
 manager_acl_user:
     path: /acl/users
-    defaults: { _controller:  Manager:Controllers:AclUserController:list }
+    defaults: { _controller:  ManagerBundle:AclUser:list }
 
 manager_acl_user_create:
     path: /acl/user/create
-    defaults: { _controller:  Manager:Controllers:AclUserController:create }
+    defaults: { _controller:  ManagerBundle:AclUser:create }
 
 manager_acl_user_show:
     path: /acl/user/{id}/show
-    defaults: { _controller:  Manager:Controllers:AclUserController:show }
+    defaults: { _controller:  ManagerBundle:AclUser:show }
 
 manager_acl_user_update:
     path: /acl/user/{id}/update
-    defaults: { _controller:  Manager:Controllers:AclUserController:update }
+    defaults: { _controller:  ManagerBundle:AclUser:update }
 
 manager_acl_user_delete:
     path: /acl/user/{id}/delete
-    defaults: { _controller:  Manager:Controllers:AclUserController:delete }
+    defaults: { _controller:  ManagerBundle:AclUser:delete }
 
 manager_acl_user_batchdelete:
     path: /acl/user/batchdelete
-    defaults: { _controller:  Manager:Controllers:AclUserController:batchDelete }
+    defaults: { _controller:  ManagerBundle:AclUser:batchDelete }
 
 manager_acl_user_toogle_enabled:
     path: /acl/user/{id}/toogle-enabled
-    defaults: { _controller:  Manager:Controllers:AclUserController:toogleEnabled }
+    defaults: { _controller:  ManagerBundle:AclUser:toogleEnabled }
 
 # User groups managerment routes
 manager_acl_usergroups:
     path: /acl/usergroups
-    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:list }
+    defaults: { _controller:  ManagerBundle:AclUserGroups:list }
 
 manager_acl_usergroups_show:
     path: /acl/usergroup/{id}/show
-    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:show }
+    defaults: { _controller:  ManagerBundle:AclUserGroups:show }
 
 manager_acl_usergroups_create:
     path: /acl/usergroup/create
-    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:create }
+    defaults: { _controller:  ManagerBundle:AclUserGroups:create }
 
 manager_acl_usergroups_update:
     path: /acl/usergroup/{id}/update
-    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:update }
+    defaults: { _controller:  ManagerBundle:AclUserGroups:update }
 
 manager_acl_usergroups_delete:
     path: /acl/usergroup/{id}/delete
-    defaults: { _controller:  Manager:Controllers:AclUserGroupsController:delete }
+    defaults: { _controller:  ManagerBundle:AclUserGroups:delete }

@@ -23,8 +23,8 @@ class DeployCommand extends Command
         $this
             ->setDefinition(
                 array(
-                    new InputOption('skip-cleaning', 's', InputOption::VALUE_NONE, 'Skip cleaning caches'),
-                    new InputOption('skip-themes', 't', InputOption::VALUE_NONE, 'Skip themes deploy'),
+                    new InputOption('skip-cleaning-caches', 'c', InputOption::VALUE_NONE, 'Skip cleaning caches'),
+                    new InputOption('skip-theme-deploy', 't', InputOption::VALUE_NONE, 'Skip themes deploy'),
                 )
             )
             ->setName('app:deploy')
@@ -52,18 +52,20 @@ EOF
 
         $this->updateCoreCode();
 
+        $this->cleanSymfonyCache();
+
         $this->compileTranslations();
 
         $this->executeMaintenance('disable');
 
         // Update themes
-        $skipThemes = $input->getOption('skip-themes');
+        $skipThemes = $input->getOption('skip-theme-deploy');
         if (!$skipThemes) {
             $this->updateThemes();
         }
 
         // Clean cache if required
-        $skipCleaning = $input->getOption('skip-cleaning');
+        $skipCleaning = $input->getOption('skip-cleaning-caches');
         if (!$skipCleaning) {
             $this->cleanCache();
         }
@@ -113,12 +115,12 @@ EOF
         $phpBinPath = exec('which php');
 
         // Update onm-core
-        $this->output->writeln(" - Updating onm instance");
+        $this->output->writeln("Updating core ONM code");
         $gitOutput = exec('git pull');
         $this->output->writeln($gitOutput."\n");
 
         // Update dependencies
-        $this->output->writeln(" - Updating vendor libraries");
+        $this->output->writeln("Updating vendor libraries");
         $composerOutput = exec($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o');
         $this->output->writeln($composerOutput."\n");
     }
@@ -143,7 +145,7 @@ EOF
      **/
     public function updateThemes()
     {
-        $this->output->writeln(" - Updating public themes");
+        $this->output->writeln("Updating public themes");
         foreach (glob($this->basePath.'/public/themes/*') as $theme) {
             // Avoid to execute pull in admin and manager themes.
             if (basename($theme) == 'admin' || basename($theme) == 'manager') {
@@ -162,9 +164,28 @@ EOF
      **/
     public function cleanCache()
     {
-        $command = $this->getApplication()->find('clean:smarty-cache');
+        try {
+            $command = $this->getApplication()->find('clean:smarty-cache');
+            $arguments = array(
+                'command' => 'clean:smarty-cache',
+            );
+
+            $input = new ArrayInput($arguments);
+            $returnCode = $command->run($input, $this->output);
+        } catch (\Exception $e) {
+
+        }
+    }
+
+    /**
+     * Executes the cache:clear
+     *
+     **/
+    public function cleanSymfonyCache()
+    {
+        $command = $this->getApplication()->find('cache:clear');
         $arguments = array(
-            'command' => 'clean:smarty-cache',
+            'command' => 'cache:clear',
         );
 
         $input = new ArrayInput($arguments);

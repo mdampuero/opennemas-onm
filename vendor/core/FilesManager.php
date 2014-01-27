@@ -195,7 +195,9 @@ class FilesManager
 
         // open archive
         if ($zip->open($filePath) !== true) {
-            die ("Could not open archive");
+            echo "Could not open archive";
+
+            return;
         }
 
         $dataZIP = array();

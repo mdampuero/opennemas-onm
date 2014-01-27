@@ -98,7 +98,7 @@
                         <label for="title">{t}Price{/t}:</label>
                     </td>
                     <td style="padding:4px;" nowrap="nowrap">
-                        <input type="text" id="price" name="price" size="80" value="{$kiosko->price|string_format:"%.2f"|default:""}"/>
+                        <input type="number" step="any" id="price" name="price" size="80" value="{$kiosko->price|string_format:"%.2f"|default:""}"/>
                     </td>
                 </tr>
                 <tr>

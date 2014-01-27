@@ -26,7 +26,7 @@ class ImporterIdeal
         return $s;
     }
 
-    public static function check_label($label)
+    public static function checkLabel($label)
     {
         $relation = array(
             "/Antetitulo/"          =>"subtitle",
@@ -76,7 +76,7 @@ class ImporterIdeal
                     foreach ($eleto->attributes() as $a => $b) {
                         // Tiene los nombres en el atribute class
                         if ($a == 'class') {
-                            $field = self::check_label($b);
+                            $field = self::checkLabel($b);
                         }
 
                         if (!empty($field) && empty($data[$field])) {
@@ -92,7 +92,7 @@ class ImporterIdeal
                         if (count($eleto->children())>0) {
                             foreach ($eleto->children() as $node) {
                                 foreach ($node->attributes() as $c => $d) {
-                                    $field = self::check_label($d);
+                                    $field = self::checkLabel($d);
                                     if (!empty($field)
                                         && empty($data[$field])
                                     ) {
