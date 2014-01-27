@@ -45,82 +45,9 @@ class Settings
      */
     public static function get($settingName, $default = null)
     {
-        // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) {
-            return false;
-        };
+        $settingsManager  = getService('setting_repository');
 
-        $cache  = getService('cache');
-        $dbConn = getService('db_conn');
-
-        if (!is_array($settingName)) {
-            // Try to fetch the setting from cache first
-            $settingValue = $cache->fetch(CACHE_PREFIX . $settingName);
-
-            // If was not fetched from cache now is turn of DB
-            if (!$settingValue) {
-                $sql = "SELECT value FROM `settings` WHERE name = ?";
-
-                $rs = $dbConn->GetOne($sql, array($settingName));
-
-                if ($rs === false) {
-                    return false;
-                }
-
-                if ($rs === null && !is_null($default)) {
-                    $settingValue = $default;
-                } else {
-                    $settingValue = unserialize($rs);
-                }
-
-                $cache->save(CACHE_PREFIX . $settingName, $settingValue);
-            }
-        } else {
-            // Try to fetch each setting from cache first
-            $cacheSettingName = array();
-            foreach ($settingName as $key) {
-                $cacheSettingName []= CACHE_PREFIX . $key;
-            }
-
-            $cacheSettingValue = $cache->fetch($cacheSettingName);
-
-            $settingValue = array();
-
-            if (!empty($cacheSettingValue)) {
-                foreach ($cacheSettingValue as $key => $value) {
-
-                    $keyName = str_replace(CACHE_PREFIX, "", $key);
-
-                    $settingValue[$keyName] = $value;
-                }
-            }
-
-            // If all the keys were not fetched from cache now is turn of DB
-            if (!is_null($settingValue)) {
-                $settings = implode("', '", $settingName);
-                $sql         = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
-                $rs          = $dbConn->Execute($sql);
-
-                if (!$rs) {
-                    return false;
-                }
-
-                $settingValue = array();
-                foreach ($rs as $option) {
-                    $settingValue[$option['name']] = unserialize($option['value']);
-                }
-
-                $cacheSettingName = array();
-                foreach ($settingValue as $key => $option) {
-                    $cacheSettingName [CACHE_PREFIX . $key] = $option;
-                }
-                $cache->save($settingName, $cacheSettingName);
-
-            }
-
-        }
-
-        return $settingValue;
+        return $settingsManager->get($settingName, $default);
     }
 
     /**
@@ -137,27 +64,9 @@ class Settings
      */
     public static function set($settingName, $settingValue)
     {
-        $cache = getService('cache');
-        // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) {
-            return false;
-        }
+        $settingsManager  = getService('setting_repository');
 
-        $settingValueSerialized = serialize($settingValue);
-
-        $sql = "INSERT INTO settings (name,value)
-                VALUES ('{$settingName}','{$settingValueSerialized}')
-                ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
-
-        $rs = $GLOBALS['application']->conn->Execute($sql);
-
-        if (!$rs) {
-            return false;
-        }
-        $cache->save(CACHE_PREFIX . $settingName, $settingValue);
-
-
-        return true;
+        return $settingsManager->set($settingName, $settingValue);
     }
 
     /**
@@ -174,19 +83,8 @@ class Settings
      */
     public static function invalidate($settingName, $instanceName = null)
     {
-        $cache = getService('cache');
+        $settingsManager  = getService('setting_repository');
 
-        if (is_null($instanceName)) {
-            $instanceName = CACHE_PREFIX;
-        }
-
-        // the setting name must be setted
-        if (!isset($settingName) || empty($settingName)) {
-            return false;
-        }
-
-        $cache->delete($instanceName . $settingName);
-
-        return true;
+        return $settingsManager->invalidate($settingName, $instanceName);
     }
 }

@@ -25,6 +25,16 @@ use Onm\Settings as s;
 class L10nSystemListener implements EventSubscriberInterface
 {
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function __construct($settingRepository)
+    {
+        $this->settingRepository = $settingRepository;
+    }
+    /**
      * Filters the Response.
      *
      * @param GetResponseEvent $event A GetResponseEvent instance
@@ -39,7 +49,10 @@ class L10nSystemListener implements EventSubscriberInterface
         $container = $kernel->getContainer();
         $request = $event->getRequest();
 
-        $timezone = \Onm\Settings::get('time_zone');
+        $settings = $this->settingRepository->get(array('time_zone', 'site_language'));
+        $timezone = $settings['time_zone'];
+        $language = $settings['site_language'];
+
         if (isset($timezone)) {
             $availableTimezones = \DateTimeZone::listIdentifiers();
             date_default_timezone_set($availableTimezones[$timezone]);
@@ -53,7 +66,6 @@ class L10nSystemListener implements EventSubscriberInterface
         ) {
             \Application::$language = $forceLanguage;
         } else {
-            $language = \Onm\Settings::get('site_language');
             if (isset($_SESSION)
                 && array_key_exists('user_language', $_SESSION)
             ) {

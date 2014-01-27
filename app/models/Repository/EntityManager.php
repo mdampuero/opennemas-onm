@@ -107,4 +107,50 @@ class EntityManager extends BaseManager
 
         return $rs;
     }
+
+    /**
+     * Clean id and search if exist in content table.
+     * If not found search in refactor_id table. (used for translate old format ids)
+     *
+     * @param string $dirtyID Vble with date in first 14 digits
+     *
+     * @return int id in table content or forward to 404
+     */
+    public function resolveId($id)
+    {
+        $cacheKey = 'content_resolve_id_'.$id;
+        $resolvedID = (int) $this->cache->fetch($cacheKey);
+
+        if (!empty($resolvedID)) {
+            return $resolvedID;
+        }
+
+        $contentID = 0;
+        if (preg_match('@tribuna@', INSTANCE_UNIQUE_NAME)
+            || preg_match('@retrincos@', INSTANCE_UNIQUE_NAME)
+            || preg_match('@cronicas@', INSTANCE_UNIQUE_NAME)
+        ) {
+            $sql = "SELECT pk_content FROM `refactor_ids` WHERE pk_content_old = ?";
+            $contentID = $GLOBALS['application']->conn->GetOne($sql, array($id));
+
+            if (!empty($contentID)) {
+                $content = $this->find('Content', $contentID)->get($contentID);
+
+                forward301('/'.$content->uri);
+            }
+        }
+
+        preg_match("@(?P<dirtythings>\d{1,14})(?P<digit>\d+)@", $id, $matches);
+
+        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1";
+        $value     = array((int) $matches["digit"]);
+        $rs = $this->dbConn->Execute($sql, $value);
+
+        if ($rs) {
+            $contentID = $rs->fields['pk_content'];
+            $this->cache->save($cacheKey, $contentID);
+        }
+
+        return $contentID;
+    }
 }

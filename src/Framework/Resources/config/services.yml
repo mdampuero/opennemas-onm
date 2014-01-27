@@ -30,6 +30,7 @@ services:
 
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener
+        arguments: [ @setting_repository ]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
 
