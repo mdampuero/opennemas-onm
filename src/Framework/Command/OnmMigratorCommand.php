@@ -614,8 +614,10 @@ class OnmMigratorCommand extends ContainerAwareCommand
         if (isset($schema['merge'])) {
             foreach ($schema['merge'] as $target => $origin) {
                 $merged = '';
+                $i = count($origin['fields']);
                 foreach ($origin['fields'] as $field) {
-                    $merged .= $default[$field] . $origin['separator'];
+                    $merged .= $default[$field] . ($i > 0 ? $origin['separator'] : '');
+                    $i--;
                 }
 
                 $default[$target] = $merged;
@@ -1290,10 +1292,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $rss  = $this->targetConnection->Execute($stmt, $values);
     }
 
-    /**
-     *
-     */
-    private function convertToBody($body)
+    protected function convertToClearTags($body)
     {
         $result = array();
 
