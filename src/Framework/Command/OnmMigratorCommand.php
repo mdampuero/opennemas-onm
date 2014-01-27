@@ -364,7 +364,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
         }
 
         $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
-            . $schema['source']['id'] . ' LIMIT 0,100';
+            . $schema['source']['id'];
 
         $request = $this->originConnection->Prepare($sql);
         $rs      = $this->originConnection->Execute($request);
@@ -1248,9 +1248,6 @@ class OnmMigratorCommand extends ContainerAwareCommand
             try {
                 $videoP = new \Panorama\Video($values['video_url']);
                 $values['information'] = $videoP->getVideoDetails();
-
-                var_dump($values['metadata']);die();
-
 
                 foreach ($values['information'] as $key => $value) {
                     // Overwrite only if it has a default value
