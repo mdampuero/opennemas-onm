@@ -279,7 +279,7 @@ class FrontpagesController extends Controller
             && !is_null($layout)
             && $layoutValid
         ) {
-            s::set('frontpage_layout_'.$category, $layout);
+            $this->get('setting_repository')->set('frontpage_layout_'.$category, $layout);
 
             m::add(sprintf(_('Layout %s seleted.'), $layout), m::SUCCESS);
         } else {
