@@ -235,7 +235,7 @@ class CommentsController extends Controller
 
                 return $this->redirect($this->generateUrl('admin_comments_facebook'));
             } else {
-                m::add(_('There was an error while saving the Facebook module configuration'), m::ERROR);
+                m::add(_('There was an error while saving the Facebook comments module configuration'), m::ERROR);
             }
 
             return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
