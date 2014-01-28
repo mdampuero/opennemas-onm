@@ -20,7 +20,7 @@ class TranslationCoreCommand extends Command
 {
     public $supportedLanguages = array('es_ES', 'gl_ES', 'pt_BR');
 
-    public $localeFolder = '/Resources/locale';
+    public $localeFolder = 'Resources/locale';
 
     protected function configure()
     {
@@ -67,7 +67,7 @@ EOF
     {
         $output->writeln(" * Extracting strings");
         $tplFolders = array(
-            'public/themes/admin/tpl/',
+            'public/themes/admin/tpl',
             'public/themes/manager/tpl',
         );
 
@@ -82,7 +82,7 @@ EOF
         $output->writeln("\t- From PHP files");
 
         $phpFiles = array(
-            SRC_PATH.'*/Controllers/*.php',
+            SRC_PATH.'*/Controller/*.php',
             SRC_PATH.'*/Resources/Menu.php',
             SITE_VENDOR_PATH.'core/*.php',
             SITE_VENDOR_PATH.'Onm/**/**/*.php',
