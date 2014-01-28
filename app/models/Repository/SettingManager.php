@@ -104,17 +104,16 @@ class SettingManager extends BaseManager
 
         $settingValueSerialized = serialize($settingValue);
 
-        $sql = "INSERT INTO settings (name,value)
-                VALUES ('{$settingName}','{$settingValueSerialized}')
-                ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
+        $sql = "INSERT INTO settings (name,value) "
+                ."VALUES ('{$settingName}','{$settingValueSerialized}')"
+                ."ON DUPLICATE KEY UPDATE value='{$settingValueSerialized}'";
 
         $rs = $this->dbConn->Execute($sql);
 
         if (!$rs) {
             return false;
         }
-        $this->cache->save($this->cachePrefix.$settingName, $settingValue);
-
+        $this->cache->save($settingName, $settingValue);
 
         return true;
     }
