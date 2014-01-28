@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
+use Onm\Settings as s;
 use Onm\StringUtils;
 
 class OnmMigratorCommand extends ContainerAwareCommand
@@ -602,11 +603,21 @@ class OnmMigratorCommand extends ContainerAwareCommand
     protected function merge($default, $values, $schema)
     {
         foreach ($values as $key => $value) {
+            $params = isset($schema['fields'][$key]['params']) ?
+                $schema['fields'][$key]['params'] : null;
+
+            // Get the values from item and append them to parameters array
+            if (in_array('select', $schema['fields'][$key]['type'])) {
+                $fields = $schema['fields'][$key]['params']['select']['fields'];
+                foreach ($fields as $field) {
+                    $params[$field] = $values[$field];
+                }
+            }
+
             $values[$key] = $this->parseField(
                 $value,
                 $schema['fields'][$key]['type'],
-                isset($schema['fields'][$key]['params']) ?
-                $schema['fields'][$key]['params'] : null
+                $params
             );
         }
 
@@ -656,6 +667,44 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     break;
                 case 'raw': // Remove spaces at beginning and end
                     $field = trim($field);
+                    break;
+                case 'select':
+                    $i = 0;
+                    $next = true;
+                    while ($i < count($params['select']['fields']) && $next) {
+                        $i++;
+                        $key = $params['select']['fields'][$i];
+                        $field = $params[$key];
+
+                        switch ($params['select']['operator']) {
+                            case '!=':
+                                if ($field != $params['select']['value']) {
+                                    $next = false;
+                                }
+                                break;
+                            case '==':
+                                if ($field == $params['select']['value']) {
+                                    $next = false;
+                                }
+                                break;
+                            case '>':
+                                if ($field > $params['select']['value']) {
+                                    $next = false;
+                                }
+                                break;
+                            case '<':
+                                if ($field < $params['select']['value']) {
+                                    $next = false;
+                                }
+                                break;
+                        }
+                    }
+
+                    // Condition not satisfied by any field
+                    if ($i >= count($params['select']['fields'])) {
+                        $field = null;
+                    }
+
                     break;
                 case 'slug':
                     $field = $this->convertToSlug($field);
@@ -884,7 +933,6 @@ class OnmMigratorCommand extends ContainerAwareCommand
             $values = $this->merge($values, $item, $schema);
 
             try {
-
                 $article = new \Article();
                 $article->create($values);
 
@@ -955,7 +1003,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'internal_category' => 0,
                 'subcategory'       => 0,
                 'logo_path'         => null,
-                'params'            => null,
+                'params'            => array(),
                 'color'             => null
             );
 
@@ -1083,6 +1131,16 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function savePhotos($name, $schema, $data)
     {
+        $settings = array (
+            'image_thumb_size'=>'140',
+            'image_inner_thumb_size'=>'470',
+            'image_front_thumb_size'=>'350'
+        );
+
+        foreach ($settings as $key => $value) {
+            s::set($key, $value);
+        }
+
         foreach ($data as $item) {
             $values = array(
                 'title'               => null,
@@ -1113,6 +1171,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 'category_name'       => '',
                 'nameCat'             => '',
                 'local_file'          => null,
+                'address'             => '',
                 'extension'           => '',
                 'directory'           => '',
                 'origin_path'         => ''
