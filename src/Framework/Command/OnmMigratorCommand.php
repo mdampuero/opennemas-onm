@@ -583,7 +583,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function matchTranslation($id, $type)
     {
-        if (array_key_exists($type, $this->translations)
+        if ($id && $type && array_key_exists($type, $this->translations)
                 && array_key_exists($id, $this->translations[$type])) {
             return $this->translations[$type][$id];
         }
@@ -664,6 +664,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     break;
                 case 'date':
                     $field = date($params['format'], strtotime($field));
+                    break;
+                case 'map':
+                    $field = $this->convertToMap($field, $params['map']);
                     break;
                 case 'raw': // Remove spaces at beginning and end
                     $field = trim($field);
@@ -885,6 +888,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['error']++;
             }
         }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $album = new \Album();
+                    $album->remove(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
+            }
+        }
     }
 
     /**
@@ -947,6 +978,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['error']++;
             }
         }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $article = new \Article();
+                    $article->remove(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
+            }
+        }
     }
 
     /**
@@ -983,6 +1042,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['error']++;
             }
         }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $attachment = new \Attachment();
+                    $attachment->remove(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
+            }
+        }
     }
 
     /**
@@ -998,9 +1085,9 @@ class OnmMigratorCommand extends ContainerAwareCommand
             $values = array(
                 'name'              => '',
                 'title'             => '',
-                'inmenu'            => 0,
+                'inmenu'            => 1,
                 'posmenu'           => 10,
-                'internal_category' => 0,
+                'internal_category' => 1,
                 'subcategory'       => 0,
                 'logo_path'         => null,
                 'params'            => array(),
@@ -1022,6 +1109,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
+            }
+        }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $category = new \ContentCategory();
+                    $category->delete(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
             }
         }
     }
@@ -1066,6 +1181,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
+            }
+        }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $comment = new \Comment();
+                    $comment->remove(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
             }
         }
     }
@@ -1118,6 +1261,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
+            }
+        }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $opinion = new \Opinion();
+                    $opinion->remove(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
             }
         }
     }
@@ -1211,6 +1382,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['error']++;
             }
         }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $photo = new \Photo();
+                    $photo->remove(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
+            }
+        }
     }
 
     /**
@@ -1244,6 +1443,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
             } catch (\Exception $e) {
                 echo $e;
                 $this->stats[$name]['error']++;
+            }
+        }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $group = new \UserGroup();
+                    $group->delete(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
             }
         }
     }
@@ -1289,6 +1516,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
+            }
+        }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $user = new \User();
+                    $user->delete(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
             }
         }
     }
@@ -1343,13 +1598,41 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $this->stats[$name]['error']++;
             }
         }
+
+        // Update translation to point to the new id
+        if (array_key_exists('remap', $schema['translation'])) {
+            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+                try {
+                    $video = new \Video();
+                    $video->remove(
+                        $this->matchTranslation(
+                            $oldId,
+                            $schema['translation']['name']
+                        )
+                    );
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $this->matchTranslation(
+                            $oldTarget,
+                            $schema['translation']['name']
+                        ),
+                        $schema['translation']['name']
+                    );
+
+                    $this->stats[$name]['imported']--;
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
+            }
+        }
     }
 
     /**
      * Updates img2 and im2_footer fields from an article.
      *
      * @param integer $id     Article id.
-     * @param integer $photo  Photo id.
+     * @param integer $pg_host()to  Photo id.
      * @param string  $footer Footer value for the photo.
      */
     protected function updateArticlePhoto($id, $photo, $footer)
@@ -1363,7 +1646,31 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $rss  = $this->targetConnection->Execute($stmt, $values);
     }
 
-    protected function convertToClearTags($body)
+    /**
+     * Updates a translation entry.
+     *
+     * @param integer $old  Old content id used in old database.
+     * @param integer $new  New content id.
+     * @param string  $type Type of the translation.
+     */
+    protected function updateTranslation($old, $new, $type)
+    {
+        $sql = 'UPDATE translation_ids SET `pk_content`=' . $new
+            . ' WHERE `pk_content_old`=' . $old . ' AND `type`=\''
+            . $type . '\'';
+
+        $rs  = $this->targetConnection->Execute($sql);
+
+        if (!$rs) {
+            $this->output->writeln(
+                'createTranslation: ' . $this->targetConnection->ErrorMsg()
+            );
+        }
+
+        $this->translations[$type][$old] = $new;
+    }
+
+    private function clearTags($body)
     {
         $result = array();
 
