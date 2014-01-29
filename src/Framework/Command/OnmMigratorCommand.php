@@ -1658,7 +1658,6 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function updateArticleVideo($id, $video, $footer)
     {
-        var_dump($id);
         $sql = "UPDATE articles  SET `fk_video2`=?, `footer_video2`=?"
             ."WHERE pk_article=?";
 
