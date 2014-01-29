@@ -347,22 +347,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
             . ' WHERE 1';
 
         // Add logical comparisons to 'WHERE' chunk
-        if (isset($schema['filters'])
-                && count($schema['filters']) > 0) {
-            foreach ($schema['filters'] as $condition) {
-                $sql .= ' AND (';
-
-                foreach ($condition as $key => $value) {
-                    $sql .= $value['table'] . '.' . $value['field']
-                        . '=\'' . $value['value'] . '\'';
-
-                    if ($key < count($condition) - 1) {
-                        $sql .= ' OR ';
-                    }
-                }
-
-                $sql .= ')';
-            }
+        if (isset($schema['filters']) && count($schema['filters']) > 0) {
+            $sql .= ' AND ' . $this->parseCondition($schema['filters']);
         }
 
         $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
@@ -393,9 +379,28 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     if (isset($field['type']) &&
                             in_array('constant', $field['type'])) {
                         $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key;
+
+                    } else if (isset($field['type']) &&
+                            in_array('subselect', $field['type'])) {
+                        $params = $field['params']['subselect'];
+
+                        $sql .= '(SELECT ' . $params['table'] . '.'
+                            . $params['field'] . ' FROM ' . $params['table']
+                            . ' WHERE ' . $params['table'] . '.' . $params['id']
+                            . '=' . $id[$schema['source']['id']];
+
+                        // Add logical comparisons to 'WHERE' chunk
+                        if (isset($params['conditions'])
+                                && count($params['conditions']) > 0) {
+                            $sql .= ' AND '
+                                . $this->parseCondition($params['conditions']);
+                        }
+
+                        $sql .= ')' . ' AS ' . $key;
+
                     } else {
-                        $sql = $sql . $field['table'] . '.'
-                            . $field['field'] . ' AS ' . $key;
+                        $sql .= $field['table'] . '.' . $field['field']
+                            . ' AS ' . $key;
                     }
 
                     if ($i < count($schema['fields']) - 1) {
@@ -443,20 +448,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 // Add logical comparisons to 'WHERE' chunk
                 if (isset($schema['conditions'])
                         && count($schema['conditions']) > 0) {
-                    foreach ($schema['conditions'] as $condition) {
-                        $sql .= ' AND (';
-
-                        foreach ($condition as $key => $value) {
-                            $sql .= $value['table'] . '.' . $value['field']
-                                . '=\'' . $value['value'] . '\'';
-
-                            if ($key < count($condition) - 1) {
-                                $sql .= ' OR ';
-                            }
-                        }
-
-                        $sql .= ')';
-                    }
+                    $sql .= ' AND '
+                        . $this->parseCondition($schema['conditions']);
                 }
 
                 // Execute sql and save in array
@@ -1587,6 +1580,16 @@ class OnmMigratorCommand extends ContainerAwareCommand
                 $video = new \Video();
                 $video->create($values);
 
+                // Update article img2 and img2_footer
+                if (isset($values['article'])
+                        && $values['article'] !== false) {
+                    $this->updateArticleVideo(
+                        $values['article'],
+                        $video->id,
+                        $values['video2_footer']
+                    );
+                }
+
                 $this->createTranslation(
                     $item[$schema['translation']['field']],
                     $video->id,
@@ -1632,7 +1635,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
      * Updates img2 and im2_footer fields from an article.
      *
      * @param integer $id     Article id.
-     * @param integer $pg_host()to  Photo id.
+     * @param integer $photo  Photo id.
      * @param string  $footer Footer value for the photo.
      */
     protected function updateArticlePhoto($id, $photo, $footer)
@@ -1641,6 +1644,25 @@ class OnmMigratorCommand extends ContainerAwareCommand
             ."WHERE pk_article=?";
 
         $values = array($photo, $footer, $id);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, $values);
+    }
+
+    /**
+     * Updates fk_video2 and footer_video2 fields from an article.
+     *
+     * @param integer $id     Article id.
+     * @param integer $video  Video id.
+     * @param string  $footer Footer value for the photo.
+     */
+    protected function updateArticleVideo($id, $video, $footer)
+    {
+        var_dump($id);
+        $sql = "UPDATE articles  SET `fk_video2`=?, `footer_video2`=?"
+            ."WHERE pk_article=?";
+
+        $values = array($video, $footer, $id);
 
         $stmt = $this->targetConnection->Prepare($sql);
         $rss  = $this->targetConnection->Execute($stmt, $values);
@@ -1763,5 +1785,40 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
+    }
+
+    /**
+     * Parses the given condition and returns the equivalent SQL.
+     *
+     * @param  array $condition Condition to parse.
+     * @return string           SQL string.
+     */
+    private function parseCondition($condition)
+    {
+        $sql = '';
+        if (array_keys($condition) !== range(0, count($condition) - 1)) {
+            // Associative array
+            $sql .= $condition['table'] . '.' . $condition['field']
+                . (array_key_exists('operator', $condition) ?
+                    $condition['operator'] : '=')
+                . '\'' . $condition['value'] . '\'';
+        } else {
+            // Non-associative array
+            $sql .= '(';
+            foreach ($condition as $key => $value) {
+                $sql .= $this->parseCondition($value);
+                if ($key < count($condition) - 1) {
+                    if (array_keys($value) !== range(0, count($value) - 1)) {
+                        $sql .= ' OR ';
+                    } else {
+                        $sql .= ' AND ';
+                    }
+                } else {
+                    $sql .= ')';
+                }
+            }
+        }
+
+        return $sql;
     }
 }
