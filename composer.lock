@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "5b5f94b19148fd6fb3b88792cbafa48e",
+    "hash": "1635ec12c68dbfa04abfb2fa10661a9e",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -858,16 +858,16 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/frandieguez/Panorama-PHP.git",
-                "reference": "1.0.2"
+                "url": "https://github.com/frandieguez/panorama-php.git",
+                "reference": "5ddc278fbbf19b039a84421ab1589c014ff10091"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/frandieguez/Panorama-PHP/zipball/1.0.2",
-                "reference": "1.0.2",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/5ddc278fbbf19b039a84421ab1589c014ff10091",
+                "reference": "5ddc278fbbf19b039a84421ab1589c014ff10091",
                 "shasum": ""
             },
             "require": {
@@ -879,6 +879,7 @@
                     "Panorama": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -893,7 +894,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2012-10-30 04:56:40"
+            "time": "2014-01-29 12:25:17"
         },
         {
             "name": "imagine/imagine",
