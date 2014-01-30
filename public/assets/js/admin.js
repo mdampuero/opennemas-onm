@@ -47,10 +47,16 @@ $(document).ready(function () {
 
         var form = $('#loginform');
         var time = form.find('input[name="time"]').val();
-        var password = form.find('input[name="_password"]');
+        var password;
 
-        // password.val('md5:' + hex_md5(hex_md5(password.val()) + time));
-        password.val(hex_md5(password.val()));
+        if (form.find('input[name="_password"]').length > 0) {
+            password = form.find('input[name="_password"]');
+            password.val(hex_md5(password.val()));
+        } else {
+            password = form.find('input[name="password"]');
+            password.val('md5:' + hex_md5(hex_md5(password.val()) + time));
+        }
+
 
         form.submit();
     });
