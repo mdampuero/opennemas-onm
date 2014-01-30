@@ -1320,16 +1320,16 @@ admin_utils_calculate_tags:
 
 admin_login_form:
     path:     /login
-    defaults: { _controller  : BackendBundle:Authentication:default }
+    defaults: { _controller  : BackendBundle:CustomAuth:login }
 
 admin_login_processform:
     path:     /login/process
-    defaults: { _controller  : BackendBundle:Authentication:processform }
+    defaults: { _controller  : BackendBundle:CustomAuth:check }
     methods:  [POST]
 
 admin_logout:
     path:     /logout
-    defaults: { _controller  : BackendBundle:Authentication:logout }
+    defaults: { _controller  : BackendBundle:CustomAuth:logout }
 
 admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
