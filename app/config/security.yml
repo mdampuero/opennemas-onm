@@ -8,13 +8,9 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [ users, in_memory ]
+                providers: [ users ]
         users:
             id: onm_user_provider
-        in_memory:
-            memory:
-                users:
-                    admin: { password: 21232f297a57a5a743894a0e4a801fc3, roles: [ ROLE_ADMIN ] }
     firewalls:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
@@ -28,6 +24,9 @@ security:
             pattern:    ^/admin/*
             anonymous: ~
             form_login:
+                csrf_provider:                  form.csrf_provider
+                csrf_parameter:                 _token
+                intention:                      authenticate
                 check_path:                     admin_login_processform
                 login_path:                     admin_login_form
                 always_use_default_target_path: true
@@ -38,4 +37,4 @@ security:
                 path:   admin_logout
                 target: admin_login_form
     access_control:
-        - { path: ^/admin/*, roles: ROLE_ADMIN }
+        - { path: ^/admin/*, roles: IS_AUTHENTICATED_FULLY }
