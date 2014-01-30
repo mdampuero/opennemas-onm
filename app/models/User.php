@@ -11,12 +11,14 @@
  * @package    Model
  **/
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * User
  *
  * @package    Model
  **/
-class User
+class User implements UserInterface
 {
     /**
      * The user id
@@ -877,12 +879,13 @@ class User
      *
      * @return string the user name
      **/
-    public function getUserName($id)
+    public function findUserName($id)
     {
         $sql = 'SELECT username FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             return false;
+
         }
 
         return $rs->fields['username'];
@@ -1480,5 +1483,74 @@ class User
         }
 
         return $newFilter;
+    }
+
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     * <code>
+     * public function getRoles()
+     * {
+     *     return array('ROLE_USER');
+     * }
+     * </code>
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return array The user roles
+     */
+    public function getRoles()
+    {
+        return array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'CATEGORY_ADMIN');
+    }
+
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+
+    }
+
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Returns the password used to authenticate the user.
+     *
+     * This should be the encoded password. On authentication, a plain-text
+     * password will be salted, encoded, and then compared to this value.
+     *
+     * @return string The password
+     */
+    public function getPassword()
+    {
+        return $this->password;
     }
 }
