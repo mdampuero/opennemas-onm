@@ -64,6 +64,18 @@
                 {t}Link video from other web video services{/t}
             </a>
         </li>
+        <li class="web">
+            <a href="{url name=admin_videos_create type="script" category=$category}" class="clearfix">
+                <img src="{$params.IMAGE_DIR}video/script-code-48.png" alt="" />
+                {t}Embebed a video script {/t}
+            </a>
+        </li>
+        <li class="web">
+            <a href="{url name=admin_videos_create type="external" category=$category}" class="clearfix">
+                <img src="{$params.IMAGE_DIR}video.png" alt="" />
+                {t}Link a external video services{/t}
+            </a>
+        </li>
     </ul>
 
 </div>

@@ -103,6 +103,10 @@
 
             {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
                 {include file="video/partials/_form_video_internal.tpl"}
+            {elseif $type == "external" || (isset($video) && $video->author_name == 'external')}
+                {include file="video/partials/_form_video_external.tpl"}
+            {elseif $type == "script" || (isset($video) && $video->author_name == 'script')}
+                {include file="video/partials/_form_video_script.tpl"}
             {else}
                 {include file="video/partials/_form_video_panorama.tpl"}
             {/if}
