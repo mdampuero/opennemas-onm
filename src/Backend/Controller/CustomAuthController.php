@@ -30,8 +30,7 @@ class CustomAuthController extends Controller
         $this->get('security.context')->setToken(null);
         $this->get('request')->getSession()->invalidate();
 
-        $token = md5(uniqid(mt_rand(), true));
-
+        $token = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
         $_SESSION['csrf'] = $token;
         $currentLanguage  = \Application::$language;
 
