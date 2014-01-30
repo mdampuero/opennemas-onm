@@ -1504,7 +1504,7 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return array('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'CATEGORY_ADMIN');
+        return array();
     }
 
 
