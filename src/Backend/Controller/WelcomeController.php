@@ -44,7 +44,7 @@ class WelcomeController extends Controller
 
         $youtubeVideoIds = $this->getYoutubeVideoIds();
 
-        $user = new \User($_SESSION['userid']);
+        $user = $this->getUser();
         $tourDone = $user->getMeta('initial_tour_done');
 
         $terms = s::get('terms_accepted');
