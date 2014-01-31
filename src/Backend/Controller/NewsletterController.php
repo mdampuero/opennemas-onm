@@ -335,82 +335,83 @@ class NewsletterController extends Controller
                 m::ERROR
             );
             return $this->redirect($this->generateUrl('admin_newsletters'));
-        } else {
+        }
 
-            $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
+        $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
 
-            $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-            $newsletterSender = s::get('newsletter_sender');
-            $configurations   = s::get('newsletter_maillist');
+        $newsletterSender = s::get('newsletter_sender');
+        $configurations   = s::get('newsletter_maillist');
 
-            if (empty($newsletterSender)) {
-                m::add(
-                    _(
-                        'Your newsletter configuration is not complete. Please'.
-                        ' contact with Opennemas administrator. newsletter_sender fault'
-                    ),
-                    m::ERROR
-                );
-
-                return $this->redirect($this->generateUrl('admin_newsletters'));
-            }
-
-            $params = array(
-                'subject'            => $newsletter->title,
-                'newsletter_sender'  => $newsletterSender,
-                'mail_from'          => $configurations['sender'],
-                'mail_from_name'     => s::get('site_name'),
+        if (empty($newsletterSender)) {
+            m::add(
+                _(
+                    'Your newsletter configuration is not complete. Please'.
+                    ' contact with Opennemas administrator. newsletter_sender fault'
+                ),
+                m::ERROR
             );
 
-            $maxAllowed = s::get('max_mailing');
-            $remaining = $maxAllowed - $this->checkMailing();
+            return $this->redirect($this->generateUrl('admin_newsletters'));
+        }
 
-            $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
+        $params = array(
+            'subject'            => $newsletter->title,
+            'newsletter_sender'  => $newsletterSender,
+            'mail_from'          => $configurations['sender'],
+            'mail_from_name'     => s::get('site_name'),
+        );
 
-            //  Build the message
-            $message = \Swift_Message::newInstance();
-            $message
-                ->setSubject($subject)
-                ->setBody($htmlContent, 'text/html')
-                ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-                ->setSender($params['newsletter_sender']);
+        $maxAllowed = s::get('max_mailing');
+        $remaining = $maxAllowed - $this->checkMailing();
 
-            $sent = 0;
-            if (!empty($recipients)) {
-                foreach ($recipients as $mailbox) {
-                    if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
-                        try {
-                            // Send the mail
-                            $message->setTo(array($mailbox->email => $mailbox->name));
-                            $properlySent = $this->get('mailer')->send($message);
-                            $sentResult []= array($mailbox, (bool)$properlySent);
-                            $remaining--;
-                            $sent++;
-                        } catch (\Exception $e) {
-                            $sentResult []= array($mailbox, false);
-                        }
-                    } else {
-                         $sentResult []= array($mailbox, false);
+        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
+
+        //  Build the message
+        $message = \Swift_Message::newInstance();
+        $message
+            ->setSubject($subject)
+            ->setBody($htmlContent, 'text/html')
+            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+            ->setSender($params['newsletter_sender']);
+
+        $sent = 0;
+        if (!empty($recipients)) {
+            foreach ($recipients as $mailbox) {
+                if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
+                    try {
+                        // Send the mail
+                        $message->setTo(array($mailbox->email => $mailbox->name));
+                        $properlySent = $this->get('onm_mailer')->send($message);
+                        $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
+                        $remaining--;
+                        $sent++;
+                    } catch (\Exception $e) {
+                        $sentResult []= array($mailbox, false, $e->getMessage());
                     }
+                } else {
+                    $sentResult []= array($mailbox, false, _('Max sents reached.'));
                 }
             }
-
-            if (empty($newsletter->sent)) {
-                $newsletter->update(array('sent' => $sent));
-            } else {
-                //duplicated newsletter for count month mail send
-
-                $newsletter->create(
-                    array(
-                        'title'   => $newsletter->title,
-                        'data'    => $newsletter->data,
-                        'html'    => $newsletter->html,
-                        'sent'    => $sent,
-                    )
-                );
-            }
         }
+
+
+        if (empty($newsletter->sent)) {
+            // $newsletter->update(array('sent' => $sent));
+        } else {
+            //duplicated newsletter for count month mail send
+
+            $newsletter->create(
+                array(
+                    'title'   => $newsletter->title,
+                    'data'    => $newsletter->data,
+                    'html'    => $newsletter->html,
+                    'sent'    => $sent,
+                )
+            );
+        }
+
         return $this->render(
             'newsletter/steps/4-send.tpl',
             array(
