@@ -383,7 +383,7 @@ class NewsletterController extends Controller
                     try {
                         // Send the mail
                         $message->setTo(array($mailbox->email => $mailbox->name));
-                        $properlySent = $this->get('onm_mailer')->send($message);
+                        $properlySent = $this->get('mailer')->send($message);
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
                         $sent++;
