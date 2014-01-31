@@ -233,10 +233,25 @@ class VideosController extends Controller
                 }
             } elseif ($type == 'external' || $type == 'script') {
 
+                $information = $_POST['infor'];
+                $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
+
                 $video = new \Video();
+                $videoData = array(
+                    'category'       => $category,
+                    'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
+                    'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
+                    'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+                    'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
+                    'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
+                    'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
+                );
 
                 try {
-                    $video->create($_POST);
+                    $video->create($videoData);
                     $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
                     $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
                     $tplManager->delete('home|1');
