@@ -26,7 +26,7 @@
     <div class="top-action-bar clearfix" id="buttons-send">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Delivered newsletter report{/t} </h2>
+                <h2>{t}Delivered newsletter report{/t}</h2>
             </div>
 
             <ul class="old-button">
@@ -45,16 +45,18 @@
 
         <div id="warnings-validation"></div>
 
-        <table class="table table-condensed">
+        <table class="table">
             {foreach from=$sent_result item=result}
-            <tr><td>
-                {$result[0]->name} &lt;{$result[0]->email}&gt; ::
-                {if $result[1]}
-                    <span class="ok">{t}OK{/t}</span>
-                {else}
-                    <span class="failed">{t}failed{/t}</span>
-                {/if}
-            </td></tr>
+            <tr>
+                <td>
+                    {$result[0]->name} &lt;{$result[0]->email}&gt;
+                    {if $result[1]}
+                        <span class="ok">{t}OK{/t}</span>
+                    {else}
+                        <span class="failed">{t}Failed{/t} - {$result[2]}</span>
+                    {/if}
+                </td>
+            </tr>
             {/foreach}
 
             <tfoot>
