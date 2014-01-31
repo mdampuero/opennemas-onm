@@ -36,10 +36,6 @@ class AuthenticationController extends Controller
     public function init()
     {
         $this->view = new \Template(TEMPLATE_USER);
-
-        session_name('_onm_sess');
-        $this->session = $this->get('session');
-        $this->session->start();
     }
 
     /**
