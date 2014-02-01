@@ -398,10 +398,9 @@ class NewsletterController extends Controller
 
 
         if (empty($newsletter->sent)) {
-            // $newsletter->update(array('sent' => $sent));
+            $newsletter->update(array('sent' => $sent));
         } else {
             //duplicated newsletter for count month mail send
-
             $newsletter->create(
                 array(
                     'title'   => $newsletter->title,
