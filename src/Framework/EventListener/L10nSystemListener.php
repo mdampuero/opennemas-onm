@@ -50,7 +50,7 @@ class L10nSystemListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         $settings = $this->settingRepository->get(array('time_zone', 'site_language'));
-        $timezone = array_key_exists('time_zone', $settings) ? $settings['time_zone'] : 0;
+        $timezone = array_key_exists('time_zone', $settings) ? $settings['time_zone'] : 335;
         $language = array_key_exists('site_language', $settings) ? $settings['site_language'] : 'en';
 
         if (isset($timezone)) {
