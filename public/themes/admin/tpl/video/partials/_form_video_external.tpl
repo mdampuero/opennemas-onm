@@ -9,58 +9,57 @@
     <div class="control-group">
         <label for="description" class="control-label">{t}Description{/t}</label>
         <div class="controls">
-            <textarea name="description" id="description" required="required" rows="6" class="input-xxlarge">{$video->description|clearslash|default:""}</textarea>
+            <textarea name="description" id="description" required="required" rows="3" class="input-xxlarge">{$video->description|clearslash|default:""}</textarea>
         </div>
+    </div>
+
+    <div class="control-group">
+        <label for="body" class="control-label">{t}Body{/t}</label>
+        <textarea name="body" id="body" rows="6" class="input-xxlarge onm-editor" data-preset="simple">{$video->body|clearslash|default:""}</textarea>
     </div>
 </div>
 <div class="contentform-main">
     <div class="control-group">
-        <label for="typ_medida" class="control-label">{t}Video Type{/t}</label>
+        <label for="typ_medida" class="control-label">{t}Video type and file URLs{/t}</label>
         <div class="controls">
-            <select name="type" id="type">
-                <option value="flv" {if !isset($video) || is_null($video->type)}selected="selected"{/if}>flv</option>
-                <option value="html5" {if isset($video) && isset($video->type) && $video->type == 'html5'}selected="selected"{/if}>{t}html5{/t}</option>
-            </select>
-            <div class="help-block">{t}Show video{/t}.</div>
-        </div>
-    </div>
-    <div class="control-group flv-type">
-        <label for="video-information" class="control-label">Video Url</label>
-        <div class="controls">
-            <div class="input-prepend">
-             <span class="btn">flv</span>
-                <input type="text" id="video_url" name="video_url"
-                    value="{$video->video_url|default:""}" class="input-xxlarge" />
-            </div>
-        </div>
-    </div>
-    <div class="control-group html5-type">
-        <label for="video-information" class="control-label">Video Url's </label>
-        <div class="controls">
-            <div class="input-prepend">
-              <span class="btn">mp4</span>
-              <input type="text" class="input-xxlarge" placeholder="mp4" name="infor['mp4']" value="{$video->information[mp4]|default:""}">
-            </div>
-            <div class="input-prepend">
-              <span class="btn">ogg</span>
-              <input type="text" class="input-xxlarge" placeholder="ogg"name="infor['webm']" value="{$video->information[webm]|default:""}">
-            </div>
-            <div class="input-prepend">
-              <span class="btn">webm</span>
-              <input type="text" class="input-xxlarge" placeholder="webm" name="infor['webm']" value="{$video->information[webm]|default:""}">
-            </div>
-
-            <div class="input-append">
-                 <textarea name="body" id="body" rows="6" class="input-xxlarge">{$video->body|clearslash|default:""}</textarea>
-                 <br>
-                 {if isset($video)}
-                    <div id="video-information" style="text-align:center; margin:0 auto;">
-
-                        {render_video video=$video height=$height width="400" height="300" base_url=$smarty.const.INSTANCE_MEDIA}
+            <div class="tabbable tabs-left type-selector">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#html5-type-block" data-toggle="tab" data-type="html5">{t}HTML5 video{/t}</a></li>
+                <li><a href="#flv-type-block" data-toggle="tab" data-type="flv">{t}Flash Video{/t}</a></li>
+              </ul>
+              <div class="tab-content">
+                    <div class="tab-pane active" id="html5-type-block">
+                        <div class="input-prepend">
+                            <span class="add-on span-2">{t}MP4 format{/t}</span>
+                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="infor['mp4']" value="{$video->information[mp4]|default:""}">
+                        </div>
+                        <div class="input-prepend">
+                            <span class="add-on span-2">{t}Ogg format{/t}</span>
+                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.ogg{/t}" name="infor['ogg']" value="{$video->information[ogg]|default:""}">
+                        </div>
+                        <div class="input-prepend">
+                            <span class="add-on span-2">{t}WebM format{/t}</span>
+                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.webm{/t}" name="infor['webm']" value="{$video->information[webm]|default:""}">
+                        </div>
                     </div>
-                {/if}
+                    <div class="tab-pane" id="flv-type-block">
+                        <div class="input-prepend">
+                            <span class="add-on">{t}FLV format{/t}</span>
+                            <input type="text" id="video_url" name="video_url" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" value="{$video->video_url|default:""}" class="input-xlarge" />
+                        </div>
+                    </div>
+              </div>
             </div>
+            <input type="hidden" name="type" id="type" value="$video->type|default:'html5'">
         </div>
+    </div>
+    <div class="control-group">
+        <label for="body" class="control-label">{t}Preview{/t}</label>
+        {if isset($video)}
+        <div id="video-information" style="text-align:center; margin:0 auto;" class="controls thumbnail">
+            {render_video video=$video height=$height base_url=$smarty.const.INSTANCE_MEDIA class="videojs"}
+        </div>
+        {/if}
     </div>
 </div>
 
@@ -104,7 +103,6 @@
 <input type="hidden" name="author_name" value="external"/>
 
 {block name="footer-js" append}
-    {script_tag src="/onm/content-provider.js"}
     <script>
     jQuery(document).ready(function($){
     $('#title').on('change', function(e, ui) {
@@ -146,6 +144,11 @@
 
             parent.removeClass('assigned');
         });
+
+        $('.type-selector .nav-tabs a').on('click', function(e, ui) {
+            var type = $(this).data('type');
+            $('#type').val(type);
+        })
     });
     </script>
 {/block}

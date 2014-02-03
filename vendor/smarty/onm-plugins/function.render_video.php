@@ -2,6 +2,7 @@
 function smarty_function_render_video($params, &$smarty)
 {
     $video = $params['video'];
+    $cssClass = (array_key_exists('css_class', $params) ? $params['css'] : null);
 
     if ($video->author_name == 'internal') {
 
@@ -26,7 +27,7 @@ function smarty_function_render_video($params, &$smarty)
 
     } elseif ($video->author_name == 'external') {
         if (!empty($video->video_url)) {
-            $output = '<video controls>';
+            $output = "<video class='{$cssClass}' controls>";
                 $ext = substr($video->video_url, strrpos($video->video_url, '.', -1) + 1);
                 $output .= '<source src="'.$video->video_url.'" type="video/'.$ext.'">';
             $output .= ' </video>';

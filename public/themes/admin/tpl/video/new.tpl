@@ -67,8 +67,8 @@
                     <div class="contentbox">
                         <h3 class="title">{t}Attributes{/t}</h3>
                         <div class="content">
-                            <label for="title" >{t}Available{/t}</label>
                             <input type="checkbox" value="1" id="available" name="available" {if $video->available eq 1}checked="checked"{/if}>
+                            <label for="available" >{t}Available{/t}</label>
 
                             <h4>{t}Category{/t}</h4>
                             {include file="common/selector_categories.tpl" name="category" item=$video}

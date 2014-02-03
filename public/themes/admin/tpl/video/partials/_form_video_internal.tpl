@@ -9,7 +9,7 @@
     <div class="control-group">
         <label for="description" class="control-label">{t}Description{/t}</label>
         <div class="controls">
-            <textarea name="description" id="description" required="required" rows="6" class="input-xxlarge">{$video->description|clearslash|default:""}</textarea>
+            <textarea name="description" id="description" required="required" rows="6" class="input-xxlarge onm-editor" data-preset="simple">{$video->description|clearslash|default:""}</textarea>
         </div>
     </div>
 </div>
