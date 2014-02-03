@@ -37,10 +37,6 @@ class FilesController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('FILE_MANAGER');
 
-        $this->checkAclOrForward('FILE_ADMIN');
-
-        $request = $this->request;
-
         $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
         $this->category    = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $this->ccm         = \ContentCategoryManager::get_instance();
@@ -71,14 +67,16 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_ADMIN')")
      **/
     public function listAction(Request $request)
     {
         $cm           = new \ContentManager();
         $itemsPerPage = s::get('items_per_page');
 
-        $page     = $request->query->getDigits('page', 1);
-        $listingStatus   = $request->query->getDigits('listing-status');
+        $page          = $request->query->getDigits('page', 1);
+        $listingStatus = $request->query->getDigits('listing-status');
 
         if (empty($page)) {
             $limit = "LIMIT ".($itemsPerPage+1);
@@ -149,11 +147,12 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
-        $request = $this->request;
-        $cm      = new \ContentManager();
+        $cm = new \ContentManager();
 
         $files = $cm->find_all(
             'Attachment',
@@ -183,6 +182,8 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_ADMIN')")
      **/
     public function statisticsAction(Request $request)
     {
@@ -283,11 +284,11 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_CREATE');
-
         if ('POST' != $request->getMethod()) {
             return $this->render('files/new.tpl', array('category' => $this->category,));
         } else {
@@ -353,12 +354,11 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_UPDATE');
-
-        $request = $this->request;
         $id      = $request->query->getDigits('id');
         $page    = $request->query->getDigits('page');
 
@@ -388,13 +388,12 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_UPDATE');
-
-        $request = $this->request;
-        $id      = $request->request->getDigits('id');
+        $id = $request->request->getDigits('id');
 
         $file = new \Attachment($id);
           $data = array(
@@ -424,13 +423,12 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_DELETE');
-
-        $request = $this->request;
-        $id      = $request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
         if (is_null($id)) {
             m::add(sprintf(_("Unable to find the file with the id '%d'."), $id), m::ERROR);
@@ -463,12 +461,11 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_AVAILABLE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_AVAILABLE');
-
-        $request = $this->request;
         $id      = $request->query->getDigits('id');
         $page    = $request->query->getDigits('page', 1);
         $status  = $request->query->getDigits('status', 0);
@@ -502,12 +499,11 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_AVAILABLE')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_AVAILABLE');
-
-        $request = $this->request;
         $id      = $request->query->getDigits('id');
         $page    = $request->query->getDigits('page', 1);
         $status  = $request->query->getDigits('status', 0);
@@ -541,12 +537,11 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_AVAILABLE');
-
-        $request = $this->request;
         $id      = $request->query->getDigits('id');
         $page    = $request->query->getDigits('page', 1);
         $status  = $request->query->getDigits('status', 0);
@@ -571,20 +566,17 @@ class FilesController extends Controller
         );
     }
 
-
-
     /**
      * Deletes multiple books at once given its ids
      *
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_DELETE');
-
-        $request = $this->request;
         $page = $request->query->getDigits('page', 1);
         $selectedItems = $request->query->get('selected_fld');
 
@@ -619,12 +611,11 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('FILE_AVAILABLE');
-
-        $request  = $this->request;
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $page     = $request->query->getDigits('page', 1);
@@ -659,6 +650,8 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -700,6 +693,8 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('FILE_ADMIN')")
      **/
     public function contentListProviderAction(Request $request)
     {

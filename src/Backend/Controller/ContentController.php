@@ -27,15 +27,6 @@ use Onm\Settings as s;
 class ContentController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
-    /**
      * Sets the available state for a content given its id
      *
      * @param Request $request the request object

@@ -36,8 +36,6 @@ class KeywordsController extends Controller
     public function init()
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('KEYWORD_MANAGER');
-
-        $this->checkAclOrForward('PCLAVE_ADMIN');
     }
     /**
      * Lists all the keywords
@@ -45,6 +43,8 @@ class KeywordsController extends Controller
      * @param Request $request the request object
      *
      * @return Response
+     *
+     * @Security("has_role('PCLAVE_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -89,11 +89,11 @@ class KeywordsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PCLAVE_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('PCLAVE_UPDATE');
-
         $id = $this->request->query->getDigits('id');
 
         $keyword = new \PClave();
@@ -114,11 +114,11 @@ class KeywordsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PCLAVE_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('PCLAVE_CREATE');
-
         if ('POST' == $this->request->getMethod()) {
             $data = array(
                 'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
@@ -153,11 +153,11 @@ class KeywordsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PCLAVE_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('PCLAVE_UPDATE');
-
         $data = array(
             'id'     => $request->query->getDigits('id'),
             'pclave' => $request->request->filter('pclave', '', FILTER_SANITIZE_STRING),
@@ -184,11 +184,11 @@ class KeywordsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PCLAVE_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        \Acl::checkOrForward('PCLAVE_DELETE');
-
         $id = $this->request->query->getDigits('id');
 
         $keyword = new \PClave();

@@ -81,6 +81,8 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -169,6 +171,8 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
@@ -207,6 +211,8 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_ADMIN')")
      **/
     public function createAction(Request $request)
     {
@@ -258,6 +264,8 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_ADMIN')")
      **/
     public function showAction(Request $request)
     {
@@ -288,11 +296,11 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_UPDATE');
-
         $id = $request->request->getInt('id');
 
         $book = new \Book($id);
@@ -303,61 +311,51 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
-        if (!\Acl::isAdmin()
-            && !\Acl::check('CONTENT_OTHER_UPDATE')
-            && $book->fk_user != $_SESSION['userid']) {
-
-            m::add(_("You can't modify this book data because you don't have enought privileges."));
-
-        } else {
-            // Check empty data
-            if (count($request->request) < 1) {
-                m::add(_("Book data sent not valid."), m::ERROR);
-
-                return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
-            }
-
-            $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
-
-            if (!empty($_FILES['file_img']['name'])) {
-                $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
-                @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
-            } else {
-                $imageName = $book->file_img;
-            }
-
-            $data = array(
-                'id'          => $id,
-                'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-                'file_img'    => $imageName,
-                'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'category'    => $request->request->getInt('category'),
-                'available'   => $request->request->getInt('available'),
-            );
-
-            $book->update($data);
-
-            $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
-            if ($continue) {
-                return $this->redirect(
-                    $this->generateUrl(
-                        'admin_books_show',
-                        array(
-                            'category' => $this->category,
-                            'id'       => $book->id,
-                        )
-                    )
-                );
-            }
-
+        if (!\Acl::check('CONTENT_OTHER_UPDATE')
+            && $book->fk_user != $_SESSION['userid']
+        ) {
+            throw new AccessDeniedException();
         }
 
+        // Check empty data
+        if (count($request->request) < 1) {
+            m::add(_("Book data sent not valid."), m::ERROR);
+
+            return $this->redirect($this->generateUrl('admin_book_show', array('id' => $id)));
+        }
+
+        $bookSavePath = INSTANCE_MEDIA_PATH.'/books/';
+
+        if (!empty($_FILES['file_img']['name'])) {
+            $imageName = StringUtils::cleanFileName($_FILES['file_img']['name']);
+            @move_uploaded_file($_FILES['file_img']['tmp_name'], $bookSavePath.$imageName);
+        } else {
+            $imageName = $book->file_img;
+        }
+
+        $data = array(
+            'id'          => $id,
+            'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+            'file_img'    => $imageName,
+            'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+            'category'    => $request->request->getInt('category'),
+            'available'   => $request->request->getInt('available'),
+        );
+
+        $book->update($data);
+
         return $this->redirect(
-            $this->generateUrl('admin_books', array('category' => $data['category'],))
+            $this->generateUrl(
+                'admin_books_show',
+                array(
+                    'category' => $this->category,
+                    'id'       => $book->id,
+                )
+            )
         );
     }
 
@@ -367,11 +365,11 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_DELETE');
-
         $id = $request->query->getInt('id');
 
         $book = new \Book($id);
@@ -399,11 +397,11 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_DELETE');
-
         $page = $request->query->getDigits('page', 1);
         $selectedItems = $request->query->get('selected_fld');
 
@@ -439,11 +437,11 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -478,11 +476,11 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_AVAILABLE')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -512,6 +510,8 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -550,11 +550,11 @@ class BooksController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('BOOK_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_AVAILABLE');
-
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $page     = $request->query->getDigits('page', 1);

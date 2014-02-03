@@ -62,7 +62,7 @@ class FrontpagesController extends Controller
 
         // Check if the user can edit frontpages
         if (!\Acl::check('ARTICLE_FRONTPAGE')) {
-            \Acl::deny();
+            throw new AccessDeniedException();
         } elseif (!\Acl::checkCategoryAccess($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
             $section = $ccm->get_name($categoryID);
@@ -100,7 +100,7 @@ class FrontpagesController extends Controller
         // Sort all the elements by its position
         $contentElementsInFrontpage  = $cm->sortArrayofObjectsByProperty($contentElementsInFrontpage, 'position');
 
-        $lm  = new LayoutManager(
+        $lm = new LayoutManager(
             SITE_PATH."/themes/".TEMPLATE_USER."/layouts/".$layoutTheme.".xml"
         );
 
@@ -144,11 +144,11 @@ class FrontpagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
     public function savePositionsAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_FRONTPAGE');
-
         $savedProperly     = false;
         $validReceivedData = false;
         $dataPositionsNotValid = false;
@@ -260,6 +260,8 @@ class FrontpagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
     public function pickLayoutAction(Request $request)
     {
@@ -306,6 +308,8 @@ class FrontpagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response instance
+     *
+     * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
     public function lastVersionAction(Request $request)
     {
@@ -332,6 +336,8 @@ class FrontpagesController extends Controller
      * @param Request $request the request object
      *
      * @return void
+     *
+     * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
     public function previewAction(Request $request)
     {
@@ -411,11 +417,12 @@ class FrontpagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_FRONTPAGE')")
      **/
     public function getPreviewAction(Request $request)
     {
         $session = $this->get('session');
-
         $content = $session->get('last_preview');
         $session->remove('last_preview');
 

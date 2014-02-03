@@ -50,6 +50,8 @@ class ImporterXmlfileController extends Controller
      * @param Request $request the request object
      *
      * @return void
+     *
+     * @Security("has_role('IMPORT_XML')")
      **/
     public function defaultAction(Request $request)
     {
@@ -62,11 +64,12 @@ class ImporterXmlfileController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_XML')")
      **/
     public function importAction(Request $request)
     {
-
-        if ('POST' != $this->request->getMethod()) {
+        if ('POST' != $request->getMethod()) {
             m::add(_('Form was sent in the wrong way.'));
 
             return $this->redirect($this->generateUrl('admin_importer_xmlfile'));
@@ -84,7 +87,7 @@ class ImporterXmlfileController extends Controller
             && !empty($_FILES["file"]["name"][0])
         ) {
 
-            $dryRun = $this->request->query->filter('dry-run', FILTER_SANITIZE_STRING);
+            $dryRun = $request->query->filter('dry-run', FILTER_SANITIZE_STRING);
             for ($i=0, $j=0; $i<count($_FILES["file"]["name"]); $i++) {
 
                 $nameFile  = $_FILES["file"]["name"][$i];
@@ -187,11 +190,13 @@ class ImporterXmlfileController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_XML')")
      **/
     public function configAction(Request $request)
     {
-        if ('POST' == $this->request->getMethod()) {
-            $config =$request->request->get('config');
+        if ('POST' == $request->getMethod()) {
+            $config = $request->request->get('config');
 
             $config = array_map(
                 function ($item) {

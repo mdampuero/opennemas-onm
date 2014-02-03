@@ -41,7 +41,7 @@ class AclUserController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page   =  $request->query->getDigits('page', 1);
+        $page =  $request->query->getDigits('page', 1);
         $filter = array(
             'name'  => $request->query->filter('name', ''),
             'group' => $request->query->getDigits('group', ''),
@@ -111,7 +111,7 @@ class AclUserController extends Controller
         }
 
         // Check if the user is the same as the one that we want edit or
-        // if we have permissions for editting other user information.
+        // if we have permissions for editing other user information.
         if ($id != $_SESSION['userid']) {
             if (false === $this->get('security.context')->isGranted('USER_UPDATE')) {
                 throw new AccessDeniedException();
