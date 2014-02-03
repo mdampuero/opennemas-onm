@@ -146,7 +146,7 @@ class SimpleMenu
             $privileges = explode(',', $privilege);
             $hasAccess = false;
             foreach ($privileges as $priv) {
-                $hasAccess = $hasAccess || \Acl::check($priv);
+                $hasAccess = $hasAccess || \Acl::checkPrivileges($priv);
             }
 
             return $hasAccess;

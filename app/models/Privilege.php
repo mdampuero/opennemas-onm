@@ -148,6 +148,22 @@ class Privilege
     }
 
     /**
+     * Returns all the privileges names
+     *
+     * @return array the list of privilege names
+     **/
+    public static function getPrivilegeNames()
+    {
+        $privileges = self::loadPrivileges();
+        $privilegeNames = array();
+        foreach ($privileges as $value) {
+            $privilegeNames[] = $value['name'];
+        }
+
+        return $privilegeNames;
+    }
+
+    /**
      * Get privileges group by modules
      *
      * @param string $filter where condition for check.
