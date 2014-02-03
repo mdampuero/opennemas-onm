@@ -1504,7 +1504,27 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        return array();
+        $p = array();
+        if (in_array('4', $this->id_user_group)
+            || in_array('5', $this->id_user_group)
+        ) {
+            $p = new \Privilege;
+            $p = $p::$privileges;
+        } else {
+            foreach ($this->id_user_group as $group) {
+                $p = array_merge(
+                    $p,
+                    \Privilege::getPrivilegesForUserGroup($group)
+                );
+            }
+        }
+
+        $privileges = array();
+        foreach ($p as $value) {
+            $privileges[] = $value['name'];
+        }
+
+        return $privileges;
     }
 
 
