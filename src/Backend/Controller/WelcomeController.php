@@ -33,12 +33,9 @@ class WelcomeController extends Controller
      * @param Request $request the request object
      *
      * @return void
-     *
      **/
     public function defaultAction()
     {
-        // $modulesActivated = s::get('activated_modules');
-
         $availableModules = \Onm\Module\ModuleManager::getAvailableModules();
         $availableModules = array_values($availableModules);
         shuffle($availableModules);
@@ -63,10 +60,9 @@ class WelcomeController extends Controller
     }
 
     /**
-     * undocumented function
+     * Fetches the Youtube video ids to print in the welcome page
      *
      * @return void
-     * @author
      **/
     public function getYoutubeVideoIds()
     {
@@ -92,10 +88,9 @@ class WelcomeController extends Controller
     }
 
     /**
-     * undocumented function
+     * Stores the accept terms setting to the instance.
      *
      * @return void
-     * @author
      **/
     public function acceptTermsAction(Request $request)
     {

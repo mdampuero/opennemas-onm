@@ -126,6 +126,7 @@ class ErrorController extends Controller
                 break;
 
             case 'Onm\Security\Exception\AccessDeniedException':
+            case 'Symfony\Component\Security\Core\Exception\AccessDeniedException':
                 $errorMessage = _('You are not allowed to perform this action.');
 
                 if ($this->request->isXmlHttpRequest()) {

@@ -54,7 +54,7 @@ class LoginListener
         $_SESSION['type']                  = $user->type;
         $_SESSION['isAdmin']               = in_array('Administrador', $groups);
         $_SESSION['isMaster']              = in_array('Masters', $groups);
-        $_SESSION['privileges']            = $privileges;
+        // $_SESSION['privileges']            = $privileges;
         $_SESSION['accesscategories']      = $user->getAccessCategoryIds();
         $_SESSION['updated']               = time();
         // $_SESSION['session_lifetime']      = $maxSessionLifeTime * 60;

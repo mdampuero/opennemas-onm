@@ -50,10 +50,15 @@ class AccessDeniedExceptionsListener implements EventSubscriberInterface
         $exception = $event->getException();
         $request = $event->getRequest();
 
-        // only handle not valid instance exceptions
-        if ($exception instanceof \Onm\Security\Exception\AccessDeniedExceptions) {
-            // $this->logException($exception, sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+        // var_dump($exception);die();
 
+
+        // only handle not valid instance exceptions
+        if ($exception instanceof \Onm\Security\Exception\AccessDeniedExceptions
+            || $exception instanceof \Symfony\Component\Security\Core\Exception\AccessDeniedException
+        ) {
+            // $this->logException($exception, sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', get_class($exception), $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+            // $exception->
             $attributes = array(
                 '_controller' => 'BackendBundle:Error:default', //$this->controller,
                 'exception'   => FlattenException::create($exception),
@@ -78,6 +83,8 @@ class AccessDeniedExceptionsListener implements EventSubscriberInterface
                 // re-throw the exception from within HttpKernel as this is a catch-all
                 return;
             }
+
+            $response->setStatusCode(Response::HTTP_FORBIDDEN);
 
 
             $event->setResponse($response);
