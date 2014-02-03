@@ -24,25 +24,28 @@
         <div class="controls">
             <div class="tabbable tabs-left type-selector">
               <ul class="nav nav-tabs">
-                <li class="active"><a href="#html5-type-block" data-toggle="tab" data-type="html5">{t}HTML5 video{/t}</a></li>
-                <li><a href="#flv-type-block" data-toggle="tab" data-type="flv">{t}Flash Video{/t}</a></li>
+                <li {if empty($video->id ) || empty($video->video_url)}
+                    class="active"{/if}><a href="#html5-type-block" data-toggle="tab" data-type="html5">{t}HTML5 video{/t}</a></li>
+                <li {if !empty($video->id ) && !empty($video->video_url)}
+                    class="active"{/if}><a href="#flv-type-block" data-toggle="tab" data-type="flv">{t}Flash Video{/t}</a></li>
               </ul>
-              <div class="tab-content">
-                    <div class="tab-pane active" id="html5-type-block">
+              <div class="tab-content {if empty($video->id ) || empty($video->video_url)}
+                    active{/if}">
+                    <div class="tab-pane" id="html5-type-block">
                         <div class="input-prepend">
                             <span class="add-on span-2">{t}MP4 format{/t}</span>
-                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="infor['mp4']" value="{$video->information[mp4]|default:""}">
+                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="infor[source][mp4]" value="{$video->information['source']['mp4']|default:""}">
                         </div>
                         <div class="input-prepend">
                             <span class="add-on span-2">{t}Ogg format{/t}</span>
-                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.ogg{/t}" name="infor['ogg']" value="{$video->information[ogg]|default:""}">
+                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.ogg{/t}" name="infor[source][ogg]" value="{$video->information['source']['ogg']|default:""}">
                         </div>
                         <div class="input-prepend">
                             <span class="add-on span-2">{t}WebM format{/t}</span>
-                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.webm{/t}" name="infor['webm']" value="{$video->information[webm]|default:""}">
+                            <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.webm{/t}" name="infor[source][webm]" value="{$video->information['source']['webm']|default:""}">
                         </div>
                     </div>
-                    <div class="tab-pane" id="flv-type-block">
+                    <div class="tab-pane {if !empty($video->id ) && !empty($video->video_url)} active{/if}" id="flv-type-block">
                         <div class="input-prepend">
                             <span class="add-on">{t}FLV format{/t}</span>
                             <input type="text" id="video_url" name="video_url" placeholder="{t}http://www.example.com/path/to/file.flv{/t}" value="{$video->video_url|default:""}" class="input-xlarge" />
@@ -75,26 +78,28 @@
         </div>
     </div>
     <div class="contentbox" >
-        <h3 class="title">{t}Thumbnail image{/t}</h3>
-        <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
-            <div class="image-data">
-                <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
-                    {if !empty($video->thumbnail)}
-                        <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$video->thumbnail}"/>
-                    {/if}
-                </a>
-                <div class="article-resource-footer">
-                    <input type="hidden" name="video_image" value="{$video->thumbnail}" class="video-frontpage-image"/>
+        <div id="related_media" class="control-group">
+            <h3 class="title">{t}Thumbnail image{/t}</h3>
+            <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
+                <div class="image-data">
+                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
+                        {if !empty($video->thumbnail)}
+                            <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$video->thumbnail}"/>
+                        {/if}
+                    </a>
+                    <div class="article-resource-footer">
+                        <input type="hidden" name="video_image" value="{$video->information[thumbnail]}" class="related-element-id"/>
+                    </div>
                 </div>
-            </div>
 
-            <div class="not-set">
-                {t}Image not set{/t}
-            </div>
+                <div class="not-set">
+                    {t}Image not set{/t}
+                </div>
 
-            <div class="btn-group">
-                <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
-                <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                <div class="btn-group">
+                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
+                    <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
+                </div>
             </div>
         </div>
     </div>
