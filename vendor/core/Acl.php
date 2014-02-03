@@ -46,6 +46,7 @@ class Acl
     public static function checkCategoryAccess($categoryID)
     {
 
+
         try {
             if (!isset($categoryID)
                 || is_null($categoryID)
@@ -170,7 +171,7 @@ class Acl
     {
         try {
             if (isset($_SESSION['isMaster'])
-            && $_SESSION['isMaster']
+                && $_SESSION['isMaster']
             ) {
                 return true;
             }
@@ -182,14 +183,18 @@ class Acl
                 return true;
             }
 
-            if (!isset($_SESSION['privileges'])
-                || empty($_SESSION['userid'])
-                || !in_array($privilege, $_SESSION['privileges'])
-                || (!is_null($categoryID) && !(self::checkAccessCategories($categoryID)))
+            $roles = getService('security.context')->getToken()->getUser()
+                ->getRoles();
+
+            $isGranted = in_array($privilege, $roles);
+
+            if ($isGranted
+                || (!is_null($categoryID) && !(self::checkCategoryAccess($categoryID)))
             ) {
                 return false;
             }
 
+            return $isGranted;
         } catch (Exception $e) {
             return false;
         }
