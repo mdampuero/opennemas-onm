@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -37,9 +38,6 @@ class CommentsController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('COMMENT_MANAGER');
 
-        // Check if the user can admin comments
-        $this->checkAclOrForward('COMMENT_ADMIN');
-
         $this->statuses = array(
             \Comment::STATUS_ACCEPTED => _('Accepted'),
             \Comment::STATUS_REJECTED => _('Rejected'),
@@ -55,6 +53,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function defaultAction(Request $request)
     {
@@ -88,6 +88,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function selectAction(Request $request)
     {
@@ -127,6 +129,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function defaultDisqusAction(Request $request)
     {
@@ -155,6 +159,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function configDisqusAction(Request $request)
     {
@@ -191,6 +197,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function defaultFacebookAction(Request $request)
     {
@@ -211,6 +219,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function configFacebookAction(Request $request)
     {
@@ -248,6 +258,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -300,12 +312,12 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('COMMENT_UPDATE');
-
-        $id      = $request->query->getDigits('id');
+        $id = $request->query->getDigits('id');
 
         if (!is_null($id)) {
             $comment = new \Comment($id);
@@ -328,11 +340,11 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('COMMENT_UPDATE');
-
         $id      = $request->query->getDigits('id');
         $comment = new \Comment($id);
 
@@ -365,11 +377,11 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('COMMENT_DELETE');
-
         $id = $request->query->getDigits('id');
 
         try {
@@ -390,13 +402,13 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_AVAILABLE')")
      **/
     public function toggleStatusAction(Request $request)
     {
-        $this->checkAclOrForward('COMMENT_AVAILABLE');
-
-        $id           = $request->query->getDigits('id');
-        $status       = $request->query->filter('status');
+        $id     = $request->query->getDigits('id');
+        $status = $request->query->filter('status');
 
         try {
             $comment = new \Comment($id);
@@ -422,11 +434,11 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_AVAILABLE')")
      **/
     public function batchStatusAction(Request $request)
     {
-        $this->checkAclOrForward('COMMENT_AVAILABLE');
-
         // Get request data
         $selected = $request->query->get('selected_fld');
         $status   = $request->query->filter('status', 'accepted');
@@ -476,11 +488,11 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('COMMENT_DELETE');
-
         $selected = $request->query->get('selected_fld');
 
         if (count($selected) > 0) {
@@ -520,6 +532,8 @@ class CommentsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('COMMENT_ADMIN')")
      **/
     public function configAction(Request $request)
     {
