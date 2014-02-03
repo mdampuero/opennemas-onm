@@ -459,10 +459,6 @@ class User
      **/
     public function addCategoryToUser($idUser, $idCategory)
     {
-        global $sc;
-        $cache = $sc->get('cache');
-        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
-
         $sql = "INSERT INTO users_content_categories "
              . "(`pk_fk_user`, `pk_fk_content_category`) "
              .  "VALUES (?,?)";
@@ -474,6 +470,9 @@ class User
         }
 
         self::readAccessCategories($idUser);
+
+        $cache = getService('cache');
+        $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
         return true;
     }
