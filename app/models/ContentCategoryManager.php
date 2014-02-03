@@ -786,7 +786,7 @@ class ContentCategoryManager
      *
      * @return boolean
      **/
-    public function isEmptyByCategoryId($category)
+    public static function isEmptyByCategoryId($category)
     {
         $sql1 = 'SELECT count(pk_content) AS number
             FROM `contents`, `contents_categories`

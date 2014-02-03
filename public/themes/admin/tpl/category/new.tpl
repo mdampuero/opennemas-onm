@@ -196,7 +196,6 @@
 
             {if !empty($subcategorys)}
             <div class="control-group">
-            <div>
                 <label class="control-label">{t}Subsections{/t}</label>
                 <div class="controls ">
                     <table class="table table-hover table-condensed" style="width:100%">
