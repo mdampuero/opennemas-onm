@@ -38,10 +38,10 @@ class LoginListener
         foreach ($userGroups as $group) {
             $groups[] = \UserGroup::getGroupName($group);
             // Get privileges from user groups
-            $privileges = array_merge(
-                $privileges,
-                \Privilege::getPrivilegesForUserGroup($group)
-            );
+            // $privileges = array_merge(
+            //     $privileges,
+            //     \Privilege::getPrivilegesForUserGroup($group)
+            // );
         }
 
         $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
