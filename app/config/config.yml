@@ -26,6 +26,13 @@ framework:
     fragments:       ~
     http_method_override: true
 
+sensio_framework_extra:
+    router:   { annotations: false }
+    request:  { converters: false }
+    view:     { annotations: false }
+    cache:    { annotations: false }
+    security: { annotations: true }
+
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
@@ -48,4 +55,3 @@ services:
     session.handler.memcache:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
         arguments: [ @session.memcache, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]
-
