@@ -487,8 +487,7 @@ class User
      **/
     public function delCategoryToUser($idUser, $idCategory)
     {
-        global $sc;
-        $cache = $sc->get('cache');
+        $cache = getService('cache');
         $cache->delete(CACHE_PREFIX . "categories_for_user_".$idUser);
 
         $sql = 'DELETE FROM users_content_categories '
