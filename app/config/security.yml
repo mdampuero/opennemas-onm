@@ -20,6 +20,10 @@ security:
             pattern:  ^/admin/login$
             security: false
 
+        backend_recover:
+            pattern:    ^/admin/login/user/recover*
+            security: false
+
         backend:
             pattern:    ^/admin/*
             # anonymous: ~
