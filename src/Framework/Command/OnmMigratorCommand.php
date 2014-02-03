@@ -1353,13 +1353,27 @@ class OnmMigratorCommand extends ContainerAwareCommand
                         $values['directory']
                     );
 
+                    // Update article img1 and img1_footer
+                    if (isset($values['article'])
+                        && $values['article'] !== false
+                    ) {
+                        $this->updateArticleFrontpagePhoto(
+                            $values['article'],
+                            $id,
+                            isset($values['img1_footer']) ?
+                            $values['img1_footer'] : ''
+                        );
+                    }
+
                     // Update article img2 and img2_footer
                     if (isset($values['article'])
-                            && $values['article'] !== false) {
+                        && $values['article'] !== false
+                    ) {
                         $this->updateArticlePhoto(
                             $values['article'],
                             $id,
-                            $values['img2_footer']
+                            isset($values['img2_footer']) ?
+                            $values['img2_footer'] : ''
                         );
                     }
 
@@ -1641,6 +1655,24 @@ class OnmMigratorCommand extends ContainerAwareCommand
     protected function updateArticlePhoto($id, $photo, $footer)
     {
         $sql = "UPDATE articles  SET `img2`=?, `img2_footer`=?"
+            ."WHERE pk_article=?";
+
+        $values = array($photo, $footer, $id);
+
+        $stmt = $this->targetConnection->Prepare($sql);
+        $rss  = $this->targetConnection->Execute($stmt, $values);
+    }
+
+    /**
+     * Updates img1 and img1_footer fields from an article.
+     *
+     * @param integer $id     Article id.
+     * @param integer $photo  Photo id.
+     * @param string  $footer Footer value for the photo.
+     */
+    protected function updateArticleFrontpagePhoto($id, $photo, $footer)
+    {
+        $sql = "UPDATE articles  SET `img1`=?, `img2_footer`=?"
             ."WHERE pk_article=?";
 
         $values = array($photo, $footer, $id);
