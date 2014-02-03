@@ -60,5 +60,6 @@ $loader->useIncludePath(true);
 $loader->register();
 
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
+require_once __DIR__.'/../vendor/sensio/framework-extra-bundle/Sensio/Bundle/FrameworkExtraBundle/Configuration/Security.php';
 
 return $loader;
