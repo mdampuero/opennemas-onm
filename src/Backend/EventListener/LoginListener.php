@@ -44,7 +44,7 @@ class LoginListener
             // );
         }
 
-        $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
+        // $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
         // Set session array
         $_SESSION['userid']                = $user->id;
         $_SESSION['realname']              = $user->name;
@@ -57,7 +57,7 @@ class LoginListener
         $_SESSION['privileges']            = $privileges;
         $_SESSION['accesscategories']      = $user->getAccessCategoryIds();
         $_SESSION['updated']               = time();
-        $_SESSION['session_lifetime']      = $maxSessionLifeTime * 60;
+        // $_SESSION['session_lifetime']      = $maxSessionLifeTime * 60;
         $_SESSION['user_language']         = $user->getMeta('user_language');
         $_SESSION['csrf']                  = md5(uniqid(mt_rand(), true));
         $_SESSION['meta']                  = $user->getMeta();
