@@ -31,7 +31,7 @@ function smarty_function_render_video($params, &$smarty)
                 $output .= '<source src="'.$video->video_url.'" type="video/flv">';
             $output .= ' </video>';
 
-        } else {
+        } elseif (!empty($video->information)) {
             if (is_array($video->information)) {
                 $videoInfo = $video->information;
             } else {

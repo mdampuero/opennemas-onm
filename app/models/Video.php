@@ -498,7 +498,7 @@ class Video extends Content
                 if (!empty($this->thumb_image->name)) {
                     $thumbnail   = MEDIA_IMG_PATH_WEB.$this->thumb_image->path_file.$this->thumb_image->name;
                 } else {
-                    $thumbnail = '';
+                    $thumbnail = '/assets/images/transparent.png';
                 }
             } else {
                 $thumbnail = $information['thumbnail'];
