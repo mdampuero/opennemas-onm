@@ -368,22 +368,22 @@ class NewsletterController extends Controller
 
         $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
-        //  Build the message
-        $message = \Swift_Message::newInstance();
-        $message
-            ->setSubject($subject)
-            ->setBody($htmlContent, 'text/html')
-            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-            ->setSender($params['newsletter_sender']);
-
         $sent = 0;
         if (!empty($recipients)) {
             foreach ($recipients as $mailbox) {
                 if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
                     try {
-                        // Send the mail
-                        $message->setTo(array($mailbox->email => $mailbox->name));
+                        //  Build the message
+                        $message = \Swift_Message::newInstance();
+                        $message
+                            ->setSubject($subject)
+                            ->setBody($htmlContent, 'text/html')
+                            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+                            ->setSender($params['newsletter_sender'])
+                            ->setTo(array($mailbox->email => $mailbox->name));
+
                         $properlySent = $this->get('mailer')->send($message);
+
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
                         $sent++;
