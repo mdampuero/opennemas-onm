@@ -28,16 +28,20 @@ function smarty_function_render_video($params, &$smarty)
     } elseif ($video->author_name == 'external') {
         if (!empty($video->video_url)) {
             $output = "<video class='{$cssClass}' controls>";
-                $ext = substr($video->video_url, strrpos($video->video_url, '.', -1) + 1);
-                $output .= '<source src="'.$video->video_url.'" type="video/'.$ext.'">';
+                $output .= '<source src="'.$video->video_url.'" type="video/flv">';
             $output .= ' </video>';
 
         } else {
-            $urls = explode(',', $video->body);
+            if (is_array($video->information)) {
+                $videoInfo = $video->information;
+            } else {
+                $videoInfo = unserialize($video->information);
+            }
             $output = '<video controls>';
-            foreach ($urls as $link) {
-                $ext = substr($link, strrpos($link, '.', -1) + 1);
-                $output .= '<source src="'.$link.'" type="video/'.$ext.'">';
+            foreach ($videoInfo['source'] as $type => $url) {
+                if (!empty($url)) {
+                    $output .= '<source src="'.$url.'" type="video/'.$type.'">';
+                }
             }
             $output .= ' </video>';
         }

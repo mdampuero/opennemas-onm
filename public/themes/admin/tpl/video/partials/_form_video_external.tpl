@@ -24,14 +24,11 @@
         <div class="controls">
             <div class="tabbable tabs-left type-selector">
               <ul class="nav nav-tabs">
-                <li {if empty($video->id ) || empty($video->video_url)}
-                    class="active"{/if}><a href="#html5-type-block" data-toggle="tab" data-type="html5">{t}HTML5 video{/t}</a></li>
-                <li {if !empty($video->id ) && !empty($video->video_url)}
-                    class="active"{/if}><a href="#flv-type-block" data-toggle="tab" data-type="flv">{t}Flash Video{/t}</a></li>
+                <li {if empty($video->id ) || empty($video->video_url)} class="active"{/if}><a href="#html5-type-block" data-toggle="tab" data-type="html5">{t}HTML5 video{/t}</a></li>
+                <li {if !empty($video->id ) && !empty($video->video_url)} class="active"{/if}><a href="#flv-type-block" data-toggle="tab" data-type="flv">{t}Flash Video{/t}</a></li>
               </ul>
-              <div class="tab-content {if empty($video->id ) || empty($video->video_url)}
-                    active{/if}">
-                    <div class="tab-pane" id="html5-type-block">
+              <div class="tab-content">
+                    <div class="tab-pane {if empty($video->id) || empty($video->video_url)} active{/if}" id="html5-type-block">
                         <div class="input-prepend">
                             <span class="add-on span-2">{t}MP4 format{/t}</span>
                             <input type="text" class="input-xlarge" placeholder="{t}http://www.example.com/path/to/file.mp4{/t}" name="infor[source][mp4]" value="{$video->information['source']['mp4']|default:""}">
@@ -59,8 +56,8 @@
     <div class="control-group">
         <label for="body" class="control-label">{t}Preview{/t}</label>
         {if isset($video)}
-        <div id="video-information" style="text-align:center; margin:0 auto;" class="controls thumbnail">
-            {render_video video=$video height=$height base_url=$smarty.const.INSTANCE_MEDIA class="videojs"}
+        <div id="video-information" style="text-align:center; margin:0 auto;" class="controls thumbnail video-container">
+            {render_video video=$video base_url=$smarty.const.INSTANCE_MEDIA class="videojs"}
         </div>
         {/if}
     </div>
@@ -108,6 +105,17 @@
 <input type="hidden" name="author_name" value="external"/>
 
 {block name="footer-js" append}
+    {script_tag src="/videojs/video.js" common=1}
+    {*script_tag src="/videojs/video.ads.js" common=1*}
+
+<script>
+    videojs('video', {}, function() {
+      var player = this;
+     // player.ads(); // initialize the ad framework
+      // your custom ad integration code
+    });
+</script>
+
     <script>
     jQuery(document).ready(function($){
     $('#title').on('change', function(e, ui) {
