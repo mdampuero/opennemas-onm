@@ -64,8 +64,6 @@ class InstancesController extends Controller
 
         $availableTimeZones = \DateTimeZone::listIdentifiers();
 
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-
         return $this->render(
             'instances/list.tpl',
             array(
@@ -150,7 +148,7 @@ class InstancesController extends Controller
 
         $templates = im::getAvailableTemplates();
 
-        $instanceManager = getService('instance_manager');
+        $instanceManager = $this->get('instance_manager');
 
         $instance = $instanceManager->read($id);
 
@@ -162,8 +160,6 @@ class InstancesController extends Controller
 
         list($instance->totals, $instance->configs) = $instanceManager->getDBInformation($instance->settings);
 
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-
         return $this->render(
             'instances/edit.tpl',
             array(
@@ -174,11 +170,6 @@ class InstancesController extends Controller
                     'en_US' => _("English"),
                     'es_ES' => _("Spanish"),
                     'gl_ES' => _("Galician")
-                ),
-                'logLevels'         => array(
-                    'normal'  => _('Normal'),
-                    'verbose' => _('Verbose'),
-                    'all'     => _('All (Paranoic mode)')
                 ),
                 'instance'          => $instance,
                 'templates'         => $templates,
@@ -276,11 +267,6 @@ class InstancesController extends Controller
                         'en_US' => _("English"),
                         'es_ES' => _("Spanish"),
                         'gl_ES' => _("Galician")
-                    ),
-                    'logLevels' => array(
-                        'normal'  => _('Normal'),
-                        'verbose' => _('Verbose'),
-                        'all'     => _('All (Paranoic mode)')
                     ),
                     'templates' => $templates,
                 )
@@ -382,7 +368,6 @@ class InstancesController extends Controller
         // Delete the 'site_name' from cache service for this instance
         s::invalidate('site_name', $data['internal_name']);
         s::invalidate('last_invoice', $data['internal_name']);
-
 
         $instanceManager = getService('instance_manager');
 
