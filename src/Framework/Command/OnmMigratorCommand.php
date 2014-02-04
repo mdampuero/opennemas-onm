@@ -19,9 +19,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
-use Framework\MigrationProvider\DatabaseProvider;
-use Framework\MigrationProvider\JsonProvider;
-use Framework\MigrationSaver\MigrationSaver;
+use Framework\Migrator\Provider\DatabaseProvider;
+use Framework\Migrator\Provider\JsonProvider;
+use Framework\Migrator\Saver\MigrationSaver;
 use Onm\DatabaseConnection;
 
 class OnmMigratorCommand extends ContainerAwareCommand
