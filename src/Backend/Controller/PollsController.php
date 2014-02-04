@@ -36,8 +36,6 @@ class PollsController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
 
-        $this->checkAclOrForward('POLL_ADMIN');
-
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
 
         $category = $this->request->query->filter(INPUT_GET, 0, FILTER_SANITIZE_STRING);
@@ -66,6 +64,8 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -129,6 +129,8 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
@@ -198,6 +200,8 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_CREATE')")
      **/
     public function createAction(Request $request)
     {
@@ -242,11 +246,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $poll = new \Poll($id);
@@ -272,11 +276,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_UPDATE');
-
         $id = $request->query->getDigits('id');
         $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
 
@@ -333,11 +337,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_DELETE');
-
         $id       = $request->query->getDigits('id');
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
@@ -371,11 +375,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -410,11 +414,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_FAVORITE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_FAVORITE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -446,11 +450,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_AVAILABLE')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -482,11 +486,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_DELETE');
-
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->getDigits('category', 'all');
         $page     = $request->query->getDigits('page', 1);
@@ -531,11 +535,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_AVAILABLE');
-
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->getDigits('category', 'all');
@@ -579,10 +583,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
-        $request      = $this->get('request');
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page');
@@ -645,6 +650,8 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {
@@ -704,11 +711,11 @@ class PollsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('POLL_SETTINGS')")
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_SETTINGS');
-
         if ('POST' == $request->getMethod()) {
             $settingsRAW = $request->request->get('poll_settings');
             $data = array(

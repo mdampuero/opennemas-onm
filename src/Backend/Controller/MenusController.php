@@ -36,8 +36,6 @@ class MenusController extends Controller
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
 
-        $this->checkAclOrForward('MENU_ADMIN');
-
         $this->pages = array(
             'frontpage' => 1,
             'opinion'   => 4,
@@ -65,6 +63,8 @@ class MenusController extends Controller
      * @param Request $request the resquest object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -79,11 +79,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_UPDATE');
-
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         $ccm = \ContentCategoryManager::get_instance();
@@ -157,11 +157,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             $data = array(
@@ -250,11 +250,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_UPDATE');
-
         $id = $this->request->query->getDigits('id');
         $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
 
@@ -310,10 +310,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_DELETE');
         $id = $request->query->getDigits('id');
 
         if (empty($id)) {
@@ -343,11 +344,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_DELETE');
-
         $page          = $request->query->getDigits('page', 1);
         $selectedItems = $request->query->get('selected_fld');
 

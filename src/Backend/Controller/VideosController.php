@@ -37,9 +37,6 @@ class VideosController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('VIDEO_MANAGER');
 
-        // Check if the user can admin video
-        $this->checkAclOrForward('VIDEO_ADMIN');
-
         /******************* GESTION CATEGORIAS  *****************************/
         $this->contentType = \ContentManager::getContentTypeIdFromName('video');
 
@@ -73,6 +70,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return void
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -139,6 +138,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return void
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
@@ -180,11 +181,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $requestPost  = $request->request;
 
@@ -294,11 +295,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_UPDATE');
-
         $id = $request->query->getDigits('id');
         $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
         $video = new \Video($id);
@@ -348,11 +349,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_DELETE');
-
         $id =  $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -390,11 +391,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $video = new \Video($id);
@@ -427,6 +428,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function videoInformationAction(Request $request)
     {
@@ -459,11 +462,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_SETTINGS')")
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_SETTINGS');
-
         if ('POST' == $request->getMethod()) {
             unset($_POST['action']);
             unset($_POST['submit']);
@@ -496,11 +499,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_DELETE');
-
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page = $request->query->getDigits('page', 1);
         $selectedItems = $request->query->get('selected_fld');
@@ -537,11 +540,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -575,11 +578,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_AVAILABLE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -612,11 +615,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_AVAILABLE')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -654,6 +657,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function relationsAction(Request $request)
     {
@@ -682,6 +687,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -724,11 +731,11 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('VIDEO_AVAILABLE');
-
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -763,6 +770,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -828,6 +837,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {
@@ -887,6 +898,8 @@ class VideosController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('VIDEO_ADMIN')")
      **/
     public function contentProviderGalleryAction(Request $request)
     {

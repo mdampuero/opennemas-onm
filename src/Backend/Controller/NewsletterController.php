@@ -36,8 +36,6 @@ class NewsletterController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
-
-        $this->checkAclOrForward('NEWSLETTER_ADMIN');
     }
 
     /**
@@ -46,6 +44,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -100,6 +100,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function createAction(Request $request)
     {
@@ -138,6 +140,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function showContentsAction(Request $request)
     {
@@ -160,6 +164,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function saveContentsAction(Request $request)
     {
@@ -213,6 +219,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function previewAction(Request $request)
     {
@@ -236,6 +244,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function saveHtmlContentAction(Request $request)
     {
@@ -260,6 +270,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function pickRecipientsAction(Request $request)
     {
@@ -318,6 +330,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function sendAction(Request $request)
     {
@@ -426,6 +440,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {
@@ -453,6 +469,8 @@ class NewsletterController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function configAction(Request $request)
     {
@@ -551,7 +569,6 @@ class NewsletterController extends Controller
 
     public function checkMailing()
     {
-
         $maxAllowed = s::get('max_mailing');
 
          //change to last_invoice s::get('site_created')

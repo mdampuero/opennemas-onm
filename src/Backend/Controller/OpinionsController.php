@@ -38,8 +38,6 @@ class OpinionsController extends Controller
         //Check if module is activated in this onm instance
         ModuleManager::checkActivatedOrForward('OPINION_MANAGER');
 
-        $this->checkAclOrForward('OPINION_ADMIN');
-
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData)
@@ -59,6 +57,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -166,6 +166,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function frontpageAction(Request $request)
     {
@@ -240,6 +242,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_UPDATE', 'OPINION_CREATE')")
      **/
     public function showAction(Request $request)
     {
@@ -302,11 +306,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $opinion = new \Opinion();
 
@@ -369,11 +373,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_UPDATE');
-
         $id = $request->query->getDigits('id');
 
         $opinion = new \Opinion($id);
@@ -460,11 +464,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_DELETE');
-
         $id     = $request->query->getDigits('id');
         $page   = $request->query->getDigits('status', 1);
         $author = $request->query->filter('author', 0, FILTER_VALIDATE_INT);
@@ -501,11 +505,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $id     = $request->query->getDigits('id', 0);
         $status = $request->query->getDigits('status', 0);
         $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
@@ -554,11 +558,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $id     = $request->query->getDigits('id', 0);
         $status = $request->query->getDigits('status', 0);
         $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
@@ -594,11 +598,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $id     = $request->query->getDigits('id', 0);
         $status = $request->query->getDigits('status', 0);
         $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
@@ -645,6 +649,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -692,11 +698,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_DELETE');
-
         $selected       = $request->query->get('selected_fld', null);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
         $author         = $request->query->getDigits('author');
@@ -743,11 +749,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
@@ -796,11 +802,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function batchInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
@@ -846,6 +852,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -913,6 +921,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {
@@ -961,11 +971,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_SETTINGS')")
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_SETTINGS');
-
         if ('POST' == $request->getMethod()) {
 
             $configsRAW = $request->request->get('opinion_settings');
@@ -1001,6 +1011,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function listAuthorAction(Request $request)
     {
@@ -1041,6 +1053,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function showAuthorAction(Request $request)
     {
@@ -1074,6 +1088,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function createAuthorAction(Request $request)
     {
@@ -1143,6 +1159,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function updateAuthorAction(Request $request)
     {
@@ -1225,6 +1243,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function deleteAuthorAction(Request $request)
     {
@@ -1247,6 +1267,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function batchDeleteAuthorAction(Request $request)
     {

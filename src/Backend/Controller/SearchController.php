@@ -36,8 +36,6 @@ class SearchController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('ADVANCED_SEARCH');
-
-        $this->checkAclOrForward('SEARCH_ADMIN');
     }
 
     /**
@@ -46,10 +44,12 @@ class SearchController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SEARCH_ADMIN')")
      **/
     public function defaultAction(Request $request)
     {
-        $searchString             = $request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
+        $searchString         = $request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
         $contentTypesSelected = $request->get('content_types', array('article', 'opinion'));
         $page                 = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
 
@@ -107,6 +107,8 @@ class SearchController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SEARCH_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {

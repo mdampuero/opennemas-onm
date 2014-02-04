@@ -36,8 +36,6 @@ class WidgetsController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('WIDGET_MANAGER');
-
-        $this->checkAclOrForward('WIDGET_ADMIN');
     }
 
     /**
@@ -46,6 +44,8 @@ class WidgetsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('WIDGET_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -95,11 +95,11 @@ class WidgetsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('WIDGET_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('WIDGET_UPDATE');
-
         $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
         // Need category to redirect to frontpage manager
@@ -135,11 +135,11 @@ class WidgetsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('WIDGET_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('WIDGET_DELETE');
-
         $id   = $request->query->getDigits('id');
 
         $widget = new \Widget();
@@ -154,11 +154,11 @@ class WidgetsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('WIDGET_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('WIDGET_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $post = $request->request;
 
@@ -209,11 +209,11 @@ class WidgetsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('WIDGET_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('WIDGET_UPDATE');
-
         $id = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -262,11 +262,11 @@ class WidgetsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('WIDGET_AVAILABLE')")
      **/
     public function toogleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('WIDGET_AVAILABLE');
-
         $id = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -291,6 +291,8 @@ class WidgetsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('WIDGET_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {

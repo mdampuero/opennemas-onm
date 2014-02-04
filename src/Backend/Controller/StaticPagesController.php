@@ -38,8 +38,6 @@ class StaticPagesController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('STATIC_PAGES_MANAGER');
-
-        $this->checkAclOrForward('STATIC_ADMIN');
     }
 
     /**
@@ -48,6 +46,8 @@ class StaticPagesController extends Controller
      * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
+     *
+     * @Security("has_role('STATIC_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -101,11 +101,11 @@ class StaticPagesController extends Controller
      * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
+     *
+     * @Security("has_role('STATIC_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('STATIC_UPDATE');
-
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         if (!is_null($id)) {
@@ -132,11 +132,11 @@ class StaticPagesController extends Controller
      * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
+     *
+     * @Security("has_role('STATIC_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('STATIC_CREATE');
-
         if ('POST' != $request->getMethod()) {
             return $this->render('static_pages/new.tpl');
         } else {
@@ -178,11 +178,11 @@ class StaticPagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('STATIC_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('STATIC_UPDATE');
-
         $id         = $request->query->getDigits('id');
         $staticPage = new \StaticPage($id);
 
@@ -232,11 +232,11 @@ class StaticPagesController extends Controller
      * @param Request $request the request object
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
+     *
+     * @Security("has_role('STATIC_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('STATIC_DELETE');
-
         $id      = $request->query->getDigits('id');
         $page    = $request->query->getDigits('page', 1);
 
@@ -259,11 +259,11 @@ class StaticPagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('STATIC_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('STATIC_AVAILABLE');
-
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);

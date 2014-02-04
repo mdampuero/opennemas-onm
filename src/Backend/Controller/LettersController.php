@@ -47,6 +47,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -100,6 +102,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function createAction(Request $request)
     {
@@ -142,6 +146,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function showAction(Request $request)
     {
@@ -174,6 +180,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function updateAction(Request $request)
     {
@@ -226,6 +234,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {
@@ -263,6 +273,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function toggleAvailableAction(Request $request)
     {
@@ -299,6 +311,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -339,6 +353,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function batchPublishAction(Request $request)
     {
@@ -378,6 +394,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -441,6 +459,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function contentListProviderAction(Request $request)
     {
