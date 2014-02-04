@@ -231,6 +231,38 @@ class VideosController extends Controller
 
                     return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
                 }
+            } elseif ($type == 'external' || $type == 'script') {
+
+                $information = $_POST['infor'];
+
+                $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
+
+                $video = new \Video();
+                $videoData = array(
+                    'category'       => $category,
+                    'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
+                    'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                    'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
+                    'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+                    'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
+                    'information'    => $information,
+                    'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
+                    'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
+                );
+
+                try {
+                    $video->create($videoData);
+                    $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
+                    $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $video->category_name).'|'.$video->id);
+                    $tplManager->delete('home|1');
+                } catch (\Exception $e) {
+                    m::add($e->getMessage());
+
+                    return $this->redirect($this->generateUrl('admin_videos_create', array('type' => $type)));
+                }
+
             } elseif ($type == 'web-source') {
 
                 if (!empty($_POST['information'])) {
@@ -300,7 +332,9 @@ class VideosController extends Controller
         $this->checkAclOrForward('VIDEO_UPDATE');
 
         $id = $request->query->getDigits('id');
-        $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
+        $requestPost  = $request->request;
+        $continue = $requestPost->filter('continue', false, FILTER_SANITIZE_STRING);
+        $category = $requestPost->getDigits('category');
         $video = new \Video($id);
 
         if ($video->id != null) {
@@ -312,7 +346,29 @@ class VideosController extends Controller
             ) {
                 m::add(_("You can't modify this video because you don't have enought privileges."));
             } else {
-                $video->update($_POST);
+
+                if ($video->author_name == 'external' || $video->author_name == 'script') {
+                    $information = $_POST['infor'];
+                    $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
+
+                    $videoData = array(
+                        'id'            => $id,
+                        'category'       => $category,
+                        'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
+                        'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                        'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
+                        'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
+                        'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
+                        'author_name'    => $requestPost->filter('author_name', null, FILTER_SANITIZE_STRING),
+                        'fk_author'      => $requestPost->filter('fk_author', 0, FILTER_VALIDATE_INT),
+                        'information'    => $information,
+                        'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
+                        'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
+                    );
+                    $video->update($videoData);
+                } else {
+                    $video->update($_POST);
+                }
                 m::add(_("Video updated successfully."), m::SUCCESS);
             }
             $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
@@ -405,6 +461,14 @@ class VideosController extends Controller
             return $this->redirect($this->generateUrl('admin_videos'));
         }
 
+        if (($video->author_name == 'external' || $video->author_name == 'script')
+            && is_array($video->information)) {
+            $video->thumbnail = '';
+            if (array_key_exists('thumbnail', $video->information) && !empty($video->information['thumbnail'])) {
+                $video->thumb_image = new \Photo($video->information['thumbnail']);
+                $video->thumbnail   = $video->thumb_image->path_file.$video->thumb_image->name;
+            }
+        }
         $authorsComplete = \User::getAllUsersAuthors();
         $authors = array( '0' => _(' - Select one author - '));
         foreach ($authorsComplete as $author) {

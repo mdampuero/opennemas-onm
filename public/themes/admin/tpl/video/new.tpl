@@ -24,6 +24,7 @@
     });
     </script>
     {script_tag src="/onm/video.js" language="javascript"}
+
 {/block}
 
 {block name="content"}
@@ -56,61 +57,53 @@
         </div>
     </div>
 
-    <div class="wrapper-content ">
+    <div class="wrapper-content">
 
         {render_messages}
+        <div class="form-vertical video-edit-form">
 
-        <div class="form-horizontal panel clearfix">
-            <div class="utilities-conf form-vertical">
-                <div class="control-group">
-                    <label for="category" class="control-label">{t}Section:{/t}</label>
-                    <div class="controls">
-                        <select name="category" id="category">
-                        {section name=as loop=$allcategorys}
-                            <option value="{$allcategorys[as]->pk_content_category}" {if isset($video) && ($video->category eq $allcategorys[as]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$allcategorys[as]->title}" >{$allcategorys[as]->title}</option>
-                            {section name=su loop=$subcat[as]}
-                            <option value="{$subcat[as][su]->pk_content_category}" {if isset($video) && ($video->category eq $subcat[as][su]->pk_content_category || $category eq $allcategorys[as]->pk_content_category)}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                            {/section}
-                        {/section}
-                    </select>
+            <div class="contentform-inner clearfix">
+                <div class="contentbox-container">
+                    <div class="contentbox">
+                        <h3 class="title">{t}Attributes{/t}</h3>
+                        <div class="content">
+                            <input type="checkbox" value="1" id="available" name="available" {if $video->available eq 1}checked="checked"{/if}>
+                            <label for="available" >{t}Available{/t}</label>
+
+                            <h4>{t}Category{/t}</h4>
+                            {include file="common/selector_categories.tpl" name="category" item=$video}
+                            <br/>
+                            <hr class="divisor" style="margin-top:8px;">
+                            <h4>{t}Author{/t}</h4>
+                            {acl isAllowed="CONTENT_OTHER_UPDATE"}
+                                <select name="fk_author" id="fk_author">
+                                    {html_options options=$authors selected=$video->fk_author}
+                                </select>
+                            {aclelse}
+                                {if !isset($video->author->name)}{t}No author assigned{/t}{else}{$video->author->name}{/if}
+                                <input type="hidden" name="fk_author" value="{$album->fk_author}">
+                            {/acl}
+                        </div>
                     </div>
                 </div>
-                <div class="control-group">
-                <label for="author" class="control-label">{t}Author{/t}</label>
-                <div class="controls">
-                    {acl isAllowed="CONTENT_OTHER_UPDATE"}
-                        <select name="fk_author" id="fk_author">
-                            {html_options options=$authors selected=$video->fk_author}
-                        </select>
-                    {aclelse}
-                        {if !isset($album->author->name)}{t}No author assigned{/t}{else}{$video->author->name}{/if}
-                        <input type="hidden" name="fk_author" value="{$video->fk_author}">
-                    {/acl}
 
-                </div>
-            </div>
-                <div class="control-group">
-                    <label for="available" class="control-label">{t}Available{/t}</label>
-                    <div class="controls">
-                        <select name="available" id="available"
-                            {acl isNotAllowed="VIDEO_AVAILABLE"} disabled="disabled" {/acl} class="required">
-                             <option value="1" {if isset($video) && $video->available eq '1'} selected {/if}>Si</option>
-                             <option value="0" {if isset($video) && $video->available eq '0'} selected {/if}>No</option>
-                        </select>
-                    </div>
-                </div>
+                {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
+                    {include file="video/partials/_form_video_internal.tpl"}
+                {elseif $type == "external" || (isset($video) && $video->author_name == 'external')}
+                    {include file="video/partials/_form_video_external.tpl"}
+                {elseif $type == "script" || (isset($video) && $video->author_name == 'script')}
+                    {include file="video/partials/_form_video_script.tpl"}
+                {else}
+                    {include file="video/partials/_form_video_panorama.tpl"}
+                {/if}
+
+
             </div>
 
-            {if $type == "file" || (isset($video) && $video->author_name == 'internal')}
-                {include file="video/partials/_form_video_internal.tpl"}
-            {else}
-                {include file="video/partials/_form_video_panorama.tpl"}
-            {/if}
+            <input type="hidden" value="1" name="content_status">
+            <input type="hidden" name="type" value="{$smarty.get.type}">
+            <input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
         </div>
-
-        <input type="hidden" value="1" name="content_status">
-        <input type="hidden" name="type" value="{$smarty.get.type}">
-		<input type="hidden" name="id" id="id" value="{$video->id|default:""}" />
 	</div>
 </form>
 {/block}

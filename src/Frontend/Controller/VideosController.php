@@ -94,7 +94,6 @@ class VideosController extends Controller
             $videosSettings = s::get('video_settings');
 
             $totalVideosFrontpage = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
-
             if (isset($categoryName)
                 && !empty($categoryName)
                 && $categoryName != 'home'
@@ -191,6 +190,7 @@ class VideosController extends Controller
                 'video/video_frontpage.tpl',
                 array(
                     'cache_id' => $cacheID,
+                    'categoryName' => $categoryName,
                 )
             );
         } else {
