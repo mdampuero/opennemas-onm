@@ -4,6 +4,7 @@ function smarty_function_render_video($params, &$smarty)
     $video = $params['video'];
     $cssClass = (array_key_exists('css_class', $params) ? $params['css'] : null);
 
+    $output ='';
     if ($video->author_name == 'internal') {
 
         $rand = rand();
@@ -37,13 +38,15 @@ function smarty_function_render_video($params, &$smarty)
             } else {
                 $videoInfo = unserialize($video->information);
             }
-            $output = '<video controls>';
-            foreach ($videoInfo['source'] as $type => $url) {
-                if (!empty($url)) {
-                    $output .= '<source src="'.$url.'" type="video/'.$type.'">';
+            if (!empty($videoInfo['source'])) {
+                $output = '<video controls>';
+                foreach ($videoInfo['source'] as $type => $url) {
+                    if (!empty($url)) {
+                        $output .= '<source src="'.$url.'" type="video/'.$type.'">';
+                    }
                 }
+                $output .= ' </video>';
             }
-            $output .= ' </video>';
         }
 
     } else {
