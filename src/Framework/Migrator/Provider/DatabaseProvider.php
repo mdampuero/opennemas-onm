@@ -10,7 +10,7 @@
  * @author Diego Blanco Estévez <diego@openhost.es>
  *
  */
-namespace Framework\MigrationProvider;
+namespace Framework\Migrator\Provider;
 
 use Onm\DatabaseConnection;
 
