@@ -16,6 +16,12 @@
                 </li>
                 <li class="separator"></li>
                 <li>
+                    <a class="change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png" alt="{t}Change manager{/t}"><br>
+                        {t}Change manager{/t}
+                    </a>
+                </li>
+                <li>
                     <a href="{url name=admin_comments}" title="{t}Go back to list{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" >
                         <br />
@@ -45,7 +51,7 @@
                 </div>
             </fieldset>
         </div>
-    </fieldset>
-    <div></div>
+    </div>
 </form>
+{include file="comment/modals/_modalChange.tpl"}
 {/block}

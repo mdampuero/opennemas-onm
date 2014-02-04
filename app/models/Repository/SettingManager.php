@@ -137,7 +137,7 @@ class SettingManager extends BaseManager
             return false;
         }
 
-        $this->cache->delete($cachePrefix . $settingName);
+        $this->cache->delete($settingName, $cachePrefix);
 
         return true;
     }

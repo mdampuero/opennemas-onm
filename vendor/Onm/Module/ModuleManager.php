@@ -91,7 +91,6 @@ class ModuleManager
                 'BOOK_MANAGER'              => _('Books'),
                 'CACHE_MANAGER'             => _('Cache manager'),
                 'CATEGORY_MANAGER'          => _('Category'),
-                'COMMENT_DISQUS_MANAGER'    => _('Disqus comment integration'),
                 'COMMENT_MANAGER'           => _('Comments'),
                 'CRONICAS_MODULES'          => _('Cronicas customizations'),
                 'FILE_MANAGER'              => _('Files'),

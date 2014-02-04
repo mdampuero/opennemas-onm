@@ -33,7 +33,7 @@
     "require": {
         "php"                            : ">=5.3.3",
         "drexarj/disqus-php"             : "dev-master",
-        "frandieguez/panorama-php"       : "1.0.2",
+        "frandieguez/panorama-php"       : "1.0.3",
         "imagine/imagine"                : "dev-develop",
         "paypal/adaptivepayments-sdk-php": "dev-master",
         "paypal/merchant-sdk-php"        : "dev-master",

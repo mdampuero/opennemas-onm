@@ -37,7 +37,7 @@ class CommentsController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('COMMENT_MANAGER');
 
-        // Check if the user can admin video
+        // Check if the user can admin comments
         $this->checkAclOrForward('COMMENT_ADMIN');
 
         $this->statuses = array(
@@ -47,6 +47,199 @@ class CommentsController extends Controller
         );
 
         $this->view->assign('statuses', $this->statuses);
+    }
+
+    /**
+     * Description of the action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function defaultAction(Request $request)
+    {
+        // Select between comments system
+        $commentSystem = s::get('comment_system');
+
+        switch ($commentSystem) {
+            case 'onm':
+                return $this->redirect($this->generateUrl('admin_comments_list'));
+                break;
+
+            case 'disqus':
+                return $this->redirect($this->generateUrl('admin_comments_disqus'));
+                break;
+
+            case 'facebook':
+                return $this->redirect($this->generateUrl('admin_comments_facebook'));
+                break;
+
+            default:
+                return $this->render('comment/select_module.tpl');
+                break;
+        }
+
+        return $this->render('comment/select_module.tpl');
+    }
+
+    /**
+     * Description of the action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function selectAction(Request $request)
+    {
+        $type = $request->query->filter('type', '', FILTER_SANITIZE_STRING);
+
+        switch ($type) {
+            case 'onm':
+                $this->get('setting_repository')->set('comment_system', 'onm');
+                m::add(_("Congratulations! You are now using Opennemas comment system."), m::SUCCESS);
+                return $this->redirect($this->generateUrl('admin_comments_list'));
+                break;
+
+            case 'disqus':
+                return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
+                break;
+
+            case 'facebook':
+                $this->get('setting_repository')->set('comment_system', 'facebook');
+                m::add(_("Congratulations! You are now using Facebook comment system."), m::SUCCESS);
+                return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
+                break;
+
+            case 'reset':
+                return $this->render('comment/select_module.tpl');
+                break;
+
+            default:
+                m::add(_("Comment data sent not valid."), m::ERROR);
+                return $this->redirect($this->generateUrl('admin_comments'));
+                break;
+        }
+    }
+
+    /**
+     * Description of the action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function defaultDisqusAction(Request $request)
+    {
+        $disqusShortName = s::get('disqus_shortname');
+        $disqusSecretKey = s::get('disqus_secret_key');
+
+        // Check if module is configured, if not redirect to configuration form
+        if (!$disqusShortName || !$disqusSecretKey) {
+            m::add(_('Please provide your Disqus configuration to start to use your Disqus Comments module'));
+
+            return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
+        }
+
+        return $this->render(
+            'comment/disqus/list.tpl',
+            array(
+                'disqus_shortname'  => $disqusShortName,
+                'disqus_secret_key' => $disqusSecretKey,
+            )
+        );
+    }
+
+    /**
+     * Shows the disqus configuration form and stores its values
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function configDisqusAction(Request $request)
+    {
+        if ($this->request->getMethod() != 'POST') {
+            $disqusShortName = s::get('disqus_shortname');
+            $disqusSecretKey = s::get('disqus_secret_key');
+
+            return $this->render(
+                'comment/disqus/config.tpl',
+                array(
+                    'shortname' => $disqusShortName,
+                    'secretKey' => $disqusSecretKey,
+                )
+            );
+        } else {
+            $shortname = $this->request->request->filter('shortname', null, FILTER_SANITIZE_STRING);
+            $secretKey = $this->request->request->filter('secret_key', null, FILTER_SANITIZE_STRING);
+
+            if (s::set('disqus_shortname', $shortname) && s::set('disqus_secret_key', $secretKey)) {
+                s::set('comment_system', 'disqus');
+                return $this->redirect($this->generateUrl('admin_comments_disqus'));
+            } else {
+                m::add(_('There was an error while saving the Disqus module configuration'), m::ERROR);
+            }
+
+            return $this->redirect($this->generateUrl('admin_comments_disqus_config'));
+        }
+    }
+
+
+    /**
+     * Description of the action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function defaultFacebookAction(Request $request)
+    {
+        $fbSettings = s::get('facebook');
+
+        return $this->render(
+            'comment/facebook/list.tpl',
+            array(
+                'fb_app_id'  => $fbSettings['api_key'],
+            )
+        );
+    }
+
+
+    /**
+     * Shows the disqus configuration form and stores its values
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function configFacebookAction(Request $request)
+    {
+        $fbSettings = s::get('facebook');
+
+        if ($this->request->getMethod() != 'POST') {
+
+            $fbAppId = $fbSettings['api_key'];
+
+            return $this->render(
+                'comment/facebook/config.tpl',
+                array(
+                    'fb_app_id'  => $fbAppId,
+                )
+            );
+        } else {
+            $fbAppId    = $this->request->request->filter('facebook', null, FILTER_SANITIZE_STRING);
+            $fbSettings = array_merge($fbSettings, $fbAppId);
+
+            if (s::set('facebook', $fbSettings)) {
+                m::add(_('Facebook configuration saved successfully'), m::SUCCESS);
+
+                return $this->redirect($this->generateUrl('admin_comments_facebook'));
+            } else {
+                m::add(_('There was an error while saving the Facebook comments module configuration'), m::ERROR);
+            }
+
+            return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
+        }
     }
 
     /**
@@ -77,7 +270,7 @@ class CommentsController extends Controller
             $commentsCount,
             $itemsPerPage,
             $this->generateUrl(
-                'admin_comments',
+                'admin_comments_list',
                 array('filter_status' => $filterStatus, 'filter_search' => $filterSearch,)
             )
         );
@@ -92,11 +285,11 @@ class CommentsController extends Controller
         return $this->render(
             'comment/list.tpl',
             array(
-                'comments'   => $comments,
-                'pagination' => $pagination,
-                'filter_status'     => $filterStatus,
-                'filter_search'     => $filterSearch,
-                'statuses'   => $this->statuses,
+                'comments'      => $comments,
+                'pagination'    => $pagination,
+                'filter_status' => $filterStatus,
+                'filter_search' => $filterSearch,
+                'statuses'      => $this->statuses,
             )
         );
     }
@@ -125,7 +318,7 @@ class CommentsController extends Controller
         } else {
             m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
 
-            return $this->redirect($this->generateUrl('admin_comments'));
+            return $this->redirect($this->generateUrl('admin_comments_list'));
         }
     }
 
@@ -188,7 +381,7 @@ class CommentsController extends Controller
             m::add($e->getMessage(), m::ERROR);
         }
 
-        return $this->redirect($this->generateUrl('admin_comments'));
+        return $this->redirect($this->generateUrl('admin_comments_list'));
     }
 
     /**
@@ -220,7 +413,7 @@ class CommentsController extends Controller
             'filter_status' => $request->query->filter('return_status', 'accepted', FILTER_SANITIZE_STRING)
         );
 
-        return $this->redirect($this->generateUrl('admin_comments', $params));
+        return $this->redirect($this->generateUrl('admin_comments_list', $params));
     }
 
     /**
@@ -273,7 +466,7 @@ class CommentsController extends Controller
             'filter_status'   => $status,
         );
 
-        return $this->redirect($this->generateUrl('admin_comments', $params));
+        return $this->redirect($this->generateUrl('admin_comments_list', $params));
 
     }
 
@@ -318,7 +511,7 @@ class CommentsController extends Controller
             'filter_search' => $request->query->filter('filter_search', null, FILTER_SANITIZE_STRING),
         );
 
-        return $this->redirect($this->generateUrl('admin_comments', $params));
+        return $this->redirect($this->generateUrl('admin_comments_list', $params));
     }
 
     /**

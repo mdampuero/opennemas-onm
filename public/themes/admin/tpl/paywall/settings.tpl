@@ -52,17 +52,6 @@
     fieldset {
         margin-bottom:40px;
     }
-    .step-number {
-        background:#ccc;
-        border-radius:20px;
-        padding:5px 10px;
-        color:White;
-        font-weight: bold;
-        font-family: Arial, Verdana;
-        font-size:1.2em;
-        display:inline-block;
-        line-height:1em;
-    }
     ol li {
         margin-bottom:5px;
     }

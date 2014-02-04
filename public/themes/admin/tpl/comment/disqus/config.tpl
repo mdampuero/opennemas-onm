@@ -5,7 +5,7 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2 class="disqus">{t}Settings{/t}</h2>
+                <h2>{t}Settings{/t}</h2>
             </div>
             <ul class="old-button">
                 <li>
@@ -16,6 +16,12 @@
                 </li>
                 <li class="separator"></li>
                 <li>
+                    <a class="change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png" alt="{t}Change system{/t}"><br>
+                        {t}Change manager{/t}
+                    </a>
+                </li>
+                <li>
                     <a href="{url name=admin_comments_disqus}" title="{t}Go back to list{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back to list{/t}" ><br />{t}Go back to list{/t}
                     </a>
@@ -25,6 +31,8 @@
     </div>
     <div class="wrapper-content">
     {render_messages}
+
+    <h4>{t}Set your Disqus configuration:{/t}</h4>
 
         <div class="form-horizontal panel">
 
@@ -52,4 +60,5 @@
         </div>
     </div>
 </form>
+{include file="comment/modals/_modalChange.tpl"}
 {/block}

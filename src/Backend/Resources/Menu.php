@@ -77,13 +77,6 @@ $menuXml = '<?xml version="1.0"?>
             link="'.url('admin_comments').'"
         />
         <node
-            module_name="COMMENT_DISQUS_MANAGER"
-            privilege="COMMENT_ADMIN"
-            title="'.htmlspecialchars(_("Comments (Disqus)"), ENT_QUOTES).'"
-            id="comment_disqus_manager"
-            link="'.url('admin_comments_disqus').'"
-        />
-        <node
             module_name="POLL_MANAGER"
             privilege="POLL_ADMIN"
             title="'.htmlspecialchars(_("Polls"), ENT_QUOTES).'"

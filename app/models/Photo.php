@@ -180,24 +180,25 @@ class Photo extends Content
         }
         // Building information for the photo image
         $data = array(
-            'title'        => $dataSource["title"],
-            'name'         => $finalPhotoFileName,
-            'path_file'    => $dateForDirectory,
-            'fk_category'  => $dataSource["fk_category"],
-            'category'     => $dataSource["fk_category"],
-            'nameCat'      => $dataSource["category_name"],
-            'created'      => $dataSource["created"],
-            'changed'      => $dataSource["changed"],
-            'date'         => $fileInformation->mtime,
-            'size'         => round($fileInformation->size/1024, 2),
-            'width'        => $fileInformation->width,
-            'height'       => $fileInformation->height,
-
-            'author_name'  => $dataSource['author_name'],
-            'pk_author'    => $_SESSION['userid'],
-            'fk_publisher' => $_SESSION['userid'],
-            'description'  => $dataSource['description'],
-            'metadata'     => $dataSource["metadata"],
+            'title'          => $dataSource["title"],
+            'name'           => $finalPhotoFileName,
+            'path_file'      => $dateForDirectory,
+            'fk_category'    => $dataSource["fk_category"],
+            'category'       => $dataSource["fk_category"],
+            'nameCat'        => $dataSource["category_name"],
+            'created'        => $dataSource["created"],
+            'changed'        => $dataSource["changed"],
+            'date'           => $fileInformation->mtime,
+            'size'           => round($fileInformation->size/1024, 2),
+            'width'          => $fileInformation->width,
+            'height'         => $fileInformation->height,
+            'available'      => $dataSource['available'],
+            'content_status' => $dataSource['content_status'],
+            'author_name'    => $dataSource['author_name'],
+            'pk_author'      => $_SESSION['userid'],
+            'fk_publisher'   => $_SESSION['userid'],
+            'description'    => $dataSource['description'],
+            'metadata'       => $dataSource["metadata"],
         );
 
         if (is_dir($uploadDir) && !is_writable($uploadDir)) {
