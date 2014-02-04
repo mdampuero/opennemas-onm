@@ -335,55 +335,57 @@ class NewsletterController extends Controller
                 m::ERROR
             );
             return $this->redirect($this->generateUrl('admin_newsletters'));
-        }
+        } else {
 
-        $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
+            $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
 
-        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+            $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-        $newsletterSender = s::get('newsletter_sender');
-        $configurations   = s::get('newsletter_maillist');
+            $newsletterSender = s::get('newsletter_sender');
+            $configurations   = s::get('newsletter_maillist');
 
-        if (empty($newsletterSender)) {
-            m::add(
-                _(
-                    'Your newsletter configuration is not complete. Please'.
-                    ' contact with Opennemas administrator. newsletter_sender fault'
-                ),
-                m::ERROR
+            if (empty($newsletterSender)) {
+                m::add(
+                    _(
+                        'Your newsletter configuration is not complete. Please'.
+                        ' contact with Opennemas administrator. newsletter_sender fault'
+                    ),
+                    m::ERROR
+                );
+
+                return $this->redirect($this->generateUrl('admin_newsletters'));
+            }
+
+            $params = array(
+                'subject'            => $newsletter->title,
+                'newsletter_sender'  => $newsletterSender,
+                'mail_from'          => $configurations['sender'],
+                'mail_from_name'     => s::get('site_name'),
             );
 
-            return $this->redirect($this->generateUrl('admin_newsletters'));
-        }
+            $maxAllowed = s::get('max_mailing');
+            $remaining = $maxAllowed - $this->checkMailing();
 
-        $params = array(
-            'subject'            => $newsletter->title,
-            'newsletter_sender'  => $newsletterSender,
-            'mail_from'          => $configurations['sender'],
-            'mail_from_name'     => s::get('site_name'),
-        );
+            $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
-        $maxAllowed = s::get('max_mailing');
-        $remaining = $maxAllowed - $this->checkMailing();
-
-        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
-
-        //  Build the message
-        $message = \Swift_Message::newInstance();
-        $message
-            ->setSubject($subject)
-            ->setBody($htmlContent, 'text/html')
-            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-            ->setSender($params['newsletter_sender']);
 
         $sent = 0;
         if (!empty($recipients)) {
             foreach ($recipients as $mailbox) {
                 if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
                     try {
-                        // Send the mail
-                        $message->setTo(array($mailbox->email => $mailbox->name));
+                        //  Build the message
+                        $message = \Swift_Message::newInstance();
+                        $message
+                            ->setSubject($subject)
+                            ->setBody($htmlContent, 'text/html')
+                            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+                            ->setSender($params['newsletter_sender'])
+                            ->setTo(array($mailbox->email => $mailbox->name));
+
+                        // Send it
                         $properlySent = $this->get('mailer')->send($message);
+
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
                         $sent++;
