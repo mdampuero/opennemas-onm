@@ -30,49 +30,6 @@
         </ul>
     </div>
 </div>
-<style>
-    .comment-type-selector {
-        list-style:none;
-        margin:40px auto;
-        width:70%;
-    }
-    .comment-type-selector li {
-        border-radius:3px;
-        border:1px solid #ccc;
-        background:#eee;
-        margin:20px;
-    }
-    .comment-type-selector li:hover {
-        background:#dedede;
-    }
-    .comment-type-selector li i,
-    .comment-type-selector li img {
-        vertical-align:middle;
-        margin-right:10px;
-    }
-    .comment-type-selector li img {
-        width: 45px;
-    }
-    .comment-type-selector li i.icon {
-        font-size: 3em;
-
-    }
-    .comment-type-selector li a {
-        padding:10px;
-        display:block;
-        width:100%;
-        height:100%;
-        color:#666;
-        font-size:1.2em;
-        margin-left:10px;
-        vertical-align:middle;
-    }
-    .comment-type-selector li a:hover {
-        text-decoration:none;
-    }
-    .icon-facebook-sign { color:#354c8c; }
-    .icon-comment { color:#222; }
-</style>
 <script>
 jQuery("#modal-comment-change").modal({
     backdrop: 'static', //Show a grey back drop
