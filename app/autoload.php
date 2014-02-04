@@ -30,6 +30,64 @@ if (file_exists(APPLICATION_PATH.'/.deploy.php')) {
     require APPLICATION_PATH.'/.deploy.php';
 }
 
+if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'
+    || (array_key_exists('SERVER_PORT', $_SERVER) && $_SERVER['SERVER_PORT'] == 443)
+) {
+    $protocol = "https://";
+} else {
+    $protocol = "http://";
+}
+
+define('SS', "/");
+define('DS', DIRECTORY_SEPARATOR);
+define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
+
+$serverName = array_key_exists('SERVER_NAME', $_SERVER) ? $_SERVER['SERVER_NAME'] : 'console';
+define('SITE', $serverName);
+define('BASE_URL', '/');
+define('ADMIN_DIR', "admin");
+define('SITE_URL', $protocol.SITE.BASE_URL);
+define('SITE_URL_ADMIN', SITE_URL.ADMIN_DIR);
+
+define('SYS_NAME_GROUP_ADMIN', 'Administrador');
+
+define('IMG_DIR', "images");
+define('FILE_DIR', "files");
+define('ADS_DIR', "advertisements");
+define('OPINION_DIR', "opinions");
+
+define('TEMPLATE_MANAGER', "manager");
+
+define('ITEMS_PAGE', "20"); // TODO: delete from application
+
+define('TEMPLATE_ADMIN', "admin");
+define('TEMPLATE_ADMIN_PATH', SITE_PATH.DS.DS."themes".DS.TEMPLATE_ADMIN.SS);
+define('TEMPLATE_ADMIN_PATH_WEB', SS."themes".SS.TEMPLATE_ADMIN.SS);
+define('TEMPLATE_ADMIN_URL', SS."themes".SS.TEMPLATE_ADMIN.SS);
+
+define('STATIC_PAGE_PATH', 'estaticas');
+
+// Backup paths
+define('BACKUP_PATH', SITE_PATH.DS.'..'.DS."tmp/backups");
+
+$maxUpload          = (int) (ini_get('upload_max_filesize'));
+$maxPost            = (int) (ini_get('post_max_size'));
+$memoryLimit        = (int) (ini_get('memory_limit'));
+$maxAllowedFileSize = min($maxUpload, $maxPost, $memoryLimit) * pow(1024, 2);
+define('MAX_UPLOAD_FILE', $maxAllowedFileSize);
+
+$commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
+if (!file_exists($commonCachepath)) {
+    mkdir($commonCachepath, 0755, true);
+}
+define('COMMON_CACHE_PATH', realpath($commonCachepath));
+
+if (!defined('DEPLOYED_AT')) {
+    define('DEPLOYED_AT', '0000000000');
+}
+
+mb_internal_encoding("UTF-8");
+
 /**
  * @var $loader ClassLoader
  */
