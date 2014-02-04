@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class OpinionSummaryGenerator extends Command
+class OpinionSummaryGeneratorCommand extends Command
 {
     protected function configure()
     {
