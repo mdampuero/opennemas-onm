@@ -37,8 +37,6 @@ class BooksController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('BOOK_MANAGER');
 
-        $this->checkAclOrForward('BOOK_ADMIN');
-
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
@@ -172,15 +170,12 @@ class BooksController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('BOOK_ADMIN')")
+     * @Security("has_role('BOOK_FAVORITE')")
      **/
     public function widgetAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_FAVORITE');
-
         $configurations = s::get('books_settings');
         $numFavorites   = $configurations['total_widget'];
-
 
         $cm = new \ContentManager();
         $books = $cm->find_all('book', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
@@ -212,12 +207,10 @@ class BooksController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('BOOK_ADMIN')")
+     * @Security("has_role('BOOK_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_CREATE');
-
         if ('POST' != $request->getMethod()) {
             $this->view->assign('category', $this->category);
 
@@ -265,12 +258,10 @@ class BooksController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('BOOK_ADMIN')")
+     * @Security("has_role('BOOK_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('BOOK_UPDATE');
-
         $id = $this->request->query->getInt('id');
 
         $book = new \Book($id);

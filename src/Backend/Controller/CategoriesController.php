@@ -36,8 +36,6 @@ class CategoriesController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('CATEGORY_MANAGER');
-
-        $this->checkAclOrForward('CATEGORY_ADMIN');
     }
 
     /**

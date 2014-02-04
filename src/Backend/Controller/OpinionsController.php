@@ -247,8 +247,6 @@ class OpinionsController extends Controller
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $opinion = new \Opinion($id);

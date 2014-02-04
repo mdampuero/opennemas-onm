@@ -205,8 +205,6 @@ class PollsController extends Controller
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('POLL_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $poll = new \Poll();
 
