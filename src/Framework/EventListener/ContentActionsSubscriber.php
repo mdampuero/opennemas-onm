@@ -102,25 +102,22 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
         if (property_exists($content, 'pk_article')) {
             $tplManager->delete(
-                preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|' . $content->pk_article
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name).'|'.$content->pk_article
             );
 
-            // Deleting home cache files
-            // if (isset($content->in_home) && $content->in_home) {
-                $tplManager->delete('home|0');
-            // }
+            // Deleting frontpage cache files
+            $tplManager->delete('frontpage|home');
             $tplManager->delete('home|RSS');
             $tplManager->delete('last|RSS');
-            $tplManager->delete('blog|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name));
-
-            if (isset($content->frontpage)
-                && $content->frontpage
-            ) {
-                $tplManager->delete(
-                    preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|0'
-                );
-                $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|RSS');
-            }
+            $tplManager->delete(
+                'blog|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
+            );
+            $tplManager->delete(
+                'frontpage|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name)
+            );
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $content->category_name) . '|RSS'
+            );
 
             $this->cleanOpcode();
         }
@@ -160,8 +157,12 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         if (isset($_REQUEST['category'])) {
             $ccm = \ContentCategoryManager::get_instance();
             $categoryName = $ccm->get_name($_REQUEST['category']);
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS');
-            $tplManager->delete(preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|0');
+            $tplManager->delete(
+                preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName) . '|RSS'
+            );
+            $tplManager->delete(
+                'frontpage|'.preg_replace('/[^a-zA-Z0-9\s]+/', '', $categoryName)
+            );
 
             $this->cleanOpcode();
         }
