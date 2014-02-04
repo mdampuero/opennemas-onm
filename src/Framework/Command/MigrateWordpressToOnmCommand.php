@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Onm\StringUtils;
 use Onm\Settings as s;
 
-class MigrateWordpressToOnm extends Command
+class MigrateWordpressToOnmCommand extends Command
 {
 
     protected $originalCategories = array();

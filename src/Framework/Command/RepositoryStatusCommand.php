@@ -16,16 +16,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RepositoryStatus extends Command
+class RepositoryStatusCommand extends Command
 {
     protected function configure()
     {
         $this
-            ->setDefinition(
-                array(
-                    // new InputOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The database password'),
-                )
-            )
+            // ->setDefinition(
+            //     array(
+            //         new InputOption('password', 'p', InputOption::VALUE_OPTIONAL, 'The database password'),
+            //     )
+            // )
             ->setName('repository:status')
             ->setDescription('Shows the latest repository status for code and themes.')
             ->setHelp(
