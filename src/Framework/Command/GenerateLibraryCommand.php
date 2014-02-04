@@ -9,24 +9,20 @@
  **/
 namespace Framework\Command;
 
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class GenerateLibraryCommand extends Command
+class GenerateLibraryCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
             ->setName('generate:library-cronicas')
             ->setDescription('Cron task for generating the static library from cronicasdelaemigracion')
-            ->setDefinition(
-                array(
-                    new InputArgument('instance', InputArgument::REQUIRED, 'user'),
-                )
-            )
             ->setHelp(
                 <<<EOF
 The <info>generate:library-cronicas</info> is a cron task for generating the static library.
@@ -39,41 +35,30 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $_SERVER['SERVER_NAME']   = 'www.cronicasdelaemigracion.com';
         $_SERVER['REQUEST_URI']   = '/';
-        $_SERVER['REQUEST_PORT']  = '8080';
-        $_SERVER['SERVER_PORT']   = '8080';
-        $_SERVER['HTTP_HOST']     ='www.cronicasdelaemigracion.com';
-
-        $instance = $input->getArgument('instance');
-
-        global $sc;
-        $framework = $sc->get('framework');
-
-
-        $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
-        $requestEvent = new \Symfony\Component\HttpKernel\Event\GetResponseEvent($framework, $request, \Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST);
-
-        $appBootupListener = new \Framework\EventListeners\ApplicationBootupListener();
-        $appBootupListener->onKernelRequest($requestEvent);
 
         // Loads one ONM instance from database
-        $im = $sc->get('instance_manager');
+        $im = $this->getContainer()->get('instance_manager');
+        $instance = $im->load('cronicas.dev:8080');
 
-        $instance = $im->load($instance);
+        $im->current_instance = $instance;
+        $im->cache_prefix     = $instance->internal_name;
 
-        $sc->setParameter('instance', $instance);
-        $sc->setParameter('cache_prefix', $instance->internal_name);
+        $cache = $this->getContainer()->get('cache');
+        $cache->setNamespace($instance->internal_name);
 
+        // Initialize the instance database connection
+        $databaseName               = $instance->getDatabaseName();
+        $databaseInstanceConnection = $this->getContainer()->get('db_conn');
 
-        $GLOBALS['application']->conn = \ADONewConnection(BD_TYPE);
-        $GLOBALS['application']->conn->Connect(BD_HOST, BD_USER, BD_PASS, BD_DATABASE);
-        $GLOBALS['application']->conn->bulkBind = true;
+        // CRAP: take this out, Workaround
+        \Application::load();
+        \Application::initDatabase($databaseInstanceConnection);
 
         // multi handle
         $curlHandler = curl_multi_init();
 
-        $urlBase = SITE_URL."seccion/";
+        $urlBase = "http://www.cronicasdelaemigracion.es/seccion/";
 
         $date          = new \DateTime();
         $directoryDate = $date->format("/Y/m/d/");
@@ -84,8 +69,7 @@ EOF
             mkdir($basePath, 0777, true);
         }
 
-        $menu = new \Menu();
-        $menu->getMenu('archive');
+        $menu = $this->generateMenu();
 
         if (count($menu->items) <= 0) {
             $input->writeln("There are no frontpages. You must define archive menu.");
@@ -93,26 +77,31 @@ EOF
             return;
         }
 
+        $urlBase = "http://www.cronicasdelaemigracion.com/seccion/";
+
+        // multi handle
+        $mh = curl_multi_init();
 
         foreach ($menu->items as $item) {
-            $categoryName = $item->link;
+            $category_name = $item->link;
 
-            if (!empty($categoryName)) {
-                $curly[$categoryName] = curl_init();
+            if (!empty($category_name)) {
 
-                $url = $urlBase. $categoryName.'/';
-                curl_setopt($curly[$categoryName], CURLOPT_URL, $url);
-                curl_setopt($curly[$categoryName], CURLOPT_HEADER, 0);
-                curl_setopt($curly[$categoryName], CURLOPT_RETURNTRANSFER, 1);
+                $curly[$category_name] = curl_init();
 
-                curl_multi_add_handle($curlHandler, $curly[$categoryName]);
+                $url = $urlBase. $category_name.'/';
+                curl_setopt($curly[$category_name], CURLOPT_URL, $url);
+                curl_setopt($curly[$category_name], CURLOPT_HEADER, 0);
+                curl_setopt($curly[$category_name], CURLOPT_RETURNTRANSFER, 1);
+
+                curl_multi_add_handle($mh, $curly[$category_name]);
             }
         }
 
-          // execute the handles
+        // execute the handles
         $running = null;
         do {
-            curl_multi_exec($curlHandler, $running);
+            curl_multi_exec($mh, $running);
         } while ($running > 0);
 
 
@@ -132,23 +121,65 @@ EOF
         array_push($replacement, "href=\"/archive/digital{$directoryDate}home.html\"");
 
           // get content and remove handles
-        foreach ($curly as $categoryName => $c) {
+        foreach ($curly as $category_name => $c) {
             $htmlOut = curl_multi_getcontent($c);
 
             $htmlOut = preg_replace($pattern, $replacement, $htmlOut);
 
-            var_dump($htmlOut);die();
-
-
-            $newFile = $basePath.$categoryName.".html";
+            $newFile = $basePath.$category_name.".html";
             $result  = file_put_contents($newFile, $htmlOut);
 
-            curl_multi_remove_handle($curlHandler, $c);
+            curl_multi_remove_handle($mh, $c);
         }
+          // all done
+        curl_multi_close($mh);
 
-        // all done
-        curl_multi_close($curlHandler);
+        $output->write('Generation completed');
+    }
 
-        $input->writeln('Generation done');
+    /**
+     * Generates a dummy  menu
+     *
+     * @return Menu the object menu with elements
+     **/
+    public function generateMenu()
+    {
+        $menu = new \Menu();
+
+        $menu->name  ='archive';
+        $menu->items = array();
+
+        $item       = new \stdClass();
+        $item->link = 'home';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'cronicas';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'galicia';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'galicia-exporta';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'castillaleon';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'asturias';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'canarias';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'andalucia';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'catabria';
+        array_push($menu->items, $item);
+        $item       = new \stdClass();
+        $item->link = 'paisvasco';
+        array_push($menu->items, $item);
+
+        return $menu;
     }
 }
