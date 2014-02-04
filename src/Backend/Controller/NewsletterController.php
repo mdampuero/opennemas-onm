@@ -335,38 +335,38 @@ class NewsletterController extends Controller
                 m::ERROR
             );
             return $this->redirect($this->generateUrl('admin_newsletters'));
-        } else {
+        }
 
-            $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
+        $_SESSION['data-recipients-'.$newsletter->id] = $recipients;
 
-            $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
+        $htmlContent = htmlspecialchars_decode($newsletter->html, ENT_QUOTES);
 
-            $newsletterSender = s::get('newsletter_sender');
-            $configurations   = s::get('newsletter_maillist');
+        $newsletterSender = s::get('newsletter_sender');
+        $configurations   = s::get('newsletter_maillist');
 
-            if (empty($newsletterSender)) {
-                m::add(
-                    _(
-                        'Your newsletter configuration is not complete. Please'.
-                        ' contact with Opennemas administrator. newsletter_sender fault'
-                    ),
-                    m::ERROR
-                );
-
-                return $this->redirect($this->generateUrl('admin_newsletters'));
-            }
-
-            $params = array(
-                'subject'            => $newsletter->title,
-                'newsletter_sender'  => $newsletterSender,
-                'mail_from'          => $configurations['sender'],
-                'mail_from_name'     => s::get('site_name'),
+        if (empty($newsletterSender)) {
+            m::add(
+                _(
+                    'Your newsletter configuration is not complete. Please'.
+                    ' contact with Opennemas administrator. newsletter_sender fault'
+                ),
+                m::ERROR
             );
 
-            $maxAllowed = s::get('max_mailing');
-            $remaining = $maxAllowed - $this->checkMailing();
+            return $this->redirect($this->generateUrl('admin_newsletters'));
+        }
 
-            $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
+        $params = array(
+            'subject'            => $newsletter->title,
+            'newsletter_sender'  => $newsletterSender,
+            'mail_from'          => $configurations['sender'],
+            'mail_from_name'     => s::get('site_name'),
+        );
+
+        $maxAllowed = s::get('max_mailing');
+        $remaining = $maxAllowed - $this->checkMailing();
+
+        $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
 
         $sent = 0;
