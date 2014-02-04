@@ -26,7 +26,7 @@
                 <li>
                     <a class="change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png" alt="{t}Change system{/t}"><br>
-                        {t}Change system{/t}
+                        {t}Change manager{/t}
                     </a>
                 </li>
                 <li>
@@ -40,7 +40,7 @@
     <div class="wrapper-content">
     {render_messages}
 
-        <h4><div class="step-number">2</div> {t}Set your Facebook configuration:{/t}</h4>
+        <h4>{t}Set your Facebook configuration:{/t}</h4>
 
         <div class="form-horizontal panel">
 

@@ -107,7 +107,7 @@ class CommentsController extends Controller
             case 'facebook':
                 $this->get('setting_repository')->set('comment_system', 'facebook');
                 m::add(_("Congratulations! You are now using Facebook comment system."), m::SUCCESS);
-                return $this->redirect($this->generateUrl('admin_comments_facebook'));
+                return $this->redirect($this->generateUrl('admin_comments_facebook_config'));
                 break;
 
             case 'reset':
