@@ -10,7 +10,7 @@
  * @author Diego Blanco Estévez <diego@openhost.es>
  *
  */
-namespace Framework\MigrationSaver;
+namespace Framework\Migrator\Saver;
 
 use Onm\DatabaseConnection;
 use Onm\Settings as s;
