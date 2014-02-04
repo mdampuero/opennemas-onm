@@ -76,7 +76,7 @@
     </div>
     <div class="contentbox" >
         <div id="related_media" class="control-group">
-            <h3 class="title">{t}Thumbnail image{/t}</h3>
+            <h3 class="title">{t}Video cover{/t}</h3>
             <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
                 <div class="image-data">
                     <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
@@ -117,11 +117,17 @@
 </script>
 
     <script>
-    jQuery(document).ready(function($){
-    $('#title').on('change', function(e, ui) {
-            fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+        jQuery(document).ready(function($){
+        $('#title').on('change', function(e, ui) {
+                fill_tags($('#title').val(),'#metadata', '{url name=admin_utils_calculate_tags}');
+            });
         });
-    });
+        $('#continue').on('click', function(e, ui) {
+            if ($('.related-element-id').val().length < 1) {
+                $(".messages").html('<div class="alert alert-error"><button class="close" data-dismiss="alert">×</button>You must assign a cover video<br></div>');
+                e.preventDefault();
+            };
+        });
     </script>
     {include file="media_uploader/media_uploader.tpl"}
     <script>

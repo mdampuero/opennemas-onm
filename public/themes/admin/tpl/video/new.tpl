@@ -37,11 +37,11 @@
                 <li>
                 {if isset($video->id)}
                     {acl isAllowed="VIDEO_UPDATE"}
-                        <button href="{url name=admin_videos_update id=$video->id}" name="continue" value="1">
+                        <button href="{url name=admin_videos_update id=$video->id}" id="continue" name="continue" value="1">
                     {/acl}
                 {else}
                     {acl isAllowed="VIDEO_CREATE"}
-                        <button href="{url name=admin_videos_create}"  name="continue" value="1">
+                        <button href="{url name=admin_videos_create}" id="continue" name="continue" value="1">
                     {/acl}
                 {/if}
                         <img src="{$params.IMAGE_DIR}save.png" title="Guardar" alt="{t}Save{/t}"><br />{t}Save{/t}
