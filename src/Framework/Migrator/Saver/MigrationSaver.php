@@ -758,23 +758,9 @@ class MigrationSaver
      */
     protected function configure()
     {
-        define('DS', DIRECTORY_SEPARATOR);
         define('CACHE_PREFIX', $this->settings['provider']['instance']);
-
-        // Initialize internal constants for logger
-        // Logger
-        define(
-            'SYS_LOG_PATH',
-            realpath(
-                SITE_PATH . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR
-                . "tmp/logs"
-            )
-        );
         define('INSTANCE_UNIQUE_NAME', $this->settings['provider']['instance']);
-        define('FILE_DIR', INSTANCE_UNIQUE_NAME.'/files');
-        define('SITE_URL', $this->settings['provider']['url']);
 
-        define('IMG_DIR', "images");
         define(
             'MEDIA_PATH',
             SITE_PATH . "media" . DIRECTORY_SEPARATOR . INSTANCE_UNIQUE_NAME
@@ -996,14 +982,16 @@ class MigrationSaver
                     $field = $this->convertToMap($field, $params['map']);
                     break;
                 case 'merge':
-                    $value = '';
-                    foreach ($field as $key => $value) {
-                        $value .= $value;
-                        if ($key < count($field) - 1) {
-                            $value .= ',';
+                    if (!is_null($field)) {
+                        $value = '';
+                        foreach ($field as $key => $v) {
+                            $value .= $v;
+                            if ($key < count($field) - 1) {
+                                $value .= ',';
+                            }
                         }
+                        $field = $value;
                     }
-                    $field = $value;
                     break;
                 case 'raw': // Remove spaces at beginning and end
                     $field = trim($field);
