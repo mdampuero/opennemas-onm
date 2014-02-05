@@ -45,7 +45,6 @@ EOF
 
         // Initialize internal constants
         define('CACHE_PREFIX', 'disqus');
-        define('SYS_LOG_PATH', realpath(SITE_PATH."/".'..'."/"."tmp/logs"));
         define('INSTANCE_UNIQUE_NAME', 'community');
 
         // Get database name from prompt
