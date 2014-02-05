@@ -13,6 +13,7 @@
 namespace Framework\Migrator\Provider;
 
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\File\File;
 
 use Onm\DatabaseConnection;
 use Onm\Settings as s;
@@ -20,12 +21,6 @@ use Onm\StringUtils;
 
 class JsonProvider extends MigrationProvider
 {
-    /**
-     * Array of paths.
-     *
-     * @var array
-     */
-    protected $files;
 
     /**
      * Constructs a new Migration provider.
@@ -61,58 +56,172 @@ class JsonProvider extends MigrationProvider
         $this->stats[$name]['already_imported'] = 0;
 
         // Read files
-        $finder = new Finder();
-        $finder->name('*.json');
-        $finder->files()->in($schema['source']['path']);
+        $files;
+        if (is_dir($schema['source']['path'])) {
+            $finder = new Finder();
+            $finder->name('*.json');
+            $finder->files()->in($schema['source']['path']);
+            $finder->files()->in($schema['source']['path']);
+            $files = $finder;
+        } else if (is_file($schema['source']['path'])) {
+            $files = array(new File($schema['source']['path']));
+        }
 
-        $total = count($finder);
+        $total = count($files);
         $current = 1;
-
-        foreach ($finder as $file) {
+        foreach ($files as $file) {
+            $builded = array();
             // Read item from file
             $item = json_decode(file_get_contents($file->getPathName()), true);
 
-            // Builded item
-            $builded = array();
-
-            $imported = $item;
-            foreach (explode('.', $schema['source']['id']) as $key) {
-                $imported = $imported[$key];
+            if (array_key_exists('prefix', $schema['source'])) {
+                foreach (explode('.', $schema['source']['prefix']) as $prefix) {
+                    $item = $item[$prefix];
+                }
             }
 
-            if (!is_null($item) && (!isset($schema['filters'])
-                || (isset($schema['filters'])
-                && $this->isParseable($schema['filters'], $item)))
-                && !$this->elementIsImported(
-                    $imported,
-                    $schema['translation']['name']
-                )
+            if (is_array($item)
+                && array_keys($item) !== range(0, count($item) - 1)
             ) {
-                foreach ($schema['fields'] as $field => $values) {
-                    if (in_array('constant', $values['type'])) {
-                        $builded[$field] = $values['value'];
-                    } else {
-                        $value = $item;
-                        foreach (explode('.', $values['field']) as $f) {
-                            $value = $value[$f];
+                // Associative array (1 item per file)
+                // var_dump('assoc');
+                $builded = $this->itemToFlat($item, $schema);
+            } else if (is_array($item)
+                && array_keys($item) === range(0, count($item) - 1)
+            ) {
+                // Non-Associative array (1..* items per file)
+                // var_dump('non-assoc');
+                foreach ($item as $i) {
+                    $builded =
+                        array_merge($builded, $this->itemToFlat($i, $schema));
+                }
+            }
+
+            // Ignore wrong joined items
+            $required = array();
+            foreach ($schema['fields'] as $key => $value) {
+                if (array_key_exists('field', $value)
+                    && array_key_exists('required', $value)
+                    && $value['required']
+                ) {
+                    $required[] = $value['field'];
+                }
+            }
+
+            // Apply filters
+            foreach ($builded as $key => $value) {
+                if ((!empty($required)
+                    && !empty(array_intersect(array_keys($value), $required)))
+                    || empty($required)
+                ) {
+                    // Has all required fields - Filter
+                    if ((!isset($schema['filters'])
+                        || (isset($schema['filters'])
+                        && $this->isParseable($schema['filters'], $value)))
+                        && !$this->elementIsImported(
+                            $value[$schema['source']['id']],
+                            $schema['translation']['name']
+                        )
+                    ) {
+                        // Add constants
+                        foreach ($schema['fields'] as $field => $values) {
+                            if (in_array('constant', $values['type'])) {
+                                $builded[$key][$field] = $values['value'];
+                            }
                         }
-                        $builded[$field] = $value;
+
+                    }
+                }
+            }
+
+            // Get fields according to schema
+            foreach ($builded as $b) {
+                $filtered = array();
+
+                foreach ($schema['fields'] as $key => $value) {
+
+                    if (array_key_exists('field', $value)
+                        && array_key_exists($value['field'], $b)
+                    ) {
+                        $filtered[$key] = $b[$value['field']];
+                    } else if (array_key_exists($key, $b)) {
+                        $filtered[$key] = $b[$key];
+                    } else {
+                        $filtered[$key] = null;
                     }
                 }
 
-                $data[] = $builded;
-
-            } else if ($this->elementIsImported(
-                $imported,
-                $schema['translation']['name']
-            )) {
-                $this->stats[$name]['already_imported']++;
+                // Save if it is not imported
+                if (!$this->elementIsImported(
+                    $filtered[$schema['translation']['field']],
+                    $schema['translation']['name']
+                )) {
+                    $data[] = $filtered;
+                } else {
+                    $this->stats[$name]['already_imported']++;
+                }
             }
         }
 
-        // var_dump($data);die();
-
         return $data;
+    }
+
+    /**
+     * Parses an item and returns an array with data to process.
+     *
+     * @param  array $key         Sliced key
+     * @param  array $item        Item to parse.
+     * @param  array $parsedIndex Array with parsed content keys.
+     * @return array              Data to process.
+     */
+    private function itemToFlat($item, $schema)
+    {
+        $parsed = array();
+
+        foreach ($item as $name => $value) {
+            // var_dump('key: ' . $name);
+
+            if (!is_array($value)) {
+                // var_dump('non-array - copy');
+                if (count($parsed) == 0) {
+                    // var_dump('new array');
+                    $parsed[] = array($name => $value);
+                } else {
+                    // var_dump('fill array');
+                    foreach ($parsed as $key => $p) {
+                        $parsed[$key][$name] = $value;
+                    }
+                }
+            } else {
+                if (array_keys($value) !== range(0, count($value) - 1)) {
+                    // var_dump('assoc - extract fields');
+                    // Associative array (Sub-fields - Extract)
+                    foreach ($value as $i => $v) {
+                        foreach ($parsed as $j => $p) {
+                            $parsed[$j][$i] = $v;
+                        }
+                    }
+                } else {
+                    // var_dump('non-assoc - clone & join');
+                    // Non-associative array (Sub-items - Clone & Join)
+                    $joined = array();
+                    foreach ($value as $k => $v) {
+                        $toJoin = $this->itemToFlat($v, $schema);
+
+                        // Join fields to elements in parsed
+                        foreach ($toJoin as $f) {
+                            foreach ($parsed as $j => $v) {
+                                $joined[] = array_merge($parsed[$j], $f);
+                            }
+                        }
+                    }
+
+                    $parsed = $joined;
+                }
+            }
+        }
+
+        return $parsed;
     }
 
     /**
