@@ -314,12 +314,13 @@ class InstanceManager
     public function update($data)
     {
         $sql = "UPDATE instances SET name=?, internal_name=?, "
-             . "domains=?, activated=?, settings=? WHERE id=?";
+             . "domains=?, activated=?, contact_mail=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
             $data['internal_name'],
             $data['domains'],
             $data['activated'],
+            $data['user_mail'],
             serialize($data['settings']),
             $data['id']
         );
