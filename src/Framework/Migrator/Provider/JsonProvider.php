@@ -118,10 +118,10 @@ class JsonProvider extends MigrationProvider
                     if ((!isset($schema['filters'])
                         || (isset($schema['filters'])
                         && $this->isParseable($schema['filters'], $value)))
-                        && !$this->elementIsImported(
+                        && $this->elementIsImported(
                             $value[$schema['source']['id']],
                             $schema['translation']['name']
-                        )
+                        ) === false
                     ) {
                         // Add constants
                         foreach ($schema['fields'] as $field => $values) {
@@ -130,6 +130,9 @@ class JsonProvider extends MigrationProvider
                             }
                         }
 
+                    } else {
+                        // Remove invalided items according to filter
+                        unset($builded[$key]);
                     }
                 }
             }
@@ -137,9 +140,7 @@ class JsonProvider extends MigrationProvider
             // Get fields according to schema
             foreach ($builded as $b) {
                 $filtered = array();
-
                 foreach ($schema['fields'] as $key => $value) {
-
                     if (array_key_exists('field', $value)
                         && array_key_exists($value['field'], $b)
                     ) {
