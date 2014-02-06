@@ -39,7 +39,8 @@ class Instances extends \Onm\Rest\RestBase
         $contact_IP,
         $timezone,
         $token,
-        $language
+        $language,
+        $plan
     ) {
         //Force internal_name lowercase
         //If is creating a new instance, get DB params on the fly
@@ -74,6 +75,7 @@ class Instances extends \Onm\Rest\RestBase
             'site_created'  => $date->format('Y-m-d H:i:s'),
             'owner_fk_user' => 0,
             'price'         => 0,
+            'plan'          => filter_var($plan, FILTER_SANITIZE_STRING),
         );
 
         // Also get timezone if comes from openhost form
@@ -104,15 +106,15 @@ class Instances extends \Onm\Rest\RestBase
         );
 
         $domain = $instanceCreator['base_domain'];
-        $this->sendMails($data, $companyMail, $domain, $language);
+        $this->sendMails($data, $companyMail, $domain, $language, $plan);
 
         return true;
     }
 
-    private function sendMails($data, $companyMail, $domain, $language)
+    private function sendMails($data, $companyMail, $domain, $language, $plan)
     {
         $this->sendMailToUser($data, $companyMail, $domain);
-        $this->sendMailToCompany($data, $companyMail, $domain);
+        $this->sendMailToCompany($data, $companyMail, $domain, $plan);
     }
 
     private function sendMailToUser($data, $companyMail, $domain)
@@ -137,11 +139,11 @@ class Instances extends \Onm\Rest\RestBase
         $message->setSender($companyMail['sender_mail'], "Opennemas");
 
         // Send the email
-        $mailer = $this->restler->container->get('mailer');
+        $mailer = $this->restler->mailer;
         $mailer->send($message);
     }
 
-    private function sendMailToCompany($data, $companyMail, $domain)
+    private function sendMailToCompany($data, $companyMail, $domain,  $plan)
     {
         $message = \Swift_Message::newInstance();
         $message->setTo(
@@ -154,6 +156,7 @@ class Instances extends \Onm\Rest\RestBase
             array(
                 'data'        => $data,
                 'domain'      => $domain,
+                'plan'        => $plan
             )
         );
         $body =  $this->restler->view->fetch('instances/mails/newInstanceToCompany.tpl');
@@ -163,8 +166,8 @@ class Instances extends \Onm\Rest\RestBase
         $message->setSender($companyMail['sender_mail'], "Opennemas");
 
         // Send the email
-        $mailer = $this->restler->container->get('mailer');
-        $mailer->send($message);
+        $mailer = $this->restler->mailer;
+        $sent = $mailer->send($message, $failures);
     }
 
     /**

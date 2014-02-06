@@ -43,6 +43,7 @@ class WebServiceController extends Controller
 
         $r->view = $this->view;
         $r->container = $this->container;
+        $r->mailer = $this->get('mailer');
         $r->wsParams = $r->container->getParameter("manager_webservice");
 
         $r->addAPIClass('Onm\\Rest\\Manager\\Instances');
