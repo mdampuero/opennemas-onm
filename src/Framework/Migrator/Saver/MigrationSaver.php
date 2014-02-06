@@ -670,7 +670,7 @@ class MigrationSaver
                 if ($this->matchTranslation(
                     $values[$schema['translation']['field']],
                     $schema['translation']['name']
-                ) !== false
+                ) === false
                 ) {
                     $user = new \User();
                     $user->create($values);
@@ -1285,10 +1285,10 @@ class MigrationSaver
             . " WHERE name='" . $name . "'";
 
         $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
 
-        if ($rs) {
-            $result = $rs->getArray();
-            return $result[0]['pk_content_category'];
+        if ($rss) {
+            return $rss['pk_content_category'];
         }
 
         return false;
