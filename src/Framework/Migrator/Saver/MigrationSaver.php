@@ -172,7 +172,10 @@ class MigrationSaver
                     $album->saveAttachedPhotos($photos);
 
                     foreach ($photos['album_photos_id'] as $key => $photo) {
-                        if ($this->matchTranslation($photo, $album->id)!== false
+                        if ($this->matchTranslation(
+                            $photo,
+                            $schema['translation']['name']
+                        ) === false
                         ) {
                             if ($key == 0) {
                                 $this->updateAlbumCover($id, $photo);
@@ -185,6 +188,8 @@ class MigrationSaver
                             );
 
                             $this->stats[$name]['imported']++;
+                        } else {
+                            $this->stats[$name]['already_imported']++;
                         }
                     }
                 }
@@ -596,6 +601,8 @@ class MigrationSaver
                     );
 
                     $this->stats[$name]['imported']++;
+                } else {
+                    $this->stats[$name]['error']++;
                 }
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
@@ -1094,7 +1101,7 @@ class MigrationSaver
     {
         $sql = "UPDATE albums  SET `cover_id`=? WHERE pk_album=?";
 
-        $values = array($album, $photo);
+        $values = array($photo, $album);
 
         $stmt = $this->targetConnection->Prepare($sql);
         $rss  = $this->targetConnection->Execute($stmt, $values);
