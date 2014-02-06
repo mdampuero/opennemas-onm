@@ -62,7 +62,7 @@ class DatabaseProvider extends MigrationProvider
         }
 
         $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
-            . $schema['source']['id'] . ' LIMIT 0,100';
+            . $schema['source']['id'];
 
         $request = $this->originConnection->Prepare($sql);
         $rs      = $this->originConnection->Execute($request);
