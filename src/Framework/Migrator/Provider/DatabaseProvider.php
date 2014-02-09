@@ -51,10 +51,18 @@ class DatabaseProvider extends MigrationProvider
         $data = array();
         $this->stats[$name]['already_imported'] = 0;
 
-        // Select all ids
+        $translations = '';
+        foreach ($this->translations[$schema['translation']['name']] as
+                $oldId => $newId) {
+            $translations .= $oldId . ', ';
+        }
+
         $sql = 'SELECT ' . $schema['source']['table'] . '.'
             . $schema['source']['id'] . ' FROM ' . $schema['source']['table']
-            . ' WHERE 1';
+            . ' WHERE ' . $schema['source']['table'] . '.'
+            . $schema['source']['id'] . ' NOT IN (' . rtrim($translations, ', ')
+            . ')';
+
 
         // Add logical comparisons to 'WHERE' chunk
         if (isset($schema['filters']) && count($schema['filters']) > 0) {
@@ -84,7 +92,6 @@ class DatabaseProvider extends MigrationProvider
 
                 // Build sql statement 'SELECT' chunk
                 $sql = 'SELECT ';
-                $i = 0;
                 foreach ($schema['fields'] as $key => $field) {
                     if (isset($field['type']) &&
                             in_array('constant', $field['type'])) {
@@ -110,15 +117,11 @@ class DatabaseProvider extends MigrationProvider
 
                     } else {
                         $sql .= $field['table'] . '.' . $field['field']
-                            . ' AS ' . $key;
+                            . ' AS ' . $key . ', ';
                     }
-
-                    if ($i < count($schema['fields']) - 1) {
-                        $sql .= ',';
-                    }
-
-                    $i++;
                 }
+
+                $sql = rtrim($sql, ', ');
 
                 // Build sql statement 'FROM' chunk
                 $sql .= ' FROM ';
@@ -129,10 +132,10 @@ class DatabaseProvider extends MigrationProvider
                         $sql .= ' AS ' . $table['alias'];
                     }
 
-                    if ($key < count($schema['tables']) - 1) {
-                        $sql .= ', ';
-                    }
+                    $sql .=  ', ';
                 }
+
+                $sql = rtrim($sql, ', ');
 
                 // Build sql statement 'WHERE' chuck
                 $sql.= ' WHERE ('
