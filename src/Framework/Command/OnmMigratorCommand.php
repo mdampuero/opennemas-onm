@@ -19,8 +19,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml\Parser;
 
-use Framework\Migrator\Provider\DatabaseProvider;
-use Framework\Migrator\Provider\JsonProvider;
 use Framework\Migrator\Saver\MigrationSaver;
 use Onm\DatabaseConnection;
 
@@ -90,18 +88,12 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function displayConfigurationInfo()
     {
-        $info = '';
-        if (isset($this->settings['provider']['instance'])) {
-            $info .= "Instance: " . $this->settings['provider']['instance'];
-        }
-
-        if (isset($this->settings['provider']['url'])) {
-            $info .= "\nSite url: " . $this->settings['provider']['url'];
-        }
-
-        if (isset($this->settings['provider']['type'])) {
-            $info .= "\nProvider: " . $this->settings['provider']['type'];
-        }
+        $info = "Instance: " . $this->settings['migration']['instance']
+            . "\nSite url: " . $this->settings['migration']['url']
+            . "\nProvider: " . $this->settings['migration']['provider']
+            . "\nSaver:    "
+            . (array_key_exists('saver', $this->settings['migration']) ?
+                $this->settings['migration']['saver'] : 'MigrationSaver');
 
         $this->output->writeln($info);
     }
@@ -187,43 +179,41 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     private function configureMigrator()
     {
-        // Creates a new migration saver
-        $this->saver = new MigrationSaver(
-            $this->logger,
-            $this->settings,
-            $this->translations,
-            $this->stats,
-            $this->output,
-            $this->debug
-        );
+        if (array_key_exists('saver', $this->settings['migration'])
+            && class_exists(
+                'Framework\Migrator\Provider\\'
+                . $this->settings['migration']['saver']
+            )
+        ) {
+            $saver = 'Framework\Migrator\Saver\\'
+                . $this->settings['migration']['saver'];
 
-        // Creates a new migration provider
-        switch ($this->settings['provider']['type']) {
-            case 'database':
-                $this->provider = new DatabaseProvider(
-                    $this->logger,
-                    $this->settings,
-                    $this->translations,
-                    $this->stats,
-                    $this->output,
-                    $this->debug
-                );
-                break;
-            case 'json':
-                $this->provider = new JsonProvider(
-                    $this->logger,
-                    $this->settings,
-                    $this->translations,
-                    $this->stats,
-                    $this->output,
-                    $this->debug
-                );
-                break;
-            default: // Custom provider
-                $className = 'Framework\Migrator\Provider\\'
-                    . $this->settings['provider']['type'];
+            $this->saver = new $saver(
+                $this->logger,
+                $this->settings,
+                $this->translations,
+                $this->stats,
+                $this->output,
+                $this->debug
+            );
+        } else {
+            // Creates a new migration saver
+            $this->saver = new MigrationSaver(
+                $this->logger,
+                $this->settings,
+                $this->translations,
+                $this->stats,
+                $this->output,
+                $this->debug
+            );
+        }
 
-                $this->provider = new $className(
+        if (array_key_exists('provider', $this->settings['migration'])) {
+            $provider = 'Framework\Migrator\Provider\\'
+                . $this->settings['migration']['provider'];
+
+            if (class_exists($provider)) {
+                $this->provider = new $provider(
                     $this->logger,
                     $this->settings,
                     $this->translations,
@@ -231,7 +221,12 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     $this->output,
                     $this->debug
                 );
-                break;
+            } else {
+                throw new \Exception($provider . " class not found");
+            }
+
+        } else {
+            throw new \Exception("Provider not defined.");
         }
     }
 
@@ -240,7 +235,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
      */
     protected function import()
     {
-        foreach ($this->settings['provider']['schemas'] as $key => $schema) {
+        foreach ($this->settings['migration']['schemas'] as $key => $schema) {
             $this->output->writeln(
                 "\n<fg=yellow>Migrating from <fg=red>"
                 . (isset($schema['source']['table']) ?
