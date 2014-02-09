@@ -157,9 +157,11 @@ class OnmMigratorCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $start        = time();
+
+        $basePath     = APPLICATION_PATH;
         $this->debug  = $input->getOption('debug');
         $this->output = $output;
-        $basePath     = APPLICATION_PATH;
+        $this->logger = $this->getContainer()->get('logger');
 
         chdir($basePath);
 
@@ -187,7 +189,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
     {
         // Creates a new migration saver
         $this->saver = new MigrationSaver(
-            $this->getContainer()->get('logger'),
+            $this->logger,
             $this->settings,
             $this->translations,
             $this->stats,
@@ -199,19 +201,34 @@ class OnmMigratorCommand extends ContainerAwareCommand
         switch ($this->settings['provider']['type']) {
             case 'database':
                 $this->provider = new DatabaseProvider(
-                    $this->getContainer()->get('logger'),
+                    $this->logger,
                     $this->settings,
                     $this->translations,
                     $this->stats,
+                    $this->output,
                     $this->debug
                 );
                 break;
             case 'json':
                 $this->provider = new JsonProvider(
-                    $this->getContainer()->get('logger'),
+                    $this->logger,
                     $this->settings,
                     $this->translations,
                     $this->stats,
+                    $this->output,
+                    $this->debug
+                );
+                break;
+            default: // Custom provider
+                $className = 'Framework\Migrator\Provider\\'
+                    . $this->settings['provider']['type'];
+
+                $this->provider = new $className(
+                    $this->logger,
+                    $this->settings,
+                    $this->translations,
+                    $this->stats,
+                    $this->output,
                     $this->debug
                 );
                 break;
