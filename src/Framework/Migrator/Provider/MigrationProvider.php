@@ -81,10 +81,12 @@ abstract class MigrationProvider
         $settings,
         &$translations,
         &$stats,
+        $output,
         $debug = false
     ) {
         $this->debug        = $debug;
         $this->logger       = $logger;
+        $this->output       = $output;
         $this->settings     = $settings;
         $this->stats        = &$stats;
         $this->translations = &$translations;
