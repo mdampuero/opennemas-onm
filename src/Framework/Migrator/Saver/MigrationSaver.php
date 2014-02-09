@@ -61,7 +61,7 @@ class MigrationSaver
     protected $translations;
 
     /**
-     * Constructs a new Migration provider.
+     * Constructs a new Migration saver.
      *
      * @param Logger $logger
      * @param array  $settings
@@ -830,8 +830,8 @@ class MigrationSaver
      */
     protected function configure()
     {
-        define('CACHE_PREFIX', $this->settings['provider']['instance']);
-        define('INSTANCE_UNIQUE_NAME', $this->settings['provider']['instance']);
+        define('CACHE_PREFIX', $this->settings['migration']['instance']);
+        define('INSTANCE_UNIQUE_NAME', $this->settings['migration']['instance']);
 
         define(
             'MEDIA_PATH',
@@ -841,7 +841,7 @@ class MigrationSaver
         // Initialize target database
         $this->targetConnection = getService('db_conn');
         $this->targetConnection->selectDatabase(
-            $this->settings['provider']['target']
+            $this->settings['migration']['target']
         );
 
         \Application::load();
@@ -851,7 +851,7 @@ class MigrationSaver
             getContainerParameter('database')
         );
         $this->originConnection->selectDatabase(
-            $this->settings['provider']['source']
+            $this->settings['migration']['source']
         );
 
         $_SESSION['username'] = 'script';
@@ -1144,9 +1144,9 @@ class MigrationSaver
                     $field = $this->convertToYoutube($field);
                     break;
                 default:
-                    if (method_exists($this, 'convertTo' . $type)) {
+                    if (method_exists($this, $type . 'Filter')) {
                         $field = call_user_func(
-                            array($this, 'convertTo' . $type),
+                            array($this, $type . 'Filter'),
                             $field,
                             $params
                         );
