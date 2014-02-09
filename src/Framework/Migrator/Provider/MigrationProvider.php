@@ -102,7 +102,7 @@ abstract class MigrationProvider
         // Initialize target database
         $this->targetConnection = getService('db_conn');
         $this->targetConnection->selectDatabase(
-            $this->settings['provider']['target']
+            $this->settings['migration']['target']
         );
 
         \Application::load();
