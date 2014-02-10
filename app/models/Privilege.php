@@ -757,7 +757,7 @@ class Privilege
                 'description'  => _('List'),
                 'module'       => 'FILE',
             ),
-            99 => array(
+            105 => array(
                 'pk_privilege' => '105',
                 'name'         => 'FILE_FRONTS',
                 'description'  => _('File Fronts'),
@@ -1146,6 +1146,12 @@ class Privilege
                 'name'         => 'IMPORT_NEWS_AGENCY_CONFIG',
                 'description'  => _('Config News Agency importer'),
                 'module'       => 'IMPORT',
+            ),
+            178 => array(
+                'pk_privilege' => '178',
+                'name'         => 'SYNC_ADMIN',
+                'description'  => _('Administer synchronization between Opennemas'),
+                'module'       => 'SYNC_MANAGER',
             ),
         );
 
