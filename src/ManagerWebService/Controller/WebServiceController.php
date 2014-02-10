@@ -103,8 +103,7 @@ class WebServiceController extends Controller
         $im = $this->get('instance_manager');
         // Check for repeated internalnameshort and if so, add a number at the end
         $data = $im->checkInternalShortName($data);
-        // $errors = $im->create($data);
-        $errors = array();
+        $errors = $im->create($data);
         if (is_array($errors) && count($errors) > 0) {
             return new JsonResponse(array('success' => false, 'errors' => $errors), 400);
         }
