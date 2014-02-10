@@ -65,8 +65,8 @@
                     <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
                 </p>
             </div>
-            <input type="hidden" name="_token" value="{$smarty.session.csrf}">
-            <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
+            <input type="hidden" name="_token" value="{$token}">
+            <input type="hidden" name="_referer" value="{$referer}">
             <input type="hidden" name="time" value="{$smarty.now}">
     	</form>
     </div>

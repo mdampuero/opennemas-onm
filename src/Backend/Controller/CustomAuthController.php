@@ -18,6 +18,7 @@ class CustomAuthController extends Controller
     public function loginAction(Request $request)
     {
         $lastUsername = null;
+        $referer = $this->session->get('_security.backend.target_path');
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $request->attributes
@@ -31,7 +32,6 @@ class CustomAuthController extends Controller
         $this->get('request')->getSession()->invalidate();
 
         $token = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
-        $_SESSION['csrf'] = $token;
         $currentLanguage  = \Application::$language;
 
         return $this->render(
@@ -39,6 +39,7 @@ class CustomAuthController extends Controller
             array(
                 'current_language' => $currentLanguage,
                 'token'            => $token,
+                'referer'          => $referer
             )
         );
     }
