@@ -35,7 +35,7 @@ class DatabaseProvider extends MigrationProvider
             getContainerParameter('database')
         );
         $this->originConnection->selectDatabase(
-            $this->settings['provider']['source']
+            $this->settings['migration']['source']
         );
     }
 
@@ -51,10 +51,29 @@ class DatabaseProvider extends MigrationProvider
         $data = array();
         $this->stats[$name]['already_imported'] = 0;
 
-        // Select all ids
+        $translations = '';
+        if (array_key_exists(
+            $schema['translation']['name'],
+            $this->translations
+        )) {
+            foreach ($this->translations[$schema['translation']['name']] as
+                    $oldId => $newId) {
+                $translations .= $oldId . ', ';
+            }
+        }
+
         $sql = 'SELECT ' . $schema['source']['table'] . '.'
             . $schema['source']['id'] . ' FROM ' . $schema['source']['table']
-            . ' WHERE 1';
+            . ' WHERE ' ;
+
+        if ($translations != '') {
+            $sql .= $schema['source']['table'] . '.'
+                . $schema['source']['id']
+                . ' NOT IN (' . rtrim($translations, ', ') . ')';
+        } else {
+            $sql .= '1';
+        }
+
 
         // Add logical comparisons to 'WHERE' chunk
         if (isset($schema['filters']) && count($schema['filters']) > 0) {
@@ -62,7 +81,7 @@ class DatabaseProvider extends MigrationProvider
         }
 
         $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
-            . $schema['source']['id'] . ' LIMIT 0,100';
+            . $schema['source']['id'];
 
         $request = $this->originConnection->Prepare($sql);
         $rs      = $this->originConnection->Execute($request);
@@ -84,11 +103,11 @@ class DatabaseProvider extends MigrationProvider
 
                 // Build sql statement 'SELECT' chunk
                 $sql = 'SELECT ';
-                $i = 0;
                 foreach ($schema['fields'] as $key => $field) {
                     if (isset($field['type']) &&
                             in_array('constant', $field['type'])) {
-                        $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key;
+                        $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key
+                            . ', ';
 
                     } else if (isset($field['type']) &&
                             in_array('subselect', $field['type'])) {
@@ -106,19 +125,15 @@ class DatabaseProvider extends MigrationProvider
                                 . $this->parseCondition($params['conditions']);
                         }
 
-                        $sql .= ')' . ' AS ' . $key;
+                        $sql .= ')' . ' AS ' . $key . ', ';
 
                     } else {
                         $sql .= $field['table'] . '.' . $field['field']
-                            . ' AS ' . $key;
+                            . ' AS ' . $key . ', ';
                     }
-
-                    if ($i < count($schema['fields']) - 1) {
-                        $sql .= ',';
-                    }
-
-                    $i++;
                 }
+
+                $sql = rtrim($sql, ', ');
 
                 // Build sql statement 'FROM' chunk
                 $sql .= ' FROM ';
@@ -129,10 +144,10 @@ class DatabaseProvider extends MigrationProvider
                         $sql .= ' AS ' . $table['alias'];
                     }
 
-                    if ($key < count($schema['tables']) - 1) {
-                        $sql .= ', ';
-                    }
+                    $sql .=  ', ';
                 }
+
+                $sql = rtrim($sql, ', ');
 
                 // Build sql statement 'WHERE' chuck
                 $sql.= ' WHERE ('

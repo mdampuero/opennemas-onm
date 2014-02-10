@@ -81,10 +81,12 @@ abstract class MigrationProvider
         $settings,
         &$translations,
         &$stats,
+        $output,
         $debug = false
     ) {
         $this->debug        = $debug;
         $this->logger       = $logger;
+        $this->output       = $output;
         $this->settings     = $settings;
         $this->stats        = &$stats;
         $this->translations = &$translations;
@@ -100,7 +102,7 @@ abstract class MigrationProvider
         // Initialize target database
         $this->targetConnection = getService('db_conn');
         $this->targetConnection->selectDatabase(
-            $this->settings['provider']['target']
+            $this->settings['migration']['target']
         );
 
         \Application::load();

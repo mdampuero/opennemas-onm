@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1635ec12c68dbfa04abfb2fa10661a9e",
+    "hash": "ca65d070cbb0051f306f08232029fa86",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -208,16 +208,16 @@
         },
         {
             "name": "doctrine/collections",
-            "version": "v1.1",
+            "version": "v1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "560f29c39cfcfbcd210e5d549d993a39d898b04b"
+                "reference": "b99c5c46c87126201899afe88ec490a25eedd6a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/560f29c39cfcfbcd210e5d549d993a39d898b04b",
-                "reference": "560f29c39cfcfbcd210e5d549d993a39d898b04b",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/b99c5c46c87126201899afe88ec490a25eedd6a2",
+                "reference": "b99c5c46c87126201899afe88ec490a25eedd6a2",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +226,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -242,7 +242,8 @@
                 {
                     "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -271,7 +272,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2013-03-07 12:15:54"
+            "time": "2014-02-03 23:07:43"
         },
         {
             "name": "doctrine/common",
@@ -661,12 +662,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "199cb62a80c7723942d14107c23bc45168e4241c"
+                "reference": "0742fc7167a4deedaabc8639849a3e71082999f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/199cb62a80c7723942d14107c23bc45168e4241c",
-                "reference": "199cb62a80c7723942d14107c23bc45168e4241c",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/0742fc7167a4deedaabc8639849a3e71082999f1",
+                "reference": "0742fc7167a4deedaabc8639849a3e71082999f1",
                 "shasum": ""
             },
             "require": {
@@ -713,7 +714,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2014-01-04 09:19:33"
+            "time": "2014-01-20 11:29:43"
         },
         {
             "name": "doctrine/orm",
@@ -858,16 +859,16 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "5ddc278fbbf19b039a84421ab1589c014ff10091"
+                "reference": "325fd77ced595cd8249009c15a027a1ab9ed8565"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/5ddc278fbbf19b039a84421ab1589c014ff10091",
-                "reference": "5ddc278fbbf19b039a84421ab1589c014ff10091",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/325fd77ced595cd8249009c15a027a1ab9ed8565",
+                "reference": "325fd77ced595cd8249009c15a027a1ab9ed8565",
                 "shasum": ""
             },
             "require": {
@@ -894,7 +895,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2014-01-29 12:25:17"
+            "time": "2014-02-07 11:31:32"
         },
         {
             "name": "imagine/imagine",
@@ -1231,12 +1232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/merchant-sdk-php.git",
-                "reference": "aae229ddb3646e9d6bf0b68802b535e363cd9742"
+                "reference": "b988fb719d2a0e8d1d1530dcd3ed2446792c0b3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/aae229ddb3646e9d6bf0b68802b535e363cd9742",
-                "reference": "aae229ddb3646e9d6bf0b68802b535e363cd9742",
+                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/b988fb719d2a0e8d1d1530dcd3ed2446792c0b3b",
+                "reference": "b988fb719d2a0e8d1d1530dcd3ed2446792c0b3b",
                 "shasum": ""
             },
             "require": {
@@ -1267,7 +1268,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2013-10-17 05:48:38"
+            "time": "2014-01-24 19:25:08"
         },
         {
             "name": "paypal/sdk-core-php",
@@ -1317,12 +1318,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/alchemy-fr/PHP-FFmpeg.git",
+                "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
                 "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
                 "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
                 "shasum": ""
             },
@@ -1824,17 +1825,17 @@
         },
         {
             "name": "symfony/swiftmailer-bundle",
-            "version": "v2.3.4",
+            "version": "v2.3.5",
             "target-dir": "Symfony/Bundle/SwiftmailerBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/SwiftmailerBundle.git",
-                "reference": "f5e5d12629c26a835c7aa1d74e2e041486b92d93"
+                "reference": "fcefa9dbd5a1ed20547b0f8a2afd5ad6837ea321"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/SwiftmailerBundle/zipball/f5e5d12629c26a835c7aa1d74e2e041486b92d93",
-                "reference": "f5e5d12629c26a835c7aa1d74e2e041486b92d93",
+                "url": "https://api.github.com/repos/symfony/SwiftmailerBundle/zipball/fcefa9dbd5a1ed20547b0f8a2afd5ad6837ea321",
+                "reference": "fcefa9dbd5a1ed20547b0f8a2afd5ad6837ea321",
                 "shasum": ""
             },
             "require": {
@@ -1875,7 +1876,7 @@
             ],
             "description": "Symfony SwiftmailerBundle",
             "homepage": "http://symfony.com",
-            "time": "2013-08-22 13:32:58"
+            "time": "2013-11-21 12:29:01"
         },
         {
             "name": "symfony/symfony",

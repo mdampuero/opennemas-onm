@@ -21,28 +21,6 @@ use Onm\StringUtils;
 
 class JsonProvider extends MigrationProvider
 {
-
-    /**
-     * Constructs a new Migration provider.
-     *
-     * @param Logger $logger
-     * @param array  $settings
-     * @param array  $translations Array of translations.
-     * @param array  $stats
-     * @param array  $debug
-     */
-    public function __construct(
-        $logger,
-        $settings,
-        &$translations,
-        &$stats,
-        $debug = false
-    ) {
-        parent::__construct($logger, $settings, $translations, $stats, $debug);
-
-        $this->prepareDatabase();
-    }
-
     /**
      * Gets all source fields from database for each entity.
      *
@@ -118,10 +96,10 @@ class JsonProvider extends MigrationProvider
                     if ((!isset($schema['filters'])
                         || (isset($schema['filters'])
                         && $this->isParseable($schema['filters'], $value)))
-                        && !$this->elementIsImported(
+                        && $this->elementIsImported(
                             $value[$schema['source']['id']],
                             $schema['translation']['name']
-                        )
+                        ) === false
                     ) {
                         // Add constants
                         foreach ($schema['fields'] as $field => $values) {
@@ -130,6 +108,9 @@ class JsonProvider extends MigrationProvider
                             }
                         }
 
+                    } else {
+                        // Remove invalided items according to filter
+                        unset($builded[$key]);
                     }
                 }
             }
@@ -137,9 +118,7 @@ class JsonProvider extends MigrationProvider
             // Get fields according to schema
             foreach ($builded as $b) {
                 $filtered = array();
-
                 foreach ($schema['fields'] as $key => $value) {
-
                     if (array_key_exists('field', $value)
                         && array_key_exists($value['field'], $b)
                     ) {
@@ -262,12 +241,5 @@ class JsonProvider extends MigrationProvider
         }
 
         return $parseable;
-    }
-
-    private function prepareDatabase()
-    {
-        $sql = "ALTER TABLE  `translation_ids` CHANGE  `pk_content_old` "
-            . " `pk_content_old` VARCHAR( 255 ) NOT NULL";
-        $rss = $this->targetConnection->Execute($sql);
     }
 }
