@@ -1361,7 +1361,7 @@ class MigrationSaver
         $rs = $this->targetConnection->Execute($sql);
         $rss = $rs->getArray();
 
-        if ($rss) {
+        if ($rss && array_key_exists('pk_content_category', $rss)) {
             return $rss['pk_content_category'];
         }
 
