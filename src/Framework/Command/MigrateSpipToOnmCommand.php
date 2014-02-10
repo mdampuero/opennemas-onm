@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Onm\StringUtils;
 use Onm\Settings as s;
 
-class MigrateSpipToOnm extends Command
+class MigrateSpipToOnmCommand extends Command
 {
 
     protected $categories = array();
@@ -36,7 +36,7 @@ class MigrateSpipToOnm extends Command
 
                 )
             )
-            ->setName('migrate:Spip')
+            ->setName('migrate:spip')
             ->setDescription('Migrate a Spip database to Openemas')
             ->setHelp(
                 <<<EOF

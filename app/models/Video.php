@@ -485,11 +485,26 @@ class Video extends Content
         } else {
             $information = $this->information;
         }
+
         if ($this->author_name == 'internal') {
             $thumbnail =
                 MEDIA_IMG_PATH_WEB."/../".$information['thumbnails']['normal'];
+        } elseif (!empty($information)
+            && is_array($information)
+            && array_key_exists('thumbnail', $information)) {
+
+            if ($this->author_name == 'external' || $this->author_name == 'script') {
+                $this->thumb_image = new \Photo($information['thumbnail']);
+                if (!empty($this->thumb_image->name)) {
+                    $thumbnail   = MEDIA_IMG_PATH_WEB.$this->thumb_image->path_file.$this->thumb_image->name;
+                } else {
+                    $thumbnail = '/assets/images/transparent.png';
+                }
+            } else {
+                $thumbnail = $information['thumbnail'];
+            }
         } else {
-            $thumbnail = $information['thumbnail'];
+            $thumbnail = '';
         }
 
         return $thumbnail;

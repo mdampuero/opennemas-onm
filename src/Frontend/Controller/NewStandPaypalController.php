@@ -303,7 +303,6 @@ class NewStandPaypalController extends Controller
             s::set('max_session_lifetime', 60*30);
         }
 
-        session_name('_onm_sess');
         $session = $this->container->get('session');
         $session->start();
         $request->setSession($session);

@@ -1,11 +1,14 @@
-# managerws_root:
-#     path: '/{url}'
-#     defaults: { _controller: ManagerWebService:WebService:default, url: '' }
-#     requirements:
-#         url: '.*'
+managerwebservice_checkinstancename:
+    path: '/instances/checkinstancename'
+    defaults: { _controller: ManagerWebServiceBundle:WebService:checkInstanceName }
+    methods:  [POST]
 
-managerwebservice_root:
-    path: '/{other}'
-    defaults: { _controller: ManagerWebServiceBundle:WebService:default, other: '' }
-    requirements:
-        other: '.*'
+managerwebservice_checkemailinuse:
+    path: '/instances/checkmailinuse'
+    defaults: { _controller: ManagerWebServiceBundle:WebService:checkMailInUse }
+    methods:  [POST]
+
+managerwebservice_instance_create:
+    path: '/instances/create'
+    defaults: { _controller: ManagerWebServiceBundle:WebService:create }
+    methods:  [POST]

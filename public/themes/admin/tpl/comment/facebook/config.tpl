@@ -26,7 +26,7 @@
                 <li>
                     <a class="change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png" alt="{t}Change system{/t}"><br>
-                        {t}Change system{/t}
+                        {t}Change manager{/t}
                     </a>
                 </li>
                 <li>
@@ -38,15 +38,15 @@
         </div>
     </div>
     <div class="wrapper-content">
-    {render_messages}
-
-        <h4><div class="step-number">2</div> {t}Set your Facebook configuration:{/t}</h4>
+        {render_messages}
 
         <div class="form-horizontal panel">
 
+            <p>{t escape=off}To be able to moderate comments of your site in Facebook you must create and set here your <strong>Facebook App Id</strong>.{/t}</p>
+
             <fieldset>
                 <div class="control-group">
-                    <label for="facebook_api_key" class="control-label">Facebook App Id:</label>
+                    <label for="facebook_api_key" class="control-label">Facebook App Id</label>
                     <div class="controls">
                         <input type="text" id="facebook_api_key" class="input-xxlarge" name="facebook[api_key]" id="fb_app_id" value="{$fb_app_id|default:""}"/>
                         <div class="help-block">

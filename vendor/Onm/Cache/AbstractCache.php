@@ -107,9 +107,13 @@ abstract class AbstractCache implements CacheInterface
      * @return boolean TRUE if the cache entry was successfully deleted,
      *                 FALSE otherwise.
      */
-    public function delete($id)
+    public function delete($id, $namespace = '')
     {
-        $id = $this->getNamespacedId($id);
+        if (empty($namespace)) {
+            $id = $this->getNamespacedId($id);
+        } else {
+            $id = $namespace.'_'.$id;
+        }
 
         if (strpos($id, '*') !== false) {
             return $this->deleteByRegex('/'.str_replace('*', '.*', $id).'/');

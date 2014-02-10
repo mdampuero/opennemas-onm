@@ -49,12 +49,6 @@
                 {/acl}
                 <li class="separator"></li>
                 <li>
-                    <a class="change" data-controls-modal="modal-comment-change" href="#" title="{t}Change comments module{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}/template_manager/refresh48x48.png" alt="{t}Change system{/t}"><br>
-                        {t}Change system{/t}
-                    </a>
-                </li>
-                <li>
                     <a href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}/template_manager/configure48x48.png" alt="{t}Settings{/t}"><br>
                         {t}Settings{/t}

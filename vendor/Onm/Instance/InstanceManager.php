@@ -151,20 +151,13 @@ class InstanceManager
     public static function getConnection($connectionData = null)
     {
         // Database
-        global $onmInstancesConnection;
+        $conn = getService('db_conn_manager');
         if (!is_null($connectionData)
             && is_array($connectionData)
         ) {
-            $onmInstancesConnection = $connectionData;
+            $conn = getService('db_conn');
+            $conn = $conn->selectDatabase($connectionData['BD_DATABASE']);
         }
-
-        $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
-        $conn->Connect(
-            $onmInstancesConnection['BD_HOST'],
-            $onmInstancesConnection['BD_USER'],
-            $onmInstancesConnection['BD_PASS'],
-            $onmInstancesConnection['BD_DATABASE']
-        );
 
         // Check if adodb is log enabled
         $conn->LogSQL();
@@ -321,12 +314,13 @@ class InstanceManager
     public function update($data)
     {
         $sql = "UPDATE instances SET name=?, internal_name=?, "
-             . "domains=?, activated=?, settings=? WHERE id=?";
+             . "domains=?, activated=?, contact_mail=?, settings=? WHERE id=?";
         $values = array(
             $data['name'],
             $data['internal_name'],
             $data['domains'],
             $data['activated'],
+            $data['user_mail'],
             serialize($data['settings']),
             $data['id']
         );
@@ -590,12 +584,12 @@ class InstanceManager
             return false;
         }
 
-        global $onmInstancesConnection;
+        $conn = getService('db_conn_manager');
 
-        $dump = "mysqldump -u".$onmInstancesConnection['BD_USER'].
-                " -p".$onmInstancesConnection['BD_PASS'].
+        $dump = "mysqldump -u".$conn->connectionParams['user'].
+                " -p".$conn->connectionParams['password'].
                 " --no-create-info --where 'id=".$id."' ".
-                $onmInstancesConnection['BD_DATABASE'].
+                $conn->connectionParams['dbname'].
                 " instances > ".$backupPath.DS."instanceReference.sql";
 
         exec($dump, $output, $return_var);
@@ -619,11 +613,11 @@ class InstanceManager
      **/
     public function restoreInstanceReferenceInManager($backupPath)
     {
-        global $onmInstancesConnection;
+        $conn = getService('db_conn_manager');
 
-        $dump = "mysql -u".$onmInstancesConnection['BD_USER'].
-                " -p".$onmInstancesConnection['BD_PASS'].
-                " ".$onmInstancesConnection['BD_DATABASE'].
+        $dump = "mysql -u".$conn->connectionParams['user'].
+                " -p".$conn->connectionParams['password'].
+                " ".$conn->connectionParams['dbname'].
                 " < ".$backupPath.DS."instanceReference.sql";
 
         exec($dump, $output, $return_var);
@@ -642,14 +636,9 @@ class InstanceManager
      **/
     public function createDatabaseForInstance($data)
     {
-        // Gets global database connection and creates the requested database
-        global $onmInstancesConnection;
-        $conn = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
-        $conn->Connect(
-            $onmInstancesConnection['BD_HOST'],
-            $onmInstancesConnection['BD_USER'],
-            $onmInstancesConnection['BD_PASS']
-        );
+        // Get manager database connection and creates the requested database
+        $conn = getService('db_conn_manager');
+
         $sql = "CREATE DATABASE `{$data['settings']['BD_DATABASE']}`";
         $rs = $conn->Execute($sql);
 
@@ -689,9 +678,9 @@ class InstanceManager
         }
 
         $exampleDatabasePath = realpath(APPLICATION_PATH.DS.'db'.DS.'instance-default.sql');
-        $execLine = "mysql -h {$onmInstancesConnection['BD_HOST']} "
-            ."-u{$onmInstancesConnection['BD_USER']}"
-            ." -p{$onmInstancesConnection['BD_PASS']} "
+        $execLine = "mysql -h {$conn->connectionParams['host']} "
+            ."-u{$conn->connectionParams['user']}"
+            ." -p{$conn->connectionParams['password']} "
             ."{$data['settings']['BD_DATABASE']} < {$exampleDatabasePath}";
         exec($execLine, $output, $exitCode);
         if ($exitCode > 0) {
@@ -848,10 +837,10 @@ class InstanceManager
             return false;
         }
 
-        global $onmInstancesConnection;
+        $conn = getService('db_conn_manager');
 
-        $dump = "mysqldump -u".$onmInstancesConnection['BD_USER'].
-                " -p".$onmInstancesConnection['BD_PASS']." --databases ".
+        $dump = "mysqldump -u".$conn->connectionParams['user'].
+                " -p".$conn->connectionParams['password']." --databases ".
                 "'".$database."'".
                 " > ".$backupPath.DS."database.sql";
 
@@ -874,10 +863,10 @@ class InstanceManager
      **/
     public function restoreDatabaseForInstance($backupPath)
     {
-        global $onmInstancesConnection;
+        $conn = getService('db_conn_manager');
 
-        $dump = "mysql -u".$onmInstancesConnection['BD_USER'].
-                " -p".$onmInstancesConnection['BD_PASS'].
+        $dump = "mysql -u".$conn->connectionParams['user'].
+                " -p".$conn->connectionParams['password'].
                 " < ".$backupPath.DS."database.sql";
 
         exec($dump, $output, $return_var);
@@ -956,10 +945,10 @@ class InstanceManager
      **/
     public function restoreInstanceUserFromDatabaseManager($backupPath)
     {
-        global $onmInstancesConnection;
+        $conn = getService('db_conn_manager');
 
-        $dump = "mysql -u".$onmInstancesConnection['BD_USER'].
-                " -p".$onmInstancesConnection['BD_PASS'].
+        $dump = "mysql -u".$conn->connectionParams['user'].
+                " -p".$conn->connectionParams['password'].
                 " < ".$backupPath.DS."user.sql";
 
         exec($dump, $output, $return_var);

@@ -58,6 +58,7 @@ class AuthSystem implements \Luracast\Restler\iAuthenticate
                 $timestamp.$function.$timestamp,
                 $this->key
             );
+
             if (isset($this->restler->requestData['signature']) &&
                 ($signature == $this->restler->requestData['signature'])) {
                 return true;

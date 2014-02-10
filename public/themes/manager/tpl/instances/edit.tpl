@@ -103,8 +103,7 @@ jQuery(document).ready(function($) {
                 <li><a href="#general-information">{t}Information{/t}</a> </li>
                 <li><a href="#internals">{t}Internals{/t}</a> </li>
                 <li><a href="#database">{t}Database{/t}</a></li>
-                <li><a href="#mail">{t}Mail{/t}</a></li>
-                <li><a href="#log">{t}Log{/t}</a></li>
+                <li><a href="#mail">{t}Newsletter{/t}</a></li>
                 <li><a href="#external">{t}External Services{/t}</a></li>
                 <li><a href="#modules">{t}Modules{/t}</a></li>
             </ul>
@@ -447,57 +446,6 @@ jQuery(document).ready(function($) {
 
              <div id="mail">
                 <fieldset>
-                    <legend>{t}Mail{/t}</legend>
-                    <table>
-                    <tbody>
-                        <tr valign="top" class="control-group">
-                            <th scope="row">
-                                <label for="mail_server" class="control-label">{t}Mail server{/t}</label>
-                            </th>
-                            <td class="controls">
-                                <input type="text" id="mail_server" name="mail_server" value="{$configs['mail_server']|default:""}">
-                            </td>
-                            <td>
-
-                            </td>
-                        </tr>
-                        <tr valign="top" class="control-group">
-                            <th scope="row">
-                                <label for="mail_username" class="control-label">{t}Username{/t}</label>
-                            </th>
-                            <td class="controls">
-                                <input type="text" id="mail_username" name="mail_username" value="{$configs['mail_username']|default:""}">
-                            </td>
-                            <td>
-
-                            </td>
-                        </tr>
-                        <tr valign="top" class="control-group">
-                            <th scope="row">
-                                <label for="mail_password" class="control-label">{t}Password{/t}</label>
-                            </th>
-                            <td class="controls">
-                                <input type="password" id="mail_password" name="mail_password" value="{$configs['mail_password']|default:""}">
-                            </td>
-                            <td>
-
-                            </td>
-                        </tr>
-                         <tr valign="top" class="control-group">
-                            <th scope="row">
-                                <label for="mail_sender" class="control-label">{t}Sender{/t} (Sender)</label>
-                            </th>
-                            <td class="controls">
-                                <input type="text" id="mail_sender" name="mail_sender" value="{$configs['mail_sender']|default:'no-reply@postman.opennemas.com'}">
-                            </td>
-                            <td>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                    </table>
-                </fieldset>
-                <fieldset>
                     <legend>{t}Newsletter{/t}</legend>
                     <table>
                     <tbody>
@@ -526,59 +474,6 @@ jQuery(document).ready(function($) {
                             </td>
                         </tr>
                     </tbody>
-                    </table>
-                </fieldset>
-            </div>
-
-            <div id="log">
-                <fieldset>
-                    <legend>{t}System log{/t}</legend>
-                    <table>
-                        <tbody>
-                            <tr valign="top" class="control-group">
-                                <th scope="row">
-                                    <label for="log_enabled" class="control-label">{t}Enable Log:{/t}</label>
-                                </th>
-                                <td class="controls">
-                                    <input type="checkbox" id="log_enabled" name="log_enabled" {if ($configs['log_enabled'])}checked{/if} />
-                                    <span class="default-value">{t}Default: true{/t}</span>
-                                </td>
-                            <td>
-
-                            </td>
-                            </tr>
-                            <tr valign="top" class="control-group">
-                                <th scope="row">
-                                    <label for="site_title" class="control-label">{t}Log level:{/t}</label>
-                                </th>
-                                <td class="controls">
-                                    {html_options name=log_level options=$logLevels selected=$configs['log_level']}
-                                    <span class="default-value">{t}Default: true{/t}</span>
-                                </td>
-                            <td>
-
-                            </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </fieldset>
-                <fieldset>
-                    <legend>{t}Database log{/t}</legend>
-                    <table>
-                        <tbody>
-                            <tr valign="top" class="control-group">
-                                <th scope="row">
-                                    <label for="log_db_enabled" class="control-label">{t}Enable Log:{/t}</label>
-                                </th>
-                                <td class="controls">
-                                    <input type="checkbox" id="log_db_enabled" name="log_db_enabled" {if ($configs['log_db_enabled'])}checked{/if} />
-                                    <span class="default-value">{t}Default: false{/t}</span>
-                                </td>
-                            <td>
-
-                            </td>
-                            </tr>
-                        </tbody>
                     </table>
                 </fieldset>
             </div>

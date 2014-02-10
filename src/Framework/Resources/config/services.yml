@@ -2,11 +2,6 @@ parameters:
 #    onm_test.example.class: Onm\TestBundle\Example
 
 services:
-    kernel.listener.app_bootup:
-        class: Framework\EventListener\ApplicationBootupListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 101 }
-
     kernel.listener.maintenance_mode:
         class: Framework\EventListener\MaintenanceModeListener
         tags:

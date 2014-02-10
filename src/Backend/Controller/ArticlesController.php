@@ -571,11 +571,8 @@ class ArticlesController extends Controller
                     $article->promoteToCategoryFrontpage($_POST['category']);
                 }
 
-                // TODO: Move this to a post update hook
-                $tplManager = new \TemplateCacheManager(TEMPLATE_USER_PATH);
-                $tplManager->delete($article->category_name.'|'.$article->id);
-                $tplManager->delete('home|0');
-                $tplManager->delete($_POST['category'] . '|0');
+                // Clear caches
+                dispatchEventWithParams('content.update', array('content' => $article));
 
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {
@@ -1042,18 +1039,18 @@ class ArticlesController extends Controller
         \Frontend\Controller\ArticlesController::getAds($actualCategoryId);
 
         // Fetch media associated to the article
+        $photoInt = '';
         if (isset($article->img2)
             && ($article->img2 != 0)
         ) {
             $photoInt = new \Photo($article->img2);
-            $this->view->assign('photoInt', $photoInt);
         }
 
+        $videoInt = '';
         if (isset($article->fk_video2)
             && ($article->fk_video2 != 09)
         ) {
             $videoInt = new \Video($article->fk_video2);
-            $this->view->assign('videoInt', $videoInt);
         }
 
         // Fetch related contents to the inner article
@@ -1108,6 +1105,8 @@ class ArticlesController extends Controller
                     'contentId'             => $article->id,
                     'article'               => $article,
                     'category_name'         => $category_name,
+                    'photoInt'              => $photoInt,
+                    'videoInt'              => $videoInt,
                 )
             )
         );

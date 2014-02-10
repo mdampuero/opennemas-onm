@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "85337b0dead65dd02530e2568cf6f236",
+    "hash": "5b91e81122c3f4ddfe000a385a7984eb",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -208,16 +208,16 @@
         },
         {
             "name": "doctrine/collections",
-            "version": "v1.1",
+            "version": "v1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/collections.git",
-                "reference": "560f29c39cfcfbcd210e5d549d993a39d898b04b"
+                "reference": "b99c5c46c87126201899afe88ec490a25eedd6a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/collections/zipball/560f29c39cfcfbcd210e5d549d993a39d898b04b",
-                "reference": "560f29c39cfcfbcd210e5d549d993a39d898b04b",
+                "url": "https://api.github.com/repos/doctrine/collections/zipball/b99c5c46c87126201899afe88ec490a25eedd6a2",
+                "reference": "b99c5c46c87126201899afe88ec490a25eedd6a2",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +226,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -242,7 +242,8 @@
                 {
                     "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -271,7 +272,7 @@
                 "collections",
                 "iterator"
             ],
-            "time": "2013-03-07 12:15:54"
+            "time": "2014-02-03 23:07:43"
         },
         {
             "name": "doctrine/common",
@@ -717,16 +718,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.3.4",
+            "version": "2.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "a41b02c080114c0de3da4ee9fba61f7d18fae7d0"
+                "reference": "2c31ec4809a28a549bf22d7cb7504add98156cd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/a41b02c080114c0de3da4ee9fba61f7d18fae7d0",
-                "reference": "a41b02c080114c0de3da4ee9fba61f7d18fae7d0",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2c31ec4809a28a549bf22d7cb7504add98156cd6",
+                "reference": "2c31ec4809a28a549bf22d7cb7504add98156cd6",
                 "shasum": ""
             },
             "require": {
@@ -784,7 +785,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-05-11 07:51:12"
+            "time": "2014-02-08 16:28:24"
         },
         {
             "name": "drexarj/disqus-php",
@@ -858,16 +859,16 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "5ddc278fbbf19b039a84421ab1589c014ff10091"
+                "reference": "325fd77ced595cd8249009c15a027a1ab9ed8565"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/5ddc278fbbf19b039a84421ab1589c014ff10091",
-                "reference": "5ddc278fbbf19b039a84421ab1589c014ff10091",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/325fd77ced595cd8249009c15a027a1ab9ed8565",
+                "reference": "325fd77ced595cd8249009c15a027a1ab9ed8565",
                 "shasum": ""
             },
             "require": {
@@ -894,7 +895,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2014-01-29 12:25:17"
+            "time": "2014-02-07 11:31:32"
         },
         {
             "name": "imagine/imagine",
@@ -1317,12 +1318,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
+                "url": "https://github.com/alchemy-fr/PHP-FFmpeg.git",
                 "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
+                "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
                 "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
                 "shasum": ""
             },
