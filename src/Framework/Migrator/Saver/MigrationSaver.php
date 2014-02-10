@@ -724,7 +724,7 @@ class MigrationSaver
                 'type'          => 0,
                 'deposit'       => 0,
                 'token'         => null,
-                'activated'     => 1,
+                'activated'     => 0,
                 'id_user_group' => array('3'),
             );
 
