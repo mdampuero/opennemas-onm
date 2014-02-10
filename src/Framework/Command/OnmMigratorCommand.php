@@ -135,7 +135,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
         $this->output->writeln(
             "<fg=green>Imported: " . $stats['imported']
             . "</fg=green><fg=yellow>\tAlready imported: "
-            . $stats['already_imported'] . "</fg=yellow><fg=red>\tError: "
+            . $stats['already_imported'] . "</fg=yellow><fg=red>\tNot found: "
+            . $stats['not_found'] . "</fg=red><fg=red>\tError: "
             . $stats['error'] . "</fg=red>\n"
         );
     }
@@ -248,6 +249,7 @@ class OnmMigratorCommand extends ContainerAwareCommand
             $this->stats[$key]['already_imported'] = 0;
             $this->stats[$key]['error']            = 0;
             $this->stats[$key]['imported']         = 0;
+            $this->stats[$key]['not_found']        = 0;
             $this->stats[$key]['start']            = time();
 
             $data = $this->provider->getSource($key, $schema);

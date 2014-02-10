@@ -648,7 +648,7 @@ class MigrationSaver
 
                         $this->stats[$name]['imported']++;
                     } else {
-                        $this->stats[$name]['error']++;
+                        $this->stats[$name]['not_found']++;
                     }
                 } else {
                     $this->stats[$name]['already_imported']++;
