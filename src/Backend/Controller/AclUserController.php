@@ -102,7 +102,7 @@ class AclUserController extends Controller
      **/
     public function showAction(Request $request)
     {
-        //user can modify his data
+        // User can modify his data
         $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         if ($idRAW === 'me') {
             $id = $_SESSION['userid'];
@@ -113,7 +113,7 @@ class AclUserController extends Controller
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editing other user information.
         if ($id != $_SESSION['userid']) {
-            if (false === $this->get('security.context')->isGranted('USER_UPDATE')) {
+            if (false === \Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
             }
         }
@@ -179,7 +179,7 @@ class AclUserController extends Controller
         $userId = $request->query->getDigits('id');
 
         if ($userId != $_SESSION['userid']) {
-            if (false === $this->get('security.context')->isGranted('USER_UPDATE')) {
+            if (false === \Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
             }
         }

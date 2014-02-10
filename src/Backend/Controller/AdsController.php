@@ -257,7 +257,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if ($ad->fk_user != $_SESSION['userid']
-            && (false === $this->get('security.context')->isGranted('CONTENT_OTHER_UPDATE'))
+            && (false === \Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             m::add(_("You can't modify this content because you don't have enought privileges."));
 
@@ -306,7 +306,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if ($ad->fk_user != $_SESSION['userid']
-            && (false === $this->get('security.context')->isGranted('CONTENT_OTHER_UPDATE'))
+            && (false === \Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             m::add(_("You can't modify this content because you don't have enought privileges."));
 
