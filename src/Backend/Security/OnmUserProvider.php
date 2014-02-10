@@ -8,9 +8,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class OnmUserProvider implements UserProviderInterface
 {
-
     protected $user;
-
 
     /**
      * Loads the user for the given username.
@@ -21,7 +19,7 @@ class OnmUserProvider implements UserProviderInterface
      * @throws UsernameNotFoundException if the user is not found
      * @param  string $username The username
      *
-     * @return UserInterface
+     * @return AdvancedUserInterface
      */
     public function loadUserByUsername($username)
     {

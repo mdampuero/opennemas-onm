@@ -11,14 +11,14 @@
  * @package    Model
  **/
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 /**
  * User
  *
  * @package    Model
  **/
-class User implements UserInterface
+class User implements AdvancedUserInterface
 {
     /**
      * The user id
@@ -1522,6 +1522,18 @@ class User implements UserInterface
         return $this->roles;
     }
 
+    /**
+     * Returns the password used to authenticate the user.
+     *
+     * This should be the encoded password. On authentication, a plain-text
+     * password will be salted, encoded, and then compared to this value.
+     *
+     * @return string The password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
 
     /**
      * Returns the salt that was originally used to encode the password.
@@ -1536,17 +1548,6 @@ class User implements UserInterface
     }
 
     /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
-     */
-    public function eraseCredentials()
-    {
-
-    }
-
-    /**
      * Returns the username used to authenticate the user.
      *
      * @return string The username
@@ -1557,15 +1558,66 @@ class User implements UserInterface
     }
 
     /**
-     * Returns the password used to authenticate the user.
+     * Removes sensitive data from the user.
      *
-     * This should be the encoded password. On authentication, a plain-text
-     * password will be salted, encoded, and then compared to this value.
-     *
-     * @return string The password
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
      */
-    public function getPassword()
+    public function eraseCredentials()
     {
-        return $this->password;
+    }
+
+    /**
+     * Returns whether or not the given user is equivalent to this user.
+     *
+     * @return boolean
+     */
+    public function equals(UserInterface $user)
+    {
+        if ($user->getUsername() === $this->getUsername()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether the user's account has expired.
+     *
+     * @return boolean
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is locked.
+     *
+     * @return boolean
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user's credentials (password) has expired.
+     *
+     * @return boolean
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is enabled.
+     *
+     * @return boolean
+     */
+    public function isEnabled()
+    {
+        return $this->activated;
     }
 }
