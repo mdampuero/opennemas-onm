@@ -138,19 +138,30 @@ class Validator
 
     public function validateBadWords($field, $params)
     {
-        $badWords  = array(
-            'admin','user','macada','sandra', 'operator',
-            'fran','alex','openhost','opennemas','prueba','test','probando',
-            'testing', 'check', 'retrincos', 'drop', 'create', 'alter',
-            'grant', 'asdf', 'qwert'
-        );
+        $badWords  = $this->getBadWords();
 
         foreach ($badWords as $word) {
             similar_text($this->data[$field], $word, $percent);
 
             if (preg_match('/'.$word.'/i', '/'.$this->data[$field].'/', $badWords)
                 || $percent > 70 ) {
-                $this->errors[$field][] = _('The name you entered is not allowed. Please try a new one.').$field;
+                switch ($field) {
+                    case 'instance_name':
+                        $this->errors []= _('Your newspaper name cointains disallowed words.');
+                        break;
+
+                    case 'subdomain':
+                        $this->errors []= _('Your desired address contains disallowed words.');
+                        break;
+
+                    case 'user_email':
+                        $this->errors []= _('Your user name contains disallowed words.');
+                        break;
+
+                    default:
+                        $this->errors []= _('The name you entered is not allowed.');
+                        break;
+                }
                 return false;
             }
         }
@@ -177,5 +188,15 @@ class Validator
         }
 
         return true;
+    }
+
+    public function getBadWords()
+    {
+        return array(
+            'admin','user','macada','sandra', 'operator',
+            'fran','alex','openhost','opennemas','prueba','test','probando',
+            'testing', 'check', 'retrincos', 'drop', 'create', 'alter',
+            'grant', 'asdf', 'qwert', 'sex', 'penis', 'cum', 'cock', 'dick',
+        );
     }
 }
