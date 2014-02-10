@@ -1517,6 +1517,10 @@ class User implements AdvancedUserInterface
                     );
                 }
             }
+
+            if ((int) $this->type == 0) {
+                $this->roles []= 'ROLE_BACKEND_USER';
+            }
         }
 
         return $this->roles;

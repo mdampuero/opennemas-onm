@@ -40,4 +40,4 @@ security:
                 path:   admin_logout
                 target: admin_login_form
     access_control:
-        - { path: ^/admin/*, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/admin/*, roles: [ IS_AUTHENTICATED_FULLY, ROLE_BACKEND_USER ] }
