@@ -35,7 +35,7 @@ class DatabaseProvider extends MigrationProvider
             getContainerParameter('database')
         );
         $this->originConnection->selectDatabase(
-            $this->settings['provider']['source']
+            $this->settings['migration']['source']
         );
     }
 
@@ -52,16 +52,27 @@ class DatabaseProvider extends MigrationProvider
         $this->stats[$name]['already_imported'] = 0;
 
         $translations = '';
-        foreach ($this->translations[$schema['translation']['name']] as
-                $oldId => $newId) {
-            $translations .= $oldId . ', ';
+        if (array_key_exists(
+            $schema['translation']['name'],
+            $this->translations
+        )) {
+            foreach ($this->translations[$schema['translation']['name']] as
+                    $oldId => $newId) {
+                $translations .= $oldId . ', ';
+            }
         }
 
         $sql = 'SELECT ' . $schema['source']['table'] . '.'
             . $schema['source']['id'] . ' FROM ' . $schema['source']['table']
-            . ' WHERE ' . $schema['source']['table'] . '.'
-            . $schema['source']['id'] . ' NOT IN (' . rtrim($translations, ', ')
-            . ')';
+            . ' WHERE ' ;
+
+        if ($translations != '') {
+            $sql .= $schema['source']['table'] . '.'
+                . $schema['source']['id']
+                . ' NOT IN (' . rtrim($translations, ', ') . ')';
+        } else {
+            $sql .= '1';
+        }
 
 
         // Add logical comparisons to 'WHERE' chunk
@@ -95,7 +106,8 @@ class DatabaseProvider extends MigrationProvider
                 foreach ($schema['fields'] as $key => $field) {
                     if (isset($field['type']) &&
                             in_array('constant', $field['type'])) {
-                        $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key;
+                        $sql .= '\'' . $field['value'] . '\'' . ' AS ' . $key
+                            . ', ';
 
                     } else if (isset($field['type']) &&
                             in_array('subselect', $field['type'])) {
@@ -113,7 +125,7 @@ class DatabaseProvider extends MigrationProvider
                                 . $this->parseCondition($params['conditions']);
                         }
 
-                        $sql .= ')' . ' AS ' . $key;
+                        $sql .= ')' . ' AS ' . $key . ', ';
 
                     } else {
                         $sql .= $field['table'] . '.' . $field['field']
