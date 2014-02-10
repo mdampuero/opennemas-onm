@@ -159,7 +159,7 @@ class Validator
                         break;
 
                     default:
-                        $this->errors []= _('The name you entered is not allowed.');
+                        $this->errors []= _('There was an error while validating your data against disallowed words.');
                         break;
                 }
                 return false;
@@ -170,10 +170,11 @@ class Validator
 
     public function validateCheckMailInUse($field, $params)
     {
-        $exists = $this->instanceManager->checkMailExists($field);
+        $exists = $this->instanceManager->checkMailExists($this->data[$field]);
 
         if ($exists) {
-            return array(_('The email that you entered is already in use'));
+            $this->errors []= _('The email that you entered is already in use');
+            return false;
         }
 
         return true;
@@ -181,10 +182,11 @@ class Validator
 
     public function validateInstanceNameInUse($field, $params)
     {
-        $exists = $this->instanceManager->checkInstanceExists($field);
+        $exists = $this->instanceManager->checkInstanceExists($this->data[$field]);
 
         if ($exists) {
-            return array(_('The url that you entered is already in use'));
+            $this->errors []= _('The address that you entered is already in use');
+            return false;
         }
 
         return true;
