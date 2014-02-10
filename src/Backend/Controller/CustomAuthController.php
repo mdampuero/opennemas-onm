@@ -17,21 +17,23 @@ class CustomAuthController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $lastUsername = null;
+        $error = null;
         $referer = $this->session->get('_security.backend.target_path');
 
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $request->attributes
+            $error = $request->attributes
+                ->get(SecurityContext::AUTHENTICATION_ERROR);
+        } else {
+            $error = $request->getSession()
                 ->get(SecurityContext::AUTHENTICATION_ERROR);
         }
 
-        $lastUsername = $request->getSession()
-            ->get(SecurityContext::LAST_USERNAME);
+        if ($error) {
+            $this->session->getFlashBag()->add('error', $error->getMessage());
+        }
 
-        $this->get('security.context')->setToken(null);
-        $this->get('request')->getSession()->invalidate();
-
-        $token = $this->get('form.csrf_provider')->generateCsrfToken('authenticate');
+        $token = $this->get('form.csrf_provider')
+            ->generateCsrfToken('authenticate');
         $currentLanguage  = \Application::$language;
 
         return $this->render(
