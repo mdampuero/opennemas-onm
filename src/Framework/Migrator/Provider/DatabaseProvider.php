@@ -74,7 +74,6 @@ class DatabaseProvider extends MigrationProvider
             $sql .= '1';
         }
 
-
         // Add logical comparisons to 'WHERE' chunk
         if (isset($schema['filters']) && count($schema['filters']) > 0) {
             $sql .= ' AND ' . $this->parseCondition($schema['filters']);

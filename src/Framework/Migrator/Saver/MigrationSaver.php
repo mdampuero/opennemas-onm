@@ -648,7 +648,7 @@ class MigrationSaver
 
                         $this->stats[$name]['imported']++;
                     } else {
-                        $this->stats[$name]['error']++;
+                        $this->stats[$name]['not_found']++;
                     }
                 } else {
                     $this->stats[$name]['already_imported']++;
@@ -724,7 +724,7 @@ class MigrationSaver
                 'type'          => 0,
                 'deposit'       => 0,
                 'token'         => null,
-                'activated'     => 1,
+                'activated'     => 0,
                 'id_user_group' => array('3'),
             );
 
