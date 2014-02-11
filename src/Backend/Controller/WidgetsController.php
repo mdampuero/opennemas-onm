@@ -293,7 +293,7 @@ class WidgetsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('WIDGET_ADMIN')")
+     * #@Security("has_role('WIDGET_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {

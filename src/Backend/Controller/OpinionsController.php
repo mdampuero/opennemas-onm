@@ -852,7 +852,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * #@Security("has_role('OPINION_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -921,7 +921,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * #@Security("has_role('OPINION_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {

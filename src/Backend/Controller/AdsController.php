@@ -542,7 +542,7 @@ class AdsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ADVERTISEMENT_ADMIN')")
+     * #@Security("has_role('ADVERTISEMENT_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {

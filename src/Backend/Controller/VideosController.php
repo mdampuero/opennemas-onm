@@ -903,7 +903,7 @@ class VideosController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('VIDEO_ADMIN')")
+     * #@Security("has_role('VIDEO_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {
@@ -964,7 +964,7 @@ class VideosController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('VIDEO_ADMIN')")
+     * #@Security("has_role('VIDEO_ADMIN')")
      **/
     public function contentProviderGalleryAction(Request $request)
     {

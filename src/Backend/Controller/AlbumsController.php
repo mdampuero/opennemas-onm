@@ -670,7 +670,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ALBUM_ADMIN')")
+     * #@Security("has_role('ALBUM_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -737,7 +737,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ALBUM_ADMIN')")
+     * #@Security("has_role('ALBUM_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {

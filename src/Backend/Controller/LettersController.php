@@ -379,7 +379,7 @@ class LettersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('LETTER_ADMIN')")
+     * #@Security("has_role('LETTER_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -444,7 +444,7 @@ class LettersController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('LETTER_ADMIN')")
+     * #@Security("has_role('LETTER_ADMIN')")
      **/
     public function contentListProviderAction(Request $request)
     {

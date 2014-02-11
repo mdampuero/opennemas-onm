@@ -583,7 +583,7 @@ class PollsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('POLL_ADMIN')")
+     * #@Security("has_role('POLL_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -650,7 +650,7 @@ class PollsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('POLL_ADMIN')")
+     * #@Security("has_role('POLL_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {

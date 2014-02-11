@@ -109,7 +109,7 @@ class SearchController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('SEARCH_ADMIN')")
+     * #@Security("has_role('SEARCH_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
