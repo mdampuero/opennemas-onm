@@ -732,8 +732,8 @@ div.utilities-conf input[type="text"]{
     .usermenu a, .comments-available a{ color:White; }
       .usermenu .logout { display:block; padding:5px 0 4px 0; }
   .navbar-inverse .nav-collapse .nav > li > a, .navbar-inverse .nav-collapse .dropdown-menu a { color:white; }
-/*}
-@media (min-width:900px) {*/
+}
+@media (min-width:900px) {
   .usermenu .avatar { position:absolute; top:10px; left:20px; width:50px; height:50px; }
   .usermenu li a:hover { text-decoration:underline !important; }
   .usermenu .user-info { margin:5px 10px 5px 10px; padding-left:70px; }
