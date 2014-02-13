@@ -64,6 +64,10 @@ class ArticlesController extends Controller
 
         $article = $er->find('Article', $articleID);
 
+        if (isset($article->params['bodyLink']) && !empty($article->params['bodyLink'])) {
+            return $this->redirect($article->params['bodyLink']);
+        }
+
         // Load config
         $this->view->setConfig('articles');
 
