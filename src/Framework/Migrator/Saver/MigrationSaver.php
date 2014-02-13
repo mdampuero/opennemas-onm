@@ -494,10 +494,10 @@ class MigrationSaver
     {
         foreach ($data as $item) {
             $values = array(
-                'fk_author'      => null,
-                'fk_author_img'  => null,
+                'fk_author'      => 0,
+                'fk_author_img'  => 0,
                 'with_comment'   => 1,
-                'type_opinion'   => 1,
+                'type_opinion'   => 0,
                 'title'          => null,
                 'available'      => 1,
                 'content_status' => 1,
@@ -610,7 +610,6 @@ class MigrationSaver
                 ) === false
                 ) {
                     if (is_file($values['local_file'])) {
-
                         $id = $photo->createFromLocalFile(
                             $values,
                             $values['directory']
@@ -826,7 +825,7 @@ class MigrationSaver
     }
 
     /**
-     * Configures the keeper
+     * Configures the saver.
      */
     protected function configure()
     {
@@ -987,17 +986,19 @@ class MigrationSaver
      */
     protected function merge($default, $values, $schema)
     {
+        // Pre-filter (pre-select, pre-merge)
+        if (array_key_exists('pre-filters', $schema)) {
+            $values = $this->filterItem(
+                $values,
+                $schema['pre-filters']['type'],
+                $schema['pre-filters']['params']
+            );
+        }
+
+        // Parse fields
         foreach ($values as $key => $value) {
             $params = isset($schema['fields'][$key]['params']) ?
                 $schema['fields'][$key]['params'] : null;
-
-            // Get the values from item and append them to parameters array
-            if (in_array('select', $schema['fields'][$key]['type'])) {
-                $fields = $schema['fields'][$key]['params']['select']['fields'];
-                foreach ($fields as $field) {
-                    $params[$field] = $values[$field];
-                }
-            }
 
             $values[$key] = $this->parseField(
                 $value,
@@ -1008,17 +1009,13 @@ class MigrationSaver
 
         $default = array_merge($default, $values);
 
-        if (isset($schema['merge'])) {
-            foreach ($schema['merge'] as $target => $origin) {
-                $merged = '';
-                $i = count($origin['fields']) - 1;
-                foreach ($origin['fields'] as $field) {
-                    $merged .= $default[$field] . ($i > 0 ? $origin['separator'] : '');
-                    $i--;
-                }
-
-                $default[$target] = $merged;
-            }
+        // Pre-filter (select, merge)
+        if (array_key_exists('post-filters', $schema)) {
+            $default = $this->filterItem(
+                $default,
+                $schema['post-filters']['type'],
+                $schema['post-filters']['params']
+            );
         }
 
         return $default;
@@ -1050,63 +1047,39 @@ class MigrationSaver
                 case 'date':
                     $field = date($params['format'], strtotime($field));
                     break;
+                case 'embed':
+                    $pattern = '~(?:http|https|)(?::\/\/|)(?:www.|)(?:youtu\.be\
+                        /|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/ytscreeni
+                        ngroom\?v=|\/feeds\/api\/videos\/|\/user\S*[^\w\-\s]|\S*
+                        [^\w\-\s]))([\w\-]{11})[a-z0-9;:@?&%=+\/\$_.-]*~i';
+
+                    preg_match($pattern, $field, $matches);
+
+                    $field = $matches[1];
+                    break;
+                case 'findUser':
+                    $id = $this->findUser($field);
+                    if ($id !== false) {
+                        $field = $id;
+                    }
+                    break;
                 case 'map':
                     $field = $this->convertToMap($field, $params['map']);
                     break;
+                case 'metadata':
+                    $field = \Onm\StringUtils::get_tags($field);
+                    break;
                 case 'merge':
-                    if (!is_null($field)) {
+                    if (is_array($field) && count($field) > 0) {
                         $value = '';
                         foreach ($field as $key => $v) {
-                            $value .= $v;
-                            if ($key < count($field) - 1) {
-                                $value .= ',';
-                            }
+                            $value .= $v . ',';
                         }
-                        $field = $value;
+                        $field = rtrim($value, ',');
                     }
                     break;
                 case 'raw': // Remove spaces at beginning and end
                     $field = trim($field);
-                    break;
-                case 'select':
-                    $i    = 0;
-                    $next = true;
-                    while ($i < count($params['select']['fields']) && $next) {
-                        $key = $params['select']['fields'][$i];
-                        $field = $params[$key];
-
-                        switch ($params['select']['operator']) {
-                            case '!=':
-                                if ($field != $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                            case '==':
-                                if ($field == $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                            case '>':
-                                if ($field > $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                            case '<':
-                                if ($field < $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                        }
-
-                        if ($next) {
-                            $i++;
-                        }
-                    }
-
-                    // Condition not satisfied by any field
-                    if ($i >= count($params['select']['fields'])) {
-                        $field = null;
-                    }
                     break;
                 case 'slug':
                     $field = $this->convertToSlug($field);
@@ -1252,6 +1225,141 @@ class MigrationSaver
         $this->translations[$type][$old] = $new;
     }
 
+    /**
+     * Applies general item filters.
+     *
+     * @param array $values  Array of values to filter.
+     * @param array $filters Array of filters to apply.
+     * @param array $params  Array of parameters used to filter.
+     */
+    private function filterItem($values, $filters, $params)
+    {
+        foreach ($filters as $filter) {
+            switch ($filter) {
+                case 'select':
+                    $values = $this->selectFilter($values, $params['select']);
+                    break;
+                case 'merge':
+                    $values = $this->mergeFilter($values, $params['merge']);
+                    break;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * Finds the category id for a given normalized name.
+     *
+     * @param  string  $name Category name.
+     * @return integer       Category id.
+     */
+    private function findCategory($name)
+    {
+        $sql = "SELECT pk_content_category FROM content_categories"
+            . " WHERE name='" . $name . "'";
+
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
+
+        if ($rss && array_key_exists('pk_content_category', $rss)) {
+            return $rss['pk_content_category'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Finds the user's id for a given normalized name.
+     *
+     * @param  string  $name User's name.
+     * @return mixed         User's id if user was found. Otherwise, return
+     *                       false.
+     */
+    private function findUser($name)
+    {
+        $sql = "SELECT id FROM users WHERE name LIKE '%" . $name . "%'";
+
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
+
+        if ($rss && count($rss) == 1 && array_key_exists('id', $rss[0])) {
+            return $rss[0]['id'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * Merges two or more fields in $values into another field.
+     *
+     * @param  array $values Array of values.
+     * @param  array $params Array of parameters used to merge fields.
+     * @return array         Filtered array of values
+     */
+    private function mergeFilter($values, $params)
+    {
+        foreach ($params as $filter) {
+            $merged = '';
+            foreach ($filter['fields'] as $source) {
+                $merged .=  $values[$source] . $filter['separator'];
+            }
+
+            $values[$filter['target']] = rtrim($merged, $filter['separator']);
+        }
+
+        return $values;
+    }
+
+    /**
+     * Returns a array of values after applying select filter.
+     *
+     * @param  array $values Array of values.
+     * @param  array $params Array of parameters used to select.
+     * @return array         Filtered array of values.
+     */
+    private function selectFilter($values, $params)
+    {
+        foreach ($params as $filter) {
+            $i    = 0;
+            $next = true;
+            while ($i < count($filter['fields']) && $next) {
+                $key = $filter['fields'][$i++];
+                $values[$filter['target']] = $values[$key];
+
+                switch ($filter['operator']) {
+                    case '!=':
+                        if ($values[$filter['target']] != $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                    case '==':
+                        if ($values[$filter['target']] == $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                    case '>':
+                        if ($values[$filter['target']] > $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                    case '<':
+                        if ($values[$filter['target']] < $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                }
+            }
+
+            // Condition not satisfied by any field
+            if ($next && $i >= count($filter['fields'])) {
+                $values[$filter['target']] = null;
+            }
+        }
+
+        return $values;
+    }
+
     private function clearTags($body)
     {
         $result = array();
@@ -1272,11 +1380,10 @@ class MigrationSaver
 
 
                 //-420x278.jpg
-                preg_match_all ( "@(.*)-[0-9]{3,4}x[0-9]{3,4}.(.*)@", $guid, $result);
-                if (!empty($result[1]) ) {
+                preg_match_all("@(.*)-[0-9]{3,4}x[0-9]{3,4}.(.*)@", $guid, $result);
+                if (!empty($result[1])) {
 
                     $newGuid = $result[1][0].".".$result[2][0];
-                    // var_dump($newGuid);
                     $img     = $this->getOnmIdImage($newGuid);
 
                     if (empty($img)) {
@@ -1287,7 +1394,7 @@ class MigrationSaver
                 $date = $date->format('Y-m-d H:i:s');
                 $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
                 $oldID = $this->elementIsImported('fotos', 'category');
-                if(empty($oldID)) {
+                if (empty($oldID)) {
                     $oldID ='1';
                 }
                 $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
@@ -1345,26 +1452,5 @@ class MigrationSaver
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
-    }
-
-    /**
-     * Finds the category id for a given normalized name.
-     *
-     * @param  string  $name Category name.
-     * @return integer       Category id.
-     */
-    private function findCategory($name)
-    {
-        $sql = "SELECT pk_content_category FROM content_categories"
-            . " WHERE name='" . $name . "'";
-
-        $rs = $this->targetConnection->Execute($sql);
-        $rss = $rs->getArray();
-
-        if ($rss && array_key_exists('pk_content_category', $rss)) {
-            return $rss['pk_content_category'];
-        }
-
-        return false;
     }
 }
