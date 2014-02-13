@@ -925,6 +925,14 @@ admin_opinion_show:
     path:     /opinion/{id}/show
     defaults: { _controller  : BackendBundle:Opinions:show }
 
+admin_opinion_preview:
+    path:     /opinion/preview
+    defaults: { _controller  : BackendBundle:Opinions:preview }
+
+admin_opinion_get_preview:
+    path:     /opinion/get-preview
+    defaults: { _controller  : BackendBundle:Opinions:getPreview }
+
 admin_opinion_update:
     path:     /opinion/{id}/update
     defaults: { _controller  : BackendBundle:Opinions:update }
