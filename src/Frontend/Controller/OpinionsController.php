@@ -854,7 +854,7 @@ class OpinionsController extends Controller
      *
      * @param string $context the context to fetch ads from
      */
-    private function getAds($context = '')
+    public static function getAds($context = '')
     {
         // Get opinion positions
         $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
@@ -864,10 +864,6 @@ class OpinionsController extends Controller
             $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
-        $ccm = \ContentCategoryManager::get_instance();
-        $category = $ccm->get_id($this->category_name);
-        $category = (!isset($category) || ($category=='home'))? 0: $category;
-
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        return \Advertisement::findForPositionIdsAndCategory($positions, 'opinion');
     }
 }
