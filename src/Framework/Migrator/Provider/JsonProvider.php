@@ -37,17 +37,24 @@ class JsonProvider extends MigrationProvider
         $files;
         if (is_dir($schema['source']['path'])) {
             $finder = new Finder();
-            $finder->name('*.json');
-            $finder->files()->in($schema['source']['path']);
-            $finder->files()->in($schema['source']['path']);
-            $files = $finder;
+
+            if (isset($schema['source']['name'])) {
+                $finder->name($schema['source']['name']);
+            } else {
+                $finder->name('*.json');
+            }
+
+            $files = $finder->in($schema['source']['path']);
         } else if (is_file($schema['source']['path'])) {
             $files = array(new File($schema['source']['path']));
         }
 
-        $total = count($files);
         $current = 1;
         foreach ($files as $file) {
+            if ($this->debug) {
+                $this->output->writeln('   Processing item ' . $current++);
+            }
+
             $builded = array();
             // Read item from file
             $item = json_decode(file_get_contents($file->getPathName()), true);
@@ -62,13 +69,11 @@ class JsonProvider extends MigrationProvider
                 && array_keys($item) !== range(0, count($item) - 1)
             ) {
                 // Associative array (1 item per file)
-                // var_dump('assoc');
                 $builded = $this->itemToFlat($item, $schema);
             } else if (is_array($item)
                 && array_keys($item) === range(0, count($item) - 1)
             ) {
                 // Non-Associative array (1..* items per file)
-                // var_dump('non-assoc');
                 foreach ($item as $i) {
                     $builded =
                         array_merge($builded, $this->itemToFlat($i, $schema));
@@ -93,9 +98,12 @@ class JsonProvider extends MigrationProvider
                     || empty($required)
                 ) {
                     // Has all required fields - Filter
-                    if ((!isset($schema['filters'])
-                        || (isset($schema['filters'])
-                        && $this->isParseable($schema['filters'], $value)))
+                    if ((!isset($schema['pre-conditions'])
+                        || (isset($schema['pre-conditions'])
+                        && $this->isParseable(
+                            $schema['pre-conditions'],
+                            $value
+                        )))
                         && $this->elementIsImported(
                             $value[$schema['source']['id']],
                             $schema['translation']['name']
@@ -109,7 +117,7 @@ class JsonProvider extends MigrationProvider
                         }
 
                     } else {
-                        // Remove invalided items according to filter
+                        // Remove invalided items according to pre-conditions
                         unset($builded[$key]);
                     }
                 }
@@ -156,24 +164,20 @@ class JsonProvider extends MigrationProvider
     private function itemToFlat($item, $schema)
     {
         $parsed = array();
-
         foreach ($item as $name => $value) {
-            // var_dump('key: ' . $name);
-
             if (!is_array($value)) {
-                // var_dump('non-array - copy');
+                // Non-array - Copy
                 if (count($parsed) == 0) {
-                    // var_dump('new array');
+                    // Parsed empty - New item
                     $parsed[] = array($name => $value);
                 } else {
-                    // var_dump('fill array');
+                    // Append value to already parsed items
                     foreach ($parsed as $key => $p) {
                         $parsed[$key][$name] = $value;
                     }
                 }
             } else {
                 if (array_keys($value) !== range(0, count($value) - 1)) {
-                    // var_dump('assoc - extract fields');
                     // Associative array (Sub-fields - Extract)
                     foreach ($value as $i => $v) {
                         foreach ($parsed as $j => $p) {
@@ -181,21 +185,51 @@ class JsonProvider extends MigrationProvider
                         }
                     }
                 } else {
-                    // var_dump('non-assoc - clone & join');
                     // Non-associative array (Sub-items - Clone & Join)
-                    $joined = array();
-                    foreach ($value as $k => $v) {
-                        $toJoin = $this->itemToFlat($v, $schema);
-
-                        // Join fields to elements in parsed
-                        foreach ($toJoin as $f) {
-                            foreach ($parsed as $j => $v) {
-                                $joined[] = array_merge($parsed[$j], $f);
-                            }
-                        }
+                    // Find field config in $schema
+                    $keys = array_keys($schema['fields']);
+                    $i = 0;
+                    while ($i < count($keys)
+                        && (
+                            !array_key_exists(
+                                'field',
+                                $schema['fields'][$keys[$i]]
+                            ) || (array_key_exists(
+                                'field',
+                                $schema['fields'][$keys[$i]]
+                            ) && $schema['fields'][$keys[$i]]['field'] != $name)
+                        )
+                    ) {
+                        $i++;
                     }
 
-                    $parsed = $joined;
+                    // Check if field has to be merged
+                    if ($i < count($keys)
+                        && in_array(
+                            'merge',
+                            $schema['fields'][$keys[$i]]['type']
+                        )
+                    ) {
+                        // Append array to already parsed items
+                        foreach ($parsed as $j => $p) {
+                            $parsed[$j][$name] = $value;
+                        }
+                    } else {
+                        // Join
+                        $joined = array();
+                        foreach ($value as $k => $v) {
+                            $toJoin = $this->itemToFlat($v, $schema);
+
+                            // Join fields to elements in parsed
+                            foreach ($toJoin as $f) {
+                                foreach ($parsed as $j => $v) {
+                                    $joined[] = array_merge($parsed[$j], $f);
+                                }
+                            }
+                        }
+
+                        $parsed = $joined;
+                    }
                 }
             }
         }
