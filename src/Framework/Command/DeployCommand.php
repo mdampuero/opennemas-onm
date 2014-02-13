@@ -222,9 +222,9 @@ EOF
         $process = new Process($processLine);
         $process->run(function ($type, $buffer) use ($output) {
             if (Process::ERR === $type) {
-                $this->output->write("\t<error>".$buffer. "<error>");
+                $output->write("\t<error>".$buffer. "<error>");
             } else {
-                $this->output->write("\t".$buffer);
+                $output->write("\t".$buffer);
             }
         });
     }
