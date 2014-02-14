@@ -75,6 +75,7 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
         $files    = array();
         $fs       = new FileSystem();
         $path     = $input->getArgument('path');
+        $debug    = $input->getOption('debug');
 
         // Initialize target database
         $this->targetConnection = getService('db_conn');
@@ -84,7 +85,7 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
         $files = array_merge($files, $this->getAttachments());
 
         $output->writeln(
-            '<fg=yellow>*** ONM Migrator:Clean Stats ***</fg=yellow>'
+            '<fg=yellow>*** ONM Migrator:Clean ***</fg=yellow>'
         );
 
         $finder = new Finder();
@@ -93,13 +94,17 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
         $notRemoved = 0;
         foreach ($finder->files()->in($path) as $file) {
             $total++;
+            if ($debug) {
+                $output->writeln('Checking ' . $file->getFilename());
+            }
+
             if (!in_array($file->getFilename(), $files)) {
                 $fs->remove($file->getPathName());
                 $removed++;
 
                 if ($this->debug) {
                     $this->output->writeln(
-                        'Removed ' . $file->getPathName . 'file'
+                        'Removed ' . $file->getPathName() . 'file'
                     );
                 }
             } else {
@@ -108,7 +113,8 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
         }
 
         $output->writeln(
-            "Total: " . $total
+            '<fg=yellow>*** ONM Migrator:Clean ***</fg=yellow>'
+            . "\nTotal: " . $total
             . "\t<fg=red>Removed: " . $removed . "</fg=red>"
             . "\t<fg=green>Not removed: " . $notRemoved . "</fg=green>"
         );
