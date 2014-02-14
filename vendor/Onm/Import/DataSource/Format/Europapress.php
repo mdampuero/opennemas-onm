@@ -265,6 +265,16 @@ class Europapress implements FormatInterface
     }
 
     /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        return 'Europa Press';
+    }
+
+    /**
      * Returns the id of the element
      *
      * @return string the title
