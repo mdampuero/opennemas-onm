@@ -15,7 +15,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_comments}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
+<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" {$formAttrs|default:""}>
     <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
