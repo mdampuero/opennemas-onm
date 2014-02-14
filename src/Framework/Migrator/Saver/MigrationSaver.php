@@ -98,8 +98,8 @@ class MigrationSaver
         if (array_key_exists('remap', $schema['translation'])) {
             foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
                 try {
-                    $user = new \User();
-                    $user->delete(
+                    $content = new \Content();
+                    $content->delete(
                         $this->matchTranslation(
                             $oldId,
                             $schema['translation']['name']
@@ -967,7 +967,7 @@ class MigrationSaver
      */
     protected function matchTranslation($id, $type)
     {
-        if ($id && $type && array_key_exists($type, $this->translations)
+        if (!is_null($id) && $type && array_key_exists($type, $this->translations)
                 && array_key_exists($id, $this->translations[$type])) {
             return $this->translations[$type][$id];
         }
@@ -1262,8 +1262,10 @@ class MigrationSaver
         $rs = $this->targetConnection->Execute($sql);
         $rss = $rs->getArray();
 
-        if ($rss && array_key_exists('pk_content_category', $rss)) {
-            return $rss['pk_content_category'];
+        if ($rss && count($rss) == 1
+            && array_key_exists('pk_content_category', $rss[0])
+        ) {
+            return $rss[0]['pk_content_category'];
         }
 
         return false;
@@ -1325,26 +1327,26 @@ class MigrationSaver
             $next = true;
             while ($i < count($filter['fields']) && $next) {
                 $key = $filter['fields'][$i++];
-                $values[$filter['target']] = $values[$key];
+                $selected = $values[$key];
 
                 switch ($filter['operator']) {
                     case '!=':
-                        if ($values[$filter['target']] != $filter['value']) {
+                        if ($selected != $filter['value']) {
                             $next = false;
                         }
                         break;
                     case '==':
-                        if ($values[$filter['target']] == $filter['value']) {
+                        if ($selected == $filter['value']) {
                             $next = false;
                         }
                         break;
                     case '>':
-                        if ($values[$filter['target']] > $filter['value']) {
+                        if ($selected > $filter['value']) {
                             $next = false;
                         }
                         break;
                     case '<':
-                        if ($values[$filter['target']] < $filter['value']) {
+                        if ($selected < $filter['value']) {
                             $next = false;
                         }
                         break;
@@ -1353,7 +1355,13 @@ class MigrationSaver
 
             // Condition not satisfied by any field
             if ($next && $i >= count($filter['fields'])) {
-                $values[$filter['target']] = null;
+                if (array_key_exists('default', $filter)) {
+                    $values[$filter['target']] = $filter['default'];
+                } else {
+                    $values[$filter['target']] = null;
+                }
+            } else {
+                $values[$filter['target']] = $selected;
             }
         }
 
