@@ -102,8 +102,8 @@ class OnmMigratorCleanCommand extends ContainerAwareCommand
                 $fs->remove($file->getPathName());
                 $removed++;
 
-                if ($this->debug) {
-                    $this->output->writeln(
+                if ($debug) {
+                    $output->writeln(
                         'Removed ' . $file->getPathName() . 'file'
                     );
                 }
