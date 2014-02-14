@@ -967,8 +967,10 @@ class MigrationSaver
      */
     protected function matchTranslation($id, $type)
     {
-        if (!is_null($id) && $type && array_key_exists($type, $this->translations)
-                && array_key_exists($id, $this->translations[$type])) {
+        if (!is_null($id) && $id && $type
+            && array_key_exists($type, $this->translations)
+            && array_key_exists($id, $this->translations[$type])
+        ) {
             return $this->translations[$type][$id];
         }
 
