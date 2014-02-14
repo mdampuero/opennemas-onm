@@ -1140,6 +1140,10 @@ admin_news_agency_servers:
     path:     /news-agency/servers
     defaults: { _controller  : BackendBundle:NewsAgency:configListServers }
 
+admin_news_agency_server_toogle:
+    path:     /news-agency/servers/toogle
+    defaults: { _controller  : BackendBundle:NewsAgency:toogleEnabled }
+
 admin_news_agency_server_create:
     path:     /news-agency/servers/create
     defaults: { _controller  : BackendBundle:NewsAgency:configCreateServer }
@@ -1172,6 +1176,10 @@ admin_news_agency_sync:
 admin_news_agency_import:
     path:     /news-agency/{source_id}/{id}/import
     defaults: { _controller  : BackendBundle:NewsAgency:import }
+
+admin_news_agency_batch_import:
+    path:     /news-agency/batch-import
+    defaults: { _controller  : BackendBundle:NewsAgency:batchImport }
 
 admin_news_agency_show:
     path:     /news-agency/{source_id}/{id}/show

@@ -37,16 +37,24 @@ jQuery(document).ready(function($) {
     <table id="source-list" class="table-condensed table">
         <tr>
             <th>{t}Source name{/t}</th>
-            <th>{t}Sync from{/t}</th>
-            <th>{t}Activated{/t}</th>
-            <th style="width:10px;" class="right">{t}Actions{/t}</th>
+            <th class="center">{t}Sync from{/t}</th>
+            <th class="center">{t}Activated{/t}</th>
+            <th style="width:10px;" class="center">{t}Actions{/t}</th>
         </tr>
 
         {foreach $servers as $server}
         <tr id="{$server['id']}">
             <td class="server_name">{$server['name']}</td>
-            <td class="server_name nowrap">{$sync_from[$server['sync_from']]}</td>
-            <td class="server_name">{if $server['activated'] == 1}{t}Enabled{/t}{else}{t}Disabled{/t}{/if}</td>
+            <td class="server_name nowrap center">{$sync_from[$server['sync_from']]}</td>
+            <td class="server_name center">
+                <a class="btn" href="{url name=admin_news_agency_server_toogle id=$server['id']}" title="{t}Activate server{/t}">
+                    {if $server['activated'] == 1}
+                        <i class="icon16 icon-ok"></i>
+                    {else}
+                        <i class="icon16 icon-remove"></i>
+                    {/if}
+                </a>
+            </td>
             <td class="right">
                 <div class="btn-group">
                     <a href="{url name=admin_news_agency_server_show id=$server['id']}" class="btn edit"><i class="pencil"></i> Editar</a>
