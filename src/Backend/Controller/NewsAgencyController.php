@@ -270,7 +270,7 @@ class NewsAgencyController extends Controller
      **/
     public function batchImportAction(Request $request)
     {
-        $selected = $request->query->get('selected', null);
+        $selected = $this->request->request->get('selected', null);
 
         if (is_array($selected) && count($selected) > 0) {
 
