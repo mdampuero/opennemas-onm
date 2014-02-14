@@ -38,6 +38,7 @@ jQuery(document).ready(function ($){
 
     $('#modal-news-agency-batch-import a.btn.yes').on('click', function(e, ui){
         $('#formulario').attr('action', '{url name="admin_news_agency_batch_import"}');
+        $('#formulario').attr('method', 'POST');
         $('#formulario').submit();
         e.preventDefault();
     });
