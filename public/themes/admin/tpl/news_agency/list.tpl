@@ -21,6 +21,16 @@
             $('#modal-sync').modal('show');
         });
         $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
+
+        $('.minput').on('click', function() {
+            checkbox = $(this).find('input[type="checkbox"]');
+            var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
+            if (checked_elements > 0) {
+                $('.old-button .batch-actions').fadeIn('fast');
+            } else {
+                $('.old-button .batch-actions').fadeOut('fast');
+            }
+        });
     });
 </script>
 {/block}
@@ -29,6 +39,11 @@
     <div class="wrapper-content">
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
+            <li class="batch-actions">
+                <a class="importChecked" data-controls-modal="modal-news-agency-batch-import" href="#" title="{t}Batch import{/t}">
+                    <img src="{$params.IMAGE_DIR}select.png" title="{t}Batch import{/t}" alt="{t}Batch import{/t}"/><br/>{t}Batch import{/t}
+                </a>
+            </li>
 			<li>
 				<a href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
 				    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
@@ -53,14 +68,14 @@
 <div class="wrapper-content">
     <div class="warnings-validation"></div><!-- / -->
 
-    <form action="{url name=admin_news_agency}" method="GET">
+    <form action="{url name=admin_news_agency}" method="GET" id="formulario">
 
     	{render_messages}
 
         <div class="table-info clearfix">
             <div class="left"><strong>{t 1=$pagination->_totalItems}%1 articles{/t}</strong></div>
             <div class="right form-inline">
-                <input type="search" id="username" name="filter_title"value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
+                <input type="search" id="username" name="filter_title" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
 
                 <div class="input-append">
                     <label for="usergroup">
@@ -80,6 +95,7 @@
             <thead>
                 <tr>
                 {if count($elements) >0}
+                    <th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
                     <th class="right" style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th>{t}Attachments{/t}</th>
@@ -93,6 +109,9 @@
             <tbody>
                 {foreach name=c from=$elements item=element}
                 <tr class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
+                    <td>
+                        <input type="checkbox" name="selected[]" value="{$element->source_id},{$element->xmlFile|urlencode}" class="minput"/>
+                    </td>
                     <td  class="right">
                         {if $element->priority <= 1}
                         <span class="badge badge-important">{t}Urgent{/t}</span>
@@ -150,7 +169,7 @@
                 </tr>
                 {foreachelse}
                 <tr>
-                    <td colspan=6 class="empty">
+                    <td colspan="7" class="empty">
                         <h2>
                             <b>{t}There is no elements to import{/t}</b>
                         </h2>
@@ -161,7 +180,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="6" class="center">
+                    <td colspan="7" class="center">
                         <div class="pagination">
                             {$pagination->links|default:""}
                         </div>
@@ -173,4 +192,6 @@
 	</form>
 </div>
 {include file="news_agency/modals/_modal_sync_dialog.tpl"}
+{include file="news_agency/modals/_modal_batch_import.tpl"}
+
 {/block}

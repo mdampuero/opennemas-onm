@@ -233,265 +233,25 @@ class NewsAgencyController extends Controller
         $sourceId = $this->request->query->getDigits('source_id');
         $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
 
-        if (empty($id) || empty($sourceId)) {
-            m::add(_('Please specify the article to import.'), m::ERROR);
+        // Import and create element
+        $article = $this->importElements($id, $sourceId, $category);
 
+        // If something went wrong, redirect
+        if ($article == 'redirect_list') {
             return $this->redirect($this->generateUrl('admin_news_agency'));
+        } elseif ($article == 'redirect_category') {
+            return $this->redirect($this->generateUrl('admin_news_agency_pickcategory', array(
+                'id'        => $id,
+                'source_id' => $sourceId
+            )));
         }
-
-        if (empty($category)) {
-            m::add(_('Please assign the category where import this article'), m::ERROR);
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_news_agency_pickcategory',
-                    array(
-                        'id'        => $id,
-                        'source_id' => $sourceId
-                    )
-                )
-            );
-        }
-
-        $categoryInstance = new \ContentCategory($category);
-        if (!is_object($categoryInstance)) {
-            m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
-
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_news_agency_pickcategory',
-                    array(
-                        'id' => $id,
-                        'source_id' => $sourceId
-                    )
-                )
-            );
-        }
-
-        // Get EFE new from a filename
-        try {
-            $repository = new \Onm\Import\Repository\LocalRepository();
-            $element = $repository->findByFileName($sourceId, $id);
-        } catch (\Exception $e) {
-            m::add(_('Please specify the article to import.'), m::ERROR);
-
-            return $this->redirect($this->generateUrl('admin_news_agency'));
-        }
-
-        // Get server config
-        $servers = s::get('news_agency_config');
-        $server = $servers[$sourceId];
-
-        // If the new has photos import them
-        if ($element->hasPhotos()) {
-            $photos = $element->getPhotos();
-            $i = 0;
-            foreach ($photos as $photo) {
-                // Get image from FTP
-                $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$photo->file_path
-                );
-                $fileName = $photo->file_path;
-
-                // If no image from FTP check HTTP
-                if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$photo->name[$i];
-                    $fileName = $photo->name[$i];
-                }
-
-                // Check if the file cache exists(keys)
-                if (file_exists($filePath)) {
-                    $data = array(
-                        'title'         => $fileName,
-                        'description'   => $photo->title,
-                        'local_file'    => $filePath,
-                        'fk_category'   => $category,
-                        'category_name' => $categoryInstance->name,
-                        'category'      => $categoryInstance->name,
-                        'metadata'      => \Onm\StringUtils::get_tags($photo->title),
-                        'author_name'   => '&copy; EFE '.date('Y'),
-                        'original_filename' => $fileName,
-                    );
-
-                    $photo = new \Photo();
-                    $photoObject = $photo->createFromLocalFileAjax($data);
-
-                    // Check if sync is from Opennemas instances
-                    if ($element->getServicePartyName() == 'Opennemas') {
-                        // If this article has more than one photo take the first one to front
-                        if (!isset($frontPhoto)) {
-                            $frontPhoto = new \Photo($photoObject->id);
-                        } elseif (!isset($innerPhoto)) {
-                            $innerPhoto = new \Photo($photoObject->id);
-                        }
-                    } elseif (!isset($innerPhoto)) {
-                        $innerPhoto = new \Photo($photoObject->id);
-                    }
-
-                }
-                $i++;
-            }
-        }
-
-        // Check if sync is from Opennemas instances for importing author
-        if ($element->getServicePartyName() == 'Opennemas') {
-            // Check if allow to import authors
-            if (isset($server['author']) && $server['author'] == '1') {
-
-                // Get author object,decode it and create new author
-                $authorObj = json_decode($element->getRightsOwner());
-                $authorArray = get_object_vars($authorObj);
-                $user = new \User();
-
-                // Create author
-                if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
-                    // Create new user
-                    $user->create($authorArray);
-
-                    // Set user meta if exists
-                    if ($authorObj->meta) {
-                        $userMeta = get_object_vars($authorObj->meta);
-                        $user->setMeta($userMeta);
-                    }
-
-                    // Fetch and save author image if exists
-                    $authorImgUrl = $element->getRightsOwnerPhoto();
-                    $cm = new \ContentManager();
-                    $authorPhotoRaw = $cm->getUrlContent($authorImgUrl);
-                    if ($authorPhotoRaw) {
-                        $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
-                        $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
-                        if (!is_dir($localImageDir)) {
-                            \FilesManager::createDirectory($localImageDir);
-                        }
-                        if (file_exists($localImagePath)) {
-                            unlink($localImagePath);
-                        }
-                        file_put_contents($localImagePath, $authorPhotoRaw);
-
-                        // Get all necessary data for the photo
-                        $infor = new \MediaItem($localImagePath);
-                        $data = array(
-                            'title'       => $authorObj->photo->name,
-                            'name'        => $authorObj->photo->name,
-                            'user_name'   => $authorObj->photo->name,
-                            'path_file'   => $authorObj->photo->path_file,
-                            'nameCat'     => $authorObj->username,
-                            'category'    => '',
-                            'created'     => $infor->atime,
-                            'changed'     => $infor->mtime,
-                            'date'        => $infor->mtime,
-                            'size'        => round($infor->size/1024, 2),
-                            'width'       => $infor->width,
-                            'height'      => $infor->height,
-                            'type'        => $infor->type,
-                            'type_img'    => substr($authorObj->photo->name, -3),
-                            'media_type'  => 'image',
-                            'author_name' => $authorObj->username,
-                        );
-
-                        $photo = new \Photo();
-                        $photoId = $photo->create($data);
-
-                        // Get new author id and update avatar_img_id
-                        $newAuthor = get_object_vars($user->findByEmail($authorObj->email));
-                        $authorId = $newAuthor['id'];
-                        $newAuthor['avatar_img_id'] = $photoId;
-                        unset($newAuthor['password']);
-                        $user->update($newAuthor);
-                    }
-                } else {
-                    // Fetch the user if exists and is not null
-                    if (!is_null($authorObj->email)) {
-                        $author = $user->findByEmail($authorObj->email);
-                        $authorId = $author->id;
-                    }
-                }
-            }
-        }
-
-        // If the new has videos import them
-        if ($element->hasVideos()) {
-            $videos = $element->getVideos();
-            foreach ($videos as $video) {
-                $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$video->file_path
-                );
-
-                // If no video from FTP check HTTP
-                if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$video->name[$i];
-                    $fileName = $video->name[$i];
-                }
-
-
-                // Check if the file exists
-                if ($filePath) {
-                    $videoFileData = array(
-                        'file_type'      => $video->file_type,
-                        'file_path'      => $filePath,
-                        'category'       => $category,
-                        'available'      => 1,
-                        'content_status' => 0,
-                        'title'          => $video->title,
-                        'metadata'       => \Onm\StringUtils::get_tags($video->title),
-                        'description'    => '',
-                        'author_name'    => 'internal',
-                    );
-
-                    $video = new \Video();
-                    $videoID = $video->createFromLocalFile($videoFileData);
-
-                    // If this article has more than one video take the first one
-                    if (!isset($innerVideo)) {
-                        $innerVideo = new \Video($videoID);
-                    }
-                }
-                $i++;
-            }
-        }
-
-        $values = array(
-            'title'          => $element->title,
-            'category'       => $category,
-            'with_comment'   => 1,
-            'content_status' => 0,
-            'frontpage'      => 0,
-            'in_home'        => 0,
-            'title_int'      => $element->title,
-            'metadata'       => \Onm\StringUtils::get_tags($element->title),
-            'subtitle'       => $element->pretitle,
-            'agency'         => $server['agency_string'],
-            'fk_author'      => (isset($authorId) ? $authorId : 0),
-            'summary'        => $element->summary,
-            'body'           => $element->body,
-            'posic'          => 0,
-            'id'             => 0,
-            'fk_publisher'   => $_SESSION['userid'],
-            'img1'           => (isset($frontPhoto) ? $frontPhoto->id : ''),
-            'img1_footer'    => (isset($frontPhoto) ? $frontPhoto->description : ''),
-            'img2'           => (isset($innerPhoto) ? $innerPhoto->id : ''),
-            'img2_footer'    => (isset($innerPhoto) ? $innerPhoto->description : ''),
-            'fk_video'       => '',
-            'fk_video2'      => (isset($innerVideo) ? $innerVideo->id : ''),
-            'footer_video2'  => (isset($innerVideo) ? $innerVideo->title : ''),
-            'ordenArti'      => '',
-            'ordenArtiInt'   => '',
-            'urn_source'     => $element->urn,
-        );
-
-        $article           = new \Article();
-        $newArticleID      = $article->create($values);
-        $_SESSION['desde'] = 'efe_press_import';
 
         // TODO: change this redirection when creating the ported article controller
-        if (!empty($newArticleID)) {
+        if (!empty($article)) {
             return $this->redirect(
                 $this->generateUrl(
                     'admin_article_show',
-                    array('id' => $newArticleID)
+                    array('id' => $article)
                 )
             );
         } else {
@@ -499,6 +259,32 @@ class NewsAgencyController extends Controller
 
             return $this->redirect($this->generateUrl('admin_news_agency'));
         }
+    }
+
+    /**
+     * Imports a list of articles given a list Ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function batchImportAction(Request $request)
+    {
+        $selected = $request->query->get('selected', null);
+
+        if (is_array($selected) && count($selected) > 0) {
+
+            foreach ($selected as $value) {
+                // First is sorce_id and second is xml filename
+                $item = explode(',', $value);
+
+                // Import and create element - category unknown
+                $this->importElements($item[1], $item[0], '20');
+
+            }
+        }
+
+        return $this->redirect($this->generateUrl('admin_news_agency'));
     }
 
     /**
@@ -740,6 +526,41 @@ class NewsAgencyController extends Controller
     }
 
     /**
+     * Toogle an server state to enabled/disabled
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function toogleEnabledAction(Request $request)
+    {
+        $serverId = $request->query->getDigits('id');
+
+        $servers = s::get('news_agency_config');
+
+        if ($servers[$serverId]['activated'] == '1') {
+            $servers[$serverId]['activated'] = '0';
+            $status = 'disabled';
+        } else {
+            $servers[$serverId]['activated'] = '1';
+            $status = 'enabled';
+        }
+
+        s::set('news_agency_config', $servers);
+
+        m::add(
+            sprintf(
+                'Server "%s" has been %s',
+                $servers[$serverId]['name'],
+                $status
+            ),
+            m::SUCCESS
+        );
+
+        return $this->redirect($this->generateUrl('admin_news_agency_servers'));
+    }
+
+    /**
      * Shows and handles the configuration form for Efe module
      *
      * @param Request $request the request object
@@ -875,5 +696,255 @@ class NewsAgencyController extends Controller
         }
 
         return $this->redirect($this->generateUrl('admin_news_agency_servers'));
+    }
+
+    /**
+     * Basic logic to import an element
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    private function importElements($id = '', $sourceId = '', $category = null)
+    {
+        if (empty($id) || empty($sourceId)) {
+            m::add(_('Please specify the article to import.'), m::ERROR);
+
+            return 'redirect_list';
+        }
+
+        if (empty($category)) {
+            m::add(_('Please assign the category where import this article'), m::ERROR);
+
+            return 'redirect_category';
+        }
+
+        $categoryInstance = new \ContentCategory($category);
+        if (!is_object($categoryInstance)) {
+            m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
+
+            return 'redirect_category';
+        }
+
+        // Get EFE new from a filename
+        try {
+            $repository = new \Onm\Import\Repository\LocalRepository();
+            $element = $repository->findByFileName($sourceId, $id);
+        } catch (\Exception $e) {
+            m::add(_('Please specify the article to import.'), m::ERROR);
+
+            return 'redirect_list';
+        }
+
+        // Get server config
+        $servers = s::get('news_agency_config');
+        $server = $servers[$sourceId];
+
+        // If the new has photos import them
+        if ($element->hasPhotos()) {
+            $photos = $element->getPhotos();
+            $i = 0;
+            foreach ($photos as $photo) {
+                // Get image from FTP
+                $filePath = realpath(
+                    $repository->syncPath.DS.$sourceId.DS.$photo->file_path
+                );
+                $fileName = $photo->file_path;
+
+                // If no image from FTP check HTTP
+                if (!$filePath) {
+                    $filePath = $repository->syncPath.DS.
+                        $sourceId.DS.$photo->name[$i];
+                    $fileName = $photo->name[$i];
+                }
+
+                // Check if the file cache exists(keys)
+                if (file_exists($filePath)) {
+                    $data = array(
+                        'title'         => $fileName,
+                        'description'   => $photo->title,
+                        'local_file'    => $filePath,
+                        'fk_category'   => $category,
+                        'category_name' => $categoryInstance->name,
+                        'category'      => $categoryInstance->name,
+                        'metadata'      => \Onm\StringUtils::get_tags($photo->title),
+                        'author_name'   => '&copy; EFE '.date('Y'),
+                        'original_filename' => $fileName,
+                    );
+
+                    $photo = new \Photo();
+                    $photoObject = $photo->createFromLocalFileAjax($data);
+
+                    // Check if sync is from Opennemas instances
+                    if ($element->getServicePartyName() == 'Opennemas') {
+                        // If this article has more than one photo take the first one to front
+                        if (!isset($frontPhoto)) {
+                            $frontPhoto = new \Photo($photoObject->id);
+                        } elseif (!isset($innerPhoto)) {
+                            $innerPhoto = new \Photo($photoObject->id);
+                        }
+                    } elseif (!isset($innerPhoto)) {
+                        $innerPhoto = new \Photo($photoObject->id);
+                    }
+
+                }
+                $i++;
+            }
+        }
+
+        // Check if sync is from Opennemas instances for importing author
+        if ($element->getServicePartyName() == 'Opennemas') {
+            // Check if allow to import authors
+            if (isset($server['author']) && $server['author'] == '1') {
+
+                // Get author object,decode it and create new author
+                $authorObj = json_decode($element->getRightsOwner());
+                $authorArray = get_object_vars($authorObj);
+                $user = new \User();
+
+                // Create author
+                if (!is_null($authorArray['id']) && !$user->checkIfUserExists($authorArray)) {
+                    // Create new user
+                    $user->create($authorArray);
+
+                    // Set user meta if exists
+                    if ($authorObj->meta) {
+                        $userMeta = get_object_vars($authorObj->meta);
+                        $user->setMeta($userMeta);
+                    }
+
+                    // Fetch and save author image if exists
+                    $authorImgUrl = $element->getRightsOwnerPhoto();
+                    $cm = new \ContentManager();
+                    $authorPhotoRaw = $cm->getUrlContent($authorImgUrl);
+                    if ($authorPhotoRaw) {
+                        $localImageDir  = MEDIA_IMG_PATH.$authorObj->photo->path_file;
+                        $localImagePath = MEDIA_IMG_PATH.$authorObj->photo->path_img;
+                        if (!is_dir($localImageDir)) {
+                            \FilesManager::createDirectory($localImageDir);
+                        }
+                        if (file_exists($localImagePath)) {
+                            unlink($localImagePath);
+                        }
+                        file_put_contents($localImagePath, $authorPhotoRaw);
+
+                        // Get all necessary data for the photo
+                        $infor = new \MediaItem($localImagePath);
+                        $data = array(
+                            'title'       => $authorObj->photo->name,
+                            'name'        => $authorObj->photo->name,
+                            'user_name'   => $authorObj->photo->name,
+                            'path_file'   => $authorObj->photo->path_file,
+                            'nameCat'     => $authorObj->username,
+                            'category'    => '',
+                            'created'     => $infor->atime,
+                            'changed'     => $infor->mtime,
+                            'date'        => $infor->mtime,
+                            'size'        => round($infor->size/1024, 2),
+                            'width'       => $infor->width,
+                            'height'      => $infor->height,
+                            'type'        => $infor->type,
+                            'type_img'    => substr($authorObj->photo->name, -3),
+                            'media_type'  => 'image',
+                            'author_name' => $authorObj->username,
+                        );
+
+                        $photo = new \Photo();
+                        $photoId = $photo->create($data);
+
+                        // Get new author id and update avatar_img_id
+                        $newAuthor = get_object_vars($user->findByEmail($authorObj->email));
+                        $authorId = $newAuthor['id'];
+                        $newAuthor['avatar_img_id'] = $photoId;
+                        unset($newAuthor['password']);
+                        $user->update($newAuthor);
+                    }
+                } else {
+                    // Fetch the user if exists and is not null
+                    if (!is_null($authorObj->email)) {
+                        $author = $user->findByEmail($authorObj->email);
+                        $authorId = $author->id;
+                    }
+                }
+            }
+        }
+
+        // If the new has videos import them
+        if ($element->hasVideos()) {
+            $videos = $element->getVideos();
+            foreach ($videos as $video) {
+                $filePath = realpath(
+                    $repository->syncPath.DS.$sourceId.DS.$video->file_path
+                );
+
+                // If no video from FTP check HTTP
+                if (!$filePath) {
+                    $filePath = $repository->syncPath.DS.
+                        $sourceId.DS.$video->name[$i];
+                    $fileName = $video->name[$i];
+                }
+
+
+                // Check if the file exists
+                if ($filePath) {
+                    $videoFileData = array(
+                        'file_type'      => $video->file_type,
+                        'file_path'      => $filePath,
+                        'category'       => $category,
+                        'available'      => 1,
+                        'content_status' => 0,
+                        'title'          => $video->title,
+                        'metadata'       => \Onm\StringUtils::get_tags($video->title),
+                        'description'    => '',
+                        'author_name'    => 'internal',
+                    );
+
+                    $video = new \Video();
+                    $videoID = $video->createFromLocalFile($videoFileData);
+
+                    // If this article has more than one video take the first one
+                    if (!isset($innerVideo)) {
+                        $innerVideo = new \Video($videoID);
+                    }
+                }
+                $i++;
+            }
+        }
+
+        $values = array(
+            'title'          => $element->title,
+            'category'       => $category,
+            'with_comment'   => 1,
+            'available'      => 0,
+            'content_status' => 0,
+            'frontpage'      => 0,
+            'in_home'        => 0,
+            'title_int'      => $element->title,
+            'metadata'       => \Onm\StringUtils::get_tags($element->title),
+            'subtitle'       => $element->pretitle,
+            'agency'         => $server['agency_string'],
+            'fk_author'      => (isset($authorId) ? $authorId : 0),
+            'summary'        => $element->summary,
+            'body'           => $element->body,
+            'posic'          => 0,
+            'id'             => 0,
+            'fk_publisher'   => $_SESSION['userid'],
+            'img1'           => (isset($frontPhoto) ? $frontPhoto->id : ''),
+            'img1_footer'    => (isset($frontPhoto) ? $frontPhoto->description : ''),
+            'img2'           => (isset($innerPhoto) ? $innerPhoto->id : ''),
+            'img2_footer'    => (isset($innerPhoto) ? $innerPhoto->description : ''),
+            'fk_video'       => '',
+            'fk_video2'      => (isset($innerVideo) ? $innerVideo->id : ''),
+            'footer_video2'  => (isset($innerVideo) ? $innerVideo->title : ''),
+            'ordenArti'      => '',
+            'ordenArtiInt'   => '',
+            'urn_source'     => $element->urn,
+        );
+
+        $article           = new \Article();
+        $newArticleID      = $article->create($values);
+        $_SESSION['desde'] = 'efe_press_import';
+
+        return $newArticleID;
     }
 }
