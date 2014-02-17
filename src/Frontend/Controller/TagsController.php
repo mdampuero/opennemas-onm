@@ -44,49 +44,62 @@ class TagsController extends Controller
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
             $tagSearch = $GLOBALS['application']->conn->qstr("%{$tag}%");
             $itemsPerPage = s::get('items_in_blog');
-            if (empty($itemsPerPage )) {
+            if (empty($itemsPerPage)) {
                 $itemsPerPage = 8;
             }
-
 
             $searchCriteria =  " metadata LIKE {$tagSearch}  AND fk_content_type IN (1, 4, 7, 9) "
                 ." AND available=1 AND in_litter=0";
 
             $er = $this->get('entity_repository');
-            $contentsCount  = $er->count($searchCriteria);
-            $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);
+            $contents = $er->findBy($searchCriteria, 'starttime DESC');
 
+            $filteredContents = array();
             foreach ($contents as &$item) {
-                $item = $item->get($item->id);
-                if (isset($item->img1) && ($item->img1 > 0)) {
-                    $image = new \Photo($item->img1);
-                    $item->img1_path = $image->path_file.$image->name;
-                    $item->img1 = $image;
+                $arrayMetadatas = explode(',', $item->metadata);
+
+                foreach ($arrayMetadatas as &$word) {
+                    $word = trim($word);
                 }
 
-                if ($item->fk_content_type == 7) {
-                    $image = new \Photo($item->cover_id);
-                    $item->img1_path = $image->path_file.$image->name;
-                    $item->img1 = $image;
-                    $item->summary = $item->subtitle;
-                    $item->subtitle= '';
-                }
+                if (in_array($tag, $arrayMetadatas)) {
+                    $item = $item->get($item->id);
+                    if (isset($item->img1) && ($item->img1 > 0)) {
+                        $image = new \Photo($item->img1);
+                        $item->img1_path = $image->path_file.$image->name;
+                        $item->img1 = $image;
+                    }
 
-                if ($item->fk_content_type == 9) {
-                    $item->obj_video = $item;
-                    $item->summary = $item->description;
-                }
+                    if ($item->fk_content_type == 7) {
+                        $image = new \Photo($item->cover_id);
+                        $item->img1_path = $image->path_file.$image->name;
+                        $item->img1 = $image;
+                        $item->summary = $item->subtitle;
+                        $item->subtitle= '';
+                    }
 
-                if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                    $item->video = new \Video($item->fk_video2);
+                    if ($item->fk_content_type == 9) {
+                        $item->obj_video = $item;
+                        $item->summary = $item->description;
+                    }
+
+                    if (isset($item->fk_video) && ($item->fk_video > 0)) {
+                        $item->video = new \Video($item->fk_video2);
+                    }
+
+                    // Add item to final array
+                    $filteredContents[] = $item;
                 }
             }
+
+            $totalContents = count($filteredContents);
+            $filteredContents = array_slice($filteredContents, ($page-1)*$itemsPerPage, $itemsPerPage);
 
             $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                 array(
                     'page'  => $page,
                     'items' => $itemsPerPage,
-                    'total' => $contentsCount,
+                    'total' => $totalContents,
                     'url'   => $this->generateUrl(
                         'tag_frontpage',
                         array(
@@ -98,7 +111,7 @@ class TagsController extends Controller
 
             $this->view->assign(
                 array(
-                    'contents'   => $contents,
+                    'contents'   => $filteredContents,
                     'tagName'    => $tagName,
                     'pagination' => $pagination,
                 )
