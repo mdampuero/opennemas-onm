@@ -71,7 +71,10 @@ class RedirectorsController extends Controller
             $content->category_name = $content->catName;
         } elseif ($type == 'opinion') {
             $content = new \Opinion($newContentID);
+        } else {
+            $content = new \Content($newContentID);
         }
+
         if (!isset($content) || is_null($content->id)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
