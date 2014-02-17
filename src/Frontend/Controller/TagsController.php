@@ -55,11 +55,12 @@ class TagsController extends Controller
             $contents = $er->findBy($searchCriteria, 'starttime DESC');
 
             $filteredContents = array();
+            $tag = strtolower($tag);
             foreach ($contents as &$item) {
                 $arrayMetadatas = explode(',', $item->metadata);
 
                 foreach ($arrayMetadatas as &$word) {
-                    $word = trim($word);
+                    $word = strtolower(trim($word));
                 }
 
                 if (in_array($tag, $arrayMetadatas)) {
