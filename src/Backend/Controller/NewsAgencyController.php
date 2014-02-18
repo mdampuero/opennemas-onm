@@ -231,7 +231,7 @@ class NewsAgencyController extends Controller
     {
         $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
         $sourceId = $this->request->query->getDigits('source_id');
-        $category = $this->request->request->filter('category', null, FILTER_SANITIZE_STRING);
+        $category = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
 
         // Import and create element
         $article = $this->importElements($id, $sourceId, $category);
@@ -279,7 +279,7 @@ class NewsAgencyController extends Controller
                 $item = explode(',', $value);
 
                 // Import and create element - category unknown
-                $this->importElements($item[1], $item[0], '20');
+                $this->importElements($item[1], $item[0], 'GUESS');
 
             }
         }
@@ -305,16 +305,29 @@ class NewsAgencyController extends Controller
             $this->redirect($this->generateUrl('admin_news_agency'));
         }
 
+        $repository       = new \Onm\Import\Repository\LocalRepository();
+        $element          = $repository->findByFileName($sourceId, $id);
+
         $ccm = \ContentCategoryManager::get_instance();
         list($parentCategories, $subcat, $categoryData) = $ccm->getArraysMenu();
-
         $categories = array();
         foreach ($parentCategories as $category) {
-            $categories [$category->pk_content_category]= $category->title;
+            $categories [$category->pk_content_category] = $category->title;
         }
 
-        $repository = new \Onm\Import\Repository\LocalRepository();
-        $element = $repository->findByFileName($sourceId, $id);
+        // If the element has a original category that matches an existing category
+        // in the newspaper redirect it to the import action with that category
+        $targetCategory = $this->getSimilarCategoryIdForElement($element);
+        if (!empty($targetCategory)) {
+            return $this->redirect($this->generateUrl(
+                'admin_news_agency_import',
+                array(
+                    'source_id' => $sourceId,
+                    'id'        => $id,
+                    'category'  => $targetCategory,
+                )
+            ));
+        }
 
         return $this->render(
             'news_agency/import_select_category.tpl',
@@ -325,6 +338,35 @@ class NewsAgencyController extends Controller
                 'categories' => $categories,
             )
         );
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getSimilarCategoryIdForElement($element)
+    {
+        $originalCategory     = utf8_decode($element->getOpennemasData('category'));
+        $originalCategoryTemp = strtolower($originalCategory);
+
+        $ccm        = \ContentCategoryManager::get_instance();
+        $categories = $ccm->findAll();
+
+        $prevPoint = 1000;
+        $finalCategory = null;
+        foreach ($categories as $category) {
+            $categoryName = strtolower(utf8_decode($category->title));
+            $lev          = levenshtein($originalCategoryTemp, $categoryName);
+
+            if ($lev < 2  && $lev < $prevPoint) {
+                $prevPoint     = $lev;
+                $finalCategory = $category->id;
+            }
+        }
+
+        return $finalCategory;
     }
 
     /**
@@ -713,12 +755,6 @@ class NewsAgencyController extends Controller
             return 'redirect_list';
         }
 
-        if (empty($category)) {
-            m::add(_('Please assign the category where import this article'), m::ERROR);
-
-            return 'redirect_category';
-        }
-
         $categoryInstance = new \ContentCategory($category);
         if (!is_object($categoryInstance)) {
             m::add(_('The category you have chosen doesn\'t exists.'), m::ERROR);
@@ -734,6 +770,20 @@ class NewsAgencyController extends Controller
             m::add(_('Please specify the article to import.'), m::ERROR);
 
             return 'redirect_list';
+        }
+
+
+        if ($category == 'GUESS') {
+            // If the element has a original category that matches an existing category
+            // in the newspaper redirect it to the import action with that category
+            $category = $this->getSimilarCategoryIdForElement($element);
+            if (empty($category)) {
+                $category = '20';
+            }
+        } else {
+            m::add(_('Please assign the category where import this article'), m::ERROR);
+
+            return 'redirect_category';
         }
 
         // Get server config
