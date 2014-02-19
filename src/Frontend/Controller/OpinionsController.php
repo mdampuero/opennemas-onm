@@ -94,14 +94,14 @@ class OpinionsController extends Controller
                 );
             }
 
-            foreach ($editorial as &$opinion) {
+            foreach ($editorial as &$op) {
                 $item = new \Content();
-                $item->loadAllContentProperties($opinion->pk_content);
+                $item->loadAllContentProperties($op->pk_content);
 
-                $opinion->summary = $item->summary;
-                $opinion->img1_footer = $item->img1_footer;
+                $op->summary = $item->summary;
+                $op->img1_footer = $item->img1_footer;
                 if (isset($item->img1) && ($item->img1 > 0)) {
-                    $opinion->img1 = new \Photo($item->img1);
+                    $op->img1 = new \Photo($item->img1);
                 }
             }
 
