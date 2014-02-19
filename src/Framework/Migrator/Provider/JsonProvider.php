@@ -165,70 +165,75 @@ class JsonProvider extends MigrationProvider
     {
         $parsed = array();
         foreach ($item as $name => $value) {
-            if (!is_array($value)) {
-                // Non-array - Copy
-                if (count($parsed) == 0) {
-                    // Parsed empty - New item
-                    $parsed[] = array($name => $value);
-                } else {
-                    // Append value to already parsed items
-                    foreach ($parsed as $key => $p) {
-                        $parsed[$key][$name] = $value;
-                    }
-                }
-            } else {
-                if (array_keys($value) !== range(0, count($value) - 1)) {
-                    // Associative array (Sub-fields - Extract)
-                    foreach ($value as $i => $v) {
-                        foreach ($parsed as $j => $p) {
-                            $parsed[$j][$i] = $v;
-                        }
-                    }
-                } else {
-                    // Non-associative array (Sub-items - Clone & Join)
-                    // Find field config in $schema
-                    $keys = array_keys($schema['fields']);
-                    $i = 0;
-                    while ($i < count($keys)
-                        && (
-                            !array_key_exists(
-                                'field',
-                                $schema['fields'][$keys[$i]]
-                            ) || (array_key_exists(
-                                'field',
-                                $schema['fields'][$keys[$i]]
-                            ) && $schema['fields'][$keys[$i]]['field'] != $name)
-                        )
-                    ) {
-                        $i++;
-                    }
-
-                    // Check if field has to be merged
-                    if ($i < count($keys)
-                        && in_array(
-                            'merge',
-                            $schema['fields'][$keys[$i]]['type']
-                        )
-                    ) {
-                        // Append array to already parsed items
-                        foreach ($parsed as $j => $p) {
-                            $parsed[$j][$name] = $value;
-                        }
+            if (!array_key_exists('ignore', $schema)
+                || (array_key_exists('ignore', $schema)
+                && !in_array($name, $schema['ignore']))
+            ) {
+                if (!is_array($value)) {
+                    // Non-array - Copy
+                    if (count($parsed) == 0) {
+                        // Parsed empty - New item
+                        $parsed[] = array($name => $value);
                     } else {
-                        // Join
-                        $joined = array();
-                        foreach ($value as $k => $v) {
-                            $toJoin = $this->itemToFlat($v, $schema);
-
-                            // Join fields to elements in parsed
-                            foreach ($toJoin as $f) {
-                                foreach ($parsed as $j => $v) {
-                                    $joined[] = array_merge($parsed[$j], $f);
-                                }
+                        // Append value to already parsed items
+                        foreach ($parsed as $key => $p) {
+                            $parsed[$key][$name] = $value;
+                        }
+                    }
+                } else {
+                    if (array_keys($value) !== range(0, count($value) - 1)) {
+                        // Associative array (Sub-fields - Extract)
+                        foreach ($value as $i => $v) {
+                            foreach ($parsed as $j => $p) {
+                                $parsed[$j][$i] = $v;
                             }
                         }
+                    } else {
+                        // Non-associative array (Sub-items - Clone & Join)
+                        // Find field config in $schema
+                        $keys = array_keys($schema['fields']);
+                        $i = 0;
+                        while ($i < count($keys)
+                            && (
+                                !array_key_exists(
+                                    'field',
+                                    $schema['fields'][$keys[$i]]
+                                ) || (array_key_exists(
+                                    'field',
+                                    $schema['fields'][$keys[$i]]
+                                ) && $schema['fields'][$keys[$i]]['field'] != $name)
+                            )
+                        ) {
+                            $i++;
+                        }
 
-                        $parsed = $joined;
+                        // Check if field has to be merged
+                        if ($i < count($keys)
+                            && in_array(
+                                'merge',
+                                $schema['fields'][$keys[$i]]['type']
+                            )
+                        ) {
+                            // Append array to already parsed items
+                            foreach ($parsed as $j => $p) {
+                                $parsed[$j][$name] = $value;
+                            }
+                        } else {
+                            // Join
+                            $joined = array();
+                            foreach ($value as $k => $v) {
+                                $toJoin = $this->itemToFlat($v, $schema);
+
+                                // Join fields to elements in parsed
+                                foreach ($toJoin as $f) {
+                                    foreach ($parsed as $j => $v) {
+                                        $joined[] = array_merge($parsed[$j], $f);
+                                    }
+                                }
+                            }
+
+                            $parsed = $joined;
+                        }
                     }
                 }
             }
