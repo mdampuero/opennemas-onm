@@ -149,7 +149,7 @@
                             {foreach name=d from=$accounts item=account}
                                 <li class="account"  data-email="{$account->email}" data-name="{$account->name}">
                                     <label>
-                                        <input type="checkbox" name="selected" class="">
+                                        <input type="checkbox">
                                         {$account->name}:{$account->email}
                                         <i class="icon icon-trash"></i>
                                     </label>
