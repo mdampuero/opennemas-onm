@@ -108,6 +108,7 @@ abstract class MigrationProvider
         \Application::load();
         \Application::initDatabase($this->targetConnection);
 
+        $this->configureTranslations();
         $this->loadTranslations();
     }
 
@@ -143,6 +144,27 @@ abstract class MigrationProvider
         foreach ($translations as $translation) {
             $this->translations[$translation['type']]
                 [$translation['pk_content_old']] = $translation['pk_content'];
+        }
+    }
+
+    /**
+     * Prepares the database before starting migration.
+     */
+    private function configureTranslations()
+    {
+        // Initialize target database
+        $conn = new DatabaseConnection(getContainerParameter('database'));
+        $conn->selectDatabase('information_schema');
+
+        $sql = "SELECT *  FROM information_schema.COLUMNS"
+            . " WHERE TABLE_SCHEMA = '" . $this->settings['migration']['target']
+            . "' AND TABLE_NAME = 'translation_ids' AND COLUMN_NAME = 'slug'";
+        $rss = $conn->Execute($sql);
+
+        if ($rss && count($rss->getArray()) == 0) {
+            $sql = "ALTER TABLE translation_ids ADD `slug` VARCHAR(200) DEFAULT"
+                . " '' AFTER `type`;";
+            $rss = $this->targetConnection->Execute($sql);
         }
     }
 }
