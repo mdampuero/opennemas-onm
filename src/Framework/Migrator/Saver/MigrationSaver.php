@@ -1128,21 +1128,29 @@ class MigrationSaver
                     $field = $this->convertToSlug($field);
                     break;
                 case 'substr':
-                    $offset = array_key_exists('offset', $params) ?
-                        $params['offset'] : 0;
-                    $field = substr(
-                        $field,
-                        0,
-                        strpos($field, $params['delimiter'], $offset)
-                    );
-                    break;
-                case 'substrr':
-                    $offset = array_key_exists('offset', $params) ?
-                        $params['offset'] : 0;
-                    if (strrpos($field, $params['delimiter'], $offset)) {
+                    $offset = array_key_exists('offset', $params['substr']) ?
+                        $params['substr']['offset'] : 0;
+                    $delimiter = $params['substr']['delimiter'];
+
+                    if (strpos($field, $delimiter, $offset) !== false) {
                         $field = substr(
                             $field,
-                            strrpos($field, $params['delimiter'], $offset) + 1
+                            0,
+                            strpos($field, $delimiter, $offset)
+                        );
+                    } else {
+                        $field = '';
+                    }
+                    break;
+                case 'substrr':
+                    $offset = array_key_exists('offset', $params['substrr']) ?
+                        $params['substrr']['offset'] : 0;
+                    $delimiter = $params['substrr']['delimiter'];
+
+                    if (strrpos($field, $delimiter, $offset) !== false) {
+                        $field = substr(
+                            $field,
+                            strrpos($field, $delimiter, $offset) + 1
                         );
                     } else {
                         $field = '';
