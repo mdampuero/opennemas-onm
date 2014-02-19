@@ -170,6 +170,8 @@ class MigrationSaver
                     $album->read($id);
 
                     $album->saveAttachedPhotos($photos);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     foreach ($photos['album_photos_id'] as $key => $photo) {
                         if ($this->matchTranslation(
@@ -184,7 +186,8 @@ class MigrationSaver
                             $this->createTranslation(
                                 $photo,
                                 $album->id,
-                                $schema['translation']['name']
+                                $schema['translation']['name'],
+                                $slug
                             );
 
                             $this->stats[$name]['imported']++;
@@ -240,11 +243,14 @@ class MigrationSaver
                 ) {
                     $album = new \Album();
                     $album->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $album->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -269,7 +275,7 @@ class MigrationSaver
         foreach ($data as $item) {
             $values = array(
                 'title'          => null,
-                'with_comment'   => 1,
+                'with_comment'   => 0,
                 'available'      => 1,
                 'content_status' => 1,
                 'category'       => 20,
@@ -310,11 +316,14 @@ class MigrationSaver
                 ) {
                     $article = new \Article();
                     $article->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $article->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -354,11 +363,14 @@ class MigrationSaver
                 ) {
                     $attachment = new \Attachment();
                     $attachment->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $attachment->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -401,6 +413,8 @@ class MigrationSaver
                 );
 
                 $categoryId = $this->findCategory($categoryName);
+                $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                 if ($categoryId === false) {
                     $category = new \ContentCategory();
@@ -409,13 +423,14 @@ class MigrationSaver
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $category->pk_content_category,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
                 } else {
                     // Remap translation to existing category
-                    $this->createTranslation(
+                    $this->updateTranslation(
                         $values[$schema['translation']['field']],
                         $categoryId,
                         $schema['translation']['name']
@@ -423,8 +438,6 @@ class MigrationSaver
 
                     $this->stats[$name]['already_imported']++;
                 }
-
-
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -466,11 +479,14 @@ class MigrationSaver
                 ) {
                     $comment = new \Comment();
                     $comment->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $comment->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -526,11 +542,14 @@ class MigrationSaver
                 ) {
                     $opinion = new \Opinion();
                     $opinion->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $opinion->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -614,6 +633,8 @@ class MigrationSaver
                             $values,
                             $values['directory']
                         );
+                        $slug = array_key_exists('slug', $schema['translation'])
+                            ? $values[$schema['translation']['slug']] : '';
 
                         // Update article img2 and img2_footer
                         if (isset($values['article'])
@@ -642,7 +663,8 @@ class MigrationSaver
                         $this->createTranslation(
                             $values[$schema['translation']['field']],
                             $id,
-                            $schema['translation']['name']
+                            $schema['translation']['name'],
+                            $slug
                         );
 
                         $this->stats[$name]['imported']++;
@@ -683,11 +705,14 @@ class MigrationSaver
                 ) {
                     $group   = new \UserGroup();
                     $group->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $group->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -737,11 +762,14 @@ class MigrationSaver
                 ) {
                     $user = new \User();
                     $user->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $user->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -797,6 +825,8 @@ class MigrationSaver
 
                     $video = new \Video();
                     $video->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     // Update article img2 and img2_footer
                     if (isset($values['article'])
@@ -811,7 +841,8 @@ class MigrationSaver
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $video->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -853,8 +884,14 @@ class MigrationSaver
             $this->settings['migration']['source']
         );
 
-        $_SESSION['username'] = 'script';
-        $_SESSION['userid']   = 11;
+        if (array_key_exists('user', $this->settings['migration'])) {
+            $_SESSION['userid'] = $this->settings['migration']['user']['id'];
+            $_SESSION['username'] =
+                $this->settings['migration']['user']['username'];
+        } else {
+            $_SESSION['userid'] = 999;
+            $_SESSION['username'] = 'ONM';
+        }
     }
 
     /**
@@ -884,8 +921,8 @@ class MigrationSaver
      */
     protected function convertToMap($string, $params)
     {
-        if (isset($params['map']) && isset($params['map'][$string])) {
-            return $params['map'][$string];
+        if (isset($params) && isset($params[$string])) {
+            return $params[$string];
         }
 
         return false;
@@ -939,12 +976,13 @@ class MigrationSaver
      * @param integer $old  Old content id used in old database.
      * @param integer $new  New content id.
      * @param string  $type Type of the translation.
+     * @param string  $slug Old content slug.
      */
-    protected function createTranslation($old, $new, $type)
+    protected function createTranslation($old, $new, $type, $slug = null)
     {
         $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
-            . '`type`) VALUES (?,?,?)';
-        $values = array($old, $new, $type);
+            . '`type`, `slug`) VALUES (?,?,?,?)';
+        $values = array($old, $new, $type, $slug);
 
         $stmt = $this->targetConnection->Prepare($sql);
         $rss  = $this->targetConnection->Execute($stmt, $values);
@@ -1065,6 +1103,9 @@ class MigrationSaver
                         $field = $id;
                     }
                     break;
+                case 'html':
+                    $field = htmlentities($field, ENT_IGNORE, 'UTF-8');
+                    break;
                 case 'map':
                     $field = $this->convertToMap($field, $params['map']);
                     break;
@@ -1080,24 +1121,28 @@ class MigrationSaver
                         $field = rtrim($value, ',');
                     }
                     break;
-                case 'raw': // Remove spaces at beginning and end
+                case 'raw':
                     $field = trim($field);
                     break;
                 case 'slug':
                     $field = $this->convertToSlug($field);
                     break;
                 case 'substr':
+                    $offset = array_key_exists('offset', $params) ?
+                        $params['offset'] : 0;
                     $field = substr(
                         $field,
                         0,
-                        strpos($field, $params['delimiter'])
+                        strpos($field, $params['delimiter'], $offset)
                     );
                     break;
                 case 'substrr':
-                    if (strrpos($field, $params['delimiter'])) {
+                    $offset = array_key_exists('offset', $params) ?
+                        $params['offset'] : 0;
+                    if (strrpos($field, $params['delimiter'], $offset)) {
                         $field = substr(
                             $field,
-                            strrpos($field, $params['delimiter']) + 1
+                            strrpos($field, $params['delimiter'], $offset) + 1
                         );
                     } else {
                         $field = '';
@@ -1158,7 +1203,7 @@ class MigrationSaver
      */
     protected function updateArticleFrontpagePhoto($id, $photo, $footer)
     {
-        $sql = "UPDATE articles  SET `img1`=?, `img2_footer`=?"
+        $sql = "UPDATE articles  SET `img1`=?, `img1_footer`=?"
             ."WHERE pk_article=?";
 
         $values = array($photo, $footer, $id);
