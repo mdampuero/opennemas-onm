@@ -38,7 +38,7 @@ class TagsController extends Controller
         // Load config
         $this->view->setConfig('frontpages');
 
-        $tagName = $request->query->filter('tag_name', '', FILTER_SANITIZE_STRING);
+        $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $page    = $request->query->getDigits('page', 1);
 
         $cacheId = "tag|$tagName|$page";
