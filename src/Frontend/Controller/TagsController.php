@@ -35,6 +35,8 @@ class TagsController extends Controller
     public function tagsAction(Request $request)
     {
         $this->view = new \Template(TEMPLATE_USER);
+        // Load config
+        $this->view->setConfig('frontpages');
 
         $tagName = $request->query->filter('tag_name', '', FILTER_SANITIZE_STRING);
         $page    = $request->query->getDigits('page', 1);
@@ -61,6 +63,7 @@ class TagsController extends Controller
 
                 foreach ($arrayMetadatas as &$word) {
                     $word = strtolower(trim($word));
+                    $word = \StringUtils::normalize($word);
                 }
 
                 if (in_array($tag, $arrayMetadatas)) {
