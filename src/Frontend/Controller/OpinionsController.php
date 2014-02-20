@@ -864,6 +864,6 @@ class OpinionsController extends Controller
             $positions = $positionManager->getAdsPositionsForGroup('opinion_frontpage', array(7, 9));
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, 'opinion');
+        return \Advertisement::findForPositionIdsAndCategory($positions, '4');
     }
 }
