@@ -507,6 +507,26 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function getOpennemasData($property)
+    {
+        $internalPropertyName = 'Onm_'.ucfirst($property);
+        $rawProperty = $this->getData()->xpath('//Property[@FormalName=\''.$internalPropertyName.'\']');
+
+        if (empty($rawProperty)) {
+            return null;
+        }
+
+        $propertyValue = (string) $rawProperty[0]->attributes()->Value;
+
+        return $propertyValue;
+    }
+
+    /**
      * Returns the internal data, use with caution
      */
     public function getData()

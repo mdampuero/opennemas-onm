@@ -225,7 +225,6 @@ class OnmMigratorCommand extends ContainerAwareCommand
             } else {
                 throw new \Exception($provider . " class not found");
             }
-
         } else {
             throw new \Exception("Provider not defined.");
         }
