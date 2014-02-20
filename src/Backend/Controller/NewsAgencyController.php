@@ -229,9 +229,12 @@ class NewsAgencyController extends Controller
      **/
     public function importAction(Request $request)
     {
-        $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
-        $category = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $id       = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
+        $sourceId = $request->query->getDigits('source_id');
+        $category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        if (empty($category)) {
+            $category = $request->request->filter('category', null, FILTER_SANITIZE_STRING);
+        }
 
         // Import and create element
         $article = $this->importElements($id, $sourceId, $category);
@@ -780,7 +783,7 @@ class NewsAgencyController extends Controller
             if (empty($category)) {
                 $category = '20';
             }
-        } else {
+        } elseif (empty($category)) {
             m::add(_('Please assign the category where import this article'), m::ERROR);
 
             return 'redirect_category';
