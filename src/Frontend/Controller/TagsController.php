@@ -50,11 +50,12 @@ class TagsController extends Controller
                 $itemsPerPage = 8;
             }
 
-            $searchCriteria =  " metadata LIKE {$tagSearch}  AND fk_content_type IN (1, 4, 7, 9) "
-                ." AND available=1 AND in_litter=0";
+            $searchCriteria =  "available=1 AND in_litter=0  AND fk_content_type IN (1, 4, 7, 9) "
+                ." AND `starttime`>=DATE_SUB(CURDATE(), INTERVAL 1 YEAR) "
+                ." AND metadata LIKE {$tagSearch}";
 
             $er = $this->get('entity_repository');
-            $contents = $er->findBy($searchCriteria, 'starttime DESC');
+            $contents = $er->findBy($searchCriteria, 'starttime DESC', 200, 1);
 
             $filteredContents = array();
             $tag = strtolower($tag);
@@ -70,13 +71,13 @@ class TagsController extends Controller
                 if (in_array($tag, $arrayMetadatas)) {
                     $item = $item->get($item->id);
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = new \Photo($item->img1);
+                        $image = $er->find('Photo', $item->img1);
                         $item->img1_path = $image->path_file.$image->name;
                         $item->img1 = $image;
                     }
 
                     if ($item->fk_content_type == 7) {
-                        $image = new \Photo($item->cover_id);
+                        $image = $er->find('Photo', $item->cover_id);
                         $item->img1_path = $image->path_file.$image->name;
                         $item->img1 = $image;
                         $item->summary = $item->subtitle;
@@ -89,7 +90,7 @@ class TagsController extends Controller
                     }
 
                     if (isset($item->fk_video) && ($item->fk_video > 0)) {
-                        $item->video = new \Video($item->fk_video2);
+                        $item->video = $er->find('Video', $item->fk_video2);
                     }
 
                     // Add item to final array
