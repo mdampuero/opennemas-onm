@@ -291,7 +291,8 @@ class OnmMigratorCommand extends ContainerAwareCommand
                     break;
             }
 
-            $this->saver->remapTranslations($key, $schema);
+            $this->saver->premapTranslations($key, $schema);
+            $this->saver->postmapTranslations($key, $schema);
 
             $this->stats[$key]['end'] = time();
             $this->displaySectionResults($key, $this->stats[$key]);
