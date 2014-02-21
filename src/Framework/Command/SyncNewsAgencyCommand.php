@@ -59,7 +59,7 @@ EOF
         $database = $instance->settings['BD_DATABASE'];
         $dbConn->selectDatabase($database);
 
-        $logger->notice('Synchying '.$instance->internal_name. ' agencies elements.', array('cron'));
+        $logger->notice("Start syncing '{$instance->internal_name}' agencies elements.", array('cron'));
 
         // CRAP: take this out, Workaround
         \Application::load();
@@ -73,14 +73,14 @@ EOF
         try {
             $messages = $synchronizer->syncMultiple($servers);
             foreach ($messages as $message) {
-                $finalMessage = ' Sync "'.$database.'": '.$message;
+                $finalMessage = "Sync report for '{$instance->internal_name}': {$message}";
                 $logger->notice($finalMessage, array('cron'));
             }
         } catch (\Onm\Import\Synchronizer\LockException $e) {
-            $output->writeln("<error>Sync {$instance->internal_name} - {$e->getMessage()}</error>");
+            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}. Unlocking and it will sync the next time.</error>");
             $synchronizer->unlockSync();
         } catch (\Exception $e) {
-            $output->writeln("<error>Sync {$instance->internal_name} - {$e->getMessage()}</error>");
+            $output->writeln("<error>Sync report for '{$instance->internal_name}': {$e->getMessage()}</error>");
         }
 
 
