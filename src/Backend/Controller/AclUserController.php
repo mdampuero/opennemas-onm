@@ -65,8 +65,12 @@ class AclUserController extends Controller
         );
 
         $er = $this->get('entity_repository');
+        $filterUsers = array();
         foreach ($users as &$user) {
             $user->photo = $er->find('Photo', $user->avatar_img_id);
+            if (in_array($filter['group'], $user->fk_user_group)) {
+                $filterUsers[] = $user;
+            }
         }
 
         $userGroup = new \UserGroup();
@@ -81,7 +85,7 @@ class AclUserController extends Controller
         return $this->render(
             'acl/user/list.tpl',
             array(
-                'users'           => $users,
+                'users'           => $filterUsers,
                 'user_groups'     => $groups,
                 'groupsOptions'   => $groupsOptions,
                 'total_num_users' => $usersCount,
