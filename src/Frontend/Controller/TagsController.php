@@ -64,6 +64,7 @@ class TagsController extends Controller
                 foreach ($arrayMetadatas as &$word) {
                     $word = strtolower(trim($word));
                     $word = \StringUtils::normalize($word);
+                    $word = preg_replace('/[^a-z0-9]/', '_', $word);
                 }
 
                 if (in_array($tag, $arrayMetadatas)) {
