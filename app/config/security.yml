@@ -36,6 +36,7 @@ security:
                 default_target_path:            admin_welcome
                 target_path_parameter:          _referer
                 use_referer:                    true
+                success_handler:                login_success_handler
             logout:
                 path:   admin_logout
                 target: admin_login_form
