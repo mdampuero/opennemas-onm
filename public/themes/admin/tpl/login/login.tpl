@@ -51,7 +51,7 @@
                 <input name="_username" id="_username" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
                 <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                 <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
-                {if $smarty.get.failed_login_attempts >= 3}
+                {if $failed_login_attempts >= 3}
                 <div class="control-group clearfix">
                     <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
                     <noscript>
