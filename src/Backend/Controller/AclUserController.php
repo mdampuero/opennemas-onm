@@ -68,7 +68,9 @@ class AclUserController extends Controller
         $filterUsers = array();
         foreach ($users as &$user) {
             $user->photo = $er->find('Photo', $user->avatar_img_id);
-            if (in_array($filter['group'], $user->fk_user_group)) {
+            if (empty($filter['group'])) {
+                $filterUsers[] = $user;
+            } elseif (in_array($filter['group'], $user->fk_user_group)) {
                 $filterUsers[] = $user;
             }
         }
