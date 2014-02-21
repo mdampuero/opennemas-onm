@@ -48,7 +48,7 @@ class InstanceManager
      *
      * @param string $serverName the domain name for one instance
      *
-     * @return stdClass dummy object with properties for the loaded instance
+     * @return \Onm\Instance dummy object with properties for the loaded instance
      * @return false    if the instance doesn't exists
      */
     public function load($serverName)
@@ -92,7 +92,40 @@ class InstanceManager
     }
 
     /**
+     * Fetches one onm instance from DB given its internal name
+     *
+     *
+     * @param string $internalName the internal name for one instance
+     *
+     * @return Instance dummy object with properties for the loaded instance
+     * @return false    if the instance doesn't exists
+     **/
+    public function loadFromInternalName($internalName)
+    {
+        $instance = $this->fetchInstanceFromInternalName($internalName);
+
+        //If found matching instance initialize its contants and return it
+        if (is_object($instance)) {
+            define('INSTANCE_UNIQUE_NAME', $instance->internal_name);
+
+            $instance->boot();
+
+            // If this instance is not activated throw an exception
+            if ($instance->activated != '1') {
+                $message =_('Instance not activated');
+                throw new \Onm\Instance\NotActivatedException($message);
+            }
+        } else {
+            throw new \Onm\Instance\NotFoundException(_('Instance not found'));
+        }
+
+        return $instance;
+    }
+
+    /**
      * Builds the instance object given a serverName
+     *
+     * @param string $serverName the server name of the instance to fetch
      *
      * @return \Onm\Instance|null the instance object
      **/
@@ -135,6 +168,42 @@ class InstanceManager
             }
         }
 
+        $instance = $this->loadInstanceProperties($matchedInstance);
+
+        return $instance;
+    }
+
+    /**
+     * Builds the instance object given an internal name
+     *
+     * @return \Onm\Instance|null the instance object
+     **/
+    public function fetchInstanceFromInternalName($internalName)
+    {
+        $sql = "SELECT SQL_CACHE * FROM instances WHERE internal_name = ?";
+        $this->connection->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->connection->Execute($sql, array($internalName));
+
+        if (!$rs) {
+            return false;
+        }
+
+        $matchedInstance = $rs->GetArray();
+        $instance = $this->loadInstanceProperties($matchedInstance[0]);
+
+        return $instance;
+    }
+
+    /**
+     * Builds an \Onm\Instance object from an array of instance properties
+     *
+     * @param  array $matchedInstance the list of properties to assign the new
+     *                                Instance object.
+     *
+     * @return \Onm\Instance the Instance object
+     **/
+    public function loadInstanceProperties($matchedInstance)
+    {
         $instance = new Instance();
         foreach ($matchedInstance as $key => $value) {
             $instance->{$key} = $value;
@@ -146,7 +215,9 @@ class InstanceManager
     /*
      * Gets one Database connection
      *
-     * @param $arg
+     * @param array $connectionData the parameters to build the connection
+     *
+     * @return Onm\DatabaseConnection the database connection object instance
      */
     public static function getConnection($connectionData = null)
     {
@@ -165,10 +236,13 @@ class InstanceManager
         return $conn;
     }
 
-    /*
+    /**
      * Gets a list of instances
      *
-     */
+     * @param array $params the list of filters to use when searching instances
+     *
+     * @return array list of instances that match the search criteria
+     **/
     public function findAll($params = array())
     {
         $instances = array();

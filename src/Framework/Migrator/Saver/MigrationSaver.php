@@ -93,18 +93,35 @@ class MigrationSaver
      * @param string $name   Schema name.
      * @param array  $schema Source schema.
      */
-    public function remapTranslations($name, $schema)
+    public function premapTranslations($name, $schema)
     {
-        if (array_key_exists('remap', $schema['translation'])) {
-            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+        if (array_key_exists('premap', $schema['translation'])) {
+            foreach ($schema['translation']['premap'] as $oldId => $oldTarget) {
                 try {
-                    $content = new \Content();
-                    $content->delete(
-                        $this->matchTranslation(
-                            $oldId,
-                            $schema['translation']['name']
-                        )
+                    $item = null;
+                    $id   = $this->matchTranslation(
+                        $oldId,
+                        $schema['translation']['name']
                     );
+
+                    switch ($schema['target']) {
+                        case 'category':
+                            $item = new \ContentCategory();
+                            break;
+                        case 'user':
+                            $item = new \User();
+                            break;
+                        case 'user_group':
+                            $item = new \UserGroup();
+                            break;
+                        default:
+                            $item = new \Content();
+                            break;
+                    }
+
+                    if ($item) {
+                        $item->delete($id);
+                    }
 
                     $this->updateTranslation(
                         $oldId,
@@ -112,6 +129,55 @@ class MigrationSaver
                             $oldTarget,
                             $schema['translation']['name']
                         ),
+                        $schema['translation']['name']
+                    );
+
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
+            }
+        }
+    }
+
+    /*
+     * Update translation to point to the new id
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Source schema.
+     */
+    public function postmapTranslations($name, $schema)
+    {
+        if (array_key_exists('postmap', $schema['translation'])) {
+            foreach ($schema['translation']['postmap'] as $oldId => $target) {
+                try {
+                    $item = null;
+                    $id   = $this->matchTranslation(
+                        $oldId,
+                        $schema['translation']['name']
+                    );
+
+                    switch ($schema['target']) {
+                        case 'category':
+                            $item = new \ContentCategory();
+                            break;
+                        case 'user':
+                            $item = new \User();
+                            break;
+                        case 'user_group':
+                            $item = new \UserGroup();
+                            break;
+                        default:
+                            $item = new \Content();
+                            break;
+                    }
+
+                    if ($item) {
+                        $item->delete($id);
+                    }
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $target,
                         $schema['translation']['name']
                     );
 
@@ -419,25 +485,17 @@ class MigrationSaver
                 if ($categoryId === false) {
                     $category = new \ContentCategory();
                     $category->create($values);
-
-                    $this->createTranslation(
-                        $values[$schema['translation']['field']],
-                        $category->pk_content_category,
-                        $schema['translation']['name'],
-                        $slug
-                    );
-
-                    $this->stats[$name]['imported']++;
-                } else {
-                    // Remap translation to existing category
-                    $this->updateTranslation(
-                        $values[$schema['translation']['field']],
-                        $categoryId,
-                        $schema['translation']['name']
-                    );
-
-                    $this->stats[$name]['already_imported']++;
+                    $categoryId = $category->pk_content_category;
                 }
+
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $categoryId,
+                    $schema['translation']['name'],
+                    $slug
+                );
+
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -755,19 +813,26 @@ class MigrationSaver
             $values = $this->merge($values, $item, $schema);
 
             try {
+                $userId = $this->findUser($values['username']);
+                $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
+
                 if ($this->matchTranslation(
                     $values[$schema['translation']['field']],
                     $schema['translation']['name']
                 ) === false
                 ) {
-                    $user = new \User();
-                    $user->create($values);
-                    $slug = array_key_exists('slug', $schema['translation']) ?
-                        $values[$schema['translation']['slug']] : '';
+                    if ($userId === false) {
+                        $user = new \User();
+                        $user->create($values);
+                        $slug = array_key_exists('slug', $schema['translation'])
+                            ? $values[$schema['translation']['slug']] : '';
+                        $userId = $user->id;
+                    }
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
-                        $user->id,
+                        $userId,
                         $schema['translation']['name'],
                         $slug
                     );
@@ -1163,6 +1228,13 @@ class MigrationSaver
                     $field = $this->matchTranslation(
                         $field,
                         $params['translation']
+                    );
+                    break;
+                case 'username':
+                    $field = \Onm\StringUtils::get_title(
+                        $field,
+                        true,
+                        $params['separator']
                     );
                     break;
                 case 'utf8':
