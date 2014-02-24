@@ -4,7 +4,7 @@
     "keywords": ["nms", "newspapres", "magazines", "content management system"],
     "homepage": "http://opennemas.com",
     "type": "cms",
-    "license": "closed source",
+    "license": "proprietary",
     "version": "1.0",
     "authors": [
         {
