@@ -36,9 +36,17 @@ class EstrellaDigitalProvider extends JsonProvider
         $settings,
         &$translations,
         &$stats,
+        $output,
         $debug = false
     ) {
-        parent::__construct($logger, $settings, $translations, $stats, $debug);
+        parent::__construct(
+            $logger,
+            $settings,
+            $translations,
+            $stats,
+            $output,
+            $debug
+        );
 
         $this->prepareDatabase();
     }

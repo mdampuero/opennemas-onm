@@ -89,7 +89,7 @@ class ArticlesController extends Controller
 
         $itemsPerPage = s::get('items_per_page');
 
-        $filterSQL = array('in_litter != 1');
+        $filterSQL = array('in_litter <> 1');
         if ($status >= 0) {
             $filterSQL []= ' contents.available='.$status;
         }

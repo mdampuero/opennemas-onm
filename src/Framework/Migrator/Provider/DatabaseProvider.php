@@ -74,10 +74,11 @@ class DatabaseProvider extends MigrationProvider
             $sql .= '1';
         }
 
-
         // Add logical comparisons to 'WHERE' chunk
-        if (isset($schema['filters']) && count($schema['filters']) > 0) {
-            $sql .= ' AND ' . $this->parseCondition($schema['filters']);
+        if (isset($schema['pre-conditions'])
+            && count($schema['pre-conditions']) > 0
+        ) {
+            $sql .= ' AND ' . $this->parseCondition($schema['pre-conditions']);
         }
 
         $sql .= ' ORDER BY ' . $schema['source']['table'] . '.'
@@ -171,10 +172,11 @@ class DatabaseProvider extends MigrationProvider
                 }
 
                 // Add logical comparisons to 'WHERE' chunk
-                if (isset($schema['conditions'])
-                        && count($schema['conditions']) > 0) {
+                if (isset($schema['post-conditions'])
+                    && count($schema['post-conditions']) > 0
+                ) {
                     $sql .= ' AND '
-                        . $this->parseCondition($schema['conditions']);
+                        . $this->parseCondition($schema['post-conditions']);
                 }
 
                 // Execute sql and save in array

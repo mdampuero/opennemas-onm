@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "eafca31e9b1eda6cea78ba67750143cf",
+    "hash": "bac2b0a7cb134528945bf1e0655ce6f9",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -896,20 +896,23 @@
         },
         {
             "name": "frandieguez/panorama-php",
-            "version": "1.0.4",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/frandieguez/panorama-php.git",
-                "reference": "325fd77ced595cd8249009c15a027a1ab9ed8565"
+                "reference": "70a1cdb30db487be32ad3ec17d1207e5978e1625"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/325fd77ced595cd8249009c15a027a1ab9ed8565",
-                "reference": "325fd77ced595cd8249009c15a027a1ab9ed8565",
+                "url": "https://api.github.com/repos/frandieguez/panorama-php/zipball/70a1cdb30db487be32ad3ec17d1207e5978e1625",
+                "reference": "70a1cdb30db487be32ad3ec17d1207e5978e1625",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "behat/behat": "2.4.*@stable"
             },
             "type": "library",
             "autoload": {
@@ -932,7 +935,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2014-02-07 11:31:32"
+            "time": "2014-02-11 10:57:03"
         },
         {
             "name": "imagine/imagine",
@@ -1355,12 +1358,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
+                "url": "https://github.com/alchemy-fr/PHP-FFmpeg.git",
                 "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
+                "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
                 "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
                 "shasum": ""
             },
@@ -1855,9 +1858,7 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
+                    "email": "fabien@symfony.com"
                 },
                 {
                     "name": "Symfony Community",
@@ -1916,9 +1917,7 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
+                    "email": "fabien@symfony.com"
                 },
                 {
                     "name": "Symfony Community",

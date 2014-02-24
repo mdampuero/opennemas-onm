@@ -93,18 +93,35 @@ class MigrationSaver
      * @param string $name   Schema name.
      * @param array  $schema Source schema.
      */
-    public function remapTranslations($name, $schema)
+    public function premapTranslations($name, $schema)
     {
-        if (array_key_exists('remap', $schema['translation'])) {
-            foreach ($schema['translation']['remap'] as $oldId => $oldTarget) {
+        if (array_key_exists('premap', $schema['translation'])) {
+            foreach ($schema['translation']['premap'] as $oldId => $oldTarget) {
                 try {
-                    $user = new \User();
-                    $user->delete(
-                        $this->matchTranslation(
-                            $oldId,
-                            $schema['translation']['name']
-                        )
+                    $item = null;
+                    $id   = $this->matchTranslation(
+                        $oldId,
+                        $schema['translation']['name']
                     );
+
+                    switch ($schema['target']) {
+                        case 'category':
+                            $item = new \ContentCategory();
+                            break;
+                        case 'user':
+                            $item = new \User();
+                            break;
+                        case 'user_group':
+                            $item = new \UserGroup();
+                            break;
+                        default:
+                            $item = new \Content();
+                            break;
+                    }
+
+                    if ($item) {
+                        $item->delete($id);
+                    }
 
                     $this->updateTranslation(
                         $oldId,
@@ -112,6 +129,55 @@ class MigrationSaver
                             $oldTarget,
                             $schema['translation']['name']
                         ),
+                        $schema['translation']['name']
+                    );
+
+                } catch (Exception $e) {
+                    $this->stats[$name]['error']++;
+                }
+            }
+        }
+    }
+
+    /*
+     * Update translation to point to the new id
+     *
+     * @param string $name   Schema name.
+     * @param array  $schema Source schema.
+     */
+    public function postmapTranslations($name, $schema)
+    {
+        if (array_key_exists('postmap', $schema['translation'])) {
+            foreach ($schema['translation']['postmap'] as $oldId => $target) {
+                try {
+                    $item = null;
+                    $id   = $this->matchTranslation(
+                        $oldId,
+                        $schema['translation']['name']
+                    );
+
+                    switch ($schema['target']) {
+                        case 'category':
+                            $item = new \ContentCategory();
+                            break;
+                        case 'user':
+                            $item = new \User();
+                            break;
+                        case 'user_group':
+                            $item = new \UserGroup();
+                            break;
+                        default:
+                            $item = new \Content();
+                            break;
+                    }
+
+                    if ($item) {
+                        $item->delete($id);
+                    }
+
+                    $this->updateTranslation(
+                        $oldId,
+                        $target,
                         $schema['translation']['name']
                     );
 
@@ -170,6 +236,8 @@ class MigrationSaver
                     $album->read($id);
 
                     $album->saveAttachedPhotos($photos);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     foreach ($photos['album_photos_id'] as $key => $photo) {
                         if ($this->matchTranslation(
@@ -184,7 +252,8 @@ class MigrationSaver
                             $this->createTranslation(
                                 $photo,
                                 $album->id,
-                                $schema['translation']['name']
+                                $schema['translation']['name'],
+                                $slug
                             );
 
                             $this->stats[$name]['imported']++;
@@ -240,11 +309,14 @@ class MigrationSaver
                 ) {
                     $album = new \Album();
                     $album->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $album->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -269,7 +341,7 @@ class MigrationSaver
         foreach ($data as $item) {
             $values = array(
                 'title'          => null,
-                'with_comment'   => 1,
+                'with_comment'   => 0,
                 'available'      => 1,
                 'content_status' => 1,
                 'category'       => 20,
@@ -310,11 +382,14 @@ class MigrationSaver
                 ) {
                     $article = new \Article();
                     $article->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $article->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -354,11 +429,14 @@ class MigrationSaver
                 ) {
                     $attachment = new \Attachment();
                     $attachment->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $attachment->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -401,30 +479,23 @@ class MigrationSaver
                 );
 
                 $categoryId = $this->findCategory($categoryName);
+                $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                 if ($categoryId === false) {
                     $category = new \ContentCategory();
                     $category->create($values);
-
-                    $this->createTranslation(
-                        $values[$schema['translation']['field']],
-                        $category->pk_content_category,
-                        $schema['translation']['name']
-                    );
-
-                    $this->stats[$name]['imported']++;
-                } else {
-                    // Remap translation to existing category
-                    $this->createTranslation(
-                        $values[$schema['translation']['field']],
-                        $categoryId,
-                        $schema['translation']['name']
-                    );
-
-                    $this->stats[$name]['already_imported']++;
+                    $categoryId = $category->pk_content_category;
                 }
 
+                $this->createTranslation(
+                    $values[$schema['translation']['field']],
+                    $categoryId,
+                    $schema['translation']['name'],
+                    $slug
+                );
 
+                $this->stats[$name]['already_imported']++;
             } catch (\Exception $e) {
                 $this->stats[$name]['error']++;
             }
@@ -466,11 +537,14 @@ class MigrationSaver
                 ) {
                     $comment = new \Comment();
                     $comment->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $comment->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -494,10 +568,10 @@ class MigrationSaver
     {
         foreach ($data as $item) {
             $values = array(
-                'fk_author'      => null,
-                'fk_author_img'  => null,
+                'fk_author'      => 0,
+                'fk_author_img'  => 0,
                 'with_comment'   => 1,
-                'type_opinion'   => 1,
+                'type_opinion'   => 0,
                 'title'          => null,
                 'available'      => 1,
                 'content_status' => 1,
@@ -526,11 +600,14 @@ class MigrationSaver
                 ) {
                     $opinion = new \Opinion();
                     $opinion->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $opinion->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -610,11 +687,12 @@ class MigrationSaver
                 ) === false
                 ) {
                     if (is_file($values['local_file'])) {
-
                         $id = $photo->createFromLocalFile(
                             $values,
                             $values['directory']
                         );
+                        $slug = array_key_exists('slug', $schema['translation'])
+                            ? $values[$schema['translation']['slug']] : '';
 
                         // Update article img2 and img2_footer
                         if (isset($values['article'])
@@ -643,12 +721,13 @@ class MigrationSaver
                         $this->createTranslation(
                             $values[$schema['translation']['field']],
                             $id,
-                            $schema['translation']['name']
+                            $schema['translation']['name'],
+                            $slug
                         );
 
                         $this->stats[$name]['imported']++;
                     } else {
-                        $this->stats[$name]['error']++;
+                        $this->stats[$name]['not_found']++;
                     }
                 } else {
                     $this->stats[$name]['already_imported']++;
@@ -684,11 +763,14 @@ class MigrationSaver
                 ) {
                     $group   = new \UserGroup();
                     $group->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $group->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -724,25 +806,35 @@ class MigrationSaver
                 'type'          => 0,
                 'deposit'       => 0,
                 'token'         => null,
-                'activated'     => 1,
+                'activated'     => 0,
                 'id_user_group' => array('3'),
             );
 
             $values = $this->merge($values, $item, $schema);
 
             try {
+                $userId = $this->findUser($values['username']);
+                $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
+
                 if ($this->matchTranslation(
                     $values[$schema['translation']['field']],
                     $schema['translation']['name']
                 ) === false
                 ) {
-                    $user = new \User();
-                    $user->create($values);
+                    if ($userId === false) {
+                        $user = new \User();
+                        $user->create($values);
+                        $slug = array_key_exists('slug', $schema['translation'])
+                            ? $values[$schema['translation']['slug']] : '';
+                        $userId = $user->id;
+                    }
 
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
-                        $user->id,
-                        $schema['translation']['name']
+                        $userId,
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -798,6 +890,8 @@ class MigrationSaver
 
                     $video = new \Video();
                     $video->create($values);
+                    $slug = array_key_exists('slug', $schema['translation']) ?
+                        $values[$schema['translation']['slug']] : '';
 
                     // Update article img2 and img2_footer
                     if (isset($values['article'])
@@ -812,7 +906,8 @@ class MigrationSaver
                     $this->createTranslation(
                         $values[$schema['translation']['field']],
                         $video->id,
-                        $schema['translation']['name']
+                        $schema['translation']['name'],
+                        $slug
                     );
 
                     $this->stats[$name]['imported']++;
@@ -826,7 +921,7 @@ class MigrationSaver
     }
 
     /**
-     * Configures the keeper
+     * Configures the saver.
      */
     protected function configure()
     {
@@ -854,8 +949,14 @@ class MigrationSaver
             $this->settings['migration']['source']
         );
 
-        $_SESSION['username'] = 'script';
-        $_SESSION['userid']   = 11;
+        if (array_key_exists('user', $this->settings['migration'])) {
+            $_SESSION['userid'] = $this->settings['migration']['user']['id'];
+            $_SESSION['username'] =
+                $this->settings['migration']['user']['username'];
+        } else {
+            $_SESSION['userid'] = 999;
+            $_SESSION['username'] = 'ONM';
+        }
     }
 
     /**
@@ -885,8 +986,8 @@ class MigrationSaver
      */
     protected function convertToMap($string, $params)
     {
-        if (isset($params['map']) && isset($params['map'][$string])) {
-            return $params['map'][$string];
+        if (isset($params) && isset($params[$string])) {
+            return $params[$string];
         }
 
         return false;
@@ -940,12 +1041,13 @@ class MigrationSaver
      * @param integer $old  Old content id used in old database.
      * @param integer $new  New content id.
      * @param string  $type Type of the translation.
+     * @param string  $slug Old content slug.
      */
-    protected function createTranslation($old, $new, $type)
+    protected function createTranslation($old, $new, $type, $slug = null)
     {
         $sql = 'INSERT INTO translation_ids(`pk_content_old`, `pk_content`, '
-            . '`type`) VALUES (?,?,?)';
-        $values = array($old, $new, $type);
+            . '`type`, `slug`) VALUES (?,?,?,?)';
+        $values = array($old, $new, $type, $slug);
 
         $stmt = $this->targetConnection->Prepare($sql);
         $rss  = $this->targetConnection->Execute($stmt, $values);
@@ -968,8 +1070,10 @@ class MigrationSaver
      */
     protected function matchTranslation($id, $type)
     {
-        if ($id && $type && array_key_exists($type, $this->translations)
-                && array_key_exists($id, $this->translations[$type])) {
+        if (!is_null($id) && $id !== false && $type
+            && array_key_exists($type, $this->translations)
+            && array_key_exists($id, $this->translations[$type])
+        ) {
             return $this->translations[$type][$id];
         }
 
@@ -987,17 +1091,19 @@ class MigrationSaver
      */
     protected function merge($default, $values, $schema)
     {
+        // Pre-filter (pre-select, pre-merge)
+        if (array_key_exists('pre-filters', $schema)) {
+            $values = $this->filterItem(
+                $values,
+                $schema['pre-filters']['type'],
+                $schema['pre-filters']['params']
+            );
+        }
+
+        // Parse fields
         foreach ($values as $key => $value) {
             $params = isset($schema['fields'][$key]['params']) ?
                 $schema['fields'][$key]['params'] : null;
-
-            // Get the values from item and append them to parameters array
-            if (in_array('select', $schema['fields'][$key]['type'])) {
-                $fields = $schema['fields'][$key]['params']['select']['fields'];
-                foreach ($fields as $field) {
-                    $params[$field] = $values[$field];
-                }
-            }
 
             $values[$key] = $this->parseField(
                 $value,
@@ -1008,17 +1114,13 @@ class MigrationSaver
 
         $default = array_merge($default, $values);
 
-        if (isset($schema['merge'])) {
-            foreach ($schema['merge'] as $target => $origin) {
-                $merged = '';
-                $i = count($origin['fields']) - 1;
-                foreach ($origin['fields'] as $field) {
-                    $merged .= $default[$field] . ($i > 0 ? $origin['separator'] : '');
-                    $i--;
-                }
-
-                $default[$target] = $merged;
-            }
+        // Pre-filter (select, merge)
+        if (array_key_exists('post-filters', $schema)) {
+            $default = $this->filterItem(
+                $default,
+                $schema['post-filters']['type'],
+                $schema['post-filters']['params']
+            );
         }
 
         return $default;
@@ -1050,79 +1152,70 @@ class MigrationSaver
                 case 'date':
                     $field = date($params['format'], strtotime($field));
                     break;
+                case 'embed':
+                    $pattern = '~(?:http|https|)(?::\/\/|)(?:www.|)(?:youtu\.be\
+                        /|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/ytscreeni
+                        ngroom\?v=|\/feeds\/api\/videos\/|\/user\S*[^\w\-\s]|\S*
+                        [^\w\-\s]))([\w\-]{11})[a-z0-9;:@?&%=+\/\$_.-]*~i';
+
+                    preg_match($pattern, $field, $matches);
+
+                    $field = $matches[1];
+                    break;
+                case 'findUser':
+                    $id = $this->findUser($field);
+                    if ($id !== false) {
+                        $field = $id;
+                    }
+                    break;
+                case 'html':
+                    $field = htmlentities($field, ENT_IGNORE, 'UTF-8');
+                    break;
                 case 'map':
                     $field = $this->convertToMap($field, $params['map']);
                     break;
+                case 'metadata':
+                    $field = \Onm\StringUtils::get_tags($field);
+                    break;
                 case 'merge':
-                    if (!is_null($field)) {
+                    if (is_array($field) && count($field) > 0) {
                         $value = '';
                         foreach ($field as $key => $v) {
-                            $value .= $v;
-                            if ($key < count($field) - 1) {
-                                $value .= ',';
-                            }
+                            $value .= $v . ',';
                         }
-                        $field = $value;
+                        $field = rtrim($value, ',');
                     }
                     break;
-                case 'raw': // Remove spaces at beginning and end
+                case 'raw':
                     $field = trim($field);
-                    break;
-                case 'select':
-                    $i    = 0;
-                    $next = true;
-                    while ($i < count($params['select']['fields']) && $next) {
-                        $key = $params['select']['fields'][$i];
-                        $field = $params[$key];
-
-                        switch ($params['select']['operator']) {
-                            case '!=':
-                                if ($field != $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                            case '==':
-                                if ($field == $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                            case '>':
-                                if ($field > $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                            case '<':
-                                if ($field < $params['select']['value']) {
-                                    $next = false;
-                                }
-                                break;
-                        }
-
-                        if ($next) {
-                            $i++;
-                        }
-                    }
-
-                    // Condition not satisfied by any field
-                    if ($i >= count($params['select']['fields'])) {
-                        $field = null;
-                    }
                     break;
                 case 'slug':
                     $field = $this->convertToSlug($field);
                     break;
                 case 'substr':
-                    $field = substr(
-                        $field,
-                        0,
-                        strpos($field, $params['delimiter'])
-                    );
-                    break;
-                case 'substrr':
-                    if (strrpos($field, $params['delimiter'])) {
+                    $offset = array_key_exists('offset', $params['substr']) ?
+                        $params['substr']['offset'] : 0;
+                    $delimiter = $params['substr']['delimiter'];
+
+                    if (strpos($field, $delimiter, $offset) !== false) {
                         $field = substr(
                             $field,
-                            strrpos($field, $params['delimiter']) + 1
+                            0,
+                            strpos($field, $delimiter, $offset)
+                        );
+                    } else {
+                        $field = '';
+                    }
+                    break;
+                case 'substrr':
+                    $offset = array_key_exists('offset', $params['substrr']) ?
+                        $params['substrr']['offset'] : 0;
+                    $delimiter = $params['substrr']['delimiter'];
+
+                    if (strrpos($field, $delimiter, $offset) !== false) {
+                        $field = substr(
+                            $field,
+                            strrpos($field, $delimiter, $offset) + 1
                         );
                     } else {
                         $field = '';
@@ -1135,6 +1228,13 @@ class MigrationSaver
                     $field = $this->matchTranslation(
                         $field,
                         $params['translation']
+                    );
+                    break;
+                case 'username':
+                    $field = \Onm\StringUtils::get_title(
+                        $field,
+                        true,
+                        $params['separator']
                     );
                     break;
                 case 'utf8':
@@ -1183,7 +1283,7 @@ class MigrationSaver
      */
     protected function updateArticleFrontpagePhoto($id, $photo, $footer)
     {
-        $sql = "UPDATE articles  SET `img1`=?, `img2_footer`=?"
+        $sql = "UPDATE articles  SET `img1`=?, `img1_footer`=?"
             ."WHERE pk_article=?";
 
         $values = array($photo, $footer, $id);
@@ -1252,6 +1352,149 @@ class MigrationSaver
         $this->translations[$type][$old] = $new;
     }
 
+    /**
+     * Applies general item filters.
+     *
+     * @param array $values  Array of values to filter.
+     * @param array $filters Array of filters to apply.
+     * @param array $params  Array of parameters used to filter.
+     */
+    private function filterItem($values, $filters, $params)
+    {
+        foreach ($filters as $filter) {
+            switch ($filter) {
+                case 'select':
+                    $values = $this->selectFilter($values, $params['select']);
+                    break;
+                case 'merge':
+                    $values = $this->mergeFilter($values, $params['merge']);
+                    break;
+            }
+        }
+
+        return $values;
+    }
+
+    /**
+     * Finds the category id for a given normalized name.
+     *
+     * @param  string  $name Category name.
+     * @return integer       Category id.
+     */
+    private function findCategory($name)
+    {
+        $sql = "SELECT pk_content_category FROM content_categories"
+            . " WHERE name='" . $name . "'";
+
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
+
+        if ($rss && count($rss) == 1
+            && array_key_exists('pk_content_category', $rss[0])
+        ) {
+            return $rss[0]['pk_content_category'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Finds the user's id for a given normalized name.
+     *
+     * @param  string  $name User's name.
+     * @return mixed         User's id if user was found. Otherwise, return
+     *                       false.
+     */
+    private function findUser($name)
+    {
+        $sql = "SELECT id FROM users WHERE name LIKE '%" . $name . "%'";
+
+        $rs = $this->targetConnection->Execute($sql);
+        $rss = $rs->getArray();
+
+        if ($rss && count($rss) == 1 && array_key_exists('id', $rss[0])) {
+            return $rss[0]['id'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * Merges two or more fields in $values into another field.
+     *
+     * @param  array $values Array of values.
+     * @param  array $params Array of parameters used to merge fields.
+     * @return array         Filtered array of values
+     */
+    private function mergeFilter($values, $params)
+    {
+        foreach ($params as $filter) {
+            $merged = '';
+            foreach ($filter['fields'] as $source) {
+                $merged .=  $values[$source] . $filter['separator'];
+            }
+
+            $values[$filter['target']] = rtrim($merged, $filter['separator']);
+        }
+
+        return $values;
+    }
+
+    /**
+     * Returns a array of values after applying select filter.
+     *
+     * @param  array $values Array of values.
+     * @param  array $params Array of parameters used to select.
+     * @return array         Filtered array of values.
+     */
+    private function selectFilter($values, $params)
+    {
+        foreach ($params as $filter) {
+            $i    = 0;
+            $next = true;
+            while ($i < count($filter['fields']) && $next) {
+                $key = $filter['fields'][$i++];
+                $selected = $values[$key];
+
+                switch ($filter['operator']) {
+                    case '!=':
+                        if ($selected != $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                    case '==':
+                        if ($selected == $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                    case '>':
+                        if ($selected > $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                    case '<':
+                        if ($selected < $filter['value']) {
+                            $next = false;
+                        }
+                        break;
+                }
+            }
+
+            // Condition not satisfied by any field
+            if ($next && $i >= count($filter['fields'])) {
+                if (array_key_exists('default', $filter)) {
+                    $values[$filter['target']] = $filter['default'];
+                } else {
+                    $values[$filter['target']] = null;
+                }
+            } else {
+                $values[$filter['target']] = $selected;
+            }
+        }
+
+        return $values;
+    }
+
     private function clearTags($body)
     {
         $result = array();
@@ -1272,11 +1515,10 @@ class MigrationSaver
 
 
                 //-420x278.jpg
-                preg_match_all ( "@(.*)-[0-9]{3,4}x[0-9]{3,4}.(.*)@", $guid, $result);
-                if (!empty($result[1]) ) {
+                preg_match_all("@(.*)-[0-9]{3,4}x[0-9]{3,4}.(.*)@", $guid, $result);
+                if (!empty($result[1])) {
 
                     $newGuid = $result[1][0].".".$result[2][0];
-                    // var_dump($newGuid);
                     $img     = $this->getOnmIdImage($newGuid);
 
                     if (empty($img)) {
@@ -1287,7 +1529,7 @@ class MigrationSaver
                 $date = $date->format('Y-m-d H:i:s');
                 $local_file = str_replace(ORIGINAL_URL, ORIGINAL_MEDIA, $guid);
                 $oldID = $this->elementIsImported('fotos', 'category');
-                if(empty($oldID)) {
+                if (empty($oldID)) {
                     $oldID ='1';
                 }
                 $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
@@ -1345,26 +1587,5 @@ class MigrationSaver
         $newBody = '<p>'.($str).'</p>';
 
         return array('img' => $img, 'body' => $newBody, 'gallery' => $gallery, 'footer' => $footer);
-    }
-
-    /**
-     * Finds the category id for a given normalized name.
-     *
-     * @param  string  $name Category name.
-     * @return integer       Category id.
-     */
-    private function findCategory($name)
-    {
-        $sql = "SELECT pk_content_category FROM content_categories"
-            . " WHERE name='" . $name . "'";
-
-        $rs = $this->targetConnection->Execute($sql);
-        $rss = $rs->getArray();
-
-        if ($rss && array_key_exists('pk_content_category', $rss)) {
-            return $rss['pk_content_category'];
-        }
-
-        return false;
     }
 }

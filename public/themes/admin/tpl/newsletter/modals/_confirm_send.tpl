@@ -28,7 +28,7 @@ jQuery("#modal-confirm-send").modal({
          e.preventDefault();
     });
 
-jQuery('#modal-confirm-send a.btn.yes').on('click', function(){
+jQuery('#modal-confirm-send a.btn.yes').on('click', function(e, ui){
     jQuery('#pick-recipients-form').attr('action', "{url name=admin_newsletter_send id=$id}");
     jQuery('#pick-recipients-form').submit();
 

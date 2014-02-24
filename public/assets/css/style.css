@@ -570,12 +570,13 @@ div.utilities-conf input[type="text"]{
 
 .navbar-inverse .divider {
   margin: 5px 0;
-  padding: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
 }
 
 .navbar-inverse a {
-    display: block; color: #CCCCCC; vertical-align:middle; text-decoration: none; white-space:nowrap;
+    color: #CCCCCC; vertical-align:middle; text-decoration: none; white-space:nowrap;
 }
 
 .navbar-inverse ul#menu {
@@ -588,19 +589,7 @@ div.utilities-conf input[type="text"]{
     color: White;
 }
 
-.navbar-inverse ul#menu ul {background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
 .navbar-inverse ul#menu a:hover, .navbar-inverse ul#menu a:focus { color: White; }
-
-.navbar-inverse ul#menu > li > a {padding: 8px 10px !important;color:#9C9C9C;}
-.navbar-inverse ul#menu > li:hover > a,
-.navbar-inverse ul#menu > li:focus > a {
-    background: rgba(0,0,0,.25);
-    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-    -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-    box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
-    list-style: none;
-    text-align: center;
-}
 
 .navbar-inverse .dropdown-menu li > a:hover,
 .navbar-inverse .dropdown-menu li > a:focus,
@@ -613,11 +602,27 @@ div.utilities-conf input[type="text"]{
     margin-left:0px;
     border-radius: 0 6px 6px 0;
 }
+
 .navbar-inverse ul#menu > li ul {
     margin-top:0px;
     border-top: 0 none;
 }
-
+@media (min-width:900px) {
+  .navbar-inverse ul#menu ul {background-color: #1d1d1d; box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.6); }
+  ul.nav li.dropdown:hover > ul.dropdown-menu {
+      display: block;
+  }
+  .navbar-inverse ul#menu > li > a {padding: 8px 10px !important;color:#9C9C9C;}
+  .navbar-inverse ul#menu > li:hover > a,
+  .navbar-inverse ul#menu > li:focus > a {
+      background: rgba(0,0,0,.25);
+      -webkit-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+      -moz-box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+      box-shadow: 0 0 1px rgba(255,255,255,.3), inset 0 0 5px rgba(0,0,0,1.0);
+      list-style: none;
+      text-align: center;
+  }
+}
 /* -------------------------------------------------------------
   Global navigation bar
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -681,15 +686,18 @@ div.utilities-conf input[type="text"]{
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), 0 -1px 0 rgba(0, 0, 0, 0.1) inset;
 }
 
+
+  .global-nav .dropdown-menu:after,
+  .global-nav .dropdown-menu:before { display:none !important; }
+
+@media (min-width:900px) {
   .global-nav .dropdown-menu {
     margin-top:0px;
     border-radius:0 0 3px 3px;
     background: #222;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9) inset, 0 1px 2px rgba(0, 0, 0, 0.2);
   }
-  .global-nav .dropdown-menu:after,
-  .global-nav .dropdown-menu:before { display:none !important; }
-
+}
 @media (max-width:891px) {
   .global-nav .navbar-inner {
     height:auto;

@@ -115,8 +115,10 @@ class ContentCategory
      **/
     public function create($data)
     {
-        $data['name'] = strtolower($data['title']);
-        $data['name'] = StringUtils::normalize_name($data['name']);
+        if (!isset($data['name'])) {
+            $data['name'] = strtolower($data['title']);
+            $data['name'] = StringUtils::normalize_name($data['name']);
+        }
         $data['logo_path'] =
             (isset($data['logo_path'])) ? $data['logo_path'] : '';
         $data['color'] = (isset($data['color'])) ? $data['color'] : '';

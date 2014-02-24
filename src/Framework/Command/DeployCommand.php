@@ -15,6 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 class DeployCommand extends Command
 {
@@ -25,6 +26,7 @@ class DeployCommand extends Command
                 array(
                     new InputOption('skip-cleaning-caches', 'c', InputOption::VALUE_NONE, 'Skip cleaning caches'),
                     new InputOption('skip-theme-deploy', 't', InputOption::VALUE_NONE, 'Skip themes deploy'),
+                    new InputOption('dev', 'd', InputOption::VALUE_NONE, 'Run for development mode'),
                 )
             )
             ->setName('app:deploy')
@@ -115,14 +117,13 @@ EOF
         $phpBinPath = exec('which php');
 
         // Update onm-core
-        $this->output->writeln("Updating core ONM code");
-        $gitOutput = exec('git pull');
-        $this->output->writeln($gitOutput."\n");
+        $this->output->writeln("<info>Updating core ONM code</info>");
+        $this->execProcess('git pull');
 
         // Update dependencies
-        $this->output->writeln("Updating vendor libraries");
-        $composerOutput = exec($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o');
-        $this->output->writeln($composerOutput."\n");
+        $this->output->writeln("<info>Updating vendor libraries</info>");
+        $composerDev = ($this->input->getOption('dev')) ? '--dev' : '--no-dev';
+        $this->execProcess($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o '.$composerDev);
     }
 
     /**
@@ -145,7 +146,7 @@ EOF
      **/
     public function updateThemes()
     {
-        $this->output->writeln("Updating public themes");
+        $this->output->writeln("<info>Updating public themes</info>");
         foreach (glob($this->basePath.'/public/themes/*') as $theme) {
             // Avoid to execute pull in admin and manager themes.
             if (basename($theme) == 'admin' || basename($theme) == 'manager') {
@@ -153,7 +154,8 @@ EOF
             }
             chdir($theme);
             $this->output->writeln("\t* ".basename($theme));
-            $gitOutput = exec('git pull');
+            $output = exec("git pull");
+            $this->output->writeln("\t\t".$output);
             chdir($this->basePath);
         }
         $this->output->writeln('');
@@ -206,5 +208,24 @@ EOF
 
         $input = new ArrayInput($arguments);
         $returnCode = $command->run($input, $this->output);
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function execProcess($processLine)
+    {
+        $output = $this->output;
+        $process = new Process($processLine);
+        $process->run(function ($type, $buffer) use ($output) {
+            if (Process::ERR === $type) {
+                $output->write("\t<error>".$buffer. "<error>");
+            } else {
+                $output->write("\t".$buffer);
+            }
+        });
     }
 }

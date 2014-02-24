@@ -1,12 +1,22 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-css" append}
+{css_tag href="/jquery/colorbox.css" media="screen"}
+{/block}
+
 {block name="footer-js" append}
     {script_tag src="/jquery-onm/jquery.inputlength.js"}
     {script_tag src="/jquery/jquery-ui-timepicker-addon.js"}
     {script_tag src="/onm/jquery.datepicker.js"}
     {script_tag src="/jquery/jquery.tagsinput.min.js" common=1}
+    {script_tag src="/jquery/jquery.colorbox-min.js"}
     <script>
         $('.tabs').tabs();
+
+        var opinions_urls = {
+            preview : '{url name=admin_opinion_preview}',
+            get_preview : '{url name=admin_opinion_get_preview}'
+        };
 
         jQuery(document).ready(function ($){
             var tags_input = $('#metadata').tagsInput({ width: '100%', height: 'auto', defaultText: "{t}Write a tag and press Enter...{/t}"});
@@ -29,7 +39,31 @@
                     $('#author').show();
                 }
             });
+            $('#button_preview').on('click', function(e, ui) {
+                e.preventDefault();
+
+                CKEDITOR.instances.body.updateElement();
+                CKEDITOR.instances.summary.updateElement();
+
+                var form = $('#formulario');
+                var contents = form.serializeArray();
+
+                $.ajax({
+                    type: 'POST',
+                    url: opinions_urls.preview,
+                    data: {
+                        'contents': contents
+                    },
+                    success: function(data) {
+                        $.colorbox({ href: opinions_urls.get_preview, iframe : true, width: '95%', height: '95%' });
+                        $('#warnings-validation').html('');
+                    }
+                });
+
+                return false;
+            });
         });
+
     </script>
     {include file="media_uploader/media_uploader.tpl"}
     <script>
@@ -75,6 +109,11 @@
                 </button>
             </li>
             <li class="separator"></li>
+            <li>
+                <a href="#" accesskey="P" id="button_preview">
+                    <img src="{$params.IMAGE_DIR}preview.png" alt="{t}Preview{/t}" /><br />{t}Preview{/t}
+                </a>
+            </li>
             <li>
                 <a href="{url name=admin_opinions}" title="{t}Go back{/t}">
                     <img src="{$params.IMAGE_DIR}previous.png" alt="{t}Go back{/t}" ><br />{t}Go back{/t}

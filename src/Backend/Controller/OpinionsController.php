@@ -1285,4 +1285,133 @@ class OpinionsController extends Controller
 
         return $this->redirect($this->generateUrl('admin_opinion_authors'));
     }
+
+
+    /**
+     * Previews an opinion in frontend by sending the opinion info by POST
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function previewAction(Request $request)
+    {
+        $opinion = new \Opinion();
+        $cm = new  \ContentManager();
+        $this->view = new \Template(TEMPLATE_USER);
+
+        $opinionContents = $request->request->filter('contents');
+
+        // Fetch all opinion properties and generate a new object
+        foreach ($opinionContents as $key => $value) {
+            if (isset($value['name']) && !empty($value['name'])) {
+                $opinion->$value['name'] = $value['value'];
+            }
+        }
+
+        // Set a dummy Id for the opinion if doesn't exists
+        if (empty($opinion->pk_article) && empty($opinion->id)) {
+            $opinion->pk_article = '-1';
+            $opinion->id = '-1';
+        }
+
+        //Fetch information for Advertisements
+        \Frontend\Controller\OpinionsController::getAds('inner');
+
+        $author = new \User($opinion->fk_author);
+        $opinion->author = $author;
+
+        // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
+        $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
+
+        // Machine suggested contents code -----------------------------
+        $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
+            $opinion->metadata,
+            'opinion',
+            " contents.available=1 AND pk_content = pk_fk_content",
+            4
+        );
+
+        // Get author slug for suggested opinions
+        foreach ($machineSuggestedContents as &$suggest) {
+            $element = new \Opinion($suggest['pk_content']);
+            if (!empty($element->author)) {
+                $suggest['author_name'] = $element->author;
+                $suggest['author_name_slug'] = \Onm\StringUtils::get_title($element->author);
+            } else {
+                $suggest['author_name_slug'] = "author";
+            }
+            $suggest['uri'] = $element->uri;
+        }
+
+        // Associated media code --------------------------------------
+        $photo = '';
+        if (isset($opinion->img2) && ($opinion->img2 > 0)) {
+            $photo = new \Photo($opinion->img2);
+        }
+
+        // Fetch the other opinions for this author
+        if ($opinion->type_opinion == 1) {
+            $where =' opinions.type_opinion = 1';
+            $opinion->name = 'Editorial';
+            $this->view->assign('actual_category', 'editorial');
+        } elseif ($opinion->type_opinion == 2) {
+            $where =' opinions.type_opinion = 2';
+            $opinion->name = 'Director';
+        } else {
+            $where =' opinions.fk_author='.($opinion->fk_author);
+        }
+
+        $otherOpinions = $cm->find(
+            'Opinion',
+            $where.' AND `pk_opinion` <>' .$opinionID
+            .' AND available = 1  AND content_status=1',
+            ' ORDER BY created DESC LIMIT 0,9'
+        );
+
+        foreach ($otherOpinions as &$otOpinion) {
+            $otOpinion->author           = $author;
+            $otOpinion->author_name_slug = $opinion->author_name_slug;
+            $otOpinion->uri              = $otOpinion->uri;
+        }
+
+        $this->view->caching = 0;
+
+        $session = $this->get('session');
+
+        $session->set(
+            'last_preview',
+            $this->view->fetch(
+                'opinion/opinion.tpl',
+                array(
+                    'opinion'        => $opinion,
+                    'content'        => $opinion,
+                    'other_opinions' => $otherOpinions,
+                    'author'         => $author,
+                    'contentId'      => $opinion->id,
+                    'photo'          => $photo,
+                    'suggested'      => $machineSuggestedContents
+                )
+            )
+        );
+
+        return new Response('OK');
+    }
+
+    /**
+     * Description of this action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function getPreviewAction(Request $request)
+    {
+        $session = $this->get('session');
+
+        $content = $session->get('last_preview');
+        $session->remove('last_preview');
+
+        return new Response($content);
+    }
 }

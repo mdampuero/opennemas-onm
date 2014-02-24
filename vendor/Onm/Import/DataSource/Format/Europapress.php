@@ -255,6 +255,16 @@ class Europapress implements FormatInterface
     }
 
     /**
+     * Returns the name of the service that authored this element
+     *
+     * @return string the service name
+     **/
+    public function getServicePartyName()
+    {
+        return 'Europa Press';
+    }
+
+    /**
      * Returns the id of the element
      *
      * @return string the title
@@ -361,7 +371,7 @@ class Europapress implements FormatInterface
         $date = \DateTime::createFromFormat(
             $dateFormat,
             $originalDate,
-            new \DateTimeZone('UTC')
+            new \DateTimeZone('Europe/Madrid')
         );
 
         return $date;
