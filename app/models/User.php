@@ -1624,4 +1624,34 @@ class User implements AdvancedUserInterface
     {
         return $this->activated;
     }
+
+    /**
+     * Returns whether or not user is in master group.
+     *
+     * @return boolean True if the users is in master group.
+     */
+    public function isMaster()
+    {
+        if (in_array('4', $this->id_user_group)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether or not user is in administrator group.
+     *
+     * @return boolean True if the users is in administrator group.
+     */
+    public function isAdmin()
+    {
+        if (in_array('4', $this->id_user_group)
+            || in_array('5', $this->id_user_group)
+        ) {
+            return true;
+        }
+
+        return false;
+    }
 }
