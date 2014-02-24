@@ -48,7 +48,7 @@ class AclUserController extends Controller
             'type'  => $request->query->getDigits('type', ''),
         );
 
-        if (!$_SESSION['isMaster']) {
+        if (!$this->getUser()->isMaster()) {
             $filter ['base'] = 'fk_user_group != 4';
         }
 
