@@ -9,14 +9,14 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListInstancesCommand extends Command
+class ListInstancesCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -46,23 +46,8 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        global $onmInstancesConnection;
-
-        define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
-        define('SYS_LOG_FILENAME', SYS_LOG_PATH.DS.'cron-application.log');
-        define('INSTANCE_UNIQUE_NAME', 'cron');
-
-        $connection = \ADONewConnection($onmInstancesConnection['BD_TYPE']);
-
-        $connection->Connect(
-            $onmInstancesConnection['BD_HOST'],
-            $onmInstancesConnection['BD_USER'],
-            $onmInstancesConnection['BD_PASS'],
-            $onmInstancesConnection['BD_DATABASE']
-        );
-
-        $connection->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $connection->GetArray('SELECT * FROM instances');
+        $dbConn = $this->getContainer()->get('db_conn_manager');
+        $rs = $dbConn->GetArray('SELECT * FROM instances');
 
         $field = $input->getOption('field');
         foreach ($rs as $instance) {
