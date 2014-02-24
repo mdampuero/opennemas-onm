@@ -84,8 +84,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['email']            = $user->email;
         $_SESSION['deposit']          = $user->deposit;
         $_SESSION['type']             = $user->type;
-        $_SESSION['isAdmin']          = in_array('Administrador', $groups);
-        $_SESSION['isMaster']         = in_array('Masters', $groups);
         $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
         $_SESSION['updated']          = time();
         $_SESSION['user_language']    = $user->getMeta('user_language');
@@ -94,9 +92,12 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['valid']            = $valid;
 
         if ($valid === false) {
-            $_SESSION['failed_login_attempts'] =
-                isset($_SESSION['failed_login_attempts']) ?
-                $_SESSION['failed_login_attempts'] + 1 : 1;
+            if (isset($_SESSION['failed_login_attempts'])) {
+                $_SESSION['failed_login_attempts']++;
+            } else {
+                $_SESSION['failed_login_attempts'] = 1;
+            }
+
             $this->session->getFlashBag()->add('error', 'Wrong captcha code');
 
             return new RedirectResponse($request->headers->get('referer'));
