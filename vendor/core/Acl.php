@@ -99,8 +99,12 @@ class Acl
      */
     public static function isAdmin()
     {
-        $user = getService('security.context')->getToken()->getUser();
-        return $user->isAdmin();
+        if (getService('security.context')->getToken()) {
+            $user = getService('security.context')->getToken()->getUser();
+            return $user->isAdmin();
+        }
+
+        return false;
     }
 
     /**
@@ -110,8 +114,12 @@ class Acl
      */
     public static function isMaster()
     {
-        $user = getService('security.context')->getToken()->getUser();
-        return $user->isMaster();
+        if (getService('security.context')->getToken()) {
+            $user = getService('security.context')->getToken()->getUser();
+            return $user->isMaster();
+        }
+
+        return false;
     }
 
     /**
