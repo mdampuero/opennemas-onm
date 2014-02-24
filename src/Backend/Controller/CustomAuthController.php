@@ -13,6 +13,18 @@ use Onm\Framework\Controller\Controller;
 class CustomAuthController extends Controller
 {
     /**
+     * Bad credentials exception class name.
+     */
+    const BAD_CREDENTIALS =
+        'Symfony\Component\Security\Core\Exception\BadCredentialsException';
+
+    /**
+     * Invalid token exception class name.
+     */
+    const INVALID_TOKEN =
+        'Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException';
+
+    /**
      * Displays the login form template.
      */
     public function loginAction(Request $request)
@@ -29,7 +41,17 @@ class CustomAuthController extends Controller
         }
 
         if ($error) {
-            $this->session->getFlashBag()->add('error', $error->getMessage());
+            $msg = '';
+            if (is_a($error, self::BAD_CREDENTIALS)) {
+                $msg = 'Username or password incorrect.';
+            } else if (is_a($error, self::INVALID_TOKEN)) {
+                $msg = 'Login token is not valid. Try to authenticate again.';
+            } else {
+                $msg = $error->getMessage();
+            }
+
+            $this->session->getFlashBag()->add('error', $msg);
+
             $_SESSION['failed_login_attempts'] =
                 isset($_SESSION['failed_login_attempts']) ?
                 $_SESSION['failed_login_attempts'] + 1 : 1;

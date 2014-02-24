@@ -98,7 +98,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
                 $_SESSION['failed_login_attempts'] = 1;
             }
 
-            $this->session->getFlashBag()->add('error', 'Wrong captcha code');
+            $this->session->getFlashBag()->add(
+                'error',
+                'The reCAPTCHA wasn\'t entered correctly. Try to authenticate'
+                . ' again.'
+            );
 
             return new RedirectResponse($request->headers->get('referer'));
         } else {
