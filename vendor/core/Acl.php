@@ -46,23 +46,13 @@ class Acl
     public static function checkCategoryAccess($categoryID)
     {
         try {
-            if (!isset($categoryID)
-                || is_null($categoryID)
-            ) {
+            if (!isset($categoryID) || is_null($categoryID)) {
                 $_SESSION['lasturlcategory'] = $_SERVER['REQUEST_URI'];
-
                 return true;
             }
 
-            if (isset($_SESSION['isMaster'])
-                && $_SESSION['isMaster']
-            ) {
-                return true;
-            }
-
-            if (isset($_SESSION['isAdmin'])
-                && $_SESSION['isAdmin']
-            ) {
+            $user = getService('security.context')->getToken()->getUser();
+            if ($user->isMaster() || $user->isAdmin()) {
                 return true;
             }
 
@@ -109,18 +99,8 @@ class Acl
      */
     public static function isAdmin()
     {
-        if (isset($_SESSION['isMaster'])
-            && $_SESSION['isMaster']
-        ) {
-            return true;
-        }
-        if (isset($_SESSION['isAdmin'])
-            && $_SESSION['isAdmin']
-        ) {
-            return true;
-        }
-
-        return false;
+        $user = getService('security.context')->getToken()->getUser();
+        return $user->isAdmin();
     }
 
     /**
@@ -130,13 +110,8 @@ class Acl
      */
     public static function isMaster()
     {
-        if (isset($_SESSION['isMaster'])
-            && $_SESSION['isMaster']
-        ) {
-            return true;
-        }
-
-        return false;
+        $user = getService('security.context')->getToken()->getUser();
+        return $user->isMaster();
     }
 
     /**
@@ -168,24 +143,23 @@ class Acl
     public static function checkPrivileges($privilege, $categoryID = null)
     {
         try {
-            if (isset($_SESSION['isMaster'])
-                && $_SESSION['isMaster']
-            ) {
+            if (self::isMaster()) {
                 return true;
             }
 
-            if (isset($_SESSION['isAdmin'])
-                && $_SESSION['isAdmin']
-                && ($privilege !='ONLY_MASTERS')
-            ) {
+            if (self::isAdmin() && ($privilege !='ONLY_MASTERS')) {
                 return true;
             }
 
-            $roles = getService('security.context')->getToken()->getUser()->getRoles();
+            $roles = getService('security.context')->getToken()
+                ->getUser()->getRoles();
 
             $isGranted = in_array($privilege, $roles);
 
-            if ($isGranted && (!is_null($categoryID) && self::checkCategoryAccess($categoryID))
+            if ($isGranted
+                && (!is_null($categoryID)
+                    && self::checkCategoryAccess($categoryID)
+                )
             ) {
                 return false;
             }
