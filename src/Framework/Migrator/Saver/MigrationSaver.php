@@ -219,11 +219,19 @@ class MigrationSaver
                     $albums[$values['album']]['album_photos_footer'] = array();
                 }
 
-                $albums[$values['album']]['album_photos_id'][] =
-                    $values['photo'];
+                if (is_array($values['photo'])) {
+                    foreach ($values['photo'] as $id) {
+                        $albums[$values['album']]['album_photos_id'][] = $id;
+                        $albums[$values['album']]['album_photos_footer'][] =
+                            $values['footer'];
+                    }
+                } else {
+                    $albums[$values['album']]['album_photos_id'][] =
+                        $values['photo'];
 
-                $albums[$values['album']]['album_photos_footer'][] =
-                    $values['footer'];
+                    $albums[$values['album']]['album_photos_footer'][] =
+                        $values['footer'];
+                }
             } else {
                 $this->stats[$name]['error']++;
             }
@@ -1196,13 +1204,15 @@ class MigrationSaver
                     $offset = array_key_exists('offset', $params['substr']) ?
                         $params['substr']['offset'] : 0;
                     $delimiter = $params['substr']['delimiter'];
+                    $start = array_key_exists('start', $params['substr']) ?
+                        $params['substr']['start'] : 0;
+                    $pos = (array_key_exists('strrpos', $params['substrr'])
+                        && $params['substrr']['strrpos']) ?
+                        strrpos($field, $delimiter, $offset) + 1 :
+                        strpos($field, $delimiter, $offset);
 
-                    if (strpos($field, $delimiter, $offset) !== false) {
-                        $field = substr(
-                            $field,
-                            0,
-                            strpos($field, $delimiter, $offset)
-                        );
+                    if ($pos !== false) {
+                        $field = substr($field, $start, $pos);
                     } else {
                         $field = '';
                     }
@@ -1211,12 +1221,13 @@ class MigrationSaver
                     $offset = array_key_exists('offset', $params['substrr']) ?
                         $params['substrr']['offset'] : 0;
                     $delimiter = $params['substrr']['delimiter'];
+                    $pos = (array_key_exists('strrpos', $params['substrr'])
+                        && $params['substrr']['strrpos']) ?
+                        strrpos($field, $delimiter, $offset) + 1 :
+                        strpos($field, $delimiter, $offset);
 
-                    if (strrpos($field, $delimiter, $offset) !== false) {
-                        $field = substr(
-                            $field,
-                            strrpos($field, $delimiter, $offset) + 1
-                        );
+                    if ($pos !== false) {
+                        $field = substr($field, $pos);
                     } else {
                         $field = '';
                     }
@@ -1416,7 +1427,7 @@ class MigrationSaver
             return $rss[0]['id'];
         }
 
-        return 0;
+        return false;
     }
 
     /**
