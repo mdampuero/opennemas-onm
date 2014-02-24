@@ -22,7 +22,6 @@ framework:
     session:
         name:            __onm_sess
         gc_maxlifetime:  %session_memcache_expire%
-        cookie_lifetime: %session_memcache_expire%
         handler_id:      session.handler.memcache
         # handler_id:    session.handler.redis
     fragments:       ~
@@ -57,6 +56,7 @@ services:
     session.handler.memcache:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\MemcachedSessionHandler
         arguments: [ @session.memcache, { prefix: %session_memcache_prefix%, expiretime: %session_memcache_expire% } ]
-    # session.handler.redis:
-    #     class: Drak\NativeSession\NativeRedisSessionHandler
-    #     arguments: [tcp://localhost:6379?timeout=2]
+
+    session.handler.redis:
+        class: Drak\NativeSession\NativeRedisSessionHandler
+        arguments: [tcp://localhost:6379?timeout=2]
