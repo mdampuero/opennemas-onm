@@ -64,35 +64,8 @@ EOF
 
         chdir($basePath);
 
-        $routes = array();
-        $request = '';
-        require_once $basePath.'/app/autoload.php';
-        require_once $basePath.'/app/container.php';
-
-        $_SERVER['SERVER_NAME'] = 'local';
-
-        require $basePath.'/config/config.inc.php';
-
-        foreach ($onmInstancesConnection as $key => $value) {
-            define($key, $value);
-        }
-        $GLOBALS['application'] = new \Application();
-
-        $dbParams = array(
-            'connections' => array(
-                'default' => array(
-                    'database_host'     => $onmInstancesConnection['BD_HOST'],
-                    'database_user'     => $onmInstancesConnection['BD_USER'],
-                    'database_password' => $onmInstancesConnection['BD_PASS'],
-                    'database_name'     => $onmInstancesConnection['BD_DATABASE'],
-                    'database_driver'   => $onmInstancesConnection['BD_TYPE'],
-                )
-            )
-        );
-
         // Initialize Databse connection
-        $dbConn = $this->getConnection($dbParams);
-        $dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $dbConn = $this->getContainer()->get('db_conn_manager');
 
         $rs = $dbConn->GetAll('SELECT internal_name, settings FROM instances');
         // $rs = $dbConn->getAll('SHOW DATABASES');

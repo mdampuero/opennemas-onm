@@ -22,6 +22,11 @@ class GenerateLibraryCommand extends ContainerAwareCommand
     {
         $this
             ->setName('generate:library-cronicas')
+            ->setDefinition(
+                array(
+                    new InputArgument('internal_name', InputArgument::REQUIRED, 'user'),
+                )
+            )
             ->setDescription('Cron task for generating the static library from cronicasdelaemigracion')
             ->setHelp(
                 <<<EOF
@@ -37,9 +42,11 @@ EOF
     {
         $_SERVER['REQUEST_URI']   = '/';
 
+        $internalName = $input->getArgument('internal_name');
+
         // Loads one ONM instance from database
         $im = $this->getContainer()->get('instance_manager');
-        $instance = $im->load('cronicas.dev:8080');
+        $instance = $im->loadFromInternalName($internalName);
 
         $im->current_instance = $instance;
         $im->cache_prefix     = $instance->internal_name;
