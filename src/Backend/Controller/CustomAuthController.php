@@ -5,6 +5,8 @@ namespace Backend\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContext;
 use Onm\Framework\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
 
 /**
  * Auth controller.
@@ -12,18 +14,6 @@ use Onm\Framework\Controller\Controller;
  */
 class CustomAuthController extends Controller
 {
-    /**
-     * Bad credentials exception class name.
-     */
-    const BAD_CREDENTIALS =
-        'Symfony\Component\Security\Core\Exception\BadCredentialsException';
-
-    /**
-     * Invalid token exception class name.
-     */
-    const INVALID_TOKEN =
-        'Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException';
-
     /**
      * Displays the login form template.
      */
@@ -42,10 +32,10 @@ class CustomAuthController extends Controller
 
         if ($error) {
             $msg = '';
-            if (is_a($error, self::BAD_CREDENTIALS)) {
-                $msg = 'Username or password incorrect.';
-            } else if (is_a($error, self::INVALID_TOKEN)) {
-                $msg = 'Login token is not valid. Try to authenticate again.';
+            if ($error instanceof BadCredentialsException) {
+                $msg = _('Username or password incorrect.');
+            } elseif ($error instanceof InvalidCsrfTokenException) {
+                $msg = _('Login token is not valid. Try to authenticate again.');
             } else {
                 $msg = $error->getMessage();
             }
@@ -61,13 +51,15 @@ class CustomAuthController extends Controller
             ->generateCsrfToken('authenticate');
         $currentLanguage  = \Application::$language;
 
-        $failed_login_attempts = isset($_SESSION['failed_login_attempts']) ?
-            $_SESSION['failed_login_attempts'] : 0;
+        $failedLoginAttempts =  0;
+        if (isset($_SESSION['failed_login_attempts'])) {
+            $failedLoginAttempts = $_SESSION['failed_login_attempts'];
+        }
 
         return $this->render(
             'login/login.tpl',
             array(
-                'failed_login_attempts' => $failed_login_attempts,
+                'failed_login_attempts' => $failedLoginAttempts,
                 'current_language'      => $currentLanguage,
                 'token'                 => $token,
                 'referer'               => $referer
