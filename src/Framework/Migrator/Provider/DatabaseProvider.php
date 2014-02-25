@@ -221,8 +221,9 @@ class DatabaseProvider extends MigrationProvider
             // Associative array
             $sql .= $condition['table'] . '.' . $condition['field']
                 . (array_key_exists('operator', $condition) ?
-                    $condition['operator'] : '=')
-                . '\'' . $condition['value'] . '\'';
+                    $condition['operator'] . '\'' . $condition['value'] . '\''
+                    : ' LIKE \'%' . $condition['value'] . '%\''
+                );
         } else {
             // Non-associative array
             $sql .= '(';
