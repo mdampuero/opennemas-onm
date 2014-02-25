@@ -40,7 +40,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        if (strpos('_profiler', $event->getRequest()->getRequestUri()) !== false
+        if (preg_match('@^/_.*@', $event->getRequest()->getRequestUri()) != 1
             && $this->context->getToken()
         ) {
             $token = $this->context->getToken();
