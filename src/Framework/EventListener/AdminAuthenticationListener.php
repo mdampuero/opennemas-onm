@@ -40,9 +40,13 @@ class AdminAuthenticationListener implements EventSubscriberInterface
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $token = $this->context->getToken();
-        $token->getUser()->eraseCredentials();
-        $token->setAuthenticated(false);
+        if (strpos('_profiler', $event->getRequest()->getRequestUri()) !== false
+            && $this->context->getToken()
+        ) {
+            $token = $this->context->getToken();
+            $token->getUser()->eraseCredentials();
+            $token->setAuthenticated(false);
+        }
     }
 
     public static function getSubscribedEvents()
