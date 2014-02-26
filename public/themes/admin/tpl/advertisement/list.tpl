@@ -13,6 +13,8 @@
                         <h4>{t}Special elements{/t}</h4>
                         <a href="{url name=admin_ads category=0}" {if $category==0}class="active"{/if}>{t}HOMEPAGE{/t} </a>
                         <a href="{url name=admin_ads category=4}" {if $category==4}class="active"{/if}>{t}OPINION{/t} </a>
+                        <a href="{url name=admin_ads category=3}" {if $category==3}class="active"{/if}>{t}ALBUM{/t} </a>
+                        <a href="{url name=admin_ads category=6}" {if $category==6}class="active"{/if}>{t}VIDEO{/t} </a>
 
                         {include file="common/drop_down_categories.tpl" home={url name=admin_ads l=1} hide_all=true}
                     </div>
