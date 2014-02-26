@@ -471,4 +471,14 @@ class Europapress implements FormatInterface
     {
         return array();
     }
+
+    /**
+     * Returns the opennemas metadata
+     *
+     * @return string the property value
+     **/
+    public function getOpennemasData($property)
+    {
+        return null;
+    }
 }

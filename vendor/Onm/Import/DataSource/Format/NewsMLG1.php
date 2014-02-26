@@ -507,10 +507,9 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
-     * undocumented function
+     * Returns the opennemas metadata
      *
-     * @return void
-     * @author
+     * @return string the property value
      **/
     public function getOpennemasData($property)
     {
