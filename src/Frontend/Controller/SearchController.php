@@ -46,7 +46,9 @@ class SearchController extends Controller
      **/
     public function googleAction()
     {
-        \Frontend\Controller\FrontpagesController::getAds();
+        $ads = \Frontend\Controller\ArticlesController::getAds();
+
+        $this->view->assign('advertisements', $ads);
 
         return $this->render('search/search.tpl');
     }
