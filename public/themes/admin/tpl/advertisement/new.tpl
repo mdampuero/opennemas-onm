@@ -118,6 +118,8 @@
                 {if isset($advertisement->id)}
                     <option value="0" {if isset($advertisement) && in_array(0,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Frontpage{/t}</option>
                     <option value="4" {if isset($advertisement) && in_array(4,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Opinion{/t}</option>
+                    <option value="3" {if isset($advertisement) && in_array(3,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Album{/t}</option>
+                    <option value="6" {if isset($advertisement) && in_array(6,$advertisement->fk_content_categories)}selected="selected"{/if}>{t}Video{/t}</option>
 
                     {section name=as loop=$allcategorys}
                         {acl hasCategoryAccess=$allcategorys[as]->pk_content_category}
@@ -139,6 +141,12 @@
                     <option value="0" {if $category == 0}selected="selected"{/if}>{t}Frontpage{/t}</option>
                     {is_module_activated name="OPINION_MANAGER"}
                     <option value="4" {if $category == 4}selected="selected"{/if}>{t}Opinion{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="ALBUM_MANAGER"}
+                    <option value="3" {if $category == 3}selected="selected"{/if}>{t}Album{/t}</option>
+                    {/is_module_activated}
+                    {is_module_activated name="VIDEO_MANAGER"}
+                    <option value="6" {if $category == 6}selected="selected"{/if}>{t}Video{/t}</option>
                     {/is_module_activated}
 
                     {section name=as loop=$allcategorys}
