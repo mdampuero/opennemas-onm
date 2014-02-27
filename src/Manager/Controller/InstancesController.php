@@ -35,8 +35,7 @@ class InstancesController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Response the response object
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
+     * @return Response the response
      **/
     public function listAction(Request $request)
     {
@@ -82,8 +81,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function listExportAction(Request $request)
     {
@@ -144,8 +141,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function showAction(Request $request)
     {
@@ -188,8 +183,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function createAction(Request $request)
     {
@@ -287,8 +280,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function updateAction(Request $request)
     {
@@ -414,8 +405,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {
@@ -450,8 +439,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -490,8 +477,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function toggleAvailableAction(Request $request)
     {
@@ -520,8 +505,6 @@ class InstancesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function batchAvailableAction(Request $request)
     {

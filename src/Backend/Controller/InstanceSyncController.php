@@ -44,6 +44,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -76,6 +78,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function createAction(Request $request)
     {
@@ -121,6 +125,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function fetchCategoriesAction(Request $request)
     {
@@ -174,6 +180,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function showAction(Request $request)
     {
@@ -232,6 +240,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {
