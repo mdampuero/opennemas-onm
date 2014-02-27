@@ -429,9 +429,9 @@ admin_images_batchdelete:
     path:     /images/batchdelete
     defaults: { _controller  : BackendBundle:Images:batchDelete }
 
-admin_images_config:
-    path:     /images/config
-    defaults: { _controller  : BackendBundle:Images:config }
+# admin_images_config:
+#     path:     /images/config
+#     defaults: { _controller  : BackendBundle:Images:config }
 
 admin_images_content_provider_gallery:
     path:     /images/content-provider-gallery
