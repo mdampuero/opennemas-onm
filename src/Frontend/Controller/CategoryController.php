@@ -201,6 +201,7 @@ class CategoryController extends Controller
                     'category'              => $category,
                     'pagination'            => $pagination,
                     'actual_category_title' => $ccm->get_title($categoryName),
+                    'actual_category'       => $categoryName
                 )
             );
         }
