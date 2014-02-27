@@ -1171,6 +1171,12 @@ class Privilege
                 'description'  => _('Manage frontpage'),
                 'module'       => 'SPECIAL',
             ),
+            182 => array(
+                'pk_privilege' => '182',
+                'name'         => 'PAYWALL_ADMIN',
+                'description'  => _('Administer paywall'),
+                'module'       => 'PAYWALL',
+            ),
         );
 
         return self::$privileges;
