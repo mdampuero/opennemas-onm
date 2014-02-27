@@ -84,7 +84,9 @@
                     <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:100px;">Created</th>
-                    <th class="center" style="width:35px;">{t}Published{/t}</th>
+                    {acl isAllowed="SPECIAL_AVAILABLE"}
+                        <th class="center" style="width:35px;">{t}Published{/t}</th>
+                    {/acl}
                     {acl isAllowed="SPECIAL_FAVORITE"}
                         {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     {/acl}
@@ -120,11 +122,11 @@
                 {acl isAllowed="SPECIAL_AVAILABLE"}
                     {if $special->available == 1}
                     <a href="{url name=admin_special_toggleavailable id=$special->pk_special status=0 category=$category page=$page}" title="{t}Published{/t}">
-                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" />
+                        &nbsp;
                     </a>
                     {else}
                     <a href="{url name=admin_special_toggleavailable id=$special->pk_special status=1 category=$category page=$page}" title="{t}Pending{/t}">
-                        <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/>
+                        &nbsp;
                     </a>
                     {/if}
                 {/acl}
