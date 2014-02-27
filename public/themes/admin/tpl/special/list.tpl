@@ -85,8 +85,12 @@
                     {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:100px;">Created</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
-                     {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
-                    <th class="center" style="width:35px;">{t}Home{/t}</th>
+                    {acl isAllowed="SPECIAL_FAVORITE"}
+                        {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
+                    {/acl}
+                    {acl isAllowed="SPECIAL_HOME"}
+                        <th class="center" style="width:35px;">{t}Home{/t}</th>
+                    {/acl}
                     <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
@@ -126,25 +130,25 @@
                 {/acl}
                 </td>
                 {if $category!='widget'}
-                <td class="center">
                     {acl isAllowed="SPECIAL_FAVORITE"}
-                        {if $special->favorite == 1}
-                           <a href="{url name=admin_special_togglefavorite id=$special->pk_special status=0 category=$category page=$page}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
-                        {else}
-                            <a href="{url name=admin_special_togglefavorite id=$special->pk_special status=1 category=$category page=$page}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
-                        {/if}
+                        <td class="center">
+                            {if $special->favorite == 1}
+                               <a href="{url name=admin_special_togglefavorite id=$special->pk_special status=0 category=$category page=$page}" class="favourite_on" title="{t}Take out from frontpage{/t}"></a>
+                            {else}
+                                <a href="{url name=admin_special_togglefavorite id=$special->pk_special status=1 category=$category page=$page}" class="favourite_off" title="{t}Put in frontpage{/t}"></a>
+                            {/if}
+                        </td>
                     {/acl}
-                </td>
                 {/if}
-                <td class="center">
-                    {acl isAllowed="SPECIAL_HOME"}
+                {acl isAllowed="SPECIAL_HOME"}
+                    <td class="center">
                         {if $special->in_home == 1}
                            <a href="{url name=admin_special_toggleinhome id=$special->pk_special status=0 category=$category page=$page}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
                             <a href="{url name=admin_special_toggleinhome id=$special->pk_special status=1 category=$category page=$page}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
-                    {/acl}
-                </td>
+                    </td>
+                {/acl}
                 <td class="right">
                     <div class="btn-group">
                        {acl isAllowed="SPECIAL_UPDATE"}
