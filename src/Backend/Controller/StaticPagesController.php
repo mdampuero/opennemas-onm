@@ -191,7 +191,7 @@ class StaticPagesController extends Controller
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
                 && $staticPage->fk_author != $_SESSION['userid']) {
-                m::add(_("You can't modify this static page because you don't have enought privileges."));
+                m::add(_("You can't modify this static page because you don't have enough privileges."));
             } else {
                 // Check empty data
                 if (count($request->request) < 1) {
