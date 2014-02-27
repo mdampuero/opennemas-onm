@@ -79,6 +79,10 @@ frontend_auth_login:
     path: /login
     defaults: { _controller: FrontendBundle:Authentication:login }
 
+frontend_auth_check:
+    path: /check
+    defaults: { _controller: FrontendBundle:Authentication:check }
+
 frontend_auth_logout:
     path: /logout
     defaults: { _controller: FrontendBundle:Authentication:logout }

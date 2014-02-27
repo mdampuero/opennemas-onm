@@ -837,15 +837,6 @@ admin_keyword_autolink:
     path:     /keywords/autolink
     defaults: { _controller  : BackendBundle:Keywords:autolink }
 
-# Statistics controller routes
-admin_statistics:
-    path:     /statistics
-    defaults: { _controller  : BackendBundle:Statistics:default }
-
-admin_statistics_widget:
-    path:     /statistics/widget
-    defaults: { _controller  : BackendBundle:Statistics:getWidget }
-
 # Article controller routes
 admin_articles:
     path:     /articles
@@ -1214,14 +1205,6 @@ admin_tpl_manager_config:
     path:     /system/cachemanager/config
     defaults: { _controller  : BackendBundle:CacheManager:config }
 
-admin_tpl_manager_refresh:
-    path:     /system/cachemanager/refresh
-    defaults: { _controller  : BackendBundle:CacheManager:refresh }
-
-admin_tpl_manager_update:
-    path:     /system/cachemanager/update
-    defaults: { _controller  : BackendBundle:CacheManager:update }
-
 admin_tpl_manager_delete:
     path:     /system/cachemanager/delete
     defaults: { _controller  : BackendBundle:CacheManager:delete }
@@ -1229,10 +1212,6 @@ admin_tpl_manager_delete:
 admin_tpl_manager_deleteall:
     path:     /system/cachemanager/deleteall
     defaults: { _controller  : BackendBundle:CacheManager:deleteAll }
-
-admin_tpl_manager_cleanfrontpage:
-    path:     /system/cachemanager/cleanfrontapge
-    defaults: { _controller  : BackendBundle:CacheManager:cleanFrontpage }
 
 # Database error controller routes
 admin_databaseerrors:
@@ -1267,10 +1246,6 @@ admin_acl_user_batchdelete:
     path:     /acl/users/batchdelete
     defaults: { _controller  : BackendBundle:AclUser:batchDelete }
 
-admin_acl_user_connected_users:
-    path:     /acl/users/connected-users
-    defaults: { _controller  : BackendBundle:AclUser:connectedUsers }
-
 admin_acl_user_set_meta:
     path:     /acl/user/set-meta
     defaults: { _controller  : BackendBundle:AclUser:setMeta }
@@ -1278,27 +1253,6 @@ admin_acl_user_set_meta:
 admin_acl_user_toogle_enabled:
     path:     /acl/user/{id}/toggle-enabled
     defaults: { _controller  : BackendBundle:AclUser:toogleEnabled }
-
-# Privilege management routes
-admin_acl_privileges:
-    path:     /acl/privileges
-    defaults: { _controller  : BackendBundle:AclPrivileges:list }
-
-admin_acl_privileges_show:
-    path:     /acl/privilege/show/{id}
-    defaults: { _controller  : BackendBundle:AclPrivileges:show }
-
-admin_acl_privileges_create:
-    path:     /acl/privilege/create
-    defaults: { _controller  : BackendBundle:AclPrivileges:create }
-
-admin_acl_privileges_update:
-    path:     /acl/privilege/{id}/update
-    defaults: { _controller  : BackendBundle:AclPrivileges:update }
-
-admin_acl_privileges_delete:
-    path:     /acl/privilege/{id}/delete
-    defaults: { _controller  : BackendBundle:AclPrivileges:delete }
 
 # User groups managerment routes
 admin_acl_usergroups:
@@ -1336,16 +1290,16 @@ admin_utils_calculate_tags:
 
 admin_login_form:
     path:     /login
-    defaults: { _controller  : BackendBundle:CustomAuth:login }
+    defaults: { _controller  : BackendBundle:Authentication:login }
 
 admin_login_processform:
     path:     /login/process
-    defaults: { _controller  : BackendBundle:CustomAuth:check }
+    defaults: { _controller  : BackendBundle:Authentication:check }
     methods:  [POST]
 
 admin_logout:
     path:     /logout
-    defaults: { _controller  : BackendBundle:CustomAuth:logout }
+    defaults: { _controller  : BackendBundle:Authentication:logout }
 
 admin_acl_user_recover_pass:
     path:     /login/user/recover-pass
