@@ -87,8 +87,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['accesscategories'] = $user->getAccessCategoryIds();
         $_SESSION['updated']          = time();
         $_SESSION['user_language']    = $user->getMeta('user_language');
-        $_SESSION['csrf']             = md5(uniqid(mt_rand(), true));
-        $_SESSION['meta']             = $user->getMeta();
         $_SESSION['valid']            = $valid;
 
         if ($valid === false) {
@@ -107,10 +105,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             return new RedirectResponse($request->headers->get('referer'));
         } else {
             unset($_SESSION['failed_login_attempts']);
-
-            return new RedirectResponse(
-                $this->router->generate('admin_welcome')
-            );
+            return new RedirectResponse($request->get('_referer'));
         }
     }
 }
