@@ -11,7 +11,7 @@
 
 namespace Framework\EventListener;
 
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents as SymfonyKernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -38,7 +38,7 @@ class AdminAuthenticationListener implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event A FilterResponseEvent instance
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelController(FilterControllerEvent $event)
     {
         if (preg_match('@^/_.*@', $event->getRequest()->getRequestUri()) != 1
             && $this->context->getToken()
