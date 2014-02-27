@@ -51,12 +51,11 @@ $(document).ready(function () {
 
         if (form.find('input[name="_password"]').length > 0) {
             password = form.find('input[name="_password"]');
-            password.val(hex_md5(password.val()));
+            password.val('md5:' + hex_md5(password.val()));
         } else {
             password = form.find('input[name="password"]');
             password.val('md5:' + hex_md5(hex_md5(password.val()) + time));
         }
-
 
         form.submit();
     });
