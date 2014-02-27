@@ -5,11 +5,13 @@
 	<div class="wrapper-content">
 		<div class="title"><h2>{t}Static pages{/t}</h2></div>
 		<ul class="old-button">
+            {acl isAllowed="STATIC_CREATE"}
 			<li>
 				<a href="{url name=admin_staticpages_create}" title="{t}Create new page{/t}">
 					<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New page{/t}
 				</a>
 			</li>
+            {/acl}
 		</ul>
 	</div>
 </div>
