@@ -110,7 +110,7 @@ admin_widget_update:
     defaults: { _controller  : BackendBundle:Widgets:update }
 
 admin_widget_toogle_available:
-    path:     /widget/{id}/toogle_available
+    path:     /widget/{id}/toggle_available
     defaults: { _controller  : BackendBundle:Widgets:toogleAvailable }
 
 admin_widgets_content_provider:
@@ -234,7 +234,7 @@ admin_ad_show:
     defaults: { _controller  : BackendBundle:Ads:show }
 
 admin_ad_update:
-    path:     /ads/{id}/update
+    path:     /ad/{id}/update
     defaults: { _controller  : BackendBundle:Ads:update }
 
 admin_ad_delete:
@@ -254,7 +254,7 @@ admin_ads_content_provider:
     defaults: { _controller  : BackendBundle:Ads:contentProvider }
 
 admin_ad_toggleavailable:
-    path:     /ads/{id}/toggle-available
+    path:     /ad/{id}/toggle-available
     defaults: { _controller  : BackendBundle:Ads:toggleAvailable }
 
 admin_ads_config:
@@ -1141,7 +1141,7 @@ admin_news_agency_servers:
     defaults: { _controller  : BackendBundle:NewsAgency:configListServers }
 
 admin_news_agency_server_toogle:
-    path:     /news-agency/servers/toogle
+    path:     /news-agency/servers/toggle
     defaults: { _controller  : BackendBundle:NewsAgency:toogleEnabled }
 
 admin_news_agency_server_create:
@@ -1276,7 +1276,7 @@ admin_acl_user_set_meta:
     defaults: { _controller  : BackendBundle:AclUser:setMeta }
 
 admin_acl_user_toogle_enabled:
-    path:     /acl/user/{id}/toogle-enabled
+    path:     /acl/user/{id}/toggle-enabled
     defaults: { _controller  : BackendBundle:AclUser:toogleEnabled }
 
 # Privilege management routes
