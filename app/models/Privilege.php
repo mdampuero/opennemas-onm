@@ -1069,6 +1069,12 @@ class Privilege
                 'description'  => _('Manage module settings'),
                 'module'       => 'VIDEO',
             ),
+            179 => array(
+                'pk_privilege' => '179',
+                'name'         => 'MENU_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'MENU',
+            ),
             164 => array(
                 'pk_privilege' => '164',
                 'name'         => 'MENU_DELETE',
@@ -1152,6 +1158,18 @@ class Privilege
                 'name'         => 'SYNC_ADMIN',
                 'description'  => _('Administer synchronization between Opennemas'),
                 'module'       => 'SYNC_MANAGER',
+            ),
+            180 => array(
+                'pk_privilege' => '178',
+                'name'         => 'INSTANCE_SYNC_ADMIN',
+                'description'  => _('Administer instances'),
+                'module'       => 'INSTANCE_SYNC',
+            ),
+            181 => array(
+                'pk_privilege' => '181',
+                'name'         => 'SPECIAL_HOME',
+                'description'  => _('Manage frontpage'),
+                'module'       => 'SPECIAL',
             ),
         );
 
