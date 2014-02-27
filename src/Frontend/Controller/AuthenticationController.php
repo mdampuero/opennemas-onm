@@ -14,12 +14,12 @@
  **/
 namespace Frontend\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\SecurityContext;
+
 use Onm\Framework\Controller\Controller;
-use Onm\Message as m;
-use Onm\Settings as s;
 
 /**
  * Handles the actions for the user authentication in frontend
@@ -29,142 +29,60 @@ use Onm\Settings as s;
 class AuthenticationController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-        $this->view = new \Template(TEMPLATE_USER);
-    }
-
-    /**
-     * Performs the login action
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
+     * Displays the login form template.
+     */
     public function loginAction(Request $request)
     {
-        $session = $this->container->get('session');
-        $session->start();
-        $this->container->get('request')->setSession($session);
-        $contentId = $request->query->filter('content_id', '', FILTER_SANITIZE_STRING);
+        $error   = null;
+        $route   = $request->get('_route');
+        $referer = $this->generateUrl('frontend_user_show');
 
-        if ('POST' == $request->getMethod()) {
-            //  Get values from post
-            $login     = $request->request->filter('login', null, FILTER_SANITIZE_STRING);
-            $password  = $request->request->filter('password', null, FILTER_SANITIZE_STRING);
-            $token     = $request->request->filter('token', null, FILTER_SANITIZE_STRING);
-            $captcha   = '';
+        if ($this->session->get('_security.frontend.target_path')) {
+            $referer = $this->session->get('_security.frontend.target_path');
+        }
 
-            $user = new \User();
+        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes
+                ->get(SecurityContext::AUTHENTICATION_ERROR);
+        } else {
+            $error = $request->getSession()
+                ->get(SecurityContext::AUTHENTICATION_ERROR);
+        }
 
-            if (array_key_exists('csrf', $_SESSION)
-                && $_SESSION['csrf'] !== $token
-            ) {
-                m::add(_('Login token is not valid. Try to autenticate again.'), m::ERROR);
-                return $this->redirect($this->generateUrl('frontend_auth_login'));
+        if ($error) {
+            $msg = '';
+            if ($error instanceof BadCredentialsException) {
+                $msg = _('Username or password incorrect.');
+            } elseif ($error instanceof InvalidCsrfTokenException) {
+                $msg = _('Login token is not valid. Try to authenticate again.');
             } else {
-                // Try to autenticate the user
-                if ($user->login($login, $password, $token, $captcha)) {
-                    // Check if user account is activated
-                    if ($user->activated != 1) {
-                        m::add(_('This user is not activated. Check your e-mail for the activation link.'), m::ERROR);
-                        return $this->redirect($this->generateUrl('frontend_auth_login'));
-                    } else {
-                        // Increase security by regenerating the id
-                        $request->getSession()->migrate();
-
-                        $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
-
-                        // Set last login date
-                        $user->setLastLoginDate();
-
-                        // Get group(s) of the user
-                        $group = array();
-                        $privileges = array();
-                        $userGroups = $user->fk_user_group;
-                        foreach ($userGroups as $group) {
-                            $groups[] = \UserGroup::getGroupName($group);
-                            // Get privileges from user groups
-                            $privileges = array_merge(
-                                $privileges,
-                                \Privilege::getPrivilegesForUserGroup($group)
-                            );
-                        }
-
-                        $_SESSION = array(
-                            'userid'           => $user->id,
-                            'realname'         => $user->name,
-                            'username'         => $user->username,
-                            'email'            => $user->email,
-                            'deposit'          => $user->deposit,
-                            'type'             => $user->type,
-                            'isAdmin'          => (in_array('Administrador', $groups)),
-                            'isMaster'         => (in_array('Masters', $groups)),
-                            'privileges'       => $privileges,
-                            'accesscategories' => $user->getAccessCategoryIds(),
-                            'updated'          => time(),
-                            'session_lifetime' => $maxSessionLifeTime * 60,
-                            'user_language'    => $user->getMeta('user_language'),
-                            'csrf'             => md5(uniqid(mt_rand(), true)),
-                            'meta'             => $user->getMeta(),
-                        );
-
-                        m::add(_('Log in succesful.'), m::SUCCESS);
-
-                        if (!empty($contentId)) {
-                            $article = new \Article($contentId);
-                            return $this->redirect($article->uri);
-                        }
-
-                        return $this->redirect($this->generateUrl('frontend_user_show'));
-                    }
-
-                } else {
-                    m::add(_('Username or password incorrect.'), m::ERROR);
-                    return $this->redirect($this->generateUrl('frontend_auth_login'));
-                }
+                $msg = $error->getMessage();
             }
+
+            $this->session->getFlashBag()->add('error', $msg);
+
+            $_SESSION['failed_login_attempts'] =
+                isset($_SESSION['failed_login_attempts']) ?
+                $_SESSION['failed_login_attempts'] + 1 : 1;
         }
 
-        // If the session was already initialized redirect the user to user page
-        if (array_key_exists('userid', $_SESSION)) {
-            return $this->redirect($this->generateUrl('frontend_user_show'));
-        }
+        $token = $this->get('form.csrf_provider')
+            ->generateCsrfToken('frontend_authenticate');
+        $currentLanguage  = \Application::$language;
 
-        $token = md5(uniqid(mt_rand(), true));
-        $_SESSION['csrf'] = $token;
+        $failedLoginAttempts =  0;
+        if (isset($_SESSION['failed_login_attempts'])) {
+            $failedLoginAttempts = $_SESSION['failed_login_attempts'];
+        }
 
         return $this->render(
             'authentication/login.tpl',
             array(
-                'token' => $token,
-                'id'    => $contentId
+                'failed_login_attempts' => $failedLoginAttempts,
+                'current_language'      => $currentLanguage,
+                'token'                 => $token,
+                'referer'               => $referer
             )
         );
-    }
-
-    /**
-     * Performs the log out action
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function logoutAction(Request $request)
-    {
-        // $csrf = $request->query->filter('csrf', null, FILTER_SANITIZE_STRING);
-        // if ($csrf === $_SESSION['csrf']) {
-        $_SESSION = array();
-        if (isset($_COOKIE[session_name()])) {
-            setcookie(session_name(), '', time()-42000, '/');
-        }
-
-        session_destroy();
-
-        return new RedirectResponse(SITE_URL);
     }
 }
