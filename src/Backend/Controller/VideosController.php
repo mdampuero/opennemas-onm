@@ -644,7 +644,7 @@ class VideosController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('VIDEO_AVAILABLE')")
+     * @Security("has_role('VIDEO_FAVORITE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
@@ -681,7 +681,7 @@ class VideosController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('VIDEO_AVAILABLE')")
+     * @Security("has_role('VIDEO_HOME')")
      **/
     public function toggleInHomeAction(Request $request)
     {

@@ -474,7 +474,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ALBUM_AVAILABLE')")
+     * @Security("has_role('ALBUM_FAVORITE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
@@ -512,7 +512,7 @@ class AlbumsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('ALBUM_AVAILABLE')")
+     * @Security("has_role('ALBUM_HOME')")
      **/
     public function toggleInHomeAction(Request $request)
     {
