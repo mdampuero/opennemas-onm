@@ -11,3 +11,5 @@ services:
     login_success_handler:
         class: Backend\EventListener\LoginSuccessHandler
         arguments: ['@security.context', '@router', '@session']
+    onm_password_encoder:
+        class: Backend\Security\OnmPasswordEncoder
