@@ -487,7 +487,7 @@ class CoversController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('KIOSKO_AVAILABLE')")
+     * @Security("has_role('KIOSKO_HOME')")
      **/
     public function toggleInHomeAction(Request $request)
     {

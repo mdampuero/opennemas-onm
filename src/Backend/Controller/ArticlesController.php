@@ -692,8 +692,6 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_ADMIN')")
      **/
     public function contentProviderSuggestedAction(Request $request)
     {
@@ -754,8 +752,6 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_ADMIN')")
      **/
     public function contentProviderCategoryAction(Request $request)
     {
@@ -819,8 +815,6 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {
@@ -881,8 +875,6 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_ADMIN')")
      **/
     public function contentProviderInFrontpageAction(Request $request)
     {

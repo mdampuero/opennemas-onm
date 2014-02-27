@@ -168,7 +168,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('OPINION_ADMIN')")
+     * @Security("has_role('OPINION_FRONTPAGE')")
      **/
     public function frontpageAction(Request $request)
     {
@@ -244,7 +244,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('OPINION_UPDATE', 'OPINION_CREATE')")
+     * @Security("has_role('OPINION_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -558,7 +558,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('OPINION_AVAILABLE')")
+     * @Security("has_role('OPINION_HOME')")
      **/
     public function toggleInHomeAction(Request $request)
     {
@@ -802,7 +802,7 @@ class OpinionsController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('OPINION_AVAILABLE')")
+     * @Security("has_role('OPINION_HOME')")
      **/
     public function batchInHomeAction(Request $request)
     {
@@ -1293,6 +1293,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function previewAction(Request $request)
     {
@@ -1404,6 +1406,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function getPreviewAction(Request $request)
     {

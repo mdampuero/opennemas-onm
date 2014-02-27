@@ -171,7 +171,7 @@ class BooksController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('BOOK_FAVORITE')")
+     * @Security("has_role('BOOK_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
