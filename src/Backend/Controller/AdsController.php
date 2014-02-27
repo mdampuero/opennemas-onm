@@ -663,6 +663,8 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_ADMIN')")
      **/
     public function configAction(Request $request)
     {
