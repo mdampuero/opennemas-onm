@@ -519,7 +519,7 @@ class User implements AdvancedUserInterface
 
         $contentCategories = $cache->fetch(CACHE_PREFIX . "categories_for_user_".$id);
          // If was not fetched from APC now is turn of DB
-        if (!$contentCategories) {
+        if (!$contentCategories && $this->type != 0) {
 
             $sql = 'SELECT pk_fk_content_category '
                  . 'FROM users_content_categories '
@@ -1507,6 +1507,14 @@ class User implements AdvancedUserInterface
                 || in_array('5', $this->id_user_group)
             ) {
                 $this->roles = \Privilege::getPrivilegeNames();
+
+                if (in_array('4', $this->id_user_group)) {
+                    $this->roles[] = 'ROLE_MASTER';
+                }
+
+                if (in_array('5', $this->id_user_group)) {
+                    $this->roles[] = 'ROLE_ADMIN';
+                }
             } else {
                 $this->roles = array();
                 foreach ($this->id_user_group as $group) {
@@ -1519,7 +1527,9 @@ class User implements AdvancedUserInterface
             }
 
             if ((int) $this->type == 0) {
-                $this->roles []= 'ROLE_BACKEND_USER';
+                $this->roles[] = 'ROLE_BACKEND';
+            } else {
+                $this->roles[] = 'ROLE_FRONTEND';
             }
         }
 
