@@ -33,18 +33,24 @@
 
     <div class="form-wrapper">
         {render_messages}
-
         <form method="post" autocomplete="off" action="{url name=manager_login_processform}" id="loginform" name="loginform" class="clearfix">
-
             <div class="input-wrapper">
-                <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
-                <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
-
+                <input name="_username" id="_username" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
+                <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                 <button id="submit-button" type="submit" tabindex="3" class="onm-button blue"><span>{t}Enter{/t}</span></button>
+                {if $failed_login_attempts >= 3}
+                <div class="control-group clearfix">
+                    <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
+                    <noscript>
+                        <iframe src="http://www.google.com/recaptcha/api/noscript?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66" height="300" width="500" frameborder="0"></iframe><br>
+                        <textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+                        <input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+                    </noscript>
+                </div>
+                {/if}
             </div>
-        <input type="hidden" name="token" value="{$smarty.session.csrf}">
-        <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
-        <input type="hidden" name="time" value="{$smarty.now}">
+        <input type="hidden" name="_token" value="{$token}">
+        <input type="hidden" name="_referer" value="{$referer}">
         </form>
     </div>
 

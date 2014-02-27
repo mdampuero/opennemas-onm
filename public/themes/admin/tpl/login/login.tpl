@@ -67,7 +67,6 @@
             </div>
             <input type="hidden" name="_token" value="{$token}">
             <input type="hidden" name="_referer" value="{$referer}">
-            <input type="hidden" name="time" value="{$smarty.now}">
     	</form>
     </div>
 
