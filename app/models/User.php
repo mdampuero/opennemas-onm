@@ -519,7 +519,7 @@ class User implements AdvancedUserInterface
 
         $contentCategories = $cache->fetch(CACHE_PREFIX . "categories_for_user_".$id);
          // If was not fetched from APC now is turn of DB
-        if (!$contentCategories && $this->type != 0) {
+        if (!$contentCategories) {
 
             $sql = 'SELECT pk_fk_content_category '
                  . 'FROM users_content_categories '
