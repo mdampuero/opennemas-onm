@@ -267,7 +267,7 @@ class AclUserController extends Controller
 
                     return $this->redirect(
                         $this->generateUrl(
-                            'admin_acl_user_show',
+                            'manager_acl_user_show',
                             array('id' => $user->id)
                         )
                     );
@@ -310,10 +310,17 @@ class AclUserController extends Controller
             $user = new \User();
             if ($user->delete($userId)) {
                 $user->deleteMeta($userId);
-                m::add(_('You have deleted selected user.'), m::SUCCESS);
+
+                $request->getSession()->getFlashBag()->add(
+                    'success',
+                    sprintf(_('Successfully deleted user with id "%d".'), $userId)
+                );
             }
+
             if (!$request->isXmlHttpRequest()) {
                 return $this->redirect($this->generateUrl('manager_acl_user'));
+            } else {
+                return new Response('ok');
             }
         }
     }
@@ -321,7 +328,7 @@ class AclUserController extends Controller
     /**
      * Deletes multiple users at once given their ids
      *
-     * @return string the string resposne
+     * @return string the string response
      **/
     public function batchDeleteAction(Request $request)
     {
