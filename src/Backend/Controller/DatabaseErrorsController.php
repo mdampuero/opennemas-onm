@@ -37,6 +37,8 @@ class DatabaseErrorsController extends Controller
      * @param Request $request the request object
      *
      * @return string the response
+     *
+     * @Security("has_role('ROLE_MASTER')")
      **/
     public function defaultAction(Request $request)
     {
@@ -96,6 +98,8 @@ class DatabaseErrorsController extends Controller
      * @param Request $request the request object
      *
      * @return string the response
+     *
+     * @Security("has_role('ROLE_MASTER')")
      **/
     public function purgeAction(Request $request)
     {
