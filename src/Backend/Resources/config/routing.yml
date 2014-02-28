@@ -139,7 +139,7 @@ admin_menu_delete:
     defaults: { _controller  : BackendBundle:Menus:delete }
 
 admin_menu_batchdelete:
-    path:     /menus/batchdelete
+    path:     /menus/batch-delete
     defaults: { _controller  : BackendBundle:Menus:batchDelete }
 
 admin_instance_sync:
@@ -957,11 +957,11 @@ admin_opinions_batch_inhome:
     defaults: { _controller  : BackendBundle:Opinions:batchInHome }
 
 admin_opinions_batch_inhome:
-    path:     /opinions/save-positions
+    path:     /opinions/batch-inhome
     defaults: { _controller  : BackendBundle:Opinions:batchInHome }
 
 admin_opinions_savepositions:
-    path:     /opinions/batch-inhome
+    path:     /opinions/save-positions
     defaults: { _controller  : BackendBundle:Opinions:savePositions }
 
 admin_opinions_content_provider:
