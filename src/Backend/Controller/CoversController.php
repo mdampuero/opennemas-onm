@@ -325,7 +325,7 @@ class CoversController extends Controller
         $id = $request->query->getDigits('id');
 
         $cover = new \Kiosko($id);
-        if ($cover->id != null) {
+        if ($cover->id == null) {
             $this->get('session')->getFlashBag()->add('error', _('Cover id not valid.'));
 
             return $this->redirect(
