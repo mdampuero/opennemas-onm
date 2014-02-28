@@ -145,6 +145,7 @@ class WidgetsController extends Controller
 
         $widget = new \Widget();
         $widget->delete($id);
+        m::add(_('Widget deleted successfully.'), m::SUCCESS);
 
         return $this->redirect($this->generateUrl('admin_widgets'));
     }
