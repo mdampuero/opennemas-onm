@@ -322,7 +322,7 @@ class MenusController extends Controller
             m::add(_('You must give an id for delete the menu.'), m::ERROR);
         } else {
             $menu = new \Menu($id);
-            $menu->delete($_SESSION['userid']);
+            $menu->delete($id);
             \MenuItems::emptyMenu($id);
 
             m::add(sprintf(_("Menu '%s' deleted successfully."), $menu->name), m::SUCCESS);
@@ -360,7 +360,7 @@ class MenusController extends Controller
                 $menu = new \Menu($id);
 
                 if ($menu->type == 'user') {
-                    $menu->delete($_SESSION['userid']);
+                    $menu->delete($id);
                     m::add(sprintf(_('Menu "%s" deleted successfully.'), $menu->name), m::SUCCESS);
                 } else {
                     m::add(sprintf(_('Unable to delete the menu "%s" as is system internal.'), $menu->name), m::ERROR);
