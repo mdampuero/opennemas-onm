@@ -318,20 +318,19 @@ class CommentsController extends Controller
     public function showAction(Request $request)
     {
         $id = $request->query->getDigits('id');
+        $comment = new \Comment($id);
 
-        if (!is_null($id)) {
-            $comment = new \Comment($id);
+        if (!is_null($comment->id)) {
             $comment->content = new \Content($comment->content_id);
 
             return $this->render(
                 'comment/read.tpl',
                 array('comment' => $comment)
             );
-        } else {
-            m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
-
-            return $this->redirect($this->generateUrl('admin_comments_list'));
         }
+
+        m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
+        return $this->redirect($this->generateUrl('admin_comments_list'));
     }
 
     /**
@@ -348,27 +347,31 @@ class CommentsController extends Controller
         $id      = $request->query->getDigits('id');
         $comment = new \Comment($id);
 
-        // Check empty data
-        if (count($request->request) < 1) {
-            m::add(_("Comment data sent not valid."), m::ERROR);
+        if (!is_null($comment->id)) {
+            // Check empty data
+            if (count($request->request) < 1) {
+                m::add(_("Comment data sent not valid."), m::ERROR);
+                return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
+            }
+
+            $data = array(
+                'status' => $request->request->filter('status'),
+                'body'   => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+            );
+
+            try {
+                $comment->update($data);
+
+                m::add(_('Comment saved successfully.'), m::SUCCESS);
+            } catch (\Exception $e) {
+                m::add($e->getMessage(), m::ERROR);
+            }
 
             return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
         }
 
-        $data = array(
-            'status' => $request->request->filter('status'),
-            'body'   => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-        );
-
-        try {
-            $comment->update($data);
-
-            m::add(_('Comment saved successfully.'), m::SUCCESS);
-        } catch (\Exception $e) {
-            m::add($e->getMessage(), m::ERROR);
-        }
-
-        return $this->redirect($this->generateUrl('admin_comment_show', array('id' => $id)));
+        m::add(sprintf(_('Comment with id "%d" doesn\'t exists.'), $id), m::ERROR);
+        return $this->redirect($this->generateUrl('admin_comments_list'));
     }
 
     /**
