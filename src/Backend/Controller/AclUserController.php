@@ -105,6 +105,8 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -179,6 +181,8 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
