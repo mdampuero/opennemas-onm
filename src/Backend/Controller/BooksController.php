@@ -41,7 +41,7 @@ class BooksController extends Controller
         // Take out this crap from this PLEASE ---------------------------------
         $contentType = \ContentManager::getContentTypeIdFromName('book');
 
-        $this->category = $this->request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
 
         $this->ccm = \ContentCategoryManager::get_instance();
         list($parentCategories, $subcat, $categoryData) =
@@ -342,7 +342,7 @@ class BooksController extends Controller
 
         return $this->redirect(
             $this->generateUrl(
-                'admin_books_show',
+                'admin_book_show',
                 array(
                     'category' => $this->category,
                     'id'       => $book->id,
@@ -367,7 +367,6 @@ class BooksController extends Controller
         $book = new \Book($id);
         if (is_null($book->id)) {
             m::add(sprintf(_('Unable to find the book with the id "%d"'), $id));
-
         } else {
             $book->delete($id);
             m::add(_("Book '{$book->title}' deleted successfully."), m::SUCCESS);
