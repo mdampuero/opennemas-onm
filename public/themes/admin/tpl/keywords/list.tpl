@@ -6,11 +6,13 @@
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Keywords{/t}</h2></div>
 			<ul class="old-button">
-				<li>
-					<a href="{url name=admin_keyword_create}" class="admin_add" title="Nueva palabra clave">
-						<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />{t}New{/t}
-					</a>
-				</li>
+				{acl isAllowed="PCLAVE_CREATE"}
+					<li>
+						<a href="{url name=admin_keyword_create}" class="admin_add" title="Nueva palabra clave">
+							<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="Nueva palabra clave" alt="" ><br />{t}New{/t}
+						</a>
+					</li>
+				{/acl}
 			</ul>
 		</div>
 	</div>
