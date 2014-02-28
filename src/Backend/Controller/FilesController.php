@@ -39,7 +39,7 @@ class FilesController extends Controller
         \Onm\Module\ModuleManager::checkActivatedOrForward('FILE_MANAGER');
 
         $this->contentType = \ContentManager::getContentTypeIdFromName('attachment');
-        $this->category    = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $this->ccm         = \ContentCategoryManager::get_instance();
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
@@ -694,8 +694,6 @@ class FilesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
-     *
-     * @Security("has_role('FILE_ADMIN')")
      **/
     public function contentListProviderAction(Request $request)
     {
