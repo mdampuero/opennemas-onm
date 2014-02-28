@@ -37,10 +37,6 @@ class AuthenticationController extends Controller
         $route   = $request->get('_route');
         $referer = $this->generateUrl('frontend_user_show');
 
-        if ($this->session->get('_security.frontend.target_path')) {
-            $referer = $this->session->get('_security.frontend.target_path');
-        }
-
         if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
             $error = $request->attributes
                 ->get(SecurityContext::AUTHENTICATION_ERROR);
