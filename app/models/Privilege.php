@@ -1177,6 +1177,12 @@ class Privilege
                 'description'  => _('Administer paywall'),
                 'module'       => 'PAYWALL',
             ),
+            183 => array(
+                'pk_privilege' => '183',
+                'name'         => 'FILE_AVAILABLE',
+                'description'  => _('Publish/unpublish'),
+                'module'       => 'FILE',
+            ),
         );
 
         return self::$privileges;
