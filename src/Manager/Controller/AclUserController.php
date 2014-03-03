@@ -11,6 +11,7 @@ namespace Manager\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -45,7 +46,7 @@ class AclUserController extends Controller
 
         $filter    = $request->query->get('filter', array());
 
-        if (!$_SESSION['isMaster']) {
+        if (!$this->getUser()->isMaster()) {
             $filter ['base'] = 'fk_user_group != 4';
         }
 
@@ -198,7 +199,7 @@ class AclUserController extends Controller
             // If a regular user is upating him/her information
             // redirect to welcome page
             if (($userId == $_SESSION['userid'])
-                && !\Acl::check('USER_UPDATE')
+                && !Acl::check('USER_UPDATE')
             ) {
                 $redirectUrl = $this->generateUrl('manager_welcome');
             } else {
@@ -350,26 +351,6 @@ class AclUserController extends Controller
         }
 
         return $this->redirect($this->generateUrl('manager_acl_user'));
-    }
-
-    /**
-     * Returns a connected users panel.
-     * TODO: Not work in manager [ Nor developed ]
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function connectedUsersAction(Request $request)
-    {
-        $this->checkAclOrForward('BACKEND_ADMIN');
-
-        $sessions = $GLOBALS['Session']->getSessions();
-
-        return $this->render(
-            'acl/panel/show_panel.ajax.html',
-            array('users' => $sessions)
-        );
     }
 
     /**

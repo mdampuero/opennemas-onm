@@ -16,6 +16,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -303,7 +304,7 @@ class BooksController extends Controller
             return $this->redirect($this->generateUrl('admin_books'));
         }
 
-        if (!\Acl::check('CONTENT_OTHER_UPDATE')
+        if (!Acl::check('CONTENT_OTHER_UPDATE')
             && !$book->isOwner($_SESSION['userid'])
         ) {
             throw new AccessDeniedException();

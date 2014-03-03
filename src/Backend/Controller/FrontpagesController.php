@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -64,9 +65,9 @@ class FrontpagesController extends Controller
         );
 
         // Check if the user can edit frontpages
-        if (!\Acl::check('ARTICLE_FRONTPAGE')) {
+        if (!Acl::check('ARTICLE_FRONTPAGE')) {
             throw new AccessDeniedException();
-        } elseif (!\Acl::checkCategoryAccess($categoryID)) {
+        } elseif (!Acl::checkCategoryAccess($categoryID)) {
             $categoryID = $_SESSION['accesscategories'][0];
             $section = $ccm->get_name($categoryID);
             $_REQUEST['category'] = $categoryID;

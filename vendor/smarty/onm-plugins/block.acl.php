@@ -9,6 +9,7 @@
  * {/acl}
  *
 */
+use Onm\Security\Acl;
 
 function smarty_block_acl($params, $content, &$smarty, $open) {
     if( $open ) {

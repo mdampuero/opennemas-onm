@@ -12,6 +12,8 @@
  */
 namespace Onm\Module;
 
+use Onm\Security\Acl;
+
 /**
  * Class for handling activated and available modules.
  *
@@ -166,7 +168,7 @@ class ModuleManager
      */
     public static function isActivated($module = '')
     {
-        if (\Acl::isMaster()) {
+        if (Acl::isMaster()) {
             return true;
         }
 

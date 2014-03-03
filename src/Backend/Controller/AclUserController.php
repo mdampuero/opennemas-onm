@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -121,7 +122,7 @@ class AclUserController extends Controller
         // Check if the user is the same as the one that we want edit or
         // if we have permissions for editing other user information.
         if ($id != $_SESSION['userid']) {
-            if (false === \Acl::check('USER_UPDATE')) {
+            if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
             }
         }
@@ -189,7 +190,7 @@ class AclUserController extends Controller
         $userId = $request->query->getDigits('id');
 
         if ($userId != $_SESSION['userid']) {
-            if (false === \Acl::check('USER_UPDATE')) {
+            if (false === Acl::check('USER_UPDATE')) {
                 throw new AccessDeniedException();
             }
         }

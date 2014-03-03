@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -260,8 +261,8 @@ class OpinionsController extends Controller
         }
 
         // Check if you can see others opinions
-        if (!\Acl::isAdmin()
-            && !\Acl::check('CONTENT_OTHER_UPDATE')
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
             && $opinion->fk_author != $_SESSION['userid']
         ) {
             m::add(_("You can't modify this opinion because you don't have enought privileges."));
@@ -382,8 +383,8 @@ class OpinionsController extends Controller
         $opinion = new \Opinion($id);
 
         if ($opinion->id != null) {
-            if (!\Acl::isAdmin()
-                && !\Acl::check('CONTENT_OTHER_UPDATE')
+            if (!Acl::isAdmin()
+                && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$opinion->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this opinion because you don't have enought privileges."));

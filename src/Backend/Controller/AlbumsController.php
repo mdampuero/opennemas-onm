@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -380,8 +381,8 @@ class AlbumsController extends Controller
             return $this->redirect($this->generateUrl('admin_albums'));
         }
 
-        if (!\Acl::isAdmin()
-            && !\Acl::check('CONTENT_OTHER_UPDATE')
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
             && !$album->isOwner($_SESSION['userid'])
         ) {
             m::add(_("You don't have enough privileges for modify this album."), m::SUCCESS);

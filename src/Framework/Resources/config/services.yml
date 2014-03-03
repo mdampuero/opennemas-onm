@@ -18,11 +18,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1 }
 
-    kernel.listener.admin_auth:
-        class: Framework\EventListener\AdminAuthenticationListener
-        arguments: [ @security.context ]
-        tags:
-            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+    # kernel.listener.admin_auth:
+    #     class: Framework\EventListener\AdminAuthenticationListener
+    #     arguments: [ @security.context ]
+    #     tags:
+    #         - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener

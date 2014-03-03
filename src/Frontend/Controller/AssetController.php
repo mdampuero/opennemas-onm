@@ -151,68 +151,75 @@ class AssetController extends Controller
     public function customCssAction(Request $request)
     {
         $categoryName       = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
-        $cm                 = new \ContentManager;
-        $ccm                = \ContentCategoryManager::get_instance();
-        $currentCategoryId  = $ccm->get_id($categoryName);
-        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($currentCategoryId);
 
-        //content_id | title_catID | serialize(font-family:;font-size:;color:)
-        if (is_array($contentsInHomepage)) {
-            foreach ($contentsInHomepage as &$content) {
-                $content->bgcolor = $content->getProperty('bgcolor_'.$currentCategoryId);
+        $cache = $this->get('cache');
+        $output = $cache->fetch($categoryName . '|css');
 
-                $content->title_props = $content->getProperty('title'."_".$currentCategoryId);
-                if (!empty($content->title_props)) {
-                    $content->title_props = json_decode($content->title_props);
-                }
-            }
-        }
+        if ($output === false) {
+            $cm                 = new \ContentManager;
+            $ccm                = \ContentCategoryManager::get_instance();
+            $currentCategoryId  = $ccm->get_id($categoryName);
+            $contentsInHomepage = $cm->getContentsForHomepageOfCategory($currentCategoryId);
 
+            //content_id | title_catID | serialize(font-family:;font-size:;color:)
+            if (is_array($contentsInHomepage)) {
+                foreach ($contentsInHomepage as &$content) {
+                    $content->bgcolor = $content->getProperty('bgcolor_'.$currentCategoryId);
 
-        // RenderColorMenu - ADDED RENDER COLOR MENU
-        $currentCategory = (isset($categoryName) ? $categoryName : null);
-        $configColor = s::get('site_color');
-        $siteColor   = (!empty($configColor) ? '#'.$configColor : '#dedede');
-
-        // Styles to print each category's new
-        $currentCategoryColor = '';
-
-        $categories = $ccm->categories;
-
-        $selectedCategories = array();
-        foreach ($categories as &$category) {
-            if (in_array($category->name, array('photo', 'publicidad', 'album', 'opinion', 'comment', 'video', 'author', 'portada', 'unknown'))) {
-                continue;
-            }
-            if (empty($category->color)) {
-                $category->color = $siteColor;
-            } else {
-                if (!preg_match('@^#@', $category->color)) {
-                    $category->color = '#'.$category->color;
+                    $content->title_props = $content->getProperty('title'."_".$currentCategoryId);
+                    if (!empty($content->title_props)) {
+                        $content->title_props = json_decode($content->title_props);
+                    }
                 }
             }
 
-            if ($currentCategory == $category->name) {
-                $currentCategoryColor = $category->color;
+            // RenderColorMenu - ADDED RENDER COLOR MENU
+            $currentCategory = (isset($categoryName) ? $categoryName : null);
+            $configColor = s::get('site_color');
+            $siteColor   = (!empty($configColor) ? '#'.$configColor : '#dedede');
+
+            // Styles to print each category's new
+            $currentCategoryColor = '';
+
+            $categories = $ccm->categories;
+
+            $selectedCategories = array();
+            foreach ($categories as &$category) {
+                if (in_array($category->name, array('photo', 'publicidad', 'album', 'opinion', 'comment', 'video', 'author', 'portada', 'unknown'))) {
+                    continue;
+                }
+                if (empty($category->color)) {
+                    $category->color = $siteColor;
+                } else {
+                    if (!preg_match('@^#@', $category->color)) {
+                        $category->color = '#'.$category->color;
+                    }
+                }
+
+                if ($currentCategory == $category->name) {
+                    $currentCategoryColor = $category->color;
+                }
+                $selectedCategories []= $category;
             }
-            $selectedCategories []= $category;
-        }
 
-        if ($currentCategory == 'home' || $currentCategory == null) {
-            $currentCategoryColor = $siteColor;
-        }
+            if ($currentCategory == 'home' || $currentCategory == null) {
+                $currentCategoryColor = $siteColor;
+            }
 
-        $this->view = new \Template(TEMPLATE_USER);
-        $output = $this->renderView(
-            'base/custom_css.tpl',
-            array(
-                'contents_frontpage'     => $contentsInHomepage,
-                'categories'             => $selectedCategories,
-                'current_category'       => $currentCategory,
-                'site_color'             => $siteColor,
-                'current_category_color' => $currentCategoryColor,
-            )
-        );
+            $this->view = new \Template(TEMPLATE_USER);
+            $output = $this->renderView(
+                'base/custom_css.tpl',
+                array(
+                    'contents_frontpage'     => $contentsInHomepage,
+                    'categories'             => $selectedCategories,
+                    'current_category'       => $currentCategory,
+                    'site_color'             => $siteColor,
+                    'current_category_color' => $currentCategoryColor,
+                )
+            );
+
+            $cache->save($categoryName . '|css', $output);
+        }
 
         return new Response(
             $output,

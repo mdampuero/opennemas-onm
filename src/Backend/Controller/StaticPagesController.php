@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -188,8 +189,8 @@ class StaticPagesController extends Controller
         $staticPage = new \StaticPage($id);
 
         if (!is_null($staticPage->id)) {
-            if (!\Acl::isAdmin()
-                && !\Acl::check('CONTENT_OTHER_UPDATE')
+            if (!Acl::isAdmin()
+                && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$staticPage->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this static page because you don't have enough privileges."));

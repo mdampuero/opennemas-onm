@@ -9,6 +9,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -42,7 +43,7 @@ class DatabaseErrorsController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        if (!\Acl::isMaster()) {
+        if (!Acl::isMaster()) {
             m::add("You don't have permissions");
 
             return $this->redirect($this->generateUrl('admin_welcome'));
@@ -103,7 +104,7 @@ class DatabaseErrorsController extends Controller
      **/
     public function purgeAction(Request $request)
     {
-        if (!\Acl::isMaster()) {
+        if (!Acl::isMaster()) {
             m::add("You don't have permissions");
 
             return $this->redirect($this->generateUrl('admin_welcome'));

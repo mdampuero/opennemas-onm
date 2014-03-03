@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -263,7 +264,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if ($ad->fk_publisher != $_SESSION['userid']
-            && (false === \Acl::check('CONTENT_OTHER_UPDATE'))
+            && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             m::add(_("You can't modify this content because you don't have enought privileges."));
 
@@ -313,7 +314,7 @@ class AdsController extends Controller
             return $this->redirect($this->generateUrl('admin_ads'));
         }
         if (!$ad->isOwner($_SESSION['userid'])
-            && (false === \Acl::check('CONTENT_OTHER_UPDATE'))
+            && (false === Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             m::add(_("You can't modify this content because you don't have enought privileges."));
 

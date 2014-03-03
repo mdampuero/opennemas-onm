@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -342,8 +343,8 @@ class VideosController extends Controller
         if ($video->id != null) {
             $_POST['information'] = json_decode($_POST['information'], true);
 
-            if (!\Acl::isAdmin()
-                && !\Acl::check('CONTENT_OTHER_UPDATE')
+            if (!Acl::isAdmin()
+                && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$video->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this video because you don't have enought privileges."));

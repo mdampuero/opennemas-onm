@@ -17,6 +17,7 @@ namespace Backend\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -69,7 +70,7 @@ class ArticlesController extends Controller
     {
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
-            if (!\Acl::checkCategoryAccess($this->category)) {
+            if (!Acl::checkCategoryAccess($this->category)) {
                 m::add(_("You don't have enought privileges to see this category."));
 
                 return $this->redirect($this->generateUrl('admin_welcome'));
@@ -467,8 +468,8 @@ class ArticlesController extends Controller
         $article = new \Article($id);
 
         if ($article->id != null) {
-            if (!\Acl::isAdmin()
-                && !\Acl::check('CONTENT_OTHER_UPDATE')
+            if (!Acl::isAdmin()
+                && !Acl::check('CONTENT_OTHER_UPDATE')
                 && !$article->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this article because you don't have enought privileges."));
