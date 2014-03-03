@@ -546,7 +546,8 @@ class BooksController extends Controller
      **/
     public function batchPublishAction(Request $request)
     {
-        $status   = $request->query->getDigits('status', 0);
+        $status   = $request->query->getDigits('new_status', 0);
+
         $selected = $request->query->get('selected_fld', null);
         $page     = $request->query->getDigits('page', 1);
 
