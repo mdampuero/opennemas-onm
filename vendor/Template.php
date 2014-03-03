@@ -65,6 +65,7 @@ class Template extends Smarty
         $this->addFilter("output", "css_includes");
         $this->addFilter("output", "canonical_url");
         $this->addFilter("output", "generate_fb_admin_tag");
+        $this->addFilter("output", "ads_generator");
 
         $this->setTemplateVars($theme);
 

@@ -564,7 +564,7 @@ class Advertisement extends Content
 
         } elseif ($this->with_script == 2) {
             $content = "<script type='text/javascript'><!--// <![CDATA[
-OA_show('{$this->params['openx_zone_name']}');
+OA_show('zone_{$this->type_advertisement}');
 // ]]> --></script>";
         } else {
             // Check for external advertisement Flash/Image based
