@@ -148,6 +148,22 @@ class Privilege
     }
 
     /**
+     * Returns all the privileges names
+     *
+     * @return array the list of privilege names
+     **/
+    public static function getPrivilegeNames()
+    {
+        $privileges = self::loadPrivileges();
+        $privilegeNames = array();
+        foreach ($privileges as $value) {
+            $privilegeNames[] = $value['name'];
+        }
+
+        return $privilegeNames;
+    }
+
+    /**
      * Get privileges group by modules
      *
      * @param string $filter where condition for check.
@@ -741,7 +757,7 @@ class Privilege
                 'description'  => _('List'),
                 'module'       => 'FILE',
             ),
-            99 => array(
+            105 => array(
                 'pk_privilege' => '105',
                 'name'         => 'FILE_FRONTS',
                 'description'  => _('File Fronts'),
@@ -1053,6 +1069,12 @@ class Privilege
                 'description'  => _('Manage module settings'),
                 'module'       => 'VIDEO',
             ),
+            179 => array(
+                'pk_privilege' => '179',
+                'name'         => 'MENU_CREATE',
+                'description'  => _('Create'),
+                'module'       => 'MENU',
+            ),
             164 => array(
                 'pk_privilege' => '164',
                 'name'         => 'MENU_DELETE',
@@ -1130,6 +1152,36 @@ class Privilege
                 'name'         => 'IMPORT_NEWS_AGENCY_CONFIG',
                 'description'  => _('Config News Agency importer'),
                 'module'       => 'IMPORT',
+            ),
+            178 => array(
+                'pk_privilege' => '178',
+                'name'         => 'SYNC_ADMIN',
+                'description'  => _('Administer synchronization between Opennemas'),
+                'module'       => 'SYNC_MANAGER',
+            ),
+            180 => array(
+                'pk_privilege' => '178',
+                'name'         => 'INSTANCE_SYNC_ADMIN',
+                'description'  => _('Administer instances'),
+                'module'       => 'INSTANCE_SYNC',
+            ),
+            181 => array(
+                'pk_privilege' => '181',
+                'name'         => 'SPECIAL_HOME',
+                'description'  => _('Manage frontpage'),
+                'module'       => 'SPECIAL',
+            ),
+            182 => array(
+                'pk_privilege' => '182',
+                'name'         => 'PAYWALL_ADMIN',
+                'description'  => _('Administer paywall'),
+                'module'       => 'PAYWALL',
+            ),
+            183 => array(
+                'pk_privilege' => '183',
+                'name'         => 'FILE_AVAILABLE',
+                'description'  => _('Publish/unpublish'),
+                'module'       => 'FILE',
             ),
         );
 

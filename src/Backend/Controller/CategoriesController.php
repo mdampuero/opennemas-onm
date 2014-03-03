@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
@@ -36,8 +37,6 @@ class CategoriesController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('CATEGORY_MANAGER');
-
-        $this->checkAclOrForward('CATEGORY_ADMIN');
     }
 
     /**
@@ -46,6 +45,8 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -135,11 +136,11 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_CREATE');
-
         $configurations = s::get('section_settings');
         $ccm = \ContentCategoryManager::get_instance();
 
@@ -217,11 +218,11 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_UPDATE');
-
         $id = $request->query->getDigits('id');
 
         $ccm = \ContentCategoryManager::get_instance();
@@ -262,14 +263,14 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_UPDATE');
-
-        $id = $request->query->getDigits('id');
+        $id     = $request->query->getDigits('id');
         $params = $request->request->get('params');
-        $inrss = (array_key_exists('inrss', $params) && $params['inrss'] == true);
+        $inrss  = (array_key_exists('inrss', $params) && $params['inrss'] == true);
 
         // Check empty data
         if (count($request->request) < 1) {
@@ -328,11 +329,11 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_DELETE');
-
         $id = $request->query->getDigits('id');
         $category = new \ContentCategory($id);
 
@@ -368,11 +369,11 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_DELETE')")
      **/
     public function emptyAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_DELETE');
-
         $id = $request->query->getDigits('id');
         $category = new \ContentCategory($id);
 
@@ -407,12 +408,11 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_AVAILABLE');
-
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
 
@@ -440,11 +440,11 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_AVAILABLE')")
      **/
     public function toggleRssAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_AVAILABLE');
-
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
@@ -473,11 +473,11 @@ class CategoriesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('CATEGORY_SETTINGS')")
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('CATEGORY_SETTINGS');
-
         if ('POST' == $request->getMethod()) {
             $sectionSettings = $request->request->get('section_settings');
             if ($sectionSettings['allowLogo'] == 1) {

@@ -4,7 +4,7 @@
     "keywords": ["nms", "newspapres", "magazines", "content management system"],
     "homepage": "http://opennemas.com",
     "type": "cms",
-    "license": "closed source",
+    "license": "proprietary",
     "version": "1.0",
     "authors": [
         {
@@ -37,7 +37,7 @@
         "imagine/imagine"                : "dev-develop",
         "paypal/adaptivepayments-sdk-php": "dev-master",
         "paypal/merchant-sdk-php"        : "dev-master",
-        "symfony/symfony": "2.3.*",
+        "symfony/symfony": "~2.3",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
         "doctrine/migrations": "dev-master",
@@ -47,10 +47,11 @@
         "symfony/swiftmailer-bundle": "2.3.*",
         "symfony/monolog-bundle": "2.3.*",
         "sensio/distribution-bundle": "2.3.*",
-        "sensio/framework-extra-bundle": "2.3.*",
+        "sensio/framework-extra-bundle": ">2.3",
         "sensio/generator-bundle": "2.3.*",
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
-        "smarty/smarty" : "3.1.14"
+        "smarty/smarty" : "3.1.14",
+        "drak/native-session": "*"
     },
     "scripts": {
         "post-install-cmd": [

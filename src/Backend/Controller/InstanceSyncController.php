@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
@@ -33,7 +34,7 @@ class InstanceSyncController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
+        // Check if module is activated in this ONM instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('SYNC_MANAGER');
     }
 
@@ -43,6 +44,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -75,53 +78,55 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function createAction(Request $request)
     {
-        if ('POST' == $request->getMethod()) {
-
-            // Filter params
-            $syncParams = filter_input_array(INPUT_POST);
-            $siteUrl    = $request->request->filter('site_url', '', FILTER_SANITIZE_URL);
-            $siteColor  = $request->request->filter('site_color', '', FILTER_SANITIZE_STRING);
-
-            $categoriesToSync = $syncParams['categories'];
-
-            // Get saved settings if exists
-            if ($syncSettings = s::get('sync_params')) {
-                $syncParams = array_merge($syncSettings, array($siteUrl => $categoriesToSync));
-            } else {
-                $syncParams = array($siteUrl => $categoriesToSync);
-            }
-
-            // Get site colors
-            if ($syncColorSettings = s::get('sync_colors')) {
-                $syncColors = array_merge($syncColorSettings, array($siteUrl => $siteColor));
-            } else {
-                $syncColors = array($siteUrl => $siteColor);
-            }
-
-            if (s::set('sync_params', $syncParams)
-                && s::set('sync_colors', $syncColors)
-            ) {
-                m::add(_('Instance sync module configuration saved successfully'), m::SUCCESS);
-            } else {
-                m::add(_('There was an error while saving the Instance sync module configuration'), m::ERROR);
-            }
-
-            return $this->redirect($this->generateUrl('admin_instance_sync'));
-        } else {
-
+        if ('POST' !== $request->getMethod()) {
             return $this->render('instance_sync/new.tpl');
         }
+
+        // Filter params
+        $syncParams = filter_input_array(INPUT_POST);
+        $siteUrl    = $request->request->filter('site_url', '', FILTER_SANITIZE_URL);
+        $siteColor  = $request->request->filter('site_color', '', FILTER_SANITIZE_STRING);
+
+        $categoriesToSync = $syncParams['categories'];
+
+        // Get saved settings if exists
+        if ($syncSettings = s::get('sync_params')) {
+            $syncParams = array_merge($syncSettings, array($siteUrl => $categoriesToSync));
+        } else {
+            $syncParams = array($siteUrl => $categoriesToSync);
+        }
+
+        // Get site colors
+        if ($syncColorSettings = s::get('sync_colors')) {
+            $syncColors = array_merge($syncColorSettings, array($siteUrl => $siteColor));
+        } else {
+            $syncColors = array($siteUrl => $siteColor);
+        }
+
+        if (s::set('sync_params', $syncParams)
+            && s::set('sync_colors', $syncColors)
+        ) {
+            m::add(_('Instance sync module configuration saved successfully'), m::SUCCESS);
+        } else {
+            m::add(_('There was an error while saving the Instance sync module configuration'), m::ERROR);
+        }
+
+        return $this->redirect($this->generateUrl('admin_instance_sync'));
     }
 
     /**
-     * Fetchs the categories from an url
+     * Fetches the categories from an URL
      *
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function fetchCategoriesAction(Request $request)
     {
@@ -175,6 +180,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function showAction(Request $request)
     {
@@ -233,6 +240,8 @@ class InstanceSyncController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('INSTANCE_SYNC_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {

@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -35,10 +36,8 @@ class AclUserGroupsController extends Controller
      **/
     public function init()
     {
-        //Check if module is activated in this onm instance
+        // Check if this module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('USER_GROUP_MANAGER');
-
-        $this->checkAclOrForward('GROUP_ADMIN');
     }
 
     /**
@@ -47,6 +46,8 @@ class AclUserGroupsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('GROUP_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -65,11 +66,11 @@ class AclUserGroupsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('GROUP_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('GROUP_UPDATE');
-
         $id = $request->query->filter('id', FILTER_VALIDATE_INT);
 
         $userGroup = new \UserGroup($id);
@@ -95,11 +96,11 @@ class AclUserGroupsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('GROUP_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('GROUP_CREATE');
-
         $userGroup = new \UserGroup();
         $privilege = new \Privilege();
 
@@ -138,11 +139,11 @@ class AclUserGroupsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('GROUP_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('GROUP_UPDATE');
-
         $userGroup = new \UserGroup();
 
         $data = array(
@@ -171,11 +172,11 @@ class AclUserGroupsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('GROUP_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('GROUP_DELETE');
-
         $id = $request->query->getDigits('id');
 
         $userGroup = new \UserGroup();

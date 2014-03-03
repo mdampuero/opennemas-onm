@@ -1,7 +1,15 @@
 parameters:
 #    onm_test.example.class: Onm\TestBundle\Example
+    onm_user_provider.class: Backend\Security\OnmUserProvider
 
 services:
 #    onm_test.example:
 #        class: %onm_test.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
+    onm_user_provider:
+        class: %onm_user_provider.class%
+    login_success_handler:
+        class: Backend\EventListener\LoginSuccessHandler
+        arguments: ['@security.context', '@router', '@session']
+    onm_password_encoder:
+        class: Backend\Security\OnmPasswordEncoder

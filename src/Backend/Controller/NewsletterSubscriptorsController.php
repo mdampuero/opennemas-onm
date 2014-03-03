@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
@@ -35,8 +36,6 @@ class NewsletterSubscriptorsController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('NEWSLETTER_MANAGER');
-
-        $this->checkAclOrForward('NEWSLETTER_ADMIN');
     }
 
     /**
@@ -45,6 +44,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -85,6 +86,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function createAction(Request $request)
     {
@@ -135,6 +138,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function updateAction(Request $request)
     {
@@ -177,6 +182,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function showAction(Request $request)
     {
@@ -202,6 +209,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {
@@ -230,6 +239,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function toggleSubscriptionAction(Request $request)
     {
@@ -249,6 +260,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function toggleActivatedAction(Request $request)
     {
@@ -268,6 +281,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -298,6 +313,8 @@ class NewsletterSubscriptorsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('NEWSLETTER_ADMIN')")
      **/
     public function batchSubscribeAction(Request $request)
     {

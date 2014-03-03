@@ -98,23 +98,22 @@
         <td class="center">
             {$num_sub_contents[$i].advertisements|default:0}
         </td>
+        {acl isAllowed="CATEGORY_AVAILABLE"}
         <td class="center">
         {if $subcategory->internal_category eq '1'}
             {if $subcategory->inmenu==1}
-                {acl isAllowed="CATEGORY_AVAILABLE"}
                 <a href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=0}" title="En menu">
                     <img src="{$params.IMAGE_DIR}publish_g.png" alt="Publicado" />
                 </a>
-                {/acl}
             {else}
-                {acl isAllowed="CATEGORY_AVAILABLE"}
                 <a href="{url name=admin_category_toggleavailable id=$subcategory->pk_content_category status=1}" title="No en menu">
                     <img src="{$params.IMAGE_DIR}publish_r.png" alt="Pendiente" />
                 </a>
-                {/acl}
             {/if}
         {/if}
         </td>
+        {/acl}
+        {acl isAllowed="CATEGORY_AVAILABLE"}
         <td class="center">
             {if $subcategory->params['inrss'] eq 1 || !isset($subcategory->params['inrss'])}
                 <a href="{url name=admin_category_togglerss id=$subcategory->pk_content_category status=0}" title="En rss">
@@ -126,7 +125,7 @@
                 </a>
             {/if}
         </td>
-
+        {/acl}
         <td class="right nowrap">
             <div class="btn-group">
                 {acl isAllowed="CATEGORY_UPDATE"}

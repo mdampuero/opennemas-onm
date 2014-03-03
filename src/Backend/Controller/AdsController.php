@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -35,8 +36,6 @@ class AdsController extends Controller
     public function init()
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('ADS_MANAGER');
-
-        $this->checkAclOrForward('ADVERTISEMENT_ADMIN');
 
         $contentType = \ContentManager::getContentTypeIdFromName('advertisement');
 
@@ -63,6 +62,8 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -166,10 +167,11 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_CREATE');
         $page = $request->request->getDigits('page', 1);
         $filter = $request->query->get('filter');
 
@@ -201,7 +203,7 @@ class AdsController extends Controller
                 'script'             => $request->request->filter('script', '', FILTER_SANITIZE_STRING),
                 'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
                 'fk_author'          => $_SESSION['userid'],
-                'publisher'          => $_SESSION['userid'],
+                'fk_publisher'       => $_SESSION['userid'],
                 'params'             => array(
                     'width'          => $request->request->getDigits('params_width', ''),
                     'height'         => $request->request->getDigits('params_height', ''),
@@ -239,11 +241,11 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_UPDATE');
-
         $id     = $request->query->getDigits('id', null);
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
@@ -254,8 +256,8 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
-        if ($ad->fk_user != $_SESSION['userid']
-            && (!\Acl::check('CONTENT_OTHER_UPDATE'))
+        if ($ad->fk_publisher != $_SESSION['userid']
+            && (false === \Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             m::add(_("You can't modify this content because you don't have enought privileges."));
 
@@ -288,11 +290,11 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_UPDATE');
-
         $id = $request->query->getDigits('id');
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
@@ -303,8 +305,8 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads'));
         }
-        if ($ad->fk_user != $_SESSION['userid']
-            && (!\Acl::check('CONTENT_OTHER_UPDATE'))
+        if (!$ad->isOwner($_SESSION['userid'])
+            && (false === \Acl::check('CONTENT_OTHER_UPDATE'))
         ) {
             m::add(_("You can't modify this content because you don't have enought privileges."));
 
@@ -336,7 +338,7 @@ class AdsController extends Controller
             'script'             => $request->request->filter('script', '', FILTER_SANITIZE_STRING),
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
             'fk_author'          => $_SESSION['userid'],
-            'publisher'          => $_SESSION['userid'],
+            'fk_publisher'       => $_SESSION['userid'],
             'params'             => array(
                 'width'          => $request->request->getDigits('params_width', ''),
                 'height'         => $request->request->getDigits('params_height', ''),
@@ -367,11 +369,11 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_DELETE');
-
         $id       = $request->query->getDigits('id');
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
@@ -406,11 +408,11 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_DELETE');
-
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->getDigits('category', 'all');
         $page     = $request->query->getDigits('page', 1);
@@ -455,11 +457,11 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_AVAILA')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_AVAILA');
-
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->getDigits('category', 0);
@@ -501,11 +503,11 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_AVAILA')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('ADVERTISEMENT_AVAILA');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $filter   = $request->query->filter('filter', '', FILTER_SANITIZE_STRING);
@@ -539,6 +541,8 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * #@Security("has_role('ADVERTISEMENT_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -659,6 +663,8 @@ class AdsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_ADMIN')")
      **/
     public function configAction(Request $request)
     {

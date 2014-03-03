@@ -48,10 +48,10 @@
         {render_messages}
     	<form method="post" autocomplete="off" action="{url name=admin_login_processform}" id="loginform" name="loginform" class="clearfix">
 			<div class="input-wrapper">
-                <input name="login" id="user_login" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
-                <input type="password" name="password" id="password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
+                <input name="_username" id="_username" type="text" class="input-medium" tabindex="1" value="{$smarty.cookies.login_username|default:""}" autofocus placeholder="{t}User name{/t}">
+                <input type="password" name="_password" id="_password" class="input-medium" tabindex="2" value="{$smarty.cookies.login_password|default:""}" placeholder="{t}Password{/t}">
                 <button id="submit-button" type="submit" tabindex="4" class="onm-button blue"><span>{t}Enter{/t}</span></button>
-                {if $smarty.get.failed_login_attempts >= 3}
+                {if $failed_login_attempts >= 3}
                 <div class="control-group clearfix">
                     <script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=6LfLDtMSAAAAAEdqvBjFresKMZoknEwdo4mN8T66"></script>
                     <noscript>
@@ -65,9 +65,8 @@
                     <a href="{url name=admin_acl_user_recover_pass}" class="recover_pass">{t domain=base}Forgot Password?{/t}</a>
                 </p>
             </div>
-            <input type="hidden" name="token" value="{$smarty.session.csrf}">
-            <input type="hidden" name="forward_to" value="{$smarty.get.forward_to}">
-            <input type="hidden" name="time" value="{$smarty.now}">
+            <input type="hidden" name="_token" value="{$token}">
+            <input type="hidden" name="_referer" value="{$referer}">
     	</form>
     </div>
 

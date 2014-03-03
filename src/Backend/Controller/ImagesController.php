@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -37,12 +38,8 @@ class ImagesController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('IMAGE_MANAGER');
 
-        $this->checkAclOrForward('IMAGE_ADMIN');
-
-        $request = $this->request;
-
-        $this->ccm = \ContentCategoryManager::get_instance();
-        $this->category = $request->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
+        $this->ccm         = \ContentCategoryManager::get_instance();
+        $this->category    = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_NUMBER_INT);
         $this->contentType = \ContentManager::getContentTypeIdFromName('album');
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
@@ -73,12 +70,13 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_ADMIN')")
      **/
     public function listAction(Request $request)
     {
-        $request           = $this->request;
-        $page              = $request->query->getDigits('page', 1);
-        $itemsPerPage      = s::get('items_per_page', 20);
+        $page         = $request->query->getDigits('page', 1);
+        $itemsPerPage = s::get('items_per_page', 20);
 
         $_SESSION['desde'] = 'category_catalog';
 
@@ -143,6 +141,8 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_ADMIN')")
      **/
     public function configAction(Request $request)
     {
@@ -184,11 +184,13 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_ADMIN')")
      **/
     public function searchAction(Request $request)
     {
-        $page     = $request->query->getDigits('page', 1);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page            = $request->query->getDigits('page', 1);
+        $category        = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $searchStringRAW = $request->query->filter('string_search', null, FILTER_SANITIZE_STRING);
 
         // If the form was not completed show the form
@@ -328,13 +330,11 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_CREATE')")
      **/
     public function newAction(Request $request)
     {
-        $this->checkAclOrForward('IMAGE_CREATE');
-
-        $request = $this->request;
-
         $maxUpload      = (int) (ini_get('upload_max_filesize'));
         $maxPost        = (int) (ini_get('post_max_size'));
         $memoryLimit    = (int) (ini_get('memory_limit'));
@@ -354,12 +354,11 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('IMAGE_UPDATE');
-
-        $request     = $this->request;
         $ids         = $request->query->get('id');
         $page        = $request->query->getDigits('page', 1);
 
@@ -412,12 +411,11 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('IMAGE_UPDATE');
-
-        $request   = $this->request;
         $photosRAW = $request->request->get('description');
 
         $ids = array();
@@ -459,11 +457,11 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('IMAGE_DELETE');
-
         $request = $this->get('request');
         $id   = $request->query->getDigits('id', null);
         $page = $request->query->getDigits('page', 1);
@@ -494,11 +492,11 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('IMAGE_CREATE');
-
         $response = new Response();
         $response->headers->add(
             array(
@@ -685,14 +683,13 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('IMAGE_DELETE');
-
-        $request = $this->get('request');
-        $category = $request->request->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page = $request->request->getDigits('page', 1);
+        $category      = $request->request->filter('category', 'all', FILTER_SANITIZE_STRING);
+        $page          = $request->request->getDigits('page', 1);
         $selectedItems = $request->request->get('selected_fld');
 
         if (is_array($selectedItems)
@@ -723,6 +720,8 @@ class ImagesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMAGE_ADMIN')")
      **/
     public function contentProviderGalleryAction(Request $request)
     {

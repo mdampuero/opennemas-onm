@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -38,8 +39,6 @@ class TrashController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('TRASH_MANAGER');
 
-        $this->checkAclOrForward('TRASH_ADMIN');
-
         $this->filterContentType = $this->request->query->get('mytype', 'article');
         $this->page              = $this->request->query->getDigits('page', 1);
     }
@@ -49,6 +48,8 @@ class TrashController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('TRASH_ADMIN')")
      **/
     public function defaultAction(Request $request)
     {
@@ -110,6 +111,8 @@ class TrashController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('TRASH_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {
@@ -148,6 +151,8 @@ class TrashController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('TRASH_ADMIN')")
      **/
     public function restoreAction(Request $request)
     {
@@ -186,6 +191,8 @@ class TrashController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('TRASH_ADMIN')")
      **/
     public function batchDeleteAction(Request $request)
     {
@@ -223,6 +230,8 @@ class TrashController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('TRASH_ADMIN')")
      **/
     public function batchRestoreAction(Request $request)
     {
@@ -261,6 +270,8 @@ class TrashController extends Controller
      * @param Request $request the request object
      *
      * @return string the response string
+     *
+     * @Security("has_role('TRASH_ADMIN')")
      **/
     public function deleteAllAction(Request $request)
     {

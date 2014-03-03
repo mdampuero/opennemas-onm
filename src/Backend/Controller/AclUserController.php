@@ -14,6 +14,8 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,19 +36,19 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_ADMIN')")
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('USER_ADMIN');
-
-        $page   =  $request->query->getDigits('page', 1);
+        $page =  $request->query->getDigits('page', 1);
         $filter = array(
             'name'  => $request->query->filter('name', ''),
             'group' => $request->query->getDigits('group', ''),
             'type'  => $request->query->getDigits('type', ''),
         );
 
-        if (!$_SESSION['isMaster']) {
+        if (!$this->getUser()->isMaster()) {
             $filter ['base'] = 'fk_user_group != 4';
         }
 
@@ -103,10 +105,12 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        //user can modify his data
+        // User can modify his data
         $idRAW = $request->query->filter('id', '', FILTER_SANITIZE_STRING);
         if ($idRAW === 'me') {
             $id = $_SESSION['userid'];
@@ -115,9 +119,11 @@ class AclUserController extends Controller
         }
 
         // Check if the user is the same as the one that we want edit or
-        // if we have permissions for editting other user information.
+        // if we have permissions for editing other user information.
         if ($id != $_SESSION['userid']) {
-            $this->checkAclOrForward('USER_UPDATE');
+            if (false === \Acl::check('USER_UPDATE')) {
+                throw new AccessDeniedException();
+            }
         }
 
         $ccm = new \ContentCategoryManager();
@@ -175,13 +181,17 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
         $userId = $request->query->getDigits('id');
 
         if ($userId != $_SESSION['userid']) {
-            $this->checkAclOrForward('USER_UPDATE');
+            if (false === \Acl::check('USER_UPDATE')) {
+                throw new AccessDeniedException();
+            }
         }
 
         if (count($request->request) < 1) {
@@ -273,11 +283,11 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('USER_CREATE');
-
         $user = new \User();
 
         if ($request->getMethod() == 'POST') {
@@ -375,11 +385,11 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('USER_DELETE');
-
         $userId = $request->query->getDigits('id');
 
         if (!is_null($userId)) {
@@ -405,11 +415,11 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('USER_DELETE');
-
         $selected = $request->query->get('selected');
 
         if (count($selected) > 0) {
@@ -471,6 +481,8 @@ class AclUserController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('USER_ADMIN')")
      **/
     public function toogleEnabledAction(Request $request)
     {

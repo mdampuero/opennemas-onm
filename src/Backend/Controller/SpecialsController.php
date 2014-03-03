@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -36,9 +37,6 @@ class SpecialsController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('SPECIAL_MANAGER');
-
-         // Check if the user can admin specials
-        $this->checkAclOrForward('SPECIAL_ADMIN');
 
         $this->contentType = \ContentManager::getContentTypeIdFromName('special');
 
@@ -64,6 +62,8 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -120,6 +120,8 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
@@ -183,11 +185,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $special = new \Special();
 
@@ -228,11 +230,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $special = new \Special($id);
@@ -282,11 +284,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_UPDATE');
-
         $id = $request->query->getDigits('id');
 
         $special = new \Special($id);
@@ -334,11 +336,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_DELETE');
-
         $id       = $request->query->getDigits('id');
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page     = $request->query->getDigits('page', 1);
@@ -373,6 +375,8 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -412,11 +416,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_DELETE');
-
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->getDigits('category', 'all');
         $page     = $request->query->getDigits('page', 1);
@@ -461,11 +465,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_AVAILABLE');
-
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->getDigits('category', 'all');
@@ -509,11 +513,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -548,11 +552,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_FAVORITE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_FAVORITE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -584,11 +588,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_AVAILABLE')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -620,11 +624,11 @@ class SpecialsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('SPECIAL_SETTINGS')")
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('SPECIAL_SETTINGS');
-
         if ('POST' == $request->getMethod()) {
             $settingsRAW = $request->request->get('special_settings');
             $data = array(

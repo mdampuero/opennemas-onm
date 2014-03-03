@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
@@ -36,9 +37,6 @@ class LettersController extends Controller
     {
         // Check MODULE
         \Onm\Module\ModuleManager::checkActivatedOrForward('LETTER_MANAGER');
-
-        // Check ACL
-        $this->checkAclOrForward('LETTER_ADMIN');
     }
 
     /**
@@ -47,6 +45,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -100,11 +100,11 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('LETTER_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $letter = new \Letter();
 
@@ -142,11 +142,11 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('LETTER_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $letter = new \Letter($id);
@@ -174,11 +174,11 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('LETTER_UPDATE');
-
         // Check empty data
         if (count($request->request) < 1) {
             m::add(_("Letter data sent not valid."), m::ERROR);
@@ -226,11 +226,11 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('LETTER_DELETE');
-
         $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
@@ -263,11 +263,11 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('LETTER_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -299,11 +299,11 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('LETTER_DELETE');
-
         $selected = $request->query->get('selected_fld', null);
 
         if (is_array($selected)
@@ -339,11 +339,11 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('LETTER_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('LETTER_AVAILABLE');
-
         $selected = $request->query->get('selected_fld', null);
 
         if (is_array($selected)
@@ -378,6 +378,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * #@Security("has_role('LETTER_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -441,6 +443,8 @@ class LettersController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * #@Security("has_role('LETTER_ADMIN')")
      **/
     public function contentListProviderAction(Request $request)
     {

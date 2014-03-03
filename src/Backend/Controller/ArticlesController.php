@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -36,8 +37,6 @@ class ArticlesController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('ARTICLE_MANAGER');
-
-        $this->checkAclOrForward('ARTICLE_ADMIN');
 
         $this->category = $this->get('request')->query
                                ->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -63,11 +62,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_PENDINGS') and has_role('ARTICLE_ADMIN')")
      **/
     public function listAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_PENDINGS');
-
         // Check if the user has access to this category
         if ($this->category != 'all' && $this->category != '0') {
             if (!\Acl::checkCategoryAccess($this->category)) {
@@ -177,11 +176,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $article = new \Article();
 
@@ -323,11 +322,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $article = new \Article($id);
@@ -458,11 +457,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_UPDATE');
-
         $id = $request->query->getDigits('id');
 
         $article = new \Article($id);
@@ -470,7 +469,7 @@ class ArticlesController extends Controller
         if ($article->id != null) {
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $article->fk_user != $_SESSION['userid']
+                && !$article->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this article because you don't have enought privileges."));
 
@@ -610,11 +609,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_DELETE');
-
         $id       = $request->query->getDigits('id');
         $category = $request->query->getDigits('category', 0);
         $page     = $request->query->getDigits('page', 0);
@@ -653,11 +652,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $redirectStatus   = $request->query->filter('redirectstatus', -1, FILTER_SANITIZE_STRING);
@@ -914,12 +913,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-
-        $this->checkAclOrForward('ARTICLE_AVAILABLE');
-
         $status         = $request->query->getDigits('new_status', 0);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
         $selected       = $request->query->get('selected_fld', null);
@@ -960,11 +958,11 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('ARTICLE_DELETE');
-
         $selected       = $request->query->get('selected_fld', null);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
         $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -996,6 +994,8 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_ADMIN')")
      **/
     public function previewAction(Request $request)
     {
@@ -1112,6 +1112,8 @@ class ArticlesController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ARTICLE_ADMIN')")
      **/
     public function getPreviewAction(Request $request)
     {

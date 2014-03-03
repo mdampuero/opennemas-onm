@@ -52,12 +52,11 @@ manager_framework_opcache_status:
 
 manager_login_form:
     path: /login
-    defaults: { _controller:  ManagerBundle:Authentication:default }
+    defaults: { _controller:  ManagerBundle:Authentication:login }
 
 manager_login_processform:
     path: /login/process
-    defaults: { _controller:  ManagerBundle:Authentication:processform }
-    methods:  [POST]
+    defaults: { _controller:  ManagerBundle:Authentication:check }
 
 manager_logout:
     path: /logout

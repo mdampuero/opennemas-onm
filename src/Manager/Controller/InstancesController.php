@@ -35,7 +35,7 @@ class InstancesController extends Controller
      *
      * @param Request $request the request object
      *
-     * @return Response the response object
+     * @return Response the response
      **/
     public function listAction(Request $request)
     {

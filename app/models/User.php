@@ -11,12 +11,14 @@
  * @package    Model
  **/
 
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+
 /**
  * User
  *
  * @package    Model
  **/
-class User
+class User implements AdvancedUserInterface
 {
     /**
      * The user id
@@ -875,12 +877,13 @@ class User
      *
      * @return string the user name
      **/
-    public function getUserName($id)
+    public function findUserName($id)
     {
         $sql = 'SELECT username FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             return false;
+
         }
 
         return $rs->fields['username'];
@@ -1478,5 +1481,189 @@ class User
         }
 
         return $newFilter;
+    }
+
+
+    /**
+     * Returns the roles granted to the user.
+     *
+     * <code>
+     * public function getRoles()
+     * {
+     *     return array('ROLE_USER');
+     * }
+     * </code>
+     *
+     * Alternatively, the roles might be stored on a ``roles`` property,
+     * and populated in any number of different ways when the user object
+     * is created.
+     *
+     * @return array The user roles
+     */
+    public function getRoles()
+    {
+        if (!isset($this->roles)) {
+            if (in_array('4', $this->id_user_group)
+                || in_array('5', $this->id_user_group)
+            ) {
+                $this->roles = \Privilege::getPrivilegeNames();
+
+                if (in_array('4', $this->id_user_group)) {
+                    $this->roles[] = 'ROLE_MASTER';
+                }
+
+                if (in_array('5', $this->id_user_group)) {
+                    $this->roles[] = 'ROLE_ADMIN';
+                }
+            } else {
+                $this->roles = array();
+                foreach ($this->id_user_group as $group) {
+                    $groupPrivileges = \Privilege::getPrivilegesForUserGroup($group);
+                    $this->roles = array_merge(
+                        $this->roles,
+                        $groupPrivileges
+                    );
+                }
+            }
+
+            if ((int) $this->type == 0) {
+                $this->roles[] = 'ROLE_BACKEND';
+            } else {
+                $this->roles[] = 'ROLE_FRONTEND';
+            }
+        }
+
+        return $this->roles;
+    }
+
+    /**
+     * Returns the password used to authenticate the user.
+     *
+     * This should be the encoded password. On authentication, a plain-text
+     * password will be salted, encoded, and then compared to this value.
+     *
+     * @return string The password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Returns the salt that was originally used to encode the password.
+     *
+     * This can return null if the password was not encoded using a salt.
+     *
+     * @return string|null The salt
+     */
+    public function getSalt()
+    {
+        return null;
+    }
+
+    /**
+     * Returns the username used to authenticate the user.
+     *
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+        $this->read($this->id);
+        $this->roles = null;
+    }
+
+    /**
+     * Returns whether or not the given user is equivalent to this user.
+     *
+     * @return boolean
+     */
+    public function equals(UserInterface $user)
+    {
+        if ($user->getUsername() === $this->getUsername()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether the user's account has expired.
+     *
+     * @return boolean
+     */
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is locked.
+     *
+     * @return boolean
+     */
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user's credentials (password) has expired.
+     *
+     * @return boolean
+     */
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    /**
+     * Checks whether the user is enabled.
+     *
+     * @return boolean
+     */
+    public function isEnabled()
+    {
+        return $this->activated;
+    }
+
+    /**
+     * Returns whether or not user is in master group.
+     *
+     * @return boolean True if the users is in master group.
+     */
+    public function isMaster()
+    {
+        if (in_array('4', $this->id_user_group)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether or not user is in administrator group.
+     *
+     * @return boolean True if the users is in administrator group.
+     */
+    public function isAdmin()
+    {
+        if (in_array('4', $this->id_user_group)
+            || in_array('5', $this->id_user_group)
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }

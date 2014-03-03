@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -36,9 +37,6 @@ class AlbumsController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('ALBUM_MANAGER');
-
-         // Check if the user can admin album
-        $this->checkAclOrForward('ALBUM_ADMIN');
 
         $request = $this->get('request');
 
@@ -66,6 +64,8 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return void
+     *
+     * @Security("has_role('ALBUM_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -133,6 +133,8 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
@@ -204,11 +206,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_CREATE');
-
         if ('POST' == $this->request->getMethod()) {
             $request  = $this->request->request;
 
@@ -277,11 +279,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_DELETE');
-
         $request = $this->get('request');
         $id      = $request->query->getDigits('id');
         $page    = $request->query->getDigits('page', 1);
@@ -319,11 +321,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_UPDATE');
-
         $request = $this->get('request');
         $id = $request->query->getDigits('id');
 
@@ -362,11 +364,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_UPDATE');
-
         $request  = $this->get('request');
         $id       = $request->request->getDigits('id');
 
@@ -380,7 +382,7 @@ class AlbumsController extends Controller
 
         if (!\Acl::isAdmin()
             && !\Acl::check('CONTENT_OTHER_UPDATE')
-            && $album->fk_user != $_SESSION['userid']
+            && !$album->isOwner($_SESSION['userid'])
         ) {
             m::add(_("You don't have enough privileges for modify this album."), m::SUCCESS);
 
@@ -432,11 +434,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_AVAILABLE');
-
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
@@ -471,11 +473,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_FAVORITE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_AVAILABLE');
-
         $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
@@ -509,12 +511,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_HOME')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_AVAILABLE');
-
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 0);
@@ -552,12 +553,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_DELETE');
-
-        $request       = $this->request;
         $category      = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page          = $request->query->getDigits('page', 1);
         $selectedItems = $request->query->get('selected_fld');
@@ -594,12 +594,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_AVAILABLE');
-
-        $request  = $this->request;
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -634,6 +633,8 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -668,10 +669,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * #@Security("has_role('ALBUM_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
-        $request      = $this->get('request');
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
         $itemsPerPage = s::get('items_per_page');
@@ -734,6 +736,8 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * #@Security("has_role('ALBUM_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {
@@ -793,11 +797,11 @@ class AlbumsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ALBUM_SETTINGS')")
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('ALBUM_SETTINGS');
-
         if ('POST' == $this->request->getMethod()) {
 
             $formValues = $this->get('request')->request;

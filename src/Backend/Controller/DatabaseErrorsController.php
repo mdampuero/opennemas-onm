@@ -6,6 +6,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -36,6 +37,8 @@ class DatabaseErrorsController extends Controller
      * @param Request $request the request object
      *
      * @return string the response
+     *
+     * @Security("has_role('ROLE_MASTER')")
      **/
     public function defaultAction(Request $request)
     {
@@ -95,6 +98,8 @@ class DatabaseErrorsController extends Controller
      * @param Request $request the request object
      *
      * @return string the response
+     *
+     * @Security("has_role('ROLE_MASTER')")
      **/
     public function purgeAction(Request $request)
     {

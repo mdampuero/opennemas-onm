@@ -7,11 +7,13 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}User groups{/t}</h2></div>
             <ul class="old-button">
-                <li>
-                    <a href="{url name="admin_acl_usergroups_create"}">
-                        <img src="{$params.IMAGE_DIR}usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New User Group{/t}"><br />{t}New User group{/t}
-                    </a>
-                </li>
+                {acl isAllowed="GROUP_CREATE"}
+                    <li>
+                        <a href="{url name="admin_acl_usergroups_create"}">
+                            <img src="{$params.IMAGE_DIR}usergroup_add.png" title="{t}New Privilege{/t}" alt="{t}New User Group{/t}"><br />{t}New User group{/t}
+                        </a>
+                    </li>
+                {/acl}
             </ul>
         </div>
     </div>

@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -35,8 +36,6 @@ class WelcomeController extends Controller
      **/
     public function defaultAction()
     {
-        // $modulesActivated = s::get('activated_modules');
-
         $availableModules = \Onm\Module\ModuleManager::getAvailableModules();
         $availableModules = array_values($availableModules);
         shuffle($availableModules);
@@ -44,7 +43,7 @@ class WelcomeController extends Controller
 
         $youtubeVideoIds = $this->getYoutubeVideoIds();
 
-        $user = new \User($_SESSION['userid']);
+        $user = $this->getUser();
         $tourDone = $user->getMeta('initial_tour_done');
 
         $terms = s::get('terms_accepted');
@@ -61,10 +60,9 @@ class WelcomeController extends Controller
     }
 
     /**
-     * undocumented function
+     * Fetches the Youtube video ids to print in the welcome page
      *
      * @return void
-     * @author
      **/
     public function getYoutubeVideoIds()
     {
@@ -90,10 +88,9 @@ class WelcomeController extends Controller
     }
 
     /**
-     * undocumented function
+     * Stores the accept terms setting to the instance.
      *
      * @return void
-     * @author
      **/
     public function acceptTermsAction(Request $request)
     {

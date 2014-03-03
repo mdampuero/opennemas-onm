@@ -113,7 +113,7 @@ class ModuleManager
                 'SPECIAL_MANAGER'           => _('Specials'),
                 'STATIC_LIBRARY'            => _('Static library'),
                 'STATIC_PAGES_MANAGER'      => _('Static pages'),
-                'SYNC_MANAGER'              => _('Instace synchronization'),
+                'SYNC_MANAGER'              => _('Instance synchronization'),
                 'TRASH_MANAGER'             => _('Trash'),
                 'USER_GROUP_MANAGER'        => _('User groups'),
                 'USER_MANAGER'              => _('Users'),

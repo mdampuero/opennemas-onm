@@ -94,8 +94,10 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
+                            {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
                             <th style="width:15px;" class="nowrap">{t}Show in rss{/t}</th>
+                            {/acl}
                             <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -135,7 +137,9 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
+                            {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
+                            {/acl}
                             <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -174,7 +178,9 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
+                            {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
+                            {/acl}
                             <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -214,7 +220,9 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
+                            {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
+                            {/acl}
                             <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -254,7 +262,9 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
+                            {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
+                            {/acl}
                             <th style="width:100px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -294,7 +304,9 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
+                            {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
+                            {/acl}
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>
@@ -334,7 +346,9 @@ jQuery(document).ready(function ($){
                             <th style="width:15px;">{t}Articles{/t}</th>
                             <th style="width:15px;">{t}Photos{/t}</th>
                             <th style="width:15px;">{t}Advertisements{/t}</th>
+                            {acl isAllowed="CATEGORY_AVAILABLE"}
                             <th style="width:15px;">{t}Available{/t}</th>
+                            {/acl}
                             <th style="width:70px;">{t}Actions{/t}</th>
                         </tr>
                     </thead>

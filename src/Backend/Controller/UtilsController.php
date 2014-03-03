@@ -28,15 +28,6 @@ use Onm\StringUtils;
 class UtilsController extends Controller
 {
     /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
-    /**
      * Returns the cleaned and normalized tags for a given string
      *
      * @param Request $request the request object

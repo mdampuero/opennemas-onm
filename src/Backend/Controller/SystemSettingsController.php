@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -36,8 +37,6 @@ class SystemSettingsController extends Controller
     public function init()
     {
         // Check ACL
-        $this->checkAclOrForward('ONM_SETTINGS');
-
         $this->configurationsKeys = array(
             'site_title', 'site_logo', 'site_description','site_keywords','site_agency',
             'site_footer', 'mobile_logo', 'favico', 'youtube_page',
@@ -58,6 +57,8 @@ class SystemSettingsController extends Controller
      * @param Request $request the resquest object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ONM_SETTINGS')")
      **/
     public function defaultAction(Request $request)
     {
@@ -79,6 +80,8 @@ class SystemSettingsController extends Controller
      * @param Request $request the resquest object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('ONM_SETTINGS')")
      **/
     public function saveAction(Request $request)
     {
