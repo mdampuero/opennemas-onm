@@ -562,6 +562,10 @@ class Advertisement extends Content
                 ' scrolling="no"></iframe>';
             }
 
+        } elseif ($this->with_script == 2) {
+            $content = "<script type='text/javascript'><!--// <![CDATA[
+OA_show('{$this->params['openx_zone_name']}');
+// ]]> --></script>";
         } else {
             // Check for external advertisement Flash/Image based
             if (isset($this->extWsUrl)) {
