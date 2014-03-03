@@ -574,12 +574,7 @@ class ArticlesController extends Controller
 
                 // Clear caches
                 dispatchEventWithParams('content.update', array('content' => $article));
-
-                $categoryId = $request->request->getDigits('category');
-                $ccm = \ContentCategoryManager::get_instance();
-                $categoryName = $ccm->get_name($categoryId);
-
-                dispatchEventWithParams('article.update', array('category' => $categoryName));
+                dispatchEventWithParams('article.update', array('category' => $request->request->getDigits('category')));
 
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {

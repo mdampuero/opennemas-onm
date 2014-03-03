@@ -225,7 +225,7 @@ class FrontpagesController extends Controller
                 );
             }
 
-            $this->dispatchEvent('frontpage.save_position', array('category' => $category));
+            $this->dispatchEvent('frontpage.save_position', array('category' => $categoryID));
         }
 
         // If this request is Ajax return properly formated result.

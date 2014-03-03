@@ -315,12 +315,7 @@ class CategoriesController extends Controller
             \Content::refreshFrontpageForAllCategories();
         }
 
-        dispatchEventWithParams(
-            'category.update',
-            array(
-                'category' => $category->name
-            )
-        );
+        dispatchEventWithParams('category.update', array('category' => $id));
 
         $continue = $request->request->getDigits('continue', 0);
         if ($continue) {
