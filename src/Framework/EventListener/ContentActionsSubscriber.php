@@ -48,7 +48,9 @@ class ContentActionsSubscriber implements EventSubscriberInterface
                 array('deleteSmartyCache', 5),
                 array('sendVarnishRequestCleaner', 5),
             ),
-            // 'content.create' => array(),
+            'article.update' => array(
+                array('deleteCustomCss', 5)
+            ),
             'content.set_positions' => array(
                 array('refreshFrontpage', 10),
             ),
@@ -62,7 +64,12 @@ class ContentActionsSubscriber implements EventSubscriberInterface
                 array('deleteOpinionCreateCaches', 5),
             ),
             'frontpage.save_position' => array(
-                array('cleanFrontpage', 5))
+                array('cleanFrontpage', 5),
+                array('deleteCustomCss', 5)
+            ),
+            'category.update' => array(
+                array('deleteCustomCss', 5)
+            )
         );
     }
 
@@ -295,6 +302,29 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     {
         if (extension_loaded('Zend Opcache')) {
             opcache_reset();
+        }
+    }
+
+    /**
+     * Deletes custom css from cache.
+     *
+     * @param Event $event
+     */
+    public function deleteCustomCss(Event $event)
+    {
+        $category = $event->getArgument('category');
+
+        if (isset($category)) {
+            if ($category == '0' || $category == 'home') {
+                $categoryName = 'home';
+            } elseif ($category == 'opinion') {
+                $categoryName = 'opinion';
+            } else {
+                $ccm = \ContentCategoryManager::get_instance();
+                $categoryName = $ccm->get_name($category);
+            }
+
+            $this->cacheHandler->delete('custom_css|' . $categoryName);
         }
     }
 }

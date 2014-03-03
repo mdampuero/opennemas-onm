@@ -315,6 +315,13 @@ class CategoriesController extends Controller
             \Content::refreshFrontpageForAllCategories();
         }
 
+        dispatchEventWithParams(
+            'category.update',
+            array(
+                'category' => $category->name
+            )
+        );
+
         $continue = $request->request->getDigits('continue', 0);
         if ($continue) {
             return $this->redirect($this->generateUrl('admin_category_show', array('id' => $id)));

@@ -153,7 +153,7 @@ class AssetController extends Controller
         $categoryName       = $this->request->query->filter('category', 'home', FILTER_SANITIZE_STRING);
 
         $cache = $this->get('cache');
-        $output = $cache->fetch($categoryName . '|css');
+        $output = $cache->fetch('custom_css|' . $categoryName);
 
         if ($output === false) {
             $cm                 = new \ContentManager;
@@ -218,7 +218,7 @@ class AssetController extends Controller
                 )
             );
 
-            $cache->save($categoryName . '|css', $output);
+            $cache->save('custom_css|' . $categoryName, $output);
         }
 
         return new Response(

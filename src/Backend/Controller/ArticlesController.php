@@ -575,6 +575,12 @@ class ArticlesController extends Controller
                 // Clear caches
                 dispatchEventWithParams('content.update', array('content' => $article));
 
+                $categoryId = $request->request->getDigits('category');
+                $ccm = \ContentCategoryManager::get_instance();
+                $categoryName = $ccm->get_name($categoryId);
+
+                dispatchEventWithParams('article.update', array('category' => $categoryName));
+
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {
                 m::add(_('Unable to update the article.'), m::ERROR);
