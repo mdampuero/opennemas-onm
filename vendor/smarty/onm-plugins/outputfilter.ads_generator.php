@@ -30,7 +30,7 @@ function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $sm
             $adsPositions = "\n<script type='text/javascript'><!--// <![CDATA[
 var OA_zones = { \n".implode(",\n", $zonesInformation)."\n}
 // ]]> --></script>
-<script type='text/javascript' src='{$adsOpenXconfs['url']}/www/delivery/spcjs.php?id={$adsOpenXconfs['site_id']}'></script>";
+<script type='text/javascript' src='{$adsOpenXconfs['url']}/www/delivery/spcjs.php?id_sec={$adsOpenXconfs['site_id']}'></script>";
 
             $output = str_replace('</head>', $adsPositions.'</head>', $output);
         }
