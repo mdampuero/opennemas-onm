@@ -344,7 +344,7 @@ class VideosController extends Controller
 
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $video->pk_user != $_SESSION['userid']
+                && !$video->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this video because you don't have enought privileges."));
             } else {

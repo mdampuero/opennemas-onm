@@ -337,11 +337,11 @@ class CoversController extends Controller
                 )
             );
         }
-        $_POST['fk_user_last_editor']=$_SESSION['userid'];
+        $_POST['fk_user_last_editor'] = $_SESSION['userid'];
 
         if (!\Acl::isAdmin()
             && !\Acl::check('CONTENT_OTHER_UPDATE')
-            && $cover->pk_user != $_SESSION['userid']
+            && !$cover->isOwner($_SESSION['userid'])
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',

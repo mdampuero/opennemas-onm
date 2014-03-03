@@ -469,7 +469,7 @@ class ArticlesController extends Controller
         if ($article->id != null) {
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $article->fk_user != $_SESSION['userid']
+                && !$article->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this article because you don't have enought privileges."));
 

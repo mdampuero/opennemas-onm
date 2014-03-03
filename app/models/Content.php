@@ -2278,4 +2278,19 @@ class Content
 
         return Comment::deleteFromFilter("`content_id` = {$contentID}");
     }
+
+    /**
+     * Checks if the given id is the creator's id
+     *
+     * @param  integer $userId
+     * @return boolean
+     */
+    public function isOwner($userId)
+    {
+        if ($this->fk_publisher == $userId) {
+            return true;
+        }
+
+        return false;
+    }
 }

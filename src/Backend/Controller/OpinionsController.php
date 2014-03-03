@@ -384,7 +384,7 @@ class OpinionsController extends Controller
         if ($opinion->id != null) {
             if (!\Acl::isAdmin()
                 && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $opinion->fk_author != $_SESSION['userid']
+                && !$opinion->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this opinion because you don't have enought privileges."));
 

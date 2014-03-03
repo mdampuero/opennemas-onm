@@ -34,8 +34,8 @@ class PollsController extends Controller
      * @return void
      **/
     public function init()
-    {
-        \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
+
+{        \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
 
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
 

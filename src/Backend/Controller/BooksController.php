@@ -304,7 +304,7 @@ class BooksController extends Controller
         }
 
         if (!\Acl::check('CONTENT_OTHER_UPDATE')
-            && $book->fk_user != $_SESSION['userid']
+            && !$book->isOwner($_SESSION['userid'])
         ) {
             throw new AccessDeniedException();
         }

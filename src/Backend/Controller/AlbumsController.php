@@ -382,7 +382,7 @@ class AlbumsController extends Controller
 
         if (!\Acl::isAdmin()
             && !\Acl::check('CONTENT_OTHER_UPDATE')
-            && $album->fk_user != $_SESSION['userid']
+            && !$album->isOwner($_SESSION['userid'])
         ) {
             m::add(_("You don't have enough privileges for modify this album."), m::SUCCESS);
 
