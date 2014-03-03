@@ -130,7 +130,7 @@
 
     <div class="form-horizontal panel">
 
-        <h4>{t}General information{/t}</h4>
+        <h5>{t}General information{/t}</h5>
         <div class="control-group">
             <label for="title" class="control-label">{t}Title{/t}</label>
             <div class="controls">
@@ -147,17 +147,16 @@
         </div>
 
         <div class="control-group">
-            <label for="available" class="control-label">{t}Actived{/t}</label>
+            <label for="available" class="control-label">{t}Activated{/t}</label>
             <div class="controls">
                 <input type="checkbox" name="content_status" id="available" value="1"
                     {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if}
                     {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
-
             </div>
         </div>
 
 
-        <h4>{t}When to show this ad{/t}</h4>
+        <h5>{t}When to show this ad{/t}</h5>
         <div class="control-group">
             <label for="typ_medida" class="control-label">{t}Restrictions{/t}</label>
             <div class="controls">
@@ -181,14 +180,16 @@
             </div>
         </div>
 
-        <h4>{t}Contents{/t}</h4>
+        <h5>{t}Contents{/t}</h5>
         <div class="control-group">
             <label class="control-label" for="with_script">{t}Type{/t}</label>
             <div class="controls">
                 <select name="with_script" id="with_script">
                     <option value="0" {if !isset($advertisement) || $advertisement->with_script == 0}selected="selected"{/if}>{t}Image or Flash object{/t}</option>
                     <option value="1" {if isset($advertisement) && $advertisement->with_script == 1}selected="selected"{/if}>{t}HTML or Javascript code{/t}</option>
+                    {if !empty(server_url)}
                     <option value="2" {if isset($advertisement) && $advertisement->with_script == 2}selected="selected"{/if}>{t}Open X zone{/t}</option>
+                    {/if}
                 </select>
             </div>
         </div>
@@ -201,15 +202,14 @@
                 <div id="content_type_1" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
                     <textarea name="script" id="script" class="input-xxlarge" rows="10" style="width:95%">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
+                {if !empty(server_url)}
                 <div id="content_type_2" style="{if isset($advertisement) && $advertisement->with_script ==2}display:block{else}display:none{/if};">
-                    <label for="openx_zone">{t}Open X zone name{/t}</label>
-                    <input type="text" name="openx_zone_name" value="{$advertisement->params['openx_zone_name']}">
-
                     <label for="openx_zone">{t}Open X zone id{/t}</label>
                     <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
 
-                    <div class="help-block">{t}OpenX/Revive Ad server uses an id to identify an advertisement. Please give this position a name and fill the zone id from your OpenX/Revive server{/t}</div>
+                    <div class="help-block">{t 1=$server_url}OpenX/Revive Ad server uses an id to identify an advertisement. Please fill the zone id from your OpenX/Revive server %1{/t}</div>
                 </div>
+                {/if}
             </div>
         </div>
 
@@ -248,7 +248,7 @@
             </div>
         </div>
 
-        <h4>{t}Where to show this ad{/t}</h4>
+        <h5>{t}Where to show this ad{/t}</h5>
         <div class="control-group">
             <label for="category" class="control-label">{t}Category{/t}</label>
             <div class="controls">

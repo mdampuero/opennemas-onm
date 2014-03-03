@@ -71,12 +71,13 @@ class AdsController extends Controller
         $map        = $positionManager->getAllAdsPositions();
         $adsNames   = $positionManager->getAllAdsNames();
         $filtersUrl = $request->query->get('filter');
+        $category   = $request->query->getDigits('category', 0);
 
         // Get page
         $page = $request->query->getDigits('page', 1);
         list($filter, $queryString) = $this->buildFilter(
             $request,
-            'in_litter != 1 AND fk_content_categories LIKE \'%' . $this->category . '%\''
+            'in_litter != 1 AND fk_content_categories LIKE \'%' . $category . '%\''
         );
 
         // Filters
@@ -94,12 +95,6 @@ class AdsController extends Controller
             ),
         );
 
-        if ($this->category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $this->category;
-        }
-
         $itemsPerPage = s::get('items_per_page');
 
         $cm = new \ContentManager();
@@ -111,7 +106,7 @@ class AdsController extends Controller
 
         foreach ($ads as $key => &$ad) {
             //Distinguir entre flash o no flash
-            $img = new \Photo($ad->path);
+            $img = $this->get('entity_repository')->find('Photo', $ad->path);
             if ($img->type_img == "swf") {
                 $ad->is_flash = 1;
             } else {
@@ -123,7 +118,7 @@ class AdsController extends Controller
             $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
             $ad->advertisement_placeholder = $adv_placeholder;
 
-            if (!in_array($this->category, $ad->fk_content_categories)) {
+            if (!in_array($category, $ad->fk_content_categories)) {
                 unset($ads[$key]);
             }
         }
@@ -254,6 +249,11 @@ class AdsController extends Controller
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
 
+        $serverUrl = '';
+        if ($openXsettings = s::get('revive_ad_server')) {
+            $serverUrl = $openXsettings['url'];
+        }
+
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
             m::add(sprintf(_('Unable to find the advertisement with the id "%d"'), $id));
@@ -284,6 +284,7 @@ class AdsController extends Controller
                 'themeAds'      => $positionManager->getThemeAdsPositions(),
                 'filter'        => $filter,
                 'page'          => $page,
+                'server_url'    => $serverUrl,
             )
         );
 
