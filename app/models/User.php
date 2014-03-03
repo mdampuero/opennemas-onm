@@ -854,7 +854,12 @@ class User implements AdvancedUserInterface
         $items = array();
         $_where = $this->buildFilter($filter);
 
-        $sql = 'SELECT * FROM `users` WHERE ' . $_where . ' ' . $orderBy;
+        $sql = 'SELECT * FROM `users`';
+        if ($_where) {
+            $sql .= ' WHERE ' . $_where;
+        }
+
+        $sql .= ' ' . $orderBy;
 
         $rs = $GLOBALS['application']->conn->Execute($sql);
         if ($rs !== false) {
