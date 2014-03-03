@@ -72,12 +72,13 @@ class AdsController extends Controller
         $map        = $positionManager->getAllAdsPositions();
         $adsNames   = $positionManager->getAllAdsNames();
         $filtersUrl = $request->query->get('filter');
+        $category   = $request->query->getDigits('category', 0);
 
         // Get page
         $page = $request->query->getDigits('page', 1);
         list($filter, $queryString) = $this->buildFilter(
             $request,
-            'in_litter != 1 AND fk_content_categories LIKE \'%' . $this->category . '%\''
+            'in_litter != 1 AND fk_content_categories LIKE \'%' . $category . '%\''
         );
 
         // Filters
@@ -95,12 +96,6 @@ class AdsController extends Controller
             ),
         );
 
-        if ($this->category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $this->category;
-        }
-
         $itemsPerPage = s::get('items_per_page');
 
         $cm = new \ContentManager();
@@ -112,7 +107,7 @@ class AdsController extends Controller
 
         foreach ($ads as $key => &$ad) {
             //Distinguir entre flash o no flash
-            $img = new \Photo($ad->path);
+            $img = $this->get('entity_repository')->find('Photo', $ad->path);
             if ($img->type_img == "swf") {
                 $ad->is_flash = 1;
             } else {
@@ -124,7 +119,7 @@ class AdsController extends Controller
             $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
             $ad->advertisement_placeholder = $adv_placeholder;
 
-            if (!in_array($this->category, $ad->fk_content_categories)) {
+            if (!in_array($category, $ad->fk_content_categories)) {
                 unset($ads[$key]);
             }
         }
@@ -205,8 +200,10 @@ class AdsController extends Controller
                 'fk_author'          => $_SESSION['userid'],
                 'fk_publisher'       => $_SESSION['userid'],
                 'params'             => array(
-                    'width'          => $request->request->getDigits('params_width', ''),
-                    'height'         => $request->request->getDigits('params_height', ''),
+                    'width'           => $request->request->getDigits('params_width', ''),
+                    'height'          => $request->request->getDigits('params_height', ''),
+                    'openx_zone_name' => $request->request->filter('openx_zone_name', '', FILTER_SANITIZE_STRING),
+                    'openx_zone_id'   => $request->request->getDigits('openx_zone_id', ''),
                 )
             );
 
@@ -218,8 +215,12 @@ class AdsController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'admin_ads',
-                    array('category' => $firstCategory, 'page' => $page, 'filter'   => $filter)
+                    'admin_ad_show',
+                    array(
+                        'id'     => $advertisement->id,
+                        'filter' => $filter,
+                        'page'   => $page
+                    )
                 )
             );
         } else {
@@ -249,6 +250,11 @@ class AdsController extends Controller
         $id     = $request->query->getDigits('id', null);
         $filter = $request->query->get('filter');
         $page   = $request->query->getDigits('page', 1);
+
+        $serverUrl = '';
+        if ($openXsettings = s::get('revive_ad_server')) {
+            $serverUrl = $openXsettings['url'];
+        }
 
         $ad = new \Advertisement($id);
         if (is_null($ad->id)) {
@@ -280,6 +286,7 @@ class AdsController extends Controller
                 'themeAds'      => $positionManager->getThemeAdsPositions(),
                 'filter'        => $filter,
                 'page'          => $page,
+                'server_url'    => $serverUrl,
             )
         );
 
@@ -340,8 +347,10 @@ class AdsController extends Controller
             'fk_author'          => $_SESSION['userid'],
             'fk_publisher'       => $_SESSION['userid'],
             'params'             => array(
-                'width'          => $request->request->getDigits('params_width', ''),
-                'height'         => $request->request->getDigits('params_height', ''),
+                'width'           => $request->request->getDigits('params_width', ''),
+                'height'          => $request->request->getDigits('params_height', ''),
+                'openx_zone_name' => $request->request->filter('openx_zone_name', '', FILTER_SANITIZE_STRING),
+                'openx_zone_id'   => $request->request->getDigits('openx_zone_id', ''),
             )
         );
 
@@ -670,13 +679,17 @@ class AdsController extends Controller
     {
         if ('POST' == $this->request->getMethod()) {
 
-            $formValues = $this->get('request')->request;
+            $formValues = $request->request;
 
             $settings = array(
                 'ads_settings' => array(
                     'lifetime_cookie' => $formValues->getDigits('ads_settings_lifetime_cookie'),
-                    'no_generics'      => $formValues->getDigits('ads_settings_no_generics'),
-                )
+                    'no_generics'     => $formValues->getDigits('ads_settings_no_generics'),
+                ),
+                'revive_ad_server' => array(
+                    'url'     => $formValues->filter('revive_ad_server_url', '', FILTER_SANITIZE_STRING),
+                    'site_id' => $formValues->getDigits('revive_ad_server_site_id'),
+                ),
             );
 
             foreach ($settings as $key => $value) {
@@ -687,7 +700,7 @@ class AdsController extends Controller
 
             return $this->redirect($this->generateUrl('admin_ads_config'));
         } else {
-            $configurationsKeys = array('ads_settings',);
+            $configurationsKeys = array('ads_settings','revive_ad_server');
             $configurations = s::get($configurationsKeys);
 
             return $this->render(

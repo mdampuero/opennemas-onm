@@ -562,6 +562,10 @@ class Advertisement extends Content
                 ' scrolling="no"></iframe>';
             }
 
+        } elseif ($this->with_script == 2) {
+            $content = "<script type='text/javascript'><!--// <![CDATA[
+OA_show('zone_{$this->type_advertisement}');
+// ]]> --></script>";
         } else {
             // Check for external advertisement Flash/Image based
             if (isset($this->extWsUrl)) {
