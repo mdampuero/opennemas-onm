@@ -44,7 +44,12 @@ class AdminAuthenticationListener implements EventSubscriberInterface
             && $this->context->getToken()
         ) {
             $token = $this->context->getToken();
-            $token->getUser()->eraseCredentials();
+            $user = $token->getUser();
+
+            if ($user && $user != 'anon.') {
+                $user->eraseCredentials();
+            }
+
             $token->setAuthenticated(false);
         }
     }

@@ -101,7 +101,10 @@ class Acl
     {
         if (getService('security.context')->getToken()) {
             $user = getService('security.context')->getToken()->getUser();
-            return $user->isAdmin();
+
+            if ($user && $user != 'anon.') {
+                return $user->isAdmin();
+            }
         }
 
         return false;
@@ -116,7 +119,10 @@ class Acl
     {
         if (getService('security.context')->getToken()) {
             $user = getService('security.context')->getToken()->getUser();
-            return $user->isMaster();
+
+            if ($user && $user != 'anon.') {
+                return $user->isMaster();
+            }
         }
 
         return false;
