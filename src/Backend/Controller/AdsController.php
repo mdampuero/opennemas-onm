@@ -203,7 +203,7 @@ class AdsController extends Controller
                 'script'             => $request->request->filter('script', '', FILTER_SANITIZE_STRING),
                 'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
                 'fk_author'          => $_SESSION['userid'],
-                'publisher'          => $_SESSION['userid'],
+                'fk_publisher'       => $_SESSION['userid'],
                 'params'             => array(
                     'width'          => $request->request->getDigits('params_width', ''),
                     'height'         => $request->request->getDigits('params_height', ''),
@@ -338,7 +338,7 @@ class AdsController extends Controller
             'script'             => $request->request->filter('script', '', FILTER_SANITIZE_STRING),
             'type_advertisement' => $request->request->filter('type_advertisement', '', FILTER_SANITIZE_STRING),
             'fk_author'          => $_SESSION['userid'],
-            'publisher'          => $_SESSION['userid'],
+            'fk_publisher'       => $_SESSION['userid'],
             'params'             => array(
                 'width'          => $request->request->getDigits('params_width', ''),
                 'height'         => $request->request->getDigits('params_height', ''),
