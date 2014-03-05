@@ -49,7 +49,7 @@ services:
         class: Framework\EventListener\GeneralExceptionsListener
         arguments: [ %kernel.environment%, @logger ]
         tags:
-            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 0 }
 
     kernel.listener.content_subscriber:
         class: Framework\EventListener\ContentActionsSubscriber
