@@ -54,6 +54,11 @@ class Acl
             }
 
             $user = getService('security.context')->getToken()->getUser();
+
+            if (is_null($user) || $user == 'anon.') {
+                return false;
+            }
+
             if ($user->isMaster() || $user->isAdmin()) {
                 return true;
             }
@@ -115,10 +120,15 @@ class Acl
 
             $isGranted = false;
             if (getService('security.context')->getToken()) {
-                $roles = getService('security.context')->getToken()
-                    ->getUser()->getRoles();
+                $user = getService('security.context')->getToken()->getUser();
 
-                $isGranted = in_array($privilege, $roles);
+                if ($user && $user !== 'anon.') {
+                    $isGranted = in_array(
+                        $privilege,
+                        $user->getUser()->getRoles()
+                    );
+                }
+
             }
 
             if ($isGranted
