@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -26,15 +27,6 @@ use Onm\Settings as s;
  **/
 class ContentController extends Controller
 {
-    /**
-     * Common code for all the actions
-     *
-     * @return void
-     **/
-    public function init()
-    {
-    }
-
     /**
      * Sets the available state for a content given its id
      *

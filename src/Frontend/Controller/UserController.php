@@ -247,7 +247,7 @@ class UserController extends Controller
      **/
     public function userBoxAction(Request $request)
     {
-        return $this->render('login/user_box.tpl');
+        return $this->render('user/user_box.tpl');
     }
 
     /**

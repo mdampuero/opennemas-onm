@@ -29,6 +29,7 @@ vendor/alchemy
 vendor/autoload.php
 vendor/composer
 vendor/doctrine
+vendor/drak
 vendor/evenement
 vendor/frandieguez
 vendor/imagine
@@ -40,8 +41,8 @@ vendor/paypal
 vendor/php-ffmpeg
 vendor/psr
 vendor/sensio
+vendor/smarty
 vendor/swiftmailer
 vendor/symfony
 vendor/temporary-filesystem
 vendor/twig
-vendor/smarty

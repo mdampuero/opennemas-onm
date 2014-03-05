@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -38,8 +39,6 @@ class CacheManagerController extends Controller
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('CACHE_MANAGER');
 
-        $this->checkAclOrForward('CACHE_TPL_ADMIN');
-
         // Initialization of the frontend template object
         $this->frontpageTemplate = new \Template(TEMPLATE_USER);
 
@@ -56,6 +55,8 @@ class CacheManagerController extends Controller
      * @param Request $request the request object
      *
      * @return string the string response
+     *
+     * @Security("has_role('CACHE_TPL_ADMIN')")
      **/
     public function defaultAction(Request $request)
     {
@@ -188,6 +189,8 @@ class CacheManagerController extends Controller
      * @param Request $request the request object
      *
      * @return string the string response
+     *
+     * @Security("has_role('CACHE_TPL_ADMIN')")
      **/
     public function deleteAction(Request $request)
     {
@@ -224,6 +227,8 @@ class CacheManagerController extends Controller
      * @param Request $request the request object
      *
      * @return string the result string
+     *
+     * @Security("has_role('CACHE_TPL_ADMIN')")
      **/
     public function deleteAllAction(Request $request)
     {
@@ -238,6 +243,8 @@ class CacheManagerController extends Controller
      * @param Request $request the request object
      *
      * @return string the string response
+     *
+     * @Security("has_role('CACHE_TPL_ADMIN')")
      **/
     public function configAction(Request $request)
     {

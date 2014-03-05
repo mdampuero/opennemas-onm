@@ -26,6 +26,7 @@ class DeployCommand extends Command
                 array(
                     new InputOption('skip-cleaning-caches', 'c', InputOption::VALUE_NONE, 'Skip cleaning caches'),
                     new InputOption('skip-theme-deploy', 't', InputOption::VALUE_NONE, 'Skip themes deploy'),
+                    new InputOption('skip-composer-install', 'i', InputOption::VALUE_NONE, 'Skip composer install'),
                     new InputOption('dev', 'd', InputOption::VALUE_NONE, 'Run for development mode'),
                 )
             )
@@ -120,10 +121,14 @@ EOF
         $this->output->writeln("<info>Updating core ONM code</info>");
         $this->execProcess('git pull');
 
-        // Update dependencies
-        $this->output->writeln("<info>Updating vendor libraries</info>");
-        $composerDev = ($this->input->getOption('dev')) ? '--dev' : '--no-dev';
-        $this->execProcess($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o '.$composerDev);
+        // Update themes
+        $skipComposer = $this->input->getOption('skip-composer-install');
+        if (!$skipComposer) {
+            // Update dependencies
+            $this->output->writeln("<info>Updating vendor libraries</info>");
+            $composerDev = ($this->input->getOption('dev')) ? '--dev' : '--no-dev';
+            $this->execProcess($phpBinPath.' '.$this->basePath.'/bin/composer.phar install -o '.$composerDev);
+        }
     }
 
     /**

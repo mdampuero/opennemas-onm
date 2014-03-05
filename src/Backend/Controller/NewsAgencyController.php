@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -36,9 +37,6 @@ class NewsAgencyController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('NEWS_AGENCY_IMPORTER');
-
-        // Check ACL
-        $this->checkAclOrForward('IMPORT_ADMIN');
 
         $this->syncFrom = array(
             '3600'         => sprintf(_('%d hour'), '1'),
@@ -74,6 +72,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -185,6 +185,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function showAction(Request $request)
     {
@@ -226,6 +228,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function importAction(Request $request)
     {
@@ -296,12 +300,14 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function selectCategoryWhereToImportAction(Request $request)
     {
         $id       = $this->request->query->filter('id', null, FILTER_SANITIZE_STRING);
-        $sourceId = $this->request->query->getDigits('source_id');
         $category = $this->request->query->filter('category', null, FILTER_SANITIZE_STRING);
+        $sourceId = $this->request->query->getDigits('source_id');
 
         if (empty($id)) {
             m::add(_('The article you want to import doesn\'t exists.'), m::ERROR);
@@ -379,6 +385,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function showAttachmentAction(Request $request)
     {
@@ -432,6 +440,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function unlockAction(Request $request)
     {
@@ -453,6 +463,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function syncAction(Request $request)
     {
@@ -489,6 +501,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_ADMIN')")
      **/
     public function configListServersAction(Request $request)
     {
@@ -509,11 +523,11 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
      **/
     public function configUpdateServerAction(Request $request)
     {
-        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
-
         $id = $request->query->getDigits('id');
 
         $servers = s::get('news_agency_config');
@@ -551,6 +565,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
      **/
     public function configShowServerAction(Request $request)
     {
@@ -611,11 +627,11 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
      **/
     public function configCreateServerAction(Request $request)
     {
-        $this->checkAclOrForward('IMPORT_NEWS_AGENCY_CONFIG');
-
         if ('POST' != $request->getMethod()) {
             $this->view->assign(
                 array(
@@ -667,6 +683,8 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
      **/
     public function configDeleteServerAction(Request $request)
     {
@@ -710,13 +728,14 @@ class NewsAgencyController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('IMPORT_NEWS_AGENCY_CONFIG')")
      **/
     public function removeServerFilesAction(Request $request)
     {
-        $servers = s::get('news_agency_config');
-
         $id = $request->query->getDigits('id');
 
+        $servers = s::get('news_agency_config');
         if (!array_key_exists($id, $servers)) {
             m::add(
                 sprintf(

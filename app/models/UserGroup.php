@@ -151,6 +151,8 @@ class UserGroup
                 //print 'Insertamos los privilegios';
                 return $this->insertPrivileges($data['privileges']);
             }
+
+            return true;
         }
 
         return false;

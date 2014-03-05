@@ -154,7 +154,7 @@
                 {/acl}
             </td>
             <td class="center">
-            {acl isAllowed="KIOSKO_UPDATE"}
+            {acl isAllowed="KIOSKO_AVAILABLE"}
                 {if $cover->favorite == 1}
                     <a href="{url name=admin_cover_togglefavorite id=$cover->id status=0 page=$page category=$category}" class="favourite_on" title="Quitar de favorito"></a>
                 {else}

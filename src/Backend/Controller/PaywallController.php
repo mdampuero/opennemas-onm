@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Onm\Framework\Controller\Controller;
@@ -56,6 +57,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function defaultAction(Request $request)
     {
@@ -113,6 +116,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function usersAction(Request $request)
     {
@@ -204,6 +209,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function userListExportAction(Request $request)
     {
@@ -274,6 +281,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function purchasesListExportAction(Request $request)
     {
@@ -336,6 +345,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function purchasesAction(Request $request)
     {
@@ -412,6 +423,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function settingsAction(Request $request)
     {
@@ -523,6 +536,8 @@ class PaywallController extends Controller
      * @param $mode the paypal selected mode (sandbox, live)
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function validateCredentialsAction(Request $request)
     {
@@ -572,6 +587,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function setValidateIpnAction(Request $request)
     {
@@ -639,6 +656,8 @@ class PaywallController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('PAYWALL_ADMIN')")
      **/
     public function doValidateIpnAction(Request $request)
     {

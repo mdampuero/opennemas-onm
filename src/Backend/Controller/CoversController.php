@@ -14,8 +14,10 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
 use Onm\Message as m;
@@ -36,9 +38,6 @@ class CoversController extends Controller
     {
         //Check if module is activated in this onm instance
         \Onm\Module\ModuleManager::checkActivatedOrForward('KIOSKO_MANAGER');
-
-        // Check if the user can admin kiosko
-        $this->checkAclOrForward('KIOSKO_ADMIN');
 
         if (!defined('KIOSKO_DIR')) {
             define('KIOSKO_DIR', "kiosko".SS);
@@ -68,6 +67,8 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -136,6 +137,8 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
@@ -199,11 +202,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $cover = new \Kiosko($id);
@@ -232,11 +235,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_CREATE');
-
         if ('POST' !== $request->getMethod()) {
             return $this->render('covers/read.tpl');
         }
@@ -315,15 +318,15 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_UPDATE');
-
         $id = $request->query->getDigits('id');
 
         $cover = new \Kiosko($id);
-        if ($cover->id != null) {
+        if ($cover->id == null) {
             $this->get('session')->getFlashBag()->add('error', _('Cover id not valid.'));
 
             return $this->redirect(
@@ -335,11 +338,11 @@ class CoversController extends Controller
                 )
             );
         }
-        $_POST['fk_user_last_editor']=$_SESSION['userid'];
+        $_POST['fk_user_last_editor'] = $_SESSION['userid'];
 
-        if (!\Acl::isAdmin()
-            && !\Acl::check('CONTENT_OTHER_UPDATE')
-            && $cover->pk_user != $_SESSION['userid']
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
+            && !$cover->isOwner($_SESSION['userid'])
         ) {
             $this->get('session')->getFlashBag()->add(
                 'error',
@@ -367,13 +370,12 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_DELETE');
-
-        $request = $this->request;
-        $id = $request->query->getDigits('id');
+        $id   = $request->query->getDigits('id');
         $page = $request->query->getDigits('page', 1);
 
         if (!empty($id)) {
@@ -405,11 +407,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -446,11 +448,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_AVAILABLE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_AVAILABLE');
-
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -485,12 +487,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_HOME')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_AVAILABLE');
-
-        $request  = $this->get('request');
         $id       = $request->query->getDigits('id', 0);
         $status   = $request->query->getDigits('status', 0);
         $page     = $request->query->getDigits('page', 1);
@@ -524,11 +525,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_DELETE');
-
         $request       = $this->request;
         $category      = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
         $page          = $request->query->getDigits('page', 1);
@@ -569,12 +570,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('KIOSKO_AVAILABLE');
-
-        $request  = $this->request;
         $status   = $request->query->getDigits('status', 0);
         $selected = $request->query->get('selected_fld', null);
         $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
@@ -609,11 +609,11 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
-        $request = $this->get('request');
-
         $positions = $request->query->get('positions');
 
         $result = true;
@@ -645,6 +645,8 @@ class CoversController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('KIOSKO_ADMIN')")
      **/
     public function configAction(Request $request)
     {
@@ -656,24 +658,24 @@ class CoversController extends Controller
                 'covers/config.tpl',
                 array('configs'   => $configurations,)
             );
-        } else {
-            $settingsRAW = $request->request->get('kiosko_settings');
-            $settings = array(
-                'kiosko_settings' => array(
-                    'orderFrontpage' => filter_var($settingsRAW['orderFrontpage'], FILTER_SANITIZE_STRING),
-                )
-            );
-
-            foreach ($settings as $key => $value) {
-                s::set($key, $value);
-            }
-
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                _('Settings saved successfully.')
-            );
-
-            return $this->redirect($this->generateUrl('admin_covers_config'));
         }
+
+        $settingsRAW = $request->request->get('kiosko_settings');
+        $settings = array(
+            'kiosko_settings' => array(
+                'orderFrontpage' => filter_var($settingsRAW['orderFrontpage'], FILTER_SANITIZE_STRING),
+            )
+        );
+
+        foreach ($settings as $key => $value) {
+            s::set($key, $value);
+        }
+
+        $this->get('session')->getFlashBag()->add(
+            'success',
+            _('Settings saved successfully.')
+        );
+
+        return $this->redirect($this->generateUrl('admin_covers_config'));
     }
 }

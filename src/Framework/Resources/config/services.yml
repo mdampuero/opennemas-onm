@@ -18,10 +18,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1 }
 
-    kernel.listener.admin_auth:
-        class: Framework\EventListener\AdminAuthenticationListener
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+    # kernel.listener.admin_auth:
+    #     class: Framework\EventListener\AdminAuthenticationListener
+    #     arguments: [ @security.context ]
+    #     tags:
+    #         - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     kernel.listener.l10n_system:
         class: Framework\EventListener\L10nSystemListener
@@ -36,6 +37,11 @@ services:
 
     kernel.listener.instance_exceptions:
         class: Framework\EventListener\InstanceExceptionsListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
+
+    kernel.listener.access_denied_exceptions:
+        class: Framework\EventListener\AccessDeniedExceptionsListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 100 }
 

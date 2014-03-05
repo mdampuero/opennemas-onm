@@ -1,0 +1,100 @@
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        User:
+            id: onm_password_encoder
+    role_hierarchy:
+        ROLE_ADMIN:       [ ROLE_FRONTEND, ROLE_BACKEND ]
+        ROLE_MASTER:      ROLE_ADMIN
+        ROLE_SUPER_ADMIN: [ ROLE_MASTER, ROLE_ALLOWED_TO_SWITCH ]
+    providers:
+        chain_provider:
+            chain:
+                providers: [ users ]
+        users:
+            id: onm_user_provider
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        backend_login:
+            pattern:  ^/admin/login$
+            security: false
+
+        manager_login:
+            pattern:  ^/manager/login$
+            security: false
+
+        frontend_login:
+            pattern:  ^/login$
+            security: false
+
+        backend_recover:
+            pattern:  ^/admin/login/user/recover*
+            security: false
+
+        manager_recover:
+            pattern:  ^/admin/login/user/recover*
+            security: false
+
+        frontend_recover:
+            pattern:  ^/user/(recover*|register|(activate/*))
+            security: false
+
+        backend:
+            pattern:    ^/admin/*
+            form_login:
+                csrf_provider:                  form.csrf_provider
+                csrf_parameter:                 _token
+                intention:                      backend_authenticate
+                check_path:                     admin_login_processform
+                login_path:                     admin_login_form
+                always_use_default_target_path: false
+                default_target_path:            admin_welcome
+                target_path_parameter:          _referer
+                use_referer:                    true
+                success_handler:                login_success_handler
+            logout:
+                path:   admin_logout
+                target: admin_login_form
+
+        manager:
+            pattern:    ^/manager/*
+            form_login:
+                csrf_provider:                  form.csrf_provider
+                csrf_parameter:                 _token
+                intention:                      manager_authenticate
+                check_path:                     manager_login_processform
+                login_path:                     manager_login_form
+                always_use_default_target_path: false
+                default_target_path:            manager_welcome
+                target_path_parameter:          _referer
+                use_referer:                    true
+                success_handler:                login_success_handler
+            logout:
+                path:   manager_logout
+                target: manager_login_form
+
+        frontend:
+            pattern:    ^/*
+            anonymous:  ~
+            form_login:
+                csrf_provider:                  form.csrf_provider
+                csrf_parameter:                 _token
+                intention:                      frontend_authenticate
+                check_path:                     frontend_auth_check
+                login_path:                     frontend_auth_login
+                always_use_default_target_path: false
+                default_target_path:            frontend_user_show
+                target_path_parameter:          _referer
+                use_referer:                    true
+                success_handler:                login_success_handler
+            logout:
+                path:   frontend_auth_logout
+                target: frontend_auth_login
+
+    access_control:
+        - { path: ^/admin/*, roles: [ ROLE_BACKEND ] }
+        - { path: ^/manager/*, roles: [ ROLE_MASTER ] }
+        - { path: ^/*, roles: [ IS_AUTHENTICATED_ANONYMOUSLY, IS_AUTHENTICATED_FULLY ] }

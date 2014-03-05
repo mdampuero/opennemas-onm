@@ -418,7 +418,7 @@ class Content
 
         $data['fk_author']           = (!array_key_exists('fk_author', $data)) ? null: $data['fk_author'];
         $data['fk_user_last_editor'] = $_SESSION['userid'];
-        $data['fk_publisher']        = (empty($data['available']))? '': $_SESSION['userid'];
+        $data['fk_publisher']        = $_SESSION['userid'];
 
         $fk_content_type = \ContentManager::getContentTypeIdFromName(underscore($this->content_type));
 
@@ -2277,5 +2277,20 @@ class Content
         }
 
         return Comment::deleteFromFilter("`content_id` = {$contentID}");
+    }
+
+    /**
+     * Checks if the given id is the creator's id
+     *
+     * @param  integer $userId
+     * @return boolean
+     */
+    public function isOwner($userId)
+    {
+        if ($this->fk_publisher == $userId) {
+            return true;
+        }
+
+        return false;
     }
 }

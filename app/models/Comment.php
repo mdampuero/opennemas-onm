@@ -146,19 +146,21 @@ class Comment
      **/
     public function load($data)
     {
-        $allowedProperties = $this->getValidProperties();
+        if ($data) {
+            $allowedProperties = $this->getValidProperties();
 
-        foreach ($allowedProperties as $name) {
-            if (array_key_exists($name, $data)) {
-                if ($name == 'date') {
+            foreach ($allowedProperties as $name) {
+                if (array_key_exists($name, $data)) {
+                    if ($name == 'date') {
 
-                    $this->date = \DateTime::createFromFormat(
-                        'Y-m-d H:i:s',
-                        $data[$name],
-                        new \DateTimeZone('UTC')
-                    );
-                } else {
-                    $this->{$name} = $data[$name];
+                        $this->date = \DateTime::createFromFormat(
+                            'Y-m-d H:i:s',
+                            $data[$name],
+                            new \DateTimeZone('UTC')
+                        );
+                    } else {
+                        $this->{$name} = $data[$name];
+                    }
                 }
             }
         }

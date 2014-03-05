@@ -8,7 +8,9 @@
     <script>
     var book_manager_urls = {
         batchDelete: '{url name=admin_books_batchdelete category=$category page=$page}',
-        savePositions: '{url name=admin_books_save_positions category=$category page=$page}'
+        savePositions: '{url name=admin_books_save_positions category=$category page=$page}',
+        batch_publish: '{url name=admin_books_batchpublish new_status=1}',
+        batch_unpublish: '{url name=admin_books_batchpublish new_status=0}'
     }
 
     jQuery('#save-positions').on('click', function(e, ui){
@@ -105,6 +107,7 @@
                         <option value="0" {if $status eq '0'}selected{/if}> {t}Unpublished{/t} </option>
                         <option value="1" {if $status eq '1'}selected{/if}> {t}Published{/t} </option>
                     </select>
+                    <input type="hidden" id="new_status" name="new_status" value="" />
                     </label>
 
                     <div class="input-append">
@@ -227,12 +230,17 @@
 </form>
  <script>
     // <![CDATA[
-        jQuery('#batch-publish').on('click', function(){
-            jQuery('#formulario').attr('action', '{url name=admin_books_batchpublish}');
-        });
-        jQuery('#batch-unpublish').on('click', function(){
-            jQuery('#formulario').attr('action', '{url name=admin_books_batchpublish}');
+        jQuery('#batch-publish').on('click', function(e){
             e.preventDefault();
+            jQuery('#formulario').attr('action', book_manager_urls.batch_publish);
+            $('#new_status').val($(this).val());
+            jQuery('#formulario').submit();
+        });
+        jQuery('#batch-unpublish').on('click', function(e){
+            e.preventDefault();
+            jQuery('#formulario').attr('action', book_manager_urls.batch_unpublish);
+            $('#new_status').val($(this).val());
+            jQuery('#formulario').submit();
         });
 
 

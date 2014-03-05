@@ -72,8 +72,8 @@
                             <a href="{url name=admin_menu_show id=$menu->pk_menu}"
                                 title="{t 1=$menu->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
                             {/acl}
+                                {$menu->name|capitalize}
                             {acl isAllowed="MENU_UPDATE"}
-                                 {$menu->name|capitalize}
                             </a>
                             {/acl}
                         </td>
@@ -91,7 +91,7 @@
                             </a>
                             {/acl}
                             {if $menu->type eq 'user'}
-                                {acl isAllowed="MENU_ADMIN"}
+                                {acl isAllowed="MENU_DELETE"}
                                     <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
                                         data-url="{url name=admin_menu_delete id=$menu->pk_menu}"
                                         data-title="{$menu->name|capitalize}"

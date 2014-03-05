@@ -14,8 +14,10 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Onm\Security\Acl;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -38,8 +40,6 @@ class OpinionsController extends Controller
         //Check if module is activated in this onm instance
         ModuleManager::checkActivatedOrForward('OPINION_MANAGER');
 
-        $this->checkAclOrForward('OPINION_ADMIN');
-
         $this->ccm  = \ContentCategoryManager::get_instance();
 
         list($this->parentCategories, $this->subcat, $this->categoryData)
@@ -59,6 +59,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -166,6 +168,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_FRONTPAGE')")
      **/
     public function frontpageAction(Request $request)
     {
@@ -240,11 +244,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_UPDATE');
-
         $id = $request->query->getDigits('id', null);
 
         $opinion = new \Opinion($id);
@@ -257,8 +261,8 @@ class OpinionsController extends Controller
         }
 
         // Check if you can see others opinions
-        if (!\Acl::isAdmin()
-            && !\Acl::check('CONTENT_OTHER_UPDATE')
+        if (!Acl::isAdmin()
+            && !Acl::check('CONTENT_OTHER_UPDATE')
             && $opinion->fk_author != $_SESSION['userid']
         ) {
             m::add(_("You can't modify this opinion because you don't have enought privileges."));
@@ -302,11 +306,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $opinion = new \Opinion();
 
@@ -315,25 +319,25 @@ class OpinionsController extends Controller
             $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
             $data = array(
-                'title'                => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'category'             => 'opinion',
-                'available'            => (empty($available)) ? 0 : 1,
-                'in_home'              => (empty($inhome)) ? 0 : 1,
-                'with_comment'         => (empty($withComment)) ? 0 : 1,
-                'summary'              => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
-                'img1'                 => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'img1_footer'          => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
-                'img2'                 => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
-                'img2_footer'          => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
-                'type_opinion'         => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-                'fk_author'            => $request->request->getDigits('fk_author'),
-                'fk_user_last_editor'  => $request->request->getDigits('fk_user_last_editor'),
-                'metadata'             => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'body'                 => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-                'fk_author_img'        => $request->request->getDigits('fk_author_img'),
-                'publisher'            => $_SESSION['userid'],
-                'starttime'         => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'           => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
+                'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'category'            => 'opinion',
+                'available'           => (empty($available)) ? 0 : 1,
+                'in_home'             => (empty($inhome)) ? 0 : 1,
+                'with_comment'        => (empty($withComment)) ? 0 : 1,
+                'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
+                'img1'                => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
+                'img2'                => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
+                'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
+                'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
+                'fk_author'           => $request->request->getDigits('fk_author'),
+                'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
+                'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'body'                => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'fk_author_img'       => $request->request->getDigits('fk_author_img'),
+                'fk_publisher'        => $_SESSION['userid'],
+                'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'endtime'             => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
             );
 
             if ($opinion->create($data)) {
@@ -369,19 +373,19 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_UPDATE');
-
         $id = $request->query->getDigits('id');
 
         $opinion = new \Opinion($id);
 
         if ($opinion->id != null) {
-            if (!\Acl::isAdmin()
-                && !\Acl::check('CONTENT_OTHER_UPDATE')
-                && $opinion->fk_author != $_SESSION['userid']
+            if (!Acl::isAdmin()
+                && !Acl::check('CONTENT_OTHER_UPDATE')
+                && !$opinion->isOwner($_SESSION['userid'])
             ) {
                 m::add(_("You can't modify this opinion because you don't have enought privileges."));
 
@@ -400,26 +404,26 @@ class OpinionsController extends Controller
             }
 
             $data = array(
-                'id'                   => $id,
-                'title'                => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'category'             => 'opinion',
-                'available'            => (empty($available)) ? 0 : 1,
-                'in_home'              => (empty($inhome)) ? 0 : 1,
-                'with_comment'         => (empty($withComment)) ? 0 : 1,
-                'summary'              => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
-                'img1'                 => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'img1_footer'          => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
-                'img2'                 => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
-                'img2_footer'          => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
-                'type_opinion'         => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
-                'fk_author'            => $request->request->getDigits('fk_author'),
-                'fk_user_last_editor'  => $request->request->getDigits('fk_user_last_editor'),
-                'metadata'             => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'body'                 => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
-                'fk_author_img'        => $request->request->getDigits('fk_author_img'),
-                'publisher'            => $_SESSION['userid'],
-                'starttime'            => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'endtime'              => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
+                'id'                  => $id,
+                'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'category'            => 'opinion',
+                'available'           => (empty($available)) ? 0 : 1,
+                'in_home'             => (empty($inhome)) ? 0 : 1,
+                'with_comment'        => (empty($withComment)) ? 0 : 1,
+                'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
+                'img1'                => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'img1_footer'         => $request->request->filter('img1_footer', '', FILTER_SANITIZE_STRING),
+                'img2'                => $request->request->filter('img2', '', FILTER_SANITIZE_STRING),
+                'img2_footer'         => $request->request->filter('img2_footer', '', FILTER_SANITIZE_STRING),
+                'type_opinion'        => $request->request->filter('type_opinion', '', FILTER_SANITIZE_STRING),
+                'fk_author'           => $request->request->getDigits('fk_author'),
+                'fk_user_last_editor' => $request->request->getDigits('fk_user_last_editor'),
+                'metadata'            => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'body'                => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'fk_author_img'       => $request->request->getDigits('fk_author_img'),
+                'fk_publisher'        => $_SESSION['userid'],
+                'starttime'           => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+                'endtime'             => $request->request->filter('endtime', '', FILTER_SANITIZE_STRING),
             );
 
             if ($opinion->update($data)) {
@@ -460,11 +464,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_DELETE');
-
         $id     = $request->query->getDigits('id');
         $page   = $request->query->getDigits('status', 1);
         $author = $request->query->filter('author', 0, FILTER_VALIDATE_INT);
@@ -501,11 +505,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function toggleAvailableAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $id     = $request->query->getDigits('id', 0);
         $status = $request->query->getDigits('status', 0);
         $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
@@ -554,11 +558,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_HOME')")
      **/
     public function toggleInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $id     = $request->query->getDigits('id', 0);
         $status = $request->query->getDigits('status', 0);
         $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
@@ -594,11 +598,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function toggleFavoriteAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $id     = $request->query->getDigits('id', 0);
         $status = $request->query->getDigits('status', 0);
         $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
@@ -645,6 +649,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -692,11 +698,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_DELETE');
-
         $selected       = $request->query->get('selected_fld', null);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
         $author         = $request->query->getDigits('author');
@@ -743,11 +749,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_AVAILABLE')")
      **/
     public function batchPublishAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
@@ -796,11 +802,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_HOME')")
      **/
     public function batchInHomeAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_AVAILABLE');
-
         $selected       = $request->query->get('selected_fld', null);
         $status         = $request->query->getDigits('new_status', 0);
         $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
@@ -846,6 +852,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * #@Security("has_role('OPINION_ADMIN')")
      **/
     public function contentProviderAction(Request $request)
     {
@@ -913,6 +921,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * #@Security("has_role('OPINION_ADMIN')")
      **/
     public function contentProviderRelatedAction(Request $request)
     {
@@ -961,11 +971,11 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_SETTINGS')")
      **/
     public function configAction(Request $request)
     {
-        $this->checkAclOrForward('OPINION_SETTINGS');
-
         if ('POST' == $request->getMethod()) {
 
             $configsRAW = $request->request->get('opinion_settings');
@@ -1001,6 +1011,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function listAuthorAction(Request $request)
     {
@@ -1041,6 +1053,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function showAuthorAction(Request $request)
     {
@@ -1074,6 +1088,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function createAuthorAction(Request $request)
     {
@@ -1143,6 +1159,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function updateAuthorAction(Request $request)
     {
@@ -1225,6 +1243,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function deleteAuthorAction(Request $request)
     {
@@ -1247,6 +1267,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function batchDeleteAuthorAction(Request $request)
     {
@@ -1272,6 +1294,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function previewAction(Request $request)
     {
@@ -1383,6 +1407,8 @@ class OpinionsController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('OPINION_ADMIN')")
      **/
     public function getPreviewAction(Request $request)
     {

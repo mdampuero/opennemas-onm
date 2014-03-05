@@ -14,6 +14,7 @@
  **/
 namespace Backend\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -35,8 +36,6 @@ class MenusController extends Controller
     public function init()
     {
         \Onm\Module\ModuleManager::checkActivatedOrForward('MENU_MANAGER');
-
-        $this->checkAclOrForward('MENU_ADMIN');
 
         $this->pages = array(
             'frontpage' => 1,
@@ -65,6 +64,8 @@ class MenusController extends Controller
      * @param Request $request the resquest object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -79,11 +80,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_UPDATE')")
      **/
     public function showAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_UPDATE');
-
         $id = $request->query->filter('id', null, FILTER_SANITIZE_STRING);
 
         $ccm = \ContentCategoryManager::get_instance();
@@ -157,11 +158,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_CREATE')")
      **/
     public function createAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_CREATE');
-
         if ('POST' == $request->getMethod()) {
             $continue = $request->request->filter('continue', false, FILTER_SANITIZE_STRING);
             $data = array(
@@ -250,11 +251,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_UPDATE');
-
         $id = $this->request->query->getDigits('id');
         $continue = $this->request->request->filter('continue', false, FILTER_SANITIZE_STRING);
 
@@ -310,17 +311,18 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_DELETE');
         $id = $request->query->getDigits('id');
 
         if (empty($id)) {
             m::add(_('You must give an id for delete the menu.'), m::ERROR);
         } else {
             $menu = new \Menu($id);
-            $menu->delete($_SESSION['userid']);
+            $menu->delete($id);
             \MenuItems::emptyMenu($id);
 
             m::add(sprintf(_("Menu '%s' deleted successfully."), $menu->name), m::SUCCESS);
@@ -343,11 +345,11 @@ class MenusController extends Controller
      * @param Request $request the request object
      *
      * @return Response the response object
+     *
+     * @Security("has_role('MENU_DELETE')")
      **/
     public function batchDeleteAction(Request $request)
     {
-        $this->checkAclOrForward('MENU_DELETE');
-
         $page          = $request->query->getDigits('page', 1);
         $selectedItems = $request->query->get('selected_fld');
 
@@ -358,7 +360,7 @@ class MenusController extends Controller
                 $menu = new \Menu($id);
 
                 if ($menu->type == 'user') {
-                    $menu->delete($_SESSION['userid']);
+                    $menu->delete($id);
                     m::add(sprintf(_('Menu "%s" deleted successfully.'), $menu->name), m::SUCCESS);
                 } else {
                     m::add(sprintf(_('Unable to delete the menu "%s" as is system internal.'), $menu->name), m::ERROR);

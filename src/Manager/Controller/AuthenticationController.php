@@ -14,10 +14,12 @@
  **/
 namespace Manager\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\SecurityContext;
+
 use Onm\Framework\Controller\Controller;
-use Onm\Settings as s;
 
 /**
  * Handles all the request for Welcome actions
@@ -26,138 +28,61 @@ use Onm\Settings as s;
  **/
 class AuthenticationController extends Controller
 {
-
     /**
-     * Common actions for all the actions
-     *
-     * @return void
-     **/
-    public function init()
+     * Displays the login form template.
+     */
+    public function loginAction(Request $request)
     {
-        // Setup view
-        $this->view = new \TemplateManager(TEMPLATE_MANAGER);
-        $this->view->assign('version', \Onm\Common\Version::VERSION);
-    }
+        $error   = null;
+        $route   = $request->get('_route');
+        $referer = $this->generateUrl('manager_welcome');
 
-    /**
-     * Shows the login form
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function defaultAction(Request $request)
-    {
-        $token = md5(uniqid(mt_rand(), true));
+        if ($this->session->get('_security.manager.target_path')) {
+            $referer = $this->session->get('_security.manager.target_path');
+        }
 
-        $_SESSION['csrf'] = $token;
-        $languages        = $this->container->getParameter('available_languages');
+        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes
+                ->get(SecurityContext::AUTHENTICATION_ERROR);
+        } else {
+            $error = $request->getSession()
+                ->get(SecurityContext::AUTHENTICATION_ERROR);
+        }
+
+        if ($error) {
+            $msg = '';
+            if ($error instanceof BadCredentialsException) {
+                $msg = _('Username or password incorrect.');
+            } elseif ($error instanceof InvalidCsrfTokenException) {
+                $msg = _('Login token is not valid. Try to authenticate again.');
+            } else {
+                $msg = $error->getMessage();
+            }
+
+            $this->session->getFlashBag()->add('error', $msg);
+
+            $_SESSION['failed_login_attempts'] =
+                isset($_SESSION['failed_login_attempts']) ?
+                $_SESSION['failed_login_attempts'] + 1 : 1;
+        }
+
+        $token = $this->get('form.csrf_provider')
+            ->generateCsrfToken('manager_authenticate');
         $currentLanguage  = \Application::$language;
+
+        $failedLoginAttempts =  0;
+        if (isset($_SESSION['failed_login_attempts'])) {
+            $failedLoginAttempts = $_SESSION['failed_login_attempts'];
+        }
 
         return $this->render(
             'login/login.tpl',
             array(
-                'languages'        => $languages,
-                'current_language' => $currentLanguage,
-                'token'            => $token,
+                'failed_login_attempts' => $failedLoginAttempts,
+                'current_language'      => $currentLanguage,
+                'token'                 => $token,
+                'referer'               => $referer
             )
         );
-    }
-
-    // TODO: Move session management logic to a specialized class
-    /**
-     * Gets all the settings and displays the form
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function processformAction(Request $request)
-    {
-        //  Get values from post
-        $login    = $this->request->request->filter('login', null, FILTER_SANITIZE_STRING);
-        $password = $this->request->request->filter('password', null, FILTER_SANITIZE_STRING);
-        $token    = $this->request->request->filter('token', null, FILTER_SANITIZE_STRING);
-        $time     = $this->request->request->filter('time', null, FILTER_SANITIZE_STRING);
-        $captcha  = '';
-
-        $user = new \User();
-
-        if (array_key_exists('csrf', $_SESSION) && $_SESSION['csrf'] !== $token) {
-            $this->view->assign('message', _('Login token is not valid. Try to autenticate again.'));
-        } else {
-
-            // Try to autenticate the user
-            if ($user->login($login, $password, $token, $captcha, $time)) {
-
-                // Check if user account is activated
-                if ($user->activated != 1) {
-                    $this->view->assign(
-                        'message',
-                        _('This user was deactivated. Please ask your administrator.')
-                    );
-                } else {
-
-                    // Increase security by regenerating the id
-                    session_regenerate_id();
-
-                    $maxSessionLifeTime = (int) s::get('max_session_lifetime', 60);
-
-                    $_SESSION = array(
-                        'userid'           => $user->id,
-                        'realname'         => $user->name,
-                        'username'         => $user->username,
-                        'email'            => $user->email,
-                        'isMaster'         => ( \UserGroup::getGroupName($user->fk_user_group)=='Masters' ),
-                        'default_expire'   => $user->sessionexpire,
-                        //?? 'privileges'       => \Privilege::getPrivilegesForUserGroup($user->fk_user_group),
-                        //?? 'updated'          => time(),
-                        'session_lifetime' => $maxSessionLifeTime * 60,
-                        'user_language'    => $user->getMeta('user_language'),
-                        'csrf'             => md5(uniqid(mt_rand(), true))
-                    );
-
-
-                    $forwardTo = $request->request->filter('forward_to', null, FILTER_SANITIZE_STRING);
-
-                    return $this->redirect($forwardTo?:$this->generateUrl('manager_welcome'));
-                }
-
-            } else {
-                $message = _('Username or password incorrect.');
-                $this->view->assign('message', $message);
-            }
-        }
-        $token = md5(uniqid(mt_rand(), true));
-        $_SESSION['csrf'] = $token;
-
-        return $this->render('login/login.tpl', array('token', $token));
-    }
-
-    /**
-     * Performs the action of saving the configuration settings
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     **/
-    public function logoutAction(Request $request)
-    {
-        $csrf = filter_input(INPUT_GET, 'csrf');
-
-        // Only perform session destroy if cross-site request
-        // forgery matches the session variable.
-        //if ($csrf === $_SESSION['csrf']) {
-        $_SESSION = array();
-        if (isset($_COOKIE[session_name()])) {
-            setcookie(session_name(), '', time()-42000, '/');
-        }
-        session_destroy();
-
-        return $this->redirect($this->generateUrl('manager_login_form'));
-
-        // } else {
-        //     return new Response('Are you hijacking my session dude?!');
-        // }
     }
 }
