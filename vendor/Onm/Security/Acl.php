@@ -125,7 +125,7 @@ class Acl
                 if ($user && $user !== 'anon.') {
                     $isGranted = in_array(
                         $privilege,
-                        $user->getUser()->getRoles()
+                        $user->getRoles()
                     );
                 }
 
