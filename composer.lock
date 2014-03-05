@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "bac2b0a7cb134528945bf1e0655ce6f9",
+    "hash": "f5628cbcc1b1ceb8aae83762105ff15e",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -662,12 +662,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "0742fc7167a4deedaabc8639849a3e71082999f1"
+                "reference": "4837b4afac4469c8740f33eae6bdcd8bd1545d2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/0742fc7167a4deedaabc8639849a3e71082999f1",
-                "reference": "0742fc7167a4deedaabc8639849a3e71082999f1",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/4837b4afac4469c8740f33eae6bdcd8bd1545d2e",
+                "reference": "4837b4afac4469c8740f33eae6bdcd8bd1545d2e",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +714,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2014-01-20 11:29:43"
+            "time": "2014-03-04 01:42:11"
         },
         {
             "name": "doctrine/orm",
@@ -943,12 +943,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "5e013323dacbb7d6ab0c0d55692e6b75d1fb30d2"
+                "reference": "e26c6e472ec3de139d905dfc8ed568afdb585adf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/5e013323dacbb7d6ab0c0d55692e6b75d1fb30d2",
-                "reference": "5e013323dacbb7d6ab0c0d55692e6b75d1fb30d2",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/e26c6e472ec3de139d905dfc8ed568afdb585adf",
+                "reference": "e26c6e472ec3de139d905dfc8ed568afdb585adf",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +992,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2013-12-23 10:54:18"
+            "time": "2014-03-02 22:23:54"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1272,12 +1272,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/merchant-sdk-php.git",
-                "reference": "b988fb719d2a0e8d1d1530dcd3ed2446792c0b3b"
+                "reference": "faaccc703e0496792adcbc37543a3a1d7bd87cf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/b988fb719d2a0e8d1d1530dcd3ed2446792c0b3b",
-                "reference": "b988fb719d2a0e8d1d1530dcd3ed2446792c0b3b",
+                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/faaccc703e0496792adcbc37543a3a1d7bd87cf3",
+                "reference": "faaccc703e0496792adcbc37543a3a1d7bd87cf3",
                 "shasum": ""
             },
             "require": {
@@ -1308,7 +1308,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2014-01-24 19:25:08"
+            "time": "2014-02-26 15:52:19"
         },
         {
             "name": "paypal/sdk-core-php",
@@ -1358,13 +1358,13 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/alchemy-fr/PHP-FFmpeg.git",
-                "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e"
+                "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
+                "reference": "4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
-                "reference": "551d45ab5d08a2ccd21d00be5fe5b00836ad578e",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91",
+                "reference": "4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91",
                 "shasum": ""
             },
             "require": {
@@ -1420,7 +1420,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2013-12-25 12:18:17"
+            "time": "2014-02-27 23:23:32"
         },
         {
             "name": "psr/log",
