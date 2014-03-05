@@ -818,6 +818,10 @@ class User implements AdvancedUserInterface
             $this->accesscategories = $this->readAccessCategories($id);
         }
 
+        if (count($this->accessCategories) < 1) {
+            return array();
+        }
+
         $categories = $this->accesscategories;
 
         usort(
