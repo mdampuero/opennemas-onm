@@ -113,10 +113,13 @@ class Acl
                 return true;
             }
 
-            $roles = getService('security.context')->getToken()
-                ->getUser()->getRoles();
+            $isGranted = false;
+            if (getService('security.context')->getToken()) {
+                $roles = getService('security.context')->getToken()
+                    ->getUser()->getRoles();
 
-            $isGranted = in_array($privilege, $roles);
+                $isGranted = in_array($privilege, $roles);
+            }
 
             if ($isGranted
                 && (!is_null($categoryID)
@@ -208,10 +211,5 @@ class Acl
         }
 
         return false;
-    }
-
-    public static function test()
-    {
-        return 'test function';
     }
 }
