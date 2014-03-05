@@ -38,6 +38,7 @@
 
 </head>
 <body>
+    {acl isAllowed="ROLE_BACKEND"}
     <header class="clearfix">
         <div class="navbar navbar-inverse global-nav" style="position:fixed">
             <div class="navbar-inner">
@@ -111,6 +112,7 @@
             </div>
         </div>
     </header>
+    {/acl}
     <div id="content" role="main">
     {block name="content"}{/block}
     </div>
