@@ -526,8 +526,13 @@ class Video extends Content
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
 
+        $template = 'frontpage/contents/_video.tpl';
+        if ($params['custom'] == 1) {
+            $template = $params['tpl'];
+        }
+
         try {
-            $html = $tpl->fetch('frontpage/contents/_video.tpl');
+            $html = $tpl->fetch($template);
         } catch (\Exception $e) {
             $html = 'Video not available';
         }
