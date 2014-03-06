@@ -265,12 +265,11 @@ class NITF extends NewsMLG1
         $attributes =
             (string) $this->getData()->body->{'body.head'}->dateline->{'story.date'};
 
-        $attributes = explode('+', $attributes);
 
         // '20130315T150100+0000'
         return \DateTime::createFromFormat(
-            'Ymd\THis',
-            $attributes[0]
+            'Ymd\THisP',
+            $attributes
         );
     }
 
