@@ -354,7 +354,7 @@ class User implements AdvancedUserInterface
         $GLOBALS['application']->conn->CommitTrans();
 
         $this->id = $data['id'];
-        if (isset($data['ids_category'])) {
+        if (array_key_exists('ids_category', $data)) {
             $this->createAccessCategoriesDb($data['ids_category']);
         }
 
@@ -818,7 +818,7 @@ class User implements AdvancedUserInterface
             $this->accesscategories = $this->readAccessCategories($id);
         }
 
-        if (count($this->accessCategories) < 1) {
+        if (count($this->accesscategories) < 1) {
             return array();
         }
 
