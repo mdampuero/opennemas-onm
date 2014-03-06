@@ -11,24 +11,22 @@
     $.extend({
         onmEditor: function( options ) {
 
-            var load_plugins = 'webkitdrag,autogrow,autokeywords,a11yhelp,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,pastespecial,removeformat,resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wordcount,wysiwygarea';
+            var load_plugins = 'a11yhelp,about,imageresize,autogrow,autokeywords,,basicstyles,blockquote,clipboard,contextmenu,elementspath,enterkey,entities,filebrowser,floatingspace,font,format,justify,horizontalrule,htmlwriter,image,indent,link,list,magicline,maximize,pastefromword,pastetext,pastespecial,removeformat,resize,scayt,sourcearea,stylescombo,tab,table,tabletools,toolbar,undo,wsc,wordcount,wysiwygarea';
             var presets = {
 
                 simple : {
                     plugins: load_plugins,
-                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText',
+                    removeButtons: 'Anchor,Strike,Subscript,Superscript,Font,Format,Styles,Cut,Copy,Paste,PasteText,Table,HorizontalRule',
                     toolbarGroups: [
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
                       { name: 'align', groups: [ 'align' ]},
-                      { name: 'editing',     groups: [ 'find', 'selection' ] },
+                      { name: 'editing', groups: [ 'find', 'selection' ] },
                       { name: 'forms' },
                       { name: 'styles' },
-                      // { name: 'clipboard',   groups: [ 'PasteSpecial', 'clipboard' ] },
                       { name: 'links' },
                       { name: 'others', groups: [ 'undo' ] },
-                      { items : [ 'Image' ] },
-                      { name: 'about' },
-                      { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] }
+                      { name: 'insert'},
+                      { name: 'document', groups: [ 'mode', 'document', 'doctools' ] }
                     ],
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500,
@@ -43,21 +41,18 @@
                     removeButtons: 'Cut,Copy,Paste,PasteText',
                     toolbarGroups: [
                       { name: 'align', groups: [ 'align' ]},
-                      { name: 'document',      groups: [ 'mode', 'document', 'doctools' ] },
-                      { name: 'editing',     groups: [ 'find', 'selection', 'spellchecker' ] },
+                      { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                      { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ] },
                       { name: 'forms' },
                       '/',
                       { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                      { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks', 'align' ] },
+                      { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align' ] },
                       { name: 'links' },
                       { name: 'insert' },
                       '/',
-                      // { name: 'clipboard',   groups: [ 'clipboard' ] },
                       { name: 'styles' },
-                      { name: 'colors' },
                       { name: 'tools' },
                       { name: 'others', groups: [ 'undo' ] },
-                      { name: 'about' }
                     ],
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500
@@ -80,8 +75,6 @@
                         { name: 'paragraph',   groups: [ 'list', 'indent', 'blocks' ] },
                         { name: 'links' },
                         { name: 'insert' },
-                        { name: 'colors' },
-                        { name: 'about' }
                     ],
                     autoGrow_onStartup: true,
                     autoGrow_maxHeight: 500

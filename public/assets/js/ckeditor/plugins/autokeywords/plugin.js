@@ -1,5 +1,5 @@
 CKEDITOR.plugins.add( 'autokeywords', {
-    lang: 'es,en,gl',
+    lang: ['es', 'en', 'gl'],
     icons: 'autokeywords',
     init: function( editor ) {
         editor.addCommand( 'replaceKeywords', {
@@ -18,7 +18,7 @@ CKEDITOR.plugins.add( 'autokeywords', {
         });
 
         editor.ui.addButton( 'Automatic keywords', {
-            label: "Automatic keywords",
+            label: editor.lang.autokeywords.toolbar,
             command: 'replaceKeywords',
             toolbar: 'links',
             icon: this.path + 'icons/autokeywords.png'

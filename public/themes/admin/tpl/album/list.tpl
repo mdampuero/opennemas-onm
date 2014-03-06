@@ -92,7 +92,7 @@
                     <th class="title">{t}Title{/t}</th>
                     {if $category=='widget' || $category=='all'}<th style="width:65px;" class="left">{t}Section{/t}</th>{/if}
                     <th class="left nowrap" style="width:100px;">Created</th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                    <!-- <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th> -->
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
@@ -124,7 +124,7 @@
                 </td>
                 {/if}
                 <td class="center nowrap">{$album->created}</td>
-                <td class="center">{$album->views}</td>
+                <!-- <td class="center">{$album->views}</td> -->
                 <td class="center">
                     {acl isAllowed="ALBUM_AVAILABLE"}
                         {if $album->available == 1}

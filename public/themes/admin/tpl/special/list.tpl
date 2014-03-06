@@ -81,7 +81,6 @@
                         <input type="checkbox" class="toggleallcheckbox">
                     </th>
                     <th class="title">{t}Title{/t}</th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     {if $category=='widget' || $category=='all'}<th style="width:65px;" class="center">{t}Section{/t}</th>{/if}
                     <th class="center" style="width:100px;">Created</th>
                     {acl isAllowed="SPECIAL_AVAILABLE"}
@@ -106,9 +105,6 @@
                     <a href="{url name=admin_special_show id=$special->pk_special}" title="{$special->title|clearslash}">
                         {$special->title|clearslash}
                     </a>
-                </td>
-                 <td class="center">
-                    {$special->views}
                 </td>
                 {if $category=='widget' || $category=='all'}
                     <td class="center">
