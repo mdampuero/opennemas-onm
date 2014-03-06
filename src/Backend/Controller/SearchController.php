@@ -172,6 +172,7 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
+                        'pager'       => $pagination,
                     )
                 );
 
@@ -181,6 +182,7 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
+                        'pager'       => $pagination,
                     )
                 );
             }
