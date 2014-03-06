@@ -365,8 +365,12 @@ class Album extends Content
         $tpl->assign('item', $this);
         $tpl->assign('cssclass', $params['cssclass']);
 
+        $template = 'frontpage/contents/_album.tpl';
+        if ($params['custom'] == 1) {
+            $template = $params['tpl'];
+        }
         try {
-            $html = $tpl->fetch('frontpage/contents/_album.tpl');
+            $html = $tpl->fetch($template);
         } catch (\Exception $e) {
             $html = 'Album not available';
         }
