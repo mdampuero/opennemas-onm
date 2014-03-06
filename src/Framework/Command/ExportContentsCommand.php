@@ -9,14 +9,14 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExportContentsCommand extends Command
+class ExportContentsCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -64,16 +64,16 @@ EOF
 
         chdir($basePath);
 
-        // Initialize Databse connection
         $dbConn = $this->getContainer()->get('db_conn_manager');
 
         $rs = $dbConn->GetAll('SELECT internal_name, settings FROM instances');
-        // $rs = $dbConn->getAll('SHOW DATABASES');
 
         $instances = array();
         foreach ($rs as $database) {
-            $instances [$database['internal_name']] = unserialize($database['settings']);
+            $instances[$database['internal_name']] =
+                unserialize($database['settings']);
         }
+
         $instanceNames = array_keys($instances);
 
         if ($instance == '*') {
@@ -84,6 +84,7 @@ EOF
                 if (trim($value) == '') {
                     throw new \Exception('The instance name cannot be empty');
                 }
+
                 if (!in_array($value, $instanceNames)) {
                     throw new \Exception('Instance name not valid');
                 }
@@ -107,32 +108,29 @@ EOF
         $output->writeln("Exporting content from the instance $instance");
 
         // Initialize internal constants for logger
-        // Logger in content class when creating widgets
-        define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
         define('INSTANCE_UNIQUE_NAME', $instance);
+
+        // Initialize database connection
+        $this->connection = $this->getContainer()->get('db_conn');
+        $this->connection->selectDatabase($instances[$instance]['BD_DATABASE']);
 
         // Initialize application
         $GLOBALS['application'] = new \Application();
-        \Application::initDatabase();
-        \Application::initLogger();
+        \Application::load();
+        \Application::initDatabase($this->connection);
 
         // Initialize the template system
-        define('CACHE_PATH', APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.INSTANCE_UNIQUE_NAME);
-        define('SS', '/');
-        define('SITE_URL', '');
+        define('CACHE_PREFIX', '');
+
         $commonCachepath = APPLICATION_PATH.DS.'tmp'.DS.'instances'.DS.'common';
         if (!file_exists($commonCachepath)) {
             mkdir($commonCachepath, 0755, true);
         }
-        define('COMMON_CACHE_PATH', realpath($commonCachepath));
+
         $this->tpl = new \TemplateAdmin('admin');
 
-        // Initialize database connection
-        $dbParams['connections']['default']['database_name'] = $instances[$instance]['BD_DATABASE'];
-        $dbConn = $this->getConnection($dbParams);
-
         $cm = new \ContentManager();
-        list($countArticles, $articles)= $cm->getCountAndSlice(
+        list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             null,
             null,
@@ -172,35 +170,46 @@ EOF
         $output->writeln("\tSaved ".count($articles)." articles into '$targetDir' <info>DONE</info> ");
     }
 
-    public function getConnection($connectionParams)
-    {
-        $GLOBALS['application']->conn = new \Onm\DatabaseConnection();
-
-        $GLOBALS['application']->conn->connect($connectionParams);
-
-        return $GLOBALS['application']->conn;
-    }
-
+    /**
+     * Converts an Article to NewsML.
+     *
+     * @param  Article $article Article to convert.
+     * @return string           Article in NewsML format.
+     */
     public function convertToNewsML($article)
     {
-        $content = $this->tpl->fetch('news_agency/newsml_templates/base.tpl', array('article' => $article));
+        $content = $this->tpl->fetch(
+            'news_agency/newsml_templates/base.tpl',
+            array('article' => $article)
+        );
 
         return $content;
     }
 
+    /**
+     * Copies images.
+     *
+     * @note Not implemented
+     */
     public function copyImages($images)
     {
         return true;
     }
 
+    /**
+     * Writes an article in NewsML format to a file.
+     *
+     * @param Article $article      Article to export.
+     * @param string  $newsMLString Article in NewsMML format.
+     * @param string  $folder       Path where file will be created.
+     */
     public function storeContentFile($article, $newsMLString, $folder)
     {
         if (!is_dir($folder)) {
             mkdir($folder, 0777);
         }
 
-        $filename = $folder.DIRECTORY_SEPARATOR.$article->id.'.xml';
-
+        $filename = $folder . DIRECTORY_SEPARATOR . $article->id . '.xml';
         file_put_contents($filename, $newsMLString);
     }
 }

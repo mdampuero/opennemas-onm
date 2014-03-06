@@ -12,14 +12,16 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrateOnmCategory extends Command
+use Onm\DatabaseConnection;
+
+class MigrateOnmCategoryCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -51,14 +53,10 @@ EOF
 
         chdir($basePath);
 
-        $dataBaseHost = 'localhost';
-        $dataBaseType = 'mysqli';
-        $dataBaseUser = 'root';
-
-        $originDataBaseName = $input->getArgument('originDB');
-        $originCategory     = $input->getArgument('originCategory');
-        $dataBaseName       = $input->getArgument('finalDB');
-        $finalCategory      = $input->getArgument('finalCategory');
+        $originDatabase = $input->getArgument('originDB');
+        $originCategory = $input->getArgument('originCategory');
+        $targetDatabase = $input->getArgument('finalDB');
+        $finalCategory  = $input->getArgument('finalCategory');
 
         $dialog = $this->getHelperSet()->get('dialog');
 
@@ -74,39 +72,33 @@ EOF
             false
         );
 
-        define('BD_HOST', $dataBaseHost);
-        define('BD_USER', $dataBaseUser);
-        define('BD_PASS', $dataBasePass);
-        define('BD_TYPE', $dataBaseType);
-        define('BD_DATABASE', $dataBaseName);
-        define('ORIGIN_BD_DATABASE', $originDataBaseName);
-
-        include_once $basePath.'/app/autoload.php';
-        include_once 'Application.php';
-
         // Initialize internal constants for logger
         // Logger in content class when creating widgets
-        define('SYS_LOG_PATH', realpath(SITE_PATH.DS.'..'.DS."tmp/logs"));
         define('INSTANCE_UNIQUE_NAME', 'opennemas');
 
         // Initialize Globals and Database
         $GLOBALS['application'] = new \Application();
-        \Application::initDatabase();
-        \Application::initLogger();
 
-        $GLOBALS['application']->connOrigin = \ADONewConnection(BD_TYPE);
-        $GLOBALS['application']->connOrigin->Connect(BD_HOST, BD_USER, BD_PASS, ORIGIN_BD_DATABASE);
+        $this->targetConnection = $this->getContainer()->get('db_conn');
+        $this->targetConnection->selectDatabase($targetDatabase);
+
+        \Application::initDatabase($this->targetConnection);
+
+        $this->originConnection = new DatabaseConnection(
+            getContainerParameter('database')
+        );
+        $this->originConnection->selectDatabase($originDatabase);
 
         $_SESSION['username'] = 'script';
         $_SESSION['userid'] = 11;
         // Execute functions
-        $output->writeln("\t<fg=blue;bg=white>Migrating ".$originCategory.": ".$originDataBaseName."->". $finalCategory."-".$dataBaseName."</fg=blue;bg=white>");
+        $output->writeln("\t<fg=blue;bg=white>Migrating ".$originCategory.": ".$originDatabase."->". $finalCategory."-".$targetDatabase."</fg=blue;bg=white>");
         // Migrate database
         $this->migrateImages($input, $output);
         $this->migrateArticles($input, $output);
 
         $output->writeln(
-            "\n\t<fg=yellow;bg=white>Migration finished for Database: ".$dataBaseName."</fg=yellow;bg=white>"
+            "\n\t<fg=yellow;bg=white>Migration finished for Database: ".$targetDatabase."</fg=yellow;bg=white>"
         );
     }
 
@@ -118,18 +110,18 @@ EOF
     protected function migrateArticles($input, $output)
     {
         $sql = 'SELECT * FROM articles, contents, contents_categories '
-                .' WHERE  pk_fk_content_category = '.$input->getArgument('originCategory')
-                .' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                .' WHERE  pk_fk_content_category = \''.$input->getArgument('originCategory')
+                .'\' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                 .'AND  `articles`.`pk_article` = `contents`.`pk_content` ';
 
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs = $GLOBALS['application']->connOrigin->Execute($request);
+        $request = $this->originConnection->Prepare($sql);
+        $rs = $this->originConnection->Execute($request);
 
         if (!$rs) {
-            $output->writeln('DB problem: '. $GLOBALS['application']->connOrigin->ErrorMsg());
+            $output->writeln('DB problem: '. $this->originConnection->ErrorMsg());
         } else {
 
-            $totalRows = $rs->_numOfRows;
+            $totalRows = count($rs->getArray());
             $current = 1;
 
             $article = new \Article();
@@ -190,8 +182,9 @@ EOF
                 $rs->MoveNext();
             }
             $output->writeln('Imported  '.$current.' articles \n');
+
+            $rs->Close();
         }
-        $rs->Close();
         return true;
     }
 
@@ -203,67 +196,69 @@ EOF
     protected function migrateImages($input, $output)
     {
         $sql = 'SELECT * FROM photos, contents, contents_categories '
-                .' WHERE  pk_fk_content_category = '.$input->getArgument('originCategory')
-                .' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
+                .' WHERE  pk_fk_content_category = \''.$input->getArgument('originCategory')
+                .'\' AND  `contents_categories`.`pk_fk_content` = `contents`.`pk_content` '
                 .' AND  `photos`.`pk_photo` = `contents`.`pk_content` ';
 
-        $request = $GLOBALS['application']->connOrigin->Prepare($sql);
-        $rs = $GLOBALS['application']->connOrigin->Execute($request);
+        $request = $this->originConnection->Prepare($sql);
+        $rs = $this->originConnection->Execute($request);
 
-        $totalRows = $rs->_numOfRows;
-        $current = 1;
-        $photo = new \Photo();
+        if ($rs) {
+            $totalRows = $rs->_numOfRows;
+            $current = 1;
+            $photo = new \Photo();
 
-        while (!$rs->EOF) {
-            if ($this->elementIsImported($rs->fields['pk_content'], 'image')) {
-                $output->writeln("[{$current}/{$totalRows}] Image already imported");
-            } else {
-                $imageData = array(
-                    'category'      => $input->getArgument('finalCategory'),
-                    'title'         => $rs->fields['title'],
-                    'name'          => $rs->fields['name'],
-                    'metadata'      => $rs->fields['metadata'],
-                    'description'   => $rs->fields['description'],
-                    'created'       => $rs->fields['created'],
-                    'starttime'     => $rs->fields['starttime'],
-                    'endtime'        => $rs->fields['endtime'],
-                    'changed'       => $rs->fields['changed'],
-                    'path_file'     => $rs->fields['path_file'],
-                    'fk_category'   => $input->getArgument('finalCategory'),
-                    'nameCat'       => $rs->fields['category_name'],
-                    'size'          => $rs->fields['size'],
-                    'width'         => $rs->fields['width'],
-                    'height'        => $rs->fields['height'],
-                    'author_name'   => $rs->fields['author_name'],
-                    'frontpage'      => $rs->fields['frontpage'],
-                    'content_status' => $rs->fields['content_status'],
-                    'available'      => $rs->fields['available'],
-                    'in_home'        => $rs->fields['in_home'],
-                    'position'       => $rs->fields['position'],
-                    'home_pos'       => $rs->fields['home_pos'],
-                    'views'          => $rs->fields['views'],
-                    'fk_user'        => $rs->fields['fk_author'],
-                    'fk_author'      => $rs->fields['fk_author'],
-                    'fk_publisher'   => $rs->fields['fk_author'],
-                    'slug'           => $rs->fields['slug'],
-                    'urn_source'     => $rs->fields['urn_source'],
-                    'params'         => $rs->fields['params'],
-                );
-                $imageID = $photo->create($imageData);
-
-                if (!empty($imageID)) {
-                    $this->insertRefactorID($rs->fields['pk_content'], $imageID, 'image');
-                    //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
-                    $output->writeln('- Image '. $imageID. ' ok');
+            while (!$rs->EOF) {
+                if ($this->elementIsImported($rs->fields['pk_content'], 'image')) {
+                    $output->writeln("[{$current}/{$totalRows}] Image already imported");
                 } else {
-                    $output->writeln('Problem inserting image '.$rs->fields['pk_content'].' - '.$rs->fields['title'] .'\n');
-                }
-            }
-            $current++;
-            $rs->MoveNext();
-        }
+                    $imageData = array(
+                        'category'      => $input->getArgument('finalCategory'),
+                        'title'         => $rs->fields['title'],
+                        'name'          => $rs->fields['name'],
+                        'metadata'      => $rs->fields['metadata'],
+                        'description'   => $rs->fields['description'],
+                        'created'       => $rs->fields['created'],
+                        'starttime'     => $rs->fields['starttime'],
+                        'endtime'        => $rs->fields['endtime'],
+                        'changed'       => $rs->fields['changed'],
+                        'path_file'     => $rs->fields['path_file'],
+                        'fk_category'   => $input->getArgument('finalCategory'),
+                        'nameCat'       => $rs->fields['category_name'],
+                        'size'          => $rs->fields['size'],
+                        'width'         => $rs->fields['width'],
+                        'height'        => $rs->fields['height'],
+                        'author_name'   => $rs->fields['author_name'],
+                        'frontpage'      => $rs->fields['frontpage'],
+                        'content_status' => $rs->fields['content_status'],
+                        'available'      => $rs->fields['available'],
+                        'in_home'        => $rs->fields['in_home'],
+                        'position'       => $rs->fields['position'],
+                        'home_pos'       => $rs->fields['home_pos'],
+                        'views'          => $rs->fields['views'],
+                        'fk_user'        => $rs->fields['fk_author'],
+                        'fk_author'      => $rs->fields['fk_author'],
+                        'fk_publisher'   => $rs->fields['fk_author'],
+                        'slug'           => $rs->fields['slug'],
+                        'urn_source'     => $rs->fields['urn_source'],
+                        'params'         => $rs->fields['params'],
+                    );
+                    $imageID = $photo->create($imageData);
 
-        $rs->Close();
+                    if (!empty($imageID)) {
+                        $this->insertRefactorID($rs->fields['pk_content'], $imageID, 'image');
+                        //$this->updateFields('`available` ='.$rs->fields['available'], $rs->fields['pk_content']);
+                        $output->writeln('- Image '. $imageID. ' ok');
+                    } else {
+                        $output->writeln('Problem inserting image '.$rs->fields['pk_content'].' - '.$rs->fields['title'] .'\n');
+                    }
+                }
+                $current++;
+                $rs->MoveNext();
+            }
+
+            $rs->Close();
+        }
     }
 
     /**

@@ -9,14 +9,14 @@
  **/
 namespace Framework\Command;
 
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\Event;
 
-class CronActionsCommand extends Command
+class CronActionsCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
@@ -35,15 +35,14 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        global $sc;
-        $eventDispatcher = $sc->get('dispatcher');
+        $eventDispatcher = $this->getContainer()->get('event_dispatcher');
 
         $output->writeln('Executing cron actions');
 
         $event = new Event();
         $event->input     = $input;
         $event->output    = $output;
-        $event->container = $sc;
+        $event->container = $this->getContainer();
 
         $eventDispatcher->dispatch('cron.actions', $event);
     }
