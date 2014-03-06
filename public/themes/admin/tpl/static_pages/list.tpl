@@ -38,7 +38,7 @@
                 {if count($pages) > 0}
                     <th>{t}Title{/t}</th>
                     <th>{t}URL{/t}</th>
-                    <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
+                    <!-- <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th> -->
                     <th class="center" style="width:20px;">{t}Published{/t}</th>
                     <th class="center" style="width:80px;">{t}Actions{/t}</th>
                 {else}
@@ -46,61 +46,54 @@
                 </tr>
             </thead>
             <tbody>
-                {section name=k loop=$pages}
+                {foreach $pages as $page}
                 <tr>
-
+                    <td>{$page->title}</td>
                     <td>
-                        {$pages[k]->title}
-                    </td>
-
-                    <td>
-                        <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/{$pages[k]->slug}/" target="_blank" title="{t}Open in a new window{/t}">
-                            {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/{$pages[k]->slug}/
+                        <a href="{$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/{$page->slug}/" target="_blank" title="{t}Open in a new window{/t}">
+                            {$smarty.const.SITE_URL}{$smarty.const.STATIC_PAGE_PATH}/{$page->slug}/
                         </a>
                     </td>
-
-                    <td class="center">
-                        {$pages[k]->views}
-                    </td>
-
+                    <!-- <td class="center">
+                        {$page->views}
+                    </td> -->
                     <td class="center">
                         {acl isAllowed="STATIC_AVAILABLE"}
-                        {if $pages[k]->available eq 1}
-                            <a href="{url name=admin_staticpages_toggle_available id=$pages[k]->id status=0 page=$page}" class="unavailable">
+                        {if $page->available eq 1}
+                            <a href="{url name=admin_staticpages_toggle_available id=$page->id status=0 page=$page}" class="unavailable">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" border="0" title="{t}Published{/t}" />
                             </a>
                         {else}
-                            <a href="{url name=admin_staticpages_toggle_available id=$pages[k]->id status=1 page=$page}" class="available">
+                            <a href="{url name=admin_staticpages_toggle_available id=$page->id status=1 page=$page}" class="available">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" border="0" title="{t}Unpublished{/t}" />
                             </a>
                         {/if}
                         {/acl}
                     </td>
-
                     <td class="right nowrap">
                         <div class="btn-group">
-                        {acl isAllowed="STATIC_UPDATE"}
-                            <a class="btn" href="{url name=admin_staticpage_show id=$pages[k]->id}" title="{t}Modify{/t}">
+                            {acl isAllowed="STATIC_UPDATE"}
+                            <a class="btn" href="{url name=admin_staticpage_show id=$page->id}" title="{t}Modify{/t}">
                                 <i class="icon-pencil"></i>{t}Edit{/t}
                             </a>
-                        {/acl}
-                        {acl isAllowed="STATIC_DELETE"}
+                            {/acl}
+
+                            {acl isAllowed="STATIC_DELETE"}
                             <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                               data-url="{url name=admin_staticpages_delete id=$pages[k]->id}"
+                               data-url="{url name=admin_staticpages_delete id=$page->id}"
                                title="{t}Delete{/t}"
-                               data-title="{$pages[k]->title|capitalize}" href="{url name=admin_staticpages_delete id=$pages[k]->id}" >
+                               data-title="{$page->title|capitalize}" href="{url name=admin_staticpages_delete id=$page->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
-                        {/acl}
-
+                            {/acl}
                         </div>
                     </td>
                 </tr>
-                {sectionelse}
+                {foreachelse}
                 <tr>
                     <td class="empty">{t}There is no static pages.{/t}</td>
                 </tr>
-                {/section}
+                {/foreach}
             </tbody>
             <tfoot>
                 <tr>

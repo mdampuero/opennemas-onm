@@ -96,7 +96,6 @@
                     <th>{t}Title{/t}</th>
                     {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
                     <th class="left nowrap">Created</th>
-                    <th class="center" style="width:35px;">{t}Views{/t}</th>
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
                     <th class="center" style="width:35px;">{t}Home{/t}</th>
@@ -129,9 +128,6 @@
 
                     <td class="left nowrap">
                         {$video->created}
-                    </td>
-                    <td class="center">
-                        {$video->views}
                     </td>
                     <td class="center">
                         {acl isAllowed="VIDEO_AVAILABLE"}

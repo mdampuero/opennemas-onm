@@ -141,40 +141,36 @@
                     <th class="title">{t}Title{/t}</th>
                     <th style="width:65px;" class="center">{t}Section{/t}</th>
                     <th class="center" style="width:100px;">Created</th>
-                    <th class="center" style="width:20px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                     <th class="center" style="width:10px;">{t}Published{/t}</th>
                     <th class="center" style="width:10px;">{t}Favorite{/t}</th>
                     <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
             <tbody class="sortable">
-            {section name=as loop=$books}
-            <tr data-id="{$books[as]->pk_book}" style="cursor:pointer;">
+            {foreach $books as $book}
+            <tr data-id="{$book->pk_book}" style="cursor:pointer;">
                 <td class="center">
-                    <input type="checkbox" class="minput"  id="selected_{$smarty.section.as.iteration}" name="selected_fld[]" value="{$books[as]->id}"  style="cursor:pointer;" >
+                    <input type="checkbox" class="minput"  id="selected_{$book->id}" name="selected_fld[]" value="{$book->id}"  style="cursor:pointer;" >
                 </td>
                 <td>
-                    <a href="{url name=admin_book_show id=$books[as]->pk_book}" title="{$books[as]->title|clearslash}">
-                        {$books[as]->title|clearslash}
+                    <a href="{url name=admin_book_show id=$book->pk_book}" title="{$book->title|clearslash}">
+                        {$book->title|clearslash}
                     </a>
                 </td>
                 <td class="center">
-                    {$books[as]->category_title}
+                    {$book->category_title}
                 </td>
                 <td class="center">
-                    {$books[as]->created}
-                </td>
-                 <td class="center">
-                    {$books[as]->views}
+                    {$book->created}
                 </td>
                 <td class="center">
                     {acl isAllowed="BOOK_AVAILABLE"}
-                        {if $books[as]->available == 1}
-                            <a href="{url name=admin_books_toggle_available id=$books[as]->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
+                        {if $book->available == 1}
+                            <a href="{url name=admin_books_toggle_available id=$book->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
                                 <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" />
                             </a>
                         {else}
-                            <a href="{url name=admin_books_toggle_available id=$books[as]->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
+                            <a href="{url name=admin_books_toggle_available id=$book->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
                                 <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pendiente{/t}" />
                             </a>
                         {/if}
@@ -183,27 +179,27 @@
 
                 <td class="center">
                     {acl isAllowed="BOOK_AVAILABLE"}
-                        {if $books[as]->in_home == 1}
-                           <a href="{url name=admin_books_toggle_inhome id=$books[as]->id status=0 category=$category page=$page|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
+                        {if $book->in_home == 1}
+                           <a href="{url name=admin_books_toggle_inhome id=$book->id status=0 category=$category page=$page|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
                         {else}
-                            <a href="{url name=admin_books_toggle_inhome id=$books[as]->id status=1 category=$category page=$page|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
+                            <a href="{url name=admin_books_toggle_inhome id=$book->id status=1 category=$category page=$page|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
                         {/if}
                     {/acl}
                 </td>
                 <td class="right">
                     <div class="btn-group">
                        {acl isAllowed="BOOK_UPDATE"}
-                            <a class="btn"  href="{url name=admin_book_show id=$books[as]->pk_book}" title="{t}Edit book{/t}" >
+                            <a class="btn"  href="{url name=admin_book_show id=$book->pk_book}" title="{t}Edit book{/t}" >
                                <i class="icon-pencil"></i> {t}Edit{/t}
                             </a>
                        {/acl}
 
                        {acl isAllowed="BOOK_DELETE"}
                             <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                data-id="{$books[as]->pk_book}"
-                                data-title="{$books[as]->title|capitalize}"
-                                data-url="{url name=admin_books_delete id=$books[as]->id}"
-                                href="{url name=admin_books_delete id=$books[as]->id}" >
+                                data-id="{$book->pk_book}"
+                                data-title="{$book->title|capitalize}"
+                                data-url="{url name=admin_books_delete id=$book->id}"
+                                href="{url name=admin_books_delete id=$book->id}" >
                                 <i class="icon-trash icon-white"></i>
                             </a>
                        {/acl}

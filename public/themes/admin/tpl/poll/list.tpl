@@ -71,7 +71,6 @@
                             <th style="width:65px;" class="center">{t}Section{/t}</th>
                         {/if}
                         <th class="center" style="width:40px">{t}Votes{/t}</th>
-                        <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th>
                         <th style="width:110px;" class="center">{t}Date{/t}</th>
                         <th style="width:40px;" class="center">{t}Published{/t}</th>
                         <th class="center" style="width:35px;">{t}Favorite{/t}</th>
@@ -98,9 +97,6 @@
                     {/if}
                     <td class="center">
                         {$poll->total_votes}
-                    </td>
-                    <td class="center">
-                        {$poll->views}
                     </td>
                     <td class="center">
                         {$poll->created}
