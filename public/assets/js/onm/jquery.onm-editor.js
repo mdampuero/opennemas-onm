@@ -94,6 +94,7 @@
                 var data = $(this).data();
 
                 var editor_configuration = {
+                    allowedContent: true,
                     language: settings.language,
                     extraPlugins: 'magicline,font',
                     magicline_color: 'blue',
