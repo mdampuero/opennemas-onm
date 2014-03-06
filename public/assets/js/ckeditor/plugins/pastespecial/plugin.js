@@ -40,7 +40,6 @@
 	// Register the plugin.
 	CKEDITOR.plugins.add( 'pastespecial', {
 		requires: 'clipboard',
-		lang: 'es,en,gl', // %REMOVE_LINE_CORE%
 		icons: 'pastetext,pastetext-rtl', // %REMOVE_LINE_CORE%
 		init: function( editor ) {
 			var commandName = 'pastespecial';
