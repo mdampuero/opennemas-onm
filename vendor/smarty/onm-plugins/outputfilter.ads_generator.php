@@ -22,7 +22,7 @@ function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $sm
         $zonesInformation = array();
         foreach ($advertisements as $advertisement) {
             if ($advertisement->with_script == 2) {
-                $zonesInformation []= " 'zone_{$advertisement->type_advertisement}' : ".(int) $advertisement->params['openx_zone_id'];
+                $zonesInformation []= " 'zone_{$advertisement->id}' : ".(int) $advertisement->params['openx_zone_id'];
             }
         }
 
