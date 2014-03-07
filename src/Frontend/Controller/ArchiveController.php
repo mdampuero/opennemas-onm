@@ -17,6 +17,7 @@ namespace Frontend\Controller;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 use Onm\Settings as s;
@@ -162,14 +163,19 @@ class ArchiveController extends Controller
         $path = "{$this->year}/{$this->month}/{$this->day}";
         $html = '';
         $file = MEDIA_PATH."/library/{$path}/{$this->categoryName}.html";
+        //"/archive/content/yyyy/mm/dd"
+        //"/archive/content/yyyy/mm/dd/category.html"
+        $url = "/archive/content/{$path}/";
         if (file_exists($file) && is_readable($file)) {
             $html = file_get_contents(SITE_URL.INSTANCE_MEDIA."library/{$path}/{$this->categoryName}.html");
         } else {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            return new RedirectResponse($url, 301);
+            //throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
         if (empty($html)) {
-            throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
+            return new RedirectResponse($url, 301);
+            //throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
         return new Response($html);
