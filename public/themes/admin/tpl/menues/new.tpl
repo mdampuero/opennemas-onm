@@ -45,7 +45,6 @@
         {render_messages}
 
         <div class="form-vertical panel">
-
             <div class="form-inline-block">
                 <div class="control-group">
                     <label for="name" class="control-label">{t}Name{/t}</label>
@@ -221,7 +220,7 @@
                         <ul id='availablePages' class="elementsContainer">
                             {foreach from=$pages item=value key=page}
                                 <li id="page_{$page}"
-                                    data-item-id="{$value}"
+                                    data-item-id="{$page}"
                                     data-title={if $page eq 'frontpage'}"Portada"
                                             {elseif $page eq 'poll'}"Encuesta"
                                             {elseif $page eq 'kiosko'}"Portadas Papel"
@@ -273,7 +272,7 @@
                              {section name=k loop=$staticPages}
                                  <li id="static_{$staticPages[k]->id}"
                                     data-title="{$staticPages[k]->title}"
-                                    data-item-id=""
+                                    data-item-id="{$staticPages[k]->id}"
                                     data-type="static"
                                     data-link="{$staticPages[k]->slug}"
                                     pk_menu="{$staticPages[k]->id}"
