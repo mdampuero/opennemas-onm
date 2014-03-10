@@ -133,7 +133,7 @@ class SearchController extends Controller
 
             $sql = "SELECT pk_content, fk_content_type FROM contents"
                   ." WHERE contents.available=1 "
-                  ." AND fk_content_type IN (1, 2, 3, 4, 7, 9, 10, 11) "
+                  ." AND fk_content_type IN (1, 2, 4, 7, 9, 10, 11, 12) "
                   .$szWhere
                   ." ORDER BY starttime DESC";
 
@@ -172,6 +172,7 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
+                        'pager'       => $pagination,
                     )
                 );
 
@@ -181,6 +182,7 @@ class SearchController extends Controller
                     array(
                         'contents'    => $results,
                         'contentType' => 'Content',
+                        'pager'       => $pagination,
                     )
                 );
             }

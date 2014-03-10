@@ -117,10 +117,22 @@ jQuery(document).ready(function($) {
 
         menu_elements.each(function(pos, item) {
             if ($(item).attr('id')) {
-                var parent_id = 0;
+                var parent_id = null;
                 $.each(items_hierarchy, function(index, item_hierarchy) {
                     if ($(item).data('item-id') == item_hierarchy['item_id']) {
-                        parent_id = parseInt(item_hierarchy['parent_id']);
+                        var parent_type = null;
+                        if (item_hierarchy['parent_id'] != null) {
+                            parent_type = $(
+                                '#menuelements li[data-item-id='
+                                + item_hierarchy['parent_id']
+                                + ']'
+                            ).data('type');
+                        }
+
+                        parent_id = item_hierarchy['parent_id'];
+                        if (parent_type != null) {
+                            parent_id += '_' + parent_type;
+                        }
                     }
                 });
                 var newitem = {
@@ -133,6 +145,7 @@ jQuery(document).ready(function($) {
                 items.push(newitem);
             }
         });
+
         jQuery('#items').attr('value', JSON.stringify(items));
     });
 
@@ -140,11 +153,12 @@ jQuery(document).ready(function($) {
         e.preventDefault();
         var name = jQuery('#external-link-title').val();
         var link = jQuery('#external-link-link').val();
+        var time = new Date().getTime();
         if (name && link) {
             jQuery('#menuelements').append(
                 '<li data-title="' + name + '" data-link="' + link +
-                    '" class="menuItem" data-name="' + name + '" id ="' + name +
-                    '" data-item-id="" data-type="external">' +
+                    '" class="menuItem" data-name="' + name + '" id ="auto_' + time +
+                    '" data-item-id="' + time + '" data-type="external">' +
                     '<div>' +
                         '<span class="menu-title">' +
                         name +

@@ -564,8 +564,12 @@ class Advertisement extends Content
 
         } elseif ($this->with_script == 2) {
             $content = "<script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
-OA_show('zone_{$this->type_advertisement}');
+OA_show('zone_{$this->id}');
 // ]]> --></script>";
+        } elseif ($this->with_script == 3) {
+            $content = "<div id='zone_{$this->id}' style='width:{$width}px; height:{$height}px;'><script type='text/javascript' data-id='{$this->id}'><!--// <![CDATA[
+googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });
+// ]]> --></script></div>";
         } else {
             // Check for external advertisement Flash/Image based
             if (isset($this->extWsUrl)) {

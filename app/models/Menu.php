@@ -382,6 +382,9 @@ class Menu
      */
     public function setMenuElements($id, $items = array())
     {
+        // Save new items temporarily to add children
+        $translations = array();
+
         // Check if id and $items are not empty
         if (empty($id)) {
             return false;
@@ -399,21 +402,28 @@ class Menu
         $saved  = true;
 
         foreach ($items as $item) {
-            // Get an null Id for synchronized categorys
-            if ($item->type == 'syncCategory' || $item->type == 'syncBlogCategory') {
-                $item->id = null;
-            } else {
-                $item->id = filter_var($item->id, FILTER_VALIDATE_INT);
+            $title = filter_var($item->title, FILTER_SANITIZE_STRING);
+            $link = filter_var($item->link, FILTER_SANITIZE_STRING);
+            $type = filter_var($item->type, FILTER_SANITIZE_STRING);
+            $parent = explode('_', $item->parent_id);
+            $parentId = $parent[0];
+            $parentType = null;
+
+            if (count($parent) > 1) {
+                $parentType = $parent[1];
             }
-            $values = array(
-                $item->id,
-                (int) $id,
-                filter_var($item->title, FILTER_SANITIZE_STRING),
-                filter_var($item->link, FILTER_SANITIZE_STRING),
-                filter_var($item->type, FILTER_SANITIZE_STRING),
-                $i,
-                filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0,
-            );
+
+            if (array_key_exists($parentType, $translations) &&
+                array_key_exists($parentId, $translations[$parentType])
+            ) {
+                $parent = $translations[$parentType][$parentId];
+            } else {
+                $parent = filter_var($item->parent_id, FILTER_VALIDATE_INT) ?: 0;
+            }
+
+            $position = $i;
+            $values = array(null, $id, $title, $link, $type, $position,$parent);
+
             $i++;
 
             $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
@@ -421,6 +431,24 @@ class Menu
                 $saved = $saved && false;
             } else {
                 $saved = $saved && true;
+
+                $sql = "SELECT pk_item FROM menu_items"
+                    . " WHERE `title`='" . $title . "'"
+                    . " AND `pk_menu`='" . $id . "'"
+                    . " AND `link_name`='" . $link . "'"
+                    . " AND `type`='" . $type . "'"
+                    . " AND `position`=" . $position
+                    . " AND `pk_father`=" . $parent;
+
+                $rs = $GLOBALS['application']->conn->Execute($sql);
+                $newId = $rs->fields['pk_item'];
+
+                if (!array_key_exists($item->type, $translations)
+                    || (array_key_exists($item->type, $translations)
+                    && !array_key_exists($item->id, $translations[$item->type]))
+                ) {
+                    $translations[$item->type][$item->id] = $newId;
+                }
             }
         }
 

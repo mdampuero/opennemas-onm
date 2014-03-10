@@ -308,6 +308,12 @@ class ContentManager
         // Initialization of variables
         $contents = array();
 
+        $cache = getService('cache');
+        $contentsFromCache = $cache->fetch('frontpage_elements_'.$categoryID);
+        if (is_array($contentsFromCache)) {
+            return $contentsFromCache;
+        }
+
         // Fetch the id, placeholder, position, and content_type
         // in this category's frontpage
         // The second parameter is the id for the homepage category
@@ -371,6 +377,8 @@ class ContentManager
                 }
             }
         }
+
+        $cache->save('frontpage_elements_'.$categoryID, $contents);
 
         // Return all the objects of contents initialized
         return $contents;
@@ -1338,8 +1346,8 @@ class ContentManager
         $pk_fk_content_category = null
     ) {
         $this->init($contentType);
-        $_where = 'AND in_litter=0';
 
+        $_where = '';
         if (!is_null($filter)) {
             if (($filter == ' `contents`.`in_litter`=1')
                 || ($filter == 'in_litter=1')
@@ -1348,6 +1356,8 @@ class ContentManager
             } else {
                 $_where .= ' AND '.$filter;
             }
+        } else {
+            $_where = 'AND in_litter=0';
         }
 
         if (intval($pk_fk_content_category) > 0) {
@@ -1487,7 +1497,7 @@ class ContentManager
         $this->init($contentType);
 
         if (empty($filter)) {
-            $filterCount = ' contents.in_litter != 1 ';
+            $filterCount = ' contents.in_litter<>1';
             $filter = ' AND '. $filterCount;
         } else {
             $filterCount = $filter;

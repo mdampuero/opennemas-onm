@@ -50,14 +50,28 @@ class WidgetsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page = $request->query->getDigits('page', 1);
+        $page   = $request->query->getDigits('page', 1);
+        $type   = $request->query->filter('type', -1);
+        $status = (int) $request->query->get('status', -1);
+
+        $filterSQL = array();
+        if (!is_null($type) && $type != -1) {
+            $filterSQL[] = '`renderlet`=\''. $type . '\'';
+        }
+
+        if (!is_null($status) && $status != -1) {
+            $filterSQL[] = '`available`=' . $status;
+        }
+
+        $filterSQL = implode(' AND ', $filterSQL);
+
         $itemsPerPage = s::get('items_per_page', 20);
 
         $cm = new \ContentManager();
         list($countWidgets, $widgets) = $cm->getCountAndSlice(
             'widget',
             null,
-            '',
+            $filterSQL,
             'ORDER BY title ASC',
             $page,
             $itemsPerPage
@@ -83,9 +97,11 @@ class WidgetsController extends Controller
         return $this->render(
             'widget/list.tpl',
             array(
-                'widgets'    => $widgets,
-                'pagination' => $pagination,
-                'page'       => $page,
+                'widgets'      => $widgets,
+                'pagination'   => $pagination,
+                'page'         => $page,
+                'status'       => $status,
+                'totalWidgets' => $countWidgets
             )
         );
     }
@@ -121,11 +137,11 @@ class WidgetsController extends Controller
         return $this->render(
             'widget/new.tpl',
             array(
-                'all_widgets' => $allInteligentWidgets,
-                'id'          => $id,
-                'widget'      => $widget,
-                'page'        => $page,
-                'category'    => $category
+                'all_widgets'  => $allInteligentWidgets,
+                'id'           => $id,
+                'widget'       => $widget,
+                'page'         => $page,
+                'category'     => $category
             )
         );
     }

@@ -63,18 +63,22 @@ class FrontpagesController extends Controller
             )
         );
 
-        // Fetch ads
+        // Get the ID of the actual category from the categoryName
         $ccm = \ContentCategoryManager::get_instance();
-        $actualCategoryId    = $ccm->get_id($categoryName);
-        $ads = $this->getAds($actualCategoryId);
+        $actualCategoryId = $ccm->get_id($categoryName);
+
+        $cm = new \ContentManager;
+        $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
+        $contentsInHomepage = $cm->getInTime($contentsInHomepage);
+
+        // Fetch ads
+        $ads = $this->getAds($actualCategoryId, $contentsInHomepage);
         $this->view->assign('advertisements', $ads);
 
 
         if ($this->view->caching == 0
             || !$this->view->isCached('frontpage/frontpage.tpl', $cacheID)
         ) {
-            // Init the Content and Database object
-
             // If no home category name
             if (($categoryName != 'home')
                 && (empty($categoryName) || !$ccm->exists($categoryName))
@@ -95,13 +99,7 @@ class FrontpagesController extends Controller
                 )
             );
 
-
-            $cm = new \ContentManager;
-
-            $contentsInHomepage = $cm->getContentsForHomepageOfCategory($actualCategoryId);
-
             // Filter articles if some of them has time scheduling and sort them by position
-            $contentsInHomepage = $cm->getInTime($contentsInHomepage);
             $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
 
             /***** GET ALL FRONTPAGE'S IMAGES *******/
@@ -244,7 +242,7 @@ class FrontpagesController extends Controller
      *
      * @return void
      **/
-    public static function getAds($category = 'home')
+    public static function getAds($category = 'home', $contentsInHomepage)
     {
         $category = (!isset($category) || ($category == 'home'))? 0: $category;
 
@@ -252,6 +250,16 @@ class FrontpagesController extends Controller
         $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
         $positions = $positionManager->getAdsPositionsForGroup('frontpage');
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
+        $advertisements = \Advertisement::findForPositionIdsAndCategory($positions, $category);
+
+        // Get all the ads from the list of contents dropped in this frontpage and
+        // add them to the advertisements list.
+        foreach ($contentsInHomepage as $content) {
+            if ($content->content_type_name == 'advertisement') {
+                $advertisements []= $content;
+            }
+        }
+
+        return $advertisements;
     }
 }

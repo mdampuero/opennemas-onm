@@ -45,9 +45,7 @@ class Template extends Smarty
 
         $this->setBasePaths($theme);
 
-        global $kernel;
-        $container = $kernel->getContainer();
-        $instanceManager = $container->get('instance_manager');
+        $instanceManager = getService('instance_manager');
         $baseTheme = '';
         if (property_exists($instanceManager, 'current_instance') && isset($instanceManager->current_instance->theme)) {
             $baseTheme = $instanceManager->current_instance->theme->getParentTheme();
@@ -61,11 +59,7 @@ class Template extends Smarty
 
         $this->setPluginLoadPaths();
 
-        $this->addFilter("output", "js_includes");
-        $this->addFilter("output", "css_includes");
-        $this->addFilter("output", "canonical_url");
-        $this->addFilter("output", "generate_fb_admin_tag");
-        $this->addFilter("output", "ads_generator");
+        $this->registerCustomPlugins();
 
         $this->setTemplateVars($theme);
 
@@ -300,5 +294,19 @@ class Template extends Smarty
 
             $this->setCacheLifetime($config['cache_lifetime']);
         }
+    }
+
+    /**
+     * Registers the required smarty plugins
+     *
+     * @return void
+     **/
+    public function registerCustomPlugins()
+    {
+        $this->addFilter("output", "js_includes");
+        $this->addFilter("output", "css_includes");
+        $this->addFilter("output", "canonical_url");
+        $this->addFilter("output", "generate_fb_admin_tag");
+        $this->addFilter("output", "ads_generator");
     }
 }

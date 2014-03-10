@@ -10,7 +10,6 @@
 
 class TemplateAdmin extends Template
 {
-
     /**
      * Initializes the Template class
      *
@@ -34,5 +33,17 @@ class TemplateAdmin extends Template
     public function setBaseCachePath()
     {
         $this->baseCachePath = COMMON_CACHE_PATH;
+    }
+
+    /**
+     * Registers the required smarty plugins
+     *
+     * @return void
+     **/
+    public function registerCustomPlugins()
+    {
+        $this->addFilter("output", "js_includes");
+        $this->addFilter("output", "css_includes");
+        $this->addFilter("output", "canonical_url");
     }
 }

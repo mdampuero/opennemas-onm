@@ -50,10 +50,9 @@ class NewsAgencyCronActionSubscriber implements EventSubscriberInterface
     {
         $output = $event->output;
         $input  = $event->input;
+        $sc     = $event->container;
 
         $output->writeln(' - Executing news agency actions');
-
-        global $sc;
 
         $_SERVER['SERVER_NAME'] = 'cron';
         define('CACHE_PREFIX', 'cron');

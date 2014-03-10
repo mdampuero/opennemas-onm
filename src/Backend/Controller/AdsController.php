@@ -201,10 +201,10 @@ class AdsController extends Controller
                 'fk_author'          => $_SESSION['userid'],
                 'fk_publisher'       => $_SESSION['userid'],
                 'params'             => array(
-                    'width'           => $request->request->getDigits('params_width', ''),
-                    'height'          => $request->request->getDigits('params_height', ''),
-                    'openx_zone_name' => $request->request->filter('openx_zone_name', '', FILTER_SANITIZE_STRING),
-                    'openx_zone_id'   => $request->request->getDigits('openx_zone_id', ''),
+                    'width'             => $request->request->getDigits('params_width', ''),
+                    'height'            => $request->request->getDigits('params_height', ''),
+                    'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
+                    'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
                 )
             );
 
@@ -348,10 +348,10 @@ class AdsController extends Controller
             'fk_author'          => $_SESSION['userid'],
             'fk_publisher'       => $_SESSION['userid'],
             'params'             => array(
-                'width'           => $request->request->getDigits('params_width', ''),
-                'height'          => $request->request->getDigits('params_height', ''),
-                'openx_zone_name' => $request->request->filter('openx_zone_name', '', FILTER_SANITIZE_STRING),
-                'openx_zone_id'   => $request->request->getDigits('openx_zone_id', ''),
+                'width'             => $request->request->getDigits('params_width', ''),
+                'height'            => $request->request->getDigits('params_height', ''),
+                'openx_zone_id'     => $request->request->getDigits('openx_zone_id', ''),
+                'googledfp_unit_id' => $request->request->filter('googledfp_unit_id', '', FILTER_SANITIZE_STRING),
             )
         );
 

@@ -65,7 +65,8 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             ),
             'frontpage.save_position' => array(
                 array('cleanFrontpage', 5),
-                array('deleteCustomCss', 5)
+                array('deleteCustomCss', 5),
+                array('cleanFrontpageObjectCache', 5)
             ),
             'category.update' => array(
                 array('deleteCustomCss', 5)
@@ -206,6 +207,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             $tplManager->delete($categoryName . '|RSS');
 
             $tplManager->delete('frontpage|'.$categoryName);
+            $this->cacheHandler->delete('frontpage_elements_' . $category);
 
             $this->logger->notice("Cleaning frontpage cache for category: {$category} ($categoryName)");
 
@@ -326,5 +328,18 @@ class ContentActionsSubscriber implements EventSubscriberInterface
 
             $this->cacheHandler->delete('custom_css|' . $categoryName);
         }
+    }
+
+    /**
+     * Deletes the list of objects in cache for a frontpage.
+     *
+     * @return void
+     * @author
+     **/
+    public function cleanFrontpageObjectCache(Event $event)
+    {
+        $category = $event->getArgument('category');
+
+        $this->cacheHandler->delete('fronpage_elements_'.$category);
     }
 }
