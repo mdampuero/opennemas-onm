@@ -187,7 +187,7 @@
                 <select name="with_script" id="with_script">
                     <option value="0" {if !isset($advertisement) || $advertisement->with_script == 0}selected="selected"{/if}>{t}Image or Flash object{/t}</option>
                     <option value="1" {if isset($advertisement) && $advertisement->with_script == 1}selected="selected"{/if}>{t}HTML or Javascript code{/t}</option>
-                    {if !empty(server_url)}
+                    {if !empty($server_url)}
                     <option value="2" {if isset($advertisement) && $advertisement->with_script == 2}selected="selected"{/if}>{t}Open X zone{/t}</option>
                     {/if}
                 </select>
@@ -202,7 +202,7 @@
                 <div id="content_type_1" style="{if isset($advertisement) && $advertisement->with_script ==1}display:block{else}display:none{/if};">
                     <textarea name="script" id="script" class="input-xxlarge" rows="10" style="width:95%">{$advertisement->script|escape:'htmlall'|default:'&lt;script type="text/javascript"&gt;/* JS code */&lt;/script&gt;'}</textarea>
                 </div>
-                {if !empty(server_url)}
+                {if !empty($server_url)}
                 <div id="content_type_2" style="{if isset($advertisement) && $advertisement->with_script ==2}display:block{else}display:none{/if};">
                     <label for="openx_zone">{t}Open X zone id{/t}</label>
                     <input type="text" name="openx_zone_id" value="{$advertisement->params['openx_zone_id']}">
