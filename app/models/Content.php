@@ -1151,9 +1151,9 @@ class Content
     public function load($properties)
     {
         if (is_array($properties)) {
-            foreach ($properties as $k => $v) {
-                if (!is_numeric($k)) {
-                    $this->{$k} = $v;
+            foreach ($properties as $propertyName => $propertyValue) {
+                if (!is_numeric($propertyName)) {
+                    $this->{$propertyName} = iconv(mb_detect_encoding($propertyValue), "UTF-8", $propertyValue);
                 }
             }
         } elseif (is_object($properties)) {
