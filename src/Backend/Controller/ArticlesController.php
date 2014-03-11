@@ -261,9 +261,11 @@ class ArticlesController extends Controller
 
             if ($article->create($data)) {
                 if ($data['promoted_to_category_frontpage'] == 1
-                    && !$article->isInFrontpageOfCategory($_POST['category'])
+                    && !$article->isInFrontpageOfCategory($data['category'])
                 ) {
-                    $article->promoteToCategoryFrontpage($_POST['category']);
+                    $article->promoteToCategoryFrontpage($data['category']);
+                    // Clear frontpage cache
+                    dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
                 }
 
                 m::add(_('Article successfully created.'), m::SUCCESS);
@@ -567,14 +569,14 @@ class ArticlesController extends Controller
 
                 // Promote content to category frontpate if user wants to and is not already promoted
                 if ($data['promoted_to_category_frontpage'] == 1
-                    && !$article->isInFrontpageOfCategory($_POST['category'])
+                    && !$article->isInFrontpageOfCategory($data['category'])
                 ) {
-                    $article->promoteToCategoryFrontpage($_POST['category']);
+                    $article->promoteToCategoryFrontpage($data['category']);
                 }
 
                 // Clear caches
                 dispatchEventWithParams('content.update', array('content' => $article));
-                dispatchEventWithParams('article.update', array('category' => $request->request->getDigits('category')));
+                dispatchEventWithParams('frontpage.save_position', array('category' => $data['category']));
 
                 m::add(_('Article successfully updated.'), m::SUCCESS);
             } else {
