@@ -406,8 +406,9 @@ class NewsletterController extends Controller
                         $headers[] = "MIME-Version: 1.0";
                         $headers[] = "Content-type: text/html; charset=utf-8";
                         $headers[] = "From: {$params['mail_from_name']} <{$params['mail_from']}>";
-                        $headers[] = "Reply-To: {$params['newsletter_sender']}";
+                        $headers[] = "Sender: {$params['newsletter_sender']}";
                         $headers[] = "Subject: {$subject}";
+                        $headers[] = "Message-ID: <".$_SERVER['REQUEST_TIME'].md5($_SERVER['REQUEST_TIME'])."@".$_SERVER['SERVER_NAME'].">";
                         $headers[] = "X-Mailer: PHP/".phpversion();
 
                         $properlySent = mail($mailbox->email, $subject, $message, implode("\r\n", $headers), '-f'.$params['newsletter_sender']);
