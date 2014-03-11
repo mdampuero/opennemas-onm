@@ -138,12 +138,25 @@ class ArticlesController extends Controller
         if (isset($articles) && is_array($articles)) {
 
             $user    = new \User();
+            $users   = $user->getUsers();
+            $authors = array();
+            foreach ($users as $user) {
+                $authors[$user->id]  = $user;
+            }
+
             foreach ($articles as &$article) {
                 $article->category_name = $article->loadCategoryName($article->id);
-                $article->publisher = $user->getUserName($article->fk_publisher);
-                $article->editor    = $user->getUserName($article->fk_user_last_editor);
-                $article->author    = $user->getUserRealName($article->fk_author);
+                if (!empty($article->fk_publisher)) {
+                    $article->publisher = $authors[$article->fk_publisher]->getUserName();
+                }
+                if (!empty($article->fk_user_last_editor)) {
+                    $article->editor    = $authors[$article->fk_user_last_editor]->getUserName();
+                }
+                if (!empty($article->fk_author)) {
+                    $article->author    = $authors[$article->fk_author]->getUserRealName($article->fk_author);
+                }
             }
+
         } else {
             $articles = array();
         }
