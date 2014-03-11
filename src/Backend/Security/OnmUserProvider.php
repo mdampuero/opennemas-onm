@@ -25,9 +25,11 @@ class OnmUserProvider implements UserProviderInterface
     {
         $user = new \User();
 
-        if ($user->checkIfExistsUserName($username)) {
-            $sql = 'SELECT `id` FROM users WHERE username = ?';
-            $rs = $GLOBALS['application']->conn->Execute($sql, array($username));
+        if ($user->checkIfExistsUserName($username)
+            || $user->checkIfExistsUserEmail($username)
+        ) {
+            $sql = 'SELECT `id` FROM users WHERE username = ? OR email = ?';
+            $rs = $GLOBALS['application']->conn->Execute($sql, array($username, $username));
 
             $user->read($rs->fields['id']);
 
