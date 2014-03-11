@@ -138,12 +138,6 @@ class ArticlesController extends Controller
         if (isset($articles) && is_array($articles)) {
 
             $user    = new \User();
-            $users   = $user->getUsers();
-            $authors = array();
-            foreach ($users as $user) {
-                $authors[$user->id]  = $user;
-            }
-
             foreach ($articles as &$article) {
                 $article->category_name = $article->loadCategoryName($article->id);
                 if (!empty($article->fk_publisher) && is_object($authors[$article->fk_publisher])) {
@@ -156,7 +150,6 @@ class ArticlesController extends Controller
                     $article->author    = $authors[$article->fk_author]->getUserRealName($article->fk_author);
                 }
             }
-
         } else {
             $articles = array();
         }
