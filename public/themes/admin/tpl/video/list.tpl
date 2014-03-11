@@ -121,7 +121,7 @@
                     </td>
                     {if $category=='widget' || $category=='all'}
                     <td >
-                        {$album->category_name}
+                        {$video->category_name}
                     </td>
                     {/if}
                     </td class="center">
