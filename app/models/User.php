@@ -907,6 +907,9 @@ class User implements AdvancedUserInterface
      **/
     public function getUserRealName($id)
     {
+        if (isset($this) && !empty($this->id)) {
+            return $this->name;
+        }
         $sql = 'SELECT name FROM users WHERE id=?';
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
@@ -1577,6 +1580,7 @@ class User implements AdvancedUserInterface
      */
     public function getUsername()
     {
+
         return $this->username;
     }
 
