@@ -404,7 +404,7 @@ class NewsletterController extends Controller
 
                         $headers   = array();
                         $headers[] = "MIME-Version: 1.0";
-                        $headers[] = "Content-type: text/html; charset: utf8";
+                        $headers[] = "Content-type: text/html; charset=utf-8";
                         $headers[] = "From: {$params['mail_from_name']} <{$params['mail_from']}>";
                         $headers[] = "Reply-To: {$params['newsletter_sender']}";
                         $headers[] = "Subject: {$subject}";
