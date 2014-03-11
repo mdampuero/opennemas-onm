@@ -383,6 +383,7 @@ class NewsletterController extends Controller
 
         $subject = (!isset($params['subject']))? '[Boletin]': $params['subject'];
 
+        $message = $htmlContent;
 
         $sent = 0;
         if (!empty($recipients)) {
@@ -390,16 +391,26 @@ class NewsletterController extends Controller
                 if (empty($maxAllowed) || (!empty($maxAllowed) && !empty($remaining))) {
                     try {
                         //  Build the message
-                        $message = \Swift_Message::newInstance();
-                        $message
-                            ->setSubject($subject)
-                            ->setBody($htmlContent, 'text/html')
-                            ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
-                            ->setSender($params['newsletter_sender'])
-                            ->setTo(array($mailbox->email => $mailbox->name));
+                        // $message = \Swift_Message::newInstance();
+                        // $message
+                        //     ->setSubject($subject)
+                        //     ->setBody($htmlContent, 'text/html')
+                        //     ->setFrom(array($params['mail_from'] => $params['mail_from_name']))
+                        //     ->setSender($params['newsletter_sender'])
+                        //     ->setTo(array($mailbox->email => $mailbox->name));
 
                         // Send it
-                        $properlySent = $this->get('mailer')->send($message);
+                        // $properlySent = $this->get('mailer')->send($message);
+
+                        $headers   = array();
+                        $headers[] = "MIME-Version: 1.0";
+                        $headers[] = "Content-type: text/html; charset: utf8";
+                        $headers[] = "From: {$params['mail_from_name']} <{$params['mail_from']}>";
+                        $headers[] = "Reply-To: {$params['newsletter_sender']}";
+                        $headers[] = "Subject: {$subject}";
+                        $headers[] = "X-Mailer: PHP/".phpversion();
+
+                        $properlySent = mail($mailbox->email, $subject, $message, implode("\r\n", $headers), '-f'.$params['newsletter_sender']);
 
                         $sentResult []= array($mailbox, (bool)$properlySent, _('Unable to deliver your email'));
                         $remaining--;
