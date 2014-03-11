@@ -230,7 +230,7 @@
             </div>
         </div>
 
-        <div class="control-group" id="ad_dimensions" style="{if isset($advertisement) && $advertisement->with_script != 2}display:block{else}display:none{/if};">
+        <div class="control-group" id="ad_dimensions" style="{if (isset($advertisement) && $advertisement->with_script != 2) || !isset($advertisement)}display:block{else}display:none{/if};">
             <label class="control-label"></label>
             <div class="controls">
                 <div class="form-inline-block">
@@ -416,7 +416,7 @@
                 </div><!-- /position-adv -->
             </div>
         </div>
-
     </div>
+</div>
 </form>
 {/block}
