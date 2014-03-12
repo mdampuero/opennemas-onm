@@ -1153,7 +1153,7 @@ class Content
         if (is_array($properties)) {
             foreach ($properties as $propertyName => $propertyValue) {
                 if (!is_numeric($propertyName)) {
-                    $this->{$propertyName} = iconv(mb_detect_encoding($propertyValue), "UTF-8", $propertyValue);
+                    $this->{$propertyName} = $propertyValue;
                 }
             }
         } elseif (is_object($properties)) {
