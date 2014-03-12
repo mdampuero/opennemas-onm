@@ -38,7 +38,9 @@ class NewsMLEuropapress extends NewsMLG1
      **/
     public function getTitle()
     {
-        return (string) $this->getData()->NewsItem->NewsComponent->NewsComponent->NewsLines->HeadLine;
+        $title = (string) $this->getData()->NewsItem->NewsComponent->NewsComponent->NewsLines->HeadLine;
+
+        return iconv(mb_detect_encoding($title), "UTF-8", $title);
     }
 
     /**
@@ -101,7 +103,7 @@ class NewsMLEuropapress extends NewsMLG1
             $body = $matches[1];
         }
 
-        return $body;
+        return iconv(mb_detect_encoding($body), "UTF-8", $body);
     }
 
     /**

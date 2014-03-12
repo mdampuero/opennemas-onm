@@ -144,6 +144,10 @@ class MediaUploaderController extends Controller
                     'real_path' => INSTANCE_MEDIA.'images'.$photo->path_file.'/'.$photo->name
                 )
             );
+
+            // Set text to utf-8
+            $photo->title = iconv(mb_detect_encoding($photo->title), "UTF-8", $photo->title);
+            $photo->description = iconv(mb_detect_encoding($photo->description), "UTF-8", $photo->description);
         }
 
         $response = new Response();
