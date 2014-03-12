@@ -146,13 +146,13 @@ class ArticlesController extends Controller
 
             foreach ($articles as &$article) {
                 $article->category_name = $article->loadCategoryName($article->id);
-                if (!empty($article->fk_publisher)) {
+                if (!empty($article->fk_publisher) && is_object($authors[$article->fk_publisher])) {
                     $article->publisher = $authors[$article->fk_publisher]->getUserName();
                 }
-                if (!empty($article->fk_user_last_editor)) {
+                if (!empty($article->fk_user_last_editor) && is_object($authors[$article->fk_user_last_editor])) {
                     $article->editor    = $authors[$article->fk_user_last_editor]->getUserName();
                 }
-                if (!empty($article->fk_author)) {
+                if (!empty($article->fk_author) && is_object($authors[$article->fk_author])) {
                     $article->author    = $authors[$article->fk_author]->getUserRealName($article->fk_author);
                 }
             }
