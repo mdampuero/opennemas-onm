@@ -196,7 +196,9 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getTitle()
     {
-        return (string) $this->getData()->NewsItem->NewsComponent->NewsLines->HeadLine;
+        $title = (string) $this->getData()->NewsItem->NewsComponent->NewsLines->HeadLine;
+
+        return iconv(mb_detect_encoding($title), "UTF-8", $title);
     }
 
     /**
@@ -206,7 +208,9 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getPretitle()
     {
-        return (string) $this->getData()->NewsItem->NewsComponent->NewsLines->SubHeadLine;
+        $pretitle = (string) $this->getData()->NewsItem->NewsComponent->NewsLines->SubHeadLine;
+
+        return iconv(mb_detect_encoding($pretitle), "UTF-8", $pretitle);
     }
 
     /**
@@ -227,7 +231,7 @@ class NewsMLG1 implements FormatInterface
             }
         }
 
-        return $summary;
+        return iconv(mb_detect_encoding($summary), "UTF-8", $summary);
     }
 
     /**
@@ -238,13 +242,14 @@ class NewsMLG1 implements FormatInterface
     public function getBody()
     {
         if (count($this->texts) > 0 && ($this->texts[0]->body != '')) {
-            return $this->texts[0]->body;
+            $body = $this->texts[0]->body;
+            return iconv(mb_detect_encoding($body), "UTF-8", $body);
         } else {
             $bodies = $this->getData()->xpath(
                 "//nitf/body/body.content"
             );
 
-            return $bodies[0];
+            return iconv(mb_detect_encoding($bodies[0]), "UTF-8", $bodies[0]);
         }
     }
 

@@ -281,7 +281,7 @@ class Europapress implements FormatInterface
      **/
     public function getTitle()
     {
-        return (string) $this->data->TITULAR;
+        return (string) iconv(mb_detect_encoding($this->data->TITULAR), "UTF-8", $this->data->TITULAR);
     }
 
     /**
@@ -291,7 +291,7 @@ class Europapress implements FormatInterface
      **/
     public function getPretitle()
     {
-        return (string) $this->data->ANTETITULO;
+        return (string) iconv(mb_detect_encoding($this->data->ANTETITULO), "UTF-8", $this->data->ANTETITULO);
     }
 
     /**
@@ -301,7 +301,7 @@ class Europapress implements FormatInterface
      **/
     public function getSummary()
     {
-        return (string) $this->data->ENTRADILLA;
+        return (string) iconv(mb_detect_encoding($this->data->ENTRADILLA), "UTF-8", $this->data->ENTRADILLA);
     }
 
     /**
@@ -312,7 +312,10 @@ class Europapress implements FormatInterface
     public function getBody()
     {
         $title = (string) $this->data->CONTENIDO;
-        return nl2br($title);
+
+        $titleClean = nl2br($title);
+
+        return iconv(mb_detect_encoding($titleClean), "UTF-8", $titleClean);
     }
 
     /**

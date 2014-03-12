@@ -136,7 +136,9 @@ class NITF implements FormatInterface
     {
         $titles = $this->getData()->xpath("//NewsLines/HeadLine");
 
-        return (string) $titles[0];
+        $title = (string) $titles[0];
+
+        return iconv(mb_detect_encoding($title), "UTF-8", $title);
     }
 
     /**
@@ -148,7 +150,9 @@ class NITF implements FormatInterface
     {
         $pretitles = $this->getData()->xpath("//NewsLines/SubHeadLine");
 
-        return (string) $pretitles[0];
+        $pretitle = (string) $pretitles[0];
+
+        return iconv(mb_detect_encoding($pretitle), "UTF-8", $pretitle);
     }
 
     /**
@@ -166,7 +170,7 @@ class NITF implements FormatInterface
             $summary .= "<p>".sprintf("%s", $child)."</p>";
         }
 
-        return $summary;
+        return iconv(mb_detect_encoding($summary), "UTF-8", $summary);
     }
 
     /**
@@ -184,7 +188,7 @@ class NITF implements FormatInterface
             $body .= "<p>".sprintf("%s", $child)."</p>\n";
         }
 
-        return $body;
+        return iconv(mb_detect_encoding($body), "UTF-8", $body);
     }
 
     /**

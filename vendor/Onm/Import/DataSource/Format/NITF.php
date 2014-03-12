@@ -153,7 +153,9 @@ class NITF extends NewsMLG1
      **/
     public function getTitle()
     {
-        return (string) $this->getData()->head->title;
+        $title = (string) $this->getData()->head->title;
+
+        return iconv(mb_detect_encoding($title), "UTF-8", $title);
     }
 
     /**
@@ -191,7 +193,7 @@ class NITF extends NewsMLG1
             $body .= "<p>".sprintf("%s", $child)."</p>\n";
         }
 
-        return $body;
+        return iconv(mb_detect_encoding($body), "UTF-8", $body);
     }
 
     /**
