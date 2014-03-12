@@ -88,6 +88,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['updated']          = time();
         $_SESSION['user_language']    = $user->getMeta('user_language');
         $_SESSION['valid']            = $valid;
+        $_SESSION['meta']             = $user->getMeta();
 
         if ($valid === false) {
             if (isset($_SESSION['failed_login_attempts'])) {
