@@ -26,6 +26,10 @@ security:
             pattern:  ^/manager/login$
             security: false
 
+        managerws:
+            pattern:  ^/managerws/*
+            security: false
+
         frontend_login:
             pattern:  ^/login$
             security: false
