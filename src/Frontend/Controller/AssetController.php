@@ -34,7 +34,7 @@ class AssetController extends Controller
         $parameters = $request->query->get('parameters');
         $path       = realpath(SITE_PATH.'/'.$request->query->get('real_path'));
 
-        $parameters      = explode(',', urldecode($parameters));
+        $parameters = explode(',', urldecode($parameters));
 
         $method = array_shift($parameters);
 
@@ -51,6 +51,7 @@ class AssetController extends Controller
             $imagine = new \Imagine\Imagick\Imagine();
 
             $image = $imagine->open($path);
+            $image->strip();
 
             $imageSize   = $image->getSize();
             $imageWidth  = $imageSize->getWidth();
@@ -104,9 +105,6 @@ class AssetController extends Controller
                 if ($topY < 0) {
                     $topY = 0;
                 }
-                // $newSize = $image->getSize();
-
-                // var_dump($width, $height, $widthResize, $heightResize, $topX, $topY);die();
 
                 $image = $image->resize(
                     new \Imagine\Image\Box($widthResize, $heightResize, $mode)
@@ -114,8 +112,9 @@ class AssetController extends Controller
                     new \Imagine\Image\Point($topX, $topY),
                     new \Imagine\Image\Box($width, $height)
                 );
+            } elseif ($method == 'clean') {
+                // do nothing
             } else {
-
                 $width  = $parameters[0];
                 $height = $parameters[1];
 
