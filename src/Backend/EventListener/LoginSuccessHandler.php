@@ -90,18 +90,32 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         $_SESSION['valid']            = $valid;
         $_SESSION['meta']             = $user->getMeta();
 
-        if ($valid === false) {
+        $isTokenValid = getService('form.csrf_provider')->isCsrfTokenValid(
+            $this->session->get('intention'),
+            $request->get('_token')
+        );
+
+        if (!$isTokenValid || $valid === false) {
             if (isset($_SESSION['failed_login_attempts'])) {
                 $_SESSION['failed_login_attempts']++;
             } else {
                 $_SESSION['failed_login_attempts'] = 1;
             }
 
-            $this->session->getFlashBag()->add(
-                'error',
-                'The reCAPTCHA wasn\'t entered correctly. Try to authenticate'
-                . ' again.'
-            );
+            if (!$isTokenValid) {
+                $this->session->getFlashBag()->add(
+                    'error',
+                    'Login token is not valid. Try to autenticate again.'
+                );
+            }
+
+            if ($valid === false) {
+                $this->session->getFlashBag()->add(
+                    'error',
+                    'The reCAPTCHA wasn\'t entered correctly. Try to authenticate'
+                    . ' again.'
+                );
+            }
 
             return new RedirectResponse($request->headers->get('referer'));
         } else {
