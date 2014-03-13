@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new Backend\BackendBundle(),
+            new BackendWebService\BackendWebServiceBundle(),
             new Framework\OnmFrameworkBundle(),
             new Frontend\FrontendBundle(),
             new FrontendMobile\FrontendMobileBundle(),

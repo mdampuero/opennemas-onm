@@ -1,0 +1,19 @@
+backend_ws_advertisements_list:
+    path:     /advertisements
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:list }
+
+backend_ws_advertisement_create:
+    path:     /advertisement/create
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:create }
+
+backend_ws_advertisement_show:
+    path:     /advertisements/{id}/show
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:show }
+
+backend_ws_advertisement_update:
+    path:     /advertisements/{id}/update
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:update }
+
+backend_ws_advertisement_delete:
+    path:     /advertisements/{id}/delete
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:delete }

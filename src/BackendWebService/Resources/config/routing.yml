@@ -1,0 +1,7 @@
+backend_ws_advertisements:
+    resource: @BackendWebServiceBundle/Resources/config/routing/advertisements.yml
+    prefix:   /
+
+backend_ws_articles:
+    resource: @BackendWebServiceBundle/Resources/config/routing/articles.yml
+    prefix:   /
