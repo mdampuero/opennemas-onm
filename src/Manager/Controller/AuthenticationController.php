@@ -1,17 +1,13 @@
 <?php
 /**
- * Handles all the request for Welcome actions
- *
- * @package Manager_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
+
 namespace Manager\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -22,10 +18,9 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Onm\Framework\Controller\Controller;
 
 /**
- * Handles all the request for Welcome actions
+ * Handles the actions for the user authentication in manager.
  *
- * @package Manager_Controllers
- **/
+ */
 class AuthenticationController extends Controller
 {
     /**
@@ -66,8 +61,11 @@ class AuthenticationController extends Controller
                 $_SESSION['failed_login_attempts'] + 1 : 1;
         }
 
-        $token = $this->get('form.csrf_provider')
-            ->generateCsrfToken('manager_authenticate');
+        $intention = time() . rand();
+        $token     = $this->get('form.csrf_provider')->generateCsrfToken($intention);
+
+        $this->request->getSession()->set('intention', $intention);
+
         $currentLanguage  = \Application::$language;
 
         $failedLoginAttempts =  0;
