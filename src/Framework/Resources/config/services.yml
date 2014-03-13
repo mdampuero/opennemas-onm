@@ -70,6 +70,10 @@ services:
         class: Onm\DatabaseConnection
         arguments: [ %database% ]
 
+    dbal_connection:
+        class: Onm\Database\DbalWrapper
+        arguments: [ %database% ]
+
     db_conn_manager:
         class: Onm\DatabaseConnection
         arguments: [  %database% ]
@@ -84,7 +88,7 @@ services:
 
     entity_repository:
         class: Repository\EntityManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     user_repository:
         class: Repository\UserManager
