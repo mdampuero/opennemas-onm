@@ -1,15 +1,24 @@
 <?php
+/**
+ * This file is part of the Onm package.
+ *
+ * (c)  OpenHost S.L. <developers@openhost.es>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Backend\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContext;
-use Onm\Framework\Controller\Controller;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\InvalidCsrfTokenException;
+use Symfony\Component\Security\Core\SecurityContext;
+
+use Onm\Framework\Controller\Controller;
 
 /**
- * Authentication controller.
+ * Handles the actions for the user authentication in backend.
  *
  */
 class AuthenticationController extends Controller
@@ -52,8 +61,11 @@ class AuthenticationController extends Controller
                 $_SESSION['failed_login_attempts'] + 1 : 1;
         }
 
-        $token = $this->get('form.csrf_provider')
-            ->generateCsrfToken('backend_authenticate');
+        $intention = time() . rand();
+        $token     = $this->get('form.csrf_provider')->generateCsrfToken($intention);
+
+        $this->request->getSession()->set('intention', $intention);
+
         $currentLanguage  = \Application::$language;
 
         $failedLoginAttempts =  0;

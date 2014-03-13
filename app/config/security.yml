@@ -49,9 +49,6 @@ security:
         backend:
             pattern:    ^/admin/*
             form_login:
-                csrf_provider:                  form.csrf_provider
-                csrf_parameter:                 _token
-                intention:                      backend_authenticate
                 check_path:                     admin_login_processform
                 login_path:                     admin_login_form
                 always_use_default_target_path: false
@@ -66,9 +63,6 @@ security:
         manager:
             pattern:    ^/manager/*
             form_login:
-                csrf_provider:                  form.csrf_provider
-                csrf_parameter:                 _token
-                intention:                      manager_authenticate
                 check_path:                     manager_login_processform
                 login_path:                     manager_login_form
                 always_use_default_target_path: false
@@ -84,9 +78,6 @@ security:
             pattern:    ^/*
             anonymous:  ~
             form_login:
-                csrf_provider:                  form.csrf_provider
-                csrf_parameter:                 _token
-                intention:                      frontend_authenticate
                 check_path:                     frontend_auth_check
                 login_path:                     frontend_auth_login
                 always_use_default_target_path: false
