@@ -77,102 +77,14 @@ class ArticlesController extends Controller
             }
         }
 
-        $page     =  $request->query->getDigits('page', 1);
-        $title    =  $request->query->filter('title', null, FILTER_SANITIZE_STRING);
-        $status   =  (int) $request->query->get('status', -1);
-        $category =  $request->query->filter('category', 0, FILTER_VALIDATE_INT);
-
-        if (is_null($category) || $category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = (int) $category;
-        }
-
-        $itemsPerPage = s::get('items_per_page');
-
-        $filterSQL = array('in_litter <> 1');
-        if ($status >= 0) {
-            $filterSQL []= ' contents.available='.$status;
-        }
-        if (!empty($title)) {
-            $filterSQL []=
-                "(title LIKE '%{$title}%'"
-                ." OR description LIKE '%{$title}%'"
-                ." OR metadata LIKE '%{$title}%')";
-
-        }
-
-        $filterSQL = implode(' AND ', $filterSQL);
-
-        $cm      = new \ContentManager();
-        list($countArticles, $articles)= $cm->getCountAndSlice(
-            'Article',
-            $categoryFilter,
-            $filterSQL,
-            'ORDER BY created DESC, available ASC',
-            $page,
-            $itemsPerPage
-        );
-
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countArticles,
-                'fileName'    => $this->generateUrl(
-                    'admin_articles',
-                    array(
-                        'status'   => $status,
-                        'title'    => $title,
-                        'category' => $category
-                    )
-                ).'&page=%d',
-            )
-        );
-
-        if (isset($articles) && is_array($articles)) {
-
-            $user    = new \User();
-            foreach ($articles as &$article) {
-                $article->category_name = $article->loadCategoryName($article->id);
-                if (!empty($article->fk_publisher) && is_object($authors[$article->fk_publisher])) {
-                    $article->publisher = $authors[$article->fk_publisher]->getUserName();
-                }
-                if (!empty($article->fk_user_last_editor) && is_object($authors[$article->fk_user_last_editor])) {
-                    $article->editor    = $authors[$article->fk_user_last_editor]->getUserName();
-                }
-                if (!empty($article->fk_author) && is_object($authors[$article->fk_author])) {
-                    $article->author    = $authors[$article->fk_author]->getUserRealName($article->fk_author);
-                }
-            }
-        } else {
-            $articles = array();
-        }
-
-        $_SESSION['_from'] = $this->generateUrl(
-            'admin_articles',
-            array(
-                'status'   => $status,
-                'title'    => $title,
-                'category' => $category,
-                'page'     => $page
-            )
-        );
+        $title  = $request->query->filter('title', null, FILTER_SANITIZE_STRING);
+        $status = (int) $request->query->get('status', -1);
 
         return $this->render(
             'article/list.tpl',
             array(
-                'articles'   => $articles,
-                'page'       => $page,
-                'status'     => $status,
-                'title'      => $title,
-                'pagination' => $pagination,
-                'totalArticles' => $countArticles
+                'status' => $status,
+                'title'  => $title,
             )
         );
     }

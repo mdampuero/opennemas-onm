@@ -70,17 +70,12 @@ class AdsController extends Controller
     {
         // Get ads positions
         $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $map        = $positionManager->getAllAdsPositions();
-        $adsNames   = $positionManager->getAllAdsNames();
-        $filtersUrl = $request->query->get('filter');
-        $category   = $request->query->getDigits('category', 0);
+        // $map        = $positionManager->getAllAdsPositions();
 
-        // Get page
-        $page = $request->query->getDigits('page', 1);
-        list($filter, $queryString) = $this->buildFilter(
-            $request,
-            'in_litter != 1 AND fk_content_categories LIKE \'%' . $category . '%\''
-        );
+
+        $adsNames   = $positionManager->getAllAdsNames();
+        // $filtersUrl = $request->query->get('filter');
+        // $category   = $request->query->getDigits('category', 0);
 
         // Filters
         $filterOptions = array(
@@ -97,62 +92,32 @@ class AdsController extends Controller
             ),
         );
 
-        $itemsPerPage = s::get('items_per_page');
+        // foreach ($ads as $key => &$ad) {
+        //     //Distinguir entre flash o no flash
+        //     $img = $this->get('entity_repository')->find('Photo', $ad->path);
+        //     if ($img->type_img == "swf") {
+        //         $ad->is_flash = 1;
+        //     } else {
+        //         $ad->is_flash = 0;
+        //     }
+        //     $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
 
-        $cm = new \ContentManager();
-        $ads = $cm->find_all(
-            'Advertisement',
-            $filter,
-            'ORDER BY created DESC '
-        );
+        //     //Get the name of the advertisement placeholder
+        //     $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
+        //     $ad->advertisement_placeholder = $adv_placeholder;
 
-        foreach ($ads as $key => &$ad) {
-            //Distinguir entre flash o no flash
-            $img = $this->get('entity_repository')->find('Photo', $ad->path);
-            if ($img->type_img == "swf") {
-                $ad->is_flash = 1;
-            } else {
-                $ad->is_flash = 0;
-            }
-            $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
-
-            //Get the name of the advertisement placeholder
-            $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
-            $ad->advertisement_placeholder = $adv_placeholder;
-
-            if (!in_array($category, $ad->fk_content_categories)) {
-                unset($ads[$key]);
-            }
-        }
-
-        $filteredAds = array_slice($ads, ($page-1)*$itemsPerPage, $itemsPerPage);
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($ads),
-                'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
-            )
-        );
-
-        $_SESSION['desde'] = 'advertisement';
+        //     if (!in_array($category, $ad->fk_content_categories)) {
+        //         unset($ads[$key]);
+        //     }
+        // }
 
         return $this->render(
             'advertisement/list.tpl',
             array(
-                'pagination'     => $pagination,
-                'advertisements' => $filteredAds,
                 'filter_options' => $filterOptions,
-                'map'            => $map,
-                'page'           => $page,
-                'filter'         => $filtersUrl,
+                // 'map'            => json_encode($map),
+        //         'page'           => $page,
+        //         'filter'         => $filtersUrl,
             )
         );
     }
