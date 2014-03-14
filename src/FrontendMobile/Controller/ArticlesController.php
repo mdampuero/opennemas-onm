@@ -71,7 +71,7 @@ class ArticlesController extends Controller
             if (isset($article->img2) and ($article->img2 != 0)) {
                 $photo = new \Photo($article->img2);
                 $article->photo = $photo;
-                $this->view->assign('photo', $photo->path_file . '140-100-' . $photo->name);
+                $this->view->assign('photo', $photo->path_file.$photo->name);
             }
 
             $relContentManager = new \RelatedContent();
