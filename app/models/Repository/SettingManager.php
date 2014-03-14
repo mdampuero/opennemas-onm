@@ -59,14 +59,14 @@ class SettingManager extends BaseManager
                 $this->cache->save($settingName, $settingValue);
             }
         } else {
-            // Try to fetch each setting from cache first
-            $cacheSettingName = array();
+            // Get settings in string format separeted by comma
+            $settings = implode("', '", $settingName);
 
-            $settingValue = $this->cache->fetch($settingName);
+            // Try to fetch each setting from cache first
+            $settingValue = $this->cache->fetch($settings);
 
             // If all the keys were not fetched from cache now is turn of DB
-            if (is_null($settingValue)) {
-                $settings = implode("', '", $settingName);
+            if (is_null($settingValue) || empty($settingValue)) {
                 $sql      = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
                 $rs       = $this->dbConn->Execute($sql);
 
@@ -79,9 +79,8 @@ class SettingManager extends BaseManager
                     $settingValue[$option['name']] = unserialize($option['value']);
                 }
 
-                $this->cache->save($settingValue, '');
+                $this->cache->save($settings, $settingValue);
             }
-
         }
 
         return $settingValue;
