@@ -1,7 +1,15 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="widgets.js" language="javascript" bundle="backend" basepath="js/controllers"}
+{/block}
+
 {block name="content"}
-<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario">
+<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -20,7 +28,7 @@
             </ul>
         </div>
     </div>
-    <div class="wrapper-content">
+    <div class="wrapper-content" ng-controller="WidgetsController" ng-init="list(filters)" data-url="{url name=backend_ws_widgets_list}">
         {render_messages}
         <div class="table-info clearfix">
             {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t 1=$totalWidgets}%1 widgets{/t}</strong></div> {/acl}
@@ -34,10 +42,10 @@
                     </select>
                     {t}Status:{/t}
                     <div class="input-append">
-                        <select name="status">
-                            <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-                            <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
-                            <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
+                        <select name="status" ng-model="available">
+                            <option value="-1"> {t}-- All --{/t} </option>
+                            <option value="1"> {t}Published{/t} </option>
+                            <option value="0"> {t}No published{/t} </option>
                         </select>
                         <button type="submit" class="btn"><i class="icon-search"></i> </button>
                     </div>
@@ -56,70 +64,55 @@
                 <th scope="col" colspan=4>&nbsp;</th>
                 {/if}
             </thead>
-
             <tbody>
-                {section name=wgt loop=$widgets}
-                <tr>
-                    <td>
-                        {$widgets[wgt]->title}
-                    </td>
-
-                    <td>
-                        {$widgets[wgt]->renderlet|upper}
-                    </td>
-
-                    <td class="center">
-                        {acl isAllowed="WIDGET_AVAILABLE"}
-                        {if $widgets[wgt]->available == 1}
-                        <a href="{url name=admin_widget_toogle_available id=$widgets[wgt]->pk_widget page=$page}" class="switchable" title="{t}Published{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_g.png"alt="{t}Published{/t}" /></a>
-                        {else}
-                        <a href="{url name=admin_widget_toogle_available id=$widgets[wgt]->pk_widget page=$page}" class="switchable" title="{t}Unpublished{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Unpublished{/t}" /></a>
-                        {/if}
-                        {/acl}
-                    </td>
-
-                    <td class="right nowrap" >
-                        <div class="btn-group">
-
-                        {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
-                        {acl isAllowed="WIDGET_UPDATE"}
-                        <a href="{url name=admin_widget_show id=$widgets[wgt]->pk_widget page=$page}" title="{t}Edit{/t}" class="btn">
-                            <i class="icon-pencil"></i> {t}Edit{/t}
-                        </a>
-                        {/acl}
-                        {acl isAllowed="WIDGET_DELETE"}
-                            <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                               data-url="{url name=admin_widget_delete id=$widgets[wgt]->pk_widget page=$page}" title="{t}Delete{/t}"
-                               data-title="{$widgets[wgt]->title|capitalize}" href="{url name=admin_widget_delete id=$widgets[wgt]->pk_widget page=$page}" >
-                                <i class="icon-trash icon-white"></i>
-                            </a>
-                        {/acl}
-                        {/if}
-                        </div>
-                    </td>
-                </tr>
-                {sectionelse}
-                <tr>
+                <tr ng-if="contents.length == 0">
                     <td class="empty" colspan="5">
                         {t}There is no available widgets{/t}
                     </td>
                 </tr>
-                {/section}
+                <tr ng-if="contents.length > 0" ng-include="'widget'" ng-repeat="content in contents"></tr>
             </tbody>
-
             <tfoot>
                 <tr>
                     <td colspan="5" class="center">
-                        <div class="pagination">
-                            {$pagination->links}
-                        </div>
+                        <pagination boundary-links="true" direction-links="false" on-select-page="selectPage(page)" page="page" total-items="total"></pagination>
                     </td>
                 </tr>
             </tfoot>
         </table>
     </div>
-        {include file="widget/modals/_modalDelete.tpl"}
+    <script type="text/ng-template" id="widget">
+        <td>
+            [% content.title %]
+        </td>
+        <td>
+            [% content.renderlet %]
+        </td>
+        <td class="center">
+            {acl isAllowed="WIDGET_AVAILABLE"}
+            <a href="#" title="{t}Published{/t}" ng-if="content.available == 1">
+                <img src="{$params.IMAGE_DIR}publish_g.png"alt="{t}Published{/t}" />
+            </a>
+            <a href="#" title="{t}Unpublished{/t}" ng-if="content.available == 0">
+                <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Unpublished{/t}" />
+            </a>
+            {/acl}
+        </td>
+        <td class="right nowrap">
+            <div class="btn-group">
+                {acl isAllowed="WIDGET_UPDATE"}
+                    <button class="btn">
+                        <i class="icon-pencil"></i> {t}Edit{/t}
+                    </button>
+                {/acl}
+                {acl isAllowed="WIDGET_DELETE"}
+                    <button class="del btn btn-danger">
+                        <i class="icon-trash icon-white"></i>
+                    </button>
+                {/acl}
+            </div>
+        </td>
+    </script>
+    {include file="widget/modals/_modalDelete.tpl"}
 </form>
 {/block}

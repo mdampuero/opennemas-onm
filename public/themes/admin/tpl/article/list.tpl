@@ -74,7 +74,7 @@
         </div>
     </div>
 
-    <div class="wrapper-content" ng-controller="ArticlesController" ng-init="list(data)" data-url="{url name=backend_ws_articles_list}">
+    <div class="wrapper-content" ng-controller="ArticlesController" ng-init="list(filters)" data-url="{url name=backend_ws_articles_list}">
 
         {render_messages}
 
@@ -82,13 +82,13 @@
             {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t 1=$totalArticles}%1 articles{/t}</strong></div> {/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" value="{$title}"/>
+                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="title"/>
                     {t}Status:{/t}
                     <div class="input-append">
-                        <select name="status">
-                            <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-                            <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
-                            <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
+                        <select name="status" ng-model="available">
+                            <option value="-1"> {t}-- All --{/t} </option>
+                            <option value="1"> {t}Published{/t} </option>
+                            <option value="0"> {t}No published{/t} </option>
                         </select>
                         <button type="submit" class="btn"><i class="icon-search"></i> </button>
                     </div>
@@ -162,7 +162,12 @@
         <td class="center">
             <span ng-if="content.category != 20">
             {acl isAllowed="ARTICLE_AVAILABLE"}
-
+                <a href="#" title={t}"Published"{/t} ng-if="content.available == 1">
+                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}"/>
+                </a>
+                <a href="#" title={t escape=off}"Unresolved"{/t} ng-if="content.available == 0">
+                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/>
+                </a>
             {/acl}
         </td>
         <td class="right">

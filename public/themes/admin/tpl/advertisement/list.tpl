@@ -67,7 +67,7 @@
             </ul>
         </div>
     </div>
-    <div class="wrapper-content" ng-controller="AdvertisementsController" ng-init="list(data)" data-url="{url name=backend_ws_advertisements_list}">
+    <div class="wrapper-content" ng-controller="AdvertisementsController" ng-init="list(filters)" data-url="{url name=backend_ws_advertisements_list}">
 
         {render_messages}
 
@@ -85,7 +85,7 @@
                 </select>
                 &nbsp;&nbsp;&nbsp;
                 <label>{t}Status:{/t}</label>
-                <select name="filter[available]"x>
+                <select name="filter[available]" ng-model="status">
                     {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type_advertisement)}
                         {assign var=filterAvailable value=""}
                     {else}
@@ -96,7 +96,7 @@
                  &nbsp;&nbsp;&nbsp;
                 <label>{t}Type:{/t}</label>
                 <div class="input-append">
-                    <select name="filter[type]">
+                    <select name="filter[type]" ng-model="type">
                         {if !isset($smarty.request.filter) && !isset($smarty.request.filter.type)}
                             {assign var=filterType value=""}
                         {else}
@@ -154,7 +154,7 @@
             <label>
                 <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
                 <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
-                <img ng-id="content.with_script != 1 && (content.with_script != 1 content.is_flash != 1)" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />
+                <img ng-id="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />
                 [% map[content.type_advertisement].name %]
             </label>
         </td>
@@ -172,16 +172,12 @@
         </td>
         {acl isAllowed="ADVERTISEMENT_AVAILA"}
         <td class="center" style="width:40px;">
-            {if $ad->available == 1}
-                <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=0 page=$page filter=$filter}"
-                    title={t}"Published"{/t}>
-                    <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
-            {else}
-                <a href="{url name=admin_ad_toggleavailable id=$ad->id category=$category status=1 page=$page filter=$filter}"
-                    title={t escape=off}"Unresolved"{/t}>
-                    <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}" /></a>
-            {/if}
-            </li>
+            <a href="#" title={t}"Published"{/t} ng-if="content.available == 1">
+                <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}"/>
+            </a>
+            <a href="#" title={t escape=off}"Unresolved"{/t} ng-if="content.available == 0">
+                <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/>
+            </a>
         </td>
         {/acl}
         <td class="right">

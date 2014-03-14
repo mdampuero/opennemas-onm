@@ -12,13 +12,17 @@
             width:200px;
         }
     </style>
-    {script_tag src="/utilsMenues.js" language="javascript"}
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="jjavascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="jjavascript" bundle="backend" basepath="js"}
+    {script_tag src="menus.js" language="javascript" bundle="backend" basepath="js/controllers"}
 {/block}
 
 
 
 {block name="content"}
-<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario">
+<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario" ng-app="BackendApp">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Menus{/t}</h2></div>
@@ -43,15 +47,18 @@
         </div>
     </div>
 
-    <div class="wrapper-content">
+    <div class="wrapper-content" ng-controller="MenusController" ng-init="list(filters)" data-url="{url name=backend_ws_menus_list}">
 
         {render_messages}
+        <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
+            <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
+        </div>
 
-        <table class="table table-hover table-condensed">
+        <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
                 <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" class="toggleallcheckbox">
+                        <input type="checkbox" ng-checked="isSelectedAll()" ng-click="selectAll($event)">
                     </th>
                     <th>{t}Title{/t}</th>
                     {if count($menu_positions) > 1}
@@ -61,49 +68,7 @@
                 </tr>
             </thead>
             <tbody>
-                {foreach from=$menues item=menu}
-                    <tr>
-                         <td class="center">
-                            <input type="checkbox" class="minput"  id="{$menu->pk_menu}"
-                                   name="selected_fld[]" value="{$menu->pk_menu}">
-                        </td>
-                        <td>
-                            {acl isAllowed="MENU_UPDATE"}
-                            <a href="{url name=admin_menu_show id=$menu->pk_menu}"
-                                title="{t 1=$menu->name}Edit page '%1'{/t}" title={t}"Edit"{/t}>
-                            {/acl}
-                                {$menu->name|capitalize}
-                            {acl isAllowed="MENU_UPDATE"}
-                            </a>
-                            {/acl}
-                        </td>
-                        {if count($menu_positions) > 1}
-                        <td class="left">
-                            {if !empty($menu->position)}{$menu->position}{else}{t}Unasigned{/t}{/if}
-                        </td>
-                        {/if}
-                        <td class="right">
-                            <div class="btn-group">
-                            {acl isAllowed="MENU_UPDATE"}
-                            <a href="{url name=admin_menu_show id=$menu->pk_menu}"
-                                title="{t 1=$menu->name}Edit page '%1'{/t}" class="btn">
-                                <i class="icon-pencil"></i> {t}Edit{/t}
-                            </a>
-                            {/acl}
-                            {if $menu->type eq 'user'}
-                                {acl isAllowed="MENU_DELETE"}
-                                    <a  class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                        data-url="{url name=admin_menu_delete id=$menu->pk_menu}"
-                                        data-title="{$menu->name|capitalize}"
-                                        href="{url name=admin_menus_delete id=$menu->pk_menu}">
-                                        <i class="icon-trash icon-white"></i>
-                                    </a>
-                                {/acl}
-                            {/if}
-                            </div>
-                        </td>
-                    </tr>
-                {/foreach}
+                <tr ng-repeat="content in contents" ng-include="'menu'"></tr>
             </tbody>
             <tfoot>
                 <tr>
@@ -112,6 +77,44 @@
             </tfoot>
         </table>
     </div><!--fin wrapper-content-->
+    <script type="text/ng-template" id="menu">
+        <td class="center">
+            <input type="checkbox" class="minput"  id="[% content.pk_menu %]" ng-checked="isSelected(content.pk_menu)" ng-click="updateSelection($event, content.pk_menu)">
+        </td>
+        <td>
+            {acl isAllowed="MENU_UPDATE"}
+            <a href="#" title="{t}Edit page '[% content.name %]'{/t}" title={t}"Edit"{/t}>
+            {/acl}
+                [% content.name %]
+            {acl isAllowed="MENU_UPDATE"}
+            </a>
+            {/acl}
+        </td>
+        {if count($menu_positions) > 1}
+        <td class="left">
+            <span ng-if="content.position">
+                [% content.position %]
+            </span>
+            <span ng-if="!content.position">
+                {t}Unasigned{/t}
+            </span>
+        </td>
+        {/if}
+        <td class="right">
+            <div class="btn-group">
+                {acl isAllowed="MENU_UPDATE"}
+                <a href="[% content.editUrl %]" title="{t}Edit page '[% content.name %]'{/t}" class="btn">
+                    <i class="icon-pencil"></i> {t}Edit{/t}
+                </a>
+                {/acl}
+                {acl isAllowed="MENU_DELETE"}
+                    <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="delete($index, content.deleteUrl)" type="button">
+                        <i class="icon-trash icon-white"></i>
+                    </button>
+                {/acl}
+            </div>
+        </td>
+    </script>
 </form>
 {include file="menues/modals/_modalDelete.tpl"}
 {include file="menues/modals/_modalBatchDelete.tpl"}
