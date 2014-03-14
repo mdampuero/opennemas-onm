@@ -150,10 +150,11 @@ class Menu
             return false;
         }
 
-        $this->pk_menu   = $rs->fields['pk_menu'];
-        $this->name      = $rs->fields['name'];
-        $this->position  = $rs->fields['position'];
-        $this->params    = unserialize($rs->fields['params']);
+        $this->pk_menu  = $rs->fields['pk_menu'];
+        $this->name     = $rs->fields['name'];
+        $this->position = $rs->fields['position'];
+        $this->type     = $rs->fields['type'];
+        $this->params   = unserialize($rs->fields['params']);
 
         return $this;
     }
