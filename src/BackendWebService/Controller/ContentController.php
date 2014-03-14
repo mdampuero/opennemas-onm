@@ -31,8 +31,6 @@ class ContentController extends Controller
         $search          = $request->request->get('search');
         $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
         $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
-        $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $map             = $positionManager->getAllAdsPositions();
 
         $em = $this->get('entity_repository');
 
@@ -41,21 +39,53 @@ class ContentController extends Controller
             $order = '`' . $sortBy . '` ' . $sortOrder;
         }
 
-        $results = $em->findBy(
-            $search,
-            $order,
-            $elementsPerPage,
-            $page
-        );
-
-        $total = $em->countBy($search);
+        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $total   = $em->countBy($search);
 
         return array(
             'elements_per_page' => $elementsPerPage,
-            'map'               => $map,
             'page'              => $page,
             'results'           => $results,
             'total'             => $total
         );
+    }
+
+    /**
+     * Deletes a content.
+     *
+     * @param  integer $id          Content id.
+     * @param  string  $contentType Content class name.
+     * @return boolean              True if content was deleted successfully.
+     *                              Otherwise, return false.
+     */
+    public function deleteAction($id, $contentType)
+    {
+        try {
+            $content = new $contentType($id);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Toggles content available property.
+     *
+     * @param  integer $id          Content id.
+     * @param  string  $contentType Content class name.
+     * @param  integer $available   New available value.
+     * @return boolean              True if content was deleted successfully.
+     *                              Otherwise, return false.
+     */
+    public function toggleAvailableAction($id, $contentType, $available)
+    {
+        try {
+            $content->toggleAvailable($id);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }

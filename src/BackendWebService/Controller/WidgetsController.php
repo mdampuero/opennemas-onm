@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 
-class ArticlesController extends ContentController
+class WidgetsController extends ContentController
 {
     /**
      * Returns a list of contents in JSON format.
