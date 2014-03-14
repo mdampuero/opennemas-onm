@@ -1,6 +1,6 @@
 
 angular.module('BackendApp.controllers')
-    .controller('ArticlesController', ['$attrs', '$http', '$scope', '$timeout', function($attrs, $http, $scope, $timeout) {
+    .controller('WidgetsController', ['$attrs', '$http', '$scope', '$timeout', function($attrs, $http, $scope, $timeout) {
 
         $scope.available = -1;
 
@@ -9,7 +9,7 @@ angular.module('BackendApp.controllers')
             page:              1,
             sort_by:           'title',
             sort_order:        'asc',
-            search:            { "content_type_name": "article" }
+            search:            { "content_type_name": "widget" }
         }
 
         $scope.list = function(data) {
@@ -37,25 +37,5 @@ angular.module('BackendApp.controllers')
             }
 
             $scope.list($scope.filters);
-        });
-
-        var searchTimeout;
-        $scope.$watch('title', function(newValue, oldValue) {
-            if (searchTimeout) {
-                $timeout.cancel(searchTimeout);
-            }
-
-            if(newValue === oldValue){
-                return;
-            }
-
-            searchTimeout = $timeout(function() {
-                if ($scope.title == '') {
-                    delete $scope.filters.search.title;
-                } else {
-                    $scope.filters.search.title = '%' + $scope.title + '%';
-                }
-                $scope.list($scope.filters);
-            }, 500); // delay 500 ms
         });
 }]);
