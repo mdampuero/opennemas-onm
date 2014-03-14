@@ -62,7 +62,11 @@ class SystemSettingsController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $configurations = s::get($this->configurationsKeys);
+        $configurations = array();
+
+        foreach ($this->configurationsKeys as $key => $value) {
+            $configurations[$value] = s::get($value);
+        }
 
         return $this->render(
             'system_settings/system_settings.tpl',
