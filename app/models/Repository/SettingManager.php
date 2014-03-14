@@ -59,14 +59,12 @@ class SettingManager extends BaseManager
                 $this->cache->save($settingName, $settingValue);
             }
         } else {
-            // Get settings in string format separeted by comma
-            $settings = implode("', '", $settingName);
-
             // Try to fetch each setting from cache first
-            $settingValue = $this->cache->fetch($settings);
+            $settingValue = $this->cache->fetch($settingName);
 
             // If all the keys were not fetched from cache now is turn of DB
             if (is_null($settingValue) || empty($settingValue)) {
+                $settings = implode("', '", $settingName);
                 $sql      = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
                 $rs       = $this->dbConn->Execute($sql);
 
@@ -79,7 +77,7 @@ class SettingManager extends BaseManager
                     $settingValue[$option['name']] = unserialize($option['value']);
                 }
 
-                $this->cache->save($settings, $settingValue);
+                $this->cache->save($settingValue, '');
             }
         }
 
