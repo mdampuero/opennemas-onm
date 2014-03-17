@@ -10,6 +10,7 @@
 
 namespace BackendWebService\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -21,10 +22,97 @@ class WidgetsController extends ContentController
      *
      * @param  Request      $request The request with the search parameters.
      * @return JsonResponse          The response in JSON format.
+     *
+     * @Security("has_role('WIDGET_ADMIN')")
      */
     public function listAction(Request $request)
     {
-        $results = $this->searchAction($request);
-        return new JsonResponse($results);
+        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
+        $page            = $request->request->getDigits('page', 1);
+        $search          = $request->request->get('search');
+        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+
+        $em = $this->get('widget_repository');
+
+        $order = null;
+        if ($sortBy) {
+            $order = '`' . $sortBy . '` ' . $sortOrder;
+        }
+
+        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $total   = $em->countBy($search);
+
+        return new JsonResponse(
+            array(
+                'elements_per_page' => $elementsPerPage,
+                'page'              => $page,
+                'results'           => $results,
+                'total'             => $total
+            )
+        );
+    }
+
+    /**
+     * Deletes a widget.
+     *
+     * @param  integer      $id Menu id.
+     * @return JsonResponse     The response of the current action.
+     *
+     * @Security("has_role('WIDGET_DELETE')")
+     */
+    public function deleteAction($id)
+    {
+        $status  = 'ERROR';
+        $message = _('You must give an id for delete the widget.');
+
+        $widget = new \Widget($id);
+
+        if (!is_null($id)) {
+            try {
+                $widget->remove($id);
+
+                $status  = 'OK';
+                $message = _('Widget deleted successfully.');
+            } catch (Exception $e) {
+                // Continue
+            }
+        }
+
+        return new JsonResponse(array('status' => $status, 'message' => $message));
+    }
+
+    /**
+     * Toggles widget availability.
+     *
+     * @param  integer      $id Widget id.
+     * @return JsonResponse     The response of the current action.
+     *
+     * @Security("has_role('WIDGET_AVAILABLE')")
+     */
+    public function toggleAvailableAction($id)
+    {
+        $status  = 'ERROR';
+        $message = _('You must give an id for delete the widget.');
+
+        $em     = $this->get('entity_repository');
+        $widget = $em->find('widget', $id);
+
+        if (!$widget) {
+            $message = sprintf(_('Unable to find widget with id "%d"'), $id);
+        } else {
+            $widget->toggleAvailable();
+
+            $status  = 'OK';
+            $message = sprintf(_('Successfully changed availability for "%s" widget'), $widget->title);
+        }
+
+        return new JsonResponse(
+            array(
+                'status' => $status,
+                'message' => $message,
+                'available' => $widget->available
+            )
+        );
     }
 }

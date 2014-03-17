@@ -1,6 +1,8 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
     {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
@@ -28,41 +30,44 @@
             </ul>
         </div>
     </div>
-    <div class="wrapper-content" ng-controller="WidgetsController" ng-init="list(filters)" data-url="{url name=backend_ws_widgets_list}">
+    <div class="wrapper-content" ng-controller="WidgetsCtrl" ng-init="list(filters)">
         {render_messages}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t 1=$totalWidgets}%1 widgets{/t}</strong></div> {/acl}
+            {acl hasCategoryAccess=$category}
+                <div class="pull-left">
+                    <strong>
+                        <span class="loading" ng-if="loading == 1" style="display: inline-block;">&nbsp;</span>
+                        <span ng-if="loading == 0">[% total %]</span>
+                        {t}widgets{/t}
+                    </strong>
+                </div>
+            {/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <select name="type">
+                    <select name="type" ng-model="type">
                         <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
                         <option value="intelligentwidget" {if $status === intelligentwidget} selected {/if}> {t}IntelligentWidget{/t} </option>
                         <option value="html" {if  $status === html} selected {/if}> {t}HTML{/t} </option>
                         <option value="smarty" {if $status === smarty} selected {/if}> {t}Smarty{/t} </option>
                     </select>
                     {t}Status:{/t}
-                    <div class="input-append">
-                        <select name="status" ng-model="available">
-                            <option value="-1"> {t}-- All --{/t} </option>
-                            <option value="1"> {t}Published{/t} </option>
-                            <option value="0"> {t}No published{/t} </option>
-                        </select>
-                        <button type="submit" class="btn"><i class="icon-search"></i> </button>
-                    </div>
+                    <select name="status" ng-model="available">
+                        <option value="-1"> {t}-- All --{/t} </option>
+                        <option value="1"> {t}Published{/t} </option>
+                        <option value="0"> {t}No published{/t} </option>
+                    </select>
                 </div>
             </div>
         </div>
-
-        <table class="table table-hover table-condensed" >
+        <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
+            <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
+        </div>
+        <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
-                {if count($widgets) > 0}
                 <th>{t}Name{/t}</th>
                 <th style="width:70px">{t}Type{/t}</th>
                 <th class="center" style="width:20px">{t}Published{/t}</th>
                 <th class="center" style="width:10px">Actions</th>
-                {else}
-                <th scope="col" colspan=4>&nbsp;</th>
-                {/if}
             </thead>
             <tbody>
                 <tr ng-if="contents.length == 0">
@@ -90,29 +95,27 @@
         </td>
         <td class="center">
             {acl isAllowed="WIDGET_AVAILABLE"}
-            <a href="#" title="{t}Published{/t}" ng-if="content.available == 1">
-                <img src="{$params.IMAGE_DIR}publish_g.png"alt="{t}Published{/t}" />
-            </a>
-            <a href="#" title="{t}Unpublished{/t}" ng-if="content.available == 0">
-                <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Unpublished{/t}" />
-            </a>
+            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" title="{t}Published{/t}" ng-click="toggleAvailable($index, content.pk_widget)" type="button">
+            </button>
             {/acl}
         </td>
-        <td class="right nowrap">
+        <td class="right">
             <div class="btn-group">
                 {acl isAllowed="WIDGET_UPDATE"}
-                    <button class="btn">
+                    <button class="btn" ng-click="edit(content.pk_widget)" title="{t}Edit widget '[% content.title %]'{/t}" type="button">
                         <i class="icon-pencil"></i> {t}Edit{/t}
                     </button>
                 {/acl}
                 {acl isAllowed="WIDGET_DELETE"}
-                    <button class="del btn btn-danger">
+                    <button class="del btn btn-danger" ng-click="open($index, content.pk_widget)" type="button">
                         <i class="icon-trash icon-white"></i>
                     </button>
                 {/acl}
             </div>
         </td>
     </script>
-    {include file="widget/modals/_modalDelete.tpl"}
+    <script type="text/ng-template" id="modal-delete">
+        {include file="widget/modals/_modalDelete.tpl"}
+    </script>
 </form>
 {/block}

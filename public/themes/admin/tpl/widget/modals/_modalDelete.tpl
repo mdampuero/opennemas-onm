@@ -1,49 +1,11 @@
-<div class="modal hide fade" id="modal-widget-delete">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>{t}Delete widget{/t}</h3>
-    </div>
-    <div class="modal-body">
-        <p>{t escape=off}Are you sure that do you want delete "<span>%title%</span>"?{/t}</p>
-
-    </div>
-    <div class="modal-footer">
-        <a class="btn btn-primary yes" href="#">{t}Yes, delete{/t}</a>
-        <a class="btn secondary no" href="#">{t}No{/t}</a>
-    </div>
+<div class="modal-header">
+  <button type="button" class="close" ng-click="cancel()" aria-hidden="true">×</button>
+  <h3>{t}Delete widget{/t}</h3>
 </div>
-
-<script>
-jQuery("#modal-widget-delete").modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false,
-});
-
-jQuery('.del').click(function(e, ui) {
-    e.preventDefault();
-    jQuery('#modal-widget-delete .modal-body span').html( jQuery(this).data('title') );
-    //Sets up the modal
-    jQuery("#modal-widget-delete").modal('show');
-    jQuery("body").data("selected-for-del", jQuery(this).data("url"));
-});
-
-jQuery('#modal-widget-delete a.btn.yes').on('click', function(e, ui){
-    e.preventDefault();
-    var url = jQuery("body").data("selected-for-del");
-    if(url) {
-        jQuery.ajax({
-            url:  url,
-            type: "POST",
-            success: function(){
-                location.reload();
-            }
-        });
-    }
-});
-
-jQuery('#modal-widget-delete a.btn.no').on('click', function(e){
-    jQuery("#modal-widget-delete").modal('hide');
-    e.preventDefault();
-});
-</script>
+<div class="modal-body">
+    <p>{t escape=off}Are you sure that do you want delete "[% title %]"?{/t}</p>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="delete(index, id)">{t}Yes, delete{/t}</button>
+    <button class="btn secondary" ng-click="cancel()">{t}No{/t}</button>
+</div>
