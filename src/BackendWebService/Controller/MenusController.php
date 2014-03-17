@@ -10,6 +10,7 @@
 
 namespace BackendWebService\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
@@ -22,6 +23,8 @@ class MenusController extends Controller
      *
      * @param  Request      $request The request with the search parameters.
      * @return JsonResponse          The response in JSON format.
+     *
+     * @Security("has_role('MENU_ADMIN')")
      */
     public function listAction(Request $request)
     {
@@ -42,12 +45,6 @@ class MenusController extends Controller
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $total   = $em->countBy($search);
 
-        foreach ($results as &$menu) {
-            $menu->editUrl   = $this->generateUrl('admin_menu_show', array('id' => $menu->pk_menu));
-            $menu->deleteUrl = $this->generateUrl('backend_ws_menu_delete', array('id' => $menu->pk_menu));
-            $menu->selected  = 0;
-        }
-
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
@@ -63,6 +60,8 @@ class MenusController extends Controller
      *
      * @param  integer      $id Menu id.
      * @return JsonResponse     The response of the current action.
+     *
+     * @Security("has_role('MENU_DELETE')")
      */
     public function deleteAction($id)
     {
@@ -82,5 +81,45 @@ class MenusController extends Controller
         }
 
         return new JsonResponse(array('status' => $status, 'message' => $message));
+    }
+
+
+    /**
+     * Deletes multiple menus at once give them ids
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @Security("has_role('MENU_DELETE')")
+     */
+    public function batchDeleteAction(Request $request)
+    {
+        $status  = 'OK';
+        $errors  = array();
+        $success = array();
+
+        $ids = $request->request->get('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            $em = $this->get('menu_repository');
+
+            try {
+                foreach ($ids as $id) {
+                    $menu = new \Menu($id);
+
+                    if (!is_null($menu->pk_menu) && $menu->type == 'user') {
+                        $em->delete($id);
+                        $success[] = sprintf(_('Menu "%s" deleted successfully.'), $menu->name);
+                    } else {
+                        $errors[] = sprintf(_('Unable to delete the menu "%s" as is system internal.'), $menu->name);
+                    }
+                }
+            } catch (Exception $e) {
+                // Continue
+            }
+        }
+
+        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
     }
 }

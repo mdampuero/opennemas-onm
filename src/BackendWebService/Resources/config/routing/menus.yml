@@ -1,19 +1,35 @@
 backend_ws_menus_list:
     path:     /menus
     defaults: { _controller  : BackendWebServiceBundle:Menus:list }
+    options:
+        expose: true
 
 backend_ws_menu_create:
     path:     /menu/create
     defaults: { _controller  : BackendWebServiceBundle:Menus:create }
+    options:
+        expose: true
 
 backend_ws_menu_show:
     path:     /menus/{id}/show
     defaults: { _controller  : BackendWebServiceBundle:Menus:show }
+    options:
+        expose: true
 
 backend_ws_menu_update:
     path:     /menus/{id}/update
     defaults: { _controller  : BackendWebServiceBundle:Menus:update }
+    options:
+        expose: true
 
 backend_ws_menu_delete:
     path:     /menus/{id}/delete
     defaults: { _controller  : BackendWebServiceBundle:Menus:delete }
+    options:
+        expose: true
+
+backend_ws_menus_batch_delete:
+    path:     /menus/batch-delete
+    defaults: { _controller  : BackendWebServiceBundle:Menus:batchDelete }
+    options:
+        expose: true

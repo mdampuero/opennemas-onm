@@ -12,30 +12,30 @@
             width:200px;
         }
     </style>
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
     {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="app.js" language="jjavascript" bundle="backend" basepath="js"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="jjavascript" bundle="backend" basepath="js"}
     {script_tag src="menus.js" language="javascript" bundle="backend" basepath="js/controllers"}
 {/block}
 
-
-
 {block name="content"}
-<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario" ng-app="BackendApp">
+<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="MenusCtrl" ng-init="list(filters)">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Menus{/t}</h2></div>
               <ul class="old-button">
                   {acl isAllowed="MENU_DELETE"}
-                <li>
-                    <a class="delChecked" data-controls-modal="modal-menu-batchDelete" href="#" title="Eliminar" alt="Eliminar">
+                <li ng-if="selected.length > 0">
+                    <a class="delChecked" href="#" title="Eliminar" alt="Eliminar" ng-click="open('modal-delete-all', $index)">
                         <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
                     </a>
                 </li>
                 {/acl}
 
-                <li class="separator"></li>
+                <li class="separator" ng-if="selected.length > 0"></li>
                 <li>
                     {acl isAllowed="MENU_CREATE"}
                     <a href="{url name=admin_menu_create}" class="admin_add">
@@ -47,7 +47,7 @@
         </div>
     </div>
 
-    <div class="wrapper-content" ng-controller="MenusController" ng-init="list(filters)" data-url="{url name=backend_ws_menus_list}">
+    <div class="wrapper-content">
 
         {render_messages}
         <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
@@ -103,20 +103,24 @@
         <td class="right">
             <div class="btn-group">
                 {acl isAllowed="MENU_UPDATE"}
-                <a href="[% content.editUrl %]" title="{t}Edit page '[% content.name %]'{/t}" class="btn">
+                <button class="btn" ng-click="edit(content.pk_menu)" title="{t}Edit page '[% content.name %]'{/t}" type="button">
                     <i class="icon-pencil"></i> {t}Edit{/t}
-                </a>
+                </button>
                 {/acl}
                 {acl isAllowed="MENU_DELETE"}
-                    <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="delete($index, content.deleteUrl)" type="button">
+                    <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', $index)" type="button">
                         <i class="icon-trash icon-white"></i>
                     </button>
                 {/acl}
             </div>
         </td>
     </script>
+    <script type="text/ng-template" id="modal-delete">
+        {include file="menues/modals/_modalDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-delete-all">
+        {include file="menues/modals/_modalBatchDelete.tpl"}
+    </script>
 </form>
-{include file="menues/modals/_modalDelete.tpl"}
-{include file="menues/modals/_modalBatchDelete.tpl"}
 {include file="menues/modals/_modalAccept.tpl"}
 {/block}
