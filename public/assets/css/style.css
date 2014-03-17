@@ -3194,3 +3194,31 @@ div#modal-element-customize-content div.select-disposition{
 }
 .icon-facebook-sign { color:#354c8c; }
 .icon-comment { color:#222; }
+
+.pagination {
+  list-style: none;
+}
+
+.pagination li {
+    cursor: pointer;
+    float: left;
+    margin-right: 2px;
+}
+
+.published {
+  background: url('../images/publish_g.png') no-repeat;
+  height: 20px;
+  width: 20px;
+}
+
+.unpublished {
+  background: url('../images/publish_r.png') no-repeat;
+  height: 20px;
+  width: 20px;
+}
+
+.loading {
+  background: url('../../themes/base/images/ajax-loader.gif') no-repeat;
+  height: 20px;
+  width: 20px;
+}
