@@ -96,10 +96,8 @@ admin_widgets:
 admin_widget_show:
     path:     /widget/{id}/show
     defaults: { _controller  : BackendBundle:Widgets:show }
-
-admin_widget_delete:
-    path:     /widget/{id}/delete
-    defaults: { _controller  : BackendBundle:Widgets:delete }
+    options:
+        expose: true
 
 admin_widget_create:
     path:     /widget/create
@@ -108,10 +106,6 @@ admin_widget_create:
 admin_widget_update:
     path:     /widget/{id}/update
     defaults: { _controller  : BackendBundle:Widgets:update }
-
-admin_widget_toogle_available:
-    path:     /widget/{id}/toggle_available
-    defaults: { _controller  : BackendBundle:Widgets:toogleAvailable }
 
 admin_widgets_content_provider:
     path:     /widget/content-provider
@@ -125,6 +119,8 @@ admin_menus:
 admin_menu_show:
     path:     /menu/{id}/show
     defaults: { _controller  : BackendBundle:Menus:show }
+    options:
+        expose: true
 
 admin_menu_create:
     path:     /menu/create
