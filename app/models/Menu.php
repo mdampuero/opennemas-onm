@@ -206,7 +206,7 @@ class Menu
         $GLOBALS['application']->conn->CompleteTrans();
 
         /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
+        // logContentEvent(__METHOD__, $this);
 
         return true;
     }
