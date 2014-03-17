@@ -79,14 +79,14 @@ class EntityManager extends BaseManager
 
         $cachedContentIds = array();
         foreach ($contents as $content) {
-            $cachedContentIds []= $content->content_type_name.'-'.$content->id;
+            $cachedContentIds[] = $content->content_type_name.'-'.$content->id;
         }
 
         $missedIds = array_diff($contentIds, $cachedContentIds);
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode('-', $content);
 
-            $contents [] = $this->find(\classify($contentType), $contentId);
+            $contents[] = $this->find(\classify($contentType), $contentId);
         }
 
         return $contents;
@@ -113,7 +113,10 @@ class EntityManager extends BaseManager
         $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content FROM `contents` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT content_type_name, pk_content
+            FROM `contents`
+            WHERE $filterSQL
+            ORDER BY $orderBySQL $limitSQL";
 
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);

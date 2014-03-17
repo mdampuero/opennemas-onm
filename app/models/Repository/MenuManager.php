@@ -130,7 +130,7 @@ class MenuManager extends BaseManager
             $ids[] = 'menu_' . $value;
         }
 
-        $menus = $this->cache->fetch($ids);
+        $menus = array_values($this->cache->fetch($ids));
 
         $cachedIds = array();
         foreach ($menus as $menu) {
