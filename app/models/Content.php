@@ -714,8 +714,12 @@ class Content
         if ($id == null) {
             $id = $this->id;
         }
+
         $status = ($this->available + 1) % 2;
         $date = $this->starttime;
+
+        $this->available = $status;
+
         if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
             $date = date("Y-m-d H:i:s");
         }
@@ -735,6 +739,8 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
