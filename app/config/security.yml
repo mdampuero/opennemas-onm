@@ -35,11 +35,7 @@ security:
             security: false
 
         backend_recover:
-            pattern:  ^/admin/login/user/recover*
-            security: false
-
-        manager_recover:
-            pattern:  ^/admin/login/user/recover*
+            pattern:  ^/admin/login/user/*
             security: false
 
         frontend_recover:
