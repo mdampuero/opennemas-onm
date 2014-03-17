@@ -225,13 +225,20 @@ class AdsController extends Controller
                 )
             );
         } else {
+            // Get ads server if exists
+            $serverUrl = '';
+            if ($openXsettings = s::get('revive_ad_server')) {
+                $serverUrl = $openXsettings['url'];
+            }
+
             $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
             return $this->render(
                 'advertisement/new.tpl',
                 array(
-                    'themeAds' => $positionManager->getThemeAdsPositions(),
-                    'filter'   => $filter,
-                    'page'     => $page,
+                    'themeAds'   => $positionManager->getThemeAdsPositions(),
+                    'filter'     => $filter,
+                    'page'       => $page,
+                    'server_url' => $serverUrl,
                 )
             );
         }
