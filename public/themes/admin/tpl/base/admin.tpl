@@ -21,10 +21,13 @@
         {css_tag href="/style.css" common=1}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
+        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css"}
+        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css"}
 	{/block}
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js" common=1}
+        {script_tag src="/jquery/select2/select2.min.js" common=1}
         {script_tag src="/libs/bootstrap.js" common=1}
         {script_tag src="/libs/jquery.tools.min.js" common=1}
         {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
@@ -178,6 +181,8 @@
             $.onmEditor({
                 language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
             });
+
+            $('.select2').select2();
         })
         </script>
 	{/block}
