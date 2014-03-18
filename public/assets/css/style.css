@@ -3222,3 +3222,10 @@ div#modal-element-customize-content div.select-disposition{
   height: 20px;
   width: 20px;
 }
+
+.modal-footer .loading {
+  background-position: center bottom;
+  display: inline-block;
+  padding-top: 3px;
+  float: left;"
+}
