@@ -32,6 +32,7 @@ vendor/doctrine
 vendor/drak
 vendor/evenement
 vendor/frandieguez
+vendor/friendsofsymfony
 vendor/imagine
 vendor/jdorn
 vendor/kriswallsmith
@@ -46,3 +47,4 @@ vendor/swiftmailer
 vendor/symfony
 vendor/temporary-filesystem
 vendor/twig
+vendor/willdurand/
