@@ -50,42 +50,42 @@ class ContentController extends Controller
         );
     }
 
-    /**
-     * Deletes a content.
-     *
-     * @param  integer $id          Content id.
-     * @param  string  $contentType Content class name.
-     * @return boolean              True if content was deleted successfully.
-     *                              Otherwise, return false.
-     */
-    public function deleteAction($id, $contentType)
-    {
-        try {
-            $content = new $contentType($id);
-        } catch (Exception $e) {
-            return false;
-        }
+    // /**
+    //  * Deletes a content.
+    //  *
+    //  * @param  integer $id          Content id.
+    //  * @param  string  $contentType Content class name.
+    //  * @return boolean              True if content was deleted successfully.
+    //  *                              Otherwise, return false.
+    //  */
+    // public function deleteAction($id, $contentType)
+    // {
+    //     try {
+    //         $content = new $contentType($id);
+    //     } catch (Exception $e) {
+    //         return false;
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
-    /**
-     * Toggles content available property.
-     *
-     * @param  integer $id          Content id.
-     * @param  string  $contentType Content class name.
-     * @param  integer $available   New available value.
-     * @return boolean              True if content was deleted successfully.
-     *                              Otherwise, return false.
-     */
-    public function toggleAvailableAction($id, $contentType, $available)
-    {
-        try {
-            $content->toggleAvailable($id);
-        } catch (Exception $e) {
-            return false;
-        }
+    // *
+    //  * Toggles content available property.
+    //  *
+    //  * @param  integer $id          Content id.
+    //  * @param  string  $contentType Content class name.
+    //  * @param  integer $available   New available value.
+    //  * @return boolean              True if content was deleted successfully.
+    //  *                              Otherwise, return false.
 
-        return true;
-    }
+    // public function toggleAvailableAction($id, $contentType, $available)
+    // {
+    //     try {
+    //         $content->toggleAvailable($id);
+    //     } catch (Exception $e) {
+    //         return false;
+    //     }
+
+    //     return true;
+    // }
 }
