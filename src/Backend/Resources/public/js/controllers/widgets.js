@@ -121,12 +121,16 @@ angular.module('BackendApp.controllers').controller(
 
         // Deletes widget on confirmation
         $scope.delete = function (index, id) {
+            $scope.deleting = 1;
+
             var url = Routing.generate('backend_ws_widget_delete', { id: id });
             $http.post(url).success(function(response) {
                 if (response.status == 'OK') {
                     $scope.contents.splice(index, 1);
                     $modalInstance.close();
                 }
+
+                $scope.deleting = 0;
             });
         };
     }
