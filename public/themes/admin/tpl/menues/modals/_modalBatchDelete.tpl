@@ -7,6 +7,7 @@
 
 </div>
 <div class="modal-footer">
+    <span class="loading" ng-if="deleting == 1"></span>
     <button class="btn btn-primary" ng-click="deleteSelected()">{t}Yes, delete all{/t}</button>
     <button class="btn secondary" ng-click="cancel()">{t}No{/t}</button>
 </div>

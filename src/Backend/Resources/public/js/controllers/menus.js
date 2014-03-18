@@ -123,17 +123,24 @@ angular.module('BackendApp.controllers').controller(
 
         // Deletes widget on confirmation
         $scope.delete = function (index, id) {
+            $scope.deleting = 1;
+
             var url = Routing.generate('backend_ws_menu_delete', { id: id });
             $http.post(url).success(function(response) {
                 if (response.status == 'OK') {
                     $scope.contents.splice(index, 1);
                     $modalInstance.close();
                 }
+
+                $scope.deleting = 0;
             });
+
         };
 
         // Deletes selected widgets on confirmation
         $scope.deleteSelected = function () {
+            $scope.deleting = 1;
+
             var url = Routing.generate('backend_ws_menus_batch_delete');
             $http.post(url, { ids: $scope.selected }).success(function(response) {
                 if (response.status == 'OK') {
@@ -151,6 +158,8 @@ angular.module('BackendApp.controllers').controller(
                     };
                     $modalInstance.close();
                 }
+
+                $scope.deleting = 0;
             });
         };
     }
