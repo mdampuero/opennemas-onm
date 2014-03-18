@@ -228,6 +228,8 @@ admin_ad_create:
 admin_ad_show:
     path:     /ad/{id}/show
     defaults: { _controller  : BackendBundle:Ads:show }
+    options:
+        expose: true
 
 admin_ad_update:
     path:     /ad/{id}/update

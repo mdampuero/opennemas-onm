@@ -95,7 +95,7 @@
         </td>
         <td class="center">
             {acl isAllowed="WIDGET_AVAILABLE"}
-            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" title="{t}Published{/t}" ng-click="toggleAvailable($index, content.pk_widget)" type="button">
+            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable($index, content.pk_widget)" type="button">
             </button>
             {/acl}
         </td>

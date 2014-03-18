@@ -1,19 +1,47 @@
 backend_ws_advertisements_list:
     path:     /advertisements
     defaults: { _controller  : BackendWebServiceBundle:Advertisements:list }
+    options:
+        expose: true
 
 backend_ws_advertisement_create:
     path:     /advertisement/create
     defaults: { _controller  : BackendWebServiceBundle:Advertisements:create }
+    options:
+        expose: true
 
 backend_ws_advertisement_show:
     path:     /advertisements/{id}/show
     defaults: { _controller  : BackendWebServiceBundle:Advertisements:show }
+    options:
+        expose: true
 
 backend_ws_advertisement_update:
     path:     /advertisements/{id}/update
     defaults: { _controller  : BackendWebServiceBundle:Advertisements:update }
+    options:
+        expose: true
 
 backend_ws_advertisement_delete:
     path:     /advertisements/{id}/delete
     defaults: { _controller  : BackendWebServiceBundle:Advertisements:delete }
+    options:
+        expose: true
+
+backend_ws_advertisements_batch_delete:
+    path:     /advertisements/batch-delete
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:batchDelete }
+    options:
+        expose: true
+
+backend_ws_advertisements_batch_toggle_available:
+    path:     /advertisements/batch-toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:batchToggleAvailable }
+    options:
+        expose: true
+
+backend_ws_advertisement_toggle_available:
+    path:     /advertisements/{id}/toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Advertisements:toggleAvailable }
+    options:
+        expose: true

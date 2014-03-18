@@ -98,6 +98,10 @@ services:
         class: Repository\MenuManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
+    advertisement_repository:
+        class: Repository\AdvertisementManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
     widget_repository:
         class: Repository\WidgetManager
         arguments: [ @dbal_connection, @cache, %cache_prefix% ]
