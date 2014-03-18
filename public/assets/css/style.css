@@ -3205,6 +3205,13 @@ div#modal-element-customize-content div.select-disposition{
     margin-right: 2px;
 }
 
+.pagination li.active a {
+  background: #343434 !important;
+  border: 0;
+  color: #aaa !important;
+  cursor: default;
+}
+
 .published {
   background: url('../images/publish_g.png') no-repeat;
   height: 20px;
@@ -3217,7 +3224,7 @@ div#modal-element-customize-content div.select-disposition{
   width: 20px;
 }
 
-.loading {
+button.loading {
   background: url('../../themes/base/images/ajax-loader.gif') no-repeat;
   height: 20px;
   width: 20px;
