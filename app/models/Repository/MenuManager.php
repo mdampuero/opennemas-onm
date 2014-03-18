@@ -125,6 +125,8 @@ class MenuManager extends BaseManager
      */
     public function findMulti(array $data)
     {
+        $ordered = array_flip($data);
+
         $ids = array();
         foreach ($data as $value) {
             $ids[] = 'menu_' . $value;
@@ -134,6 +136,7 @@ class MenuManager extends BaseManager
 
         $cachedIds = array();
         foreach ($menus as $menu) {
+            $ordered[$menu->pk_menu] = $menu;
             $cachedIds[] = 'menu_' . $menu->pk_menu;
         }
 
@@ -141,11 +144,13 @@ class MenuManager extends BaseManager
 
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode('_', $content);
+            $menu = $this->find($contentId);
 
-            $menus[] = $this->find($contentId);
+            // $menus[] = $menu;
+            $ordered[$menu->pk_menu] = $menu;
         }
 
-        return $menus;
+        return array_values($ordered);
     }
 
     /**

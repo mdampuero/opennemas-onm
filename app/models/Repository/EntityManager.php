@@ -68,28 +68,34 @@ class EntityManager extends BaseManager
      * @param  array $contentsData Array of preprocessed content ids.
      * @return array               Array of contents.
      */
-    public function findMulti(array $contentsData)
+    public function findMulti(array $data)
     {
-        $contentIds = array();
-        foreach ($contentsData as $value) {
-            $contentIds[] = $value[0] . '-' . $value[1];
+        $ordered = array();
+
+        $ids = array();
+        $i = 0;
+        foreach ($data as $value) {
+            $ids[] = $value[0] . '-' . $value[1];
+            $ordered[$value[1]] = $i++;
         }
 
-        $contents = $this->cache->fetch($contentIds);
+        $contents = $this->cache->fetch($ids);
 
-        $cachedContentIds = array();
+        $cachedIds = array();
         foreach ($contents as $content) {
-            $cachedContentIds[] = $content->content_type_name.'-'.$content->id;
+            $ordered[$content->id] = $content;
+            $cachedIds[] = $content->content_type_name.'-'.$content->id;
         }
 
-        $missedIds = array_diff($contentIds, $cachedContentIds);
+        $missedIds = array_diff($ids, $cachedIds);
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode('-', $content);
+            $content = $this->find(\classify($contentType), $contentId);
 
-            $contents[] = $this->find(\classify($contentType), $contentId);
+            $ordered[$content->id] = $content;
         }
 
-        return $contents;
+        return array_values($ordered);
     }
 
      /**
