@@ -85,7 +85,7 @@
                         {/if}
                     </a>
                     <div class="article-resource-footer">
-                        <input type="hidden" name="video_image" value="{$video->information[thumbnail]}" class="related-element-id"/>
+                        <input type="hidden" name="video_image" value="{$video->information['thumbnail']}" class="related-element-id"/>
                     </div>
                 </div>
 
