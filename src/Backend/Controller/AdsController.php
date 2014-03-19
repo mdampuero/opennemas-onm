@@ -71,7 +71,8 @@ class AdsController extends Controller
         // Get ads positions
         $positionManager = $this->container->get('instance_manager')
             ->current_instance->theme->getAdsPositionManager();
-        $map = $positionManager->getAllAdsPositions();
+        $map      = $positionManager->getAllAdsPositions();
+        $adsNames = $positionManager->getAllAdsNames();
 
         // Filters
         $filterOptions = array(
