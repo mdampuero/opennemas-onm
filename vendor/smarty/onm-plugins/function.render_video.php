@@ -66,8 +66,13 @@ function smarty_function_render_video($params, &$smarty)
                     $videoUrl = '//www.youtube.com/embed/'.$videoId;
                 }
             }
-
-            $output = '<div class="video-container"><iframe width="560" height="315" src="'.$videoUrl.'" frameborder="0" allowfullscreen></iframe></div>';
+            $width  = '560';
+            $height = '320';
+            if ($params['width'] || $params['height']) {
+                $width  = $params['width'];
+                $height = $params['height'];
+            }
+            $output = '<div class="video-container"><iframe width="'.$width.'" height="'.$height.'" src="'.$videoUrl.'" frameborder="0" allowfullscreen></iframe></div>';
 
         } else {
 
