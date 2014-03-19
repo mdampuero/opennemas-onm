@@ -140,7 +140,8 @@ class VideosController extends Controller
                     'in_litter != 1 AND contents.available=1',
                     'ORDER BY created DESC',
                     $this->page,
-                    $itemsPerPage
+                    $itemsPerPage,
+                    3 // limit offset
                 );
 
                 $total = count($othersVideos)+1;
@@ -386,7 +387,8 @@ class VideosController extends Controller
             'in_litter != 1 AND contents.available=1',
             'ORDER BY created DESC',
             $this->page,
-            $itemsPerPage
+            $itemsPerPage,
+            3 // limit offset
         );
 
         $total = count($othersVideos)+1;
