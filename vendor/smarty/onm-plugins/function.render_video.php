@@ -50,18 +50,33 @@ function smarty_function_render_video($params, &$smarty)
         }
 
     } else {
-
         if (is_array($video->information)) {
             $videoInfo = $video->information;
         } else {
             $videoInfo = unserialize($video->information);
         }
 
-        if ($params['width'] || $params['height']) {
-            $videoInfo['embedHTML'] = preg_replace("@width='\d*'@", "width='{$params['width']}'", $videoInfo['embedHTML']);
-            $videoInfo['embedHTML'] = preg_replace("@height='\d*'@", "height='{$params['height']}'", $videoInfo['embedHTML']);
+        if ($video->author_name == 'Youtube' || $videoInfo['service'] == 'Youtube') {
+
+            $videoUrl = $video->video_url;
+
+            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $videoUrl, $match)) {
+                $videoId = $match[1];
+                if (!empty($videoId)) {
+                    $videoUrl = '//www.youtube.com/embed/'.$videoId;
+                }
+            }
+
+            $output = '<div class="video-container"><iframe width="560" height="315" src="'.$videoUrl.'" frameborder="0" allowfullscreen></iframe></div>';
+
+        } else {
+
+            if ($params['width'] || $params['height']) {
+                $videoInfo['embedHTML'] = preg_replace("@width='\d*'@", "width='{$params['width']}'", $videoInfo['embedHTML']);
+                $videoInfo['embedHTML'] = preg_replace("@height='\d*'@", "height='{$params['height']}'", $videoInfo['embedHTML']);
+            }
+            $output = $videoInfo['embedHTML'];
         }
-        $output = $videoInfo['embedHTML'];
 
     }
 
