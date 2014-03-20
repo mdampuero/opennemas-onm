@@ -212,10 +212,11 @@ class EntityManager extends BaseManager
 
         $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1";
         $value     = array((int) $matches["digit"]);
-        $rs = $this->dbConn->Execute($sql, $value);
+        $rs = $this->dbConn->executeQuery($sql, $value);
+        $rs = $rs->fetch(ADODB_FETCH_ASSOC);
 
         if ($rs) {
-            $contentID = $rs->fields['pk_content'];
+            $contentID = $rs['pk_content'];
             $this->cache->save($cacheKey, $contentID);
         }
 
