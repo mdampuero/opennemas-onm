@@ -1,19 +1,47 @@
-backend_ws_articles_list:
-    path:     /articles
-    defaults: { _controller  : BackendWebServiceBundle:Articles:list }
-
 backend_ws_article_create:
     path:     /article/create
     defaults: { _controller  : BackendWebServiceBundle:Articles:create }
-
-backend_ws_article_show:
-    path:     /articles/{id}/show
-    defaults: { _controller  : BackendWebServiceBundle:Articles:show }
-
-backend_ws_article_update:
-    path:     /articles/{id}/update
-    defaults: { _controller  : BackendWebServiceBundle:Articles:update }
+    options:
+        expose: true
 
 backend_ws_article_delete:
     path:     /articles/{id}/delete
     defaults: { _controller  : BackendWebServiceBundle:Articles:delete }
+    options:
+        expose: true
+
+backend_ws_article_show:
+    path:     /articles/{id}/show
+    defaults: { _controller  : BackendWebServiceBundle:Articles:show }
+    options:
+        expose: true
+
+backend_ws_article_toggle_available:
+    path:     /articles/{id}/toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Articles:toggleAvailable }
+    options:
+        expose: true
+
+backend_ws_article_update:
+    path:     /articles/{id}/update
+    defaults: { _controller  : BackendWebServiceBundle:Articles:update }
+    options:
+        expose: true
+
+backend_ws_articles_batch_delete:
+    path:     /articles/delete
+    defaults: { _controller  : BackendWebServiceBundle:Articles:batchDelete }
+    options:
+        expose: true
+
+backend_ws_articles_batch_toggle_available:
+    path:     /articles/toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Articles:batchToggleAvailable }
+    options:
+        expose: true
+
+backend_ws_articles_list:
+    path:     /articles
+    defaults: { _controller  : BackendWebServiceBundle:Articles:list }
+    options:
+        expose: true

@@ -1,46 +1,12 @@
-<div class="modal hide fade" id="modal-article-batchDelete">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>{t}Delete articles{/t}</h3>
-    </div>
-    <div class="modal-body">
-        <p>{t escape=off}Are you sure you want to delete <span>%num%</span> articles?{/t}</p>
-
-    </div>
-    <div class="modal-footer">
-        <a class="btn btn-primary yes" href="#">{t}Yes, delete all{/t}</a>
-        <a class="btn secondary no" href="#">{t}No{/t}</a>
-    </div>
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" ng-click="close()" aria-hidden="true">×</button>
+  <h3>{t}Delete articles{/t}</h3>
 </div>
+<div class="modal-body">
+    <p>{t escape=off}Are you sure you want to delete [% selected.length %] articles?{/t}</p>
 
-<script>
-jQuery("#modal-article-batchDelete").modal({
-    backdrop: 'static', //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false
-});
-
-jQuery('.delChecked').click(function(e, ui) {
-    e.preventDefault();
-    var number = jQuery(".minput:checked").length;
-    if (number >= 1 ) {
-        jQuery('#modal-article-batchDelete .modal-body span').html(number);
-        jQuery("#modal-article-batchDelete").modal('show');
-    } else {
-        jQuery('#modal-article-accept .modal-body')
-            .html("{t}You must select some elements.{/t}");
-        jQuery("#modal-article-accept").modal('show');
-    }
-});
-
-jQuery('#modal-article-batchDelete a.btn.yes').on('click', function(e){
-    jQuery('#formulario').attr('action', article_manager_urls.batch_delete);
-    jQuery('#formulario').submit();
-    e.preventDefault();
-});
-
-jQuery('#modal-article-batchDelete a.btn.no').on('click', function(e){
-    jQuery("#modal-article-batchDelete").modal('hide');
-    e.preventDefault();
-});
-</script>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="deleteSelected('backend_ws_articles_batch_delete')">{t}Yes, delete all{/t}</button>
+    <button class="btn secondary" ng-click="close()">{t}No{/t}</button>
+</div>
