@@ -109,6 +109,8 @@ class VideosController extends Controller
                     'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
                 );
 
+                $this->view->assign('front_videos', $frontVideos);
+
             } else {
                 // Videos on top of the homepage
                 $videos = $this->cm->find_all(
