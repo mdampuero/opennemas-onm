@@ -847,6 +847,8 @@ admin_article_create:
 admin_article_show:
     path:     /article/{id}/show
     defaults: { _controller  : BackendBundle:Articles:show }
+    options:
+        expose: true
 
 admin_article_delete:
     path:     /article/{id}/delete
