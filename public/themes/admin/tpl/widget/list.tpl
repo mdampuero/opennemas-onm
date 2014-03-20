@@ -126,8 +126,7 @@
         </td>
         <td class="center">
             {acl isAllowed="WIDGET_AVAILABLE"}
-            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable($index, content.pk_widget)" type="button">
-            </button>
+            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_widget_toggle_available')" type="button"></button>
             {/acl}
         </td>
         <td class="right">

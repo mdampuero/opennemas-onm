@@ -165,7 +165,7 @@ class WidgetsController extends ContentController
         $message = _('You must give an id for delete the widget.');
 
         $em     = $this->get('entity_repository');
-        $widget = $em->find('widget', $id);
+        $widget = $em->find(\classify('widget'), $id);
 
         if (!$widget) {
             $message = sprintf(_('Unable to find widget with id "%d"'), $id);
