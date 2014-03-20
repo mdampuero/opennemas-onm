@@ -18,6 +18,104 @@ use Onm\Framework\Controller\Controller;
 class WidgetsController extends ContentController
 {
     /**
+     * Deletes multiple widgets at once give them ids
+     *
+     * @param  Request $request the request object
+     * @return Response         the response object
+     *
+     * @Security("has_role('WIDGET_DELETE')")
+     */
+    public function batchDeleteAction(Request $request)
+    {
+        $status  = 'OK';
+        $errors  = array();
+        $success = array();
+
+        $ids = $request->request->get('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $widget = new \Widget($id);
+
+                if (!is_null($widget->id)) {
+                    try {
+                        $widget->remove($id);
+                        $success[] = _('Widget deleted successfully.');
+                    } catch (Exception $e) {
+                        $errors[] = sprintf(_('Unable to delete the widget "%s".'), $widget->name);
+                    }
+                }
+            }
+        }
+
+        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
+    }
+
+    /**
+     * Updates widgets available property.
+     *
+     * @param  Request $request the request object
+     * @return Response         the response object
+     *
+     * @Security("has_role('WIDGET_AVAILABLE')")
+     */
+    public function batchToggleAvailableAction(Request $request)
+    {
+        $status  = 'OK';
+        $errors  = array();
+        $success = array();
+
+        $ids       = $request->request->get('ids');
+        $available = $request->request->get('available');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $widget = new \Widget($id);
+
+                if (!is_null($widget->id)) {
+                    try {
+                        $widget->set_available($available, $_SESSION['userid']);
+                        $success[] = sprintf(_('Successfully changed availability for "%s" widget'), $widget->title);
+                    } catch (Exception $e) {
+                        $errors[] = sprintf(_('Unable to change the widget availability for "%s" widget'), $widget->name);
+                    }
+                }
+            }
+        }
+
+        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
+    }
+
+    /**
+     * Deletes a widget.
+     *
+     * @param  integer      $id Menu id.
+     * @return JsonResponse     The response of the current action.
+     *
+     * @Security("has_role('WIDGET_DELETE')")
+     */
+    public function deleteAction($id)
+    {
+        $status  = 'ERROR';
+        $message = _('You must give an id for delete the widget.');
+
+        $widget = new \Widget($id);
+
+        if (!is_null($id)) {
+            try {
+                $widget->remove($id);
+
+                $status  = 'OK';
+                $message = _('Widget deleted successfully.');
+            } catch (Exception $e) {
+                // Continue
+            }
+        }
+
+        return new JsonResponse(array('status' => $status, 'message' => $message));
+    }
+
+    /**
      * Returns a list of contents in JSON format.
      *
      * @param  Request      $request The request with the search parameters.
@@ -51,35 +149,6 @@ class WidgetsController extends ContentController
                 'total'             => $total
             )
         );
-    }
-
-    /**
-     * Deletes a widget.
-     *
-     * @param  integer      $id Menu id.
-     * @return JsonResponse     The response of the current action.
-     *
-     * @Security("has_role('WIDGET_DELETE')")
-     */
-    public function deleteAction($id)
-    {
-        $status  = 'ERROR';
-        $message = _('You must give an id for delete the widget.');
-
-        $widget = new \Widget($id);
-
-        if (!is_null($id)) {
-            try {
-                $widget->remove($id);
-
-                $status  = 'OK';
-                $message = _('Widget deleted successfully.');
-            } catch (Exception $e) {
-                // Continue
-            }
-        }
-
-        return new JsonResponse(array('status' => $status, 'message' => $message));
     }
 
     /**

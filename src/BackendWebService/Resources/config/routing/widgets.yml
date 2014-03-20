@@ -1,24 +1,6 @@
-backend_ws_widgets_list:
-    path:     /widgets
-    defaults: { _controller  : BackendWebServiceBundle:Widgets:list }
-    options:
-        expose: true
-
 backend_ws_widget_create:
     path:     /widget/create
     defaults: { _controller  : BackendWebServiceBundle:Widgets:create }
-    options:
-        expose: true
-
-backend_ws_widget_show:
-    path:     /widgets/{id}/show
-    defaults: { _controller  : BackendWebServiceBundle:Widgets:show }
-    options:
-        expose: true
-
-backend_ws_widget_update:
-    path:     /widgets/{id}/update
-    defaults: { _controller  : BackendWebServiceBundle:Widgets:update }
     options:
         expose: true
 
@@ -28,8 +10,38 @@ backend_ws_widget_delete:
     options:
         expose: true
 
+backend_ws_widget_show:
+    path:     /widgets/{id}/show
+    defaults: { _controller  : BackendWebServiceBundle:Widgets:show }
+    options:
+        expose: true
+
 backend_ws_widget_toggle_available:
     path:     /widgets/{id}/toggle-available
     defaults: { _controller  : BackendWebServiceBundle:Widgets:toggleAvailable }
+    options:
+        expose: true
+
+backend_ws_widget_update:
+    path:     /widgets/{id}/update
+    defaults: { _controller  : BackendWebServiceBundle:Widgets:update }
+    options:
+        expose: true
+
+backend_ws_widgets_batch_delete:
+    path:     /widgets/delete
+    defaults: { _controller  : BackendWebServiceBundle:Widgets:batchDelete }
+    options:
+        expose: true
+
+backend_ws_widgets_batch_toggle_available:
+    path:     /widgets/toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Widgets:batchToggleAvailable }
+    options:
+        expose: true
+
+backend_ws_widgets_list:
+    path:     /widgets
+    defaults: { _controller  : BackendWebServiceBundle:Widgets:list }
     options:
         expose: true
