@@ -75,6 +75,13 @@ class Menu
     public $name      = null;
 
     /**
+     * The name of the menu
+     *
+     * @var string
+     **/
+    public $title      = null;
+
+    /**
      * Menu type. internal, external...
      *
      * @var string
@@ -159,6 +166,7 @@ class Menu
 
         $this->id       = $rs->fields['pk_menu'];
         $this->pk_menu  = $rs->fields['pk_menu'];
+        $this->title     = $rs->fields['name'];
         $this->name     = $rs->fields['name'];
         $this->position = $rs->fields['position'];
         $this->type     = $rs->fields['type'];
