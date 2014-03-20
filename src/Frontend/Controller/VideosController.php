@@ -38,25 +38,16 @@ class VideosController extends Controller
         $this->view = new \Template(TEMPLATE_USER);
         $this->view->setConfig('video');
 
-        /******************* GESTION CATEGORIAS  *****************************/
-        /*
-        Setting up available categories for menu.
-        $actual_category_id ---> Solo se accede en accion list,
-                                    en otras se asigna el tpl->assign pero se toma el valor de category
-        $category_real_name ---> Solo se accede aqui
-        */
-        $this->category_name = $this->request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-        $this->page = $this->request->query->getDigits('page', 1);
+        $this->page          = $this->request->query->getDigits('page', 1);
+        $this->category_name = $this->request->query->filter('category_name', 'home', FILTER_SANITIZE_STRING);
 
-        if (!empty($this->category_name)
-            && $this->category_name != 'home'
-        ) {
+        if ($this->category_name != 'home') {
             $ccm = \ContentCategoryManager::get_instance();
             $this->category = $ccm->get_id($this->category_name);
             $category_real_name = $ccm->get_title($this->category_name);
             $this->view->assign(
                 array(
-                    'category'           => $this->category ,
+                    'category'           => $this->category,
                     'actual_category_id' => $this->category,
                     'category_name'      => $this->category_name,
                     'actual_category'    => $this->category_name,
@@ -67,7 +58,6 @@ class VideosController extends Controller
             $this->category = 0; //NEED CODE WIDGETS
         }
         $this->view->assign('category_real_name', $category_real_name);
-        /******************* GESTION CATEGORIAS  *****************************/
 
         $this->cm = new \ContentManager();
     }
@@ -81,76 +71,69 @@ class VideosController extends Controller
      **/
     public function frontpageAction(Request $request)
     {
-        $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
-
         $ads = $this->getAds();
         $this->view->assign('advertisements', $ads);
 
         # If is not cached process this action
-        $cacheID = $this->view->generateCacheId($categoryName, '', $this->page);
+        $cacheID = $this->view->generateCacheId($this->category_name, '', $this->page);
         if (($this->view->caching == 0)
             || !$this->view->isCached('video/video_frontpage.tpl', $cacheID)
         ) {
+            // Fetch video settings
             $videosSettings = s::get('video_settings');
+            $totalVideosFrontpage       = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
+            $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
+            $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
+            $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:3;
+            $totalVideosBlockOther      = isset($videosSettings['block_others'])?$videosSettings['block_others']:6;
 
-            $totalVideosFrontpage = isset($videosSettings['total_front'])?$videosSettings['total_front']:2;
-            if (isset($categoryName)
-                && !empty($categoryName)
-                && $categoryName != 'home'
-            ) {
-                $frontVideos = $this->cm->find_all(
+            if ($this->category_name != 'home') {
+                // Fetch total of videos for this category
+                $allVideos = $this->cm->find_all(
                     'Video',
                     'available=1 AND `contents_categories`.`pk_fk_content_category` ='
                     . $this->category . '',
-                    'ORDER BY created DESC LIMIT '.$totalVideosFrontpage
+                    'ORDER BY created DESC LIMIT '.($totalVideosFrontpage+$totalVideosBlockInCategory)
                 );
 
-                $videos = $this->cm->find_all(
-                    'Video',
-                    'available=1 AND `contents_categories`.`pk_fk_content_category` ='.$this->category,
-                    'ORDER BY created DESC LIMIT '.$totalVideosFrontpage.',3'
-                );
+                // Videos on frontpage left column
+                $frontVideos  = array_slice($allVideos, 0, $totalVideosFrontpage);
 
+                // Videos on more in category block
+                $videos       = array_slice($allVideos, $totalVideosFrontpage, $totalVideosBlockInCategory);
+
+                // Videos on others videos block
                 $othersVideos = $this->cm->find_all(
                     'Video',
                     'available=1 ',
-                    'ORDER BY views DESC LIMIT 3, 6'
+                    'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
                 );
-
-                if (count($videos) > 0) {
-                    foreach ($videos as &$video) {
-                        $video->category_name  = $video->loadCategoryName($video->id);
-                        $video->category_title = $video->loadCategoryTitle($video->id);
-                    }
-                }
-                $this->view->assign('front_videos', $frontVideos);
 
             } else {
+                // Videos on top of the homepage
                 $videos = $this->cm->find_all(
                     'Video',
-                    ' available=1 ',
-                    'ORDER BY created DESC LIMIT 3'
+                    'available=1 ',
+                    'ORDER BY created DESC LIMIT '.$totalVideosFrontpageOffset
                 );
 
-
-                $itemsPerPage = 12;//$totalVideosFrontpage;
+                // Videos on more videos block
                 list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
                     'Video',
                     (int) $this->category,
                     'in_litter != 1 AND contents.available=1',
                     'ORDER BY created DESC',
                     $this->page,
-                    $itemsPerPage,
-                    3 // limit offset
+                    $totalVideosMoreFrontpage,
+                    $totalVideosFrontpageOffset
                 );
 
-                $total = count($othersVideos)+1;
-
+                // Pagination for block more videos
                 $pagination = \Onm\Pager\SimplePager::getPagerUrl(
                     array(
                         'page'  => $this->page,
-                        'items' => $itemsPerPage,
-                        'total' => $total,
+                        'items' => $totalVideosMoreFrontpage,
+                        'total' => count($othersVideos)+1,
                         'url'   => $this->generateUrl(
                             'frontend_video_ajax_paginated'
                         )
@@ -183,15 +166,12 @@ class VideosController extends Controller
             );
         }
 
-        if (isset($categoryName)
-            && !empty($categoryName)
-            && $categoryName != 'home'
-        ) {
+        if ($this->category_name != 'home') {
             return $this->render(
                 'video/video_frontpage.tpl',
                 array(
                     'cache_id' => $cacheID,
-                    'categoryName' => $categoryName,
+                    'categoryName' => $this->category_name,
                 )
             );
         } else {
@@ -289,18 +269,16 @@ class VideosController extends Controller
      **/
     public function ajaxMoreAction(Request $request)
     {
-        if ($this->category == 0) {
-            $itemsPage = 6;
-        } else {
-            $itemsPage = 3;
-        }
+        // Fetch video settings
+        $videosSettings = s::get('video_settings');
+        $totalVideosBlockOther      = isset($videosSettings['block_others'])?$videosSettings['block_others']:6;
 
-        $limit = 'LIMIT ' . ($this->page - 1) * $itemsPage . ', ' . ($itemsPage);
+        $limit = ($this->page-1)*$totalVideosBlockOther.', '.$totalVideosBlockOther;
 
         $videos = $this->cm->find_all(
             'Video',
             'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $this->category . '',
-            'ORDER BY created DESC ' . $limit
+            'ORDER BY created DESC  LIMIT ' . $limit
         );
 
         if (count($videos) > 0) {
@@ -320,7 +298,6 @@ class VideosController extends Controller
                 'others_videos'      => $videos,
                 'actual_category_id' => $this->category,
                 'page'               => $this->page,
-                'total_more'         => 4,
             )
         );
     }
@@ -334,18 +311,16 @@ class VideosController extends Controller
      **/
     public function ajaxInCategoryAction(Request $request)
     {
-        $itemsPage = 3;
+        // Fetch video settings
+        $videosSettings = s::get('video_settings');
+        $totalVideosBlockInCategory = isset($videosSettings['block_in_category'])?$videosSettings['block_in_category']:3;
 
-        if ($this->category == 0) {
-            $this->category = $request->query->filter('category', null, FILTER_SANITIZE_STRING);
-        }
-
-        $_limit = 'LIMIT ' . ($this->page - 1) * $itemsPage . ', ' . ($itemsPage);
+        $limit = ($this->page-1)*$totalVideosBlockInCategory.', '.$totalVideosBlockInCategory;
 
         $videos = $this->cm->find_all(
             'Video',
             'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $this->category . '',
-            'ORDER BY created DESC ' . $_limit
+            'ORDER BY created DESC LIMIT ' . $limit
         );
 
         if (count($videos) > 0) {
@@ -365,7 +340,7 @@ class VideosController extends Controller
                 'videos'             => $videos,
                 'actual_category_id' => $this->category,
                 'page'               => $this->page,
-                'total_incategory'   => 9,
+                // 'total_incategory'   => 9, commented on all templates
             )
         );
     }
@@ -379,39 +354,38 @@ class VideosController extends Controller
      **/
     public function ajaxPaginatedAction(Request $request)
     {
-        // Items_page refers to the widget
-        $itemsPerPage = 12;//$totalVideosFrontpage;
+        // Fetch video settings
+        $videosSettings = s::get('video_settings');
+        $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
+        $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
+
+        // Fetch videos paginated
         list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
             'Video',
             (int) $this->category,
             'in_litter != 1 AND contents.available=1',
             'ORDER BY created DESC',
             $this->page,
-            $itemsPerPage,
-            3 // limit offset
+            $totalVideosMoreFrontpage,
+            $totalVideosFrontpageOffset
         );
-
-        $total = count($othersVideos)+1;
 
         if ($countVideos > 0) {
             foreach ($othersVideos as &$video) {
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
-
         } else {
-
             return new RedirectResponse(
                 $this->generateUrl('frontend_video_ajax_paginated')
             );
         }
 
-
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
                 'page'  => $this->page,
-                'items' => $itemsPerPage,
-                'total' => $total,
+                'items' => $totalVideosMoreFrontpage,
+                'total' => count($othersVideos)+1,
                 'url'   => $this->generateUrl(
                     'frontend_video_ajax_paginated'
                 )
@@ -436,7 +410,9 @@ class VideosController extends Controller
      */
     private function getAds($context = 'frontpage')
     {
-        $category = (!isset($category) || ($category == 'home'))? 0: $category;
+        $ccm = \ContentCategoryManager::get_instance();
+        $categoryName = 'video';
+        $category = $ccm->get_id($categoryName);
 
         // Get video positions
         $positionManager = getService('instance_manager')->current_instance->theme->getAdsPositionManager();
@@ -446,6 +422,6 @@ class VideosController extends Controller
             $positions = $positionManager->getAdsPositionsForGroup('video_frontpage', array(7, 9));
         }
 
-        return \Advertisement::findForPositionIdsAndCategory($positions, $this->category);
+        return \Advertisement::findForPositionIdsAndCategory($positions, $category);
     }
 }
