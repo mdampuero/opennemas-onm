@@ -52,6 +52,41 @@ class AdvertisementsController extends ContentController
     }
 
     /**
+     * Updates advertisements available property.
+     *
+     * @param  Request $request the request object
+     * @return Response         the response object
+     *
+     * @Security("has_role('ADVERTISEMENT_AVAILA')")
+     */
+    public function batchToggleAvailableAction(Request $request)
+    {
+        $status  = 'OK';
+        $errors  = array();
+        $success = array();
+
+        $ids       = $request->request->get('ids');
+        $available = $request->request->get('available');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $advertisement = new \Advertisement($id);
+
+                if (!is_null($advertisement->id)) {
+                    try {
+                        $advertisement->set_available($available, $_SESSION['userid']);
+                        $success[] = sprintf(_('Successfully changed availability for "%s" advertisement'), $advertisement->title);
+                    } catch (Exception $e) {
+                        $errors[] = sprintf(_('Unable to change the advertisement availability for "%s" advertisement'), $advertisement->name);
+                    }
+                }
+            }
+        }
+
+        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
+    }
+
+    /**
      * Deletes a advertisement.
      *
      * @param  integer      $id Menu id.
@@ -100,13 +135,12 @@ class AdvertisementsController extends ContentController
             ->current_instance->theme->getAdsPositionManager();
         $map = $positionManager->getAllAdsPositions();
 
-        $em = $this->get('advertisement_repository');
-
         $order = null;
         if ($sortBy) {
             $order = '`' . $sortBy . '` ' . $sortOrder;
         }
 
+        $em = $this->get('advertisement_repository');
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $total   = $em->countBy($search);
 
@@ -135,7 +169,7 @@ class AdvertisementsController extends ContentController
         $message = _('You must give an id for delete the advertisement.');
 
         $em     = $this->get('entity_repository');
-        $advertisement = $em->find('advertisement', $id);
+        $advertisement = $em->find(\classify('advertisement'), $id);
 
         if (!$advertisement) {
             $message = sprintf(_('Unable to find advertisement with id "%d"'), $id);
@@ -153,40 +187,5 @@ class AdvertisementsController extends ContentController
                 'available' => $advertisement->available
             )
         );
-    }
-
-    /**
-     * Deletes multiple advertisements at once give them ids
-     *
-     * @param  Request $request the request object
-     * @return Response         the response object
-     *
-     * @Security("has_role('ADVERTISEMENT_AVAILA')")
-     */
-    public function batchToggleAvailableAction(Request $request)
-    {
-        $status  = 'OK';
-        $errors  = array();
-        $success = array();
-
-        $ids       = $request->request->get('ids');
-        $available = $request->request->get('available');
-
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $advertisement = new \Advertisement($id);
-
-                if (!is_null($advertisement->id)) {
-                    try {
-                        $advertisement->set_available($available, $_SESSION['userid']);
-                        $success[] = sprintf(_('Successfully changed availability for "%s" advertisement'), $advertisement->title);
-                    } catch (Exception $e) {
-                        $errors[] = sprintf(_('Unable to change the advertisement availability for "%s" advertisement'), $advertisement->name);
-                    }
-                }
-            }
-        }
-
-        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
     }
 }

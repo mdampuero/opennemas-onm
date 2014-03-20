@@ -7,38 +7,19 @@
     {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="app.js" language="jjavascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="advertisements.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
 {/block}
 
 {block name="content"}
-    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="AdvertisementsController" ng-init="list(filters)">
+    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: -1, type_advertisement: -1, available: -1, with_script: -1 }, 'backend_ws_advertisements_list')">
         <div class="top-action-bar clearfix">
             <div class="wrapper-content">
                 <div class="title">
                     <h2>{t}Advertisements{/t}</h2>
                 </div>
                 <ul class="old-button">
-                    {acl isAllowed="ADVERTISEMENT_DELETE"}
-                    <li>
-                         <button ng-if="selected.length > 0" title="{t}Delete{/t}" type="button" ng-click="open('modal-delete-all', $index)">
-                            <img src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}"><br />{t}Delete{/t}
-                        </button>
-                    </li>
-                    {/acl}
-                    {acl isAllowed="ADVERTISEMENT_AVAILA"}
-                    <li>
-                        <button ng-if="selected.length > 0" ng-click="batchToggleAvailable(0)" type="button">
-                            <img src="{$params.IMAGE_DIR}publish_no.gif" alt="noFrontpage" ><br />{t}Unpublish{/t}
-                        </button>
-                    </li>
-                    <li>
-                        <button ng-if="selected.length > 0" ng-click="batchToggleAvailable(1)" type="button">
-                            <img src="{$params.IMAGE_DIR}publish.gif" alt="Frontpage" ><br />{t}Publish{/t}
-                        </button>
-                    </li>
-                    {/acl}
-                    {acl isAllowed="ALBUM_SETTINGS"}
-                    <li class="separator" ng-if="selected.length > 0"></li>
+                    {acl isAllowed="ADVERTISEMENT_SETTINGS"}
                         <li>
                             <a href="{url name=admin_ads_config}" title="{t}Config ads module{/t}">
                                 <img src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
@@ -46,8 +27,40 @@
                             </a>
                         </li>
                     {/acl}
-                    {acl isAllowed="ADVERTISEMENT_CREATE"}
                     <li class="separator"></li>
+                    <li ng-if="selected.length > 0">
+                        <a href="#">
+                            <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                            <br/>{t}Batch actions{/t}
+                        </a>
+                        <ul class="dropdown-menu" style="margin-top: 1px;">
+                            {acl isAllowed="ADVERTISEMENT_AVAILA"}
+                            <li>
+                                <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_advertisements_batch_toggle_available')">
+                                    <i class="icon-eye-open"></i>
+                                    {t}Publish{/t}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_advertisements_batch_toggle_available')">
+                                    <i class="icon-eye-close"></i>
+                                    {t}Unpublish{/t}
+                                </a>
+                            </li>
+                            {/acl}
+                            {acl isAllowed="ADVERTISEMENT_DELETE"}
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="#" id="batch-delete" ng-click="open('modal-delete-selected')">
+                                        <i class="icon-trash"></i>
+                                        {t}Delete{/t}
+                                    </a>
+                                </li>
+                            {/acl}
+                        </ul>
+                    </li>
+                    <li class="separator" ng-if="selected.length > 0"></li>
+                    {acl isAllowed="ADVERTISEMENT_CREATE"}
                     <li>
                         <a href="{url name=admin_ad_create category=$category page=$page filter=$filter}" class="admin_add" accesskey="N" tabindex="1">
                             <img src="{$params.IMAGE_DIR}list-add.png" alt="{t}New{/t}"><br />{t}New{/t}
@@ -133,7 +146,6 @@
                         <th class="right" style="width:70px">{t}Actions{/t}</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     <tr ng-if="contents.length == 0">
                         <td class="empty" colspan="10">
@@ -145,7 +157,7 @@
                 <tfoot >
                     <tr>
                         <td colspan="8" class="center">
-                            <pagination max-size="5" direction-links="true" on-select-page="selectPage(page)" page="page" total-items="total"></pagination>
+                            <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_advertisements_list')" page="page" total-items="total"></pagination>
                         </td>
                     </tr>
                 </tfoot>
@@ -170,22 +182,22 @@
             <td style="text-align:center;" class="center">
                 <span ng-if="content.type_medida == 'NULL'">{t}Undefined{/t}</span>
                 <span ng-if="content.type_medida == 'CLICK'">{t}Clicks:{/t} [% content.num_clic %]</span>
-                <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% num_view.num_clic %]</span>
+                <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% content.num_view %]</span>
                 <span ng-if="content.type_medida == 'DATE'">{t}Date:{/t} [% content.startime %]-[% content.endtime %]</span>
             </td>
             <td style="text-align:center;">
-                [% content.num_clic %]
+                [% content.num_clic_count %]
             </td>
             {acl isAllowed="ADVERTISEMENT_AVAILA"}
             <td class="center" style="width:40px;">
-                <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable($index, content.pk_advertisement)" type="button">
+                <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_advertisement_toggle_available')" type="button">
                 </button>
             </td>
             {/acl}
             <td class="right">
                 <div class="btn-group">
                 {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                    <button class="btn" ng-click="edit(content.pk_advertisement)" title="{t}Edit{/t}" type="button">
+                    <button class="btn" ng-click="edit(content.id, 'admin_ad_show')" title="{t}Edit{/t}" type="button">
                         <i class="icon-pencil"></i>
                     </button>
                 {/acl}
@@ -200,7 +212,7 @@
         <script type="text/ng-template" id="modal-delete">
             {include file="advertisement/modals/_modalDelete.tpl"}
         </script>
-        <script type="text/ng-template" id="modal-delete-all">
+        <script type="text/ng-template" id="modal-delete-selected">
             {include file="advertisement/modals/_modalBatchDelete.tpl"}
         </script>
     </form>
