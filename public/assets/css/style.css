@@ -3231,8 +3231,11 @@ button.loading {
 }
 
 .modal-footer .loading {
+  background: url('../../themes/base/images/ajax-loader.gif') no-repeat;
   background-position: center bottom;
   display: inline-block;
+  float: left;
+  height: 20px;
   padding-top: 3px;
-  float: left;"
+  width: 20px;
 }
