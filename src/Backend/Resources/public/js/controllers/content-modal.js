@@ -7,14 +7,14 @@
  * @param int    id       Selected item id.
  * @param int    index    Index of the selected content in contents array.
  * @param array  contents Array of contents.
- * @param string name     Selected item name.
+ * @param string title     Selected item title.
  * @param array  selected Array of selected items.
  */
-function ContentModalCtrl($http, $scope, $modalInstance, id, index, contents, name, selected) {
+function ContentModalCtrl($http, $scope, $modalInstance, id, index, contents, title, selected) {
     $scope.id       = id;
     $scope.index    = index;
     $scope.contents = contents;
-    $scope.name     = name;
+    $scope.title    = title;
     $scope.selected = selected;
 
     /**
@@ -29,7 +29,7 @@ function ContentModalCtrl($http, $scope, $modalInstance, id, index, contents, na
      *
      * @param int    id    Item id.
      * @param int    index Index of the item in the array of contents.
-     * @param string route Route name.
+     * @param string route Route title.
      */
     $scope.delete = function (id, index, route) {
         // Enable spinner
@@ -53,7 +53,7 @@ function ContentModalCtrl($http, $scope, $modalInstance, id, index, contents, na
     /**
      * Deletes selected contents on confirmation.
      *
-     * @param string route Route name.
+     * @param string route Route title.
      */
     $scope.deleteSelected = function (route) {
         // Enable spinner

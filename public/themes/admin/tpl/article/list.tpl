@@ -12,7 +12,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title: '' }, 'backend_ws_articles_list')">
+<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title: '' }, 'title', 'backend_ws_articles_list')">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">

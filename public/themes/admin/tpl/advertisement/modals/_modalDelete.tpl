@@ -3,7 +3,7 @@
   <h3>{t}Delete advertisement{/t}</h3>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure that do you want delete "[% name %]"?{/t}</p>
+    <p>{t escape=off}Are you sure that do you want delete "[% title %]"?{/t}</p>
 
 </div>
 <div class="modal-footer">

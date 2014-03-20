@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <button type="button" class="close" ng-click="cancel()" aria-hidden="true">×</button>
+  <button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
   <h3>{t}Delete menus{/t}</h3>
 </div>
 <div class="modal-body">
@@ -8,6 +8,6 @@
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>
-    <button class="btn btn-primary" ng-click="deleteSelected()">{t}Yes, delete all{/t}</button>
-    <button class="btn secondary" ng-click="cancel()">{t}No{/t}</button>
+    <button class="btn btn-primary" ng-click="deleteSelected('backend_ws_menus_batch_delete')">{t}Yes, delete all{/t}</button>
+    <button class="btn secondary" ng-click="close()">{t}No{/t}</button>
 </div>

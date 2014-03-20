@@ -18,11 +18,12 @@
     {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="jjavascript" bundle="backend" basepath="js"}
-    {script_tag src="menus.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="MenusCtrl" ng-init="list(filters)">
+<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { available: -1, renderlet: -1 }, 'name', 'backend_ws_menus_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Menus{/t}</h2></div>
@@ -103,7 +104,7 @@
         <td class="right">
             <div class="btn-group">
                 {acl isAllowed="MENU_UPDATE"}
-                <button class="btn" ng-click="edit(content.pk_menu)" title="{t}Edit page '[% content.name %]'{/t}" type="button">
+                <button class="btn" ng-click="edit(content.id, 'admin_menu_show')" title="{t}Edit page '[% content.name %]'{/t}" type="button">
                     <i class="icon-pencil"></i> {t}Edit{/t}
                 </button>
                 {/acl}

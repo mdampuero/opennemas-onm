@@ -99,7 +99,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
      * @param string content Content type.
      * @param string route   Route name.
      */
-    $scope.init = function(content, filters, route) {
+    $scope.init = function(content, filters, sortBy, route) {
         // Initialize filters
         for (var filter in filters) {
             $scope.filters.search[filter] = filters[filter];
@@ -116,7 +116,14 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
         // Route for list (required by $watch)
         $scope.route = route;
 
-        $scope.filters.search.content_type_name = content;
+        if (content != null) {
+            $scope.filters.search.content_type_name = content;
+        }
+
+        if (sortBy != null) {
+            $scope.filters.sort_by = sortBy;
+        }
+
         $scope.list(route);
     }
 
@@ -187,7 +194,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
 
                     return null;
                 },
-                name: function () {
+                title: function () {
                     if (index != null) {
                         return $scope.contents[index].title;
                     }
@@ -342,3 +349,4 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
 
 // Register ContentCtrl function as AngularJS controller
 angular.module('BackendApp.controllers').controller('ContentCtrl', ContentCtrl);
+//
