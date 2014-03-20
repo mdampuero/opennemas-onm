@@ -61,6 +61,13 @@ class Menu
     public $pk_menu   = null;
 
     /**
+     * The menu id
+     *
+     * @var int
+     **/
+    public $id = null;
+
+    /**
      * The name of the menu
      *
      * @var string
@@ -150,6 +157,7 @@ class Menu
             return false;
         }
 
+        $this->id       = $rs->fields['pk_menu'];
         $this->pk_menu  = $rs->fields['pk_menu'];
         $this->name     = $rs->fields['name'];
         $this->position = $rs->fields['position'];
