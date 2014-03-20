@@ -35,12 +35,12 @@ class ArticlesController extends ContentController
 
         if (is_array($ids) && count($ids) > 0) {
             foreach ($ids as $id) {
-                $article = new \Advertisement($id);
+                $article = new \Article($id);
 
                 if (!is_null($article->id)) {
                     try {
                         $article->remove($id);
-                        $success[] = _('Advertisement deleted successfully.');
+                        $success[] = _('Article deleted successfully.');
                     } catch (Exception $e) {
                         $errors[] = sprintf(_('Unable to delete the article "%s".'), $article->name);
                     }
@@ -57,7 +57,7 @@ class ArticlesController extends ContentController
      * @param  Request $request the request object
      * @return Response         the response object
      *
-     * @Security("has_role('ADVERTISEMENT_AVAILA')")
+     * @Security("has_role('ARTICLE_AVAILABLE')")
      */
     public function batchToggleAvailableAction(Request $request)
     {
@@ -99,7 +99,7 @@ class ArticlesController extends ContentController
         $status  = 'ERROR';
         $message = _('You must give an id for delete the article.');
 
-        $article = new \Advertisement($id);
+        $article = new \Article($id);
 
         if (!is_null($id)) {
             try {
