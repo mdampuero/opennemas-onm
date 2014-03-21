@@ -59,6 +59,8 @@ EOF
 
         $this->compileTranslations();
 
+        $this->generateRoutes();
+
         $this->executeMaintenance('disable');
 
         // Update themes
@@ -78,8 +80,6 @@ EOF
         $this->generateDeployFile();
 
         $this->cleanOpCodeCache();
-
-        $this->generateRoutes();
     }
 
     /**
@@ -244,7 +244,7 @@ EOF
         $command = $this->getApplication()->find('fos:js-routing:dump');
         $arguments = array(
             'command' => 'fos:js-routing:dump',
-            '--target' => 'public/assets/js/routes/js'
+            '--target' => 'public/assets/js/routes.1js'
         );
 
         $input = new ArrayInput($arguments);
