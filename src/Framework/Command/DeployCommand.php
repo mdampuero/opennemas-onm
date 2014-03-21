@@ -244,7 +244,7 @@ EOF
         $command = $this->getApplication()->find('fos:js-routing:dump');
         $arguments = array(
             'command' => 'fos:js-routing:dump',
-            '--target' => 'public/assets/js/routes.1js'
+            '--target' => 'public/assets/js/routes.js'
         );
 
         $input = new ArrayInput($arguments);
