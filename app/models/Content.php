@@ -493,7 +493,7 @@ class Content
         $this->load($rs->fields);
         $this->fk_user = $this->fk_author;
 
-          // Get author data for contents
+        // Get author data for contents
         if (!empty($this->fk_author)) {
             $this->author = new \User($this->fk_author);
         }
@@ -746,6 +746,92 @@ class Content
     }
 
     /**
+     * Change current value of in_home property
+     *
+     * @param string $id the id of the element
+     *
+     * @return boolean true if it was changed successfully
+     **/
+    public function toggleFavorite($id = null)
+    {
+        if ($id == null) {
+            $id = $this->id;
+        }
+
+        $status = ($this->favorite + 1) % 2;
+        $date = $this->starttime;
+
+        $this->favorite = $status;
+
+        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+            $date = date("Y-m-d H:i:s");
+        }
+
+        $sql = 'UPDATE `contents` '
+               .'SET `favorite` = ?, '
+               .'`content_status` = ?, '
+               .'`starttime` = ? '
+               .'WHERE `pk_content`=?';
+
+        $values = array($status, $status, $date, $id);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            return false;
+        }
+
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
+
+        return true;
+    }
+
+    /**
+     * Change current value of in_home property
+     *
+     * @param string $id the id of the element
+     *
+     * @return boolean true if it was changed successfully
+     **/
+    public function toggleInHome($id = null)
+    {
+        if ($id == null) {
+            $id = $this->id;
+        }
+
+        $status = ($this->in_home + 1) % 2;
+        $date = $this->starttime;
+
+        $this->in_home = $status;
+
+        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+            $date = date("Y-m-d H:i:s");
+        }
+
+        $sql = 'UPDATE `contents` '
+               .'SET `in_home` = ?, '
+               .'`content_status` = ?, '
+               .'`starttime` = ? '
+               .'WHERE `pk_content`=?';
+
+        $values = array($status, $status, $date, $id);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            return false;
+        }
+
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
+
+        return true;
+    }
+
+    /**
      * Change current value of frontpage property
      *
      * @return boolean true if it was changed successfully
@@ -781,6 +867,61 @@ class Content
 
         $sql = 'UPDATE contents '
              . 'SET `available`=?, `content_status`=?, `starttime`=?, '
+             . '`fk_user_last_editor`=? WHERE `pk_content`=?';
+        $stmt = $GLOBALS['application']->conn->Prepare($sql);
+
+        if (!is_array($status)) {
+            if (($status == 1) && ($this->starttime =='0000-00-00 00:00:00')) {
+                $this->starttime = date("Y-m-d H:i:s");
+            }
+            $values = array(
+                $status,
+                $status,
+                $this->starttime,
+                $lastEditor,
+                $this->id
+            );
+        } else {
+            $values = $status;
+        }
+
+        if (count($values)>0) {
+            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if ($rs === false) {
+
+                return false;
+            }
+        }
+
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
+
+        // Set status for it's updated to next event
+        if (!empty($this)) {
+            $this->available = $status;
+        }
+
+        return true;
+    }
+
+    /**
+     * Change the current value of available content_status property
+     *
+     * @param int $status the available value
+     * @param int $lastEditor the author id that performs the action
+     *
+     * @return boolean true if it was changed successfully
+     **/
+    public function set_in_home($status, $lastEditor)
+    {
+        if (($this->id == null) && !is_array($status)) {
+            return false;
+        }
+
+        $sql = 'UPDATE contents '
+             . 'SET `in_home`=?, `content_status`=?, `starttime`=?, '
              . '`fk_user_last_editor`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
