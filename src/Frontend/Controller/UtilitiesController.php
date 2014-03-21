@@ -153,7 +153,7 @@ class UtilitiesController extends Controller
             print_r($errmsg);*/
         }
 
-        $cache->save($encUrl, $content);
+        $cache->save($encUrl, $content, $cacheTimeout);
 
 
         return $content;
