@@ -21,82 +21,105 @@ class MenusController extends Controller
     /**
      * Deletes multiple menus at once give them ids
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('MENU_DELETE')")
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
      */
-    public function batchDeleteAction(Request $request)
+    public function batchDeleteAction(Request $request, $contentType = null)
     {
-        $status  = 'OK';
+        $em = $this->get('menu_repository');
         $errors  = array();
         $success = array();
 
         $ids = $request->request->get('ids');
 
         if (is_array($ids) && count($ids) > 0) {
-            $em = $this->get('menu_repository');
+            foreach ($ids as $id) {
+                $content = $em->find($id);
 
-            try {
-                foreach ($ids as $id) {
-                    $menu = new \Menu($id);
-
-                    if (!is_null($menu->pk_menu) && $menu->type == 'user') {
-                        $em->delete($id);
-                        $success[] = sprintf(_('Menu "%s" deleted successfully.'), $menu->name);
-                    } else {
-                        $errors[] = sprintf(_('Unable to delete the menu "%s" as is system internal.'), $menu->name);
+                if (!is_null($content->id)) {
+                    try {
+                        $content->delete($id);
+                        $success[] = array(
+                            'id'      => $id,
+                            'message' => 'Selected items deleted successfully'
+                        );
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'      => $id,
+                            'message' => 'Unable to delete item with id "$id"'
+                        );
                     }
+                } else {
+                    $errors[] = array(
+                        'id'      => $id,
+                        'message' => 'Unable to find item with id "$id"'
+                    );
                 }
-            } catch (Exception $e) {
-                // Continue
             }
         }
 
-        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
+                'success' => $success
+            )
+        );
     }
 
     /**
      * Deletes a menu.
      *
-     * @param  integer      $id Menu id.
-     * @return JsonResponse     The response of the current action.
-     *
-     * @Security("has_role('MENU_DELETE')")
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
      */
-    public function deleteAction($id)
+    public function deleteAction($id, $contentType = null)
     {
-        $status  = 'ERROR';
-        $message = _('You must give an id for delete the menu.');
+        $em = $this->get('menu_repository');
+        $errors  = array();
+        $success = array();
 
-        if ($id) {
+        $menu = $em->find($id);
+
+        if (!is_null($id)) {
             try {
-                $em = $this->get('menu_repository');
-                $em->delete($id);
+                $menu->delete($id);
 
-                $status  = 'OK';
-                $message = sprintf(_("Menu '%s' deleted successfully."), $id);
+                $success[] = array(
+                    'id'      => $id,
+                    'message' => 'Item deleted successfully'
+                );
             } catch (Exception $e) {
-                // Continue
+                $errors[] = array(
+                    'id'      => $id,
+                    'message' => 'Unable to delete item with id "$id"'
+                );
             }
+        } else {
+            $errors[] = array(
+                'id'      => $id,
+                'message' => 'Unable to find item with id "$id"'
+            );
         }
 
-        return new JsonResponse(array('status' => $status, 'message' => $message));
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
+                'success' => $success
+            )
+        );
     }
 
     /**
      * Returns a list of contents in JSON format.
      *
-     * @param  Request      $request The request with the search parameters.
-     * @return JsonResponse          The response in JSON format.
-     *
-     * @Security("has_role('MENU_ADMIN')")
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $contentType = null)
     {
-        $results = array();
-
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search');
@@ -104,11 +127,12 @@ class MenusController extends Controller
         $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
         $order           = null;
 
+        $em = $this->get('menu_repository');
+
         if ($sortBy) {
             $order = '`' . $sortBy . '` ' . $sortOrder;
         }
 
-        $em      = $this->get('menu_repository');
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $total   = $em->countBy($search);
 

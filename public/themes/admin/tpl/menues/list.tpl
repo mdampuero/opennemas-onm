@@ -17,9 +17,11 @@
     {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="controllers.js" language="jjavascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}

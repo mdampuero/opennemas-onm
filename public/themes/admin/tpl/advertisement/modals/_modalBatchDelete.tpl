@@ -8,6 +8,6 @@
 </div>
 <div class="modal-footer">
     <span class="loading" ng-if="deleting == 1"></span>
-    <button class="btn btn-primary" ng-click="deleteSelected('backend_ws_advertisements_batch_delete')" type="button">{t}Yes, delete all{/t}</button>
+    <button class="btn btn-primary" ng-click="deleteSelected('backend_ws_contents_batch_delete')" type="button">{t}Yes, delete all{/t}</button>
     <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
 </div>

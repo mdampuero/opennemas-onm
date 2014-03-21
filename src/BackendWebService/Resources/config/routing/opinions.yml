@@ -1,0 +1,5 @@
+backend_ws_opinions_list:
+    path:     /opinions
+    defaults: { _controller  : BackendWebServiceBundle:Opinions:list }
+    options:
+        expose: true

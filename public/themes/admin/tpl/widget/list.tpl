@@ -6,13 +6,15 @@
     {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('widget', { available: -1, renderlet: -1 }, 'title', 'backend_ws_widgets_list')">
+<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('widget', { available: -1, renderlet: -1 }, 'title', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -27,13 +29,13 @@
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="ARTICLE_AVAILABLE"}
                         <li>
-                            <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_widgets_batch_toggle_available')">
+                            <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
                                 <i class="icon-eye-open"></i>
                                 {t}Publish{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_widgets_batch_toggle_available')">
+                            <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
                                 <i class="icon-eye-close"></i>
                                 {t}Unpublish{/t}
                             </a>
@@ -108,7 +110,7 @@
             <tfoot>
                 <tr>
                     <td colspan="5" class="center">
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_widgets_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
                     </td>
                 </tr>
             </tfoot>
@@ -126,7 +128,7 @@
         </td>
         <td class="center">
             {acl isAllowed="WIDGET_AVAILABLE"}
-            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_widget_toggle_available')" type="button"></button>
+            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
             {/acl}
         </td>
         <td class="right">

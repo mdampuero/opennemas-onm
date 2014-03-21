@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 
-class WidgetsController extends ContentController
+class OpinionsController extends ContentController
 {
     /**
      * Returns a list of contents in JSON format.
      *
-     * @param  Request      $request     The request with the search parameters.
+     * @param  Request      $request     The request object.
      * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response in JSON format.
+     * @return JsonResponse              The response object.
      */
     public function listAction(Request $request, $contentType = null)
     {
@@ -32,7 +32,7 @@ class WidgetsController extends ContentController
         $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
         $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
-        $em = $this->get('widget_repository');
+        $em = $this->get('entity_repository');
 
         $order = null;
         if ($sortBy) {

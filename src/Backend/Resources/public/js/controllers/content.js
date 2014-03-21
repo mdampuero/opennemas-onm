@@ -1,7 +1,7 @@
 /**
  * Controller to handle list actions.
  */
-function ContentCtrl($http, $location, $modal, $scope, $timeout) {
+function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
     /**
      * All contents selected flag.
      *
@@ -56,12 +56,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
     $scope.batchToggleAvailable = function (available, route) {
         updateAvailable(1);
 
-        var url = Routing.generate(route);
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
         $http.post(url, { ids: $scope.selected, available: available })
             .success(function(response) {
-                if (response.status == 'OK') {
-                    updateAvailable(0, available);
-                }
+                updateAvailable(0, available);
+            });
+    };
+
+    /**
+     * Changes the in_home property for selected contents.
+     *
+     * @param int    inHome Available value.
+     * @param string route  Route name.
+     */
+    $scope.batchToggleInHome = function (inHome, route) {
+        updateInHome(1);
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
+        $http.post(url, { ids: $scope.selected, in_home: inHome })
+            .success(function(response) {
+                updateInHome(0, inHome);
             });
     };
 
@@ -89,7 +103,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
      * @param string route Route name.
      */
     $scope.edit = function(id, route) {
-        var url = Routing.generate(route, { id: id});
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id});
         document.location = url;
     }
 
@@ -100,6 +114,8 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
      * @param string route   Route name.
      */
     $scope.init = function(content, filters, sortBy, route) {
+        $scope.contentType = content;
+
         // Initialize filters
         for (var filter in filters) {
             $scope.filters.search[filter] = filters[filter];
@@ -155,7 +171,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
             search:            clearFilters($scope.filters.search)
         }
 
-        var url = Routing.generate(route);
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
         $http.post(url, postData).success(function(response) {
             $scope.total    = response.total;
             $scope.page     = response.page;
@@ -181,6 +197,9 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
             templateUrl: template,
             controller: 'ContentModalCtrl',
             resolve: {
+                contentType: function () {
+                    return $scope.contentType;
+                },
                 contents: function () {
                     return $scope.contents;
                 },
@@ -249,17 +268,67 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
         // Enable spinner
         $scope.contents[index].loading = 1;
 
-        var url = Routing.generate(route, { id: id });
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
         $http.post(url).success(function(response) {
-            if (response.status == 'OK') {
+            if (response.available != null) {
                 $scope.contents[index].available = response.available;
-
-                // Disable spinner
-                $scope.contents[index].loading = 0;
             }
+
+            // Disable spinner
+            $scope.contents[index].loading = 0;
         }).error(function(response) {
             // Disable spinner
             $scope.contents[index].loading = 0;
+        });
+    };
+
+    /**
+     * Changes the content in_home property.
+     *
+     * @param int    id    Content id.
+     * @param int    index Index of content in the array of contents.
+     * @param string route Route name.
+     */
+    $scope.toggleInHome = function (id, index, route) {
+        // Enable spinner
+        $scope.contents[index].home_loading = 1;
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
+        $http.post(url).success(function(response) {
+            if (response.in_home != null) {
+                $scope.contents[index].in_home = response.in_home;
+            }
+
+            // Disable spinner
+            $scope.contents[index].home_loading = 0;
+        }).error(function(response) {
+            // Disable spinner
+            $scope.contents[index].home_loading = 0;
+        });
+    };
+
+    /**
+     * Changes the content favorite property.
+     *
+     * @param int    id    Content id.
+     * @param int    index Index of content in the array of contents.
+     * @param string route Route name.
+     */
+    $scope.toggleFavorite = function (id, index, route) {
+        // Enable spinner
+        $scope.contents[index].favorite_loading = 1;
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
+        $http.post(url).success(function(response) {
+            if (response.favorite != null) {
+                $scope.contents[index].favorite = response.favorite;
+            }
+
+            // Disable spinner
+            $scope.contents[index].favorite_loading = 0;
+        }).error(function(response) {
+            // Disable spinner
+            $scope.contents[index].favorite_loading = 0;
         });
     };
 
@@ -284,6 +353,31 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
                 };
 
                 $scope.contents[i].loading = loading;
+            }
+        };
+    }
+
+    /**
+     * Updates the in_home property for selected contents.
+     *
+     * @param int loading   Loading flag to use in template.
+     * @param int inHome    Available value.
+     */
+    function updateInHome(loading, inHome) {
+        for (var i = 0; i < $scope.contents.length; i++) {
+            var j = 0;
+            while (j < $scope.selected.length
+                && $scope.contents[i].id != $scope.selected[j]
+            ) {
+                j++;
+            }
+
+            if (j < $scope.selected.length) {
+                if (inHome != null) {
+                    $scope.contents[i].in_home = inHome;
+                };
+
+                $scope.contents[i].home_loading = loading;
             }
         };
     }
@@ -349,4 +443,3 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout) {
 
 // Register ContentCtrl function as AngularJS controller
 angular.module('BackendApp.controllers').controller('ContentCtrl', ContentCtrl);
-//

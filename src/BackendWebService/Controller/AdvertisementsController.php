@@ -18,112 +18,13 @@ use Onm\Framework\Controller\Controller;
 class AdvertisementsController extends ContentController
 {
     /**
-     * Deletes multiple advertisements at once give them ids
-     *
-     * @param  Request $request the request object
-     * @return Response         the response object
-     *
-     * @Security("has_role('ADVERTISEMENT_DELETE')")
-     */
-    public function batchDeleteAction(Request $request)
-    {
-        $status  = 'OK';
-        $errors  = array();
-        $success = array();
-
-        $ids = $request->request->get('ids');
-
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $advertisement = new \Advertisement($id);
-
-                if (!is_null($advertisement->id)) {
-                    try {
-                        $advertisement->remove($id);
-                        $success[] = _('Advertisement deleted successfully.');
-                    } catch (Exception $e) {
-                        $errors[] = sprintf(_('Unable to delete the advertisement "%s".'), $advertisement->name);
-                    }
-                }
-            }
-        }
-
-        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
-    }
-
-    /**
-     * Updates advertisements available property.
-     *
-     * @param  Request $request the request object
-     * @return Response         the response object
-     *
-     * @Security("has_role('ADVERTISEMENT_AVAILA')")
-     */
-    public function batchToggleAvailableAction(Request $request)
-    {
-        $status  = 'OK';
-        $errors  = array();
-        $success = array();
-
-        $ids       = $request->request->get('ids');
-        $available = $request->request->get('available');
-
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $advertisement = new \Advertisement($id);
-
-                if (!is_null($advertisement->id)) {
-                    try {
-                        $advertisement->set_available($available, $_SESSION['userid']);
-                        $success[] = sprintf(_('Successfully changed availability for "%s" advertisement'), $advertisement->title);
-                    } catch (Exception $e) {
-                        $errors[] = sprintf(_('Unable to change the advertisement availability for "%s" advertisement'), $advertisement->name);
-                    }
-                }
-            }
-        }
-
-        return new JsonResponse(array('status' => $status, 'errors' => $errors, 'success' => $success));
-    }
-
-    /**
-     * Deletes a advertisement.
-     *
-     * @param  integer      $id Menu id.
-     * @return JsonResponse     The response of the current action.
-     *
-     * @Security("has_role('ADVERTISEMENT_DELETE')")
-     */
-    public function deleteAction($id)
-    {
-        $status  = 'ERROR';
-        $message = _('You must give an id for delete the advertisement.');
-
-        $advertisement = new \Advertisement($id);
-
-        if (!is_null($id)) {
-            try {
-                $advertisement->remove($id);
-
-                $status  = 'OK';
-                $message = _('Advertisement deleted successfully.');
-            } catch (Exception $e) {
-                // Continue
-            }
-        }
-
-        return new JsonResponse(array('status' => $status, 'message' => $message));
-    }
-
-    /**
      * Returns a list of contents in JSON format.
      *
-     * @param  Request      $request The request with the search parameters.
-     * @return JsonResponse          The response in JSON format.
-     *
-     * @Security("has_role('ADVERTISEMENT_ADMIN')")
+     * @param  Request      $request     The request with the search parameters.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response in JSON format.
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $contentType = null)
     {
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
@@ -151,40 +52,6 @@ class AdvertisementsController extends ContentController
                 'page'              => $page,
                 'results'           => $results,
                 'total'             => $total
-            )
-        );
-    }
-
-    /**
-     * Toggles advertisement availability.
-     *
-     * @param  integer      $id advertisement id.
-     * @return JsonResponse     The response of the current action.
-     *
-     * @Security("has_role('ADVERTISEMENT_AVAILA')")
-     */
-    public function toggleAvailableAction($id)
-    {
-        $status  = 'ERROR';
-        $message = _('You must give an id for delete the advertisement.');
-
-        $em     = $this->get('entity_repository');
-        $advertisement = $em->find(\classify('advertisement'), $id);
-
-        if (!$advertisement) {
-            $message = sprintf(_('Unable to find advertisement with id "%d"'), $id);
-        } else {
-            $advertisement->toggleAvailable();
-
-            $status  = 'OK';
-            $message = sprintf(_('Successfully changed availability for "%s" advertisement'), $advertisement->title);
-        }
-
-        return new JsonResponse(
-            array(
-                'status' => $status,
-                'message' => $message,
-                'available' => $advertisement->available
             )
         );
     }

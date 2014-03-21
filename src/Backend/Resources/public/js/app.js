@@ -1,5 +1,5 @@
 
-angular.module('BackendApp', ['BackendApp.controllers', 'ui.bootstrap'])
+angular.module('BackendApp', ['BackendApp.controllers', 'BackendApp.services', 'ui.bootstrap'])
     .config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {

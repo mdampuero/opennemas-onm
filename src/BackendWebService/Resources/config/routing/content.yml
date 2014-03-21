@@ -1,0 +1,65 @@
+backend_ws_content_create:
+    path:     /{contentType}/create
+    defaults: { _controller  : BackendWebServiceBundle:Content:create }
+    options:
+        expose: true
+
+backend_ws_content_delete:
+    path:     /{contentType}s/{id}/delete
+    defaults: { _controller  : BackendWebServiceBundle:Content:delete }
+    options:
+        expose: true
+
+backend_ws_content_show:
+    path:     /{contentType}s/{id}/show
+    defaults: { _controller  : BackendWebServiceBundle:Content:show }
+    options:
+        expose: true
+
+backend_ws_content_toggle_available:
+    path:     /{contentType}s/{id}/toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Content:toggleAvailable }
+    options:
+        expose: true
+
+backend_ws_content_toggle_favorite:
+    path:     /{contentType}s/{id}/toggle-favorite
+    defaults: { _controller  : BackendWebServiceBundle:Content:toggleFavorite }
+    options:
+        expose: true
+
+backend_ws_content_toggle_in_home:
+    path:     /{contentType}s/{id}/toggle-in-home
+    defaults: { _controller  : BackendWebServiceBundle:Content:toggleInHome }
+    options:
+        expose: true
+
+backend_ws_content_update:
+    path:     /{contentType}s/{id}/update
+    defaults: { _controller  : BackendWebServiceBundle:Content:update }
+    options:
+        expose: true
+
+backend_ws_contents_batch_delete:
+    path:     /{contentType}s/delete
+    defaults: { _controller  : BackendWebServiceBundle:Content:batchDelete }
+    options:
+        expose: true
+
+backend_ws_contents_batch_toggle_available:
+    path:     /{contentType}s/toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Content:batchToggleAvailable }
+    options:
+        expose: true
+
+backend_ws_contents_batch_toggle_in_home:
+    path:     /{contentType}s/toggle-in-home
+    defaults: { _controller  : BackendWebServiceBundle:Content:batchToggleInHome }
+    options:
+        expose: true
+
+backend_ws_contents_list:
+    path:     /{contentType}s
+    defaults: { _controller  : BackendWebServiceBundle:Content:list }
+    options:
+        expose: true

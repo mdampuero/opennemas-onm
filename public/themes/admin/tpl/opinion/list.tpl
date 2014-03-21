@@ -1,17 +1,21 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    <script>
-        var opinion_manager_urls = {
-            batch_delete: '{url name=admin_opinions_batch_delete category=$category page=$page}'
-        }
-    </script>
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
-
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_opinions}" method="get" name="formulario" id="formulario">
+<form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '' }, 'title', 'backend_ws_contents_list')">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
@@ -31,47 +35,60 @@
             </div>
         </div>
         <ul class="old-button">
-            {acl isAllowed="OPINION_AVAILABLE"}
-            <li class="batch-actions">
-
+            {acl isAllowed="OPINION_SETTINGS"}
+                <li>
+                    <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config opinion module{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config opinion module{/t}"/><br />
+                        {t}Settings{/t}
+                    </a>
+                </li>
+            {/acl}
+            <li class="separator"></li>
+            <li ng-if="selected.length > 0">
                 <a href="#">
                     <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                     <br/>{t}Batch actions{/t}
                 </a>
-
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" style="margin-top: 1px;">
+                    {acl isAllowed="OPINION_AVAILABLE"}
                     <li>
-                        <button type="submit" name="new_status" value="1" href="#" id="batch-publish">
-                            {t}Batch publish{/t}
-                        </button>
+                        <a href="#" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
+                            <i class="icon-eye-open"></i>
+                            {t}Publish{/t}
+                        </a>
                     </li>
                     <li>
-                        <button type="submit" name="new_status" value="0" href="#" id="batch-unpublish">
-                            {t}Batch unpublish{/t}
-                        </button>
+                        <a href="#" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
+                            <i class="icon-eye-close"></i>
+                            {t}Unpublish{/t}
+                        </a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#" ng-click="batchToggleInHome(1, 'backend_ws_contents_batch_toggle_in_home')">
+                            <i class="go-home"></i>
+                            {t escape="off"}In home{/t}
+                        </a>
                     </li>
                     <li>
-                        <button type="submit" name="new_status" value="1" id="batch-inhome">
-                            {t escape="off"}Batch in home{/t}
-                        </button>
+                        <a href="#" ng-click="batchToggleInHome(0, 'backend_ws_contents_batch_toggle_in_home')">
+                            <i class="no-home"></i>
+                            {t escape="off"}Drop from home{/t}
+                        </a>
                     </li>
-                    <li>
-                        <button type="submit" name="new_status" value="0" id="batch-noinhome">
-                            {t escape="off"}Batch drop from home{/t}
-                        </button>
-                    </li>
+                    {/acl}
+                    {acl isAllowed="OPINION_DELETE"}
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#" ng-click="open('modal-delete-selected')">
+                                <i class="icon-trash"></i>
+                                {t}Delete{/t}
+                            </a>
+                        </li>
+                    {/acl}
                 </ul>
-                {acl isAllowed="OPINION_DELETE"}
-                <li>
-                    <a class="delChecked" data-controls-modal="modal-opinion-batchDelete" href="#" title="{t}Delete{/t}">
-                    <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />
-                    {t}Delete{/t}
-                </a>
-                </li>
-                {/acl}
-
             </li>
-            {/acl}
+            <li class="separator" ng-if="selected.length > 0"></li>
 
             {acl isAllowed="OPINION_FRONTPAGE"}
             {if $home}
@@ -83,14 +100,7 @@
                 </li>
             {/if}
             {/acl}
-            {acl isAllowed="OPINION_SETTINGS"}
-            <li>
-                <a href="{url name=admin_opinions_config}" class="admin_add" title="{t}Config opinion module{/t}">
-                    <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="{t}Config opinion module{/t}"/><br />
-                    {t}Settings{/t}
-                </a>
-            </li>
-            {/acl}
+
             {acl isAllowed="OPINION_CREATE"}
             <li>
                 <a href="{url name=admin_opinion_create}" class="admin_add" title="{t}New opinion{/t}">
@@ -103,11 +113,8 @@
     </div>
 </div>
     <div class="wrapper-content">
-
         {render_messages}
-
         <div id="warnings-validation"></div><!-- /warnings-validation -->
-
         <div id="list_opinion">
         {if $home}
             {include file="opinion/partials/_opinion_list_home.tpl"}
@@ -116,9 +123,68 @@
         {/if}
         </div>
     </div>
+    <script type="text/ng-template" id="opinion">
+        <td>
+            <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+        </td>
+        <td>
+            <strong>
+            <span ng-if="content.author.name">
+                [% content.author.name %]
+            </span>
+            <span ng-if="!content.author.name">
+                [% content.author %]
+            </span>
+            -
+            [% content.title %]
+            </strong>
+        </td>
+        <td class="center">
+            [% content.views %]
+        </td>
+        <td class="center">
+            [% content.created %]
+        </td>
+        <td class="center">
+            {acl isAllowed="OPINION_FRONTPAGE"}
+                <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-if="content.author.meta.is_blog != 1" ng-click="toggleInHome(content.id, $index, 'backend_ws_content_toggle_in_home')" type="button"></button>
+                <span ng-if="content.author.meta.is_blog == 1">
+                    Blog
+                </span>
+            {/acl}
+        </td>
+        <td class="center">
+            {acl isAllowed="OPINION_AVAILABLE"}
+                <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
+            {/acl}
+        </td>
+        <td class="center">
+            {acl isAllowed="OPINION_HOME"}
+            <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="toggleFavorite(content.id, $index, 'backend_ws_content_toggle_favorite')" ng-if="content.type_opinion == 0" type="button"></button>
+            {/acl}
+        </td>
+        <td class="right">
+            <div class="btn-group">
+                {acl isAllowed="OPINION_UPDATE"}
+                <button class="btn" ng-click="edit(content.id, 'admin_opinion_show')" type="button">
+                    <i class="icon-pencil"></i>
+                </button>
+                {/acl}
+                {acl isAllowed="OPINION_DELETE"}
+                <button class="btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
+                    <i class="icon-trash icon-white"></i>
+                </button>
+                {/acl}
+            </ul>
+        </td>
+    </script>
+    <script type="text/ng-template" id="modal-delete">
+        {include file="opinion/modals/_modalDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-delete-selected">
+        {include file="opinion/modals/_modalBatchDelete.tpl"}
+    </script>
 </form>
-    {include file="opinion/modals/_modalDelete.tpl"}
-    {include file="opinion/modals/_modalBatchDelete.tpl"}
     {include file="opinion/modals/_modalAccept.tpl"}
 {/block}
 
@@ -126,34 +192,6 @@
 {block name="footer-js" append}
     <script>
     jQuery(document).ready(function($) {
-        $('.minput, #toggleallcheckbox').on('click', function() {
-            checkbox = $(this).find('input[type="checkbox"]');
-            checkbox.attr(
-               'checked',
-               !checkbox.is(':checked')
-            );
-            var checked_elements = $('input[type="checkbox"]:checked').length;
-            if (checked_elements > 0) {
-                $('.old-button .batch-actions').fadeIn('fast');
-            } else {
-                $('.old-button .batch-actions').fadeOut('fast');
-            }
-        });
-        $('#batch-inhome, #batch-noinhome').on('click', function(e, ui) {
-            $('#formulario').attr('action', "{url name=admin_opinions_batch_inhome}");
-        });
-
-        $('#batch-publish, #batch-unpublish').on('click', function(e, ui) {
-            $('#formulario').attr('action', "{url name=admin_opinions_batch_publish}");
-        });
-
-
-        $('#batch-delete').on('click', function(e, ui){
-            e.preventDefault();
-            $('#formulario').attr('action', "{url name=admin_opinions_batch_delete}");
-            $('#formulario').submit();
-        });
-
         {if $home}
         $( "#list_opinion tbody" ).sortable({
             items: "tr:not(.header)",

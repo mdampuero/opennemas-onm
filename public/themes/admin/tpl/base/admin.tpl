@@ -133,7 +133,6 @@
                     <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
                            target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
 
-
                 </ul><!-- / -->
             </nav>
             <nav class="right">

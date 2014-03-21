@@ -915,6 +915,8 @@ admin_opinion_create:
 admin_opinion_show:
     path:     /opinion/{id}/show
     defaults: { _controller  : BackendBundle:Opinions:show }
+    options:
+        expose: true
 
 admin_opinion_preview:
     path:     /opinion/preview

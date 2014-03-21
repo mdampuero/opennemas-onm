@@ -10,12 +10,13 @@
  * @param string title     Selected item title.
  * @param array  selected Array of selected items.
  */
-function ContentModalCtrl($http, $scope, $modalInstance, id, index, contents, title, selected) {
-    $scope.id       = id;
-    $scope.index    = index;
-    $scope.contents = contents;
-    $scope.title    = title;
-    $scope.selected = selected;
+function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting, contentType, id, index, contents, title, selected) {
+    $scope.contentType = contentType;
+    $scope.contents    = contents;
+    $scope.id          = id;
+    $scope.index       = index;
+    $scope.title       = title;
+    $scope.selected    = selected;
 
     /**
      * Closes the current modal.
@@ -35,9 +36,13 @@ function ContentModalCtrl($http, $scope, $modalInstance, id, index, contents, ti
         // Enable spinner
         $scope.deleting = 1;
 
-        var url = Routing.generate(route, { id: id });
+        var url = fosJsRouting.generate(
+            route,
+            { contentType: $scope.contentType, id: id }
+        );
+
         $http.post(url).success(function(data) {
-            if (data.status == 'OK') {
+            if (data.errors.length == 0) {
                 $scope.contents.splice(index, 1);
                 $modalInstance.close();
             }
@@ -59,24 +64,26 @@ function ContentModalCtrl($http, $scope, $modalInstance, id, index, contents, ti
         // Enable spinner
         $scope.deleting = 1;
 
-        var url = Routing.generate(route);
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
         $http.post(url, { ids: $scope.selected }).success(function(response) {
-            if (response.status == 'OK') {
-                // Remove selected items from contents array
-                for (var i = 0; i < $scope.contents.length; i++) {
-                    var j = 0;
-                    while (j < $scope.selected.length
-                        && $scope.contents[i].id != $scope.selected[j]
-                    ) {
-                        j++;
-                    }
+            // Remove only successfully deleted contents
+            for (var i = 0; i < response.success.length; i++) {
+                var j = 0;
+                while (j < $scope.contents.length
+                    && $scope.contents[j].id != response.success[i].id
+                ) {
+                    j++;
+                }
 
-                    if (j < $scope.selected.length) {
-                        $scope.contents.splice(i, 1);
-                    }
-                };
-                $modalInstance.close();
-            }
+                if (j < $scope.contents.length) {
+                    $scope.contents.splice(j, 1);
+                }
+                console.log(j);
+            };
+
+            // Handle errors
+
+            $modalInstance.close();
 
             // Disable spinner
             $scope.deleting = 0;

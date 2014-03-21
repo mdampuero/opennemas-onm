@@ -1,12 +1,12 @@
-backend_ws_menus_list:
-    path:     /menus
-    defaults: { _controller  : BackendWebServiceBundle:Menus:list }
-    options:
-        expose: true
-
 backend_ws_menu_create:
     path:     /menu/create
     defaults: { _controller  : BackendWebServiceBundle:Menus:create }
+    options:
+        expose: true
+
+backend_ws_menu_delete:
+    path:     /menus/{id}/delete
+    defaults: { _controller  : BackendWebServiceBundle:Menus:delete }
     options:
         expose: true
 
@@ -22,14 +22,14 @@ backend_ws_menu_update:
     options:
         expose: true
 
-backend_ws_menu_delete:
-    path:     /menus/{id}/delete
-    defaults: { _controller  : BackendWebServiceBundle:Menus:delete }
-    options:
-        expose: true
-
 backend_ws_menus_batch_delete:
     path:     /menus/batch-delete
     defaults: { _controller  : BackendWebServiceBundle:Menus:batchDelete }
+    options:
+        expose: true
+
+backend_ws_menus_list:
+    path:     /menus
+    defaults: { _controller  : BackendWebServiceBundle:Menus:list }
     options:
         expose: true

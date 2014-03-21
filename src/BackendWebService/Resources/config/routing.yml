@@ -2,14 +2,18 @@ backend_ws_advertisements:
     resource: @BackendWebServiceBundle/Resources/config/routing/advertisements.yml
     prefix:   /
 
-backend_ws_articles:
-    resource: @BackendWebServiceBundle/Resources/config/routing/articles.yml
+backend_ws_menus:
+    resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
     prefix:   /
 
 backend_ws_widgets:
     resource: @BackendWebServiceBundle/Resources/config/routing/widgets.yml
     prefix:   /
 
-backend_ws_menus:
-    resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
+backend_ws_opinions:
+    resource: @BackendWebServiceBundle/Resources/config/routing/opinions.yml
+    prefix:   /
+
+backend_ws_content:
+    resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
     prefix:   /
