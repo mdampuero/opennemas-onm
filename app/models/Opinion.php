@@ -234,9 +234,9 @@ class Opinion extends Content
             } elseif ((int) $rs->fields['type_opinion'] == 2) {
                 $rs->fields['author'] = 'Director';
             }
-        } else {
-            $rs->fields['author'] =  $rs->fields['name'] ;
-        }
+        }/* else {
+             $rs->fields['author'] =  $rs->fields['name'] ;
+        }*/
 
         $this->load($rs->fields);
 
