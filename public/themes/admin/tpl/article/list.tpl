@@ -109,6 +109,9 @@
                 </div>
             </div>
         </div>
+        <div ng-include="'articles'"></div>
+    </div>
+    <script type="text/ng-template" id="articles">
         <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
             <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
         </div>
@@ -131,7 +134,53 @@
                 <tr ng-if="contents.length == 0">
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
                 </tr>
-                <tr ng-if="contents.length >= 0" ng-include="'article'" ng-repeat="content in contents"></tr>
+                <tr ng-if="contents.length >= 0" ng-repeat="content in contents">
+                    <td>
+                        <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
+                    </td>
+                    <td class="left" >
+                        <span  rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
+                    </td>
+                    {if $category eq 'all' || $category == 0}
+                    <td class="left">
+                        <span ng-if="content.category_name == 'unknown'">
+                            {t}Unasigned{/t}
+                        </span>
+                        <span ng-if="content.category_name != 'unknown'">
+                            [% content.category_name %]
+                        </span>
+                    </td>
+                    {/if}
+                    <td class="left" >
+                        <span ng-if="content.author != 0">
+                            [% content.author.name %]
+                        </span>
+                        <span ng-if="content.author == 0 && content.agency != ''">
+                            [% content.agency %]
+                        </span>
+                        <span ng-if="content.author == 0 && content.agency == ''">
+                            [% content.editor %]
+                        </span>
+                    </td>
+                    <td class="center">[% content.created %]</td>
+                    <td class="center">[% content.editor %]</td>
+                    <td class="center">
+                        <span ng-if="content.category != 20">
+                        {acl isAllowed="ARTICLE_AVAILABLE"}
+                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
+                        {/acl}
+                    </td>
+                    <td class="right">
+                        <div class="btn-group">
+                            <button class="btn" ng-click="edit(content.id, 'admin_article_show')" type="button">
+                                <i class="icon-pencil"></i>
+                            </button>
+                            <button class="del btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
+                                <i class="icon-trash icon-white"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
             {/acl}
             </tbody>
             <tfoot>
@@ -143,54 +192,6 @@
             </tfoot>
             {*/acl*}
         </table>
-
-    </div>
-    <script type="text/ng-template" id="article">
-        <td>
-            <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
-        </td>
-        <td class="left" >
-            <span  rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
-        </td>
-        {if $category eq 'all' || $category == 0}
-        <td class="left">
-            <span ng-if="content.category_name == 'unknown'">
-                {t}Unasigned{/t}
-            </span>
-            <span ng-if="content.category_name != 'unknown'">
-                [% content.category_name %]
-            </span>
-        </td>
-        {/if}
-        <td class="left" >
-            <span ng-if="content.author != 0">
-                [% content.author.name %]
-            </span>
-            <span ng-if="content.author == 0 && content.agency != ''">
-                [% content.agency %]
-            </span>
-            <span ng-if="content.author == 0 && content.agency == ''">
-                [% content.editor %]
-            </span>
-        </td>
-        <td class="center">[% content.created %]</td>
-        <td class="center">[% content.editor %]</td>
-        <td class="center">
-            <span ng-if="content.category != 20">
-            {acl isAllowed="ARTICLE_AVAILABLE"}
-                <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
-            {/acl}
-        </td>
-        <td class="right">
-            <div class="btn-group">
-                <button class="btn" ng-click="edit(content.id, 'admin_article_show')" type="button">
-                    <i class="icon-pencil"></i>
-                </button>
-                <button class="del btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
-                    <i class="icon-trash icon-white"></i>
-                </button>
-            </div>
-        </td>
     </script>
     <script type="text/ng-template" id="modal-delete">
         {include file="article/modals/_modalDelete.tpl"}
