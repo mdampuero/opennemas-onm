@@ -48,3 +48,4 @@ vendor/symfony
 vendor/temporary-filesystem
 vendor/twig
 vendor/willdurand/
+/public/assets/js/routes.js
