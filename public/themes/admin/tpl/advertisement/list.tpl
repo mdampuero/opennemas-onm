@@ -206,7 +206,13 @@
                 <tfoot >
                     <tr>
                         <td colspan="8" class="center">
-                            <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total"></pagination>
+                            <div class="pull-left">
+                                [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            </div>
+                                <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total"></pagination>
+                            <div class="pull-right">
+                                [% page %] / [% pages %]
+                            </div>
                         </td>
                     </tr>
                 </tfoot>

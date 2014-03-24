@@ -109,7 +109,13 @@
         <tfoot>
             <tr >
                 <td colspan="11" class="center">
+                    <div class="pull-left">
+                        [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                    </div>
                     <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_opinions_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                    <div class="pull-right">
+                        [% page %] / [% pages %]
+                    </div>
                 </td>
             </tr>
         </tfoot>
