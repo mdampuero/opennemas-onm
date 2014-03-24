@@ -51,12 +51,14 @@
     </div>
 
     <div class="wrapper-content">
-
         {render_messages}
-        <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
-            <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
+        <div ng-include="'menus'"></div>
+    </div><!--fin wrapper-content-->
+    <script type="text/ng-template" id="menus">
+        <div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-
         <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
                 <tr>
@@ -71,7 +73,44 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="content in contents" ng-include="'menu'"></tr>
+                <tr ng-repeat="content in contents">
+                    <td class="center">
+                        <input type="checkbox" class="minput"  id="[% content.pk_menu %]" ng-checked="isSelected(content.pk_menu)" ng-click="updateSelection($event, content.pk_menu)">
+                    </td>
+                    <td>
+                        {acl isAllowed="MENU_UPDATE"}
+                        <a href="#" title="{t}Edit page '[% content.name %]'{/t}" title={t}"Edit"{/t}>
+                        {/acl}
+                            [% content.name %]
+                        {acl isAllowed="MENU_UPDATE"}
+                        </a>
+                        {/acl}
+                    </td>
+                    {if count($menu_positions) > 1}
+                    <td class="left">
+                        <span ng-if="content.position">
+                            [% content.position %]
+                        </span>
+                        <span ng-if="!content.position">
+                            {t}Unasigned{/t}
+                        </span>
+                    </td>
+                    {/if}
+                    <td class="right">
+                        <div class="btn-group">
+                            {acl isAllowed="MENU_UPDATE"}
+                            <button class="btn" ng-click="edit(content.id, 'admin_menu_show')" title="{t}Edit page '[% content.name %]'{/t}" type="button">
+                                <i class="icon-pencil"></i> {t}Edit{/t}
+                            </button>
+                            {/acl}
+                            {acl isAllowed="MENU_DELETE"}
+                                <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', $index)" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                            {/acl}
+                        </div>
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
@@ -79,44 +118,6 @@
                 </tr>
             </tfoot>
         </table>
-    </div><!--fin wrapper-content-->
-    <script type="text/ng-template" id="menu">
-        <td class="center">
-            <input type="checkbox" class="minput"  id="[% content.pk_menu %]" ng-checked="isSelected(content.pk_menu)" ng-click="updateSelection($event, content.pk_menu)">
-        </td>
-        <td>
-            {acl isAllowed="MENU_UPDATE"}
-            <a href="#" title="{t}Edit page '[% content.name %]'{/t}" title={t}"Edit"{/t}>
-            {/acl}
-                [% content.name %]
-            {acl isAllowed="MENU_UPDATE"}
-            </a>
-            {/acl}
-        </td>
-        {if count($menu_positions) > 1}
-        <td class="left">
-            <span ng-if="content.position">
-                [% content.position %]
-            </span>
-            <span ng-if="!content.position">
-                {t}Unasigned{/t}
-            </span>
-        </td>
-        {/if}
-        <td class="right">
-            <div class="btn-group">
-                {acl isAllowed="MENU_UPDATE"}
-                <button class="btn" ng-click="edit(content.id, 'admin_menu_show')" title="{t}Edit page '[% content.name %]'{/t}" type="button">
-                    <i class="icon-pencil"></i> {t}Edit{/t}
-                </button>
-                {/acl}
-                {acl isAllowed="MENU_DELETE"}
-                    <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', $index)" type="button">
-                        <i class="icon-trash icon-white"></i>
-                    </button>
-                {/acl}
-            </div>
-        </td>
     </script>
     <script type="text/ng-template" id="modal-delete">
         {include file="menues/modals/_modalDelete.tpl"}

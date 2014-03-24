@@ -15,7 +15,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title: '' }, 'title', 'backend_ws_contents_list')">
+<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title_like: '' }, 'title', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
@@ -73,7 +73,7 @@
             {acl hasCategoryAccess=$category}<div class="pull-left"><strong>[% total %] {t}articles{/t}</strong></div> {/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="filters.search.title"/>
+                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="filters.search.title_like"/>
                     <label for="category">{t}Category:{/t}</label>
                     <select class="input-medium select2" id="category" ng-model="filters.search.category_name">
                         <option value="-1">{t}-- All --{/t}</option>
@@ -112,8 +112,9 @@
         <div ng-include="'articles'"></div>
     </div>
     <script type="text/ng-template" id="articles">
-        <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
-            <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
+        <div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
         <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>

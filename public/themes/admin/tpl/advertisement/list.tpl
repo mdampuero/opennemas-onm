@@ -128,9 +128,12 @@
                     </select>
                 </div>
             </div>
-
-            <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
-                <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
+            <div ng-include="'advertisements'"></div>
+        </div> <!--end wrapper-->
+        <script type="text/ng-template" id="advertisements">
+            <div class="spinner-wrapper" ng-if="loading">
+                <div class="spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
             </div>
             <table class="table table-hover table-condensed" ng-if="!loading">
                 <thead>
@@ -154,7 +157,51 @@
                             {t}There is no advertisement stored in this section{/t}
                         </td>
                     </tr>
-                    <tr ng-if="contents.length > 0" ng-include="'advertisement'" ng-repeat="content in contents"></tr>
+                    <tr ng-if="contents.length > 0" ng-repeat="content in contents">
+                        <td style="text-align:center;">
+                            <input type="checkbox" class="minput"  id="[% content.id %]" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+                        </td>
+                        <td>
+                            <label>
+                                <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
+                                <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
+                                <img ng-id="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />
+                                [% map[content.type_advertisement].name %]
+                            </label>
+                        </td>
+                        <td style="">
+                            [% content.title %]
+                        </td>
+                        <td style="text-align:center;" class="center">
+                            <span ng-if="content.type_medida == 'NULL'">{t}Undefined{/t}</span>
+                            <span ng-if="content.type_medida == 'CLICK'">{t}Clicks:{/t} [% content.num_clic %]</span>
+                            <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% content.num_view %]</span>
+                            <span ng-if="content.type_medida == 'DATE'">{t}Date:{/t} [% content.startime %]-[% content.endtime %]</span>
+                        </td>
+                        <td style="text-align:center;">
+                            [% content.num_clic_count %]
+                        </td>
+                        {acl isAllowed="ADVERTISEMENT_AVAILA"}
+                        <td class="center" style="width:40px;">
+                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button">
+                            </button>
+                        </td>
+                        {/acl}
+                        <td class="right">
+                            <div class="btn-group">
+                            {acl isAllowed="ADVERTISEMENT_UPDATE"}
+                                <button class="btn" ng-click="edit(content.id, 'admin_ad_show')" title="{t}Edit{/t}" type="button">
+                                    <i class="icon-pencil"></i>
+                                </button>
+                            {/acl}
+                            {acl isAllowed="ADVERTISEMENT_DELETE"}
+                              <button class="btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                            {/acl}
+                            </ul>
+                        </td>
+                    </tr>
                 </tbody>
                 <tfoot >
                     <tr>
@@ -165,51 +212,6 @@
                 </tfoot>
 
             </table>
-        </div> <!--end wrapper-->
-        <script type="text/ng-template" id="advertisement">
-            <td style="text-align:center;">
-                <input type="checkbox" class="minput"  id="[% content.id %]" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
-            </td>
-            <td>
-                <label>
-                    <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
-                    <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
-                    <img ng-id="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />
-                    [% map[content.type_advertisement].name %]
-                </label>
-            </td>
-            <td style="">
-                [% content.title %]
-            </td>
-            <td style="text-align:center;" class="center">
-                <span ng-if="content.type_medida == 'NULL'">{t}Undefined{/t}</span>
-                <span ng-if="content.type_medida == 'CLICK'">{t}Clicks:{/t} [% content.num_clic %]</span>
-                <span ng-if="content.type_medida == 'VIEW'">{t}Viewed:{/t} [% content.num_view %]</span>
-                <span ng-if="content.type_medida == 'DATE'">{t}Date:{/t} [% content.startime %]-[% content.endtime %]</span>
-            </td>
-            <td style="text-align:center;">
-                [% content.num_clic_count %]
-            </td>
-            {acl isAllowed="ADVERTISEMENT_AVAILA"}
-            <td class="center" style="width:40px;">
-                <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button">
-                </button>
-            </td>
-            {/acl}
-            <td class="right">
-                <div class="btn-group">
-                {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                    <button class="btn" ng-click="edit(content.id, 'admin_ad_show')" title="{t}Edit{/t}" type="button">
-                        <i class="icon-pencil"></i>
-                    </button>
-                {/acl}
-                {acl isAllowed="ADVERTISEMENT_DELETE"}
-                  <button class="btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
-                        <i class="icon-trash icon-white"></i>
-                    </button>
-                {/acl}
-                </ul>
-            </td>
         </script>
         <script type="text/ng-template" id="modal-delete">
             {include file="advertisement/modals/_modalDelete.tpl"}

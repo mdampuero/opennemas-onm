@@ -122,61 +122,7 @@
         {/if}
         </div>
     </div>
-    <script type="text/ng-template" id="opinion">
-        <td>
-            <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
-        </td>
-        <td>
-            <strong>
-            <span ng-if="content.author.name">
-                [% content.author.name %]
-            </span>
-            <span ng-if="!content.author.name">
-                [% content.author %]
-            </span>
-            -
-            [% content.title %]
-            </strong>
-        </td>
-        <td class="center">
-            [% content.views %]
-        </td>
-        <td class="center">
-            [% content.created %]
-        </td>
-        <td class="center">
-            {acl isAllowed="OPINION_FRONTPAGE"}
-                <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-if="content.author.meta.is_blog != 1" ng-click="toggleInHome(content.id, $index, 'backend_ws_content_toggle_in_home')" type="button"></button>
-                <span ng-if="content.author.meta.is_blog == 1">
-                    Blog
-                </span>
-            {/acl}
-        </td>
-        <td class="center">
-            {acl isAllowed="OPINION_AVAILABLE"}
-                <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
-            {/acl}
-        </td>
-        <td class="center">
-            {acl isAllowed="OPINION_HOME"}
-            <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="toggleFavorite(content.id, $index, 'backend_ws_content_toggle_favorite')" ng-if="content.type_opinion == 0" type="button"></button>
-            {/acl}
-        </td>
-        <td class="right">
-            <div class="btn-group">
-                {acl isAllowed="OPINION_UPDATE"}
-                <button class="btn" ng-click="edit(content.id, 'admin_opinion_show')" type="button">
-                    <i class="icon-pencil"></i>
-                </button>
-                {/acl}
-                {acl isAllowed="OPINION_DELETE"}
-                <button class="btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
-                    <i class="icon-trash icon-white"></i>
-                </button>
-                {/acl}
-            </ul>
-        </td>
-    </script>
+
     <script type="text/ng-template" id="modal-delete">
         {include file="opinion/modals/_modalDelete.tpl"}
     </script>

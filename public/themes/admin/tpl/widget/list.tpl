@@ -88,8 +88,12 @@
                 </div>
             </div>
         </div>
-        <div ng-if="loading" style="text-align: center; padding: 40px 0px;">
-            <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
+        <div ng-include="'widgets'"></div>
+    </div>
+    <script type="text/ng-template" id="widgets">
+        <div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
         <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
@@ -105,7 +109,36 @@
                         {t}There is no available widgets{/t}
                     </td>
                 </tr>
-                <tr ng-if="contents.length > 0" ng-include="'widget'" ng-repeat="content in contents"></tr>
+                <tr ng-if="contents.length > 0" ng-repeat="content in contents">
+                    <td>
+                        <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
+                    </td>
+                    <td>
+                        [% content.title %]
+                    </td>
+                    <td>
+                        [% content.renderlet %]
+                    </td>
+                    <td class="center">
+                        {acl isAllowed="WIDGET_AVAILABLE"}
+                        <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
+                        {/acl}
+                    </td>
+                    <td class="right">
+                        <div class="btn-group">
+                            {acl isAllowed="WIDGET_UPDATE"}
+                                <button class="btn" ng-click="edit(content.id, 'admin_widget_show')" title="{t}Edit widget '[% content.title %]'{/t}" type="button">
+                                    <i class="icon-pencil"></i> {t}Edit{/t}
+                                </button>
+                            {/acl}
+                            {acl isAllowed="WIDGET_DELETE"}
+                                <button class="del btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                            {/acl}
+                        </div>
+                    </td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
@@ -115,36 +148,6 @@
                 </tr>
             </tfoot>
         </table>
-    </div>
-    <script type="text/ng-template" id="widget">
-        <td>
-            <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
-        </td>
-        <td>
-            [% content.title %]
-        </td>
-        <td>
-            [% content.renderlet %]
-        </td>
-        <td class="center">
-            {acl isAllowed="WIDGET_AVAILABLE"}
-            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
-            {/acl}
-        </td>
-        <td class="right">
-            <div class="btn-group">
-                {acl isAllowed="WIDGET_UPDATE"}
-                    <button class="btn" ng-click="edit(content.id, 'admin_widget_show')" title="{t}Edit widget '[% content.title %]'{/t}" type="button">
-                        <i class="icon-pencil"></i> {t}Edit{/t}
-                    </button>
-                {/acl}
-                {acl isAllowed="WIDGET_DELETE"}
-                    <button class="del btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
-                        <i class="icon-trash icon-white"></i>
-                    </button>
-                {/acl}
-            </div>
-        </td>
     </script>
     <script type="text/ng-template" id="modal-delete">
         {include file="widget/modals/_modalDelete.tpl"}
