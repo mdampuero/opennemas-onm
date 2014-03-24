@@ -32,9 +32,7 @@ class OpinionsController extends Controller
 {
     /**
      * Common code for all the actions
-     *
-     * @return void
-     **/
+     */
     public function init()
     {
         //Check if module is activated in this onm instance
@@ -54,110 +52,23 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Lists all the opinions
+     * Lists all the opinions.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request $request The request object.
+     * @return Response         The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
-
-        $page   =  $request->query->getDigits('page', 1);
-        $author =  (int) $request->query->filter('author', 0, FILTER_VALIDATE_INT);
-        $status =  (int) $request->query->filter('status', -1);
-        $contentType =  $request->query->filter('contentType', 'opinion');
-
-        $itemsPerPage = s::get('items_per_page');
-
-        $filterSQL = array('in_litter != 1');
-        if ($status >= 0) {
-            $filterSQL []= ' content_status='.$status;
-        }
-
-        if ($author != 0) {
-            if ($author > 0) {
-                $filterSQL []= 'opinions.fk_author='.$author;
-            } elseif ($author == -1) {
-                $filterSQL []= 'opinions.type_opinion=2';
-            } elseif ($author == -2) {
-                $filterSQL []= 'opinions.type_opinion=1';
-            }
-        }
          // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
-
-        $authorsBlog = array();
-        foreach ($allAuthors as $authorData) {
-            if ($authorData->is_blog == 1) {
-                $authorsBlog[$authorData->id] = $authorData;
-            }
-        }
-        if (!empty($authorsBlog)) {
-            if ($contentType == 'blog') {
-                $filterSQL [] = ' opinions.fk_author IN ('.implode(', ', array_keys($authorsBlog)).") ";
-            } else {
-                $filterSQL [] = ' opinions.fk_author NOT IN ('.implode(', ', array_keys($authorsBlog)).") ";
-            }
-        }
-
-        $filterSQL = implode(' AND ', $filterSQL);
-
-        $cm      = new \ContentManager();
-
-        list($countOpinions, $opinions)= $cm->getCountAndSlice(
-            'Opinion',
-            null,
-            $filterSQL,
-            'ORDER BY content_status, available, created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if ($contentType == 'blog') {
-            $route = 'admin_blogs';
-        } else {
-            $route = 'admin_opinions';
-        }
-
-        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
-            array(
-                'page'  => $page,
-                'items' => $itemsPerPage,
-                'total' => $countOpinions,
-                'url'   => $this->generateUrl(
-                    $route,
-                    array(
-                        'status' => $status,
-                        'author' => $author,
-                        'contentType' => $contentType,
-                    )
-                ).""
-            )
-        );
-
-        if (isset($opinions) && is_array($opinions)) {
-            foreach ($opinions as &$opinion) {
-                $opinion->author = new \User($opinion->fk_author);
-            }
-        } else {
-            $opinions = array();
-        }
 
         return $this->render(
             'opinion/list.tpl',
             array(
-                'autores'    => $allAuthors,
-                'opinions'   => $opinions,
-                'page'       => $page,
-                'status'     => $status,
-                'author'     => $author,
-                'home'       => false,
-                'pagination' => $pagination,
-                'total'      => $countOpinions,
-                'contentType'=> $contentType,
+                'autores' => $allAuthors,
+                'home'    => false,
             )
         );
     }
@@ -165,12 +76,11 @@ class OpinionsController extends Controller
     /**
      * Manages the frontpage of opinion
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request $request The request object.
+     * @return Response         The response object.
      *
      * @Security("has_role('OPINION_FRONTPAGE')")
-     **/
+     */
     public function frontpageAction(Request $request)
     {
         $page =  $request->query->getDigits('page', 1);
@@ -500,150 +410,6 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Change available status for one opinion given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id', 0);
-        $status = $request->query->getDigits('status', 0);
-        $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
-        $page   = $request->query->getDigits('page', 1);
-
-        $opinion = new \Opinion($id);
-
-        if (is_null($opinion->id)) {
-            m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
-        } else {
-            if ($status == 0) {
-                $opinion->setDraft();
-                $opinion->set_inhome($status, $_SESSION['userid']);
-            } else {
-                $opinion->setAvailable();
-            }
-            m::add(
-                sprintf(_('Successfully changed availability for the opinion "%s"'), $opinion->title),
-                m::SUCCESS
-            );
-        }
-
-        if ($type != 'frontpage') {
-            $url = $this->generateUrl(
-                'admin_opinions',
-                array(
-                    'type' => $type,
-                    'page' => $page
-                )
-            );
-        } else {
-            $url = $this->generateUrl(
-                'admin_opinions_frontpage',
-                array(
-                    'page' => $page
-                )
-            );
-        }
-
-         return $this->redirect($url);
-    }
-
-    /**
-     * Change in_home status for one opinion given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_HOME')")
-     **/
-    public function toggleInHomeAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id', 0);
-        $status = $request->query->getDigits('status', 0);
-        $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
-        $page   = $request->query->getDigits('page', 1);
-
-        $opinion = new \Opinion($id);
-
-        if (is_null($opinion->id)) {
-            m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
-        } else {
-            $opinion->set_inhome($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title), m::SUCCESS);
-        }
-
-        if ($type != 'frontpage') {
-            $url = $this->generateUrl(
-                'admin_opinions',
-                array('type' => $type, 'page' => $page)
-            );
-        } else {
-            $url = $this->generateUrl(
-                'admin_opinions_frontpage',
-                array('page' => $page)
-            );
-        }
-
-         return $this->redirect($url);
-    }
-
-    /**
-     * Change favorite flag for one opinion given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_AVAILABLE')")
-     **/
-    public function toggleFavoriteAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id', 0);
-        $status = $request->query->getDigits('status', 0);
-        $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
-        $page   = $request->query->getDigits('page', 1);
-
-        $opinion = new \Opinion($id);
-
-        if (is_null($opinion->id)) {
-            m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
-        } else {
-            $opinion->set_favorite($status, $_SESSION['userid']);
-            m::add(
-                sprintf(
-                    _('Successfully changed favorite state for the opinion "%s"'),
-                    $opinion->title
-                ),
-                m::SUCCESS
-            );
-        }
-
-        if ($type != 'frontpage') {
-            $url = $this->generateUrl(
-                'admin_opinions',
-                array(
-                    'type' => $type,
-                    'page' => $page
-                )
-            );
-        } else {
-            $url = $this->generateUrl(
-                'admin_opinions_frontpage',
-                array(
-                    'page' => $page
-                )
-            );
-        }
-
-         return $this->redirect($url);
-    }
-
-    /**
      * Saves the widget opinions content positions
      *
      * @param Request $request the request object
@@ -692,160 +458,6 @@ class OpinionsController extends Controller
         return new Response($output);
     }
 
-    /**
-     * Deletes multiple opinions at once given their ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $selected       = $request->query->get('selected_fld', null);
-        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
-        $author         = $request->query->getDigits('author');
-        $page           = $request->query->getDigits('page', 1);
-
-        $changes = 0;
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $opinion = new \Opinion((int) $id);
-                if (!is_null($opinion->id)) {
-                    $opinion->delete($id, $_SESSION['userid']);
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find a opinion with the id "%d"'), $id));
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully deleted %d opinions'), $changes));
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_opinions',
-                    array(
-                        'author' => $author,
-                        'status' => $redirectStatus,
-                        'page' => $page,
-                    )
-                )
-            );
-        } else {
-            return new Response('Ok', 200);
-        }
-
-    }
-
-    /**
-     * Changes the available status for opinions given their ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $selected       = $request->query->get('selected_fld', null);
-        $status         = $request->query->getDigits('new_status', 0);
-        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
-        $author         = $request->query->getDigits('author');
-        $page           = $request->query->getDigits('page', 1);
-
-        $changes = 0;
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $opinion = new \Opinion((int) $id);
-                if (!is_null($opinion->id)) {
-                    if ($status == 0) {
-                        $opinion->setDraft();
-                        $opinion->set_favorite($status);
-                        $opinion->set_inhome($status);
-                    } else {
-                        $opinion->setAvailable();
-                    }
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find a opinion with the id "%d"'), $id), m::ERROR);
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully changed the available status of %d opinions'), $changes), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_opinions',
-                array(
-                    'author' => $author,
-                    'status' => $redirectStatus,
-                    'page' => $page,
-                )
-            )
-        );
-    }
-
-      /**
-     * Changes home status for opinions given their ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_HOME')")
-     **/
-    public function batchInHomeAction(Request $request)
-    {
-        $selected       = $request->query->get('selected_fld', null);
-        $status         = $request->query->getDigits('new_status', 0);
-        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
-        $author         = $request->query->getDigits('author');
-        $page           = $request->query->getDigits('page', 1);
-
-        $changes = 0;
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $opinion = new \Opinion((int) $id);
-                if (!is_null($opinion->id)) {
-                    if ($status == 0) {
-                        $opinion->set_inhome($status);
-                    } else {
-                        $opinion->set_inhome($status);
-                    }
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find a opinion with the id "%d"'), $id), m::ERROR);
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully changed the home status of %d opinions'), $changes), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_opinions',
-                array(
-                    'author' => $author,
-                    'status' => $redirectStatus,
-                    'page' => $page,
-                )
-            )
-        );
-    }
     /**
      * Lists the available opinions for the frontpage manager
      *

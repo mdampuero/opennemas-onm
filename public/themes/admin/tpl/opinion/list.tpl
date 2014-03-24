@@ -15,7 +15,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '' }, 'title', 'backend_ws_contents_list')">
+<form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '', blog: -1, author: -1 }, 'title', 'backend_ws_contents_list')">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
@@ -29,8 +29,7 @@
                     {acl isAllowed="OPINION_FRONTPAGE"}
                     <a href="{url name=admin_opinions_frontpage}" {if $home}class="active"{/if}>{t}Opinion frontpage{/t}</a>
                     {/acl}
-                    <a href="{url name=admin_opinions}" {if !$home &&  $contentType neq 'blog'}class="active"{/if}>{t}Listing{/t}</a>
-                    <a href="{url name=admin_blogs}" {if $contentType eq 'blog'}class="active"{/if}>{t}Listing{/t} Posts</a>
+                    <a href="{url name=admin_opinions}" {if !$home}class="active"{/if}>{t}Listing{/t}</a>
                 </div>
             </div>
         </div>

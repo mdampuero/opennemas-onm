@@ -32,7 +32,7 @@ class OpinionsController extends ContentController
         $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
         $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
 
-        $em = $this->get('entity_repository');
+        $em = $this->get('opinion_repository');
 
         $order = null;
         if ($sortBy) {

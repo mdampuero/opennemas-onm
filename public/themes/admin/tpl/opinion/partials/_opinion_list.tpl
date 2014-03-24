@@ -2,29 +2,33 @@
     <div class="pull-left"><strong>[% total %] {t}items{/t}</strong></div>
     <div class="pull-right form-inline">
         {t}Type:{/t}
-        <select class="input-small select2" name="type">
-            <option value="opinion">Opinion</option>
-            <option value="blog">Blog</option>
+        <select class="input-small select2" ng-model="filters.search.blog">
+            <option value="-1">-- All --</option>
+            <option value="0">Opinion</option>
+            <option value="1">Blog</option>
         </select>
         {t}Status:{/t}
-        <select class="input-small select2" name="status">
-            <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-            <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
-            <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
+        <select class="input-small select2" ng-model="filters.search.available">
+            <option value="-1">{t}-- All --{/t}</option>
+            <option value="1">{t}Published{/t}</option>
+            <option value="0">{t}No published{/t}</option>
         </select>
          &nbsp;
         {t}Select an author{/t}
-        <select class="select2 input-large" name="author" id="author">
-            <option value="0" {if isset($author) && $author eq "0"} selected {/if}> {t}All authors{/t} </option>
-            <option value="-1" {if isset($author) && $author eq "-1"} selected {/if}> {t}Director{/t} </option>
-            <option value="-2" {if isset($author) && $author eq "-2"} selected {/if}> {t}Editorial{/t} </option>
+        <select class="select2 input-large" ng-model="filters.search.author">
+            <option value="-1"> {t}All authors{/t} </option>
+            <option value="-2"> {t}Director{/t} </option>
+            <option value="-3"> {t}Editorial{/t} </option>
             {section name=as loop=$autores}
                 <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name} {if $autores[as]->meta['is_blog'] eq 1} (Blogger) {/if}</option>
             {/section}
         </select>
     </div>
 </div>
-<table class="table table-hover table-condensed">
+<div ng-if="loading" style="text-align: center; padding: 40px 0px;">
+    <img src="/assets/images/facebox/loading.gif" style="margin: 0 auto;">
+</div>
+<table class="table table-hover table-condensed" ng-if="!loading">
 	<thead>
 		<tr>
 			<th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
