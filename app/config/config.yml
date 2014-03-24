@@ -22,7 +22,7 @@ framework:
     session:
         name:            __onm_sess
         gc_maxlifetime:  %session_memcache_expire%
-        handler_id:      session.handler.drak.memcached
+        handler_id:      %session_handler_id%
         # handler_id:    session.handler.drak.redis
     fragments:       ~
     http_method_override: true
@@ -59,7 +59,8 @@ services:
 
     session.handler.drak.redis:
         class: Drak\NativeSession\NativeRedisSessionHandler
-        arguments: [tcp://localhost:6379?timeout=2]
+        arguments: [%session_handler_savepath%]
 
     session.handler.drak.memcached:
         class: Drak\NativeSession\NativeMemcachedSessionHandler
+        arguments: [%session_handler_savepath%, %session_handler_options%]
