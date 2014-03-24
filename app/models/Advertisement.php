@@ -522,7 +522,7 @@ class Advertisement extends Content
         if (array_key_exists('cssclass', $params)
             && isset($params['cssclass'])
         ) {
-            $wrapperClass = $params['cssclass'];
+            $wrapperClass = $params['cssclass'].' ad_in_column ad_horizontal_marker clearfix';
         } else {
             $wrapperClass = 'ad_in_column ad_horizontal_marker clearfix';
         }
@@ -532,9 +532,9 @@ class Advertisement extends Content
             $params['afterHTML']  = "</div>";
         }
 
-        $width                = $this->params['width'];
-        $height               = $this->params['height'];
-        $overlap              = (isset($this->params['overlap']))? $this->params['overlap']: false;
+        $width   = $this->params['width'];
+        $height  = $this->params['height'];
+        $overlap = (isset($this->params['overlap']))? $this->params['overlap']: false;
 
         // Extract width and height properties from CSS
         $width  = $params['width'];
