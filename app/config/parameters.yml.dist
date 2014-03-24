@@ -51,7 +51,7 @@ parameters:
             prefix: onm
 
     session_params:
-        name:          _onm_sess
+        name:          __onm_sess
         gc_maxlifetime: 86400
 
     logger_file_path: tmp/log/application.log

@@ -40,9 +40,6 @@ class FormController extends Controller
         require_once 'recaptchalib.php';
 
         \Frontend\Controller\StaticPagesController::getAds();
-
-        $this->session = $this->get('session');
-        $this->session->start();
     }
 
     /**
