@@ -29,7 +29,7 @@ class ContentController extends Controller
         $errors  = array();
         $success = array();
 
-        $ids         = $request->request->get('ids');
+        $ids = $request->request->get('ids');
 
         if (is_array($ids) && count($ids) > 0) {
             foreach ($ids as $id) {
@@ -39,19 +39,19 @@ class ContentController extends Controller
                     try {
                         $content->remove($id);
                         $success[] = array(
-                            'id'      => $id,
-                            'message' => 'Selected items deleted successfully'
+                            'id'   => $id,
+                            'text' => _('Selected items deleted successfully')
                         );
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'      => $id,
-                            'message' => 'Unable to delete item with id "$id"'
+                            'id'   => $id,
+                            'text' => _('Unable to delete item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"'
+                        'id'   => $id,
+                        'text' => _('Unable to find item with id "$id"')
                     );
                 }
             }
@@ -93,19 +93,19 @@ class ContentController extends Controller
                         );
 
                         $success[] = array(
-                            'id'      => $id,
-                            'message' => 'Selected items updated successfully'
+                            'id'   => $id,
+                            'text' => _('Selected items updated successfully')
                         );
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'      => $id,
-                            'message' => 'Unable to update item with id "$id"'
+                            'id'   => $id,
+                            'text' => _('Unable to update item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"'
+                        'id'   => $id,
+                        'text' => _('Unable to find item with id "$id"')
                     );
                 }
             }
@@ -147,19 +147,19 @@ class ContentController extends Controller
                         );
 
                         $success[] = array(
-                            'id'      => $id,
-                            'message' => 'Selected items updated successfully'
+                            'id'   => $id,
+                            'text' => _('Selected items updated successfully')
                         );
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'      => $id,
-                            'message' => 'Unable to update item with id "$id"'
+                            'id'   => $id,
+                            'text' => _('Unable to update item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"'
+                        'id'   => $id,
+                        'text' => _('Unable to find item with id "$id"')
                     );
                 }
             }
@@ -192,19 +192,19 @@ class ContentController extends Controller
             try {
                 $content->remove($id);
                 $success[] = array(
-                    'id'      => $id,
-                    'message' => 'Item deleted successfully'
+                    'id'   => $id,
+                    'text' => _('Item deleted successfully')
                 );
             } catch (Exception $e) {
                 $errors[] = array(
-                    'id'      => $id,
-                    'message' => 'Unable to delete item with id "$id"'
+                    'id'   => $id,
+                    'text' => _('Unable to delete item with id "$id"')
                 );
             }
         } else {
             $errors[] = array(
-                'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'id'   => $id,
+                'text' => _('Unable to find item with id "$id"')
             );
         }
 
@@ -272,13 +272,13 @@ class ContentController extends Controller
 
             $available = $content->available;
             $success[] = array(
-                'id'      => $id,
-                'message' => 'Item updated successfully'
+                'id'   => $id,
+                'text' => _('Item updated successfully')
             );
         } else {
             $errors[] = array(
-                'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'id'   => $id,
+                'text' => _('Unable to find item with id "$id"')
             );
         }
 
@@ -312,13 +312,13 @@ class ContentController extends Controller
 
             $favorite = $content->favorite;
             $success[] = array(
-                'id'      => $id,
-                'message' => 'Item updated successfully'
+                'id'   => $id,
+                'text' => _('Item updated successfully')
             );
         } else {
             $errors[] = array(
-                'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'id'   => $id,
+                'text' => _('Unable to find item with id "$id"')
             );
         }
 
@@ -352,13 +352,13 @@ class ContentController extends Controller
 
             $inHome = $content->in_home;
             $success[] = array(
-                'id'      => $id,
-                'message' => 'Item updated successfully'
+                'id'   => $id,
+                'text' => _('Item updated successfully')
             );
         } else {
             $errors[] = array(
-                'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'id'   => $id,
+                'text' => _('Unable to find item with id "$id"')
             );
         }
 
