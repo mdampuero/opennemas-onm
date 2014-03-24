@@ -33,10 +33,21 @@ parameters:
     mailer_port:       ~
     mailer_no_reply_address: no-reply@postman.opennemas.com
 
-    session_memcache_host: 127.0.0.1
-    session_memcache_port: 11211
+    session_memcache_host:   127.0.0.1
+    session_memcache_port:   11211
     session_memcache_prefix: sess
     session_memcache_expire: 84600
+    session_handler_id:      session.handler.drak.memcached
+    #session_handler_id:     session.handler.drak.redis
+
+    # Memcached options
+    session_handler_options: []
+
+    # Savepath for Memcached (ip:port)
+    session_handler_savepath: 127.0.0.1:11211
+
+    # Savepath for Redis (tcp://ip:port?<options>)
+    # session_handler_savepath: tcp://localhost:6379?timeout=2
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
