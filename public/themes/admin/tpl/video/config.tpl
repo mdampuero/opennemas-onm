@@ -64,6 +64,22 @@
             </div>
 
             <div class="control-group">
+                <label for="video[total_front_more]" class="control-label">{t}Total in video frontpage more videos{/t}</label>
+                <div class="controls">
+                    <input type="number" name="video_settings[total_front_more]" value="{$configs['video_settings']['total_front_more']|default:"12"}" required />
+                    <div class="help-block">{t}Total number of videos on more videos section in video home frontpage{/t}</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="video[front_offset]" class="control-label">{t}Total offset in video frontpage more videos{/t}</label>
+                <div class="controls">
+                    <input type="number" name="video_settings[front_offset]" value="{$configs['video_settings']['front_offset']|default:"3"}" required />
+                    <div class="help-block">{t}Total number of videos that are placed on top home video frontpage{/t}</div>
+                </div>
+            </div>
+
+            <div class="control-group">
                 <label for="video[total_widget]" class="control-label">{t}Total in video gallery{/t}</label>
                 <div class="controls">
                     <input type="number" name="video_settings[total_gallery]" value="{$configs['video_settings']['total_gallery']|default:"20"}" required />

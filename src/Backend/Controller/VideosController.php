@@ -355,7 +355,7 @@ class VideosController extends Controller
                     $information['thumbnail'] = $requestPost->filter('video_image', null, FILTER_SANITIZE_STRING);
 
                     $videoData = array(
-                        'id'            => $id,
+                        'id'             => $id,
                         'category'       => $category,
                         'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
                         'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
@@ -367,9 +367,12 @@ class VideosController extends Controller
                         'information'    => $information,
                         'body'           => $requestPost->filter('body', 0, FILTER_VALIDATE_INT),
                         'video_url'      => $requestPost->filter('video_url', 0, FILTER_VALIDATE_INT),
+                        'starttime'      => $video->starttime,
                     );
+
                     $video->update($videoData);
                 } else {
+                    $_POST['starttime'] = $video->starttime;
                     $video->update($_POST);
                 }
                 m::add(_("Video updated successfully."), m::SUCCESS);

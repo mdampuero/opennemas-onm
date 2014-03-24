@@ -205,6 +205,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             $categoryName = preg_replace('@-@', '', $categoryName);
 
             $tplManager->delete($categoryName . '|RSS');
+            $tplManager->delete('last|RSS');
 
             $tplManager->delete('frontpage|'.$categoryName);
             $this->cacheHandler->delete('frontpage_elements_' . $category);

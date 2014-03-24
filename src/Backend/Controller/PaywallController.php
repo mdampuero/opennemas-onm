@@ -65,8 +65,6 @@ class PaywallController extends Controller
         $settings = s::get('paywall_settings');
 
         if (empty($settings)) {
-            $session = $this->get('session');
-            $session->start();
             $this->get('session')->getFlashBag()->add(
                 'notice',
                 _('Please configure your Paywall module before using it.')

@@ -1492,6 +1492,7 @@ class ContentManager
         $orderBy,
         $page = 1,
         $numElements = 10,
+        $offset = 0,
         $debug = false
     ) {
         $this->init($contentType);
@@ -1507,9 +1508,9 @@ class ContentManager
         $countContents = $this->count($contentType, $filterCount, $categoryId);
 
         if ($page == 1) {
-            $limit = ' LIMIT '. $numElements;
+            $limit = $offset.', '.$numElements;
         } else {
-            $limit = ' LIMIT '.($page-1)*$numElements.', '.$numElements;
+            $limit = $offset+(($page-1)*$numElements).', '.$numElements;
         }
 
         if (intval($categoryId)>0) {
@@ -1520,14 +1521,14 @@ class ContentManager
                  . $filter
                  . ' '
                  . $orderBy
-                 . $limit;
+                 . ' LIMIT '.$limit;
         } else {
             $sql = 'SELECT * FROM `contents`, `'.$this->table.'` '
                  . ' WHERE `contents`.`pk_content`=`'.$this->table.'`.`pk_'.$this->content_type.'` '
                  . $filter
                  . ' '
                  . $orderBy
-                 . $limit;
+                 . ' LIMIT '.$limit;
         }
         if ($debug == true) {
             var_dump($sql);

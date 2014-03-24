@@ -60,12 +60,10 @@ class SettingManager extends BaseManager
             }
         } else {
             // Try to fetch each setting from cache first
-            $cacheSettingName = array();
-
             $settingValue = $this->cache->fetch($settingName);
 
             // If all the keys were not fetched from cache now is turn of DB
-            if (is_null($settingValue)) {
+            if (is_null($settingValue) || empty($settingValue)) {
                 $settings = implode("', '", $settingName);
                 $sql      = "SELECT name, value FROM `settings` WHERE name IN ('{$settings}') ";
                 $rs       = $this->dbConn->Execute($sql);
@@ -81,7 +79,6 @@ class SettingManager extends BaseManager
 
                 $this->cache->save($settingValue, '');
             }
-
         }
 
         return $settingValue;

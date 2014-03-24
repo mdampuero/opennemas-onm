@@ -11,6 +11,7 @@ class Template extends Smarty
 {
     // Private properties
     public $theme               = null;
+    public $themeName           = null;
     public $locale_dir	        = null;
     public $css_dir	            = null;
     public $image_dir           = null;
@@ -40,6 +41,7 @@ class Template extends Smarty
     {
         // Call the parent constructor
         parent::__construct();
+        $this->themeName = $theme;
 
         $this->setBaseCachePath();
 
@@ -55,14 +57,13 @@ class Template extends Smarty
             }
         }
 
-        $this->setupCachePath();
+        $this->setupCachePath($baseTheme);
 
         $this->setPluginLoadPaths();
 
         $this->registerCustomPlugins();
 
         $this->setTemplateVars($theme);
-
 
         // Load filters
         foreach ($this->filters as $filterSectionName => $filters) {
@@ -102,10 +103,10 @@ class Template extends Smarty
      *
      * @return void
      **/
-    public function setupCachePath()
+    public function setupCachePath($themeName)
     {
         if (!file_exists($this->baseCachePath.'/smarty')) {
-            mkdir($this->baseCachePath.'/smarty', 0775);
+            mkdir($this->baseCachePath.'/smarty', 0775, true);
         }
 
         $cachePath = $this->baseCachePath.'/smarty/config/';
@@ -124,14 +125,17 @@ class Template extends Smarty
 
         $this->setConfigDir(realpath($this->baseCachePath.'/smarty/config'));
 
-        // Create cache and compile dirs if not exists to make template instance aware
-        foreach (array('cache', 'compile') as $key => $value) {
-            $directory = $this->baseCachePath.'/smarty/'.$value;
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755);
-            }
-            $this->{$value."_dir"} = realpath($directory).'/';
+        $directory = COMMON_CACHE_PATH.'/smarty/compile-'.$this->themeName;
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
         }
+        $this->compile_dir = realpath($directory).'/';
+
+        $directory = $this->baseCachePath.'/smarty/cache';
+        if (!is_dir($directory)) {
+            mkdir($directory, 0755, true);
+        }
+        $this->cache_dir = realpath($directory).'/';
     }
 
     /**

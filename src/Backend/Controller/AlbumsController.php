@@ -415,6 +415,7 @@ class AlbumsController extends Controller
             'album_photos_id'       => $request->request->get('album_photos_id'),
             'album_photos_footer'   => $request->request->get('album_photos_footer'),
             'fk_author'             => $request->request->filter('fk_author', 0, FILTER_VALIDATE_INT),
+            'starttime'             => $album->starttime,
         );
 
         $album->update($data);
