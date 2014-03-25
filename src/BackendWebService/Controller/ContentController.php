@@ -58,7 +58,7 @@ class ContentController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function deleteAction($id, $contentType)
+    public function sendToTrashAction($id, $contentType)
     {
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -101,7 +101,7 @@ class ContentController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function batchDeleteAction(Request $request, $contentType)
+    public function batchSendToTrashAction(Request $request, $contentType)
     {
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -150,7 +150,7 @@ class ContentController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function restoreAction($id, $contentType)
+    public function restoreFromTrashAction($id, $contentType)
     {
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -193,7 +193,7 @@ class ContentController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function batchRestoreAction(Request $request, $contentType)
+    public function batchRestoreFromTrashAction(Request $request, $contentType)
     {
         $em      = $this->get('entity_repository');
         $errors  = array();

@@ -4,45 +4,9 @@ backend_ws_content_create:
     options:
         expose: true
 
-backend_ws_content_send_to_trash:
-    path:     /{contentType}s/{id}/delete
-    defaults: { _controller  : BackendWebServiceBundle:Content:delete }
-    options:
-        expose: true
-
-backend_ws_content_restore_from_trash:
-    path:     /{contentType}/{id}/restore_from_trash
-    defaults: { _controller  : BackendWebServiceBundle:Content:restore }
-    options:
-        expose: true
-
-backend_ws_content_remove:
-    path:     /{contentType}/{id}/restore_from_trash
-    defaults: { _controller  : BackendWebServiceBundle:Content:restore }
-    options:
-        expose: true
-
 backend_ws_content_show:
     path:     /{contentType}s/{id}/show
     defaults: { _controller  : BackendWebServiceBundle:Content:show }
-    options:
-        expose: true
-
-backend_ws_content_toggle_available:
-    path:     /{contentType}s/{id}/toggle-available
-    defaults: { _controller  : BackendWebServiceBundle:Content:toggleAvailable }
-    options:
-        expose: true
-
-backend_ws_content_toggle_favorite:
-    path:     /{contentType}s/{id}/toggle-favorite
-    defaults: { _controller  : BackendWebServiceBundle:Content:toggleFavorite }
-    options:
-        expose: true
-
-backend_ws_content_toggle_in_home:
-    path:     /{contentType}s/{id}/toggle-in-home
-    defaults: { _controller  : BackendWebServiceBundle:Content:toggleInHome }
     options:
         expose: true
 
@@ -52,9 +16,45 @@ backend_ws_content_update:
     options:
         expose: true
 
-backend_ws_contents_batch_delete:
+backend_ws_content_send_to_trash:
+    path:     /{contentType}s/{id}/delete
+    defaults: { _controller  : BackendWebServiceBundle:Content:sendToTrash }
+    options:
+        expose: true
+
+backend_ws_contents_batch_send_to_trash:
     path:     /{contentType}s/delete
-    defaults: { _controller  : BackendWebServiceBundle:Content:batchDelete }
+    defaults: { _controller  : BackendWebServiceBundle:Content:batchSendToTrash }
+    options:
+        expose: true
+
+backend_ws_content_restore_from_trash:
+    path:     /{contentType}/{id}/restore_from_trash
+    defaults: { _controller  : BackendWebServiceBundle:Content:restoreFromTrash }
+    options:
+        expose: true
+
+backend_ws_contents_batch_restore_from_trash:
+    path:     /{contentType}s/restore_from_trash
+    defaults: { _controller  : BackendWebServiceBundle:Content:batchRestoreFromTrash }
+    options:
+        expose: true
+
+backend_ws_content_remove_permanently:
+    path:     /{contentType}s/{id}/remove
+    defaults: { _controller  : BackendWebServiceBundle:Content:removePermanently }
+    options:
+        expose: true
+
+backend_ws_contents_batch_remove_permanently:
+    path:     /{contentType}s/remove
+    defaults: { _controller  : BackendWebServiceBundle:Content:batchRemovePermanently }
+    options:
+        expose: true
+
+backend_ws_content_toggle_available:
+    path:     /{contentType}s/{id}/toggle-available
+    defaults: { _controller  : BackendWebServiceBundle:Content:toggleAvailable }
     options:
         expose: true
 

@@ -28,7 +28,7 @@
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="ARTICLE_DELETE"}
                             <li>
-                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_delete')">
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
                                     <i class="icon-trash"></i>
                                     {t}Delete{/t}
                                 </a>
