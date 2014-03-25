@@ -17,6 +17,84 @@ use Onm\Framework\Controller\Controller;
 class ContentController extends Controller
 {
     /**
+     * Returns a list of contents in JSON format.
+     *
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function listAction(Request $request, $contentType)
+    {
+        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
+        $page            = $request->request->getDigits('page', 1);
+        $search          = $request->request->get('search');
+        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
+        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
+
+        $em = $this->get('entity_repository');
+
+        $order = null;
+        if ($sortBy) {
+            $order = '`' . $sortBy . '` ' . $sortOrder;
+        }
+
+        $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $total   = $em->countBy($search);
+
+        return new JsonResponse(
+            array(
+                'elements_per_page' => $elementsPerPage,
+                'page'              => $page,
+                'results'           => $results,
+                'total'             => $total
+            )
+        );
+    }
+
+    /**
+     * Deletes a content.
+     *
+     * @param  integer      $id          Content id.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function deleteAction($id, $contentType)
+    {
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
+
+        $content = $em->find(\classify($contentType), $id);
+
+        if (!is_null($content->id)) {
+            try {
+                $content->remove($id);
+                $success[] = array(
+                    'id'   => $id,
+                    'text' => _('Item deleted successfully')
+                );
+            } catch (Exception $e) {
+                $errors[] = array(
+                    'id'   => $id,
+                    'text' => _('Unable to delete item with id "$id"')
+                );
+            }
+        } else {
+            $errors[] = array(
+                'id'   => $id,
+                'text' => _('Unable to find item with id "$id"')
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
+                'success' => $success
+            )
+        );
+    }
+
+    /**
      * Deletes multiple contents at once give them ids.
      *
      * @param  Request      $request     The request object.
@@ -61,6 +139,46 @@ class ContentController extends Controller
             array(
                 'errors'  => $errors,
                 'success' => $success
+            )
+        );
+    }
+
+    /**
+     * Toggles content available property.
+     *
+     * @param  integer      $id          Content id.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function toggleAvailableAction($id, $contentType)
+    {
+        $available = null;
+        $em        = $this->get('entity_repository');
+        $errors    = array();
+        $success   = array();
+
+        $content   = $em->find(\classify($contentType), $id);
+
+        if (!is_null($content->id)) {
+            $content->toggleAvailable();
+
+            $available = $content->available;
+            $success[] = array(
+                'id'   => $id,
+                'text' => _('Item updated successfully')
+            );
+        } else {
+            $errors[] = array(
+                'id'   => $id,
+                'text' => _('Unable to find item with id "$id"')
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'available' => $available,
+                'errors'    => $errors,
+                'success'   => $success
             )
         );
     }
@@ -115,178 +233,6 @@ class ContentController extends Controller
             array(
                 'errors'  => $errors,
                 'success' => $success
-            )
-        );
-    }
-
-    /**
-     * Updates contents in_home property.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     */
-    public function batchToggleInHomeAction(Request $request, $contentType)
-    {
-        $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-
-        $inHome = $request->request->get('in_home');
-        $ids       = $request->request->get('ids');
-
-        if (is_array($ids) && count($ids) > 0) {
-            foreach ($ids as $id) {
-                $content = $em->find(\classify($contentType), $id);
-
-                if (!is_null($content->id)) {
-                    try {
-                        $content->set_in_home(
-                            $inHome,
-                            $this->getUser()->id
-                        );
-
-                        $success[] = array(
-                            'id'   => $id,
-                            'text' => _('Selected items updated successfully')
-                        );
-                    } catch (Exception $e) {
-                        $errors[] = array(
-                            'id'   => $id,
-                            'text' => _('Unable to update item with id "$id"')
-                        );
-                    }
-                } else {
-                    $errors[] = array(
-                        'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"')
-                    );
-                }
-            }
-        }
-
-        return new JsonResponse(
-            array(
-                'errors'  => $errors,
-                'success' => $success
-            )
-        );
-    }
-
-    /**
-     * Deletes a content.
-     *
-     * @param  integer      $id          Content id.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     */
-    public function deleteAction($id, $contentType)
-    {
-        $em      = $this->get('entity_repository');
-        $errors  = array();
-        $success = array();
-
-        $content = $em->find(\classify($contentType), $id);
-
-        if (!is_null($content->id)) {
-            try {
-                $content->remove($id);
-                $success[] = array(
-                    'id'   => $id,
-                    'text' => _('Item deleted successfully')
-                );
-            } catch (Exception $e) {
-                $errors[] = array(
-                    'id'   => $id,
-                    'text' => _('Unable to delete item with id "$id"')
-                );
-            }
-        } else {
-            $errors[] = array(
-                'id'   => $id,
-                'text' => _('Unable to find item with id "$id"')
-            );
-        }
-
-        return new JsonResponse(
-            array(
-                'errors'  => $errors,
-                'success' => $success
-            )
-        );
-    }
-
-    /**
-     * Returns a list of contents in JSON format.
-     *
-     * @param  Request      $request     The request object.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     */
-    public function listAction(Request $request, $contentType)
-    {
-        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
-        $page            = $request->request->getDigits('page', 1);
-        $search          = $request->request->get('search');
-        $sortBy          = $request->request->filter('sort_by', null, FILTER_SANITIZE_STRING);
-        $sortOrder       = $request->request->filter('sort_order', 'asc', FILTER_SANITIZE_STRING);
-
-        $em = $this->get('entity_repository');
-
-        $order = null;
-        if ($sortBy) {
-            $order = '`' . $sortBy . '` ' . $sortOrder;
-        }
-
-        $results = $em->findBy($search, $order, $elementsPerPage, $page);
-        $total   = $em->countBy($search);
-
-        return new JsonResponse(
-            array(
-                'elements_per_page' => $elementsPerPage,
-                'page'              => $page,
-                'results'           => $results,
-                'total'             => $total
-            )
-        );
-    }
-
-    /**
-     * Toggles content available property.
-     *
-     * @param  integer      $id          Content id.
-     * @param  string       $contentType Content type name.
-     * @return JsonResponse              The response object.
-     */
-    public function toggleAvailableAction($id, $contentType)
-    {
-        $available = null;
-        $em        = $this->get('entity_repository');
-        $errors    = array();
-        $success   = array();
-
-        $content   = $em->find(\classify($contentType), $id);
-
-        if (!is_null($content->id)) {
-            $content->toggleAvailable();
-
-            $available = $content->available;
-            $success[] = array(
-                'id'   => $id,
-                'text' => _('Item updated successfully')
-            );
-        } else {
-            $errors[] = array(
-                'id'   => $id,
-                'text' => _('Unable to find item with id "$id"')
-            );
-        }
-
-        return new JsonResponse(
-            array(
-                'available' => $available,
-                'errors'    => $errors,
-                'success'   => $success
             )
         );
     }
@@ -366,6 +312,60 @@ class ContentController extends Controller
             array(
                 'errors'  => $errors,
                 'in_home' => $inHome,
+                'success' => $success
+            )
+        );
+    }
+
+    /**
+     * Updates contents in_home property.
+     *
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function batchToggleInHomeAction(Request $request, $contentType)
+    {
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
+
+        $inHome = $request->request->get('in_home');
+        $ids       = $request->request->get('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $content = $em->find(\classify($contentType), $id);
+
+                if (!is_null($content->id)) {
+                    try {
+                        $content->set_in_home(
+                            $inHome,
+                            $this->getUser()->id
+                        );
+
+                        $success[] = array(
+                            'id'   => $id,
+                            'text' => _('Selected items updated successfully')
+                        );
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'   => $id,
+                            'text' => _('Unable to update item with id "$id"')
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'   => $id,
+                        'text' => _('Unable to find item with id "$id"')
+                    );
+                }
+            }
+        }
+
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
                 'success' => $success
             )
         );
