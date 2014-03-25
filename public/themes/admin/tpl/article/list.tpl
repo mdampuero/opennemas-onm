@@ -172,12 +172,16 @@
                     </td>
                     <td class="right">
                         <div class="btn-group">
-                            <button class="btn" ng-click="edit(content.id, 'admin_article_show')" type="button">
-                                <i class="icon-pencil"></i>
-                            </button>
-                            <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_delete', $index)" type="button">
-                                <i class="icon-trash icon-white"></i>
-                            </button>
+                            {acl isAllowed="ARTICLE_UPDATE"}
+                                <button class="btn" ng-click="edit(content.id, 'admin_article_show')" type="button">
+                                    <i class="icon-pencil"></i>
+                                </button>
+                            {/acl}
+                            {acl isAllowed="ARTICLE_DELETE"}
+                                <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_delete', $index)" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                            {/acl}
                         </div>
                     </td>
                 </tr>
