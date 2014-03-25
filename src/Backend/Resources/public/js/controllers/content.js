@@ -152,7 +152,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
         // Route for list (required by $watch)
         $scope.route = route;
 
-        if (content != null) {
+        if (content != null && content != 'content') {
             $scope.filters.search.content_type_name = content;
         }
 
