@@ -84,7 +84,6 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
                 if (j < $scope.contents.length) {
                     $scope.contents.splice(j, 1);
                 }
-                console.log(j);
             };
 
             // Handle errors

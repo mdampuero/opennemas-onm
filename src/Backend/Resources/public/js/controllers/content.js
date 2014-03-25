@@ -228,8 +228,10 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
                     if (index != null) {
                         if ($scope.contents[index].title) {
                             return $scope.contents[index].title;
-                        } else {
+                        } else if ($scope.contents[index].name) {
                             return $scope.contents[index].name;
+                        } else {
+                            return $scope.contents[index].id;
                         }
                     }
 
@@ -341,6 +343,32 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
         }).error(function(response) {
             // Disable spinner
             $scope.contents[index].favorite_loading = 0;
+        });
+    };
+
+    /**
+     * Changes the content available property.
+     *
+     * @param int    id    Content id.
+     * @param int    index Index of content in the array of contents.
+     * @param string route Route name.
+     */
+    $scope.toggleStatus = function (id, index, route) {
+        // Enable spinner
+        $scope.contents[index].loading = 1;
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
+        $http.post(url).success(function(response) {
+            if (response.status != null) {
+                $scope.contents[index].status = response.status;
+                console.log($scope.contents[index].status);
+            }
+
+            // Disable spinner
+            $scope.contents[index].loading = 0;
+        }).error(function(response) {
+            // Disable spinner
+            $scope.contents[index].loading = 0;
         });
     };
 

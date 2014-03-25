@@ -2,6 +2,10 @@ backend_ws_advertisements:
     resource: @BackendWebServiceBundle/Resources/config/routing/advertisements.yml
     prefix:   /
 
+backend_ws_comments:
+    resource: @BackendWebServiceBundle/Resources/config/routing/comments.yml
+    prefix:   /
+
 backend_ws_menus:
     resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
     prefix:   /
