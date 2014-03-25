@@ -143,6 +143,10 @@ font-size: 13px;
 .table .pagination a { border: 1px solid #666; background: #3f3f3f !important; color:White !important; text-shadow:none; }
 .table .pagination a:hover { background:#3c3c3c; }
 .form-horizontal .help-block {margin-top:3px;}
+.pagination .disabled {
+  opacity: 0.6;
+  cursor:not-allowed;
+}
 
 .form-inline-block > *{ vertical-align: top; }
 .form-inline-block .control-group { display:inline-block; }
