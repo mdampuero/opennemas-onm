@@ -4,13 +4,19 @@ backend_ws_content_create:
     options:
         expose: true
 
-backend_ws_content_delete:
+backend_ws_content_send_to_trash:
     path:     /{contentType}s/{id}/delete
     defaults: { _controller  : BackendWebServiceBundle:Content:delete }
     options:
         expose: true
 
 backend_ws_content_restore_from_trash:
+    path:     /{contentType}/{id}/restore_from_trash
+    defaults: { _controller  : BackendWebServiceBundle:Content:restore }
+    options:
+        expose: true
+
+backend_ws_content_remove:
     path:     /{contentType}/{id}/restore_from_trash
     defaults: { _controller  : BackendWebServiceBundle:Content:restore }
     options:
