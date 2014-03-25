@@ -149,6 +149,98 @@ class ContentController extends Controller
     }
 
     /**
+     * Restores a content.
+     *
+     * @param  integer      $id          Content id.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function restoreAction($id, $contentType)
+    {
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
+
+        $content = $em->find(\classify($contentType), $id);
+
+        if (!is_null($content->id)) {
+            try {
+                $content->restoreFromTrash($id);
+                $success[] = array(
+                    'id'   => $id,
+                    'text' => _('Item restored successfully')
+                );
+            } catch (Exception $e) {
+                $errors[] = array(
+                    'id'   => $id,
+                    'text' => _('Unable to restore the item with id "$id"')
+                );
+            }
+        } else {
+            $errors[] = array(
+                'id'   => $id,
+                'text' => _('Unable to find the item with id "$id"')
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
+                'success' => $success
+            )
+        );
+    }
+
+    /**
+     * Deletes multiple contents at once give them ids.
+     *
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function batchRestoreAction(Request $request, $contentType)
+    {
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
+
+        $ids = $request->request->get('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $content = $em->find(\classify($contentType), $id);
+
+                if (!is_null($content->id)) {
+                    try {
+                        $content->restoreFromTrash($id);
+                        $success[] = array(
+                            'id'   => $id,
+                            'text' => _('Selected items restored from trash successfully')
+                        );
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'   => $id,
+                            'text' => _('Unable to restore from trash the item with id "$id"')
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'   => $id,
+                        'text' => _('Unable to find item with id "$id"')
+                    );
+                }
+            }
+        }
+
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
+                'success' => $success
+            )
+        );
+    }
+
+    /**
      * Toggles content available property.
      *
      * @param  integer      $id          Content id.
