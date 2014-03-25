@@ -85,6 +85,7 @@ class MenusController extends Controller
         if (!is_null($id)) {
             try {
                 $menu->delete($id);
+                $em->delete($id);
 
                 $success[] = array(
                     'id'      => $id,
