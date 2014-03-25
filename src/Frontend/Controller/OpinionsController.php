@@ -701,6 +701,19 @@ class OpinionsController extends Controller
             $author = new \User($opinion->fk_author);
             $opinion->author = $author;
 
+            if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+                return new RedirectResponse(
+                    $this->generateUrl(
+                        'frontend_blog_show',
+                        array(
+                            'blog_id' => $dirtyID,
+                            'author_name' => $author->username,
+                            'blog_title'  => $opinion->slug,
+                        )
+                    )
+                );
+            }
+
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
             $opinion->author_name_slug = \Onm\StringUtils::get_title($opinion->name);
 
