@@ -317,6 +317,18 @@ class BlogsController extends Controller
 
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
             $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
+            if (!array_key_exists('is_blog', $author->meta) || (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] != 1)) {
+                return new RedirectResponse(
+                    $this->generateUrl(
+                        'frontend_opinion_show',
+                        array(
+                            'blog_id' => $dirtyID,
+                            'author_name' => $author->username,
+                            'blog_title'  => $opinion->slug,
+                        )
+                    )
+                );
+            }
 
             // Associated media code --------------------------------------
             if (isset($blog->img2) && ($blog->img2 > 0)) {
