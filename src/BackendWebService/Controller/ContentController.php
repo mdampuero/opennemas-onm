@@ -68,7 +68,7 @@ class ContentController extends Controller
 
         if (!is_null($content->id)) {
             try {
-                $content->remove($id);
+                $content->delete($id);
                 $success[] = array(
                     'id'   => $id,
                     'text' => _('Item deleted successfully')
@@ -115,7 +115,7 @@ class ContentController extends Controller
 
                 if (!is_null($content->id)) {
                     try {
-                        $content->remove($id);
+                        $content->delete($id);
                         $success[] = array(
                             'id'   => $id,
                             'text' => _('Selected items deleted successfully')
