@@ -64,6 +64,22 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
     };
 
     /**
+     * Changes the available property for selected contents.
+     *
+     * @param int    available Available value.
+     * @param string route     Route name.
+     */
+    $scope.batchToggleStatus = function (status, route) {
+        updateStatus(1);
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
+        $http.post(url, { ids: $scope.selected, status: status })
+            .success(function(response) {
+                updateStatus(0, status);
+            });
+    };
+
+    /**
      * Changes the in_home property for selected contents.
      *
      * @param int    inHome Available value.
@@ -437,6 +453,31 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
           $scope.selected.splice(index, 1);
         }
     };
+
+    /**
+     * Updates the status property for selected contents.
+     *
+     * @param int loading Loading flag to use in template.
+     * @param int status  Status value.
+     */
+    function updateStatus(loading, status) {
+        for (var i = 0; i < $scope.contents.length; i++) {
+            var j = 0;
+            while (j < $scope.selected.length
+                && $scope.contents[i].id != $scope.selected[j]
+            ) {
+                j++;
+            }
+
+            if (j < $scope.selected.length) {
+                if (status != null) {
+                    $scope.contents[i].status = status;
+                };
+
+                $scope.contents[i].loading = loading;
+            }
+        };
+    }
 
     /**
      * Updates the selected items on click.
