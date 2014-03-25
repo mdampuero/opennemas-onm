@@ -28,7 +28,6 @@ use Onm\Message as m;
  **/
 class TrashController extends Controller
 {
-
     /**
      * Common code for all the actions
      *
@@ -55,52 +54,11 @@ class TrashController extends Controller
     {
         $cm           = new \ContentManager();
         $contentTypes = $cm->getContentTypes();
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page', 20);
-
-        // Get paginated elements that are marked as in litter
-        list($countElements, $elements) = $cm->getCountAndSlice(
-            $this->filterContentType,
-            null,
-            'in_litter=1',
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        // Complete elements information
-        foreach ($elements as &$item) {
-            $item->category_name =  $item->loadCategoryName($item->id);
-            $item->category_title = $item->loadCategoryTitle($item->id);
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countElements,
-                'fileName'    => $this->generateUrl(
-                    'admin_trash',
-                    array(
-                        'mytype' => $this->filterContentType
-                    )
-                ).'&page=%d',
-            )
-        );
 
         return $this->render(
-            'trash/trash.tpl',
+            'trash/list.tpl',
             array(
-                'mytype'        => $this->filterContentType,
                 'types_content' => $contentTypes,
-                'pagination'    => $pagination,
-                'contents'      => $elements
             )
         );
     }
