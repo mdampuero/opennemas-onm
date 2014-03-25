@@ -672,6 +672,8 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -685,9 +687,7 @@ class Content
     public function restoreFromTrash()
     {
         $changed = date("Y-m-d H:i:s");
-        $sql  =   'UPDATE contents SET `in_litter`=?, '
-                .'`changed`=?'
-                .'WHERE pk_content=?';
+        $sql  =   'UPDATE contents SET `in_litter`=?, `changed`=? WHERE pk_content=?';
 
         $values = array(0, $changed, $this->id);
 
@@ -698,6 +698,8 @@ class Content
 
         /* Notice log of this action */
         logContentEvent('recover from trash', $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return $this;
     }
