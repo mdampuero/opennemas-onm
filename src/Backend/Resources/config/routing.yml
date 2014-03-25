@@ -1031,6 +1031,8 @@ admin_comments_config:
 admin_comment_show:
     path:     /comments/{id}/show
     defaults: { _controller  : BackendBundle:Comments:show }
+    options:
+        expose: true
 
 admin_comments_update:
     path:     /comments/{id}/update

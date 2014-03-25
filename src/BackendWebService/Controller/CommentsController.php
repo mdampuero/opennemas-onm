@@ -67,6 +67,58 @@ class CommentsController extends ContentController
     }
 
     /**
+     * Updates contents status property.
+     *
+     * @param  Request      $request     The request object.
+     * @param  string       $contentType Content type name.
+     * @return JsonResponse              The response object.
+     */
+    public function batchToggleStatusAction(Request $request)
+    {
+        $em      = $this->get('comment_repository');
+        $errors  = array();
+        $success = array();
+
+        $status = $request->request->get('status');
+        $ids    = $request->request->get('ids');
+
+        if (is_array($ids) && count($ids) > 0) {
+            foreach ($ids as $id) {
+                $content = $em->find($id);
+
+                if (!is_null($content->id)) {
+                    try {
+                        $content->setStatus($status);
+                        $em->delete($id);
+
+                        $success[] = array(
+                            'id'   => $id,
+                            'text' => _('Selected items updated successfully')
+                        );
+                    } catch (Exception $e) {
+                        $errors[] = array(
+                            'id'   => $id,
+                            'text' => _('Unable to update item with id "$id"')
+                        );
+                    }
+                } else {
+                    $errors[] = array(
+                        'id'   => $id,
+                        'text' => _('Unable to find item with id "$id"')
+                    );
+                }
+            }
+        }
+
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
+                'success' => $success
+            )
+        );
+    }
+
+    /**
      * Deletes a comment.
      *
      * @param  Request      $request     The request object.

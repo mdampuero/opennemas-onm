@@ -78,7 +78,7 @@ services:
 
     comment_repository:
         class: Repository\CommentManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     entity_repository:
         class: Repository\EntityManager

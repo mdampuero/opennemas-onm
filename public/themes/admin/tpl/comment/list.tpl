@@ -41,22 +41,22 @@
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="ARTICLE_AVAILABLE"}
                         <li>
-                            <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
-                                <i class="icon-eye-open"></i>
-                                {t}Publish{/t}
+                            <a href="#" id="batch-publish" ng-click="batchToggleStatus('accepted', 'backend_ws_comments_batch_toggle_status')">
+                                <i class="icon-check"></i>
+                                {t}Accept{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
-                                <i class="icon-eye-close"></i>
-                                {t}Unpublish{/t}
+                            <a href="#" id="batch-unpublish" ng-click="batchToggleStatus('rejected', 'backend_ws_comments_batch_toggle_status')">
+                                <i class="icon-remove"></i>
+                                {t}Reject{/t}
                             </a>
                         </li>
                         {/acl}
                         {acl isAllowed="ARTICLE_DELETE"}
                             <li class="divider"></li>
                             <li>
-                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_delete')">
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_comments_batch_delete')">
                                     <i class="icon-trash"></i>
                                     {t}Delete{/t}
                                 </a>
