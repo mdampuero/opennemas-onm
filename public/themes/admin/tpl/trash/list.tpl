@@ -1,0 +1,141 @@
+{extends file="base/admin.tpl"}
+
+{block name="header-js" append}
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
+    {script_tag src="/onm/jquery-functions.js" language="javascript"}
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+{/block}
+
+{block name="footer-js" append}
+<script>
+jQuery(function($){
+    $('#batch-delete').click(function(e) {
+        //Sets up the modal
+        jQuery("#modal-delete-contents").modal('show');
+        e.preventDefault();
+    });
+    $('#batch-restore').click(function(e) {
+        //Sets up the modal
+        jQuery("#modal-restore-contents").modal('show');
+        e.preventDefault();
+    });
+});
+</script>
+{/block}
+
+{block name="content"}
+<form action="{url name=admin_trash}" method="post" id="trashform"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'title', 'backend_ws_contents_list')">
+
+    <div class="top-action-bar clearfix">
+        <div class="wrapper-content">
+            <div class="title"><h2>{t}Trash{/t}</h2></div>
+            <ul class="old-button">
+                {acl isAllowed="TRASH_ADMIN"}
+                <li>
+                    <button type="submit" id="batch-delete" title="{t}Deletes the selected elements{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
+                    </button>
+                </li>
+                <li>
+                    <button type="submit" id="batch-restore" title="{t}Restore{/t}">
+                        <img border="0" src="{$params.IMAGE_DIR}trash_no.png" title="Recuperar" alt="Recuperar"><br />{t}Restore{/t}
+                    </button>
+                </li>
+                {/acl}
+            </ul>
+        </div>
+    </div>
+
+	<div class="wrapper-content">
+        {render_messages}
+
+        <div class="table-info clearfix">
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% total %] contents{/t}</strong></div>{/acl}
+            <div class="pull-right">
+                <div class="form-inline">
+                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="filters.search.title_like"/>
+                    <label for="content_type_name">{t}Content Type:{/t}</label>
+                    {include file="trash/partials/_pills.tpl"}
+                </div>
+            </div>
+        </div>
+        <div ng-include="'trash_list'"></div>
+
+
+        <script type="text/ng-template" id="trash_list">
+        <div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+        </div>
+
+        <table class="table table-hover table-condensed" ng-if="!loading">
+            <thead>
+               <tr ng-if="contents.length > 0">
+                    <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                    <th class='left'>{t}Title{/t}</th>
+                    <th style="width:40px">{t}Section{/t}</th>
+                    <th class="left" style="width:110px;">{t}Date{/t}</th>
+                    <th class="nowrap center" style="width:40px;">{t}Actions{/t}</th>
+               </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-if="contents.length == 0">
+                    <td class="empty"colspan=6>
+                        {t}There is no elements in the trash{/t}
+                    </td>
+                </tr>
+
+                <tr ng-if="contents.length >= 0" ng-repeat="content in contents">
+                    <td>
+                        <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+                    </td>
+                    <td>[% content.title %]</td>
+                    <td class="left">[% content.category_name %]</td>
+                    <td class="center">[% content.created %]</td>
+                    <td class="nowrap right">
+                        <div class="btn-group">
+
+                            <button class="del btn" ng-click="open('modal-restore-from-trash', 'backend_ws_content_restore_from_trash', $index)" type="button" title="{t}Restore{/t}">
+                                <i class="icon-retweet"></i> {t}Restore{/t}
+                            </button>
+
+                            <a class="btn btn-danger" href="{url name=admin_trash_delete id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="{t}Delete this content{/t}">
+                                <i class="icon-trash icon-white"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="10" class="center">
+                        <div class="pull-left">
+                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                        </div>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <div class="pull-right">
+                            [% page %] / [% pages %]
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        </script>
+
+        <script type="text/ng-template" id="modal-restore-from-trash">
+            {include file="common/modals/_modalRestoreFromTrash.tpl"}
+        </script>
+
+    </div>
+</form>
+{/block}
