@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f2ee4c9e2d5e02a4fdcca005496de92e",
+    "hash": "187764cd1ac0b2264107598005637c51",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -489,12 +489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "bf9bcb39506047de069066ec63f57978f0d7b135"
+                "reference": "f7138381aa884c0f679da4de41e369b94ead9cd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/bf9bcb39506047de069066ec63f57978f0d7b135",
-                "reference": "bf9bcb39506047de069066ec63f57978f0d7b135",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/f7138381aa884c0f679da4de41e369b94ead9cd3",
+                "reference": "f7138381aa884c0f679da4de41e369b94ead9cd3",
                 "shasum": ""
             },
             "require": {
@@ -541,7 +541,7 @@
                 "migrations",
                 "schema"
             ],
-            "time": "2014-03-16 11:00:13"
+            "time": "2014-03-20 14:48:55"
         },
         {
             "name": "doctrine/inflector",
@@ -791,16 +791,16 @@
         },
         {
             "name": "drak/native-session",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drak/NativeSession.git",
-                "reference": "d8de65190488d26720c122c40b12382d881db421"
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drak/NativeSession/zipball/d8de65190488d26720c122c40b12382d881db421",
-                "reference": "d8de65190488d26720c122c40b12382d881db421",
+                "url": "https://api.github.com/repos/drak/NativeSession/zipball/f2b14ad483605a8d4b898c260bec7512347ca600",
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600",
                 "shasum": ""
             },
             "require": {
@@ -810,7 +810,7 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Drak": "src/"
+                    "Drak": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -824,7 +824,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2012-12-13 15:40:15"
+            "time": "2013-03-11 11:07:59"
         },
         {
             "name": "drexarj/disqus-php",
@@ -1176,16 +1176,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57"
+                "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6225b22de9dcf36546be3a0b2fa8e3d986153f57",
-                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/392ef35fd470638e08d0160d6b1cbab63cb23174",
+                "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174",
                 "shasum": ""
             },
             "require": {
@@ -1193,11 +1193,11 @@
                 "psr/log": "~1.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "~2.4.8",
-                "doctrine/couchdb": "dev-master",
-                "mlehner/gelf-php": "1.0.*",
+                "aws/aws-sdk-php": "~2.4, >2.4.8",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
                 "phpunit/phpunit": "~3.7.0",
-                "raven/raven": "0.5.*",
+                "raven/raven": "~0.5",
                 "ruflin/elastica": "0.90.*"
             },
             "suggest": {
@@ -1205,19 +1205,20 @@
                 "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "raven/raven": "Allow sending log messages to a Sentry server",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "1.8.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Monolog": "src/"
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1239,7 +1240,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2013-11-14 19:48:31"
+            "time": "2014-03-23 19:50:26"
         },
         {
             "name": "neutron/temporary-filesystem",
@@ -1418,12 +1419,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-                "reference": "4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91"
+                "reference": "62763adae5b3542f17e5bbffb2e9435531e1a9de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91",
-                "reference": "4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/62763adae5b3542f17e5bbffb2e9435531e1a9de",
+                "reference": "62763adae5b3542f17e5bbffb2e9435531e1a9de",
                 "shasum": ""
             },
             "require": {
@@ -1479,7 +1480,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2014-02-27 23:23:32"
+            "time": "2014-03-19 07:25:50"
         },
         {
             "name": "psr/log",
@@ -1828,17 +1829,17 @@
         },
         {
             "name": "symfony/icu",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "target-dir": "Symfony/Component/Icu",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Icu.git",
-                "reference": "7299cd3d8d6602103d1ebff5d0a9917b7bc6de72"
+                "reference": "98e197da54df1f966dd5e8a4992135703569c987"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Icu/zipball/7299cd3d8d6602103d1ebff5d0a9917b7bc6de72",
-                "reference": "7299cd3d8d6602103d1ebff5d0a9917b7bc6de72",
+                "url": "https://api.github.com/repos/symfony/Icu/zipball/98e197da54df1f966dd5e8a4992135703569c987",
+                "reference": "98e197da54df1f966dd5e8a4992135703569c987",
                 "shasum": ""
             },
             "require": {
@@ -1872,7 +1873,7 @@
                 "icu",
                 "intl"
             ],
-            "time": "2013-06-03 18:32:58"
+            "time": "2013-10-04 10:06:38"
         },
         {
             "name": "symfony/monolog-bundle",
