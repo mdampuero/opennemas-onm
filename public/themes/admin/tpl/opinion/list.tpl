@@ -79,7 +79,7 @@
                     {acl isAllowed="OPINION_DELETE"}
                         <li class="divider"></li>
                         <li>
-                            <a href="#" ng-click="open('modal-delete-selected')">
+                            <a href="#" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_delete')">
                                 <i class="icon-trash"></i>
                                 {t}Delete{/t}
                             </a>
@@ -124,10 +124,10 @@
     </div>
 
     <script type="text/ng-template" id="modal-delete">
-        {include file="opinion/modals/_modalDelete.tpl"}
+        {include file="common/modals/_modalDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">
-        {include file="opinion/modals/_modalBatchDelete.tpl"}
+        {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
 </form>
     {include file="opinion/modals/_modalAccept.tpl"}

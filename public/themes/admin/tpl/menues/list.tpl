@@ -32,7 +32,7 @@
               <ul class="old-button">
                   {acl isAllowed="MENU_DELETE"}
                 <li ng-if="selected.length > 0">
-                    <a class="delChecked" href="#" title="Eliminar" alt="Eliminar" ng-click="open('modal-delete-all', $index)">
+                    <a class="delChecked" href="#" title="Eliminar" alt="Eliminar" ng-click="open('modal-delete-all', 'backend_ws_menus_batch_delete', $index)">
                         <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
                     </a>
                 </li>
@@ -104,7 +104,7 @@
                             </button>
                             {/acl}
                             {acl isAllowed="MENU_DELETE"}
-                                <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', $index)" type="button">
+                                <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', 'backend_ws_menu_delete', $index)" type="button">
                                     <i class="icon-trash icon-white"></i>
                                 </button>
                             {/acl}
@@ -120,11 +120,10 @@
         </table>
     </script>
     <script type="text/ng-template" id="modal-delete">
-        {include file="menues/modals/_modalDelete.tpl"}
+        {include file="common/modals/_modalDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-all">
-        {include file="menues/modals/_modalBatchDelete.tpl"}
+        {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
 </form>
-{include file="menues/modals/_modalAccept.tpl"}
 {/block}

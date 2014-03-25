@@ -1,25 +1,26 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-<script>
-jQuery(function($){
-    $('#batch-delete').on('click', function(){
-        var form = $('#authorform');
-        form.attr('action', '{url name="admin_opinion_author_batchdelete"}');
-    });
-});
-</script>
+{block name="header-js" append}
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
-
 {block name="content"}
-<form action="{url name=admin_opinion_authors}" method="get" id="authorform">
+<form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'backend_ws_authors_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Authors{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <button type="submit" id="batch-delete" title="{t}Delete selected authors{/t}">
+                    <button type="submit" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" title="{t}Delete selected authors{/t}">
                         <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </button>
                 </li>
@@ -33,15 +34,19 @@ jQuery(function($){
         </div>
     </div>
     <div class="wrapper-content">
-
         {render_messages}
-
-        <table class="table table-hover table-condensed">
-            {if count($users) gt 0}
+        <div ng-include="'authors'"></div>
+    </div>
+    <script type="text/ng-template" id="authors">
+        <div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+        </div>
+        <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
                 <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" class="toggleallcheckbox">
+                        <input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)">
                     </th>
                     <th class="center" style="width:20px;">{t}Avatar{/t}</th>
                     <th class="left">{t}Full name{/t}</th>
@@ -49,12 +54,10 @@ jQuery(function($){
                     <th class="center" style="width:10px">{t}Actions{/t}</th>
                 </tr>
             </thead>
-            {/if}
             <tbody>
-                {foreach from=$users item=user name=user_listing}
-                <tr>
+                <tr ng-if="contents.length > 0" ng-repeat="content in contents">
                     <td>
-                        <input type="checkbox" name="selected[]" value="{$user->id}">
+                        <input ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" type="checkbox" value="[% content.id %]">
                     </td>
                     <td class="center">
                         {if is_object($user->photo) && !is_null($user->photo->name)}
@@ -65,51 +68,54 @@ jQuery(function($){
                     </td>
 
                     <td class="left">
-                        <a href="{url name=admin_opinion_author_show id=$user->id}" title="{t}Edit user{/t}">
-                            {$user->name}
+                        <a ng-click="edit(content.id, 'admin_opinion_author_show')" title="{t}Edit user{/t}">
+                            [% content.name %]
                         </a>
                     </td>
 
                     <td class="left">
-                        {if $user->is_blog}<strong>Blog </strong>: {/if}{$user->bio}
+                        <span ng-if="content.is_blog == 1">
+                            <strong>Blog </strong>:
+                        </span>
+                        [% content.bio %]
                     </td>
-
                     <td class="right nowrap">
                         <div class="btn-group">
-                            <a class="btn" href="{url name=admin_opinion_author_show id=$user->id}" title="{t}Edit user{/t}">
+                            <button class="btn" ng-click="edit(content.id, 'admin_opinion_author_show')" title="{t}Edit user{/t}" type="button">
                                 <i class="icon-pencil"></i> {t}Edit{/t}
-                            </a>
-
-                            <a class="del btn btn-danger"
-                                href="{url name=admin_opinion_author_delete id=$user->id}"
-                                data-url="{url name=admin_opinion_author_delete id=$user->id}"
-                                data-title="{$user->name}"
-                                title="{t}Delete this user{/t}">
+                            </button>
+                            <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_user_delete', $index)" type="button">
                                 <i class="icon-trash icon-white"></i>
-                            </a>
+                            </button>
                         </div>
                     </td>
                 </tr>
-
-                {foreachelse}
-                <tr>
+            <tr ng-if="contents.length == 0">
                     <td colspan="7" class="empty">
                         {t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
                     </td>
                 </tr>
-                {/foreach}
             </tbody>
             <tfoot>
-                <tr >
+                <tr>
                     <td colspan="7" class="center">
-                        <div class="pagination">
-                            {$pagination->links|default:""}&nbsp;
+                        <div class="pull-left">
+                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                        </div>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <div class="pull-right">
+                            [% page %] / [% pages %]
                         </div>
                     </td>
                 </tr>
             </tfoot>
         </table>
-    </div>
+    </script>
+    <script type="text/ng-template" id="modal-delete">
+        {include file="common/modals/_modalDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-delete-selected">
+        {include file="common/modals/_modalBatchDelete.tpl"}
+    </script>
 </form>
-{include file="opinion/modals/_modalDelete.tpl"}
 {/block}

@@ -195,9 +195,10 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * Opens new modal window when clicking delete button.
      *
      * @param  string template Template id.
+     * @param  string route    Route name.
      * @param  int    index    Index of the selected content.
      */
-    $scope.open = function(template, index) {
+    $scope.open = function(template, route, index) {
         $modal.open({
             templateUrl: template,
             controller: 'ContentModalCtrl',
@@ -218,15 +219,22 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
 
                     return null;
                 },
-                title: function () {
-                    if (index != null) {
-                        return $scope.contents[index].title;
-                    }
-
-                    return null;
+                route: function () {
+                    return route;
                 },
                 selected: function () {
                     return $scope.selected;
+                },
+                title: function () {
+                    if (index != null) {
+                        if ($scope.contents[index].title) {
+                            return $scope.contents[index].title;
+                        } else {
+                            return $scope.contents[index].name;
+                        }
+                    }
+
+                    return null;
                 }
             }
         });
@@ -448,3 +456,4 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
 
 // Register ContentCtrl function as AngularJS controller
 angular.module('BackendApp.controllers').controller('ContentCtrl', ContentCtrl);
+//

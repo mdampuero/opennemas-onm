@@ -53,7 +53,7 @@
                             {acl isAllowed="ADVERTISEMENT_DELETE"}
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="#" id="batch-delete" ng-click="open('modal-delete-selected')">
+                                    <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_delete')">
                                         <i class="icon-trash"></i>
                                         {t}Delete{/t}
                                     </a>
@@ -195,7 +195,7 @@
                                 </button>
                             {/acl}
                             {acl isAllowed="ADVERTISEMENT_DELETE"}
-                              <button class="btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
+                              <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_delete', $index)" type="button">
                                     <i class="icon-trash icon-white"></i>
                                 </button>
                             {/acl}
@@ -209,7 +209,7 @@
                             <div class="pull-left">
                                 [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
                             </div>
-                                <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total"></pagination>
+                                <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" num-pages="pages" page="page" total-items="total"></pagination>
                             <div class="pull-right">
                                 [% page %] / [% pages %]
                             </div>
@@ -220,10 +220,10 @@
             </table>
         </script>
         <script type="text/ng-template" id="modal-delete">
-            {include file="advertisement/modals/_modalDelete.tpl"}
+            {include file="common/modals/_modalDelete.tpl"}
         </script>
         <script type="text/ng-template" id="modal-delete-selected">
-            {include file="advertisement/modals/_modalBatchDelete.tpl"}
+            {include file="common/modals/_modalBatchDelete.tpl"}
         </script>
     </form>
 {/block}

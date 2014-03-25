@@ -45,7 +45,7 @@
                         {acl isAllowed="ARTICLE_DELETE"}
                             <li class="divider"></li>
                             <li>
-                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected')">
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_delete')">
                                     <i class="icon-trash"></i>
                                     {t}Delete{/t}
                                 </a>
@@ -176,7 +176,7 @@
                             <button class="btn" ng-click="edit(content.id, 'admin_article_show')" type="button">
                                 <i class="icon-pencil"></i>
                             </button>
-                            <button class="del btn btn-danger" ng-click="open('modal-delete', $index)" type="button">
+                            <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_delete', $index)" type="button">
                                 <i class="icon-trash icon-white"></i>
                             </button>
                         </div>
@@ -201,10 +201,10 @@
         </table>
     </script>
     <script type="text/ng-template" id="modal-delete">
-        {include file="article/modals/_modalDelete.tpl"}
+        {include file="common/modals/_modalDelete.tpl"}
     </script>
     <script type="text/ng-template" id="modal-delete-selected">
-        {include file="article/modals/_modalBatchDelete.tpl"}
+        {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
 </form>
 {/block}

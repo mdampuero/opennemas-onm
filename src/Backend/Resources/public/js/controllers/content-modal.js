@@ -10,13 +10,16 @@
  * @param string title     Selected item title.
  * @param array  selected Array of selected items.
  */
-function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting, contentType, id, index, contents, title, selected) {
+function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
+    contentType, id, index, contents, route, selected, title
+) {
     $scope.contentType = contentType;
     $scope.contents    = contents;
     $scope.id          = id;
     $scope.index       = index;
-    $scope.title       = title;
+    $scope.route       = route;
     $scope.selected    = selected;
+    $scope.title       = title;
 
     /**
      * Closes the current modal.
@@ -64,7 +67,10 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting, contentTy
         // Enable spinner
         $scope.deleting = 1;
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
+        var url = fosJsRouting.generate(
+            route,
+            { contentType: $scope.contentType }
+        );
         $http.post(url, { ids: $scope.selected }).success(function(response) {
             // Remove only successfully deleted contents
             for (var i = 0; i < response.success.length; i++) {
@@ -95,4 +101,5 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting, contentTy
 }
 
 // Register ModalCtrl function as AngularJS controller
-angular.module('BackendApp.controllers').controller('ContentModalCtrl', ContentModalCtrl);
+angular.module('BackendApp.controllers')
+    .controller('ContentModalCtrl', ContentModalCtrl);
