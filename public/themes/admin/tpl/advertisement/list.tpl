@@ -195,7 +195,7 @@
                                 </button>
                             {/acl}
                             {acl isAllowed="ADVERTISEMENT_DELETE"}
-                              <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_delete', $index)" type="button">
+                              <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
                                     <i class="icon-trash icon-white"></i>
                                 </button>
                             {/acl}
