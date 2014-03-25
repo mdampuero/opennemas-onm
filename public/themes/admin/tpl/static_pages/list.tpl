@@ -54,8 +54,8 @@
             <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
         <table class="table table-hover table-condensed" ng-if="!loading">
-            <thead>
-                <tr ng-if="contents.length > 0">
+            <thead ng-if="contents.length > 0">
+                <tr>
                     <th>{t}Title{/t}</th>
                     <th>{t}URL{/t}</th>
                     <!-- <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}" title="{t}Views{/t}"></th> -->

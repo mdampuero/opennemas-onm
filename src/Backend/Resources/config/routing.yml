@@ -279,6 +279,8 @@ admin_special_create:
 admin_special_show:
     path:     /special/{id}/show
     defaults: { _controller  : BackendBundle:Specials:show }
+    options:
+        expose: true
 
 admin_special_update:
     path:     /special/{id}/update
