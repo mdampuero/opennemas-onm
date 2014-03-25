@@ -33,6 +33,11 @@ class ContentController extends Controller
 
         $em = $this->get('entity_repository');
 
+        // Remove content type to search all contents
+        if ($contentType == 'content') {
+            unset($search['content_type_name']);
+        }
+
         $order = null;
         if ($sortBy) {
             $order = '`' . $sortBy . '` ' . $sortOrder;
