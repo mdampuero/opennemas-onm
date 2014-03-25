@@ -130,7 +130,6 @@
                 <th class="center" style="width:70px;">{t}Actions{/t}</th>
             </thead>
             <tbody>
-            {*acl hasCategoryAccess=$category*}
             {acl hasCategoryAccess=$article->category}
                 <tr ng-if="contents.length == 0">
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
@@ -197,7 +196,6 @@
                     </td>
                 </tr>
             </tfoot>
-            {*/acl*}
         </table>
     </script>
     <script type="text/ng-template" id="modal-delete">
