@@ -119,10 +119,8 @@ class EntityManager extends BaseManager
         $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT content_type_name, pk_content
-            FROM `contents`
-            WHERE $filterSQL
-            ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT content_type_name, pk_content FROM `contents` "
+            ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
 
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
