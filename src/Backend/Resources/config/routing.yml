@@ -988,6 +988,8 @@ admin_opinion_authors:
 admin_opinion_author_show:
     path:     /opinion/author/{id}/show
     defaults: { _controller  : BackendBundle:Opinions:showAuthor }
+    options:
+        expose: true
 
 admin_opinion_author_create:
     path:     /opinion/authors/create

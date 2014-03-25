@@ -86,7 +86,7 @@ services:
 
     user_repository:
         class: Repository\UserManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     menu_repository:
         class: Repository\MenuManager

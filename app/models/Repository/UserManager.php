@@ -9,6 +9,9 @@
  **/
 namespace Repository;
 
+use Onm\Cache\CacheInterface;
+use Onm\Database\DbalWrapper;
+
 /**
  * Handles common operations with users
  *
@@ -17,91 +20,149 @@ namespace Repository;
 class UserManager extends BaseManager
 {
     /**
-     * {@inherit_doc}
+     * Initializes the entity manager
+     *
+     * @param CacheInterface $cache the cache instance
      **/
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    {
+        $this->dbConn      = $dbConn;
+        $this->cache       = $cache;
+        $this->cachePrefix = $cachePrefix;
+    }
+
+    /**
+     * Counts searched users given a criteria
+     *
+     * @param  array $criteria        the criteria used to search the comments.
+     * @return int                    the amount of elements.
+     */
+    public function countBy($criteria)
+    {
+        // Building the SQL filter
+        $whereSQL  = $this->getFilterSQL($criteria);
+
+        // Executing the SQL
+        $sql = "SELECT COUNT(id) FROM `users` WHERE $whereSQL";
+
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->fetchArray($sql);
+
+        if (!$rs) {
+            return 0;
+        }
+
+        return $rs[0];
+    }
+
+    /**
+     * Finds one user from the given a user id.
+     *
+     * @param  integer $id Menu id
+     * @return Menu
+     */
     public function find($id)
     {
-        $user = null;
+        $entity = null;
 
-        // $cacheId = $this->cachePrefix . "_user_" . $id.microtime(true);
+        $cacheId = "user_" . $id;
 
-        // if (!$this->hasCache()
-        //     || ($user = $this->cache->fetch($cacheId)) === false
-        //     || !is_object($user)
-        // ) {
-        $user = new \User($id);
+        if (!$this->hasCache()
+            || ($entity = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
+        ) {
+            $entity = new \User($id);
 
-            // if ($this->hasCache()) {
-            //     $this->cache->save($cacheId, $user);
-            // }
-        // }
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $entity);
+            }
+        }
 
-        return $user;
+        return $entity;
     }
 
     /**
      * Searches for users given a criteria
      *
-     * @param array $criteria        the criteria used to search the users
-     * @param array $order           the order applied in the search
-     * @param int   $elementsPerPage the max number of elements to return
-     * @param int   $page            the offset to start with
-     *
-     * @return array the matched elements
-     **/
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null)
+     * @param  array $criteria        the criteria used to search the comments.
+     * @param  array $order           the order applied in the search.
+     * @param  int   $elementsPerPage the max number of elements to return.
+     * @param  int   $page            the offset to start with.
+     * @return array                  the matched elements.
+     */
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
+        $whereSQL = $this->getFilterSQL($criteria);
 
-        $orderBySQL  = '`pk_user` DESC';
+        $orderSQL = '`id` DESC';
         if (!empty($order)) {
-            $orderBySQL = $this->getOrderBySQL($order);
+            $orderSQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT * FROM `users` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT id FROM `users` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
 
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->Execute($sql);
+        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->fetchAll($sql);
 
-        if ($rs === false) {
-            return false;
+        $ids = array();
+        foreach ($rs as $resultElement) {
+            $ids[] = $resultElement['id'];
         }
 
-        $users = array();
-        while (!$rs->EOF) {
-            $user = new \User();
-            $user->setValues($rs->fields);
-
-            $users []= $user;
-            $rs->MoveNext();
-        }
+        $users = $this->findMulti($ids);
 
         return $users;
     }
 
     /**
-     * Returns the number of comments given a filter
+     * Find multiple users from a given array of content ids.
      *
-     * @param string|array $filter the filter to apply
-     *
-     * @return int the number of comments
-     **/
-    public function count($filter)
+     * @param  array $data Array of preprocessed content ids.
+     * @return array       Array of contents.
+     */
+    public function findMulti(array $data)
     {
-        // Building the SQL filter
-        $filterSQL = $this->getFilterSQL($filter);
+        $ordered = array_flip($data);
 
-        // Executing the SQL
-        $sql = "SELECT count(id) FROM `users` WHERE $filterSQL";
-        $rs = $this->dbConn->GetOne($sql);
-
-        if ($rs === false) {
-            return false;
+        $ids = array();
+        foreach ($data as $value) {
+            $ids[] = 'user_' . $value;
         }
 
-        return $rs;
+        $users = array_values($this->cache->fetch($ids));
+
+        $cachedIds = array();
+        foreach ($users as $user) {
+            $ordered[$user->id] = $user;
+            $cachedIds[] = 'user_' . $user->id;
+        }
+
+        $missedIds = array_diff($ids, $cachedIds);
+
+        foreach ($missedIds as $content) {
+            list($contentType, $contentId) = explode('_', $content);
+            $user = $this->find($contentId);
+            $ordered[$user->id] = $user;
+        }
+
+        return array_values($ordered);
+    }
+
+    /**
+     * Deletes a user and its metas.
+     *
+     * @param integer $id User id.
+     */
+    public function delete($id)
+    {
+        $this->dbConn->transactional(function ($em) use ($id) {
+            $em->executeQuery('DELETE FROM `users` WHERE `id`= ' . $id);
+            $em->executeQuery('DELETE FROM `usermeta` WHERE `user_id`= ' . $id);
+        });
+
+        $this->cache->delete('user_' . $id);
     }
 }

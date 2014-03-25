@@ -14,13 +14,13 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'backend_ws_authors_list')">
+<form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'backend_ws_users_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Authors{/t}</h2></div>
             <ul class="old-button">
                 <li>
-                    <button type="submit" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" title="{t}Delete selected authors{/t}">
+                    <button ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" title="{t}Delete selected authors{/t}" type="button">
                         <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
                     </button>
                 </li>
