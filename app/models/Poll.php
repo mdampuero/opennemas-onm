@@ -166,7 +166,7 @@ class Poll extends Content
             return false;
         }
 
-        return true;
+        return $this;
     }
 
     /**

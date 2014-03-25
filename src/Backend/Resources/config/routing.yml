@@ -176,6 +176,8 @@ admin_poll_create:
 admin_poll_show:
     path:     /poll/{id}/show
     defaults: { _controller  : BackendBundle:Polls:show }
+    options:
+        expose: true
 
 admin_poll_update:
     path:     /poll/{id}/update
