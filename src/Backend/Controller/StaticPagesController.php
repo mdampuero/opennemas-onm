@@ -53,48 +53,7 @@ class StaticPagesController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $requestFilter = $request->query->get('filter');
-        $page          = $request->query->getDigits('page', 1);
-        $itemsPerPage  = s::get('items_per_page', 20);
-
-        $filter        = 'contents.in_litter != 1';
-        if (is_array($requestFilter)
-            && array_key_exists('title', $requestFilter)) {
-            $filter .= ' AND `title` LIKE "%' . $requestFilter['title'] . '%"';
-        }
-
-        $cm = new \ContentManager();
-        list($countPages, $pages) = $cm->getCountAndSlice(
-            'StaticPage',
-            null,
-            $filter,
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPages,
-                'fileName'    => $this->generateUrl('admin_staticpages').'?page=%d',
-            )
-        );
-
-        return $this->render(
-            'static_pages/list.tpl',
-            array(
-                'pages' => $pages,
-                'pager' => $pagination,
-            )
-        );
+        return $this->render('static_pages/list.tpl');
     }
 
     /**
@@ -227,72 +186,6 @@ class StaticPagesController extends Controller
                 $this->generateUrl('admin_staticpage_show', array('id' => $staticPage->id))
             );
         }
-    }
-
-    /**
-     * Deletes an static page given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Symfony\Component\HttpFoundation\Response the response object
-     *
-     * @Security("has_role('STATIC_DELETE')")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id      = $request->query->getDigits('id');
-        $page    = $request->query->getDigits('page', 1);
-
-        if (!empty($id)) {
-            $staticPage = new \StaticPage($id);
-            $staticPage->delete($id);
-            m::add(sprintf(_("Static Page '%s' deleted successfully."), $staticPage->title), m::SUCCESS);
-        } else {
-            m::add(_('You must provide a valid an id for delete the static page.'), m::ERROR);
-        }
-
-        return $this->redirect(
-            $this->generateUrl('admin_staticpages', array('page' => $page))
-        );
-    }
-
-    /**
-     * Change availability for one page given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('STATIC_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $request  = $this->get('request');
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 1);
-
-        $staticPage = new \StaticPage($id);
-
-        if (is_null($staticPage->id)) {
-            m::add(sprintf(_('Unable to find page with id "%d"'), $id), m::ERROR);
-        } else {
-            $staticPage->toggleAvailable($staticPage->id);
-            if ($status == 0) {
-                $staticPage->set_favorite($status);
-            }
-            m::add(
-                sprintf(
-                    _('Successfully changed availability for page with id "%s"'),
-                    $staticPage->title
-                ),
-                m::SUCCESS
-            );
-        }
-
-        return $this->redirect(
-            $this->generateUrl('admin_staticpages', array('page' => $page))
-        );
     }
 
     /**

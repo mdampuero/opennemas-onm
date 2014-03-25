@@ -63,6 +63,8 @@ admin_staticpages:
 admin_staticpage_show:
     path:     /static-pages/{id}/show
     defaults: { _controller  : BackendBundle:StaticPages:show }
+    options:
+        expose: true
 
 admin_staticpages_create:
     path:     /static-pages/create
