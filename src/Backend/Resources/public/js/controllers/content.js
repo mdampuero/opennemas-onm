@@ -88,11 +88,10 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
     function clearFilters(filters) {
         var cleaned = {};
         for (var name in filters) {
-            if (name.indexOf('_like') !== -1) {
-                cleaned[name.substring(0, name.indexOf('_like'))] =
-                    '%' + filters[name] + '%'
-            } else {
-                if (filters[name] != -1 && filters[name] != '') {
+            if (filters[name] != -1 && filters[name] != '') {
+                if (name.indexOf('_like') !== -1) {
+                    cleaned[name.substring(0, name.indexOf('_like'))] = '%' + filters[name] + '%'
+                } else {
                     cleaned[name] = filters[name];
                 }
             }
