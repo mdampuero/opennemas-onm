@@ -75,7 +75,7 @@
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "public",
-        "symfony-assets-install": "symlink",
+        "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         },
