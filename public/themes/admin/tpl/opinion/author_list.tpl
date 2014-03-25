@@ -19,12 +19,23 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Authors{/t}</h2></div>
             <ul class="old-button">
-                <li>
-                    <button ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')" title="{t}Delete selected authors{/t}" type="button">
-                        <img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-                    </button>
+                <li ng-if="selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="ARTICLE_DELETE"}
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_users_batch_delete')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
                 </li>
-                <li class="separator"></li>
+                <li class="separator" ng-if="selected.length > 0"></li>
                 <li>
                     <a href="{url name=admin_opinion_author_create}" title="{t}Create new author{/t}">
                         <img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New author{/t}

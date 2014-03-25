@@ -61,7 +61,7 @@ class OpinionsController extends Controller
      */
     public function listAction(Request $request)
     {
-         // Fetch all authors
+        // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
 
         return $this->render(
@@ -369,47 +369,6 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Deletes an opinion given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_DELETE')")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id     = $request->query->getDigits('id');
-        $page   = $request->query->getDigits('status', 1);
-        $author = $request->query->filter('author', 0, FILTER_VALIDATE_INT);
-        $status = (int) $request->query->getDigits('status');
-
-        if (!empty($id)) {
-            $opinion = new \Opinion($id);
-
-            $opinion->delete($id, $_SESSION['userid']);
-            m::add(_("Opinion deleted successfully."), m::SUCCESS);
-        } else {
-            m::add(_('You must give an id for delete an opinion.'), m::ERROR);
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_opinions',
-                    array(
-                        'page'     => $page,
-                        'author'   => $author,
-                        'status'   => $status,
-                    )
-                )
-            );
-        } else {
-            return new Response('Ok', 200);
-        }
-    }
-
-    /**
      * Saves the widget opinions content positions
      *
      * @param Request $request the request object
@@ -618,56 +577,26 @@ class OpinionsController extends Controller
     }
 
     /**
-     * Show a non paginated list of backend users
+     * Show a list of opinion authors.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request $request The request object.
+     * @return Response         The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
-     **/
+     */
     public function listAuthorAction(Request $request)
     {
-        $page   = $this->request->query->getDigits('page', 1);
-
-        $users = \User::getAllUsersAuthors();
-
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        $usersPage = array_slice($users, ($page-1)*$itemsPerPage, $itemsPerPage);
-
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($users),
-                'fileName'    => $this->generateUrl('admin_opinion_authors').'?page=%d',
-            )
-        );
-
-        return $this->render(
-            'opinion/author_list.tpl',
-            array(
-                'users' => $usersPage,
-                'pagination' => $pagination,
-            )
-        );
+        return $this->render('opinion/author_list.tpl');
     }
 
     /**
-     * Shows the author information given its id
+     * Shows the author information given its id.
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
+     * @param  Request $request The request object.
+     * @return Response         The response object.
      *
      * @Security("has_role('OPINION_ADMIN')")
-     **/
+     */
     public function showAuthorAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -848,57 +777,6 @@ class OpinionsController extends Controller
             $this->generateUrl('admin_opinion_author_show', array('id' => $userId))
         );
     }
-
-    /**
-     * Deletes an author given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_ADMIN')")
-     **/
-    public function deleteAuthorAction(Request $request)
-    {
-        $userId = $request->query->getDigits('id');
-
-        if (!is_null($userId)) {
-            $user = new \User();
-            $user->delete($userId);
-            if (!$request->isXmlHttpRequest()) {
-                return $this->redirect($this->generateUrl('admin_opinion_authors'));
-            } else {
-                return new Response('ok');
-            }
-        }
-    }
-
-    /**
-     * Deletes multiple authors at once given their ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('OPINION_ADMIN')")
-     **/
-    public function batchDeleteAuthorAction(Request $request)
-    {
-        $selected = $request->query->get('selected');
-
-        if (count($selected) > 0) {
-            $user = new \User();
-            foreach ($selected as $userId) {
-                $user->delete((int) $userId);
-            }
-            m::add(sprintf(_('You have deleted %d authors.'), count($selected)), m::SUCCESS);
-        } else {
-            m::add(_('You haven\'t selected any author to delete.'), m::ERROR);
-        }
-
-        return $this->redirect($this->generateUrl('admin_opinion_authors'));
-    }
-
 
     /**
      * Previews an opinion in frontend by sending the opinion info by POST
