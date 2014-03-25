@@ -15,11 +15,6 @@
         <option value="advertisement">{t}Advertisements{/t}</option>
     {/acl}{/is_module_activated}
 
-    {is_module_activated name="COMMENT_MANAGER"}
-    {acl isAllowed="COMMENT_TRASH"}
-        <option value="comment">{t}Comments{/t}</option>
-    {/acl}{/is_module_activated}
-
     {is_module_activated name="KIOSKO_MANAGER"}
     {acl isAllowed="KIOSKO_TRASH"}
         <option value="kiosko">{t}Covers{/t}</option>

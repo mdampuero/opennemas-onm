@@ -64,9 +64,21 @@ backend_ws_contents_batch_toggle_available:
     options:
         expose: true
 
+backend_ws_content_toggle_in_home:
+    path:     /{contentType}s/{id}/toggle-in-home
+    defaults: { _controller  : BackendWebServiceBundle:Content:toggleInHome }
+    options:
+        expose: true
+
 backend_ws_contents_batch_toggle_in_home:
     path:     /{contentType}s/toggle-in-home
     defaults: { _controller  : BackendWebServiceBundle:Content:batchToggleInHome }
+    options:
+        expose: true
+
+backend_ws_content_toggle_favorite:
+    path:     /{contentType}s/{id}/toggle-favorite
+    defaults: { _controller  : BackendWebServiceBundle:Content:toggleFavorite }
     options:
         expose: true
 

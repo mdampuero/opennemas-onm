@@ -144,7 +144,7 @@ font-size: 13px;
 .table .pagination a:hover { background:#3c3c3c; }
 .form-horizontal .help-block {margin-top:3px;}
 .pagination .disabled {
-  opacity: 0.6;
+  display:none;
   cursor:not-allowed;
 }
 

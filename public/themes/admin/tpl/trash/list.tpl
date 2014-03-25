@@ -38,18 +38,28 @@ jQuery(function($){
         <div class="wrapper-content">
             <div class="title"><h2>{t}Trash{/t}</h2></div>
             <ul class="old-button">
-                {acl isAllowed="TRASH_ADMIN"}
-                <li>
-                    <button type="submit" id="batch-delete" title="{t}Deletes the selected elements{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}trash.png" title="Eliminar" alt="Eliminar"><br />{t}Delete{/t}
-                    </button>
+                <li ng-if="selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="TRASH_ADMIN"}
+                        <li>
+                            <a href="#" ng-click="open('modal-batch-restore', 'backend_ws_contents_batch_restore_from_trash')">
+                                <i class="icon-retweet"></i>
+                                {t}Restore{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" ng-click="open('modal-batch-remove-permanently', 'backend_ws_contents_batch_remove_permanently')">
+                                <i class="icon-trash"></i>
+                                {t}Delete{/t}
+                            </a>
+                        </li>
+                        {/acl}
+                    </ul>
                 </li>
-                <li>
-                    <button type="submit" id="batch-restore" title="{t}Restore{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}trash_no.png" title="Recuperar" alt="Recuperar"><br />{t}Restore{/t}
-                    </button>
-                </li>
-                {/acl}
             </ul>
         </div>
     </div>
@@ -80,6 +90,7 @@ jQuery(function($){
             <thead>
                <tr ng-if="contents.length > 0">
                     <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                    <th class="left">{t}Content type{/t}</th>
                     <th class='left'>{t}Title{/t}</th>
                     <th style="width:40px">{t}Section{/t}</th>
                     <th class="left" style="width:110px;">{t}Date{/t}</th>
@@ -98,6 +109,7 @@ jQuery(function($){
                     <td>
                         <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                     </td>
+                    <td><strong>[% content.content_type_l10n_name %]</strong> </td>
                     <td>[% content.title %]</td>
                     <td class="left">[% content.category_name %]</td>
                     <td class="center">[% content.created %]</td>
@@ -108,9 +120,9 @@ jQuery(function($){
                                 <i class="icon-retweet"></i> {t}Restore{/t}
                             </button>
 
-                            <a class="btn btn-danger" href="{url name=admin_trash_delete id=$contents[c]->id mytype=$mytype page=$paginacion->_currentPage}" title="{t}Delete this content{/t}">
+                            <button class="btn btn-danger" ng-click="open('modal-remove-permanently', 'backend_ws_content_remove_permanently', $index)" type="button" title="{t}Restore{/t}">
                                 <i class="icon-trash icon-white"></i>
-                            </a>
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -134,6 +146,18 @@ jQuery(function($){
 
         <script type="text/ng-template" id="modal-restore-from-trash">
             {include file="common/modals/_modalRestoreFromTrash.tpl"}
+        </script>
+
+        <script type="text/ng-template" id="modal-remove-permanently">
+            {include file="common/modals/_modalRemovePermanently.tpl"}
+        </script>
+
+        <script type="text/ng-template" id="modal-batch-restore">
+            {include file="common/modals/_modalBatchDelete.tpl"}
+        </script>
+
+        <script type="text/ng-template" id="modal-batch-remove-permanently">
+            {include file="common/modals/_modalBatchRemovePermanently.tpl"}
         </script>
 
     </div>
