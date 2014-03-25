@@ -9,6 +9,9 @@
  **/
 namespace Repository;
 
+use Onm\Cache\CacheInterface;
+use Onm\Database\DbalWrapper;
+
 /**
  * Handles common operations with comments
  *
@@ -16,17 +19,59 @@ namespace Repository;
  **/
 class CommentManager extends BaseManager
 {
+    /**
+     * Initializes the entity manager
+     *
+     * @param CacheInterface $cache the cache instance
+     **/
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    {
+        $this->dbConn      = $dbConn;
+        $this->cache       = $cache;
+        $this->cachePrefix = $cachePrefix;
+    }
+
+    /**
+     * Counts searched comments given a criteria
+     *
+     * @param  array   $criteria  The criteria used to search the comments.
+     * @return integer            The amount of elements.
+     */
+    public function countBy($criteria)
+    {
+        // Building the SQL filter
+        $whereSQL  = $this->getFilterSQL($criteria);
+
+        // Executing the SQL
+        $sql = "SELECT COUNT(id) FROM `comments` WHERE $whereSQL";
+
+        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->fetchArray($sql);
+
+        if (!$rs) {
+            return 0;
+        }
+
+        return $rs[0];
+    }
+
+    /**
+     * Finds one comment from the given a comment id.
+     *
+     * @param  integer $id Comment id
+     * @return Comment
+     */
     public function find($id)
     {
         $comment = null;
 
-        $cacheId = $this->cachePrefix . "_comment_" . $id;
+        $cacheId = "comment_" . $id;
 
         if (!$this->hasCache()
             || ($comment = $this->cache->fetch($cacheId)) === false
             || !is_object($comment)
         ) {
-            $comment = new Comment($id);
+            $comment = new \Comment($id);
 
             if ($this->hasCache()) {
                 $this->cache->save($cacheId, $comment);
@@ -55,51 +100,60 @@ class CommentManager extends BaseManager
         if (!empty($order)) {
             $orderBySQL = $this->getOrderBySQL($order);
         }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT * FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT id FROM `comments` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->Execute($sql);
+        $rs = $this->dbConn->fetchAll($sql);
 
-        if ($rs === false) {
-            return false;
+        $ids = array();
+        foreach ($rs as $resultElement) {
+            $ids[] = $resultElement['id'];
         }
 
-        $comments = array();
-        while (!$rs->EOF) {
-            $comment = new \Comment();
-            $comment->load($rs->fields);
-
-            $comments []= $comment;
-            $rs->MoveNext();
-        }
+        $comments = $this->findMulti($ids);
 
         return $comments;
     }
 
     /**
-     * Returns the number of comments given a filter
+     * Find multiple comments from a given array of content ids.
      *
-     * @param string|array $filter the filter to apply
-     *
-     * @return int the number of comments
-     **/
-    public function count($filter)
+     * @param  array $data Array of preprocessed content ids.
+     * @return array       Array of contents.
+     */
+    public function findMulti(array $data)
     {
-        // Building the SQL filter
-        $filterSQL = $this->getFilterSQL($filter);
+        $ordered = array_flip($data);
 
-        // Executing the SQL
-        $sql = "SELECT count(id) FROM `comments` WHERE $filterSQL";
-        $rs = $this->dbConn->GetOne($sql);
-
-        if ($rs === false) {
-            return false;
+        $ids = array();
+        foreach ($data as $value) {
+            $ids[] = 'comment_' . $value;
         }
 
-        return $rs;
+        $comments = array_values($this->cache->fetch($ids));
+
+        $cachedIds = array();
+        foreach ($comments as $comment) {
+            $ordered[$comment->id] = $comment;
+            $cachedIds[] = 'comment_' . $comment->id;
+        }
+
+        $missedIds = array_diff($ids, $cachedIds);
+
+        foreach ($missedIds as $content) {
+            list($contentType, $contentId) = explode('_', $content);
+            $comment = $this->find($contentId);
+
+            // $comments[] = $comment;
+            $ordered[$comment->id] = $comment;
+        }
+
+        return array_values($ordered);
     }
+
 
     /**
      * Gets the public comments from a given content's id.
@@ -112,35 +166,14 @@ class CommentManager extends BaseManager
      **/
     public function getCommentsforContentId($contentID, $elemsByPage = null, $page = null)
     {
-        $comments = array();
-
-        if (empty($contentID)) {
-            return $comments;
-        }
-
-        // Preparing limit
-        $limitSQL = $this->getLimitSQL($elemsByPage, $page);
-
-        $sql = "SELECT * FROM `comments`
-                WHERE `content_id`=? AND `status`=?
-                ORDER BY `date` DESC $limitSQL";
-        $values = array($contentID, \Comment::STATUS_ACCEPTED);
-        $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->Execute($sql, $values);
-
-        if ($rs == false) {
-            return array();
-        }
-
-        while (!$rs->EOF) {
-            $comment = new \Comment();
-            $comment->load($rs->fields);
-            $comments[] = $comment;
-
-            $rs->MoveNext();
-        }
-
-        return $comments;
+        return $this->findBy(
+            array(
+                'content_id' => $contentID
+            ),
+            null,
+            $elemsByPage,
+            $page
+        );
     }
 
     /**
@@ -156,10 +189,12 @@ class CommentManager extends BaseManager
             return false;
         }
 
-        $sql = "SELECT count(id) FROM comments WHERE content_id = ? AND `status` =?";
-        $rs = $this->dbConn->GetOne($sql, array($contentID, \Comment::STATUS_ACCEPTED));
-
-        return intval($rs);
+        return $this->countBy(
+            array(
+                'content_id' => $contentID,
+                'status' => \Comment::STATUS_ACCEPTED
+            )
+        );
     }
 
     /**
@@ -176,7 +211,7 @@ class CommentManager extends BaseManager
     public static function getPublicCommentsAndTotalCount($contentId, $elemsByPage, $offset)
     {
         // Get the total number of comments
-        $sql = 'SELECT count(pk_comment) FROM comments WHERE content_id = ? AND content_status=?';
+        $sql = 'SELECT count(id) FROM comments WHERE content_id = ? AND content_status=?';
         $rs = $this->dbConn->GetOne($sql, array($contentId, \Comment::STATUS_ACCEPTED));
 
         // If there is no comments do a early return
@@ -202,10 +237,7 @@ class CommentManager extends BaseManager
      **/
     public function countPendingComments()
     {
-        $sql = "SELECT count(id) FROM `comments` WHERE `status`=?";
-        $rs  = $this->dbConn->GetOne($sql, array(\Comment::STATUS_PENDING));
-
-        return intval($rs);
+        return $this->countBy(array('status' => \Comment::STATUS_PENDING));
     }
 
     /**
@@ -220,5 +252,20 @@ class CommentManager extends BaseManager
         $weight = \Onm\StringUtils::getWeightBadWords($string);
 
         return $weight > 100;
+    }
+
+    /**
+     * Deletes a comment and its items.
+     *
+     * @param \Menu $menu Menu to delete.
+     */
+    public function delete($id)
+    {
+        // $this->dbConn->transactional(function ($em) use ($id) {
+        //     $em->executeQuery('DELETE FROM `menues` WHERE `pk_menu`= ' . $id);
+        //     $em->executeQuery('DELETE FROM `menu_items` WHERE `pk_menu`= ' . $id);
+        // });
+
+        $this->cache->delete('comment_' . $id);
     }
 }

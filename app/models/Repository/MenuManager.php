@@ -160,10 +160,10 @@ class MenuManager extends BaseManager
      */
     public function delete($id)
     {
-        $this->dbConn->transactional(function ($em) use ($id) {
-            $em->executeQuery('DELETE FROM `menues` WHERE `pk_menu`= ' . $id);
-            $em->executeQuery('DELETE FROM `menu_items` WHERE `pk_menu`= ' . $id);
-        });
+        // $this->dbConn->transactional(function ($em) use ($id) {
+        //     $em->executeQuery('DELETE FROM `menues` WHERE `pk_menu`= ' . $id);
+        //     $em->executeQuery('DELETE FROM `menu_items` WHERE `pk_menu`= ' . $id);
+        // });
 
         $this->cache->delete('menu_' . $id);
     }
