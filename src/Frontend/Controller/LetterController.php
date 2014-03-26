@@ -216,9 +216,9 @@ class LetterController extends Controller
                 $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
                 $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
                 $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
+                $items   = $request->request->get('items');
 
-                if (array_key_exists('items', $_POST) && !empty($_POST['items'])) {
-                    $items   = $request->request->get('items');//,$_POST['items'];
+                if (!empty($items)) {
                     foreach ($items as $key => $value) {
                         if (!empty($key) && !empty($value)) {
                             $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
