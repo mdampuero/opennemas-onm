@@ -1,7 +1,7 @@
 /**
  * Controller to handle list actions.
  */
-function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
+function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, sharedVars) {
     /**
      * All contents selected flag.
      *
@@ -14,25 +14,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      *
      * @type object
      */
-    $scope.filters = {
-        elements_per_page: 10,
-        page:              1,
-        sort_by:           'title',
-        sort_order:        'asc',
-        search: {
-            content_type_name:     -1,
-            available:             -1,
-            category_name:         -1,
-            with_script:           -1,
-        },
-    }
-
-    /**
-     * Array of selected items.
-     *
-     * @type array
-     */
-    $scope.selected = [];
+    $scope.shvs = {}
 
     /**
      * Returns if the given content is selected.
@@ -41,8 +23,8 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      *                 false.
      */
     $scope.areSelected = function() {
-        var selected = $scope.selected ? $scope.selected.length : 0;
-        var contents = $scope.contents ? $scope.contents.length : 0;
+        var selected = sharedVars.get('selected') ? sharedVars.get('selected').length : 0;
+        var contents = sharedVars.get('contents') ? sharedVars.get('contents').length : 0;
 
         return selected == contents;
     };
@@ -54,10 +36,13 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route     Route name.
      */
     $scope.batchToggleAvailable = function (available, route) {
+        // Load shared variable
+        var selected = sharedVars.get('selected');
+
         updateAvailable(1);
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
-        $http.post(url, { ids: $scope.selected, available: available })
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
+        $http.post(url, { ids: selected, available: available })
             .success(function(response) {
                 updateAvailable(0, available);
             });
@@ -70,10 +55,13 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route     Route name.
      */
     $scope.batchToggleStatus = function (status, route) {
+        // Load shared variable
+        var selected = sharedVars.get('selected');
+
         updateStatus(1);
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
-        $http.post(url, { ids: $scope.selected, status: status })
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
+        $http.post(url, { ids: selected, status: status })
             .success(function(response) {
                 updateStatus(0, status);
             });
@@ -86,10 +74,13 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route  Route name.
      */
     $scope.batchToggleInHome = function (inHome, route) {
+        // Load shared variable
+        var selected = sharedVars.get('selected');
+
         updateInHome(1);
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
-        $http.post(url, { ids: $scope.selected, in_home: inHome })
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
+        $http.post(url, { ids: selected, in_home: inHome })
             .success(function(response) {
                 updateInHome(0, inHome);
             });
@@ -104,7 +95,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
     function clearFilters(filters) {
         var cleaned = {};
         for (var name in filters) {
-            if (filters[name] != -1 && filters[name] != '') {
+            if (filters[name] != -1 && filters[name] !== '') {
                 if (name.indexOf('_like') !== -1) {
                     cleaned[name.substring(0, name.indexOf('_like'))] = '%' + filters[name] + '%'
                 } else {
@@ -123,7 +114,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route Route name.
      */
     $scope.edit = function(id, route) {
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id});
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id});
         document.location = url;
     }
 
@@ -131,35 +122,47 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * Initializes the content type for the current list.
      *
      * @param string content Content type.
+     * @param object filters Object of allowed filters.
+     * @param string sortBy  Field name to sort by.
      * @param string route   Route name.
      */
-    $scope.init = function(content, filters, sortBy, route) {
-        $scope.contentType = content;
-
-        // Initialize filters
-        for (var filter in filters) {
-            $scope.filters.search[filter] = filters[filter];
-        };
+    $scope.init = function(content, filters, sortBy, sortOrder, route) {
+        // Initialize content type for current list.
+        sharedVars.set('contentType', content);
 
         // Load filters from URL
-        var search = $location.search();
-        for (var filter in search) {
-            if (filters[filter] != null) {
-                $scope.filters.search[filter] = search[filter];
+        var query = $location.search();
+        for (var name in query) {
+            if (filters[name] != null) {
+                filters[name] = query[name];
             }
         };
 
+        // Add content_type_name if it isn't a list of all content types
+        if (content != null && content != 'content') {
+            filters['content_type_name'] = content;
+        }
+
+        // Set sortBy
+        sharedVars.set('sort_by', 'created');
+        if (sortBy != null) {
+            sharedVars.set('sort_by', sortBy);
+        }
+
+        // Set sortOrder
+        sharedVars.set('sort_order', 'desc');
+        if (sortOrder != null) {
+            sharedVars.set('sort_order', sortOrder);
+        }
+
+        sharedVars.set('search', filters);
+        sharedVars.set('page', 1);
+        sharedVars.set('elements_per_page', 10);
+        sharedVars.set('contents', []);
+        sharedVars.set('selected', []);
+
         // Route for list (required by $watch)
         $scope.route = route;
-
-        if (content != null && content != 'content') {
-            $scope.filters.search.content_type_name = content;
-        }
-
-        if (sortBy != null) {
-            $scope.filters.sort_by = sortBy;
-        }
-
         $scope.list(route);
     }
 
@@ -171,7 +174,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      *                    return false.
      */
     $scope.isSelected = function(id) {
-        return $scope.selected.indexOf(id) >= 0;
+        return sharedVars.get('selected').indexOf(id) >= 0;
     };
 
     /**
@@ -184,19 +187,19 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
         $scope.loading = 1;
 
         var postData = {
-            elements_per_page: $scope.filters.elements_per_page,
-            page:              $scope.filters.page,
-            sort_by:           $scope.filters.sort_by,
-            sort_order:        $scope.filters.sort_order,
-            search:            clearFilters($scope.filters.search)
+            elements_per_page: $scope.shvs.elements_per_page,
+            page:              $scope.shvs.page,
+            sort_by:           $scope.shvs.sort_by,
+            sort_order:        $scope.shvs.sort_order,
+            search:            clearFilters($scope.shvs.search)
         }
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType });
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
         $http.post(url, postData).success(function(response) {
-            $scope.total    = response.total;
-            $scope.page     = response.page;
-            $scope.contents = response.results;
-            $scope.map      = response.map;
+            sharedVars.set('total', response.total);
+            sharedVars.set('page', response.page);
+            sharedVars.set('contents', response.results);
+            sharedVars.set('map', response.map);
 
             // Disable spinner
             $scope.loading = 0;
@@ -218,40 +221,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
             templateUrl: template,
             controller: 'ContentModalCtrl',
             resolve: {
-                contentType: function () {
-                    return $scope.contentType;
-                },
-                contents: function () {
-                    return $scope.contents;
-                },
                 index: function () {
                     return index;
                 },
-                id: function () {
-                    if (index != null) {
-                        return $scope.contents[index].id;
-                    }
-
-                    return null;
-                },
                 route: function () {
                     return route;
-                },
-                selected: function () {
-                    return $scope.selected;
-                },
-                title: function () {
-                    if (index != null) {
-                        if ($scope.contents[index].title) {
-                            return $scope.contents[index].title;
-                        } else if ($scope.contents[index].name) {
-                            return $scope.contents[index].name;
-                        } else {
-                            return $scope.contents[index].id;
-                        }
-                    }
-
-                    return null;
                 }
             }
         });
@@ -266,11 +240,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
         var checkbox = $event.target;
 
         $scope.allSelected = !$scope.areSelected();
-        $scope.selected = [];
+        sharedVars.set('selected', []);
 
         if ($scope.allSelected) {
-            for (var content in $scope.contents) {
-                updateSelected($scope.allSelected, $scope.contents[content].id);
+            for (var content in $scope.shvs.contents) {
+                updateSelected($scope.allSelected, $scope.shvs.contents[content].id);
             };
         }
     };
@@ -281,8 +255,8 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param  int page Page number.
      */
     $scope.selectPage = function(page, route) {
-        if (page != $scope.filters.page) {
-            $scope.filters.page = page;
+        if (page != $scope.shvs.page) {
+            $scope.shvs.page = page;
             $scope.list(route);
         }
     };
@@ -295,21 +269,27 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route Route name.
      */
     $scope.toggleAvailable = function (id, index, route) {
-        // Enable spinner
-        $scope.contents[index].loading = 1;
+        // Load shared variable
+        var contents = sharedVars.get('contents');
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
+        // Enable spinner
+        contents[index].loading = 1;
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
         $http.post(url).success(function(response) {
             if (response.available != null) {
-                $scope.contents[index].available = response.available;
+                contents[index].available = response.available;
             }
 
             // Disable spinner
-            $scope.contents[index].loading = 0;
+            contents[index].loading = 0;
         }).error(function(response) {
             // Disable spinner
-            $scope.contents[index].loading = 0;
+            contents[index].loading = 0;
         });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
     };
 
     /**
@@ -320,21 +300,27 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route Route name.
      */
     $scope.toggleInHome = function (id, index, route) {
-        // Enable spinner
-        $scope.contents[index].home_loading = 1;
+        // Load shared variable
+        var contents = sharedVars.get('contents');
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
+        // Enable spinner
+        contents[index].home_loading = 1;
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
         $http.post(url).success(function(response) {
             if (response.in_home != null) {
-                $scope.contents[index].in_home = response.in_home;
+                contents[index].in_home = response.in_home;
             }
 
             // Disable spinner
-            $scope.contents[index].home_loading = 0;
+            contents[index].home_loading = 0;
         }).error(function(response) {
             // Disable spinner
-            $scope.contents[index].home_loading = 0;
+            contents[index].home_loading = 0;
         });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
     };
 
     /**
@@ -345,21 +331,27 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route Route name.
      */
     $scope.toggleFavorite = function (id, index, route) {
-        // Enable spinner
-        $scope.contents[index].favorite_loading = 1;
+        // Load shared variable
+        var contents = sharedVars.get('contents');
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
+        // Enable spinner
+        contents[index].favorite_loading = 1;
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
         $http.post(url).success(function(response) {
             if (response.favorite != null) {
-                $scope.contents[index].favorite = response.favorite;
+                contents[index].favorite = response.favorite;
             }
 
             // Disable spinner
-            $scope.contents[index].favorite_loading = 0;
+            contents[index].favorite_loading = 0;
         }).error(function(response) {
             // Disable spinner
-            $scope.contents[index].favorite_loading = 0;
+            contents[index].favorite_loading = 0;
         });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
     };
 
     /**
@@ -370,22 +362,27 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param string route Route name.
      */
     $scope.toggleStatus = function (id, index, route) {
-        // Enable spinner
-        $scope.contents[index].loading = 1;
+        // Load shared variable
+        var contents = sharedVars.get('contents');
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.contentType, id: id });
+        // Enable spinner
+        contents[index].loading = 1;
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
         $http.post(url).success(function(response) {
             if (response.status != null) {
-                $scope.contents[index].status = response.status;
-                console.log($scope.contents[index].status);
+                contents[index].status = response.status;
             }
 
             // Disable spinner
-            $scope.contents[index].loading = 0;
+            contents[index].loading = 0;
         }).error(function(response) {
             // Disable spinner
-            $scope.contents[index].loading = 0;
+            contents[index].loading = 0;
         });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
     };
 
     /**
@@ -395,22 +392,30 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param int available Available value.
      */
     function updateAvailable(loading, available) {
-        for (var i = 0; i < $scope.contents.length; i++) {
+        // Load shared variables
+        var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
+
+        for (var i = 0; i < contents.length; i++) {
             var j = 0;
-            while (j < $scope.selected.length
-                && $scope.contents[i].id != $scope.selected[j]
+            while (j < selected.length
+                && contents[i].id != selected[j]
             ) {
                 j++;
             }
 
-            if (j < $scope.selected.length) {
+            if (j < selected.length) {
                 if (available != null) {
-                    $scope.contents[i].available = available;
+                    contents[i].available = available;
                 };
 
-                $scope.contents[i].loading = loading;
+                contents[i].loading = loading;
             }
         };
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
+        sharedVars.set('selected', selected);
     }
 
     /**
@@ -420,22 +425,30 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param int inHome    Available value.
      */
     function updateInHome(loading, inHome) {
-        for (var i = 0; i < $scope.contents.length; i++) {
+        // Load shared variables
+        var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
+
+        for (var i = 0; i < contents.length; i++) {
             var j = 0;
-            while (j < $scope.selected.length
-                && $scope.contents[i].id != $scope.selected[j]
+            while (j < selected.length
+                && contents[i].id != selected[j]
             ) {
                 j++;
             }
 
-            if (j < $scope.selected.length) {
+            if (j < selected.length) {
                 if (inHome != null) {
-                    $scope.contents[i].in_home = inHome;
+                    contents[i].in_home = inHome;
                 };
 
-                $scope.contents[i].home_loading = loading;
+                contents[i].home_loading = loading;
             }
         };
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
+        sharedVars.set('selected', selected);
     }
 
     /**
@@ -445,13 +458,18 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param  int     id      Selected content id.
      */
     function updateSelected(enabled, id) {
-        var index = $scope.selected.indexOf(id);
+        // Load shared variable
+        var selected = sharedVars.get('selected');
+        var index    = selected.indexOf(id);
 
         if (enabled && index === -1) {
-          $scope.selected.push(id);
+          selected.push(id);
         } else {
-          $scope.selected.splice(index, 1);
+          selected.splice(index, 1);
         }
+
+        // Updated shared variable
+        sharedVars.set('selected', selected);
     };
 
     /**
@@ -461,22 +479,30 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param int status  Status value.
      */
     function updateStatus(loading, status) {
-        for (var i = 0; i < $scope.contents.length; i++) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
+
+        for (var i = 0; i < contents.length; i++) {
             var j = 0;
-            while (j < $scope.selected.length
-                && $scope.contents[i].id != $scope.selected[j]
+            while (j < selected.length
+                && contents[i].id != selected[j]
             ) {
                 j++;
             }
 
-            if (j < $scope.selected.length) {
+            if (j < selected.length) {
                 if (status != null) {
-                    $scope.contents[i].status = status;
+                    contents[i].status = status;
                 };
 
-                $scope.contents[i].loading = loading;
+                contents[i].loading = loading;
             }
         };
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
+        sharedVars.set('selected', selected);
     }
 
     /**
@@ -499,7 +525,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
      * @param  object newValues New filters values.
      * @param  object oldValues Old filters values.
      */
-    $scope.$watch('filters.search', function(newValues, oldValues) {
+    $scope.$watch('shvs.search', function(newValues, oldValues) {
         if (searchTimeout) {
             $timeout.cancel(searchTimeout);
         }
@@ -520,8 +546,17 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting) {
             }, 500);
         }
     }, true);
+
+    /**
+     * Load the value of shared variables object in scope when it changes.
+     *
+     * @param  Event  event Event object.
+     * @param  Object vars  Shared variables object.
+     */
+    $scope.$on('SharedVarsChanged', function(event, vars) {
+        $scope.shvs = vars;
+    });
 }
 
 // Register ContentCtrl function as AngularJS controller
 angular.module('BackendApp.controllers').controller('ContentCtrl', ContentCtrl);
-//

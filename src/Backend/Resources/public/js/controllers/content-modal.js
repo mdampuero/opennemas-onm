@@ -11,15 +11,24 @@
  * @param array  selected Array of selected items.
  */
 function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
-    contentType, id, index, contents, route, selected, title
+    sharedVars, index, route
 ) {
-    $scope.contentType = contentType;
-    $scope.contents    = contents;
-    $scope.id          = id;
-    $scope.index       = index;
-    $scope.route       = route;
-    $scope.selected    = selected;
-    $scope.title       = title;
+    $scope.route = route;
+    $scope.index = index;
+
+    if (index != null) {
+        $scope.id    = sharedVars.get('contents')[index].id;
+
+        if (sharedVars.get('contents')[index].title) {
+            $scope.title = sharedVars.get('contents')[index].title;
+        } else if (sharedVars.get('contents')[index].name) {
+            $scope.title = sharedVars.get('contents')[index].name;
+        } else {
+            $scope.title = sharedVars.get('contents')[index].id;
+        }
+    };
+
+    $scope.selected = sharedVars.get('selected').length;
 
     /**
      * Closes the current modal.
@@ -36,17 +45,21 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
      * @param string route Route title.
      */
     $scope.delete = function (id, index, route) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+
         // Enable spinner
         $scope.deleting = 1;
 
         var url = fosJsRouting.generate(
             route,
-            { contentType: $scope.contentType, id: id }
+            { contentType: sharedVars.get('contentType'), id: id }
         );
 
         $http.post(url).success(function(data) {
             if (data.errors.length == 0) {
-                $scope.contents.splice(index, 1);
+                contents.splice(index, 1);
+                sharedVars.set('total', sharedVars.get('total') - 1);
                 $modalInstance.close();
             }
 
@@ -56,6 +69,9 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
             // Disable spinner
             $scope.deleting = 0;
         });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
     };
 
     /**
@@ -64,25 +80,30 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
      * @param string route Route title.
      */
     $scope.deleteSelected = function (route) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
+
         // Enable spinner
         $scope.deleting = 1;
 
         var url = fosJsRouting.generate(
             route,
-            { contentType: $scope.contentType }
+            { contentType: sharedVars.get('contentType') }
         );
-        $http.post(url, { ids: $scope.selected }).success(function(response) {
+        $http.post(url, { ids: selected }).success(function(response) {
             // Remove only successfully deleted contents
             for (var i = 0; i < response.success.length; i++) {
                 var j = 0;
-                while (j < $scope.contents.length
-                    && $scope.contents[j].id != response.success[i].id
+                while (j < contents.length
+                    && contents[j].id != response.success[i].id
                 ) {
                     j++;
                 }
 
-                if (j < $scope.contents.length) {
-                    $scope.contents.splice(j, 1);
+                if (j < contents.length) {
+                    contents.splice(j, 1);
+                    sharedVars.set('total', sharedVars.get('total') - 1);
                 }
             };
 
@@ -96,7 +117,20 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
             // Disable spinner
             $scope.deleting = 0;
         });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
     };
+
+    /**
+     * Load the value of shared variables object in scope when it changes.
+     *
+     * @param  Event  event Event object.
+     * @param  Object vars  Shared variables object.
+     */
+    $scope.$on('SharedVarsChanged', function(event, vars) {
+        $scope.shvs = vars;
+    });
 }
 
 // Register ModalCtrl function as AngularJS controller
