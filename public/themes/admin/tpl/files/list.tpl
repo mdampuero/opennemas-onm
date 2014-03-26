@@ -235,7 +235,7 @@
                         <td class="right">
                             <div class="btn-group">
                                 {acl isAllowed="FILE_UPDATE"}
-                                <button class="btn" ng-click="edit(content.id, 'admin_poll_show')" type="button">
+                                <button class="btn" ng-click="edit(content.id, 'admin_files_show')" type="button">
                                     <i class="icon-pencil"></i>
                                 </button>
                                 {/acl}
@@ -250,9 +250,13 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan="9" class="center">
-                            <div class="pagination">
-                                {$pagination->links}
+                        <td colspan="10" class="center">
+                            <div class="pull-left">
+                                [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            </div>
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                            <div class="pull-right">
+                                [% page %] / [% pages %]
                             </div>
                         </td>
                     </tr>

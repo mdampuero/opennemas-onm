@@ -1,4 +1,5 @@
 {extends file="base/admin.tpl"}
+
 {block name="header-js" append}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
     {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}

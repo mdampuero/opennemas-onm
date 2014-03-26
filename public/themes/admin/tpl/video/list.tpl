@@ -1,7 +1,17 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
     {script_tag src="/onm/jquery-functions.js" language="javascript"}
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="footer-js" append}
@@ -15,7 +25,7 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario">
+<form action="#" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '', blog: -1, author: -1 }, 'title', 'backend_ws_contents_list')">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title">
@@ -30,27 +40,39 @@
                 </div>
             </div>
 			<ul class="old-button">
-				{acl isAllowed="VIDEO_DELETE"}
-				<li>
-                    <button type="submit" class="delChecked" data-controls-modal="modal-video-batchDelete" href="#" title="{t}Delete{/t}">
-                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-                    </button>
-				</li>
-				{/acl}
-				{acl isAllowed="VIDEO_AVAILABLE"}
-                <li>
-                    <button id="batch-unpublish" type="submit" name="status" value="0">
-                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
-                   </button>
-               </li>
-               <li>
-                   <button id="batch-publish" type="submit" name="status" value="1">
-                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
-                   </button>
-               </li>
-				{/acl}
+                <li ng-if="selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="VIDEO_AVAILABLE"}
+                        <li>
+                            <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
+                                <i class="icon-eye-open"></i>
+                                {t}Publish{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
+                                <i class="icon-eye-close"></i>
+                                {t}Unpublish{/t}
+                            </a>
+                        </li>
+                        {/acl}
+                        {acl isAllowed="VIDEO_DELETE"}
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
+                </li>
+                <li class="separator" ng-if="selected.length > 0"></li>
 				{acl isAllowed="VIDEO_CREATE"}
-                <li class="separator"></li>
 				<li>
 					<a href="{url name=admin_videos_create category=$category}" accesskey="N" tabindex="1">
 						<img border="0" src="{$params.IMAGE_DIR}/video.png" title="Nuevo Video" alt="Nuevo Video"><br />{t}New video{/t}
@@ -83,124 +105,159 @@
     <div class="wrapper-content">
 
         {render_messages}
-        <div id="warnings-validation"></div>
+        <div class="table-info clearfix">
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% total %] videos{/t}</strong></div>{/acl}
+            <div class="pull-right">
+                <div class="form-inline">
+                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="filters.search.title_like"/>
+                    <label for="category">{t}Category:{/t}</label>
+                    <select class="input-medium select2" id="category" ng-model="filters.search.category_name">
+                        <option value="-1">{t}-- All --{/t}</option>
+                            {section name=as loop=$allcategorys}
+                                {assign var=ca value=$allcategorys[as]->pk_content_category}
+                                <option value="{$allcategorys[as]->name}">
+                                    {$allcategorys[as]->title}
+                                    {if $allcategorys[as]->inmenu eq 0}
+                                        <span class="inactive">{t}(inactive){/t}</span>
+                                    {/if}
+                                </option>
+                                {section name=su loop=$subcat[as]}
+                                {assign var=subca value=$subcat[as][su]->pk_content_category}
+                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                    {assign var=subca value=$subcat[as][su]->pk_content_category}
+                                    <option value="{$subcat[as][su]->name}">
+                                        &rarr;
+                                        {$subcat[as][su]->title}
+                                        {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
+                                            <span class="inactive">{t}(inactive){/t}</span>
+                                        {/if}
+                                    </option>
+                                {/acl}
+                                {/section}
+                            {/section}
+                    </select>
+                    {t}Status:{/t}
+                    <select class="select2 input-medium" name="status" ng-model="filters.search.available">
+                        <option value="-1"> {t}-- All --{/t} </option>
+                        <option value="1"> {t}Published{/t} </option>
+                        <option value="0"> {t}No published{/t} </option>
+                    </select>
 
-        <table class="table table-hover table-condensed">
-            <thead>
-                <tr>
-                    {if count($videos) > 0}
-                    <th style="width:15px;">
-                        <input type="checkbox" class="toggleallcheckbox">
-                    </th>
-                    <th></th>
-                    <th>{t}Title{/t}</th>
-                    {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
-                    <th class="left nowrap">Created</th>
-                    <th class="center" style="width:35px;">{t}Published{/t}</th>
-                    {if $category!='widget'} <th class="center" style="width:35px;">{t}Favorite{/t}</th>{/if}
-                    <th class="center" style="width:35px;">{t}Home{/t}</th>
-                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
-                    {else}
-                    <th class="center">
-                        &nbsp;
-                    </th>
-                    {/if}
-                </tr>
-            </thead>
-            <tbody class="sortable">
-                {foreach name=c from=$videos item=video}
-                <tr data-id="{$video->id}" style="cursor:pointer;">
-                    <td>
-                        <input type="checkbox" class="minput" id="selected_{$smarty.foreach.c.iteration}" name="selected_fld[]" value="{$video->id}"  style="cursor:pointer;">
-                    </td>
-                    <td style="width:15px;">
-                        <img src="{$video->thumb}" alt="" style="max-width:60px">
-                    </td>
-                    <td onClick="javascript:document.getElementById('selected_{$smarty.foreach.c.iteration}').click();">
-                        {if $video->author_name != 'internal'}<strong>{$video->author_name}</strong> {/if}{$video->title|clearslash}
-                    </td>
-                    {if $category=='widget' || $category=='all'}
-                    <td >
-                        {$video->category_name}
-                    </td>
-                    {/if}
-                    </td class="center">
+                    <input type="hidden" name="in_home" ng-model="filters.search.in_home">
+                </div>
+            </div>
+        </div>
+        <div ng-include="'files'"></div>
 
-                    <td class="left nowrap">
-                        {$video->created}
-                    </td>
-                    <td class="center">
+        <script type="text/ng-template" id="files">
+            <div class="spinner-wrapper" ng-if="loading">
+                <div class="spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
+            </div>
+
+            <table class="table table-hover table-condensed" ng-if="!loading">
+               <thead ng-if="contents.length > 0">
+                    <tr ng-if="contents.length > 0">
+                        <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                        <th></th>
+                        <th>{t}Title{/t}</th>
+                        {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
+                        <th class="left nowrap">Created</th>
                         {acl isAllowed="VIDEO_AVAILABLE"}
-                        {if $video->available == 1}
-                            <a href="{url name=admin_video_toggle_available id=$video->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
-                                <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" />
-                            </a>
-                        {else}
-                            <a href="{url name=admin_video_toggle_available id=$video->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pendiente{/t}" />
-                            </a>
-                        {/if}
+                        <th class="center" style="width:35px;">{t}Published{/t}</th>
                         {/acl}
-                    </td>
-                     {if $category!='widget'}
-                    <td class="center">
                         {acl isAllowed="VIDEO_FAVORITE"}
-                        {if $video->favorite == 1}
-                           <a href="{url name=admin_video_toggle_favorite id=$video->id status=0 category=$category page=$page|default:1}" class="favourite_on" title="Quitar de Portada"></a>
-                        {else}
-                            <a href="{url name=admin_video_toggle_favorite id=$video->id status=1 category=$category page=$page|default:1}" class="favourite_off" title="Meter en Portada"></a>
-                        {/if}
+                        <th class="center" style="width:35px;">{t}Favorite{/t}</th>
                         {/acl}
-                    </td>
-                    {/if}
-                    <td class="center">
-                    {acl isAllowed="VIDEO_HOME"}
-                        {if $video->in_home == 1}
-                           <a href="{url name=admin_video_toggle_inhome id=$video->id status=0 category=$category page=$page|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
-                        {else}
-                            <a href="{url name=admin_video_toggle_inhome id=$video->id status=1 category=$category page=$page|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
-                        {/if}
-                    {/acl}
-                    </td>
-                    <td class="right">
-                        <div class="btn-group">
-                            {acl isAllowed="VIDEO_UPDATE"}
-                            <a class="btn" href="{url name=admin_video_show id=$video->id}" title="{t}Edit{/t}" >
-                                <i class="icon-pencil"></i> {t}Edit{/t}
-                            </a>
-                            {/acl}
+                        {acl isAllowed="VIDEO_HOME"}
+                        <th class="center" style="width:35px;">{t}Home{/t}</th>
+                        {/acl}
+                        <th class="center" style="width:100px;">{t}Actions{/t}</th>
+                    </tr>
+                </thead>
+                <tbody class="sortable">
+                    <tr ng-if="contents.length == 0">
+                        <td class="empty" colspan="10">{t}No available videos.{/t}</td>
+                    </tr>
 
-                            {acl isAllowed="VIDEO_DELETE"}
-                            <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                               data-id="{$video->id}"
-                               data-title="{$video->title|capitalize}"
-                               data-url="{url name=admin_video_delete id=$video->id}"
-                               data-url-relations="{url name=admin_video_get_relations id=$video->id}"
-                               href="{url name=admin_video_delete id=$video->id}" >
-                                <i class="icon-trash icon-white"></i>
-                            </a>
-                            {/acl}
-                        </div>
-                    </td>
-                </tr>
-                {foreachelse}
-                <tr>
-                    <td class="empty" colspan="8">
-                        {t}There is no videos yet.{/t}
-                    </td>
-                </tr>
-                {/foreach}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="10" class="center">
-                        <div class="pagination">
-                            {$pagination->links}
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                    <tr ng-if="contents.length >= 0" ng-repeat="content in contents" data-id="[% content.id %]">
+                        <td>
+                            <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+                        </td>
+                        <td style="width:15px;">
+                            <img ng-src="[% content.thumb %]" alt="" style="max-width:60px">
+                        </td>
+                        <td>
+                            <strong ng-if="content.author_name != 'internal'">[% content.author_name %]</strong> [% content.title %]
+                        </td>
+                        {if $category=='widget' || $category=='all'}
+                        <td >
+                            [% content.category_name %]
+                        </td>
+                        {/if}
+                        </td class="center">
+
+                        <td class="left nowrap">
+                            [% content.created%]
+                        </td>
+
+                        {acl isAllowed="VIDEO_AVAILABLE"}
+                        <td class="center">
+                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
+                        </td>
+                        {/acl}
+                        {if $category != 'widget'}
+                        {acl isAllowed="VIDEO_FAVORITE"}
+                        <td class="center">
+                            <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="toggleFavorite(content.id, $index, 'backend_ws_content_toggle_favorite')" type="button"></button>
+                        </td>
+                        {/acl}
+                        {/if}
+                        {acl isAllowed="VIDEO_HOME"}
+                        <td class="center">
+                            <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-click="toggleInHome(content.id, $index, 'backend_ws_content_toggle_in_home')" type="button"></button>
+                        </td>
+                        {/acl}
+
+                        <td class="right">
+                            <div class="btn-group">
+                                {acl isAllowed="VIDEO_UPDATE"}
+                                <button class="btn" ng-click="edit(content.id, 'admin_video_show')" type="button">
+                                    <i class="icon-pencil"></i>
+                                </button>
+                                {/acl}
+                                {acl isAllowed="VIDEO_DELETE"}
+                                <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                                {/acl}
+                           </ul>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="10" class="center">
+                            <div class="pull-left">
+                                [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            </div>
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                            <div class="pull-right">
+                                [% page %] / [% pages %]
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </script>
+
+        <script type="text/ng-template" id="modal-delete">
+            {include file="common/modals/_modalDelete.tpl"}
+        </script>
+
+        <script type="text/ng-template" id="modal-delete-selected">
+            {include file="common/modals/_modalBatchDelete.tpl"}
+        </script>
 
     </div>
 </form>

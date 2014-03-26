@@ -153,7 +153,7 @@
                     <td class="right">
                         <div class="btn-group">
                             {acl isAllowed="LETTER_UPDATE"}
-                            <button class="btn" ng-click="edit(content.id, 'admin_poll_show')" type="button">
+                            <button class="btn" ng-click="edit(content.id, 'admin_letter_show')" type="button">
                                 <i class="icon-pencil"></i>
                             </button>
                             {/acl}
