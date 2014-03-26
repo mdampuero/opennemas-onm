@@ -123,7 +123,14 @@ class RssController extends Controller
 
                 // Filter articles if some of them has time scheduling and sort them by position
                 $contentsInHomepage = $cm->getInTime($contentsInHomepage);
-                $articles_home = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+                $contentsInHomepage = $cm->sortArrayofObjectsByProperty($contentsInHomepage, 'position');
+
+                // Keep only articles
+                foreach ($contentsInHomepage as $value) {
+                    if ($value->content_type_name == 'article') {
+                        $articles_home[] = $value;
+                    }
+                }
             } elseif ($categoryName == 'opinion') {
                 $author = $request->query->filter('author', null, FILTER_SANITIZE_STRING);
 
