@@ -133,7 +133,6 @@ jQuery(document).ready(function($) {
                             <label for="author" class="control-label">{t}Nickname{/t}</label>
                             <input type="text" id="author" name="author" value="{$letter->author|clearslash}" required="required" class="input-xlarge" />
                         </div>
-
                         <div class="control-group">
                             <label for="email" class="control-label">{t}Email{/t}</label>
                             <div class="controls">
@@ -141,14 +140,14 @@ jQuery(document).ready(function($) {
                             </div>
                         </div>
                     </div>
-
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label for="params[ip]" class="control-label">{t}Sent from IP{/t}</label>
-                <div class="controls">
-                    <input type="text" id="params[ip]" name="params[ip]" value="{$letter->ip}"/>
+                    <div class="form-inline-block">
+                        {foreach $letter->params as $key => $value}
+                        <div class="control-group">
+                            <label for="{$key}" class="control-label">{t}{$key|capitalize}{/t}</label>
+                            <input type="text" id="params[{$key}]" name="params[{$key}]" value="{$value|clearslash}"  readonly/>
+                        </div>
+                        {/foreach}
+                    </div>
                 </div>
             </div>
 
