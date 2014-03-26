@@ -12,12 +12,12 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="footer-js" append}
     <script>
     var video_manager_urls = {
-        batchDelete: '{url name=admin_video_batchdelete category=$category page=$page}',
         saveWidgetPositions: '{url name=admin_video_save_positions category=$category page=$page}'
     }
     </script>
@@ -25,22 +25,30 @@
 {/block}
 
 {block name="content"}
-<form action="#" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '', blog: -1, author: -1 }, 'title', 'backend_ws_contents_list')">
+<form action="#" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('video', { available: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title">
                 <h2>{t}Videos{/t} :: </h2>
                 <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{elseif $category == 'all'}{t}All categories{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
+                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{elseif $category == 'all'}{t}Listing{/t}{else}{$datos_cat[0]->title}{/if}</span> <span class="caret"></span></div>
                     <div class="options">
-                        <h4>{t}Special elements{/t}</h4>
                         <a href="{url name=admin_videos_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
-                        {include file="common/drop_down_categories.tpl" home={url name=admin_videos l=1}}
+                        <a href="{url name=admin_videos}" {if $category != 'widget'}class="active"{/if}>{t}Listing{/t}</a>
                     </div>
                 </div>
             </div>
 			<ul class="old-button">
-                <li ng-if="selected.length > 0">
+                {acl isAllowed="VIDEO_SETTINGS"}
+                    <li>
+                        <a href="{url name=admin_videos_config}" class="admin_add" title="{t}Config video module{/t}">
+                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                            {t}Settings{/t}
+                        </a>
+                    </li>
+                    <li class="separator"></li>
+                {/acl}
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
@@ -59,6 +67,19 @@
                                 {t}Unpublish{/t}
                             </a>
                         </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#" ng-click="batchToggleInHome(1, 'backend_ws_contents_batch_toggle_in_home')">
+                                <i class="go-home"></i>
+                                {t escape="off"}In home{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" ng-click="batchToggleInHome(0, 'backend_ws_contents_batch_toggle_in_home')">
+                                <i class="no-home"></i>
+                                {t escape="off"}Drop from home{/t}
+                            </a>
+                        </li>
                         {/acl}
                         {acl isAllowed="VIDEO_DELETE"}
                             <li class="divider"></li>
@@ -71,7 +92,7 @@
                         {/acl}
                     </ul>
                 </li>
-                <li class="separator" ng-if="selected.length > 0"></li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
 				{acl isAllowed="VIDEO_CREATE"}
 				<li>
 					<a href="{url name=admin_videos_create category=$category}" accesskey="N" tabindex="1">
@@ -89,29 +110,19 @@
                         </li>
                     {/if}
                 {/acl}
-                {acl isAllowed="VIDEO_SETTINGS"}
-                    <li class="separator"></li>
-                    <li>
-                        <a href="{url name=admin_videos_config}" class="admin_add" title="{t}Config video module{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                            {t}Settings{/t}
-                        </a>
-                    </li>
-                {/acl}
 			</ul>
 		</div>
 	</div>
 
     <div class="wrapper-content">
-
         {render_messages}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% total %] videos{/t}</strong></div>{/acl}
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] videos{/t}</strong></div>{/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="filters.search.title_like"/>
+                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     <label for="category">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="filters.search.category_name">
+                    <select class="input-medium select2" id="category" ng-model="shvs.search.category_name">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -137,13 +148,13 @@
                             {/section}
                     </select>
                     {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="filters.search.available">
+                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
                     </select>
 
-                    <input type="hidden" name="in_home" ng-model="filters.search.in_home">
+                    <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
                 </div>
             </div>
         </div>
@@ -156,12 +167,12 @@
             </div>
 
             <table class="table table-hover table-condensed" ng-if="!loading">
-               <thead ng-if="contents.length > 0">
-                    <tr ng-if="contents.length > 0">
+               <thead>
+                    <tr>
                         <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                         <th></th>
                         <th>{t}Title{/t}</th>
-                        {if $category=='widget' || $category=='all'}<th class="left">{t}Section{/t}</th>{/if}
+                        <th class="left">{t}Section{/t}</th>
                         <th class="left nowrap">Created</th>
                         {acl isAllowed="VIDEO_AVAILABLE"}
                         <th class="center" style="width:35px;">{t}Published{/t}</th>
@@ -176,11 +187,11 @@
                     </tr>
                 </thead>
                 <tbody class="sortable">
-                    <tr ng-if="contents.length == 0">
+                    <tr ng-if="shvs.contents.length == 0">
                         <td class="empty" colspan="10">{t}No available videos.{/t}</td>
                     </tr>
 
-                    <tr ng-if="contents.length >= 0" ng-repeat="content in contents" data-id="[% content.id %]">
+                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" data-id="[% content.id %]">
                         <td>
                             <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                         </td>
@@ -198,7 +209,7 @@
                         </td class="center">
 
                         <td class="left nowrap">
-                            [% content.created%]
+                            [% content.created %]
                         </td>
 
                         {acl isAllowed="VIDEO_AVAILABLE"}
@@ -206,13 +217,11 @@
                             <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
                         </td>
                         {/acl}
-                        {if $category != 'widget'}
                         {acl isAllowed="VIDEO_FAVORITE"}
                         <td class="center">
                             <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="toggleFavorite(content.id, $index, 'backend_ws_content_toggle_favorite')" type="button"></button>
                         </td>
                         {/acl}
-                        {/if}
                         {acl isAllowed="VIDEO_HOME"}
                         <td class="center">
                             <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-click="toggleInHome(content.id, $index, 'backend_ws_content_toggle_in_home')" type="button"></button>
@@ -239,11 +248,11 @@
                     <tr>
                         <td colspan="10" class="center">
                             <div class="pull-left">
-                                [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                                [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                             </div>
-                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                             <div class="pull-right">
-                                [% page %] / [% pages %]
+                                [% shvs.page %] / [% pages %]
                             </div>
                         </td>
                     </tr>
@@ -263,14 +272,6 @@
 </form>
     <script>
     // <![CDATA[
-        jQuery('#batch-publish').on('click', function(){
-            jQuery('#formulario').attr('action', '{url name=admin_video_batchpublish}');
-        });
-        jQuery('#batch-unpublish').on('click', function(){
-            jQuery('#formulario').attr('action', '{url name=admin_video_batchpublish}');
-            e.preventDefault();
-        });
-
         {if $category eq 'widget'}
             jQuery(document).ready(function() {
                 makeSortable();
@@ -278,8 +279,5 @@
         {/if}
     // ]]>
     </script>
-
-    {include file="video/modals/_modalDelete.tpl"}
-    {include file="video/modals/_modalBatchDelete.tpl"}
     {include file="video/modals/_modalAccept.tpl"}
 {/block}

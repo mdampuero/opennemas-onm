@@ -131,7 +131,6 @@
                 <th class="center" style="width:70px;">{t}Actions{/t}</th>
             </thead>
             <tbody>
-            {acl hasCategoryAccess=$article->category}
                 <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
                 </tr>
@@ -186,7 +185,6 @@
                         </div>
                     </td>
                 </tr>
-            {/acl}
             </tbody>
             <tfoot>
                 <tr>
