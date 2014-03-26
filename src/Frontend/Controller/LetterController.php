@@ -225,18 +225,6 @@ class LetterController extends Controller
                         }
                     }
                 }
-<<<<<<< HEAD
-=======
-
-                if (array_key_exists('items', $_POST) && !empty($_POST['items'])) {
-                    $items   = $request->request->get('items');//,$_POST['items'];
-                    foreach ($items as $key => $value) {
-                        if (!empty($key) && !empty($value)) {
-                            $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
-                        }
-                    }
-                }
->>>>>>> hotfix/fix-duplicated-target-phpdoc
 
                 $data['url']        = $url;
                 $data['body']       = $lettertext;
