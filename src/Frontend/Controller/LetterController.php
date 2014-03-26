@@ -86,7 +86,7 @@ class LetterController extends Controller
                     'items' => $itemsPerPage,
                     'total' => $total,
                     'url'   => $this->generateUrl(
-                        'frontend_participa_frontpage'
+                        'frontend_letter_frontpage'
                     )
                 )
             );
@@ -205,15 +205,26 @@ class LetterController extends Controller
 
             return $response;
         } else {
+
             $lettertext    = $request->request->filter('lettertext', '', FILTER_SANITIZE_STRING);
             $security_code = $request->request->filter('security_code', '', FILTER_SANITIZE_STRING);
 
             if (empty($security_code)) {
-                $data = array();
+                $params  = array();
+                $data    = array();
                 $name    = $request->request->filter('name', '', FILTER_SANITIZE_STRING);
                 $subject = $request->request->filter('subject', '', FILTER_SANITIZE_STRING);
                 $mail    = $request->request->filter('mail', '', FILTER_SANITIZE_STRING);
                 $url     = $request->request->filter('url', '', FILTER_SANITIZE_STRING);
+
+                if (array_key_exists('items', $_POST) && !empty($_POST['items'])) {
+                    $items   = $request->request->get('items');//,$_POST['items'];
+                    foreach ($items as $key => $value) {
+                        if (!empty($key) && !empty($value)) {
+                            $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
+                        }
+                    }
+                }
 
                 $data['url']        = $url;
                 $data['body']       = $lettertext;
@@ -237,7 +248,8 @@ class LetterController extends Controller
                         ."de palabras malsonantes.";
                 } else {
                     $ip = getRealIp();
-                    $data["params"] = array('ip'=> $ip);
+                    $params['ip']   = $ip;
+                    $data["params"] = $params;
 
                     if ($letter->create($data)) {
 
@@ -252,7 +264,7 @@ class LetterController extends Controller
             }
         }
 
-        $response = new RedirectResponse($this->generateUrl('frontend_participa_frontpage').'?msg="'.$msg.'"');
+        $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
 
         return $response;
     }
