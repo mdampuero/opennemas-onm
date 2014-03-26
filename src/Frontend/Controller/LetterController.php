@@ -225,6 +225,7 @@ class LetterController extends Controller
                         }
                     }
                 }
+<<<<<<< HEAD
 
                 if (array_key_exists('items', $_POST) && !empty($_POST['items'])) {
                     $items   = $request->request->get('items');//,$_POST['items'];
@@ -234,6 +235,8 @@ class LetterController extends Controller
                         }
                     }
                 }
+=======
+>>>>>>> Fix wrong merge in letters to editor
 
                 $data['url']        = $url;
                 $data['body']       = $lettertext;
