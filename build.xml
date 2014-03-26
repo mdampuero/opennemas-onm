@@ -139,17 +139,11 @@
             <arg value="${project.paths.php.comma-separated}" />
             <arg line="-t" />
             <arg path="${basedir}/build/api" />
-        </exec>
-    </target>
-
-    <target name="phpdoc">
-        <exec executable="phpdoc">
-            <arg line="-d" />
-            <arg value="${project.paths.php.comma-separated}" />
             <arg line="-c" />
             <arg path="${basedir}/build/phpdoc.dist.xml" />
         </exec>
     </target>
+
 
     <target name="phpunit" description="Run unit tests with PHPUnit">
         <exec executable="phpunit" failonerror="true">
