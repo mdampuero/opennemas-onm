@@ -226,6 +226,15 @@ class LetterController extends Controller
                     }
                 }
 
+                if (array_key_exists('items', $_POST) && !empty($_POST['items'])) {
+                    $items   = $request->request->get('items');//,$_POST['items'];
+                    foreach ($items as $key => $value) {
+                        if (!empty($key) && !empty($value)) {
+                            $params[$key] = $request->request->filter("items[{$key}]", '', FILTER_SANITIZE_STRING);
+                        }
+                    }
+                }
+
                 $data['url']        = $url;
                 $data['body']       = $lettertext;
                 $data['author']     = $name;
