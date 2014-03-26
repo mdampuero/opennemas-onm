@@ -12,17 +12,18 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title_like: '' }, 'title', 'backend_ws_contents_list')">
+<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
                 <h2>{t}Articles{/t}</h2>
             </div>
             <ul class="old-button">
-                <li ng-if="selected.length > 0">
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
@@ -53,7 +54,7 @@
                         {/acl}
                     </ul>
                 </li>
-                <li class="separator" ng-if="selected.length > 0"></li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {acl isAllowed="ARTICLE_CREATE"}
                     <li>
                         <a href="{url name=admin_article_create category=$category}">
@@ -70,12 +71,12 @@
         {render_messages}
 
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>[% total %] {t}articles{/t}</strong></div> {/acl}
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>[% shvs.total %] {t}articles{/t}</strong></div> {/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="filters.search.title_like"/>
+                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
                     <label for="category">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="filters.search.category_name">
+                    <select class="input-medium select2" id="category" ng-model="shvs.search.category_name">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -101,7 +102,7 @@
                             {/section}
                     </select>
                     {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="filters.search.available">
+                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
@@ -131,10 +132,10 @@
             </thead>
             <tbody>
             {acl hasCategoryAccess=$article->category}
-                <tr ng-if="contents.length == 0">
+                <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
                 </tr>
-                <tr ng-if="contents.length >= 0" ng-repeat="content in contents">
+                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents">
                     <td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
@@ -191,11 +192,11 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pull-left">
-                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% page %] / [% pages %]
+                            [% shvs.page %] / [% pages %]
                         </div>
                     </td>
                 </tr>

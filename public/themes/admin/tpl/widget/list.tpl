@@ -11,17 +11,18 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('widget', { available: -1, renderlet: -1 }, 'title', 'backend_ws_contents_list')">
+<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('widget', { available: -1, renderlet: -1, title_like: '', in_litter: 0 }, 'title', 'asc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2>{t}Widgets{/t}</h2>
             </div>
             <ul class="old-button">
-                <li ng-if="selected.length > 0">
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
@@ -52,7 +53,7 @@
                         {/acl}
                     </ul>
                 </li>
-                <li class="separator" ng-if="selected.length > 0"></li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {acl isAllowed="ARTICLE_CREATE"}
                     <li>
                         <a href="{url name=admin_widget_create category=$category}">
@@ -67,20 +68,20 @@
         {render_messages}
         <div class="table-info clearfix">
             {acl hasCategoryAccess=$category}
-                <div class="pull-left"><strong>[% total %] {t}widgets{/t}</strong></div>
+                <div class="pull-left"><strong>[% shvs.total %] {t}widgets{/t}</strong></div>
             {/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="filters.search.title"/>
+                    <input type="text" placeholder="{t}Search by title:{/t}" ng-model="shvs.search.title_like"/>
                     <label for="type">{t}Type:{/t}</label>
-                    <select class="select2 input-medium" name="type" ng-model="filters.search.renderlet">
+                    <select class="select2 input-medium" name="type" ng-model="shvs.search.renderlet">
                         <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
                         <option value="intelligentwidget" {if $status === intelligentwidget} selected {/if}> {t}IntelligentWidget{/t} </option>
                         <option value="html" {if  $status === html} selected {/if}> {t}HTML{/t} </option>
                         <option value="smarty" {if $status === smarty} selected {/if}> {t}Smarty{/t} </option>
                     </select>
                     {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="filters.search.available">
+                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
@@ -104,12 +105,12 @@
                 <th class="center" style="width:10px">Actions</th>
             </thead>
             <tbody>
-                <tr ng-if="contents.length == 0">
+                <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="5">
                         {t}There is no available widgets{/t}
                     </td>
                 </tr>
-                <tr ng-if="contents.length > 0" ng-repeat="content in contents">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
                     <td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
@@ -132,7 +133,7 @@
                                 </button>
                             {/acl}
                             {acl isAllowed="WIDGET_DELETE"}
-                                <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
                                     <i class="icon-trash icon-white"></i>
                                 </button>
                             {/acl}
@@ -144,11 +145,11 @@
                 <tr>
                     <td colspan="5" class="center">
                         <div class="pull-left">
-                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% page %] / [% pages %]
+                            [% shvs.page %] / [% pages %]
                         </div>
                     </td>
                 </tr>

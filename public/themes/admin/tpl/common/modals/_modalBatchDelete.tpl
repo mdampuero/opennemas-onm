@@ -3,7 +3,7 @@
   <h3>{t}Delete selected items{/t}</h3>
 </div>
 <div class="modal-body">
-    <p>{t escape=off}Are you sure you want to delete [% selected.length %] item(s)?{/t}</p>
+    <p>{t escape=off}Are you sure you want to delete [% selected %] item(s)?{/t}</p>
 
 </div>
 <div class="modal-footer">

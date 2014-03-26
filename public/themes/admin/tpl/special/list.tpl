@@ -12,10 +12,11 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_specials}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('content', { available: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '' }, 'title', 'backend_ws_contents_list')">
+<form action="{url name=admin_specials}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('special', { available: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -29,25 +30,47 @@
                 </div>
             </div>
             <ul class="old-button">
-                <li ng-if="selected.length > 0">
+                {acl isAllowed="SPECIAL_SETTINGS"}
+                    <li>
+                        <a href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
+                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
+                            {t}Settings{/t}
+                        </a>
+                    </li>
+                    <li class="separator"></li>
+                {/acl}
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="SPECIAL_AVAILABLE"}
-                        <li>
-                            <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
-                                <i class="icon-eye-open"></i>
-                                {t}Publish{/t}
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
-                                <i class="icon-eye-close"></i>
-                                {t}Unpublish{/t}
-                            </a>
-                        </li>
+                            <li>
+                                <a href="#" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
+                                    <i class="icon-eye-open"></i>
+                                    {t}Publish{/t}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
+                                    <i class="icon-eye-close"></i>
+                                    {t}Unpublish{/t}
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" ng-click="batchToggleInHome(1, 'backend_ws_contents_batch_toggle_in_home')">
+                                    <i class="go-home"></i>
+                                    {t escape="off"}In home{/t}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" ng-click="batchToggleInHome(0, 'backend_ws_contents_batch_toggle_in_home')">
+                                    <i class="no-home"></i>
+                                    {t escape="off"}Drop from home{/t}
+                                </a>
+                            </li>
                         {/acl}
                         {acl isAllowed="SPECIAL_DELETE"}
                             <li class="divider"></li>
@@ -60,6 +83,7 @@
                         {/acl}
                     </ul>
                 </li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {acl isAllowed="SPECIAL_WIDGET"}
                      {if $category eq 'widget'}
                         <li class="separator"></li>
@@ -70,16 +94,7 @@
                         </li>
                     {/if}
                 {/acl}
-                {acl isAllowed="SPECIAL_SETTINGS"}
-                    <li>
-                        <a href="{url name=admin_specials_config}" class="admin_add" title="{t}Config special module{/t}">
-                            <img border="0" src="{$params.IMAGE_DIR}template_manager/configure48x48.png" alt="" /><br />
-                            {t}Settings{/t}
-                        </a>
-                    </li>
-                {/acl}
                 {acl isAllowed="SPECIAL_CREATE"}
-                <li class="separator"></li>
                 <li>
                     <a href="{url name=admin_special_create}">
                         <img src="{$params.IMAGE_DIR}special.png" alt="Nuevo Special"><br />{t}New special{/t}
@@ -97,9 +112,9 @@
             {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% total %] specials{/t}</strong></div>{/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="filters.search.title_like"/>
+                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     <label for="category">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="filters.search.category_name">
+                    <select class="input-medium select2" id="category" ng-model="shvs.search.category_name">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -125,13 +140,13 @@
                             {/section}
                     </select>
                     {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="filters.search.available">
+                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
                     </select>
 
-                    <input type="hidden" name="in_home" ng-model="filters.search.in_home">
+                    <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
                 </div>
             </div>
         </div>
@@ -144,7 +159,7 @@
         </div>
 
         <table class="table table-hover table-condensed" ng-if="!loading">
-            <thead ng-if="contents.length > 0">
+            <thead ng-if="shvs.contents.length > 0">
                 <tr>
                     <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                     <th class="title">{t}Title{/t}</th>
@@ -157,10 +172,10 @@
                 </tr>
             </thead>
             <tbody class="sortable">
-                <tr ng-if="contents.length == 0">
+                <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="10">{t}No available specials.{/t}</td>
                 </tr>
-                <tr data-id="{$special->pk_special}" ng-if="contents.length >= 0" ng-repeat="content in contents">
+                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents">
                     <td class="center">
                         <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                     </td>
@@ -214,11 +229,11 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pull-left">
-                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% page %] / [% pages %]
+                            [% shvs.page %] / [% pages %]
                         </div>
                     </td>
                 </tr>

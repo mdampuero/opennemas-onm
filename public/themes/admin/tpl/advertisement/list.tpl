@@ -12,10 +12,11 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: -1, type_advertisement: -1, available: -1, with_script: -1 }, 'title', 'backend_ws_contents_list')">
+    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: -1, type_advertisement: -1, available: -1, with_script: -1, in_litter: 0 }, 'title', 'asc', 'backend_ws_contents_list')">
         <div class="top-action-bar clearfix">
             <div class="wrapper-content">
                 <div class="title">
@@ -31,7 +32,7 @@
                         </li>
                     {/acl}
                     <li class="separator"></li>
-                    <li ng-if="selected.length > 0">
+                    <li ng-if="shvs.selected.length > 0">
                         <a href="#">
                             <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                             <br/>{t}Batch actions{/t}
@@ -62,7 +63,7 @@
                             {/acl}
                         </ul>
                     </li>
-                    <li class="separator" ng-if="selected.length > 0"></li>
+                    <li class="separator" ng-if="shvs.selected.length > 0"></li>
                     {acl isAllowed="ADVERTISEMENT_CREATE"}
                     <li>
                         <a href="{url name=admin_ad_create category=$category page=$page filter=$filter}" class="admin_add" accesskey="N" tabindex="1">
@@ -80,7 +81,7 @@
             <div class="table-info clearfix">
                 <div class="pull-right form-inline">
                     <label for="filter[type_advertisement]">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="filters.search.fk_content_categories">
+                    <select class="input-medium select2" id="category" ng-model="shvs.search.fk_content_categories">
                         <option value="-1">{t}-- All --{/t}</option>
                         <optgroup label="{t}Special elements{/t}">
                             <option value="0">{t}HOMEPAGE{/t}</option>
@@ -114,17 +115,17 @@
                         </optgroup>
                     </select>
                     <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
-                    <select class="input-large select2" name="filter[type_advertisement]" ng-model="filters.search.type_advertisement">
+                    <select class="input-large select2" name="filter[type_advertisement]" ng-model="shvs.search.type_advertisement">
                         {html_options options=$filter_options.type_advertisement selected=$filterType}
                     </select>
                     &nbsp;&nbsp;&nbsp;
                     <label>{t}Status:{/t}</label>
-                    <select class="input-medium select2" ng-model="filters.search.available">
+                    <select class="input-medium select2" ng-model="shvs.search.available">
                         {html_options options=$filter_options.available selected=$filterAvailable}
                     </select>
                      &nbsp;&nbsp;&nbsp;
                     <label>{t}Type:{/t}</label>
-                    <select class="input-medium select2" ng-model="filters.search.with_script">
+                    <select class="input-medium select2" ng-model="shvs.search.with_script">
                         {html_options options=$filter_options.type}
                     </select>
                 </div>
@@ -153,12 +154,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-if="contents.length == 0">
+                    <tr ng-if="shvs.contents.length == 0">
                         <td class="empty" colspan="10">
                             {t}There is no advertisement stored in this section{/t}
                         </td>
                     </tr>
-                    <tr ng-if="contents.length > 0" ng-repeat="content in contents">
+                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
                         <td style="text-align:center;">
                             <input type="checkbox" class="minput"  id="[% content.id %]" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                         </td>
@@ -167,7 +168,7 @@
                                 <img ng-if="content.with_script == 1" src="{$params.IMAGE_DIR}iconos/script_code_red.png" alt="Javascript" title="Javascript"/>
                                 <img ng-if="content.with_script != 1 && content.is_flash == 1" src="{$params.IMAGE_DIR}flash.gif" alt="{t}Media flash{/t}" title="{t}Media flash element (swf){/t}" style="width: 16px; height: 16px;"/>
                                 <img ng-id="content.with_script != 1 && content.is_flash != 1" src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />
-                                [% map[content.type_advertisement].name %]
+                                [% shvs.map[content.type_advertisement].name %]
                             </label>
                         </td>
                         <td style="">
@@ -208,11 +209,11 @@
                     <tr>
                         <td colspan="8" class="center">
                             <div class="pull-left">
-                                [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                                [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                             </div>
-                                <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" num-pages="pages" page="page" total-items="total"></pagination>
+                                <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" num-pages="pages" page="shvs.page" total-items="shvs.total"></pagination>
                             <div class="pull-right">
-                                [% page %] / [% pages %]
+                                [% shvs.page %] / [% pages %]
                             </div>
                         </td>
                     </tr>

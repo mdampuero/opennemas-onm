@@ -22,23 +22,32 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { available: -1, renderlet: -1 }, 'name', 'backend_ws_menus_list')">
+<form action="{url name=admin_menus}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { available: -1, renderlet: -1 }, 'name', 'asc', 'backend_ws_menus_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Menus{/t}</h2></div>
               <ul class="old-button">
-                  {acl isAllowed="MENU_DELETE"}
-                <li ng-if="selected.length > 0">
-                    <a class="delChecked" href="#" title="Eliminar" alt="Eliminar" ng-click="open('modal-delete-all', 'backend_ws_menus_batch_delete', $index)">
-                        <img src="{$params.IMAGE_DIR}trash.png" border="0"  title="Eliminar" alt="Eliminar" ><br />Eliminar
+                <li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
                     </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="MENU_DELETE"}
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_menus_batch_delete')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
                 </li>
-                {/acl}
-
-                <li class="separator" ng-if="selected.length > 0"></li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 <li>
                     {acl isAllowed="MENU_CREATE"}
                     <a href="{url name=admin_menu_create}" class="admin_add">
@@ -73,7 +82,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="content in contents">
+                <tr ng-repeat="content in shvs.contents">
                     <td class="center">
                         <input type="checkbox" class="minput"  id="[% content.pk_menu %]" ng-checked="isSelected(content.pk_menu)" ng-click="updateSelection($event, content.pk_menu)">
                     </td>
@@ -122,7 +131,7 @@
     <script type="text/ng-template" id="modal-delete">
         {include file="common/modals/_modalDelete.tpl"}
     </script>
-    <script type="text/ng-template" id="modal-delete-all">
+    <script type="text/ng-template" id="modal-delete-selected">
         {include file="common/modals/_modalBatchDelete.tpl"}
     </script>
 </form>

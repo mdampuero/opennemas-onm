@@ -12,10 +12,11 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '', blog: -1, author: -1 }, 'title', 'backend_ws_contents_list')">
+<form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '', blog: -1, author: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">
@@ -43,7 +44,7 @@
                 </li>
             {/acl}
             <li class="separator"></li>
-            <li ng-if="selected.length > 0">
+            <li ng-if="shvs.selected.length > 0">
                 <a href="#">
                     <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                     <br/>{t}Batch actions{/t}
@@ -87,7 +88,7 @@
                     {/acl}
                 </ul>
             </li>
-            <li class="separator" ng-if="selected.length > 0"></li>
+            <li class="separator" ng-if="shvs.selected.length > 0"></li>
 
             {acl isAllowed="OPINION_FRONTPAGE"}
             {if $home}

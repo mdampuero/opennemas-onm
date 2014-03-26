@@ -1,21 +1,21 @@
 <div class="table-info clearfix">
-    <div class="pull-left"><strong>[% total %] {t}items{/t}</strong></div>
+    <div class="pull-left"><strong>[% shvs.total %] {t}items{/t}</strong></div>
     <div class="pull-right form-inline">
         {t}Type:{/t}
-        <select class="input-small select2" ng-model="filters.search.blog">
+        <select class="input-small select2" ng-model="shvs.search.blog">
             <option value="-1">-- All --</option>
             <option value="0">Opinion</option>
             <option value="1">Blog</option>
         </select>
         {t}Status:{/t}
-        <select class="input-small select2" ng-model="filters.search.available">
+        <select class="input-small select2" ng-model="shvs.search.available">
             <option value="-1">{t}-- All --{/t}</option>
             <option value="1">{t}Published{/t}</option>
             <option value="0">{t}No published{/t}</option>
         </select>
          &nbsp;
         {t}Select an author{/t}
-        <select class="select2 input-large" ng-model="filters.search.author">
+        <select class="select2 input-large" ng-model="shvs.search.author">
             <option value="-1"> {t}All authors{/t} </option>
             <option value="-2"> {t}Director{/t} </option>
             <option value="-3"> {t}Editorial{/t} </option>
@@ -45,7 +45,7 @@
           </tr>
         </thead>
         <tbody>
-            <tr ng-if="contents.length > 0" ng-repeat="content in contents">
+            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
                 <td>
                     <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                 </td>
@@ -100,21 +100,21 @@
                     </ul>
                 </td>
             </tr>
-            <tr ng-if="contents.length == 0">
+            <tr ng-if="shvs.contents.length == 0">
                 <td class="empty" colspan="11">
                     {t}There is no opinions yet.{/t}
                 </td>
             </tr>
         </tbody>
         <tfoot>
-            <tr >
+            <tr>
                 <td colspan="11" class="center">
                     <div class="pull-left">
-                        [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                        [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                     </div>
-                    <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_opinions_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                    <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_opinions_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                     <div class="pull-right">
-                        [% page %] / [% pages %]
+                        [% shvs.page %] / [% pages %]
                     </div>
                 </td>
             </tr>

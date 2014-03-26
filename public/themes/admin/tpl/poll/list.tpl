@@ -12,10 +12,11 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_polls category=$category page=$page}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('poll', { available: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '' }, 'title', 'backend_ws_contents_list')">
+<form action="{url name=admin_polls category=$category page=$page}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('poll', { available: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -39,7 +40,7 @@
                 </li>
                 <li class="separator"></li>
                 {/acl}
-                <li ng-if="selected.length > 0">
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
@@ -70,6 +71,7 @@
                         {/acl}
                     </ul>
                 </li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {acl isAllowed="POLL_CREATE"}
                 <li>
                     <a href="{url name=admin_poll_create}" title="{t}New poll{/t}">
@@ -82,23 +84,22 @@
     </div>
 
     <div class="wrapper-content">
-
         {render_messages}
-
-        <div class="messages" ng-if="$total_elements_widget > 0 && total != {$total_elements_widget}">
-            <div class="alert alert-info">
-                <button class="close" data-dismiss="alert">×</button>
-                {t 1=$total_elements_widget}You must put %1 polls in the HOME{/t}<br>
+        {if $category == 'widget'}
+            <div class="messages" ng-if="{$total_elements_widget} > 0 && shvs.total != {$total_elements_widget}">
+                <div class="alert alert-info">
+                    <button class="close" data-dismiss="alert">×</button>
+                    {t 1=$total_elements_widget}You must put %1 polls in the HOME{/t}<br>
+                </div>
             </div>
-        </div>
-
+        {/if}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% total %] polls{/t}</strong></div>{/acl}
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] polls{/t}</strong></div>{/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="filters.search.title_like"/>
+                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     <label for="category">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="filters.search.category_name">
+                    <select class="input-medium select2" id="category" ng-model="shvs.search.category_name">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -124,13 +125,13 @@
                             {/section}
                     </select>
                     {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="filters.search.available">
+                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
                     </select>
 
-                    <input type="hidden" name="in_home" ng-model="filters.search.in_home">
+                    <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
                 </div>
             </div>
         </div>
@@ -144,7 +145,7 @@
     </div>
 
     <table class="table table-hover table-condensed" ng-if="!loading">
-        <thead ng-if="contents.length > 0">
+        <thead ng-if="shvs.contents.length > 0">
            <tr>
                 <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                 <th>{t}Title{/t}</th>
@@ -160,11 +161,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-if="contents.length == 0">
+            <tr ng-if="shvs.contents.length == 0">
                 <td class="empty" colspan="10">{t}No available polls.{/t}</td>
             </tr>
 
-            <tr ng-if="contents.length >= 0" ng-repeat="content in contents">
+            <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents">
                 <td>
                     <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                 </td>
@@ -215,11 +216,11 @@
             <tr>
                 <td colspan="10" class="center">
                     <div class="pull-left">
-                        [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                        [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                     </div>
-                    <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                    <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                     <div class="pull-right">
-                        [% page %] / [% pages %]
+                        [% shvs.page %] / [% pages %]
                     </div>
                 </td>
             </tr>

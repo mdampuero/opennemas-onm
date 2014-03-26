@@ -12,6 +12,7 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="header-css" append}
@@ -24,7 +25,7 @@
 
 
 {block name="content"}
-<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('comment', { status: -1, body_like: '' }, 'date', 'backend_ws_contents_list')">
+<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('comment', { status: -1, body_like: '' }, 'date', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -33,7 +34,7 @@
                 </h2>
             </div>
             <ul class="old-button">
-                <li ng-if="selected.length > 0">
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
@@ -64,7 +65,7 @@
                         {/acl}
                     </ul>
                 </li>
-                <li class="separator" ng-if="selected.length > 0"></li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 <li>
                     <a href="{url name=admin_comments_config}" title="{t}Config comments module{/t}">
                         <img border="0" src="{$params.IMAGE_DIR}/template_manager/configure48x48.png" alt="{t}Settings{/t}"><br>
@@ -81,9 +82,9 @@
 
         <div class="table-info clearfix">
             <div class="pull-right form-inline">
-                <input placeholder="{t}Search{/t}" ng-model="filters.search.body_like" type="text">
+                <input placeholder="{t}Search{/t}" ng-model="shvs.search.body_like" type="text">
                 <label for="status">Status:</label>
-                <select class="form-filters" name="status" ng-model="filters.search.status">
+                <select class="form-filters" name="status" ng-model="shvs.search.status">
                     <option value="-1">-- All --</option>
                     {html_options options=$statuses selected=$filter_status}
                 </select>
@@ -109,7 +110,7 @@
                </tr>
             </thead>
             <tbody>
-                <tr ng-if="contents.length > 0" ng-repeat="content in contents">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
                     <td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
@@ -152,7 +153,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr ng-if="contents.length == 0">
+                <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="6">
                         {t}No comments matched your criteria.{/t}
                     </td>
@@ -162,11 +163,11 @@
                 <tr>
                     <td colspan="6" class="center">
                         <div class="pull-left">
-                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% page %] / [% pages %]
+                            [% shvs.page %] / [% pages %]
                         </div>
                     </td>
                 </tr>
