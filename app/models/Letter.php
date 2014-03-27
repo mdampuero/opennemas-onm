@@ -160,7 +160,7 @@ class Letter extends Content
 
         $this->loadAllContentProperties();
 
-        $this->image = $letter->getProperty('image');
+        $this->image = $this->getProperty('image');
 
         if (!empty($this->image)) {
             $this->photo = $this->photo;
