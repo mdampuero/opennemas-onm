@@ -12,6 +12,7 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="footer-js" append}
@@ -32,13 +33,12 @@ jQuery(function($){
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_trash}" method="post" id="trashform"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'title', 'backend_ws_contents_list')">
-
+<form action="{url name=admin_trash}" method="post" id="trashform"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('content', { in_litter: 1, title_like: '', content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Trash{/t}</h2></div>
             <ul class="old-button">
-                <li ng-if="selected.length > 0">
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
@@ -68,10 +68,10 @@ jQuery(function($){
         {render_messages}
 
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% total %] contents{/t}</strong></div>{/acl}
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] contents{/t}</strong></div>{/acl}
             <div class="pull-right">
                 <div class="form-inline">
-                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="filters.search.title_like"/>
+                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     <label for="content_type_name">{t}Content Type:{/t}</label>
                     {include file="trash/partials/_pills.tpl"}
                 </div>
@@ -88,7 +88,7 @@ jQuery(function($){
 
         <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
-               <tr ng-if="contents.length > 0">
+               <tr>
                     <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                     <th class="left">{t}Content type{/t}</th>
                     <th class='left'>{t}Title{/t}</th>
@@ -99,13 +99,13 @@ jQuery(function($){
             </thead>
 
             <tbody>
-                <tr ng-if="contents.length == 0">
+                <tr ng-if="shvs.contents.length == 0">
                     <td class="empty"colspan=6>
                         {t}There is no elements in the trash{/t}
                     </td>
                 </tr>
 
-                <tr ng-if="contents.length >= 0" ng-repeat="content in contents">
+                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents">
                     <td>
                         <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                     </td>
@@ -132,11 +132,11 @@ jQuery(function($){
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pull-left">
-                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% page %] / [% pages %]
+                            [% shvs.page %] / [% pages %]
                         </div>
                     </td>
                 </tr>
