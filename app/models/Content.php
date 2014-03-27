@@ -1953,7 +1953,7 @@ class Content
     */
     public static function searchContentID($oldID)
     {
-        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ? LIMIT 1";
+        $sql       = "SELECT pk_content FROM `contents` WHERE pk_content = ?";
         $value     = array($oldID);
         $contentID = $GLOBALS['application']->conn->GetOne($sql, $value);
 
