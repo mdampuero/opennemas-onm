@@ -50,10 +50,6 @@ class LettersController extends Controller
      **/
     public function listAction(Request $request)
     {
-        // foreach ($letters as &$letter) {
-        //     $letter->image = $letter->getProperty('image');
-        // }
-
         return $this->render('letter/list.tpl');
     }
 

@@ -77,61 +77,7 @@ class VideosController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page           = $request->query->getDigits('page', 1);
-        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $configurations = s::get('video_settings');
-
-        $cm = new \ContentManager();
-
-        if ($category == 'all') {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $category;
-        }
-        $itemsPerPage = s::get('items_per_page', 20);
-
-        list($videoCount, $videos) = $cm->getCountAndSlice(
-            'video',
-            $categoryForLimit,
-            '',
-            'ORDER BY created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (!empty($videos)) {
-            foreach ($videos as &$video) {
-                $video->information    = unserialize($video->information);
-                $video->category_name  = $this->ccm->get_name($video->category);
-                $video->category_title = $this->ccm->get_title($video->category_name);
-            }
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $videoCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_videos',
-                    array('category' => $category)
-                ).'&page=%d',
-            )
-        );
-
-        return $this->render(
-            'video/list.tpl',
-            array(
-                'pagination' => $pagination,
-                'videos'     => $videos
-            )
-        );
+        return $this->render('video/list.tpl');
     }
 
     /**

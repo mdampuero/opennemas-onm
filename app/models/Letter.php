@@ -159,6 +159,9 @@ class Letter extends Content
         $this->ip = $this->params['ip'];
 
         $this->loadAllContentProperties();
+
+        $this->image = $letter->getProperty('image');
+
         if (!empty($this->image)) {
             $this->photo = $this->photo;
         }

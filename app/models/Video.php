@@ -83,10 +83,6 @@ class Video extends Content
                 return 'Video';
 
                 break;
-            case 'thumb':
-                return $this->getThumb();
-
-                break;
             default:
                 return parent::__get($name);
                 break;
@@ -140,10 +136,11 @@ class Video extends Content
             return;
         }
 
-        $this->pk_video = $rs->fields['pk_video'];
-        $this->video_url = $rs->fields['video_url'];
+        $this->pk_video    = $rs->fields['pk_video'];
+        $this->video_url   = $rs->fields['video_url'];
         $this->author_name = $rs->fields['author_name'];
         $this->information = unserialize($rs->fields['information']);
+        $this->thumb       = $this->getThumb();
     }
 
     /**

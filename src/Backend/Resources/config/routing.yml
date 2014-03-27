@@ -334,6 +334,8 @@ admin_letter_create:
 admin_letter_show:
     path:     /letter/{id}/show
     defaults: { _controller  : BackendBundle:Letters:show }
+    options:
+        expose: true
 
 admin_letter_update:
     path:     /letter/{id}/update
