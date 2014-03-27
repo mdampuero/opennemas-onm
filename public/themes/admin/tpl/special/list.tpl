@@ -47,13 +47,13 @@
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="SPECIAL_AVAILABLE"}
                             <li>
-                                <a href="#" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
+                                <a href="#" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
                                     <i class="icon-eye-open"></i>
                                     {t}Publish{/t}
                                 </a>
                             </li>
                             <li>
-                                <a href="#" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
+                                <a href="#" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
                                     <i class="icon-eye-close"></i>
                                     {t}Unpublish{/t}
                                 </a>
@@ -109,7 +109,7 @@
         {render_messages}
 
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% total %] specials{/t}</strong></div>{/acl}
+            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] specials{/t}</strong></div>{/acl}
             <div class="pull-right">
                 <div class="form-inline">
                     <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
@@ -159,7 +159,7 @@
         </div>
 
         <table class="table table-hover table-condensed" ng-if="!loading">
-            <thead ng-if="shvs.contents.length > 0">
+            <thead>
                 <tr>
                     <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                     <th class="title">{t}Title{/t}</th>
@@ -190,7 +190,7 @@
                     </td>
                     {acl isAllowed="SPECIAL_AVAILABLE"}
                     <td class="center">
-                        <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
+                        <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" type="button"></button>
                     </td>
                     {/acl}
 
@@ -229,11 +229,10 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pull-left">
-                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
+                            {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% shvs.page %] / [% pages %]
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
                     </td>
                 </tr>

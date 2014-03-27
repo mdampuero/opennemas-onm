@@ -35,16 +35,16 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      * @param int    available Available value.
      * @param string route     Route name.
      */
-    $scope.batchToggleAvailable = function (available, route) {
+    $scope.batchSetContentStatus = function (available, route) {
         // Load shared variable
         var selected = sharedVars.get('selected');
 
-        updateAvailable(1);
+        updateContentStatus(1);
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
         $http.post(url, { ids: selected, available: available })
             .success(function(response) {
-                updateAvailable(0, available);
+                updateContentStatus(0, available);
             });
     };
 
@@ -268,17 +268,20 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      * @param int    index Index of content in the array of contents.
      * @param string route Route name.
      */
-    $scope.toggleAvailable = function (id, index, route) {
+    $scope.setContentStatus = function (index, route, status) {
         // Load shared variable
         var contents = sharedVars.get('contents');
 
         // Enable spinner
         contents[index].loading = 1;
 
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
-        $http.post(url).success(function(response) {
-            if (response.available != null) {
-                contents[index].available = response.available;
+        var url = fosJsRouting.generate(
+            route,
+            { contentType: $scope.shvs.contentType, id: contents[index].id }
+        );
+        $http.post(url, {status: status}).success(function(response) {
+            if (response.content_status != null) {
+                contents[index].content_status = response.content_status;
             }
 
             // Disable spinner
@@ -386,12 +389,12 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     };
 
     /**
-     * Updates the available property for selected contents.
+     * Updates the content_status property for selected contents.
      *
      * @param int loading   Loading flag to use in template.
-     * @param int available Available value.
+     * @param int content_status Available value.
      */
-    function updateAvailable(loading, available) {
+    function updateContentStatus(loading, status) {
         // Load shared variables
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
@@ -405,8 +408,8 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             }
 
             if (j < selected.length) {
-                if (available != null) {
-                    contents[i].available = available;
+                if (status != null) {
+                    contents[i].content_status = status;
                 };
 
                 contents[i].loading = loading;

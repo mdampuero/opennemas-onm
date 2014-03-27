@@ -52,15 +52,15 @@ backend_ws_contents_batch_remove_permanently:
     options:
         expose: true
 
-backend_ws_content_toggle_available:
-    path:     /{contentType}s/{id}/toggle-available
-    defaults: { _controller  : BackendWebServiceBundle:Content:toggleAvailable }
+backend_ws_content_set_content_status:
+    path:     /{contentType}s/{id}/set-content-status
+    defaults: { _controller  : BackendWebServiceBundle:Content:setContentStatus }
     options:
         expose: true
 
-backend_ws_contents_batch_toggle_available:
-    path:     /{contentType}s/toggle-available
-    defaults: { _controller  : BackendWebServiceBundle:Content:batchToggleAvailable }
+backend_ws_contents_batch_set_content_status:
+    path:     /{contentType}s/set-content-status
+    defaults: { _controller  : BackendWebServiceBundle:Content:batchSetContentStatus }
     options:
         expose: true
 

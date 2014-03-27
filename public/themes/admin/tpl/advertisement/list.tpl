@@ -40,13 +40,13 @@
                         <ul class="dropdown-menu" style="margin-top: 1px;">
                             {acl isAllowed="ADVERTISEMENT_AVAILA"}
                             <li>
-                                <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
+                                <a href="#" id="batch-publish" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
                                     <i class="icon-eye-open"></i>
                                     {t}Publish{/t}
                                 </a>
                             </li>
                             <li>
-                                <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
+                                <a href="#" id="batch-unpublish" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
                                     <i class="icon-eye-close"></i>
                                     {t}Unpublish{/t}
                                 </a>
@@ -185,7 +185,7 @@
                         </td>
                         {acl isAllowed="ADVERTISEMENT_AVAILA"}
                         <td class="center" style="width:40px;">
-                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button">
+                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" type="button">
                             </button>
                         </td>
                         {/acl}
@@ -209,11 +209,10 @@
                     <tr>
                         <td colspan="8" class="center">
                             <div class="pull-left">
-                                [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
+                                {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                             </div>
-                                <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" num-pages="pages" page="shvs.page" total-items="shvs.total"></pagination>
                             <div class="pull-right">
-                                [% shvs.page %] / [% pages %]
+                                <pagination max-size="0" direction-links="true" on-select-page="selectPage(page, 'backend_ws_contents_list')" num-pages="pages" page="shvs.page" total-items="shvs.total"></pagination>
                             </div>
                         </td>
                     </tr>

@@ -22,7 +22,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_letters}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('letter', { available: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_letters}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('letter', { content_status: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -37,13 +37,13 @@
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="LETTER_AVAILABLE"}
                         <li>
-                            <a href="#" id="batch-publish" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
+                            <a href="#" id="batch-publish" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
                                 <i class="icon-eye-open"></i>
                                 {t}Publish{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="batch-unpublish" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
+                            <a href="#" id="batch-unpublish" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
                                 <i class="icon-eye-close"></i>
                                 {t}Unpublish{/t}
                             </a>
@@ -81,10 +81,11 @@
                     <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     <label>
                         {t}Status:{/t}
-                        <select class="select2 input-medium" id="content_status" ng-model="shvs.search.available">
+                        <select class="select2 input-medium" id="content_status" ng-model="shvs.search.content_status">
                             <option value="-1">-- All --</option>
                             <option value="1">{t}Published{/t}</option>
-                            <option value="0">{t}Rejected{/t}</option>
+                            <option value="0">{t}Unpublished{/t}</option>
+                            <option value="2">{t}Rejected{/t}</option>
                         </select>
                     </label>
                 </div>
@@ -130,7 +131,9 @@
                     </td>
                     <td class="center">
                         {acl isAllowed="LETTER_AVAILABLE"}
-                        <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.available == 1, unpublished: content.available == 0 }" ng-click="toggleAvailable(content.id, $index, 'backend_ws_content_toggle_available')" type="button"></button>
+                        <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status != 1 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" title="{t}Publish/Unpublish{/t}" type="button"></button>
+                        <button class="btn-link" ng-class="{ loading: content.loading == 1, unpublished: content.loading != 1 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', 2)" ng-if="content.content_status != 2" type="button" title="{t}Reject{/t}">
+                        </button>
                         {/acl}
                     </td>
                     <td class="right">
@@ -153,11 +156,10 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pull-left">
-                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
+                            {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% shvs.page %] / [% pages %]
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
                     </td>
                 </tr>

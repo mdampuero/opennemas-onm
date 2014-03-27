@@ -902,7 +902,8 @@ class Content
 
         // Set status for it's updated to next event
         if (!empty($this)) {
-            $this->available = $status;
+            $this->available      = $status;
+            $this->content_status = $status;
         }
 
         return true;

@@ -334,19 +334,20 @@ class ContentController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function toggleAvailableAction($id, $contentType)
+    public function setContentStatusAction(Request $request, $id, $contentType)
     {
-        $available = null;
-        $em        = $this->get('entity_repository');
-        $errors    = array();
-        $success   = array();
+        $status  = $request->request->getDigits('status');
+
+        $em      = $this->get('entity_repository');
+        $errors  = array();
+        $success = array();
 
         $content   = $em->find(\classify($contentType), $id);
 
         if (!is_null($content->id)) {
-            $content->toggleAvailable();
+            $content->set_available($status, $this->getUser()->id);
 
-            $available = $content->available;
+            $status = $content->available;
             $success[] = array(
                 'id'   => $id,
                 'text' => _('Item updated successfully')
@@ -360,9 +361,9 @@ class ContentController extends Controller
 
         return new JsonResponse(
             array(
-                'available' => $available,
-                'errors'    => $errors,
-                'success'   => $success
+                'content_status' => $status,
+                'errors'         => $errors,
+                'success'        => $success
             )
         );
     }
@@ -374,7 +375,7 @@ class ContentController extends Controller
      * @param  string       $contentType Content type name.
      * @return JsonResponse              The response object.
      */
-    public function batchToggleAvailableAction(Request $request, $contentType)
+    public function batchSetContentStatusAction(Request $request, $contentType)
     {
         $em      = $this->get('entity_repository');
         $errors  = array();

@@ -128,10 +128,10 @@
                 <td class="center">
                     {acl isAllowed="ALBUM_AVAILABLE"}
                         {if $album->available == 1}
-                                <a href="{url name=admin_album_toggle_available id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Published{/t}">
+                                <a href="{url name=admin_album_set_content_status id=$album->pk_album status=0 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Published{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" /></a>
                         {else}
-                                <a href="{url name=admin_album_toggle_available id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Pending{/t}">
+                                <a href="{url name=admin_album_set_content_status id=$album->pk_album status=1 category=$category page=$paginacion->_currentPage|default:1}" title="{t}Pending{/t}">
                                         <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pending{/t}"/></a>
                         {/if}
                     {/acl}

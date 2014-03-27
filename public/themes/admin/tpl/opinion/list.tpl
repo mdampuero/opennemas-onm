@@ -52,13 +52,13 @@
                 <ul class="dropdown-menu" style="margin-top: 1px;">
                     {acl isAllowed="OPINION_AVAILABLE"}
                     <li>
-                        <a href="#" ng-click="batchToggleAvailable(1, 'backend_ws_contents_batch_toggle_available')">
+                        <a href="#" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
                             <i class="icon-eye-open"></i>
                             {t}Publish{/t}
                         </a>
                     </li>
                     <li>
-                        <a href="#" ng-click="batchToggleAvailable(0, 'backend_ws_contents_batch_toggle_available')">
+                        <a href="#" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
                             <i class="icon-eye-close"></i>
                             {t}Unpublish{/t}
                         </a>

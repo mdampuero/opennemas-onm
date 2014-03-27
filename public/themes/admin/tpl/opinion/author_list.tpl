@@ -11,15 +11,16 @@
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'backend_ws_users_list')">
+<form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'asc', 'backend_ws_users_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Authors{/t}</h2></div>
             <ul class="old-button">
-                <li ng-if="selected.length > 0">
+                <li ng-if="shvs.selected.length > 0">
                     <a href="#">
                         <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
                         <br/>{t}Batch actions{/t}
@@ -35,7 +36,7 @@
                         {/acl}
                     </ul>
                 </li>
-                <li class="separator" ng-if="selected.length > 0"></li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 <li>
                     <a href="{url name=admin_opinion_author_create}" title="{t}Create new author{/t}">
                         <img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New author{/t}
@@ -66,7 +67,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-if="contents.length > 0" ng-repeat="content in contents">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
                     <td>
                         <input ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" type="checkbox" value="[% content.id %]">
                     </td>
@@ -101,7 +102,7 @@
                         </div>
                     </td>
                 </tr>
-            <tr ng-if="contents.length == 0">
+            <tr ng-if="shvs.contents.length == 0">
                     <td colspan="7" class="empty">
                         {t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
                     </td>
@@ -111,11 +112,10 @@
                 <tr>
                     <td colspan="7" class="center">
                         <div class="pull-left">
-                            [% (page - 1) * 10 %]-[% (page * 10) < total ? page * 10 : total %] of [% total %]
+                        {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% page %] / [% pages %]
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
                         </div>
                     </td>
                 </tr>
