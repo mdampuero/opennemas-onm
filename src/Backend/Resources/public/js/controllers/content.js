@@ -127,13 +127,19 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      * @param string route   Route name.
      */
     $scope.init = function(content, filters, sortBy, sortOrder, route) {
-        // Initialize content type for current list.
+        // Initialize the current list.
         sharedVars.set('contentType', content);
+        sharedVars.set('page', 1);
+        sharedVars.set('elements_per_page', 10);
 
         // Load filters from URL
         var query = $location.search();
         for (var name in query) {
-            if (filters[name] != null) {
+            if (name == 'page') {
+                sharedVars.set('page', query[name]);
+            } else if (name == 'view') {
+                sharedVars.set('elements_per_page', query[name]);
+            } else if (filters[name] != null) {
                 filters[name] = query[name];
             }
         };
@@ -156,8 +162,6 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         }
 
         sharedVars.set('search', filters);
-        sharedVars.set('page', 1);
-        sharedVars.set('elements_per_page', 10);
         sharedVars.set('contents', []);
         sharedVars.set('selected', []);
 
@@ -257,6 +261,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     $scope.selectPage = function(page, route) {
         if (page != $scope.shvs.page) {
             $scope.shvs.page = page;
+            $location.search('page', page);
             $scope.list(route);
         }
     };
