@@ -169,6 +169,7 @@ class Kiosko extends Content
         if (!$rs) {
             return null;
         }
+        $rs->fields['thumb_url'] = str_replace('.pdf', '.jpg', $rs->fields['name']);
 
         $this->load($rs->fields);
 

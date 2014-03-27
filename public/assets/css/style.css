@@ -1164,6 +1164,7 @@ img[src="non"] { display:none !important; }
     text-shadow:0 1px 0 #FFFFFF;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
 }
+.table-info .form-inline {padding-left:5px;}
 .table-info > div { padding:0 3px; }
 .table-info div { height:100%;vertical-align:middle; }
 .table-info label {margin-bottom:0;}

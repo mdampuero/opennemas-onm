@@ -589,6 +589,8 @@ admin_cover_create:
 admin_cover_show:
     path:     /covers/{id}/show
     defaults: { _controller  : BackendBundle:Covers:show }
+    options:
+        expose: true
 
 admin_cover_update:
     path:     /cover/{id}/update
