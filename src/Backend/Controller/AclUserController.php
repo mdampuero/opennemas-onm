@@ -39,50 +39,49 @@ class AclUserController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('USER_ADMIN')")
-     **/
+     */
     public function listAction(Request $request)
     {
-        $page =  $request->query->getDigits('page', 1);
-        $filter = array(
-            'name'  => $request->query->filter('name', ''),
-            'group' => $request->query->getDigits('group', ''),
-            'type'  => $request->query->getDigits('type', ''),
-        );
 
-        if (!$this->getUser()->isMaster()) {
-            $filter ['base'] = 'fk_user_group != 4';
-        }
+        // $filter = array(
+        //     'name'  => $request->query->filter('name', ''),
+        //     'group' => $request->query->getDigits('group', ''),
+        //     'type'  => $request->query->getDigits('type', ''),
+        // );
 
-        $itemsPerPage = s::get('items_per_page') ?: 20;
+        // if (!$this->getUser()->isMaster()) {
+        //     $filter ['base'] = 'fk_user_group != 4';
+        // }
 
-        // Fetch users paginated and filtered
-        $user           = new \User();
-        $searchCriteria = $user->buildFilter($filter);
-        $userManager    = $this->get('user_repository');
-        $usersCount     = $userManager->count($searchCriteria);
-        $users          = $userManager->findBy(
-            $searchCriteria,
-            'name',
-            $itemsPerPage,
-            $page
-        );
+        // $itemsPerPage = s::get('items_per_page') ?: 20;
 
-        $er = $this->get('entity_repository');
-        $filterUsers = array();
-        foreach ($users as &$user) {
-            $user->photo = $er->find('Photo', $user->avatar_img_id);
-            if (empty($filter['group'])) {
-                $filterUsers[] = $user;
-            } elseif (in_array($filter['group'], $user->fk_user_group)) {
-                $filterUsers[] = $user;
-            }
-        }
+        // // Fetch users paginated and filtered
+        // $user           = new \User();
+        // $searchCriteria = $user->buildFilter($filter);
+        // $userManager    = $this->get('user_repository');
+        // $usersCount     = $userManager->count($searchCriteria);
+        // $users          = $userManager->findBy(
+        //     $searchCriteria,
+        //     'name',
+        //     $itemsPerPage,
+        //     $page
+        // );
+
+        // $er = $this->get('entity_repository');
+        // $filterUsers = array();
+        // foreach ($users as &$user) {
+        //     $user->photo = $er->find('Photo', $user->avatar_img_id);
+        //     if (empty($filter['group'])) {
+        //         $filterUsers[] = $user;
+        //     } elseif (in_array($filter['group'], $user->fk_user_group)) {
+        //         $filterUsers[] = $user;
+        //     }
+        // }
 
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
 
         $groupsOptions = array();
-        $groupsOptions[] = _('--All--');
         foreach ($groups as $cat) {
             $groupsOptions[$cat->id] = $cat->name;
         }
@@ -90,12 +89,8 @@ class AclUserController extends Controller
         return $this->render(
             'acl/user/list.tpl',
             array(
-                'users'           => $filterUsers,
                 'user_groups'     => $groups,
                 'groupsOptions'   => $groupsOptions,
-                'total_num_users' => $usersCount,
-                'url_filters'     => $filter,
-                'items_per_page'  => $itemsPerPage,
             )
         );
     }
