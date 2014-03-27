@@ -34,8 +34,8 @@ class MenuManager extends BaseManager
     /**
      * Counts searched menus given a criteria
      *
-     * @param  array $criteria        the criteria used to search the comments.
-     * @return int                    the amount of elements.
+     * @param  array   $criteria The criteria used to search the comments.
+     * @return integer           The amount of elements.
      */
     public function countBy($criteria)
     {
@@ -63,9 +63,8 @@ class MenuManager extends BaseManager
      */
     public function find($id)
     {
-        $entity = null;
-
         $cacheId = "menu_" . $id;
+        $entity  = null;
 
         if (!$this->hasCache()
             || ($entity = $this->cache->fetch($cacheId)) === false
@@ -146,7 +145,6 @@ class MenuManager extends BaseManager
             list($contentType, $contentId) = explode('_', $content);
             $menu = $this->find($contentId);
 
-            // $menus[] = $menu;
             $ordered[$menu->pk_menu] = $menu;
         }
 
@@ -156,7 +154,7 @@ class MenuManager extends BaseManager
     /**
      * Deletes a menu and its items.
      *
-     * @param \Menu $menu Menu to delete.
+     * @param integer $id Menu id.
      */
     public function delete($id)
     {
