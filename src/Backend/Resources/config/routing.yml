@@ -1247,6 +1247,8 @@ admin_acl_user_create:
 admin_acl_user_show:
     path:     /acl/user/{id}/show
     defaults: { _controller  : BackendBundle:AclUser:show }
+    options:
+        expose: true
 
 admin_acl_user_update:
     path:     /acl/user/{id}/update
