@@ -81,10 +81,12 @@
         {render_messages}
 
         <div class="table-info clearfix">
-            <div class="pull-right form-inline">
-                <input placeholder="{t}Search{/t}" ng-model="shvs.search.body_like" type="text">
-                <label for="status">Status:</label>
-                <select class="form-filters" name="status" ng-model="shvs.search.status">
+            <div class="pull-left form-inline">
+                <strong>{t}FILTER:{/t}</strong>
+                &nbsp;&nbsp;
+                <input placeholder="{t}Search by body:{/t}" ng-model="shvs.search.body_like" type="text">
+                &nbsp;&nbsp;
+                <select class="select2" name="status" ng-model="shvs.search.status" data-label="{t}Status{/t}">
                     <option value="-1">-- All --</option>
                     {html_options options=$statuses selected=$filter_status}
                 </select>

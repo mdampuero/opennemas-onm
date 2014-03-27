@@ -71,12 +71,13 @@
         {render_messages}
 
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>[% shvs.total %] {t}articles{/t}</strong></div> {/acl}
-            <div class="pull-right">
+            <div class="pull-left">
                 <div class="form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
                     <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    <label for="category">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="shvs.search.category_name">
+                    &nbsp;&nbsp;
+                    <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -101,8 +102,8 @@
                                 {/section}
                             {/section}
                     </select>
-                    {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
+                    &nbsp;&nbsp;
+                    <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
@@ -124,11 +125,9 @@
                 {if $category eq 'all' || $category == 0}
                     <th class="left">{t}Section{/t}</th>
                 {/if}
-                <th  class="left" style="width:80px;">{t}Author{/t}</th>
                 <th class="center" style="width:130px;">{t}Created{/t}</th>
-                <th class="center" style="width:80px;">{t}Last Editor{/t}</th>
-                <th class="center" style="width:10px;">{t}Available{/t}</th>
-                <th class="center" style="width:70px;">{t}Actions{/t}</th>
+                <th class="center" style="width:10px;">{t}Published{/t}</th>
+                <th class="center" style="width:70px;"></th>
             </thead>
             <tbody>
                 <tr ng-if="shvs.contents.length == 0">
@@ -139,7 +138,22 @@
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
                     <td class="left" >
-                        <span  rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
+                        <span rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
+			<div>
+				<span ng-if="content.author == 0 && content.agency == '' && content.editor == ''">
+					<strong>{t}Author{/t}:</strong>
+					<span ng-if="content.author != 0">
+        	                	    [% content.author.name %]
+	                	        </span>
+        		                <span ng-if="content.author == 0 && content.agency != ''">
+		                            [% content.agency %]
+	                        	</span>
+                		        <span ng-if="content.author == 0 && content.agency == ''">
+        		                    [% content.editor %]
+		                        </span>
+				</span>
+				<span ng-if="content.editor != ''"><strong>{t}Last editor{/t}</strong>: [% content.editor %]</span>
+			</div>
                     </td>
                     {if $category eq 'all' || $category == 0}
                     <td class="left">
@@ -151,19 +165,7 @@
                         </span>
                     </td>
                     {/if}
-                    <td class="left" >
-                        <span ng-if="content.author != 0">
-                            [% content.author.name %]
-                        </span>
-                        <span ng-if="content.author == 0 && content.agency != ''">
-                            [% content.agency %]
-                        </span>
-                        <span ng-if="content.author == 0 && content.agency == ''">
-                            [% content.editor %]
-                        </span>
-                    </td>
                     <td class="center">[% content.created %]</td>
-                    <td class="center">[% content.editor %]</td>
                     <td class="center">
                         <span ng-if="content.category != 20">
                         {acl isAllowed="ARTICLE_AVAILABLE"}
@@ -190,7 +192,7 @@
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pull-left">
-                            {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                            {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
                         </div>
                         <div class="pull-right">
                             <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>

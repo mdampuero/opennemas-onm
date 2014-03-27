@@ -67,21 +67,20 @@
     <div class="wrapper-content">
         {render_messages}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}
-                <div class="pull-left"><strong>[% shvs.total %] {t}widgets{/t}</strong></div>
-            {/acl}
-            <div class="pull-right">
+            <div class="pull-left">
                 <div class="form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
                     <input type="text" placeholder="{t}Search by title:{/t}" ng-model="shvs.search.title_like"/>
-                    <label for="type">{t}Type:{/t}</label>
-                    <select class="select2 input-medium" name="type" ng-model="shvs.search.renderlet">
-                        <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-                        <option value="intelligentwidget" {if $status === intelligentwidget} selected {/if}> {t}IntelligentWidget{/t} </option>
-                        <option value="html" {if  $status === html} selected {/if}> {t}HTML{/t} </option>
-                        <option value="smarty" {if $status === smarty} selected {/if}> {t}Smarty{/t} </option>
+                    &nbsp;&nbsp;
+                    <select class="select2 input-medium" name="type" ng-model="shvs.search.renderlet" data-label="{t}Type{/t}">
+                        <option value="-1">{t}-- All --{/t}</option>
+                        <option value="intelligentwidget">{t}IntelligentWidget{/t}</option>
+                        <option value="html">{t}HTML{/t}</option>
+                        <option value="smarty">{t}Smarty{/t}</option>
                     </select>
-                    {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
+                    &nbsp;&nbsp;
+                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>

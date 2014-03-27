@@ -66,26 +66,23 @@ jQuery(function($){
 
 	<div class="wrapper-content">
         {render_messages}
-
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] contents{/t}</strong></div>{/acl}
-            <div class="pull-right">
+            <div class="pull-left">
                 <div class="form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
                     <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    <label for="content_type_name">{t}Content Type:{/t}</label>
+                    &nbsp;&nbsp;
                     {include file="trash/partials/_pills.tpl"}
                 </div>
             </div>
         </div>
         <div ng-include="'trash_list'"></div>
-
-
         <script type="text/ng-template" id="trash_list">
         <div class="spinner-wrapper" ng-if="loading">
             <div class="spinner"></div>
             <div class="spinner-text">{t}Loading{/t}...</div>
         </div>
-
         <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
                <tr>
@@ -97,14 +94,12 @@ jQuery(function($){
                     <th class="nowrap center" style="width:40px;">{t}Actions{/t}</th>
                </tr>
             </thead>
-
             <tbody>
                 <tr ng-if="shvs.contents.length == 0">
                     <td class="empty"colspan=6>
                         {t}There is no elements in the trash{/t}
                     </td>
                 </tr>
-
                 <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents">
                     <td>
                         <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
@@ -127,16 +122,14 @@ jQuery(function($){
                     </td>
                 </tr>
             </tbody>
-
             <tfoot>
                 <tr>
                     <td colspan="10" class="center">
                         <div class="pull-left">
-                            [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] of [% shvs.total %]
+                            {t}Showing{/t} [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
-                        <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         <div class="pull-right">
-                            [% shvs.page %] / [% pages %]
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
                     </td>
                 </tr>

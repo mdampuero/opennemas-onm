@@ -16,7 +16,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_staticpages}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('static_page', { title: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_staticpages}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('static_page', { title: '', available: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
     	<div class="wrapper-content">
     		<div class="title"><h2>{t}Static pages{/t}</h2></div>
@@ -66,12 +66,16 @@
     <div class="wrapper-content">
         {render_messages}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] static pages{/t}</strong></div>{/acl}
             <div>
-                <div class="right form-inline">
-                    <div class="input-append">
-                        <input type="search" name="title" placeholder="{t}Filter by title{/t}" ng-model="shvs..search.title_like"/>
-                    </div>
+                <div class="pull-left form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    <input type="search" name="title" placeholder="{t}Filter by title{/t}" ng-model="shvs..search.title_like"/>
+                    &nbsp;&nbsp;
+                    <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
+                        <option value="-1"> {t}-- All --{/t} </option>
+                        <option value="1"> {t}Published{/t} </option>
+                        <option value="0"> {t}No published{/t} </option>
+                    </select>
                 </div>
             </div>
         </div>

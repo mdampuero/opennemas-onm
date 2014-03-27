@@ -117,12 +117,13 @@
     <div class="wrapper-content">
         {render_messages}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] videos{/t}</strong></div>{/acl}
-            <div class="pull-right">
+            <div class="pull-left">
                 <div class="form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
                     <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    <label for="category">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="shvs.search.category_name">
+                    &nbsp;&nbsp;
+                    <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                             {section name=as loop=$allcategorys}
                                 {assign var=ca value=$allcategorys[as]->pk_content_category}
@@ -147,13 +148,13 @@
                                 {/section}
                             {/section}
                     </select>
-                    {t}Status:{/t}
-                    <select class="select2 input-medium" name="status" ng-model="shvs.search.available">
+                    &nbsp;&nbsp;
+                    <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
                     </select>
-
+                    &nbsp;&nbsp;
                     <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
                 </div>
             </div>

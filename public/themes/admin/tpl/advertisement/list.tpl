@@ -75,13 +75,12 @@
             </div>
         </div>
         <div class="wrapper-content">
-
             {render_messages}
-
             <div class="table-info clearfix">
-                <div class="pull-right form-inline">
-                    <label for="filter[type_advertisement]">{t}Category:{/t}</label>
-                    <select class="input-medium select2" id="category" ng-model="shvs.search.fk_content_categories">
+                <div class="pull-left form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
+                    <select class="select2" id="category" ng-model="shvs.search.fk_content_categories" data-label="{t}Category{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                         <optgroup label="{t}Special elements{/t}">
                             <option value="0">{t}HOMEPAGE{/t}</option>
@@ -114,18 +113,16 @@
                             {/section}
                         </optgroup>
                     </select>
-                    <label for="filter[type_advertisement]">{t}Banner type:{/t}</label>
-                    <select class="input-large select2" name="filter[type_advertisement]" ng-model="shvs.search.type_advertisement">
+                    &nbsp;&nbsp;
+                    <select class="select2" name="filter[type_advertisement]" ng-model="shvs.search.type_advertisement" data-label="{t}Banner type{/t}">
                         {html_options options=$filter_options.type_advertisement selected=$filterType}
                     </select>
-                    &nbsp;&nbsp;&nbsp;
-                    <label>{t}Status:{/t}</label>
-                    <select class="input-medium select2" ng-model="shvs.search.available">
+                    &nbsp;&nbsp;
+                    <select class="input-medium select2" ng-model="shvs.search.available" data-label="{t}Status{/t}">
                         {html_options options=$filter_options.available selected=$filterAvailable}
                     </select>
-                     &nbsp;&nbsp;&nbsp;
-                    <label>{t}Type:{/t}</label>
-                    <select class="input-medium select2" ng-model="shvs.search.with_script">
+                     &nbsp;&nbsp;
+                    <select class="input-medium select2" ng-model="shvs.search.with_script" data-label="{t}Type{/t}">
                         {html_options options=$filter_options.type}
                     </select>
                 </div>

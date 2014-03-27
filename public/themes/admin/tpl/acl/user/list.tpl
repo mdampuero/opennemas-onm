@@ -1,30 +1,57 @@
 {extends file="base/admin.tpl"}
 
-{block name="footer-js" append}
-<script>
-jQuery(function($){
-	$('#batch-delete').on('click', function(e ,ui) {
-		e.preventDefault();
-		var form = $('#userform');
-		form.attr('action', '{url name="admin_acl_user_batchdelete"}');
-		form.submit();
-	});
-});
-</script>
+{block name="header-js" append}
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_acl_user}" method="get" id="userform">
+<form action="{url name=admin_acl_user}" method="get" id="userform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { name_like: '', fk_user_group: -1, type: -1 }, 'name', 'asc', 'backend_ws_users_list')">
 	<div class="top-action-bar clearfix">
 		<div class="wrapper-content">
 			<div class="title"><h2>{t}Users{/t}</h2></div>
 			<ul class="old-button">
-				<li>
-					<a id="batch-delete" title="{t}Delete selected users{/t}">
-						<img src="{$params.IMAGE_DIR}trash.png" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-					</a>
-				</li>
-				<li class="separator"></li>
+				<li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="ARTICLE_AVAILABLE"}
+                        <li>
+                            <a href="#" id="batch-publish" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
+                                <i class="icon-ok"></i>
+                                {t}Enable{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="batch-unpublish" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
+                                <i class="icon-remove"></i>
+                                {t}Disable{/t}
+                            </a>
+                        </li>
+                        {/acl}
+                        {acl isAllowed="ARTICLE_DELETE"}
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
+                </li>
+				<li class="separator" ng-if="shvs.selected > 0"></li>
 				<li>
 					<a href="{url name=admin_acl_user_create}" title="{t}Create new user{/t}">
 						<img src="{$params.IMAGE_DIR}user_add.png" alt="Nuevo"><br />{t}New user{/t}
@@ -34,135 +61,120 @@ jQuery(function($){
 		</div>
 	</div>
 	<div class="wrapper-content">
-
 		{render_messages}
-
+ 		<div ng-include="'users'"></div>
+	</div>
+	<script type="text/ng-template" id="users">
 		<div class="table-info clearfix">
-            <div class="pull-left">
-                <strong>{$total_num_users} {t}users{/t}</strong>
-            </div>
-			<div class="pull-right form-inline">
-				<input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" />
-
-				<label for="usergroup">{t}type{/t}</label>
-				<div class="input-append">
-					<select id="usertype" name="type" class="span2">
-						{assign var=type value=$smarty.request.type}
-						<option value="" {if ($type eq "")}selected{/if}>{t}--All--{/t}</option>
-                        <option value="0" {if ($type eq "0")}selected{/if}>{t}Backend{/t}</option>
-                        <option value="1" {if ($type eq "1")}selected{/if}>{t}Frontend{/t}</option>
-					</select>
-				</div>
-
-				<label for="usergroup">{t}and group{/t}</label>
-				<div class="input-append">
-					<select id="usergroup" name="group" class="span2">
-						{html_options options=$groupsOptions selected=$smarty.request.group|default:""}
-					</select>
-					<button type="submit" class="btn"><i class="icon-search"></i></button>
-				</div>
+			<div class="pull-left form-inline">
+				<strong>{t}FILTER:{/t}</strong>
+				&nbsp;&nbsp;
+				<input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" ng-model="shvs.search.name_like"/>
+				&nbsp;&nbsp;
+				<select id="usertype" name="type" class="select2" ng-model="shvs.search.type" data-label="{t}Type{/t}">
+					{assign var=type value=$smarty.request.type}
+					<option value="-1">{t}--All--{/t}</option>
+                    <option value="0">{t}Backend{/t}</option>
+                    <option value="1">{t}Frontend{/t}</option>
+				</select>
+				&nbsp;&nbsp;
+				<select id="usergroup" name="group" class="select2" ng-model="shvs.search.fk_user_group" data-label="{t}Group{/t}">
+					<option value="-1">{t}--All--{/t}</option>
+					{html_options options=$groupsOptions selected=$smarty.request.group|default:""}
+				</select>
 			</div>
 		</div>
-		<table class="table table-hover table-condensed">
-			{if count($users) gt 0}
+		<div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+        </div>
+        <table class="table table-hover table-condensed" ng-if="!loading">
 			<thead>
 				<tr>
-					<th style="width:15px;">
-                        <input type="checkbox" class="toggleallcheckbox">
-                    </th>
+					<th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                     <th></th>
 					<th class="left">{t}Full name{/t}</th>
 					<th class="center" style="width:110px">{t}Username{/t}</th>
-
 					<th class="center" >{t}E-mail{/t}</th>
-
 					<th class="center" >{t}Group{/t}</th>
-
 					<th class="center" >{t}Activated{/t}</th>
 					<th class="center" style="width:10px">{t}Actions{/t}</th>
 				</tr>
 			</thead>
-			{/if}
 			<tbody>
-				{foreach $users as $user}
-				<tr>
+				<tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
 					<td>
-						<input type="checkbox" name="selected[]" value="{$user->id}">
-					</td>
+                        <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
+                    </td>
 					<td>
-                        {if is_object($user->photo) && !is_null($user->photo->name)}
-                        {dynamic_image src="{$user->photo->path_file}/{$user->photo->name}" transform="thumbnail,40,40"}
+                        {*if is_object($user->photo) && !is_null($user->photo->name)}
+                        	{dynamic_image src="{$user->photo->path_file}/{$user->photo->name}" transform="thumbnail,40,40"}
                         {else}
                         {gravatar email="{$user->email}" image_dir=$params.IMAGE_DIR image=true size="40"}
-                        {/if}
+                        {/if*}
 					</td>
 					<td class="left">
 						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
-							{$user->name}
+							[% content.name %]
 						</a>
 					</td>
 					<td class="center">
-						{$user->username}
+						[% content.username %]
 					</td>
 
 					<td class="center">
-						{$user->email}
+						[% content.email %]
 					</td>
 					<td class="center">
-						{foreach $user_groups as $group}
+						{*foreach $user_groups as $group}
 							{if in_array($group->id, $user->fk_user_group)}
 								{$group->name}<br>
 							{/if}
-						{/foreach}
+						{/foreach*}
 					</td>
 
 					<td class="center">
 						<div class="btn-group">
-							<a class="btn" href="{url name=admin_acl_user_toogle_enabled id=$user->id}" title="{t}Activate user{/t}">
-								{if $user->activated eq 1}
-									<i class="icon16 icon-ok"></i>
-								{else}
-									<i class="icon16 icon-remove"></i>
-								{/if}
-							</a>
+							<button class="btn-link" type="button">
+								<i class="icon16 icon-ok" ng-class="{ 'icon-ok': content.activated, 'icon-remove': !content.activated}"></i>
+							</button>
 						</div>
 					</td>
 					<td class="right nowrap">
 						<div class="btn-group">
-							<a class="btn" href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
+							<button class="btn" ng-click="edit(content.id, 'admin_acl_user_show')" title="{t}Edit user{/t}" type="button">
 								<i class="icon-pencil"></i> {t}Edit{/t}
-							</a>
+							</button>
 
-							<a class="del btn btn-danger"
-								href="{url name=admin_acl_user_delete id=$user->id}"
-								data-url="{url name=admin_acl_user_delete id=$user->id}"
-								data-title="{$user->name}"
-								title="{t}Delete this user{/t}">
+							<button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_user_delete', $index)"
+								title="{t}Delete this user{/t}" type="button">
 								<i class="icon-trash icon-white"></i>
-							</a>
+							</button>
 						</div>
 					</td>
 				</tr>
-
-				{foreachelse}
-				<tr>
+				<tr ng-if="shvs.contents.length == 0">
 					<td colspan="8" class="empty">
 						{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
 					</td>
 				</tr>
-				{/foreach}
 			</tbody>
 			<tfoot>
 				<tr >
 					<td colspan="8" class="center">
-		                <div class="pagination">
-		                	{paginate_links url='admin_acl_user' items_per_page=$items_per_page filters=$url_filters total=$total_num_users}
-		                </div>
+		                <div class="pull-left">
+                        	{t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                        </div>
+                        <div class="pull-right">
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                        </div>
 					</td>
 				</tr>
 			</tfoot>
 		</table>
-	</div>
+	</script>
+	<script type="text/ng-template" id="modal-delete">
+		{include file="common/modals/_modalDelete.tpl"}
+	</script>
 </form>
-{include file="acl/user/modal/_modalDelete.tpl"}
 {/block}

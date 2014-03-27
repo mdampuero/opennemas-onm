@@ -1,24 +1,23 @@
 <div class="table-info clearfix">
-    <div class="pull-left"><strong>[% shvs.total %] {t}items{/t}</strong></div>
-    <div class="pull-right form-inline">
-        {t}Type:{/t}
-        <select class="input-small select2" ng-model="shvs.search.blog">
+    <div class="pull-left form-inline">
+        <strong>{t}FILTER:{/t}</strong>
+        &nbsp;&nbsp;
+        <select class="select2" ng-model="shvs.search.blog" data-label="{t}Type{/t}">
             <option value="-1">-- All --</option>
             <option value="0">Opinion</option>
             <option value="1">Blog</option>
         </select>
-        {t}Status:{/t}
-        <select class="input-small select2" ng-model="shvs.search.available">
+        &nbsp;&nbsp;
+        <select class="select2" ng-model="shvs.search.available" data-label="{t}Status{/t}">
             <option value="-1">{t}-- All --{/t}</option>
             <option value="1">{t}Published{/t}</option>
             <option value="0">{t}No published{/t}</option>
         </select>
-         &nbsp;
-        {t}Select an author{/t}
-        <select class="select2 input-large" ng-model="shvs.search.author">
-            <option value="-1"> {t}All authors{/t} </option>
-            <option value="-2"> {t}Director{/t} </option>
-            <option value="-3"> {t}Editorial{/t} </option>
+        &nbsp;&nbsp;
+        <select class="select2" ng-model="shvs.search.author" data-label="{t}Author{/t}">
+            <option value="-1">{t}-- All authors --{/t}</option>
+            <option value="-2">{t}Director{/t}</option>
+            <option value="-3">{t}Editorial{/t}</option>
             {section name=as loop=$autores}
                 <option value="{$autores[as]->id}" {if isset($author) && $author == $autores[as]->id} selected {/if}>{$autores[as]->name} {if $autores[as]->meta['is_blog'] eq 1} (Blogger) {/if}</option>
             {/section}

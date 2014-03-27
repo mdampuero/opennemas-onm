@@ -75,19 +75,18 @@
     <div class="wrapper-content">
         {render_messages}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t}[% shvs.total %] letters{/t}</strong></div>{/acl}
-            <div class="pull-right">
+            <div class="pull-left">
                 <div class="form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
                     <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
-                    <label>
-                        {t}Status:{/t}
-                        <select class="select2 input-medium" id="content_status" ng-model="shvs.search.content_status">
-                            <option value="-1">-- All --</option>
-                            <option value="1">{t}Published{/t}</option>
-                            <option value="0">{t}Unpublished{/t}</option>
-                            <option value="2">{t}Rejected{/t}</option>
-                        </select>
-                    </label>
+                    &nbsp;&nbsp;
+                    <select class="select2" id="content_status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                        <option value="-1">-- All --</option>
+                        <option value="1">{t}Published{/t}</option>
+                        <option value="0">{t}No published{/t}</option>
+                        <option value="2">{t}Rejected{/t}</option>
+                    </select>
                 </div>
             </div>
         </div>

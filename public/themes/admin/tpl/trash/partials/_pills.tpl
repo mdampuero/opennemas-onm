@@ -1,4 +1,4 @@
-<select class="input-medium select2" id="content_type_name" ng-model="shvs.search.content_type_name">
+<select class="select2" id="content_type_name" ng-model="shvs.search.content_type_name" data-label="{t}Content Type{/t}">
     <option value="-1">{t}-- All --{/t}</option>
     {is_module_activated name="ARTICLE_MANAGER"}
     {acl isAllowed="ARTICLE_TRASH"}
