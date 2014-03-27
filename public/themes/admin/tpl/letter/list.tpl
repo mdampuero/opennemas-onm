@@ -102,14 +102,13 @@
             <thead>
                 <tr>
                     <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
-                    <th>{t}Title{/t}</th>
-                    <th>{t}Author{/t}</th>
+                    <th>{t}Author{/t} - {t}Title{/t}</th>
                     <th style='width:110px;' class="left">{t}Date{/t}</th>
-                    <th style='width:110px;'>{t}Image{/t}</th>
+                    <th style='width:10px;'>{t}Image{/t}</th>
                     {acl isAllowed="LETTER_AVAILABLE"}
-                    <th class="center" style='width:40px;'>{t}Available{/t}</th>
+                    <th class="center" style='width:10px;'>{t}Available{/t}</th>
                     {/acl}
-                    <th style='width:90px;' class="right">{t}Actions{/t}</th>
+                    <th style='width:10px;' class="right"></th>
                </tr>
             </thead>
             <tbody>
@@ -121,9 +120,11 @@
                         <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                     </td>
                     <td>
+                        <div>
+                            <strong>[% content.author %]: [% content.email %]</strong>
+                        </div>
                         <span rel="tooltip" data-original-title="[% content.body %]">[% content.title %]</span>
                     </td>
-                    <td>[% content.author %]: [% content.email %]</td>
                     <td class="left"> [% content.created %] </td>
                     <td >
                         <img ng-if="content.image" ng-src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />

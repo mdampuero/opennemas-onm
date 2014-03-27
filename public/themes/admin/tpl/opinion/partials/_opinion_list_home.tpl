@@ -3,12 +3,12 @@
         <tr>
             <th style="width:30px;"><input type="checkbox" class="toggleallcheckbox"></th>
             <th style="width:200px;">{t}Author{/t} - {t}Title{/t}</th>
+            <th class="center" style="width:130px;">{t}Created in{/t}</th>
             <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
-            <th class="center" style="width:130px;">{t}Date{/t}</th>
             <th class="center" style="width:10px;">{t}Home{/t}</th>
             <th class="center" style="width:10px;">{t}Available{/t}</th>
             <th class="center" style="width:10px;">{t}Favorite{/t}</th>
-            <th class="right" style="width:10px;">{t}Actions{/t}</th>
+            <th class="right" style="width:10px;"></th>
         </tr>
     </thead>
     {if count($director) > 0}
@@ -30,10 +30,10 @@
                 {$opinion->title|clearslash}
             </td>
             <td class="center">
-                {$opinion->views}
+                {$opinion->created}
             </td>
             <td class="center">
-                {$opinion->created}
+                {$opinion->views}
             </td>
             <td class="center">
                 {if $opinion->in_home == 1}
@@ -102,10 +102,10 @@
             {$opinion->title|clearslash}
         </td>
         <td class="center">
-            {$opinion->views}
+            {$opinion->created}
         </td>
         <td class="center">
-            {$opinion->created}
+            {$opinion->views}
         </td>
         <td class="center">
             {if $opinion->in_home == 1}
@@ -182,12 +182,12 @@
             -
             {$opinion->title|clearslash}
         </td>
+        <td class="center">
+            {$opinion->created}
+        </td>
 
         <td class="center">
             {$opinion->views}
-        </td>
-        <td class="center">
-            {$opinion->created}
         </td>
         <td class="center">
             {acl isAllowed="OPINION__FRONTPAGE"}

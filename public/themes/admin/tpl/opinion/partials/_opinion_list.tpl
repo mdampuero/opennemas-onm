@@ -35,12 +35,12 @@
             <tr>
                 <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                 <th>{t}Author name{/t} - {t}Title{/t}</th>
-                <th class="center" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
                 <th class="center" style="width:110px;">{t}Created in{/t}</th>
+                <th class="center" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
                 <th class="center" style="width:70px;">{t}In home{/t}</th>
                 <th class="center" style="width:20px;">{t}Published{/t}</th>
                 <th class="center" style="width:20px;">{t}Favorite{/t}</th>
-                <th class="center" style="width:70px;">{t}Actions{/t}</th>
+                <th class="center" style="width:10px;"></th>
           </tr>
         </thead>
         <tbody>
@@ -50,21 +50,21 @@
                 </td>
                 <td>
                     <strong>
-                    <span ng-if="content.author.name">
-                        [% content.author.name %]
-                    </span>
-                    <span ng-if="!content.author.name">
-                        [% content.author %]
-                    </span>
+                        <span ng-if="content.author.name">
+                            [% content.author.name %]
+                        </span>
+                        <span ng-if="!content.author.name">
+                            [% content.author %]
+                        </span>
+                    </strong>
                     -
                     [% content.title %]
-                    </strong>
-                </td>
-                <td class="center">
-                    [% content.views %]
                 </td>
                 <td class="center">
                     [% content.created %]
+                </td>
+                <td class="center">
+                    [% content.views %]
                 </td>
                 <td class="center">
                     {acl isAllowed="OPINION_FRONTPAGE"}

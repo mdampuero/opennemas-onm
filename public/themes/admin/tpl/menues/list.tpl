@@ -76,9 +76,9 @@
                     </th>
                     <th>{t}Title{/t}</th>
                     {if count($menu_positions) > 1}
-                    <th class="nowrap center" style="width:100px;">{t}Menu position assigned{/t}</th>
+                    <th class="nowrap center" style="width:100px;">{t}Position assigned{/t}</th>
                     {/if}
-                    <th class="center" style="width:100px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:100px;"></th>
                 </tr>
             </thead>
             <tbody>

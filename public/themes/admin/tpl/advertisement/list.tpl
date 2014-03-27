@@ -147,7 +147,7 @@
                         {acl isAllowed="ADVERTISEMENT_AVAILA"}
                         <th class="center" style="width:40px;">{t}Available{/t}</th>
                         {/acl}
-                        <th class="right" style="width:70px">{t}Actions{/t}</th>
+                        <th class="right" style="width:10px"></th>
                     </tr>
                 </thead>
                 <tbody>

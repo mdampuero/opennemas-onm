@@ -150,14 +150,18 @@
                 <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                 <th>{t}Title{/t}</th>
                 <th style="width:65px;" class="center">{t}Section{/t}</th>
-                <th class="center" style="width:40px">{t}Votes{/t}</th>
                 <th style="width:110px;" class="center">{t}Date{/t}</th>
+                <th class="center" style="width:40px">{t}Votes{/t}</th>
                 {acl isAllowed="POLL_AVAILABLE"}
                 <th style="width:40px;" class="center">{t}Published{/t}</th>
                 {/acl}
+                {acl isAllowed="POLL_FAVORITE"}
                 <th class="center" style="width:35px;">{t}Favorite{/t}</th>
+                {/acl}
+                {acl isAllowed="POLL_HOME"}
                 <th style="width:40px;" class="center">{t}Home{/t}</th>
-                <th class="center" style="width:40px;">{t}Actions{/t}</th>
+                {/acl}
+                <th class="center" style="width:10px;"></th>
             </tr>
         </thead>
         <tbody>
@@ -176,10 +180,10 @@
                     [% content.category_name %]
                 </td>
                 <td class="center">
-                    [% content.total_votes %]
+                    [% content.created %]
                 </td>
                 <td class="center">
-                    [% content.created %]
+                    [% content.total_votes %]
                 </td>
                 {acl isAllowed="POLL_AVAILABLE"}
                 <td class="center">

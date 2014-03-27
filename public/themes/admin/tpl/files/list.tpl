@@ -175,9 +175,9 @@
                <thead>
                    <tr>
                         <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
-                        <th style="width:20px">{t}Path{/t}</th>
                         <th>{t}Title{/t}</th>
-                        <th class="left">{t}Category{/t}</th>
+                        <th class="center" style="width:20px">{t}Category{/t}</th>
+                        <th class="center nowrap" style="width:20px">{t}Created in{/t}</th>
                         {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
                         <th class="center" style="width:20px;">{t}Home{/t}</th>
                         <th class="center" style="width:20px">{t}Published{/t}</th>
@@ -197,12 +197,13 @@
                             <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
                                 {t}[Link]{/t}
                             </a>
-                        </td>
-                        <td>
                             [% content.title %]
                         </td>
-                        <td class="left">
+                        <td class="center">
                             [% content.category_name %]
+                        </td>
+                        <td class="center nowrap">
+                            [% content.created %]
                         </td>
                         {acl isAllowed="FILE_AVAILABLE"}
                         <td class="center">

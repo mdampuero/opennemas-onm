@@ -101,7 +101,7 @@
                 <th>{t}Name{/t}</th>
                 <th style="width:70px">{t}Type{/t}</th>
                 <th class="center" style="width:20px">{t}Published{/t}</th>
-                <th class="center" style="width:10px">Actions</th>
+                <th class="center" style="width:10px"></th>
             </thead>
             <tbody>
                 <tr ng-if="shvs.contents.length == 0">

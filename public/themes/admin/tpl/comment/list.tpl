@@ -108,7 +108,7 @@
                     <th>{t}Comment{/t}</th>
                     <th class="wrap">{t}In response to{/t}</th>
                     <th style='width:20px;' class="center">{t}Published{/t}</th>
-                    <th style='width:80px;' class="right">{t}Actions{/t}</th>
+                    <th style='width:10px;'></th>
                </tr>
             </thead>
             <tbody>

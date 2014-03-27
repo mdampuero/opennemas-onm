@@ -173,8 +173,8 @@
                         <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                         <th></th>
                         <th>{t}Title{/t}</th>
-                        <th class="left">{t}Section{/t}</th>
-                        <th class="left nowrap">Created</th>
+                        <th class="center">{t}Section{/t}</th>
+                        <th class="center nowrap">Created</th>
                         {acl isAllowed="VIDEO_AVAILABLE"}
                         <th class="center" style="width:35px;">{t}Published{/t}</th>
                         {/acl}
@@ -184,7 +184,7 @@
                         {acl isAllowed="VIDEO_HOME"}
                         <th class="center" style="width:35px;">{t}Home{/t}</th>
                         {/acl}
-                        <th class="center" style="width:100px;">{t}Actions{/t}</th>
+                        <th class="center"></th>
                     </tr>
                 </thead>
                 <tbody class="sortable">
@@ -203,13 +203,13 @@
                             <strong ng-if="content.author_name != 'internal'">[% content.author_name %]</strong> [% content.title %]
                         </td>
                         {if $category=='widget' || $category=='all'}
-                        <td >
+                        <td class="center">
                             [% content.category_name %]
                         </td>
                         {/if}
-                        </td class="center">
+                        </td>
 
-                        <td class="left nowrap">
+                        <td class="center nowrap">
                             [% content.created %]
                         </td>
 
@@ -241,7 +241,7 @@
                                     <i class="icon-trash icon-white"></i>
                                 </button>
                                 {/acl}
-                           </ul>
+                           </div>
                         </td>
                     </tr>
                 </tbody>
