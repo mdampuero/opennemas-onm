@@ -21,6 +21,23 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}User groups{/t}</h2></div>
             <ul class="old-button">
+                <li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="GROUP_DELETE"}
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_usergroups_batch_delete')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
+                </li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {acl isAllowed="GROUP_CREATE"}
                     <li>
                         <a href="{url name="admin_acl_usergroups_create"}">
@@ -53,6 +70,7 @@
                 <thead>
                     <tr>
                         <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                        <th></th>
                         <th>{t}Group name{/t}</th>
                         <th class="center" style="width:10px"></th>
                     </tr>
@@ -65,7 +83,7 @@
                     </tr>
                     <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
                         <td>
-                            <input ng-model="selected" type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
+                            <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                         </td>
                         <td>
                             [% content.name %]
@@ -84,10 +102,15 @@
                             </div>
                         </td>
                     </tr>
+                    <tr>
+                        <td colspa=2 class="empty">
+
+                        </td>
+                    </tr>
                 </tbody>
                 <tfoot>
-                    <tr >
-                        <td colspan="8" class="center">
+                    <tr>
+                        <td colspan="3" class="center">
                             <div class="pull-left">
                                 {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                             </div>
@@ -102,6 +125,9 @@
 
         <script type="text/ng-template" id="modal-delete">
             {include file="common/modals/_modalDelete.tpl"}
+        </script>
+        <script type="text/ng-template" id="modal-delete-selected">
+            {include file="common/modals/_modalBatchDelete.tpl"}
         </script>
     </div>
 </form>
