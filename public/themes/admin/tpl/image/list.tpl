@@ -95,7 +95,7 @@
                     <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                     <th style="width:80px"></th>
                     <th>{t}Information{/t}</th>
-                    <th>{t}Created in{/t}</th>
+                    <th>{t}Created on{/t}</th>
                     <th class="center" style="width:10px;"></th>
                 </tr>
             </thead>
@@ -108,7 +108,7 @@
                         {t escape=off}No available images for this search{/t}
                     </td>
                 </tr>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" data-id="[% content.id %]">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents"  ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
                     <td>
                         <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                     </td>
@@ -158,7 +158,7 @@
                                     <span class="author" ng-if="content.author != ''">
                                         <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
                                     </span>
-                                    <div><strong>{t}Created in{/t}</strong> [% content.created %]</div>
+                                    <div><strong>{t}Created on{/t}</strong> [% content.created %]</div>
 
                                     <div><strong>{t}Resolution:{/t}</strong> [% content.width %] x [% content.height %] (px)</div>
                                     <div><strong>{t}Size:{/t}</strong> [% content.size %] Kb</div>

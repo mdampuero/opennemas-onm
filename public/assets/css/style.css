@@ -139,6 +139,16 @@ font-size: 13px;
 .table th { background:#ecf0f2; color:#666; text-transform:uppercase; font-weight:bold; }
 .table th, .table tfoot td { background:#ecf0f2; padding: 9px; text-align: left; }
 
+.table tr.row_selected td {
+  background-color: #ffffcc !important;
+}
+.table tbody tr.row_selected:hover>td {
+  background-color: #fef8ae !important;
+}
+.table tbody tr td:first-child input[type="checkbox"] {
+  margin-left:5px;
+}
+
 .table .pagination { color:#aaa !important; }
 .table .pagination a { background: #3f3f3f !important; color:White !important; text-shadow:none; border-radius:5px; margin-left:10px; padding:4px 10px}
 .table .pagination a:hover { background:#3c3c3c; }

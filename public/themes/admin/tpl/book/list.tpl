@@ -52,9 +52,6 @@
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Books{/t}</h2>
-            </div>
-            <div class="title">
                 <h2>{t}Books{/t} :: </h2>
                 <div class="section-picker">
                     <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
@@ -177,14 +174,14 @@
                     <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                     <th class="title">{t}Title{/t}</th>
                     <th style="width:65px;" class="center">{t}Section{/t}</th>
-                    <th class="center" style="width:100px;">{t}Created in{/t}</th>
+                    <th class="center" style="width:100px;">{t}Created on{/t}</th>
                     {acl isAllowed="BOOK_AVAILABLE"}
                     <th class="center" style="width:35px;">{t}Published{/t}</th>
                     {/acl}
                     {acl isAllowed="BOOK_AVAILABLE"}
                     <th class="center" style="width:35px;">{t}Favorite{/t}</th>
                     {/acl}
-                    <th class="right" style="width:110px;">{t}Actions{/t}</th>
+                    <th class="right" style="width:10px;"></th>
                 </tr>
             </thead>
             <tbody class="sortable">
@@ -192,7 +189,7 @@
                 <td class="empty" colspan="10">{t}No available books.{/t}</td>
             </tr>
 
-            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" data-id="[% content.id %]">
+            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
                 <td>
                     <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                 </td>
@@ -202,7 +199,7 @@
                 <td class="center">
                     [% content.category_name %]
                 </td>
-                <td class="center">
+                <td class="center nowrap">
                     [% content.created %]
                 </td>
                 {acl isAllowed="BOOK_AVAILABLE"}

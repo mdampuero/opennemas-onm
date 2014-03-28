@@ -53,15 +53,19 @@
                 <thead>
                     <tr>
                         <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
-                        <th></th>
                         <th>{t}Group name{/t}</th>
                         <th class="center" style="width:10px"></th>
                     </tr>
                 </thead>
-                <tbody>{t}There is no groups created yet.{/t}
-                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
+                <tbody>
+                    <tr ng-if="shvs.contents.length == 0">
+                        <td colspan="3" class="empty">
+                            {t escape=off}There is no user groups created yet or <br/>results matching your searching criteria.{/t}
+                        </td>
+                    </tr>
+                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
                         <td>
-                            <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
+                            <input ng-model="selected" type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                         </td>
                         <td>
                             [% content.name %]
@@ -78,11 +82,6 @@
                                     <i class="icon-trash icon-white"></i>
                                 </button>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspa=2 class="empty">
-
                         </td>
                     </tr>
                 </tbody>

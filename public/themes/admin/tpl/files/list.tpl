@@ -177,7 +177,7 @@
                         <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                         <th>{t}Title{/t}</th>
                         <th class="center" style="width:20px">{t}Category{/t}</th>
-                        <th class="center nowrap" style="width:20px">{t}Created in{/t}</th>
+                        <th class="center nowrap" style="width:20px">{t}Created on{/t}</th>
                         {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
                         <th class="center" style="width:20px;">{t}Home{/t}</th>
                         <th class="center" style="width:20px">{t}Published{/t}</th>
@@ -189,7 +189,7 @@
                         <td class="empty" colspan="10">{t}No available files.{/t}</td>
                     </tr>
 
-                    <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" data-id="[% content.id %]">
+                    <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
                         <td>
                             <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                         </td>

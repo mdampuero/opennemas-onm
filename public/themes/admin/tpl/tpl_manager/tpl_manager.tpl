@@ -114,7 +114,7 @@
                         </th>
                         <th class="left">{t}Resource{/t}</th>
                         <th class="left" scope=col style="width:30px;">{t}Category{/t}</th>
-                        <!-- <th class="left" scope=col style="width:120px;">{t}Created in{/t}</th> -->
+                        <!-- <th class="left" scope=col style="width:120px;">{t}Created on{/t}</th> -->
                         <th class="left" scope=col style="width:100px;">{t}Valid until{/t}</th>
                         <th class="left" scope=col style="width:40px;">{t}Size{/t}</th>
                         <th class="center" scope=col style="width:40px;">{t}Actions{/t}</th>

@@ -104,12 +104,12 @@
 			<tbody>
                 <tr ng-if="shvs.contents.length == 0">
                     <td colspan="8" class="empty">
-                        {t escape=off}There is no user groupss created yet or <br/>not results for your searching criteria.{/t}
+                        {t escape=off}There is no user created yet or <br/>not results for your searching criteria.{/t}
                     </td>
                 </tr>
-				<tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
+				<tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
 					<td>
-                        <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
+                        <input ng-model="selected" type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
 					<td>
                         {*if is_object($user->photo) && !is_null($user->photo->name)}

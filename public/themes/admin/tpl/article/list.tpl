@@ -133,16 +133,16 @@
                 <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="10">{t}No available articles.{/t}</td>
                 </tr>
-                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents">
+                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
                     <td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
                     <td class="left" >
                         <span rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
-			<div>
-				<span ng-if="content.author == 0 && content.agency == '' && content.editor == ''">
-					<strong>{t}Author{/t}:</strong>
-					<span ng-if="content.author != 0">
+            			<div>
+            				<span ng-if="content.author == 0 && content.agency == '' && content.editor == ''">
+            					<strong>{t}Author{/t}:</strong>
+            					<span ng-if="content.author != 0">
         	                	    [% content.author.name %]
 	                	        </span>
         		                <span ng-if="content.author == 0 && content.agency != ''">
@@ -151,9 +151,9 @@
                 		        <span ng-if="content.author == 0 && content.agency == ''">
         		                    [% content.editor %]
 		                        </span>
-				</span>
-				<span ng-if="content.editor != ''"><strong>{t}Last editor{/t}</strong>: [% content.editor %]</span>
-			</div>
+            				</span>
+            				<span ng-if="content.editor != ''"><strong>{t}Last editor{/t}</strong>: [% content.editor %]</span>
+            			</div>
                     </td>
                     {if $category eq 'all' || $category == 0}
                     <td class="left">

@@ -109,7 +109,7 @@
                         {t}There is no available widgets{/t}
                     </td>
                 </tr>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
                     <td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>

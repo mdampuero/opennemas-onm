@@ -67,7 +67,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
                     <td>
                         <input ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" type="checkbox" value="[% content.id %]">
                     </td>

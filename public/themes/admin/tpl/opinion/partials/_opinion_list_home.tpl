@@ -3,7 +3,7 @@
         <tr>
             <th style="width:30px;"><input type="checkbox" class="toggleallcheckbox"></th>
             <th style="width:200px;">{t}Author{/t} - {t}Title{/t}</th>
-            <th class="center" style="width:130px;">{t}Created in{/t}</th>
+            <th class="center" style="width:130px;">{t}Created on{/t}</th>
             <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
             <th class="center" style="width:10px;">{t}Home{/t}</th>
             <th class="center" style="width:10px;">{t}Available{/t}</th>
