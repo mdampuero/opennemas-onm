@@ -70,62 +70,7 @@ class AlbumsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $itemsPerPage = s::get('items_per_page');
-
-        $page           = $this->get('request')->query->getDigits('page', 1);
-        $category       = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $cm = new \ContentManager();
-
-        if ($category == 'all') {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $category;
-        }
-
-        list($albumCount, $albums) = $cm->getCountAndSlice(
-            'album',
-            $categoryForLimit,
-            'contents.in_litter!=1',
-            'ORDER BY created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (count($albums) > 0) {
-            foreach ($albums as &$album) {
-                $album->category_name  = $this->ccm->get_name($album->category);
-                $album->category_title = $this->ccm->get_title($album->category_name);
-                $album->read($album->id);
-            }
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $albumCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_albums',
-                    array('category' => $category)
-                ).'&page=%d',
-            )
-        );
-
-        return $this->render(
-            'album/list.tpl',
-            array(
-                'pagination' => $pagination,
-                'albums'     => $albums,
-                'page'       => $page,
-            )
-        );
+        return $this->render('album/list.tpl');
     }
 
     /**

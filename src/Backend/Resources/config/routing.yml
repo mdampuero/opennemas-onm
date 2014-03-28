@@ -540,6 +540,8 @@ admin_album_update:
 admin_album_show:
     path:     /albums/{id}/show
     defaults: { _controller  : BackendBundle:Albums:show }
+    options:
+        expose: true
 
 admin_album_delete:
     path:     /albums/{id}/delete
