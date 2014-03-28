@@ -45,11 +45,25 @@ abstract class BaseManager
         } elseif (is_array($filter)) {
             $filterSQL = array();
             foreach ($filter as $field => $value) {
-                // TODO : detect LIKE sqls
-                if ($value[0] == '%' && $value[strlen($value) -1] == '%') {
-                    $filterSQL []= "`$field` LIKE '$value'";
+                if (is_array($value)) {
+                    $sql = array();
+                    foreach ($value as $v) {
+                        // TODO : detect LIKE sqls
+                        if ($v[0] == '%' && $v[strlen($v) -1] == '%') {
+                            $sql []= "`$field` LIKE '$v'";
+                        } else {
+                            $sql[]= "`$field`='$v'";
+                        }
+                    }
+
+                    $filterSQL[] = implode(' OR ', $sql);
                 } else {
-                    $filterSQL []= "`$field`='$value'";
+                    // TODO : detect LIKE sqls
+                    if ($value[0] == '%' && $value[strlen($value) -1] == '%') {
+                        $filterSQL []= "`$field` LIKE '$value'";
+                    } else {
+                        $filterSQL []= "`$field`='$value'";
+                    }
                 }
             }
             $filterSQL = implode(' AND ', $filterSQL);
