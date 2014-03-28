@@ -131,6 +131,13 @@ class UsersController extends Controller
 
         unset($search['content_type_name']);
 
+        if (!$this->getUser()->isMaster()) {
+            $search['fk_user_group'][] = array(
+                'value' => '^4$|,4,|,4$',
+                'operator' => 'not regexp'
+            );
+        }
+
         if ($sortBy) {
             $order = '`' . $sortBy . '` ' . $sortOrder;
         }
