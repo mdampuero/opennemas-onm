@@ -95,11 +95,22 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     function clearFilters(filters) {
         var cleaned = {};
         for (var name in filters) {
-            if (filters[name] != -1 && filters[name] !== '') {
-                if (name.indexOf('_like') !== -1) {
-                    cleaned[name.substring(0, name.indexOf('_like'))] = '%' + filters[name] + '%'
-                } else {
-                    cleaned[name] = filters[name];
+            for (var i = 0; i < filters[name].length; i++) {
+                if (filters[name][i]['value'] != -1
+                    && filters[name][i]['value'] !== ''
+                ){
+                    if (name.indexOf('_like') !== -1) {
+                        var shortName = name.substring(0, name.indexOf('_like'));
+                        cleaned[shortName] = [];
+                        cleaned[shortName][i] = {
+                            value: '%' + filters[name][i]['value'] + '%'
+                        };
+                    } else {
+                        cleaned[name] = [];
+                        cleaned[name][i] = {
+                            value: filters[name][i]['value']
+                        };
+                    }
                 }
             }
         };
@@ -161,7 +172,13 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             sharedVars.set('sort_order', sortOrder);
         }
 
+        // Filters used in request
+        sharedVars.set('filters', {});
+
+        // Filters used in GUI
         sharedVars.set('search', filters);
+
+
         sharedVars.set('contents', []);
         sharedVars.set('selected', []);
 
@@ -195,7 +212,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             page:              $scope.shvs.page,
             sort_by:           $scope.shvs.sort_by,
             sort_order:        $scope.shvs.sort_order,
-            search:            clearFilters($scope.shvs.search)
+            search:            clearFilters($scope.shvs.filters)
         }
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
@@ -543,6 +560,20 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 if (newValues[name] !== oldValues[name]) {
                     $location.search(name, newValues[name]);
 
+                    $scope.shvs.filters[name] = [];
+
+                    if ($scope.shvs.search[name] instanceof Array) {
+                        for (var i = 0; i < $scope.shvs.search[name].length; i++) {
+                            $scope.shvs.filters[name].push({
+                                value: $scope.shvs.search[name][i]
+                            });
+                        };
+                    } else {
+                        $scope.shvs.filters[name].push({
+                            value: $scope.shvs.search[name]
+                        });
+                    }
+
                     if (newValues[name] == '') {
                         $location.search(name, null);
                     }
@@ -563,6 +594,28 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      */
     $scope.$on('SharedVarsChanged', function(event, vars) {
         $scope.shvs = vars;
+
+        for (var name in $scope.shvs.search) {
+            $location.search(name, $scope.shvs.search[name]);
+
+            $scope.shvs.filters[name] = [];
+
+            if ($scope.shvs.search[name] instanceof Array) {
+                for (var i = 0; i < $scope.shvs.search[name].length; i++) {
+                    $scope.shvs.filters[name].push({
+                        value: $scope.shvs.search[name][i]
+                    });
+                };
+            } else {
+                $scope.shvs.filters[name].push({
+                    value: $scope.shvs.search[name]
+                });
+            }
+
+            if ($scope.shvs.search[name] == '') {
+                $location.search(name, null);
+            }
+        };
     });
 }
 
