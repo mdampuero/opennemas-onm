@@ -75,64 +75,7 @@ class ImagesController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page', 20);
-
-        $_SESSION['desde'] = 'category_catalog';
-
-        if ($this->category == 'all') {
-            $filterCategory = null;
-        } else {
-            $filterCategory = $this->category;
-        }
-        $cm = new \ContentManager();
-        list($countImages, $images) = $cm->getCountAndSlice(
-            'photo',
-            $filterCategory,
-            'contents.in_litter != 1 AND contents.fk_content_type=8',
-            'ORDER BY pk_content DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        foreach ($images as &$image) {
-            $image->category_name   = $image->loadCategoryName($image->id);
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countImages,
-                'fileName'    => $this->generateUrl(
-                    'admin_images',
-                    array('category' => $this->category)
-                ).'&page=%d',
-            )
-        );
-
-        $adsModule = 'false';
-        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
-            $adsModule = 'true';
-        }
-
-
-        return $this->render(
-            'image/list.tpl',
-            array(
-                'pages'    => $pagination,
-                'photos'   => $images,
-                'category' => $this->category,
-                'page'     => $page,
-                'adsModule'=> $adsModule,
-            )
-        );
+        return $this->render('image/list.tpl');
     }
 
     /**
