@@ -10,6 +10,7 @@
 namespace Repository;
 
 use Onm\Cache\CacheInterface;
+use Onm\Database\DbalWrapper;
 
 /**
  * Handles common actions in UserGroups
@@ -18,91 +19,149 @@ use Onm\Cache\CacheInterface;
  **/
 class UserGroupManager extends BaseManager
 {
-    public function find($id)
+    /**
+     * Initializes the entity manager
+     *
+     * @param CacheInterface $cache the cache instance
+     **/
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
     {
-        $group = null;
-
-        $cacheId = $this->cachePrefix . "_usergroup_" . $id.microtime(true);
-
-        if (!$this->hasCache()
-            || ($group = $this->cache->fetch($cacheId)) === false
-            || !is_object($group)
-        ) {
-            $group = new \UserGroup($id);
-
-            if ($this->hasCache()) {
-                $this->cache->save($cacheId, $group);
-            }
-        }
-
-        return $group;
+        $this->dbConn      = $dbConn;
+        $this->cache       = $cache;
+        $this->cachePrefix = $cachePrefix;
     }
 
     /**
-     * Searches for groups given a criteria
+     * Counts searched users given a criteria
      *
-     * @param array $filter          the criteria used to search the groups
-     * @param array $order           the order applied in the search
-     * @param int   $elementsPerPage the max number of elements to return
-     * @param int   $page            the offset to start with
-     *
-     * @return array the matched elements
-     **/
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null)
+     * @param  array $criteria        the criteria used to search the comments.
+     * @return int                    the amount of elements.
+     */
+    public function countBy($criteria)
     {
         // Building the SQL filter
-        $filterSQL  = $this->getFilterSQL($criteria);
-
-        $orderBySQL  = '`pk_user_group` DESC';
-        if (!empty($order)) {
-            $orderBySQL = $this->getOrderBySQL($order);
-        }
-        $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
+        $whereSQL  = $this->getFilterSQL($criteria);
 
         // Executing the SQL
-        $sql = "SELECT * FROM `user_groups` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT COUNT(pk_user_group) FROM `user_groups` WHERE $whereSQL";
+
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->Execute($sql);
+        $rs = $this->dbConn->fetchArray($sql);
 
-        if ($rs === false) {
-            return false;
-        }
-
-        $userGroups = array();
-        while (!$rs->EOF) {
-            $userGroup = new \UserGroup();
-            $userGroup->load($rs->fields);
-
-            $userGroups []= $userGroup;
-            $rs->MoveNext();
-        }
-
-        // Load privileges for these matched groups
-        $userGroupIds = array_map(
-            function ($userGroup) {
-                return $userGroup->id;
-            },
-            $userGroups
-        );
-        $sql =  "SELECT pk_fk_user_group, pk_fk_privilege"
-                ." FROM user_groups_privileges"
-                ." WHERE pk_fk_user_group IN (".implode(',', $userGroupIds).")";
-
-        $rs = $this->dbConn->Execute($sql);
-        $privileges = $rs->getArray();
         if (!$rs) {
-            return;
+            return 0;
         }
 
-        foreach ($privileges as $privilege) {
-            foreach ($userGroups as &$userGroup) {
+        return $rs[0];
+    }
 
-                if ($privilege['pk_fk_user_group'] == $userGroup->id) {
-                    $userGroup->privileges[] = $privilege['pk_fk_privilege'];
-                }
+    /**
+     * Finds one usergroup from the given a user id.
+     *
+     * @param  integer $id Menu id
+     * @return Menu
+     */
+    public function find($id)
+    {
+        $entity = null;
+
+        $cacheId = "usergroup_" . $id;
+
+        if (!$this->hasCache()
+            || ($entity = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
+        ) {
+            $entity = new \UserGroup($id);
+
+            if ($this->hasCache()) {
+                $this->cache->save($cacheId, $entity);
             }
         }
 
-        return $userGroups;
+        return $entity;
+    }
+
+    /**
+     * Searches for users given a criteria
+     *
+     * @param  array $criteria        the criteria used to search the comments.
+     * @param  array $order           the order applied in the search.
+     * @param  int   $elementsPerPage the max number of elements to return.
+     * @param  int   $page            the offset to start with.
+     * @return array                  the matched elements.
+     */
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
+    {
+        // Building the SQL filter
+        $whereSQL = $this->getFilterSQL($criteria);
+
+        $orderSQL = '`pk_user_group` DESC';
+        if (!empty($order)) {
+            $orderSQL = $this->getOrderBySQL($order);
+        }
+        $limitSQL = $this->getLimitSQL($elementsPerPage, $page);
+
+        // Executing the SQL
+        $sql = "SELECT pk_user_group FROM `user_groups` WHERE $whereSQL ORDER BY $orderSQL $limitSQL";
+
+        $this->dbConn->setFetchMode(ADODB_FETCH_ASSOC);
+        $rs = $this->dbConn->fetchAll($sql);
+
+        $ids = array();
+        foreach ($rs as $resultElement) {
+            $ids[] = $resultElement['pk_user_group'];
+        }
+
+        $users = $this->findMulti($ids);
+
+        return $users;
+    }
+
+    /**
+     * Find multiple users from a given array of content ids.
+     *
+     * @param  array $data Array of preprocessed content ids.
+     * @return array       Array of contents.
+     */
+    public function findMulti(array $data)
+    {
+        $ordered = array_flip($data);
+
+        $ids = array();
+        foreach ($data as $value) {
+            $ids[] = 'user_' . $value;
+        }
+
+        $users = array_values($this->cache->fetch($ids));
+
+        $cachedIds = array();
+        foreach ($users as $user) {
+            $ordered[$user->id] = $user;
+            $cachedIds[] = 'usergroup_' . $user->id;
+        }
+
+        $missedIds = array_diff($ids, $cachedIds);
+
+        foreach ($missedIds as $content) {
+            list($contentType, $contentId) = explode('_', $content);
+            $user = $this->find($contentId);
+            $ordered[$user->id] = $user;
+        }
+
+        return array_values($ordered);
+    }
+
+    /**
+     * Deletes a usergroup
+     *
+     * @param integer $id User id.
+     */
+    public function delete($id)
+    {
+        $this->dbConn->transactional(function ($em) use ($id) {
+            $em->executeQuery('DELETE FROM `user_groups` WHERE `pk_user_group`= ' . $id);
+        });
+
+        $this->cache->delete('usergroup_' . $id);
     }
 }

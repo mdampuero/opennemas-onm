@@ -106,7 +106,7 @@ services:
 
     usergroup_repository:
         class: Repository\UserGroupManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     setting_repository:
         class: Repository\SettingManager
