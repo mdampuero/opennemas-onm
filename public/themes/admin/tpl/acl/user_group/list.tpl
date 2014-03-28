@@ -1,7 +1,21 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
+    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
+    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
+    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
+{/block}
+
 {block name="content"}
-<form action="{url name=admin_usergroups}" method="post" name="formulario" id="formulario">
+<form action="#" method="post" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { name_like: ''}, 'name', 'asc', 'backend_ws_usergroups_list')">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
@@ -21,55 +35,75 @@
     <div class="wrapper-content">
 
         {render_messages}
+        <div ng-include="'usergroups'"></div>
 
-        <table class="table table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th>{t}Group name{/t}</th>
-                    <th class="center" style="width:10px">{t}Actions{/t}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach name=c from=$user_groups item=group}
-                <tr>
-                    <td>
-                        <a href="{url name="admin_acl_usergroups_show" id="{$group->id}"}" title="{t}Edit group{/t}">
-                            {$group->name}
-                        </a>
-                    </td>
-                    <td class="right nowrap">
-                        <div class="btn-group">
-							<a class="btn" href="{url name="admin_acl_usergroups_show" id="{$group->id}"}" title="{t}Edit group{/t}">
-								<i class="icon-pencil"></i> {t}Edit{/t}
-							</a>
-							<a class="del btn btn-danger"
-                                href="{url name=admin_acl_usergroups_delete id=$group->id}"
-                                data-url="{url name=admin_acl_usergroups_delete id=$group->id}"
-                                data-title="{$group->name}"
-                                title="{t}Delete group{/t}">
-								<i class="icon-trash icon-white"></i>
-							</a>
-                        </div>
-                    </td>
-                </tr>
-                {foreachelse}
-                <tr>
-                    <td colspa=2 class="empty">
-                        {t}There is no groups created yet.{/t}
-                    </td>
-                </tr>
-                {/foreach}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2" class="center">
-                        <div class="pagination">
-                            {$paginacion->links}
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+        <script type="text/ng-template" id="usergroups">
+            <div class="table-info clearfix">
+                <div class="pull-left form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
+                    <input type="text" id="username" name="name" value="" placeholder="{t}Filter by name or email{/t}" ng-model="shvs.search.name_like"/>
+                </div>
+            </div>
+            <div class="spinner-wrapper" ng-if="loading">
+                <div class="spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
+            </div>
+            <table class="table table-hover table-condensed" ng-if="!loading">
+                <thead>
+                    <tr>
+                        <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                        <th></th>
+                        <th>{t}Group name{/t}</th>
+                        <th class="center" style="width:10px"></th>
+                    </tr>
+                </thead>
+                <tbody>{t}There is no groups created yet.{/t}
+                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
+                        <td>
+                            <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
+                        </td>
+                        <td>
+                            [% content.name %]
+                        </td>
+                        <td class="right nowrap">
+                            <div class="btn-group">
+
+                                <button class="btn" ng-click="edit(content.id, 'admin_acl_usergroup_show')" title="{t}Edit user{/t}" type="button">
+                                    <i class="icon-pencil"></i> {t}Edit{/t}
+                                </button>
+
+                                <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_usergroup_delete', $index)"
+                                    title="{t}Delete this user{/t}" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspa=2 class="empty">
+
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr >
+                        <td colspan="8" class="center">
+                            <div class="pull-left">
+                                {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                            </div>
+                            <div class="pull-right">
+                                <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </script>
+
+        <script type="text/ng-template" id="modal-delete">
+            {include file="common/modals/_modalDelete.tpl"}
+        </script>
     </div>
 </form>
 {include file="acl/user_group/modal/_modalDelete.tpl"}

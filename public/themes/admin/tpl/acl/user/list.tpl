@@ -102,6 +102,11 @@
 				</tr>
 			</thead>
 			<tbody>
+                <tr ng-if="shvs.contents.length == 0">
+                    <td colspan="8" class="empty">
+                        {t escape=off}There is no user groupss created yet or <br/>not results for your searching criteria.{/t}
+                    </td>
+                </tr>
 				<tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents">
 					<td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
@@ -151,11 +156,6 @@
 								<i class="icon-trash icon-white"></i>
 							</button>
 						</div>
-					</td>
-				</tr>
-				<tr ng-if="shvs.contents.length == 0">
-					<td colspan="8" class="empty">
-						{t escape=off}There is no users created yet or <br/>your search don't match your criteria{/t}
 					</td>
 				</tr>
 			</tbody>

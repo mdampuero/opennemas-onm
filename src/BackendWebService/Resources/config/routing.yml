@@ -22,6 +22,10 @@ backend_ws_users:
     resource: @BackendWebServiceBundle/Resources/config/routing/users.yml
     prefix:   /
 
+backend_ws_usergroups:
+    resource: @BackendWebServiceBundle/Resources/config/routing/usergroups.yml
+    prefix:   /
+
 backend_ws_content:
     resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
     prefix:   /

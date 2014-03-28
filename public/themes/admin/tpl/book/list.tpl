@@ -189,7 +189,7 @@
             </thead>
             <tbody class="sortable">
             <tr ng-if="shvs.contents.length == 0">
-                <td class="empty" colspan="10">{t}No available videos.{/t}</td>
+                <td class="empty" colspan="10">{t}No available books.{/t}</td>
             </tr>
 
             <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" data-id="[% content.id %]">

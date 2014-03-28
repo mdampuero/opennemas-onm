@@ -1,0 +1,35 @@
+backend_ws_usergroup_create:
+    path:     /user/create
+    defaults: { _controller  : BackendWebServiceBundle:UserGroups:create }
+    options:
+        expose: true
+
+backend_ws_usergroup_delete:
+    path:     /usergroups/{id}/delete
+    defaults: { _controller  : BackendWebServiceBundle:UserGroups:delete }
+    options:
+        expose: true
+
+backend_ws_usergroup_show:
+    path:     /usergroups/{id}/show
+    defaults: { _controller  : BackendWebServiceBundle:UserGroups:show }
+    options:
+        expose: true
+
+backend_ws_usergroup_update:
+    path:     /usergroups/{id}/update
+    defaults: { _controller  : BackendWebServiceBundle:UserGroups:update }
+    options:
+        expose: true
+
+backend_ws_usergroups_batch_delete:
+    path:     /usergroups/batch-delete
+    defaults: { _controller  : BackendWebServiceBundle:UserGroups:batchDelete }
+    options:
+        expose: true
+
+backend_ws_usergroups_list:
+    path:     /usergroups
+    defaults: { _controller  : BackendWebServiceBundle:UserGroups:list }
+    options:
+        expose: true

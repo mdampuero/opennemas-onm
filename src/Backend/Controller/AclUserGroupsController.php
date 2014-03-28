@@ -51,13 +51,7 @@ class AclUserGroupsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $userGroup  = new \UserGroup();
-        $userGroups = $userGroup->find();
-
-        return $this->render(
-            'acl/user_group/list.tpl',
-            array( 'user_groups' => $userGroups)
-        );
+        return $this->render('acl/user_group/list.tpl');
     }
 
     /**
