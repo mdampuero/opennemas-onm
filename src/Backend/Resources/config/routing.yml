@@ -650,6 +650,8 @@ admin_books_create:
 admin_book_show:
     path:     /books/{id}/show
     defaults: { _controller  : BackendBundle:Books:show }
+    options:
+        expose: true
 
 admin_books_update:
     path:     /books/{id}/update

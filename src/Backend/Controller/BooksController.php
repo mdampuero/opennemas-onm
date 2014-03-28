@@ -86,83 +86,15 @@ class BooksController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page           = $request->query->getDigits('page', 1);
-        $status         = $request->query->getDigits('status');
 
-        $itemsPerPage   = s::get('items_per_page');
         $configurations = s::get('book_settings');
-        $numFavorites   =  1;
-
         if (isset($configurations['total_widget'])
-            && !empty($configurations['total_widget'])) {
-            $numFavorites =  $configurations['total_widget'];
+            && !empty($configurations['total_widget'])
+        ) {
+            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
         }
 
-        $cm = new \ContentManager();
-
-        if (empty($page)) {
-            $limit = "LIMIT ".($itemsPerPage+1);
-        } else {
-            $limit = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
-        }
-
-        if ($this->category == 'all') {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $this->category;
-        }
-
-        $filter = ' contents.in_litter != 1 ';
-        if (($status != '') && ($status != null)) {
-            $filter .= ' AND contents.available = '. $status;
-        }
-
-        list($booksCount, $books) = $cm->getCountAndSlice(
-            'book',
-            $categoryForLimit,
-            $filter,
-            'ORDER BY position ASC, created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (!empty($books)) {
-            foreach ($books as &$book) {
-                $book->category_name  = $this->ccm->get_name($book->category);
-                $book->category_title = $this->ccm->get_title($book->category_name);
-            }
-        }
-        if (count($books) != $numFavorites) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $booksCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_books',
-                    array('category' => $this->category)
-                ).'&page=%d',
-            )
-        );
-
-        return $this->render(
-            'book/list.tpl',
-            array(
-                'pagination' => $pagination,
-                'page'       => $page,
-                'status'     => $status,
-                'books'      => $books
-            )
-        );
+        return $this->render('book/list.tpl');
     }
 
     /**
