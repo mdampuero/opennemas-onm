@@ -87,14 +87,17 @@ class OpinionManager extends EntityManager
      * @param string|array $filter the filter params
      *
      * @return string the SQL WHERE filter
-     **/
-    protected function getFilterSQL($filter)
+     */
+    protected function getFilterSQL($filters)
     {
-        if (empty($filter)) {
+        if (empty($filters)) {
             $filterSQL = ' 1=1 ';
-        } elseif (is_array($filter)) {
+        } elseif (is_array($filters)) {
             $filterSQL = array();
-            foreach ($filter as $field => $value) {
+
+            foreach ($filters as $field => $values) {
+                $fieldFilters = array();
+
                 if ($field == 'blog') {
                     $allAuthors = \User::getAllUsersAuthors();
 
@@ -106,7 +109,7 @@ class OpinionManager extends EntityManager
                     }
 
                     if (!empty($authorsBlog)) {
-                        if ($value) {
+                        if ($values[0]['value']) {
                             $filterSQL [] = ' opinions.fk_author IN ('
                                 . implode(', ', array_keys($authorsBlog)).") ";
                         } else {
@@ -114,27 +117,42 @@ class OpinionManager extends EntityManager
                                 . implode(', ', array_keys($authorsBlog)).") ";
                         }
                     } else {
-                        if ($value) {
+                        if ($values[0]['value']) {
                             $filterSQL [] = ' opinions.fk_author=-1';
                         }
                     }
                 } elseif ($field == 'author') {
-                    if ($value > 0) {
-                        $filterSQL []= 'opinions.fk_author='.$value;
-                    } elseif ($value == -2) {
+                    if ($values[0]['value'] > 0) {
+                        $filterSQL []= 'opinions.fk_author=' . $values[0]['value'];
+                    } elseif ($values[0]['value'] == -2) {
                         $filterSQL []= 'opinions.type_opinion=2';
-                    } elseif ($value == -3) {
+                    } elseif ($values[0]['value'] == -3) {
                         $filterSQL []= 'opinions.type_opinion=1';
                     }
                 } else {
-                    // TODO : detect LIKE sqls
-                    if ($value[0] == '%' && $value[strlen($value) -1] == '%') {
-                        $filterSQL []= "`$field` LIKE '$value'";
-                    } else {
-                        $filterSQL []= "`$field`='$value'";
+                    foreach ($values as $filter) {
+                        $operator = "=";
+                        $value    = "";
+
+                        // Check operator
+                        if (array_key_exists('operator', $filter)) {
+                            $operator = $filter['operator'];
+                        }
+
+                        // Check value
+                        if (array_key_exists('value', $filter)) {
+                            $value = $filter['value'];
+                        }
+
+                        $fieldFilters[] = "`$field` $operator '$value'";
                     }
+
+                    // Add filters for the current $field
+                    $filterSQL[] = implode(' OR ', $fieldFilters);
                 }
             }
+
+            // Build filters
             $filterSQL = implode(' AND ', $filterSQL);
         } else {
             $filterSQL = $filter;

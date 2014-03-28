@@ -237,7 +237,13 @@ class CommentManager extends BaseManager
      **/
     public function countPendingComments()
     {
-        return $this->countBy(array('status' => \Comment::STATUS_PENDING));
+        return $this->countBy(
+            array(
+                'status' => array(
+                    array('value' => \Comment::STATUS_PENDING)
+                )
+            )
+        );
     }
 
     /**
@@ -267,5 +273,52 @@ class CommentManager extends BaseManager
         // });
 
         $this->cache->delete('comment_' . $id);
+    }
+
+    /**
+     * Builds the SQL WHERE filter given an array or string with the desired filter
+     *
+     * @param string|array $filter the filter params
+     *
+     * @return string the SQL WHERE filter
+     */
+    protected function getFilterSQL($filters)
+    {
+        if (empty($filters)) {
+            $filterSQL = ' 1=1 ';
+        } elseif (is_array($filters)) {
+            $filterSQL = array();
+
+            foreach ($filters as $field => $values) {
+                $fieldFilters = array();
+
+                foreach ($values as $filter) {
+                    $operator = "=";
+                    $value    = "";
+
+                    // Check operator
+                    if (array_key_exists('operator', $filter)) {
+                        $operator = $filter['operator'];
+                    }
+
+                    // Check value
+                    if (array_key_exists('value', $filter)) {
+                        $value = $filter['value'];
+                    }
+
+                    $fieldFilters[] = "`$field` $operator '$value'";
+                }
+
+                // Add filters for the current $field
+                $filterSQL[] = implode(' OR ', $fieldFilters);
+            }
+
+            // Build filters
+            $filterSQL = implode(' AND ', $filterSQL);
+        } else {
+            $filterSQL = $filter;
+        }
+
+        return $filterSQL;
     }
 }
