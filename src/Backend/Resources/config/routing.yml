@@ -419,6 +419,12 @@ admin_image_show:
     path:     /images/show
     defaults: { _controller  : BackendBundle:Images:show }
 
+admin_photo_show:
+    path:     /images/show
+    defaults: { _controller  : BackendBundle:Images:show }
+    options:
+        expose: true
+
 admin_image_create:
     path:     /image/create
     defaults: { _controller  : BackendBundle:Images:create }
@@ -459,6 +465,8 @@ admin_videos_get_info:
 admin_video_show:
     path:     /videos/{id}/show
     defaults: { _controller  : BackendBundle:Videos:show }
+    options:
+        expose: true
 
 admin_videos_update:
     path:     /videos/{id}/update
@@ -1281,9 +1289,11 @@ admin_acl_usergroups:
     path:     /acl/usergroups
     defaults: { _controller  : BackendBundle:AclUserGroups:list }
 
-admin_acl_usergroups_show:
+admin_acl_usergroup_show:
     path:     /acl/usergroup/{id}/show
     defaults: { _controller  : BackendBundle:AclUserGroups:show }
+    options:
+        expose: true
 
 admin_acl_usergroups_create:
     path:     /acl/usergroup/create
