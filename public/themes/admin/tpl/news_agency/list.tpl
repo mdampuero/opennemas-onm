@@ -31,19 +31,14 @@
     <div class="wrapper-content">
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
-            <li class="batch-actions">
-                <a class="importChecked" data-controls-modal="modal-news-agency-batch-import" href="#" title="{t}Batch import{/t}">
+            <li class="batch-actions" ng-if="shvs.selected.length > 0">
+                <a class="importChecked" href="#" title="{t}Batch import{/t}" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
                     <img src="{$params.IMAGE_DIR}select.png" title="{t}Batch import{/t}" alt="{t}Batch import{/t}"/><br/>{t}Batch import{/t}
                 </a>
             </li>
 			<li>
 				<a href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
 				    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
-				</a>
-			</li>
-			<li>
-				<a href="{url name=admin_news_agency}" class="admin_add" title="{t}Reload list{/t}">
-				    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
 				</a>
 			</li>
             <li class="separator"></li>
@@ -108,9 +103,9 @@
                         <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                     </td>
                 </tr>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.source_id+','+content.xmlFile) }" class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}">
                     <td>
-                        <input type="checkbox" name="selected[]" value="[% content.source_id %],[%content.xmlFile %]" class="minput"/>
+                        <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
                     <td  class="right">
                         <span ng-if="content.priority == 1" class="badge badge-important">{t}Urgent{/t}</span>
@@ -130,7 +125,7 @@
                         <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
                     </td>
                     <td class="nowrap center">
-                        <span class="label" style="background-color:{$servers[$element->source_id]['color']};">{$servers[$element->source_id]['name']}</span>
+                        <span class="label" style="background-color:[% content.source_color %]};">[% content.source_name %]</span>
                     </td>
                     <td class="nowrap center">
                         <span title="[% content.created_time.date %] [% content.created_time.timezone %]">[% content.created_time.date %]  [% content.created_time.timezone %]</span>
@@ -139,7 +134,7 @@
                     <td class="nowrap">
                         <ul class="btn-group">
                             <li>
-                                <a class="btn btn-small" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
+                                <a class="btn btn-small" href="[% content.import_url %]" title="{t}Import{/t}">
                                     {t}Import{/t}
                                 </a>
                             </li>
@@ -155,7 +150,7 @@
                             {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
                         </div>
                         <div class="pull-right">
-                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'admin_news_agency_ws')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
                     </td>
                 </tr>

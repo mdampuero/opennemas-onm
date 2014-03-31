@@ -145,7 +145,6 @@ class NewsAgencyController extends Controller
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search');
-var_dump($elementsPerPage, $page);die();
 
         $filterSource = $filterTitle = '*';
 
@@ -191,6 +190,17 @@ var_dump($elementsPerPage, $page);die();
 
         foreach ($elements as &$element) {
             $element->load();
+            $element->source_name = $servers[$element->source_id]['name'];
+            $element->source_color = $servers[$element->source_id]['color'];
+            $element->import_url = $this->generateUrl(
+                'admin_news_agency_pickcategory',
+                array(
+                    'source_id' => $element->source_id,
+                    'id'        => \urlencode($element->xmlFile)
+                )
+            );
+            $element->id = $element->source_id . ',' . $element->id;
+
             $element->already_imported = in_array($element->urn, $alreadyImported);
         }
 
