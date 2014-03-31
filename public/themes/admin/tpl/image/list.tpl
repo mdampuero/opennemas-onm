@@ -9,6 +9,9 @@
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="dynamic-image.js" language="javascript" bundle="backend" basepath="js/directives"}
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
@@ -113,58 +116,20 @@
                         <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                     </td>
                     <td class="thumb">
-                        {if preg_match('/^swf$/i', $photo->type_img)}
-                            <object>
-                                <param name="wmode" value="window"
-                                       value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                                <embed wmode="window"
-                                       src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                                       width="140" height="80" ></embed>
-                            </object>
-                            <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
-                        {else}
-                            {dynamic_image src="{$photo->path_file}/[% content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview" rel="#image-{$smarty.foreach.n.index}"}
-                        {/if}
-                        <div class="simple_overlay modal hide fade" id="image-{$smarty.foreach.n.index}">
-                            <div class="modal-header">
-                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                              <h3>{t}Image preview{/t}</h3>
-                            </div>
-                            <div class="modal-body">
-                                <div class="resource">
-                                    {if preg_match('/^swf$/i', $photo->type_img)}
-                                        <object>
-                                            <param name="wmode" value="window" value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                                            <embed wmode="window" width="400" height="400"
-                                                   src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"></embed>
-                                        </object>
-                                        <img style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
-                                    {elseif preg_match('/^(jpeg|jpg|gif|png)$/i', $photo->type_img)}
-                                        <img src='{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}'/>
-                                    {/if}
-                                </div>
-
-                                <div class="details">
-                                    <h4 class="description">
-                                        <span ng-if="content.description != ''">[% content.description %]</span>
-                                        <span ng-if="content.description == ''">{t}No available description{/t}</span>
-                                    </h4>
-                                    <div><strong>{t}Filename{/t}</strong> [% content.title %]</div>
-                                    <div class="tags">
-                                        <img src="{$params.IMAGE_DIR}tag_red.png" />
-                                        <span ng-if="content.metadata != ''">[% content.metadata %]</span>
-                                        <span ng-if="content.metadata == ''">{t}No tags{/t}</span>
-                                    </div>
-                                    <span class="author" ng-if="content.author != ''">
-                                        <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
-                                    </span>
-                                    <div><strong>{t}Created on{/t}</strong> [% content.created %]</div>
-
-                                    <div><strong>{t}Resolution:{/t}</strong> [% content.width %] x [% content.height %] (px)</div>
-                                    <div><strong>{t}Size:{/t}</strong> [% content.size %] Kb</div>
-                                </div>
-                            </div>
-                        </div>
+                        <span ng-click="open('modal-image', null, $index)">
+                            {if preg_match('/^swf$/i', $photo->type_img)}
+                                <object>
+                                    <param name="wmode" value="window"
+                                           value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
+                                    <embed wmode="window"
+                                           src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
+                                           width="140" height="80" ></embed>
+                                </object>
+                                <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
+                            {else}
+                                <dynamic-image instance="{$instance_media}" path="[% content.path_file + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
+                            {/if}
+                        </span>
                     </td>
                     <td>
                         <span class="description">
@@ -238,21 +203,38 @@
         <script type="text/ng-template" id="modal-delete-selected">
             {include file="common/modals/_modalBatchDelete.tpl"}
         </script>
+
+        <script type="text/ng-template" id="modal-image">
+            <div class="modal-header">
+              <button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+              <h3>{t}Image preview{/t}</h3>
+            </div>
+            <div class="modal-body">
+                <div class="resource">
+                    <img ng-src="{$MEDIA_IMG_URL}/[% contents[index].path_file + '/' + contents[index].name %]"/>
+                </div>
+
+                <div class="details">
+                    <h4 class="description">
+                        <span ng-if="contents[index].description != ''">[% contents[index].description %]</span>
+                        <span ng-if="contents[index].description == ''">{t}No available description{/t}</span>
+                    </h4>
+                    <div><strong>{t}Filename{/t}</strong> [% contents[index].title %]</div>
+                    <div class="tags">
+                        <img src="{$params.IMAGE_DIR}tag_red.png" />
+                        <span ng-if="contents[index].metadata != ''">[% contents[index].metadata %]</span>
+                        <span ng-if="contents[index].metadata == ''">{t}No tags{/t}</span>
+                    </div>
+                    <span class="author" ng-if="contents[index].author != ''">
+                        <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
+                    </span>
+                    <div><strong>{t}Created on{/t}</strong> [% contents[index].created %]</div>
+
+                    <div><strong>{t}Resolution:{/t}</strong> [% contents[index].width %] x [% contents[index].height %] (px)</div>
+                    <div><strong>{t}Size:{/t}</strong> [% contents[index].size %] Kb</div>
+                </div>
+            </div>
+        </script>
     </div>
 </form>
-
-<script>
-jQuery(".simple_overlay").modal({
-    backdrop: true, //Show a grey back drop
-    keyboard: true, //Can close on escape
-    show: false,
-});
-jQuery('.table').on('click', '.image-preview', function(e){
-    e.preventDefault();
-    var image = $(this);
-    var rel_target = image.attr('rel');
-
-    $(rel_target).modal('show');
-});
-</script>
 {/block}

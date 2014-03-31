@@ -37,8 +37,7 @@
         {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js" common=1}
-     {/block}
-
+    {/block}
 </head>
 <body>
     {acl isAllowed="ROLE_BACKEND"}
