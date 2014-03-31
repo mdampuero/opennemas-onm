@@ -228,15 +228,11 @@ class Opinion extends Content
             return null;
         }
 
-        if ((int) $rs->fields['fk_author'] == 0) {
-            if ((int) $rs->fields['type_opinion'] == 1) {
-                $rs->fields['author'] = 'Editorial';
-            } elseif ((int) $rs->fields['type_opinion'] == 2) {
-                $rs->fields['author'] = 'Director';
-            }
-        }/* else {
-             $rs->fields['author'] =  $rs->fields['name'] ;
-        }*/
+        if ((int) $rs->fields['type_opinion'] == 1) {
+            $rs->fields['author'] = 'Editorial';
+        } elseif ((int) $rs->fields['type_opinion'] == 2) {
+            $rs->fields['author'] = 'Director';
+        }
 
         $this->load($rs->fields);
 
