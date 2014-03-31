@@ -70,7 +70,6 @@
                 <thead>
                     <tr>
                         <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
-                        <th></th>
                         <th>{t}Group name{/t}</th>
                         <th class="center" style="width:10px"></th>
                     </tr>
@@ -100,11 +99,6 @@
                                     <i class="icon-trash icon-white"></i>
                                 </button>
                             </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspa=2 class="empty">
-
                         </td>
                     </tr>
                 </tbody>
