@@ -28,6 +28,7 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
         }
     };
 
+    $scope.contents = sharedVars.get('contents');
     $scope.selected = sharedVars.get('selected').length;
 
     /**
