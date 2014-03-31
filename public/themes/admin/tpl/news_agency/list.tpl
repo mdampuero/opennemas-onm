@@ -31,10 +31,21 @@
     <div class="wrapper-content">
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
-            <li class="batch-actions" ng-if="shvs.selected.length > 0">
-                <a class="importChecked" href="#" title="{t}Batch import{/t}" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
-                    <img src="{$params.IMAGE_DIR}select.png" title="{t}Batch import{/t}" alt="{t}Batch import{/t}"/><br/>{t}Batch import{/t}
-                </a>
+            <li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        <li>
+                            <a href="#" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'backend_ws_contents_batch_send_to_trash')">
+                                {t}Batch import{/t}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            <li ng-if="shvs.selected.length > 0">
+
             </li>
 			<li>
 				<a href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
@@ -103,7 +114,7 @@
                         <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                     </td>
                 </tr>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id), already_imported: already_imported }">
                     <td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>
@@ -159,8 +170,9 @@
         </script>
 	</form>
 </div>
-{include file="news_agency/modals/_modal_sync_dialog.tpl"}
-{include file="news_agency/modals/_modal_batch_import.tpl"}
 
+<script type="text/ng-template" id="modal-import-selected">
+{include file="news_agency/modals/_modal_batch_import.tpl"}
+</script>
 </div>
 {/block}

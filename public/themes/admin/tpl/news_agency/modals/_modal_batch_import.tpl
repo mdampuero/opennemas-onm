@@ -1,16 +1,14 @@
-<div class="modal hide fade" id="modal-news-agency-batch-import">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3>{t}Import all elements{/t}</h3>
-    </div>
-    <div class="modal-body">
-        <p>{t escape=off}Are you sure you want to import <span>%num%</span> elemets?{/t}</p>
-
-    </div>
-    <div class="modal-footer">
-        <a class="btn btn-primary yes" href="#">{t}Yes, import all{/t}</a>
-        <a class="btn secondary no" href="#">{t}No{/t}</a>
-    </div>
+<div class="modal-header">
+  <button type="button" class="close" ng-click="close()" aria-hidden="true">×</button>
+  <h3>{t}Import selected items{/t}</h3>
+</div>
+<div class="modal-body">
+    <p>{t escape=off}Are you sure you want to import [% selected %] elemets?{/t}</p>
+</div>
+<div class="modal-footer">
+    <span class="loading" ng-if="deleting == 1"></span>
+    <button class="btn btn-primary" ng-click="deleteSelected(route)" type="button">{t}Yes, import them{/t}</button>
+    <button class="btn secondary" ng-click="close()" type="button">{t}No{/t}</button>
 </div>
 
 <script>
