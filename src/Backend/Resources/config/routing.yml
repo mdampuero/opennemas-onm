@@ -1150,10 +1150,16 @@ admin_paywall_purchases_list_export:
     path:     /paywall/purchases/list-export.csv
     defaults: { _controller  : BackendBundle:Paywall:purchasesListExport }
 
-# Importer Efe controller routes
+# Agency importer controller routes
 admin_news_agency:
     path:     /news-agency
     defaults: { _controller  : BackendBundle:NewsAgency:list }
+
+admin_news_agency_ws:
+    path:     /news-agency/ws
+    defaults: { _controller  : BackendBundle:NewsAgency:webService }
+    options:
+        expose: true
 
 admin_news_agency_servers:
     path:     /news-agency/servers

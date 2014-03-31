@@ -3307,3 +3307,17 @@ li a .no-home {
   margin-top:.2em;
   font-size:1.2em;
 }
+
+.already-imported,
+.already-imported:hover{
+    background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
+    background-color:none;
+}
+.tooltip-inner {
+    max-width:500px !important;
+    text-align: justify;
+}
+
+.select2-display-none {
+  width: auto !important;
+}
