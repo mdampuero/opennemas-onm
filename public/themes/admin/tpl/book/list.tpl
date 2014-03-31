@@ -207,11 +207,11 @@
                 </td>
 
             </tr>
-            {sectionelse}
+            {foreachelse}
             <tr>
                 <td class="empty" colspan="9">{t}There is no books yet{/t}</td>
             </tr>
-        {/section}
+            {/foreach}
         </tbody>
         <tfoot>
           <td colspan="9">
