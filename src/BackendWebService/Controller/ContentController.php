@@ -44,9 +44,10 @@ class ContentController extends Controller
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
+                'extra'             => $this->loadExtraData($results),
                 'page'              => $page,
                 'results'           => $results,
-                'total'             => $total
+                'total'             => $total,
             )
         );
     }
@@ -635,5 +636,39 @@ class ContentController extends Controller
         }
 
         return empty(array_diff($required, $roles));
+    }
+
+    /**
+     * Loads extra data related to the given contents.
+     *
+     * @param  array $contents Array of contents.
+     * @return array           Array of extra data.
+     */
+    private function loadExtraData($contents)
+    {
+        $extra = array();
+
+        $ids = array();
+
+        foreach ($contents as $content) {
+            $ids[] = $content->fk_author;
+            $ids[] = $content->fk_publisher;
+            $ids[] = $content->fk_user_last_editor;
+        }
+        $ids = array_unique($ids);
+
+        if (($key = array_search(0, $ids)) !== false) {
+            unset($ids[$key]);
+        }
+
+        $users = $this->get('user_repository')->findMulti($ids);
+
+        $extra['authors'] = array();
+        foreach ($users as $user) {
+            $extra['authors'][$user->id] = $user->eraseCredentials();
+        }
+
+
+        return $extra;
     }
 }

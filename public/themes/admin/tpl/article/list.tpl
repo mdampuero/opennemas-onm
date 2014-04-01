@@ -148,7 +148,7 @@
         		                    [% content.editor %]
 		                        </span>
             				</span>
-            				<span ng-if="content.editor != ''"><strong>{t}Last editor{/t}</strong>: [% content.editor %]</span>
+            				<span ng-if="content.editor != ''"><strong>{t}Last editor{/t}</strong>: [% shvs.extra.authors[content.fk_user_last_editor].name %]</span>
             			</div>
                     </td>
                     {if $category eq 'all' || $category == 0}
