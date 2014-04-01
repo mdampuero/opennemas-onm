@@ -145,9 +145,9 @@ font-size: 13px;
 .table tbody tr.row_selected:hover>td {
   background-color: #fef8ae !important;
 }
-.table thead tr td:first-child .bootstrap-checkbox,
-.table thead tr td:first-child input[type="checkbox"] {
-  margin-left:2px;
+.table thead tr th:first-child .bootstrap-checkbox,
+.table thead tr th:first-child input[type="checkbox"] {
+  margin-left:1px;
 }
 .table tbody tr td:first-child input[type="checkbox"],
 .table tbody tr td:first-child .bootstrap-checkbox {
