@@ -159,6 +159,9 @@ class RssController extends Controller
                 //Generate author-name-slug for generate_uri
                 foreach ($articles_home as &$art) {
                     $art['author_name_slug'] = \Onm\StringUtils::get_title($art['name']);
+                    if (isset($art['avatar_img_id']) && !empty($art['avatar_img_id'])) {
+                        $art['photo'] = new \Photo($art['avatar_img_id']);
+                    }
 
                     $art['uri'] = \Uri::generate(
                         'opinion',
