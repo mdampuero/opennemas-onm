@@ -77,14 +77,13 @@ class ArticlesController extends Controller
             }
         }
 
-        $title  = $request->query->filter('title', null, FILTER_SANITIZE_STRING);
-        $status = (int) $request->query->get('status', -1);
+        // Fetch all authors
+        $allAuthors = \User::getAllUsersAuthors();
 
         return $this->render(
             'article/list.tpl',
             array(
-                'status' => $status,
-                'title'  => $title,
+                'authors' => $allAuthors,
             )
         );
     }
