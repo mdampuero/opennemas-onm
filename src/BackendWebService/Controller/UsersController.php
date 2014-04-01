@@ -159,12 +159,38 @@ class UsersController extends Controller
             $groups [$group->id] = $group;
         }
 
+        // Load groups information
+        $photoIds = array();
+        foreach ($results as $user) {
+            $photoIds[] = $user->avatar_img_id;
+        }
+        $photoIds = array_unique($photoIds);
+
+        if (($key = array_search(0, $photoIds)) !== false) {
+            unset($photoIds[$key]);
+        }
+
+        $ids = array();
+        foreach ($photoIds as $photo) {
+            $ids[] = array('photo',$photo);
+        }
+
+        $contentsRepository = $this->get('entity_repository');
+        $photosRaw = $contentsRepository->findMulti($ids);
+        $photos = array();
+        foreach ($photosRaw as $photo) {
+            $photos[$photo->id] = $photo;
+        }
+
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
                 'page'              => $page,
                 'results'           => $results,
-                'extra'             => array( 'groups' => $groups),
+                'extra'             => array(
+                    'groups' => $groups,
+                    'photos' => $photos
+                ),
                 'total'             => $total
             )
         );
