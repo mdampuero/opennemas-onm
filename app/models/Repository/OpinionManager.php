@@ -110,7 +110,7 @@ class OpinionManager extends EntityManager
 
                     if (!empty($authorsBlog)) {
                         if ($values[0]['value']) {
-                        $filterSQL [] = ' opinions.fk_author IN ('
+                            $filterSQL [] = ' opinions.fk_author IN ('
                                 . implode(', ', array_keys($authorsBlog)).") ";
                         } else {
                             $filterSQL [] = ' opinions.fk_author NOT IN ('
@@ -133,6 +133,11 @@ class OpinionManager extends EntityManager
                     foreach ($values as $filter) {
                         $operator = "=";
                         $value    = "";
+                        if ($filter['value'][0] == '%'
+                            && $filter['value'][strlen($filter['value']) - 1] == '%'
+                        ) {
+                            $operator = "LIKE";
+                        }
 
                         // Check operator
                         if (array_key_exists('operator', $filter)) {
