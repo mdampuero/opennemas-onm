@@ -129,7 +129,7 @@ font-size: 13px;
 }
 
 .table {color:#424E51;}
-.table-condensed th, .table-condensed td{ padding:8px 5px;vertical-align: middle;}
+.table-condensed th, .table-condensed td { padding:8px 5px;vertical-align: middle;}
 .pagination { vertical-align:middle; }
 .table .pagination {display:inline-block; margin-top:0;margin-bottom:0;}
 .table a {font-weight:bold;}
@@ -145,7 +145,12 @@ font-size: 13px;
 .table tbody tr.row_selected:hover>td {
   background-color: #fef8ae !important;
 }
-.table tbody tr td:first-child input[type="checkbox"] {
+.table thead tr td:first-child .bootstrap-checkbox,
+.table thead tr td:first-child input[type="checkbox"] {
+  margin-left:2px;
+}
+.table tbody tr td:first-child input[type="checkbox"],
+.table tbody tr td:first-child .bootstrap-checkbox {
   margin-left:5px;
 }
 
