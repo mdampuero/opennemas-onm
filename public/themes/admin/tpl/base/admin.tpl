@@ -23,6 +23,7 @@
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
         {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css"}
         {css_tag href="/jquery/select2/select2.css" media="all" type="text/css"}
+        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css"}
 	{/block}
 
     {block name="js-library"}
