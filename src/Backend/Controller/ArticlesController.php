@@ -570,46 +570,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Change available status for one article given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $redirectStatus   = $request->query->filter('redirectstatus', -1, FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $article = new \Article($id);
-        if (is_null($article->id)) {
-            m::add(sprintf(_('Unable to find article with id "%d"'), $id), m::ERROR);
-        } else {
-            $article->toggleAvailable($article->id);
-            if ($status == 0) {
-                $article->set_favorite($status);
-            }
-            m::add(sprintf(_('Successfully changed availability for article with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_articles',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'status'   => $redirectStatus,
-                )
-            )
-        );
-    }
-
-    /**
      * Lists all the articles with the suggested flag activated
      *
      * @param Request $request the request object
@@ -826,87 +786,6 @@ class ArticlesController extends Controller
                 'contentTypeCategories' => $this->parentCategories,
                 'category'              => $this->category,
                 'contentProviderUrl'    => $this->generateUrl('admin_articles_content_provider_in_frontpage'),
-            )
-        );
-    }
-
-    /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status         = $request->query->getDigits('new_status', 0);
-        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
-        $selected       = $request->query->get('selected_fld', null);
-        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page           = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $article = new \Article($id);
-                if ($article->category != 20) {
-                    $article->set_available($status, $_SESSION['userid']);
-                    if ($status == 0) {
-                        $article->set_favorite($status, $_SESSION['userid']);
-                    }
-                } else {
-                    m::add(sprintf(_('You must assign a section for "%s"'), $article->title), m::ERROR);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_articles',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'status'   => $redirectStatus,
-                )
-            )
-        );
-    }
-
-    /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $selected       = $request->query->get('selected_fld', null);
-        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
-        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page           = $request->query->getDigits('page', 1);
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $article = new \Article($id);
-                $article->delete($id);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_articles',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'status'   => $redirectStatus,
-                )
             )
         );
     }

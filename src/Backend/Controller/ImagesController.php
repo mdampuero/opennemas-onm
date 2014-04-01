@@ -621,43 +621,6 @@ class ImagesController extends Controller
     }
 
     /**
-     * Deletes multiple images at once
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMAGE_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $category      = $request->request->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page          = $request->request->getDigits('page', 1);
-        $selectedItems = $request->request->get('selected_fld');
-
-        if (is_array($selectedItems)
-            && count($selectedItems) > 0
-        ) {
-            foreach ($selectedItems as $element) {
-                $photo = new \Photo($element);
-                $photo->delete($element, $_SESSION['userid']);
-
-                m::add(sprintf(_('Image "%s" deleted successfully.'), $photo->title), m::SUCCESS);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_images',
-                array(
-                    'categoy' => $category,
-                    'page'    => $page,
-                )
-            )
-        );
-    }
-
-    /**
      * Shows a paginated list of images from a category
      *
      * @param Request $request the request object
