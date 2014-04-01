@@ -249,6 +249,32 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     }
 
     /**
+     * Saves the content positions in widget.
+     *
+     * @param string route Route name.
+     */
+    $scope.savePositions = function(route) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+        var ids = [];
+
+        for (var i = 0; i < contents.length; i++) {
+            ids.push(contents[i].id);
+        };
+
+        var url = fosJsRouting.generate(
+            route,
+            { contentType: $scope.shvs.contentType }
+        );
+        $http.post(url, { positions: ids }).success(function(response) {
+            if (response.content_status != null) {
+                contents[index].content_status = response.content_status;
+            }
+        }).error(function(response) {
+        });
+    }
+
+    /**
      * Changes the page of the list.
      *
      * @param  int page Page number.
