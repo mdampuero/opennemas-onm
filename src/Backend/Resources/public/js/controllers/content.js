@@ -514,7 +514,9 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                         });
                     }
 
-                    if (newValues[name] == '') {
+                    if ($scope.shvs.search[name] == ''
+                        || $scope.shvs.search[name] == -1
+                    ) {
                         $location.search(name, null);
                     }
                 }
@@ -552,7 +554,9 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 });
             }
 
-            if ($scope.shvs.search[name] == '') {
+            if ($scope.shvs.search[name] == ''
+                || $scope.shvs.search[name] == -1
+            ) {
                 $location.search(name, null);
             }
         };
