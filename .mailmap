@@ -1,0 +1,21 @@
+# File for mapping wrong commit author names to the proper ones
+#
+# Right commit author           Wrong commit author
+#
+Fran Dieguez <fran@openhost.es> Fran Diéguez <fran@openhost.es>
+Fran Dieguez <fran@openhost.es> Fran Diéguez <frandieguez@ns3.openhost.es>
+Fran Dieguez <fran@openhost.es> Fran Diéguez <fran@fran.(none)>
+Fran Dieguez <fran@openhost.es> Fran <fran@leela.(none)>
+Fran Dieguez <fran@openhost.es> Fran Diéguez <fran.dieguez@mabishu.com>
+Fran Dieguez <fran@openhost.es> frandieguez <frandieguez@6b240e21-b319-415b-acc2-1cc10fe194ed>
+Sandra Pereira <sandra@openhost.es> Sandra <sandra@openhost.es>
+Sandra Pereira <sandra@openhost.es> sandra <sandra@6b240e21-b319-415b-acc2-1cc10fe194ed>
+Alex Rodrigues <alex@openhost.es> Alex Rico <alex@openhost.es>
+Alex Rodrigues <alex@openhost.es> Alex <alex@openhost.es>
+Alex Rodrigues <alex@openhost.es> Alex <>
+Alex Rodrigues <alex@openhost.es> Alex <alex@laptop00.(none)>
+Diego Blanco <diego@openhost.es> Diego Blanco <diegoblaes@gmail.com>
+Diego Blanco <diego@openhost.es> Diego Blanco <diego@openhost.com>
+David Martinez <macada@openhost.es> macada <macada@macada-laptop.(none)>
+David Martinez <macada@openhost.es> macada <macada@6b240e21-b319-415b-acc2-1cc10fe194ed>
+Tomas Vilariño <vifito@openhost.es> vifito <vifito@6b240e21-b319-415b-acc2-1cc10fe194ed>
