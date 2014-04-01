@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title_like: '', in_litter: 0, author: -1 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_articles}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('article', { available: -1, category_name: -1, title_like: '', in_litter: 0, fk_author: -1 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix" >
         <div class="wrapper-content">
             <div class="title">
@@ -98,7 +98,7 @@
                         <option value="0"> {t}No published{/t} </option>
                     </select>
                     &nbsp;&nbsp;
-                    <select class="select2" ng-model="shvs.search.author" data-label="{t}Author{/t}">
+                    <select class="select2" ng-model="shvs.search.fk_author" data-label="{t}Author{/t}">
                         <option value="-1">{t}-- All --{/t}</option>
                         {foreach $authors as $author}
                             <option value="{$author->id}">{$author->name}</option>
