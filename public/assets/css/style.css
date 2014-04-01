@@ -3515,12 +3515,15 @@ border-bottom-left-radius: 2px;
    border-radius: 0 2px 2px 0;
 }
 
-.select2-display-none {
-  width: auto !important;
-}
-
 .select2-container-active .select2-choice, .select2-container-active .select2-choices, .select2-drop-active { border-color:#aaa;}
 
 .sortable tr {
 
+}
+.drag-category{
+  cursor:pointer;
+  padding:10 px;
+  list-style-type: none;
+  border: 1px solid #CCCCCC;
+  width:200px;
 }
