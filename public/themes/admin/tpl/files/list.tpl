@@ -17,6 +17,7 @@
     {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
     {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
+    {script_tag src="ui-sortable.js" language="javascript" bundle="backend" basepath="lib"}
 {/block}
 
 {block name="footer-js" append}
@@ -193,7 +194,7 @@
                         <td class="empty" colspan="10">{t}No available files.{/t}</td>
                     </tr>
 
-                    <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }" data-id="[% content.id %]">
+                    <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
                         <td>
                             <checkbox type="checkbox" index="[% $index %]">
                         </td>
