@@ -1,7 +1,7 @@
 angular.module('BackendApp.filters', []).filter('moment', function($locale) {
     return function(input, format, language) {
         var lang = 'en';
-        var fmt = 'LLLL'
+        var fmt = 'MMMM DD, YYYY, HH:mm'
 
         if (language) {
             lang = language;
@@ -13,6 +13,7 @@ angular.module('BackendApp.filters', []).filter('moment', function($locale) {
 
         var date = new Date(input);
 
+        moment.lang(lang);
         return moment(date).format(fmt);
     };
 });
