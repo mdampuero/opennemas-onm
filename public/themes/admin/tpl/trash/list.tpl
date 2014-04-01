@@ -1,39 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
-    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
-    {script_tag src="/onm/jquery-functions.js" language="javascript"}
-    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="filters.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
-    {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
-    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
-    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
-{/block}
-
-{block name="footer-js" append}
-<script>
-jQuery(function($){
-    $('#batch-delete').click(function(e) {
-        //Sets up the modal
-        jQuery("#modal-delete-contents").modal('show');
-        e.preventDefault();
-    });
-    $('#batch-restore').click(function(e) {
-        //Sets up the modal
-        jQuery("#modal-restore-contents").modal('show');
-        e.preventDefault();
-    });
-});
-</script>
+    {include file="common/angular_includes.tpl"}
 {/block}
 
 {block name="content"}
@@ -106,7 +74,7 @@ jQuery(function($){
                 </tr>
                 <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
                     <td>
-                        <checkbox type="checkbox" index="[% $index %]">
+                        <checkbox index="[% $index %]">
                     </td>
                     <td><strong>[% content.content_type_l10n_name %]</strong> </td>
                     <td>[% content.title %]</td>

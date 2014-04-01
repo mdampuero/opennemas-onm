@@ -190,7 +190,7 @@
                 </tr>
                 <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
                     <td class="center">
-                        <checkbox type="checkbox" index="[% $index %]">
+                        <checkbox index="[% $index %]">
                     </td>
                     <td>
                         [% content.title %]

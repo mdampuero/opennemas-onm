@@ -1,22 +1,7 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
-    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
-    {script_tag src="/onm/jquery-functions.js" language="javascript"}
-    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="filters.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
-    {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
-    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
-    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
+    {include file="common/angular_includes.tpl"}
 {/block}
 
 {block name="header-js" append}
@@ -28,7 +13,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_covers category=$category page=$page}" method="get" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('kiosko', { available: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_covers category=$category page=$page}" method="get" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('kiosko', { available: -1, title_like: '', category_name: -1, in_litter: 0 }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -89,7 +74,7 @@
                         </a>
                     </li>
                     {/acl}
-                    {/if}
+                {/if}
                     {acl isAllowed="KIOSKO_DELETE"}
                         <li class="divider"></li>
                         <li>
@@ -101,6 +86,16 @@
                     {/acl}
                 </ul>
             </li>
+                {acl isAllowed="KIOSKO_WIDGET"}
+                     {if $category eq 'widget'}
+                        <li class="separator"></li>
+                        <li>
+                            <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')"  title="{t}Save positions{/t}">
+                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                            </a>
+                        </li>
+                    {/if}
+                {/acl}
             {acl isAllowed="KIOSKO_CREATE"}
             <li class="separator"></li>
             <li>
@@ -191,13 +186,13 @@
             </tr>
         </thead>
 
-        <tbody class="sortable">
+        <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
             <tr ng-if="shvs.contents.length == 0">
                 <td class="empty" colspan="10">{t}No available covers.{/t}</td>
             </tr>
             <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }" data-id="[% content.id %]">
                 <td>
-                    <checkbox type="checkbox" index="[% $index %]">
+                    <checkbox index="[% $index %]">
                 </td>
                 <td class="center">
                     <img ng-src="{$KIOSKO_IMG_URL}[% content.path%][% content.thumb_url %]"

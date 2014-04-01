@@ -46,7 +46,7 @@
         <tbody>
             <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
                 <td>
-                    <checkbox type="checkbox" index="[% $index %]">
+                    <checkbox index="[% $index %]">
                 </td>
                 <td>
                     <strong>

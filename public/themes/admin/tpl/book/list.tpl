@@ -1,58 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
-    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
-    {script_tag src="/onm/jquery-functions.js" language="javascript"}
-    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="filters.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
-    {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
-    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
-    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
-{/block}
-
-{block name="footer-js" append}
-    <script>
-    var book_manager_urls = {
-        batchDelete: '{url name=admin_books_batchdelete category=$category page=$page}',
-        savePositions: '{url name=admin_books_save_positions category=$category page=$page}',
-        batch_publish: '{url name=admin_books_batchpublish new_status=1}',
-        batch_unpublish: '{url name=admin_books_batchpublish new_status=0}'
-    }
-
-    jQuery('#save-positions').on('click', function(e, ui){
-        e.preventDefault();
-
-        var items_id = [];
-        jQuery( "tbody.sortable tr" ).each(function(){
-            items_id.push(jQuery(this).data("id"))
-        });
-
-        jQuery.ajax(book_manager_urls.savePositions, {
-           type: "POST",
-           data: { positions : items_id }
-        }).done(function( msg ){
-
-               jQuery('#warnings-validation').html("<div class=\"success\">"+msg+"</div>")
-                                             .effect("highlight", { }, 3000);
-
-       });
-        return false;
-    });
-
-    </script>
+    {include file="common/angular_includes.tpl"}
 {/block}
 
 {block name="content"}
-<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { available: -1, title_like: '', category_name: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { available: -1, title_like: '', category_name: -1, in_litter: 0 }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -61,7 +14,7 @@
                     <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
                     <div class="options">
                         <a href="{url name=admin_books_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
-                        <a href="{url name=admin_books}" {if $category != 'widget'}class="active"{/if}>{t}Listing{/t}</a>
+                         <a href="{url name=admin_books}" {if $category != 'widget'}class="active"{/if}>{t}Listing{/t}</a>
                     </div>
                 </div>
             </div>
@@ -101,7 +54,7 @@
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {if $page <= 1}
                 <li>
-                    <a href="#" id="save-positions" title="{t}Save positions{/t}">
+                    <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                     </a>
                 </li>
@@ -188,14 +141,14 @@
                     <th class="right" style="width:10px;"></th>
                 </tr>
             </thead>
-            <tbody class="sortable">
+            <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
             <tr ng-if="shvs.contents.length == 0">
                 <td class="empty" colspan="10">{t}No available books.{/t}</td>
             </tr>
 
             <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }" data-id="[% content.id %]">
                 <td>
-                    <checkbox type="checkbox" index="[% $index %]">
+                    <checkbox index="[% $index %]">
                 </td>
                 <td>
                     [% content.title %]
@@ -257,12 +210,4 @@
 
     </div>
 </form>
- <script>
-    // <![CDATA[
-        jQuery(document).ready(function() {
-            makeSortable();
-        });
-    // ]]>
-</script>
-
 {/block}

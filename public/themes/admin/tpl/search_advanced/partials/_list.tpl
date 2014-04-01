@@ -30,31 +30,9 @@
                 <strong>{t}Created{/t}:</strong> [% content.created %]
             </td>
             <td class="center">
-                {*if ($content->in_litter == 1)}
-                    <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera"/>
-                {else}
-                    {if ($content->type == '')}
-                        {if ($content->available eq 1) && ($content->content_status eq 1)}
-                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicada" title="Publicada"/>
-                        {elseif ($content->available eq 1) && ($content->content_status eq 0)}
-                            <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="{t}In library{/t}" title="{t}In library{/t}" />
-                        {else}
-                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="En Pendientes" />
-                        {/if}
-                        {elseif $content->content_type eq 'photo'}
-                            {if ($content->content_status eq 1)}
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
-                            {else}
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
-                            {/if}
-                        {else}
-                            {if ($contentvavailable eq 1)}
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
-                            {else}
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
-                            {/if}
-                        {/if}
-                 {/if*}
+                <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera" ng-if="content.in_litter == 1"/>
+                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicada" title="Publicada" ng-if="content.in_litter != 1&& content.content_status == 1"/>
+                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicada" title="Publicada" ng-if="content.in_litter != 1 && content.content_status == 0"/>
             </td>
             <td class="right">
                 <div class="btn-group right">

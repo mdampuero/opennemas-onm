@@ -1,56 +1,11 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
-    {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
-    {script_tag src="/onm/jquery-functions.js" language="javascript"}
-    {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
-    {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="filters.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
-    {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
-    {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
-    {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
-    {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
-    {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
-    {script_tag src="ui-sortable.js" language="javascript" bundle="backend" basepath="lib"}
-{/block}
-
-{block name="footer-js" append}
-    <script>
-    var file_manager_urls = {
-        savePositions: '{url name=admin_files_save_positions category=$category page=$page}'
-    }
-
-    jQuery('#save-positions').on('click', function(e, ui){
-        e.preventDefault();
-
-        var items_id = [];
-        jQuery( "tbody.sortable tr" ).each(function(){
-            items_id.push(jQuery(this).data("id"))
-        });
-
-        jQuery.ajax(file_manager_urls.savePositions, {
-           type: "POST",
-           data: { positions : items_id }
-        }).done(function( msg ){
-
-               jQuery('#warnings-validation').html("<div class=\"success\">"+msg+"</div>")
-                                             .effect("highlight", { }, 3000);
-
-       });
-        return false;
-    });
-
-    </script>
+    {include file="common/angular_includes.tpl"}
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_files}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('attachment', { available: -1, category_name: -1, title_like: '', in_home: {if $category == 'widget'}1{else}-1{/if}, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_files}" method="GET" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('attachment', { available: -1, category_name: -1, title_like: '', in_home: {if $category == 'widget'}1{else}-1{/if}, in_litter: 0 }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -108,8 +63,8 @@
                 {if $category eq 'widget'}
                 {acl isAllowed="VIDEO_WIDGET"}
                     <li>
-                        <a href="#" id="save-widget-positions" title="{t}Save positions{/t}">
-                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                        <a href="#" id="save-widget-positions" title="{t}Save positions{/t}" ng-click="savePositions('backend_ws_contents_save_positions')">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br/>{t}Save positions{/t}
                         </a>
                     </li>
                 {/acl}
@@ -179,7 +134,7 @@
                <thead>
                    <tr>
                         {if $category == 'widget'}<th ng-if="shvs.contents.length >= 0" style="width:1px"></th>{/if}
-                        <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                        <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                         <th>{t}Title{/t}</th>
                         <th class="center" style="width:20px">{t}Category{/t}</th>
                         <th class="center nowrap" style="width:20px">{t}Created on{/t}</th>
@@ -189,7 +144,7 @@
                         <th style="width:10px" class="center">{t}Actions{/t}</th>
                     </tr>
                 </thead>
-                <tbody class="sortable">
+                <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
                     <tr ng-if="shvs.contents.length == 0">
                         <td class="empty" colspan="10">{t}No available files.{/t}</td>
                     </tr>
@@ -197,7 +152,7 @@
                     <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
                         {if $category == 'widget'}<td ng-if="shvs.contents.length >= 0"><i class="icon icon-move"></i></td>{/if}
                         <td>
-                            <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+                            <checkbox index="[% $index %]">
                         </td>
                         <td>
                             <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
@@ -268,15 +223,4 @@
         </script>
     </div>
 </form>
- <script>
-    // <![CDATA[
-        {if $category eq 'widget'}
-            jQuery(document).ready(function() {
-                makeSortable();
-            });
-        {/if}
-    // ]]>
-
-</script>
-
 {/block}
