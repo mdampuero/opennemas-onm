@@ -85,6 +85,12 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
+        var ids = [];
+
+        for (var i = 0; i < selected.length; i++) {
+            ids.push(contents[selected[i]].id);
+        };
+
         // Enable spinner
         $scope.deleting = 1;
 
@@ -92,7 +98,7 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
             route,
             { contentType: sharedVars.get('contentType') }
         );
-        $http.post(url, { ids: selected }).success(function(response) {
+        $http.post(url, { ids: ids }).success(function(response) {
             // Remove only successfully deleted contents
             for (var i = 0; i < response.success.length; i++) {
                 var j = 0;

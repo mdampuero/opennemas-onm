@@ -17,19 +17,6 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     $scope.shvs = {}
 
     /**
-     * Returns if the given content is selected.
-     *
-     * @return boolean True if the given content is selected. Otherwise, return
-     *                 false.
-     */
-    $scope.areSelected = function() {
-        var selected = sharedVars.get('selected') ? sharedVars.get('selected').length : 0;
-        var contents = sharedVars.get('contents') ? sharedVars.get('contents').length : 0;
-
-        return selected == contents;
-    };
-
-    /**
      * Changes the available property for selected contents.
      *
      * @param int    available Available value.
@@ -37,12 +24,19 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      */
     $scope.batchSetContentStatus = function (available, route) {
         // Load shared variable
+        var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
+
+        var ids = [];
+
+        for (var i = 0; i < selected.length; i++) {
+            ids.push(contents[selected[i]].id);
+        };
 
         updateContentStatus(1);
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: selected, available: available })
+        $http.post(url, { ids: ids, available: available })
             .success(function(response) {
                 updateContentStatus(0, available);
             });
@@ -56,15 +50,21 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      */
     $scope.batchToggleStatus = function (status, route) {
         // Load shared variable
+        var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
+
+        var ids = [];
+
+        for (var i = 0; i < selected.length; i++) {
+            ids.push(contents[selected[i]].id);
+        };
 
         updateStatus(1);
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: selected, status: status })
-            .success(function(response) {
-                updateStatus(0, status);
-            });
+        $http.post(url, { ids: ids, status: status }).success(function(response) {
+            updateStatus(0, status);
+        });
     };
 
     /**
@@ -75,12 +75,19 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      */
     $scope.batchToggleInHome = function (inHome, route) {
         // Load shared variable
+        var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
+
+        var ids = [];
+
+        for (var i = 0; i < selected.length; i++) {
+            ids.push(contents[selected[i]].id);
+        };
 
         updateInHome(1);
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: selected, in_home: inHome })
+        $http.post(url, { ids: ids, in_home: inHome })
             .success(function(response) {
                 updateInHome(0, inHome);
             });
@@ -188,17 +195,6 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     }
 
     /**
-     * Returns if the given content is selected.
-     *
-     * @param  int     id Checked item id.
-     * @return boolean    True if the given content is selected. Otherwise,
-     *                    return false.
-     */
-    $scope.isSelected = function(id) {
-        return sharedVars.get('selected').indexOf(id) >= 0;
-    };
-
-    /**
      * Updates the array of contents.
      *
      * @param string route Route name.
@@ -251,24 +247,6 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             }
         });
     }
-
-    /**
-     * Selects all contents in the list.
-     *
-     * @param object $event The event.
-     */
-    $scope.selectAll = function ($event) {
-        var checkbox = $event.target;
-
-        $scope.allSelected = !$scope.areSelected();
-        sharedVars.set('selected', []);
-
-        if ($scope.allSelected) {
-            for (var content in $scope.shvs.contents) {
-                updateSelected($scope.allSelected, $scope.shvs.contents[content].id);
-            };
-        }
-    };
 
     /**
      * Changes the page of the list.
@@ -421,21 +399,9 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
-        for (var i = 0; i < contents.length; i++) {
-            var j = 0;
-            while (j < selected.length
-                && contents[i].id != selected[j]
-            ) {
-                j++;
-            }
-
-            if (j < selected.length) {
-                if (status != null) {
-                    contents[i].content_status = status;
-                };
-
-                contents[i].loading = loading;
-            }
+        for (var i = 0; i < selected.length; i++) {
+            contents[selected[i]].content_status = status;
+            contents[selected[i]].loading = loading
         };
 
         // Updated shared variable
@@ -454,48 +420,15 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
-        for (var i = 0; i < contents.length; i++) {
-            var j = 0;
-            while (j < selected.length
-                && contents[i].id != selected[j]
-            ) {
-                j++;
-            }
-
-            if (j < selected.length) {
-                if (inHome != null) {
-                    contents[i].in_home = inHome;
-                };
-
-                contents[i].home_loading = loading;
-            }
+    for (var i = 0; i < selected.length; i++) {
+            contents[selected[i]].in_home = inHome;
+            contents[selected[i]].loading = loading
         };
 
         // Updated shared variable
         sharedVars.set('contents', contents);
         sharedVars.set('selected', selected);
     }
-
-    /**
-     * Updates the selected items.
-     *
-     * @param  boolean enabled Whether to enable or disable the select.
-     * @param  int     id      Selected content id.
-     */
-    function updateSelected(enabled, id) {
-        // Load shared variable
-        var selected = sharedVars.get('selected');
-        var index    = selected.indexOf(id);
-
-        if (enabled && index === -1) {
-          selected.push(id);
-        } else {
-          selected.splice(index, 1);
-        }
-
-        // Updated shared variable
-        sharedVars.set('selected', selected);
-    };
 
     /**
      * Updates the status property for selected contents.
@@ -508,21 +441,9 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
-        for (var i = 0; i < contents.length; i++) {
-            var j = 0;
-            while (j < selected.length
-                && contents[i].id != selected[j]
-            ) {
-                j++;
-            }
-
-            if (j < selected.length) {
-                if (status != null) {
-                    contents[i].status = status;
-                };
-
-                contents[i].loading = loading;
-            }
+        for (var i = 0; i < selected.length; i++) {
+            contents[selected[i]].status = status;
+            contents[selected[i]].loading = loading
         };
 
         // Updated shared variable
@@ -530,17 +451,6 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         sharedVars.set('selected', selected);
     }
 
-    /**
-     * Updates the selected items on click.
-     *
-     * @param  object $event The event.
-     * @param  int    id     Selected content id.
-     */
-    $scope.updateSelection = function($event, id) {
-        var checkbox = $event.target;
-        var action = checkbox.checked;
-        updateSelected(action, id);
-    };
 
     var searchTimeout;
 
