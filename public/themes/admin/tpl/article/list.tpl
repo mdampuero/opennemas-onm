@@ -136,19 +136,16 @@
                     <td class="left" >
                         <span rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
             			<div>
-            				<span ng-if="content.author == 0 && content.agency == '' && content.editor == ''">
+            				<small ng-if="content.fk_author != 0 && content.agency != ''">
             					<strong>{t}Author{/t}:</strong>
-            					<span ng-if="content.author != 0">
-        	                	    [% content.author.name %]
+            					<span ng-if="content.fk_author != 0">
+        	                	    [% shvs.extra.authors[content.fk_author].name %]
 	                	        </span>
-        		                <span ng-if="content.author == 0 && content.agency != ''">
+        		                <span ng-if="content.fk_author == 0 && content.agency != ''">
 		                            [% content.agency %]
 	                        	</span>
-                		        <span ng-if="content.author == 0 && content.agency == ''">
-        		                    [% content.editor %]
-		                        </span>
-            				</span>
-            				<span ng-if="content.editor != ''"><strong>{t}Last editor{/t}</strong>: [% shvs.extra.authors[content.fk_user_last_editor].name %]</span>
+            				</small>
+            				<small ng-if="content.fk_user_last_editor != ''"><strong>{t}Last editor{/t}</strong>: [% shvs.extra.authors[content.fk_user_last_editor].name %]</small>
             			</div>
                     </td>
                     {if $category eq 'all' || $category == 0}
