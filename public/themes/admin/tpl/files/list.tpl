@@ -105,16 +105,15 @@
                     </ul>
                 </li>
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
+                {if $category eq 'widget'}
                 {acl isAllowed="VIDEO_WIDGET"}
-                    {if $category eq 'widget'}
-                        <li class="separator"></li>
-                        <li>
-                            <a href="#" id="save-widget-positions" title="{t}Save positions{/t}">
-                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
-                            </a>
-                        </li>
-                    {/if}
+                    <li>
+                        <a href="#" id="save-widget-positions" title="{t}Save positions{/t}">
+                            <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                        </a>
+                    </li>
                 {/acl}
+                {/if}
                 <li>
                     <a href="{url name=admin_files_statistics}">
                         <img src="{$params.IMAGE_DIR}statistics.png" alt="Statistics"><br>Statistics
@@ -179,7 +178,8 @@
             <table class="table table-hover table-condensed" ng-if="!loading">
                <thead>
                    <tr>
-                        <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                        {if $category == 'widget'}<th ng-if="shvs.contents.length >= 0" style="width:1px"></th>{/if}
+                        <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
                         <th>{t}Title{/t}</th>
                         <th class="center" style="width:20px">{t}Category{/t}</th>
                         <th class="center nowrap" style="width:20px">{t}Created on{/t}</th>
@@ -195,8 +195,9 @@
                     </tr>
 
                     <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
+                        {if $category == 'widget'}<td ng-if="shvs.contents.length >= 0"><i class="icon icon-move"></i></td>{/if}
                         <td>
-                            <checkbox type="checkbox" index="[% $index %]">
+                            <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
                         </td>
                         <td>
                             <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
