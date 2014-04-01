@@ -80,6 +80,8 @@ class ArticlesController extends Controller
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
 
+        $_SESSION['_from'] = $this->generateUrl('admin_articles');
+
         return $this->render(
             'article/list.tpl',
             array(
