@@ -1,6 +1,6 @@
 
 angular.module('BackendApp',['BackendApp.controllers', 'BackendApp.directives',
-        'BackendApp.filters', 'BackendApp.services', 'ui.bootstrap'])
+        'BackendApp.filters', 'BackendApp.services', 'ui.bootstrap', 'ui.sortable'])
     .config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
