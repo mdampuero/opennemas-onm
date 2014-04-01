@@ -67,12 +67,7 @@ class SpecialsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        return $this->render(
-            'special/list.tpl',
-            array(
-                'category'   => $category,
-            )
-        );
+        return $this->render('special/list.tpl');
     }
 
     /**
