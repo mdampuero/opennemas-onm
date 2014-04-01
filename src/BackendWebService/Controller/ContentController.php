@@ -557,6 +557,51 @@ class ContentController extends Controller
     }
 
     /**
+     * Save positions for widget.
+     *
+     * @param  Request $request the request object
+     * @return Response the response object
+     */
+    public function savePositionsAction(Request $request)
+    {
+        $errors    = array();
+        $positions = $request->request->get('positions');
+        $success   = array();
+
+        $result = true;
+        if (isset($positions)
+            && is_array($positions)
+            && count($positions) > 0
+        ) {
+            $pos = 1;
+            foreach ($positions as $id) {
+                $file= new \Attachment($id);
+
+                if ($file->setPosition($pos)) {
+                    $success[] = array(
+                        'id' => $id,
+                        'message' => 'Position saved successfully'
+                    );
+                } else {
+                    $errors[] = array(
+                        'id' => $id,
+                        'message' => 'Unable to save position'
+                    );
+                }
+
+                $pos += 1;
+            }
+        }
+
+        return new JsonResponse(
+            array(
+                'errors'  => $errors,
+                'success' => $success
+            )
+        );
+    }
+
+    /**
      * Checks if the current user has roles to execute the required action.
      *
      * @param  string  $contentType Content type name.

@@ -87,3 +87,9 @@ backend_ws_contents_list:
     defaults: { _controller  : BackendWebServiceBundle:Content:list }
     options:
         expose: true
+
+backend_ws_contents_save_positions:
+    path:     /{contentType}s/save-positions
+    defaults: { _controller  : BackendWebServiceBundle:Content:savePositions }
+    options:
+        expose: true
