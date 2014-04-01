@@ -12,7 +12,7 @@
             <div class="title">
                 <h2>{t}Albums{/t} :: </h2>
                 <div class="section-picker">
-                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget home{/t}{else}{t}All categories{/t}{/if}</span> <span class="caret"></span></div>
+                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
                     <div class="options">
                         <h4>{t}Other{/t}</h4>
                         <a href="{url name=admin_albums_widget}" {if $category == 'widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
