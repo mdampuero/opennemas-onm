@@ -145,11 +145,26 @@ class UsersController extends Controller
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $total   = $em->countBy($search);
 
+        // Load groups information
+        $groupIds = array();
+        foreach ($results as $user) {
+            $user->eraseCredentials();
+            $groupIds = $groupIds +$user->id_user_group;
+        }
+
+        $groupsRepository = $this->get('usergroup_repository');
+        $groupsRaw = $groupsRepository->findMulti($groupIds);
+        $groups = array();
+        foreach ($groupsRaw as $group) {
+            $groups [$group->id] = $group;
+        }
+
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
                 'page'              => $page,
                 'results'           => $results,
+                'extra'             => array( 'groups' => $groups),
                 'total'             => $total
             )
         );

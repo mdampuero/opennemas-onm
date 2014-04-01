@@ -84,11 +84,11 @@
 					<th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th></th>
 					<th class="left">{t}Full name{/t}</th>
-					<th class="center" style="width:110px">{t}Username{/t}</th>
+					<th class="center nowrap" style="width:110px">{t}Username{/t}</th>
 					<th class="center" >{t}E-mail{/t}</th>
 					<th class="center" >{t}Group{/t}</th>
 					<th class="center" >{t}Activated{/t}</th>
-					<th class="center" style="width:10px">{t}Actions{/t}</th>
+					<th class="center" style="width:10px"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -109,11 +109,9 @@
                         {/if*}
 					</td>
 					<td class="left">
-						<a href="{url name=admin_acl_user_show id=$user->id}" title="{t}Edit user{/t}">
-							[% content.name %]
-						</a>
+						<strong>[% content.name %]</strong>
 					</td>
-					<td class="center">
+					<td class="center nowrap">
 						[% content.username %]
 					</td>
 
@@ -121,11 +119,7 @@
 						[% content.email %]
 					</td>
 					<td class="center">
-						{*foreach $user_groups as $group}
-							{if in_array($group->id, $user->fk_user_group)}
-								{$group->name}<br>
-							{/if}
-						{/foreach*}
+                        <span ng-repeat="group in content.id_user_group">[% shvs.extra.groups[group].name %][%$last ? '' : ', ' %]</span>
 					</td>
 
 					<td class="center">

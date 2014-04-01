@@ -217,6 +217,9 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             sharedVars.set('page', response.page);
             sharedVars.set('contents', response.results);
             sharedVars.set('map', response.map);
+            if (response.hasOwnProperty('extra')) {
+                sharedVars.set('extra', response.extra);
+            };
 
             // Disable spinner
             $scope.loading = 0;
