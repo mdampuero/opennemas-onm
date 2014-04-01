@@ -102,11 +102,9 @@
                         <checkbox index="[% $index %]">
                     </td>
 					<td>
-                        {*if is_object($user->photo) && !is_null($user->photo->name)}
-                        	{dynamic_image src="{$user->photo->path_file}/{$user->photo->name}" transform="thumbnail,40,40"}
-                        {else}
-                        {gravatar email="{$user->email}" image_dir=$params.IMAGE_DIR image=true size="40"}
-                        {/if*}
+                        <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + content.name %]" transform="thumbnail,40,40" ng-if="content.avatar_img_id != 0"></dynamic-image>
+
+                        <gravatar email="[% content.email %]" image_dir="$params.IMAGE_DIR" image=true size="40" ng-if="content.avatar_img_id == 0"></gravatar>
 					</td>
 					<td class="left">
 						<strong>[% content.name %]</strong>
