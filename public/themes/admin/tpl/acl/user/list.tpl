@@ -102,7 +102,7 @@
                         <checkbox index="[% $index %]">
                     </td>
 					<td>
-                        <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + content.name %]" transform="thumbnail,40,40" ng-if="content.avatar_img_id != 0"></dynamic-image>
+                        <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% shvs.extra.photos[content.avatar_img_id].path_file + '/' + shvs.extra.photos[content.avatar_img_id].name %]" transform="thumbnail,40,40" ng-if="content.avatar_img_id != 0"></dynamic-image>
 
                         <gravatar email="[% content.email %]" image_dir="$params.IMAGE_DIR" image=true size="40" ng-if="content.avatar_img_id == 0"></gravatar>
 					</td>
