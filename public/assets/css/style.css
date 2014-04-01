@@ -150,7 +150,7 @@ font-size: 13px;
 }
 
 .table .pagination { color:#aaa !important; }
-.table .pagination a { background: #3f3f3f !important; color:White !important; text-shadow:none; border-radius:5px; margin-left:10px; padding:4px 10px}
+.table .pagination a { border:0 none; background: #3f3f3f !important; color:White !important; text-shadow:none; border-radius:5px; margin-left:10px; padding:6px 10px}
 .table .pagination a:hover { background:#3c3c3c; }
 .form-horizontal .help-block {margin-top:3px;}
 .pagination .disabled {
@@ -806,7 +806,7 @@ div.utilities-conf input[type="text"]{
     width: 100%;
     border: none;
     border-bottom: 1px solid #D2D2D2;
-    background: #F1F1F1;
+    background: #ecf0f2;
 }
   .top-action-bar .title > * {
     display:inline-block;
@@ -1165,7 +1165,7 @@ img[src="non"] { display:none !important; }
 .table-info {
     position: relative;
     margin:0 auto;
-    padding:2px 0;
+    padding: 0;
     width: 100%;
     width: 100%; width: 100%;
     border-top:1px solid #d9d9d9;
@@ -1174,8 +1174,8 @@ img[src="non"] { display:none !important; }
     text-shadow:0 1px 0 #FFFFFF;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f1f1f1', endColorstr='#d9d9d9'); /* for IE */
 }
-.table-info .form-inline {padding-left:5px;}
-.table-info > div { padding:0 3px; }
+.table-info > .form-inline {padding-left:10px;}
+.table-info > div { padding: 4px 0 2px 10px;}
 .table-info div { height:100%;vertical-align:middle; }
 .table-info label {margin-bottom:0;}
 .table-info .right { float:right; text-align:right; }
@@ -3308,9 +3308,9 @@ li a .no-home {
   font-size:1.2em;
 }
 
-.already-imported,
-.already-imported:hover{
-    background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
+.already_imported,
+.already_imported:hover{
+    background:url(../../themes/admin/images/backgrounds/stripe-rows.png) top right repeat;
     background-color:none;
 }
 .tooltip-inner {
@@ -3515,3 +3515,7 @@ border-bottom-left-radius: 2px;
 }
 
 .select2-container-active .select2-choice, .select2-container-active .select2-choices, .select2-drop-active { border-color:#aaa;}
+
+.sortable tr {
+
+}

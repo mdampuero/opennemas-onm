@@ -38,7 +38,7 @@
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         <li>
-                            <a href="#" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'backend_ws_contents_batch_send_to_trash')">
+                            <a href="#" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
                                 {t}Batch import{/t}
                             </a>
                         </li>
@@ -73,7 +73,7 @@
             <div class="pull-left form-inline">
                 <strong>{t}FILTER:{/t}</strong>
                 &nbsp;&nbsp;
-                <input type="search" id="username" name="title" class="input-medium" placeholder="{t}Filter by title or content{/t}" ng-model="shvs.search.title"/>
+                <input type="search" id="username" name="title" class="input-large" placeholder="{t}Filter by title or content{/t}" ng-model="shvs.search.title"/>
                 <label for="usergroup">
                     {t}and in{/t}
                     <select id="source" name="source" class="select2" ng-model="shvs.search.source" data-label="{t}Source{/t}">
@@ -114,7 +114,7 @@
                         <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                     </td>
                 </tr>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id), already_imported: already_imported }">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
                     <td>
                         <input type="checkbox" class="minput" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)" value="[% content.id %]">
                     </td>

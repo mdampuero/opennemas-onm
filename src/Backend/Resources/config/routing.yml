@@ -1205,6 +1205,8 @@ admin_news_agency_import:
 admin_news_agency_batch_import:
     path:     /news-agency/batch-import
     defaults: { _controller  : BackendBundle:NewsAgency:batchImport }
+    options:
+        expose: true
 
 admin_news_agency_show:
     path:     /news-agency/{source_id}/{id}/show
