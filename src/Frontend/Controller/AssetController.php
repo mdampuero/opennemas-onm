@@ -175,7 +175,7 @@ class AssetController extends Controller
             // RenderColorMenu - ADDED RENDER COLOR MENU
             $currentCategory = (isset($categoryName) ? $categoryName : null);
             $configColor = s::get('site_color');
-            $siteColor   = (!empty($configColor) ? '#'.$configColor : '#dedede');
+            $siteColor   = (!empty($configColor) ? '#'.$configColor : '#005689');
 
             // Styles to print each category's new
             $currentCategoryColor = '';
