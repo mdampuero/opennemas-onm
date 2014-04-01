@@ -9,9 +9,12 @@
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="filters.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
+    {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
     {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
@@ -139,7 +142,7 @@
                 <thead>
                     <tr>
                         <th style="width:15px">
-                            <input type="checkbox" ng-checked="isSelectedAll()" ng-click="selectAll($event)">
+                            <checkbox select-all="true"></checkbox>
                         </th>
                         <th class="title"  style="width:250px">{t}Type{/t}</th>
                         <th>{t}Title{/t}</th>
@@ -157,9 +160,9 @@
                             {t}There is no advertisement stored in this section{/t}
                         </td>
                     </tr>
-                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
                         <td>
-                            <input type="checkbox" class="minput"  id="[% content.id %]" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+                            <checkbox type="checkbox" index="[% $index %]">
                         </td>
                         <td>
                             <label>

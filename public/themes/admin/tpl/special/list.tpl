@@ -9,9 +9,12 @@
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="filters.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
+    {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
     {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
@@ -163,7 +166,7 @@
         <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
                 <tr>
-                    <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                    <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th class="title">{t}Title{/t}</th>
                     <th style="width:65px;" class="center">{t}Section{/t}</th>
                     <th class="center" style="width:100px;">Created</th>
@@ -177,9 +180,9 @@
                 <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="10">{t}No available specials.{/t}</td>
                 </tr>
-                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                <tr ng-if="shvs.contents.length >= 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
                     <td class="center">
-                        <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+                        <checkbox type="checkbox" index="[% $index %]">
                     </td>
                     <td>
                         [% content.title %]

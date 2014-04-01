@@ -19,9 +19,12 @@
     {script_tag src="app.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="services.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="controllers.js" language="javascript" bundle="backend" basepath="js"}
+    {script_tag src="filters.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="directives.js" language="javascript" bundle="backend" basepath="js"}
     {script_tag src="content-modal.js" language="javascript" bundle="backend" basepath="js/controllers"}
     {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
+    {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
+    {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
     {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
     {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {/block}
@@ -73,7 +76,7 @@
             <thead>
                 <tr>
                     <th style="width:15px;">
-                        <input type="checkbox" ng-checked="isSelectedAll()" ng-click="selectAll($event)">
+                        <checkbox select-all="true"></checkbox>
                     </th>
                     <th>{t}Title{/t}</th>
                     {if count($menu_positions) > 1}
@@ -83,9 +86,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                <tr ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
                     <td class="center">
-                        <input type="checkbox" class="minput"  id="[% content.pk_menu %]" ng-checked="isSelected(content.pk_menu)" ng-click="updateSelection($event, content.pk_menu)">
+                        <checkbox type="checkbox" index="[% $index %]">
                     </td>
                     <td>
                         {acl isAllowed="MENU_UPDATE"}

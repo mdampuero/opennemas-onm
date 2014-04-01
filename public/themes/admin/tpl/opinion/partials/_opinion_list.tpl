@@ -33,7 +33,7 @@
     <table class="table table-hover table-condensed" ng-if="!loading">
         <thead>
             <tr>
-                <th style="width:15px;"><input type="checkbox" ng-checked="areSelected()" ng-click="selectAll($event)"></th>
+                <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                 <th>{t}Author name{/t} - {t}Title{/t}</th>
                 <th class="center" style="width:110px;">{t}Created on{/t}</th>
                 <th class="center" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
@@ -44,9 +44,9 @@
           </tr>
         </thead>
         <tbody>
-            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
                 <td>
-                    <input type="checkbox" ng-checked="isSelected(content.id)" ng-click="updateSelection($event, content.id)">
+                    <checkbox type="checkbox" index="[% $index %]">
                 </td>
                 <td>
                     <strong>
