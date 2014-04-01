@@ -1,5 +1,6 @@
 {script_tag src="/libs/moment-with-langs.min.js" common=1}
 {script_tag src="/libs/moment-timezone.min.js" common=1}
+{script_tag src="/onm/md5.min.js" language="javascript" common="1"}
 {script_tag src="router.js" language="javascript" bundle="fosjsrouting" basepath="js"}
 {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
 {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
@@ -13,6 +14,7 @@
 {script_tag src="content.js" language="javascript" bundle="backend" basepath="js/controllers"}
 {script_tag src="checkbox.js" language="javascript" bundle="backend" basepath="js/directives"}
 {script_tag src="dynamic-image.js" language="javascript" bundle="backend" basepath="js/directives"}
+{script_tag src="gravatar.js" language="javascript" bundle="backend" basepath="js/directives"}
 {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
 {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
 {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}

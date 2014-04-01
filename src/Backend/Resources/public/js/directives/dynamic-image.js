@@ -1,3 +1,6 @@
+/**
+ * Directive to generate a dynamic image.
+ */
 angular.module('BackendApp.directives')
     .directive('dynamicImage', function ($compile, fosJsRouting) {
         return {
