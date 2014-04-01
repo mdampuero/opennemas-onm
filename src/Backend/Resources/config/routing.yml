@@ -74,14 +74,6 @@ admin_staticpages_update:
     path:     /static-pages/{id}/update
     defaults: { _controller  : BackendBundle:StaticPages:update }
 
-admin_staticpages_delete:
-    path:     /static-pages/{id}/delete
-    defaults: { _controller  : BackendBundle:StaticPages:delete }
-
-admin_staticpages_toggle_available:
-    path:     /static-pages/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:StaticPages:toggleAvailable }
-
 admin_staticpages_build_slug:
     path:     /static-pages/{id}/build-slug
     defaults: { _controller  : BackendBundle:StaticPages:buildSlug }
@@ -132,14 +124,6 @@ admin_menu_update:
     path:     /menu/{id}/update
     defaults: { _controller  : BackendBundle:Menus:update }
 
-admin_menu_delete:
-    path:     /menu/{id}/delete
-    defaults: { _controller  : BackendBundle:Menus:delete }
-
-admin_menu_batchdelete:
-    path:     /menus/batch-delete
-    defaults: { _controller  : BackendBundle:Menus:batchDelete }
-
 admin_instance_sync:
     path:     /instance-sync
     defaults: { _controller  : BackendBundle:InstanceSync:list }
@@ -183,34 +167,9 @@ admin_poll_update:
     path:     /poll/{id}/update
     defaults: { _controller  : BackendBundle:Polls:update }
 
-admin_poll_delete:
-    path:     /poll/{id}/delete
-    defaults: { _controller  : BackendBundle:Polls:delete }
-
 admin_polls_config:
     path:     /polls/config
     defaults: { _controller  : BackendBundle:Polls:config }
-
-admin_polls_batchpublish:
-    path:     /polls/batch-publish
-    defaults: { _controller  : BackendBundle:Polls:batchPublish }
-
-admin_polls_batchdelete:
-    path:     /polls/batch-delete
-    defaults: { _controller  : BackendBundle:Polls:batchDelete }
-
-admin_poll_toggleavailable:
-    path:     /poll/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Polls:toggleAvailable }
-
-admin_poll_togglefavorite:
-    path:     /poll/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Polls:toggleFavorite }
-
-admin_poll_toggleinhome:
-    path:     /poll/{id}/toggle-inhome
-    defaults: { _controller  : BackendBundle:Polls:toggleInHome }
-
 
 admin_polls_content_provider:
     path:     /polls/content-provider
@@ -239,25 +198,9 @@ admin_ad_update:
     path:     /ad/{id}/update
     defaults: { _controller  : BackendBundle:Ads:update }
 
-admin_ad_delete:
-    path:     /ad/{id}/delete
-    defaults: { _controller  : BackendBundle:Ads:delete }
-
-admin_ads_batchpublish:
-    path:     /ads/batch-publish
-    defaults: { _controller  : BackendBundle:Ads:batchPublish }
-
-admin_ads_batchdelete:
-    path:     /ads/batch-delete
-    defaults: { _controller  : BackendBundle:Ads:batchDelete }
-
 admin_ads_content_provider:
     path:     /ads/content-provider
     defaults: { _controller  : BackendBundle:Ads:contentProvider }
-
-admin_ad_toggleavailable:
-    path:     /ad/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Ads:toggleAvailable }
 
 admin_ads_config:
     path:     /ads/config
@@ -286,10 +229,6 @@ admin_special_update:
     path:     /special/{id}/update
     defaults: { _controller  : BackendBundle:Specials:update }
 
-admin_special_delete:
-    path:     /special/{id}/delete
-    defaults: { _controller  : BackendBundle:Specials:delete }
-
 admin_special_widget_save_positions:
     path:     /specials/widget/save-positions
     defaults: { _controller  : BackendBundle:Specials:savePositions }
@@ -297,30 +236,6 @@ admin_special_widget_save_positions:
 admin_specials_config:
     path:     /specials/config
     defaults: { _controller  : BackendBundle:Specials:config }
-
-admin_special_toggleavailable:
-    path:     /special/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Specials:toggleAvailable }
-
-admin_special_togglefavorite:
-    path:     /special/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Specials:toggleFavorite }
-
-admin_special_togglefavorite:
-    path:     /special/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Specials:toggleFavorite }
-
-admin_special_toggleinhome:
-    path:     /special/{id}/toggle-in-home
-    defaults: { _controller  : BackendBundle:Specials:toggleInHome }
-
-admin_specials_batchpublish:
-    path:     /special/batch-publish
-    defaults: { _controller  : BackendBundle:Specials:batchPublish }
-
-admin_specials_batchdelete:
-    path:     /special/batch-delete
-    defaults: { _controller  : BackendBundle:Specials:batchDelete }
 
 # Letter manager routes
 admin_letters:
@@ -340,22 +255,6 @@ admin_letter_show:
 admin_letter_update:
     path:     /letter/{id}/update
     defaults: { _controller  : BackendBundle:Letters:update }
-
-admin_letter_delete:
-    path:     /letter/{id}/delete
-    defaults: { _controller  : BackendBundle:Letters:delete }
-
-admin_letter_toggleavailable:
-    path:     /letter/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Letters:toggleAvailable }
-
-admin_letters_batchpublish:
-    path:     /letter/batch-publish
-    defaults: { _controller  : BackendBundle:Letters:batchPublish }
-
-admin_letters_batchdelete:
-    path:     /letter/batch-delete
-    defaults: { _controller  : BackendBundle:Letters:batchDelete }
 
 admin_letters_content_provider:
     path:     /letters/content-provider
@@ -433,14 +332,6 @@ admin_image_update:
     path:     /image/update
     defaults: { _controller  : BackendBundle:Images:update }
 
-admin_image_delete:
-    path:     /image/{id}/delete
-    defaults: { _controller  : BackendBundle:Images:delete }
-
-admin_images_batchdelete:
-    path:     /images/batchdelete
-    defaults: { _controller  : BackendBundle:Images:batchDelete }
-
 # admin_images_config:
 #     path:     /images/config
 #     defaults: { _controller  : BackendBundle:Images:config }
@@ -472,10 +363,6 @@ admin_videos_update:
     path:     /videos/{id}/update
     defaults: { _controller  : BackendBundle:Videos:update }
 
-admin_video_delete:
-    path:     /videos/{id}/delete
-    defaults: { _controller  : BackendBundle:Videos:delete }
-
 admin_videos_widget:
     path:     /videos/widget
     defaults: { _controller  : BackendBundle:Videos:widget }
@@ -488,29 +375,9 @@ admin_video_save_positions:
     path:     /videos/save-positions
     defaults: { _controller  : BackendBundle:Videos:savePositions }
 
-admin_video_toggle_available:
-    path:     /videos/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Videos:toggleAvailable }
-
-admin_video_toggle_favorite:
-    path:     /videos/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Videos:toggleFavorite }
-
-admin_video_toggle_inhome:
-    path:     /videos/{id}/toggle-inhome
-    defaults: { _controller  : BackendBundle:Videos:toggleInHome }
-
 admin_video_get_relations:
     path:     /videos/{id}/relations
     defaults: { _controller  : BackendBundle:Videos:relations }
-
-admin_video_batchdelete:
-    path:     /videos/batch-delete
-    defaults: { _controller  : BackendBundle:Videos:batchDelete }
-
-admin_video_batchpublish:
-    path:     /videos/batch-publish
-    defaults: { _controller  : BackendBundle:Videos:batchPublish }
 
 admin_videos_content_provider:
     path:     /videos/content-provider
@@ -551,30 +418,6 @@ admin_album_show:
     options:
         expose: true
 
-admin_album_delete:
-    path:     /albums/{id}/delete
-    defaults: { _controller  : BackendBundle:Albums:delete }
-
-admin_album_toggle_available:
-    path:     /album/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Albums:toggleAvailable }
-
-admin_album_toggle_favorite:
-    path:     /album/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Albums:toggleFavorite }
-
-admin_album_toggle_inhome:
-    path:     /album/{id}/toggle-inhome
-    defaults: { _controller  : BackendBundle:Albums:toggleInHome }
-
-admin_album_batchdelete:
-    path:     /albums/batch-delete
-    defaults: { _controller  : BackendBundle:Albums:batchDelete }
-
-admin_album_batchpublish:
-    path:     /albums/batch-publish
-    defaults: { _controller  : BackendBundle:Albums:batchPublish }
-
 admin_albums_savepositions:
     path:     /albums/save-positions
     defaults: { _controller  : BackendBundle:Albums:savePositions }
@@ -605,26 +448,6 @@ admin_cover_show:
 admin_cover_update:
     path:     /cover/{id}/update
     defaults: { _controller  : BackendBundle:Covers:update }
-
-admin_cover_toggleavailable:
-    path:     /cover/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Covers:toggleAvailable }
-
-admin_cover_togglefavorite:
-    path:     /cover/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Covers:toggleFavorite }
-
-admin_cover_toggleinhome:
-    path:     /cover/{id}/toggle-inhome
-    defaults: { _controller  : BackendBundle:Covers:toggleInHome }
-
-admin_covers_batchpublish:
-    path:     /covers/batch-publish
-    defaults: { _controller  : BackendBundle:Covers:batchPublish }
-
-admin_covers_batchdelete:
-    path:     /covers/batch-delete
-    defaults: { _controller  : BackendBundle:Covers:batchDelete }
 
 admin_covers_savepositions:
     path:     /covers/save-positions
@@ -665,29 +488,9 @@ admin_books_update:
     path:     /books/{id}/update
     defaults: { _controller  : BackendBundle:Books:update }
 
-admin_books_delete:
-    path:     /books/{id}/delete
-    defaults: { _controller  : BackendBundle:Books:delete }
-
 admin_books_save_positions:
     path:     /books/save-positions
     defaults: { _controller  : BackendBundle:Books:savePositions }
-
-admin_books_toggle_available:
-    path:     /books/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Books:toggleAvailable }
-
-admin_books_toggle_inhome:
-    path:     /books/{id}/toggle-inhome
-    defaults: { _controller  : BackendBundle:Books:toggleInHome }
-
-admin_books_batchdelete:
-    path:     /books/batch-delete
-    defaults: { _controller  : BackendBundle:Books:batchDelete }
-
-admin_books_batchpublish:
-    path:     /books/batch-publish
-    defaults: { _controller  : BackendBundle:Books:batchPublish }
 
 # Files controller routes
 admin_files:
@@ -714,33 +517,9 @@ admin_files_update:
     path:     /files/{id}/update
     defaults: { _controller  : BackendBundle:Files:update }
 
-admin_files_delete:
-    path:     /files/{id}/delete
-    defaults: { _controller  : BackendBundle:Files:delete }
-
-admin_files_toggle_favorite:
-    path:     /files/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Files:toggleFavorite }
-
-admin_files_toggle_in_home:
-    path:     /files/{id}/toggle-in-home
-    defaults: { _controller  : BackendBundle:Files:toggleInHome }
-
-admin_files_toggle_available:
-    path:     /files/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Files:toggleAvailable }
-
 admin_file_save_positions:
     path:     /files/save-positions
     defaults: { _controller  : BackendBundle:Files:savePositions }
-
-admin_files_batchdelete:
-    path:     /files/batch-delete
-    defaults: { _controller  : BackendBundle:Files:batchDelete }
-
-admin_files_batchpublish:
-    path:     /files/batch-publish
-    defaults: { _controller  : BackendBundle:Files:batchPublish }
 
 admin_files_content_provider:
     path:     /files/content-provider
@@ -872,17 +651,9 @@ admin_article_show:
     options:
         expose: true
 
-admin_article_delete:
-    path:     /article/{id}/delete
-    defaults: { _controller  : BackendBundle:Articles:delete }
-
 admin_article_update:
     path:     /article/{id}/update
     defaults: { _controller  : BackendBundle:Articles:update }
-
-admin_article_toggleavailable:
-    path:     /article/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Articles:toggleAvailable }
 
 admin_article_preview:
     path:     /article/preview
@@ -907,15 +678,6 @@ admin_articles_content_provider_related:
 admin_articles_content_provider_in_frontpage:
     path:     /articles/content-provider-in-frontpage
     defaults: { _controller  : BackendBundle:Articles:contentProviderInFrontpage }
-
-
-admin_articles_batchdelete:
-    path:     /articles/batch-delete
-    defaults: { _controller  : BackendBundle:Articles:batchDelete }
-
-admin_articles_batchpublish:
-    path:     /articles/batch-publish
-    defaults: { _controller  : BackendBundle:Articles:batchPublish }
 
 # Opinion controller routes
 admin_opinions:
@@ -951,38 +713,6 @@ admin_opinion_get_preview:
 admin_opinion_update:
     path:     /opinion/{id}/update
     defaults: { _controller  : BackendBundle:Opinions:update }
-
-admin_opinion_delete:
-    path:     /opinion/{id}/delete
-    defaults: { _controller  : BackendBundle:Opinions:delete }
-
-admin_opinion_toggleavailable:
-    path:     /opinion/{id}/toggle-available
-    defaults: { _controller  : BackendBundle:Opinions:toggleAvailable }
-
-admin_opinion_toggleinhome:
-    path:     /opinion/{id}/toggle-inhome
-    defaults: { _controller  : BackendBundle:Opinions:toggleInHome }
-
-admin_opinion_togglefavorite:
-    path:     /opinion/{id}/toggle-favorite
-    defaults: { _controller  : BackendBundle:Opinions:toggleFavorite }
-
-admin_opinions_batch_delete:
-    path:     /opinions/batch-delete
-    defaults: { _controller  : BackendBundle:Opinions:batchDelete }
-
-admin_opinions_batch_publish:
-    path:     /opinions/batch-publish
-    defaults: { _controller  : BackendBundle:Opinions:batchPublish }
-
-admin_opinions_batch_inhome:
-    path:     /opinions/batch-inhome
-    defaults: { _controller  : BackendBundle:Opinions:batchInHome }
-
-admin_opinions_batch_inhome:
-    path:     /opinions/batch-inhome
-    defaults: { _controller  : BackendBundle:Opinions:batchInHome }
 
 admin_opinions_savepositions:
     path:     /opinions/save-positions
@@ -1093,22 +823,6 @@ admin_trash:
     path:     /trash
     defaults: { _controller  : BackendBundle:Trash:default }
 
-admin_trash_delete:
-    path:     /trash/{id}/delete
-    defaults: { _controller  : BackendBundle:Trash:delete }
-
-admin_trash_restore:
-    path:     /trash/{id}/restore
-    defaults: { _controller  : BackendBundle:Trash:restore }
-
-admin_trash_batchdelete:
-    path:     /trash/batchdelete
-    defaults: { _controller  : BackendBundle:Trash:batchDelete }
-
-admin_trash_batchrestore:
-    path:     /trash/batchrestore
-    defaults: { _controller  : BackendBundle:Trash:batchRestore }
-
 # Paywall controller routes
 admin_paywall:
     path:     /paywall
@@ -1177,7 +891,6 @@ admin_news_agency_server_show:
     path:     /news-agency/servers/{id}/show
     defaults: { _controller  : BackendBundle:NewsAgency:configShowServer }
 
-
 admin_news_agency_server_update:
     path:     /news-agency/servers/{id}/update
     defaults: { _controller  : BackendBundle:NewsAgency:configUpdateServer }
@@ -1224,6 +937,7 @@ admin_news_agency_pickcategory:
 admin_importer_xmlfile:
     path:     /importer/xml-file
     defaults: { _controller  : BackendBundle:ImporterXmlfile:default }
+
 admin_importer_xmlfile_config:
     path:     /importer/xml-file/config
     defaults: { _controller  : BackendBundle:ImporterXmlfile:config }
@@ -1276,14 +990,6 @@ admin_acl_user_update:
     path:     /acl/user/{id}/update
     defaults: { _controller  : BackendBundle:AclUser:update }
 
-admin_acl_user_delete:
-    path:     /acl/user/{id}/delete
-    defaults: { _controller  : BackendBundle:AclUser:delete }
-
-admin_acl_user_batchdelete:
-    path:     /acl/users/batchdelete
-    defaults: { _controller  : BackendBundle:AclUser:batchDelete }
-
 admin_acl_user_set_meta:
     path:     /acl/user/set-meta
     defaults: { _controller  : BackendBundle:AclUser:setMeta }
@@ -1311,10 +1017,7 @@ admin_acl_usergroups_update:
     path:     /acl/usergroup/{id}/update
     defaults: { _controller  : BackendBundle:AclUserGroups:update }
 
-admin_acl_usergroups_delete:
-    path:     /acl/usergroup/{id}/delete
-    defaults: { _controller  : BackendBundle:AclUserGroups:delete }
-
+# System settings routes
 admin_system_settings:
     path:     /system/settings
     defaults: { _controller  : BackendBundle:SystemSettings:default }
@@ -1324,10 +1027,12 @@ admin_system_settings_save:
     defaults: { _controller  : BackendBundle:SystemSettings:save }
     methods:  [POST]
 
+# Miscelaneous util routes
 admin_utils_calculate_tags:
     path:     /utils/calculate-tags
     defaults: { _controller  : BackendBundle:Utils:calculateTags }
 
+# Auth system routes
 admin_login_form:
     path:     /login
     defaults: { _controller  : BackendBundle:Authentication:login }
@@ -1357,6 +1062,7 @@ admin_welcome_accept_terms:
     path:     /accept-terms
     defaults: { _controller  : BackendBundle:Welcome:acceptTerms }
 
+# Media uploader routes
 admin_media_uploader:
     path:     /media-uploader
     defaults: { _controller  : BackendBundle:MediaUploader:show }
