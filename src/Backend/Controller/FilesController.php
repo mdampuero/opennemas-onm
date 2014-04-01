@@ -73,72 +73,6 @@ class FilesController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $cm           = new \ContentManager();
-        $itemsPerPage = s::get('items_per_page');
-
-        $page          = $request->query->getDigits('page', 1);
-        $listingStatus = $request->query->getDigits('listing-status');
-
-        if (empty($page)) {
-            $limit = "LIMIT ".($itemsPerPage+1);
-        } else {
-            $limit = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
-        }
-
-        if ($this->category == 'all' || empty($this->category)) {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $this->category;
-        }
-
-        $filter = ' contents.in_litter != 1 ';
-        if (($listingStatus != '') && ($listingStatus != null)) {
-            $filter .= ' AND contents.available = '. $listingStatus;
-        }
-
-        list($filesCount, $files) = $cm->getCountAndSlice(
-            'attachment',
-            $categoryForLimit,
-            $filter,
-            'ORDER BY created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if ($filesCount > 0) {
-            foreach ($files as &$file) {
-                $file->category_name  = $this->ccm->get_name($file->category);
-                $file->category_title = $this->ccm->get_title($file->category_name);
-            }
-        }
-
-         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $filesCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_files',
-                    array('category' => $this->category)
-                ).'&page=%d',
-            )
-        );
-
-        $this->view->assign(
-            array(
-                'listingStatus' => $listingStatus,
-                'pagination'    => $pagination,
-                'attaches'      => $files,
-                'page'          => $page,
-            )
-        );
-
         return $this->render('files/list.tpl');
     }
 
@@ -153,25 +87,9 @@ class FilesController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $cm = new \ContentManager();
-
-        $files = $cm->find_all(
-            'Attachment',
-            'in_home =1',
-            'ORDER BY created DESC'
-        );
-
-        if (!empty($files)) {
-            foreach ($files as &$file) {
-                $file->category_name  = $this->ccm->get_name($file->category);
-                $file->category_title = $this->ccm->get_title($file->category_name);
-            }
-        }
-
         return $this->render(
             'files/list.tpl',
             array(
-                'attaches' => $files,
                 'category' => 'widget'
             )
         );

@@ -86,7 +86,6 @@ class BooksController extends Controller
      **/
     public function listAction(Request $request)
     {
-
         $configurations = s::get('book_settings');
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
@@ -108,28 +107,17 @@ class BooksController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $configurations = s::get('books_settings');
-        $numFavorites   = $configurations['total_widget'];
-
-        $cm = new \ContentManager();
-        $books = $cm->find_all('book', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
-
-        if (!empty($books)) {
-            foreach ($books as &$book) {
-                $book->category_name  = $this->ccm->get_name($book->category);
-                $book->category_title = $this->ccm->get_title($book->category_name);
-            }
-        }
-
-        if (count($books) != $numFavorites) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
+        $configurations = s::get('book_settings');
+        if (isset($configurations['total_widget'])
+            && !empty($configurations['total_widget'])
+        ) {
+            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
         }
 
         return $this->render(
             'book/list.tpl',
             array(
-                'books' => $books,
-                'category' => $this->category,
+                'category' => 'widget',
             )
         );
     }

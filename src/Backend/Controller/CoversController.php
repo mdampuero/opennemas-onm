@@ -90,54 +90,11 @@ class CoversController extends Controller
     public function widgetAction(Request $request)
     {
         $category = 'widget';
-        $page = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page');
-
-        $cm = new \ContentManager();
-        $filter = null;
-
-        list($countCovers, $covers) = $cm->getCountAndSlice(
-            'kiosko',
-            $filter,
-            'contents.in_litter != 1 AND favorite = 1',
-            'ORDER BY position ASC, date DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        $aut = new \User();
-        $ccm = \ContentCategoryManager::get_instance();
-        foreach ($covers as &$cover) {
-            $cover->publisher      = $aut->getUserName($cover->fk_publisher);
-            $cover->editor         = $aut->getUserName($cover->fk_user_last_editor);
-            $cover->category_name  = $ccm->get_name($cover->category);
-            $cover->category_title = $ccm->get_title($cover->category_name);
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countCovers,
-                'fileName'    => $this->generateUrl(
-                    'admin_covers',
-                    array('category' => $category)
-                ).'&page=%d',
-            )
-        );
 
         return $this->render(
             'covers/list.tpl',
             array(
                 'KIOSKO_IMG_URL' => INSTANCE_MEDIA.KIOSKO_DIR,
-                'pagination'     => $pagination,
-                'covers'         => $covers,
                 'category'       => $category,
             )
         );

@@ -84,64 +84,10 @@ class AlbumsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $page           = $this->get('request')->query->getDigits('page', 1);
-        $category       = $this->get('request')->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
-
-        $configurations = s::get('album_settings');
-        $numFavorites = $configurations['total_widget'];
-
-        $itemsPerPage = s::get('items_per_page');
-
-        $cm = new \ContentManager();
-
-        $categoryForLimit = null;
-
-        list($albumCount, $albums) = $cm->getCountAndSlice(
-            'album',
-            $categoryForLimit,
-            'in_home =1 AND available =1 AND contents.in_litter !=1',
-            'ORDER BY position ASC, created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (count($albums) != $numFavorites) {
-            m::add(sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
-        }
-
-        if (count($albums) > 0) {
-            foreach ($albums as &$album) {
-                $album->category_name  = $this->ccm->get_name($album->category);
-                $album->category_title = $this->ccm->get_title($album->category_name);
-                $album->read($album->id);
-            }
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $albumCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_albums',
-                    array('category' => $category)
-                ).'&page=%d',
-            )
-        );
-
         return $this->render(
             'album/list.tpl',
             array(
-                'pagination' => $pagination,
-                'albums'     => $albums,
-                'category'   => $category,
-                'page'       => $page,
+                'category'   => 'widget',
             )
         );
     }

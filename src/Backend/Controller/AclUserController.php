@@ -43,41 +43,6 @@ class AclUserController extends Controller
     public function listAction(Request $request)
     {
 
-        // $filter = array(
-        //     'name'  => $request->query->filter('name', ''),
-        //     'group' => $request->query->getDigits('group', ''),
-        //     'type'  => $request->query->getDigits('type', ''),
-        // );
-
-        // if (!$this->getUser()->isMaster()) {
-        //     $filter ['base'] = 'fk_user_group != 4';
-        // }
-
-        // $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        // // Fetch users paginated and filtered
-        // $user           = new \User();
-        // $searchCriteria = $user->buildFilter($filter);
-        // $userManager    = $this->get('user_repository');
-        // $usersCount     = $userManager->count($searchCriteria);
-        // $users          = $userManager->findBy(
-        //     $searchCriteria,
-        //     'name',
-        //     $itemsPerPage,
-        //     $page
-        // );
-
-        // $er = $this->get('entity_repository');
-        // $filterUsers = array();
-        // foreach ($users as &$user) {
-        //     $user->photo = $er->find('Photo', $user->avatar_img_id);
-        //     if (empty($filter['group'])) {
-        //         $filterUsers[] = $user;
-        //     } elseif (in_array($filter['group'], $user->fk_user_group)) {
-        //         $filterUsers[] = $user;
-        //     }
-        // }
-
         $userGroup = new \UserGroup();
         $groups    = $userGroup->find();
 

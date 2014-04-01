@@ -125,7 +125,6 @@ class SpecialsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $page = $request->query->getDigits('page', 1);
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
@@ -133,48 +132,12 @@ class SpecialsController extends Controller
         } else {
             $numFavorites = 1;
         }
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        $cm = new \ContentManager();
-        list($countSpecials, $specials) = $cm->getCountAndSlice(
-            'Special',
-            null,
-            'in_home=1',
-            'ORDER BY position, created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        foreach ($specials as &$special) {
-            $special->category_name  = $this->ccm->get_name($special->category);
-            $special->category_title = $this->ccm->get_title($special->category_name);
-        }
-
-        if (count($specials) != $numFavorites) {
-            m::add(sprintf(_("You must put %d specials in the HOME widget"), $numFavorites));
-        }
-
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countSpecials,
-                'fileName'    => $this->generateUrl('admin_specials_widget').'?page=%d',
-            )
-        );
 
         return $this->render(
             'special/list.tpl',
             array(
-                'pagination' => $pagination,
-                'specials'   => $specials,
-                'category'   => 'widget',
-                'page'       => $page
+                'total_elements_widget' => $numFavorites,
+                'category'              => 'widget',
             )
         );
     }

@@ -91,34 +91,14 @@ class VideosController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $category = $request->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
         $configurations = s::get('video_settings');
         $numFavorites   = $configurations['total_widget'];
-
-        $cm = new \ContentManager();
-        $videos = $cm->find_all('Video', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
-
-        if (count($videos) < $numFavorites) {
-            m::add(
-                sprintf(
-                    _("You must put %d videos in the HOME widget"),
-                    $numFavorites
-                )
-            );
-        }
-
-        if (!empty($videos)) {
-            foreach ($videos as &$video) {
-                $video->category_name  = $this->ccm->get_name($video->category);
-                $video->category_title = $this->ccm->get_title($video->category_name);
-            }
-        }
 
         return $this->render(
             'video/list.tpl',
             array(
-                'videos'     => $videos,
-                'category'   => $category,
+                'total_elements_widget' => $numFavorites,
+                'category'              => 'widget',
             )
         );
     }

@@ -120,6 +120,16 @@
 
     <div class="wrapper-content">
         {render_messages}
+
+        {if $category == 'widget'}
+            <div class="messages" ng-if="{$total_elements_widget} > 0 && shvs.total != {$total_elements_widget}">
+                <div class="alert alert-info">
+                    <button class="close" data-dismiss="alert">×</button>
+                    {t 1=$total_elements_widget}You must put %1 videos in the HOME{/t}<br>
+                </div>
+            </div>
+        {/if}
+
         <div class="table-info clearfix">
             <div class="pull-left">
                 <div class="form-inline">

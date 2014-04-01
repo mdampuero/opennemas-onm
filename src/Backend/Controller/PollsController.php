@@ -91,8 +91,6 @@ class PollsController extends Controller
             $totalWidget = 0;
         }
 
-        // m::add(sprintf(_("You must put %d polls in the HOME"), $totalWidget));
-
         return $this->render(
             'poll/list.tpl',
             array(
