@@ -67,49 +67,10 @@ class SpecialsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $category = $request->query->getDigits('category', null);
-        $page = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        if (empty($category)) {
-            $category = 'all';
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $category;
-        }
-
-        $cm = new \ContentManager();
-        list($countSpecials, $specials) = $cm->getCountAndSlice(
-            'Special',
-            $categoryFilter,
-            '',
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countSpecials,
-                'fileName'    => $this->generateUrl('admin_specials', array('category' => $category)).'&page=%d',
-            )
-        );
-
         return $this->render(
             'special/list.tpl',
             array(
-                'pagination' => $pagination,
-                'specials'   => $specials,
                 'category'   => $category,
-                'page'       => $page
             )
         );
     }
