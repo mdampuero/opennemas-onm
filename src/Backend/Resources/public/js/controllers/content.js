@@ -1,7 +1,7 @@
 /**
  * Controller to handle list actions.
  */
-function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, sharedVars) {
+function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, sharedVars, messenger) {
     /**
      * All contents selected flag.
      *
@@ -39,6 +39,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         $http.post(url, { ids: ids, available: available })
             .success(function(response) {
                 updateContentStatus(0, available);
+
+                for (var i = 0; i < response.success.length; i++) {
+                    var params = {
+                        id:      new Date().getTime() + '_' + response.success[i].id,
+                        message: response.success[i].message,
+                        type:    'success'
+                    };
+
+                    messenger.post(params);
+                };
+
+                for (var i = 0; i < response.errors.length; i++) {
+                    var params = {
+                        id:      new Date().getTime() + '_' + response.errors[i].id,
+                        message: response.errors[i].message,
+                        type:    'error'
+                    };
+
+                    messenger.post(params);
+                };
             });
     };
 
@@ -64,6 +84,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
         $http.post(url, { ids: ids, status: status }).success(function(response) {
             updateStatus(0, status);
+
+            for (var i = 0; i < response.success.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.success[i].id,
+                    message: response.success[i].message,
+                    type:    'success'
+                };
+
+                messenger.post(params);
+            };
+
+            for (var i = 0; i < response.errors.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.errors[i].id,
+                    message: response.errors[i].message,
+                    type:    'error'
+                };
+
+                messenger.post(params);
+            };
         });
     };
 
@@ -90,6 +130,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         $http.post(url, { ids: ids, in_home: inHome })
             .success(function(response) {
                 updateInHome(0, inHome);
+
+                for (var i = 0; i < response.success.length; i++) {
+                    var params = {
+                        id:      new Date().getTime() + '_' + response.success[i].id,
+                        message: response.success[i].message,
+                        type:    'success'
+                    };
+
+                    messenger.post(params);
+                };
+
+                for (var i = 0; i < response.errors.length; i++) {
+                    var params = {
+                        id:      new Date().getTime() + '_' + response.errors[i].id,
+                        message: response.errors[i].message,
+                        type:    'error'
+                    };
+
+                    messenger.post(params);
+                };
             });
     };
 
@@ -314,6 +374,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 contents[index].content_status = response.content_status;
             }
 
+            for (var i = 0; i < response.success.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.success[i].id,
+                    message: response.success[i].message,
+                    type:    'success'
+                };
+
+                messenger.post(params);
+            };
+
+            for (var i = 0; i < response.errors.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.errors[i].id,
+                    message: response.errors[i].message,
+                    type:    'error'
+                };
+
+                messenger.post(params);
+            };
+
             // Disable spinner
             contents[index].loading = 0;
         }).error(function(response) {
@@ -344,6 +424,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             if (response.in_home != null) {
                 contents[index].in_home = response.in_home;
             }
+
+            for (var i = 0; i < response.success.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.success[i].id,
+                    message: response.success[i].message,
+                    type:    'success'
+                };
+
+                messenger.post(params);
+            };
+
+            for (var i = 0; i < response.errors.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.errors[i].id,
+                    message: response.errors[i].message,
+                    type:    'error'
+                };
+
+                messenger.post(params);
+            };
 
             // Disable spinner
             contents[index].home_loading = 0;
@@ -376,6 +476,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 contents[index].favorite = response.favorite;
             }
 
+            for (var i = 0; i < response.success.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.success[i].id,
+                    message: response.success[i].message,
+                    type:    'success'
+                };
+
+                messenger.post(params);
+            };
+
+            for (var i = 0; i < response.errors.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.errors[i].id,
+                    message: response.errors[i].message,
+                    type:    'error'
+                };
+
+                messenger.post(params);
+            };
+
             // Disable spinner
             contents[index].favorite_loading = 0;
         }).error(function(response) {
@@ -406,6 +526,26 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             if (response.status != null) {
                 contents[index].status = response.status;
             }
+
+            for (var i = 0; i < response.success.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.success[i].id,
+                    message: response.success[i].message,
+                    type:    'success'
+                };
+
+                messenger.post(params);
+            };
+
+            for (var i = 0; i < response.errors.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.errors[i].id,
+                    message: response.errors[i].message,
+                    type:    'error'
+                };
+
+                messenger.post(params);
+            };
 
             // Disable spinner
             contents[index].loading = 0;

@@ -72,18 +72,18 @@ class ContentController extends Controller
                 $content->delete($id);
                 $success[] = array(
                     'id'   => $id,
-                    'text' => _('Item deleted successfully')
+                    'message' => _('Item deleted successfully')
                 );
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'   => $id,
-                    'text' => _('Unable to delete item with id "$id"')
+                    'message' => _('Unable to delete item with id "$id"')
                 );
             }
         } else {
             $errors[] = array(
                 'id'   => $id,
-                'text' => _('Unable to find item with id "$id"')
+                'message' => _('Unable to find item with id "$id"')
             );
         }
 
@@ -107,6 +107,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
+        $updated = 0;
 
         $ids = $request->request->get('ids');
 
@@ -117,23 +118,27 @@ class ContentController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->delete($id);
-                        $success[] = array(
-                            'id'   => $id,
-                            'text' => _('Selected items deleted successfully')
-                        );
+                        $updated++;
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'   => $id,
-                            'text' => _('Unable to delete item with id "$id"')
+                            'id'      => $id,
+                            'message' => _('Unable to delete item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"')
+                        'id'      => $id,
+                        'message' => _('Unable to find item with id "$id"')
                     );
                 }
             }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => _("$updated item(s) deleted successfully")
+            );
         }
 
         return new JsonResponse(
@@ -164,18 +169,18 @@ class ContentController extends Controller
                 $content->restoreFromTrash($id);
                 $success[] = array(
                     'id'   => $id,
-                    'text' => _('Item restored successfully')
+                    'message' => _('Item restored successfully')
                 );
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'   => $id,
-                    'text' => _('Unable to restore the item with id "$id"')
+                    'message' => _('Unable to restore the item with id "$id"')
                 );
             }
         } else {
             $errors[] = array(
                 'id'   => $id,
-                'text' => _('Unable to find the item with id "$id"')
+                'message' => _('Unable to find the item with id "$id"')
             );
         }
 
@@ -199,6 +204,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
+        $updated = 0;
 
         $ids = $request->request->get('ids');
 
@@ -209,23 +215,27 @@ class ContentController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->restoreFromTrash($id);
-                        $success[] = array(
-                            'id'   => $id,
-                            'text' => _('Selected items restored from trash successfully')
-                        );
+                        $updated++;
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'   => $id,
-                            'text' => _('Unable to restore from trash the item with id "$id"')
+                            'id'      => $id,
+                            'message' => _('Unable to restore from trash the item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"')
+                        'id'      => $id,
+                        'message' => _('Unable to find item with id "$id"')
                     );
                 }
             }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => _("$updated item(s) restored successfully")
+            );
         }
 
         return new JsonResponse(
@@ -256,18 +266,18 @@ class ContentController extends Controller
                 $content->remove($id);
                 $success[] = array(
                     'id'   => $id,
-                    'text' => _('Item removed permanently successfully')
+                    'message' => _('Item removed permanently successfully')
                 );
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'   => $id,
-                    'text' => _('Unable to remove permanently the item with id "$id"')
+                    'message' => _('Unable to remove permanently the item with id "$id"')
                 );
             }
         } else {
             $errors[] = array(
                 'id'   => $id,
-                'text' => _('Unable to find the item with id "$id"')
+                'message' => _('Unable to find the item with id "$id"')
             );
         }
 
@@ -291,6 +301,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
+        $updated = 0;
 
         $ids = $request->request->get('ids');
 
@@ -301,23 +312,27 @@ class ContentController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->remove($id);
-                        $success[] = array(
-                            'id'   => $id,
-                            'text' => _('Selected items restored from trash successfully')
-                        );
+                        $updated++;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'   => $id,
-                            'text' => _('Unable to restore from trash the item with id "$id"')
+                            'message' => _('Unable to remove permanently the item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"')
+                        'message' => _('Unable to find item with id "$id"')
                     );
                 }
             }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'   => $updated,
+                'message' => _("$updated item(s) removed successfully")
+            );
         }
 
         return new JsonResponse(
@@ -350,13 +365,13 @@ class ContentController extends Controller
 
             $status = $content->available;
             $success[] = array(
-                'id'   => $id,
-                'text' => _('Item updated successfully')
+                'id'      => $id,
+                'message' => _('Item updated successfully')
             );
         } else {
             $errors[] = array(
-                'id'   => $id,
-                'text' => _('Unable to find item with id "$id"')
+                'id'      => $id,
+                'message' => _('Unable to find item with id "$id"')
             );
         }
 
@@ -381,6 +396,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
+        $updated = 0;
 
         $available = $request->request->get('available');
         $ids       = $request->request->get('ids');
@@ -396,23 +412,27 @@ class ContentController extends Controller
                             $this->getUser()->id
                         );
 
-                        $success[] = array(
-                            'id'   => $id,
-                            'text' => _('Selected items updated successfully')
-                        );
+                        $updated++;
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'   => $id,
-                            'text' => _('Unable to update item with id "$id"')
+                            'id'      => $id,
+                            'message' => _('Unable to update item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"')
+                        'id'      => $id,
+                        'message' => _('Unable to find item with id "$id"')
                     );
                 }
             }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => _("$updated item(s) updated successfully")
+            );
         }
 
         return new JsonResponse(
@@ -444,13 +464,13 @@ class ContentController extends Controller
 
             $favorite = $content->favorite;
             $success[] = array(
-                'id'   => $id,
-                'text' => _('Item updated successfully')
+                'id'      => $id,
+                'message' => _('Item updated successfully')
             );
         } else {
             $errors[] = array(
-                'id'   => $id,
-                'text' => _('Unable to find item with id "$id"')
+                'id'      => $id,
+                'message' => _('Unable to find item with id "$id"')
             );
         }
 
@@ -485,12 +505,12 @@ class ContentController extends Controller
             $inHome = $content->in_home;
             $success[] = array(
                 'id'   => $id,
-                'text' => _('Item updated successfully')
+                'message' => _('Item updated successfully')
             );
         } else {
             $errors[] = array(
                 'id'   => $id,
-                'text' => _('Unable to find item with id "$id"')
+                'message' => _('Unable to find item with id "$id"')
             );
         }
 
@@ -515,6 +535,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
+        $updated = 0;
 
         $inHome = $request->request->get('in_home');
         $ids       = $request->request->get('ids');
@@ -530,23 +551,27 @@ class ContentController extends Controller
                             $this->getUser()->id
                         );
 
-                        $success[] = array(
-                            'id'   => $id,
-                            'text' => _('Selected items updated successfully')
-                        );
+                        $updated++;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'   => $id,
-                            'text' => _('Unable to update item with id "$id"')
+                            'message' => _('Unable to update item with id "$id"')
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"')
+                        'message' => _('Unable to find item with id "$id"')
                     );
                 }
             }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'   => $updated,
+                'message' => _('$updated item(s) updated successfully')
+            );
         }
 
         return new JsonResponse(

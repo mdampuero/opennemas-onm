@@ -11,7 +11,7 @@
  * @param array  selected Array of selected items.
  */
 function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
-    sharedVars, index, route
+    messenger, sharedVars, index, route
 ) {
     $scope.route = route;
     $scope.index = index;
@@ -114,7 +114,25 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
                 }
             };
 
-            // Handle errors
+            for (var i = 0; i < response.success.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.success[i].id,
+                    message: response.success[i].message,
+                    type:    'success'
+                };
+
+                messenger.post(params);
+            };
+
+            for (var i = 0; i < response.errors.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.errors[i].id,
+                    message: response.errors[i].message,
+                    type:    'error'
+                };
+
+                messenger.post(params);
+            };
 
             $modalInstance.close();
 
