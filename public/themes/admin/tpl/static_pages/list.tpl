@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_staticpages}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('static_page', { title: '', available: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_staticpages}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('static_page', { title_like: '', available: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
     	<div class="wrapper-content">
     		<div class="title"><h2>{t}Static pages{/t}</h2></div>
@@ -58,7 +58,7 @@
             <div>
                 <div class="pull-left form-inline">
                     <strong>{t}FILTER:{/t}</strong>
-                    <input type="search" autofocus name="title" placeholder="{t}Search by title{/t}" ng-model="shvs..search.title_like"/>
+                    <input type="search" autofocus name="title" placeholder="{t}Search by title{/t}" ng-model="shvs.search.title_like"/>
                     &nbsp;&nbsp;
                     <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
@@ -127,12 +127,13 @@
             <tfoot>
                 <tr>
                     <td colspan="10" class="center">
-                        <div class="pull-left">
-                            {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                        <div class="pull-left" ng-if="shvs.contents.length > 0">
+                            {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
-                        <div class="pull-right">
+                        <div class="pull-right" ng-if="shvs.contents.length > 0">
                             <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
+                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                     </td>
                 </tr>
             </tfoot>

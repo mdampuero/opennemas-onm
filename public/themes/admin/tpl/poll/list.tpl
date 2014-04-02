@@ -179,7 +179,7 @@
                     [% content.category_name %]
                 </td>
                 <td class="center">
-                    [% content.created %]
+                    [% content.created | moment %]
                 </td>
                 <td class="center">
                     [% content.total_votes %]
@@ -218,12 +218,13 @@
         <tfoot>
             <tr>
                 <td colspan="10" class="center">
-                    <div class="pull-left">
-                        {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                    <div class="pull-left" ng-if="shvs.contents.length > 0">
+                        {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                     </div>
-                    <div class="pull-right">
+                    <div class="pull-right" ng-if="shvs.contents.length > 0">
                         <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                     </div>
+                    <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                 </td>
             </tr>
         </tfoot>

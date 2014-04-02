@@ -136,7 +136,7 @@
                     <td class="left" >
                         <span rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
             			<div>
-            				<small ng-if="content.fk_author != 0 && content.agency != ''">
+            				<small ng-if="content.fk_author != 0 || content.agency != ''">
             					<strong>{t}Author{/t}:</strong>
             					<span ng-if="content.fk_author != 0">
         	                	    [% shvs.extra.authors[content.fk_author].name %]
@@ -184,12 +184,13 @@
             <tfoot>
                 <tr>
                     <td colspan="10" class="center">
-                        <div class="pull-left">
-                            {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
+                        <div class="pull-left" ng-if="shvs.contents.length > 0">
+                            {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
                         </div>
-                        <div class="pull-right">
+                        <div class="pull-right" ng-if="shvs.contents.length > 0">
                             <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
+                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                     </td>
                 </tr>
             </tfoot>

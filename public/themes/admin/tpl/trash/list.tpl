@@ -79,7 +79,7 @@
                     <td><strong>[% content.content_type_l10n_name %]</strong> </td>
                     <td>[% content.title %]</td>
                     <td class="left">[% content.category_name %]</td>
-                    <td class="center">[% content.created %]</td>
+                    <td class="center">[% content.created | moment %]</td>
                     <td class="nowrap right">
                         <div class="btn-group">
 
@@ -97,12 +97,13 @@
             <tfoot>
                 <tr>
                     <td colspan="10" class="center">
-                        <div class="pull-left">
+                        <div class="pull-left" ng-if="shvs.contents.length > 0">
                             {t}Showing{/t} [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
-                        <div class="pull-right">
+                        <div class="pull-right" ng-if="shvs.contents.length > 0">
                             <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
+                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                     </td>
                 </tr>
             </tfoot>

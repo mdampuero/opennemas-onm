@@ -115,7 +115,7 @@
                     <td >
                         [% content.title %]
                         <div class="tags">
-                            <span ng-repeat="tag in content.tags">[% tag %][%$last ? '' : ', ' %]</span>
+                            <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
                         </div>
                     </td>
 
@@ -127,7 +127,7 @@
                         <span class="label" style="background-color:[% content.source_color %]};">[% content.source_name %]</span>
                     </td>
                     <td class="nowrap center">
-                        <span title="[% content.created_time.date %] [% content.created_time.timezone %]">[% content.created_time.date %]  [% content.created_time.timezone %]</span>
+                        <span title="[% content.created_time.date %] [% content.created_time.timezone %]">[% content.created_time.date | moment %]  [% content.created_time.timezone %]</span>
                     </td>
 
                     <td class="nowrap">
@@ -145,12 +145,13 @@
             <tfoot>
                 <tr>
                     <td colspan="10" class="center">
-                        <div class="pull-left">
-                            {t}Showing{/t} [% (shvs.page - 1) * shvs.elements_per_page %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
+                        <div class="pull-left" ng-if="shvs.contents.length > 0">
+                            {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
                         </div>
-                        <div class="pull-right">
+                        <div class="pull-right" ng-if="shvs.contents.length > 0">
                             <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'admin_news_agency_ws')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
+                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                     </td>
                 </tr>
             </tfoot>
