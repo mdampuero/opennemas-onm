@@ -108,35 +108,28 @@
                         </span>
                     </td>
                     <td>
-                        <span class="description">
+                        <div class="description">
                             <span ng-if="content.description != ''">[% content.description %]</span>
                             <span ng-if="content.description == ''">{t}No available description{/t}</span>
-                        </span>
-                        <br>
-                        <span class="tags">
+                        </div>
+
+                        <div class="tags">
                             <img src="{$params.IMAGE_DIR}tag_red.png" />
                             <span ng-if="content.metadata != ''">[% content.metadata %]</span>
                             <span ng-if="content.metadata == ''">{t}No tags{/t}</span>
-                        </span>
+                        </div>
 
-                        <span class="author" ng-if="content.author != ''">
-                            <strong>{t}Author:{/t}</strong> {$photo->author_name|clearslash|default:""}
-                        </span>
+                        <div class="author" ng-if="content.fk_author !== null">
+                            <strong>{t}Author:{/t}</strong> [% shvs.extra.authors[content.fk_author].name %]
+                        </div>
 
-                        <br>
-                        {if preg_match('@^/authors/@', $photo->path_file)}
-                            <span class="url">
-                                <a href="{$MEDIA_IMG_URL}{$photo->path_file}/{$photo->name}" target="_blank">
-                                    {t}[Link]{/t}
-                                </a>
-                            </span>
-                        {else}
+                        <div>
                             <span class="url">
                                 <a href="{$MEDIA_IMG_URL}[% content.path_file %]/[% content.name %]" target="_blank">
                                     {t}[Link]{/t}
                                 </a>
                             </span>
-                        {/if}
+                        </div>
                     </td>
                     <td class="nowrap">
                         [% content.created %]
