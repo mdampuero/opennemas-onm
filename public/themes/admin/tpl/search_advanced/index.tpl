@@ -33,7 +33,7 @@ span.highlighted {
                     <div class="form-inline">
                         <strong>{t}FILTER:{/t}</strong>
                         &nbsp;&nbsp;
-                        <input type="text" placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
+                        <input type="text" autofocus placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
                         &nbsp;&nbsp;
                         <strong>{t}CONTENT TYPE:{/t}</strong>
                         <select class="select2 input-large" name="content_types[]" id="content_types" multiple ng-model="shvs.search.content_type_name">

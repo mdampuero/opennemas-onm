@@ -50,7 +50,7 @@
                 <div class="form-inline">
                     <strong>{t}FILTER:{/t}</strong>
                     &nbsp;&nbsp;
-                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
+                    <input type="text" autofocus placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     &nbsp;&nbsp;
                     <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
@@ -95,18 +95,16 @@
                     </td>
                     <td class="thumb">
                         <span ng-click="open('modal-image', null, $index)">
-                            {if preg_match('/^swf$/i', $photo->type_img)}
+                            <span ng-if="content.type_img == 'swf'">
                                 <object>
-                                    <param name="wmode" value="window"
-                                           value="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}" />
-                                    <embed wmode="window"
-                                           src="{$MEDIA_IMG_URL}{$photo->path_file}{$photo->name}"
-                                           width="140" height="80" ></embed>
+                                    <param name="wmode" value="window" value="{$MEDIA_IMG_URL}[% content.path_file%][% content.name %]" />
+                                    <embed wmode="window" src="[% content.path_file%][% content.name %]"  width="140" height="80" ></embed>
                                 </object>
                                 <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
-                            {else}
+                            </span>
+                            <span ng-if="content.type_img !== 'swf'">
                                 <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
-                            {/if}
+                            </span>
                         </span>
                     </td>
                     <td>

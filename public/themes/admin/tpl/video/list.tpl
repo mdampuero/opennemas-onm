@@ -111,7 +111,7 @@
                 <div class="form-inline">
                     <strong>{t}FILTER:{/t}</strong>
                     &nbsp;&nbsp;
-                    <input type="text" placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
+                    <input type="text" autofocus placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     &nbsp;&nbsp;
                     <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
                         <option value="-1">{t}-- All --{/t}</option>

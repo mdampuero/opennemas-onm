@@ -58,7 +58,7 @@
             <div>
                 <div class="pull-left form-inline">
                     <strong>{t}FILTER:{/t}</strong>
-                    <input type="search" name="title" placeholder="{t}Filter by title{/t}" ng-model="shvs..search.title_like"/>
+                    <input type="search" autofocus name="title" placeholder="{t}Search by title{/t}" ng-model="shvs..search.title_like"/>
                     &nbsp;&nbsp;
                     <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>

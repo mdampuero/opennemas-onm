@@ -61,7 +61,7 @@
             <div class="pull-left form-inline">
                 <strong>{t}FILTER:{/t}</strong>
                 &nbsp;&nbsp;
-                <input type="search" id="username" name="title" class="input-large" placeholder="{t}Filter by title or content{/t}" ng-model="shvs.search.title"/>
+                <input type="search" autofocus id="username" name="title" class="input-large" placeholder="{t}Filter by title or content{/t}" ng-model="shvs.search.title"/>
                 <label for="usergroup">
                     {t}and in{/t}
                     <select id="source" name="source" class="select2" ng-model="shvs.search.source" data-label="{t}Source{/t}">

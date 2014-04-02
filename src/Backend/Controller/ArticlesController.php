@@ -370,7 +370,6 @@ class ArticlesController extends Controller
                 ),
             )
         );
-
     }
 
     /**
