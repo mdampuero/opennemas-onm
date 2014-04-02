@@ -52,7 +52,7 @@
                     </ul>
                 </li>
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {if $page <= 1}
+                {if $category == 'widget' && $page <= 1}
                 <li>
                     <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
                         <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
