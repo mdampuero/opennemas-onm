@@ -106,7 +106,7 @@
                         <div>
                             <small>[% content.author %]: [% content.email %]</small>
                         </div>
-                        <span tooltip="[% content.body | limitTo: 140 %]...">[% content.title %]</span>
+                        <span tooltip="[% content.body | striptags | limitTo: 140 %]...">[% content.title %]</span>
                     </td>
                     <td class="left"> [% content.created | moment %] </td>
                     <td >

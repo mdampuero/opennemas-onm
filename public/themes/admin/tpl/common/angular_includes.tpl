@@ -17,5 +17,6 @@
 {script_tag src="gravatar.js" language="javascript" bundle="backend" basepath="js/directives"}
 {script_tag src="fos-js-routing.js" language="javascript" bundle="backend" basepath="js/services"}
 {script_tag src="moment.js" language="javascript" bundle="backend" basepath="js/filters"}
+{script_tag src="striptags.js" language="javascript" bundle="backend" basepath="js/filters"}
 {script_tag src="shared-vars.js" language="javascript" bundle="backend" basepath="js/services"}
 {script_tag src="ui-sortable.js" language="javascript" bundle="backend" basepath="lib"}
