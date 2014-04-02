@@ -96,6 +96,7 @@ class ModuleManager
                 'COMMENT_MANAGER'           => _('Comments'),
                 'CRONICAS_MODULES'          => _('Cronicas customizations'),
                 'FILE_MANAGER'              => _('Files'),
+                'FORM_MANAGER'              => _('Forms'),
                 'FRONTPAGE_MANAGER'         => _('Frontpages'),
                 'FRONTPAGES_LAYOUT'         => _('Frontpages layout'),
                 'IMAGE_MANAGER'             => _('Images'),
