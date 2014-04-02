@@ -302,8 +302,8 @@
                     </div>
                 </div>
             </fieldset>
-            {/is_module_activated}
             <hr>
+            {/is_module_activated}
             <fieldset>
                 <h3 class="settings-header">{t}Sessions{/t}</h3>
                 <div class="control-group">
