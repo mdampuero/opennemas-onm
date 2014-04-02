@@ -1,10 +1,14 @@
 angular.module('BackendApp.filters', []).filter('moment', function($locale) {
     return function(input, format, language) {
         var lang = 'en';
-        var fmt = 'MMMM DD, YYYY, HH:mm'
+        var fmt = 'MMMM Do, YYYY, HH:mm'
 
         if (language) {
             lang = language;
+
+            if (language == 'es') {
+                fmt = 'DD [de] MMMM [de] YYYY, HH:mm'
+            }
         }
 
         if (format) {
