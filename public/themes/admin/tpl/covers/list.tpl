@@ -20,7 +20,7 @@
         <div class="title">
             <h2>{t}ePapers{/t} :: </h2>
             <div class="section-picker">
-                <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}All categories{/t}{/if}</span> <span class="caret"></span></div>
+                <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}Widget Home{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
                 <div class="options">
                     <a href="{url name=admin_covers_widget}" {if $category=='widget'}class="active"{/if}>{t}Widget Home{/t}</a>
                     <a href="{url name=admin_covers}" {if $category != 'widget'}class="active"{/if}>{t}Listing{/t}</a>

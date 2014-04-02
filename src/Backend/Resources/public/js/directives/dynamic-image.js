@@ -7,8 +7,9 @@ angular.module('BackendApp.directives')
             restrict: 'AE',
             link: function ($scope, $element, $attrs) {
                 var baseUrl;
-                var html = '<img ng-src="[% src %]">';
+                var html = '<img ng-src="[% src %]" [% extra_parameters %]>';
                 var src  = $attrs['path'];
+                var extra_parameters = '';
 
                 if (src.match('@http://@')) {
                     baseUrl = '';
@@ -32,8 +33,17 @@ angular.module('BackendApp.directives')
                     resource = baseUrl + src;
                 }
 
+                delete $attrs['src'];
+                delete $attrs['base_url'];
+                delete $attrs['transform'];
+
+                angular.forEach($attrs, function(value, key){
+                    extra_parameters = extra_parameters + ' ' + key + '="'+value+'"';
+                });
+
                 resource = resource.replace(/[/]+/g, "/");
                 $scope.src = resource;
+                $scope.extra_parameters = extra_parameters;
 
                 // Compile template and replace elements
                 var e = $compile(html)($scope);

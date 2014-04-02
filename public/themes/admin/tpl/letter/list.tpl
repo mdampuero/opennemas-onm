@@ -104,7 +104,7 @@
                     </td>
                     <td>
                         <div>
-                            <strong>[% content.author %]: [% content.email %]</strong>
+                            <small>[% content.author %]: [% content.email %]</small>
                         </div>
                         <span tooltip="[% content.body | limitTo: 140 %]...">[% content.title %]</span>
                     </td>
