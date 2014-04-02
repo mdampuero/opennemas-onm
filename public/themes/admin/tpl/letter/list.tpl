@@ -108,7 +108,9 @@
                         </div>
                         <span tooltip="[% content.body | striptags | limitTo: 140 %]...">[% content.title %]</span>
                     </td>
-                    <td class="left"> [% content.created | moment %] </td>
+                    <td class="center nowrap">
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
                     <td >
                         <img ng-if="content.image" ng-src="{$params.IMAGE_DIR}iconos/picture.png" alt="{t}Media{/t}" title="{t}Media element (jpg, image, gif){/t}" />
                     </td>

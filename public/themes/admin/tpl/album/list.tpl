@@ -190,7 +190,9 @@
                 </td>
                 {/if}
 
-                <td class="center nowrap">[% content.created | moment %]</td>
+                <td class="center nowrap">
+                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                </td>
                 <td class="center">[% content.views %]</td>
 
                 {acl isAllowed="ALBUM_AVAILABLE"}

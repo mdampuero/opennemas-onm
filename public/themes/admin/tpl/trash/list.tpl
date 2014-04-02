@@ -79,7 +79,9 @@
                     <td><strong>[% content.content_type_l10n_name %]</strong> </td>
                     <td>[% content.title %]</td>
                     <td class="left">[% content.category_name %]</td>
-                    <td class="center">[% content.created | moment %]</td>
+                    <td class="center nowrap">
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
                     <td class="nowrap right">
                         <div class="btn-group">
 

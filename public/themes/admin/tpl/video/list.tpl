@@ -198,11 +198,9 @@
                         </td>
                         {/if}
                         </td>
-
                         <td class="center nowrap">
-                            [% content.created | moment %]
+                            [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                         </td>
-
                         {acl isAllowed="VIDEO_AVAILABLE"}
                         <td class="center">
                             <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" type="button"></button>

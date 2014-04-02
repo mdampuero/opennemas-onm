@@ -27,7 +27,7 @@
                 <br>
                 <strong>{t}Category{/t}:</strong> [% content.category_name %]
                 <br>
-                <strong>{t}Created{/t}:</strong> [% content.created | moment %]
+                <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
             </td>
             <td class="center">
                 <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera" ng-if="content.in_litter == 1"/>

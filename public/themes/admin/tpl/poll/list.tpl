@@ -178,9 +178,9 @@
                 <td class="center">
                     [% content.category_name %]
                 </td>
-                <td class="center">
-                    [% content.created | moment %]
-                </td>
+                <td class="center nowrap">
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
                 <td class="center">
                     [% content.total_votes %]
                 </td>

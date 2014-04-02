@@ -114,7 +114,7 @@
                         [% content.author_ip %]
                     </td>
                     <td class="left">
-                        <div class="submitted-on">{t}Submitted on:{/t} [% content.date.date | moment %]</div>
+                        <div class="submitted-on">{t}Submitted on:{/t} [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
                         <p>
                             [% content.body | limitTo : 250 %]<span ng-if="content.body.length > 250">...</span>
                             {*$comment->body|strip_tags|clearslash|truncate:250:"..."*}

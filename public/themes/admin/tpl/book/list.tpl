@@ -162,7 +162,7 @@
                     </span>
                 </td>
                 <td class="center nowrap">
-                    [% content.created | moment %]
+                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                 </td>
                 {acl isAllowed="BOOK_AVAILABLE"}
                 <td class="center">

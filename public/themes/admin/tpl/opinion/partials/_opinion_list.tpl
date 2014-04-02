@@ -37,7 +37,7 @@
             <tr>
                 <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                 <th>{t}Author name{/t} - {t}Title{/t}</th>
-                <th class="center" style="width:110px;">{t}Created on{/t}</th>
+                <th class="center">{t}Created on{/t}</th>
                 <th class="center" style="width:40px"><i class="icon-eye-open" style="font-size: 130%;"></i></th>
                 <th class="center" style="width:70px;">{t}In home{/t}</th>
                 <th class="center" style="width:20px;">{t}Published{/t}</th>
@@ -62,9 +62,9 @@
                     -
                     [% content.title %]
                 </td>
-                <td class="center">
-                    [% content.created | moment %]
-                </td>
+                <td class="center nowrap">
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                    </td>
                 <td class="center">
                     [% content.views %]
                 </td>

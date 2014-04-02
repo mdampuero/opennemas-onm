@@ -103,7 +103,7 @@
                                 <img class="image-preview" style="width:16px;height:16px;border:none;"  src="{$smarty.const.SITE_URL_ADMIN}/themes/default/images/flash.gif" />
                             </span>
                             <span ng-if="content.type_img !== 'swf'">
-                                <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
+                                <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% content.path_file + '/' + content.name %]" width="80" transform="zoomcrop,80,80,center,center" class="image-preview"></dynamic-image>
                             </span>
                         </span>
                     </td>
@@ -131,8 +131,8 @@
                             </span>
                         </div>
                     </td>
-                    <td class="nowrap">
-                        [% content.created | moment %]
+                    <td class="center nowrap">
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </td>
                     <td class="right">
                         <div class="btn-group">

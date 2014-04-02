@@ -183,8 +183,8 @@
                     <td class="center">
                         [% content.category_name %]
                     </td>
-                    <td class="center">
-                        [% content.created | moment %]
+                    <td class="center nowrap">
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </td>
                     {acl isAllowed="SPECIAL_AVAILABLE"}
                     <td class="center">
