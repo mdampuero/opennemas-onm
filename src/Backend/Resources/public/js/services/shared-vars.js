@@ -1,3 +1,6 @@
+/**
+ * Service used to share variable between controllers.
+ */
 angular.module('BackendApp.services')
     .service('sharedVars',  function ($rootScope) {
         /**
