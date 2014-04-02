@@ -125,6 +125,9 @@ class UserManager extends BaseManager
      */
     public function findMulti(array $data)
     {
+        if ($key = array_search(null, $data)) {
+            unset($data[$key]);
+        }
         $ordered = array_flip($data);
 
         // Don't get information for undefined users (0)
