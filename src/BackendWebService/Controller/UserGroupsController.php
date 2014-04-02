@@ -42,6 +42,20 @@ class UserGroupsController extends Controller
             $order = '`' . $sortBy . '` ' . $sortOrder;
         }
 
+        if (!$this->getUser()->isMaster()) {
+            $search['pk_user_group'][] = array(
+                'operator' => '<>',
+                'value'    => '4'
+            );
+        }
+
+        if (!$this->getUser()->isAdmin()) {
+            $search['pk_user_group'][] = array(
+                'operator' => '<>',
+                'value'    => '5'
+            );
+        }
+
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $total   = $em->countBy($search);
 
