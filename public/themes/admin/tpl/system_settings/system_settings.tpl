@@ -292,17 +292,17 @@
                 {/is_module_activated}
             </fieldset>
             <hr>
+            {is_module_activated name="FORM_MANAGER"}
             <fieldset>
                 <h3 class="settings-header">{t}Form Module{/t}</h3>
-                {is_module_activated name="FORM_MANAGER"}
                 <div class="control-group">
                     <label for="contact_email" class="control-label">{t}Contact email{/t}</label>
                     <div class="controls">
                         <input type="text" id="contact_email" name="contact_email" value="{$configs['contact_email']}">
                     </div>
                 </div>
-                {/is_module_activated}
             </fieldset>
+            {/is_module_activated}
             <hr>
             <fieldset>
                 <h3 class="settings-header">{t}Sessions{/t}</h3>
