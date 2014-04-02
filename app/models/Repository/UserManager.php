@@ -127,6 +127,11 @@ class UserManager extends BaseManager
     {
         $ordered = array_flip($data);
 
+        // Don't get information for undefined users (0)
+        if (array_key_exists(0, $ordered)) {
+            unset($ordered[0]);
+        }
+
         $ids = array();
         foreach ($data as $value) {
             $ids[] = 'user_' . $value;
