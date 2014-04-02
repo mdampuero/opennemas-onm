@@ -512,6 +512,8 @@ admin_files_create:
 admin_file_show:
     path:     /files/{id}/show
     defaults: { _controller  : BackendBundle:Files:show }
+    options:
+        expose: true
 
 admin_files_update:
     path:     /files/{id}/update

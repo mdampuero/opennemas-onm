@@ -154,7 +154,12 @@
                     [% content.title %]
                 </td>
                 <td class="center">
-                    [% content.category_name %]
+                    <span ng-if="content.category_name">
+                        [% content.category_name %]
+                    </span>
+                    <span ng-if="!content.category_name">
+                        {t}Unassigned{/t}
+                    </span>
                 </td>
                 <td class="center nowrap">
                     [% content.created | moment %]

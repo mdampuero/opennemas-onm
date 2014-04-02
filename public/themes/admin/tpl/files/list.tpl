@@ -161,7 +161,12 @@
                             [% content.title %]
                         </td>
                         <td class="center">
-                            [% content.category_name %]
+                            <span ng-if="content.category_name">
+                                [% content.category_name %]
+                            </span>
+                            <span ng-if="!content.category_name">
+                                {t}Unassigned{/t}
+                            </span>
                         </td>
                         <td class="center nowrap">
                             [% content.created | moment %]
@@ -186,7 +191,7 @@
                         <td class="right">
                             <div class="btn-group">
                                 {acl isAllowed="FILE_UPDATE"}
-                                <button class="btn" ng-click="edit(content.id, 'admin_files_show')" type="button">
+                                <button class="btn" ng-click="edit(content.id, 'admin_file_show')" type="button">
                                     <i class="icon-pencil"></i>
                                 </button>
                                 {/acl}
