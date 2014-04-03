@@ -320,9 +320,8 @@ class CommentsController extends ContentController
 
         $ids = array();
         foreach ($comments as $comment) {
-            $ids[] = array($comment->content_type_referenced, $comment->id);
+            $ids[] = array($comment->content_type_referenced, $comment->content_id);
         }
-        $ids = array_unique($ids);
 
         $contents = $this->get('entity_repository')->findMulti($ids);
 

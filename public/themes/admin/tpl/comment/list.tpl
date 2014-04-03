@@ -117,11 +117,10 @@
                         <div class="submitted-on">{t}Submitted on:{/t} [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
                         <p>
                             [% content.body | limitTo : 250 %]<span ng-if="content.body.length > 250">...</span>
-                            {*$comment->body|strip_tags|clearslash|truncate:250:"..."*}
                         </p>
                     </td>
                     <td >
-                        [% shvs.extra.contents[content.content].title | limitTo : 140 %]<span ng-if="content.body.length > 250">...</span>
+                        [% shvs.extra.contents[content.content_id].title | limitTo : 100 %]<span ng-if="shvs.extra.contents[content.content_id].title.length > 250">...</span>
                     </td>
                     <td class="center">
                         {acl isAllowed="COMMENT_AVAILABLE"}
