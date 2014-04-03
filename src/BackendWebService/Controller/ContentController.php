@@ -25,19 +25,22 @@ class ContentController extends Controller
      */
     public function listAction(Request $request, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
             );
         }
+
 
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
@@ -75,14 +78,16 @@ class ContentController extends Controller
      */
     public function sendToTrashAction($id, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -134,14 +139,16 @@ class ContentController extends Controller
      */
     public function batchSendToTrashAction(Request $request, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -204,14 +211,16 @@ class ContentController extends Controller
      */
     public function restoreFromTrashAction($id, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -263,14 +272,16 @@ class ContentController extends Controller
      */
     public function batchRestoreFromTrashAction(Request $request, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -333,14 +344,16 @@ class ContentController extends Controller
      */
     public function removePermanentlyAction($id, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -392,14 +405,16 @@ class ContentController extends Controller
      */
     public function batchRemovePermanentlyAction(Request $request, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -462,14 +477,16 @@ class ContentController extends Controller
      */
     public function setContentStatusAction(Request $request, $id, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -518,14 +535,16 @@ class ContentController extends Controller
      */
     public function batchSetContentStatusAction(Request $request, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -593,14 +612,16 @@ class ContentController extends Controller
      */
     public function toggleFavoriteAction($id, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -648,14 +669,16 @@ class ContentController extends Controller
      */
     public function toggleInHomeAction($id, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -703,14 +726,16 @@ class ContentController extends Controller
      */
     public function batchToggleInHomeAction(Request $request, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -775,16 +800,18 @@ class ContentController extends Controller
      * @param  Request $request the request object
      * @return Response the response object
      */
-    public function savePositionsAction(Request $request)
+    public function savePositionsAction(Request $request, $contentType)
     {
-        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+
+        if (!$hasRoles) {
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied'
+                            'message' => 'Access denied (' . print_r($required) . ')'
                         )
                     )
                 )
@@ -838,10 +865,23 @@ class ContentController extends Controller
      */
     private function hasRoles($action, $contentType)
     {
-        $roles    = $this->getUser()->getRoles();
         $required = array();
+        $roles    = $this->getUser()->getRoles();
+        $types    = array();
 
-        $required[] = strtoupper($contentType) . '_ADMIN';
+        // Add all admin roles for generic list (trash,)
+        if ($contentType == 'content') {
+            $type = [ 'advertisement', 'album', 'article', 'book', 'cover',
+                'file', 'letter', 'opinion', 'photo', 'poll', 'special',
+                'static', 'video', 'widget',
+            ];
+        } else {
+            $type[] = $contentType;
+        }
+
+        foreach ($types as $type) {
+            $required[] = strtoupper($type) . '_ADMIN';
+        }
 
         switch ($action) {
             case 'batchSendToTrashAction':
@@ -864,7 +904,10 @@ class ContentController extends Controller
                 break;
         }
 
-        return empty(array_diff($required, $roles));
+        return array(
+            empty(array_diff($required, $roles)),
+            array_diff($required, $roles)
+        );
     }
 
     /**
