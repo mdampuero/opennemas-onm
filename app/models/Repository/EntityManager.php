@@ -70,29 +70,33 @@ class EntityManager extends BaseManager
      */
     public function findMulti(array $data)
     {
+        $keys = array();
         $ordered = array();
 
         $ids = array();
         $i = 0;
         foreach ($data as $value) {
             $ids[] = $value[0] . '-' . $value[1];
-            $ordered[$value[1]] = $i++;
+            $keys[$value[1]] = $i++;
         }
 
         $contents = $this->cache->fetch($ids);
 
         $cachedIds = array();
         foreach ($contents as $content) {
-            $ordered[$content->id] = $content;
+            $ordered[$keys[$content->id]] = $content;
             $cachedIds[] = $content->content_type_name.'-'.$content->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
+
         foreach ($missedIds as $content) {
             list($contentType, $contentId) = explode('-', $content);
 
             $content = $this->find(\classify($contentType), $contentId);
-            $ordered[$content->id] = $content;
+            if ($content->id) {
+                $ordered[$keys[$content->pk_content]] = $content;
+            }
         }
 
         return array_values($ordered);
