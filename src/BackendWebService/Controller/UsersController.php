@@ -145,54 +145,70 @@ class UsersController extends Controller
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
         $total   = $em->countBy($search);
 
-        // Load groups information
-        $groupIds = array();
-        foreach ($results as $user) {
-            $user->eraseCredentials();
-            $groupIds = $groupIds +$user->id_user_group;
-        }
-
-        $groupsRepository = $this->get('usergroup_repository');
-        $groupsRaw = $groupsRepository->findMulti($groupIds);
-        $groups = array();
-        foreach ($groupsRaw as $group) {
-            $groups [$group->id] = $group;
-        }
-
-        // Load groups information
-        $photoIds = array();
-        foreach ($results as $user) {
-            $photoIds[] = $user->avatar_img_id;
-        }
-        $photoIds = array_unique($photoIds);
-
-        if (($key = array_search(0, $photoIds)) !== false) {
-            unset($photoIds[$key]);
-        }
-
-        $ids = array();
-        foreach ($photoIds as $photo) {
-            $ids[] = array('photo',$photo);
-        }
-
-        $contentsRepository = $this->get('entity_repository');
-        $photosRaw = $contentsRepository->findMulti($ids);
-        $photos = array();
-        foreach ($photosRaw as $photo) {
-            $photos[$photo->id] = $photo;
-        }
-
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
                 'page'              => $page,
                 'results'           => $results,
-                'extra'             => array(
-                    'groups' => $groups,
-                    'photos' => $photos
-                ),
+                'extra'             => $this->loadExtraData($results),
                 'total'             => $total
             )
         );
+    }
+
+    /**
+     * Loads extra data related to the given users.
+     *
+     * @param  array $contents Array of users.
+     * @return array           Array of extra data.
+     */
+    private function loadExtraData($results)
+    {
+        $extra = array();
+
+        // Load groups information
+        $ids = array();
+        foreach ($results as $user) {
+            $user->eraseCredentials();
+            $ids = array_unique(array_merge($ids, $user->id_user_group));
+        }
+
+        if (($key = array_search('', $ids)) !== false) {
+            unset($ids[$key]);
+        }
+
+        if (($key = array_search(0, $ids)) !== false) {
+            unset($ids[$key]);
+        }
+
+        $groups = $this->get('usergroup_repository')->findMulti($ids);
+        $extra['groups'] = array();
+        foreach ($groups as $group) {
+            $extra['groups'][$group->id] = $group;
+        }
+
+        // Load groups information
+        $ids = array();
+        foreach ($results as $user) {
+            $ids[] = $user->avatar_img_id;
+        }
+        $ids = array_unique($ids);
+
+        if (($key = array_search(0, $ids)) !== false) {
+            unset($ids[$key]);
+        }
+
+        $contentIds = array();
+        foreach ($ids as $photo) {
+            $contentIds[] = array('photo', $photo);
+        }
+
+        $photos = $this->get('entity_repository')->findMulti($contentIds);
+        $extra['photos'] = array();
+        foreach ($photos as $photo) {
+            $extra['photos'][$photo->id] = $photo;
+        }
+
+        return $extra;
     }
 }
