@@ -123,14 +123,14 @@ class ContentController extends Controller
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => _('Unable to delete item with id "$id"'),
+                    'message' => _('Unable to delete item with id "' . $id . '"'),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "$id"'),
+                'message' => _('Unable to find item with id "' . $id . '"'),
                 'type'    => 'error'
             );
         }
@@ -176,7 +176,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
-        $updated = 0;
+        $updated = array();
 
         $ids = $request->request->get('ids');
 
@@ -187,18 +187,18 @@ class ContentController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->delete($id);
-                        $updated++;
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to delete item with id "$id"'),
+                            'message' => _('Unable to delete item with id "' . $id . '"'),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"'),
+                        'message' => _('Unable to find item with id "' . $id . '"'),
                         'type'    => 'error'
                     );
                 }
@@ -208,7 +208,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _("$updated item(s) deleted successfully"),
+                'message' => _(count($updated) . ' item(s) deleted successfully'),
                 'type'    => 'success'
             );
         }
@@ -268,14 +268,14 @@ class ContentController extends Controller
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => _('Unable to restore the item with id "$id"'),
+                    'message' => _('Unable to restore the item with id "' . $id . '"'),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find the item with id "$id"'),
+                'message' => _('Unable to find the item with id "' . $id . '"'),
                 'type'    => 'error'
             );
         }
@@ -321,7 +321,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
-        $updated = 0;
+        $updated = array();
 
         $ids = $request->request->get('ids');
 
@@ -332,18 +332,18 @@ class ContentController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->restoreFromTrash($id);
-                        $updated++;
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to restore from trash the item with id "$id"'),
+                            'message' => _('Unable to restore from trash the item with id "' . $id . '"'),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"'),
+                        'message' => _('Unable to find item with id "' . $id . '"'),
                         'type'    => 'error'
                     );
                 }
@@ -353,7 +353,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _("$updated item(s) restored successfully"),
+                'message' => _(count($updated) . ' item(s) restored successfully'),
                 'type'    => 'success'
             );
         }
@@ -413,14 +413,14 @@ class ContentController extends Controller
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => _('Unable to remove permanently the item with id "$id"'),
+                    'message' => _('Unable to remove permanently the item with id "' . $id . '"'),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find the item with id "$id"'),
+                'message' => _('Unable to find the item with id "' . $id . '"'),
                 'type'    => 'error'
             );
         }
@@ -466,7 +466,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
-        $updated = 0;
+        $updated = array();
 
         $ids = $request->request->get('ids');
 
@@ -477,18 +477,18 @@ class ContentController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->remove($id);
-                        $updated++;
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to remove permanently the item with id "$id"'),
+                            'message' => _('Unable to remove permanently the item with id "' . $id . '"'),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"'),
+                        'message' => _('Unable to find item with id "' . $id . '"'),
                         'type'    => 'error'
                     );
                 }
@@ -498,7 +498,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _("$updated item(s) removed successfully"),
+                'message' => _(count($updated) . ' item(s) removed successfully'),
                 'type'    => 'success'
             );
         }
@@ -561,7 +561,7 @@ class ContentController extends Controller
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "$id"'),
+                'message' => _('Unable to find item with id "' . $id . '"'),
                 'type'    => 'error'
             );
         }
@@ -608,7 +608,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
-        $updated = 0;
+        $updated = array();
 
         $available = $request->request->get('available');
         $ids       = $request->request->get('ids');
@@ -624,18 +624,18 @@ class ContentController extends Controller
                             $this->getUser()->id
                         );
 
-                        $updated++;
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to update item with id "$id"'),
+                            'message' => _('Unable to update item with id "' . $id . '"'),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"'),
+                        'message' => _('Unable to find item with id "' . $id . '"'),
                         'type'    => 'error'
                     );
                 }
@@ -645,7 +645,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _("$updated item(s) updated successfully"),
+                'message' => _(count($updated) . ' item(s) updated successfully'),
                 'type'    => 'success'
             );
         }
@@ -707,7 +707,7 @@ class ContentController extends Controller
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "$id"'),
+                'message' => _('Unable to find item with id "' . $id . '"'),
                 'type'    => 'error'
             );
         }
@@ -770,7 +770,7 @@ class ContentController extends Controller
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "$id"'),
+                'message' => _('Unable to find item with id "' . $id . '"'),
                 'type'    => 'error'
             );
         }
@@ -817,7 +817,7 @@ class ContentController extends Controller
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
-        $updated = 0;
+        $updated = array();
 
         $inHome = $request->request->get('in_home');
         $ids       = $request->request->get('ids');
@@ -833,18 +833,18 @@ class ContentController extends Controller
                             $this->getUser()->id
                         );
 
-                        $updated++;
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to update item with id "$id"'),
+                            'message' => _('Unable to update item with id "' . $id . '"'),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"'),
+                        'message' => _('Unable to find item with id "' . $id . '"'),
                         'type'    => 'error'
                     );
                 }
@@ -854,7 +854,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _('$updated item(s) updated successfully'),
+                'message' => _(count($updated) . ' item(s) updated successfully'),
                 'type'    => 'success'
             );
         }
@@ -911,11 +911,11 @@ class ContentController extends Controller
                 $file= new \Attachment($id);
 
                 if ($file->setPosition($pos)) {
-                    $updated++;
+                    $updated[] = $id;
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to save position for item with id "$id"',
+                        'message' => 'Unable to save position for item with id "' . $id . '"',
                         'type'    => 'error'
                     );
                 }

@@ -148,6 +148,7 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
 
         // Updated shared variable
         sharedVars.set('contents', contents);
+        sharedVars.set('selected', []);
     };
 
     /**
