@@ -40,25 +40,17 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             .success(function(response) {
                 updateContentStatus(0, available);
 
-                for (var i = 0; i < response.success.length; i++) {
+                for (var i = 0; i < response.messages.length; i++) {
                     var params = {
-                        id:      new Date().getTime() + '_' + response.success[i].id,
-                        message: response.success[i].message,
-                        type:    'success'
+                        id:      new Date().getTime() + '_' + response.messages[i].id,
+                        message: response.messages[i].message,
+                        type:    response.messages[i].type
                     };
 
                     messenger.post(params);
                 };
+            }).error(function(response) {
 
-                for (var i = 0; i < response.errors.length; i++) {
-                    var params = {
-                        id:      new Date().getTime() + '_' + response.errors[i].id,
-                        message: response.errors[i].message,
-                        type:    'error'
-                    };
-
-                    messenger.post(params);
-                };
             });
     };
 
@@ -85,21 +77,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         $http.post(url, { ids: ids, status: status }).success(function(response) {
             updateStatus(0, status);
 
-            for (var i = 0; i < response.success.length; i++) {
+            for (var i = 0; i < response.messages.length; i++) {
                 var params = {
-                    id:      new Date().getTime() + '_' + response.success[i].id,
-                    message: response.success[i].message,
-                    type:    'success'
-                };
-
-                messenger.post(params);
-            };
-
-            for (var i = 0; i < response.errors.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.errors[i].id,
-                    message: response.errors[i].message,
-                    type:    'error'
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
                 };
 
                 messenger.post(params);
@@ -131,21 +113,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             .success(function(response) {
                 updateInHome(0, inHome);
 
-                for (var i = 0; i < response.success.length; i++) {
+                for (var i = 0; i < response.messages.length; i++) {
                     var params = {
-                        id:      new Date().getTime() + '_' + response.success[i].id,
-                        message: response.success[i].message,
-                        type:    'success'
-                    };
-
-                    messenger.post(params);
-                };
-
-                for (var i = 0; i < response.errors.length; i++) {
-                    var params = {
-                        id:      new Date().getTime() + '_' + response.errors[i].id,
-                        message: response.errors[i].message,
-                        type:    'error'
+                        id:      new Date().getTime() + '_' + response.messages[i].id,
+                        message: response.messages[i].message,
+                        type:    response.messages[i].type
                     };
 
                     messenger.post(params);
@@ -334,6 +306,16 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             if (response.content_status != null) {
                 contents[index].content_status = response.content_status;
             }
+
+            for (var i = 0; i < response.messages.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
+                };
+
+                messenger.post(params);
+            };
         }).error(function(response) {
         });
     }
@@ -374,21 +356,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 contents[index].content_status = response.content_status;
             }
 
-            for (var i = 0; i < response.success.length; i++) {
+            for (var i = 0; i < response.messages.length; i++) {
                 var params = {
-                    id:      new Date().getTime() + '_' + response.success[i].id,
-                    message: response.success[i].message,
-                    type:    'success'
-                };
-
-                messenger.post(params);
-            };
-
-            for (var i = 0; i < response.errors.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.errors[i].id,
-                    message: response.errors[i].message,
-                    type:    'error'
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
                 };
 
                 messenger.post(params);
@@ -425,21 +397,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 contents[index].in_home = response.in_home;
             }
 
-            for (var i = 0; i < response.success.length; i++) {
+            for (var i = 0; i < response.messages.length; i++) {
                 var params = {
-                    id:      new Date().getTime() + '_' + response.success[i].id,
-                    message: response.success[i].message,
-                    type:    'success'
-                };
-
-                messenger.post(params);
-            };
-
-            for (var i = 0; i < response.errors.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.errors[i].id,
-                    message: response.errors[i].message,
-                    type:    'error'
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
                 };
 
                 messenger.post(params);
@@ -476,21 +438,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 contents[index].favorite = response.favorite;
             }
 
-            for (var i = 0; i < response.success.length; i++) {
+            for (var i = 0; i < response.messages.length; i++) {
                 var params = {
-                    id:      new Date().getTime() + '_' + response.success[i].id,
-                    message: response.success[i].message,
-                    type:    'success'
-                };
-
-                messenger.post(params);
-            };
-
-            for (var i = 0; i < response.errors.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.errors[i].id,
-                    message: response.errors[i].message,
-                    type:    'error'
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
                 };
 
                 messenger.post(params);
@@ -527,21 +479,11 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 contents[index].status = response.status;
             }
 
-            for (var i = 0; i < response.success.length; i++) {
+            for (var i = 0; i < response.messages.length; i++) {
                 var params = {
-                    id:      new Date().getTime() + '_' + response.success[i].id,
-                    message: response.success[i].message,
-                    type:    'success'
-                };
-
-                messenger.post(params);
-            };
-
-            for (var i = 0; i < response.errors.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.errors[i].id,
-                    message: response.errors[i].message,
-                    type:    'error'
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
                 };
 
                 messenger.post(params);
@@ -590,7 +532,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
-    for (var i = 0; i < selected.length; i++) {
+        for (var i = 0; i < selected.length; i++) {
             contents[selected[i]].in_home = inHome;
             contents[selected[i]].loading = loading
         };

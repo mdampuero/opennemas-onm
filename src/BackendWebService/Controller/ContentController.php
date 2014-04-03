@@ -25,6 +25,20 @@ class ContentController extends Controller
      */
     public function listAction(Request $request, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
         $page            = $request->request->getDigits('page', 1);
         $search          = $request->request->get('search');
@@ -61,6 +75,20 @@ class ContentController extends Controller
      */
     public function sendToTrashAction($id, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -71,26 +99,28 @@ class ContentController extends Controller
             try {
                 $content->delete($id);
                 $success[] = array(
-                    'id'   => $id,
-                    'message' => _('Item deleted successfully')
+                    'id'      => $id,
+                    'message' => _('Item deleted successfully'),
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $errors[] = array(
-                    'id'   => $id,
-                    'message' => _('Unable to delete item with id "$id"')
+                    'id'      => $id,
+                    'message' => _('Unable to delete item with id "$id"'),
+                    'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
-                'id'   => $id,
-                'message' => _('Unable to find item with id "$id"')
+                'id'      => $id,
+                'message' => _('Unable to find item with id "$id"'),
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages'  => array_merge($success, $errors),
             )
         );
     }
@@ -104,6 +134,20 @@ class ContentController extends Controller
      */
     public function batchSendToTrashAction(Request $request, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -122,13 +166,15 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to delete item with id "$id"')
+                            'message' => _('Unable to delete item with id "$id"'),
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"')
+                        'message' => _('Unable to find item with id "$id"'),
+                        'type'    => 'error'
                     );
                 }
             }
@@ -137,14 +183,14 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _("$updated item(s) deleted successfully")
+                'message' => _("$updated item(s) deleted successfully"),
+                'type'    => 'success'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -158,6 +204,20 @@ class ContentController extends Controller
      */
     public function restoreFromTrashAction($id, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -168,26 +228,28 @@ class ContentController extends Controller
             try {
                 $content->restoreFromTrash($id);
                 $success[] = array(
-                    'id'   => $id,
-                    'message' => _('Item restored successfully')
+                    'id'      => $id,
+                    'message' => _('Item restored successfully'),
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $errors[] = array(
-                    'id'   => $id,
-                    'message' => _('Unable to restore the item with id "$id"')
+                    'id'      => $id,
+                    'message' => _('Unable to restore the item with id "$id"'),
+                    'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
-                'id'   => $id,
-                'message' => _('Unable to find the item with id "$id"')
+                'id'      => $id,
+                'message' => _('Unable to find the item with id "$id"'),
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -201,6 +263,20 @@ class ContentController extends Controller
      */
     public function batchRestoreFromTrashAction(Request $request, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -219,13 +295,15 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to restore from trash the item with id "$id"')
+                            'message' => _('Unable to restore from trash the item with id "$id"'),
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"')
+                        'message' => _('Unable to find item with id "$id"'),
+                        'type'    => 'error'
                     );
                 }
             }
@@ -234,14 +312,14 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _("$updated item(s) restored successfully")
+                'message' => _("$updated item(s) restored successfully"),
+                'type'    => 'success'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -255,6 +333,20 @@ class ContentController extends Controller
      */
     public function removePermanentlyAction($id, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -265,26 +357,28 @@ class ContentController extends Controller
             try {
                 $content->remove($id);
                 $success[] = array(
-                    'id'   => $id,
-                    'message' => _('Item removed permanently successfully')
+                    'id'      => $id,
+                    'message' => _('Item removed permanently successfully'),
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $errors[] = array(
-                    'id'   => $id,
-                    'message' => _('Unable to remove permanently the item with id "$id"')
+                    'id'      => $id,
+                    'message' => _('Unable to remove permanently the item with id "$id"'),
+                    'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
-                'id'   => $id,
-                'message' => _('Unable to find the item with id "$id"')
+                'id'      => $id,
+                'message' => _('Unable to find the item with id "$id"'),
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -298,6 +392,20 @@ class ContentController extends Controller
      */
     public function batchRemovePermanentlyAction(Request $request, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -315,14 +423,16 @@ class ContentController extends Controller
                         $updated++;
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'   => $id,
-                            'message' => _('Unable to remove permanently the item with id "$id"')
+                            'id'      => $id,
+                            'message' => _('Unable to remove permanently the item with id "$id"'),
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'   => $id,
-                        'message' => _('Unable to find item with id "$id"')
+                        'id'      => $id,
+                        'message' => _('Unable to find item with id "$id"'),
+                        'type'    => 'error'
                     );
                 }
             }
@@ -330,15 +440,15 @@ class ContentController extends Controller
 
         if ($updated > 0) {
             $success[] = array(
-                'id'   => $updated,
-                'message' => _("$updated item(s) removed successfully")
+                'id'      => $updated,
+                'message' => _("$updated item(s) removed successfully"),
+                'type'    => 'success'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'message'  => array_merge($success, $errors)
             )
         );
     }
@@ -352,6 +462,20 @@ class ContentController extends Controller
      */
     public function setContentStatusAction(Request $request, $id, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $status  = $request->request->getDigits('status');
 
         $em      = $this->get('entity_repository');
@@ -366,20 +490,21 @@ class ContentController extends Controller
             $status = $content->available;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully')
+                'message' => _('Item updated successfully'),
+                'type'    => 'success'
             );
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "$id"')
+                'message' => _('Unable to find item with id "$id"'),
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
                 'content_status' => $status,
-                'errors'         => $errors,
-                'success'        => $success
+                'messages'       => array_merge($success, $errors)
             )
         );
     }
@@ -393,6 +518,20 @@ class ContentController extends Controller
      */
     public function batchSetContentStatusAction(Request $request, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -416,13 +555,15 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to update item with id "$id"')
+                            'message' => _('Unable to update item with id "$id"'),
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "$id"')
+                        'message' => _('Unable to find item with id "$id"'),
+                        'type'    => 'error'
                     );
                 }
             }
@@ -431,14 +572,14 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _("$updated item(s) updated successfully")
+                'message' => _("$updated item(s) updated successfully"),
+                'type'    => 'success'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -452,6 +593,20 @@ class ContentController extends Controller
      */
     public function toggleFavoriteAction($id, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em       = $this->get('entity_repository');
         $errors   = array();
         $favorite = null;
@@ -465,20 +620,21 @@ class ContentController extends Controller
             $favorite = $content->favorite;
             $success[] = array(
                 'id'      => $id,
-                'message' => _('Item updated successfully')
+                'message' => _('Item updated successfully'),
+                'type'    => 'success'
             );
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "$id"')
+                'message' => _('Unable to find item with id "$id"'),
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'   => $errors,
                 'favorite' => $favorite,
-                'success'  => $success,
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -492,6 +648,20 @@ class ContentController extends Controller
      */
     public function toggleInHomeAction($id, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $inHome  = null;
@@ -504,21 +674,22 @@ class ContentController extends Controller
 
             $inHome = $content->in_home;
             $success[] = array(
-                'id'   => $id,
-                'message' => _('Item updated successfully')
+                'id'      => $id,
+                'message' => _('Item updated successfully'),
+                'type'    => 'success'
             );
         } else {
             $errors[] = array(
-                'id'   => $id,
-                'message' => _('Unable to find item with id "$id"')
+                'id'      => $id,
+                'message' => _('Unable to find item with id "$id"'),
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'in_home' => $inHome,
-                'success' => $success
+                'in_home'  => $inHome,
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -532,6 +703,20 @@ class ContentController extends Controller
      */
     public function batchToggleInHomeAction(Request $request, $contentType)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $em      = $this->get('entity_repository');
         $errors  = array();
         $success = array();
@@ -554,14 +739,16 @@ class ContentController extends Controller
                         $updated++;
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'   => $id,
-                            'message' => _('Unable to update item with id "$id"')
+                            'id'      => $id,
+                            'message' => _('Unable to update item with id "$id"'),
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
-                        'id'   => $id,
-                        'message' => _('Unable to find item with id "$id"')
+                        'id'      => $id,
+                        'message' => _('Unable to find item with id "$id"'),
+                        'type'    => 'error'
                     );
                 }
             }
@@ -569,15 +756,15 @@ class ContentController extends Controller
 
         if ($updated > 0) {
             $success[] = array(
-                'id'   => $updated,
-                'message' => _('$updated item(s) updated successfully')
+                'id'      => $updated,
+                'message' => _('$updated item(s) updated successfully'),
+                'type'    => 'success'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -590,6 +777,20 @@ class ContentController extends Controller
      */
     public function savePositionsAction(Request $request)
     {
+        if (!$this->hasRoles(__FUNCTION__, $contentType)) {
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied'
+                        )
+                    )
+                )
+            );
+        }
+
         $errors    = array();
         $positions = $request->request->get('positions');
         $success   = array();
@@ -605,13 +806,15 @@ class ContentController extends Controller
 
                 if ($file->setPosition($pos)) {
                     $success[] = array(
-                        'id' => $id,
-                        'message' => 'Position saved successfully'
+                        'id'      => $id,
+                        'message' => 'Position saved successfully',
+                        'type'    => 'success'
                     );
                 } else {
                     $errors[] = array(
-                        'id' => $id,
-                        'message' => 'Unable to save position'
+                        'id'      => $id,
+                        'message' => 'Unable to save position',
+                        'type'    => 'error'
                     );
                 }
 
@@ -621,8 +824,7 @@ class ContentController extends Controller
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -630,11 +832,11 @@ class ContentController extends Controller
     /**
      * Checks if the current user has roles to execute the required action.
      *
-     * @param  string  $contentType Content type name.
      * @param  string  $action      Required action.
+     * @param  string  $contentType Content type name.
      * @return boolean              [description]
      */
-    private function hasRoles($contentType, $action)
+    private function hasRoles($action, $contentType)
     {
         $roles    = $this->getUser()->getRoles();
         $required = array();
@@ -642,20 +844,22 @@ class ContentController extends Controller
         $required[] = strtoupper($contentType) . '_ADMIN';
 
         switch ($action) {
-            case 'batchDelete':
-            case 'delete':
+            case 'batchSendToTrashAction':
+            case 'sendToTrashAction':
+            case 'batchRemovePermanentlyAction':
+            case 'removePermanentlyAction':
                 $required[] = strtoupper($contentType) . '_DELETE';
                 break;
-            case 'batchToggleAvailable':
-            case 'toggleAvailable':
+            case 'batchSetContentStatusAction':
+            case 'setContentStatusAction':
                 $required[] = strtoupper($contentType) . '_AVAILABLE';
                 break;
-            case 'batchToggleFavorite': // Not implemented
-            case 'toggleFavorite':
+            case 'batchToggleFavoriteAction': // Not implemented
+            case 'toggleFavoriteAction':
                 $required[] = strtoupper($contentType) . '_FAVORITE';
                 break;
-            case 'batchToggleInHome':
-            case 'toggleInHome':
+            case 'batchToggleInHomeAction':
+            case 'toggleInHomeAction':
                 $required[] = strtoupper($contentType) . '_HOME';
                 break;
         }
