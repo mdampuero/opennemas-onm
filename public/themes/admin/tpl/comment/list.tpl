@@ -121,7 +121,7 @@
                         </p>
                     </td>
                     <td >
-                        [% content.content.title %]
+                        [% shvs.extra.contents[content.content].title | limitTo : 140 %]<span ng-if="content.body.length > 250">...</span>
                     </td>
                     <td class="center">
                         {acl isAllowed="COMMENT_AVAILABLE"}

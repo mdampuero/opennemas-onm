@@ -191,6 +191,7 @@ class CommentsController extends ContentController
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
+                'extra'             => $this->loadExtraData($results),
                 'page'              => $page,
                 'results'           => $results,
                 'total'             => $total
@@ -305,5 +306,31 @@ class CommentsController extends ContentController
 
         return $this->redirect($this->generateUrl('admin_comments_list', $params));
 
+    }
+
+    /**
+     * Loads extra data related to the given contents.
+     *
+     * @param  array $contents Array of contents.
+     * @return array           Array of extra data.
+     */
+    private function loadExtraData($comments)
+    {
+        $extra = array();
+
+        $ids = array();
+        foreach ($comments as $comment) {
+            $ids[] = array($comment->content_type_referenced, $comment->id);
+        }
+        $ids = array_unique($ids);
+
+        $contents = $this->get('entity_repository')->findMulti($ids);
+
+        $extra['contents'] = array();
+        foreach ($contents as $content) {
+            $extra['contents'][$content->pk_content] = $content;
+        }
+
+        return $extra;
     }
 }
