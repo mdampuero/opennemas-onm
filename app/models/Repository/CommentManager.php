@@ -168,7 +168,7 @@ class CommentManager extends BaseManager
     {
         return $this->findBy(
             array(
-                'content_id' => $contentID
+                'content_id' => array(array('value' => $contentID))
             ),
             null,
             $elemsByPage,
@@ -188,11 +188,10 @@ class CommentManager extends BaseManager
         if (empty($contentID)) {
             return false;
         }
-
         return $this->countBy(
             array(
-                'content_id' => $contentID,
-                'status' => \Comment::STATUS_ACCEPTED
+                'content_id' => array(array('value' => $contentID)),
+                'status' => array(array('value' => \Comment::STATUS_ACCEPTED))
             )
         );
     }
