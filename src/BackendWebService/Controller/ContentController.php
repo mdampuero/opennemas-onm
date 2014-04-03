@@ -30,7 +30,7 @@ class ContentController extends Controller
         if (!$hasRoles) {
             $roles = '';
             foreach ($required as $role) {
-                $roles .= $rolel;
+                $roles .= $role;
             }
             $roles = rtrim($roles, ',');
 
@@ -87,13 +87,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -148,13 +154,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -220,13 +232,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -281,13 +299,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -353,13 +377,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -414,13 +444,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -486,13 +522,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -544,13 +586,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -621,13 +669,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -678,13 +732,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -735,13 +795,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
@@ -811,13 +877,19 @@ class ContentController extends Controller
         list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
 
         if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
             return new JsonResponse(
                 array(
                     'messages' => array(
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . print_r($required) . ')'
+                            'message' => 'Access denied (' . $roles . ')'
                         )
                     )
                 )
