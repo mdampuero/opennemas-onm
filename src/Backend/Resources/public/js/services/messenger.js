@@ -13,6 +13,8 @@ angular.module('BackendApp.services').service('messenger',  function () {
             theme: 'flat'
         };
 
+        params.hideAfter = 5;
+
         Messenger().post(params);
     }
 });
