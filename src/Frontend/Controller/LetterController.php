@@ -201,7 +201,7 @@ class LetterController extends Controller
         // What happens when the CAPTCHA was entered incorrectly
         if (!$resp->is_valid) {
             $msg = "reCAPTCHA no fue introducido correctamente. Intentelo de nuevo.";
-            $response = new RedirectResponse($this->generateUrl('frontend_participa_frontpage').'?msg="'.$msg.'"');
+            $response = new RedirectResponse($this->generateUrl('frontend_letter_frontpage').'?msg="'.$msg.'"');
 
             return $response;
         } else {
