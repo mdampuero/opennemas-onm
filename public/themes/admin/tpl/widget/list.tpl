@@ -117,9 +117,9 @@
                     <td class="right">
                         <div class="btn-group">
                             {acl isAllowed="WIDGET_UPDATE"}
-                                <button class="btn" ng-click="edit(content.id, 'admin_widget_show')" title="{t}Edit widget '[% content.title %]'{/t}" type="button">
+                                <a class="btn" href="[% edit(content.id, 'admin_widget_show') %]" title="{t}Edit widget '[% content.title %]'{/t}">
                                     <i class="icon-pencil"></i> {t}Edit{/t}
-                                </button>
+                                </a>
                             {/acl}
                             {acl isAllowed="WIDGET_DELETE"}
                                 <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">

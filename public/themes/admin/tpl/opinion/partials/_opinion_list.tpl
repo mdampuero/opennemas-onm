@@ -89,9 +89,9 @@
                 <td class="right">
                     <div class="btn-group">
                         {acl isAllowed="OPINION_UPDATE"}
-                        <button class="btn" ng-click="edit(content.id, 'admin_opinion_show')" type="button">
-                        <i class="icon-pencil"></i>
-                        </button>
+                        <a class="btn" href="[% edit(content.id, 'admin_opinion_show') %]">
+                            <i class="icon-pencil"></i>
+                        </a>
                         {/acl}
                         {acl isAllowed="OPINION_DELETE"}
                         <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">

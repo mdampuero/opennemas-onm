@@ -132,9 +132,9 @@
 
                         <div class="btn-group">
                             {acl isAllowed="COMMENT_UPDATE"}
-                                <button class="btn" ng-click="edit(content.id, 'admin_comment_show')" title="{t}Edit{/t}" type="button">
+                                <a class="btn" href="[% edit(content.id, 'admin_comment_show') %]" title="{t}Edit{/t}">
                                     <i class="icon-pencil"></i>
-                                </button>
+                                </a>
                             {/acl}
                             {acl isAllowed="COMMENT_DELETE"}
                                 <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_comment_delete', $index)" type="button">

@@ -81,9 +81,9 @@
                     <td class="right">
                         <div class="btn-group">
                             {acl isAllowed="MENU_UPDATE"}
-                            <button class="btn" ng-click="edit(content.id, 'admin_menu_show')" title="{t}Edit page '[% content.name %]'{/t}" type="button">
+                            <a class="btn" href="[% edit(content.id, 'admin_menu_show') %]" title="{t}Edit page '[% content.name %]'{/t}">
                                 <i class="icon-pencil"></i> {t}Edit{/t}
-                            </button>
+                            </a>
                             {/acl}
                             {acl isAllowed="MENU_DELETE"}
                                 <button class="btn btn-danger" ng-if="content.type == 'user'" ng-click="open('modal-delete', 'backend_ws_menu_delete', $index)" type="button">

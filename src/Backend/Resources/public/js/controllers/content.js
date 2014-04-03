@@ -164,8 +164,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      * @param string route Route name.
      */
     $scope.edit = function(id, route) {
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id});
-        document.location = url;
+        return fosJsRouting.generate(route, { id: id});
     }
 
     /**

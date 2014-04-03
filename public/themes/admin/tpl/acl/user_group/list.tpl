@@ -80,9 +80,9 @@
                         <td class="right nowrap">
                             <div class="btn-group">
 
-                                <button class="btn" ng-click="edit(content.id, 'admin_acl_usergroup_show')" title="{t}Edit user{/t}" type="button">
+                                <a class="btn" href="[% edit(content.id, 'admin_acl_usergroup_show') %]" title="{t}Edit user{/t}">
                                     <i class="icon-pencil"></i> {t}Edit{/t}
-                                </button>
+                                </a>
 
                                 <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_usergroup_delete', $index)"
                                     title="{t}Delete this user{/t}" type="button">

@@ -36,9 +36,9 @@
             </td>
             <td class="right">
                 <div class="btn-group right">
-                    <button class="btn" ng-click="edit(content.id, 'admin_' + content.content_type_name + '_show')" title="Editar" type="button">
+                    <a class="btn" href="[% edit(content.id, 'admin_' + content.content_type_name + '_show') %]" title="Editar">
                         <i class="icon-pencil"></i>
-                    </button>
+                    </a>
                 </div>
             </td>
         </tr>

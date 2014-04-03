@@ -124,9 +124,9 @@
                     <td class="right">
                         <div class="btn-group">
                             {acl isAllowed="LETTER_UPDATE"}
-                            <button class="btn" ng-click="edit(content.id, 'admin_letter_show')" type="button">
+                            <a class="btn" href="[% edit(content.id, 'admin_letter_show') %]">
                                 <i class="icon-pencil"></i>
-                            </button>
+                            </a>
                             {/acl}
                             {acl isAllowed="LETTER_DELETE"}
                             <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
