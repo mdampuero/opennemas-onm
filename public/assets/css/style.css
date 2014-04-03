@@ -3517,6 +3517,9 @@ border-bottom-left-radius: 2px;
 
 .select2-container-active .select2-choice, .select2-container-active .select2-choices, .select2-drop-active { border-color:#aaa;}
 
+.select2-drop-active {
+  width:auto !important;
+}
 .sortable tr {
 
 }
