@@ -899,6 +899,7 @@ class ContentController extends Controller
         $errors    = array();
         $positions = $request->request->get('positions');
         $success   = array();
+        $updated   = 0;
 
         $result = true;
         if (isset($positions)
@@ -910,21 +911,25 @@ class ContentController extends Controller
                 $file= new \Attachment($id);
 
                 if ($file->setPosition($pos)) {
-                    $success[] = array(
-                        'id'      => $id,
-                        'message' => 'Position saved successfully',
-                        'type'    => 'success'
-                    );
+                    $updated++;
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to save position',
+                        'message' => 'Unable to save position for item with id "$id"',
                         'type'    => 'error'
                     );
                 }
 
                 $pos += 1;
             }
+        }
+
+        if ($updated > 0) {
+            $success[] = array(
+                'id'      => $id,
+                'message' => 'Positions saved successfully',
+                'type'    => 'success'
+            );
         }
 
         return new JsonResponse(
