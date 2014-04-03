@@ -146,9 +146,9 @@
                 <td class="empty" colspan="10">{t}No available books.{/t}</td>
             </tr>
 
-            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }" data-id="[% content.id %]">
+            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
                 <td>
-                    <checkbox index="[% $index %]">
+                    <checkbox index="[% content.id %]">
                 </td>
                 <td>
                     [% content.title %]

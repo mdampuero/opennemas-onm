@@ -97,9 +97,9 @@
                         {t escape=off}There is no user created yet or <br/>not results for your searching criteria.{/t}
                     </td>
                 </tr>
-				<tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
+				<tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
 					<td>
-                        <checkbox index="[% $index %]">
+                        <checkbox index="[% content.id %]">
                     </td>
 					<td>
                         <dynamic-image instance="{$smarty.const.INSTANCE_MEDIA}" path="[% shvs.extra.photos[content.avatar_img_id].path_file + '/' + shvs.extra.photos[content.avatar_img_id].name %]" transform="thumbnail,40,40" ng-if="content.avatar_img_id != 0"></dynamic-image>

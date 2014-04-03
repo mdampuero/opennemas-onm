@@ -61,9 +61,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
+                <tr ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
                     <td class="center">
-                        <checkbox index="[% $index %]">
+                        <checkbox index="[% content.id %]">
                     </td>
                     <td>
                         [% content.name %]

@@ -57,12 +57,28 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
             { contentType: sharedVars.get('contentType'), id: id }
         );
 
-        $http.post(url).success(function(data) {
-            if (data.errors.length == 0) {
+        $http.post(url).success(function(response) {
+            var errors = 0;
+            for (var i = 0; i < response.messages.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
+                };
+
+                messenger.post(params);
+
+                if (response.messages[i].type == 'error') {
+                    errors++;
+                }
+            };
+
+            if (errors == 0) {
                 contents.splice(index, 1);
                 sharedVars.set('total', sharedVars.get('total') - 1);
-                $modalInstance.close();
-            }
+            };
+
+            $modalInstance.close();
 
             // Disable spinner
             $scope.deleting = 0;
@@ -85,12 +101,6 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
-        var ids = [];
-
-        for (var i = 0; i < selected.length; i++) {
-            ids.push(contents[selected[i]].id);
-        };
-
         // Enable spinner
         $scope.deleting = 1;
 
@@ -98,40 +108,33 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
             route,
             { contentType: sharedVars.get('contentType') }
         );
-        $http.post(url, { ids: ids }).success(function(response) {
-            // Remove only successfully deleted contents
-            for (var i = 0; i < response.success.length; i++) {
-                var j = 0;
-                while (j < contents.length
-                    && contents[j].id != response.success[i].id
-                ) {
-                    j++;
-                }
-
-                if (j < contents.length) {
-                    contents.splice(j, 1);
-                    sharedVars.set('total', sharedVars.get('total') - 1);
-                }
-            };
-
-            for (var i = 0; i < response.success.length; i++) {
+        $http.post(url, { ids: selected }).success(function(response) {
+            var errors = 0;
+            for (var i = 0; i < response.messages.length; i++) {
                 var params = {
-                    id:      new Date().getTime() + '_' + response.success[i].id,
-                    message: response.success[i].message,
-                    type:    'success'
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
                 };
 
                 messenger.post(params);
-            };
 
-            for (var i = 0; i < response.errors.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.errors[i].id,
-                    message: response.errors[i].message,
-                    type:    'error'
-                };
+                if (response.messages[i].type == 'success') {
+                    console.log(response.messages[i]);
+                    for (var j = 0; j < response.messages[i].id.length; j++) {
+                        var k = 0;
+                        while (k < contents.length
+                            && contents[k].id != response.messages[i].id[j]
+                        ) {
+                            k++;
+                        }
 
-                messenger.post(params);
+                        if (k < contents.length) {
+                            contents.splice(k, 1);
+                            sharedVars.set('total', sharedVars.get('total') - 1);
+                        }
+                    };
+                }
             };
 
             $modalInstance.close();

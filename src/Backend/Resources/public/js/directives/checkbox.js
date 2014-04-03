@@ -79,7 +79,7 @@ angular.module('BackendApp.directives')
 
                     if (allSelected) {
                         for (var i = 0; i < contents.length; i++) {
-                            updateSelected(i);
+                            updateSelected(contents[i].id);
                         };
                     }
                 };

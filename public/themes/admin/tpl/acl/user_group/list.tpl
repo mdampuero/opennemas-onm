@@ -70,9 +70,9 @@
                             {t escape=off}There is no user groups created yet or <br/>results matching your searching criteria.{/t}
                         </td>
                     </tr>
-                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index) }">
+                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
                         <td>
-                            <checkbox index="[% $index %]">
+                            <checkbox index="[% content.id %]">
                         </td>
                         <td>
                             [% content.name %]

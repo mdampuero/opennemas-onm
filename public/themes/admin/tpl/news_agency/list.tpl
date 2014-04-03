@@ -102,9 +102,9 @@
                         <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                     </td>
                 </tr>
-                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected($index), already_imported: content.already_imported }">
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
                     <td>
-                        <checkbox index="[% $index %]">
+                        <checkbox index="[% content.id %]">
                     </td>
                     <td  class="right">
                         <span ng-if="content.priority == 1" class="badge badge-important">{t}Urgent{/t}</span>

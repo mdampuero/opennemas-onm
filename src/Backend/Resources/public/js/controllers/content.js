@@ -27,16 +27,10 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
 
-        var ids = [];
-
-        for (var i = 0; i < selected.length; i++) {
-            ids.push(contents[selected[i]].id);
-        };
-
         updateContentStatus(1);
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: ids, available: available })
+        $http.post(url, { ids: selected, available: available })
             .success(function(response) {
                 updateContentStatus(0, available);
 
@@ -62,19 +56,12 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      */
     $scope.batchToggleStatus = function (status, route) {
         // Load shared variable
-        var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
-
-        var ids = [];
-
-        for (var i = 0; i < selected.length; i++) {
-            ids.push(contents[selected[i]].id);
-        };
 
         updateStatus(1);
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: ids, status: status }).success(function(response) {
+        $http.post(url, { ids: selected, status: status }).success(function(response) {
             updateStatus(0, status);
 
             for (var i = 0; i < response.messages.length; i++) {
@@ -97,19 +84,12 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      */
     $scope.batchToggleInHome = function (inHome, route) {
         // Load shared variable
-        var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
-
-        var ids = [];
-
-        for (var i = 0; i < selected.length; i++) {
-            ids.push(contents[selected[i]].id);
-        };
 
         updateInHome(1);
 
         var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: ids, in_home: inHome })
+        $http.post(url, { ids: selected, in_home: inHome })
             .success(function(response) {
                 updateInHome(0, inHome);
 
@@ -511,8 +491,16 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var selected = sharedVars.get('selected');
 
         for (var i = 0; i < selected.length; i++) {
-            contents[selected[i]].content_status = status;
-            contents[selected[i]].loading = loading
+            var j = 0;
+
+            while (j < contents.length && contents[j].id != selected[i]) {
+                j++;
+            }
+
+            if (j < contents.length) {
+                contents[j].content_status = status;
+                contents[j].loading        = loading
+            }
         };
 
         // Updated shared variable
@@ -532,8 +520,15 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var selected = sharedVars.get('selected');
 
         for (var i = 0; i < selected.length; i++) {
-            contents[selected[i]].in_home = inHome;
-            contents[selected[i]].loading = loading
+            var j = 0;
+            while (j < contents.length && contents[j].id != selected[i]) {
+                j++;
+            }
+
+            if (j < contents.length) {
+                contents[j].in_home = inHome;
+                contents[j].home_loading = loading
+            }
         };
 
         // Updated shared variable
@@ -553,8 +548,14 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var selected = sharedVars.get('selected');
 
         for (var i = 0; i < selected.length; i++) {
-            contents[selected[i]].status = status;
-            contents[selected[i]].loading = loading
+            while (j < contents.length && contents[j].id != selected[i]) {
+                j++;
+            }
+
+            if (j < contents.length) {
+                contents[j].status = status;
+                contents[j].loading        = loading
+            }
         };
 
         // Updated shared variable
