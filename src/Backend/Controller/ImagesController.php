@@ -307,11 +307,15 @@ class ImagesController extends Controller
 
         // Check if ids was passed as params
         if (!is_array($ids) || !(count($ids) > 0)) {
-            m::add(_('Please provide a image id for show it.'), m::ERROR);
+            $ids = (int) $ids;
+            if ($ids <= 0) {
+                m::add(_('Please provide a image id for show it.'), m::ERROR);
 
-            return $this->redirect(
-                $this->generateUrl('admin_images', array('category' => $category))
-            );
+                return $this->redirect(
+                    $this->generateUrl('admin_images', array('category' => $category))
+                );
+            }
+            $ids = array($ids);
         }
 
         $photos = array();

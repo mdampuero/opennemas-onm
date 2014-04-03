@@ -107,11 +107,11 @@
                     </td>
                     <td>
                         <strong>[% content.author %]</strong><br>
-                        <a href="mailto:[% content.author_email%]" ng-if="content.author_email">
+                        <small ng-if="content.author_email">
                             [% content.author_email %]
-                        </a>
+                        </small>
                         <br>
-                        [% content.author_ip %]
+                        <small>[% content.author_ip %]</small>
                     </td>
                     <td class="left">
                         <div class="submitted-on">{t}Submitted on:{/t} [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>

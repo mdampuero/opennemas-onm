@@ -171,18 +171,17 @@
         <thead>
             <tr>
                 <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
-                <th class="center"></th>
+                <th class="center" style="width:10px"></th>
                 <th class="left">{t}Title{/t}</th>
                 {if $category=='widget' || $category == 'all'}
                     <th class="center">{t}Section{/t}</th>
                 {/if}
                 <th class="center">{t}Date{/t}</th>
                 <th class="center">{t}Price{/t}</th>
-                <th class="center">{t}Last editor{/t}</th>
-                <th class="center">{t}Published{/t}</th>
-                <th class="center">{t}Favorite{/t}</th>
-                <th class="center">{t}Home{/t}</th>
-                <th class="center"></th>
+                <th class="center" style="width:10px">{t}Published{/t}</th>
+                <th class="center" style="width:10px">{t}Favorite{/t}</th>
+                <th class="center" style="width:10px">{t}Home{/t}</th>
+                <th class="center" style="width:10px"></th>
             </tr>
         </thead>
 
@@ -198,8 +197,8 @@
                     <img ng-src="{$KIOSKO_IMG_URL}[% content.path%][% content.thumb_url %]"
                         title="{$cover->title|clearslash}" alt="{$cover->title|clearslash}" style="max-width:80px"/>
                 </td>
-                <td class="center">
-                    [% content.title%]
+                <td class="left">
+                    <span tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title%]</span>
                 </td>
                 {if $category == 'widget' || $category == 'all'}
                 <td class="center">
@@ -211,9 +210,6 @@
                 </td>
                 <td class="center">
                     [% content.price | number : 2 %] €
-                </td>
-                <td  class="center">
-                    [% shvs.extra.authors[content.fk_user_last_editor].name %]
                 </td>
                 {acl isAllowed="KIOSKO_AVAILABLE"}
                 <td class="center">

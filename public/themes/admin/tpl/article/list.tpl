@@ -134,7 +134,7 @@
                         <checkbox index="[% $index %]">
                     </td>
                     <td class="left" >
-                        <span rel="tooltip" data-original-title="{t}Last author: {/t}[% content.editor %]">[% content.title %]</span>
+                        <span tooltip="{t}Last editor{/t} [% shvs.extra.authors[content.fk_user_last_editor].name %]">[% content.title %]</span>
             			<div>
             				<small ng-if="content.fk_author != 0 || content.agency != ''">
             					<strong>{t}Author{/t}:</strong>
@@ -145,7 +145,6 @@
 		                            [% content.agency %]
 	                        	</span>
             				</small>
-            				<small ng-if="content.fk_user_last_editor != ''"><strong>{t}Last editor{/t}</strong>: [% shvs.extra.authors[content.fk_user_last_editor].name %]</small>
             			</div>
                     </td>
                     {if $category eq 'all' || $category == 0}

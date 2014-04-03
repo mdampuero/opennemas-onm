@@ -66,13 +66,7 @@
                         <checkbox index="[% $index %]">
                     </td>
                     <td>
-                        {acl isAllowed="MENU_UPDATE"}
-                        <a href="#" title="{t}Edit page '[% content.name %]'{/t}" title={t}"Edit"{/t}>
-                        {/acl}
-                            [% content.name %]
-                        {acl isAllowed="MENU_UPDATE"}
-                        </a>
-                        {/acl}
+                        [% content.name %]
                     </td>
                     {if count($menu_positions) > 1}
                     <td class="left">

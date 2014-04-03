@@ -131,13 +131,13 @@
                             </span>
                         </div>
                     </td>
-                    <td class="center nowrap">
+                    <td class="left nowrap">
                         [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                     </td>
                     <td class="right">
                         <div class="btn-group">
                             {acl isAllowed="IMAGE_UPDATE"}
-                            <button class="btn" ng-click="edit(content.id, 'admin_video_show')" type="button">
+                            <button class="btn" ng-click="edit(content.id, 'admin_photo_show')" type="button">
                                 <i class="icon-pencil"></i>
                             </button>
                             {/acl}
