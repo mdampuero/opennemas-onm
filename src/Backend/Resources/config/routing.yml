@@ -319,7 +319,7 @@ admin_image_show:
     defaults: { _controller  : BackendBundle:Images:show }
 
 admin_photo_show:
-    path:     /images/show
+    path:     /image/{id}/show
     defaults: { _controller  : BackendBundle:Images:show }
     options:
         expose: true
