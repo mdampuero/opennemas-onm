@@ -75,10 +75,9 @@
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {acl isAllowed="SPECIAL_WIDGET"}
                      {if $category eq 'widget'}
-                        <li class="separator"></li>
                         <li>
-                            <a href="#" class="admin_add" onClick="javascript:saveSortPositions('{url name=admin_special_widget_save_positions category=$category page=$page}');" title="Guardar Positions" alt="Guardar Posiciones">
-                                <img border="0" src="{$params.IMAGE_DIR}save.png" alt="Guardar Posiciones"><br />{t}Save positions{/t}
+                            <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+                                <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
                             </a>
                         </li>
                     {/if}
