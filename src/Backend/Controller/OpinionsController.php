@@ -369,6 +369,46 @@ class OpinionsController extends Controller
     }
 
     /**
+     * Change in_home status for one opinion given its id
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     *
+     * @Security("has_role('OPINION_HOME')")
+     **/
+    public function toggleInHomeAction(Request $request)
+    {
+        $id     = $request->query->getDigits('id', 0);
+        $status = $request->query->getDigits('status', 0);
+        $type   = $request->query->filter('type', 0, FILTER_SANITIZE_STRING);
+        $page   = $request->query->getDigits('page', 1);
+
+        $opinion = new \Opinion($id);
+
+        if (is_null($opinion->id)) {
+            m::add(sprintf(_('Unable to find an opinion with the id "%d"'), $id), m::ERROR);
+        } else {
+            $opinion->set_inhome($status, $_SESSION['userid']);
+            m::add(sprintf(_('Successfully changed in home state for the opinion "%s"'), $opinion->title), m::SUCCESS);
+        }
+
+        if ($type != 'frontpage') {
+            $url = $this->generateUrl(
+                'admin_opinions',
+                array('type' => $type, 'page' => $page)
+            );
+        } else {
+            $url = $this->generateUrl(
+                'admin_opinions_frontpage',
+                array('page' => $page)
+            );
+        }
+
+         return $this->redirect($url);
+    }
+
+    /**
      * Saves the widget opinions content positions
      *
      * @param Request $request the request object

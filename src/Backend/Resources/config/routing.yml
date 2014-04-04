@@ -716,6 +716,11 @@ admin_opinion_update:
     path:     /opinion/{id}/update
     defaults: { _controller  : BackendBundle:Opinions:update }
 
+admin_opinion_toggleinhome:
+    path:     /opinion/{id}/toggle-in-home
+    defaults: { _controller  : BackendBundle:Opinions:toggleInHome }
+
+
 admin_opinions_savepositions:
     path:     /opinions/save-positions
     defaults: { _controller  : BackendBundle:Opinions:savePositions }

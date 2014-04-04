@@ -6,8 +6,6 @@
             <th class="center" style="width:130px;">{t}Created on{/t}</th>
             <th class="center" style="width:10px"><img src="{$params.IMAGE_DIR}seeing.png" alt="{t}Views{/t}"></th>
             <th class="center" style="width:10px;">{t}Home{/t}</th>
-            <th class="center" style="width:10px;">{t}Available{/t}</th>
-            <th class="center" style="width:10px;">{t}Favorite{/t}</th>
             <th class="right" style="width:10px;"></th>
         </tr>
     </thead>
@@ -42,40 +40,11 @@
                     <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=1  type=$type page=$page}" class="go_home" title="Meter en portada" ></a>
                 {/if}
             </td>
-
-            <td class="center">
-            {acl isAllowed="OPINION_AVAILABLE"}
-                {if $opinion->content_status == 1}
-                    <a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=0  type=$type page=$page}" title="Publicado">
-                        <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-                    </a>
-                {else}
-                    <a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=1  type=$type page=$page}" title="Pendiente">
-                        <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-                    </a>
-                {/if}
-            {/acl}
-            </td>
-            <td class="center">
-                <a href="#" class="favourite_off" title="{t}NoFavorite{/t}">
-                    &nbsp;
-                </a>
-            </td>
             <td class="right">
                 <div class="btn-group">
                 {acl isAllowed="OPINION_UPDATE"}
                     <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
                         <i class="icon-pencil"></i>
-                    </a>
-                {/acl}
-                {acl isAllowed="OPINION_DELETE"}
-                    <a class="del btn btn-danger"
-                        data-controls-modal="modal-from-dom"
-                        data-url="{url name=admin_opinion_delete id=$opinion->id}"
-                        data-title="{$opinion->title|capitalize}"
-                        href="{url name=admin_opinion_delete id=$opinion->id}"
-                        title="{t}Delete{/t}">
-                        <i class="icon-trash icon-white"></i>
                     </a>
                 {/acl}
                 </div>
@@ -114,24 +83,6 @@
                 <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=1  type=$type page=$page}" class="go_home" title="Meter en portada" ></a>
             {/if}
         </td>
-        <td class="center">
-        {acl isAllowed="OPINION_AVAILABLE"}
-        {if $opinion->content_status == 1}
-            <a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=0  type=$type page=$page}" title="Publicado">
-                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-            </a>
-        {else}
-            <a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=1  type=$type page=$page}" title="Pendiente">
-                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-            </a>
-        {/if}
-        {/acl}
-        </td>
-        <td class="center">
-            <a href="#" class="favourite_off" title="{t}NoFavorite{/t}">
-                &nbsp;
-            </a>
-        </td>
         <td class="right">
             <div class="btn-group">
 
@@ -139,16 +90,6 @@
             <a class="btn" href="{url name=admin_opinion_show id=$opinion->id}" title="{t}Edit{/t}">
                 <i class="icon-pencil"></i>
             </a>
-            {/acl}
-            {acl isAllowed="OPINION_DELETE"}
-                <a class="del btn btn-danger"
-                    data-controls-modal="modal-from-dom"
-                    data-url="{url name=admin_opinion_delete id=$opinion->id}"
-                    data-title="{$opinion->title|capitalize}"
-                    href="{url name=admin_opinion_delete id=$opinion->id}"
-                    title="{t}Delete{/t}">
-                    <i class="icon-trash icon-white"></i>
-                </a>
             {/acl}
         </div>
         </td>
@@ -190,7 +131,7 @@
             {$opinion->views}
         </td>
         <td class="center">
-            {acl isAllowed="OPINION__FRONTPAGE"}
+            {acl isAllowed="OPINION_FRONTPAGE"}
                 {if $opinion->in_home == 1}
                     <a href="{url name=admin_opinion_toggleinhome id=$opinion->id status=0 type=$type page=$page}" class="no_home" title="Sacar de portada" >
                         &nbsp;
@@ -202,32 +143,6 @@
                 {/if}
             {/acl}
         </td>
-        <td class="center">
-            {acl isAllowed="OPINION_UPDATE"}
-            {if $opinion->content_status == 1}
-                <a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=0  type=$type page=$page}" title="Publicado">
-                    <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicado" />
-                </a>
-            {else}
-                <a href="{url name=admin_opinion_toggleavailable id=$opinion->id status=1 type=$type page=$page}" title="Pendiente">
-                    <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Pendiente" />
-                </a>
-            {/if}
-            {/acl}
-        </td>
-        <td class="center">
-        {acl isAllowed="OPINION_ADMIN"}
-            {if $opinion->favorite == 1 && $opinion->type_opinion == 0}
-            <a href="{url name=admin_opinion_togglefavorite id=$opinion->id status=0  type=$type page=$page}" class="favourite_on" title="{t}Favorite{/t}">
-                &nbsp;
-            </a>
-            {elseif $opinion->type_opinion == 0}
-            <a href="{url name=admin_opinion_togglefavorite id=$opinion->id status=1  type=$type page=$page}" class="favourite_off" title="{t}NoFavorite{/t}">
-                &nbsp;
-            </a>
-            {/if}
-        {/acl}
-        </td>
         <td class="right">
             <div class="btn-group">
 
@@ -236,17 +151,6 @@
                 <i class="icon-pencil"></i>
             </a>
             {/acl}
-            {acl isAllowed="OPINION_DELETE"}
-            <a class="del btn btn-danger"
-                data-controls-modal="modal-from-dom"
-                data-url="{url name=admin_opinion_delete id=$opinion->id}"
-                data-title="{$opinion->title|capitalize}"
-                href="{url name=admin_opinion_delete id=$opinion->id}"
-                title="{t}Delete{/t}">
-                <i class="icon-trash icon-white"></i>
-            </a>
-            {/acl}
-            </div>
         </td>
     </tr>
     {/foreach}
