@@ -103,7 +103,7 @@
                             {t}Showing{/t} [% (shvs.page - 1) * 10 %]-[% (shvs.page * 10) < shvs.total ? shvs.page * 10 : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
                         <div class="pull-right" ng-if="shvs.contents.length > 0">
-                            <pagination max-size="0" direction-links="true" direction-links="false" on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
                         <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                     </td>
