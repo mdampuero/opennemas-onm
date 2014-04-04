@@ -161,7 +161,7 @@
             <div class="controls">
                 <input type="checkbox" name="content_status" id="available" value="1"
                     {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if}
-                    {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
+                    {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
             </div>
         </div>
 

@@ -27,7 +27,7 @@
                             <br/>{t}Batch actions{/t}
                         </a>
                         <ul class="dropdown-menu" style="margin-top: 1px;">
-                            {acl isAllowed="ADVERTISEMENT_AVAILA"}
+                            {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                             <li>
                                 <a href="#" id="batch-publish" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
                                     <i class="icon-eye-open"></i>
@@ -133,7 +133,7 @@
                         <th>{t}Title{/t}</th>
                         <th class="center" style="width:30px">{t}Permanence{/t}</th>
                         <th class="center" style="width:40px"><img src="{$params.IMAGE_DIR}clicked.png" alt="{t}Clicks{/t}" title="{t}Clicks{/t}"></th>
-                        {acl isAllowed="ADVERTISEMENT_AVAILA"}
+                        {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                         <th class="center" style="width:40px;">{t}Available{/t}</th>
                         {/acl}
                         <th class="right" style="width:10px"></th>
@@ -169,7 +169,7 @@
                         <td style="text-align:center;">
                             [% content.num_clic_count %]
                         </td>
-                        {acl isAllowed="ADVERTISEMENT_AVAILA"}
+                        {acl isAllowed="ADVERTISEMENT_AVAILABLE"}
                         <td class="center" style="width:40px;">
                             <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" type="button">
                             </button>

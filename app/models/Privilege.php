@@ -301,6 +301,12 @@ class Privilege
                 'description'  => _('Arquive/unarquive'),
                 'module'       => 'ARTICLE',
             ),
+           14 =>  array(
+                'pk_privilege' => '14',
+                'name'         => 'ARTICLE_FAVORITE',
+                'description'  => _('Manager favorite flag'),
+                'module'       => 'ARTICLE',
+            ),
             15 => array(
                 'pk_privilege' => '15',
                 'name'         => 'ARTICLE_HOME',
@@ -327,7 +333,7 @@ class Privilege
             ),
             19 => array(
                 'pk_privilege' => '19',
-                'name'         => 'ADVERTISEMENT_AVAILA',
+                'name'         => 'ADVERTISEMENT_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
                 'module'       => 'ADVERTISEMENT',
             ),
@@ -358,7 +364,13 @@ class Privilege
             24 => array(
                 'pk_privilege' => '24',
                 'name'         => 'ADVERTISEMENT_HOME',
-                'description'  => _('Manage advertisments for homepage'),
+                'description'  => _('Manage advertisements for homepage'),
+                'module'       => 'ADVERTISEMENT',
+            ),
+            25 => array(
+                'pk_privilege' => '25',
+                'name'         => 'ADVERTISEMENT_FAVORITE',
+                'description'  => _('Manage favorite flag'),
                 'module'       => 'ADVERTISEMENT',
             ),
             26 => array(
@@ -1182,6 +1194,24 @@ class Privilege
                 'name'         => 'FILE_AVAILABLE',
                 'description'  => _('Publish/unpublish'),
                 'module'       => 'FILE',
+            ),
+            184 => array(
+                'pk_privilege' => '184',
+                'name'         => 'FILE_HOME',
+                'description'  => _('Manage frontpage'),
+                'module'       => 'FILE',
+            ),
+            185 => array(
+                'pk_privilege' => '185',
+                'name'         => 'FILE_FAVORITE',
+                'description'  => _('Manage favourite flag'),
+                'module'       => 'FILE',
+            ),
+            186 => array(
+                'pk_privilege' => '186',
+                'name'         => 'KIOSKO_FAVORITE',
+                'description'  => _('Manage favourite flag'),
+                'module'       => 'KIOSKO',
             ),
         );
 
