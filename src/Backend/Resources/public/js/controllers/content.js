@@ -706,6 +706,9 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                 }
             };
 
+            $scope.shvs.page = 1;
+            $location.search('page', null);
+
             searchTimeout = $timeout(function() {
                 $scope.list($scope.route);
             }, 500);
