@@ -1,5 +1,5 @@
 backend_ws_advertisements_list:
     path:     /advertisements
-    defaults: { _controller  : BackendWebServiceBundle:Advertisements:list }
+    defaults: { _controller: BackendWebServiceBundle:Advertisements:list }
     options:
         expose: true

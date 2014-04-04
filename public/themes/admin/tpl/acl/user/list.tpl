@@ -16,15 +16,15 @@
                         <br/>{t}Batch actions{/t}
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="ARTICLE_AVAILABLE"}
+                        {acl isAllowed="USER_AVAILABLE"}
                         <li>
-                            <a href="#" id="batch-publish" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
+                            <a href="#" id="batch-publish" ng-click="batchSetEnabled(1, 'backend_ws_users_batch_set_enabled')">
                                 <i class="icon-ok"></i>
                                 {t}Enable{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="batch-unpublish" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
+                            <a href="#" id="batch-unpublish" ng-click="batchSetEnabled(0, 'backend_ws_users_batch_set_enabled')">
                                 <i class="icon-remove"></i>
                                 {t}Disable{/t}
                             </a>
@@ -117,13 +117,13 @@
 						[% content.email %]
 					</td>
 					<td class="center">
-                        <span ng-repeat="group in content.id_user_group">[% shvs.extra.groups[group].name %][%$last ? '' : ', ' %]</span>
+                        <span ng-repeat="group in content.id_user_group">[% shvs.extra.groups[group].name %][% $last ? '' : ', ' %]</span>
 					</td>
 
 					<td class="center">
 						<div class="btn-group">
-							<button class="btn-link" type="button">
-							<i class="icon16 icon-ok" ng-class="{ 'icon-ok': content.activated, 'icon-remove': !content.activated}"></i>
+							<button class="btn-link" ng-click="setEnabled($index, 'backend_ws_user_set_enabled', content.activated != 1 ? 1 : 0)" type="button" ng-class="{ 'loading': content.loading == 1 }">
+							<i class="icon16" ng-class="{ 'icon-ok': content.loading != 1 && content.activated == 1, 'icon-remove': content.loading != 1 && content.activated == 0 }"></i>
 						</button>
 						</div>
 					</td>

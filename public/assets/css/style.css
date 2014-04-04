@@ -3241,7 +3241,8 @@ div#modal-element-customize-content div.select-disposition{
   width: 20px;
 }
 
-button.loading {
+button.loading,
+i.loading {
   background: url('../../themes/base/images/ajax-loader.gif') no-repeat;
   height: 20px;
   width: 20px;

@@ -54,6 +54,38 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      * @param int    available Available value.
      * @param string route     Route name.
      */
+    $scope.batchSetEnabled = function (enabled, route) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
+
+        updateEnabled(1);
+
+        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
+        $http.post(url, { ids: selected, enabled: enabled })
+            .success(function(response) {
+                updateEnabled(0, enabled);
+
+                for (var i = 0; i < response.messages.length; i++) {
+                    var params = {
+                        id:      new Date().getTime() + '_' + response.messages[i].id,
+                        message: response.messages[i].message,
+                        type:    response.messages[i].type
+                    };
+
+                    messenger.post(params);
+                };
+            }).error(function(response) {
+
+            });
+    };
+
+    /**
+     * Changes the available property for selected contents.
+     *
+     * @param int    available Available value.
+     * @param string route     Route name.
+     */
     $scope.batchToggleStatus = function (status, route) {
         // Load shared variable
         var selected = sharedVars.get('selected');
@@ -357,6 +389,47 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     };
 
     /**
+     * Enabled/disabled the user.
+     *
+     * @param int    index   Index of content in the array of contents.
+     * @param string route   Route name.
+     * @param int    enabled User's activated property.
+     */
+    $scope.setEnabled = function (index, route, enabled) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+
+        // Enable spinner
+        contents[index].loading = 1;
+
+        var url = fosJsRouting.generate(route, { id: contents[index].id });
+        $http.post(url, { enabled: enabled }).success(function(response) {
+            if (response.enabled != null) {
+                contents[index].activated = response.enabled;
+            }
+
+            for (var i = 0; i < response.messages.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
+                };
+
+                messenger.post(params);
+            };
+
+            // Disable spinner
+            contents[index].loading = 0;
+        }).error(function(response) {
+            // Disable spinner
+            contents[index].loading = 0;
+        });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
+    };
+
+    /**
      * Changes the content in_home property.
      *
      * @param int    id    Content id.
@@ -548,6 +621,7 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         var selected = sharedVars.get('selected');
 
         for (var i = 0; i < selected.length; i++) {
+            var j = 0;
             while (j < contents.length && contents[j].id != selected[i]) {
                 j++;
             }
@@ -563,6 +637,34 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         sharedVars.set('selected', selected);
     }
 
+
+    /**
+     * Updates the status property for selected contents.
+     *
+     * @param int loading Loading flag to use in template.
+     * @param int status  Status value.
+     */
+    function updateEnabled(loading, enabled) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
+
+        for (var i = 0; i < selected.length; i++) {
+            var j = 0;
+            while (j < contents.length && contents[j].id != selected[i]) {
+                j++;
+            }
+
+            if (j < contents.length) {
+                contents[j].activated = enabled;
+                contents[j].loading = loading
+            }
+        };
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
+        sharedVars.set('selected', selected);
+    }
 
     var searchTimeout;
 

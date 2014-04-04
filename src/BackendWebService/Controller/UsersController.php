@@ -27,9 +27,10 @@ class UsersController extends Controller
      */
     public function batchDeleteAction(Request $request, $contentType = null)
     {
-        $em = $this->get('user_repository');
+        $em      = $this->get('user_repository');
         $errors  = array();
         $success = array();
+        $updated = array();
 
         $ids = $request->request->get('ids');
 
@@ -40,29 +41,106 @@ class UsersController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->delete($id);
-                        $success[] = array(
-                            'id'      => $id,
-                            'message' => 'Selected items deleted successfully'
-                        );
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => 'Unable to delete item with id "$id"'
+                            'message' => 'Unable to delete item with id "$id"',
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"'
+                        'message' => 'Unable to find item with id "$id"',
+                        'type'    => 'error'
                     );
                 }
             }
         }
 
+        if (count($updated) > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => 'Selected items deleted successfully',
+                'type'    => 'success'
+            );
+        }
+
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => array_merge($success, $errors)
+            )
+        );
+    }
+
+    /**
+     * Updated the users activation status.
+     *
+     * @param  Request      $request The request object.
+     * @return JsonResponse          The response object.
+     */
+    public function batchSetEnabledAction(Request $request)
+    {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'user');
+
+        if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied (' . $roles . ')'
+                        )
+                    )
+                )
+            );
+        }
+
+        $enabled = $request->request->getDigits('enabled');
+        $ids     = $request->request->get('ids');
+        $errors  = array();
+        $success = array();
+        $updated = array();
+
+        foreach ($ids as $id) {
+            if (!is_null($id)) {
+                $user = new \User();
+                if ($enabled) {
+                    $user->activateUser($id);
+                } else {
+                    $user->deactivateUser($id);
+                }
+
+                $updated[] = $id;
+            } else {
+                $errors[] = array(
+                    'id'      => $id,
+                    'message' => _('Unable to find item with id "' . $id . '"'),
+                    'type'    => 'error'
+                );
+            }
+        }
+
+        if (count($updated) > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => _(count($updated) . ' item(s) updated successfully'),
+                'type'    => 'success'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'enabled'  => $enabled,
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -76,9 +154,8 @@ class UsersController extends Controller
      */
     public function deleteAction($id, $contentType = null)
     {
-        $em = $this->get('user_repository');
-        $errors  = array();
-        $success = array();
+        $em       = $this->get('user_repository');
+        $messages = array();
 
         $user = $em->find($id);
 
@@ -88,27 +165,25 @@ class UsersController extends Controller
 
                 $success[] = array(
                     'id'      => $id,
-                    'message' => 'Item deleted successfully'
+                    'message' => 'Item deleted successfully',
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to delete item with id "$id"'
+                    'message' => 'Unable to delete item with id "$id"',
+                    'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'message' => 'Unable to find item with id "$id"',
+                'type'    => 'error'
             );
         }
 
-        return new JsonResponse(
-            array(
-                'errors'  => $errors,
-                'success' => $success
-            )
-        );
+        return new JsonResponse(array('messages'  => $messages));
     }
 
     /**
@@ -153,6 +228,99 @@ class UsersController extends Controller
                 'extra'             => $this->loadExtraData($results),
                 'total'             => $total
             )
+        );
+    }
+
+    /**
+     * Updated the users activation status.
+     *
+     * @param  Request      $request The request object.
+     * @return JsonResponse          The response object.
+     */
+    public function setEnabledAction(Request $request, $id)
+    {
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'user');
+
+        if (!$hasRoles) {
+            $roles = '';
+            foreach ($required as $role) {
+                $roles .= $role;
+            }
+            $roles = rtrim($roles, ',');
+
+            return new JsonResponse(
+                array(
+                    'messages' => array(
+                        array(
+                            'id'      => '500',
+                            'type'    => 'error',
+                            'message' => 'Access denied (' . $roles . ')'
+                        )
+                    )
+                )
+            );
+        }
+
+        $enabled  = $request->request->getDigits('enabled');
+        $messages = array();
+
+        if (!is_null($id)) {
+            $user = new \User();
+            if ($enabled) {
+                $user->activateUser($id);
+            } else {
+                $user->deactivateUser($id);
+            }
+
+            $messages[] = array(
+                'id'      => $id,
+                'message' => _('Item updated successfully'),
+                'type'    => 'success'
+            );
+        } else {
+            $messages[] = array(
+                'id'      => $id,
+                'message' => _('Unable to find item with id "' . $id . '"'),
+                'type'    => 'error'
+            );
+        }
+
+        return new JsonResponse(
+            array(
+                'enabled'  => $enabled,
+                'messages' => $messages
+            )
+        );
+    }
+
+    /**
+     * Checks if the current user has roles to execute the required action.
+     *
+     * @param  string  $action      Required action.
+     * @param  string  $contentType Content type name.
+     * @return boolean              [description]
+     */
+    private function hasRoles($action)
+    {
+        $required = array();
+        $roles    = $this->getUser()->getRoles();
+
+        $required[] = 'USER_ADMIN';
+
+        switch ($action) {
+            case 'batchDeleteAction':
+            case 'deleteAction':
+                $required[] = 'USER_DELETE';
+                break;
+            case 'batchSetContentStatusAction':
+            case 'setContentStatusAction':
+                $required[] = 'USER_AVAILABLE';
+                break;
+        }
+
+        return array(
+            empty(array_diff($required, $roles)),
+            array_diff($required, $roles)
         );
     }
 
