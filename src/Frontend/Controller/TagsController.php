@@ -41,6 +41,8 @@ class TagsController extends Controller
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $page    = $request->query->getDigits('page', 1);
 
+        $tagName = \StringUtils::normalize($tagName);
+
         $cacheId = "tag|$tagName|$page";
         if (!$this->view->isCached('blog/tag.tpl', $cacheId)) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
