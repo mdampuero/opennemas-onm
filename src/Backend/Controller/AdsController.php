@@ -77,7 +77,7 @@ class AdsController extends Controller
         // Filters
         $filterOptions = array(
             'type_advertisement' => array('-1' => _("-- All --")) + $adsNames,
-            'available' => array(
+            'content_status' => array(
                 '-1' => _("-- All --"),
                 '0'  => _("No published"),
                 '1'  => _("Published")
