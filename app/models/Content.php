@@ -493,11 +493,6 @@ class Content
         $this->load($rs->fields);
         $this->fk_user = $this->fk_author;
 
-        // Get author data for contents
-        if (!empty($this->fk_author)) {
-            $this->author = new \User($this->fk_author);
-        }
-
         return $this;
     }
 
