@@ -268,7 +268,7 @@ class CommentsController extends ContentController
      * @param  array $contents Array of contents.
      * @return array           Array of extra data.
      */
-    private function loadExtraData($comments)
+    protected function loadExtraData($comments)
     {
         $extra = array();
 

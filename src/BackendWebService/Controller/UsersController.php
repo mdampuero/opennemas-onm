@@ -331,7 +331,7 @@ class UsersController extends ContentController
      * @param  array $contents Array of users.
      * @return array           Array of extra data.
      */
-    private function loadExtraData($results)
+    protected function loadExtraData($results)
     {
         $extra = array();
 
