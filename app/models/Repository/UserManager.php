@@ -73,6 +73,10 @@ class UserManager extends BaseManager
         ) {
             $entity = new \User($id);
 
+            if ($entity->id == null) {
+                return null;
+            }
+
             if ($this->hasCache()) {
                 $this->cache->save($cacheId, $entity);
             }
