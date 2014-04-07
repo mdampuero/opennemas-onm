@@ -13,10 +13,9 @@ namespace BackendWebService\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 
-class UserGroupsController extends Controller
+class UserGroupsController extends ContentController
 {
     /**
      * Returns a list of contents in JSON format.
@@ -57,6 +56,7 @@ class UserGroupsController extends Controller
         }
 
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $this->convertToUtf8($results);
         $total   = $em->countBy($search);
 
         return new JsonResponse(

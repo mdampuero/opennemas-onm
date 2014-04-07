@@ -13,7 +13,6 @@ namespace BackendWebService\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Onm\Framework\Controller\Controller;
 
 class CommentsController extends ContentController
 {
@@ -200,6 +199,7 @@ class CommentsController extends ContentController
 
         $em      = $this->get('comment_repository');
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $this->convertToUtf8($results);
         $total   = $em->countBy($search);
 
         return new JsonResponse(

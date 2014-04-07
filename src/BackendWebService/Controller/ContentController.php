@@ -62,7 +62,7 @@ class ContentController extends Controller
         }
 
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
-        $results = $this->convertToUTF8($results);
+        $results = $this->convertToUtf8($results);
         $total   = $em->countBy($search);
 
         return new JsonResponse(
@@ -1034,7 +1034,13 @@ class ContentController extends Controller
         return $extra;
     }
 
-    private function convertToUTF8($contents)
+    /**
+     * Converts all contents to utf-8.
+     *
+     * @param  array $contents Contents to convert.
+     * @return array           Contents with properties in utf-8.
+     */
+    protected function convertToUtf8($contents)
     {
         foreach ($contents as &$content) {
             foreach (get_object_vars($content) as $key => $value) {
