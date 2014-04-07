@@ -125,35 +125,33 @@ class UserManager extends BaseManager
      */
     public function findMulti(array $data)
     {
-        if ($key = array_search(null, $data)) {
-            unset($data[$key]);
-        }
-        $ordered = array_flip($data);
-
-        // Don't get information for undefined users (0)
-        if (array_key_exists(0, $ordered)) {
-            unset($ordered[0]);
-        }
+        $keys = array();
+        $ordered = array();
 
         $ids = array();
+        $i = 0;
         foreach ($data as $value) {
-            $ids[] = 'user_' . $value;
+            $ids[] = 'user_'.$value;
+            $keys[$value] = $i++;
         }
 
-        $users = array_values($this->cache->fetch($ids));
+        $users = $this->cache->fetch($ids);
 
         $cachedIds = array();
         foreach ($users as $user) {
-            $ordered[$user->id] = $user;
-            $cachedIds[] = 'user_' . $user->id;
+            $ordered[$keys[$user->id]] = $user;
+            $cachedIds[] = 'user_'.$user->id;
         }
 
         $missedIds = array_diff($ids, $cachedIds);
 
-        foreach ($missedIds as $content) {
-            list($contentType, $contentId) = explode('_', $content);
+        foreach ($missedIds as $user) {
+            list($contentType, $contentId) = explode('_', $user);
+
             $user = $this->find($contentId);
-            $ordered[$user->id] = $user;
+            if ($user->id) {
+                $ordered[$keys[$user->id]] = $user;
+            }
         }
 
         return array_values($ordered);

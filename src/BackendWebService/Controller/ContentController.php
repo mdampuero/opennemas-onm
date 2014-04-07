@@ -1018,6 +1018,11 @@ class ContentController extends Controller
             unset($ids[$key]);
         }
 
+        if (($key = array_search(null, $ids)) !== false) {
+            unset($ids[$key]);
+        }
+
+
         $users = $this->get('user_repository')->findMulti($ids);
 
         $extra['authors'] = array();
