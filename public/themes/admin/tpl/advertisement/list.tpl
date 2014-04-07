@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: -1, type_advertisement: -1, available: -1, with_script: -1, in_litter: 0 }, 'title', 'asc', 'backend_ws_contents_list')">
+    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: 0, type_advertisement: -1, available: -1, with_script: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
         <div class="top-action-bar clearfix">
             <div class="wrapper-content">
                 <div class="title">
