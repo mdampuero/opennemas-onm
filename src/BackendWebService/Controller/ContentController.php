@@ -1037,12 +1037,12 @@ class ContentController extends Controller
     private function convertToUTF8($contents)
     {
         foreach ($contents as &$content) {
-            foreach (get_object_vars($content) as $value) {
-                if (is_string($content->{$value})) {
-                    $content->{$value} = iconv(
-                        mb_detect_encoding($content->{$value}),
+            foreach (get_object_vars($content) as $key => $value) {
+                if (is_string($value)) {
+                    $content->{$key} = iconv(
+                        mb_detect_encoding($value),
                         'utf-8',
-                        $content->{$value}
+                        $value
                     );
                 }
             }
