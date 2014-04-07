@@ -6,7 +6,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { available: -1, title: '', blog: -1, author: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_opinions}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('opinion', { content_status: -1, title: '', blog: -1, author: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title">

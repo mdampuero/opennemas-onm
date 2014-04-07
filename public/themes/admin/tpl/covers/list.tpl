@@ -4,7 +4,7 @@
     {include file="common/angular_includes.tpl"}
 {/block}
 {block name="content"}
-<form action="{url name=admin_covers category=$category page=$page}" method="get" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('kiosko', { available: -1, title_like: '', category_name: -1, in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
+<form action="{url name=admin_covers category=$category page=$page}" method="get" name="formulario" id="formulario"  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('kiosko', { content_status: -1, title_like: '', category_name: -1, in_litter: 0{if $category == 'widget'}, in_home: 1{/if} }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
 
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
