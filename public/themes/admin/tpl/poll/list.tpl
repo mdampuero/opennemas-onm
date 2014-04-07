@@ -163,7 +163,7 @@
                 <th class="center" style="width:10px;"></th>
             </tr>
         </thead>
-        <tbody ui-sortable ng-model="shvs.contents">
+        <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
             <tr ng-if="shvs.contents.length == 0">
                 <td class="empty" colspan="10">{t}No available polls.{/t}</td>
             </tr>

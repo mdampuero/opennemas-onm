@@ -18,7 +18,7 @@
                         <br/>{t}Batch actions{/t}
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="IMAGE_DELETE"}
+                        {acl isAllowed="PHOTO_DELETE"}
                             <li class="divider"></li>
                             <li>
                                 <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
@@ -30,7 +30,7 @@
                     </ul>
                 </li>
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {acl isAllowed="IMAGE_CREATE"}
+                {acl isAllowed="PHOTO_CREATE"}
                 <li>
                     <a class="admin_add" href="{url name=admin_image_new category=$category}">
                         <img src="{$params.IMAGE_DIR}upload.png" alt="{t}Upload{/t}"><br />{t}Upload{/t}
@@ -136,12 +136,12 @@
                     </td>
                     <td class="right">
                         <div class="btn-group">
-                            {acl isAllowed="IMAGE_UPDATE"}
+                            {acl isAllowed="PHOTO_UPDATE"}
                             <a class="btn" href="[% edit(content.id, 'admin_photo_show') %]">
                                 <i class="icon-pencil"></i>
                             </a>
                             {/acl}
-                            {acl isAllowed="IMAGE_DELETE"}
+                            {acl isAllowed="PHOTO_DELETE"}
                             <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
                                 <i class="icon-trash icon-white"></i>
                             </button>

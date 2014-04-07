@@ -79,7 +79,7 @@
             <h3 class="title">{t}Video cover{/t}</h3>
             <div class="content cover-image {if isset($video) && $video->thumbnail}assigned{/if}">
                 <div class="image-data">
-                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
+                    <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
                         {if !empty($video->thumbnail)}
                             <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$video->thumbnail}"/>
                         {/if}
@@ -94,7 +94,7 @@
                 </div>
 
                 <div class="btn-group">
-                    <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
+                    <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
                     <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
                 </div>
             </div>

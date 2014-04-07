@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_specials}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('special', { available: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_specials}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('special', { available: -1, category_name: -1, in_home: {if $category == 'widget'}1{else}-1{/if}, title_like: '', in_litter: 0 }, {if $category == 'widget'}'position', 'asc'{else}'created', 'desc'{/if}, 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -168,7 +168,7 @@
                     <th class="right" style="width:110px;">{t}Actions{/t}</th>
                 </tr>
             </thead>
-            <tbody class="sortable">
+            <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
                 <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="10">{t}No available specials.{/t}</td>
                 </tr>

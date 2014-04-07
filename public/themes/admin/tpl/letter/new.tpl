@@ -172,7 +172,7 @@ jQuery(document).ready(function($) {
                 </div>
             </div>
 
-            {acl isAllowed='IMAGE_ADMIN'}
+            {acl isAllowed='PHOTO_ADMIN'}
             {is_module_activated name="IMAGE_MANAGER"}
             <div id="related_media" class="control-group">
                 <label for="special-image" class="control-label">{t}Image for Special{/t}</label>

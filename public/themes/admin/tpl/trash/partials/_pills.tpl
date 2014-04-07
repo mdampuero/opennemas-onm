@@ -10,6 +10,11 @@
         <option value="opinion">{t}Opinions{/t}</option>
     {/acl}{/is_module_activated}
 
+    {is_module_activated name="OPINION_MANAGER"}
+    {acl isAllowed="LETTER_TRASH"}
+        <option value="letter">{t}Letters{/t}</option>
+    {/acl}{/is_module_activated}
+
     {is_module_activated name="ADS_MANAGER"}
     {acl isAllowed="ADVERTISEMENT_TRASH"}
         <option value="advertisement">{t}Advertisements{/t}</option>
@@ -27,7 +32,7 @@
     {/acl}{/is_module_activated}
 
     {is_module_activated name="IMAGE_MANAGER"}
-    {acl isAllowed="IMAGE_TRASH"}
+    {acl isAllowed="PHOTO_TRASH"}
         <option value="photo">{t}Images{/t}</option>
     {/acl}{/is_module_activated}
 
@@ -52,7 +57,7 @@
     {/acl}{/is_module_activated}
 
     {is_module_activated name="STATIC_PAGES_MANAGER"}
-    {acl isAllowed="STATIC_DELETE"}
+    {acl isAllowed="STATIC_PAGE_DELETE"}
         <option value="static_page">{t}Static Pages{/t}</option>
     {/acl}{/is_module_activated}
 

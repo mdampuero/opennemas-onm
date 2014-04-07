@@ -56,7 +56,7 @@
                                 {/acl}
                                 {/is_module_activated}
                                 {is_module_activated name="IMAGE_MANAGER"}
-                                {acl isAllowed="IMAGE_CREATE"}
+                                {acl isAllowed="PHOTO_CREATE"}
                                 <li>
                                     <a href="{url name=admin_image_new}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-picture"></i>{t}Upload images{/t}
@@ -86,7 +86,7 @@
                                 {/is_module_activated}
 
                                 {is_module_activated name="STATIC_PAGES_MANAGER"}
-                                {acl isAllowed="STATIC_CREATE"}
+                                {acl isAllowed="STATIC_PAGE_CREATE"}
                                 <li>
                                     <a href="{url name=admin_staticpages_create}" title="{t}Media manager{/t}" class="thumbnail">
                                         <i class="icon icon-file-text-alt"></i>{t}Static page{/t}

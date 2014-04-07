@@ -42,7 +42,7 @@
                     </ul>
                 </li>
                 <li class="separator" ng-if="shvs.selected.length > 0"></li>
-                {acl isAllowed="STATIC_CREATE"}
+                {acl isAllowed="STATIC_PAGE_CREATE"}
     			<li>
     				<a href="{url name=admin_staticpages_create}" title="{t}Create new page{/t}">
     					<img border="0" src="{$params.IMAGE_DIR}list-add.png" title="{t}New static page{/t}" alt="" /><br />{t}New page{/t}
@@ -104,18 +104,18 @@
                         {$page->views}
                     </td> -->
                     <td class="center">
-                        {acl isAllowed="STATIC_AVAILABLE"}
+                        {acl isAllowed="STATIC_PAGE_AVAILABLE"}
                             <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" type="button"></button>
                         {/acl}
                     </td>
                     <td class="right nowrap">
                         <div class="btn-group">
-                            {acl isAllowed="STATIC_UPDATE"}
+                            {acl isAllowed="STATIC_PAGE_UPDATE"}
                             <a class="btn" href="[% edit(content.id, 'admin_staticpage_show') %]">
                                 <i class="icon-pencil"></i>
                             </a>
                             {/acl}
-                            {acl isAllowed="STATIC_DELETE"}
+                            {acl isAllowed="STATIC_PAGE_DELETE"}
                             <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
                                 <i class="icon-trash icon-white"></i>
                             </button>

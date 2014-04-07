@@ -71,7 +71,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -85,7 +85,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function configAction(Request $request)
     {
@@ -128,7 +128,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function searchAction(Request $request)
     {
@@ -274,7 +274,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_CREATE')")
+     * @Security("has_role('PHOTO_CREATE')")
      **/
     public function newAction(Request $request)
     {
@@ -298,7 +298,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_UPDATE')")
+     * @Security("has_role('PHOTO_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -359,7 +359,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_UPDATE')")
+     * @Security("has_role('PHOTO_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
@@ -405,7 +405,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_DELETE')")
+     * @Security("has_role('PHOTO_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
@@ -440,7 +440,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_CREATE')")
+     * @Security("has_role('PHOTO_CREATE')")
      **/
     public function createAction(Request $request)
     {
@@ -631,7 +631,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function contentProviderGalleryAction(Request $request)
     {

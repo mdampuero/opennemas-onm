@@ -49,7 +49,7 @@ class StaticPagesController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
-     * @Security("has_role('STATIC_ADMIN')")
+     * @Security("has_role('STATIC_PAGE_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -63,7 +63,7 @@ class StaticPagesController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
-     * @Security("has_role('STATIC_UPDATE')")
+     * @Security("has_role('STATIC_PAGE_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -94,7 +94,7 @@ class StaticPagesController extends Controller
      *
      * @return Symfony\Component\HttpFoundation\Response the response object
      *
-     * @Security("has_role('STATIC_CREATE')")
+     * @Security("has_role('STATIC_PAGE_CREATE')")
      **/
     public function createAction(Request $request)
     {
@@ -140,7 +140,7 @@ class StaticPagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('STATIC_UPDATE')")
+     * @Security("has_role('STATIC_PAGE_UPDATE')")
      **/
     public function updateAction(Request $request)
     {

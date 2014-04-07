@@ -29,7 +29,7 @@
                         <br/>{t}Batch actions{/t}
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="ARTICLE_AVAILABLE"}
+                        {acl isAllowed="COMMENT_AVAILABLE"}
                         <li>
                             <a href="#" id="batch-publish" ng-click="batchToggleStatus('accepted', 'backend_ws_comments_batch_toggle_status')">
                                 <i class="icon-check"></i>
@@ -43,7 +43,7 @@
                             </a>
                         </li>
                         {/acl}
-                        {acl isAllowed="ARTICLE_DELETE"}
+                        {acl isAllowed="COMMENT_DELETE"}
                             <li class="divider"></li>
                             <li>
                                 <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_comments_batch_delete')">
