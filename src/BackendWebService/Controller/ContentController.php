@@ -297,7 +297,7 @@ class ContentController extends Controller
      */
     public function batchRestoreFromTrashAction(Request $request, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'trash');
 
         if (!$hasRoles) {
             $roles = '';
@@ -375,7 +375,7 @@ class ContentController extends Controller
      */
     public function removePermanentlyAction($id, $contentType)
     {
-        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, $contentType);
+        list($hasRoles, $required) = $this->hasRoles(__FUNCTION__, 'trash');
 
         if (!$hasRoles) {
             $roles = '';
@@ -959,7 +959,7 @@ class ContentController extends Controller
         if ($contentType == 'content') {
             $type = [ 'advertisement', 'album', 'article', 'book', 'cover',
                 'file', 'letter', 'opinion', 'photo', 'poll', 'special',
-                'static', 'video', 'widget',
+                'static', 'trash', 'video', 'widget',
             ];
         } else {
             $type[] = $contentType;
@@ -972,8 +972,6 @@ class ContentController extends Controller
         switch ($action) {
             case 'batchSendToTrashAction':
             case 'sendToTrashAction':
-            case 'batchRemovePermanentlyAction':
-            case 'removePermanentlyAction':
                 $required[] = strtoupper($contentType) . '_DELETE';
                 break;
             case 'batchSetContentStatusAction':
@@ -1002,7 +1000,7 @@ class ContentController extends Controller
      * @param  array $contents Array of contents.
      * @return array           Array of extra data.
      */
-    private function loadExtraData($contents)
+    protected function loadExtraData($contents)
     {
         $extra = array();
 
