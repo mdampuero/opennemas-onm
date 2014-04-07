@@ -107,8 +107,8 @@
                         {html_options options=$filter_options.type_advertisement selected=$filterType}
                     </select>
                     &nbsp;&nbsp;
-                    <select class="input-medium select2" ng-model="shvs.search.available" data-label="{t}Status{/t}">
-                        {html_options options=$filter_options.available selected=$filterAvailable}
+                    <select class="input-medium select2" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                        {html_options options=$filter_options.content_status selected=$filterAvailable}
                     </select>
                      &nbsp;&nbsp;
                     <select class="input-medium select2" ng-model="shvs.search.with_script" data-label="{t}Type{/t}">

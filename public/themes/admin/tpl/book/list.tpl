@@ -107,7 +107,7 @@
                             {/section}
                     </select>
                     &nbsp;&nbsp;
-                    <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
+                    <select class="select2" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
                         <option value="-1"> {t}-- All --{/t} </option>
                         <option value="1"> {t}Published{/t} </option>
                         <option value="0"> {t}No published{/t} </option>
