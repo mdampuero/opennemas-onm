@@ -78,9 +78,9 @@ class UserGroupsController extends Controller
      */
     public function deleteAction($id, $contentType = null)
     {
-        $em = $this->get('usergroup_repository');
-        $errors  = array();
-        $success = array();
+        $em       = $this->get('usergroup_repository');
+        $errors   = array();
+        $messages = array();
 
         $user = $em->find($id);
 
@@ -88,27 +88,29 @@ class UserGroupsController extends Controller
             try {
                 $user->delete($id);
 
-                $success[] = array(
+                $messages[] = array(
                     'id'      => $id,
-                    'message' => 'User group deleted successfully'
+                    'message' => _('User group deleted successfully'),
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to delete the user group with the id "$id"'
+                    'message' => sprintf(_('Unable to delete the user group with the id "%s"'), $id),
+                    'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find the user group with id "$id"'
+                'message' => sprintf(_('Unable to find the user group with the id "%s"'), $id),
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => $messages
             )
         );
     }
@@ -125,6 +127,7 @@ class UserGroupsController extends Controller
         $em = $this->get('usergroup_repository');
         $errors  = array();
         $success = array();
+        $updated = array();
 
         $ids = $request->request->get('ids');
 
@@ -135,29 +138,35 @@ class UserGroupsController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->delete($id);
-                        $success[] = array(
-                            'id'      => $id,
-                            'message' => 'Selected user groups were deleted successfully'
-                        );
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => 'Unable to delete the user group with the id "$id"'
+                            'message' => sprintf(_('Unable to delete the user group with the id "%s"'), $id),
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to find the user group with the id "$id"'
+                        'message' => sprintf(_('Unable to find the user group with the id "%s"'), $id),
+                        'type'    => 'error'
                     );
                 }
             }
         }
 
+        if (count($updated) > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => _('Selected user groups were deleted successfully'),
+                'type'    => 'success'
+            );
+        }
+
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => array_merge($success, $errors)
             )
         );
     }
