@@ -85,7 +85,9 @@ class AdsController extends Controller
             'type'  => array(
                 '-1' => _("-- All --"),
                 '0' => _("Multimedia"),
-                '1' => _("Javascript")
+                '1' => _("Javascript"),
+                '2' => _("OpenX"),
+                '3' => _("Google DFP")
             ),
         );
 
