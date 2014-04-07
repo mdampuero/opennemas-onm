@@ -62,6 +62,7 @@ class ContentController extends Controller
         }
 
         $results = $em->findBy($search, $order, $elementsPerPage, $page);
+        $results = $this->convertToUTF8($results);
         $total   = $em->countBy($search);
 
         return new JsonResponse(
@@ -1031,5 +1032,22 @@ class ContentController extends Controller
         }
 
         return $extra;
+    }
+
+    private function convertToUTF8($contents)
+    {
+        foreach ($contents as &$content) {
+            foreach (get_object_vars($content) as $value) {
+                if (is_string($content->{$value})) {
+                    $content->{$value} = iconv(
+                        mb_detect_encoding($content->{$value}),
+                        'utf-8',
+                        $content->{$value}
+                    );
+                }
+            }
+        }
+
+        return $contents;
     }
 }
