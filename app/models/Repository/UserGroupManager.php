@@ -185,6 +185,11 @@ class UserGroupManager extends BaseManager
                 foreach ($values as $filter) {
                     $operator = "=";
                     $value    = "";
+                    if ($filter['value'][0] == '%'
+                        && $filter['value'][strlen($filter['value']) - 1] == '%'
+                    ) {
+                        $operator = "LIKE";
+                    }
 
                     // Check operator
                     if (array_key_exists('operator', $filter)) {
