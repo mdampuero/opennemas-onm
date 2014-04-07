@@ -153,7 +153,7 @@ class UserManager extends BaseManager
             list($contentType, $contentId) = explode('_', $user);
 
             $user = $this->find($contentId);
-            if ($user->id) {
+            if ($user && $user->id) {
                 $ordered[$keys[$user->id]] = $user;
             }
         }
@@ -174,57 +174,5 @@ class UserManager extends BaseManager
         });
 
         $this->cache->delete('user_' . $id);
-    }
-
-    /**
-     * Builds the SQL WHERE filter given an array or string with the desired filter
-     *
-     * @param string|array $filter the filter params
-     *
-     * @return string the SQL WHERE filter
-     */
-    protected function getFilterSQL($filters)
-    {
-        if (empty($filters)) {
-            $filterSQL = ' 1=1 ';
-        } elseif (is_array($filters)) {
-            $filterSQL = array();
-
-            foreach ($filters as $field => $values) {
-                $fieldFilters = array();
-
-                foreach ($values as $filter) {
-                    $operator = "=";
-                    $value    = "";
-                    if ($filter['value'][0] == '%'
-                        && $filter['value'][strlen($filter['value']) - 1] == '%'
-                    ) {
-                        $operator = "LIKE";
-                    }
-
-                    // Check operator
-                    if (array_key_exists('operator', $filter)) {
-                        $operator = $filter['operator'];
-                    }
-
-                    // Check value
-                    if (array_key_exists('value', $filter)) {
-                        $value = $filter['value'];
-                    }
-
-                    $fieldFilters[] = "`$field` $operator '$value'";
-                }
-
-                // Add filters for the current $field
-                $filterSQL[] = implode(' OR ', $fieldFilters);
-            }
-
-            // Build filters
-            $filterSQL = implode(' AND ', $filterSQL);
-        } else {
-            $filterSQL = $filter;
-        }
-
-        return $filterSQL;
     }
 }

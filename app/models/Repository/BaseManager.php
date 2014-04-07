@@ -40,32 +40,41 @@ abstract class BaseManager
      **/
     protected function getFilterSQL($filter)
     {
-        if (empty($filter)) {
+        if (empty($filters)) {
             $filterSQL = ' 1=1 ';
-        } elseif (is_array($filter)) {
+        } elseif (is_array($filters)) {
             $filterSQL = array();
-            foreach ($filter as $field => $value) {
-                if (is_array($value)) {
-                    $sql = array();
-                    foreach ($value as $v) {
-                        // TODO : detect LIKE sqls
-                        if ($v[0] == '%' && $v[strlen($v) -1] == '%') {
-                            $sql []= "`$field` LIKE '$v'";
-                        } else {
-                            $sql[]= "`$field`='$v'";
-                        }
+
+            foreach ($filters as $field => $values) {
+                $fieldFilters = array();
+
+                foreach ($values as $filter) {
+                    $operator = "=";
+                    $value    = "";
+                    if ($filter['value'][0] == '%'
+                        && $filter['value'][strlen($filter['value']) - 1] == '%'
+                    ) {
+                        $operator = "LIKE";
                     }
 
-                    $filterSQL[] = implode(' OR ', $sql);
-                } else {
-                    // TODO : detect LIKE sqls
-                    if ($value[0] == '%' && $value[strlen($value) -1] == '%') {
-                        $filterSQL []= "`$field` LIKE '$value'";
-                    } else {
-                        $filterSQL []= "`$field`='$value'";
+                    // Check operator
+                    if (array_key_exists('operator', $filter)) {
+                        $operator = $filter['operator'];
                     }
+
+                    // Check value
+                    if (array_key_exists('value', $filter)) {
+                        $value = $filter['value'];
+                    }
+
+                    $fieldFilters[] = "`$field` $operator '$value'";
                 }
+
+                // Add filters for the current $field
+                $filterSQL[] = implode(' OR ', $fieldFilters);
             }
+
+            // Build filters
             $filterSQL = implode(' AND ', $filterSQL);
         } else {
             $filterSQL = $filter;
