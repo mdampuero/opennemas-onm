@@ -44,8 +44,6 @@ angular.module('BackendApp.directives')
                  *                       Otherwise, return false.
                  */
                 $scope.isSelected = function(index) {
-                    index = parseInt(index);
-
                     // Load shared variables
                     var selected = sharedVars.get('selected');
 
@@ -92,8 +90,6 @@ angular.module('BackendApp.directives')
                  * @param boolean enabled Whether to select the item.
                  */
                 function updateSelected(index) {
-                    index = parseInt(index);
-
                     // Load shared variables
                     var selected = sharedVars.get('selected');
                     var inArray  = selected.indexOf(index);
