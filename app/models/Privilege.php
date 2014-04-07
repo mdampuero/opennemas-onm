@@ -933,7 +933,7 @@ class Privilege
             ),
             139 => array(
                 'pk_privilege' => '139',
-                'name'         => 'BOOK_FAVORITE',
+                'name'         => 'BOOK_HOME',
                 'description'  => _('Manage widget'),
                 'module'       => 'BOOK',
             ),

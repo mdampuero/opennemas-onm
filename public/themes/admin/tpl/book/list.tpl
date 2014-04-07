@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { available: -1, title_like: '', category_name: -1, in_litter: 0 }, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
+<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { available: -1, title_like: '', category_name: -1, in_litter: 0 {if $category == 'widget'},'in_home': 1{/if}}, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -169,9 +169,9 @@
                     <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" type="button"></button>
                 </td>
                 {/acl}
-                {acl isAllowed="BOOK_FAVORITE"}
+                {acl isAllowed="BOOK_HOME"}
                 <td class="center">
-                    <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="toggleFavorite(content.id, $index, 'backend_ws_content_toggle_favorite')" type="button"></button>
+                    <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home != 1 }" ng-click="toggleInHome(content.id, $index, 'backend_ws_content_toggle_in_home')" type="button"></button>
                 </td>
                 {/acl}
                 <td class="right">
