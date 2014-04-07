@@ -38,7 +38,7 @@ abstract class BaseManager
      *
      * @return string the SQL WHERE filter
      **/
-    protected function getFilterSQL($filter)
+    protected function getFilterSQL($filters)
     {
         if (empty($filters)) {
             $filterSQL = ' 1=1 ';
