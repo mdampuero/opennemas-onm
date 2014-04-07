@@ -48,9 +48,6 @@ class OpinionManager extends EntityManager
             WHERE $filterSQL AND pk_content=pk_opinion
             ORDER BY $orderBySQL $limitSQL";
 
-        // var_dump($sql);die();
-
-
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
         $rs = $this->dbConn->fetchAll($sql);
 
