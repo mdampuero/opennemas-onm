@@ -124,7 +124,7 @@
                     </td>
                     <td class="center">
                         {acl isAllowed="COMMENT_AVAILABLE"}
-                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="toggleStatus(content.id, $index, 'backend_ws_comment_toggle_status')" type="button"></button>
+                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.status == 'accepted', unpublished: (content.status == 'rejected' || content.status == 'pending') }" ng-click="updateItem($index, content.id, 'backend_ws_comment_toggle_status', 'status', content.status != 'accepted' ? 'accepted' : 'rejected', 'loading')" type="button"></button>
                         {/acl}
                     </td>
                     <td class="right">

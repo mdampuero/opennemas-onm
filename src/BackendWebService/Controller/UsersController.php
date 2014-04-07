@@ -104,7 +104,7 @@ class UsersController extends Controller
             );
         }
 
-        $enabled = $request->request->getDigits('enabled');
+        $enabled = $request->request->getDigits('value');
         $ids     = $request->request->get('ids');
         $errors  = array();
         $success = array();
@@ -139,7 +139,7 @@ class UsersController extends Controller
 
         return new JsonResponse(
             array(
-                'enabled'  => $enabled,
+                'activated'  => $enabled,
                 'messages' => array_merge($success, $errors)
             )
         );
@@ -261,7 +261,7 @@ class UsersController extends Controller
             );
         }
 
-        $enabled  = $request->request->getDigits('enabled');
+        $enabled  = $request->request->getDigits('value');
         $messages = array();
 
         if (!is_null($id)) {
@@ -287,8 +287,8 @@ class UsersController extends Controller
 
         return new JsonResponse(
             array(
-                'enabled'  => $enabled,
-                'messages' => $messages
+                'activated' => $enabled,
+                'messages'  => $messages
             )
         );
     }

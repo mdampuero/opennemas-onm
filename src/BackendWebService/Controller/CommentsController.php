@@ -227,17 +227,10 @@ class CommentsController extends ContentController
         $messages = array();
 
         $comment = $em->find($id);
+        $status = $request->request->get('value');
 
         if (!is_null($id)) {
             try {
-                $status = $comment->status;
-
-                if ($status != 'accepted') {
-                    $status = 'accepted';
-                } else {
-                    $status = 'rejected';
-                }
-
                 $comment->setStatus($status);
                 $em->delete($id);
 

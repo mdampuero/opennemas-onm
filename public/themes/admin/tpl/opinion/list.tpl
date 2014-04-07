@@ -42,26 +42,26 @@
                 <ul class="dropdown-menu" style="margin-top: 1px;">
                     {acl isAllowed="OPINION_AVAILABLE"}
                     <li>
-                        <a href="#" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
+                        <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
                             <i class="icon-eye-open"></i>
                             {t}Publish{/t}
                         </a>
                     </li>
                     <li>
-                        <a href="#" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
+                        <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
                             <i class="icon-eye-close"></i>
                             {t}Unpublish{/t}
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="#" ng-click="batchToggleInHome(1, 'backend_ws_contents_batch_toggle_in_home')">
+                        <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 1, 'home_loading')">
                             <i class="go-home"></i>
                             {t escape="off"}In home{/t}
                         </a>
                     </li>
                     <li>
-                        <a href="#" ng-click="batchToggleInHome(0, 'backend_ws_contents_batch_toggle_in_home')">
+                        <a href="#" ng-click="updateSelectedItems('backend_ws_contents_batch_toggle_in_home', 'in_home', 0, 'home_loading')">
                             <i class="no-home"></i>
                             {t escape="off"}Drop from home{/t}
                         </a>

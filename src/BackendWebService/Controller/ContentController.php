@@ -541,7 +541,7 @@ class ContentController extends Controller
             );
         }
 
-        $status  = $request->request->getDigits('status');
+        $status  = $request->request->getDigits('value');
 
         $em      = $this->get('entity_repository');
         $errors  = array();
@@ -565,6 +565,8 @@ class ContentController extends Controller
                 'type'    => 'error'
             );
         }
+
+
 
         return new JsonResponse(
             array(
@@ -610,7 +612,7 @@ class ContentController extends Controller
         $success = array();
         $updated = array();
 
-        $available = $request->request->get('available');
+        $available = $request->request->get('value');
         $ids       = $request->request->get('ids');
 
         if (is_array($ids) && count($ids) > 0) {
@@ -819,7 +821,7 @@ class ContentController extends Controller
         $success = array();
         $updated = array();
 
-        $inHome = $request->request->get('in_home');
+        $inHome = $request->request->get('value');
         $ids       = $request->request->get('ids');
 
         if (is_array($ids) && count($ids) > 0) {

@@ -17,127 +17,6 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     $scope.shvs = {}
 
     /**
-     * Changes the available property for selected contents.
-     *
-     * @param int    available Available value.
-     * @param string route     Route name.
-     */
-    $scope.batchSetContentStatus = function (available, route) {
-        // Load shared variable
-        var contents = sharedVars.get('contents');
-        var selected = sharedVars.get('selected');
-
-        updateContentStatus(1);
-
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: selected, available: available })
-            .success(function(response) {
-                updateContentStatus(0, available);
-
-                for (var i = 0; i < response.messages.length; i++) {
-                    var params = {
-                        id:      new Date().getTime() + '_' + response.messages[i].id,
-                        message: response.messages[i].message,
-                        type:    response.messages[i].type
-                    };
-
-                    messenger.post(params);
-                };
-            }).error(function(response) {
-
-            });
-    };
-
-    /**
-     * Changes the available property for selected contents.
-     *
-     * @param int    available Available value.
-     * @param string route     Route name.
-     */
-    $scope.batchSetEnabled = function (enabled, route) {
-        // Load shared variable
-        var contents = sharedVars.get('contents');
-        var selected = sharedVars.get('selected');
-
-        updateEnabled(1);
-
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: selected, enabled: enabled })
-            .success(function(response) {
-                updateEnabled(0, enabled);
-
-                for (var i = 0; i < response.messages.length; i++) {
-                    var params = {
-                        id:      new Date().getTime() + '_' + response.messages[i].id,
-                        message: response.messages[i].message,
-                        type:    response.messages[i].type
-                    };
-
-                    messenger.post(params);
-                };
-            }).error(function(response) {
-
-            });
-    };
-
-    /**
-     * Changes the available property for selected contents.
-     *
-     * @param int    available Available value.
-     * @param string route     Route name.
-     */
-    $scope.batchToggleStatus = function (status, route) {
-        // Load shared variable
-        var selected = sharedVars.get('selected');
-
-        updateStatus(1);
-
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: selected, status: status }).success(function(response) {
-            updateStatus(0, status);
-
-            for (var i = 0; i < response.messages.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.messages[i].id,
-                    message: response.messages[i].message,
-                    type:    response.messages[i].type
-                };
-
-                messenger.post(params);
-            };
-        });
-    };
-
-    /**
-     * Changes the in_home property for selected contents.
-     *
-     * @param int    inHome Available value.
-     * @param string route  Route name.
-     */
-    $scope.batchToggleInHome = function (inHome, route) {
-        // Load shared variable
-        var selected = sharedVars.get('selected');
-
-        updateInHome(1);
-
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType });
-        $http.post(url, { ids: selected, in_home: inHome })
-            .success(function(response) {
-                updateInHome(0, inHome);
-
-                for (var i = 0; i < response.messages.length; i++) {
-                    var params = {
-                        id:      new Date().getTime() + '_' + response.messages[i].id,
-                        message: response.messages[i].message,
-                        type:    response.messages[i].type
-                    };
-
-                    messenger.post(params);
-                };
-            });
-    };
-
-    /**
      * Removes invalid filters from array of filters.
      *
      * @param  Object $filters Filters.
@@ -345,26 +224,30 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     };
 
     /**
-     * Changes the content available property.
+     * Updates an item.
      *
-     * @param int    id    Content id.
-     * @param int    index Index of content in the array of contents.
-     * @param string route Route name.
+     * @param int    index   Index of the item to update in contents.
+     * @param int    id      Id of the item to update.
+     * @param string route   Route name.
+     * @param string name    Name of the property to update.
+     * @param mixed  value   New value.
+     * @param string loading Name of the property used to show work-in-progress.
      */
-    $scope.setContentStatus = function (index, route, status) {
+    $scope.updateItem = function (index, id, route, name, value, loading) {
         // Load shared variable
         var contents = sharedVars.get('contents');
 
         // Enable spinner
-        contents[index].loading = 1;
+        contents[index][loading] = 1;
 
         var url = fosJsRouting.generate(
             route,
-            { contentType: $scope.shvs.contentType, id: contents[index].id }
+            { contentType: $scope.shvs.contentType, id: id }
         );
-        $http.post(url, {status: status}).success(function(response) {
-            if (response.content_status != null) {
-                contents[index].content_status = response.content_status;
+
+        $http.post(url, { value: value }).success(function(response) {
+            if (response[name] != null) {
+                contents[index][name] = response[name];
             }
 
             for (var i = 0; i < response.messages.length; i++) {
@@ -378,10 +261,10 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             };
 
             // Disable spinner
-            contents[index].loading = 0;
+            contents[index][loading] = 0;
         }).error(function(response) {
             // Disable spinner
-            contents[index].loading = 0;
+            contents[index][loading] = 0;
         });
 
         // Updated shared variable
@@ -389,176 +272,50 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
     };
 
     /**
-     * Enabled/disabled the user.
+     * Updates selected items.
      *
-     * @param int    index   Index of content in the array of contents.
      * @param string route   Route name.
-     * @param int    enabled User's activated property.
+     * @param string name    Name of the property to update.
+     * @param mixed  value   New value.
+     * @param string loading Name of the property used to show work-in-progress.
      */
-    $scope.setEnabled = function (index, route, enabled) {
+    $scope.updateSelectedItems = function (route, name, value, loading) {
         // Load shared variable
         var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
 
-        // Enable spinner
-        contents[index].loading = 1;
+        updateItemsStatus(loading, 1);
 
-        var url = fosJsRouting.generate(route, { id: contents[index].id });
-        $http.post(url, { enabled: enabled }).success(function(response) {
-            if (response.enabled != null) {
-                contents[index].activated = response.enabled;
-            }
+        var url = fosJsRouting.generate(
+            route,
+            { contentType: $scope.shvs.contentType }
+        );
+        $http.post(url, { ids: selected, value: value })
+            .success(function(response) {
+                updateItemsStatus(loading, 0, name, value);
 
-            for (var i = 0; i < response.messages.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.messages[i].id,
-                    message: response.messages[i].message,
-                    type:    response.messages[i].type
+                for (var i = 0; i < response.messages.length; i++) {
+                    var params = {
+                        id:      new Date().getTime() + '_' + response.messages[i].id,
+                        message: response.messages[i].message,
+                        type:    response.messages[i].type
+                    };
+
+                    messenger.post(params);
                 };
+            }).error(function(response) {
 
-                messenger.post(params);
-            };
-
-            // Disable spinner
-            contents[index].loading = 0;
-        }).error(function(response) {
-            // Disable spinner
-            contents[index].loading = 0;
-        });
-
-        // Updated shared variable
-        sharedVars.set('contents', contents);
+            });
     };
 
     /**
-     * Changes the content in_home property.
-     *
-     * @param int    id    Content id.
-     * @param int    index Index of content in the array of contents.
-     * @param string route Route name.
+     * Updates selected items current status.
+     * @param  string  loading Name of the work-in-progress property.
+     * @param  integer status  Current work-in-progress status.
+     * @param  string  name    Name of the property to update.
+     * @param  mixed   value   Value of the property to update.
      */
-    $scope.toggleInHome = function (id, index, route) {
-        // Load shared variable
-        var contents = sharedVars.get('contents');
-
-        // Enable spinner
-        contents[index].home_loading = 1;
-
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
-        $http.post(url).success(function(response) {
-            if (response.in_home != null) {
-                contents[index].in_home = response.in_home;
-            }
-
-            for (var i = 0; i < response.messages.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.messages[i].id,
-                    message: response.messages[i].message,
-                    type:    response.messages[i].type
-                };
-
-                messenger.post(params);
-            };
-
-            // Disable spinner
-            contents[index].home_loading = 0;
-        }).error(function(response) {
-            // Disable spinner
-            contents[index].home_loading = 0;
-        });
-
-        // Updated shared variable
-        sharedVars.set('contents', contents);
-    };
-
-    /**
-     * Changes the content favorite property.
-     *
-     * @param int    id    Content id.
-     * @param int    index Index of content in the array of contents.
-     * @param string route Route name.
-     */
-    $scope.toggleFavorite = function (id, index, route) {
-        // Load shared variable
-        var contents = sharedVars.get('contents');
-
-        // Enable spinner
-        contents[index].favorite_loading = 1;
-
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
-        $http.post(url).success(function(response) {
-            if (response.favorite != null) {
-                contents[index].favorite = response.favorite;
-            }
-
-            for (var i = 0; i < response.messages.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.messages[i].id,
-                    message: response.messages[i].message,
-                    type:    response.messages[i].type
-                };
-
-                messenger.post(params);
-            };
-
-            // Disable spinner
-            contents[index].favorite_loading = 0;
-        }).error(function(response) {
-            // Disable spinner
-            contents[index].favorite_loading = 0;
-        });
-
-        // Updated shared variable
-        sharedVars.set('contents', contents);
-    };
-
-    /**
-     * Changes the content available property.
-     *
-     * @param int    id    Content id.
-     * @param int    index Index of content in the array of contents.
-     * @param string route Route name.
-     */
-    $scope.toggleStatus = function (id, index, route) {
-        // Load shared variable
-        var contents = sharedVars.get('contents');
-
-        // Enable spinner
-        contents[index].loading = 1;
-
-        var url = fosJsRouting.generate(route, { contentType: $scope.shvs.contentType, id: id });
-        $http.post(url).success(function(response) {
-            if (response.status != null) {
-                contents[index].status = response.status;
-            }
-
-            for (var i = 0; i < response.messages.length; i++) {
-                var params = {
-                    id:      new Date().getTime() + '_' + response.messages[i].id,
-                    message: response.messages[i].message,
-                    type:    response.messages[i].type
-                };
-
-                messenger.post(params);
-            };
-
-            // Disable spinner
-            contents[index].loading = 0;
-        }).error(function(response) {
-            // Disable spinner
-            contents[index].loading = 0;
-        });
-
-        // Updated shared variable
-        sharedVars.set('contents', contents);
-    };
-
-    /**
-     * Updates the content_status property for selected contents.
-     *
-     * @param int loading   Loading flag to use in template.
-     * @param int content_status Available value.
-     */
-    function updateContentStatus(loading, status) {
+    function updateItemsStatus(loading, status, name, value) {
         // Load shared variables
         var contents = sharedVars.get('contents');
         var selected = sharedVars.get('selected');
@@ -571,36 +328,8 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
             }
 
             if (j < contents.length) {
-                contents[j].content_status = status;
-                contents[j].loading        = loading
-            }
-        };
-
-        // Updated shared variable
-        sharedVars.set('contents', contents);
-        sharedVars.set('selected', selected);
-    }
-
-    /**
-     * Updates the in_home property for selected contents.
-     *
-     * @param int loading   Loading flag to use in template.
-     * @param int inHome    Available value.
-     */
-    function updateInHome(loading, inHome) {
-        // Load shared variables
-        var contents = sharedVars.get('contents');
-        var selected = sharedVars.get('selected');
-
-        for (var i = 0; i < selected.length; i++) {
-            var j = 0;
-            while (j < contents.length && contents[j].id != selected[i]) {
-                j++;
-            }
-
-            if (j < contents.length) {
-                contents[j].in_home = inHome;
-                contents[j].home_loading = loading
+                contents[j][loading] = status
+                contents[j][name]    = value;
             }
         };
 
@@ -637,43 +366,13 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
         sharedVars.set('selected', selected);
     }
 
-
-    /**
-     * Updates the status property for selected contents.
-     *
-     * @param int loading Loading flag to use in template.
-     * @param int status  Status value.
-     */
-    function updateEnabled(loading, enabled) {
-        // Load shared variable
-        var contents = sharedVars.get('contents');
-        var selected = sharedVars.get('selected');
-
-        for (var i = 0; i < selected.length; i++) {
-            var j = 0;
-            while (j < contents.length && contents[j].id != selected[i]) {
-                j++;
-            }
-
-            if (j < contents.length) {
-                contents[j].activated = enabled;
-                contents[j].loading = loading
-            }
-        };
-
-        // Updated shared variable
-        sharedVars.set('contents', contents);
-        sharedVars.set('selected', selected);
-    }
-
-    var searchTimeout;
-
     /**
      * Reloads the list when filters change.
      *
      * @param  object newValues New filters values.
      * @param  object oldValues Old filters values.
      */
+    var searchTimeout;
     $scope.$watch('shvs.search', function(newValues, oldValues) {
         if (searchTimeout) {
             $timeout.cancel(searchTimeout);

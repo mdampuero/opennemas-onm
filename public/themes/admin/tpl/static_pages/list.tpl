@@ -18,13 +18,13 @@
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="ARTICLE_AVAILABLE"}
                         <li>
-                            <a href="#" id="batch-publish" ng-click="batchSetContentStatus(1, 'backend_ws_contents_batch_set_content_status')">
+                            <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
                                 <i class="icon-eye-open"></i>
                                 {t}Publish{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="batch-unpublish" ng-click="batchSetContentStatus(0, 'backend_ws_contents_batch_set_content_status')">
+                            <a href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
                                 <i class="icon-eye-close"></i>
                                 {t}Unpublish{/t}
                             </a>
@@ -105,7 +105,7 @@
                     </td> -->
                     <td class="center">
                         {acl isAllowed="STATIC_PAGE_AVAILABLE"}
-                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="setContentStatus($index, 'backend_ws_content_set_content_status', content.content_status != 1 ? 1 : 0)" type="button"></button>
+                            <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button"></button>
                         {/acl}
                     </td>
                     <td class="right nowrap">
