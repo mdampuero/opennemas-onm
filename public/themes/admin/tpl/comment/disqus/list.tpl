@@ -56,7 +56,7 @@ jQuery(document).ready(function($){
 </div>
 <div class="iframe">
     {if !empty($disqus_shortname) && !empty($disqus_secret_key)}
-    <iframe src="http://{$disqus_shortname}.disqus.com/admin/moderate/" style="width: 100%; height: 80%; min-height:700px;"></iframe>
+    <iframe src="http://{$disqus_shortname}.disqus.com/admin/moderate/?template=wordpress" style="width: 100%; height: 80%; min-height:700px;"></iframe>
     {else}
         <div class="wrapper-content center">
             <h3>{t}Disqus not configured{/t}</h3>

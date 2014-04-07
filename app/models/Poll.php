@@ -274,8 +274,8 @@ class Poll extends Content
                 $item['percent'] = 0;
                 if (!empty($item['votes'])) {
                     $item['percent'] = sprintf(
-                        "%.0f",
-                        ($item['votes'] * 100 / $total)
+                        "%.2f",
+                        round($item['votes'] / $total, 4) * 100
                     );
                 }
             }
