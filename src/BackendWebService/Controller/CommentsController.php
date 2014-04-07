@@ -29,6 +29,7 @@ class CommentsController extends ContentController
         $em = $this->get('comment_repository');
         $errors  = array();
         $success = array();
+        $updated = array();
 
         $ids = $request->request->get('ids');
 
@@ -39,29 +40,35 @@ class CommentsController extends ContentController
                 if (!is_null($content->id)) {
                     try {
                         $content->delete($id);
-                        $success[] = array(
-                            'id'      => $id,
-                            'message' => 'Selected items deleted successfully'
-                        );
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => 'Unable to delete item with id "$id"'
+                            'message' => 'Unable to delete item with id "$id"',
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"'
+                        'message' => 'Unable to find item with id "$id"',
+                        'type'    => 'error'
                     );
                 }
             }
         }
 
+        if (count($updated) > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => count($updated) . ' item(s) deleted successfully',
+                'type'    => 'success'
+            );
+        }
+
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -78,6 +85,7 @@ class CommentsController extends ContentController
         $em      = $this->get('comment_repository');
         $errors  = array();
         $success = array();
+        $updated = array();
 
         $status = $request->request->get('status');
         $ids    = $request->request->get('ids');
@@ -90,30 +98,35 @@ class CommentsController extends ContentController
                     try {
                         $content->setStatus($status);
                         $em->delete($id);
-
-                        $success[] = array(
-                            'id'   => $id,
-                            'text' => _('Selected items updated successfully')
-                        );
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
-                            'id'   => $id,
-                            'text' => _('Unable to update item with id "$id"')
+                            'id'      => $id,
+                            'message' => _('Unable to update item with id "$id"'),
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"')
+                        'text' => _('Unable to find item with id "$id"'),
+                        'type' => 'error'
                     );
                 }
             }
         }
 
+        if (count($updated)) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => _(count($updated) . ' item(s) updated successfully'),
+                'type'    => 'success'
+            );
+        }
+
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages'  => array_merge($success, $errors)
             )
         );
     }
@@ -127,9 +140,8 @@ class CommentsController extends ContentController
      */
     public function deleteAction($id, $contentType = null)
     {
-        $em = $this->get('comment_repository');
-        $errors  = array();
-        $success = array();
+        $em       = $this->get('comment_repository');
+        $messages = array();
 
         $comment = $em->find($id);
 
@@ -137,27 +149,29 @@ class CommentsController extends ContentController
             try {
                 $comment->delete($id);
 
-                $success[] = array(
+                $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Item deleted successfully'
+                    'message' => 'Item deleted successfully',
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
-                $errors[] = array(
+                $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to delete item with id "$id"'
+                    'message' => 'Unable to delete item with id "$id"',
+                    'type'    => 'error'
                 );
             }
         } else {
-            $errors[] = array(
+            $messages[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'message' => 'Unable to find item with id "$id"',
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages'  => $messages
             )
         );
     }
@@ -208,10 +222,9 @@ class CommentsController extends ContentController
      */
     public function toggleStatusAction(Request $request, $id)
     {
-        $status  = null;
-        $em      = $this->get('comment_repository');
-        $errors  = array();
-        $success = array();
+        $status   = null;
+        $em       = $this->get('comment_repository');
+        $messages = array();
 
         $comment = $em->find($id);
 
@@ -228,84 +241,32 @@ class CommentsController extends ContentController
                 $comment->setStatus($status);
                 $em->delete($id);
 
-                $success[] = array(
+                $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Item updated successfully'
+                    'message' => 'Item updated successfully',
+                    'type'    => 'success'
                 );
             } catch (Exception $e) {
-                $errors[] = array(
+                $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to update item with id "$id"'
+                    'message' => 'Unable to update item with id "$id"',
+                    'type'    => 'error'
                 );
             }
         } else {
-            $errors[] = array(
+            $messages[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'message' => 'Unable to find item with id "$id"',
+                'type'    => 'error'
             );
         }
 
         return new JsonResponse(
             array(
-                'status'  => $status,
-                'errors'  => $errors,
-                'success' => $success
+                'status'   => $status,
+                'messages' => $messages,
             )
         );
-    }
-
-        /**
-     * Change  status some comments given its ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('COMMENT_AVAILABLE')")
-     **/
-    public function batchStatusAction(Request $request)
-    {
-        // Get request data
-        $selected = $request->query->get('selected_fld');
-        $status   = $request->query->filter('status', 'accepted');
-
-        if (count($selected) > 0) {
-
-            // Iterate over each comment and update its status
-            $success = 0;
-            foreach ($selected as $id) {
-                try {
-
-                    $comment = new \Comment($id);
-                    $comment->setStatus($status);
-                    $success++;
-                } catch (\Exception $e) {
-                    m::add(
-                        sprintf(_('Comment id %s: ').$e->getMessage(), $id),
-                        m::ERROR
-                    );
-                }
-            }
-
-            if ($success > 0) {
-                m::add(
-                    sprintf(
-                        _("Successfully changed the status to '%s' to %d comments."),
-                        $this->statuses[$status],
-                        $success
-                    ),
-                    m::SUCCESS
-                );
-            }
-        }
-
-        $params = array(
-            'page'     => $request->query->getDigits('page', 1),
-            'filter_status'   => $status,
-        );
-
-        return $this->redirect($this->generateUrl('admin_comments_list', $params));
-
     }
 
     /**

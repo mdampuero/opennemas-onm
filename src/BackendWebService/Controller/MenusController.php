@@ -30,6 +30,7 @@ class MenusController extends Controller
         $em = $this->get('menu_repository');
         $errors  = array();
         $success = array();
+        $updated = array();
 
         $ids = $request->request->get('ids');
 
@@ -40,29 +41,35 @@ class MenusController extends Controller
                 if (!is_null($content->id)) {
                     try {
                         $content->delete($id);
-                        $success[] = array(
-                            'id'      => $id,
-                            'message' => 'Selected items deleted successfully'
-                        );
+                        $updated[] = $id;
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => 'Unable to delete item with id "$id"'
+                            'message' => 'Unable to delete item with id "$id"',
+                            'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"'
+                        'message' => 'Unable to find item with id "$id"',
+                        'type'    => 'error'
                     );
                 }
             }
         }
 
+        if (count($updated) > 0) {
+            $success[] = array(
+                'id'      => $updated,
+                'message' => count($updated) . ' item(s) deleted successfully',
+                'type'    => 'success'
+            );
+        }
+
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => array_merge($success, $errors)
             )
         );
     }
@@ -76,9 +83,8 @@ class MenusController extends Controller
      */
     public function deleteAction($id, $contentType = null)
     {
-        $em = $this->get('menu_repository');
-        $errors  = array();
-        $success = array();
+        $em       = $this->get('menu_repository');
+        $messages = array();
 
         $menu = $em->find($id);
 
@@ -87,18 +93,18 @@ class MenusController extends Controller
                 $menu->delete($id);
                 $em->delete($id);
 
-                $success[] = array(
+                $messages[] = array(
                     'id'      => $id,
                     'message' => 'Item deleted successfully'
                 );
             } catch (Exception $e) {
-                $errors[] = array(
+                $messages[] = array(
                     'id'      => $id,
                     'message' => 'Unable to delete item with id "$id"'
                 );
             }
         } else {
-            $errors[] = array(
+            $messages[] = array(
                 'id'      => $id,
                 'message' => 'Unable to find item with id "$id"'
             );
@@ -106,8 +112,7 @@ class MenusController extends Controller
 
         return new JsonResponse(
             array(
-                'errors'  => $errors,
-                'success' => $success
+                'messages' => $messages,
             )
         );
     }

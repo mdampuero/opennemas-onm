@@ -899,7 +899,7 @@ class ContentController extends Controller
         $errors    = array();
         $positions = $request->request->get('positions');
         $success   = array();
-        $updated   = 0;
+        $updated   = array();
 
         $result = true;
         if (isset($positions)
