@@ -52,12 +52,6 @@
                     &nbsp;&nbsp;
                     <input type="text" autofocus placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
                     &nbsp;&nbsp;
-                    <select class="select2" name="status" ng-model="shvs.search.available" data-label="{t}Status{/t}">
-                        <option value="-1"> {t}-- All --{/t} </option>
-                        <option value="1"> {t}Published{/t} </option>
-                        <option value="0"> {t}No published{/t} </option>
-                    </select>
-                    &nbsp;&nbsp;
                     <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
                 </div>
             </div>
