@@ -45,14 +45,14 @@ class MenusController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => 'Unable to delete item with id "$id"',
+                            'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"',
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -62,7 +62,7 @@ class MenusController extends Controller
         if (count($updated) > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => count($updated) . ' item(s) deleted successfully',
+                'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -95,18 +95,18 @@ class MenusController extends Controller
 
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Item deleted successfully'
+                    'message' => _('Item deleted successfully')
                 );
             } catch (Exception $e) {
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to delete item with id "$id"'
+                    'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                 );
             }
         } else {
             $messages[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find item with id "$id"'
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
             );
         }
 

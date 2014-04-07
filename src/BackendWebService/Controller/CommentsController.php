@@ -44,14 +44,14 @@ class CommentsController extends ContentController
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => 'Unable to delete item with id "$id"',
+                            'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"',
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -61,7 +61,7 @@ class CommentsController extends ContentController
         if (count($updated) > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => count($updated) . ' item(s) deleted successfully',
+                'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -102,14 +102,14 @@ class CommentsController extends ContentController
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to update item with id "$id"'),
+                            'message' => sprintf(_('Unable to update item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'   => $id,
-                        'text' => _('Unable to find item with id "$id"'),
+                        'text' => sprintf(_('Unable to find the item with id "%d"'), $id)
                         'type' => 'error'
                     );
                 }
@@ -119,7 +119,7 @@ class CommentsController extends ContentController
         if (count($updated)) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _(count($updated) . ' item(s) updated successfully'),
+                'message' => sprintf(_('%d item(s) updated successfully'), count($updated))
                 'type'    => 'success'
             );
         }
@@ -151,20 +151,20 @@ class CommentsController extends ContentController
 
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Item deleted successfully',
+                    'message' => _('Item deleted successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to delete item with id "$id"',
+                    'message' => sprintf(_('Unable to delete the item with id "%d"'), $id)
                     'type'    => 'error'
                 );
             }
         } else {
             $messages[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find item with id "$id"',
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
             );
         }
@@ -243,20 +243,20 @@ class CommentsController extends ContentController
 
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Item updated successfully',
+                    'message' => _('Item updated successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to update item with id "$id"',
+                    'message' => sprintf(_('Unable to update item with id "%d"'), $id)
                     'type'    => 'error'
                 );
             }
         } else {
             $messages[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find item with id "$id"',
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
             );
         }

@@ -40,7 +40,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -99,7 +99,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -123,14 +123,14 @@ class ContentController extends Controller
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => _('Unable to delete item with id "' . $id . '"'),
+                    'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "' . $id . '"'),
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
             );
         }
@@ -166,7 +166,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -191,14 +191,14 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to delete item with id "' . $id . '"'),
+                            'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "' . $id . '"'),
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -208,7 +208,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _(count($updated) . ' item(s) deleted successfully'),
+                'message' => sprintf(_('%d item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -244,7 +244,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -268,14 +268,14 @@ class ContentController extends Controller
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => _('Unable to restore the item with id "' . $id . '"'),
+                    'message' => sprintf(_('Unable to restore the item with id "%d"'), $id),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find the item with id "' . $id . '"'),
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
             );
         }
@@ -311,7 +311,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -336,14 +336,14 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to restore from trash the item with id "' . $id . '"'),
+                            'message' => sprintf(_('Unable to restore from trash the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "' . $id . '"'),
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -353,7 +353,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _(count($updated) . ' item(s) restored successfully'),
+                'message' => sprintf(_('%d item(s) restored successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -389,7 +389,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -413,14 +413,14 @@ class ContentController extends Controller
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => _('Unable to remove permanently the item with id "' . $id . '"'),
+                    'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find the item with id "' . $id . '"'),
+                'message' => sprintf(_('Unable to find the item with id "%s"'), $id),
                 'type'    => 'error'
             );
         }
@@ -456,7 +456,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -481,14 +481,14 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to remove permanently the item with id "' . $id . '"'),
+                            'message' => sprintf(_('Unable to remove permanently the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "' . $id . '"'),
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -498,7 +498,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _(count($updated) . ' item(s) removed successfully'),
+                'message' => sprintf(_('%d item(s) removed successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -534,7 +534,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -561,7 +561,7 @@ class ContentController extends Controller
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "' . $id . '"'),
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
             );
         }
@@ -598,7 +598,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -628,14 +628,14 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to update item with id "' . $id . '"'),
+                            'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "' . $id . '"'),
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -645,7 +645,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _(count($updated) . ' item(s) updated successfully'),
+                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -681,7 +681,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -707,7 +707,7 @@ class ContentController extends Controller
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "' . $id . '"'),
+                'message' => sprintf(_('Unable to find the item with id "%s"'), $id),
                 'type'    => 'error'
             );
         }
@@ -744,7 +744,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -770,7 +770,7 @@ class ContentController extends Controller
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "' . $id . '"'),
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
             );
         }
@@ -807,7 +807,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -837,14 +837,14 @@ class ContentController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => _('Unable to update item with id "' . $id . '"'),
+                            'message' => sprintf(_('Unable to update the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => _('Unable to find item with id "' . $id . '"'),
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -854,7 +854,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _(count($updated) . ' item(s) updated successfully'),
+                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -889,7 +889,7 @@ class ContentController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -915,7 +915,7 @@ class ContentController extends Controller
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to save position for item with id "' . $id . '"',
+                        'message' => sprintf(_('Unable to save the position for the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -927,7 +927,7 @@ class ContentController extends Controller
         if ($updated > 0) {
             $success[] = array(
                 'id'      => $id,
-                'message' => 'Positions saved successfully',
+                'message' => _('Positions saved successfully'),
                 'type'    => 'success'
             );
         }
@@ -1022,7 +1022,6 @@ class ContentController extends Controller
         foreach ($users as $user) {
             $extra['authors'][$user->id] = $user->eraseCredentials();
         }
-
 
         return $extra;
     }

@@ -45,14 +45,14 @@ class UsersController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => 'Unable to delete item with id "$id"',
+                            'message' => sprintf(_('Unable to delete the item with id "%d"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => 'Unable to find item with id "$id"',
+                        'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -62,7 +62,7 @@ class UsersController extends Controller
         if (count($updated) > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => 'Selected items deleted successfully',
+                'message' => _('Selected items deleted successfully'),
                 'type'    => 'success'
             );
         }
@@ -97,7 +97,7 @@ class UsersController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -123,7 +123,7 @@ class UsersController extends Controller
             } else {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => _('Unable to find item with id "' . $id . '"'),
+                    'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                     'type'    => 'error'
                 );
             }
@@ -132,7 +132,7 @@ class UsersController extends Controller
         if (count($updated) > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _(count($updated) . ' item(s) updated successfully'),
+                'message' => sprintf(_('%d item(s) updated successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
@@ -165,20 +165,20 @@ class UsersController extends Controller
 
                 $success[] = array(
                     'id'      => $id,
-                    'message' => 'Item deleted successfully',
+                    'message' => _('Item deleted successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => 'Unable to delete item with id "$id"',
+                    'message' => sprintf(_('Unable to delete the item with the id "%d"'), $id),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => 'Unable to find item with id "$id"',
+                'message' => sprintf(_('Unable to find the item with the id "%d"'), $id),
                 'type'    => 'error'
             );
         }
@@ -254,7 +254,7 @@ class UsersController extends Controller
                         array(
                             'id'      => '500',
                             'type'    => 'error',
-                            'message' => 'Access denied (' . $roles . ')'
+                            'message' => sprintf(_('Access denied (%s)'), $roles)
                         )
                     )
                 )
@@ -280,7 +280,7 @@ class UsersController extends Controller
         } else {
             $messages[] = array(
                 'id'      => $id,
-                'message' => _('Unable to find item with id "' . $id . '"'),
+                'message' => sprintf(_('Unable to find the item with id "%d"'), $id),
                 'type'    => 'error'
             );
         }
