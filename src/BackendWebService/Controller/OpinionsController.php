@@ -45,6 +45,7 @@ class OpinionsController extends ContentController
         return new JsonResponse(
             array(
                 'elements_per_page' => $elementsPerPage,
+                'extra'             => $this->loadExtraData($results),
                 'page'              => $page,
                 'results'           => $results,
                 'total'             => $total

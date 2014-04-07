@@ -52,10 +52,10 @@
                 </td>
                 <td>
                     <strong>
-                        <span ng-if="content.author.name">
-                            [% content.author.name %]
+                        <span ng-if="content.fk_author">
+                            [% shvs.extra.authors[content.fk_author].name %]
                         </span>
-                        <span ng-if="!content.author.name">
+                        <span ng-if="!content.fk_author || content.fk_author == 0">
                             [% content.author %]
                         </span>
                     </strong>
