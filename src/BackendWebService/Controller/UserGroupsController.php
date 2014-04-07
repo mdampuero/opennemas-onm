@@ -90,20 +90,20 @@ class UserGroupsController extends Controller
 
                 $messages[] = array(
                     'id'      => $id,
-                    'message' => _('User group deleted successfully'),
+                    'message' => _('Item deleted successfully'),
                     'type'    => 'success'
                 );
             } catch (Exception $e) {
                 $errors[] = array(
                     'id'      => $id,
-                    'message' => sprintf(_('Unable to delete the user group with the id "%s"'), $id),
+                    'message' => sprintf(_('Unable to delete the item with the id "%s"'), $id),
                     'type'    => 'error'
                 );
             }
         } else {
             $errors[] = array(
                 'id'      => $id,
-                'message' => sprintf(_('Unable to find the user group with the id "%s"'), $id),
+                'message' => sprintf(_('Unable to find the item with the id "%s"'), $id),
                 'type'    => 'error'
             );
         }
@@ -142,14 +142,14 @@ class UserGroupsController extends Controller
                     } catch (Exception $e) {
                         $errors[] = array(
                             'id'      => $id,
-                            'message' => sprintf(_('Unable to delete the user group with the id "%s"'), $id),
+                            'message' => sprintf(_('Unable to delete the item with the id "%s"'), $id),
                             'type'    => 'error'
                         );
                     }
                 } else {
                     $errors[] = array(
                         'id'      => $id,
-                        'message' => sprintf(_('Unable to find the user group with the id "%s"'), $id),
+                        'message' => sprintf(_('Unable to find the item with the id "%s"'), $id),
                         'type'    => 'error'
                     );
                 }
@@ -159,7 +159,7 @@ class UserGroupsController extends Controller
         if (count($updated) > 0) {
             $success[] = array(
                 'id'      => $updated,
-                'message' => _('Selected user groups were deleted successfully'),
+                'message' => sprintf(_('%s item(s) deleted successfully'), count($updated)),
                 'type'    => 'success'
             );
         }
