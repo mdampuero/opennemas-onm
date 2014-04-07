@@ -163,7 +163,7 @@
 </div>
 
 <script type="text/ng-template" id="modal-import-selected">
-{include file="news_agency/modals/_modal_batch_import.tpl"}
+    {include file="news_agency/modals/_modal_batch_import.tpl"}
 </script>
 </div>
 {/block}

@@ -199,7 +199,7 @@ class NewsAgencyController extends Controller
                     'id'        => \urlencode($element->xmlFile)
                 )
             );
-            $element->id = $element->source_id . ',' . $element->id;
+            $element->id = $element->source_id . ',' . $element->id . '.xml';
 
             $element->already_imported = in_array($element->urn, $alreadyImported);
         }
@@ -312,21 +312,35 @@ class NewsAgencyController extends Controller
      **/
     public function batchImportAction(Request $request)
     {
-        $selected = $this->request->request->get('selected', null);
+        $ids      = array();
+        $selected = $this->request->request->get('ids', null);
+        $updated  = array();
+
 
         if (is_array($selected) && count($selected) > 0) {
-
             foreach ($selected as $value) {
+                $updated[] = $value;
+
                 // First is sorce_id and second is xml filename
                 $item = explode(',', $value);
 
                 // Import and create element - category unknown
                 $this->importElements($item[1], $item[0], 'GUESS');
-
             }
         }
 
-        return $this->redirect($this->generateUrl('admin_news_agency'));
+        return new JsonResponse(
+            array(
+                'already_imported' => true,
+                'messages'        => array(
+                    array(
+                        'id'      => $updated,
+                        'message' => sprintf(_('%s item(s) imported successfully'), count($updated)),
+                        'type'    => 'success'
+                    )
+                )
+            )
+        );
     }
 
     /**

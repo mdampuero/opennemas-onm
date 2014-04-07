@@ -120,7 +120,6 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
                 messenger.post(params);
 
                 if (response.messages[i].type == 'success') {
-                    console.log(response.messages[i]);
                     for (var j = 0; j < response.messages[i].id.length; j++) {
                         var k = 0;
                         while (k < contents.length
@@ -132,6 +131,64 @@ function ContentModalCtrl($http, $scope, $modalInstance, fosJsRouting,
                         if (k < contents.length) {
                             contents.splice(k, 1);
                             sharedVars.set('total', sharedVars.get('total') - 1);
+                        }
+                    };
+                }
+            };
+
+            $modalInstance.close();
+
+            // Disable spinner
+            $scope.deleting = 0;
+        }).error(function() {
+            // Disable spinner
+            $scope.deleting = 0;
+        });
+
+        // Updated shared variable
+        sharedVars.set('contents', contents);
+        sharedVars.set('selected', []);
+    };
+
+    /**
+     * Imports selected contents on confirmation.
+     *
+     * @param string route Route title.
+     */
+    $scope.importSelected = function (route) {
+        // Load shared variable
+        var contents = sharedVars.get('contents');
+        var selected = sharedVars.get('selected');
+
+        // Enable spinner
+        $scope.deleting = 1;
+
+        var url = fosJsRouting.generate(
+            route,
+            { contentType: sharedVars.get('contentType') }
+        );
+        $http.post(url, { ids: selected }).success(function(response) {
+            var errors = 0;
+            for (var i = 0; i < response.messages.length; i++) {
+                var params = {
+                    id:      new Date().getTime() + '_' + response.messages[i].id,
+                    message: response.messages[i].message,
+                    type:    response.messages[i].type
+                };
+
+                messenger.post(params);
+
+                if (response.messages[i].type == 'success') {
+                    for (var j = 0; j < response.messages[i].id.length; j++) {
+                        var k = 0;
+                        while (k < contents.length
+                            && contents[k].id != response.messages[i].id[j]
+                        ) {
+                            k++;
+                        }
+
+                        if (k < contents.length) {
+                            contents[k].already_imported = response.already_imported;
                         }
                     };
                 }
