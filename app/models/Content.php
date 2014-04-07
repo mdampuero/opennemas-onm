@@ -600,7 +600,7 @@ class Content
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
             $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
-            $this->category_name, $data['params'], $data['id']
+            $catName, $data['params'], $data['id']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
