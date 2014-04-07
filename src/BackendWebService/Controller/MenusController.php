@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 
-class MenusController extends Controller
+class MenusController extends ContentController
 {
     /**
      * Deletes multiple menus at once give them ids

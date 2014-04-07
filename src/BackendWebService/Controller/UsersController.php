@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Message as m;
 
-class UsersController extends Controller
+class UsersController extends ContentController
 {
     /**
      * Deletes multiple users at once give them ids
