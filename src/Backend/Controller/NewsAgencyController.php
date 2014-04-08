@@ -167,10 +167,16 @@ class NewsAgencyController extends Controller
         }
         $sources = array_map(
             function ($server) {
-                return $server['name'];
+                if (array_key_exists('name', $server)) {
+                    return $server['name'];
+                }
+
+                return null;
             },
             $servers
         );
+
+        $sources = array_unique($sources);
 
         // Fetch filter params
         $findParams = array(
