@@ -10,9 +10,10 @@ angular.module('BackendApp.filters').filter('moment', function() {
      * @param  string language Language used while formating.
      * @return string          The formated date.
      */
-    return function(input, format, language) {
+    return function(input, format, language, timezone) {
+        var fmt  = 'MMMM Do, YYYY, HH:mm';
         var lang = 'en';
-        var fmt = 'MMMM Do, YYYY, HH:mm'
+        var tmz  = 'Europe/Madrid';
 
         if (language) {
             lang = language;
@@ -26,9 +27,14 @@ angular.module('BackendApp.filters').filter('moment', function() {
             fmt = format;
         }
 
+        if (timezone) {
+            tmz = timezone;
+        }
+
         var date = new Date(input);
 
         moment.lang(lang);
-        return moment(date).format(fmt);
+
+        return moment(date).tz(tmz).format(fmt);
     };
 });

@@ -1,5 +1,6 @@
 {script_tag src="/libs/moment-with-langs.min.js" common=1}
 {script_tag src="/libs/moment-timezone.min.js" common=1}
+{script_tag src="/libs/moment-data.js" common=1}
 {script_tag src="/libs/messenger.min.js" common=1}
 {script_tag src="/onm/md5.min.js" language="javascript" common="1"}
 
