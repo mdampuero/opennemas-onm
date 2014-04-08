@@ -59,7 +59,7 @@ class OpinionsController extends Controller
      *
      * @Security("has_role('OPINION_ADMIN')")
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $blog)
     {
         // Fetch all authors
         $allAuthors = \User::getAllUsersAuthors();
@@ -68,6 +68,7 @@ class OpinionsController extends Controller
             'opinion/list.tpl',
             array(
                 'autores' => $allAuthors,
+                'blog'    => $blog,
                 'home'    => false,
             )
         );
