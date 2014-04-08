@@ -113,7 +113,7 @@
                         <span ng-if="content.priority < 1 || content.priority > 3" class="badge">{t}Basic{/t}</span>
                     </td>
                     <td >
-                        [% content.title %]
+                        <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
                         <div class="tags">
                             <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
                         </div>
