@@ -191,6 +191,10 @@ admin_ad_create:
 admin_ad_show:
     path:     /ad/{id}/show
     defaults: { _controller  : BackendBundle:Ads:show }
+
+admin_advertisement_show:
+    path:     /ad/{id}/show
+    defaults: { _controller  : BackendBundle:Ads:show }
     options:
         expose: true
 
@@ -515,6 +519,12 @@ admin_file_show:
     options:
         expose: true
 
+admin_attachment_show:
+    path:     /files/{id}/show
+    defaults: { _controller  : BackendBundle:Files:show }
+    options:
+        expose: true
+
 admin_files_update:
     path:     /files/{id}/update
     defaults: { _controller  : BackendBundle:Files:update }
@@ -684,11 +694,11 @@ admin_articles_content_provider_in_frontpage:
 # Opinion controller routes
 admin_opinions:
     path:     /opinions
-    defaults: { _controller  : BackendBundle:Opinions:list, contentType  : opinion }
+    defaults: { _controller  : BackendBundle:Opinions:list, blog  : 0 }
 
 admin_blogs:
     path:     /opinions/blog
-    defaults: { _controller  : BackendBundle:Opinions:list, contentType  : blog }
+    defaults: { _controller  : BackendBundle:Opinions:list, blog  : 1 }
 
 admin_opinions_frontpage:
     path:     /opinions/frontpage
