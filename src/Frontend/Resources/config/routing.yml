@@ -12,6 +12,8 @@ asset_image:
     requirements:
         parameters : "[^/]+"
         real_path : ".+"
+    options:
+        expose: true
 
 category_frontpage:
     path: /blog/section/{category_name}

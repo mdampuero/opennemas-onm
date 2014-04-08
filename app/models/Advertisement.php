@@ -133,6 +133,13 @@ class Advertisement extends Content
      **/
     public $timeout     = null;
 
+    /**
+     * Whether this advertisement has a flash image
+     *
+     * @var boolean
+     **/
+    public $is_flash = null;
+
 
     /**
      * Initializes the Advertisement class
@@ -144,8 +151,15 @@ class Advertisement extends Content
     public function __construct($id = null)
     {
         $this->content_type = get_class();
-
         parent::__construct($id);
+
+        // Check if it contains a flash element
+        $img = getService('entity_repository')->find('Photo', $this->path);
+        if ($img->type_img == "swf") {
+            $this->is_flash = 1;
+        } else {
+            $this->is_flash = 0;
+        }
     }
 
     /**

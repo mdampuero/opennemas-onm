@@ -1,69 +1,64 @@
 {extends file="base/admin.tpl"}
 
 {block name="header-js" append}
-    {script_tag src="/onm/jquery-functions.js" language="javascript"}
-{/block}
-
-{block name="footer-js" append}
-    <script>
-    var book_manager_urls = {
-        batchDelete: '{url name=admin_books_batchdelete category=$category page=$page}',
-        savePositions: '{url name=admin_books_save_positions category=$category page=$page}',
-        batch_publish: '{url name=admin_books_batchpublish new_status=1}',
-        batch_unpublish: '{url name=admin_books_batchpublish new_status=0}'
-    }
-
-    jQuery('#save-positions').on('click', function(e, ui){
-        e.preventDefault();
-
-        var items_id = [];
-        jQuery( "tbody.sortable tr" ).each(function(){
-            items_id.push(jQuery(this).data("id"))
-        });
-
-        jQuery.ajax(book_manager_urls.savePositions, {
-           type: "POST",
-           data: { positions : items_id }
-        }).done(function( msg ){
-
-               jQuery('#warnings-validation').html("<div class=\"success\">"+msg+"</div>")
-                                             .effect("highlight", { }, 3000);
-
-       });
-        return false;
-    });
-
-    </script>
+    {include file="common/angular_includes.tpl"}
 {/block}
 
 {block name="content"}
-<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario">
+<form action="{url name="admin_books"}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('book', { content_status: -1, title_like: '', category_name: -1, in_litter: 0 {if $category == 'widget'},'in_home': 1{/if}}, {if $category == 'widget'}'position'{else}'created'{/if}, {if $category == 'widget'}'asc'{else}'desc'{/if}, 'backend_ws_contents_list')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
-                <h2>{t}Books{/t}</h2>
+                <h2>{t}Books{/t} :: </h2>
+                <div class="section-picker">
+                    <div class="title-picker btn"><span class="text">{if $category == 'widget'}{t}WIDGET HOME{/t}{else}{t}Listing{/t}{/if}</span> <span class="caret"></span></div>
+                    <div class="options">
+                        <a href="{url name=admin_books_widget}" {if $category=='widget'}class="active"{/if}>{t}WIDGET HOME{/t}</a>
+                         <a href="{url name=admin_books}" {if $category != 'widget'}class="active"{/if}>{t}Listing{/t}</a>
+                    </div>
+                </div>
             </div>
 
             <ul class="old-button">
-                {acl isAllowed="BOOK_DELETE"}
-                <li>
-                    <button type="submit" href="#" data-controls-modal="modal-book-batchDelete" title="{t}Delete{/t}">
-                        <img src="{$params.IMAGE_DIR}trash.png" title="{t}Delete{/t}" alt="{t}Delete{/t}" ><br />{t}Delete{/t}
-                    </button>
+                <li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="BOOK_AVAILABLE"}
+                        <li>
+                            <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
+                                <i class="icon-eye-open"></i>
+                                {t}Publish{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
+                                <i class="icon-eye-close"></i>
+                                {t}Unpublish{/t}
+                            </a>
+                        </li>
+                        {/acl}
+                        {acl isAllowed="BOOK_DELETE"}
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
                 </li>
-                {/acl}
-                {acl isAllowed="BOOK_AVAILABLE"}
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
+                {if $category == 'widget' && $page <= 1}
                 <li>
-                    <button id="batch-unpublish" type="submit" name="status" value="0">
-                       <img border="0" src="{$params.IMAGE_DIR}publish_no.gif" title="{t}Unpublish{/t}" alt="{t}Unpublish{/t}" ><br />{t}Unpublish{/t}
-                   </button>
-               </li>
-               <li>
-                   <button id="batch-publish" type="submit" name="status" value="1">
-                       <img border="0" src="{$params.IMAGE_DIR}publish.gif" title="{t}Publish{/t}" alt="{t}Publish{/t}" ><br />{t}Publish{/t}
-                   </button>
-               </li>
-                {/acl}
+                    <a href="#" ng-click="savePositions('backend_ws_contents_save_positions')" title="{t}Save positions{/t}">
+                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
+                    </a>
+                </li>
+                {/if}
                 {acl isAllowed="BOOK_CREATE"}
                 <li class="separator"></li>
                 <li>
@@ -72,14 +67,6 @@
                     </a>
                 </li>
                 {/acl}
-                {if $page <= 1}
-                <li class="separator"></li>
-                <li>
-                    <a href="#" id="save-positions" title="{t}Save positions{/t}">
-                        <img src="{$params.IMAGE_DIR}save.png" alt="{t}Save positions{/t}"><br />{t}Save positions{/t}
-                    </a>
-                </li>
-                {/if}
             </ul>
         </div>
     </div>
@@ -87,169 +74,146 @@
 
         {render_messages}
 
-        <ul class="pills clearfix">
-            <li>
-                <a href="{url name=admin_books_widget}" {if $category == 'widget'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>WIDGET HOME</a>
-            </li>
-            <li>
-                <a href="{url name=admin_books}" {if $category == 'all'}class="active"{elseif $ca eq $datos_cat[0]->fk_content_category}{*class="active"*}{/if}>All categories</a>
-            </li>
-        </ul>
-
-        <div id="warnings-validation"></div>
-
         <div class="table-info clearfix">
-            <div>
-                <div class="right form-inline">
-                    <label>{t}Status:{/t}
-                    <select name="status" class="form-filters" {if $category == 'widget'} disabled="disabled"{/if}>
-                        <option value="" {if  !isset($status)}selected{/if}> {t}All{/t} </option>
-                        <option value="0" {if $status eq '0'}selected{/if}> {t}Unpublished{/t} </option>
-                        <option value="1" {if $status eq '1'}selected{/if}> {t}Published{/t} </option>
-                    </select>
-                    <input type="hidden" id="new_status" name="new_status" value="" />
-                    </label>
-
-                    <div class="input-append">
-                        <label for="category">
-                            {t}Category:{/t}
-                            <select name="category" class="form-filters">
-                                <option value="all" {if $category eq '0'}selected{/if}> {t}All{/t} </option>
-                                {section name=as loop=$allcategorys}
-                                     <option value="{$allcategorys[as]->pk_content_category}" {if isset($category) && ($category eq $allcategorys[as]->pk_content_category)}selected{/if}>{$allcategorys[as]->title}</option>
-                                     {section name=su loop=$subcat[as]}
-                                            {if $subcat[as][su]->internal_category eq 1}
-                                                <option value="{$subcat[as][su]->pk_content_category}"
-                                                {if $category eq $subcat[as][su]->pk_content_category || $article->category eq $subcat[as][su]->pk_content_category}selected{/if} name="{$subcat[as][su]->title}">&nbsp;&nbsp;|_&nbsp;&nbsp;{$subcat[as][su]->title}</option>
-                                            {/if}
-                                        {/section}
+            <div class="pull-left">
+                <div class="form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
+                    <input type="text" autofocus placeholder="{t}Search by title{/t}" name="title" ng-model="shvs.search.title_like"/>
+                    &nbsp;&nbsp;
+                    <select class="select2" id="category" ng-model="shvs.search.category_name" data-label="{t}Category{/t}">
+                        <option value="-1">{t}-- All --{/t}</option>
+                            {section name=as loop=$allcategorys}
+                                {assign var=ca value=$allcategorys[as]->pk_content_category}
+                                <option value="{$allcategorys[as]->name}">
+                                    {$allcategorys[as]->title}
+                                    {if $allcategorys[as]->inmenu eq 0}
+                                        <span class="inactive">{t}(inactive){/t}</span>
+                                    {/if}
+                                </option>
+                                {section name=su loop=$subcat[as]}
+                                {assign var=subca value=$subcat[as][su]->pk_content_category}
+                                {acl hasCategoryAccess=$subcat[as][su]->pk_content_category}
+                                    {assign var=subca value=$subcat[as][su]->pk_content_category}
+                                    <option value="{$subcat[as][su]->name}">
+                                        &rarr;
+                                        {$subcat[as][su]->title}
+                                        {if $subcat[as][su]->inmenu eq 0 || $allcategorys[as]->inmenu eq 0}
+                                            <span class="inactive">{t}(inactive){/t}</span>
+                                        {/if}
+                                    </option>
+                                {/acl}
                                 {/section}
-                            </select>
-                        </label>
-                        <button type="submit" id="search" class="btn"><i class="icon-search"></i></button>
-                    </div>
+                            {/section}
+                    </select>
+                    &nbsp;&nbsp;
+                    <select class="select2" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                        <option value="-1"> {t}-- All --{/t} </option>
+                        <option value="1"> {t}Published{/t} </option>
+                        <option value="0"> {t}No published{/t} </option>
+                    </select>
+                    &nbsp;&nbsp;
+                    <input type="hidden" name="in_home" ng-model="shvs.search.in_home">
                 </div>
             </div>
         </div>
+        <div ng-include="'files'"></div>
 
-        <table class="table table-hover table-condensed">
+        <script type="text/ng-template" id="files">
+            <div class="spinner-wrapper" ng-if="loading">
+                <div class="spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
+            </div>
+
+            <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
                 <tr>
-                    <th style="width:15px;">
-                        <input type="checkbox" class="toggleallcheckbox">
-                    </th>
+                    <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th class="title">{t}Title{/t}</th>
                     <th style="width:65px;" class="center">{t}Section{/t}</th>
-                    <th class="center" style="width:100px;">Created</th>
-                    <th class="center" style="width:10px;">{t}Published{/t}</th>
-                    <th class="center" style="width:10px;">{t}Favorite{/t}</th>
-                    <th class="right" style="width:110px;">{t}Actions{/t}</th>
+                    <th class="center" style="width:100px;">{t}Created on{/t}</th>
+                    {acl isAllowed="BOOK_AVAILABLE"}
+                    <th class="center" style="width:35px;">{t}Published{/t}</th>
+                    {/acl}
+                    {acl isAllowed="BOOK_AVAILABLE"}
+                    <th class="center" style="width:35px;">{t}Home{/t}</th>
+                    {/acl}
+                    <th class="right" style="width:10px;"></th>
                 </tr>
             </thead>
-            <tbody class="sortable">
-            {foreach $books as $book}
-            <tr data-id="{$book->pk_book}" style="cursor:pointer;">
-                <td class="center">
-                    <input type="checkbox" class="minput"  id="selected_{$book->id}" name="selected_fld[]" value="{$book->id}"  style="cursor:pointer;" >
+            <tbody {if $category == 'widget'}ui-sortable ng-model="shvs.contents"{/if}>
+            <tr ng-if="shvs.contents.length == 0">
+                <td class="empty" colspan="10">{t}No available books.{/t}</td>
+            </tr>
+
+            <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }" data-id="[% content.id %]">
+                <td>
+                    <checkbox index="[% content.id %]">
                 </td>
                 <td>
-                    <a href="{url name=admin_book_show id=$book->pk_book}" title="{$book->title|clearslash}">
-                        {$book->title|clearslash}
-                    </a>
+                    [% content.title %]
                 </td>
                 <td class="center">
-                    {$book->category_title}
+                    <span ng-if="content.category_name">
+                        [% content.category_name %]
+                    </span>
+                    <span ng-if="!content.category_name">
+                        {t}Unassigned{/t}
+                    </span>
                 </td>
+                <td class="center nowrap">
+                    [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                </td>
+                {acl isAllowed="BOOK_AVAILABLE"}
                 <td class="center">
-                    {$book->created}
+                    <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button"></button>
                 </td>
+                {/acl}
+                {acl isAllowed="BOOK_HOME"}
                 <td class="center">
-                    {acl isAllowed="BOOK_AVAILABLE"}
-                        {if $book->available == 1}
-                            <a href="{url name=admin_books_toggle_available id=$book->id status=0 category=$category page=$page|default:1}" title="{t}Published{/t}">
-                                <img src="{$params.IMAGE_DIR}publish_g.png" alt="{t}Published{/t}" />
-                            </a>
-                        {else}
-                            <a href="{url name=admin_books_toggle_available id=$book->id status=1 category=$category page=$page|default:1}" title="{t}Pendiente{/t}">
-                                <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Pendiente{/t}" />
-                            </a>
-                        {/if}
-                    {/acl}
+                    <button class="btn-link" ng-class="{ loading: content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home != 1 }" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button"></button>
                 </td>
-
-                <td class="center">
-                    {acl isAllowed="BOOK_AVAILABLE"}
-                        {if $book->in_home == 1}
-                           <a href="{url name=admin_books_toggle_inhome id=$book->id status=0 category=$category page=$page|default:1}" class="no_home" title="{t}Take out from home{/t}"></a>
-                        {else}
-                            <a href="{url name=admin_books_toggle_inhome id=$book->id status=1 category=$category page=$page|default:1}" class="go_home" title="{t}Put in home{/t}"></a>
-                        {/if}
-                    {/acl}
-                </td>
+                {/acl}
                 <td class="right">
                     <div class="btn-group">
                        {acl isAllowed="BOOK_UPDATE"}
-                            <a class="btn"  href="{url name=admin_book_show id=$book->pk_book}" title="{t}Edit book{/t}" >
-                               <i class="icon-pencil"></i> {t}Edit{/t}
-                            </a>
-                       {/acl}
-
-                       {acl isAllowed="BOOK_DELETE"}
-                            <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                                data-id="{$book->pk_book}"
-                                data-title="{$book->title|capitalize}"
-                                data-url="{url name=admin_books_delete id=$book->id}"
-                                href="{url name=admin_books_delete id=$book->id}" >
-                                <i class="icon-trash icon-white"></i>
-                            </a>
-                       {/acl}
+                        <a class="btn" href="[% edit(content.id, 'admin_book_show') %]">
+                            <i class="icon-pencil"></i>
+                        </a>
+                        {/acl}
+                        {acl isAllowed="BOOK_DELETE"}
+                        <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                            <i class="icon-trash icon-white"></i>
+                        </button>
+                        {/acl}
                     </div>
                 </td>
-
             </tr>
-            {foreachelse}
-            <tr>
-                <td class="empty" colspan="9">{t}There is no books yet{/t}</td>
-            </tr>
-            {/foreach}
         </tbody>
         <tfoot>
-          <td colspan="9">
-            <div class="pagination" class="center">
-                {$pagination->links|default:""}
-            </div>
-          </td>
+            <tr>
+                <td colspan="10" class="center">
+                    <div class="pull-left" ng-if="shvs.contents.length > 0">
+                        {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                    </div>
+                    <div class="pull-right" ng-if="shvs.contents.length > 0">
+                        <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                    </div>
+                    <span ng-if="shvs.contents.length == 0">&nbsp;</span>
+                </td>
+            </tr>
         </tfoot>
     </table>
+    </script>
+
+    <script type="text/ng-template" id="modal-delete">
+        {include file="common/modals/_modalDelete.tpl"}
+    </script>
+
+    <script type="text/ng-template" id="modal-delete-selected">
+        {include file="common/modals/_modalBatchDelete.tpl"}
+    </script>
 
     </div>
 </form>
- <script>
-    // <![CDATA[
-        jQuery('#batch-publish').on('click', function(e){
-            e.preventDefault();
-            jQuery('#formulario').attr('action', book_manager_urls.batch_publish);
-            $('#new_status').val($(this).val());
-            jQuery('#formulario').submit();
-        });
-        jQuery('#batch-unpublish').on('click', function(e){
-            e.preventDefault();
-            jQuery('#formulario').attr('action', book_manager_urls.batch_unpublish);
-            $('#new_status').val($(this).val());
-            jQuery('#formulario').submit();
-        });
-
-
-        jQuery(document).ready(function() {
-            makeSortable();
-        });
-
-    // ]]>
-
-</script>
-
-{include file="book/modals/_modalDelete.tpl"}
-{include file="book/modals/_modalBatchDelete.tpl"}
-{include file="book/modals/_modalAccept.tpl"}
-
 {/block}

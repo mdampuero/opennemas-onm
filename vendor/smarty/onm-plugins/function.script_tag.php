@@ -23,6 +23,9 @@ function smarty_function_script_tag($params, &$smarty)
         if (array_key_exists('common', $params) && $params['common']=="1") {
             $file = SITE_PATH.SS."assets".SS."js".SS.$href;
             $serverUrl = SS."assets".SS;
+        } elseif (array_key_exists('bundle', $params)) {
+            $file = SITE_PATH."bundles".SS.$params['bundle'].SS.$basepath.SS.$src;
+            $serverUrl = SS."bundles".SS.$params['bundle'].SS;
         } else {
             $file = SITE_PATH.SS."themes".SS.$smarty->theme.SS.$basepath.$href;
             $serverUrl = SS."themes".SS.$smarty->theme.SS;

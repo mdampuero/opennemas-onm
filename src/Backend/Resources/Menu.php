@@ -40,7 +40,7 @@ $menuXml = '<?xml version="1.0"?>
 
     <submenu title="'.htmlspecialchars(_("Contents"), ENT_QUOTES).'" id="contents_manager" link="#"
              privilege="ARTICLE_PENDINGS,OPINION_ADMIN,COMMENT_ADMIN,POLL_ADMIN,'
-                       .'ADVERTISEMENT_ADMIN,STATIC_ADMIN,SPECIAL_ADMIN,ARTICLE_ARCHIVE,'
+                       .'ADVERTISEMENT_ADMIN,STATIC_PAGE_ADMIN,SPECIAL_ADMIN,ARTICLE_ARCHIVE,'
                        .'CATEGORY_ADMIN,MENU_ADMIN">
         <node
             module_name="ARTICLE_MANAGER"
@@ -85,7 +85,7 @@ $menuXml = '<?xml version="1.0"?>
         />
         <node
             module_name="STATIC_PAGES_MANAGER"
-            privilege="STATIC_ADMIN"
+            privilege="STATIC_PAGE_ADMIN"
             title="'.htmlspecialchars(_("Static Pages"), ENT_QUOTES).'"
             id="static_pages_manager"
             link="'.url('admin_staticpages').'"
@@ -114,10 +114,10 @@ $menuXml = '<?xml version="1.0"?>
      </submenu>
 
     <submenu title="'.htmlspecialchars(_("Media"), ENT_QUOTES).'" id="media_manager" link="#"
-            privilege="IMAGE_ADMIN,FILE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
+            privilege="PHOTO_ADMIN,FILE_ADMIN,VIDEO_ADMIN,ALBUM_ADMIN,KIOSKO_ADMIN,BOOK_ADMIN">
         <node
             module_name="IMAGE_MANAGER"
-            privilege="IMAGE_ADMIN"
+            privilege="PHOTO_ADMIN"
             title="'.htmlspecialchars(_("Images"), ENT_QUOTES).'"
             id="image_manager"
             link="'.url('admin_images').'"

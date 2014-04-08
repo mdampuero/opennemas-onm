@@ -59,6 +59,8 @@ EOF
 
         $this->compileTranslations();
 
+        $this->generateRoutes();
+
         $this->executeMaintenance('disable');
 
         // Update themes
@@ -232,5 +234,20 @@ EOF
                 $output->write("\t".$buffer);
             }
         });
+    }
+
+    /**
+     * Generate exposed routes file to use that routes in javascript.
+     */
+    public function generateRoutes()
+    {
+        $command = $this->getApplication()->find('fos:js-routing:dump');
+        $arguments = array(
+            'command' => 'fos:js-routing:dump',
+            '--target' => 'public/assets/js/routes.js'
+        );
+
+        $input = new ArrayInput($arguments);
+        $returnCode = $command->run($input, $this->output);
     }
 }

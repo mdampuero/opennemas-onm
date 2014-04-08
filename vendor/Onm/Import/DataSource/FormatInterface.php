@@ -97,6 +97,13 @@ interface FormatInterface
     public function getCreatedTime();
 
     /**
+     * Populates the object data
+     *
+     * @return FormatInterface the object populated
+     **/
+    public function load();
+
+    /**
      * Checks if the data provided could be handled by the class
      *
      * @param SimpleXMLElement $data the XML data

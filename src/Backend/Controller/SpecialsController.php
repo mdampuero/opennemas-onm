@@ -67,51 +67,7 @@ class SpecialsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $category = $request->query->getDigits('category', null);
-        $page = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        if (empty($category)) {
-            $category = 'all';
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $category;
-        }
-
-        $cm = new \ContentManager();
-        list($countSpecials, $specials) = $cm->getCountAndSlice(
-            'Special',
-            $categoryFilter,
-            '',
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countSpecials,
-                'fileName'    => $this->generateUrl('admin_specials', array('category' => $category)).'&page=%d',
-            )
-        );
-
-        return $this->render(
-            'special/list.tpl',
-            array(
-                'pagination' => $pagination,
-                'specials'   => $specials,
-                'category'   => $category,
-                'page'       => $page
-            )
-        );
+        return $this->render('special/list.tpl');
     }
 
     /**
@@ -125,7 +81,6 @@ class SpecialsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $page = $request->query->getDigits('page', 1);
         if (isset($configurations['total_widget'])
             && !empty($configurations['total_widget'])
         ) {
@@ -133,48 +88,12 @@ class SpecialsController extends Controller
         } else {
             $numFavorites = 1;
         }
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        $cm = new \ContentManager();
-        list($countSpecials, $specials) = $cm->getCountAndSlice(
-            'Special',
-            null,
-            'in_home=1',
-            'ORDER BY position, created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        foreach ($specials as &$special) {
-            $special->category_name  = $this->ccm->get_name($special->category);
-            $special->category_title = $this->ccm->get_title($special->category_name);
-        }
-
-        if (count($specials) != $numFavorites) {
-            m::add(sprintf(_("You must put %d specials in the HOME widget"), $numFavorites));
-        }
-
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countSpecials,
-                'fileName'    => $this->generateUrl('admin_specials_widget').'?page=%d',
-            )
-        );
 
         return $this->render(
             'special/list.tpl',
             array(
-                'pagination' => $pagination,
-                'specials'   => $specials,
-                'category'   => 'widget',
-                'page'       => $page
+                'total_elements_widget' => $numFavorites,
+                'category'              => 'widget',
             )
         );
     }
@@ -408,214 +327,6 @@ class SpecialsController extends Controller
         }
 
         return new Response($output);
-    }
-
-    /**
-     * Deletes multiple specials at once given their ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('SPECIAL_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->getDigits('category', 'all');
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            $changes = 0;
-            foreach ($selected as $id) {
-                $special = new \Special((int) $id);
-                if (!is_null($special->id)) {
-                    $special->delete($id, $_SESSION['userid']);
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find a special with the id "%d"'), $id));
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully deleted %d specials'), $changes));
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_specials',
-                    array(
-                        'category' => $category,
-                        'page'     => $page,
-                    )
-                )
-            );
-        } else {
-            return new Response('Ok', 200);
-        }
-
-    }
-
-    /**
-     * Changes the available status for specials given their ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('SPECIAL_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('status', 0);
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->getDigits('category', 'all');
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            $changes = 0;
-            foreach ($selected as $id) {
-                $special = new \Special((int) $id);
-                if (!is_null($special->id)) {
-                    $special->set_available($status, $_SESSION['userid']);
-                    if ($status == 0) {
-                        $special->set_favorite($status);
-                    }
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find a special with the id "%d"'), $id), m::ERROR);
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully changed the available status of %d specials'), $changes), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_specials',
-                array(
-                    'category' => $category,
-                    'page' => $page,
-                )
-            )
-        );
-    }
-
-    /**
-     * Change available status for one special given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('SPECIAL_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        $special = new \Special($id);
-
-        if (is_null($special->id)) {
-            m::add(sprintf(_('Unable to find a special with the id "%d"'), $id), m::ERROR);
-        } else {
-            $special->set_available($status, $_SESSION['userid']);
-            if ($status == 0) {
-                $special->set_favorite($status);
-            }
-            m::add(sprintf(_('Successfully changed availability for the special "%s"'), $special->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_specials',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change available status for one special given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('SPECIAL_FAVORITE')")
-     **/
-    public function toggleFavoriteAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        $special = new \Special($id);
-
-        if (is_null($special->id)) {
-            m::add(sprintf(_('Unable to find a special with the id "%d"'), $id), m::ERROR);
-        } else {
-            $special->set_favorite($status);
-            m::add(sprintf(_('Successfully changed suggested flag for the special "%s"'), $special->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_specials',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change available status for one special given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('SPECIAL_AVAILABLE')")
-     **/
-    public function toggleInHomeAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        $special = new \Special($id);
-
-        if (is_null($special->id)) {
-            m::add(sprintf(_('Unable to find a special with the id "%d"'), $id), m::ERROR);
-        } else {
-            $special->set_inhome($status);
-            m::add(sprintf(_('Successfully changed suggested flag for the special "%s"'), $special->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_specials',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
     }
 
     /**

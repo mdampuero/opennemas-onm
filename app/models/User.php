@@ -1593,7 +1593,12 @@ class User implements AdvancedUserInterface
     public function eraseCredentials()
     {
         $this->read($this->id);
-        $this->roles = null;
+
+        unset($this->roles);
+        unset($this->password);
+        unset($this->token);
+
+        return $this;
     }
 
     /**

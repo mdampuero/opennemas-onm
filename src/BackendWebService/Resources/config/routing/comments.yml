@@ -1,0 +1,41 @@
+backend_ws_comment_create:
+    path:     /comment/create
+    defaults: { _controller: BackendWebServiceBundle:Comments:create }
+    options:
+        expose: true
+
+backend_ws_comment_delete:
+    path:     /comments/{id}/delete
+    defaults: { _controller: BackendWebServiceBundle:Comments:delete }
+    options:
+        expose: true
+
+backend_ws_comment_toggle_status:
+    path:     /comments/{id}/toggle-status
+    defaults: { _controller: BackendWebServiceBundle:Comments:toggleStatus }
+    options:
+        expose: true
+
+backend_ws_comment_update:
+    path:     /comments/{id}/update
+    defaults: { _controller: BackendWebServiceBundle:Comments:update }
+    options:
+        expose: true
+
+backend_ws_comments_batch_delete:
+    path:     /comments/batch-delete
+    defaults: { _controller: BackendWebServiceBundle:Comments:batchDelete }
+    options:
+        expose: true
+
+backend_ws_comments_batch_toggle_status:
+    path:     /comments/toggle-status
+    defaults: { _controller: BackendWebServiceBundle:Comments:batchToggleStatus }
+    options:
+        expose: true
+
+backend_ws_comments_list:
+    path:     /comments
+    defaults: { _controller: BackendWebServiceBundle:Comments:list }
+    options:
+        expose: true

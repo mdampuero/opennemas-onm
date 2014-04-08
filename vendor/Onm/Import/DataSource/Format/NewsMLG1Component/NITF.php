@@ -63,6 +63,20 @@ class NITF implements FormatInterface
     }
 
     /**
+     * Populates the object information
+     *
+     * @return Europapress the populated object
+     **/
+    public function load()
+    {
+        $this->id           = $this->getId();
+        $this->pretitle     = $this->getPretitle();
+        $this->title        = $this->getTitle();
+        $this->created_time = $this->getCreatedTime();
+        $this->body         = $this->getBody();
+    }
+
+    /**
      * Magic method for translate properties into XML elements
      *
      * @param string $propertyName the name of the property to get

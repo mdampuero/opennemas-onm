@@ -7,7 +7,7 @@
     margin-top:60px;
     width:100%;
     margin:0 auto;
-    bottom:0;
+    /*bottom:0;*/
     min-height:100%;
 }
 

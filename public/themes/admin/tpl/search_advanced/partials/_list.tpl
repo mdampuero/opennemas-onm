@@ -1,72 +1,57 @@
-<table class="table table-hover table-condensed">
+<div class="spinner-wrapper" ng-if="loading">
+    <div class="spinner"></div>
+    <div class="spinner-text">{t}Loading{/t}...</div>
+</div>
+<table class="table table-hover table-condensed" ng-if="!loading">
     <thead>
         <th class="title">{t}Title{/t}</th>
         <th class="center" style="width:10px;"></th>
         <th class="right" style="width:10px;">{t}Actions{/t}</th>
     </thead>
     <tbody>
-        {foreach $contents as $content}
-        <tr>
+        <tr ng-if="shvs.contents.length == 0">
+            <td class="empty" colspan="3">
+                <div class="search-results">
+                    <p>
+                        <img src="{$params.IMAGE_DIR}/search/search-images.png">
+                    </p>
+                    {t escape="off"}Please fill the form for searching contents{/t}
+                </div>
+            </td>
+        </tr>
+        <tr ng-repeat="content in shvs.contents" ng-if="shvs.contents.length > 0">
             <td style="padding:10px;">
-                <strong>[{$content->content_type_l10n_name}] {$content->title|clearslash}</strong>
+                <strong>[ [% content.content_type_l10n_name %] ] [% content.title %]</strong>
                 <br>
-                {if $content->content_type neq 'comment'}
-                <img src="{$params.IMAGE_DIR}/tag_red.png" alt="">  {$content->metadata|clearslash}
-                {/if}<br>
-                <strong>{t}Category{/t}:</strong> {$content->category_name}
+                <img src="{$params.IMAGE_DIR}/tag_red.png" alt="" > [% content.metadata %]
                 <br>
-                <strong>{t}Created{/t}:</strong> {$content->created}
+                <strong>{t}Category{/t}:</strong> [% content.category_name %]
+                <br>
+                <strong>{t}Created{/t}:</strong> [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
             </td>
             <td class="center">
-                {if ($content->in_litter == 1)}
-                    <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera"/>
-                {else}
-                    {if ($content->type == '')}
-                        {if ($content->available eq 1) && ($content->content_status eq 1)}
-                            <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicada" title="Publicada"/>
-                        {elseif ($content->available eq 1) && ($content->content_status eq 0)}
-                            <img src="{$params.IMAGE_DIR}save_hemeroteca_icon.png" border="0" alt="{t}In library{/t}" title="{t}In library{/t}" />
-                        {else}
-                            <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="En Pendientes" />
-                        {/if}
-                        {elseif $content->content_type eq 'photo'}
-                            {if ($content->content_status eq 1)}
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
-                            {else}
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
-                            {/if}
-                        {else}
-                            {if ($contentvavailable eq 1)}
-                                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="{t}Published{/t}" title="{t}Published{/t}" />
-                            {else}
-                                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="{t}In pending{/t}" title="{t}In pending{/t}" />
-                            {/if}
-                        {/if}
-                 {/if}
+                <img src="{$params.IMAGE_DIR}trash.png" height="16px" alt="En Papelera" title="En Papelera" ng-if="content.in_litter == 1"/>
+                <img src="{$params.IMAGE_DIR}publish_g.png" border="0" alt="Publicada" title="Publicada" ng-if="content.in_litter != 1&& content.content_status == 1"/>
+                <img src="{$params.IMAGE_DIR}publish_r.png" border="0" alt="Publicada" title="Publicada" ng-if="content.in_litter != 1 && content.content_status == 0"/>
             </td>
             <td class="right">
                 <div class="btn-group right">
-                    <a class="btn" href="{url name="admin_"|cat:$content->content_type_name|cat:"_show" id=$content->id}" title="Editar">
+                    <a class="btn" href="[% edit(content.id, 'admin_' + content.content_type_name + '_show') %]" title="Editar">
                         <i class="icon-pencil"></i>
                     </a>
                 </div>
             </td>
         </tr>
-
-        {foreachelse}
-        <tr>
-            <td class="empty" colspan=3>
-                {t}There isn't any existent elements that matches your search criteria{/t}
-            </td>
-        </tr>
-        {/foreach}
     </tbody>
-
     <tfoot>
         <td colspan="3" class="center">
-            <div class="pagination">
-                {$pagination->links}
+            <div class="pull-left" ng-if="shvs.contents.length > 0">
+                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
             </div>
+            <div class="pull-right" ng-if="shvs.contents.length > 0">
+                <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+            </div>
+            <span ng-if="shvs.contents.length == 0">&nbsp;</span>
         </td>
     </tfoot>
 </table>

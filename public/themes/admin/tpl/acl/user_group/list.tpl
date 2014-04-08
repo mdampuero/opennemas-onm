@@ -1,12 +1,33 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {include file="common/angular_includes.tpl"}
+{/block}
+
 {block name="content"}
-<form action="{url name=admin_usergroups}" method="post" name="formulario" id="formulario">
+<form action="#" method="post" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { name_like: ''}, 'name', 'asc', 'backend_ws_usergroups_list')">
 
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}User groups{/t}</h2></div>
             <ul class="old-button">
+                <li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="GROUP_DELETE"}
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_usergroups_batch_delete')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
+                </li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
                 {acl isAllowed="GROUP_CREATE"}
                     <li>
                         <a href="{url name="admin_acl_usergroups_create"}">
@@ -21,55 +42,78 @@
     <div class="wrapper-content">
 
         {render_messages}
+        <div ng-include="'usergroups'"></div>
 
-        <table class="table table-hover table-condensed">
-            <thead>
-                <tr>
-                    <th>{t}Group name{/t}</th>
-                    <th class="center" style="width:10px">{t}Actions{/t}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {foreach name=c from=$user_groups item=group}
-                <tr>
-                    <td>
-                        <a href="{url name="admin_acl_usergroups_show" id="{$group->id}"}" title="{t}Edit group{/t}">
-                            {$group->name}
-                        </a>
-                    </td>
-                    <td class="right nowrap">
-                        <div class="btn-group">
-							<a class="btn" href="{url name="admin_acl_usergroups_show" id="{$group->id}"}" title="{t}Edit group{/t}">
-								<i class="icon-pencil"></i> {t}Edit{/t}
-							</a>
-							<a class="del btn btn-danger"
-                                href="{url name=admin_acl_usergroups_delete id=$group->id}"
-                                data-url="{url name=admin_acl_usergroups_delete id=$group->id}"
-                                data-title="{$group->name}"
-                                title="{t}Delete group{/t}">
-								<i class="icon-trash icon-white"></i>
-							</a>
-                        </div>
-                    </td>
-                </tr>
-                {foreachelse}
-                <tr>
-                    <td colspa=2 class="empty">
-                        {t}There is no groups created yet.{/t}
-                    </td>
-                </tr>
-                {/foreach}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2" class="center">
-                        <div class="pagination">
-                            {$paginacion->links}
-                        </div>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+        <script type="text/ng-template" id="usergroups">
+            <div class="table-info clearfix">
+                <div class="pull-left form-inline">
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
+                    <input type="text" id="username" name="name" value="" placeholder="{t}Filter by name or email{/t}" ng-model="shvs.search.name_like"/>
+                </div>
+            </div>
+            <div class="spinner-wrapper" ng-if="loading">
+                <div class="spinner"></div>
+                <div class="spinner-text">{t}Loading{/t}...</div>
+            </div>
+            <table class="table table-hover table-condensed" ng-if="!loading">
+                <thead>
+                    <tr>
+                        <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
+                        <th>{t}Group name{/t}</th>
+                        <th class="center" style="width:10px"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-if="shvs.contents.length == 0">
+                        <td colspan="3" class="empty">
+                            {t escape=off}There is no user groups created yet or <br/>results matching your searching criteria.{/t}
+                        </td>
+                    </tr>
+                    <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                        <td>
+                            <checkbox index="[% content.id %]">
+                        </td>
+                        <td>
+                            [% content.name %]
+                        </td>
+                        <td class="right nowrap">
+                            <div class="btn-group">
+
+                                <a class="btn" href="[% edit(content.id, 'admin_acl_usergroup_show') %]" title="{t}Edit user{/t}">
+                                    <i class="icon-pencil"></i> {t}Edit{/t}
+                                </a>
+
+                                <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_usergroup_delete', $index)"
+                                    title="{t}Delete this user{/t}" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="center">
+                            <div class="pull-left" ng-if="shvs.contents.length > 0">
+                                {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
+                            </div>
+                            <div class="pull-right" ng-if="shvs.contents.length > 0">
+                                <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="page" total-items="total" num-pages="pages"></pagination>
+                            </div>
+                            <span ng-if="shvs.contents.length == 0">&nbsp;</span>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </script>
+
+        <script type="text/ng-template" id="modal-delete">
+            {include file="common/modals/_modalDelete.tpl"}
+        </script>
+        <script type="text/ng-template" id="modal-delete-selected">
+            {include file="common/modals/_modalBatchDelete.tpl"}
+        </script>
     </div>
 </form>
 {include file="acl/user_group/modal/_modalDelete.tpl"}

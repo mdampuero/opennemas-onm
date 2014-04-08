@@ -1,0 +1,31 @@
+backend_ws_advertisements:
+    resource: @BackendWebServiceBundle/Resources/config/routing/advertisements.yml
+    prefix:   /
+
+backend_ws_comments:
+    resource: @BackendWebServiceBundle/Resources/config/routing/comments.yml
+    prefix:   /
+
+backend_ws_menus:
+    resource: @BackendWebServiceBundle/Resources/config/routing/menus.yml
+    prefix:   /
+
+backend_ws_widgets:
+    resource: @BackendWebServiceBundle/Resources/config/routing/widgets.yml
+    prefix:   /
+
+backend_ws_opinions:
+    resource: @BackendWebServiceBundle/Resources/config/routing/opinions.yml
+    prefix:   /
+
+backend_ws_users:
+    resource: @BackendWebServiceBundle/Resources/config/routing/users.yml
+    prefix:   /
+
+backend_ws_usergroups:
+    resource: @BackendWebServiceBundle/Resources/config/routing/usergroups.yml
+    prefix:   /
+
+backend_ws_content:
+    resource: @BackendWebServiceBundle/Resources/config/routing/content.yml
+    prefix:   /

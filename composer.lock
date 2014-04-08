@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f5628cbcc1b1ceb8aae83762105ff15e",
+    "hash": "187764cd1ac0b2264107598005637c51",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -489,12 +489,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "667f20875f0dd3f3fce3e5a7d97cceac92a8e9d1"
+                "reference": "f7138381aa884c0f679da4de41e369b94ead9cd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/667f20875f0dd3f3fce3e5a7d97cceac92a8e9d1",
-                "reference": "667f20875f0dd3f3fce3e5a7d97cceac92a8e9d1",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/f7138381aa884c0f679da4de41e369b94ead9cd3",
+                "reference": "f7138381aa884c0f679da4de41e369b94ead9cd3",
                 "shasum": ""
             },
             "require": {
@@ -521,7 +521,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -539,7 +541,7 @@
                 "migrations",
                 "schema"
             ],
-            "time": "2014-01-02 21:27:15"
+            "time": "2014-03-20 14:48:55"
         },
         {
             "name": "doctrine/inflector",
@@ -662,12 +664,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "4837b4afac4469c8740f33eae6bdcd8bd1545d2e"
+                "reference": "46a031ddaea47d0685200027cfe8c83b02aee6f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/4837b4afac4469c8740f33eae6bdcd8bd1545d2e",
-                "reference": "4837b4afac4469c8740f33eae6bdcd8bd1545d2e",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/46a031ddaea47d0685200027cfe8c83b02aee6f6",
+                "reference": "46a031ddaea47d0685200027cfe8c83b02aee6f6",
                 "shasum": ""
             },
             "require": {
@@ -714,7 +716,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2014-03-04 01:42:11"
+            "time": "2014-03-16 19:02:43"
         },
         {
             "name": "doctrine/orm",
@@ -789,16 +791,16 @@
         },
         {
             "name": "drak/native-session",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drak/NativeSession.git",
-                "reference": "d8de65190488d26720c122c40b12382d881db421"
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drak/NativeSession/zipball/d8de65190488d26720c122c40b12382d881db421",
-                "reference": "d8de65190488d26720c122c40b12382d881db421",
+                "url": "https://api.github.com/repos/drak/NativeSession/zipball/f2b14ad483605a8d4b898c260bec7512347ca600",
+                "reference": "f2b14ad483605a8d4b898c260bec7512347ca600",
                 "shasum": ""
             },
             "require": {
@@ -808,7 +810,7 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Drak": "src/"
+                    "Drak": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -822,7 +824,7 @@
                 }
             ],
             "description": "Native session handlers for Symfony2",
-            "time": "2012-12-13 15:40:15"
+            "time": "2013-03-11 11:07:59"
         },
         {
             "name": "drexarj/disqus-php",
@@ -938,17 +940,74 @@
             "time": "2014-02-11 10:57:03"
         },
         {
+            "name": "friendsofsymfony/jsrouting-bundle",
+            "version": "1.5.3",
+            "target-dir": "FOS/JsRoutingBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git",
+                "reference": "dade3bb0b21007e5c0fb40f203ed197841eb913c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/dade3bb0b21007e5c0fb40f203ed197841eb913c",
+                "reference": "dade3bb0b21007e5c0fb40f203ed197841eb913c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "symfony/console": "~2.0",
+                "symfony/framework-bundle": "~2.0",
+                "symfony/serializer": "~2.0",
+                "willdurand/jsonp-callback-validator": "~1.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "FOS\\JsRoutingBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com",
+                    "homepage": "http://www.willdurand.fr"
+                },
+                {
+                    "name": "FriendsOfSymfony Community",
+                    "homepage": "https://github.com/friendsofsymfony/FOSJsRoutingBundle/contributors"
+                }
+            ],
+            "description": "A pretty nice way to expose your Symfony2 routing to client applications.",
+            "homepage": "http://friendsofsymfony.github.com",
+            "keywords": [
+                "Js Routing",
+                "javascript",
+                "routing"
+            ],
+            "time": "2014-01-23 21:25:39"
+        },
+        {
             "name": "imagine/imagine",
             "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "e26c6e472ec3de139d905dfc8ed568afdb585adf"
+                "reference": "2ab2237f2445ea30fdf00fdd2ff4f2d8072e87ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/e26c6e472ec3de139d905dfc8ed568afdb585adf",
-                "reference": "e26c6e472ec3de139d905dfc8ed568afdb585adf",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/2ab2237f2445ea30fdf00fdd2ff4f2d8072e87ec",
+                "reference": "2ab2237f2445ea30fdf00fdd2ff4f2d8072e87ec",
                 "shasum": ""
             },
             "require": {
@@ -992,7 +1051,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2014-03-02 22:23:54"
+            "time": "2014-03-07 15:00:25"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1117,16 +1176,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57"
+                "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/6225b22de9dcf36546be3a0b2fa8e3d986153f57",
-                "reference": "6225b22de9dcf36546be3a0b2fa8e3d986153f57",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/392ef35fd470638e08d0160d6b1cbab63cb23174",
+                "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174",
                 "shasum": ""
             },
             "require": {
@@ -1134,11 +1193,11 @@
                 "psr/log": "~1.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "~2.4.8",
-                "doctrine/couchdb": "dev-master",
-                "mlehner/gelf-php": "1.0.*",
+                "aws/aws-sdk-php": "~2.4, >2.4.8",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
                 "phpunit/phpunit": "~3.7.0",
-                "raven/raven": "0.5.*",
+                "raven/raven": "~0.5",
                 "ruflin/elastica": "0.90.*"
             },
             "suggest": {
@@ -1146,19 +1205,20 @@
                 "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
-                "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
                 "raven/raven": "Allow sending log messages to a Sentry server",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "1.8.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Monolog": "src/"
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1180,7 +1240,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2013-11-14 19:48:31"
+            "time": "2014-03-23 19:50:26"
         },
         {
             "name": "neutron/temporary-filesystem",
@@ -1359,12 +1419,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-                "reference": "4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91"
+                "reference": "62763adae5b3542f17e5bbffb2e9435531e1a9de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91",
-                "reference": "4ebd4a01661bd2b17fc484e5cdb9e522e3a96c91",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/62763adae5b3542f17e5bbffb2e9435531e1a9de",
+                "reference": "62763adae5b3542f17e5bbffb2e9435531e1a9de",
                 "shasum": ""
             },
             "require": {
@@ -1420,7 +1480,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2014-02-27 23:23:32"
+            "time": "2014-03-19 07:25:50"
         },
         {
             "name": "psr/log",
@@ -1769,17 +1829,17 @@
         },
         {
             "name": "symfony/icu",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "target-dir": "Symfony/Component/Icu",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Icu.git",
-                "reference": "7299cd3d8d6602103d1ebff5d0a9917b7bc6de72"
+                "reference": "98e197da54df1f966dd5e8a4992135703569c987"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Icu/zipball/7299cd3d8d6602103d1ebff5d0a9917b7bc6de72",
-                "reference": "7299cd3d8d6602103d1ebff5d0a9917b7bc6de72",
+                "url": "https://api.github.com/repos/symfony/Icu/zipball/98e197da54df1f966dd5e8a4992135703569c987",
+                "reference": "98e197da54df1f966dd5e8a4992135703569c987",
                 "shasum": ""
             },
             "require": {
@@ -1813,7 +1873,7 @@
                 "icu",
                 "intl"
             ],
-            "time": "2013-06-03 18:32:58"
+            "time": "2013-10-04 10:06:38"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -1858,7 +1918,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -1917,7 +1979,9 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
                 },
                 {
                     "name": "Symfony Community",
@@ -2146,6 +2210,46 @@
                 "templating"
             ],
             "time": "2014-02-13 10:19:29"
+        },
+        {
+            "name": "willdurand/jsonp-callback-validator",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/willdurand/JsonpCallbackValidator.git",
+                "reference": "1a7d388bb521959e612ef50c5c7b1691b097e909"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/willdurand/JsonpCallbackValidator/zipball/1a7d388bb521959e612ef50c5c7b1691b097e909",
+                "reference": "1a7d388bb521959e612ef50c5c7b1691b097e909",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JsonpCallbackValidator": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "William Durand",
+                    "email": "william.durand1@gmail.com",
+                    "homepage": "http://www.willdurand.fr"
+                }
+            ],
+            "description": "JSONP callback validator.",
+            "time": "2014-01-20 22:35:06"
         }
     ],
     "packages-dev": [
@@ -2162,7 +2266,8 @@
         "paypal/merchant-sdk-php": 20,
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
-        "php-ffmpeg/php-ffmpeg": 20
+        "php-ffmpeg/php-ffmpeg": 20,
+        "friendsofsymfony/jsrouting-bundle": 0
     },
     "platform": {
         "php": ">=5.3.3"

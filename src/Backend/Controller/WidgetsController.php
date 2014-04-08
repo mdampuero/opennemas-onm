@@ -1,17 +1,12 @@
 <?php
 /**
- * Handles the actions for the system information
- *
- * @package Backend_Controllers
- **/
-/**
  * This file is part of the Onm package.
  *
  * (c)  OpenHost S.L. <developers@openhost.es>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- **/
+ */
 namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -25,14 +20,14 @@ use Onm\Message as m;
  * Handles the actions for the system information
  *
  * @package Backend_Controllers
- **/
+ */
 class WidgetsController extends Controller
 {
     /**
      * Common code for all the actions
      *
      * @return void
-     **/
+     */
     public function init()
     {
         //Check if module is activated in this onm instance
@@ -40,70 +35,15 @@ class WidgetsController extends Controller
     }
 
     /**
-     * List available widgets
-     *
-     * @param Request $request the request object
+     * List widgets.
      *
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_ADMIN')")
-     **/
-    public function listAction(Request $request)
+     */
+    public function listAction()
     {
-        $page   = $request->query->getDigits('page', 1);
-        $type   = $request->query->filter('type', -1);
-        $status = (int) $request->query->get('status', -1);
-
-        $filterSQL = array();
-        if (!is_null($type) && $type != -1) {
-            $filterSQL[] = '`renderlet`=\''. $type . '\'';
-        }
-
-        if (!is_null($status) && $status != -1) {
-            $filterSQL[] = '`available`=' . $status;
-        }
-
-        $filterSQL = implode(' AND ', $filterSQL);
-
-        $itemsPerPage = s::get('items_per_page', 20);
-
-        $cm = new \ContentManager();
-        list($countWidgets, $widgets) = $cm->getCountAndSlice(
-            'widget',
-            null,
-            $filterSQL,
-            'ORDER BY title ASC',
-            $page,
-            $itemsPerPage
-        );
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countWidgets,
-                'fileName'    => $this->generateUrl(
-                    'admin_widgets'
-                ).'?page=%d',
-            )
-        );
-
-        return $this->render(
-            'widget/list.tpl',
-            array(
-                'widgets'      => $widgets,
-                'pagination'   => $pagination,
-                'page'         => $page,
-                'status'       => $status,
-                'totalWidgets' => $countWidgets
-            )
-        );
+        return $this->render('widget/list.tpl');
     }
 
     /**
@@ -114,7 +54,7 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_UPDATE')")
-     **/
+     */
     public function showAction(Request $request)
     {
         $id   = $request->query->getDigits('id');
@@ -147,26 +87,6 @@ class WidgetsController extends Controller
     }
 
     /**
-     * Delete a selected widget
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('WIDGET_DELETE')")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id   = $request->query->getDigits('id');
-
-        $widget = new \Widget();
-        $widget->delete($id);
-        m::add(_('Widget deleted successfully.'), m::SUCCESS);
-
-        return $this->redirect($this->generateUrl('admin_widgets'));
-    }
-
-    /**
      * Create a new widget
      *
      * @param Request $request the request object
@@ -174,7 +94,7 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_CREATE')")
-     **/
+     */
     public function createAction(Request $request)
     {
         if ('POST' == $request->getMethod()) {
@@ -229,7 +149,7 @@ class WidgetsController extends Controller
      * @return Response the response object
      *
      * @Security("has_role('WIDGET_UPDATE')")
-     **/
+     */
     public function updateAction(Request $request)
     {
         $id = $request->query->getDigits('id');
@@ -275,43 +195,11 @@ class WidgetsController extends Controller
     }
 
     /**
-     * Change the availability of a Widget
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('WIDGET_AVAILABLE')")
-     **/
-    public function toogleAvailableAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-        $page = $request->query->getDigits('page', 1);
-
-        $widget = new \Widget($id);
-
-        if (is_null($widget->id)) {
-            m::add(sprintf(_('Unable to find widget with id "%d"'), $id), m::ERROR);
-        } else {
-            $available = ($widget->available+1) % 2;
-            $widget->set_available($available, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed availability for "%s" widget'), $widget->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl('admin_widgets', array('page' => $page,))
-        );
-    }
-
-    /**
      * The content provider for widget
      *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * #@Security("has_role('WIDGET_ADMIN')")
-     **/
+     * @param  Request  $request the request object
+     * @return Response          the response object
+     */
     public function contentProviderAction(Request $request)
     {
         $category     = $request->query->filter('category', 'home', FILTER_SANITIZE_STRING);

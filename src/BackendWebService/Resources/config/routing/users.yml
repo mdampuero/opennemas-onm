@@ -1,0 +1,47 @@
+backend_ws_user_create:
+    path:     /user/create
+    defaults: { _controller: BackendWebServiceBundle:Users:create }
+    options:
+        expose: true
+
+backend_ws_user_delete:
+    path:     /users/{id}/delete
+    defaults: { _controller: BackendWebServiceBundle:Users:delete }
+    options:
+        expose: true
+
+backend_ws_user_set_enabled:
+    path:     /users/{id}/set-enabled
+    defaults: { _controller: BackendWebServiceBundle:Users:setEnabled }
+    options:
+        expose: true
+
+backend_ws_user_show:
+    path:     /users/{id}/show
+    defaults: { _controller: BackendWebServiceBundle:Users:show }
+    options:
+        expose: true
+
+backend_ws_user_update:
+    path:     /users/{id}/update
+    defaults: { _controller: BackendWebServiceBundle:Users:update }
+    options:
+        expose: true
+
+backend_ws_users_batch_delete:
+    path:     /users/batch-delete
+    defaults: { _controller: BackendWebServiceBundle:Users:batchDelete }
+    options:
+        expose: true
+
+backend_ws_users_list:
+    path:     /users
+    defaults: { _controller: BackendWebServiceBundle:Users:list }
+    options:
+        expose: true
+
+backend_ws_users_batch_set_enabled:
+    path:     /users/set-enabled
+    defaults: { _controller: BackendWebServiceBundle:Users:batchSetEnabled }
+    options:
+        expose: true

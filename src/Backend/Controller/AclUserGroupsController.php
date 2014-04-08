@@ -51,13 +51,7 @@ class AclUserGroupsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $userGroup  = new \UserGroup();
-        $userGroups = $userGroup->find();
-
-        return $this->render(
-            'acl/user_group/list.tpl',
-            array( 'user_groups' => $userGroups)
-        );
+        return $this->render('acl/user_group/list.tpl');
     }
 
     /**
@@ -115,7 +109,7 @@ class AclUserGroupsController extends Controller
                 // If user group was saved successfully show again the form
                 return $this->redirect(
                     $this->generateUrl(
-                        'admin_acl_usergroups_show',
+                        'admin_acl_usergroup_show',
                         array('id' => $userGroup->id)
                     )
                 );
@@ -162,7 +156,7 @@ class AclUserGroupsController extends Controller
         }
 
         return $this->redirect(
-            $this->generateUrl('admin_acl_usergroups_show', array('id' => $userGroup->id))
+            $this->generateUrl('admin_acl_usergroup_show', array('id' => $userGroup->id))
         );
     }
 

@@ -92,13 +92,6 @@ class Photo extends Content
      **/
     public function __get($propertyName)
     {
-        switch ($propertyName) {
-            case 'type_img':
-                $this->type_img = pathinfo($this->name, PATHINFO_EXTENSION);
-
-                return $this->type_img;
-                break;
-        }
         parent::__get($propertyName);
     }
 
@@ -553,6 +546,7 @@ class Photo extends Content
         $this->description = ($this->description);
         $this->metadata    = ($this->metadata);
         $this->address     = $rs->fields['address'];
+        $this->type_img    = pathinfo($this->name, PATHINFO_EXTENSION);
 
         if (!empty($photo->address)) {
             $positions = explode(',', $photo->address);

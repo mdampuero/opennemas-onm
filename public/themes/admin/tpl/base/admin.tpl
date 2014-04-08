@@ -21,10 +21,16 @@
         {css_tag href="/style.css" common=1}
         <!--[if IE]>{css_tag href="/ie.css"}<![endif]-->
         {css_tag href="/jquery/jquery-ui.css" media="all" type="text/css"}
+        {css_tag href="/jquery/select2/select2-bootstrap.css" media="all" type="text/css"}
+        {css_tag href="/jquery/select2/select2.css" media="all" type="text/css"}
+        {css_tag href="/jquery/bootstrap-checkbox/bootstrap-checkbox.css" media="all" type="text/css"}
+        {css_tag href="/jquery/messenger/messenger.css" media="all" type="text/css"}
+        {css_tag href="/jquery/messenger/messenger-spinner.css" media="all" type="text/css"}
 	{/block}
 
     {block name="js-library"}
         {script_tag src="/jquery/jquery.min.js" common=1}
+        {script_tag src="/jquery/select2/select2.min.js" common=1}
         {script_tag src="/libs/bootstrap.js" common=1}
         {script_tag src="/libs/jquery.tools.min.js" common=1}
         {script_tag src="/jquery-onm/jquery.onmvalidate.js" common=1}
@@ -34,8 +40,7 @@
         {script_tag src="/libs/modernizr.min.js" common=1}
         {block name="js-library"}{/block}
         {script_tag src="/onm/scripts.js" common=1}
-     {/block}
-
+    {/block}
 </head>
 <body>
     {acl isAllowed="ROLE_BACKEND"}
@@ -130,7 +135,6 @@
                     <li><a href="http://help.opennemas.com/knowledgebase/articles/235418-terminos-de-uso-de-opennemas"
                            target="_blank" title="{t}Legal{/t}">{t}Legal{/t}</a></li>
 
-
                 </ul><!-- / -->
             </nav>
             <nav class="right">
@@ -177,6 +181,18 @@
         $(function() {
             $.onmEditor({
                 language: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' ,
+            });
+
+            $('.select2').select2({
+                formatSelection: function(state) {
+                    var element = state.element;
+                    if ($(element).parents('.select2').data('label') != null) {
+                        return $(element).parents('.select2').data('label')
+                            + ': ' + state.text;
+                    }
+
+                    return state.text
+                }
             });
         })
         </script>
