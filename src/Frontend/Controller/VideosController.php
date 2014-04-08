@@ -360,6 +360,9 @@ class VideosController extends Controller
         $videosSettings = s::get('video_settings');
         $totalVideosMoreFrontpage   = isset($videosSettings['total_front_more'])?$videosSettings['total_front_more']:12;
         $totalVideosFrontpageOffset = isset($videosSettings['front_offset'])?$videosSettings['front_offset']:3;
+        if (empty($this->category)) {
+            $this->category = $this->request->query->getDigits('category', 0);
+        }
 
         // Fetch videos paginated
         list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
@@ -389,7 +392,10 @@ class VideosController extends Controller
                 'items' => $totalVideosMoreFrontpage,
                 'total' => count($othersVideos)+1,
                 'url'   => $this->generateUrl(
-                    'frontend_video_ajax_paginated'
+                    'frontend_video_ajax_paginated',
+                    array(
+                        'category' => $this->category
+                    )
                 )
             )
         );
