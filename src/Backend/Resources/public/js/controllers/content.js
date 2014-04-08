@@ -36,7 +36,10 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
                             value: '%' + filters[name][i]['value'] + '%'
                         };
                     } else {
-                        cleaned[name] = [];
+                        if (!cleaned[name]) {
+                            cleaned[name] = [];
+                        }
+
                         cleaned[name][i] = {
                             value: filters[name][i]['value']
                         };
