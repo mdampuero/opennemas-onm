@@ -71,7 +71,7 @@ abstract class BaseManager
                 }
 
                 // Add filters for the current $field
-                $filterSQL[] = implode(' OR ', $fieldFilters);
+                $filterSQL[] = '(' . implode(' OR ', $fieldFilters) . ')';
             }
 
             // Build filters
