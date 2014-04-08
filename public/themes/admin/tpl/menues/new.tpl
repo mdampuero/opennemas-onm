@@ -224,13 +224,13 @@
                                     data-title={if $page eq 'frontpage'}"Portada"
                                             {elseif $page eq 'poll'}"Encuesta"
                                             {elseif $page eq 'kiosko'}"Portadas Papel"
-                                            {elseif $page eq 'letter'}"Textos Al Director"
+                                            {elseif $page eq 'letter'}"Cartas Al Director"
                                             {elseif $page eq 'boletin'}"Bolet&iacute;n"
                                             {else}{$page}{/if}
                                     data-link={if $page eq 'frontpage'}"/"
                                             {elseif $page eq 'poll'}"encuesta/"
                                             {elseif $page eq 'kiosko'}"portadas-papel/"
-                                            {elseif $page eq 'letter'}"participa/"
+                                            {elseif $page eq 'letter'}"cartas-al-director/"
                                             {elseif $page eq 'boletin'}"newsletter/"
                                             {else}"{$page}/"{/if}
                                     data-type="internal"
@@ -244,7 +244,7 @@
                                             {elseif $page eq 'poll'}
                                                 Encuesta
                                             {elseif $page eq 'letter'}
-                                                Textos Al Director
+                                                Cartas al Director
                                             {elseif $page eq 'kiosko'}
                                                 Portadas Papel
                                             {elseif $page eq 'boletin'}
