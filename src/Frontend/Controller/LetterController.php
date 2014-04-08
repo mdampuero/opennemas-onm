@@ -59,7 +59,7 @@ class LetterController extends Controller
             || !$this->view->isCached('letter/letter-frontpage.tpl', $cacheID)
         ) {
 
-            $itemsPerPage = 10;
+            $itemsPerPage = 12;
 
 
             list($countLetters, $otherLetters) = $cm->getCountAndSlice(
@@ -171,6 +171,20 @@ class LetterController extends Controller
     }
 
     /**
+     * Description of the action
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function showFormAction(Request $request)
+    {
+
+        return $this->render('letter/letter_form.tpl');
+
+    }
+
+    /**
      * Saves a letter into database
      *
      * @param Request $request the request object
@@ -244,7 +258,7 @@ class LetterController extends Controller
                 $data['body'] = nl2br($data['body']);
 
                 if ($letter->hasBadWords($data)) {
-                    $msg = "Su comentario fue rechazado debido al uso "
+                    $msg = "Su carta fue rechazado debido al uso "
                         ."de palabras malsonantes.";
                 } else {
                     $ip = getRealIp();
@@ -254,6 +268,29 @@ class LetterController extends Controller
                     if ($letter->create($data)) {
 
                         $msg = "Su carta ha sido guardada y está pendiente de publicación.";
+
+                        $recipient = s::get('contact_email');
+                        if (!empty($recipient)) {
+                            $mailSender = s::get('mail_sender');
+                            if (empty($mailSender)) {
+                                $mailSender = "no-reply@postman.opennemas.com";
+                            }
+                            //  Build the message
+                            $text = \Swift_Message::newInstance();
+                            $text
+                                ->setSubject($subject)
+                                ->setBody($data['body'], 'text/html')
+                                ->setTo(array($recipient => $recipient))
+                                ->setFrom(array($mail => $name))
+                                ->setSender(array($mailSender => s::get('site_name')));
+                            try {
+                                $mailer = $this->get('mailer');
+                                $mailer->send($text);
+
+                            } catch (\Swift_SwiftException $e) {
+                            }
+                        }
+
                     } else {
                         $msg = "Su carta no ha sido guardado.\nAsegúrese de cumplimentar "
                             ."correctamente todos los campos.";
