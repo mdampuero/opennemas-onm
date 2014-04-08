@@ -14,7 +14,7 @@
 {/block}
 
 {block name="content"}
-<div  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('', { source: -1, title_like: '' }, 'created', 'desc', 'admin_news_agency_ws')">
+<div  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws')">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
@@ -26,7 +26,7 @@
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         <li>
-                            <a href="#" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
+                            <a href="{url name=admin_news_agency_sync}" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
                                 {t}Batch import{/t}
                             </a>
                         </li>
@@ -128,7 +128,7 @@
                     </td>
                     <td class="nowrap center">
                         <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                            [% content.created_time.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]  [% content.created_time.timezone %]
+                            [% (content.created_time.date + ' ' + content.created_time.timezone) | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
                         </span>
                     </td>
 
@@ -160,6 +160,7 @@
         </table>
         </script>
 	</form>
+    {include file="news_agency/modals/_modal_sync_dialog.tpl"}
 </div>
 
 <script type="text/ng-template" id="modal-import-selected">
