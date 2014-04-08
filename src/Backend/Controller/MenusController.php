@@ -46,6 +46,7 @@ class MenusController extends Controller
             'letter'    => 17,
             'kiosko'    => 14,
             'boletin'   => 13,
+            'participa' => 18,
         );
 
         $this->menuPositions = array('' => _('Without position'));
