@@ -128,7 +128,7 @@
                     </td>
                     <td class="nowrap center">
                         <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
-                            [% (content.created_time.date + ' ' + content.created_time.timezone) | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                            [% (content.created_time.date + ' ' + content.created_time.timezone) | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                         </span>
                     </td>
 

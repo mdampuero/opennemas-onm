@@ -32,7 +32,7 @@
     {/block}
     {block name="header-js"}
     <script type="text/javascript">
-        var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' };
+        var RecaptchaOptions = { theme : 'white', tabindex: 3, lang: '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' };
     </script>
     {/block}
 

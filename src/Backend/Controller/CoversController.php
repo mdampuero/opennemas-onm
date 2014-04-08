@@ -51,12 +51,16 @@ class CoversController extends Controller
         list($parentCategories, $subcat, $categoryData) =
             $ccm->getArraysMenu($category, $contentType);
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $category,
                 'subcat'       => $subcat,
                 'allcategorys' => $parentCategories,
-                'datos_cat'    => $categoryData
+                'datos_cat'    => $categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
     }

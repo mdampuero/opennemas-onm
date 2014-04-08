@@ -126,7 +126,7 @@
                         </div>
                     </td>
                     <td class="left nowrap">
-                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                     <td class="right">
                         <div class="btn-group">

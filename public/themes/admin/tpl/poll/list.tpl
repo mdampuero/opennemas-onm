@@ -179,7 +179,7 @@
                     [% content.category_name %]
                 </td>
                 <td class="center nowrap">
-                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                 <td class="center">
                     [% content.total_votes %]

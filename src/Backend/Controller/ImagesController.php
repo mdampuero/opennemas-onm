@@ -47,12 +47,16 @@ class ImagesController extends Controller
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR;
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->datos_cat,
+                'subcat'        => $this->subcat,
+                'allcategorys'  => $this->parentCategories,
+                'datos_cat'     => $this->datos_cat,
                 'MEDIA_IMG_URL' => $this->imgUrl,
+                'timezone'      => $timezone->getName()
             )
         );
 

@@ -55,12 +55,16 @@ class BooksController extends Controller
             }
         }
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $this->category,
                 'subcat'       => $subcat,
                 'allcategorys' => $bookCategories,
                 'datos_cat'    => $categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
         // ---------------------------------------------------------------------

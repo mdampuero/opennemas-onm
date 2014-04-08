@@ -80,7 +80,7 @@
                     <td>[% content.title %]</td>
                     <td class="left">[% content.category_name %]</td>
                     <td class="center nowrap">
-                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]
+                        [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                     </td>
                     <td class="nowrap right">
                         <div class="btn-group">

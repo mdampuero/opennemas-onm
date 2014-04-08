@@ -49,12 +49,16 @@ class PollsController extends Controller
             $category ='home';
         }
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData
+                'datos_cat'    => $this->categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
     }

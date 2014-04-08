@@ -114,7 +114,7 @@
                         <small>[% content.author_ip %]</small>
                     </td>
                     <td class="left">
-                        <div class="submitted-on">{t}Submitted on:{/t} [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' %]</div>
+                        <div class="submitted-on">{t}Submitted on:{/t} [% content.date.date | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]</div>
                         <p>
                             [% content.body | limitTo : 250 %]<span ng-if="content.body.length > 250">...</span>
                         </p>
