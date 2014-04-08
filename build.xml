@@ -111,6 +111,7 @@
         <exec executable="phpcs">
             <arg line="-n" />
             <arg value="--standard=PSR2" />
+            <arg line="--extensions=php" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>
@@ -121,6 +122,7 @@
             <arg line="-n" />
             <arg line="--report=checkstyle" />
             <arg value="--standard=PSR2" />
+            <arg line="--extensions=php" />
             <arg line="${project.paths.php.space-separated}" />
         </exec>
     </target>
