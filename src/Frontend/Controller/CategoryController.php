@@ -48,7 +48,8 @@ class CategoryController extends Controller
 
         $categoryManager = $this->get('category_repository');
         $category = $categoryManager->findBy(
-            array('name' => array(array('value' => $categoryName)))
+            array('name' => array(array('value' => $categoryName))),
+            'name ASC'
         );
 
         if (empty($category)) {
