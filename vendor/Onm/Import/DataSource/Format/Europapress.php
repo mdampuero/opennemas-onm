@@ -143,6 +143,11 @@ class Europapress implements FormatInterface
         }
     }
 
+    public function getTexts()
+    {
+        return null;
+    }
+
     /*
      * Return an array of localized categories
      *
