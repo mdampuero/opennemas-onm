@@ -49,7 +49,7 @@ class AlbumsController extends Controller
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $categoryManager = $this->get('category_repository');
             $category = $categoryManager->findBy(
-                array('name' => array(array('value' => $categoryName))),
+                array('name' => array(array('value' => $this->categoryName))),
                 'name ASC'
             );
 
