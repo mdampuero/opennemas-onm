@@ -47,7 +47,9 @@ class CategoryController extends Controller
         $page         = $request->query->getDigits('page', 1);
 
         $categoryManager = $this->get('category_repository');
-        $category = $categoryManager->findBy(array('name' => $categoryName));
+        $category = $categoryManager->findBy(
+            array('name' => array(array('value' => $categoryName)))
+        );
 
         if (empty($category)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();

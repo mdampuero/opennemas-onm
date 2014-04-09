@@ -9,6 +9,9 @@
  **/
 namespace Repository;
 
+use Onm\Cache\CacheInterface;
+use Onm\Database\DbalWrapper;
+
 /**
  * Handles common actions in Menus
  *
@@ -16,39 +19,94 @@ namespace Repository;
  **/
 class CategoryManager extends BaseManager
 {
+    /**
+     * Initializes the entity manager
+     *
+     * @param CacheInterface $cache the cache instance
+     **/
+    public function __construct(DbalWrapper $dbConn, CacheInterface $cache, $cachePrefix)
+    {
+        $this->dbConn      = $dbConn;
+        $this->cache       = $cache;
+        $this->cachePrefix = $cachePrefix;
+    }
+
+    /**
+     * Finds one category from the given category id.
+     *
+     * @param  integer         $id Content id
+     * @return ContentCategory
+     */
     public function find($id)
     {
-        $category = null;
+        $entity = null;
 
-        $cacheId = $this->cachePrefix . "_comment_" . $id;
+        $cacheId = "category_" . $id;
 
         if (!$this->hasCache()
-            || ($category = $this->cache->fetch($cacheId)) === false
-            || !is_object($category)
+            || ($entity = $this->cache->fetch($cacheId)) === false
+            || !is_object($entity)
         ) {
-            $category = new \ContentCategory($id);
+            $entity = new \ContentCategory($id);
 
             if ($this->hasCache()) {
-                $this->cache->save($cacheId, $category);
+                $this->cache->save($cacheId, $entity);
             }
         }
 
-        return $category;
+        return $entity;
     }
 
-
-
     /**
-     * Searches for categories given a criteria
+     * Find multiple categories from a given array of category ids.
      *
-     * @param array $criteria        the criteria used to search the categories
-     * @param array $order           the order applied in the search
-     * @param int   $elementsPerPage the max number of elements to return
-     * @param int   $page            the offset to start with
+     * @param  array $data Array of preprocessed category ids.
+     * @return array       Array of contents.
+     */
+    public function findMulti(array $data)
+    {
+        $keys    = array();
+        $ordered = array();
+
+        $ids = array();
+        $i = 0;
+
+
+        foreach ($data as $value) {
+            $ids[] = $value;
+            $keys[$value] = $i++;
+        }
+
+        $categories = $this->cache->fetch($ids);
+
+        $cachedIds = array();
+        foreach ($categories as $category) {
+            $ordered[$keys[$category->pk_content_category]] = $category;
+            $cachedIds[] = 'category_'. $category->pk_content_category;
+        }
+
+        $missedIds = array_diff($ids, $cachedIds);
+
+        foreach ($missedIds as $id) {
+            $category = $this->find($id);
+            if ($category->pk_content_category) {
+                $ordered[$keys[$category->pk_content_category]] = $category;
+            }
+        }
+
+        return array_values($ordered);
+    }
+
+     /**
+     * Searches for content given a criteria
      *
-     * @return array the matched elements
-     **/
-    public function findBy($criteria, $order = null, $elementsPerPage = null, $page = null)
+     * @param  array $criteria        the criteria used to search the comments.
+     * @param  array $order           the order applied in the search.
+     * @param  int   $elementsPerPage the max number of elements to return.
+     * @param  int   $page            the offset to start with.
+     * @return array                  the matched elements.
+     */
+    public function findBy($criteria, $order, $elementsPerPage = null, $page = null)
     {
         // Building the SQL filter
         $filterSQL  = $this->getFilterSQL($criteria);
@@ -60,24 +118,37 @@ class CategoryManager extends BaseManager
         $limitSQL   = $this->getLimitSQL($elementsPerPage, $page);
 
         // Executing the SQL
-        $sql = "SELECT * FROM `content_categories` WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+        $sql = "SELECT pk_content_category FROM `content_categories` "
+            ."WHERE $filterSQL ORDER BY $orderBySQL $limitSQL";
+
+
         $this->dbConn->SetFetchMode(ADODB_FETCH_ASSOC);
-        $rs = $this->dbConn->Execute($sql);
+        $rs = $this->dbConn->fetchAll($sql);
 
-        if ($rs === false) {
-            return false;
+        $ids = array();
+        foreach ($rs as $result) {
+            $ids[]= $result['pk_content_category'];
         }
 
-        // Prepare result array
-        $categories = array();
-        while (!$rs->EOF) {
-            $category = new \ContentCategory();
-            $category->load($rs->fields);
-
-            $categories []= $category;
-            $rs->MoveNext();
-        }
+        $categories = $this->findMulti($ids);
 
         return $categories;
+    }
+
+    public function countBy($criteria)
+    {
+        // Building the SQL filter
+        $filterSQL  = $this->getFilterSQL($criteria);
+
+        // Executing the SQL
+        $sql = "SELECT COUNT(pk_content_category) FROM `content_categories`"
+            ." WHERE $filterSQL";
+        $rs = $this->dbConn->fetchArray($sql);
+
+        if (!$rs) {
+            return 0;
+        }
+
+        return $rs[0];
     }
 }

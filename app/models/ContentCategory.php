@@ -154,6 +154,7 @@ class ContentCategory
         if ($rs === false) {
             return false;
         }
+
         $this->pk_content_category = $GLOBALS['application']->conn->Insert_ID();
 
         return true;
@@ -167,6 +168,7 @@ class ContentCategory
     public function read($id)
     {
         $sql = 'SELECT * FROM content_categories WHERE pk_content_category =?';
+
         $values = $id;
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
 
@@ -227,6 +229,8 @@ class ContentCategory
             }
         }
 
+        dispatchEventWithParams('category.update', array('category' => $this));
+
         return true;
     }
 
@@ -246,6 +250,8 @@ class ContentCategory
             if ($rs === false) {
                 return false;
             }
+
+            dispatchEventWithParams('category.update', array('category' => $this));
 
             return true;
         } else {
@@ -340,7 +346,7 @@ class ContentCategory
     }
 
     /**
-     * TODO: I think that this is
+     * TODO: Change name to setAvailable and rename the db column to available
      * Changes the menu status (shown, hidden) for the category.
      *
      * @param string $status the status to set to the category.
@@ -350,15 +356,16 @@ class ContentCategory
         if ($this->pk_content_category == null) {
             return false;
         }
-        if ($status == 0) {
-            $this->posmenu = 30;
-        }
 
-        $sql = "UPDATE content_categories SET `inmenu`=?, `posmenu`=? WHERE pk_content_category=?";
-        $values = array($status, $this->posmenu, $this->pk_content_category);
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
+        $sql = "UPDATE content_categories SET `inmenu`=? WHERE pk_content_category=?";
+        $values = array($status, $this->pk_content_category);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
             return false;
         }
+
+        dispatchEventWithParams('category.update', array('category' => $this));
     }
 
     /**
@@ -383,6 +390,8 @@ class ContentCategory
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
+
+        dispatchEventWithParams('category.update', array('category' => $this));
 
         return $this;
     }

@@ -54,10 +54,9 @@ class CategoriesController extends Controller
 
         // Get contents by group
         $groups['articles']       = $ccm->countContentsByGroupType(1);
-        $groups['photos']         = $ccm->countContentsByGroupType(8);
-        $groups['advertisements'] = $ccm->countContentsByGroupType(2);
 
-        $allcategorys  = $ccm->categories;
+        $allcategorys  = $this->get('category_repository')->findBy(null, 'inmenu DESC');
+
         $categorygorys = $subcategorys =array();
         $contentsCount =  $subContentsCount = array();
 
@@ -72,20 +71,8 @@ class CategoriesController extends Controller
                 } else {
                     $contentsCount[$i]['articles'] = 0;
                 }
-                if (isset($groups['photos'][$category->pk_content_category])) {
-                    $contentsCount[$i]['photos'] =
-                        $groups['photos'][$category->pk_content_category];
-                } else {
-                    $contentsCount[$i]['photos'] = 0;
-                }
-                if (isset($groups['advertisements'][$category->pk_content_category])) {
-                    $contentsCount[$i]['advertisements'] =
-                        $groups['advertisements'][$category->pk_content_category];
-                } else {
-                    $contentsCount[$i]['advertisements'] = 0;
-                }
+
                 //Unserialize category param field
-                $category->params = unserialize($category->params);
                 $categorygorys[$i] = $category;
 
                 $resul = $ccm->getSubcategories($category->pk_content_category);
@@ -95,17 +82,6 @@ class CategoriesController extends Controller
                         $subContentsCount[$i][$j]['articles'] = $groups['articles'][$category->pk_content_category];
                     } else {
                         $subContentsCount[$i][$j]['articles'] = 0;
-                    }
-                    if (isset($groups['photos'][$category->pk_content_category])) {
-                        $subContentsCount[$i][$j]['photos'] = $groups['photos'][$category->pk_content_category];
-                    } else {
-                        $subContentsCount[$i][$j]['photos'] = 0;
-                    }
-                    if (isset($groups['advertisements'][$category->pk_content_category])) {
-                        $subContentsCount[$i][$j]['advertisements'] =
-                            $groups['advertisements'][$category->pk_content_category];
-                    } else {
-                        $subContentsCount[$i][$j]['advertisements'] = 0;
                     }
 
                     //Unserialize subcategory param field

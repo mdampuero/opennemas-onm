@@ -48,7 +48,9 @@ class AlbumsController extends Controller
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $categoryManager = $this->get('category_repository');
-            $category = $categoryManager->findBy(array('name' => $this->categoryName));
+            $category = $categoryManager->findBy(
+                array('name' => array(array('value' => $categoryName)))
+            );
 
             if (empty($category)) {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();

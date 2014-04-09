@@ -43,13 +43,13 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
+            'article.update' => array(
+                array('deleteCustomCss', 5)
+            ),
             'content.update' => array(
                 array('deleteEntityRepositoryCache', 10),
                 array('deleteSmartyCache', 5),
                 array('sendVarnishRequestCleaner', 5),
-            ),
-            'article.update' => array(
-                array('deleteCustomCss', 5)
             ),
             'content.set_positions' => array(
                 array('refreshFrontpage', 10),
@@ -69,7 +69,8 @@ class ContentActionsSubscriber implements EventSubscriberInterface
                 array('cleanFrontpageObjectCache', 5)
             ),
             'category.update' => array(
-                array('deleteCustomCss', 5)
+                array('deleteCustomCss', 5),
+                array('deleteCategoryCache', 5)
             )
         );
     }
@@ -323,8 +324,14 @@ class ContentActionsSubscriber implements EventSubscriberInterface
             } elseif ($category == 'opinion') {
                 $categoryName = 'opinion';
             } else {
-                $ccm = \ContentCategoryManager::get_instance();
-                $categoryName = $ccm->get_name($category);
+                $categoryManager = getService('category_repository');
+
+                if (is_object($category)) {
+                    $categoryName = $category->name;
+                } else {
+                    $category = $categoryManager->find($category);
+                    $categoryName = $category->name;
+                }
             }
 
             $this->cacheHandler->delete('custom_css|' . $categoryName);
@@ -342,5 +349,19 @@ class ContentActionsSubscriber implements EventSubscriberInterface
         $category = $event->getArgument('category');
 
         $this->cacheHandler->delete('fronpage_elements_'.$category);
+    }
+
+    /**
+     * Deletes a category from cache.
+     *
+     * @param Event $event
+     */
+    public function deleteCategoryCache(Event $event)
+    {
+        $id = $event->getArgument('category')->pk_content_category;
+        $this->cacheHandler->delete('category_' . $id);
+
+        $name = $event->getArgument('category')->name;
+        $this->cacheHandler->delete('category_' . $name);
     }
 }

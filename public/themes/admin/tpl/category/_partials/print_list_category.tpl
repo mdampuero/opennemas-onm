@@ -11,12 +11,6 @@
         {$num_contents['articles']|default:0}
     </td>
     <td class="center">
-        {$num_contents['photos']|default:0}
-    </td>
-    <td class="center">
-        {$num_contents['advertisements']|default:0}
-    </td>
-    <td class="center">
     {if $category->inmenu==1}
         {acl isAllowed="CATEGORY_AVAILABLE"}
         <a href="{url name=admin_category_toggleavailable id=$category->pk_content_category status=0}" title="En menu">
@@ -92,12 +86,6 @@
         <td class="center">
             {$num_sub_contents[$i].articles|default:0}
         </td>
-        <td class="center">
-            {$num_sub_contents[$i].photos|default:0}
-        </td>
-        <td class="center">
-            {$num_sub_contents[$i].advertisements|default:0}
-        </td>
         {acl isAllowed="CATEGORY_AVAILABLE"}
         <td class="center">
         {if $subcategory->internal_category eq '1'}
@@ -134,7 +122,7 @@
                     </a>
                 {/acl}
                 {acl isAllowed="CATEGORY_DELETE"}
-                    {if ($subcategory->internal_category==1) && ($num_sub_contents[$i].articles!=0 || $num_sub_contents[$i].photos!=0 || $num_sub_contents[$i].advertisements!=0)}
+                    {if $subcategory->internal_category==1 && $num_sub_contents[$i].articles!=0}
                     <a class="btn btn-mini empty-category"
                         href="{url name=admin_category_empty id=$subcategory->pk_content_category}"
                         data-url="{url name=admin_category_empty id=$subcategory->pk_content_category}"
