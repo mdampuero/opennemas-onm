@@ -55,7 +55,7 @@ class CategoriesController extends Controller
         // Get contents by group
         $groups['articles']       = $ccm->countContentsByGroupType(1);
 
-        $allcategorys  = $this->get('category_repository')->findBy(null, 'inmenu DESC');
+        $allcategorys  = $this->get('category_repository')->findBy(null, 'name ASC');
 
         $categorygorys = $subcategorys =array();
         $contentsCount =  $subContentsCount = array();
