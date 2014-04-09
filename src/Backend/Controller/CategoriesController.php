@@ -246,7 +246,7 @@ class CategoriesController extends Controller
     {
         $id     = $request->query->getDigits('id');
         $params = $request->request->get('params');
-        $inrss  = (array_key_exists('inrss', $params) && $params['inrss'] == true);
+        $inrss  = ($params && array_key_exists('inrss', $params) && $params['inrss'] == true);
 
         // Check empty data
         if (count($request->request) < 1) {
@@ -290,8 +290,6 @@ class CategoriesController extends Controller
         if ($data['inmenu'] == 1) {
             \Content::refreshFrontpageForAllCategories();
         }
-
-        dispatchEventWithParams('category.update', array('category' => $id));
 
         $continue = $request->request->getDigits('continue', 0);
         if ($continue) {
