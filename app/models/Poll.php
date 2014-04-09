@@ -183,12 +183,14 @@ class Poll extends Content
         if ($data['item']) {
             //Insertamos
             $keys =  '';
+            $total = 0;
             foreach ($data['item'] as $k => $item) {
                 $sql    ='REPLACE INTO poll_items (`pk_item`, `fk_pk_poll`,`item`, `votes`) VALUES (?,?,?,?)';
                 $values = array((int) $k, (int) $this->id, $item, $data['votes'][$k]);
 
                 $GLOBALS['application']->conn->Execute($sql, $values);
                 $keys .= $k.', ';
+                $total += $data['votes'][$k];
             }
 
             $sql ="DELETE FROM poll_items WHERE pk_item NOT IN ({$keys} 0) AND fk_pk_poll =?";
@@ -197,12 +199,13 @@ class Poll extends Content
 
         }
 
-        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `with_comment`=?
+        $sql = "UPDATE polls SET `subtitle`=?, `visualization`=?, `total_votes`=?, `with_comment`=?
                         WHERE pk_poll= ?";
 
         $values = array(
             $data['subtitle'],
             $data['visualization'],
+            $total,
             $data['with_comment'],
             $data['id']
         );
@@ -210,6 +213,7 @@ class Poll extends Content
             return false;
         }
 
+        $this->total   = $total;
         $this->pk_poll = $data['id'];
 
         return $this;
