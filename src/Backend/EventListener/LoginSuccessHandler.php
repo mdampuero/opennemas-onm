@@ -120,6 +120,10 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             return new RedirectResponse($request->headers->get('referer'));
         } else {
             unset($_SESSION['failed_login_attempts']);
+
+            // Set last_login date
+            s::set('last_login', date("Y-m-d H:i:s"));
+
             return new RedirectResponse($request->get('_referer'));
         }
     }
