@@ -278,6 +278,10 @@ frontend_album_ajax:
     path: /album/ajax
     defaults: { _controller: FrontendBundle:Albums:ajaxPaginated }
 
+frontend_album_ajax_paginated:
+    path: /album/more
+    defaults: { _controller: FrontendBundle:Albums:ajaxAlbumPaginated }
+
 frontend_album_frontpage:
     path: /album/{page}
     defaults: { _controller: FrontendBundle:Albums:frontpage, page : 1 }

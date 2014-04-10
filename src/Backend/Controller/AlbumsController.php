@@ -810,13 +810,14 @@ class AlbumsController extends Controller
 
             $settings = array(
                 'album_settings' => array(
-                    'total_widget'   => $formValues->getDigits('album_settings_total_widget'),
-                    'crop_width'     => $formValues->getDigits('album_settings_crop_width'),
-                    'crop_height'    => $formValues->getDigits('album_settings_crop_height'),
-                    'orderFrontpage' =>
+                    'total_widget'     => $formValues->getDigits('album_settings_total_widget'),
+                    'crop_width'       => $formValues->getDigits('album_settings_crop_width'),
+                    'crop_height'      => $formValues->getDigits('album_settings_crop_height'),
+                    'orderFrontpage'   =>
                         $formValues->filter('album_settings_orderFrontpage', '', FILTER_SANITIZE_STRING),
-                    'time_last'      => $formValues->getDigits('album_settings_time_last'),
-                    'total_front'    => $formValues->getDigits('album_settings_total_front'),
+                    'time_last'        => $formValues->getDigits('album_settings_time_last'),
+                    'total_front'      => $formValues->getDigits('album_settings_total_front'),
+                    'total_front_more' => $formValues->getDigits('album_settings_total_front_more'),
                 )
             );
 

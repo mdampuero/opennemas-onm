@@ -68,12 +68,19 @@
         </div>
 
         <div class="control-group">
-            <label for="album_total_front" class="control-label">{t}Total in album frontpage{/t}</label>
+            <label for="album_settings_total_front" class="control-label">{t}Total in album frontpage{/t}</label>
             <div class="controls">
                 <input type="number" id="name" name="album_settings_total_front" value="{$configs['album_settings']['total_front']|default:"12"}" required />
                 <div class="help-block">
                     {t} Use this to define how many albums can see in the album frontpage. {/t}
                 </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label for="album_settings_total_front_more" class="control-label">{t}Total in album frontpage/widget more albums{/t}</label>
+            <div class="controls">
+                <input type="number" name="album_settings_total_front_more" value="{$configs['album_settings']['total_front_more']|default:"6"}" required />
+                <div class="help-block">{t}Total number of album on more albums section in album home frontpage{/t}</div>
             </div>
         </div>
     </div>
