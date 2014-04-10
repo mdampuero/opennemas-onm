@@ -46,6 +46,8 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
+        $this->view->assign(array('actual_category' => $categoryName));
+
         $categoryManager = $this->get('category_repository');
         $category = $categoryManager->findBy(array('name' => $categoryName));
 
@@ -128,8 +130,7 @@ class CategoryController extends Controller
                     'articles'              => $articles,
                     'category'              => $category,
                     'pagination'            => $pagination,
-                    'actual_category_title' => $category->title,
-                    'actual_category'       => $category->name
+                    'actual_category_title' => $category->title
                 )
             );
         }
