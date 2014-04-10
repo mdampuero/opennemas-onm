@@ -314,14 +314,6 @@ class BlogsController extends Controller
 
             $author = new \User($blog->fk_author);
             $blog->author = $author;
-            $blog->uri = $this->generateUrl(
-                'frontend_blog_show',
-                array(
-                    'blog_id' => $dirtyID,
-                    'author_name' => $author->username,
-                    'blog_title'  => $blog->slug,
-                )
-            );
 
             // Rescato esta asignación para que genere correctamente el enlace a frontpage de opinion
             $blog->author_name_slug = \Onm\StringUtils::get_title($blog->name);
