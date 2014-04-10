@@ -47,7 +47,7 @@ class UtilitiesController extends Controller
     public function acceptCookiesAction(Request $request)
     {
         $response = new Response('ok');
-        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('cookieoverlay_accepted', true));
+        $response->headers->setCookie(new \Symfony\Component\HttpFoundation\Cookie('cookieoverlay_accepted', true, 0));
 
         return $response;
     }
