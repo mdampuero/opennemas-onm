@@ -113,6 +113,7 @@ class Album extends Content
      */
     public function create($data)
     {
+        $data['content_status'] = $data['available'];
         parent::create($data);
 
         $data['subtitle'] = (empty($data['subtitle']))? '': $data['subtitle'];
@@ -179,6 +180,7 @@ class Album extends Content
      **/
     public function update($data)
     {
+        $data['content_status'] = $data['available'];
         parent::update($data);
 
         $data['subtitle'] = (empty($data['subtitle']))? 0 : $data['subtitle'];
