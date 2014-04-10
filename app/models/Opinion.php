@@ -84,6 +84,7 @@ class Opinion extends Content
     {
         switch ($name) {
             case 'uri':
+                $type ='opinion';
                 if ($this->fk_author == 0) {
 
                     if ((int) $this->type_opinion == 1) {
@@ -100,10 +101,13 @@ class Opinion extends Content
                     if (empty($authorName)) {
                         $authorName = 'author';
                     }
+                    if (array_key_exists('is_blog', $author->meta) && $author->meta['is_blog'] == 1) {
+                        $type = 'blog';
+                    }
                 }
 
                 $uri =  Uri::generate(
-                    'opinion',
+                    $type,
                     array(
                         'id'       => sprintf('%06d', $this->id),
                         'date'     => date('YmdHis', strtotime($this->created)),
