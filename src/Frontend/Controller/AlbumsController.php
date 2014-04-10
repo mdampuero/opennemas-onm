@@ -211,36 +211,40 @@ class AlbumsController extends Controller
         ) {
             // Get the album from the id and increment the numviews for it
             $album = new \Album($albumID);
-            $this->view->assign('album', $album);
-            $album->with_comment = 1;
+            if (($album->available == 1) && ($album->in_litter == 0)) {
+                $this->view->assign('album', $album);
+                $album->with_comment = 1;
 
-            // Get the other albums for the albums widget
-            $settings = s::get('album_settings');
-            $total    = isset($settings['total_front'])?($settings['total_front']):2;
-            $days     = isset($settings['time_last'])?($settings['time_last']):4;
+                // Get the other albums for the albums widget
+                $settings = s::get('album_settings');
+                $total    = isset($settings['total_front'])?($settings['total_front']):2;
+                $days     = isset($settings['time_last'])?($settings['time_last']):4;
 
-            $otherAlbums = $this->cm->find(
-                'Album',
-                'available=1 AND pk_content !='.$albumID
-                .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
-                . $days . ' DAY) ',
-                ' ORDER BY views DESC,  created DESC LIMIT '.$total
-            );
+                $otherAlbums = $this->cm->find(
+                    'Album',
+                    'available=1 AND pk_content !='.$albumID
+                    .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
+                    . $days . ' DAY) ',
+                    ' ORDER BY views DESC,  created DESC LIMIT '.$total
+                );
 
-            foreach ($otherAlbums as &$content) {
-                $content->cover_image    = new \Photo($content->cover_id);
-                $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
-                $content->category_name  = $content->loadCategoryName($content->id);
-                $content->category_title = $content->loadCategoryTitle($content->id);
-            }
+                foreach ($otherAlbums as &$content) {
+                    $content->cover_image    = new \Photo($content->cover_id);
+                    $content->cover          = $content->cover_image->path_file.$content->cover_image->name;
+                    $content->category_name  = $content->loadCategoryName($content->id);
+                    $content->category_title = $content->loadCategoryTitle($content->id);
+                }
 
-            $album->category_name  = $album->loadCategoryName($album->id);
-            $album->category_title = $album->loadCategoryTitle($album->id);
-            $_albumArray           = $album->_getAttachedPhotos($album->id);
-            $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $this->page);
+                $album->category_name  = $album->loadCategoryName($album->id);
+                $album->category_title = $album->loadCategoryTitle($album->id);
+                $_albumArray           = $album->_getAttachedPhotos($album->id);
+                $_albumArrayPaged      = $album->getAttachedPhotosPaged($album->id, 8, $this->page);
 
-            if (count($_albumArrayPaged) > $itemsPerPage) {
-                array_pop($_albumArrayPaged);
+                if (count($_albumArrayPaged) > $itemsPerPage) {
+                    array_pop($_albumArrayPaged);
+                }
+            } else {
+                throw new ResourceNotFoundException();
             }
 
             $this->view->assign(
@@ -266,7 +270,7 @@ class AlbumsController extends Controller
     }
 
     /**
-     * Returns the
+     * Returns via ajax the interval photos in album page
      *
      * @param Request $request the request object
      *
@@ -304,6 +308,72 @@ class AlbumsController extends Controller
                 'page'               => $page,
                 'items_page'         => $itemsPage,
                 'album'              => $album,
+            )
+        );
+
+    }
+
+
+    /**
+     * Returns via ajax the albums of the category in a page
+     *
+     * @param Request $request the request object
+     *
+     * @return Response the response object
+     **/
+    public function ajaxAlbumPaginatedAction(Request $request)
+    {
+        // Fetch album settings
+        $albumSettings = s::get('album_settings');
+        $totalAlbumMoreFrontpage   = isset($albumSettings['total_front_more'])?$albumSettings['total_front_more']:6;
+
+        if (empty($this->category)) {
+            $this->category = $this->request->query->getDigits('category', 0);
+        }
+
+        // Fetch Albums paginated
+        list($countAlbums, $othersAlbums)= $this->cm->getCountAndSlice(
+            'Album',
+            (int) $this->category,
+            'in_litter != 1 AND contents.available=1',
+            'ORDER BY created DESC',
+            $this->page,
+            $totalAlbumMoreFrontpage
+        );
+
+        if ($countAlbums > 0) {
+            foreach ($othersAlbums as &$album) {
+                $album->category_name  = $album->loadCategoryName($album->id);
+                $album->category_title = $album->loadCategoryTitle($album->id);
+                $album->cover_image    = new \Photo($album->cover_id);
+                $album->cover          = $album->cover_image->path_file.$album->cover_image->name;
+            }
+        } else {
+            return new RedirectResponse(
+                $this->generateUrl('frontend_album_ajax_paginated')
+            );
+        }
+
+        $pagination = \Onm\Pager\SimplePager::getPagerUrl(
+            array(
+                'page'  => $this->page,
+                'items' => $totalAlbumMoreFrontpage,
+                'total' => count($othersAlbums)+1,
+                'url'   => $this->generateUrl(
+                    'frontend_album_ajax_paginated',
+                    array(
+                        'category' => $this->category
+                    )
+                )
+            )
+        );
+
+        return $this->render(
+            'album/partials/_widget_more_albums.tpl',
+            array(
+                'others_albums'      => $othersAlbums,
+                'page'               => $this->page,
+                'pagination'         => $pagination,
             )
         );
 
