@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "49dea0d01ab17f9dd0f1726c80284835",
+    "hash": "c53396e983822ed2b5aed50e9f1933a9",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -1002,12 +1002,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "a772e192b9a53184a4e73699924c8412006a2d89"
+                "reference": "f93b6895f4567136528448263cc1fe71ee8504ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/a772e192b9a53184a4e73699924c8412006a2d89",
-                "reference": "a772e192b9a53184a4e73699924c8412006a2d89",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/f93b6895f4567136528448263cc1fe71ee8504ce",
+                "reference": "f93b6895f4567136528448263cc1fe71ee8504ce",
                 "shasum": ""
             },
             "require": {
@@ -1051,7 +1051,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2014-03-31 19:54:22"
+            "time": "2014-04-09 21:47:26"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1105,16 +1105,16 @@
         },
         {
             "name": "kriswallsmith/assetic",
-            "version": "v1.1.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "735cffd3982c6e8cdebe292d5db39d077f65890f"
+                "reference": "f2a5214034928d4c6849bc94cfd462ea832a50a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/735cffd3982c6e8cdebe292d5db39d077f65890f",
-                "reference": "735cffd3982c6e8cdebe292d5db39d077f65890f",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/f2a5214034928d4c6849bc94cfd462ea832a50a8",
+                "reference": "f2a5214034928d4c6849bc94cfd462ea832a50a8",
                 "shasum": ""
             },
             "require": {
@@ -1129,6 +1129,7 @@
                 "leafo/scssphp": "*",
                 "leafo/scssphp-compass": "*",
                 "mrclay/minify": "*",
+                "patchwork/jsqueeze": "*",
                 "phpunit/phpunit": "~3.7",
                 "ptachoire/cssembed": "*",
                 "twig/twig": "~1.6"
@@ -1137,13 +1138,14 @@
                 "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
                 "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
                 "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin",
+                "patchwork/jsqueeze": "Assetic provides the integration with the JSqueeze JavaScript compressor",
                 "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
                 "twig/twig": "Assetic provides the integration with the Twig templating engine"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1-dev"
+                    "dev-master": "1.2-dev"
                 }
             },
             "autoload": {
@@ -1172,7 +1174,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-07-19 00:03:27"
+            "time": "2014-04-08 21:27:14"
         },
         {
             "name": "monolog/monolog",
@@ -1328,16 +1330,16 @@
         },
         {
             "name": "paypal/merchant-sdk-php",
-            "version": "dev-master",
+            "version": "v2.4.103",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/merchant-sdk-php.git",
-                "reference": "0fc80d1c580f181f175fd68c83420dc2d2d6a985"
+                "reference": "ca739845da7f6306f7b1e802496dffe24c079345"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/0fc80d1c580f181f175fd68c83420dc2d2d6a985",
-                "reference": "0fc80d1c580f181f175fd68c83420dc2d2d6a985",
+                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/ca739845da7f6306f7b1e802496dffe24c079345",
+                "reference": "ca739845da7f6306f7b1e802496dffe24c079345",
                 "shasum": ""
             },
             "require": {
@@ -1368,7 +1370,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2014-03-27 18:41:57"
+            "time": "2013-06-11 09:36:55"
         },
         {
             "name": "paypal/sdk-core-php",
@@ -1768,21 +1770,21 @@
         },
         {
             "name": "symfony/assetic-bundle",
-            "version": "v2.3.0",
+            "version": "dev-master",
             "target-dir": "Symfony/Bundle/AsseticBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/AsseticBundle.git",
-                "reference": "146dd3cb46b302bd471560471c6aaa930483dac1"
+                "reference": "ea2424a1ea11dd276eaecdbacd188de637fd904a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/146dd3cb46b302bd471560471c6aaa930483dac1",
-                "reference": "146dd3cb46b302bd471560471c6aaa930483dac1",
+                "url": "https://api.github.com/repos/symfony/AsseticBundle/zipball/ea2424a1ea11dd276eaecdbacd188de637fd904a",
+                "reference": "ea2424a1ea11dd276eaecdbacd188de637fd904a",
                 "shasum": ""
             },
             "require": {
-                "kriswallsmith/assetic": "~1.1",
+                "kriswallsmith/assetic": "~1.2",
                 "php": ">=5.3.0",
                 "symfony/framework-bundle": "~2.1"
             },
@@ -1796,12 +1798,13 @@
                 "symfony/yaml": "~2.1"
             },
             "suggest": {
+                "kriswallsmith/spork": "v0.2",
                 "symfony/twig-bundle": "~2.1"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
@@ -1827,7 +1830,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-05-16 05:32:23"
+            "time": "2014-04-01 18:02:48"
         },
         {
             "name": "symfony/icu",
@@ -2268,6 +2271,8 @@
         "paypal/merchant-sdk-php": 20,
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
+        "symfony/assetic-bundle": 20,
+        "kriswallsmith/assetic": 20,
         "php-ffmpeg/php-ffmpeg": 20,
         "friendsofsymfony/jsrouting-bundle": 0
     },
