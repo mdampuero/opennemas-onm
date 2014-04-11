@@ -138,9 +138,9 @@
                         <th>{t}Title{/t}</th>
                         <th class="center" style="width:20px">{t}Category{/t}</th>
                         <th class="center nowrap" style="width:20px">{t}Created on{/t}</th>
+                        <th class="center" style="width:20px">{t}Published{/t}</th>
                         {if $category!='widget'} <th class="center" style="width:20px;">{t}Favorite{/t}</th>{/if}
                         <th class="center" style="width:20px;">{t}Home{/t}</th>
-                        <th class="center" style="width:20px">{t}Published{/t}</th>
                         <th style="width:10px" class="center">{t}Actions{/t}</th>
                     </tr>
                 </thead>
