@@ -122,7 +122,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
             unset($_SESSION['failed_login_attempts']);
 
             // Set last_login date
-            s::set('last_login', date("Y-m-d H:i:s"));
+            $time = new \DateTime();
+            $time->setTimezone(new \DateTimeZone('UTC'));
+            $time = $time->format('Y-m-d H:i:s');
+
+            s::set('last_login', $time);
 
             return new RedirectResponse($request->get('_referer'));
         }
