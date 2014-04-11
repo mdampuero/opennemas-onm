@@ -178,7 +178,7 @@
                         <td class="right">
                             <div class="btn-group">
                             {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                                <a class="btn" href="[% edit(content.id, 'admin_ad_show') %]" title="{t}Edit{/t}">
+                                <a class="btn" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
                                     <i class="icon-pencil"></i>
                                 </a>
                             {/acl}
