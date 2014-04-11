@@ -226,6 +226,8 @@ class VideosController extends Controller
 
             if (count($otherVideos) > 0) {
                 foreach ($otherVideos as &$otherVideo) {
+                    $otherVideo->information = unserialize($otherVideo->information);
+                    $otherVideo->thumb       = $otherVideo->getThumb();
                     $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
                     $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
                 }
