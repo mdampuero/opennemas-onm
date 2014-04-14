@@ -159,10 +159,17 @@ class NewsletterManager extends BaseManager
             'Julio', 'Agosto', 'Septiembre',
             'Octubre', 'Noviembre', 'Diciembre'
         );
-        $tpl->assign(
-            'current_date',
-            $days[(int) date('w')].' '.date('j').' de '.$months[(int) date('n')].' '.date('Y')
-        );
+
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
+        $time = new \DateTime();
+        $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
+
+        $currentDate = $days[$time->format('w')].' '.
+                       $time->format('j').' de '.
+                       $months[(int) $time->format('n')].' '.
+                       $time->format('Y');
+
+        $tpl->assign('current_date', $currentDate);
 
         $publicUrl = preg_replace('@^http[s]?://(.*?)/$@i', 'http://$1', SITE_URL);
         $tpl->assign('URL_PUBLIC', $publicUrl);
