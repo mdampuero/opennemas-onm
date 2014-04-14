@@ -147,6 +147,7 @@ class VideosController extends Controller
 
             if (count($videos) > 0) {
                 foreach ($videos as &$video) {
+                    $video->thumb          = $video->getThumb();
                     $video->category_name  = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
@@ -154,7 +155,8 @@ class VideosController extends Controller
 
             if (count($othersVideos) > 0) {
                 foreach ($othersVideos as &$video) {
-                    $video->category_name = $video->loadCategoryName($video->id);
+                    $video->thumb          = $video->getThumb();
+                    $video->category_name  = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
             }
@@ -226,6 +228,7 @@ class VideosController extends Controller
 
             if (count($otherVideos) > 0) {
                 foreach ($otherVideos as &$otherVideo) {
+                    $otherVideo->thumb          = $otherVideo->getThumb();
                     $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
                     $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
                 }
@@ -285,6 +288,7 @@ class VideosController extends Controller
 
         if (count($videos) > 0) {
             foreach ($videos as &$video) {
+                $video->thumb          = $video->getThumb();
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
@@ -327,6 +331,7 @@ class VideosController extends Controller
 
         if (count($videos) > 0) {
             foreach ($videos as &$video) {
+                $video->thumb          = $video->getThumb();
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
@@ -377,6 +382,7 @@ class VideosController extends Controller
 
         if ($countVideos > 0) {
             foreach ($othersVideos as &$video) {
+                $video->thumb          = $video->getThumb();
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
