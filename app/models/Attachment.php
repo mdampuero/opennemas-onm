@@ -132,7 +132,7 @@ class Attachment extends Content
         }
 
         $data['pk_author'] = $_SESSION['userid'];
-
+        $data['content_status'] = $data['available'];
         // all the data is ready to save into the database,
         // so create the general entry for this content
         parent::create($data);
