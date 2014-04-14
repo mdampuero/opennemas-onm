@@ -83,6 +83,10 @@ class Video extends Content
                 return 'Video';
 
                 break;
+            case 'thumb':
+                return $this->getThumb();
+
+                break;
             default:
                 return parent::__get($name);
                 break;
