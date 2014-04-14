@@ -705,24 +705,24 @@ class MigrationSaver
                         // Update article img2 and img2_footer
                         if (isset($values['article'])
                             && $values['article'] !== false
+                            && array_key_exists('img2_footer', $values)
                         ) {
                             $this->updateArticlePhoto(
                                 $values['article'],
                                 $id,
-                                isset($values['img2_footer']) ?
-                                $values['img2_footer'] : ''
+                                $values['img2_footer']
                             );
                         }
 
                         // Update article img1 and img1_footer
                         if (isset($values['article'])
                             && $values['article'] !== false
+                            && array_key_exists('img1_footer', $values)
                         ) {
                             $this->updateArticleFrontpagePhoto(
                                 $values['article'],
                                 $id,
-                                isset($values['img1_footer']) ?
-                                $values['img1_footer'] : ''
+                                $values['img1_footer']
                             );
                         }
 
@@ -1206,8 +1206,8 @@ class MigrationSaver
                     $delimiter = $params['substr']['delimiter'];
                     $start = array_key_exists('start', $params['substr']) ?
                         $params['substr']['start'] : 0;
-                    $pos = (array_key_exists('strrpos', $params['substrr'])
-                        && $params['substrr']['strrpos']) ?
+                    $pos = (array_key_exists('strrpos', $params['substr'])
+                        && $params['substr']['strrpos']) ?
                         strrpos($field, $delimiter, $offset) + 1 :
                         strpos($field, $delimiter, $offset);
 
