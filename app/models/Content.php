@@ -295,6 +295,10 @@ class Content
                 return $this->last_editor = $user->getUserName($this->fk_user_last_editor);
 
                 break;
+            case 'author':
+                return $this->getAuthor();
+
+                break;
             case 'ratings':
                 $rating = new Rating();
 
@@ -2437,5 +2441,22 @@ class Content
         }
 
         return false;
+    }
+
+    /**
+     * Returns the author object of this article
+     *
+     * @return array the author data
+     **/
+    public function getAuthor()
+    {
+        if (!empty($this->author)) {
+            return $this->author;
+        } else {
+            $author = new \User($this->fk_author);
+            $author ->photo = $author->getPhoto();
+
+            return $author;
+        }
     }
 }
