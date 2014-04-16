@@ -163,6 +163,10 @@ class Article extends Content
                     return StringUtils::get_title($this->title);
                 }
                 break;
+            case 'author':
+                return $this->getAuthor();
+
+                break;
             case 'content_type_name':
                 return 'Article';
 
@@ -444,6 +448,24 @@ class Article extends Content
 
                 $rel->{$method}($id, $content->position, $content->id);
             }
+        }
+    }
+
+
+    /**
+     * Returns the author object of this article
+     *
+     * @return array the author data
+     **/
+    public function getAuthor()
+    {
+        if (!empty($this->author)) {
+            return $this->author;
+        } else {
+            $author = new \User($this->fk_author);
+            $author ->photo = $author->getPhoto();
+
+            return $author;
         }
     }
 }
