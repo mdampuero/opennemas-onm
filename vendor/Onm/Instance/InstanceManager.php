@@ -131,8 +131,9 @@ class InstanceManager
      **/
     public function fetchInstance($serverName)
     {
-        $instanceCacheKey = 'instances_'.$serverName;
+        $instanceCacheKey = 'instance_'.$serverName;
         $instancesMatched = $this->cache->fetch($instanceCacheKey);
+// var_dump($instanceCacheKey, $instancesMatched);die();
 
         if (!is_array($instancesMatched)) {
             //TODO: improve search for allowing subdomains with wildcards
@@ -370,12 +371,16 @@ class InstanceManager
      */
     public function changeActivated($id, $flag)
     {
+        $instance = $this->read($id);
+
         $sql = "UPDATE instances SET activated = ? WHERE id = ?";
         $rs = $this->connection->Execute($sql, array($flag, $id));
 
         if (!$rs) {
             return false;
         }
+
+        $this->deleteCacheForInstancedomains($instance->domains);
 
         return true;
     }
@@ -387,6 +392,8 @@ class InstanceManager
      */
     public function update($data)
     {
+        $instance = $this->fetchInstanceFromInternalName($data['internal_name']);
+
         $sql = "UPDATE instances SET name=?, internal_name=?, "
              . "domains=?, activated=?, contact_mail=?, settings=? WHERE id=?";
         $values = array(
@@ -403,6 +410,8 @@ class InstanceManager
         if (!$rs) {
             return false;
         }
+
+        $this->deleteCacheForInstancedomains($data['domains']);
 
         return true;
     }
@@ -457,6 +466,7 @@ class InstanceManager
             return $errors;
         }
 
+        $this->deleteCacheForInstancedomains($instance->domains);
 
         return true;
     }
@@ -499,6 +509,22 @@ class InstanceManager
         }
 
         return true;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function deleteCacheForInstancedomains($instanceDomains)
+    {
+        $domains = explode(',', $instanceDomains);
+        foreach ($domains as $domain) {
+            $domain = trim($domain);
+            getService('cache')->delete($domain, 'instance');
+        }
+        // die();
     }
 
     /**
