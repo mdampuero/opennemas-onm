@@ -73,7 +73,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function listAction(Request $request)
     {
@@ -87,7 +87,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
@@ -106,7 +106,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function statisticsAction(Request $request)
     {
@@ -208,7 +208,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_CREATE')")
+     * @Security("has_role('ATTACHMENT_CREATE')")
      **/
     public function createAction(Request $request)
     {
@@ -278,7 +278,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_UPDATE')")
+     * @Security("has_role('ATTACHMENT_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -312,7 +312,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_UPDATE')")
+     * @Security("has_role('ATTACHMENT_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
@@ -347,7 +347,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {

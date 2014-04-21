@@ -34,7 +34,7 @@
                         <br/>{t}Batch actions{/t}
                     </a>
                     <ul class="dropdown-menu" style="margin-top: 1px;">
-                        {acl isAllowed="FILES_AVAILABLE"}
+                        {acl isAllowed="ATTACHMENT_AVAILABLE"}
                         <li>
                             <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
                                 <i class="icon-eye-open"></i>
@@ -48,7 +48,7 @@
                             </a>
                         </li>
                         {/acl}
-                        {acl isAllowed="FILES_DELETE"}
+                        {acl isAllowed="ATTACHMENT_DELETE"}
                             <li class="divider"></li>
                             <li>
                                 <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
@@ -155,7 +155,7 @@
                             <checkbox index="[% content.id %]">
                         </td>
                         <td>
-                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
+                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.ATTACHMENT_DIR}[% content.path %]" target="_blank">
                                 {t}[Link]{/t}
                             </a>
                             [% content.title %]
@@ -171,31 +171,31 @@
                         <td class="center nowrap">
                             [% content.created | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
                         </td>
-                        {acl isAllowed="FILE_AVAILABLE"}
+                        {acl isAllowed="ATTACHMENT_AVAILABLE"}
                         <td class="center">
                             <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button"></button>
                         </td>
                         {/acl}
                         {if $category != 'widget'}
-                        {acl isAllowed="FILE_AVAILABLE"}
+                        {acl isAllowed="ATTACHMENT_AVAILABLE"}
                         <td class="center">
                             <button class="btn-link" ng-class="{ loading: content.favorite_loading == 1, 'favorite': content.favorite == 1, 'no-favorite': content.favorite != 1 }" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_favorite', 'favorite', content.favorite != 1 ? 1 : 0, 'favorite_loading')" type="button"></button>
                         </td>
                         {/acl}
                         {/if}
-                        {acl isAllowed="FILE_AVAILABLE"}
+                        {acl isAllowed="ATTACHMENT_AVAILABLE"}
                         <td class="center">
                             <button class="btn-link" ng-class="{ 'loading': content.home_loading == 1, 'go-home': content.in_home == 1, 'no-home': content.in_home == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_toggle_in_home', 'in_home', content.in_home != 1 ? 1 : 0, 'home_loading')" type="button"></button>
                         </td>
                         {/acl}
                         <td class="right">
                             <div class="btn-group">
-                                {acl isAllowed="FILE_UPDATE"}
+                                {acl isAllowed="ATTACHMENT_UPDATE"}
                                 <a class="btn" href="[% edit(content.id, 'admin_file_show') %]">
                                     <i class="icon-pencil"></i>
                                 </a>
                                 {/acl}
-                                {acl isAllowed="FILE_DELETE"}
+                                {acl isAllowed="ATTACHMENT_DELETE"}
                                 <button class="del btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
                                     <i class="icon-trash icon-white"></i>
                                 </button>
