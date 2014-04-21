@@ -62,7 +62,7 @@ class OpinionsController extends Controller
             'ORDER BY position ASC, created DESC LIMIT 0,2'
         );
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
-            'content_status=1 AND type_opinion=0 AND content_status=1',
+            'type_opinion=0 AND content_status=1',
             'ORDER BY in_home DESC, position ASC, created DESC LIMIT 0,10'
         );
         if (isset ($director[0])) {

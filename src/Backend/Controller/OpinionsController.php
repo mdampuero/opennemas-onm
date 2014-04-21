@@ -902,8 +902,7 @@ class OpinionsController extends Controller
 
         $otherOpinions = $cm->find(
             'Opinion',
-            $where.' AND `pk_opinion` <>' .$opinionID
-            .' AND content_status = 1  AND content_status=1',
+            $where.' AND `pk_opinion` <>' .$opinionID.' AND content_status=1',
             ' ORDER BY created DESC LIMIT 0,9'
         );
 

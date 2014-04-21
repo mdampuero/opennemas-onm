@@ -137,7 +137,7 @@ class RssController extends Controller
                 // get all the authors of opinions
                 if (!isset($author) || empty($author)) {
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
-                        'contents.content_status=1 and contents.content_status=1',
+                        'contents.content_status=1',
                         'ORDER BY created DESC LIMIT 50'
                     );
                     $title_rss = 'Últimas Opiniones';
@@ -145,8 +145,7 @@ class RssController extends Controller
                     // get articles for the author in opinion
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'opinions.fk_author='.((int) $author)
-                        .' AND  contents.content_status=1  '
-                        .'AND contents.content_status=1',
+                        .' AND  contents.content_status=1',
                         'ORDER BY created DESC  LIMIT 50'
                     );
 

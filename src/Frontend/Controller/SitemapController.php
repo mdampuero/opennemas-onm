@@ -107,7 +107,7 @@ class SitemapController extends Controller
             }
 
             $opinions = $this->cm->getOpinionAuthorsPermalinks(
-                'contents.content_status=1 and contents.content_status=1',
+                'contents.content_status=1',
                 'ORDER BY in_home DESC, position ASC, changed DESC LIMIT 100'
             );
             foreach ($opinions as &$opinion) {
@@ -157,7 +157,7 @@ class SitemapController extends Controller
 
             // Get latest opinions
             $opinions = $this->cm->getOpinionAuthorsPermalinks(
-                'contents.content_status=1 AND contents.content_status=1 ',
+                'contents.content_status=1',
                 'ORDER BY position ASC, changed DESC LIMIT 100'
             );
 

@@ -66,7 +66,7 @@ class LetterController extends Controller
                 'Letter',
                 null,
                 'in_litter != 1 AND contents.content_status=1',
-                'ORDER BY created DESC, content_status ASC',
+                'ORDER BY created DESC',
                 $page,
                 $itemsPerPage
             );

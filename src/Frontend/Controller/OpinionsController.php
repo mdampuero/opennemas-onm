@@ -86,9 +86,7 @@ class OpinionsController extends Controller
                 $editorial = $this->cm->find(
                     'Opinion',
                     'opinions.type_opinion=1 '.
-                    'AND contents.content_status=1 '.
-                    $where.
-                    'AND contents.content_status=1 ',
+                    'AND contents.content_status=1 '.$where,
                     $orderBy.
                     'LIMIT '.$totalEditorial
                 );
@@ -111,9 +109,7 @@ class OpinionsController extends Controller
                 $director = $this->cm->find(
                     'Opinion',
                     'opinions.type_opinion=2 '.
-                    'AND contents.content_status=1 '.
-                    $where.
-                    'AND contents.content_status=1 ',
+                    'AND contents.content_status=1 '.$where,
                     $orderBy.
                     ' LIMIT '.$totalDirector
                 );
@@ -169,7 +165,6 @@ class OpinionsController extends Controller
                 null,
                 'opinions.type_opinion=0 '.
                 $where.
-                'AND contents.content_status=1 '.
                 'AND contents.content_status=1 ',
                 $orderBy,
                 $this->page,

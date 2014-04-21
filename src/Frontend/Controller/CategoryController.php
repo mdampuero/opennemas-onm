@@ -75,7 +75,7 @@ class CategoryController extends Controller
                 (int) $category->pk_content_category,
                 'in_litter != 1 AND contents.content_status=1 AND '.
                 '( starttime="0000-00-00 00:00:00" OR starttime<=NOW() )',
-                'ORDER BY starttime DESC, content_status ASC',
+                'ORDER BY starttime DESC',
                 $page,
                 $itemsPerPage
             );

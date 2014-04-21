@@ -187,13 +187,13 @@ class BlogsController extends Controller
                 $countItems = $this->cm->cache->count(
                     'Opinion',
                     $filter
-                    .' AND contents.content_status=1  and contents.content_status=1 '
+                    .' AND contents.content_status=1 '
                 );
 
                 // Get the list articles for this author
                 $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
                     $filter
-                    .' AND contents.content_status=1 and contents.content_status=1',
+                    .' AND contents.content_status=1',
                     'ORDER BY starttime DESC '.$_limit
                 );
 
