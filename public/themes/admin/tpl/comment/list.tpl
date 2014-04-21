@@ -14,7 +14,7 @@
 
 
 {block name="content"}
-<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('comment', { status: -1, body_like: '' }, 'date', 'desc', 'backend_ws_contents_list')">
+<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('comment', { status: -1, body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">

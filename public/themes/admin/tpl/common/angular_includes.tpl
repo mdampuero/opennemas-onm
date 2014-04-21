@@ -8,6 +8,7 @@
 {script_tag src="routes.js" language="javascript" common=1 basepath="js"}
 
 {script_tag src="angular.min.js" language="javascript" bundle="backend" basepath="lib"}
+{script_tag src="angular-translate.min.js" language="javascript" bundle="backend" basepath="lib"}
 {script_tag src="ui-sortable.js" language="javascript" bundle="backend" basepath="lib"}
 {script_tag src="ui-bootstrap-tpls-0.10.0.min.js" language="javascript" bundle="backend" basepath="lib"}
 

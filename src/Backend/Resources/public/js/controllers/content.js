@@ -1,7 +1,7 @@
 /**
  * Controller to handle list actions.
  */
-function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, sharedVars, messenger) {
+function ContentCtrl($http, $location, $modal, $scope, $timeout, $translate, fosJsRouting, sharedVars, messenger, paginationConfig) {
     /**
      * All contents selected flag.
      *
@@ -69,7 +69,13 @@ function ContentCtrl($http, $location, $modal, $scope, $timeout, fosJsRouting, s
      * @param string sortBy  Field name to sort by.
      * @param string route   Route name.
      */
-    $scope.init = function(content, filters, sortBy, sortOrder, route) {
+    $scope.init = function(content, filters, sortBy, sortOrder, route, lang) {
+        $translate.use(lang ? lang : 'en');
+        $translate(['Next', 'Previous']).then(function (translations) {
+            paginationConfig.nextText     = translations.Next;
+            paginationConfig.previousText = translations.Previous;
+        });
+
         // Initialize the current list.
         sharedVars.set('contentType', content);
         sharedVars.set('page', 1);
