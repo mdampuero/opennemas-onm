@@ -133,6 +133,7 @@ class Kiosko extends Content
             $data['type'] = 0;
         }
 
+        $data['content_status'] = $data['available'];
         parent::create($data);
 
         $sql  = "INSERT INTO kioskos (`pk_kiosko`, `name`, `path`, `date`, `price`, `type` )"
@@ -185,10 +186,7 @@ class Kiosko extends Content
      **/
     public function update($data)
     {
-        if (isset($data['available']) and !isset($data['content_status'])) {
-            $data['content_status'] = $data['available'];
-        }
-
+        $data['content_status'] = $data['available'];
         parent::update($data);
 
         $sql  = "UPDATE kioskos SET `date`=?, `price`=? WHERE pk_kiosko=?";

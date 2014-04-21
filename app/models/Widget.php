@@ -91,6 +91,7 @@ class Widget extends Content
      **/
     public function create($data)
     {
+        $data['content_status'] = $data['available'];
         $data['category'] = 0;
 
         // Start transaction
@@ -207,6 +208,7 @@ class Widget extends Content
      */
     public function update($data)
     {
+        $data['content_status'] = $data['available'];
         $data['category'] = 0;
 
         // Start transaction

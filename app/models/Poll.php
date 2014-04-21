@@ -141,6 +141,7 @@ class Poll extends Content
      **/
     public function create($data)
     {
+        $data['content_status'] = $data['available'];
         parent::create($data);
 
         if ($data['item']) {
@@ -178,6 +179,7 @@ class Poll extends Content
      **/
     public function update($data)
     {
+        $data['content_status'] = $data['available'];
         parent::update($data);
 
         if ($data['item']) {

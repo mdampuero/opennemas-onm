@@ -100,6 +100,7 @@ class Video extends Content
      **/
     public function create($data)
     {
+        $data['content_status'] = $data['available'];
         parent::create($data);
 
         $sql = "INSERT INTO videos
@@ -152,6 +153,7 @@ class Video extends Content
      **/
     public function update($data)
     {
+        $data['content_status'] = $data['available'];
         parent::update($data);
 
         $sql =  "UPDATE videos"
