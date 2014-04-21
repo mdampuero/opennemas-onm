@@ -131,9 +131,10 @@ class InstanceManager
      **/
     public function fetchInstance($serverName)
     {
-        $instanceCacheKey = 'instance_'.$serverName;
-        $instancesMatched = $this->cache->fetch($instanceCacheKey);
-// var_dump($instanceCacheKey, $instancesMatched);die();
+        $previousNamespace = $this->cache->getNamespace();
+
+        $this->cache->setNamespace('instance');
+        $instancesMatched = $this->cache->fetch($serverName);
 
         if (!is_array($instancesMatched)) {
             //TODO: improve search for allowing subdomains with wildcards
@@ -146,7 +147,7 @@ class InstanceManager
             }
 
             $instancesMatched = $rs->GetArray();
-            $this->cache->save($instanceCacheKey, $instancesMatched);
+            $this->cache->save($serverName, $instancesMatched);
         }
 
         if (!(is_array($instancesMatched) && count($instancesMatched) > 0)) {
@@ -170,6 +171,8 @@ class InstanceManager
         }
 
         $instance = $this->loadInstanceProperties($matchedInstance);
+
+        $this->cache->setNamespace($previousNamespace);
 
         return $instance;
     }
@@ -520,6 +523,7 @@ class InstanceManager
     public function deleteCacheForInstancedomains($instanceDomains)
     {
         $domains = explode(',', $instanceDomains);
+
         foreach ($domains as $domain) {
             $domain = trim($domain);
             getService('cache')->delete($domain, 'instance');
