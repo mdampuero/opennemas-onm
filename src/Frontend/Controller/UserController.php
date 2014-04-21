@@ -607,7 +607,7 @@ class UserController extends Controller
                 $user->getMeta();
 
                 $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
-                    ."AND available=1 AND in_litter=0";
+                    ."AND content_status=1 AND in_litter=0";
 
                 $er = $this->get('entity_repository');
                 $contentsCount  = $er->count($searchCriteria);

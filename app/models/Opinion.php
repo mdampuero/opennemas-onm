@@ -158,7 +158,6 @@ class Opinion extends Content
      **/
     public function create($data)
     {
-        $data['content_status'] = $data['available'];
         $data['position']   =  1;
 
         // Editorial or director
@@ -254,7 +253,6 @@ class Opinion extends Content
      **/
     public function update($data)
     {
-        $data['content_status']= $data['available'];
         if (!isset($data['fk_author'])) {
             $data['fk_author'] = $data['type_opinion'];
         } // Editorial o director
@@ -418,7 +416,7 @@ class Opinion extends Content
         // Getting latest opinions taking in place later considerations
         $contents = $cm->find(
             'Opinion',
-            'contents.content_status=1 AND contents.available=1'. $sqlExcludedContents,
+            'contents.content_status=1'. $sqlExcludedContents,
             'ORDER BY contents.created DESC, contents.title ASC ' .$_sql_limit
         );
 
@@ -457,7 +455,7 @@ class Opinion extends Content
         // Getting All latest opinions
         $contents = $cm->find(
             'Opinion',
-            'contents.available=1 ',
+            'contents.content_status=1 ',
             'ORDER BY  contents.created DESC,  contents.title ASC ' .$limitSql
         );
 
@@ -503,8 +501,8 @@ class Opinion extends Content
         // Getting All latest opinions
         $contents = $cm->find(
             'Opinion',
-            'contents.available=1 AND opinions.fk_author = '.$authorID,
-            'ORDER BY  contents.created DESC,  contents.title ASC ' .$sqlLimit
+            'contents.content_status=1 AND opinions.fk_author = '.$authorID,
+            'ORDER BY contents.created DESC,  contents.title ASC ' .$sqlLimit
         );
 
         $author = new \User($authorID);

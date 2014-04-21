@@ -86,7 +86,7 @@ class OpinionsController extends Controller
                 $editorial = $this->cm->find(
                     'Opinion',
                     'opinions.type_opinion=1 '.
-                    'AND contents.available=1 '.
+                    'AND contents.content_status=1 '.
                     $where.
                     'AND contents.content_status=1 ',
                     $orderBy.
@@ -111,7 +111,7 @@ class OpinionsController extends Controller
                 $director = $this->cm->find(
                     'Opinion',
                     'opinions.type_opinion=2 '.
-                    'AND contents.available=1 '.
+                    'AND contents.content_status=1 '.
                     $where.
                     'AND contents.content_status=1 ',
                     $orderBy.
@@ -169,7 +169,7 @@ class OpinionsController extends Controller
                 null,
                 'opinions.type_opinion=0 '.
                 $where.
-                'AND contents.available=1 '.
+                'AND contents.content_status=1 '.
                 'AND contents.content_status=1 ',
                 $orderBy,
                 $this->page,
@@ -433,13 +433,13 @@ class OpinionsController extends Controller
             $countOpinions = $this->cm->cache->count(
                 'Opinion',
                 $filter
-                .' AND contents.available=1  and contents.content_status=1 '
+                .' AND contents.content_status=1 '
             );
 
             // Get the list articles for this author
             $opinions = $this->cm->getOpinionArticlesWithAuthorInfo(
                 $filter
-                .' AND contents.available=1 and contents.content_status=1',
+                .' AND contents.content_status=1',
                 'ORDER BY created DESC '.$_limit
             );
 
@@ -682,7 +682,7 @@ class OpinionsController extends Controller
         $opinion = new \Opinion($opinionID);
 
         // TODO: Think that this comments related code can be deleted.
-        if (($opinion->available != 1) || ($opinion->in_litter != 0)) {
+        if (($opinion->content_status != 1) || ($opinion->in_litter != 0)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 
@@ -721,7 +721,7 @@ class OpinionsController extends Controller
             $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
                 $opinion->metadata,
                 'opinion',
-                " contents.available=1 AND pk_content = pk_fk_content",
+                " contents.content_status=1 AND pk_content = pk_fk_content",
                 4
             );
 
@@ -760,7 +760,7 @@ class OpinionsController extends Controller
             $otherOpinions = $this->cm->find(
                 'Opinion',
                 $where.' AND `pk_opinion` <>' .$opinionID
-                .' AND available = 1  AND content_status=1',
+                .' AND content_status=1',
                 ' ORDER BY created DESC LIMIT 0,9'
             );
 
@@ -830,7 +830,7 @@ class OpinionsController extends Controller
             $ads = $this->getAds('inner');
             $this->view->assign('advertisements', $ads);
 
-            if (($opinion->available==1) && ($opinion->in_litter == 0)) {
+            if (($opinion->content_status==1) && ($opinion->in_litter == 0)) {
 
                 if (isset($opinion->img2) && ($opinion->img2 > 0)) {
                     $photo = new \Photo($opinion->img2);

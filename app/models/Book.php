@@ -115,7 +115,6 @@ class Book extends Content
      **/
     public function create($data)
     {
-        $data['content_status'] = $data['available'];
         parent::create($data);
 
         $sql = "INSERT INTO books "
@@ -173,7 +172,6 @@ class Book extends Content
      **/
     public function update($data)
     {
-        $data['content_status'] = $data['available'];
         parent::update($data);
 
         $sql = "UPDATE books "

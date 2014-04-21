@@ -122,7 +122,6 @@ class Special extends Content
      */
     public function create($data)
     {
-        $data['content_status'] = $data['available'];
         parent::create($data);
 
         $data['id'] = $this->id;
@@ -188,7 +187,6 @@ class Special extends Content
      */
     public function update($data)
     {
-        $data['content_status'] = $data['available'];
         parent::update($data);
 
         if (!array_key_exists('pdf_path', $data)) {

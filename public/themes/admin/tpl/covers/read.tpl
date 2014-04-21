@@ -111,11 +111,11 @@ jQuery(document).ready(function($) {
             </div>
 
             <div class="control-group">
-                <label for="available" class="control-label">{t}Available{/t}</label>
+                <label for="content_status" class="control-label">{t}Available{/t}</label>
                 <div class="controls">
-                    <select name="available" id="available" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
-                        <option value="0" {if $cover->available==0}selected{/if}>{t}No{/t}</option>
-                        <option value="1" {if empty($cover) || $cover->available==1}selected{/if}>{t}Yes{/t}</option>
+                    <select name="content_status" id="content_status" required="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
+                        <option value="0" {if $cover->content_status==0}selected{/if}>{t}No{/t}</option>
+                        <option value="1" {if empty($cover) || $cover->content_status==1}selected{/if}>{t}Yes{/t}</option>
                     </select>
                 </div>
             </div>

@@ -194,7 +194,6 @@ class Article extends Content
         }
 
         $data['subtitle']= $data['subtitle'];
-        $data['available'] = $data['content_status'];
         $data['img1_footer']
             = (!isset($data['img1_footer']) || empty($data['img1_footer']))
                 ? ''
@@ -297,10 +296,6 @@ class Article extends Content
      **/
     public function update($data)
     {
-        if (isset($data['content_status']) && !isset($data['available'])) {
-            $data['available'] = $data['content_status'];
-        }
-
         // Update an article
         if (!$data['description']) {
             $data['description'] = StringUtils::get_num_words(
@@ -424,7 +419,7 @@ class Article extends Content
         try {
             $html = $tpl->fetch($params['tpl'], $params);
         } catch (\Exception $e) {
-            $html = 'Article not available';
+            $html = _('Article not available');
         }
 
         return $html;

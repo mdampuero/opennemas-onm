@@ -100,7 +100,6 @@ class Video extends Content
      **/
     public function create($data)
     {
-        $data['content_status'] = $data['available'];
         parent::create($data);
 
         $sql = "INSERT INTO videos
@@ -153,7 +152,6 @@ class Video extends Content
      **/
     public function update($data)
     {
-        $data['content_status'] = $data['available'];
         parent::update($data);
 
         $sql =  "UPDATE videos"
@@ -533,7 +531,7 @@ class Video extends Content
         try {
             $html = $tpl->fetch($template);
         } catch (\Exception $e) {
-            $html = 'Video not available';
+            $html = _('Video not available');
         }
 
         return $html;

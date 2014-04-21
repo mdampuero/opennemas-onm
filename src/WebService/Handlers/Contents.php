@@ -164,7 +164,7 @@ class Contents
 
         } else {
             $sql =  'UPDATE `contents` SET `views`=`views`+1 '
-                    .'WHERE `available`=1 AND `pk_content`='.$id;
+                    .'WHERE `content_status`=1 AND `pk_content`='.$id;
         }
 
         if ($GLOBALS['application']->conn->Execute($sql) === false) {
@@ -182,4 +182,3 @@ class Contents
         }
     }
 }
-

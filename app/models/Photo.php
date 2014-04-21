@@ -185,7 +185,6 @@ class Photo extends Content
             'size'           => round($fileInformation->size/1024, 2),
             'width'          => $fileInformation->width,
             'height'         => $fileInformation->height,
-            'available'      => $dataSource['available'],
             'content_status' => $dataSource['content_status'],
             'author_name'    => $dataSource['author_name'],
             'pk_author'      => $_SESSION['userid'],
@@ -606,7 +605,7 @@ class Photo extends Content
                     }
 
                     if (empty($exif)) {
-                        $this->infor .= _("No availabel EXIF data</br>");
+                        $this->infor .= _("No available EXIF data</br>");
 
                     } else {
                         if (empty($this->color)) {

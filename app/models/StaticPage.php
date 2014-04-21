@@ -58,7 +58,6 @@ class StaticPage extends Content
     {
         $data['category'] = 0;
 
-        $data['content_status'] = $data['available'];
         parent::create($data);
 
         $sql = "INSERT INTO `static_pages` (`static_pages`.`pk_static_page`)
@@ -85,7 +84,6 @@ class StaticPage extends Content
     {
         $data['category'] = 0;
 
-        $data['content_status'] = $data['available'];
         return parent::update($data);
     }
 

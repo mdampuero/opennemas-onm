@@ -65,8 +65,8 @@ class LetterController extends Controller
             list($countLetters, $otherLetters) = $cm->getCountAndSlice(
                 'Letter',
                 null,
-                'in_litter != 1 AND contents.available=1',
-                'ORDER BY created DESC, available ASC',
+                'in_litter != 1 AND contents.content_status=1',
+                'ORDER BY created DESC, content_status ASC',
                 $page,
                 $itemsPerPage
             );
@@ -136,7 +136,7 @@ class LetterController extends Controller
             $letter->with_comment = 1;
 
             if (empty($letter)
-                && ($letter->available != 1 || $letter->in_litter != 0)
+                && ($letter->content_status != 1 || $letter->in_litter != 0)
             ) {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
             }
@@ -145,7 +145,7 @@ class LetterController extends Controller
 
             $otherLetters = $cm->find(
                 'Letter',
-                'available=1 ',
+                'content_status=1 ',
                 'ORDER BY created DESC LIMIT 5'
             );
 
@@ -246,7 +246,7 @@ class LetterController extends Controller
                 $data['title']      = $subject;
                 $data['email']      = $mail;
                 $_SESSION['userid'] = 0;
-                $data['available']  = 0; //pendding
+                $data['content_status']  = 0; //pendding
                 $data['image']      = $this->saveImage($data);
 
                 $letter = new \Letter();

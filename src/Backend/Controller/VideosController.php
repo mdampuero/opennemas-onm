@@ -147,8 +147,7 @@ class VideosController extends Controller
                     'file_type'      => $_FILES["video_file"]["type"],
                     'file_path'      => $_FILES["video_file"]["tmp_name"],
                     'category'       => $category,
-                    'available'      => $requestPost->filter('available', null, FILTER_SANITIZE_STRING),
-                    'content_status' => $requestPost->filter('content_status', null, FILTER_SANITIZE_STRING),
+                    'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                     'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
                     'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
@@ -173,7 +172,6 @@ class VideosController extends Controller
                 $video = new \Video();
                 $videoData = array(
                     'category'       => $category,
-                    'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
                     'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                     'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
@@ -287,7 +285,6 @@ class VideosController extends Controller
                     $videoData = array(
                         'id'             => $id,
                         'category'       => $category,
-                        'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
                         'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                         'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                         'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
@@ -601,7 +598,7 @@ class VideosController extends Controller
         list($countVideos, $videos) = $cm->getCountAndSlice(
             'Video',
             null,
-            'contents.available=1 '.$sqlExcludedOpinions,
+            'contents.content_status=1 '.$sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             8

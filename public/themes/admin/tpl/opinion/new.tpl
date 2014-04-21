@@ -146,8 +146,8 @@
                 <div class="contentbox">
                     <h3 class="title">{t}Attributes{/t}</h3>
                     <div class="content">
-                        <input type="checkbox" name="available" id="available" {if $opinion->available eq 1}checked="checked"{/if} />
-                        <label for="available">{t}Available{/t}</label>
+                        <input type="checkbox" name="content_status" id="content_status" {if $opinion->content_status eq 1}checked="checked"{/if} />
+                        <label for="content_status">{t}Available{/t}</label>
 
                         <hr class="divisor">
 

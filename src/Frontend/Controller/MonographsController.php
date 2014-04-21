@@ -89,13 +89,13 @@ class MonographsController extends Controller
                 $monographs = $this->cm->find_by_category(
                     'Special',
                     $this->category,
-                    'available=1',
+                    'content_status=1',
                     ' ORDER BY starttime DESC LIMIT 14'
                 );
             } else {
                 $monographs = $this->cm->find(
                     'Special',
-                    'available=1',
+                    'content_status=1',
                     ' ORDER BY starttime DESC LIMIT 14'
                 );
             }
@@ -147,7 +147,7 @@ class MonographsController extends Controller
         if (($this->view->caching == 0)
             || (!$this->view->isCached('special/special.tpl', $cacheID))
         ) {
-            if ($special->available != 1
+            if ($special->content_status != 1
                 || $special->in_litter != 0
             ) {
                 return new \RedirectResponse($this->generateUrl('frontend_monograph_frontpage'));

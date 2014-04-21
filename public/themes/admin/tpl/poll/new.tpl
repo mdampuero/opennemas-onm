@@ -97,8 +97,8 @@
                 <div class="contentbox">
                     <h3 class="title">{t}Attributes{/t}</h3>
                     <div class="content">
-                        <input id="available" name="available" type="checkbox" {if !isset($poll) || $poll->available eq 1}checked="checked"{/if} value="1"/>
-                        <label for="available">{t}Available{/t}</label>
+                        <input id="content_status" name="content_status" type="checkbox" {if !isset($poll) || $poll->content_status eq 1}checked="checked"{/if} value="1"/>
+                        <label for="content_status">{t}Available{/t}</label>
 
                         <hr class="divisor">
 

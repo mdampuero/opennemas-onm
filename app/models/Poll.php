@@ -141,7 +141,6 @@ class Poll extends Content
      **/
     public function create($data)
     {
-        $data['content_status'] = $data['available'];
         parent::create($data);
 
         if ($data['item']) {
@@ -179,7 +178,6 @@ class Poll extends Content
      **/
     public function update($data)
     {
-        $data['content_status'] = $data['available'];
         parent::update($data);
 
         if ($data['item']) {
@@ -382,7 +380,7 @@ class Poll extends Content
         try {
             $html = $tpl->fetch('frontpage/contents/_poll.tpl');
         } catch (\Exception $e) {
-            $html = 'Poll not available';
+            $html = _('Poll not available');
         }
 
         return $html;

@@ -101,14 +101,14 @@ class WidgetsController extends Controller
             $post = $request->request;
 
             $widgetData = array(
-                'id'          => $post->getDigits('id'),
-                'action'      => $post->filter('action', null, FILTER_SANITIZE_STRING),
-                'title'       => $post->filter('title', null, FILTER_SANITIZE_STRING),
-                'available'   => $post->filter('available', null, FILTER_SANITIZE_STRING),
-                'renderlet'   => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
-                'metadata'    => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'description' => $post->filter('description', null, FILTER_SANITIZE_STRING),
-                'content'     => $post->filter('content', null, FILTER_SANITIZE_STRING),
+                'id'             => $post->getDigits('id'),
+                'action'         => $post->filter('action', null, FILTER_SANITIZE_STRING),
+                'title'          => $post->filter('title', null, FILTER_SANITIZE_STRING),
+                'content_status' => $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'renderlet'      => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
+                'metadata'       => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
+                'description'    => $post->filter('description', null, FILTER_SANITIZE_STRING),
+                'content'        => $post->filter('content', null, FILTER_SANITIZE_STRING),
             );
 
             if ($widgetData['renderlet'] == 'intelligentwidget') {
@@ -168,7 +168,7 @@ class WidgetsController extends Controller
             'id'              => $id,
             'action'          => $post->filter('action', null, FILTER_SANITIZE_STRING),
             'title'           => $post->filter('title', null, FILTER_SANITIZE_STRING),
-            'available'       => $post->filter('available', null, FILTER_SANITIZE_STRING),
+            'content_status'  => $post->filter('content_status', 0, FILTER_SANITIZE_STRING),
             'renderlet'       => $post->filter('renderlet', null, FILTER_SANITIZE_STRING),
             'metadata'        => $post->filter('metadata', null, FILTER_SANITIZE_STRING),
             'description'     => $post->filter('description', null, FILTER_SANITIZE_STRING),
@@ -225,7 +225,7 @@ class WidgetsController extends Controller
         list($countWidgets, $widgets) = $cm->getCountAndSlice(
             'Widget',
             null,
-            'contents.available=1 AND contents.in_litter != 1 '.$sqlExcludedOpinions,
+            'contents.content_status=1 AND contents.in_litter != 1 '.$sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             8

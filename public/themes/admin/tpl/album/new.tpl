@@ -189,8 +189,8 @@
                 <div class="contentbox">
                     <h3 class="title">{t}Attributes{/t}</h3>
                     <div class="content">
-                        <label for="title" >{t}Available{/t}</label>
-                        <input type="checkbox" value="1" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
+                        <label for="content_status" >{t}Available{/t}</label>
+                        <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}>
                         <br/>
 
                         <h4>{t}Category{/t}</h4>

@@ -487,7 +487,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
         // Content in time, available and not in litter
         $this->object->starttime = '2012-08-21 03:03:12';
         $this->object->endtime   = '';
-        $this->object->available = 1;
+        $this->object->content_status = 1;
         $this->object->in_litter = 0;
 
         $this->assertTrue($this->object->isReadyForPublish());
@@ -496,7 +496,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $content = new Content();
         $content->starttime = '2052-08-21 03:03:12';
         $content->endtime   = '';
-        $content->available = 0;
+        $content->content_status = 0;
         $content->in_litter = 0;
 
         $this->assertFalse($content->isReadyForPublish());
@@ -505,7 +505,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $content = new Content();
         $content->starttime = '2052-08-21 03:03:12';
         $content->endtime   = '';
-        $content->available = 1;
+        $content->content_status = 1;
         $content->in_litter = 1;
 
         $this->assertFalse($content->isReadyForPublish());
@@ -514,7 +514,7 @@ class ContentTest extends PHPUnit_Framework_TestCase
         $content = new Content();
         $content->endtime   = '';
         $content->endtime   = '1912-08-21 03:03:12';
-        $content->available = 1;
+        $content->content_status = 1;
         $content->in_litter = 0;
 
         // $this->assertFalse($content->isReadyForPublish());

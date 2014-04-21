@@ -231,13 +231,13 @@ class FilesController extends Controller
                 }
 
                 $data = array(
-                    'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'path'         => $directoryDate.$fileName,
-                    'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-                    'available'    => 1,
-                    'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
-                    'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'fk_publisher' => $_SESSION['userid'],
+                    'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                    'path'           => $directoryDate.$fileName,
+                    'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+                    'content_status' => 1,
+                    'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'fk_publisher'   => $_SESSION['userid'],
                 );
 
                 // Move uploaded file
@@ -320,13 +320,13 @@ class FilesController extends Controller
 
         $file = new \Attachment($id);
           $data = array(
-                'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-                'available'    => 1,
-                'id'           => $id,
-                'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
-                'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'fk_publisher' => $_SESSION['userid'],
+                'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+                'content_status' => 1,
+                'id'             => $id,
+                'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+                'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                'fk_publisher'   => $_SESSION['userid'],
             );
 
         if ($file->update($data)) {
@@ -401,7 +401,7 @@ class FilesController extends Controller
         list($countPolls, $polls) = $cm->getCountAndSlice(
             'Attachment',
             null,
-            'contents.available=1',
+            'contents.content_status=1',
             ' ORDER BY starttime DESC, contents.title ASC ',
             $page,
             $itemsPerPage

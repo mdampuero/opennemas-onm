@@ -53,7 +53,7 @@ class TagsController extends Controller
             }
 
             $criteria = array(
-                'available'       => array(array('value' => 1)),
+                'content_status'  => array(array('value' => 1)),
                 'in_litter'       => array(array('value' => 0)),
                 'fk_content_type' => array(
                     array('value' => 1),

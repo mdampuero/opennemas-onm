@@ -298,13 +298,13 @@ class AlbumsController extends Controller
         }
 
         $data = array(
-            'id'          => $id,
-            'available'   => $request->request->getDigits('available', 0, FILTER_SANITIZE_STRING),
-            'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'category'    => $request->request->getDigits('category'),
-            'agency'      => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
-            'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-            'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'id'             => $id,
+            'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'category'       => $request->request->getDigits('category'),
+            'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'album_frontpage_image' =>
                 $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $request->request->get('album_photos_id'),
@@ -395,7 +395,7 @@ class AlbumsController extends Controller
         list($countAlbums, $albums) = $cm->getCountAndSlice(
             'Album',
             null,
-            'contents.available=1 '.$sqlExcludedOpinions,
+            'contents.content_status=1 '.$sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             8
