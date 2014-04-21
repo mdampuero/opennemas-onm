@@ -35,16 +35,18 @@ class TagsController extends Controller
     public function tagsAction(Request $request)
     {
         $this->view = new \Template(TEMPLATE_USER);
-        // Load config
-        $this->view->setConfig('frontpages');
 
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $page    = $request->query->getDigits('page', 1);
 
         $tagName = \StringUtils::normalize($tagName);
 
+        // Load config
+        $this->view->setConfig('frontpages');
+
         $cacheId = "tag|$tagName|$page";
-        if (!$this->view->isCached('blog/tag.tpl', $cacheId)) {
+
+        if (!$this->view->isCached('frontpage/tag.tpl', $cacheId)) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
             $tagSearch = "%{$tag}%";
             $itemsPerPage = s::get('items_in_blog');
@@ -132,10 +134,10 @@ class TagsController extends Controller
                     'pagination' => $pagination,
                 )
             );
-
-            $ads = $this->getInnerAds();
-            $this->view->assign('advertisements', $ads);
         }
+
+        $ads = $this->getInnerAds();
+        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'frontpage/tags.tpl',
