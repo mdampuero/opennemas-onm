@@ -164,11 +164,11 @@ class Kiosko extends Content
         parent::read($id);
 
         $sql = 'SELECT pk_kiosko, name, path, date, price, type FROM kioskos WHERE pk_kiosko=?';
-
         $rs = $GLOBALS['application']->conn->Execute($sql, array($id));
         if (!$rs) {
             return null;
         }
+        $rs->fields['thumb_url'] = str_replace('.pdf', '.jpg', $rs->fields['name']);
 
         $this->load($rs->fields);
 
@@ -184,14 +184,9 @@ class Kiosko extends Content
      **/
     public function update($data)
     {
-        if (isset($data['available']) and !isset($data['content_status'])) {
-            $data['content_status'] = $data['available'];
-        }
-
         parent::update($data);
 
         $sql  = "UPDATE kioskos SET `date`=?, `price`=? WHERE pk_kiosko=?";
-
         $values = array($data['date'], $data['price'], $data['id']);
 
         if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
@@ -249,31 +244,6 @@ class Kiosko extends Content
         $rs = $GLOBALS['application']->conn->GetOne($sql, array($path_pdf, $category));
 
         return intval($rs) > 0;
-    }
-
-    /**
-     * Sets the favorite flag
-     *
-     * @param int $status the final status of the favorite flag
-     *
-     * @return boolean true if the flag changed its status
-     **/
-    public function set_favorite($status)
-    {
-        if ($this->id == null) {
-            return false;
-        }
-
-        parent::set_favorite($status);
-
-        $sql = "UPDATE kioskos SET `favorite`=? WHERE pk_kiosko=?";
-        $values = array($status, $this->id);
-
-        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

@@ -80,7 +80,6 @@ class BlogsController extends Controller
                 null,
                 'opinions.type_opinion=0 '.
                 $where.
-                'AND contents.available=1 '.
                 'AND contents.content_status=1 ',
                 $orderBy,
                 $this->page,
@@ -188,13 +187,13 @@ class BlogsController extends Controller
                 $countItems = $this->cm->cache->count(
                     'Opinion',
                     $filter
-                    .' AND contents.available=1  and contents.content_status=1 '
+                    .' AND contents.content_status=1 '
                 );
 
                 // Get the list articles for this author
                 $blogs = $this->cm->getOpinionArticlesWithAuthorInfo(
                     $filter
-                    .' AND contents.available=1 and contents.content_status=1',
+                    .' AND contents.content_status=1',
                     'ORDER BY starttime DESC '.$_limit
                 );
 
@@ -296,7 +295,7 @@ class BlogsController extends Controller
         $blog = new \Opinion($blogID);
 
         // TODO: Think that this comments related code can be deleted.
-        if (($blog->available != 1) || ($blog->in_litter != 0)) {
+        if (($blog->content_status != 1) || ($blog->in_litter != 0)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
         }
 

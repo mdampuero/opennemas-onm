@@ -58,9 +58,8 @@ class Opinions
         $editorial = $cm->find(
             'Opinion',
             'opinions.type_opinion=1 '.
-            'AND contents.available=1 '.
-            'AND contents.in_home=1 '.
-            'AND contents.content_status=1 ',
+            'AND contents.content_status=1 '.
+            'AND contents.in_home=1 ',
             'ORDER BY created DESC LIMIT 2'
         );
 
@@ -89,9 +88,8 @@ class Opinions
         $director = $cm->find(
             'Opinion',
             'opinions.type_opinion=2 '.
-            'AND contents.available=1 '.
-            'AND contents.in_home=1 '.
-            'AND contents.content_status=1 ',
+            'AND contents.content_status=1 '.
+            'AND contents.in_home=1 ',
             'ORDER BY created DESC LIMIT 2'
         );
 
@@ -119,7 +117,7 @@ class Opinions
         // Fetch all available opinions in home of authors
         $opinions = $cm->find(
             'Opinion',
-            'in_home=1 and available=1 and type_opinion=0',
+            'in_home=1 and content_status=1 and type_opinion=0',
             'ORDER BY position ASC, starttime DESC '
         );
 
@@ -139,7 +137,7 @@ class Opinions
 
         $opinions = $cm->find(
             'Opinion',
-            'in_home=0 and available=1 and type_opinion=0',
+            'in_home=0 and content_status=1 and type_opinion=0',
             'ORDER BY created DESC '
         );
 
@@ -163,7 +161,7 @@ class Opinions
 
         $opinions = $cm->find(
             'Opinion',
-            'in_home=0 and available=1 and type_opinion=0',
+            'in_home=0 and content_status=1 and type_opinion=0',
             'ORDER BY starttime DESC '.$limit
         );
 
@@ -188,7 +186,7 @@ class Opinions
         // Get the list articles for this author
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
             'opinions.type_opinion=0 AND opinions.fk_author='.$id.
-            ' AND contents.available=1 and contents.content_status=1',
+            ' AND contents.content_status=1',
             'ORDER BY created DESC '.$limit
         );
 
@@ -209,7 +207,7 @@ class Opinions
         // Get the list articles for this author
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
             'opinions.type_opinion=1'
-            .' AND contents.available=1 and contents.content_status=1',
+            .' AND contents.content_status=1',
             'ORDER BY created DESC '.$limit
         );
 
@@ -230,7 +228,7 @@ class Opinions
         // Get the list articles for this author
         $opinions = $cm->getOpinionArticlesWithAuthorInfo(
             'opinions.type_opinion=2'
-            .' AND contents.available=1 and contents.content_status=1',
+            .' AND contents.content_status=1',
             'ORDER BY created DESC '.$limit
         );
 
@@ -246,7 +244,7 @@ class Opinions
 
         $numOpinions = $cm->cache->count(
             'Opinion',
-            'in_home=0 and available=1 and type_opinion=0',
+            'in_home=0 and content_status=1 and type_opinion=0',
             'ORDER BY created DESC '
         );
 
@@ -263,7 +261,7 @@ class Opinions
         $numOpinions = $cm->cache->count(
             'Opinion',
             'opinions.type_opinion=0 AND opinions.fk_author='.$id.
-            ' AND contents.available=1  and contents.content_status=1'
+            ' AND contents.content_status=1'
         );
 
         return $numOpinions;
@@ -278,8 +276,7 @@ class Opinions
 
         $countOpinions = $cm->cache->count(
             'Opinion',
-            'opinions.type_opinion=1'
-            .' AND contents.available=1  and contents.content_status=1 '
+            'opinions.type_opinion=1 AND contents.content_status=1'
         );
 
         return $numOpinions;
@@ -294,8 +291,7 @@ class Opinions
 
         $numOpinions = $cm->cache->count(
             'Opinion',
-            'opinions.type_opinion=2'
-            .' AND contents.available=1  and contents.content_status=1 '
+            'opinions.type_opinion=2 AND contents.content_status=1'
         );
 
         return $numOpinions;
@@ -323,7 +319,7 @@ class Opinions
         $cm = new ContentManager();
         $otherOpinions = $cm->cache->find(
             'Opinion',
-            $where.' AND `pk_opinion` <> '.$id.' AND available = 1 AND content_status=1',
+            $where.' AND `pk_opinion` <> '.$id.' AND content_status = 1',
             ' ORDER BY created DESC LIMIT 0,9'
         );
 
@@ -350,7 +346,7 @@ class Opinions
         $suggestedContents = $machineSearcher->SearchSuggestedContents(
             $opinion->metadata,
             'opinion',
-            " contents.available=1 AND pk_content = pk_fk_content",
+            " contents.content_status=1 AND pk_content = pk_fk_content",
             4
         );
 

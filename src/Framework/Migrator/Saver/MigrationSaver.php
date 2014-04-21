@@ -705,24 +705,24 @@ class MigrationSaver
                         // Update article img2 and img2_footer
                         if (isset($values['article'])
                             && $values['article'] !== false
+                            && array_key_exists('img2_footer', $values)
                         ) {
                             $this->updateArticlePhoto(
                                 $values['article'],
                                 $id,
-                                isset($values['img2_footer']) ?
-                                $values['img2_footer'] : ''
+                                $values['img2_footer']
                             );
                         }
 
                         // Update article img1 and img1_footer
                         if (isset($values['article'])
                             && $values['article'] !== false
+                            && array_key_exists('img1_footer', $values)
                         ) {
                             $this->updateArticleFrontpagePhoto(
                                 $values['article'],
                                 $id,
-                                isset($values['img1_footer']) ?
-                                $values['img1_footer'] : ''
+                                $values['img1_footer']
                             );
                         }
 
@@ -1206,8 +1206,8 @@ class MigrationSaver
                     $delimiter = $params['substr']['delimiter'];
                     $start = array_key_exists('start', $params['substr']) ?
                         $params['substr']['start'] : 0;
-                    $pos = (array_key_exists('strrpos', $params['substrr'])
-                        && $params['substrr']['strrpos']) ?
+                    $pos = (array_key_exists('strrpos', $params['substr'])
+                        && $params['substr']['strrpos']) ?
                         strrpos($field, $delimiter, $offset) + 1 :
                         strpos($field, $delimiter, $offset);
 
@@ -1546,52 +1546,52 @@ class MigrationSaver
                 $IDCategory = $this->matchCategory($oldID); //assign category 'Fotos' for media elements
 
                 $imageData = array(
-                        'title' => $this->convertoUTF8(strip_tags($guid)),
-                        'category' => $IDCategory,
-                        'fk_category' => $IDCategory,
-                        'category_name'=> '',
-                        'content_status' => 1,
-                        'frontpage' => 0,
-                        'in_home' => 0,
-                        'metadata' => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
-                        'description' => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
-                        'id' => 0,
-                        'created' => $rs->fields['post_date_gmt'],
-                        'starttime' => $rs->fields['post_date_gmt'],
-                        'changed' => $rs->fields['post_modified_gmt'],
-                        'fk_user' =>  $this->elementIsImported(7, 'user'),
-                        'fk_author' =>  $this->elementIsImported(7, 'user'),
-                        'fk_publisher' => $this->elementIsImported(7, 'user'),
+                        'title'               => $this->convertoUTF8(strip_tags($guid)),
+                        'category'            => $IDCategory,
+                        'fk_category'         => $IDCategory,
+                        'category_name'       => '',
+                        'content_status'      => 1,
+                        'frontpage'           => 0,
+                        'in_home'             => 0,
+                        'metadata'            => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
+                        'description'         => \Onm\StringUtils::get_tags($this->convertoUTF8($guid)),
+                        'id'                  => 0,
+                        'created'             => $rs->fields['post_date_gmt'],
+                        'starttime'           => $rs->fields['post_date_gmt'],
+                        'changed'             => $rs->fields['post_modified_gmt'],
+                        'fk_user'             => $this->elementIsImported(7, 'user'),
+                        'fk_author'           => $this->elementIsImported(7, 'user'),
+                        'fk_publisher'        => $this->elementIsImported(7, 'user'),
                         'fk_user_last_editor' => $this->elementIsImported(7, 'user'),
-                        'local_file' => $local_file,
-                        'author_name' => '',
+                        'local_file'          => $local_file,
+                        'author_name'         => '',
                     );
 
                 $img  = $photo->createFromLocalFile($imageData);
                 $this->output->writeln('- Image from Body inserted'. $img. ' ');
             }
             $newBody = preg_replace($patern, '', $body);
-        //    $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+            // $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
         if (empty($img)) {
             preg_match_all('@\[caption .*?id="attachment_(.*)" align=.*?\].* alt="?(.*?)".*?\[\/caption\]@', $body, $result);
-            if (!empty($result[1]) ) {
+            if (!empty($result[1])) {
                 $id      = $result[1][0];
                 $img     = $this->elementIsImported($id, 'image');
                 $footer  = $result[2][0];
 
                 $newBody = preg_replace('/\[caption .*?\].*?\[\/caption\]/', '', $body);
-              //  $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+                //  $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
             }
         }
 
         preg_match_all('@\[gallery.*?ids="(.*)".*?\]@', $body, $result);
-        if (!empty($result[0]) ) {
+        if (!empty($result[0])) {
             $id      = $result[1][0];
             $gallery = $this->elementIsImported($id, 'gallery');
             $newBody = preg_replace('/\[gallery.*?ids="(.*)".*?\]/', '', $body);
-       //     $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
+            // $newBody = $this->convertoUTF8(strip_tags($newBody, $allowed));
         }
 
         $str = preg_replace(array("/([\r\n])+/i", "/([\n]{2,})/i", "/([\n]{2,})/i", "/(\n)/i"), array('</p><p>', '</p><p>', '<br>', '<br>'), $newBody);

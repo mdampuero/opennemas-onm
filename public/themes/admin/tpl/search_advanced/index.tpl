@@ -2,15 +2,9 @@
 
 {block name="header-css" append}
 <style type="text/css">
-#search-form button {
-    width:100%;
-}
 #search_string{
     width:195px;
     margin-bottom:5px;
-}
-#content_types {
-    min-height:150px;
 }
 #search-form {
     height:100%
@@ -21,6 +15,10 @@ span.highlighted {
 </style>
 {/block}
 
+{block name="header-js" append}
+    {include file="common/angular_includes.tpl"}
+{/block}
+
 {block name="content"}
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
@@ -28,42 +26,29 @@ span.highlighted {
     </div>
 </div>
 <div class="wrapper-content">
-    <form action="{url name=admin_search}" method="GET">
+    <form action="{url name=admin_search}" method="GET" ng-app="BackendApp" ng-controller="ContentCtrl" ng-controller="ContentCtrl" ng-init="init('content', { content_type_name: -1 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
         <div class="wrapper-content">
-            <div class="search clearfix">
-                <div class="search-results">
-                    <div id="search-results">
-                        {if !is_null($search_string)}
-                            {include file="search_advanced/partials/_list.tpl"}
-                        {else}
-                        <div class="empty">
-                            <p>
-                                <img src="{$params.IMAGE_DIR}/search/search-images.png">
-                            </p>
-                            {t escape="off"}Please fill the form for searching contents{/t}
-                        </div><!-- / -->
-                        {/if}
-                    </div><!-- /search-results -->
-                </div><!-- /search -->
-                <div class="search-form">
-                    <div>
-
-                        <label for="string_search">{t}Text to search{/t}</label>
-                        <input type="search" id="search_string" name="search_string" title="stringSearch" value="{$search_string}"
-                                style="width:95%"/>
-                        <button type="submit" class="onm-button red submit" style="width:100%"><i class="icon-search icon-white"></i> {t}Search{/t}</button>
-
-                        <br>
-
-                        <div class="search-bar-title">{t}Content type{/t}</div>
-                        <select name="content_types[]" id="content_types" multiple>
+            <div class="table-info clearfix">
+                <div class="pull-left">
+                    <div class="form-inline">
+                        <strong>{t}FILTER:{/t}</strong>
+                        &nbsp;&nbsp;
+                        <input type="text" autofocus placeholder="{t}Search by title:{/t}" name="title" ng-model="shvs.search.title_like"/>
+                        &nbsp;&nbsp;
+                        <strong>{t}CONTENT TYPE:{/t}</strong>
+                        <select class="select2 input-large" name="content_types[]" id="content_types" multiple ng-model="shvs.search.content_type_name">
                             {html_options options=$content_types selected=$content_types_selected}
-
                         </select>
-                    </div><!-- /search-form -->
+                    </div>
                 </div>
-            </div><!-- /search -->
+            </div>
+            <div id="search-results">
+                <div ng-include="'results'"></div>
+            </div><!-- /search-results -->
         </div>
+        <script type="text/ng-template" id="results">
+            {include file="search_advanced/partials/_list.tpl"}
+        </script>
     </form>
 </div>
 {/block}

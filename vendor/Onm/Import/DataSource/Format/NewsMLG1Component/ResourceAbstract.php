@@ -20,7 +20,6 @@ namespace Onm\Import\DataSource\Format\NewsMLG1Component;
  **/
 abstract class ResourceAbstract
 {
-
     /**
      * Instantiates the Photo DOM data from an SimpleXML object
      *
@@ -32,6 +31,22 @@ abstract class ResourceAbstract
     {
         $this->data = $data;
 
+        $this->load();
+    }
+
+    /**
+     * Populates the object information
+     *
+     * @return Europapress the populated object
+     **/
+    public function load()
+    {
+        $this->id           = $this->id;
+        $this->name         = $this->name;
+        $this->title        = $this->title;
+        $this->created_time = $this->created_time;
+        $this->file_type    = $this->file_type;
+        $this->file_path    = $this->file_path;
     }
 
     /**

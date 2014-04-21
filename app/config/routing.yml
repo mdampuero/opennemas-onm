@@ -22,6 +22,13 @@ frontend:
     resource: @FrontendBundle/Resources/config/routing.yml
     prefix:   /
 
+backend_webservice:
+    resource: @BackendWebServiceBundle/Resources/config/routing.yml
+    prefix:   /admin/entityws
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
 # base paths
 admin_welcome:
     path: '/admin'

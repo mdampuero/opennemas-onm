@@ -147,7 +147,7 @@ class FrontpagesController extends Controller
 
         $contents = $cm->find(
             'Article',
-            'available=1 AND content_status=1 AND fk_content_type=1',
+            'content_status=1 AND fk_content_type=1',
             'ORDER BY created DESC, changed DESC LIMIT 20'
         );
 

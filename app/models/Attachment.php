@@ -93,19 +93,6 @@ class Attachment extends Content
                 return StringUtils::get_title($this->title);
 
                 break;
-            case 'content_type_name':
-                $contentTypeName = \ContentManager::getContentTypeNameFromId($this->content_type);
-
-                if (isset($contentTypeName)) {
-                    $returnValue = $contentTypeName;
-                } else {
-                    $returnValue = $this->content_type;
-                }
-                $this->content_type_name = $returnValue;
-
-                return $returnValue;
-
-                break;
             default:
 
                 break;
@@ -132,7 +119,6 @@ class Attachment extends Content
         }
 
         $data['pk_author'] = $_SESSION['userid'];
-        $data['content_status'] = $data['available'];
         // all the data is ready to save into the database,
         // so create the general entry for this content
         parent::create($data);
@@ -321,7 +307,7 @@ class Attachment extends Content
         try {
             $html = $tpl->fetch($params['tpl']);
         } catch (\Exception $e) {
-            $html = 'File not available';
+            $html = _('File not available');
         }
 
         return $html;

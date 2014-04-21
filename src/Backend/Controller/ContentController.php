@@ -111,7 +111,7 @@ class ContentController extends Controller
         if ($id > 0) {
             $content = new \Content($id);
             if ($content->id != null) {
-                $availability = ($content->available == 1);
+                $availability = ($content->content_status == 1);
                 $content->toggleAvailable();
 
                 if (!$availability) {
@@ -174,7 +174,7 @@ class ContentController extends Controller
         if (count($error) > 0) {
             $code = 400;
         } else {
-            $error = _('Contens arquived');
+            $error = _('Contents arquived');
         }
 
         return new Response(

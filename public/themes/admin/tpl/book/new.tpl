@@ -151,13 +151,13 @@ input[type="text"].required {
                 </tr>
                 <tr>
                     <td valign="top">
-                        <label for="title"> {t}Available:{/t} </label>
+                        <label for="content_status"> {t}Available:{/t} </label>
                     </td>
                     <td valign="top">
-                            <select name="available" id="available"
+                            <select name="content_status" id="content_status"
                                 class="required" {acl isNotAllowed="BOOK_AVAILABLE"} disabled="disabled" {/acl}>
-                                <option value="0" {if $book->available eq 0} selected {/if}>{t}No{/t}</option>
-                                <option value="1" {if !isset($book) || $book->available eq 1} selected {/if}>{t}Yes{/t}</option>
+                                <option value="0" {if $book->content_status eq 0} selected {/if}>{t}No{/t}</option>
+                                <option value="1" {if !isset($book) || $book->content_status eq 1} selected {/if}>{t}Yes{/t}</option>
 
                             </select>
                     </td>

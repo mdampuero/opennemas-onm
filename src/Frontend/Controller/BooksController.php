@@ -82,7 +82,7 @@ class BooksController extends Controller
                 $bookCategories[$i]->books = $this->cm->find_by_category(
                     'Book',
                     $cat->pk_content_category,
-                    'available=1',
+                    'content_status=1',
                     'ORDER BY position ASC, created DESC LIMIT 5'
                 );
                 $i++;
@@ -132,7 +132,7 @@ class BooksController extends Controller
             $books = $this->cm->find_by_category(
                 'Book',
                 $book->category,
-                'available=1',
+                'content_status=1',
                 'ORDER BY position ASC, created DESC LIMIT 5'
             );
 
@@ -178,7 +178,7 @@ class BooksController extends Controller
         $books = $this->cm->find_by_category(
             'Book',
             $category,
-            'available=1',
+            'content_status=1',
             'ORDER BY position ASC, created DESC '. $limit
         );
 
@@ -188,7 +188,7 @@ class BooksController extends Controller
             $books  = $this->cm->find_by_category(
                 'Book',
                 $category,
-                'available=1',
+                'content_status=1',
                 'ORDER BY position ASC, created DESC '. $limit
             );
             $last = true;

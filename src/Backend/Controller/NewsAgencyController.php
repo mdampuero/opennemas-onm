@@ -16,6 +16,7 @@ namespace Backend\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Onm\Framework\Controller\Controller;
 use Onm\Settings as s;
@@ -77,19 +78,13 @@ class NewsAgencyController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $queryParams  = $this->request->query;
-        $page         = $this->request->query->filter('page', 1, FILTER_VALIDATE_INT);
-        $filterSource = $queryParams->filter('filter_source', '*', FILTER_SANITIZE_STRING);
-        $filterTitle  = $queryParams->filter('filter_title', '*', FILTER_SANITIZE_STRING);
-        $itemsPage    = s::get('items_per_page') ?: 20;
+        $filterSource = $request->query->filter('filter_source', '*', FILTER_SANITIZE_STRING);
+        $filterTitle  = $request->query->filter('filter_title', '*', FILTER_SANITIZE_STRING);
 
         // Get the amount of minutes from last sync
         $syncParams = array('cache_path' => CACHE_PATH);
         $synchronizer = new \Onm\Import\Synchronizer\Synchronizer($syncParams);
         $minutesFromLastSync = $synchronizer->minutesFromLastSync();
-
-        // Get LocalRepository instance
-        $repository = new \Onm\Import\Repository\LocalRepository();
 
         // Fetch all servers and activated sources
         $servers = s::get('news_agency_config');
@@ -102,42 +97,6 @@ class NewsAgencyController extends Controller
             },
             $servers
         );
-
-        // Fetch filter params
-        $findParams = array(
-            'source'     => $filterSource,
-            'title'      => $filterTitle,
-            'page'       => $page,
-            'items_page' => $itemsPage,
-        );
-
-        list($countTotalElements, $elements) = $repository->findAll($findParams);
-
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPage,
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'append'      => false,
-                'path'        => '',
-                'totalItems'  => $countTotalElements,
-                'fileName'        => $this->generateUrl(
-                    'admin_news_agency',
-                    array(
-                        'filter_source' => $filterSource,
-                        'filter_title'  => $filterTitle,
-                    )
-                ).'&page=%d',
-            )
-        );
-
-        $urns = array();
-        foreach ($elements as $element) {
-            $urns []= $element->urn;
-        }
-        $alreadyImported = \Content::findByUrn($urns);
 
         $message = '';
         if ($minutesFromLastSync > 100) {
@@ -161,7 +120,7 @@ class NewsAgencyController extends Controller
             array(
                 'filter_source' => $filterSource,
                 'filter_title'  => $filterTitle,
-                'page'          => $page
+                'page'          => 1
             )
         );
 
@@ -169,12 +128,94 @@ class NewsAgencyController extends Controller
             'news_agency/list.tpl',
             array(
                 'source_names'     => $sources,
-                'selectedSource'   => $filterSource,
                 'servers'          => $servers,
-                'elements'         => $elements,
-                'already_imported' => $alreadyImported,
                 'minutes'          => $minutesFromLastSync,
-                'pagination'       => $pagination,
+            )
+        );
+    }
+
+    /**
+     *
+     *
+     * @return void
+     * @author
+     **/
+    public function webServiceAction(Request $request)
+    {
+        $elementsPerPage = $request->request->getDigits('elements_per_page', 10);
+        $page            = $request->request->getDigits('page', 1);
+        $search          = $request->request->get('search');
+
+        $filterSource = $filterTitle = '*';
+
+        if (is_array($search)) {
+            if (array_key_exists('source', $search)) {
+                $filterSource          = $search['source'][0]['value'];
+            }
+            if (array_key_exists('title', $search)) {
+                $filterTitle     = $search['title'][0]['value'];
+            }
+        }
+
+        // Get LocalRepository instance
+        $repository = new \Onm\Import\Repository\LocalRepository();
+
+        // Fetch all servers and activated sources
+        $servers = s::get('news_agency_config');
+        if (!is_array($servers)) {
+            $servers = array();
+        }
+        $sources = array_map(
+            function ($server) {
+                if (array_key_exists('name', $server)) {
+                    return $server['name'];
+                }
+
+                return null;
+            },
+            $servers
+        );
+
+        $sources = array_unique($sources);
+
+        // Fetch filter params
+        $findParams = array(
+            'source'     => $filterSource,
+            'title'      => $filterTitle,
+            'page'       => $page,
+            'items_page' => $elementsPerPage,
+        );
+
+        list($countTotalElements, $elements) = $repository->findAll($findParams);
+
+        $urns = array();
+        foreach ($elements as $element) {
+            $urns []= $element->urn;
+        }
+        $alreadyImported = \Content::findByUrn($urns);
+
+        foreach ($elements as &$element) {
+            $element->load();
+            $element->source_name = $servers[$element->source_id]['name'];
+            $element->source_color = $servers[$element->source_id]['color'];
+            $element->import_url = $this->generateUrl(
+                'admin_news_agency_pickcategory',
+                array(
+                    'source_id' => $element->source_id,
+                    'id'        => \urlencode($element->xmlFile)
+                )
+            );
+            $element->id = $element->source_id . ',' . $element->id . '.xml';
+
+            $element->already_imported = in_array($element->urn, $alreadyImported);
+        }
+
+        return new JsonResponse(
+            array(
+                'elements_per_page' => $elementsPerPage,
+                'page'              => $page,
+                'results'           => $elements,
+                'total'             => $countTotalElements
             )
         );
     }
@@ -277,21 +318,35 @@ class NewsAgencyController extends Controller
      **/
     public function batchImportAction(Request $request)
     {
-        $selected = $this->request->request->get('selected', null);
+        $ids      = array();
+        $selected = $this->request->request->get('ids', null);
+        $updated  = array();
+
 
         if (is_array($selected) && count($selected) > 0) {
-
             foreach ($selected as $value) {
+                $updated[] = $value;
+
                 // First is sorce_id and second is xml filename
                 $item = explode(',', $value);
 
                 // Import and create element - category unknown
                 $this->importElements($item[1], $item[0], 'GUESS');
-
             }
         }
 
-        return $this->redirect($this->generateUrl('admin_news_agency'));
+        return new JsonResponse(
+            array(
+                'already_imported' => true,
+                'messages'        => array(
+                    array(
+                        'id'      => $updated,
+                        'message' => sprintf(_('%s item(s) imported successfully'), count($updated)),
+                        'type'    => 'success'
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -963,8 +1018,7 @@ class NewsAgencyController extends Controller
                         'file_type'      => $video->file_type,
                         'file_path'      => $filePath,
                         'category'       => $category,
-                        'available'      => 1,
-                        'content_status' => 0,
+                        'content_status' => 1,
                         'title'          => $video->title,
                         'metadata'       => \Onm\StringUtils::get_tags($video->title),
                         'description'    => '',
@@ -987,7 +1041,6 @@ class NewsAgencyController extends Controller
             'title'          => $element->title,
             'category'       => $category,
             'with_comment'   => 1,
-            'available'      => 0,
             'content_status' => 0,
             'frontpage'      => 0,
             'in_home'        => 0,

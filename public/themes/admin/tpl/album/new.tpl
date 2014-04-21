@@ -189,8 +189,8 @@
                 <div class="contentbox">
                     <h3 class="title">{t}Attributes{/t}</h3>
                     <div class="content">
-                        <label for="title" >{t}Available{/t}</label>
-                        <input type="checkbox" value="1" id="available" name="available" {if $album->available eq 1}checked="checked"{/if}>
+                        <label for="content_status" >{t}Available{/t}</label>
+                        <input type="checkbox" value="1" id="content_status" name="content_status" {if $album->content_status eq 1}checked="checked"{/if}>
                         <br/>
 
                         <h4>{t}Category{/t}</h4>
@@ -264,7 +264,7 @@
                     <h3 class="title">{t}Cover image{/t}</h3>
                     <div class="content cover-image {if isset($album) && $album->cover_id}assigned{/if}">
                         <div class="image-data">
-                            <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
+                            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="inner-image" class="image thumbnail">
                                 {if !empty($album->cover_id)}
                                     <img src="{$smarty.const.MEDIA_IMG_PATH_WEB}{$album->cover}"/>
                                 {/if}
@@ -279,7 +279,7 @@
                         </div>
 
                         <div class="btn-group">
-                            <a href="#media-uploader" {acl isAllowed='IMAGE_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
+                            <a href="#media-uploader" {acl isAllowed='PHOTO_ADMIN'}data-toggle="modal"{/acl} data-position="cover-image" class="btn btn-small">{t}Set image{/t}</a>
                             <a href="#" class="unset btn btn-small btn-danger"><i class="icon icon-trash"></i></a>
                         </div>
                     </div>

@@ -42,7 +42,7 @@
         <div class="wrapper-content">
             <div class="title"><h2>{t}Editing image{/t}</h2></div>
             <ul class="old-button">
-                {acl isAllowed="IMAGE_UPDATE"}
+                {acl isAllowed="PHOTO_UPDATE"}
                 <li>
                     <button type="submit" name="action" value="validate">
                         <img border="0" src="{$params.IMAGE_DIR}save.png" alt="{t}Save{/t}" >

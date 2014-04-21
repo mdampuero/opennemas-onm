@@ -47,12 +47,16 @@ class ImagesController extends Controller
         $this->pathUpload = MEDIA_PATH.DS.IMG_DIR.DS;
         $this->imgUrl     = MEDIA_URL.MEDIA_DIR.SS.IMG_DIR;
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
-                'subcat'       => $this->subcat,
-                'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->datos_cat,
+                'subcat'        => $this->subcat,
+                'allcategorys'  => $this->parentCategories,
+                'datos_cat'     => $this->datos_cat,
                 'MEDIA_IMG_URL' => $this->imgUrl,
+                'timezone'      => $timezone->getName()
             )
         );
 
@@ -71,68 +75,11 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function listAction(Request $request)
     {
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page', 20);
-
-        $_SESSION['desde'] = 'category_catalog';
-
-        if ($this->category == 'all') {
-            $filterCategory = null;
-        } else {
-            $filterCategory = $this->category;
-        }
-        $cm = new \ContentManager();
-        list($countImages, $images) = $cm->getCountAndSlice(
-            'photo',
-            $filterCategory,
-            'contents.in_litter != 1 AND contents.fk_content_type=8',
-            'ORDER BY pk_content DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        foreach ($images as &$image) {
-            $image->category_name   = $image->loadCategoryName($image->id);
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countImages,
-                'fileName'    => $this->generateUrl(
-                    'admin_images',
-                    array('category' => $this->category)
-                ).'&page=%d',
-            )
-        );
-
-        $adsModule = 'false';
-        if (\Onm\Module\ModuleManager::isActivated('ADS_MANAGER')) {
-            $adsModule = 'true';
-        }
-
-
-        return $this->render(
-            'image/list.tpl',
-            array(
-                'pages'    => $pagination,
-                'photos'   => $images,
-                'category' => $this->category,
-                'page'     => $page,
-                'adsModule'=> $adsModule,
-            )
-        );
+        return $this->render('image/list.tpl');
     }
 
     /**
@@ -142,7 +89,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function configAction(Request $request)
     {
@@ -185,7 +132,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function searchAction(Request $request)
     {
@@ -331,7 +278,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_CREATE')")
+     * @Security("has_role('PHOTO_CREATE')")
      **/
     public function newAction(Request $request)
     {
@@ -355,7 +302,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_UPDATE')")
+     * @Security("has_role('PHOTO_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -364,11 +311,15 @@ class ImagesController extends Controller
 
         // Check if ids was passed as params
         if (!is_array($ids) || !(count($ids) > 0)) {
-            m::add(_('Please provide a image id for show it.'), m::ERROR);
+            $ids = (int) $ids;
+            if ($ids <= 0) {
+                m::add(_('Please provide a image id for show it.'), m::ERROR);
 
-            return $this->redirect(
-                $this->generateUrl('admin_images', array('category' => $category))
-            );
+                return $this->redirect(
+                    $this->generateUrl('admin_images', array('category' => $category))
+                );
+            }
+            $ids = array($ids);
         }
 
         $photos = array();
@@ -412,7 +363,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_UPDATE')")
+     * @Security("has_role('PHOTO_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
@@ -430,7 +381,7 @@ class ImagesController extends Controller
                 'date'        => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
                 'address'     => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'    => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
-                'available'   => 1
+                'content_status'   => 1
             );
 
             $photo = new \Photo($id);
@@ -458,7 +409,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_DELETE')")
+     * @Security("has_role('PHOTO_DELETE')")
      **/
     public function deleteAction(Request $request)
     {
@@ -493,7 +444,7 @@ class ImagesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_CREATE')")
+     * @Security("has_role('PHOTO_CREATE')")
      **/
     public function createAction(Request $request)
     {
@@ -678,50 +629,13 @@ class ImagesController extends Controller
     }
 
     /**
-     * Deletes multiple images at once
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('IMAGE_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $category      = $request->request->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page          = $request->request->getDigits('page', 1);
-        $selectedItems = $request->request->get('selected_fld');
-
-        if (is_array($selectedItems)
-            && count($selectedItems) > 0
-        ) {
-            foreach ($selectedItems as $element) {
-                $photo = new \Photo($element);
-                $photo->delete($element, $_SESSION['userid']);
-
-                m::add(sprintf(_('Image "%s" deleted successfully.'), $photo->title), m::SUCCESS);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_images',
-                array(
-                    'categoy' => $category,
-                    'page'    => $page,
-                )
-            )
-        );
-    }
-
-    /**
      * Shows a paginated list of images from a category
      *
      * @param Request $request the request object
      *
      * @return Response the response object
      *
-     * @Security("has_role('IMAGE_ADMIN')")
+     * @Security("has_role('PHOTO_ADMIN')")
      **/
     public function contentProviderGalleryAction(Request $request)
     {

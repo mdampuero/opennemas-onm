@@ -47,12 +47,16 @@ class ArticlesController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $this->ccm->getArraysMenu($this->category);
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $this->category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
                 'datos_cat'    => $this->categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
     }
@@ -77,109 +81,15 @@ class ArticlesController extends Controller
             }
         }
 
-        $page     =  $request->query->getDigits('page', 1);
-        $title    =  $request->query->filter('title', null, FILTER_SANITIZE_STRING);
-        $status   =  (int) $request->query->get('status', -1);
-        $category =  $request->query->filter('category', 0, FILTER_VALIDATE_INT);
+        // Fetch all authors
+        $allAuthors = \User::getAllUsersAuthors();
 
-        if (is_null($category) || $category == 0) {
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = (int) $category;
-        }
-
-        $itemsPerPage = s::get('items_per_page');
-
-        $filterSQL = array('in_litter <> 1');
-        if ($status >= 0) {
-            $filterSQL []= ' contents.available='.$status;
-        }
-        if (!empty($title)) {
-            $filterSQL []=
-                "(title LIKE '%{$title}%'"
-                ." OR description LIKE '%{$title}%'"
-                ." OR metadata LIKE '%{$title}%')";
-
-        }
-
-        $filterSQL = implode(' AND ', $filterSQL);
-
-        $cm      = new \ContentManager();
-        list($countArticles, $articles)= $cm->getCountAndSlice(
-            'Article',
-            $categoryFilter,
-            $filterSQL,
-            'ORDER BY created DESC, available ASC',
-            $page,
-            $itemsPerPage
-        );
-
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countArticles,
-                'fileName'    => $this->generateUrl(
-                    'admin_articles',
-                    array(
-                        'status'   => $status,
-                        'title'    => $title,
-                        'category' => $category
-                    )
-                ).'&page=%d',
-            )
-        );
-
-        if (isset($articles) && is_array($articles)) {
-
-            $user    = new \User();
-            $users   = $user->getUsers();
-            $authors = array();
-            foreach ($users as $user) {
-                $authors[$user->id]  = $user;
-            }
-
-            foreach ($articles as &$article) {
-                $article->category_name = $article->loadCategoryName($article->id);
-                if (!empty($article->fk_publisher) && is_object($authors[$article->fk_publisher])) {
-                    $article->publisher = $authors[$article->fk_publisher]->getUserName();
-                }
-                if (!empty($article->fk_user_last_editor) && is_object($authors[$article->fk_user_last_editor])) {
-                    $article->editor    = $authors[$article->fk_user_last_editor]->getUserName();
-                }
-                if (!empty($article->fk_author) && is_object($authors[$article->fk_author])) {
-                    $article->author    = $authors[$article->fk_author]->getUserRealName($article->fk_author);
-                }
-            }
-
-        } else {
-            $articles = array();
-        }
-
-        $_SESSION['_from'] = $this->generateUrl(
-            'admin_articles',
-            array(
-                'status'   => $status,
-                'title'    => $title,
-                'category' => $category,
-                'page'     => $page
-            )
-        );
+        $_SESSION['_from'] = $this->generateUrl('admin_articles');
 
         return $this->render(
             'article/list.tpl',
             array(
-                'articles'   => $articles,
-                'page'       => $page,
-                'status'     => $status,
-                'title'      => $title,
-                'pagination' => $pagination,
-                'totalArticles' => $countArticles
+                'authors' => $allAuthors,
             )
         );
     }
@@ -464,7 +374,6 @@ class ArticlesController extends Controller
                 ),
             )
         );
-
     }
 
     /**
@@ -665,46 +574,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Change available status for one article given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $redirectStatus   = $request->query->filter('redirectstatus', -1, FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $article = new \Article($id);
-        if (is_null($article->id)) {
-            m::add(sprintf(_('Unable to find article with id "%d"'), $id), m::ERROR);
-        } else {
-            $article->toggleAvailable($article->id);
-            if ($status == 0) {
-                $article->set_favorite($status);
-            }
-            m::add(sprintf(_('Successfully changed availability for article with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_articles',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'status'   => $redirectStatus,
-                )
-            )
-        );
-    }
-
-    /**
      * Lists all the articles with the suggested flag activated
      *
      * @param Request $request the request object
@@ -731,7 +600,7 @@ class ArticlesController extends Controller
         list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             null,
-            ' contents.frontpage=1 AND contents.available=1 AND '.
+            ' contents.frontpage=1 AND contents.content_status=1 AND '.
             ' contents.content_status=1 AND in_litter != 1 '. $sqlExcludedOpinions,
             ' ORDER BY created DESC ',
             $page,
@@ -926,87 +795,6 @@ class ArticlesController extends Controller
     }
 
     /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status         = $request->query->getDigits('new_status', 0);
-        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
-        $selected       = $request->query->get('selected_fld', null);
-        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page           = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $article = new \Article($id);
-                if ($article->category != 20) {
-                    $article->set_available($status, $_SESSION['userid']);
-                    if ($status == 0) {
-                        $article->set_favorite($status, $_SESSION['userid']);
-                    }
-                } else {
-                    m::add(sprintf(_('You must assign a section for "%s"'), $article->title), m::ERROR);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_articles',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'status'   => $redirectStatus,
-                )
-            )
-        );
-    }
-
-    /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ARTICLE_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $selected       = $request->query->get('selected_fld', null);
-        $redirectStatus = $request->query->filter('status', '-1', FILTER_SANITIZE_STRING);
-        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page           = $request->query->getDigits('page', 1);
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $article = new \Article($id);
-                $article->delete($id);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_articles',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'status'   => $redirectStatus,
-                )
-            )
-        );
-    }
-
-    /**
      * Previews an article in frontend by sending the article info by POST
      *
      * @param Request $request the request object
@@ -1084,7 +872,7 @@ class ArticlesController extends Controller
             $article->metadata,
             'article',
             "pk_fk_content_category= ".$article->category.
-            " AND contents.available=1 AND pk_content = pk_fk_content",
+            " AND contents.content_status=1 AND pk_content = pk_fk_content",
             4
         );
 

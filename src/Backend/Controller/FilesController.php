@@ -44,12 +44,16 @@ class FilesController extends Controller
         list($this->parentCategories, $this->subcat, $this->datos_cat) =
             $this->ccm->getArraysMenu($this->category, $this->contentType);
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
                 'datos_cat'    => $this->datos_cat,
                 'category'     => $this->category,
+                'timezone'     => $timezone->getName()
             )
         );
 
@@ -69,76 +73,10 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function listAction(Request $request)
     {
-        $cm           = new \ContentManager();
-        $itemsPerPage = s::get('items_per_page');
-
-        $page          = $request->query->getDigits('page', 1);
-        $listingStatus = $request->query->getDigits('listing-status');
-
-        if (empty($page)) {
-            $limit = "LIMIT ".($itemsPerPage+1);
-        } else {
-            $limit = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
-        }
-
-        if ($this->category == 'all' || empty($this->category)) {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $this->category;
-        }
-
-        $filter = ' contents.in_litter != 1 ';
-        if (($listingStatus != '') && ($listingStatus != null)) {
-            $filter .= ' AND contents.available = '. $listingStatus;
-        }
-
-        list($filesCount, $files) = $cm->getCountAndSlice(
-            'attachment',
-            $categoryForLimit,
-            $filter,
-            'ORDER BY created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if ($filesCount > 0) {
-            foreach ($files as &$file) {
-                $file->category_name  = $this->ccm->get_name($file->category);
-                $file->category_title = $this->ccm->get_title($file->category_name);
-            }
-        }
-
-         // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 1,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $filesCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_files',
-                    array('category' => $this->category)
-                ).'&page=%d',
-            )
-        );
-
-        $this->view->assign(
-            array(
-                'listingStatus' => $listingStatus,
-                'pagination'    => $pagination,
-                'attaches'      => $files,
-                'page'          => $page,
-            )
-        );
-
         return $this->render('files/list.tpl');
     }
 
@@ -149,29 +87,13 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function widgetAction(Request $request)
     {
-        $cm = new \ContentManager();
-
-        $files = $cm->find_all(
-            'Attachment',
-            'in_home =1',
-            'ORDER BY created DESC'
-        );
-
-        if (!empty($files)) {
-            foreach ($files as &$file) {
-                $file->category_name  = $this->ccm->get_name($file->category);
-                $file->category_title = $this->ccm->get_title($file->category_name);
-            }
-        }
-
         return $this->render(
             'files/list.tpl',
             array(
-                'attaches' => $files,
                 'category' => 'widget'
             )
         );
@@ -184,7 +106,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function statisticsAction(Request $request)
     {
@@ -286,7 +208,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_CREATE')")
+     * @Security("has_role('ATTACHMENT_CREATE')")
      **/
     public function createAction(Request $request)
     {
@@ -309,13 +231,13 @@ class FilesController extends Controller
                 }
 
                 $data = array(
-                    'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'path'         => $directoryDate.$fileName,
-                    'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-                    'available'    => 1,
-                    'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
-                    'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'fk_publisher' => $_SESSION['userid'],
+                    'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                    'path'           => $directoryDate.$fileName,
+                    'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+                    'content_status' => 1,
+                    'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'fk_publisher'   => $_SESSION['userid'],
                 );
 
                 // Move uploaded file
@@ -356,7 +278,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_UPDATE')")
+     * @Security("has_role('ATTACHMENT_UPDATE')")
      **/
     public function showAction(Request $request)
     {
@@ -390,7 +312,7 @@ class FilesController extends Controller
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_UPDATE')")
+     * @Security("has_role('ATTACHMENT_UPDATE')")
      **/
     public function updateAction(Request $request)
     {
@@ -398,13 +320,13 @@ class FilesController extends Controller
 
         $file = new \Attachment($id);
           $data = array(
-                'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                'category'     => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
-                'available'    => 1,
-                'id'           => $id,
-                'description'  => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
-                'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                'fk_publisher' => $_SESSION['userid'],
+                'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                'category'       => $request->request->filter('category', null, FILTER_SANITIZE_STRING),
+                'content_status' => 1,
+                'id'             => $id,
+                'description'    => $request->request->filter('description', null, FILTER_SANITIZE_STRING),
+                'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                'fk_publisher'   => $_SESSION['userid'],
             );
 
         if ($file->update($data)) {
@@ -419,240 +341,13 @@ class FilesController extends Controller
     }
 
     /**
-     * Deletes a file given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('FILE_DELETE')")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id = $request->query->getDigits('id');
-
-        if (is_null($id)) {
-            m::add(sprintf(_("Unable to find the file with the id '%d'."), $id), m::ERROR);
-
-            return $this->redirect($this->generateUrl('admin_files'));
-        }
-
-        $file = new \Attachment($id);
-
-        //Delete relations
-        $rel= new \RelatedContent();
-        $rel->deleteAll($id);
-
-        $file->delete($id, $_SESSION['userid']);
-        m::add(sprintf(_("File with id '%d' deleted successfuly."), $id), m::SUCCESS);
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_files',
-                array(
-                    'category' => $this->category
-                )
-            )
-        );
-    }
-
-    /**
-     * Toggles the content favorite state given the content id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('FILE_AVAILABLE')")
-     **/
-    public function toggleFavoriteAction(Request $request)
-    {
-        $id      = $request->query->getDigits('id');
-        $page    = $request->query->getDigits('page', 1);
-        $status  = $request->query->getDigits('status', 0);
-
-        $file   = new \Attachment($id);
-
-        if (!is_null($file->id)) {
-            if ($file->available == 1) {
-                $file->set_favorite($status);
-            } else {
-                m::add(_("This file is not published so you can't define it as favorite."));
-            }
-        } else {
-            m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_files',
-                array(
-                    'category' => $this->category,
-                    'page'     => $page,
-                )
-            )
-        );
-    }
-
-    /**
-     * Toggles the in home state given the content id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('FILE_AVAILABLE')")
-     **/
-    public function toggleInHomeAction(Request $request)
-    {
-        $id      = $request->query->getDigits('id');
-        $page    = $request->query->getDigits('page', 1);
-        $status  = $request->query->getDigits('status', 0);
-
-        $file = new \Attachment($id);
-
-        if (!is_null($file->id)) {
-            if ($file->available == 1) {
-                $file->set_inhome($status, $_SESSION['userid']);
-            } else {
-                m::add(_("This file is not published so you can't define it as widget home content."));
-            }
-        } else {
-            m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_files',
-                array(
-                    'page' => $page,
-                    'status' => $status,
-                    'category' => $this->category,
-                )
-            )
-        );
-    }
-    /**
-     * Toggles the available status given the content id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('FILE_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id      = $request->query->getDigits('id');
-        $page    = $request->query->getDigits('page', 1);
-        $status  = $request->query->getDigits('status', 0);
-
-        $file = new \Attachment($id);
-
-        if (!is_null($file->id)) {
-            $file->set_available($status, $_SESSION['userid']);
-        } else {
-            m::add(sprintf(_("Unable to find the file with id '%d'"), $id), m::ERROR);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_files',
-                array(
-                    'page' => $page,
-                    'status' => $status,
-                    'category' => $this->category,
-                )
-            )
-        );
-    }
-
-    /**
-     * Deletes multiple books at once given its ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('FILE_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $page = $request->query->getDigits('page', 1);
-        $selectedItems = $request->query->get('selected_fld');
-
-        if (is_array($selectedItems)
-            && count($selectedItems) > 0
-        ) {
-            foreach ($selectedItems as $element) {
-                $file = new \Attachment($element);
-
-                $relations = array();
-                $relations = \RelatedContent::getContentRelations($element);
-
-                $file->delete($element, $_SESSION['userid']);
-
-                m::add(sprintf(_('Files "%s" deleted successfully.'), $file->title), m::SUCCESS);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_files',
-                array(
-                    'page'     => $page,
-                    'category' => $this->category,
-                )
-            )
-        );
-    }
-    /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('FILE_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('status', 0);
-        $selected = $request->query->get('selected_fld', null);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $file = new \Attachment($id);
-                $file->set_available($status, $_SESSION['userid']);
-                if ($status == 0) {
-                    $file->set_favorite($status, $_SESSION['userid']);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_files',
-                array(
-                    'page' => $page,
-                    'status' => $status,
-                    'category' => $this->category,
-                )
-            )
-        );
-    }
-
-    /**
      * Save positions for widget
      *
      * @param Request $request the request object
      *
      * @return Response the response object
      *
-     * @Security("has_role('FILE_ADMIN')")
+     * @Security("has_role('ATTACHMENT_ADMIN')")
      **/
     public function savePositionsAction(Request $request)
     {
@@ -706,7 +401,7 @@ class FilesController extends Controller
         list($countPolls, $polls) = $cm->getCountAndSlice(
             'Attachment',
             null,
-            'contents.available=1',
+            'contents.content_status=1',
             ' ORDER BY starttime DESC, contents.title ASC ',
             $page,
             $itemsPerPage

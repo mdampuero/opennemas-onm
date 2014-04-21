@@ -53,13 +53,17 @@ class VideosController extends Controller
             $this->category ='widget';
         }
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $this->category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
                 //TODO: ¿datoscat?¿
-                'datos_cat'    => $this->categoryData
+                'datos_cat'    => $this->categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
 
@@ -77,61 +81,7 @@ class VideosController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page           = $request->query->getDigits('page', 1);
-        $category       = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $configurations = s::get('video_settings');
-
-        $cm = new \ContentManager();
-
-        if ($category == 'all') {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $category;
-        }
-        $itemsPerPage = s::get('items_per_page', 20);
-
-        list($videoCount, $videos) = $cm->getCountAndSlice(
-            'video',
-            $categoryForLimit,
-            '',
-            'ORDER BY created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (!empty($videos)) {
-            foreach ($videos as &$video) {
-                $video->information    = unserialize($video->information);
-                $video->category_name  = $this->ccm->get_name($video->category);
-                $video->category_title = $this->ccm->get_title($video->category_name);
-            }
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $videoCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_videos',
-                    array('category' => $category)
-                ).'&page=%d',
-            )
-        );
-
-        return $this->render(
-            'video/list.tpl',
-            array(
-                'pagination' => $pagination,
-                'videos'     => $videos
-            )
-        );
+        return $this->render('video/list.tpl');
     }
 
     /**
@@ -145,34 +95,14 @@ class VideosController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $category = $request->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
         $configurations = s::get('video_settings');
         $numFavorites   = $configurations['total_widget'];
-
-        $cm = new \ContentManager();
-        $videos = $cm->find_all('Video', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
-
-        if (count($videos) < $numFavorites) {
-            m::add(
-                sprintf(
-                    _("You must put %d videos in the HOME widget"),
-                    $numFavorites
-                )
-            );
-        }
-
-        if (!empty($videos)) {
-            foreach ($videos as &$video) {
-                $video->category_name  = $this->ccm->get_name($video->category);
-                $video->category_title = $this->ccm->get_title($video->category_name);
-            }
-        }
 
         return $this->render(
             'video/list.tpl',
             array(
-                'videos'     => $videos,
-                'category'   => $category,
+                'total_elements_widget' => $numFavorites,
+                'category'              => 'widget',
             )
         );
     }
@@ -217,8 +147,7 @@ class VideosController extends Controller
                     'file_type'      => $_FILES["video_file"]["type"],
                     'file_path'      => $_FILES["video_file"]["tmp_name"],
                     'category'       => $category,
-                    'available'      => $requestPost->filter('available', null, FILTER_SANITIZE_STRING),
-                    'content_status' => $requestPost->filter('content_status', null, FILTER_SANITIZE_STRING),
+                    'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                     'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
                     'description'    => $requestPost->filter('description', null, FILTER_SANITIZE_STRING),
@@ -243,7 +172,6 @@ class VideosController extends Controller
                 $video = new \Video();
                 $videoData = array(
                     'category'       => $category,
-                    'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
                     'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                     'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                     'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
@@ -357,7 +285,6 @@ class VideosController extends Controller
                     $videoData = array(
                         'id'             => $id,
                         'category'       => $category,
-                        'available'      => $requestPost->filter('available', 0, FILTER_SANITIZE_STRING),
                         'content_status' => $requestPost->filter('content_status', 0, FILTER_SANITIZE_STRING),
                         'title'          => $requestPost->filter('title', null, FILTER_SANITIZE_STRING),
                         'metadata'       => $requestPost->filter('metadata', null, FILTER_SANITIZE_STRING),
@@ -562,163 +489,6 @@ class VideosController extends Controller
         }
     }
 
-    /**
-     * Deletes multiple videos at once given its ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('VIDEO_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page = $request->query->getDigits('page', 1);
-        $selectedItems = $request->query->get('selected_fld');
-
-        if (is_array($selectedItems)
-            && count($selectedItems) > 0
-        ) {
-            foreach ($selectedItems as $element) {
-                $video = new \Video($element);
-
-                $relations = array();
-                $relations = \RelatedContent::getContentRelations($element);
-
-                $video->delete($element, $_SESSION['userid']);
-
-                m::add(sprintf(_('Video "%s" deleted successfully.'), $video->title), m::SUCCESS);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_videos',
-                array(
-                    'categoy' => $category,
-                    'page'    => $page,
-                )
-            )
-        );
-    }
-
-    /**
-     * Change availability for one video given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('VIDEO_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 1);
-        $category = $request->query->get('category', 'all');
-
-        $video = new \Video($id);
-        if (is_null($video->id)) {
-            m::add(sprintf(_('Unable to find video with id "%d"'), $id), m::ERROR);
-        } else {
-            $video->toggleAvailable($video->id);
-            if ($status == 0) {
-                $video->set_favorite($status);
-            }
-            m::add(sprintf(_('Successfully changed availability for video with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_videos',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change suggested flag for one video given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('VIDEO_FAVORITE')")
-     **/
-    public function toggleFavoriteAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 1);
-        $category = $request->query->get('category', 'all');
-
-        $video = new \Video($id);
-        if (is_null($video->id)) {
-            m::add(sprintf(_('Unable to find video with id "%d"'), $id), m::ERROR);
-        } else {
-
-            $video->set_favorite($status);
-            m::add(sprintf(_('Successfully changed suggested flag for video with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_videos',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change in_home flag for one video given its id
-     * Used for putting this content widgets in home
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('VIDEO_HOME')")
-     **/
-    public function toggleInHomeAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 1);
-        $category = $request->query->get('category', 'all');
-
-        $video = new \Video($id);
-        if (is_null($video->id)) {
-            m::add(sprintf(_('Unable to find video with id "%d"'), $id), m::ERROR);
-        } else {
-            $video->set_inhome($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed suggested flag for video with id "%d"'), $id), m::SUCCESS);
-        }
-
-        if ($category == 'widget') {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_videos_widget'
-                )
-            );
-        }
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_videos',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
 
     /**
      * Returns the relations for a given video
@@ -795,45 +565,6 @@ class VideosController extends Controller
     }
 
     /**
-     * Set the published flag for contents in batch
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('VIDEO_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('status', 0);
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $video = new \Video($id);
-                $video->set_available($status, $_SESSION['userid']);
-                if ($status == 0) {
-                    $video->set_favorite($status, $_SESSION['userid']);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_videos',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                )
-            )
-        );
-    }
-
-    /**
      * Render the content provider for videos
      *
      * @param Request $request the request object
@@ -867,7 +598,7 @@ class VideosController extends Controller
         list($countVideos, $videos) = $cm->getCountAndSlice(
             'Video',
             null,
-            'contents.available=1 '.$sqlExcludedOpinions,
+            'contents.content_status=1 '.$sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             8

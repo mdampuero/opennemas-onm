@@ -52,6 +52,9 @@ class InstanceLoaderListener implements EventSubscriberInterface
             $databaseName               = $instance->getDatabaseName();
             $databaseInstanceConnection = getService('db_conn');
             $databaseInstanceConnection->selectDatabase($databaseName);
+
+            $dbalConnection = getService('dbal_connection');
+            $dbalConnection->selectDatabase($databaseName);
         } else {
             $databaseName               = $instance->getDatabaseName();
             $databaseInstanceConnection = getService('db_conn_manager');

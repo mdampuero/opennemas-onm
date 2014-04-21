@@ -1,21 +1,55 @@
 {extends file="base/admin.tpl"}
 
+{block name="header-js" append}
+    {include file="common/angular_includes.tpl"}
+{/block}
+
 {block name="content"}
-<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario">
+<form action="{url name=admin_widgets}" method="GET" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('widget', { content_status: -1, renderlet: -1, title_like: '', in_litter: 0 }, 'title', 'asc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title">
                 <h2>{t}Widgets{/t}</h2>
             </div>
             <ul class="old-button">
-                  {acl isAllowed="WIDGET_CREATE"}
-                <li>
-                    <a href="{url name=admin_widget_create}" class="admin_add"
-                       title="{t}New widget{/t}">
-                        <img border="0" src="{$params.IMAGE_DIR}list-add.png" title="" alt="" />
-                        <br />{t}New{/t}
+                <li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
                     </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        {acl isAllowed="ARTICLE_AVAILABLE"}
+                        <li>
+                            <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 1, 'loading')">
+                                <i class="icon-eye-open"></i>
+                                {t}Publish{/t}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_contents_batch_set_content_status', 'content_status', 0, 'loading')">
+                                <i class="icon-eye-close"></i>
+                                {t}Unpublish{/t}
+                            </a>
+                        </li>
+                        {/acl}
+                        {acl isAllowed="ARTICLE_DELETE"}
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" id="batch-delete" ng-click="open('modal-delete-selected', 'backend_ws_contents_batch_send_to_trash')">
+                                    <i class="icon-trash"></i>
+                                    {t}Delete{/t}
+                                </a>
+                            </li>
+                        {/acl}
+                    </ul>
                 </li>
+                <li class="separator" ng-if="shvs.selected.length > 0"></li>
+                {acl isAllowed="ARTICLE_CREATE"}
+                    <li>
+                        <a href="{url name=admin_widget_create category=$category}">
+                            <img border="0" src="{$params.IMAGE_DIR}/article_add.png" alt="Nuevo"><br />{t}New widget{/t}
+                        </a>
+                    </li>
                 {/acl}
             </ul>
         </div>
@@ -23,103 +57,99 @@
     <div class="wrapper-content">
         {render_messages}
         <div class="table-info clearfix">
-            {acl hasCategoryAccess=$category}<div class="pull-left"><strong>{t 1=$totalWidgets}%1 widgets{/t}</strong></div> {/acl}
-            <div class="pull-right">
+            <div class="pull-left">
                 <div class="form-inline">
-                    <select name="type">
-                        <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-                        <option value="intelligentwidget" {if $status === intelligentwidget} selected {/if}> {t}IntelligentWidget{/t} </option>
-                        <option value="html" {if  $status === html} selected {/if}> {t}HTML{/t} </option>
-                        <option value="smarty" {if $status === smarty} selected {/if}> {t}Smarty{/t} </option>
+                    <strong>{t}FILTER:{/t}</strong>
+                    &nbsp;&nbsp;
+                    <input type="text" placeholder="{t}Search by title:{/t}" ng-model="shvs.search.title_like"/>
+                    &nbsp;&nbsp;
+                    <select class="select2 input-medium" name="type" ng-model="shvs.search.renderlet" data-label="{t}Type{/t}">
+                        <option value="-1">{t}-- All --{/t}</option>
+                        <option value="intelligentwidget">{t}IntelligentWidget{/t}</option>
+                        <option value="html">{t}HTML{/t}</option>
+                        <option value="smarty">{t}Smarty{/t}</option>
                     </select>
-                    {t}Status:{/t}
-                    <div class="input-append">
-                        <select name="status">
-                            <option value="-1" {if $status === -1} selected {/if}> {t}-- All --{/t} </option>
-                            <option value="1" {if  $status === 1} selected {/if}> {t}Published{/t} </option>
-                            <option value="0" {if $status === 0} selected {/if}> {t}No published{/t} </option>
-                        </select>
-                        <button type="submit" class="btn"><i class="icon-search"></i> </button>
-                    </div>
+                    &nbsp;&nbsp;
+                    <select class="select2 input-medium" name="status" ng-model="shvs.search.content_status" data-label="{t}Status{/t}">
+                        <option value="-1"> {t}-- All --{/t} </option>
+                        <option value="1"> {t}Published{/t} </option>
+                        <option value="0"> {t}No published{/t} </option>
+                    </select>
                 </div>
             </div>
         </div>
-
-        <table class="table table-hover table-condensed" >
+        <div ng-include="'widgets'"></div>
+    </div>
+    <script type="text/ng-template" id="widgets">
+        <div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+        </div>
+        <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
-                {if count($widgets) > 0}
+                <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                 <th>{t}Name{/t}</th>
                 <th style="width:70px">{t}Type{/t}</th>
                 <th class="center" style="width:20px">{t}Published{/t}</th>
-                <th class="center" style="width:10px">Actions</th>
-                {else}
-                <th scope="col" colspan=4>&nbsp;</th>
-                {/if}
+                <th class="center" style="width:10px"></th>
             </thead>
-
             <tbody>
-                {section name=wgt loop=$widgets}
-                <tr>
-                    <td>
-                        {$widgets[wgt]->title}
-                    </td>
-
-                    <td>
-                        {$widgets[wgt]->renderlet|upper}
-                    </td>
-
-                    <td class="center">
-                        {acl isAllowed="WIDGET_AVAILABLE"}
-                        {if $widgets[wgt]->available == 1}
-                        <a href="{url name=admin_widget_toogle_available id=$widgets[wgt]->pk_widget page=$page}" class="switchable" title="{t}Published{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_g.png"alt="{t}Published{/t}" /></a>
-                        {else}
-                        <a href="{url name=admin_widget_toogle_available id=$widgets[wgt]->pk_widget page=$page}" class="switchable" title="{t}Unpublished{/t}">
-                            <img src="{$params.IMAGE_DIR}publish_r.png" alt="{t}Unpublished{/t}" /></a>
-                        {/if}
-                        {/acl}
-                    </td>
-
-                    <td class="right nowrap" >
-                        <div class="btn-group">
-
-                        {if ($widgets[wgt]->renderlet != 'intelligentwidget' or true)}
-                        {acl isAllowed="WIDGET_UPDATE"}
-                        <a href="{url name=admin_widget_show id=$widgets[wgt]->pk_widget page=$page}" title="{t}Edit{/t}" class="btn">
-                            <i class="icon-pencil"></i> {t}Edit{/t}
-                        </a>
-                        {/acl}
-                        {acl isAllowed="WIDGET_DELETE"}
-                            <a class="del btn btn-danger" data-controls-modal="modal-from-dom"
-                               data-url="{url name=admin_widget_delete id=$widgets[wgt]->pk_widget page=$page}" title="{t}Delete{/t}"
-                               data-title="{$widgets[wgt]->title|capitalize}" href="{url name=admin_widget_delete id=$widgets[wgt]->pk_widget page=$page}" >
-                                <i class="icon-trash icon-white"></i>
-                            </a>
-                        {/acl}
-                        {/if}
-                        </div>
-                    </td>
-                </tr>
-                {sectionelse}
-                <tr>
+                <tr ng-if="shvs.contents.length == 0">
                     <td class="empty" colspan="5">
                         {t}There is no available widgets{/t}
                     </td>
                 </tr>
-                {/section}
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id) }">
+                    <td>
+                        <checkbox index="[% content.id %]">
+                    </td>
+                    <td>
+                        [% content.title %]
+                    </td>
+                    <td>
+                        [% content.renderlet %]
+                    </td>
+                    <td class="center">
+                        {acl isAllowed="WIDGET_AVAILABLE"}
+                        <button class="btn-link" ng-class="{ loading: content.loading == 1, published: content.content_status == 1, unpublished: content.content_status == 0 }" ng-click="updateItem($index, content.id, 'backend_ws_content_set_content_status', 'content_status', content.content_status != 1 ? 1 : 0, 'loading')" type="button"></button>
+                        {/acl}
+                    </td>
+                    <td class="right">
+                        <div class="btn-group">
+                            {acl isAllowed="WIDGET_UPDATE"}
+                                <a class="btn" href="[% edit(content.id, 'admin_widget_show') %]" title="{t}Edit widget '[% content.title %]'{/t}">
+                                    <i class="icon-pencil"></i> {t}Edit{/t}
+                                </a>
+                            {/acl}
+                            {acl isAllowed="WIDGET_DELETE"}
+                                <button class="btn btn-danger" ng-click="open('modal-delete', 'backend_ws_content_send_to_trash', $index)" type="button">
+                                    <i class="icon-trash icon-white"></i>
+                                </button>
+                            {/acl}
+                        </div>
+                    </td>
+                </tr>
             </tbody>
-
             <tfoot>
                 <tr>
                     <td colspan="5" class="center">
-                        <div class="pagination">
-                            {$pagination->links}
+                        <div class="pull-left" ng-if="shvs.contents.length > 0">
+                            {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
+                        <div class="pull-right" ng-if="shvs.contents.length > 0">
+                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                        </div>
+                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                     </td>
                 </tr>
             </tfoot>
         </table>
-    </div>
-        {include file="widget/modals/_modalDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-delete">
+        {include file="common/modals/_modalDelete.tpl"}
+    </script>
+    <script type="text/ng-template" id="modal-delete-selected">
+        {include file="common/modals/_modalBatchDelete.tpl"}
+    </script>
 </form>
 {/block}

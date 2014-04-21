@@ -1,5 +1,5 @@
 function hide_alerts () {
-    $(".alert:not(.alert-sticky)").fadeTo(500, 0).slideUp(500, function(){
+    $(".alert:not(.alert-sticky):not(.messenger-message)").fadeTo(500, 0).slideUp(500, function(){
         $(this).remove();
     });
 }

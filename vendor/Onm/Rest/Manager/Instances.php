@@ -143,7 +143,7 @@ class Instances extends \Onm\Rest\RestBase
         $mailer->send($message);
     }
 
-    private function sendMailToCompany($data, $companyMail, $domain,  $plan)
+    private function sendMailToCompany($data, $companyMail, $domain, $plan)
     {
         $message = \Swift_Message::newInstance();
         $message->setTo(

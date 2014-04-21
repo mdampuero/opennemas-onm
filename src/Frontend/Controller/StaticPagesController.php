@@ -49,24 +49,24 @@ class StaticPagesController extends Controller
     {
         $slug = $request->query->filter('slug', null, FILTER_SANITIZE_STRING);
 
-        $page = \StaticPage::getPageBySlug($slug);
+        $content = \StaticPage::getPageBySlug($slug);
 
         // if static page doesn't exist redirect to 404 error page.
-        if (is_null($page) || (!$page->available)) {
+        if (is_null($content) || (!$content->content_status)) {
             throw new ResourceNotFoundException();
         }
 
         $ads = $this->getAds();
-        $this->view->assign('advertisements', $ads);
 
         return $this->render(
             'static_pages/statics.tpl',
             array(
-                'page'               => $page,
-                'content'            => $page,
-                'actual_category'    => $page->slug,
-                'category_real_name' => $page->title,
-                'content_id'         => $page->id
+                'page'               => $content,
+                'content'            => $content,
+                'actual_category'    => $content->slug,
+                'category_real_name' => $content->title,
+                'content_id'         => $content->id,
+                'advertisements'     => $ads,
             )
         );
     }

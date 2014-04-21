@@ -377,10 +377,10 @@ class Content
     public function create($data)
     {
         $data['body']   = (!array_key_exists('body', $data))? '': $data['body'];
-        $data['content_status']   = (empty($data['content_status']))? 0: intval($data['content_status']);
-        $data['available']        = (empty($data['available']))? 0: intval($data['available']);
+        $data['content_status'] = (empty($data['content_status']))? 0: intval($data['content_status']);
+        $data['available']      = $data['content_status'];
         if (!isset($data['starttime']) || empty($data['starttime'])) {
-            if ($data['available'] == 0) {
+            if ($data['content_status'] == 0) {
                 $data['starttime'] = '0000-00-00 00:00:00';
             } else {
                 $data['starttime'] = date("Y-m-d H:i:s");
@@ -436,13 +436,13 @@ class Content
            " VALUES (?,?,?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?, ?,?,?,?)";
 
         $values = array(
-            $fk_content_type, strtolower($this->content_type), $data['title'], $data['description'], $data['body'],
+            $fk_content_type, underscore($this->content_type), $data['title'], $data['description'], $data['body'],
             $data['metadata'], $data['starttime'], $data['endtime'],
             $data['created'], $data['changed'], $data['content_status'],
             $data['views'], $data['position'],$data['frontpage'],
             $data['fk_author'], $data['fk_publisher'],
             $data['fk_user_last_editor'], $data['in_home'],
-            $data['home_pos'],$data['available'],
+            $data['home_pos'], $data['available'],
             $data['slug'], $catName, $data['urn_source'], $data['params']
         );
 
@@ -493,11 +493,6 @@ class Content
         $this->load($rs->fields);
         $this->fk_user = $this->fk_author;
 
-          // Get author data for contents
-        if (!empty($this->fk_author)) {
-            $this->author = new \User($this->fk_author);
-        }
-
         return $this;
     }
 
@@ -512,8 +507,8 @@ class Content
     {
         $this->read($data['id']);
 
-        if ($data['available'] == 1
-            && $this->available == 0
+        if ($data['content_status'] == 1
+            && $this->content_status == 0
             && array_key_exists('starttime', $data)
             && ($data['starttime'] =='0000-00-00 00:00:00')
         ) {
@@ -529,8 +524,8 @@ class Content
                 (empty($data['endtime'])) ? '0000-00-00 00:00:00': $data['endtime'],
             'content_status' =>
                 (!isset($data['content_status'])) ? $this->content_status: $data['content_status'],
-            'available'      =>
-                (!isset($data['available'])) ? $this->available: $data['available'],
+            'content_status'      =>
+                (!isset($data['content_status'])) ? $this->content_status: $data['content_status'],
             'frontpage'      =>
                 (!isset($data['frontpage'])) ? $this->frontpage: $data['frontpage'],
             'in_home'        =>
@@ -545,7 +540,9 @@ class Content
 
         $data = array_merge($data, $values);
 
-        $data['fk_publisher'] =  (empty($data['available']))? '' : $_SESSION['userid'];
+        $data['available'] = $data['content_status'];
+
+        $data['fk_publisher'] =  (empty($data['content_status']))? '' : $_SESSION['userid'];
 
         if (empty($data['fk_user_last_editor'])
             && !isset ($data['fk_user_last_editor'])
@@ -600,7 +597,7 @@ class Content
             $data['changed'], $data['in_home'], $data['frontpage'],
             $data['available'], $data['content_status'],
             $data['fk_author'], $data['fk_user_last_editor'], $data['slug'],
-            $this->category_name, $data['params'], $data['id']
+            $catName, $data['params'], $data['id']
         );
 
         $rs = $GLOBALS['application']->conn->Execute($sql, $values);
@@ -672,6 +669,8 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
     }
 
     /**
@@ -685,9 +684,7 @@ class Content
     public function restoreFromTrash()
     {
         $changed = date("Y-m-d H:i:s");
-        $sql  =   'UPDATE contents SET `in_litter`=?, '
-                .'`changed`=?'
-                .'WHERE pk_content=?';
+        $sql  =   'UPDATE contents SET `in_litter`=?, `changed`=? WHERE pk_content=?';
 
         $values = array(0, $changed, $this->id);
 
@@ -698,6 +695,8 @@ class Content
 
         /* Notice log of this action */
         logContentEvent('recover from trash', $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return $this;
     }
@@ -714,8 +713,13 @@ class Content
         if ($id == null) {
             $id = $this->id;
         }
-        $status = ($this->available + 1) % 2;
+
+        $status = ($this->content_status + 1) % 2;
         $date = $this->starttime;
+
+        $this->content_status = $status;
+        $this->available = $status;
+
         if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
             $date = date("Y-m-d H:i:s");
         }
@@ -735,6 +739,94 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
+
+        return true;
+    }
+
+    /**
+     * Change current value of in_home property
+     *
+     * @param string $id the id of the element
+     *
+     * @return boolean true if it was changed successfully
+     **/
+    public function toggleFavorite($id = null)
+    {
+        if ($id == null) {
+            $id = $this->id;
+        }
+
+        $status = ($this->favorite + 1) % 2;
+        $date = $this->starttime;
+
+        $this->favorite = $status;
+
+        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+            $date = date("Y-m-d H:i:s");
+        }
+
+        $sql = 'UPDATE `contents` '
+               .'SET `favorite` = ?, '
+               .'`content_status` = ?, '
+               .'`starttime` = ? '
+               .'WHERE `pk_content`=?';
+
+        $values = array($status, $status, $date, $id);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            return false;
+        }
+
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
+
+        return true;
+    }
+
+    /**
+     * Change current value of in_home property
+     *
+     * @param string $id the id of the element
+     *
+     * @return boolean true if it was changed successfully
+     **/
+    public function toggleInHome($id = null)
+    {
+        if ($id == null) {
+            $id = $this->id;
+        }
+
+        $status = ($this->in_home + 1) % 2;
+        $date = $this->starttime;
+
+        $this->in_home = $status;
+
+        if (($status == 1) && ($date =='0000-00-00 00:00:00')) {
+            $date = date("Y-m-d H:i:s");
+        }
+
+        $sql = 'UPDATE `contents` '
+               .'SET `in_home` = ?, '
+               .'`content_status` = ?, '
+               .'`starttime` = ? '
+               .'WHERE `pk_content`=?';
+
+        $values = array($status, $status, $date, $id);
+
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
+        if ($rs === false) {
+            return false;
+        }
+
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -808,8 +900,57 @@ class Content
 
         // Set status for it's updated to next event
         if (!empty($this)) {
-            $this->available = $status;
+            $this->available      = $status;
+            $this->content_status = $status;
         }
+
+        return true;
+    }
+
+    /**
+     * Change the current value of available content_status property
+     *
+     * @param int $status the available value
+     * @param int $lastEditor the author id that performs the action
+     *
+     * @return boolean true if it was changed successfully
+     **/
+    public function set_in_home($status, $lastEditor)
+    {
+        if (($this->id == null) && !is_array($status)) {
+            return false;
+        }
+
+        $sql = 'UPDATE contents '
+             . 'SET `in_home`=?, `starttime`=?, `fk_user_last_editor`=? WHERE `pk_content`=?';
+        $stmt = $GLOBALS['application']->conn->Prepare($sql);
+
+        if (!is_array($status)) {
+            if (($status == 1) && ($this->starttime =='0000-00-00 00:00:00')) {
+                $this->starttime = date("Y-m-d H:i:s");
+            }
+            $values = array(
+                $status,
+                $this->starttime,
+                $lastEditor,
+                $this->id
+            );
+        } else {
+            $values = $status;
+        }
+
+        if (count($values)>0) {
+            $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+            if ($rs === false) {
+
+                return false;
+            }
+        }
+
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
+
+        dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
     }
@@ -825,9 +966,9 @@ class Content
 
         if ($this->in_litter == 1) {
             $state = self::TRASHED;
-        } elseif ($this->available == 0) {
+        } elseif ($this->content_status == 0) {
             $state = self::PENDING;
-        } elseif ($this->content_status == 1 && $this->available == 1) {
+        } elseif ($this->content_status == 1) {
             $state = self::AVAILABLE;
         }
 
@@ -926,7 +1067,7 @@ class Content
             return false;
         }
 
-        $sql = 'UPDATE contents SET `available`=0, `content_status` = 0, `fk_user_last_editor`=?, '
+        $sql = 'UPDATE contents SET `available`=0, `content_status`=0, `fk_user_last_editor`=?, '
              . '`changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
@@ -944,7 +1085,8 @@ class Content
         logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated state to next event
-        $this->available = 0;
+        $this->available      = 0;
+        $this->content_status = 0;
 
         dispatchEventWithParams('content.update', array('content' => $this));
 
@@ -958,34 +1100,22 @@ class Content
      **/
     public function setTrashed()
     {
-        // Set the flags to the trashed status
-        // Drop from all the frontpages
-        // Clean caches where this content is
         if ($this->id == null) {
             return false;
         }
 
-        $GLOBALS['application']->dispatch('onBeforeAvailable', $this);
+        $sql = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
+        $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
-        $stmt = 'UPDATE contents SET `in_litter`=1, `fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
-
-        $values = array(
-            $_SESSION['userid'],
-            date("Y-m-d H:i:s"),
-            $this->id
-        );
-
-        $rs = $GLOBALS['application']->conn->Execute($stmt, $values);
+        $rs = $GLOBALS['application']->conn->Execute($sql, $values);
         if ($rs === false) {
             return false;
         }
 
+        $this->in_litter = 1;
+
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
-
-        // Set status for it's updated to next event
-        $this->in_litter = 2;
-
         dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
@@ -1030,26 +1160,19 @@ class Content
             return false;
         }
 
-        $sql = 'UPDATE contents SET `content_status`=1, `frontpage` =0, '
+        $sql = 'UPDATE contents SET `content_status`=1, `frontpage`=0, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
-        $stmt = $GLOBALS['application']->conn->Prepare($sql);
+        $values = array($_SESSION['userid'], date("Y-m-d H:i:s"), $this->id);
 
-        $values = array(
-            $_SESSION['userid'],
-            date("Y-m-d H:i:s"),
-            $this->id
-        );
-
-        if ($GLOBALS['application']->conn->Execute($stmt, $values) === false) {
+        if ($GLOBALS['application']->conn->Execute($sql, $values) === false) {
             return false;
         }
-
-        /* Notice log of this action */
-        logContentEvent(__METHOD__, $this);
 
         // Set status for it's updated to next event
         $this->in_litter = 2;
 
+        /* Notice log of this action */
+        logContentEvent(__METHOD__, $this);
         dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
@@ -1399,7 +1522,7 @@ class Content
         $currentTime->setTimezone(new \DateTimeZone('UTC'));
         $currentTime = $currentTime->format('Y-m-d H:i:s');
 
-        $sql = 'UPDATE contents SET `content_status`=?, '
+        $sql = 'UPDATE contents SET `content_status`=?, `available`=?, '
              . '`fk_user_last_editor`=?, `changed`=? WHERE `pk_content`=?';
         $stmt = $GLOBALS['application']->conn->Prepare($sql);
 
@@ -1612,9 +1735,7 @@ class Content
     */
     public static function get($contentId)
     {
-        $sql  = 'SELECT fk_content_type '
-              . 'FROM `contents` '
-              . 'WHERE pk_content=?';
+        $sql  = 'SELECT fk_content_type FROM `contents` WHERE pk_content=?';
         $contentTypeId = $GLOBALS['application']->conn->GetOne($sql, array($contentId));
 
         $type = \ContentManager::getContentTypeNameFromId($contentTypeId);
@@ -1739,8 +1860,8 @@ class Content
         ) {
             return false;
         }
-        $sql = 'UPDATE contents SET `position`=? WHERE `pk_content`=?';
 
+        $sql = 'UPDATE contents SET `position`=? WHERE `pk_content`=?';
         $values = array($position, $this->id);
 
         if (count($values) > 0) {
@@ -1752,7 +1873,6 @@ class Content
 
         /* Notice log of this action */
         logContentEvent(__METHOD__, $this);
-
         dispatchEventWithParams('content.set_positions', array('content' => $this));
 
         return true;
@@ -1779,6 +1899,7 @@ class Content
             return false;
         }
 
+        logContentEvent(__METHOD__, $this);
         dispatchEventWithParams('content.update', array('content' => $this));
 
         return true;
@@ -1928,14 +2049,14 @@ class Content
     }
 
     /**
-     * Returns true if a match time contraints, is available and is not in trash
+     * Returns true if a match time constraints, is available and is not in trash
      *
      * @return boolean true if is ready
      **/
     public function isReadyForPublish()
     {
         return ($this->isInTime()
-                && $this->available == 1
+                && $this->content_status == 1
                 && $this->in_litter == 0);
     }
 

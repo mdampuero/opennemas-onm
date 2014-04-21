@@ -90,7 +90,7 @@ class ArticlesController extends Controller
         if (($this->view->caching == 0)
             || !$this->view->isCached("extends:{$layoutFile}|article/article.tpl", $cacheID)
         ) {
-            if (($article->available == 1) && ($article->in_litter == 0)
+            if (($article->content_status == 1) && ($article->in_litter == 0)
                 && ($article->isStarted())
             ) {
                 // Categories code -------------------------------------------
@@ -156,7 +156,7 @@ class ArticlesController extends Controller
                     $article->metadata,
                     'article',
                     "pk_fk_content_category= ".$article->category.
-                    " AND contents.available=1 AND pk_content = pk_fk_content",
+                    " AND contents.content_status=1 AND pk_content = pk_fk_content",
                     4
                 );
 
@@ -233,7 +233,7 @@ class ArticlesController extends Controller
         $article = $cm->getUrlContent($wsUrl.'/ws/articles/complete/'.$dirtyID, true);
         $article = unserialize($article);
 
-        if (($article->available==1) && ($article->in_litter==0)
+        if (($article->content_status==1) && ($article->in_litter==0)
             && ($article->isStarted())
         ) {
             // Template vars

@@ -31,12 +31,12 @@
     },
 
     "require": {
-        "php"                            : ">=5.3.3",
-        "drexarj/disqus-php"             : "dev-master",
-        "frandieguez/panorama-php"       : "1.0.*",
-        "imagine/imagine"                : "dev-develop",
+        "php": ">=5.3.3",
+        "drexarj/disqus-php": "dev-master",
+        "frandieguez/panorama-php": "1.0.*",
+        "imagine/imagine": "dev-develop",
         "paypal/adaptivepayments-sdk-php": "dev-master",
-        "paypal/merchant-sdk-php"        : "dev-master",
+        "paypal/merchant-sdk-php": "dev-master",
         "symfony/symfony": "~2.3",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
@@ -51,7 +51,8 @@
         "sensio/generator-bundle": "2.3.*",
         "php-ffmpeg/php-ffmpeg": "0.5.*@dev",
         "smarty/smarty" : "3.1.14",
-        "drak/native-session": "*"
+        "drak/native-session": "*",
+        "friendsofsymfony/jsrouting-bundle": "@stable"
     },
     "scripts": {
         "post-install-cmd": [
@@ -74,6 +75,7 @@
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "public",
+        "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
         },

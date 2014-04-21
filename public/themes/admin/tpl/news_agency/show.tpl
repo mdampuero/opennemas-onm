@@ -2,12 +2,6 @@
 
 {block name="header-css" append}
 <style type="text/css" media="screen">
-    .already-imported {
-        background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
-        padding:10px;
-        border:1px solid #ccc;
-        margin-bottom:10px;
-    }
     .photo {
         display: inline-block;
     }
@@ -50,7 +44,7 @@
     {render_messages}
 
     {if $imported}
-    <div class="already-imported">
+    <div class="already_imported">
         {t}This article was imported before. Take care of it.{/t}
     </div><!-- / -->
     {/if}

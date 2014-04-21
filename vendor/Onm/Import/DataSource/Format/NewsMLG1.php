@@ -61,6 +61,31 @@ class NewsMLG1 implements FormatInterface
     }
 
     /**
+     * Populates the object information
+     *
+     * @return NewsMLG1 the populated object
+     **/
+    public function load()
+    {
+        $this->id           = $this->getId();
+        $this->urn          = $this->getUrn();
+        $this->pretitle     = $this->getPretitle();
+        $this->title        = $this->getTitle();
+        $this->priority     = $this->getPriority();
+        $this->tags         = $this->getTags();
+        $this->created_time = $this->getCreatedTime();
+        $this->body         = $this->getBody();
+        $this->agency_name  = $this->getServiceName();
+        $this->texts        = $this->getTexts();
+        $this->photos       = $this->getPhotos();
+        $this->videos       = $this->getVideos();
+        $this->audios       = $this->getAudios();
+        $this->files        = $this->getFiles();
+
+        return $this;
+    }
+
+    /**
      * Magic method for translate properties into XML elements
      *
      * @param string $propertyName the name of the property to get

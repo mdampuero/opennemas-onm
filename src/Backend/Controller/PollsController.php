@@ -34,8 +34,8 @@ class PollsController extends Controller
      * @return void
      **/
     public function init()
-
-{        \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
+    {
+        \Onm\Module\ModuleManager::checkActivatedOrForward('POLL_MANAGER');
 
         $contentType = \ContentManager::getContentTypeIdFromName('poll');
 
@@ -49,12 +49,16 @@ class PollsController extends Controller
             $category ='home';
         }
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData
+                'datos_cat'    => $this->categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
     }
@@ -70,58 +74,7 @@ class PollsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page         = $request->query->getDigits('page', 1);
-        $category     = $request->query->getDigits('category', 'all');
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        if (empty($category)) {
-            $category = 'all';
-            $categoryFilter = null;
-        } else {
-            $categoryFilter = $category;
-        }
-
-        $cm = new \ContentManager();
-        $ccm = new \ContentCategoryManager();
-
-        list($countPolls, $polls) =$cm->getCountAndSlice(
-            'Poll',
-            $categoryFilter,
-            'in_litter != 1',
-            'ORDER BY content_status, available, created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        foreach ($polls as &$poll) {
-            $poll->category_name = $ccm->get_name($poll->category);
-            $poll->category_title = $ccm->get_title($poll->category_name);
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPolls,
-                'fileName'    => $this->generateUrl('admin_polls').'?page=%d',
-            )
-        );
-
-        return $this->render(
-            'poll/list.tpl',
-            array(
-                'polls'      => $polls,
-                'pagination' => $pagination,
-                'category'   => $category,
-                'page'       => $page,
-            )
-        );
+        return $this->render('poll/list.tpl');
     }
 
     /**
@@ -135,9 +88,6 @@ class PollsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $page = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
         $configurations = s::get('poll_settings');
         if (array_key_exists('total_widget', $configurations)) {
             $totalWidget = $configurations['total_widget'];
@@ -145,52 +95,11 @@ class PollsController extends Controller
             $totalWidget = 0;
         }
 
-        $cm = new \ContentManager();
-        $ccm = new \ContentCategoryManager();
-
-        $page         = $request->query->getDigits('page', 1);
-        $itemsPerPage = s::get('items_per_page') ?: 20;
-
-        list($countPolls, $polls) =$cm->getCountAndSlice(
-            'Poll',
-            null,
-            'in_litter != 1 AND in_home=1',
-            'ORDER BY created DESC ',
-            $page,
-            $itemsPerPage
-        );
-
-        if (count($polls) != $totalWidget) {
-            m::add(sprintf(_("You must put %d polls in the HOME"), $totalWidget));
-        }
-
-        foreach ($polls as &$poll) {
-            $poll->category_name = $ccm->get_name($poll->category);
-            $poll->category_title = $ccm->get_title($poll->category_name);
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $countPolls,
-                'fileName'    => $this->generateUrl('admin_polls').'?page=%d',
-            )
-        );
-
         return $this->render(
             'poll/list.tpl',
             array(
-                'polls'      => $polls,
-                'pagination' => $pagination,
-                'category'   => 'widget',
-                'page'       => $page,
+                'category'              => 'widget',
+                'total_elements_widget' => $totalWidget,
             )
         );
     }
@@ -210,30 +119,39 @@ class PollsController extends Controller
             $poll = new \Poll();
 
             $data = array(
-                'title'         => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'subtitle'      => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
-                'description'   => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-                'metadata'      => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'favorite'      => $request->request->getDigits('favorite', 0),
-                'with_comment'  => $request->request->getDigits('with_comment', 0),
-                'visualization' => $request->request->getDigits('visualization', 0),
-                'category'      => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
-                'available'     => $request->request->filter('available', 0, FILTER_SANITIZE_STRING),
-                'item'          => $request->request->get('item'),
+                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'subtitle'       => $request->request->filter('subtitle', '', FILTER_SANITIZE_STRING),
+                'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+                'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'favorite'       => $request->request->getDigits('favorite', 0),
+                'with_comment'   => $request->request->getDigits('with_comment', 0),
+                'visualization'  => $request->request->getDigits('visualization', 0),
+                'category'       => $request->request->filter('category', '', FILTER_SANITIZE_STRING),
+                'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'item'           => $request->request->get('item'),
             );
+            $poll = $poll->create($data);
 
-            if ($poll->create($data)) {
+            if (!empty($poll->id)) {
                 m::add(_('Poll successfully created.'), m::SUCCESS);
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_poll_show',
+                        array('id' => $poll->id)
+                    )
+                );
             } else {
                 m::add(_('Unable to create the new poll.'), m::ERROR);
+
+                return $this->redirect(
+                    $this->generateUrl(
+                        'admin_polls',
+                        array('category' => $data['category'])
+                    )
+                );
             }
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_polls',
-                    array('category' => $data['category'])
-                )
-            );
+
         } else {
             return $this->render('poll/new.tpl');
         }

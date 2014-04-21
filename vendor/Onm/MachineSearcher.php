@@ -77,7 +77,7 @@ class MachineSearcher
                         ."  FROM contents, $contentTable, contents_categories "
                         ." WHERE contents.pk_content=$contentTable.pk_$szContentsTypeTitle"
                         ." AND `contents`.`pk_content` = `contents_categories`.`pk_fk_content`"
-                        ." AND `contents`.`available` = 1 "
+                        ." AND `contents`.`content_status` = 1 "
                         ." AND `contents`.`in_litter` = 0 "
                         .$selectedContentTypesSQL
                         .$filter

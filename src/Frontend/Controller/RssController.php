@@ -137,7 +137,7 @@ class RssController extends Controller
                 // get all the authors of opinions
                 if (!isset($author) || empty($author)) {
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
-                        'contents.available=1 and contents.content_status=1',
+                        'contents.content_status=1',
                         'ORDER BY created DESC LIMIT 50'
                     );
                     $title_rss = 'Últimas Opiniones';
@@ -145,8 +145,7 @@ class RssController extends Controller
                     // get articles for the author in opinion
                     $articles_home = $cm->getOpinionArticlesWithAuthorInfo(
                         'opinions.fk_author='.((int) $author)
-                        .' AND  contents.available=1  '
-                        .'AND contents.content_status=1',
+                        .' AND  contents.content_status=1',
                         'ORDER BY created DESC  LIMIT 50'
                     );
 
@@ -176,7 +175,7 @@ class RssController extends Controller
             } elseif ($categoryName == 'last') {
                 $articles_home = $cm->find(
                     'Article',
-                    'available=1 AND content_status=1 AND fk_content_type=1',
+                    'content_status=1 AND fk_content_type=1',
                     'ORDER BY created DESC, changed DESC LIMIT 50'
                 );
 
@@ -189,8 +188,7 @@ class RssController extends Controller
                 $articles_home = $cm->find_by_category_name(
                     'Article',
                     $categoryName,
-                    'contents.content_status=1 AND '
-                    .'contents.available=1 AND contents.fk_content_type=1',
+                    'contents.content_status=1 AND contents.fk_content_type=1',
                     'ORDER BY created DESC LIMIT 50'
                 );
             }
@@ -266,7 +264,7 @@ class RssController extends Controller
                 $user->getMeta();
 
                 $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7) "
-                    ."AND available=1 AND in_litter=0";
+                    ."AND content_status=1 AND in_litter=0";
 
                 $er = $this->get('entity_repository');
                 $contents = $er->findBy($searchCriteria, 'starttime DESC', $itemsPerPage, $page);

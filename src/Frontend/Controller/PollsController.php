@@ -98,24 +98,24 @@ class PollsController extends Controller
                 $polls = $this->cm->find_by_category(
                     'Poll',
                     $this->category,
-                    'available=1',
+                    'content_status=1',
                     'ORDER BY starttime DESC LIMIT 2'
                 );
 
                 $otherPolls = $this->cm->find(
                     'Poll',
-                    'available=1',
+                    'content_status=1',
                     'ORDER BY starttime DESC LIMIT 5'
                 );
             } else {
                 $polls = $this->cm->find(
                     'Poll',
-                    'available=1 and in_home=1',
+                    'content_status=1 and in_home=1',
                     'ORDER BY starttime DESC LIMIT 2'
                 );
                 $otherPolls = $this->cm->find(
                     'Poll',
-                    'available=1',
+                    'content_status=1',
                     'ORDER BY starttime DESC LIMIT 2,7'
                 );
             }
@@ -178,7 +178,7 @@ class PollsController extends Controller
         if ($this->view->caching == 0
             || !$this->view->isCached('poll/poll.tpl', $cacheID)
         ) {
-            if ($poll->available == 1
+            if ($poll->content_status == 1
                 && $poll->in_litter == 0
             ) {
                 $items         = $poll->items;
@@ -186,7 +186,7 @@ class PollsController extends Controller
 
                 $otherPolls = $this->cm->find(
                     'Poll',
-                    'available=1 ',
+                    'content_status=1 ',
                     'ORDER BY created DESC LIMIT 5'
                 );
 

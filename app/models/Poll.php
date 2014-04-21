@@ -166,7 +166,7 @@ class Poll extends Content
             return false;
         }
 
-        return true;
+        return $this;
     }
 
     /**
@@ -380,7 +380,7 @@ class Poll extends Content
         try {
             $html = $tpl->fetch('frontpage/contents/_poll.tpl');
         } catch (\Exception $e) {
-            $html = 'Poll not available';
+            $html = _('Poll not available');
         }
 
         return $html;

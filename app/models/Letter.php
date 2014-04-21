@@ -108,7 +108,6 @@ class Letter extends Content
      **/
     public function create($data)
     {
-        $data['content_status'] = $data['available'];
         $data['position']   =  1;
         $data['category'] = 0;
 
@@ -159,6 +158,9 @@ class Letter extends Content
         $this->ip = $this->params['ip'];
 
         $this->loadAllContentProperties();
+
+        $this->image = $this->getProperty('image');
+
         if (!empty($this->image)) {
             $this->photo = $this->photo;
         }
@@ -176,8 +178,7 @@ class Letter extends Content
      **/
     public function update($data)
     {
-        $data['content_status'] = $data['available'];
-        $data['position']   =  1;
+        $data['position'] =  1;
         $data['category'] = 0;
 
         parent::update($data);
@@ -261,7 +262,7 @@ class Letter extends Content
         try {
             $html = $tpl->fetch('frontpage/contents/_content.tpl');
         } catch (\Exception $e) {
-            $html = 'Letter not available';
+            $html = _('Letter not available');
         }
 
         return $html;

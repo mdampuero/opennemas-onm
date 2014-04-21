@@ -48,7 +48,10 @@ class AlbumsController extends Controller
 
         if (!empty($this->categoryName) && $this->categoryName != 'home') {
             $categoryManager = $this->get('category_repository');
-            $category = $categoryManager->findBy(array('name' => $this->categoryName));
+            $category = $categoryManager->findBy(
+                array('name' => array(array('value' => $this->categoryName))),
+                'name ASC'
+            );
 
             if (empty($category)) {
                 throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
@@ -112,7 +115,7 @@ class AlbumsController extends Controller
                 list($countAlbums, $albums)= $this->cm->getCountAndSlice(
                     'Album',
                     (int) $this->category,
-                    'in_litter != 1 AND contents.available=1',
+                    'in_litter != 1 AND contents.content_status=1',
                     'ORDER BY favorite DESC, created DESC',
                     $this->page,
                     $itemsPerPage
@@ -123,7 +126,7 @@ class AlbumsController extends Controller
                 list($countAlbums, $albums)= $this->cm->getCountAndSlice(
                     'Album',
                     (int) $this->category,
-                    'in_litter != 1 AND contents.available=1 '
+                    'in_litter != 1 AND contents.content_status=1 '
                     .' AND created >=DATE_SUB(CURDATE(), INTERVAL ' . $days . ' DAY)',
                     'ORDER BY views DESC, created DESC',
                     $this->page,
@@ -133,7 +136,7 @@ class AlbumsController extends Controller
                 list($countAlbums, $albums)= $this->cm->getCountAndSlice(
                     'Album',
                     (int) $this->category,
-                    'in_litter != 1 AND contents.available=1',
+                    'in_litter != 1 AND contents.content_status=1',
                     'ORDER BY created DESC',
                     $this->page,
                     $itemsPerPage
@@ -208,7 +211,7 @@ class AlbumsController extends Controller
         ) {
             // Get the album from the id and increment the numviews for it
             $album = new \Album($albumID);
-            if (($album->available == 1) && ($album->in_litter == 0)) {
+            if (($album->content_status == 1) && ($album->in_litter == 0)) {
                 $this->view->assign('album', $album);
                 $album->with_comment = 1;
 
@@ -219,7 +222,7 @@ class AlbumsController extends Controller
 
                 $otherAlbums = $this->cm->find(
                     'Album',
-                    'available=1 AND pk_content !='.$albumID
+                    'content_status=1 AND pk_content !='.$albumID
                     .' AND created >=DATE_SUB(CURDATE(), INTERVAL '
                     . $days . ' DAY) ',
                     ' ORDER BY views DESC,  created DESC LIMIT '.$total
@@ -332,7 +335,7 @@ class AlbumsController extends Controller
         list($countAlbums, $othersAlbums)= $this->cm->getCountAndSlice(
             'Album',
             (int) $this->category,
-            'in_litter != 1 AND contents.available=1',
+            'in_litter != 1 AND contents.content_status=1',
             'ORDER BY created DESC',
             $this->page,
             $totalAlbumMoreFrontpage

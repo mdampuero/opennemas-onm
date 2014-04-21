@@ -63,9 +63,9 @@
                         <div class="control-group">
                             <label for="available" class="control-label">{t}Published{/t}</label>
                             <div class="controls">
-                                <select name="available" id="available">
-                                    <option value="1" {if isset($widget) && $widget->available == 1}selected="selected"{/if}>{t}Yes{/t}</option>
-                                    <option value="0" {if isset($widget) && $widget->available == 0}selected="selected"{/if}>{t}No{/t}</option>
+                                <select name="content_status" id="content_status">
+                                    <option value="1" {if isset($widget) && $widget->content_status == 1}selected="selected"{/if}>{t}Yes{/t}</option>
+                                    <option value="0" {if isset($widget) && $widget->content_status == 0}selected="selected"{/if}>{t}No{/t}</option>
                                 </select>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                     <label for="description" class="control-label clearfix">
                         <div class="pull-left">{t}Content{/t}</div>
                         <div class="pull-right">
-                            {acl isAllowed='IMAGE_ADMIN'}
+                            {acl isAllowed='PHOTO_ADMIN'}
                             <a href="#media-uploader" data-toggle="modal" data-position="body" class="btn btn-mini insert-image" style="{if !isset($widget) || $widget->renderlet != 'html'}display:none{/if}"> + {t}Insert image{/t}</a>
                             {/acl}
                         </div>

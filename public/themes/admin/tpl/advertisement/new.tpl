@@ -126,7 +126,7 @@
                 </li>
                 <li class="separator"></li>
                 <li>
-                    <a href="{url name=admin_ads category=$category page=$page filter=$filter}" title="{t}Go back{/t}">
+                    <a href="{url name=admin_ads}" title="{t}Go back{/t}">
                         <img src="{$params.IMAGE_DIR}previous.png" title="{t}Go back{/t}" alt="{t}Go back{/t}" ><br />{t}Go back{/t}
                     </a>
                 </li>
@@ -157,11 +157,11 @@
         </div>
 
         <div class="control-group">
-            <label for="available" class="control-label">{t}Activated{/t}</label>
+            <label for="content_status" class="control-label">{t}Activated{/t}</label>
             <div class="controls">
-                <input type="checkbox" name="content_status" id="available" value="1"
-                    {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if}
-                    {acl isNotAllowed="ADVERTISEMENT_AVAILA"}disabled="disabled"{/acl} />
+                <input type="checkbox" name="content_status" id="content_status" value="1"
+                    {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if}
+                    {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
             </div>
         </div>
 

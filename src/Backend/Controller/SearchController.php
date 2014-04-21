@@ -50,51 +50,8 @@ class SearchController extends Controller
      **/
     public function defaultAction(Request $request)
     {
-        $searchString         = $request->query->filter('search_string', null, FILTER_SANITIZE_STRING);
-        $contentTypesSelected = $request->get('content_types', array('article', 'opinion'));
-        $page                 = $request->query->filter('page', 1, FILTER_VALIDATE_INT);
-
         $contentTypesAvailable = $this->getContentTypesFiltered();
-        $itemsPerPage         = s::get('items_per_page') ?: 20;
-
-        $contents             = array();
-
-        // If search string is empty skip executing some logic
-        if (!empty($searchString)) {
-            $contentTypesSelected = $this->getCheckedContentTypes($contentTypesSelected);
-
-            $contents = \ContentManager::search(
-                array(
-                    'text'                   => $searchString,
-                    'content_types_selected' => $contentTypesSelected,
-                    'page'                   => $page,
-                    'elements_per_page'      => $itemsPerPage
-                )
-            );
-
-
-            foreach ($contents as &$content) {
-                $content->title   = \Onm\StringUtils::extStrIreplace(
-                    $searchString,
-                    '<span class="highlighted">$1</span>',
-                    $content->title
-                );
-                $content->metadata = \Onm\StringUtils::extStrIreplace(
-                    $searchString,
-                    '<span class="highlighted">$1</span>',
-                    $content->metadata
-                );
-                $content->content_type_name = \ContentManager::getContentTypeNameFromId($content->fk_content_type);
-            }
-
-            $this->view->assign(
-                array(
-                    'search_string'          => $searchString,
-                    'content_types_selected' => $contentTypesSelected,
-                    'contents'               => $contents,
-                )
-            );
-        }
+        unset($contentTypesAvailable['comment']);
 
         return $this->render(
             'search_advanced/index.tpl',
@@ -251,7 +208,7 @@ class SearchController extends Controller
             if (\Onm\Module\ModuleManager::moduleExists($moduleName) &&
                 \Onm\Module\ModuleManager::isActivated($moduleName)
             ) {
-                $contentTypesFiltered [$contentType['pk_content_type']] = $contentType['title'];
+                $contentTypesFiltered[$contentType['name']] = $contentType['title'];
             }
         }
 

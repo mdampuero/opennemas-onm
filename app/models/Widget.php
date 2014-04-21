@@ -211,7 +211,9 @@ class Widget extends Content
 
         // Start transaction
         $GLOBALS['application']->conn->BeginTrans();
+
         parent::update($data);
+
         $sql = "UPDATE `widgets`
                 SET `content`=?, `renderlet`=? WHERE `pk_widget`=?";
 
@@ -396,7 +398,7 @@ class Widget extends Content
 
             }
         } catch (Exception $e) {
-            return "Widget {$this->content} not available";
+            return sprintf(_("Widget %s not available"), $this->content);
         }
 
         return $class->render($params);

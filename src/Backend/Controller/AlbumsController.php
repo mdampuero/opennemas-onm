@@ -49,12 +49,16 @@ class AlbumsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData)
             = $this->ccm->getArraysMenu($category, $contentType);
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $category,
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
-                'datos_cat'    => $this->categoryData
+                'datos_cat'    => $this->categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
     }
@@ -70,62 +74,7 @@ class AlbumsController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $itemsPerPage = s::get('items_per_page');
-
-        $page           = $this->get('request')->query->getDigits('page', 1);
-        $category       = $this->get('request')->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-
-        $cm = new \ContentManager();
-
-        if ($category == 'all') {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $category;
-        }
-
-        list($albumCount, $albums) = $cm->getCountAndSlice(
-            'album',
-            $categoryForLimit,
-            'contents.in_litter!=1',
-            'ORDER BY created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (count($albums) > 0) {
-            foreach ($albums as &$album) {
-                $album->category_name  = $this->ccm->get_name($album->category);
-                $album->category_title = $this->ccm->get_title($album->category_name);
-                $album->read($album->id);
-            }
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $albumCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_albums',
-                    array('category' => $category)
-                ).'&page=%d',
-            )
-        );
-
-        return $this->render(
-            'album/list.tpl',
-            array(
-                'pagination' => $pagination,
-                'albums'     => $albums,
-                'page'       => $page,
-            )
-        );
+        return $this->render('album/list.tpl');
     }
 
     /**
@@ -139,64 +88,10 @@ class AlbumsController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $page           = $this->get('request')->query->getDigits('page', 1);
-        $category       = $this->get('request')->query->filter('category', 'widget', FILTER_SANITIZE_STRING);
-
-        $configurations = s::get('album_settings');
-        $numFavorites = $configurations['total_widget'];
-
-        $itemsPerPage = s::get('items_per_page');
-
-        $cm = new \ContentManager();
-
-        $categoryForLimit = null;
-
-        list($albumCount, $albums) = $cm->getCountAndSlice(
-            'album',
-            $categoryForLimit,
-            'in_home =1 AND available =1 AND contents.in_litter !=1',
-            'ORDER BY position ASC, created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (count($albums) != $numFavorites) {
-            m::add(sprintf(_("You must put %d albums in the HOME widget"), $numFavorites));
-        }
-
-        if (count($albums) > 0) {
-            foreach ($albums as &$album) {
-                $album->category_name  = $this->ccm->get_name($album->category);
-                $album->category_title = $this->ccm->get_title($album->category_name);
-                $album->read($album->id);
-            }
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $albumCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_albums',
-                    array('category' => $category)
-                ).'&page=%d',
-            )
-        );
-
         return $this->render(
             'album/list.tpl',
             array(
-                'pagination' => $pagination,
-                'albums'     => $albums,
-                'category'   => $category,
-                'page'       => $page,
+                'category'   => 'widget',
             )
         );
     }
@@ -403,13 +298,13 @@ class AlbumsController extends Controller
         }
 
         $data = array(
-            'id'          => $id,
-            'available'   => $request->request->getDigits('available', 0, FILTER_SANITIZE_STRING),
-            'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'category'    => $request->request->getDigits('category'),
-            'agency'      => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
-            'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-            'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'id'             => $id,
+            'content_status' => $request->request->getDigits('content_status', 0, FILTER_SANITIZE_STRING),
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'category'       => $request->request->getDigits('category'),
+            'agency'         => $request->request->filter('agency', '', FILTER_SANITIZE_STRING),
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
             'album_frontpage_image' =>
                 $request->request->filter('album_frontpage_image', '', FILTER_SANITIZE_STRING),
             'album_photos_id'       => $request->request->get('album_photos_id'),
@@ -427,205 +322,6 @@ class AlbumsController extends Controller
 
         return $this->redirect(
             $this->generateUrl('admin_album_show', array('id' => $album->id))
-        );
-    }
-
-    /**
-     * Change availability for one video given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ALBUM_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $request  = $this->get('request');
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
-        $category = $request->query->get('category', 'all');
-
-        $album = new \Album($id);
-        if (is_null($album->id)) {
-            m::add(sprintf(_('Unable to find album with id "%d"'), $id), m::ERROR);
-        } else {
-            $album->toggleAvailable($album->id);
-            if ($status == 0) {
-                $album->set_favorite($status);
-            }
-            m::add(sprintf(_('Successfully changed availability for album with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_albums',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change suggested flag for one video given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ALBUM_FAVORITE')")
-     **/
-    public function toggleFavoriteAction(Request $request)
-    {
-        $request  = $this->get('request');
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
-        $category = $request->query->get('category', 'all');
-
-        $album = new \Album($id);
-        if (is_null($album->id)) {
-            m::add(sprintf(_('Unable to find album with id "%d"'), $id), m::ERROR);
-        } else {
-
-            $album->set_favorite($status);
-            m::add(sprintf(_('Successfully changed suggested flag for album with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_albums',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Change in_home flag for one album given its id
-     * Used for putting this content widgets in home
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ALBUM_HOME')")
-     **/
-    public function toggleInHomeAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 0);
-        $category = $request->query->get('category', 'all');
-
-        $album = new \Album($id);
-        if (is_null($album->id)) {
-            m::add(sprintf(_('Unable to find album with id "%d"'), $id), m::ERROR);
-        } else {
-            $album->set_inhome($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed suggested flag for album with id "%d"'), $id), m::SUCCESS);
-        }
-
-        if ($category == 'widget') {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_albums_widget'
-                )
-            );
-        }
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_albums',
-                array(
-                    'category' => $category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-    /**
-     * Deletes multiple videos at once given its ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ALBUM_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $category      = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page          = $request->query->getDigits('page', 1);
-        $selectedItems = $request->query->get('selected_fld');
-
-        if (is_array($selectedItems)
-            && count($selectedItems) > 0
-        ) {
-            foreach ($selectedItems as $element) {
-                $album = new \Album($element);
-
-                $relations = array();
-                $relations = \RelatedContent::getContentRelations($element);
-
-                $album->delete($element, $_SESSION['userid']);
-
-                m::add(sprintf(_('Album "%s" deleted successfully.'), $album->title), m::SUCCESS);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_albums',
-                array(
-                    'categoy' => $category,
-                    'page'    => $page,
-                )
-            )
-        );
-    }
-
-    /**
-     * Batch set the published flag for contents
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ALBUM_AVAILABLE')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('status', 0);
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            foreach ($selected as $id) {
-                $album = new \Album($id);
-                $album->set_available($status, $_SESSION['userid']);
-                if ($status == 0) {
-                    $album->set_favorite($status, $_SESSION['userid']);
-                }
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_albums',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                )
-            )
         );
     }
 
@@ -699,7 +395,7 @@ class AlbumsController extends Controller
         list($countAlbums, $albums) = $cm->getCountAndSlice(
             'Album',
             null,
-            'contents.available=1 '.$sqlExcludedOpinions,
+            'contents.content_status=1 '.$sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             8

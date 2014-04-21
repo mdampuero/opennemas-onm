@@ -131,8 +131,10 @@ class InstanceManager
      **/
     public function fetchInstance($serverName)
     {
-        $instanceCacheKey = 'instances_'.$serverName;
-        $instancesMatched = $this->cache->fetch($instanceCacheKey);
+        $previousNamespace = $this->cache->getNamespace();
+
+        $this->cache->setNamespace('instance');
+        $instancesMatched = $this->cache->fetch($serverName);
 
         if (!is_array($instancesMatched)) {
             //TODO: improve search for allowing subdomains with wildcards
@@ -145,7 +147,7 @@ class InstanceManager
             }
 
             $instancesMatched = $rs->GetArray();
-            $this->cache->save($instanceCacheKey, $instancesMatched);
+            $this->cache->save($serverName, $instancesMatched);
         }
 
         if (!(is_array($instancesMatched) && count($instancesMatched) > 0)) {
@@ -169,6 +171,8 @@ class InstanceManager
         }
 
         $instance = $this->loadInstanceProperties($matchedInstance);
+
+        $this->cache->setNamespace($previousNamespace);
 
         return $instance;
     }
@@ -370,12 +374,16 @@ class InstanceManager
      */
     public function changeActivated($id, $flag)
     {
+        $instance = $this->read($id);
+
         $sql = "UPDATE instances SET activated = ? WHERE id = ?";
         $rs = $this->connection->Execute($sql, array($flag, $id));
 
         if (!$rs) {
             return false;
         }
+
+        $this->deleteCacheForInstancedomains($instance->domains);
 
         return true;
     }
@@ -387,6 +395,8 @@ class InstanceManager
      */
     public function update($data)
     {
+        $instance = $this->fetchInstanceFromInternalName($data['internal_name']);
+
         $sql = "UPDATE instances SET name=?, internal_name=?, "
              . "domains=?, activated=?, contact_mail=?, settings=? WHERE id=?";
         $values = array(
@@ -403,6 +413,8 @@ class InstanceManager
         if (!$rs) {
             return false;
         }
+
+        $this->deleteCacheForInstancedomains($data['domains']);
 
         return true;
     }
@@ -457,6 +469,7 @@ class InstanceManager
             return $errors;
         }
 
+        $this->deleteCacheForInstancedomains($instance->domains);
 
         return true;
     }
@@ -499,6 +512,23 @@ class InstanceManager
         }
 
         return true;
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author
+     **/
+    public function deleteCacheForInstancedomains($instanceDomains)
+    {
+        $domains = explode(',', $instanceDomains);
+
+        foreach ($domains as $domain) {
+            $domain = trim($domain);
+            getService('cache')->delete($domain, 'instance');
+        }
+        // die();
     }
 
     /**

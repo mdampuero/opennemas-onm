@@ -64,33 +64,49 @@ services:
         class: Onm\DatabaseConnection
         arguments: [ %database% ]
 
+    dbal_connection:
+        class: Onm\Database\DbalWrapper
+        arguments: [ %database% ]
+
     db_conn_manager:
         class: Onm\DatabaseConnection
         arguments: [  %database% ]
 
     category_repository:
         class: Repository\CategoryManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     comment_repository:
         class: Repository\CommentManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     entity_repository:
         class: Repository\EntityManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     user_repository:
         class: Repository\UserManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     menu_repository:
         class: Repository\MenuManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
+    advertisement_repository:
+        class: Repository\AdvertisementManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
+    opinion_repository:
+        class: Repository\OpinionManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
+
+    widget_repository:
+        class: Repository\WidgetManager
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     usergroup_repository:
         class: Repository\UserGroupManager
-        arguments: [ @db_conn, @cache, %cache_prefix% ]
+        arguments: [ @dbal_connection, @cache, %cache_prefix% ]
 
     setting_repository:
         class: Repository\SettingManager

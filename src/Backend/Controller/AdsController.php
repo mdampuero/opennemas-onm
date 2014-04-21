@@ -47,12 +47,16 @@ class AdsController extends Controller
         list($this->parentCategories, $this->subcat, $this->categoryData) =
             $ccm->getArraysMenu($this->category, $contentType);
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone  = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'subcat'       => $this->subcat,
                 'allcategorys' => $this->parentCategories,
                 'datos_cat'    => $this->categoryData,
-                'category'     => $this->category
+                'category'     => $this->category,
+                'timezone'     => $timezone->getName()
             )
         );
     }
@@ -69,23 +73,15 @@ class AdsController extends Controller
     public function listAction(Request $request)
     {
         // Get ads positions
-        $positionManager = $this->container->get('instance_manager')->current_instance->theme->getAdsPositionManager();
-        $map        = $positionManager->getAllAdsPositions();
-        $adsNames   = $positionManager->getAllAdsNames();
-        $filtersUrl = $request->query->get('filter');
-        $category   = $request->query->getDigits('category', 0);
-
-        // Get page
-        $page = $request->query->getDigits('page', 1);
-        list($filter, $queryString) = $this->buildFilter(
-            $request,
-            'in_litter != 1 AND fk_content_categories LIKE \'%' . $category . '%\''
-        );
+        $positionManager = $this->container->get('instance_manager')
+            ->current_instance->theme->getAdsPositionManager();
+        $map      = $positionManager->getAllAdsPositions();
+        $adsNames = $positionManager->getAllAdsNames();
 
         // Filters
         $filterOptions = array(
             'type_advertisement' => array('-1' => _("-- All --")) + $adsNames,
-            'available' => array(
+            'content_status' => array(
                 '-1' => _("-- All --"),
                 '0'  => _("No published"),
                 '1'  => _("Published")
@@ -93,66 +89,17 @@ class AdsController extends Controller
             'type'  => array(
                 '-1' => _("-- All --"),
                 '0' => _("Multimedia"),
-                '1' => _("Javascript")
+                '1' => _("Javascript"),
+                '2' => _("OpenX"),
+                '3' => _("Google DFP")
             ),
         );
-
-        $itemsPerPage = s::get('items_per_page');
-
-        $cm = new \ContentManager();
-        $ads = $cm->find_all(
-            'Advertisement',
-            $filter,
-            'ORDER BY created DESC '
-        );
-
-        foreach ($ads as $key => &$ad) {
-            //Distinguir entre flash o no flash
-            $img = $this->get('entity_repository')->find('Photo', $ad->path);
-            if ($img->type_img == "swf") {
-                $ad->is_flash = 1;
-            } else {
-                $ad->is_flash = 0;
-            }
-            $ad->fk_content_categories = explode(',', $ad->fk_content_categories);
-
-            //Get the name of the advertisement placeholder
-            $adv_placeholder = $ad->getNameOfAdvertisementPlaceholder($ad->type_advertisement);
-            $ad->advertisement_placeholder = $adv_placeholder;
-
-            if (!in_array($category, $ad->fk_content_categories)) {
-                unset($ads[$key]);
-            }
-        }
-
-        $filteredAds = array_slice($ads, ($page-1)*$itemsPerPage, $itemsPerPage);
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => count($ads),
-                'fileName'    => $this->generateUrl('admin_ads').'?'.$queryString.'&page=%d',
-            )
-        );
-
-        $_SESSION['desde'] = 'advertisement';
 
         return $this->render(
             'advertisement/list.tpl',
             array(
-                'pagination'     => $pagination,
-                'advertisements' => $filteredAds,
                 'filter_options' => $filterOptions,
-                'map'            => $map,
-                'page'           => $page,
-                'filter'         => $filtersUrl,
+                'map'            => json_encode($map)
             )
         );
     }
@@ -381,178 +328,6 @@ class AdsController extends Controller
     }
 
     /**
-     * Description of this action
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ADVERTISEMENT_DELETE')")
-     **/
-    public function deleteAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id');
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (!empty($id)) {
-            $ad = new \Advertisement($id);
-
-            $ad->delete($id, $_SESSION['userid']);
-            m::add(_("Advertisement deleted successfully."), m::SUCCESS);
-        } else {
-            m::add(_('You must give an id for delete an advertisement.'), m::ERROR);
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_ads',
-                    array(
-                        'category' => $category,
-                        'page'     => $page
-                    )
-                )
-            );
-        } else {
-            return new Response('Ok', 200);
-        }
-    }
-
-    /**
-     * Deletes multiple ads at once given their ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ADVERTISEMENT_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->getDigits('category', 'all');
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            $changes = 0;
-            foreach ($selected as $id) {
-                $ad = new \Advertisement((int) $id);
-                if (!is_null($ad->id)) {
-                    $ad->delete($id, $_SESSION['userid']);
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find an ad with the id "%d"'), $id), m::ERROR);
-                }
-            }
-        }
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully deleted %d ads'), $changes), m::SUCCESS);
-        }
-
-        if (!$request->isXmlHttpRequest()) {
-            return $this->redirect(
-                $this->generateUrl(
-                    'admin_ads',
-                    array(
-                        'category' => $category,
-                        'page' => $page,
-                    )
-                )
-            );
-        } else {
-            return new Response('Ok', 200);
-        }
-
-    }
-
-    /**
-     * Sets the available status for multiple ads at once
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ADVERTISEMENT_AVAILA')")
-     **/
-    public function batchPublishAction(Request $request)
-    {
-        $status   = $request->query->getDigits('status', 0);
-        $selected = $request->query->get('selected_fld', null);
-        $category = $request->query->getDigits('category', 0);
-        $page     = $request->query->getDigits('page', 1);
-
-        if (is_array($selected)
-            && count($selected) > 0
-        ) {
-            $changes = 0;
-            foreach ($selected as $id) {
-                $ad = new \Advertisement((int) $id);
-                if (!is_null($ad->id)) {
-                    $ad->set_available($status, $_SESSION['userid']);
-                    $changes++;
-                } else {
-                    m::add(sprintf(_('Unable to find an advertisement with the id "%d"'), $id), m::ERROR);
-                }
-            }
-        }
-
-        if ($changes > 0) {
-            m::add(sprintf(_('Successfully changed the available status of %d ads'), $changes), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_ads',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                )
-            )
-        );
-    }
-
-    /**
-     * Change available status for one ad given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('ADVERTISEMENT_AVAILA')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $filter   = $request->query->filter('filter', '', FILTER_SANITIZE_STRING);
-        $category = $request->query->filter('category', 'all', FILTER_SANITIZE_STRING);
-        $page     = $request->query->getDigits('page', 1);
-
-        $ad = new \Advertisement($id);
-
-        if (is_null($ad->id)) {
-            m::add(sprintf(_('Unable to find an ad with the id "%d"'), $id), m::ERROR);
-        } else {
-            $ad->set_available($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed availability for the ad "%s"'), $ad->title), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_ads',
-                array(
-                    'category' => $category,
-                    'page'     => $page,
-                    'filter'   => $filter,
-                )
-            )
-        );
-    }
-
-    /**
      * Lists the available advertisements for the frontpage manager
      *
      * @param Request $request the request object
@@ -614,63 +389,6 @@ class AdsController extends Controller
                 'ads'        => $ads,
                 'pagination' => $pagination,
             )
-        );
-    }
-
-    /**
-     * Builds the sql
-     *
-     * @param Request $request the request object
-     * @param string $filter the sql filter to build the final filter
-     *
-     * @return Response the response object
-     **/
-    private function buildFilter($request, $filter)
-    {
-        $filters = array();
-        $url     = array();
-
-        $filters []= $filter;
-
-        $definedFilters = $request->query->get('filter');
-
-        $url []= 'category='.$request->query->getDigits('category', 0);
-
-        if (isset($definedFilters['type_advertisement'])
-           && ($definedFilters['type_advertisement'] >= 0)
-        ) {
-            $filters[] = '`type_advertisement`=' . intval($definedFilters['type_advertisement']);
-
-            $url[] = 'filter[type_advertisement]=' . intval($definedFilters['type_advertisement']);
-        }
-
-        if (isset($definedFilters['available'])
-           && ($definedFilters['available'] >= 0)
-        ) {
-            if ($definedFilters['available']==1) {
-                $filters[] = '`available`=1';
-            } else {
-                $filters[] = '(`available`<>1 OR `available` IS NULL)';
-            }
-
-            $url[] = 'filter[available]=' . $definedFilters['available'];
-        }
-
-        if (isset($definedFilters['type'])
-           && ($definedFilters['type'] >= 0)) {
-            // with_script == 1 => is script banner, otherwise is a media banner
-            if ($definedFilters['type']==1) {
-                $filters[] = '`with_script`=1';
-            } else {
-                $filters[] = '(`with_script`<>1 OR `with_script` IS NULL)';
-            }
-
-            $url[] = 'filter[type]=' . $definedFilters['type'];
-        }
-
-        return array(
-            implode(' AND ', $filters),
-            implode('&', $url)
         );
     }
 

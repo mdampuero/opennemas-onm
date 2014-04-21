@@ -1,57 +1,43 @@
 {extends file="base/admin.tpl"}
 
-{block name="header-css" append}
-    <style type="text/css">
-    .already-imported,
-    .already-imported:hover{
-        background:url({$params.IMAGE_DIR}/backgrounds/stripe-rows.png) top right repeat;
-        background-color:none;
-    }
-    .tooltip-inner {
-        max-width:500px !important;
-        text-align: justify;
-    }
-    </style>
+{block name="header-js" append}
+    {include file="common/angular_includes.tpl"}
+
+    <script type="text/javascript">
+        jQuery(document).ready(function ($){
+            jQuery('.sync_with_server').on('click',function(e, ui) {
+                $('#modal-sync').modal('show');
+            });
+            $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
+        });
+    </script>
 {/block}
 
-{block name="header-js" prepend}
-<script type="text/javascript">
-    jQuery(document).ready(function ($){
-        jQuery('.sync_with_server').on('click',function(e, ui) {
-            $('#modal-sync').modal('show');
-        });
-        $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
-
-        $('.minput').on('click', function() {
-            checkbox = $(this).find('input[type="checkbox"]');
-            var checked_elements = $('.table tbody input[type="checkbox"]:checked').length;
-            if (checked_elements > 0) {
-                $('.old-button .batch-actions').fadeIn('fast');
-            } else {
-                $('.old-button .batch-actions').fadeOut('fast');
-            }
-        });
-    });
-</script>
-{/block}
 {block name="content"}
+<div  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
         <ul class="old-button">
-            <li class="batch-actions">
-                <a class="importChecked" data-controls-modal="modal-news-agency-batch-import" href="#" title="{t}Batch import{/t}">
-                    <img src="{$params.IMAGE_DIR}select.png" title="{t}Batch import{/t}" alt="{t}Batch import{/t}"/><br/>{t}Batch import{/t}
-                </a>
+            <li ng-if="shvs.selected.length > 0">
+                    <a href="#">
+                        <img src="{$params.IMAGE_DIR}/select.png" title="" alt="" />
+                        <br/>{t}Batch actions{/t}
+                    </a>
+                    <ul class="dropdown-menu" style="margin-top: 1px;">
+                        <li>
+                            <a href="{url name=admin_news_agency_sync}" title="{t}Batch import{/t}" ng-click="open('modal-import-selected', 'admin_news_agency_batch_import')">
+                                {t}Batch import{/t}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            <li ng-if="shvs.selected.length > 0">
+
             </li>
 			<li>
 				<a href="{url name=admin_news_agency_sync}" class="sync_with_server" title="{t}Sync with server{/t}">
 				    <img src="{$params.IMAGE_DIR}sync.png" title="{t}Sync list  with server{/t}" alt="{t}Sync with server{/t}" ><br />{t}Sync with server{/t}
-				</a>
-			</li>
-			<li>
-				<a href="{url name=admin_news_agency}" class="admin_add" title="{t}Reload list{/t}">
-				    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
 				</a>
 			</li>
             <li class="separator"></li>
@@ -71,104 +57,44 @@
     <form action="{url name=admin_news_agency}" method="GET" id="formulario">
 
     	{render_messages}
-
         <div class="table-info clearfix">
-            <div class="left"><strong>{t 1=$pagination->_totalItems}%1 articles{/t}</strong></div>
-            <div class="right form-inline">
-                <input type="search" id="username" name="filter_title" value="{$smarty.request.filter_title}" class="input-medium" placeholder="{t}Filter by title or content{/t}"/>
-
-                <div class="input-append">
-                    <label for="usergroup">
-                        {t}and in{/t}
-                        <select id="source" name="filter_source">
-                            <option value="*">{t}All sources{/t}</option>
-                            {html_options options=$source_names selected=$selectedSource|default:""}
-                        </select>
-                    </label>
-
-                    <button type="submit" class="btn"><i class="icon-search"></i></button>
-                </div>
+            <div class="pull-left form-inline">
+                <strong>{t}FILTER:{/t}</strong>
+                &nbsp;&nbsp;
+                <input type="search" autofocus id="username" name="title" class="input-large" placeholder="{t}Filter by title or content{/t}" ng-model="shvs.search.title"/>
+                <label for="usergroup">
+                    {t}and in{/t}
+                    <select id="source" name="source" class="select2" ng-model="shvs.search.source" data-label="{t}Source{/t}">
+                        <option value="*">{t}-- All --{/t}</option>
+                        {html_options options=$source_names}
+                    </select>
+                </label>
             </div>
         </div>
 
-        <table class="table table-hover table-condensed">
+
+        <div ng-include="'contents'"></div>
+
+        <script type="text/ng-template" id="contents">
+        <div class="spinner-wrapper" ng-if="loading">
+            <div class="spinner"></div>
+            <div class="spinner-text">{t}Loading{/t}...</div>
+        </div>
+        <table class="table table-hover table-condensed" ng-if="!loading">
             <thead>
                 <tr>
-                {if count($elements) >0}
-                    <th style="width:15px;"><input type="checkbox" class="toggleallcheckbox"></th>
+                    <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th class="right" style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
                     <th>{t}Attachments{/t}</th>
                     <th class="center">{t}Origin{/t}</th>
                     <th class="center" style='width:10px !important;'>{t}Date{/t}</th>
-                    <th class="right" style="width:20px;">{t}Actions{/t}</th>
+                    <th class="right" style="width:10px;"></th>
                 </tr>
-                {/if}
             </thead>
 
             <tbody>
-                {foreach name=c from=$elements item=element}
-                <tr class="{if is_array($already_imported) && in_array($element->urn,$already_imported)}already-imported{/if}"  style="cursor:pointer;" >
-                    <td>
-                        <input type="checkbox" name="selected[]" value="{$element->source_id},{$element->xmlFile|urlencode}" class="minput"/>
-                    </td>
-                    <td  class="right">
-                        {if $element->priority <= 1}
-                        <span class="badge badge-important">{t}Urgent{/t}</span>
-                        {elseif $element->priority == 2}
-                        <span class="badge badge-warning">{t}Important{/t}</span>
-                        {elseif $element->priority == 3}
-                        <span class="badge badge-info">{t}Normal{/t}</span>
-                        {else}
-                        <span class="badge">{t}Basic{/t}</span>
-                        {/if}
-                    </td>
-                    <td >
-                        <a href="{url name=admin_news_agency_show source_id=$element->source_id id=$element->xmlFile|urlencode}" rel="tooltip" data-original-title="{$element->body|clearslash|regex_replace:"/'/":"\'"|escape:'html'|truncate:600:"..."}">
-                            {$element->title}
-                        </a>
-                        <div class="tags">
-                            {$element->tags|implode:", "}
-                        </div>
-                    </td>
-
-                    <td>
-                        {if $element->hasPhotos()}
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}">
-                            {count($element->getPhotos())}
-                        {/if}
-                        {if $element->hasVideos()}
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With video{/t}] " title="{t}This new has attached videos{/t}">
-                        {/if}
-
-                        {if $element->hasPhotos() && false}
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/polls.png" alt="[{t}With files{/t}] " title="{t}This new has attached videos{/t}">
-                        {/if}
-
-                        {if $element->hasPhotos() && false}
-                            <img src="{$params.IMAGE_DIR}template_manager/elements/article16x16.png" alt="[{t}With documentary modules{/t}] " title="{t}This new has attached videos{/t}">
-                        {/if}
-                    </td>
-                    <td class="nowrap center">
-                        <span class="label" style="background-color:{$servers[$element->source_id]['color']};">{$servers[$element->source_id]['name']}</span>
-                    </td>
-                    <td class="nowrap center">
-                        <span title="{date_format date=$element->created_time}">{date_format date=$element->created_time}</span>
-                    </td>
-
-                    <td class="nowrap">
-                        <ul class="btn-group">
-                            <li>
-                                <a class="btn btn-small" href="{url name=admin_news_agency_pickcategory source_id=$element->source_id id=$element->xmlFile|urlencode}" title="{t}Import{/t}">
-                                    {t}Import{/t}
-                                </a>
-                            </li>
-                        </ul>
-                    </td>
-
-                </tr>
-                {foreachelse}
-                <tr>
+                <tr ng-if="shvs.contents.length == 0">
                     <td colspan="7" class="empty">
                         <h2>
                             <b>{t}There is no elements to import{/t}</b>
@@ -176,22 +102,69 @@
                         <p>{t}Try syncing from server by click over the "Sync with server" button above.{/t}</p>
                     </td>
                 </tr>
-                {/foreach}
+                <tr ng-if="shvs.contents.length > 0" ng-repeat="content in shvs.contents" ng-class="{ row_selected: isSelected(content.id), already_imported: content.already_imported }">
+                    <td>
+                        <checkbox index="[% content.id %]">
+                    </td>
+                    <td  class="right">
+                        <span ng-if="content.priority == 1" class="badge badge-important">{t}Urgent{/t}</span>
+                        <span ng-if="content.priority == 2" class="badge badge-warning">{t}Important{/t}</span>
+                        <span ng-if="content.priority == 3" class="badge badge-info">{t}Normal{/t}</span>
+                        <span ng-if="content.priority < 1 || content.priority > 3" class="badge">{t}Basic{/t}</span>
+                    </td>
+                    <td >
+                        <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
+                        <div class="tags">
+                            <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
+                        </div>
+                    </td>
+
+                    <td>
+                        <span ng-if="content.photos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.photos.length %]</span>
+                        <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
+                    </td>
+                    <td class="nowrap center">
+                        <span class="label" style="background-color:[% content.source_color %]};">[% content.source_name %]</span>
+                    </td>
+                    <td class="nowrap center">
+                        <span title="[% content.created_time.date %] [% content.created_time.timezone %]">
+                            [% (content.created_time.date + ' ' + content.created_time.timezone) | moment : null : '{$smarty.const.CURRENT_LANGUAGE_SHORT}' : '{$timezone}' %]
+                        </span>
+                    </td>
+
+                    <td class="nowrap">
+                        <ul class="btn-group">
+                            <li>
+                                <a class="btn btn-small" href="[% content.import_url %]" title="{t}Import{/t}">
+                                    {t}Import{/t}
+                                </a>
+                            </li>
+                        </ul>
+                    </td>
+
+                </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7" class="center">
-                        <div class="pagination">
-                            {$pagination->links|default:""}
+                    <td colspan="10" class="center">
+                        <div class="pull-left" ng-if="shvs.contents.length > 0">
+                            {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total|number %]
                         </div>
-                     </td>
-                 </tr>
+                        <div class="pull-right" ng-if="shvs.contents.length > 0">
+                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'admin_news_agency_ws')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                        </div>
+                        <span ng-if="shvs.contents.length == 0">&nbsp;</span>
+                    </td>
+                </tr>
             </tfoot>
-
         </table>
+        </script>
 	</form>
+    {include file="news_agency/modals/_modal_sync_dialog.tpl"}
 </div>
-{include file="news_agency/modals/_modal_sync_dialog.tpl"}
-{include file="news_agency/modals/_modal_batch_import.tpl"}
 
+<script type="text/ng-template" id="modal-import-selected">
+    {include file="news_agency/modals/_modal_batch_import.tpl"}
+</script>
+</div>
 {/block}

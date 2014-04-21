@@ -55,12 +55,16 @@ class BooksController extends Controller
             }
         }
 
+        $timezones = \DateTimeZone::listIdentifiers();
+        $timezone = new \DateTimeZone($timezones[s::get('time_zone', 'UTC')]);
+
         $this->view->assign(
             array(
                 'category'     => $this->category,
                 'subcat'       => $subcat,
                 'allcategorys' => $bookCategories,
                 'datos_cat'    => $categoryData,
+                'timezone'     => $timezone->getName()
             )
         );
         // ---------------------------------------------------------------------
@@ -86,83 +90,14 @@ class BooksController extends Controller
      **/
     public function listAction(Request $request)
     {
-        $page           = $request->query->getDigits('page', 1);
-        $status         = $request->query->getDigits('status');
-
-        $itemsPerPage   = s::get('items_per_page');
         $configurations = s::get('book_settings');
-        $numFavorites   =  1;
-
         if (isset($configurations['total_widget'])
-            && !empty($configurations['total_widget'])) {
-            $numFavorites =  $configurations['total_widget'];
+            && !empty($configurations['total_widget'])
+        ) {
+            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
         }
 
-        $cm = new \ContentManager();
-
-        if (empty($page)) {
-            $limit = "LIMIT ".($itemsPerPage+1);
-        } else {
-            $limit = "LIMIT ".($page-1) * $itemsPerPage .', '.$itemsPerPage;
-        }
-
-        if ($this->category == 'all') {
-            $categoryForLimit = null;
-        } else {
-            $categoryForLimit = $this->category;
-        }
-
-        $filter = ' contents.in_litter != 1 ';
-        if (($status != '') && ($status != null)) {
-            $filter .= ' AND contents.available = '. $status;
-        }
-
-        list($booksCount, $books) = $cm->getCountAndSlice(
-            'book',
-            $categoryForLimit,
-            $filter,
-            'ORDER BY position ASC, created DESC',
-            $page,
-            $itemsPerPage
-        );
-
-        if (!empty($books)) {
-            foreach ($books as &$book) {
-                $book->category_name  = $this->ccm->get_name($book->category);
-                $book->category_title = $this->ccm->get_title($book->category_name);
-            }
-        }
-        if (count($books) != $numFavorites) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
-        }
-
-        // Build the pager
-        $pagination = \Pager::factory(
-            array(
-                'mode'        => 'Sliding',
-                'perPage'     => $itemsPerPage,
-                'append'      => false,
-                'path'        => '',
-                'delta'       => 4,
-                'clearIfVoid' => true,
-                'urlVar'      => 'page',
-                'totalItems'  => $booksCount,
-                'fileName'    => $this->generateUrl(
-                    'admin_books',
-                    array('category' => $this->category)
-                ).'&page=%d',
-            )
-        );
-
-        return $this->render(
-            'book/list.tpl',
-            array(
-                'pagination' => $pagination,
-                'page'       => $page,
-                'status'     => $status,
-                'books'      => $books
-            )
-        );
+        return $this->render('book/list.tpl');
     }
 
     /**
@@ -176,28 +111,17 @@ class BooksController extends Controller
      **/
     public function widgetAction(Request $request)
     {
-        $configurations = s::get('books_settings');
-        $numFavorites   = $configurations['total_widget'];
-
-        $cm = new \ContentManager();
-        $books = $cm->find_all('book', 'in_home = 1 AND available =1', 'ORDER BY  position ASC ');
-
-        if (!empty($books)) {
-            foreach ($books as &$book) {
-                $book->category_name  = $this->ccm->get_name($book->category);
-                $book->category_title = $this->ccm->get_title($book->category_name);
-            }
-        }
-
-        if (count($books) != $numFavorites) {
-            m::add(sprintf(_("You must put %d books in the HOME widget"), $numFavorites));
+        $configurations = s::get('book_settings');
+        if (isset($configurations['total_widget'])
+            && !empty($configurations['total_widget'])
+        ) {
+            m::add(sprintf(_("You must put %d books in the HOME widget"), $configurations['total_widget']));
         }
 
         return $this->render(
             'book/list.tpl',
             array(
-                'books' => $books,
-                'category' => $this->category,
+                'category' => 'widget',
             )
         );
     }
@@ -231,8 +155,8 @@ class BooksController extends Controller
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'category'    => $request->request->getInt('category'),
-                'available'   => $request->request->getInt('available'),
+                'category'    => $request->request->getInt('category', 0),
+                'content_status'   => $request->request->getInt('content_status', 0),
             );
 
             $book = new \Book();
@@ -327,16 +251,16 @@ class BooksController extends Controller
         }
 
         $data = array(
-            'id'          => $id,
-            'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-            'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'file_img'    => $imageName,
-            'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-            'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'    => $request->request->getInt('category'),
-            'available'   => $request->request->getInt('available'),
+            'id'             => $id,
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+            'file_img'       => $imageName,
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+            'category'       => $request->request->getInt('category'),
+            'content_status' => $request->request->getInt('content_status'),
         );
 
         $book->update($data);
@@ -378,119 +302,6 @@ class BooksController extends Controller
                 'admin_books',
                 array(
                     'category' => $book->category
-                )
-            )
-        );
-    }
-
-    /**
-     * Deletes multiple books at once given its ids
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('BOOK_DELETE')")
-     **/
-    public function batchDeleteAction(Request $request)
-    {
-        $page = $request->query->getDigits('page', 1);
-        $selectedItems = $request->query->get('selected_fld');
-
-        if (is_array($selectedItems)
-            && count($selectedItems) > 0
-        ) {
-            foreach ($selectedItems as $element) {
-                $book = new \Book($element);
-
-                $relations = array();
-                $relations = \RelatedContent::getContentRelations($element);
-
-                $book->delete($element, $_SESSION['userid']);
-
-                m::add(sprintf(_('Book "%s" deleted successfully.'), $book->title), m::SUCCESS);
-            }
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_books',
-                array(
-                    'category' => $this->category,
-                    'page'    => $page,
-                )
-            )
-        );
-    }
-
-    /**
-     * Change availability for one book given its id
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('BOOK_AVAILABLE')")
-     **/
-    public function toggleAvailableAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 1);
-
-        $book = new \Book($id);
-        if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find book with id "%d"'), $id), m::ERROR);
-        } else {
-            $book->toggleAvailable($book->id);
-            if ($status == 0) {
-                $book->set_favorite($status);
-            }
-            m::add(sprintf(_('Successfully changed availability for book with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_books',
-                array(
-                    'category' => $this->category,
-                    'page'     => $page
-                )
-            )
-        );
-    }
-
-
-    /**
-     * Change in_home flag for one book given its id
-     * Used for putting this content widgets in home
-     *
-     * @param Request $request the request object
-     *
-     * @return Response the response object
-     *
-     * @Security("has_role('BOOK_AVAILABLE')")
-     **/
-    public function toggleInHomeAction(Request $request)
-    {
-        $id       = $request->query->getDigits('id', 0);
-        $status   = $request->query->getDigits('status', 0);
-        $page     = $request->query->getDigits('page', 1);
-
-        $book = new \Book($id);
-        if (is_null($book->id)) {
-            m::add(sprintf(_('Unable to find book with id "%d"'), $id), m::ERROR);
-        } else {
-            $book->set_inhome($status, $_SESSION['userid']);
-            m::add(sprintf(_('Successfully changed suggested flag for book with id "%d"'), $id), m::SUCCESS);
-        }
-
-        return $this->redirect(
-            $this->generateUrl(
-                'admin_books',
-                array(
-                    'category' => $this->category,
-                    'page'     => $page
                 )
             )
         );
