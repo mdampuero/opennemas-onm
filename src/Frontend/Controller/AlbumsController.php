@@ -235,6 +235,11 @@ class AlbumsController extends Controller
                     $content->category_title = $content->loadCategoryTitle($content->id);
                 }
 
+                // Fetch album author
+                $ur = getService('user_repository');
+                $album->author = $ur->find($album->fk_author);
+
+                // Load category and photos
                 $album->category_name  = $album->loadCategoryName($album->id);
                 $album->category_title = $album->loadCategoryTitle($album->id);
                 $_albumArray           = $album->_getAttachedPhotos($album->id);

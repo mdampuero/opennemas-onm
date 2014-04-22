@@ -457,8 +457,8 @@ class Article extends Content
         if (!empty($this->author)) {
             return $this->author;
         } else {
-            $author = new \User($this->fk_author);
-            $author ->photo = $author->getPhoto();
+            $ur = getService('user_repository');
+            $author = $ur->find($this->fk_author);
 
             return $author;
         }
