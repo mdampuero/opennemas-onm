@@ -26,16 +26,13 @@ use Onm\Settings as s;
  **/
 class TagsController extends Controller
 {
-
     /**
-     * Description of the action
+     * Shows a paginated list of contents for a given tag name
      *
      * @return Response the response object
      **/
     public function tagsAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
-
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $page    = $request->query->getDigits('page', 1);
 
@@ -46,7 +43,7 @@ class TagsController extends Controller
 
         $cacheId = "tag|$tagName|$page";
 
-        if (!$this->view->isCached('frontpage/tag.tpl', $cacheId)) {
+        if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
             $tagSearch = "%{$tag}%";
             $itemsPerPage = s::get('items_in_blog');
@@ -83,22 +80,22 @@ class TagsController extends Controller
                 if (in_array($tag, $arrayMetadatas)) {
                     $item = $item->get($item->id);
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = $er->find('Photo', $item->img1);
+                        $image           = $er->find('Photo', $item->img1);
                         $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
+                        $item->img1      = $image;
                     }
 
                     if ($item->fk_content_type == 7) {
-                        $image = $er->find('Photo', $item->cover_id);
+                        $image           = $er->find('Photo', $item->cover_id);
                         $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
-                        $item->summary = $item->subtitle;
-                        $item->subtitle= '';
+                        $item->img1      = $image;
+                        $item->summary   = $item->subtitle;
+                        $item->subtitle  = '';
                     }
 
                     if ($item->fk_content_type == 9) {
                         $item->obj_video = $item;
-                        $item->summary = $item->description;
+                        $item->summary   = $item->description;
                     }
 
                     if (isset($item->fk_video) && ($item->fk_video > 0)) {
@@ -136,8 +133,7 @@ class TagsController extends Controller
             );
         }
 
-        $ads = $this->getInnerAds();
-        $this->view->assign('advertisements', $ads);
+        $this->view->assign('advertisements', $this->getInnerAds());
 
         return $this->render(
             'frontpage/tags.tpl',
