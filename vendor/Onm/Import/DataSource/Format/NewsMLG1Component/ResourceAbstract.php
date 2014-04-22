@@ -100,7 +100,16 @@ abstract class ResourceAbstract
                 if (count($fileType->ContentItem) > 1) {
                     $fileType = (string) $fileType->ContentItem[1]->MimeType->attributes()->FormalName;
                 } else {
-                    $fileType = (string) $fileType->ContentItem->MimeType->attributes()->FormalName;
+                    if (count($fileType->ContentItem->MimeType) > 1) {
+                        $fileType = (string) $fileType->ContentItem->MimeType->attributes()->FormalName;
+                    } else {
+                        $fileType = (string) $fileType->ContentItem->attributes()->Href;
+
+                        $info = pathinfo($fileType);
+                        $extension = $info['extension'];
+
+                        $fileType = 'image/'.$extension;
+                    }
                 }
 
                 return $fileType;

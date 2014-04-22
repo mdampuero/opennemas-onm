@@ -205,6 +205,13 @@ class NewsAgencyController extends Controller
                     'id'        => \urlencode($element->xmlFile)
                 )
             );
+            $element->view_url = $this->generateUrl(
+                'admin_news_agency_show',
+                array(
+                    'source_id' => $element->source_id,
+                    'id'        => \urlencode($element->xmlFile)
+                )
+            );
             $element->id = $element->source_id . ',' . $element->id . '.xml';
 
             $element->already_imported = in_array($element->urn, $alreadyImported);
