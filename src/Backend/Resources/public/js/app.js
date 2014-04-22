@@ -55,6 +55,10 @@ angular.module('BackendApp',[ 'BackendApp.controllers', 'BackendApp.directives',
             Next:     'Siguiente',
             Previous: 'Anterior',
         });
+        $translateProvider.translations('gl', {
+            Next:     'Seguinte',
+            Previous: 'Anterior',
+        });
 
         $translateProvider.preferredLanguage('en');
     });
