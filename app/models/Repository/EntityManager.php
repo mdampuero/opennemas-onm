@@ -172,13 +172,13 @@ class EntityManager extends BaseManager
 
         // Executing the SQL
         $sql = "SELECT  count(pk_content) FROM `contents` WHERE $filterSQL";
-        $rs  = $this->dbConn->GetOne($sql);
-
-        if ($rs === false) {
+        try {
+            $rs  = $this->dbConn->fetchArray($sql);
+        } catch (\DBalException $e) {
             return false;
         }
 
-        return $rs;
+        return $rs[0];
     }
 
     /**
