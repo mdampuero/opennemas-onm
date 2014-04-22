@@ -40,6 +40,14 @@
         <div ng-include="'authors'"></div>
     </div>
     <script type="text/ng-template" id="authors">
+        <div class="table-info clearfix">
+            <div class="pull-left form-inline">
+                <strong>{t}FILTER:{/t}</strong>
+                &nbsp;&nbsp;
+                <input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" ng-model="shvs.search.name_like"/>
+                &nbsp;&nbsp;
+            </div>
+        </div>
         <div class="spinner-wrapper" ng-if="loading">
             <div class="spinner"></div>
             <div class="spinner-text">{t}Loading{/t}...</div>
