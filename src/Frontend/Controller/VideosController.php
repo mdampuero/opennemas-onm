@@ -214,10 +214,15 @@ class VideosController extends Controller
             || !$this->view->isCached('video/video_inner.tpl', $videoID)
         ) {
 
+            // Load Video and categories
             $video = new \Video($videoID);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
             $video->with_comment = 1;
+
+            // Fetch video author
+            $ur = getService('user_repository');
+            $video->author = $ur->find($video->fk_author);
 
             //Get other_videos for widget video most
             $otherVideos = $this->cm->find_all(
