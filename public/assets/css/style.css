@@ -2642,6 +2642,13 @@ div.tagsinput span.tag a { text-decoration:none; font-weight: bold;  }
   margin-top:5px;
 }
 
+/* =============================================================================
+   News agency importer
+   ========================================================================== */
+#modal-sync .progress {
+  width:100%;
+  max-width:100%;
+}
 
 /* =============================================================================
    Disposition images
