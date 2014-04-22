@@ -109,6 +109,13 @@ class VideosController extends Controller
                     'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
                 );
 
+                if (count($frontVideos) > 0) {
+                    foreach ($frontVideos as &$video) {
+                        $video->thumb          = $video->getThumb();
+                        $video->category_name  = $video->loadCategoryName($video->id);
+                        $video->category_title = $video->loadCategoryTitle($video->id);
+                    }
+                }
                 $this->view->assign('front_videos', $frontVideos);
 
             } else {
