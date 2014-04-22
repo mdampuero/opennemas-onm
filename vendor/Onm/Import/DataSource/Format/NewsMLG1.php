@@ -153,11 +153,15 @@ class NewsMLG1 implements FormatInterface
      **/
     public function getServiceName()
     {
-        $rawAgencyName = $this->getData()
-            ->NewsEnvelope->SentFrom->Party
-            ->xpath("//Property[@FormalName=\"Organization\"]");
+        $agency = '';
+        $element = $this->getData()->NewsEnvelope->SentFrom->Party;
 
-        return (string) $rawAgencyName[0]->attributes()->Value;
+        if (!empty($element)) {
+            $rawAgencyName = $element->xpath("//Property[@FormalName=\"Organization\"]");
+            $agency = (string) $rawAgencyName[0]->attributes()->Value;
+        }
+
+        return $agency;
     }
 
     /**
