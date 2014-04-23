@@ -4,11 +4,16 @@
     {include file="common/angular_includes.tpl"}
 
     <script type="text/javascript">
+
         jQuery(document).ready(function ($){
             jQuery('.sync_with_server').on('click',function(e, ui) {
                 $('#modal-sync').modal('show');
             });
             $('[rel="tooltip"]').tooltip({ placement: 'bottom', html: true });
+
+            $('#reload_listing').on('click', function(e, ui) {
+                location.reload();
+            })
         });
     </script>
 {/block}
@@ -43,8 +48,8 @@
             </li>
             {/acl}
             <li>
-                <a href="{url name=admin_news_agency}" class="admin_add" title="{t}Reload list{/t}">
-                    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" title="{t}Sync list  with server{/t}" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
+                <a href="{url name=admin_news_agency}" id="reload_listing" title="{t}Reload list{/t}">
+                    <img src="{$params.IMAGE_DIR}template_manager/refresh48x48.png" alt="{t}Reload list{/t}" ><br />{t}Reload list{/t}
                 </a>
             </li>
             <li class="separator"></li>
@@ -78,7 +83,6 @@
                 </label>
             </div>
         </div>
-
 
         <div ng-include="'contents'"></div>
 
