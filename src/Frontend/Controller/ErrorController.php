@@ -91,11 +91,12 @@ class ErrorController extends Controller
             default:
                 // Change this handle to a more generic error template
                 $errorMessage = _('Oups! Seems that we had an unknown problem while trying to run your request.');
-                error_log('Unknown error. ERROR_ID: '.$errorID);
 
                 if ($environment == 'development') {
                     $errorMessage = $error->getMessage();
                 }
+
+                error_log('Unknown error. ERROR_ID: '.$errorID.' - '.$error->getMessage());
 
                 $page = new \stdClass();
 
