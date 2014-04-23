@@ -86,7 +86,7 @@ class CommentsController extends ContentController
         $success = array();
         $updated = array();
 
-        $status = $request->request->get('status');
+        $status = $request->request->get('value');
         $ids    = $request->request->get('ids');
 
         if (is_array($ids) && count($ids) > 0) {
