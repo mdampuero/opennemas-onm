@@ -136,11 +136,10 @@ class ImporterIdeal
         $metadata = '';//StringUtils::get_title($data['title']);
         $data['metadata'] = str_replace('-', ',', $metadata);
 
-        $data['content_status']=0;
-        $data['available']=0;
-        $data['frontpage']=0;
-        $data['category']=20;
-        $data['fk_publisher'] ='';
+        $data['content_status'] = 0;
+        $data['frontpage']      = 0;
+        $data['category']       = 20;
+        $data['fk_publisher']   = '';
 
         if (empty($data['title_int'])) {
             $data['title_int']=$data['title'];

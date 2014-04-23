@@ -60,12 +60,12 @@
                             </tr>
                             <tr>
                                 <td valign="top"  align="right" nowrap="nowrap">
-                                    <label for="title">{t}Available{/t}:</label>
+                                    <label for="content_status">{t}Available{/t}:</label>
                                 </td>
                                 <td valign="top" nowrap="nowrap">
-                                    <select name="available" id="available" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
+                                    <select name="content_status" id="content_status" class="required" {acl isNotAllowed="KIOSKO_AVAILABLE"} disabled="disabled" {/acl}>
                                         <option value="0" {if $kiosko->available==0}selected{/if}>{t}No{/t}</option>
-                                        <option value="1" {if empty($kiosko) || $kiosko->available==1}selected{/if}>{t}Yes{/t}</option>
+                                        <option value="1" {if empty($kiosko) || $kiosko->content_status==1}selected{/if}>{t}Yes{/t}</option>
                                     </select>
                                 </td>
                             </tr>

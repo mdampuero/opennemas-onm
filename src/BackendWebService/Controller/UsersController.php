@@ -206,9 +206,19 @@ class UsersController extends ContentController
 
         unset($search['content_type_name']);
 
+        if ($search && array_key_exists('fk_user_group', $search)) {
+            foreach ($search['fk_user_group'] as $key => $value) {
+                $filter = array('operator' => 'regexp');
+                $filter['value'] = '^' . $value['value'] . ',|^'
+                    . $value['value'] . '$|,' . $value['value']
+                    . ',|,' . $value['value'] . '$';
+                $search['fk_user_group'][$key] = $filter;
+            }
+        }
+
         if (!$this->getUser()->isMaster()) {
             $search['fk_user_group'][] = array(
-                'value' => '^4$|,4,|,4$',
+                'value' => '^4,|^4$|,4,|,4$',
                 'operator' => 'not regexp'
             );
         }

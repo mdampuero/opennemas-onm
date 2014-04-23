@@ -607,7 +607,7 @@ class UserController extends Controller
                 $user->getMeta();
 
                 $searchCriteria =  "`fk_author`={$user->id}  AND fk_content_type IN (1, 4, 7, 9) "
-                    ."AND available=1 AND in_litter=0";
+                    ."AND content_status=1 AND in_litter=0";
 
                 $er = $this->get('entity_repository');
                 $contentsCount  = $er->count($searchCriteria);
@@ -719,7 +719,7 @@ class UserController extends Controller
            || (!$this->view->isCached('user/frontpage_author.tpl', $cacheID))
         ) {
             $sql = "SELECT count(pk_content) as total_contents, users.id FROM contents, users "
-                ." WHERE users.activated = 1 AND users.fk_user_group  LIKE '%3%' "
+                ." WHERE users.fk_user_group  LIKE '%3%' "
                 ." AND contents.fk_author = users.id  AND fk_content_type IN (1, 4, 7, 9) "
                 ." AND available = 1 AND in_litter!= 1 GROUP BY users.id ORDER BY total_contents DESC";
 

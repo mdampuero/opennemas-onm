@@ -14,7 +14,7 @@
 {/block}
 
 {block name="content"}
-<div  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws')">
+<div  ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('', { source: '*', title_like: '' }, 'created', 'desc', 'admin_news_agency_ws', '{{$smarty.const.CURRENT_LANGUAGE}}')">
 <div class="top-action-bar clearfix">
     <div class="wrapper-content">
         <div class="title"><h2>{t}News Agency{/t}</h2></div>
@@ -86,7 +86,6 @@
                     <th style="width:15px;"><checkbox select-all="true"></checkbox></th>
                     <th class="right" style='width:10px !important;'>{t}Priority{/t}</th>
                     <th>{t}Title{/t}</th>
-                    <th>{t}Attachments{/t}</th>
                     <th class="center">{t}Origin{/t}</th>
                     <th class="center" style='width:10px !important;'>{t}Date{/t}</th>
                     <th class="right" style="width:10px;"></th>
@@ -114,15 +113,18 @@
                     </td>
                     <td >
                         <span tooltip="[% content.body | striptags | limitTo: 250 %]...">[% content.title %]</span>
-                        <div class="tags">
-                            <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
-                        </div>
+                        <small>
+                            <div class="tags">
+                                <span ng-repeat="tag in content.tags">[% tag %][% $last ? '' : ', ' %]</span>
+                            </div>
+                            <span ng-if="content.photos.length > 0 || content.videos.length > 0">
+                                {t}Attachments{/t}:
+                                <span ng-if="content.photos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.photos.length %]</span>
+                                <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
+                            </span>
+                        </small>
                     </td>
 
-                    <td>
-                        <span ng-if="content.photos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/gallery16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.photos.length %]</span>
-                        <span ng-if="content.videos.length > 0"><img src="{$params.IMAGE_DIR}template_manager/elements/video16x16.png" alt="[{t}With image{/t}] " title="{t}This new has attached images{/t}"> [% content.videos.length %]</span>
-                    </td>
                     <td class="nowrap center">
                         <span class="label" style="background-color:[% content.source_color %]};">[% content.source_name %]</span>
                     </td>
@@ -133,13 +135,14 @@
                     </td>
 
                     <td class="nowrap">
-                        <ul class="btn-group">
-                            <li>
-                                <a class="btn btn-small" href="[% content.import_url %]" title="{t}Import{/t}">
-                                    {t}Import{/t}
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="btn-group">
+                            <a class="btn btn-small" href="[% content.view_url %]" title="{t}View{/t}">
+                                <i class="icon icon-eye-open"></i>
+                            </a>
+                            <a class="btn btn-small" href="[% content.import_url %]" title="{t}Import{/t}">
+                                {t}Import{/t}
+                            </a>
+                        </div>
                     </td>
 
                 </tr>

@@ -381,7 +381,7 @@ class ImagesController extends Controller
                 'date'        => filter_var($_POST['date'][$id], FILTER_SANITIZE_STRING),
                 'address'     => filter_var($_POST['address'][$id], FILTER_SANITIZE_STRING),
                 'category'    => filter_var($_POST['category'][$id], FILTER_SANITIZE_STRING),
-                'available'   => 1
+                'content_status'   => 1
             );
 
             $photo = new \Photo($id);

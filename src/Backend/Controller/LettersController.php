@@ -68,15 +68,15 @@ class LettersController extends Controller
             $letter = new \Letter();
 
             $data = array(
-                'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-                'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-                'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
-                'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-                'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-                'params'    => $request->request->get('params'),
-                'image'     => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-                'url'       => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-                'body'      => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+                'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+                'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+                'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+                'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+                'params'         => $request->request->get('params'),
+                'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+                'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+                'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
             );
 
             if ($letter->create($data)) {
@@ -152,16 +152,16 @@ class LettersController extends Controller
         }
 
         $data = array(
-            'id'        => $id,
-            'title'     => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'metadata'     => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'available' => $request->request->filter('available', '', FILTER_SANITIZE_STRING),
-            'author'    => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-            'email'     => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
-            'params'    => $request->request->get('params'),
-            'image'     => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
-            'url'       => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
-            'body'      => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
+            'id'             => $id,
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'content_status' => $request->request->filter('content_status', '', FILTER_SANITIZE_STRING),
+            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'email'          => $request->request->filter('email', '', FILTER_SANITIZE_STRING),
+            'params'         => $request->request->get('params'),
+            'image'          => $request->request->filter('img1', '', FILTER_SANITIZE_STRING),
+            'url'            => $request->request->filter('url', '', FILTER_SANITIZE_STRING),
+            'body'           => $request->request->filter('body', '', FILTER_SANITIZE_STRING),
         );
 
         if ($letter->update($data)) {
@@ -213,7 +213,7 @@ class LettersController extends Controller
         list($countLetters, $letters) = $cm->getCountAndSlice(
             'Letter',
             null,
-            'contents.available=1 AND in_litter != 1'. $sqlExcludedLetters,
+            'contents.content_status=1 AND in_litter != 1'. $sqlExcludedLetters,
             'ORDER BY created DESC ',
             $page,
             $itemsPerPage

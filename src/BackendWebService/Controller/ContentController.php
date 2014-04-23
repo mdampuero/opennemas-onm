@@ -553,7 +553,7 @@ class ContentController extends Controller
         if (!is_null($content->id)) {
             $content->set_available($status, $this->getUser()->id);
 
-            $status = $content->available;
+            $status = $content->content_status;
             $success[] = array(
                 'id'      => $id,
                 'message' => _('Item updated successfully'),

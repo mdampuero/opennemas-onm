@@ -63,9 +63,9 @@
                         <div class="control-group">
                             <label for="available" class="control-label">{t}Published{/t}</label>
                             <div class="controls">
-                                <select name="available" id="available">
-                                    <option value="1" {if isset($widget) && $widget->available == 1}selected="selected"{/if}>{t}Yes{/t}</option>
-                                    <option value="0" {if isset($widget) && $widget->available == 0}selected="selected"{/if}>{t}No{/t}</option>
+                                <select name="content_status" id="content_status">
+                                    <option value="1" {if isset($widget) && $widget->content_status == 1}selected="selected"{/if}>{t}Yes{/t}</option>
+                                    <option value="0" {if isset($widget) && $widget->content_status == 0}selected="selected"{/if}>{t}No{/t}</option>
                                 </select>
                             </div>
                         </div>

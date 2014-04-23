@@ -1,6 +1,7 @@
 
-angular.module('BackendApp',['BackendApp.controllers', 'BackendApp.directives',
-        'BackendApp.filters', 'BackendApp.services', 'ui.bootstrap', 'ui.sortable'])
+angular.module('BackendApp',[ 'BackendApp.controllers', 'BackendApp.directives',
+        'BackendApp.filters', 'BackendApp.services', 'ui.bootstrap', 'ui.sortable',
+        'pascalprecht.translate' ])
     .config(function ($interpolateProvider) {
         $interpolateProvider.startSymbol('[%').endSymbol('%]');
     }).config(function ($httpProvider) {
@@ -45,4 +46,19 @@ angular.module('BackendApp',['BackendApp.controllers', 'BackendApp.directives',
         $httpProvider.defaults.transformRequest = [function(data) {
             return angular.isObject(data) && String(data) !== '[object File]' ? param(data) : data;
         }];
+    }).config(function ($translateProvider, paginationConfig) {
+        $translateProvider.translations('en', {
+            Next:     'Next',
+            Previous: 'Previous',
+        });
+        $translateProvider.translations('es', {
+            Next:     'Siguiente',
+            Previous: 'Anterior',
+        });
+        $translateProvider.translations('gl', {
+            Next:     'Seguinte',
+            Previous: 'Anterior',
+        });
+
+        $translateProvider.preferredLanguage('en');
     });

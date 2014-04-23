@@ -163,6 +163,10 @@ class Article extends Content
                     return StringUtils::get_title($this->title);
                 }
                 break;
+            case 'author':
+                return $this->getAuthor();
+
+                break;
             case 'content_type_name':
                 return 'Article';
 
@@ -190,7 +194,6 @@ class Article extends Content
         }
 
         $data['subtitle']= $data['subtitle'];
-        $data['available'] = $data['content_status'];
         $data['img1_footer']
             = (!isset($data['img1_footer']) || empty($data['img1_footer']))
                 ? ''
@@ -293,10 +296,6 @@ class Article extends Content
      **/
     public function update($data)
     {
-        if (isset($data['content_status']) && !isset($data['available'])) {
-            $data['available'] = $data['content_status'];
-        }
-
         // Update an article
         if (!$data['description']) {
             $data['description'] = StringUtils::get_num_words(
@@ -420,7 +419,7 @@ class Article extends Content
         try {
             $html = $tpl->fetch($params['tpl'], $params);
         } catch (\Exception $e) {
-            $html = 'Article not available';
+            $html = _('Article not available');
         }
 
         return $html;
@@ -444,6 +443,24 @@ class Article extends Content
 
                 $rel->{$method}($id, $content->position, $content->id);
             }
+        }
+    }
+
+
+    /**
+     * Returns the author object of this article
+     *
+     * @return array the author data
+     **/
+    public function getAuthor()
+    {
+        if (!empty($this->author)) {
+            return $this->author;
+        } else {
+            $ur = getService('user_repository');
+            $author = $ur->find($this->fk_author);
+
+            return $author;
         }
     }
 }

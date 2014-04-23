@@ -86,7 +86,7 @@ class CommentsController extends ContentController
         $success = array();
         $updated = array();
 
-        $status = $request->request->get('status');
+        $status = $request->request->get('value');
         $ids    = $request->request->get('ids');
 
         if (is_array($ids) && count($ids) > 0) {
@@ -274,7 +274,9 @@ class CommentsController extends ContentController
 
         $ids = array();
         foreach ($comments as $comment) {
-            $ids[] = array($comment->content_type_referenced, $comment->content_id);
+            if ($comment->content_type_referenced && $comment->content_id) {
+                $ids[] = array($comment->content_type_referenced, $comment->content_id);
+            }
         }
 
         $contents = $this->get('entity_repository')->findMulti($ids);

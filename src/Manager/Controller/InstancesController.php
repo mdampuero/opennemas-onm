@@ -387,13 +387,6 @@ class InstancesController extends Controller
             m::add('Instance saved successfully.', m::SUCCESS);
         }
 
-        $domains = $request->request->filter('domains', '', FILTER_SANITIZE_STRING);
-        $domains = explode(',', $domains);
-        foreach ($domains as $domain) {
-            $domain = trim($domain);
-            $this->get('cache')->delete('instance_'.$domain);
-        }
-
         return $this->redirect(
             $this->generateUrl('manager_instance_show', array('id' => $id))
         );

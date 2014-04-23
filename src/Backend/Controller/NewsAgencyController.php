@@ -205,6 +205,13 @@ class NewsAgencyController extends Controller
                     'id'        => \urlencode($element->xmlFile)
                 )
             );
+            $element->view_url = $this->generateUrl(
+                'admin_news_agency_show',
+                array(
+                    'source_id' => $element->source_id,
+                    'id'        => \urlencode($element->xmlFile)
+                )
+            );
             $element->id = $element->source_id . ',' . $element->id . '.xml';
 
             $element->already_imported = in_array($element->urn, $alreadyImported);
@@ -1018,8 +1025,7 @@ class NewsAgencyController extends Controller
                         'file_type'      => $video->file_type,
                         'file_path'      => $filePath,
                         'category'       => $category,
-                        'available'      => 1,
-                        'content_status' => 0,
+                        'content_status' => 1,
                         'title'          => $video->title,
                         'metadata'       => \Onm\StringUtils::get_tags($video->title),
                         'description'    => '',
@@ -1042,7 +1048,6 @@ class NewsAgencyController extends Controller
             'title'          => $element->title,
             'category'       => $category,
             'with_comment'   => 1,
-            'available'      => 0,
             'content_status' => 0,
             'frontpage'      => 0,
             'in_home'        => 0,

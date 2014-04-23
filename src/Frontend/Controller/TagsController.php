@@ -26,38 +26,45 @@ use Onm\Settings as s;
  **/
 class TagsController extends Controller
 {
-
     /**
-     * Description of the action
+     * Shows a paginated list of contents for a given tag name
      *
      * @return Response the response object
      **/
     public function tagsAction(Request $request)
     {
-        $this->view = new \Template(TEMPLATE_USER);
-        // Load config
-        $this->view->setConfig('frontpages');
-
         $tagName = strip_tags($request->query->filter('tag_name', '', FILTER_SANITIZE_STRING));
         $page    = $request->query->getDigits('page', 1);
 
         $tagName = \StringUtils::normalize($tagName);
 
+        // Load config
+        $this->view->setConfig('frontpages');
+
         $cacheId = "tag|$tagName|$page";
-        if (!$this->view->isCached('blog/tag.tpl', $cacheId)) {
+
+        if (!$this->view->isCached('frontpage/tags.tpl', $cacheId)) {
             $tag = preg_replace('/[^a-z0-9]/', '_', $tagName);
-            $tagSearch = $GLOBALS['application']->conn->qstr("%{$tag}%");
+            $tagSearch = "%{$tag}%";
             $itemsPerPage = s::get('items_in_blog');
             if (empty($itemsPerPage)) {
                 $itemsPerPage = 8;
             }
 
-            $searchCriteria =  "available=1 AND in_litter=0  AND fk_content_type IN (1, 4, 7, 9) "
-                ." AND `starttime`>=DATE_SUB(CURDATE(), INTERVAL 1 YEAR) "
-                ." AND metadata LIKE {$tagSearch}";
+            $criteria = array(
+                'content_status'  => array(array('value' => 1)),
+                'in_litter'       => array(array('value' => 0)),
+                'fk_content_type' => array(
+                    array('value' => 1),
+                    array('value' => 4),
+                    array('value' => 7),
+                    array('value' => 9)
+                ),
+                'metadata' => array(array('value' => '%' . $tagName . '%'))
+            );
 
             $er = $this->get('entity_repository');
-            $contents = $er->findBy($searchCriteria, 'starttime DESC', 200, 1);
+            $contents = $er->findBy($criteria, 'starttime DESC', 200, 1);
 
             $filteredContents = array();
             $tag = strtolower($tag);
@@ -73,22 +80,22 @@ class TagsController extends Controller
                 if (in_array($tag, $arrayMetadatas)) {
                     $item = $item->get($item->id);
                     if (isset($item->img1) && ($item->img1 > 0)) {
-                        $image = $er->find('Photo', $item->img1);
+                        $image           = $er->find('Photo', $item->img1);
                         $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
+                        $item->img1      = $image;
                     }
 
                     if ($item->fk_content_type == 7) {
-                        $image = $er->find('Photo', $item->cover_id);
+                        $image           = $er->find('Photo', $item->cover_id);
                         $item->img1_path = $image->path_file.$image->name;
-                        $item->img1 = $image;
-                        $item->summary = $item->subtitle;
-                        $item->subtitle= '';
+                        $item->img1      = $image;
+                        $item->summary   = $item->subtitle;
+                        $item->subtitle  = '';
                     }
 
                     if ($item->fk_content_type == 9) {
                         $item->obj_video = $item;
-                        $item->summary = $item->description;
+                        $item->summary   = $item->description;
                     }
 
                     if (isset($item->fk_video) && ($item->fk_video > 0)) {
@@ -124,10 +131,9 @@ class TagsController extends Controller
                     'pagination' => $pagination,
                 )
             );
-
-            $ads = $this->getInnerAds();
-            $this->view->assign('advertisements', $ads);
         }
+
+        $this->view->assign('advertisements', $this->getInnerAds());
 
         return $this->render(
             'frontpage/tags.tpl',

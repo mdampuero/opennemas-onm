@@ -115,11 +115,11 @@ jQuery(document).ready(function($) {
 
             {acl isAllowed="LETTER_AVAILABLE"}
             <div class="control-group">
-                <label for="available" class="control-label">{t}Published{/t}</label>
+                <label for="content_status" class="control-label">{t}Published{/t}</label>
                 <div class="controls">
-                    <select name="available" id="available" required="required">
-                        <option value="1" {if $letter->available eq 1} selected {/if}>Si</option>
-                        <option value="0" {if $letter->available eq 0} selected {/if}>No</option>
+                    <select name="content_status" id="content_status" required="required">
+                        <option value="1" {if $letter->content_status eq 1} selected {/if}>Si</option>
+                        <option value="0" {if $letter->content_status eq 0} selected {/if}>No</option>
                     </select>
                 </div>
             </div>

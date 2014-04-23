@@ -41,7 +41,7 @@ class Agency
         // Get articles by time limit
         $articles = $this->cm->find(
             'Article',
-            'fk_content_type=1 AND available=1 AND '.
+            'fk_content_type=1 AND content_status=1 AND '.
             'created >= \''.$timeLimit.'\'',
             ' ORDER BY created DESC'
         );

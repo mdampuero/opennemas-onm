@@ -267,7 +267,6 @@ class Advertisement extends Content
      **/
     public function update($data)
     {
-        $data['available'] = $data['content_status'];
         parent::update($data);
 
         if (!empty($data['script'])) {
@@ -448,7 +447,7 @@ class Advertisement extends Content
         $sql = "SELECT * FROM contents, advertisements "
               ."WHERE contents.pk_content = advertisements.pk_advertisement "
               ."AND contents.in_litter!=1 "
-              .'AND contents.available=1 AND advertisements.type_advertisement IN ('.$types.') '
+              .'AND contents.content_status=1 AND advertisements.type_advertisement IN ('.$types.') '
               .$catsSQL
               ."ORDER BY contents.created";
 
@@ -669,8 +668,8 @@ googletag.cmd.push(function() { googletag.display('zone_{$this->id}'); });
     */
     public function onPublish()
     {
-        if (!empty($this->available) && (intval($this->available)>0)) {
-            $sql = 'UPDATE `contents` SET `available`=0 '
+        if (!empty($this->content_status) && (intval($this->content_status)>0)) {
+            $sql = 'UPDATE `contents` SET `content_status`=0 '
                  . 'WHERE pk_content IN (
                     SELECT `pk_advertisement` FROM (
                         SELECT `advertisements`.*

@@ -46,8 +46,13 @@ class CategoryController extends Controller
         $categoryName = $request->query->filter('category_name', '', FILTER_SANITIZE_STRING);
         $page         = $request->query->getDigits('page', 1);
 
+        $this->view->assign(array('actual_category' => $categoryName));
+
         $categoryManager = $this->get('category_repository');
-        $category = $categoryManager->findBy(array('name' => $categoryName));
+        $category = $categoryManager->findBy(
+            array('name' => array(array('value' => $categoryName))),
+            'name ASC'
+        );
 
         if (empty($category)) {
             throw new \Symfony\Component\Routing\Exception\ResourceNotFoundException();
@@ -68,9 +73,9 @@ class CategoryController extends Controller
             list($countArticles, $articles)= $cm->getCountAndSlice(
                 'Article',
                 (int) $category->pk_content_category,
-                'in_litter != 1 AND contents.available=1 AND '.
+                'in_litter != 1 AND contents.content_status=1 AND '.
                 '( starttime="0000-00-00 00:00:00" OR starttime<=NOW() )',
-                'ORDER BY starttime DESC, available ASC',
+                'ORDER BY starttime DESC',
                 $page,
                 $itemsPerPage
             );
@@ -128,8 +133,7 @@ class CategoryController extends Controller
                     'articles'              => $articles,
                     'category'              => $category,
                     'pagination'            => $pagination,
-                    'actual_category_title' => $category->title,
-                    'actual_category'       => $category->name
+                    'actual_category_title' => $category->title
                 )
             );
         }

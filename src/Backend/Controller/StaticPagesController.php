@@ -105,14 +105,14 @@ class StaticPagesController extends Controller
             $staticPage = new \StaticPage();
 
             $data = array(
-                    'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'body'         => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
-                    'slug'         => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
-                    'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'available'    => $request->request->filter('available', null, FILTER_SANITIZE_STRING),
-                    'fk_publisher' => $_SESSION['userid'],
-                    'category'     => 0,
-                    'id'           => 0,
+                    'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                    'body'           => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
+                    'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                    'fk_publisher'   => $_SESSION['userid'],
+                    'category'       => 0,
+                    'id'             => 0,
                 );
             $data = array_merge(
                 $data,
@@ -162,13 +162,13 @@ class StaticPagesController extends Controller
                 }
 
                 $data = array(
-                    'title'        => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
-                    'body'         => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
-                    'slug'         => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
-                    'metadata'     => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
-                    'available'    => $request->request->filter('available', null, FILTER_SANITIZE_STRING),
-                    'fk_publisher' => $_SESSION['userid'],
-                    'id'           => $id,
+                    'title'          => $request->request->filter('title', null, FILTER_SANITIZE_STRING),
+                    'body'           => $request->request->filter('body', null, FILTER_SANITIZE_STRING),
+                    'slug'           => $request->request->filter('slug', null, FILTER_SANITIZE_STRING),
+                    'metadata'       => $request->request->filter('metadata', null, FILTER_SANITIZE_STRING),
+                    'content_status' => $request->request->filter('content_status', 0, FILTER_SANITIZE_STRING),
+                    'fk_publisher'   => $_SESSION['userid'],
+                    'id'             => $id,
                 );
                 $data = array_merge(
                     $data,

@@ -98,7 +98,6 @@ class Frontpage extends Content
     public function create($data)
     {
         $data['content_status'] = 1;
-        $data['available']      = 1;
         $data['position']       = 1;
 
         parent::create($data);

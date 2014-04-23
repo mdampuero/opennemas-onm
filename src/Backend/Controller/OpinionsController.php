@@ -100,7 +100,7 @@ class OpinionsController extends Controller
 
         $opinions = $cm->find(
             'Opinion',
-            'in_home=1 and available=1 and type_opinion=0',
+            'in_home=1 and content_status=1 and type_opinion=0',
             'ORDER BY position ASC , created DESC'
         );
 
@@ -108,7 +108,7 @@ class OpinionsController extends Controller
         if ($numEditorial > 0) {
             $editorial = $cm->find(
                 'Opinion',
-                'in_home=1 and available=1 and type_opinion=1',
+                'in_home=1 and content_status=1 and type_opinion=1',
                 'ORDER BY position ASC, created DESC LIMIT '.$numEditorial
             );
         }
@@ -116,7 +116,7 @@ class OpinionsController extends Controller
         if ($numDirector >0) {
             $director = $cm->find(
                 'Opinion',
-                'in_home=1 and available=1 and type_opinion=2',
+                'in_home=1 and content_status=1 and type_opinion=2',
                 'ORDER BY position ASC , created DESC LIMIT '.$numDirector
             );
         }
@@ -229,14 +229,14 @@ class OpinionsController extends Controller
         if ('POST' == $request->getMethod()) {
             $opinion = new \Opinion();
 
-            $available   = $request->request->filter('available', '', FILTER_SANITIZE_STRING);
-            $inhome      = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
-            $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
+            $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
+            $inhome        = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
+            $withComment   = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
             $data = array(
                 'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'category'            => 'opinion',
-                'available'           => (empty($available)) ? 0 : 1,
+                'content_status'      => (empty($contentStatus)) ? 0 : 1,
                 'in_home'             => (empty($inhome)) ? 0 : 1,
                 'with_comment'        => (empty($withComment)) ? 0 : 1,
                 'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
@@ -307,7 +307,7 @@ class OpinionsController extends Controller
                 return $this->redirect($this->generateUrl('admin_opinions'));
             }
 
-            $available   = $request->request->filter('available', '', FILTER_SANITIZE_STRING);
+            $contentStatus = $request->request->filter('content_status', '', FILTER_SANITIZE_STRING);
             $inhome      = $request->request->filter('in_home', '', FILTER_SANITIZE_STRING);
             $withComment = $request->request->filter('with_comment', '', FILTER_SANITIZE_STRING);
 
@@ -322,7 +322,7 @@ class OpinionsController extends Controller
                 'id'                  => $id,
                 'title'               => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
                 'category'            => 'opinion',
-                'available'           => (empty($available)) ? 0 : 1,
+                'content_status'      => (empty($contentStatus)) ? 0 : 1,
                 'in_home'             => (empty($inhome)) ? 0 : 1,
                 'with_comment'        => (empty($withComment)) ? 0 : 1,
                 'summary'             => $request->request->filter('summary', '', FILTER_SANITIZE_STRING),
@@ -495,7 +495,7 @@ class OpinionsController extends Controller
         list($countOpinions, $opinions) = $cm->getCountAndSlice(
             'Opinion',
             null,
-            'contents.available=1 AND in_litter != 1'. $sqlExcludedOpinions,
+            'contents.content_status=1 AND in_litter != 1'. $sqlExcludedOpinions,
             'ORDER BY created DESC ',
             $page,
             $itemsPerPage
@@ -866,7 +866,7 @@ class OpinionsController extends Controller
         $machineSuggestedContents = $this->get('automatic_contents')->searchSuggestedContents(
             $opinion->metadata,
             'opinion',
-            " contents.available=1 AND pk_content = pk_fk_content",
+            " contents.content_status=1 AND pk_content = pk_fk_content",
             4
         );
 
@@ -902,8 +902,7 @@ class OpinionsController extends Controller
 
         $otherOpinions = $cm->find(
             'Opinion',
-            $where.' AND `pk_opinion` <>' .$opinionID
-            .' AND available = 1  AND content_status=1',
+            $where.' AND `pk_opinion` <>' .$opinionID.' AND content_status=1',
             ' ORDER BY created DESC LIMIT 0,9'
         );
 

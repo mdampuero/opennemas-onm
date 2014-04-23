@@ -91,7 +91,7 @@ class VideosController extends Controller
                 // Fetch total of videos for this category
                 $allVideos = $this->cm->find_all(
                     'Video',
-                    'available=1 AND `contents_categories`.`pk_fk_content_category` ='
+                    'content_status=1 AND `contents_categories`.`pk_fk_content_category` ='
                     . $this->category . '',
                     'ORDER BY created DESC LIMIT '.($totalVideosFrontpage+$totalVideosBlockInCategory)
                 );
@@ -105,17 +105,24 @@ class VideosController extends Controller
                 // Videos on others videos block
                 $othersVideos = $this->cm->find_all(
                     'Video',
-                    'available=1 ',
+                    'content_status=1 ',
                     'ORDER BY views DESC LIMIT '.$totalVideosBlockOther
                 );
 
+                if (count($frontVideos) > 0) {
+                    foreach ($frontVideos as &$video) {
+                        $video->thumb          = $video->getThumb();
+                        $video->category_name  = $video->loadCategoryName($video->id);
+                        $video->category_title = $video->loadCategoryTitle($video->id);
+                    }
+                }
                 $this->view->assign('front_videos', $frontVideos);
 
             } else {
                 // Videos on top of the homepage
                 $videos = $this->cm->find_all(
                     'Video',
-                    'available=1 ',
+                    'content_status=1 ',
                     'ORDER BY created DESC LIMIT '.$totalVideosFrontpageOffset
                 );
 
@@ -123,7 +130,7 @@ class VideosController extends Controller
                 list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
                     'Video',
                     (int) $this->category,
-                    'in_litter != 1 AND contents.available=1',
+                    'in_litter != 1 AND contents.content_status=1',
                     'ORDER BY created DESC',
                     $this->page,
                     $totalVideosMoreFrontpage,
@@ -147,6 +154,7 @@ class VideosController extends Controller
 
             if (count($videos) > 0) {
                 foreach ($videos as &$video) {
+                    $video->thumb          = $video->getThumb();
                     $video->category_name  = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
@@ -154,7 +162,8 @@ class VideosController extends Controller
 
             if (count($othersVideos) > 0) {
                 foreach ($othersVideos as &$video) {
-                    $video->category_name = $video->loadCategoryName($video->id);
+                    $video->thumb          = $video->getThumb();
+                    $video->category_name  = $video->loadCategoryName($video->id);
                     $video->category_title = $video->loadCategoryTitle($video->id);
                 }
             }
@@ -212,20 +221,26 @@ class VideosController extends Controller
             || !$this->view->isCached('video/video_inner.tpl', $videoID)
         ) {
 
+            // Load Video and categories
             $video = new \Video($videoID);
             $video->category_name = $video->loadCategoryName($video->id);
             $video->category_title = $video->loadCategoryTitle($video->id);
             $video->with_comment = 1;
 
+            // Fetch video author
+            $ur = getService('user_repository');
+            $video->author = $ur->find($video->fk_author);
+
             //Get other_videos for widget video most
             $otherVideos = $this->cm->find_all(
                 'Video',
-                ' available=1 AND pk_content <> '.$videoID,
+                ' content_status=1 AND pk_content <> '.$videoID,
                 ' ORDER BY created DESC LIMIT 4'
             );
 
             if (count($otherVideos) > 0) {
                 foreach ($otherVideos as &$otherVideo) {
+                    $otherVideo->thumb          = $otherVideo->getThumb();
                     $otherVideo->category_name  = $otherVideo->loadCategoryName($otherVideo->id);
                     $otherVideo->category_title = $otherVideo->loadCategoryTitle($otherVideo->id);
                 }
@@ -236,7 +251,7 @@ class VideosController extends Controller
                 $video->metadata,
                 'video',
                 "pk_fk_content_category = ".$video->category.
-                " AND contents.available=1 AND pk_content = pk_fk_content",
+                " AND contents.content_status=1 AND pk_content = pk_fk_content",
                 4
             );
 
@@ -279,12 +294,13 @@ class VideosController extends Controller
 
         $videos = $this->cm->find_all(
             'Video',
-            'available=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $this->category . '',
+            'content_status=1 AND `contents_categories`.`pk_fk_content_category` <> ' . $this->category . '',
             'ORDER BY created DESC  LIMIT ' . $limit
         );
 
         if (count($videos) > 0) {
             foreach ($videos as &$video) {
+                $video->thumb          = $video->getThumb();
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
@@ -321,12 +337,13 @@ class VideosController extends Controller
 
         $videos = $this->cm->find_all(
             'Video',
-            'available=1 AND `contents_categories`.`pk_fk_content_category` =' . $this->category . '',
+            'content_status=1 AND `contents_categories`.`pk_fk_content_category` =' . $this->category . '',
             'ORDER BY created DESC LIMIT ' . $limit
         );
 
         if (count($videos) > 0) {
             foreach ($videos as &$video) {
+                $video->thumb          = $video->getThumb();
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }
@@ -368,7 +385,7 @@ class VideosController extends Controller
         list($countVideos, $othersVideos)= $this->cm->getCountAndSlice(
             'Video',
             (int) $this->category,
-            'in_litter != 1 AND contents.available=1',
+            'in_litter != 1 AND contents.content_status=1',
             'ORDER BY created DESC',
             $this->page,
             $totalVideosMoreFrontpage,
@@ -377,6 +394,7 @@ class VideosController extends Controller
 
         if ($countVideos > 0) {
             foreach ($othersVideos as &$video) {
+                $video->thumb          = $video->getThumb();
                 $video->category_name  = $video->loadCategoryName($video->id);
                 $video->category_title = $video->loadCategoryTitle($video->id);
             }

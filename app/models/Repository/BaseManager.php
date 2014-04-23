@@ -77,7 +77,7 @@ abstract class BaseManager
             // Build filters
             $filterSQL = implode(' AND ', $filterSQL);
         } else {
-            $filterSQL = $filter;
+            $filterSQL = $filters;
         }
 
         return $filterSQL;

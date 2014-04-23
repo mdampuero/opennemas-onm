@@ -38,6 +38,16 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
+     * Returns the current namespace
+     *
+     * @return string the namespace
+     **/
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @param  string $id cache id The id of the cache entry to fetch.
@@ -60,6 +70,7 @@ abstract class AbstractCache implements CacheInterface
 
             return $values;
         }
+
         return $this->doFetch($this->getNamespacedId($id));
     }
 

@@ -121,8 +121,8 @@ class Frontpages
         list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             (int) $category->pk_content_category,
-            'in_litter != 1 AND contents.available=1',
-            'ORDER BY created DESC, available ASC',
+            'in_litter != 1 AND contents.content_status=1',
+            'ORDER BY created DESC, content_status ASC',
             $page,
             $itemsPerPage
         );

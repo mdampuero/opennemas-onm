@@ -372,7 +372,7 @@ class Album extends Content
         try {
             $html = $tpl->fetch($template);
         } catch (\Exception $e) {
-            $html = 'Album not available';
+            $html = _('Album not available');
         }
 
         return $html;

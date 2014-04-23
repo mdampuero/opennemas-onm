@@ -531,7 +531,7 @@ class Video extends Content
         try {
             $html = $tpl->fetch($template);
         } catch (\Exception $e) {
-            $html = 'Video not available';
+            $html = _('Video not available');
         }
 
         return $html;

@@ -98,7 +98,7 @@ class NewStandController extends Controller
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1   '.
+                        ' `contents`.`content_status`=1   '.
                         $where,
                         "ORDER BY `kioskos`.date DESC  {$limit}"
                     );
@@ -122,7 +122,7 @@ class NewStandController extends Controller
                 $date = "$year-$month-$day";
                 $portadas = $this->cm->findAll(
                     'Kiosko',
-                    ' `contents`.`available`=1 AND  `kioskos`.date ="'.$date.'"',
+                    ' `contents`.`content_status`=1 AND  `kioskos`.date ="'.$date.'"',
                     'ORDER BY `kioskos`.date DESC '
                 );
 
@@ -148,7 +148,7 @@ class NewStandController extends Controller
                     $portadas = $this->cm->find_by_category(
                         'Kiosko',
                         $theCategory->pk_content_category,
-                        ' `contents`.`available`=1   '.
+                        ' `contents`.`content_status`=1   '.
                         'AND MONTH(`kioskos`.date)='.$month.' AND'.
                         ' YEAR(`kioskos`.date)='.$year.'',
                         'ORDER BY `kioskos`.date DESC '
@@ -217,7 +217,7 @@ class NewStandController extends Controller
             $portadas = $this->cm->find_by_category(
                 'Kiosko',
                 $epaper->category,
-                ' `contents`.`available`=1   ',
+                ' `contents`.`content_status`=1   ',
                 'ORDER BY `kioskos`.date DESC  LIMIT 4'
             );
             $kiosko =array();

@@ -155,8 +155,8 @@ class BooksController extends Controller
                 'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
                 'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
                 'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-                'category'    => $request->request->getInt('category'),
-                'available'   => $request->request->getInt('available'),
+                'category'    => $request->request->getInt('category', 0),
+                'content_status'   => $request->request->getInt('content_status', 0),
             );
 
             $book = new \Book();
@@ -251,16 +251,16 @@ class BooksController extends Controller
         }
 
         $data = array(
-            'id'          => $id,
-            'title'       => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
-            'author'      => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
-            'editorial'   => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
-            'file_img'    => $imageName,
-            'description' => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
-            'metadata'    => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
-            'starttime'   => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
-            'category'    => $request->request->getInt('category'),
-            'available'   => $request->request->getInt('available'),
+            'id'             => $id,
+            'title'          => $request->request->filter('title', '', FILTER_SANITIZE_STRING),
+            'author'         => $request->request->filter('author', '', FILTER_SANITIZE_STRING),
+            'editorial'      => $request->request->filter('editorial', '', FILTER_SANITIZE_STRING),
+            'file_img'       => $imageName,
+            'description'    => $request->request->filter('description', '', FILTER_SANITIZE_STRING),
+            'metadata'       => $request->request->filter('metadata', '', FILTER_SANITIZE_STRING),
+            'starttime'      => $request->request->filter('starttime', '', FILTER_SANITIZE_STRING),
+            'category'       => $request->request->getInt('category'),
+            'content_status' => $request->request->getInt('content_status'),
         );
 
         $book->update($data);

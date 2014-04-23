@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: 0, type_advertisement: -1, content_status: -1, with_script: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list')">
+    <form action="{url name=admin_ads}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('advertisement',{ fk_content_categories: 0, type_advertisement: -1, content_status: -1, with_script: -1, in_litter: 0 }, 'created', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
         <div class="top-action-bar clearfix">
             <div class="wrapper-content">
                 <div class="title">
@@ -178,7 +178,7 @@
                         <td class="right">
                             <div class="btn-group">
                             {acl isAllowed="ADVERTISEMENT_UPDATE"}
-                                <a class="btn" href="[% edit(content.id, 'admin_ad_show') %]" title="{t}Edit{/t}">
+                                <a class="btn" href="[% edit(content.id, 'admin_advertisement_show') %]" title="{t}Edit{/t}">
                                     <i class="icon-pencil"></i>
                                 </a>
                             {/acl}

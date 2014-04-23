@@ -600,7 +600,7 @@ class ArticlesController extends Controller
         list($countArticles, $articles) = $cm->getCountAndSlice(
             'Article',
             null,
-            ' contents.frontpage=1 AND contents.available=1 AND '.
+            ' contents.frontpage=1 AND contents.content_status=1 AND '.
             ' contents.content_status=1 AND in_litter != 1 '. $sqlExcludedOpinions,
             ' ORDER BY created DESC ',
             $page,
@@ -872,7 +872,7 @@ class ArticlesController extends Controller
             $article->metadata,
             'article',
             "pk_fk_content_category= ".$article->category.
-            " AND contents.available=1 AND pk_content = pk_fk_content",
+            " AND contents.content_status=1 AND pk_content = pk_fk_content",
             4
         );
 

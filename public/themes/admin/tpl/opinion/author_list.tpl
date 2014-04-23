@@ -5,7 +5,7 @@
 {/block}
 
 {block name="content"}
-<form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'asc', 'backend_ws_users_list')">
+<form action="{url name=admin_opinion_authors}" method="get" id="authorform" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init(null, { fk_user_group: 3 }, 'name', 'asc', 'backend_ws_users_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="top-action-bar clearfix">
         <div class="wrapper-content">
             <div class="title"><h2>{t}Authors{/t}</h2></div>
@@ -40,6 +40,14 @@
         <div ng-include="'authors'"></div>
     </div>
     <script type="text/ng-template" id="authors">
+        <div class="table-info clearfix">
+            <div class="pull-left form-inline">
+                <strong>{t}FILTER:{/t}</strong>
+                &nbsp;&nbsp;
+                <input type="text" id="username" name="name" value="{$smarty.request.name|default:""}" placeholder="{t}Filter by name or email{/t}" ng-model="shvs.search.name_like"/>
+                &nbsp;&nbsp;
+            </div>
+        </div>
         <div class="spinner-wrapper" ng-if="loading">
             <div class="spinner"></div>
             <div class="spinner-text">{t}Loading{/t}...</div>
@@ -100,7 +108,7 @@
                         {t}Showing{/t} [% ((shvs.page - 1) * shvs.elements_per_page > 0) ? (shvs.page - 1) * shvs.elements_per_page : 1 %]-[% (shvs.page * shvs.elements_per_page) < shvs.total ? shvs.page * shvs.elements_per_page : shvs.total %] {t}of{/t} [% shvs.total %]
                         </div>
                         <div class="pull-right" ng-if="shvs.contents.length > 0">
-                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_contents_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
+                            <pagination max-size="0" direction-links="true"  on-select-page="selectPage(page, 'backend_ws_users_list')" page="shvs.page" total-items="shvs.total" num-pages="pages"></pagination>
                         </div>
                         <span ng-if="shvs.contents.length == 0">&nbsp;</span>
                     </td>

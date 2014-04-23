@@ -157,10 +157,10 @@
         </div>
 
         <div class="control-group">
-            <label for="available" class="control-label">{t}Activated{/t}</label>
+            <label for="content_status" class="control-label">{t}Activated{/t}</label>
             <div class="controls">
-                <input type="checkbox" name="content_status" id="available" value="1"
-                    {if isset($advertisement->available) && $advertisement->available == 1}checked="checked"{/if}
+                <input type="checkbox" name="content_status" id="content_status" value="1"
+                    {if isset($advertisement->content_status) && $advertisement->content_status == 1}checked="checked"{/if}
                     {acl isNotAllowed="ADVERTISEMENT_AVAILABLE"}disabled="disabled"{/acl} />
             </div>
         </div>

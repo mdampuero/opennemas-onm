@@ -126,10 +126,15 @@ class NewsletterController extends Controller
             }
         }
 
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
+        $time = new \DateTime();
+        $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
+        $time = $time->format('d/m/Y');
+
         return $this->render(
             'newsletter/steps/1-pick-elements.tpl',
             array(
-                'name'              => $configurations['name']." [".date('d/m/Y')."]",
+                'name'              => $configurations['name']." [".$time."]",
                 'newsletterContent' => $newsletterContent,
                 )
         );
@@ -173,9 +178,15 @@ class NewsletterController extends Controller
         $id = (int) $request->request->getDigits('id');
         $contentsRAW = $request->request->get('content_ids');
         $contents = json_decode($contentsRAW);
+
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
+        $time = new \DateTime();
+        $time->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
+        $time = $time->format('d/m/Y');
+
         $title = $request->request->filter(
             'title',
-            s::get('site_name'). ' ['.date('d/m/Y').']',
+            s::get('site_name'). ' ['.$time.']',
             FILTER_SANITIZE_STRING
         );
 
@@ -593,7 +604,9 @@ class NewsletterController extends Controller
             return false;
         }
 
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
         $today = new \DateTime();
+        $today->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
 
         $nm = $this->get('newsletter_manager');
         $where =  " updated >= '".$initDate->format('Y-m-d H:i:s')."'
@@ -630,13 +643,16 @@ class NewsletterController extends Controller
             $date = s::get('last_invoice');
         }
 
+        $availableTimeZones = \DateTimeZone::listIdentifiers();
         if (empty($date)) {
             $lastInvoice = new \DateTime();
+            $lastInvoice->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
         } else {
             try {
                 $lastInvoice = new \DateTime($date);
             } catch (\Exception $e) {
                 $lastInvoice = new \DateTime();
+                $lastInvoice->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
             }
         }
 
@@ -645,6 +661,7 @@ class NewsletterController extends Controller
         }
 
         $today     = new \DateTime();
+        $today->setTimezone(new \DateTimeZone($availableTimeZones[s::get('time_zone', 'UTC')]));
         $checkDate = new \DateTime($lastInvoice->format('Y-m-d H:i:s'));
         $checkDate->modify('+1 month');
 
