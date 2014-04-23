@@ -405,6 +405,8 @@ class Europapress implements FormatInterface
             new \DateTimeZone('Europe/Madrid')
         );
 
+        $date = \DateTime::createFromFormat('d/m/Y H:i:s P', $date->format('d/m/Y H:i:s P'));
+
         return $date;
     }
 
