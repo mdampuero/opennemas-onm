@@ -14,7 +14,7 @@
 
 
 {block name="content"}
-<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('comment', { status: -1, body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
+<form action="{url name=admin_comments_list}" method="get" name="formulario" id="formulario" ng-app="BackendApp" ng-controller="ContentCtrl" ng-init="init('comment', { status: 'pending', body_like: '' }, 'date', 'desc', 'backend_ws_contents_list', '{{$smarty.const.CURRENT_LANGUAGE}}')">
     <div class="top-action-bar clearfix" class="clearfix">
         <div class="wrapper-content">
             <div class="title">
@@ -31,13 +31,13 @@
                     <ul class="dropdown-menu" style="margin-top: 1px;">
                         {acl isAllowed="COMMENT_AVAILABLE"}
                         <li>
-                            <a href="#" id="batch-publish" ng-click="batchToggleStatus('accepted', 'backend_ws_comments_batch_toggle_status')">
+                            <a href="#" id="batch-publish" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'accepted', 'loading')">
                                 <i class="icon-check"></i>
                                 {t}Accept{/t}
                             </a>
                         </li>
                         <li>
-                            <a href="#" id="batch-unpublish" ng-click="batchToggleStatus('rejected', 'backend_ws_comments_batch_toggle_status')">
+                            <a href="#" id="batch-unpublish" ng-click="updateSelectedItems('backend_ws_comments_batch_toggle_status', 'status', 'rejected', 'loading')">
                                 <i class="icon-remove"></i>
                                 {t}Reject{/t}
                             </a>
