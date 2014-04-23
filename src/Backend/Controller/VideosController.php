@@ -756,7 +756,12 @@ class VideosController extends Controller
         if ($total > $itemsPerPage) {
             array_pop($videos);
         }
-
+        foreach ($videos as &$video) {
+            if (is_string($video->information)) {
+                $video->information = unserialize($video->information);
+            }
+            $video->thumb = $video->getThumb();
+        }
         $pagination = \Onm\Pager\SimplePager::getPagerUrl(
             array(
                 'page'  => $page,
