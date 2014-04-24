@@ -109,7 +109,7 @@ class Frontpages
         $categoryManager = $this->restler->container->get('category_repository');
         $category = $categoryManager->findBy(
             array('name' => array(array('value' => $categoryName))),
-            1
+            '1'
         );
 
         if (empty($category)) {
