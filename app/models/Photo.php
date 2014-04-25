@@ -216,32 +216,23 @@ class Photo extends Content
             );
         }
 
-        $imageCreated = new Imagick($data['local_file']);
-        $imageCreated->writeImage(realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName);
+        $imageCreated = new \Imagine\Imagick\Imagine();
+        $image = $imageCreated->open($data['local_file']);
 
-        if ($imageCreated) {
-            $photo = new Photo();
-            $photoID = $photo->create($dataPhoto);
+        $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
+        $image = $filter->apply($image);
 
-            if (!$photoID) {
-                $logger = getService('logger');
-                $logger->notice(
-                    sprintf(
-                        _('Unable to register the photo object %s (destination: %s).'),
-                        $data['local_file'],
-                        $uploadDir.$finalPhotoFileName
-                    )
-                );
-                throw new Exception(
-                    sprintf(
-                        'Unable to register the photo object into OpenNemas.',
-                        $uploadDir.$finalPhotoFileName
-                    )
-                );
-            }
-
-            return $photoID;
-        } else {
+        try {
+            $image->save(
+                realpath($uploadDir).DIRECTORY_SEPARATOR.$finalPhotoFileName,
+                array(
+                    'resolution-units' => \Imagine\Image\ImageInterface::RESOLUTION_PIXELSPERINCH,
+                    'resolution-x'     => 72,
+                    'resolution-y'     => 72,
+                    'quality'          => 85,
+                )
+            );
+        } catch (\RuntimeException $e) {
             $logger = getService('logger');
             $logger->notice(
                 sprintf(
@@ -256,9 +247,31 @@ class Photo extends Content
                     $uploadDir.$finalPhotoFileName
                 )
             );
+
+            return false;
         }
 
-        return false;
+        $photo = new Photo();
+        $photoID = $photo->create($dataPhoto);
+
+        if (!$photoID) {
+            $logger = getService('logger');
+            $logger->notice(
+                sprintf(
+                    _('Unable to register the photo object %s (destination: %s).'),
+                    $data['local_file'],
+                    $uploadDir.$finalPhotoFileName
+                )
+            );
+            throw new Exception(
+                sprintf(
+                    'Unable to register the photo object into OpenNemas.',
+                    $uploadDir.$finalPhotoFileName
+                )
+            );
+        }
+
+        return $photoID;
     }
 
     /**
