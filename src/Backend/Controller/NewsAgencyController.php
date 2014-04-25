@@ -887,8 +887,7 @@ class NewsAgencyController extends Controller
 
                 // If no image from FTP check HTTP
                 if (!$filePath) {
-                    $filePath = $repository->syncPath.DS.
-                        $sourceId.DS.$photo->name[$i];
+                    $filePath = $repository->syncPath.DS.$sourceId.DS.$photo->name[$i];
                     $fileName = $photo->name[$i];
                 }
 
@@ -907,18 +906,18 @@ class NewsAgencyController extends Controller
                     );
 
                     $photo = new \Photo();
-                    $photoObject = $photo->createFromLocalFileAjax($data);
+                    $photoId = $photo->createFromLocalFile($data);
 
                     // Check if sync is from Opennemas instances
                     if ($element->getServicePartyName() == 'Opennemas') {
                         // If this article has more than one photo take the first one to front
                         if (!isset($frontPhoto)) {
-                            $frontPhoto = new \Photo($photoObject->id);
+                            $frontPhoto = new \Photo($photoId);
                         } elseif (!isset($innerPhoto)) {
-                            $innerPhoto = new \Photo($photoObject->id);
+                            $innerPhoto = new \Photo($photoId);
                         }
                     } elseif (!isset($innerPhoto)) {
-                        $innerPhoto = new \Photo($photoObject->id);
+                        $innerPhoto = new \Photo($photoId);
                     }
 
                 }
