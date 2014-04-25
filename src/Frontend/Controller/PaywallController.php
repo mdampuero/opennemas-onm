@@ -134,7 +134,6 @@ class PaywallController extends Controller
         $itemDetails->Name         = $selectedPlan['description'];
         $itemDetails->Amount       = $orderTotal;
         $itemDetails->Quantity     = '1';
-        $itemDetails->ItemCategory = 'Digital';
 
         // Complete informatin about the buy
         $paymentDetails = new \PaymentDetailsType();
@@ -694,7 +693,6 @@ class PaywallController extends Controller
             $itemDetails->Name         = $description;
             $itemDetails->Amount       = $orderTotal;
             $itemDetails->Quantity     = '1';
-            $itemDetails->ItemCategory = 'Digital';
 
             // Complete informatin about the buy
             $paymentDetails = new \PaymentDetailsType();

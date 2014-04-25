@@ -599,7 +599,6 @@ class PaywallController extends Controller
         $itemDetails->Name         = 'Test IPN url';
         $itemDetails->Amount       = new \BasicAmountType("EUR", '0.01');
         $itemDetails->Quantity     = '1';
-        $itemDetails->ItemCategory = 'Digital';
 
         $paymentDetails = new \PaymentDetailsType();
         $paymentDetails->PaymentDetailsItem[0] = $itemDetails;
