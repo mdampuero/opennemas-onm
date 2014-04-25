@@ -107,10 +107,7 @@ class ContentActionsSubscriber implements EventSubscriberInterface
     {
         $id = $event->getArgument('authorId');
 
-
         $this->cacheHandler->delete('user_' . $id);
-
-        $this->cleanOpcode();
 
         return false;
     }
