@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "49dea0d01ab17f9dd0f1726c80284835",
+    "hash": "5ca5341783f16b789685b6a687a4e11b",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -46,7 +46,7 @@
                     "homepage": "http://www.lickmychip.com/"
                 },
                 {
-                    "name": "Nicolas Le Goff",
+                    "name": "nlegoff",
                     "email": "legoff.n@gmail.com"
                 },
                 {
@@ -1002,12 +1002,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/avalanche123/Imagine.git",
-                "reference": "a772e192b9a53184a4e73699924c8412006a2d89"
+                "reference": "2a6c047472c43032b2718d3a31aee6f982f2980c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/a772e192b9a53184a4e73699924c8412006a2d89",
-                "reference": "a772e192b9a53184a4e73699924c8412006a2d89",
+                "url": "https://api.github.com/repos/avalanche123/Imagine/zipball/2a6c047472c43032b2718d3a31aee6f982f2980c",
+                "reference": "2a6c047472c43032b2718d3a31aee6f982f2980c",
                 "shasum": ""
             },
             "require": {
@@ -1051,7 +1051,7 @@
                 "image manipulation",
                 "image processing"
             ],
-            "time": "2014-03-31 19:54:22"
+            "time": "2014-04-22 05:38:05"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1176,16 +1176,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.8.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174"
+                "reference": "65026b610f8c19e61d7242f600530677b0466aac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/392ef35fd470638e08d0160d6b1cbab63cb23174",
-                "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/65026b610f8c19e61d7242f600530677b0466aac",
+                "reference": "65026b610f8c19e61d7242f600530677b0466aac",
                 "shasum": ""
             },
             "require": {
@@ -1213,7 +1213,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.8.x-dev"
+                    "dev-master": "1.9.x-dev"
                 }
             },
             "autoload": {
@@ -1240,7 +1240,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-03-23 19:50:26"
+            "time": "2014-04-24 13:29:03"
         },
         {
             "name": "neutron/temporary-filesystem",
@@ -1328,16 +1328,16 @@
         },
         {
             "name": "paypal/merchant-sdk-php",
-            "version": "dev-master",
+            "version": "v2.4.103",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/merchant-sdk-php.git",
-                "reference": "0fc80d1c580f181f175fd68c83420dc2d2d6a985"
+                "reference": "ca739845da7f6306f7b1e802496dffe24c079345"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/0fc80d1c580f181f175fd68c83420dc2d2d6a985",
-                "reference": "0fc80d1c580f181f175fd68c83420dc2d2d6a985",
+                "url": "https://api.github.com/repos/paypal/merchant-sdk-php/zipball/ca739845da7f6306f7b1e802496dffe24c079345",
+                "reference": "ca739845da7f6306f7b1e802496dffe24c079345",
                 "shasum": ""
             },
             "require": {
@@ -1368,7 +1368,7 @@
                 "php",
                 "sdk"
             ],
-            "time": "2014-03-27 18:41:57"
+            "time": "2013-06-11 09:36:55"
         },
         {
             "name": "paypal/sdk-core-php",
@@ -1419,12 +1419,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-FFMpeg/PHP-FFMpeg.git",
-                "reference": "62763adae5b3542f17e5bbffb2e9435531e1a9de"
+                "reference": "9826c6d88c3c48fe8b2603f582c258d2ba99a046"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/62763adae5b3542f17e5bbffb2e9435531e1a9de",
-                "reference": "62763adae5b3542f17e5bbffb2e9435531e1a9de",
+                "url": "https://api.github.com/repos/PHP-FFMpeg/PHP-FFMpeg/zipball/9826c6d88c3c48fe8b2603f582c258d2ba99a046",
+                "reference": "9826c6d88c3c48fe8b2603f582c258d2ba99a046",
                 "shasum": ""
             },
             "require": {
@@ -1480,7 +1480,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2014-03-19 07:25:50"
+            "time": "2014-04-21 17:23:57"
         },
         {
             "name": "psr/log",
@@ -1920,9 +1920,7 @@
             "authors": [
                 {
                     "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com",
-                    "homepage": "http://fabien.potencier.org",
-                    "role": "Lead Developer"
+                    "email": "fabien@symfony.com"
                 },
                 {
                     "name": "Symfony Community",
@@ -2265,7 +2263,6 @@
         "drexarj/disqus-php": 20,
         "imagine/imagine": 20,
         "paypal/adaptivepayments-sdk-php": 20,
-        "paypal/merchant-sdk-php": 20,
         "doctrine/migrations": 20,
         "doctrine/doctrine-migrations-bundle": 20,
         "php-ffmpeg/php-ffmpeg": 20,
