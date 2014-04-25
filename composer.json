@@ -36,7 +36,7 @@
         "frandieguez/panorama-php": "1.0.*",
         "imagine/imagine": "dev-develop",
         "paypal/adaptivepayments-sdk-php": "dev-master",
-        "paypal/merchant-sdk-php": "dev-master",
+        "paypal/merchant-sdk-php": "v2.4.103",
         "symfony/symfony": "~2.3",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
