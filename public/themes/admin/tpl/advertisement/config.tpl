@@ -75,13 +75,6 @@
                         <div class="help-block">{t}The ad server URL (i.e. http://ad.serverexample.net/).{/t}</div>
                     </div>
                 </div>
-                <div class="control-group">
-                    <label for="revive_ad_server_site_id" class="control-label">{t}Ad server site id{/t}</label>
-                    <div class="controls">
-                        <input type="text" name="revive_ad_server_site_id" value="{$configs['revive_ad_server']['site_id']}">
-                        <div class="help-block">{t}The site id in the ad server. (i.e., 75){/t}</div>
-                    </div>
-                </div>
             </fieldset>
         </div>
         <input type="hidden" id="action" name="action" value="config" />

@@ -19,6 +19,7 @@ function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $sm
         $adsReviveConfs = s::get('revive_ad_server');
 
         $advertisements = $smarty->parent->tpl_vars['advertisements']->value;
+        $actual_category  = $smarty->parent->tpl_vars['actual_category']->value;
 
         $reviveZonesInformation = $dfpZonesInformation = array();
         foreach ($advertisements as $advertisement) {
@@ -34,7 +35,7 @@ function smarty_outputfilter_ads_generator($output, Smarty_Internal_Template $sm
             $reviveAdsPositions = "\n<script type='text/javascript'><!--// <![CDATA[
 var OA_zones = { \n".implode(",\n", $reviveZonesInformation)."\n}
 // ]]> --></script>
-<script type='text/javascript' src='{$adsReviveConfs['url']}/www/delivery/spcjs.php?id_sec={$adsReviveConfs['site_id']}'></script>";
+<script type='text/javascript' src='{$adsReviveConfs['url']}/www/delivery/spcjs.php?cat_name={$actual_category}'></script>";
 
             $output = str_replace('</head>', $reviveAdsPositions.'</head>', $output);
         }
