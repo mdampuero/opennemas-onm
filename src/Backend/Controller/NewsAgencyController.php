@@ -194,6 +194,10 @@ class NewsAgencyController extends Controller
         }
         $alreadyImported = \Content::findByUrn($urns);
 
+        if (!is_array($alreadyImported)) {
+            $alreadyImported = array();
+        }
+
         foreach ($elements as &$element) {
             $element->load();
             $element->source_name = $servers[$element->source_id]['name'];
@@ -878,11 +882,11 @@ class NewsAgencyController extends Controller
         if ($element->hasPhotos()) {
             $photos = $element->getPhotos();
             $i = 0;
+            $importedPhotos = array();
+
             foreach ($photos as $photo) {
                 // Get image from FTP
-                $filePath = realpath(
-                    $repository->syncPath.DS.$sourceId.DS.$photo->file_path
-                );
+                $filePath = realpath($repository->syncPath.DS.$sourceId.DS.$photo->file_path);
                 $fileName = $photo->file_path;
 
                 // If no image from FTP check HTTP
@@ -893,20 +897,27 @@ class NewsAgencyController extends Controller
 
                 // Check if the file cache exists(keys)
                 if (file_exists($filePath)) {
-                    $data = array(
-                        'title'         => $fileName,
-                        'description'   => $photo->title,
-                        'local_file'    => $filePath,
-                        'fk_category'   => $category,
-                        'category_name' => $categoryInstance->name,
-                        'category'      => $categoryInstance->name,
-                        'metadata'      => \Onm\StringUtils::get_tags($photo->title),
-                        'author_name'   => '&copy; EFE '.date('Y'),
-                        'original_filename' => $fileName,
-                    );
+                    // If the image is already imported use its id
+                    if (!array_key_exists($photo->id, $importedPhotos)) {
+                        $data = array(
+                            'title'         => $fileName,
+                            'description'   => $photo->title,
+                            'local_file'    => $filePath,
+                            'fk_category'   => $category,
+                            'category_name' => $categoryInstance->name,
+                            'category'      => $categoryInstance->name,
+                            'metadata'      => \Onm\StringUtils::get_tags($photo->title),
+                            'author_name'   => '&copy; EFE '.date('Y'),
+                            'original_filename' => $fileName,
+                        );
 
-                    $photo = new \Photo();
-                    $photoId = $photo->createFromLocalFile($data);
+                        $newphoto = new \Photo();
+                        $photoId = $newphoto->createFromLocalFile($data);
+
+                        $importedPhotos[$photo->id] = $photoId;
+                    } else {
+                        $photoId = $importedPhotos[$photo->id];
+                    }
 
                     // Check if sync is from Opennemas instances
                     if ($element->getServicePartyName() == 'Opennemas') {
@@ -919,8 +930,8 @@ class NewsAgencyController extends Controller
                     } elseif (!isset($innerPhoto)) {
                         $innerPhoto = new \Photo($photoId);
                     }
-
                 }
+
                 $i++;
             }
         }
