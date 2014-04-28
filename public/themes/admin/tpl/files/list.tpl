@@ -155,7 +155,7 @@
                             <checkbox index="[% content.id %]">
                         </td>
                         <td>
-                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.ATTACHMENT_DIR}[% content.path %]" target="_blank">
+                            <a href="{$smarty.const.INSTANCE_MEDIA}{$smarty.const.FILE_DIR}[% content.path %]" target="_blank">
                                 {t}[Link]{/t}
                             </a>
                             [% content.title %]

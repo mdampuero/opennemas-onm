@@ -176,7 +176,7 @@
                             <select id="fk_author" name="fk_author" required="required">
                                 <option value="0" {if is_null($author->id)}selected{/if}>{t} - Select one author - {/t}</option>
                                 {foreach from=$all_authors item=author}
-                                <option value="{$author->id}" {if $opinion->fk_author eq $author->id}selected{/if}>{$author->name}</option>
+                                <option value="{$author->id}" {if $opinion->fk_author eq $author->id}selected{/if}>{$author->name} {if $author->meta['is_blog'] eq 1} (Blogger) {/if}</option>
                                 {/foreach}
                             </select>
                         </div>
