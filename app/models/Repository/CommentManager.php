@@ -168,7 +168,8 @@ class CommentManager extends BaseManager
     {
         return $this->findBy(
             array(
-                'content_id' => array(array('value' => $contentID))
+                'content_id' => array(array('value' => $contentID)),
+                'status' => array(array('value' => \Comment::STATUS_ACCEPTED))
             ),
             null,
             $elemsByPage,
