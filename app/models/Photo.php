@@ -160,6 +160,15 @@ class Photo extends Content
             FilesManager::createDirectory($uploadDir);
         }
 
+        if (is_dir($uploadDir) && !is_writable($uploadDir)) {
+            throw new Exception(
+                sprintf(
+                    _('Upload directory doesn\'t exists or you don\'t have enough privileges to write files there'),
+                    $uploadDir.$finalPhotoFileName
+                )
+            );
+        }
+
         $filePathInfo = pathinfo($originalFileName);
 
         // Getting information for creating
@@ -207,20 +216,12 @@ class Photo extends Content
             'fk_publisher'   => $_SESSION['userid'],
         );
 
-        if (is_dir($uploadDir) && !is_writable($uploadDir)) {
-            throw new Exception(
-                sprintf(
-                    _('Upload directory doesn\'t exists or you don\'t have enough privileges to write files there'),
-                    $uploadDir.$finalPhotoFileName
-                )
-            );
-        }
-
         $imageCreated = new \Imagine\Imagick\Imagine();
         $image = $imageCreated->open($data['local_file']);
 
-        $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
-        $image = $filter->apply($image);
+        // Doesn't work as expected. Commented for now
+        // $filter = new \Onm\Imagine\Filter\CorrectExifRotation();
+        // $image = $filter->apply($image);
 
         try {
             $image->save(
@@ -241,14 +242,7 @@ class Photo extends Content
                     $uploadDir.$finalPhotoFileName
                 )
             );
-            throw new Exception(
-                sprintf(
-                    'Unable to copy the file of the photo related in EFE importer to the article.',
-                    $uploadDir.$finalPhotoFileName
-                )
-            );
-
-            return false;
+            throw new Exception(_('Unable to copy the photo file'));
         }
 
         $photo = new Photo();
@@ -263,12 +257,7 @@ class Photo extends Content
                     $uploadDir.$finalPhotoFileName
                 )
             );
-            throw new Exception(
-                sprintf(
-                    'Unable to register the photo object into OpenNemas.',
-                    $uploadDir.$finalPhotoFileName
-                )
-            );
+            throw new Exception(_('Unable to save the photo information.'));
         }
 
         return $photoID;
